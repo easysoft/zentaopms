@@ -58,6 +58,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
     /* Without privilege, don't render create button. */
     if(empty($createBtnLink)) return null;
 
+    /* With batch create privileges then render the dropdown menu. */
     if(!empty($productID) && hasPriv($storyType, 'batchCreate') && hasPriv($storyType, 'create'))
     {
         $items = array();
@@ -77,13 +78,23 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 
         $items[] = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
 
-        return dropdown
+        return btnGroup
         (
-            icon('plus'),
-            $createBtnTitle,
-            span(setClass('caret')),
-            setClass('btn primary'),
-            set::items($items),
+            btn
+            (
+                setClass($from == 'project' ? 'secondary' : 'primary'),
+                set::icon('plus'),
+                set::text($createBtnTitle),
+                set::url($createBtnLink)
+            ),
+            dropdown
+            (
+                span(setClass('caret')),
+                setClass('btn primary'),
+                setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0')),
+                set::placement('bottom-end'),
+                set::items($items),
+            )
         );
     }
 
@@ -91,7 +102,6 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
     (
         'text'  => $createBtnTitle,
         'icon'  => 'plus',
-        'type'  => 'dropdown',
         'class' => $from == 'project' ? 'secondary' : 'primary',
         'url'   => $createBtnLink
     )));
