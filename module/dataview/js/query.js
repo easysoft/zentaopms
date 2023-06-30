@@ -2,34 +2,51 @@ $(function()
 {
     if(rawMethod !== 'create') return;
     var createModal = new $.zui.ModalTrigger({url: createLink('dataview', 'create', 'step=create', '', true), type: 'iframe', width: 480});
+    var exportModal = new $.zui.ModalTrigger({url: createLink('dataview', 'export', 'type=query', '', true), type: 'iframe', width: 900});
     document.getElementById('saveButton').addEventListener('click', function(e)
     {
-        $.ajaxSettings.async = false;
-        query();
-        $.ajaxSettings.async = true;
-        e.preventDefault();
-        if($('#dataform .error').length == $('#dataform .error.hidden').length)
-        {
-            var params = $('#dataform').serializeArray();
+        tryQuery(e);
+        showModel(createModal);
+    });
 
-            getFieldSettings();
-
-            /* Fix bug #26716. */
-            var fieldSettings = DataStorage.clone('fieldSettings');
-            for(let index in fieldSettings)
-            {
-                if(!Object.keys(DataStorage.fields).includes(index)) delete fieldSettings[index];
-            }
-            DataStorage.fieldSettings = fieldSettings;
-
-            sessionStorage.setItem('dataviewSql', JSON.stringify(params));
-            sessionStorage.setItem('fieldSettings', JSON.stringify(fieldSettings));
-            sessionStorage.setItem('langs', JSON.stringify(DataStorage.langs));
-
-            createModal.show();
-        }
+    document.getElementById('export').addEventListener('click', function(e)
+    {
+        tryQuery(e);
+        showModel(exportModal);
     });
 });
+
+function tryQuery(e)
+{
+    $.ajaxSettings.async = false;
+    query();
+    $.ajaxSettings.async = true;
+    e.preventDefault();
+}
+
+function showModel(objModel)
+{
+    if($('#dataform .error').length == $('#dataform .error.hidden').length)
+    {
+        var params = $('#dataform').serializeArray();
+
+        getFieldSettings();
+
+        /* Fix bug #26716. */
+        var fieldSettings = DataStorage.clone('fieldSettings');
+        for(let index in fieldSettings)
+        {
+            if(!Object.keys(DataStorage.fields).includes(index)) delete fieldSettings[index];
+        }
+        DataStorage.fieldSettings = fieldSettings;
+
+        sessionStorage.setItem('dataviewSql', JSON.stringify(params));
+        sessionStorage.setItem('fieldSettings', JSON.stringify(fieldSettings));
+        sessionStorage.setItem('langs', JSON.stringify(DataStorage.langs));
+
+        objModel.show();
+    }
+}
 
 function locate(method, params)
 {
