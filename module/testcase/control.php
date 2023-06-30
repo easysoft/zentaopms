@@ -296,10 +296,10 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function groupCase($productID = 0, $branch = '', $groupBy = 'story', $projectID = 0, $caseType = '')
+    public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $projectID = 0, string $caseType = '')
     {
         $groupBy   = empty($groupBy) ? 'story' : $groupBy;
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->saveVisitState($productID, $this->products);
         $product   = $this->product->getByID($productID);
         if($branch === '') $branch = $this->cookie->preBranch;
 
