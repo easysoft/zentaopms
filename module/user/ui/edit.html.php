@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+import('/js/md5.js', 'js');
+
 jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
 
 $contacts = array();
@@ -33,7 +35,6 @@ if(!empty($config->user->contactField))
 
 formPanel
 (
-    import('/js/md5.js', 'js'),
     to::heading
     (
         div
