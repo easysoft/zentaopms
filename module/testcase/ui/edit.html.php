@@ -13,6 +13,7 @@ namespace zin;
 jsVar('tab', $this->app->tab);
 jsVar('isLibCase', $isLibCase);
 jsVar('caseBranch', $case->branch);
+jsVar('executionID', $case->execution);
 
 set::title($lang->testcase->edit);
 
@@ -199,7 +200,7 @@ detailBody
                         btn 
                         (
                             set::class('refresh'),
-                            set::icon($lang->refreshIcon),
+                            set::icon('refresh'),
                         )
                     ) : null,
                 ),
