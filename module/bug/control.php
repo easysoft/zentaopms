@@ -1173,6 +1173,7 @@ class bug extends control
         }
 
         if($product->shadow) $this->view->project = $this->loadModel('project')->getByShadowProduct($bug->product);
+        $this->app->loadLang('build');
 
         $this->view->bug                   = $bug;
         $this->view->product               = $product;
