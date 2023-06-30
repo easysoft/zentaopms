@@ -259,8 +259,8 @@ class storyModel extends model
         $product = $this->loadModel('product')->getById($story->product);
         if($product->type == 'normal' or $product->type == 'branch' or $story->type == 'requirement')
         {
-            $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
-            $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
+            if(isset($this->post->branches)) $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
+            if(isset($this->post->modules))  $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
             $this->post->plans    = isset($story->plan) ? array($story->plan) : array(0 => 0);
         }
 
