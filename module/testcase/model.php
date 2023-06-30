@@ -3318,7 +3318,7 @@ class testcaseModel extends model
      * @param  mixed  $productID  int|array
      * @param  string $branch     number|all
      * @param  int    $moduleID
-     * @param  array  $caseIdArr
+     * @param  array  $caseIdList
      * @param  object $pager      object|NULL
      * @param  string $type
      * @param  array  $topIdList
@@ -3326,14 +3326,14 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID,$branch, $moduleID, $caseIdArr, $pager = NULL, $type = '', $topIdList = array(), $browseType = '', &$executionSql = NULL)
+    public function getList($productID,$branch, $moduleID, $caseIdList, $pager = NULL, $type = '', $topIdList = array(), $browseType = '', &$executionSql = NULL)
     {
         /* Get list of module and its children module. */
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
 
-        /* Get scenes and all cases in $caseIdArr. */
+        /* Get scenes and all cases in $caseIdList. */
         $cases = $this->dao->select('id,path')->from(VIEW_SCENECASE)
-            ->where('id')->in($caseIdArr)
+            ->where('id')->in($caseIdList)
             ->beginIF($browseType != 'bysearch')->orWhere('( isCase')->eq(2)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere('( 1')->eq(1)->fi()
             ->beginIF(is_array($productID))->andWhere('product')->in($productID)->fi()
