@@ -17,10 +17,10 @@ formPanel
 (
     set::title($lang->testcase->createScene),
 
-    on::change('#product', 'loadProductBranch'),
-    on::change('#branch', 'loadProductModule'),
-    on::change('#module', 'loadModuleRelatedNew'),
-    on::click('.refresh', 'loadProductModule'),
+    on::change('#product', 'loadProductRelated'),
+    on::change('#branch', 'loadProductModules'),
+    on::change('#module', 'loadModuleRelated'),
+    on::click('.refresh', 'loadProductModules'),
     formRow
     (
         formGroup

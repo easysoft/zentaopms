@@ -112,8 +112,8 @@ function setModules(event)
  */
 function loadModuleRelated()
 {
-    setStories();
-    setScene();
+    if($('#story').length) setStories();
+    setScenes();
 }
 
 /**
@@ -128,7 +128,7 @@ function setStories()
     const productID = $('#product').val();
     var branch      = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    const link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=' + executionID);
+    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=' + executionID);
 
     $.get(link, function(stories)
     {
@@ -146,17 +146,34 @@ function setScenes()
 {
     const moduleID  = $('#module').val();
     const productID = $('#product').val();
+    const stype     = config.currentMethod == 'createscene' || config.currentMethod == 'editscene' ? 1 : 2;
     var branch      = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    const link = createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1');
 
-    $('#sceneIdBox').load(link);
+    const link = $.createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=' + stype + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1');
+
+    $.get(link, function(data)
+    {
+        if(data)
+        {
+            if(config.currentMethod == 'createscene' || config.currentMethod == 'editscene')
+            {
+                $('#parent').remove();
+                $('#sceneIdBox').append(data);
+            }
+            else
+            {
+                $('#sceneIdBox').html(data);
+            }
+        }
+    })
 }
 
 function loadProductRelated()
 {
     loadProductBranches();
     loadProductModules();
+    setScenes();
     if(config.currentMethod == 'create' || config.currentMethod == 'edit') setStories();
 }
 
@@ -166,10 +183,10 @@ function loadProductBranches()
 
     const productID = $('#product').val();
     var param     = config.currentMethod == 'create' ? 'active' : 'all';
-    var oldBranch = caseBranch !== 'undefined' ? caseBranch : 0;
+    var oldBranch = typeof(caseBranch) != 'undefined' ? caseBranch : 0;
     var param     = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + param;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
-    $.get(createLink('branch', 'ajaxGetBranches', param), function(data)
+    $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
     {
         if(data)
         {
@@ -187,10 +204,9 @@ function loadProductModules()
 
     if(!branch) branch = 0;
 
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + moduleID);
+    link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + moduleID);
     $('#moduleIdBox').load(link, function()
     {
-        var $inputGroup = $(this);
         if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>");
     });
 }
@@ -199,5 +215,6 @@ function loadBranchRelated()
 {
     loadProductModules();
 
+    setScenes();
     if(config.currentMethod == 'create' || config.currentMethod == 'edit') setStories();
 }
