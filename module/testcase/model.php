@@ -3328,19 +3328,20 @@ class testcaseModel extends model
      */
     public function getList($productID,$branch, $moduleID, $caseIdList, $pager = NULL, $type = '', $topIdList = array(), $browseType = '', &$executionSql = NULL)
     {
+        if(!$caseIdList && $browseType != 'onlyscene') return array();
+
         /* Get list of module and its children module. */
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
 
         /* Get scenes and all cases in $caseIdList. */
         $cases = $this->dao->select('id,path')->from(VIEW_SCENECASE)
             ->where('id')->in($caseIdList)
-            ->beginIF($browseType != 'bysearch')->orWhere('( isCase')->eq(2)->fi()
-            ->beginIF($browseType == 'bysearch')->andWhere('( 1')->eq(1)->fi()
             ->beginIF(is_array($productID))->andWhere('product')->in($productID)->fi()
             ->beginIF(!is_array($productID) and intval($productID) > 0)->andWhere('product')->eq($productID)->fi()
             ->beginIF($branch != 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF(intval($moduleID) > 0)->andWhere('module')->in($modules)->fi()
-            ->markRight(1)
+            ->beginIF($browseType != 'all')->andWhere('isCase')->eq(1)->fi()
+            ->beginIF($browseType == 'all')->orWhere('isCase')->eq(2)->fi()
             ->fetchPairs('id','path');
 
         $sceneIdArr = array();
