@@ -148,10 +148,11 @@ $config->my->score->dtable->fieldList['desc']['type']  = 'desc';
 
 $config->my->task = new stdclass();
 $config->my->task->actionList = array();
-$config->my->task->actionList['confirmStoryChange']['icon'] = 'search';
-$config->my->task->actionList['confirmStoryChange']['text'] = $lang->task->confirmStoryChange;
-$config->my->task->actionList['confirmStoryChange']['hint'] = $lang->task->confirmStoryChange;
-$config->my->task->actionList['confirmStoryChange']['url']  = array('module' => 'task', 'method' => 'confirmStoryChange', 'params' => 'taskID={id}');
+$config->my->task->actionList['confirmStoryChange']['icon']  = 'search';
+$config->my->task->actionList['confirmStoryChange']['text']  = $lang->task->confirmStoryChange;
+$config->my->task->actionList['confirmStoryChange']['hint']  = $lang->task->confirmStoryChange;
+$config->my->task->actionList['confirmStoryChange']['url']   = array('module' => 'task', 'method' => 'confirmStoryChange', 'params' => 'taskID={id}');
+$config->my->task->actionList['confirmStoryChange']['className'] = 'ajax-submit';
 
 $config->my->task->actionList['start']['icon']        = 'play';
 $config->my->task->actionList['start']['text']        = $lang->task->start;
@@ -183,17 +184,21 @@ $config->my->task->actionList['record']['hint']        = $lang->task->logEfforts
 $config->my->task->actionList['record']['url']         = array('module' => 'task', 'method' => 'recordEstimate', 'params' => 'taskID={id}');
 $config->my->task->actionList['record']['data-toggle'] = 'modal';
 
-$config->my->task->actionList['edit']['icon']        = 'edit';
-$config->my->task->actionList['edit']['text']        = $lang->task->edit;
-$config->my->task->actionList['edit']['hint']        = $lang->task->edit;
-$config->my->task->actionList['edit']['url']         = array('module' => 'task', 'method' => 'edit', 'params' => 'taskID={id}');
-$config->my->task->actionList['edit']['data-toggle'] = 'modal';
+$config->my->task->actionList['edit']['icon']          = 'edit';
+$config->my->task->actionList['edit']['text']          = $lang->task->edit;
+$config->my->task->actionList['edit']['hint']          = $lang->task->edit;
+$config->my->task->actionList['edit']['url']           = array('module' => 'task', 'method' => 'edit', 'params' => 'taskID={id}');
+$config->my->task->actionList['edit']['data-toggle']   = 'modal';
+$config->my->task->actionList['edit']['data-size']     = 'lg';
+$config->my->task->actionList['edit']['data-position'] = 'center';
 
-$config->my->task->actionList['batchCreate']['icon']        = 'split';
-$config->my->task->actionList['batchCreate']['text']        = $lang->task->batchCreate;
-$config->my->task->actionList['batchCreate']['hint']        = $lang->task->batchCreate;
-$config->my->task->actionList['batchCreate']['url']         = array('module' => 'task', 'method' => 'batchCreate', 'params' => 'executionID={execution}&storyID={story}&moduleID={module}&taskID={id}iframe=true');
-$config->my->task->actionList['batchCreate']['data-toggle'] = 'modal';
+$config->my->task->actionList['batchCreate']['icon']          = 'split';
+$config->my->task->actionList['batchCreate']['text']          = $lang->task->batchCreate;
+$config->my->task->actionList['batchCreate']['hint']          = $lang->task->batchCreate;
+$config->my->task->actionList['batchCreate']['url']           = array('module' => 'task', 'method' => 'batchCreate', 'params' => 'executionID={execution}&storyID={story}&moduleID={module}&taskID={id}iframe=true');
+$config->my->task->actionList['batchCreate']['data-toggle']   = 'modal';
+$config->my->task->actionList['batchCreate']['data-size']     = 'lg';
+$config->my->task->actionList['batchCreate']['data-position'] = 'center';
 
 $config->my->task->dtable = new stdclass();
 $config->my->task->dtable->fieldList['id']['name']  = 'id';
@@ -304,10 +309,11 @@ $config->my->requirement->actionList['edit']['hint']        = $lang->story->edit
 $config->my->requirement->actionList['edit']['url']         = array('module' => 'story', 'method' => 'edit', 'params' => 'storyID={id}&from=default&storyType=requirement');
 $config->my->requirement->actionList['edit']['data-toggle'] = 'modal';
 
-$config->my->requirement->actionList['close']['icon'] = 'off';
-$config->my->requirement->actionList['close']['text'] = $lang->story->close;
-$config->my->requirement->actionList['close']['hint'] = $lang->story->close;
-$config->my->requirement->actionList['close']['url']  = array('module' => 'story', 'method' => 'close', 'params' => 'storyID={id}&from=&storyType=requirement');
+$config->my->requirement->actionList['close']['icon']        = 'off';
+$config->my->requirement->actionList['close']['text']        = $lang->story->close;
+$config->my->requirement->actionList['close']['hint']        = $lang->story->close;
+$config->my->requirement->actionList['close']['url']         = array('module' => 'story', 'method' => 'close', 'params' => 'storyID={id}&from=&storyType=requirement');
+$config->my->requirement->actionList['close']['data-toggle'] = 'modal';
 
 $config->my->requirement->dtable = new stdclass();
 $config->my->requirement->dtable->fieldList['id']['name']  = 'id';
@@ -397,10 +403,11 @@ $config->my->story->actionList['create']['hint']        = $lang->testcase->creat
 $config->my->story->actionList['create']['url']         = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&module=0&from=&param=0&storyID={id}');
 $config->my->story->actionList['create']['data-toggle'] = 'modal';
 
-$config->my->story->actionList['close']['icon'] = 'off';
-$config->my->story->actionList['close']['text'] = $lang->story->close;
-$config->my->story->actionList['close']['hint'] = $lang->story->close;
-$config->my->story->actionList['close']['url']  = array('module' => 'story', 'method' => 'close', 'params' => 'storyID={id}');
+$config->my->story->actionList['close']['icon']        = 'off';
+$config->my->story->actionList['close']['text']        = $lang->story->close;
+$config->my->story->actionList['close']['hint']        = $lang->story->close;
+$config->my->story->actionList['close']['url']         = array('module' => 'story', 'method' => 'close', 'params' => 'storyID={id}');
+$config->my->story->actionList['close']['data-toggle'] = 'modal';
 
 $config->my->story->dtable = new stdclass();
 $config->my->story->dtable->fieldList['id']['name']  = 'id';
@@ -504,6 +511,9 @@ $config->my->testtask->dtable->fieldList['actions']['sortType'] = false;
 $config->my->testtask->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
 $config->my->testtask->dtable->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'view', 'edit', 'delete');
 
+$config->my->testtask->dtable->fieldList['actions']['list']['edit']['data-toggle'] = 'modal';
+$config->my->testtask->dtable->fieldList['actions']['list']['edit']['data-size']   = 'lg';
+
 $config->my->testcase = new stdclass();
 $config->my->testcase->dtable = new stdclass();
 $config->my->testcase->dtable->fieldList['id']['name']  = 'id';
@@ -532,6 +542,8 @@ $config->my->testcase->dtable->fieldList['lastRunDate']   = $config->testcase->d
 $config->my->testcase->dtable->fieldList['lastRunResult'] = $config->testcase->dtable->fieldList['lastRunResult'];
 $config->my->testcase->dtable->fieldList['actions']       = $config->testcase->dtable->fieldList['actions'];
 
+$config->my->testcase->dtable->fieldList['actions']['list']['edit']['data-toggle'] = 'modal';
+$config->my->testcase->dtable->fieldList['actions']['list']['edit']['data-size']   = 'lg';
 $config->my->testcase->dtable->fieldList['actions']['menu'] = array('runCase', 'runResult', 'edit', 'createBug', 'create');
 
 $config->my->audit->dtable = new stdclass();

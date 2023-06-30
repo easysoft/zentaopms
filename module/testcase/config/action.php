@@ -9,17 +9,19 @@ $config->testcase->actionList['confirmStoryChange']['text'] = $lang->confirm;
 $config->testcase->actionList['confirmStoryChange']['hint'] = $lang->confirm;
 $config->testcase->actionList['confirmStoryChange']['url']  = array('module' => 'testcase', 'method' => 'confirmStoryChange', 'params' => 'caseID={id}');
 
-$config->testcase->actionList['runCase']['icon']       = 'play';
-$config->testcase->actionList['runCase']['text']       = $lang->testtask->runCase;
-$config->testcase->actionList['runCase']['hint']       = $lang->testtask->runCase;
-$config->testcase->actionList['runCase']['url']        = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={id}&version={version}');
-$config->testcase->actionList['runCase']['data-width'] = 0.95;
+$config->testcase->actionList['runCase']['icon']        = 'play';
+$config->testcase->actionList['runCase']['text']        = $lang->testtask->runCase;
+$config->testcase->actionList['runCase']['hint']        = $lang->testtask->runCase;
+$config->testcase->actionList['runCase']['url']         = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={id}&version={version}');
+$config->testcase->actionList['runCase']['data-toggle'] = 'modal';
+$config->testcase->actionList['runCase']['data-size']   = 'lg';
 
-$config->testcase->actionList['runResult']['icon']       = 'list-alt';
-$config->testcase->actionList['runResult']['text']       = $lang->testtask->results;
-$config->testcase->actionList['runResult']['hint']       = $lang->testtask->results;
-$config->testcase->actionList['runResult']['url']        = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID=0&caseID={id}');
-$config->testcase->actionList['runResult']['data-width'] = 0.95;
+$config->testcase->actionList['runResult']['icon']        = 'list-alt';
+$config->testcase->actionList['runResult']['text']        = $lang->testtask->results;
+$config->testcase->actionList['runResult']['hint']        = $lang->testtask->results;
+$config->testcase->actionList['runResult']['url']         = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID=0&caseID={id}');
+$config->testcase->actionList['runResult']['data-toggle'] = 'modal';
+$config->testcase->actionList['runResult']['data-size']   = 'lg';
 
 $config->testcase->actionList['edit']['icon'] = 'edit';
 $config->testcase->actionList['edit']['text'] = $lang->testcase->edit;
@@ -32,10 +34,12 @@ $config->testcase->actionList['review']['hint']        = $lang->testcase->review
 $config->testcase->actionList['review']['url']         = array('module' => 'testcase', 'method' => 'review', 'params' => 'caseID={id}');
 $config->testcase->actionList['review']['data-toggle'] = 'modal';
 
-$config->testcase->actionList['createBug']['icon'] = 'bug';
-$config->testcase->actionList['createBug']['text'] = $lang->testcase->createBug;
-$config->testcase->actionList['createBug']['hint'] = $lang->testcase->createBug;
-$config->testcase->actionList['createBug']['url']  = array('module' => 'testcase', 'method' => 'createBug', 'params' => 'product={product}&branch={branch}&extra=caseID={id},version={version},runID=');
+$config->testcase->actionList['createBug']['icon']        = 'bug';
+$config->testcase->actionList['createBug']['text']        = $lang->testcase->createBug;
+$config->testcase->actionList['createBug']['hint']        = $lang->testcase->createBug;
+$config->testcase->actionList['createBug']['url']         = array('module' => 'testcase', 'method' => 'createBug', 'params' => 'product={product}&branch={branch}&extra=caseID={id},version={version},runID=');
+$config->testcase->actionList['createBug']['data-toggle'] = 'modal';
+$config->testcase->actionList['createBug']['data-size']   = 'lg';
 
 $config->testcase->actionList['create']['icon'] = 'copy';
 $config->testcase->actionList['create']['text'] = $lang->testcase->copy;

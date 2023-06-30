@@ -67,7 +67,7 @@ featureBar
     set::items($items),
     set::current($type),
     set::linkParams("taskID=$taskID&type={key}"),
-    to::before(a(set::href(createLink('testtask', 'browse', "product={$task->product}")), set::class('btn secondary'), icon('back'), $lang->goback)),
+    to::before(backBtn(set::icon('back'), set::class('btn secondary'), $lang->goback)),
     li(searchToggle())
 );
 

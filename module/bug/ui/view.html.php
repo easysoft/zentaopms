@@ -57,6 +57,7 @@ $duplicateLink = $bug->duplicateBug && $canViewBug ? a
 (
     set('href', $this->createLink('bug', 'view', "bugID={$bug->duplicateBug}")),
     set('data-toggle', 'modal'),
+    set('data-size', 'lg'),
     $bug->duplicateBugTitle
 ) : '';
 $duplicateBug = $bug->duplicateBug ? "#{$bug->duplicateBug}:{$duplicateLink}" : '';
@@ -68,6 +69,7 @@ foreach($legendMisc['relatedBug']['text'] as $relatedBugID => $relatedBugTitle)
     (
         set('href', $this->createLink('bug', 'view', "bugID={$relatedBugID}")),
         set('data-toggle', 'modal'),
+        set('data-size', 'lg'),
         span(label(set::class('dark-outline rounded-full mr-2'), $relatedBugID), $relatedBugTitle)
     ));
 }

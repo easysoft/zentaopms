@@ -260,13 +260,13 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                                 (
                                                     'type' => 'line',
                                                     'name' => $lang->block->productstatistic->opened,
-                                                    'data' => array(1, 2, 3, 4, 5, 6)
+                                                    'data' => array(23, 25, 27, 22, 24, 30)
                                                 ),
                                                 array
                                                 (
                                                     'type' => 'line',
                                                     'name' => $lang->block->productstatistic->done,
-                                                    'data' => array(6, 5, 4, 3, 2, 1)
+                                                    'data' => array(20, 21, 24, 20, 21, 22)
                                                 )
                                             )
                                         )

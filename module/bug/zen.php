@@ -632,7 +632,7 @@ class bugZen extends bug
         if($product->type != 'normal') $legendBasic['branch']  = array('name' => $branchTitle,        'text' => $branchName,    'href' => $branchLink);
         $legendBasic['module'] = array('name' => $this->lang->bug->module, 'text' => $moduleTitle);
         if(empty($product->shadow) || !empty($project->multiple)) $legendBasic['productplan'] = array('name' => $this->lang->bug->plan, 'text' => $bug->planName, 'href' => $planLink);
-        $legendBasic['fromCase']       = array('name' => $this->lang->bug->fromCase,       'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal'));
+        $legendBasic['fromCase']       = array('name' => $this->lang->bug->fromCase,       'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
         $legendBasic['type']           = array('name' => $this->lang->bug->type,           'text' => zget($this->lang->bug->typeList, $bug->type));
         $legendBasic['severity']       = array('name' => $this->lang->bug->severity,       'text' => zget($this->lang->bug->severityList, $bug->severity));
         $legendBasic['pri']            = array('name' => $this->lang->bug->pri,            'text' => zget($this->lang->bug->priList, $bug->pri));
@@ -702,8 +702,8 @@ class bugZen extends bug
         $legendExecStoryTask = array();
         $legendExecStoryTask['project']   = array('name' => $this->lang->bug->project, 'text' => zget($bug, 'projectName', ''), 'href' => $projectLink);
         $legendExecStoryTask['execution'] = array('name' => $executionTitle,           'text' => $bug->executionName,           'href' => $executionLink);
-        $legendExecStoryTask['story']     = array('name' => $this->lang->bug->story,   'text' => $bug->storyTitle,              'href' => $storyLink, 'attr' => array('data-toggle' => 'modal'));
-        $legendExecStoryTask['task']      = array('name' => $this->lang->bug->task,    'text' => $bug->taskName,                'href' => $taskLink,  'attr' => array('data-toggle' => 'modal'));
+        $legendExecStoryTask['story']     = array('name' => $this->lang->bug->story,   'text' => $bug->storyTitle,              'href' => $storyLink, 'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
+        $legendExecStoryTask['task']      = array('name' => $this->lang->bug->task,    'text' => $bug->taskName,                'href' => $taskLink,  'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
 
         return $legendExecStoryTask;
     }
@@ -731,8 +731,8 @@ class bugZen extends bug
         $legendMisc = array();
         $legendMisc['relatedBug'] = array('name' => $lang->bug->relatedBug, 'text' => isset($bug->linkBugTitles) ? $bug->linkBugTitles : array());
         $legendMisc['toCase']     = array('name' => $lang->bug->toCase,     'text' => $bug->toCases);
-        $legendMisc['toStory']    = array('name' => $lang->bug->toStory,    'text' => $toStoryName,  'href' => $toStoryLink,  'attr' => array('data-toggle' => 'modal'));
-        $legendMisc['toTask']     = array('name' => $lang->bug->toTask,     'text' => $toTaskName,   'href' => $toTaskLink,   'attr' => array('data-toggle' => 'modal'));
+        $legendMisc['toStory']    = array('name' => $lang->bug->toStory,    'text' => $toStoryName,  'href' => $toStoryLink,  'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
+        $legendMisc['toTask']     = array('name' => $lang->bug->toTask,     'text' => $toTaskName,   'href' => $toTaskLink,   'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
         $legendMisc['linkMR']     = array('name' => $lang->bug->linkMR,     'text' => $bug->linkMRTitles);
         $legendMisc['linkCommit'] = array('name' => $lang->bug->linkCommit, 'text' => $linkCommits);
 

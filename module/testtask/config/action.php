@@ -59,10 +59,12 @@ $config->testtask->actionList['edit']['text'] = $lang->testtask->edit;
 $config->testtask->actionList['edit']['hint'] = $lang->testtask->edit;
 $config->testtask->actionList['edit']['url']  = array('module' => 'testtask', 'method' => 'edit', 'params' => 'taskID={id}');
 
-$config->testtask->actionList['delete']['icon'] = 'trash';
-$config->testtask->actionList['delete']['text'] = $lang->testtask->delete;
-$config->testtask->actionList['delete']['hint'] = $lang->testtask->delete;
-$config->testtask->actionList['delete']['url']  = array('module' => 'testtask', 'method' => 'delete', 'params' => 'taskID={id}');
+$config->testtask->actionList['delete']['icon']         = 'trash';
+$config->testtask->actionList['delete']['text']         = $lang->testtask->delete;
+$config->testtask->actionList['delete']['hint']         = $lang->testtask->delete;
+$config->testtask->actionList['delete']['url']          = array('module' => 'testtask', 'method' => 'delete', 'params' => 'taskID={id}');
+$config->testtask->actionList['delete']['className']    = 'ajax-submit';
+$config->testtask->actionList['delete']['data-confirm'] = $lang->testtask->confirmDelete;
 
 if(!isset($config->testtask->cases)) $config->testtask->cases = new stdclass();
 $config->testtask->cases->actionList['confirmChange']['icon'] = 'search';

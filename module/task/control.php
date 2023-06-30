@@ -386,7 +386,7 @@ class task extends control
 
         $this->executeHooks($taskID);
 
-        echo js::reload('parent');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
