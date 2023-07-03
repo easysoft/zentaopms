@@ -1422,8 +1422,8 @@ class execution extends control
             }
             if(!empty($dateError))
             {
-                foreach($dateError as $index => $error) $dateError[$index] = str_replace(array('。', '.'), array('', ''), $error) . '<br/>';
-                return $this->sendError($dateError);
+                foreach($dateError as $index => $error) $dateError[$index] = str_replace(array('。', '.'), array('', ''), $error);
+                return $this->sendError(implode('; ', $dateError));
             }
 
             if($begin >= $end) return $this->sendError($this->lang->execution->charts->cfd->errorBegin);
