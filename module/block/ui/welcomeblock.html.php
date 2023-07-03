@@ -44,26 +44,28 @@ panel
         div
         (
             set('class', 'panel-title flex w-full'),
-            col
+            cell
             (
-                set('align', 'center'),
-                set('class', 'w-1/5 pr-3'),
+                set('width', '22%'),
+                set('class', 'center'),
                 span($todaySummary),
 
             ),
-            col
+            cell
             (
-                span(set('class', 'text-base font-medium'), html(sprintf($lang->block->summary->welcome, $usageDays, $doneReview, $finishTask, $fixBug)))
+                set::class('pr-8'),
+                span(set('class', 'text-sm font-normal'), html(sprintf($lang->block->summary->welcome, $usageDays, $doneReview, $finishTask, $fixBug)))
             )
         )
     ),
     div
     (
         set('class', 'flex py-2'),
-        col
+        cell
         (
+            set('width', '22%'),
             set('align', 'center'),
-            set('class', 'border-right w-1/5'),
+            set('class', 'border-right'),
             center
             (
                 set('class', 'font-bold'),
