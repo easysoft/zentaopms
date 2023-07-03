@@ -556,6 +556,10 @@ class mr extends control
      */
     public function link($MRID, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
+        $this->loadModel('story');
+        $this->loadModel('bug');
+        $this->loadModel('task');
+
         $this->app->loadLang('productplan');
         $this->app->loadLang('bug');
         $this->app->loadLang('task');

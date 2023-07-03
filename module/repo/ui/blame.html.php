@@ -54,12 +54,15 @@ foreach($blames as $key => $blame)
 
 $blames = initTableData($blames, $config->repo->blameDtable->fieldList);
 
-$encodes = array();
+$encodePath = $this->repo->encodePath($entry);
+$encodes    = array();
 foreach($lang->repo->encodingList as $key => $val)
 {
     $encodes[] = array('text' => $val, 'url' => inlink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$key"));
 }
-$defaultEncode = $lang->repo->encodingList[$repo->encoding == 'utf-8' ? 'utf_8' : $repo->encoding];
+$defaultEncode = $lang->repo->encodingList[$encoding];
+
+set::rawContent(false);
 
 featureBar(
     backBtn

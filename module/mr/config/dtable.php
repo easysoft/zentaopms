@@ -47,24 +47,5 @@ $config->mr->dtable->fieldList['actions']['name']  = 'actions';
 $config->mr->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->mr->dtable->fieldList['actions']['type']  = 'actions';
 $config->mr->dtable->fieldList['actions']['menu']  = array('view', 'edit', 'diff', 'link', 'delete');
+$config->mr->dtable->fieldList['actions']['list']  = $config->mr->actionList;
 
-$config->mr->dtable->fieldList['actions']['list']['view']['icon'] = 'eye';
-$config->mr->dtable->fieldList['actions']['list']['view']['hint'] = $lang->mr->view;
-$config->mr->dtable->fieldList['actions']['list']['view']['url']  = helper::createLink('mr', 'view', "MRID={id}");
-
-$config->mr->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
-$config->mr->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->mr->edit;
-$config->mr->dtable->fieldList['actions']['list']['edit']['url']  = helper::createLink('mr', 'edit', "MRID={id}");
-
-$config->mr->dtable->fieldList['actions']['list']['diff']['icon'] = 'diff';
-$config->mr->dtable->fieldList['actions']['list']['diff']['hint'] = $lang->mr->diff;
-$config->mr->dtable->fieldList['actions']['list']['diff']['url']  = helper::createLink('mr', 'diff', "MRID={id}");
-
-$config->mr->dtable->fieldList['actions']['list']['link']['icon'] = 'link';
-$config->mr->dtable->fieldList['actions']['list']['link']['hint'] = $lang->mr->link;
-$config->mr->dtable->fieldList['actions']['list']['link']['url']  = helper::createLink('mr', 'link', "MRID={id}");
-
-$config->mr->dtable->fieldList['actions']['list']['delete']['icon']        = 'trash';
-$config->mr->dtable->fieldList['actions']['list']['delete']['hint']        = $lang->mr->delete;
-$config->mr->dtable->fieldList['actions']['list']['delete']['url']         = helper::createLink('mr', 'delete', "MRID={id}");
-$config->mr->dtable->fieldList['actions']['list']['delete']['data-toggle'] = 'modal';
