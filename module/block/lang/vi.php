@@ -571,6 +571,11 @@ $lang->block->productstatistic->newExecution    = 'Latest Execution';
 $lang->block->productstatistic->newRelease      = 'Latest Release';
 $lang->block->productstatistic->deliveryRate    = 'Delivery Rate';
 
+$lang->block->projectoverview = new stdclass();
+$lang->block->projectoverview->totalProject  = 'Total';
+$lang->block->projectoverview->thisYear      = 'This Year';
+$lang->block->projectoverview->lastThreeYear = 'Done in last three years';
+
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = 'Total Product Count';
 $lang->block->productoverview->productReleasedThisYear = 'Number Of Releases This Year';

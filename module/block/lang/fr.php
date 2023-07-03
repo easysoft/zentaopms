@@ -514,6 +514,11 @@ $lang->block->productstatistic->newExecution    = 'Latest Execution';
 $lang->block->productstatistic->newRelease      = 'Latest Release';
 $lang->block->productstatistic->deliveryRate    = 'Delivery Rate';
 
+$lang->block->projectoverview = new stdclass();
+$lang->block->projectoverview->totalProject  = 'Total';
+$lang->block->projectoverview->thisYear      = 'This Year';
+$lang->block->projectoverview->lastThreeYear = 'Done in last three years';
+
 $lang->block->projectstatistic = new stdclass();
 $lang->block->projectstatistic->story       = 'Story';
 $lang->block->projectstatistic->cost        = 'Cost';

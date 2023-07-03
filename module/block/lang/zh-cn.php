@@ -516,6 +516,11 @@ $lang->block->productstatistic->newExecution    = '最新执行';
 $lang->block->productstatistic->newRelease      = '最新发布';
 $lang->block->productstatistic->deliveryRate    = '需求交付率';
 
+$lang->block->projectoverview = new stdclass();
+$lang->block->projectoverview->totalProject  = '项目总量';
+$lang->block->projectoverview->thisYear      = '今年完成';
+$lang->block->projectoverview->lastThreeYear = '近三年完成的项目数量分布';
+
 $lang->block->projectstatistic = new stdclass();
 $lang->block->projectstatistic->story       = '需求';
 $lang->block->projectstatistic->cost        = '投入';
