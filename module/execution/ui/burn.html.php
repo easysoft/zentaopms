@@ -11,6 +11,9 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('workHour', $lang->execution->workHour);
+jsVar('type', $type);
+jsVar('executionID', $executionID);
+
 $weekend      = strpos($type, 'noweekend') !== false ? 'withweekend' : 'noweekend';
 $delay        = strpos($type, 'withdelay') !== false ? 'nodelay' : 'withdelay';
 $weekendParam = $delay == 'withdelay' ? "nodelay,{$weekend}" : "withdelay,{$weekend}";
@@ -36,7 +39,7 @@ featureBar
         a
         (
             set::id('weekend'),
-            set::href(createLink('execution', 'burn', "executionID={$execution->id}&type={$weekendParam}")),
+            set::href(createLink('execution', 'burn', "executionID={$execution->id}&type={$weekendParam}&interval={$interval}")),
             $lang->execution->{$weekend}
         )
     ),
@@ -68,9 +71,31 @@ featureBar
     ) : null,
     li
     (
-        setClass('nav-item'),
+        setClass('nav-item mr-3'),
         html($lang->execution->howToUpdateBurn)
     ),
+    li
+    (
+        set::class('burnByBox'),
+        select
+        (
+            set::name('burnBy'),
+            set::items($lang->execution->burnByList),
+            set::value($burnBy),
+            set::required(true),
+        )
+    ),
+    $interval ? li
+    (
+        set::class('intervalBox ml-4'),
+        select
+        (
+            set::name('interval'),
+            set::items($dayList),
+            set::value($interval),
+            set::required(true),
+        )
+    ) : null
 );
 
 panel
@@ -79,7 +104,7 @@ panel
     (
         setClass('text-center'),
         $executionName . ' ' . $this->lang->execution->burn . '(' . zget($lang->execution->burnByList, $burnBy) . ')',
-        isset($execution->delay) ? label(setClass('label danger-outline ml-3'), $lang->execution->delayed) : null,
+        isset($execution->delay) ? label(setClass('label danger-pale ring-danger ml-3'), $lang->execution->delayed) : null,
     ),
     echarts
     (
@@ -90,7 +115,8 @@ panel
                 'type' => 'category',
                 'data' => $chartData['labels'],
                 'name' => $lang->execution->burnXUnit,
-                'boundaryGap' => false
+                'boundaryGap' => false,
+                'axisLabel' => array('interval' => (int)$interval)
             )
         ),
         set::yAxis
@@ -106,6 +132,11 @@ panel
         (
             array
             (
+                'selectedMode' => false,
+                'orient' => 'vertical',
+                'left' => 'right',
+                'top' => 'center',
+                'align' => 'left',
                 'data' => array($lang->execution->charts->burn->graph->actuality, $lang->execution->charts->burn->graph->reference, $lang->execution->charts->burn->graph->delay),
             )
         ),

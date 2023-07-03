@@ -1333,11 +1333,6 @@ class execution extends control
         $executionID = $execution->id;
         $burnBy      = $this->cookie->burnBy ? $this->cookie->burnBy : $burnBy;
 
-        /* Header and position. */
-        $title      = $execution->name . $this->lang->colon . $this->lang->execution->burn;
-        $position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $position[] = $this->lang->execution->burn;
-
         /* Get date list. */
         if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
             or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
@@ -1353,12 +1348,12 @@ class execution extends control
         $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
         $chartData    = $this->execution->buildBurnData($executionID, $dateList, $burnBy, $executionEnd);
 
-        $dayList = array_fill(1, floor((int)$execution->days / $this->config->execution->maxBurnDay) + 5, '');
+        $allDateList = date::getDateList($execution->begin, $endDate, 'Y-m-d', $type, $this->config->execution->weekend);
+        $dayList     = array_fill(1, floor(count($allDateList) / $this->config->execution->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->execution->interval . ($key + 1) . $this->lang->day;
 
         /* Assign. */
-        $this->view->title         = $title;
-        $this->view->position      = $position;
+        $this->view->title         = $execution->name . $this->lang->colon . $this->lang->execution->burn;
         $this->view->tabID         = 'burn';
         $this->view->burnBy        = $burnBy;
         $this->view->executionID   = $executionID;
@@ -1494,7 +1489,7 @@ class execution extends control
         if($_POST)
         {
             $this->execution->fixFirst($executionID);
-            return print(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
         $execution = $this->execution->getById($executionID);

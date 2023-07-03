@@ -8,3 +8,16 @@ window.randTipInfo = function(rowDatas)
     });
     return tipHtml;
 }
+
+$(document).on('change', '#burnBy', function()
+{
+    $.cookie.set('burnBy', $(this).val(), {expires:config.cookieLife, path:config.webRoot});
+
+    let interval = typeof($('#interval').val()) == 'undefined' ? 0 : $('#interval').val() ;
+    loadPage($.createLink('execution', 'burn', 'executionID=' + executionID + '&type=' + type + '&interval=' + interval + '&burnBy=' + $(this).val()));
+});
+
+$(document).on('change', '#interval', function()
+{
+    loadPage($.createLink('execution', 'burn', 'executionID=' + executionID + '&type=' + type + '&interval=' + $(this).val()));
+});

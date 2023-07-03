@@ -353,7 +353,7 @@ $lang->execution->timeSummary          = '<div class="table-col"><div class="cle
 $lang->execution->groupSummaryAB       = "<div>Aufgaben <strong>%s</strong></div><div><span class='text-muted'>Wartend</span> %s &nbsp; <span class='text-muted'>In Arbeit</span> %s</div><div>Geplant <strong>%s</strong></div><div><span class='text-muted'>Genutzt</span> %s &nbsp; <span class='text-muted'>Rest</span> %s</div>";
 $lang->execution->wbs                  = "Aufgaben aufteilen";
 $lang->execution->batchWBS             = "Mehrere aufteilen";
-$lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Wie wird der Burndown Chart aktualisiert?'>Hilfe <i class='icon icon-help'></i></a>";
+$lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Wie wird der Burndown Chart aktualisiert?'>Hilfe <i class='icon icon-help text-gray'></i></a>";
 $lang->execution->whyNoStories         = "Keine Story kann verknüpft werden. Bitte prüfen Sie ob ein Story mit {$lang->executionCommon} verknüpft ist {$lang->productCommon} und stellen Sie sicher das diese geprüft ist.";
 $lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in {$lang->projectCommon} and make sure it has been reviewed.";
 $lang->execution->productStories       = "{$lang->executionCommon} verknüpfte Story ist ein Subset von {$lang->productCommon}, welche nur nach überprüfung verknüpft werden kann. Bitte <a href='%s'> Story verknüpfen</a>。";

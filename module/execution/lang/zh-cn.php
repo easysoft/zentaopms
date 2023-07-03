@@ -353,7 +353,7 @@ $lang->execution->timeSummary          = '<div class="table-col"><div class="cle
 $lang->execution->groupSummaryAB       = "<div>总任务 <strong>%s : </strong><span class='text-muted'>未开始</span> %s &nbsp; <span class='text-muted'>进行中</span> %s</div><div>总预计 <strong>%s : </strong><span class='text-muted'>已消耗</span> %s &nbsp; <span class='text-muted'>剩余</span> %s</div>";
 $lang->execution->wbs                  = "分解任务";
 $lang->execution->batchWBS             = "批量分解";
-$lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？'>帮助 <i class='icon icon-help'></i></a>";
+$lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？'>帮助 <i class='icon icon-help text-gray'></i></a>";
 $lang->execution->whyNoStories         = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->executionCommon}关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->execution->projectNoStories     = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->projectCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->execution->productStories       = "{$lang->executionCommon}关联的{$lang->SRCommon}是{$lang->productCommon}{$lang->SRCommon}的子集，并且只有评审通过的{$lang->SRCommon}才能关联。请<a href='%s'>关联{$lang->SRCommon}</a>。";

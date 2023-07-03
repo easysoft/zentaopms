@@ -36,6 +36,7 @@ formPanel
             (
                 set::name('withLeft'),
                 set::value(1),
+                set::checked(true),
                 set::text($lang->execution->fixFirstWithLeft),
                 set::rootClass('ml-4 w-1/3 items-center'),
             ),

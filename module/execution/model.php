@@ -600,7 +600,7 @@ class executionModel extends model
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType')
+            ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType, delta')
             ->get();
 
         if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
