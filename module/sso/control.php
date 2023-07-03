@@ -344,7 +344,7 @@ class sso extends control
 
         $url = "https://open.feishu.cn/open-apis/authen/v1/index?redirect_uri=%s&app_id=%s";
         $url = sprintf($url, $redirectURI, $appID, $state);
-        header("location: $url");
+        helper::header('location', $url);
     }
 
     /**
@@ -412,7 +412,7 @@ class sso extends control
         $this->user->login($user);
 
         $indexUrl = $this->createLink('my', 'index');
-        header("location: $indexUrl");
+        helper::header('location', $indexUrl);
     }
 
     /**

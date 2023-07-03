@@ -2589,7 +2589,7 @@ class execution extends control
         $this->loadModel('kanban');
 
         /* Compatibility IE8. */
-        if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
+        if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) helper::header('X-UA-Compatible', 'IE=EmulateIE7');
 
         $this->execution->setMenu($executionID);
         $execution = $this->execution->getById($executionID);
@@ -2934,7 +2934,7 @@ class execution extends control
     public function storyKanban($executionID)
     {
         /* Compatibility IE8*/
-        if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
+        if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) helper::header('X-UA-Compatible', 'IE=EmulateIE7');
 
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);

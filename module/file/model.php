@@ -1088,10 +1088,10 @@ class fileModel extends model
         $mimes = $this->config->file->mimes;
         $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
 
-        header("Content-type: $contentType");
-        header("Content-Disposition: attachment; filename=\"$fileName\"");
-        header("Pragma: no-cache");
-        header("Expires: 0");
+        helper::header('Content-type', $contentType);
+        helper::header('Content-Disposition', "attachment; filename=\"$fileName\"");
+        helper::header('Pragma', 'no-cache');
+        helper::header('Expires', '0');
         if($type == 'content') helper::end($content);
         if($type == 'file' and file_exists($content))
         {

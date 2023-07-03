@@ -496,13 +496,13 @@ class file extends control
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
         $mime = (isset($file->extension) and in_array($file->extension, $this->config->file->imageExtensions)) ? "image/{$file->extension}" : $this->config->file->mimes['default'];
-        header("Content-type: $mime");
+        helper::header('Content-type', $mime);
 
         $cacheMaxAge = 10 * 365 * 24 * 3600;
-        header("Cache-Control: private");
-        header("Pragma: cache");
-        header("Expires:" . gmdate("D, d M Y H:i:s", time() + $cacheMaxAge) . " GMT");
-        header("Cache-Control: max-age=$cacheMaxAge");
+        helper::header('Cache-Control', 'private');
+        helper::header('Pragma', 'cache');
+        helper::header('Expires', gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT');
+        helper::header('Cache-Control', "max-age=$cacheMaxAge");
 
         $handle = fopen($file->realPath, "r");
         if($handle)

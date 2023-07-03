@@ -131,8 +131,7 @@ class cron extends control
         if(empty($this->config->global->cron)) return;
 
         /* Zand queue. */
-        $zand  = $this->app->loadClass('zand');
-        $queue = $zand->connectQueue('crons');
+        $queue = new zandQueue('crons');
 
         /* Schedule loop. */
         $cronTimes = array();
