@@ -161,7 +161,7 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID") . '#app=admin'));
         }
 
-        $this->view->step       = 'role';
+        $this->view->step       = 'assignrole';
         $this->view->prompt     = $prompt;
         $this->view->promptID   = $promptID;
         $this->view->title      = $this->lang->ai->prompts->assignRole . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
@@ -193,7 +193,7 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
         }
 
-        $this->view->step             = 'data';
+        $this->view->step             = 'selectdatasource';
         $this->view->activeDataSource = empty($prompt->module) ? 'story' : $prompt->module;
         $this->view->dataSource       = $this->config->ai->dataSource;
         $this->view->prompt           = $prompt;
@@ -227,7 +227,7 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
         }
 
-        $this->view->step        = 'purpose';
+        $this->view->step        = 'setpurpose';
         $this->view->dataPreview = ''; // TODO: Provide data preview with model method.
         $this->view->prompt      = $prompt;
         $this->view->promptID    = $promptID;
@@ -245,7 +245,7 @@ class ai extends control
      */
     public function promptSetTargetForm($promptID)
     {
-        $this->view->step       = 'target';
+        $this->view->step       = 'settargetform';
         $this->view->promptID   = $promptID;
         $this->view->title      = $this->lang->ai->prompts->setTargetForm . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
         $this->view->position[] = $this->lang->ai->prompts->common;

@@ -146,8 +146,8 @@ $lang->ai->models->proxyTypes['']       = 'No Proxy';
 $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
 
 $lang->ai->designStepNav = array();
-$lang->ai->designStepNav['role']     = 'Rolle angeben';
-$lang->ai->designStepNav['data']     = 'Objekt auswählen';
-$lang->ai->designStepNav['purpose']  = 'Operation bestätigen';
-$lang->ai->designStepNav['target']   = 'Ergebnisverarbeitung';
-$lang->ai->designStepNav['finalize'] = 'Bereit zur Veröffentlichung';
+$lang->ai->designStepNav['assignrole']       = 'Rolle angeben';
+$lang->ai->designStepNav['selectdatasource'] = 'Objekt auswählen';
+$lang->ai->designStepNav['setpurpose']       = 'Operation bestätigen';
+$lang->ai->designStepNav['settargetform']    = 'Ergebnisverarbeitung';
+$lang->ai->designStepNav['finalize']         = 'Bereit zur Veröffentlichung';

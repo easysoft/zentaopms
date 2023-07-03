@@ -146,8 +146,8 @@ $lang->ai->models->proxyTypes['']       = '不使用代理';
 $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
 
 $lang->ai->designStepNav = array();
-$lang->ai->designStepNav['role']     = '指定角色';
-$lang->ai->designStepNav['data']     = '选择对象';
-$lang->ai->designStepNav['purpose']  = '确认操作';
-$lang->ai->designStepNav['target']   = '结果处理';
-$lang->ai->designStepNav['finalize'] = '准备发布';
+$lang->ai->designStepNav['assignrole']       = '指定角色';
+$lang->ai->designStepNav['selectdatasource'] = '选择对象';
+$lang->ai->designStepNav['setpurpose']       = '确认操作';
+$lang->ai->designStepNav['settargetform']    = '结果处理';
+$lang->ai->designStepNav['finalize']         = '准备发布';
