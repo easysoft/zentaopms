@@ -25,16 +25,26 @@ class commonModel extends model
         if(!defined('FIRST_RUN'))
         {
             define('FIRST_RUN', true);
-            $this->sendHeader();
-            $this->setCompany();
-            $this->setUser();
-            $this->setApproval();
-            $this->loadConfigFromDB();
-            $this->app->setTimezone();
-            $this->loadCustomFromDB();
-            if(!$this->checkIP()) return print($this->lang->ipLimited);
             $this->app->loadLang('company');
+            $this->setUserConfig();
         }
+    }
+
+    /**
+     * Set config of user.
+     *
+     * @access public
+     * @return void
+     */
+    public function setUserConfig()
+    {
+        $this->sendHeader();
+        $this->setCompany();
+        $this->setUser();
+        $this->setApproval();
+        $this->loadConfigFromDB();
+        $this->loadCustomFromDB();
+        if(!$this->checkIP()) return print($this->lang->ipLimited);
     }
 
     /**
@@ -198,21 +208,21 @@ class commonModel extends model
      */
     public function sendHeader()
     {
-        header("Content-Type: text/html; Language={$this->config->charset}");
-        header("Cache-control: private");
+        helper::header('Content-Type', "text/html; Language={$this->config->charset}");
+        helper::header('Cache-Control', 'private');
 
         /* Send HTTP header. */
-        if($this->config->framework->sendXCTO)  header("X-Content-Type-Options: nosniff");
-        if($this->config->framework->sendXXP)   header("X-XSS-Protection: 1; mode=block");
-        if($this->config->framework->sendHSTS)  header("Strict-Transport-Security: max-age=3600; includeSubDomains");
-        if($this->config->framework->sendRP)    header("Referrer-Policy: no-referrer-when-downgrade");
-        if($this->config->framework->sendXPCDP) header("X-Permitted-Cross-Domain-Policies: master-only");
-        if($this->config->framework->sendXDO)   header("X-Download-Options: noopen");
+        if($this->config->framework->sendXCTO)  helper::header('X-Content-Type-Options', 'nosniff');
+        if($this->config->framework->sendXXP)   helper::header('X-XSS-Protection', '1; mode=block');
+        if($this->config->framework->sendHSTS)  helper::header('Strict-Transport-Security', 'max-age=3600; includeSubDomains');
+        if($this->config->framework->sendRP)    helper::header('Referrer-Policy', 'no-referrer-when-downgrade');
+        if($this->config->framework->sendXPCDP) helper::header('X-Permitted-Cross-Domain-Policies', 'master-only');
+        if($this->config->framework->sendXDO)   helper::header('X-Download-Options', 'noopen');
 
         /* Set Content-Security-Policy header. */
         if($this->config->CSPs)
         {
-            foreach($this->config->CSPs as $CSP) header("Content-Security-Policy: $CSP;");
+            foreach($this->config->CSPs as $CSP) helper::header('Content-Security-Policy', "$CSP;");
         }
 
         if($this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon'))
@@ -220,12 +230,12 @@ class commonModel extends model
             if(isset($_SERVER["HTTPS"]) and $_SERVER["HTTPS"] == 'on')
             {
                 $session = $this->config->sessionVar . '=' . session_id();
-                header("Set-Cookie: $session; SameSite=None; Secure=true", false);
+                helper::header('Set-Cookie', "$session; SameSite=None; Secure=true", false);
             }
         }
         else
         {
-            if(!empty($this->config->xFrameOptions)) header("X-Frame-Options: {$this->config->xFrameOptions}");
+            if(!empty($this->config->xFrameOptions)) helper::header('X-Frame-Options', $this->config->xFrameOptions);
         }
     }
 
@@ -267,7 +277,7 @@ class commonModel extends model
             if(!defined('IN_UPGRADE')) $this->session->user->view = $this->loadModel('user')->grantUserView();
             $this->app->user = $this->session->user;
         }
-        elseif($this->app->company->guest or PHP_SAPI == 'cli')
+        elseif($this->app->company->guest || (PHP_SAPI == 'cli' && !isset($_SERVER['RR_MODE'])))
         {
             $user             = new stdClass();
             $user->id         = 0;
@@ -2476,6 +2486,7 @@ EOF;
                 'my'      => array('changepassword'),
                 'message' => array('ajaxgetmessage'),
             );
+
             if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return print(js::locate(helper::createLink('my', 'changepassword')));
             if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
             if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
@@ -2572,7 +2583,7 @@ EOF;
         $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
         $redirectUrl  = helper::createLink('index', 'index');
         $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
-        header("location: $redirectUrl");
+        helper::header('location', $redirectUrl);
         return false;
     }
 

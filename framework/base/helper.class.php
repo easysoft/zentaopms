@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * ZenTaoPHP的baseHelper类。
  * The baseHelper class file of ZenTaoPHP framework.
@@ -716,9 +717,9 @@ class baseHelper
      */
     public static function header301($locate): never
     {
-        header('HTTP/1.1 301 Moved Permanently');
-        header('Location:' . $locate);
-        throw EndResponseException::create();
+        helper::setStatus(301);
+        helper::header('location', $locate);
+        helper::end();
     }
 
     /**
@@ -795,13 +796,74 @@ class baseHelper
         {
             if(isset($config->framework->autoRepairTable) and $config->framework->autoRepairTable)
             {
-                header("location: " . $config->webRoot . 'checktable.php');
-                throw EndResponseException::create();
+                helper::header('location', $config->webRoot . 'checktable.php');
+                helper::end();
             }
             return $lang->repairTable;
         }
 
         return null;
+    }
+
+    /**
+     * 设置状态码。
+     * Set status code.
+     *
+     * @param int $code
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function setStatus(int $code)
+    {
+        if(isset($app->worker))
+        {
+            $app->worker->response->setStatus($code);
+        }
+        else
+        {
+            $PHRASES = array(
+                100 => 'Continue', 101 => 'Switching Protocols', 102 => 'Processing',
+                200 => 'OK', 201 => 'Created', 202 => 'Accepted', 203 => 'Non-Authoritative Information', 204 => 'No Content', 205 => 'Reset Content', 206 => 'Partial Content', 207 => 'Multi-status', 208 => 'Already Reported',
+                300 => 'Multiple Choices', 301 => 'Moved Permanently', 302 => 'Found', 303 => 'See Other', 304 => 'Not Modified', 305 => 'Use Proxy', 306 => 'Switch Proxy', 307 => 'Temporary Redirect',
+                400 => 'Bad Request', 401 => 'Unauthorized', 402 => 'Payment Required', 403 => 'Forbidden', 404 => 'Not Found', 405 => 'Method Not Allowed', 406 => 'Not Acceptable', 407 => 'Proxy Authentication Required', 408 => 'Request Time-out', 409 => 'Conflict', 410 => 'Gone', 411 => 'Length Required', 412 => 'Precondition Failed', 413 => 'Request Entity Too Large', 414 => 'Request-URI Too Large', 415 => 'Unsupported Media Type', 416 => 'Requested range not satisfiable', 417 => 'Expectation Failed', 418 => 'I\'m a teapot', 422 => 'Unprocessable Entity', 423 => 'Locked', 424 => 'Failed Dependency', 425 => 'Unordered Collection', 426 => 'Upgrade Required', 428 => 'Precondition Required', 429 => 'Too Many Requests', 431 => 'Request Header Fields Too Large', 451 => 'Unavailable For Legal Reasons',
+                500 => 'Internal Server Error', 501 => 'Not Implemented', 502 => 'Bad Gateway', 503 => 'Service Unavailable', 504 => 'Gateway Time-out', 505 => 'HTTP Version not supported', 506 => 'Variant Also Negotiates', 507 => 'Insufficient Storage', 508 => 'Loop Detected', 511 => 'Network Authentication Required',
+            );
+            header('HTTP/1.1 ' . (string)$code . ' ' . $PHRASES[$code], true, $code);
+        }
+    }
+
+    /**
+     * 发送HTTP头信息。
+     * Send http header.
+     *
+     * @param string $key
+     * @param string $value
+     * @param bool   $replace
+     * @param int    $response_code
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function header(string $key, string $value, bool $replace = true, int $response_code = 0)
+    {
+        global $app;
+
+        if(isset($app->worker))
+        {
+            $key = trim(strtolower($key));
+            $app->worker->response->setHeader($key, $value);
+
+            if($key == 'location')
+            {
+                $app->worker->response->setStatus(302);
+                helper::end();
+            }
+        }
+        else
+        {
+            header($key . ': ' . $value, $replace, $response_code);
+        }
     }
 }
 

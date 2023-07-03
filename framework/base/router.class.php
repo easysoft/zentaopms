@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * 此文件包括ZenTaoPHP框架的三个类：baseRouter, config, lang。
  * The router, config and lang class file of ZenTaoPHP framework.
@@ -418,16 +419,30 @@ class baseRouter
         $this->setDebug();
         $this->setErrorHandler();
         $this->setTimezone();
-        $this->startSession();
 
-        if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
-        if($this->config->framework->multiLanguage) $this->setClientLang();
 
         $this->setupProfiling();
         $this->setupXhprof();
 
         $this->setEdition();
+
+        $this->setClient();
+    }
+
+    /**
+     * 设置客户端信息
+     * Set info of client: session, lang, device, theme...
+     *
+     * @access public
+     * @return void
+     */
+    public function setClient(): void
+    {
+        $this->startSession();
+
+        if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
+        if($this->config->framework->multiLanguage) $this->setClientLang();
         $this->setVision();
 
         $needDetectDevice   = zget($this->config->framework->detectDevice, $this->clientLang, false);

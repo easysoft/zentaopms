@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * ZenTaoPHP的baseModel类。
  * The baseModel class file of ZenTaoPHP framework.
