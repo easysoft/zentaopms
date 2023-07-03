@@ -151,6 +151,7 @@ $(function()
       $('#submit').attr('disabled', 'disabled');
     }
   });
+  $('#purpose').trigger('input');
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>
