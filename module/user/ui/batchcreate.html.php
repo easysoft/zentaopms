@@ -279,6 +279,7 @@ formBatchPanel
             set::width('400px'),
             set::label($lang->user->verifyPassword),
             set::labelClass('w-10 mr-2'),
+            set::control('password'),
             set::name('verifyPassword'),
             set::value(''),
             set::required(true),

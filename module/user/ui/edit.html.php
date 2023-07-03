@@ -286,6 +286,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->verifyPassword),
+            set::control('password'),
             set::name('verifyPassword'),
             set::value(''),
             set::placeholder($lang->user->placeholder->verify),
