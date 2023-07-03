@@ -84,7 +84,8 @@
     background-color: #ffffff;
 }
 
-.step.clickable > .solid-arrow
+.step.clickable > .solid-arrow,
+.step.disabled > .solid-arrow
 {
     position: absolute;
     top: 0;

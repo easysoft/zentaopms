@@ -13,24 +13,44 @@
   <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> $lang->goback", '', 'btn btn-info');?>
   <div class='steps'>
     <?php
-    $stepstatus = array();
-    $stepstatus['role']     = 'active';
-    $stepstatus['data']     = 'active';
-    $stepstatus['purpose']  = 'current';
-    $stepstatus['target']   = 'clickable';
-    $stepstatus['finalize'] = 'disabled';
+    $stepSequence = array('assignrole', 'selectdatasource', 'setpurpose', 'settargetform', 'finalize');
 
-    foreach($lang->ai->designStepNav as $index => $stepLang)
+    $currentStepIndex = array_search($step, $stepSequence);
+
+    $stepstatus = array();
+
+    foreach($stepSequence as $index => $stepName)
+    {
+      if($index < $currentStepIndex)
+      {
+        $stepstatus[$stepName] = 'active';
+      }
+      elseif($index == $currentStepIndex)
+      {
+        $stepstatus[$stepName] = 'current';
+      }
+      elseif($index == $currentStepIndex + 1)
+      {
+        $stepstatus[$stepName] = 'clickable';
+      }
+      else
+      {
+        $stepstatus[$stepName] = 'disabled';
+      }
+    }
+
+    foreach($lang->ai->designStepNav as $stepKey => $stepLang)
     {
       $arrow = '';
       $currentStepStatus = current($stepstatus);
       $nextStepStatus = next($stepstatus);
-      if($index != 'finalize')
+      if($stepKey != end($stepSequence))
       {
         $arrowClass = $currentStepStatus == $nextStepStatus ||($currentStepStatus == 'clickable' && $nextStepStatus == 'disabled') ? 'outline-arrow' : 'solid-arrow';
         $arrow = "<div class='$arrowClass'></div>";
       }
-      echo "<div class='step $currentStepStatus'><a href=''>$stepLang</a>$arrow</div>";
+      $aTag = html::a(inlink("prompt$stepKey", "prompt=$prompt->id"), $stepLang);
+      echo "<div class='step $currentStepStatus'>$aTag$arrow</div>";
     }
     ?>
   </div>
