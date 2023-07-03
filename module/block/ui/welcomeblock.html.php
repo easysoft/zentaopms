@@ -11,10 +11,9 @@ declare(strict_types=1);
 
 namespace zin;
 
-$usageDays     = 9999;
-$doneReview    = 9999;
-$finishTask    = 9999;
-$fixBug        = 9999;
+$doneReview = 9999;
+$finishTask = 9999;
+$fixBug     = 9999;
 
 $reviewByMe['feedback'] = array('number' => '9999', 'delay' => '1111');
 $reviewByMe['testcase'] = array('number' => '9999');

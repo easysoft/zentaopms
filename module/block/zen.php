@@ -319,6 +319,18 @@ class blockZen extends block
         {
             if($time >= $type) $welcomeType = $type;
         }
+
+        $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
+            ->where('date')->gt('1970-01-01')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->orderBy('date_asc')
+            ->limit('1')
+            ->fetch('date');
+
+        $usageDays = 1;
+        if($firstUseDate) $usageDays = ceil((time() - strtotime($firstUseDate)) / 3600 / 24);
+
+        $this->view->usageDays    = $usageDays;
         $this->view->welcomeType  = $welcomeType;
         $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())];
     }
