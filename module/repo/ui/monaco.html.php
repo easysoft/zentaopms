@@ -20,10 +20,12 @@ jsVar('repoID', $repoID);
 jsVar('repo', $repo);
 jsVar('revision', $revision);
 jsVar('branchID', $branchID);
+jsVar('branchMenus', $branchMenus);
 jsVar('file', $file);
 jsVar('tree', $tree);
 jsVar('openedFiles', array($entry));
 jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&revision=$revision&showBug=$showBug&encoding=$encoding");
+jsVar('currentLink', $this->createLink('repo', 'view', "repoID=$repoID&objectID=$objectID&entry=$file"));
 
 featureBar();
 
@@ -72,6 +74,13 @@ div(
 sidebar
 (
     set::side('left'),
+    select
+    (
+        set::id('sourceSwapper'),
+        set::items($branchMenus),
+        set::value($branchID),
+        on::change('window.changeBranch')
+    ),
     tree
     (
         set::id('monacoTree'),

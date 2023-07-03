@@ -363,5 +363,43 @@ class repoZen extends repo
 
         return $infos;
     }
+
+    /**
+     * 获取分支与tag下拉菜单组件配置。
+     * Get items of branch and tags menu.
+     *
+     * @param  object    $repo
+     * @param  string    $branchID
+     * @param  string    $objectID
+     * @param  string    $entry
+     * @access protected
+     * @return array
+     */
+    protected function getBranchAndTagItems(object $repo, string $branchID, string $objectID, string $entry): array
+    {
+        /* Set branch or tag for git. */
+        $branches = $tags = array();
+        if(!in_array($repo->SCM, $this->config->repo->gitTypeList)) return array();
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $branches = $scm->branch();
+        $initTags = $scm->tags('');
+        foreach($initTags as $tag) $tags[$tag] = $tag;
+
+        $selected = '';
+        foreach($branches as $branchName)
+        {
+            $selected = ($branchName == $branchID) ? $branchName : $selected;
+            $menus[]  = array('text' => $branchName, 'value' => $branchName);
+        }
+        foreach($tags as $tagName)
+        {
+            $selected = ($tagName == $branchID) ? $tagName : $selected;
+            $menus[]  = array('text' => $tagName, 'value' => $tagName);
+        }
+
+        return $menus;
+    }
 }
 

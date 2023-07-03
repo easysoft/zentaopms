@@ -33,6 +33,11 @@ window.afterPageUpdate = function()
         /* Select default tree item. */
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);
         $('#' + currentElement.id).parent().addClass('selected');
+
+        if(['Git', 'Gitlab', 'Gogs', 'Gitea'].indexOf(repo.SCM) == -1)
+        {
+            $('#sourceSwapper').hide();
+        }
         expandTree();
     }, 200);
 };
@@ -94,4 +99,14 @@ window.loadLinkPage = function(link)
 {
     $('#linkObject').attr('href', link);
     $('#linkObject').trigger('click');
+}
+
+window.changeBranch = function()
+{
+    var index = $('#sourceSwapper').prop('selectedIndex');
+    var branchOrTag = branchMenus[index - 1].text;
+    if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag);
+    
+    console.log(111 , currentLink)
+    openUrl(currentLink);
 }

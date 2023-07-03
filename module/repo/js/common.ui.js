@@ -208,6 +208,7 @@ function findItemInTreeItems(list, key, level) {
 function expandTree()
 {
     const treeObj = $('#monacoTree').parent().data('zui.Tree');
+    if(treeObj == undefined || treeObj.$ == undefined) return;
 
     for (const key of parentTree) treeObj.$.expand(key);
 }

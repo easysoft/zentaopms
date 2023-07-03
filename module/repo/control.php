@@ -381,18 +381,19 @@ class repo extends control
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry);
 
-        $this->view->title    = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
-        $this->view->type     = 'view';
-        $this->view->branchID = $this->cookie->repoBranch;
-        $this->view->showBug  = $showBug;
-        $this->view->encoding = $encoding;
-        $this->view->repoID   = $repoID;
-        $this->view->objectID = $objectID;
-        $this->view->repo     = $repo;
-        $this->view->revision = $revision;
-        $this->view->file     = $file;
-        $this->view->entry    = $entry;
-        $this->view->pathInfo = $pathInfo;
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->branchMenus = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch, $objectID, $file);
+        $this->view->type        = 'view';
+        $this->view->branchID    = $this->cookie->repoBranch;
+        $this->view->showBug     = $showBug;
+        $this->view->encoding    = $encoding;
+        $this->view->repoID      = $repoID;
+        $this->view->objectID    = $objectID;
+        $this->view->repo        = $repo;
+        $this->view->revision    = $revision;
+        $this->view->file        = $file;
+        $this->view->entry       = $entry;
+        $this->view->pathInfo    = $pathInfo;
 
         $this->display();
     }

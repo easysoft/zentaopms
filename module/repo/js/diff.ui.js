@@ -1,7 +1,7 @@
 var iframeHeight  = 0;
 var sidebarHeight = 0;
 var tabTemp;
-var diffAppose = $.cookie.get('renderSideBySide');
+var diffAppose = $.cookie.get('renderSideBySide') == 'true';
 
 /* Close tab. */
 $('#monacoTabs').on('click', '.monaco-close', function()
