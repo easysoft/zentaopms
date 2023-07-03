@@ -1439,26 +1439,33 @@ function floatPreNextBtn(): floatPreNextBtn
  *
  * string            name
  * ?string           icon
- * ?bool             renameBtn=true
- * ?bool             deleteBtn=true
  * ?bool             showIcon=true
+ * ?bool             showSize=true
  * ?bool             multiple=true
  * ?string           listPosition="bottom"
  * ?string           uploadText
+ * ?bool             renameBtn=true
+ * ?string           renameIcon
  * ?string           renameText
+ * ?string           renameClass
+ * ?bool             deleteBtn=true
  * ?string           deleteText
+ * ?string           deleteIcon
+ * ?string           deleteClass
  * ?string           confirmText
  * ?string           cancelText
- * ?string           tipText
+ * ?bool             useIconBtn=true
+ * ?string           tip
  * ?string           btnClass
- * ?callable         onChange
+ * ?callable         onAdd
  * ?callable         onDelete
  * ?callable         onRename
+ * ?callable         onSizeChange
+ * ?bool             draggable
  * ?int              limitCount
  * ?string           accept
  * ?object[]         defaultFileList
  * false|string|null limitSize=false
- * ?bool             draggable
  * ?string           duplicatedHint
  * ?string           exceededSizeHint
  * ?string           exceededCountHint
@@ -1470,6 +1477,33 @@ function upload(): upload
 
 /**
  * Upload images widget.
+ *
+ * string            name
+ * ?bool             showSize=true
+ * ?bool             multiple=true
+ * ?string           uploadText
+ * ?bool             renameBtn=true
+ * ?string           renameIcon
+ * ?string           renameText
+ * ?string           renameClass
+ * ?bool             deleteBtn=true
+ * ?string           deleteIcon
+ * ?string           deleteText
+ * ?string           deleteClass
+ * ?string           tip
+ * ?string           btnClass
+ * ?callable         onAdd
+ * ?callable         onDelete
+ * ?callable         onRename
+ * ?callable         onSizeChange
+ * ?int              limitCount
+ * ?string           accept
+ * ?object[]         defaultFileList
+ * false|string|null limitSize=false
+ * ?string           duplicatedHint
+ * ?string           exceededSizeHint
+ * ?string           exceededCountHint
+ * ?string           totalCountText
  */
 function uploadImgs(): uploadImgs
 {

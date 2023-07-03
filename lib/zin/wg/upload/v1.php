@@ -15,16 +15,19 @@ class upload extends wg
         'renameBtn?: bool=true',           // 是否启用重命名按钮
         'renameIcon?: string',             // 重命名图标
         'renameText?: string',             // 重命名文本
+        'renameClass?: string',            // 重命名按钮类
         'deleteBtn?: bool=true',           // 是否启用删除按钮
         'deleteIcon?: string',             // 删除图标
         'deleteText?: string',             // 删除文本
+        'deleteClass?: string',            // 删除按钮类
         'confirmText?: string',            // 确认按钮文本
         'cancelText?: string',             // 取消按钮文本
+        'useIconBtn?: string',             // 是否启用图标按钮
         'tip?: string',                    // 提示文本
         'btnClass?: string',               // 上传按钮类
-        'onChange?: callable',             // 文件变更回调
-        'onDelete?: callable',             // 文件删除回调
-        'onRename?: callable',             // 文件重命名回调
+        'onAdd?: callable',                // 添加文件回调
+        'onDelete?: callable',             // 删除文件回调
+        'onRename?: callable',             // 重命名文件回调
         'onSizeChange?: callable',         // 文件大小变更回调
         'draggable?: bool',                // 是否启用拖拽上传
         'limitCount?: int',                // 上传文件数量限制
