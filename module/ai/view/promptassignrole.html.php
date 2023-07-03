@@ -17,11 +17,7 @@
   .input-label {width: 120px; padding: 6px 12px; text-align: right;}
   .input {flex-grow: 1;}
 </style>
-<div id='mainMenu' class='clearfix' style='display: flex; flex-direction: row;'>
-  <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> $lang->goback", '', 'btn btn-info');?>
-  <?php include 'promptdesignprogressbar.html.php';?>
-  <?php echo html::commonButton("<i class='icon icon-save icon-sm'></i> $lang->save", '', 'btn btn-primary');?>
-</div>
+<?php include 'promptdesignprogressbar.html.php';?>
 <div id='mainContent' class='main-content' style='height: calc(100vh - 120px);'>
   <form class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
     <div class='center-wrapper'>
