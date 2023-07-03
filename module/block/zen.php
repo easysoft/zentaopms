@@ -581,7 +581,21 @@ class blockZen extends block
         $type    = isset($block->params->type)    ? $block->params->type    : 'all';
         $orderBy = isset($block->params->orderBy) ? $block->params->orderBy : 'id_desc';
 
-        $this->view->projects = $this->loadModel('project')->getOverviewList($type, 0, $orderBy, $count);
+        $projects = $this->loadModel('project')->getOverviewList($type, 0, $orderBy, $count);
+
+        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
+            ->from(TABLE_TASK)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('project', 'id');
+        $hours = $this->loadModel('program')->computeProjectHours($tasks);
+
+        $projects = $this->program->appendStatToProjects($projects, 'hours', array('hours' => $hours));
+        foreach($projects as $project) $project->progress = $project->hours->progress;
+
+        $this->view->projects = $projects;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 

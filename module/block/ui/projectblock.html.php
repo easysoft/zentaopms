@@ -11,24 +11,51 @@ declare(strict_types=1);
 
 namespace zin;
 
-$isChinese = in_array($this->app->getClientLang(), array('zh-cn','zh-tw'));
+jsVar('delayInfo', $lang->project->delayInfo);
 
-foreach($projects as $project)
+foreach($projects as $project) $project->consumed .= $lang->execution->workHourUnit;
+if(!$longBlock)
 {
-    $programBudget = $isChinese ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
-
-    $project->PM        = zget($users, $project->PM, $project->PM);
-    $project->status    = zget($lang->project->statusList, $project->status);
-    $project->consumed .= $lang->execution->workHourUnit;
-    $project->budget    = $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $lang->project->future;
+    unset($config->block->project->dtable->fieldList['PM']);
+    unset($config->block->project->dtable->fieldList['status']);
+    unset($config->block->project->dtable->fieldList['consumed']);
+    unset($config->block->project->dtable->fieldList['storyCount']);
+    unset($config->block->project->dtable->fieldList['leftTasks']);
+    unset($config->block->project->dtable->fieldList['leftBugs']);
 }
 
-dtable
+panel
 (
-    set::width('100%'),
-    set::height('auto'),
-    set::cols(array_values($config->block->dtable->project->fieldList)),
-    set::data(array_values($projects))
+    set('class', 'project-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set('headingClass', 'border-b'),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title'),
+            span($block->title),
+        )
+    ),
+    to::headingActions
+    (
+        a
+        (
+            set('class', 'text-gray'),
+            set('href', createLink('project', 'browse', 'program=0&browseType=' . $block->params->type)),
+            $lang->more,
+            icon('caret-right')
+        )
+    ),
+    dtable
+    (
+        set::height(320),
+        set::bordered(false),
+        set::horzScrollbarPos('inside'),
+        set::cols(array_values($config->block->project->dtable->fieldList)),
+        set::data(array_values($projects)),
+        set::userMap($users),
+        set::onRenderCell(jsRaw('window.onRenderProjectNameCell')),
+    )
 );
 
 render();
