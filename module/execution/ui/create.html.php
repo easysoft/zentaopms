@@ -570,7 +570,7 @@ modalTrigger
 
 modalTrigger
 (
-    modal (set::id('tipsModal'))
+    modal(set::id('tipsModal'))
 );
 
 /* ====== Render page ====== */

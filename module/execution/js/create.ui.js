@@ -144,5 +144,6 @@ window.triggerTips = function()
     const modal = zui.Modal.open({
         url: $.createLink('execution', 'tips', 'executionID=' + executionID),
         id: 'tipsModal',
+        backdrop: false
     });
 }
