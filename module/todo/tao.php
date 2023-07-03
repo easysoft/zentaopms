@@ -82,12 +82,26 @@ class todoTao extends todoModel
      */
     protected function insert(object $todo): int
     {
+        $isModuleType = isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList);
+
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->check($this->config->todo->create->requiredFields, 'notempty')
-            ->checkIF(isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList), 'objectID', 'notempty')
+            ->checkIF($isModuleType, 'objectID', 'notempty')
             ->exec();
 
+        if(dao::isError() && $isModuleType)
+        {
+            $errors = dao::getError();
+            if(isset($errors['name']) && isset($errors['objectID']))
+            {
+                dao::$errors[$todo->type] = $errors['name'];
+            }
+            else
+            {
+                dao::$errors = $errors;
+            }
+        }
         return (int)$this->dao->lastInsertID();
     }
 
