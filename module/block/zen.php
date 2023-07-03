@@ -634,6 +634,39 @@ class blockZen extends block
     }
 
     /**
+     * Get data of the project overview block.
+     *
+     * @param  object $block
+     * @access protected
+     * @return void
+     */
+    protected function printProjectOverviewBlock(object $block): void
+    {
+        $projects = $this->dao->select('id, Year(closedDate) AS year')->from(TABLE_PROJECT)->where('deleted')->eq('0')->fetchPairs();
+        $projects = array_map(function($year){return $year == null ? 0 : $year;}, $projects);
+        $stats    = array_count_values($projects);
+
+        $thisYear    = date('Y');
+        $lastYear    = date('Y', strtotime('-1 year'));
+        $lastTwoYear = date('Y', strtotime('-2 years'));
+
+        $thisYearCount    = zget($stats, $thisYear, 0);
+        $lastYearCount    = zget($stats, $lastYear, 0);
+        $lastTwoYearCount = zget($stats, $lastTwoYear, 0);
+
+        $maxCount = $thisYearCount;
+        if($lastYearCount > $maxCount)    $maxCount = $lastYearCount;
+        if($lastTwoYearCount > $maxCount) $maxCount = $lastTwoYearCount;
+
+        $projectStats['total']       = array_sum($stats);
+        $projectStats['thisYear']    = array('year' => $thisYear,    'count' => $thisYearCount,    'rate' => $maxCount ? round($thisYearCount    / $maxCount * 100) . '%' : '0%');
+        $projectStats['lastYear']    = array('year' => $lastYear,    'count' => $lastYearCount,    'rate' => $maxCount ? round($lastYearCount    / $maxCount * 100) . '%' : '0%');
+        $projectStats['lastTwoYear'] = array('year' => $lastTwoYear, 'count' => $lastTwoYearCount, 'rate' => $maxCount ? round($lastTwoYearCount / $maxCount * 100) . '%' : '0%');
+
+        $this->view->projectStats = $projectStats;
+    }
+
+    /**
      * Print project statistic block.
      *
      * @param  object    $block
