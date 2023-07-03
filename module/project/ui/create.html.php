@@ -422,6 +422,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->project->addProduct),
+            set::required(true),
             inputGroup
             (
                 div
