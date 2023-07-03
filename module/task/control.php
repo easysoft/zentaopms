@@ -59,7 +59,7 @@ class task extends control
         /* Submit the data process after create the task form. */
         if(!empty($_POST))
         {
-            $taskData = $this->taskZen->buildTaskForCreate($this->post->execution);
+            $taskData = $this->taskZen->buildTaskForCreate($this->post->execution ? $this->post->execution : $executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Check whether a task with the same name is created within the specified time. */

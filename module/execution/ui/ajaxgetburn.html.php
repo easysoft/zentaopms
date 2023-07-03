@@ -33,7 +33,7 @@ panel
             $lang->more
         ) : null,
     ),
-    echarts
+    common::hasPriv('execution', 'burn') ? echarts
     (
         set::grid(array('left' => '0', 'right' => '50px', 'bottom' => '0',  'containLabel' => true)),
         set::xAxis
@@ -164,7 +164,7 @@ panel
                 ),
             )
         ),
-    )->size('100%', '85%')
+    )->size('100%', '85%') : null
 );
 
 /* ====== Render page ====== */

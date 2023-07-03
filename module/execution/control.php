@@ -2436,19 +2436,6 @@ class execution extends control
         $this->execution->setMenu($execution->id);
         $this->app->loadLang('bug');
 
-        if($execution->type == 'kanban')
-        {
-            $this->app->loadClass('date');
-
-            list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
-            $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
-            $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
-            if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
-
-            $this->view->begin = helper::safe64Encode(urlencode($begin));
-            $this->view->end   = helper::safe64Encode(urlencode($end));
-        }
-
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager(0, 30, 1);
@@ -4361,6 +4348,30 @@ class execution extends control
         $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
         $this->view->chartData = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
         $this->view->execution = $execution;
+
+        $this->display();
+    }
+
+    /**
+     * AJAX: Get brun kanban html.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCFD(int $executionID)
+    {
+        $this->app->loadClass('date');
+
+        $execution = $this->execution->getById($executionID, true);
+        list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
+        $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
+        $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
+        if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
+
+        $this->view->begin     = helper::safe64Encode(urlencode($begin));
+        $this->view->end       = helper::safe64Encode(urlencode($end));
+        $this->view->chartData = $chartData;
 
         $this->display();
     }

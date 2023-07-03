@@ -51,7 +51,7 @@ else
         array(
             'id'    => 1,
             'size'  => 'sm',
-            'domID' => 'cfdBlock'
+            'fetch' => createLink('execution', 'ajaxGetCFD', "executionID={$execution->id}")
         ),
         array(
             'id'    => 2,
