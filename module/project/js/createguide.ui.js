@@ -5,5 +5,5 @@ $(document).on('click', '.model-item', function()
 
     zui.Modal.hide();
 
-    loadPage(link);
+    openUrl(link, {'app': 'project'});
 });
