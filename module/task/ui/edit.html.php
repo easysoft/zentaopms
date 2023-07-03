@@ -97,20 +97,24 @@ detailBody
             (
                 set::label($lang->task->desc),
                 set::name('desc'),
-                set::value(htmlSpecialString($task->desc)),
+                set::value($task->desc ? htmlSpecialString($task->desc) : ''),
                 set::control('textarea'),
             )
         ),
         section
         (
-            set::title($lang->comment),
-            textarea
+            set::title($lang->task->story),
+            formGroup
             (
-                set::label($lang->comment),
-                set::name('comment'),
-                set::value(''),
-                set::control('textarea'),
-            )
+                set::width('1/2'),
+                control
+                (
+                    set::type('picker'),
+                    set::name('story'),
+                    set::value($task->story),
+                    set::items($storyOptions)
+                )
+            ),
         ),
         section
         (
@@ -126,6 +130,7 @@ detailBody
         set::actions($actions),
         set::users($users),
         set::methodName($methodName),
+        set::commentBtn(true)
     ),
     detailSide
     (
@@ -164,16 +169,6 @@ detailBody
                         set::inline(true),
                     ),
                 )
-            ),
-            item
-            (
-                set::name($lang->task->story),
-                select
-                (
-                    set::name('story'),
-                    set::value($task->story),
-                    set::items($storyOptions)
-                ),
             ),
             ($task->parent >= 0 and empty($task->team))
                 ? item
@@ -315,11 +310,22 @@ detailBody
             item
             (
                 set::name($lang->task->estimate),
-                control
+                inputGroup
                 (
-                    set::name('estimate'),
-                    set::value($task->estimate),
-                    set::type('text')
+                    input
+                    (
+                        set::name('estimate'),
+                        set::value($task->estimate),
+                    ),
+                    div
+                    (
+                        setClass('input-group-btn'),
+                        btn
+                        (
+                            setClass('btn btn-default'),
+                            'H'
+                        )
+                    )
                 )
             ),
             item
@@ -329,8 +335,8 @@ detailBody
                 (
                     span
                     (
-                        setClass('span-text'),
-                        $task->consumed,
+                        setClass('span-text mr-1'),
+                        $task->consumed . 'H'
                     ),
                     h::a
                     (
@@ -342,11 +348,22 @@ detailBody
             item
             (
                 set::name($lang->task->left),
-                control
+                inputGroup
                 (
-                    set::name('left'),
-                    set::value($task->left),
-                    set::control('text')
+                    input
+                    (
+                        set::name('left'),
+                        set::value($task->left),
+                    ),
+                    div
+                    (
+                        setClass('input-group-btn'),
+                        btn
+                        (
+                            setClass('btn btn-default'),
+                            'H'
+                        )
+                    )
                 )
             ),
         ),
