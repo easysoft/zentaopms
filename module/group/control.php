@@ -386,9 +386,9 @@ class group extends control
         if(!empty($_POST))
         {
             $this->group->updateUser($groupID);
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
+
         $group        = $this->group->getById($groupID);
         $groupUsers   = $this->group->getUserPairs($groupID);
         $allUsers     = $this->loadModel('dept')->getDeptUserPairs($deptID);
@@ -405,6 +405,7 @@ class group extends control
         $this->view->position     = $position;
         $this->view->group        = $group;
         $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
+        $this->view->deptID       = $deptID;
         $this->view->groupUsers   = $groupUsers;
         $this->view->otherUsers   = $otherUsers;
         $this->display();

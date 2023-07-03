@@ -227,7 +227,7 @@ class deptModel extends model
      */
     public function createGroupManageMemberLink($dept, $groupID)
     {
-        return html::a(helper::createLink('group', 'managemember', "groupID=$groupID&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
+        return helper::createLink('group', 'managemember', "groupID=$groupID&deptID={$dept->id}");
     }
 
     /**
