@@ -370,7 +370,7 @@ class userEntry extends entry
                     $info->rights = array();
                     $info->rights['admin']  = (!empty($inAdminGroup) or $this->app->user->admin);
 
-                    $usedModules = ',bug,project,execution,task,file,effort,feedback,story,testcase,program,projectstory,testtask,doc,projectbuild,release,meeting,';
+                    $usedModules = ',bug,project,execution,task,file,effort,feedback,story,testcase,program,projectstory,testtask,doc,projectbuild,release,meeting,product,qa,';
                     $info->rights['rights'] = array();
                     foreach($this->app->user->rights['rights'] as $module => $priv) if(strpos($usedModules, ",{$module},") !== false) $info->rights['rights'][$module] = $priv;
             }
