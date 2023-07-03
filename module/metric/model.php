@@ -117,4 +117,18 @@ class metricModel extends model
         }
         return $classifiedInstances;
     }
+
+    /**
+     * Unite field list of each metric.
+     *
+     * @param  array  $metricInstances
+     * @access public
+     * @return string
+     */
+    public function uniteFieldList($metricInstances)
+    {
+        $fieldList = array();
+        foreach($metricInstances as $metricInstance) $fieldList  = array_merge($fieldList, $metricInstance->fieldList);
+        return implode(',', array_unique($fieldList));
+    }
 }
