@@ -471,6 +471,27 @@
         }, options.delayTime || 0);
     }
 
+    /** Load an old page. */
+    function loadOldPage(url)
+    {
+        let $page = $('#oldPage');
+        if($page.length === 0)
+        {
+            $page = $('<div/>').append($('<iframe />').attr({name: `app-${currentCode}-old`, frameborder: 'no', allowtransparency: true, scrolling: 'auto', style: 'width:100%;height:100%;'})).attr({id: 'oldPage', class: 'load-indicator', style: 'position:fixed;width:100%;height:100%;left:0;top:0;z-index:100'}).insertAfter('body');
+        }
+        const $iframe = $page.addClass('loading').removeClass('hidden').find('iframe').removeClass('in');
+        if($iframe.attr('src') === url) $iframe[0].contentWindow.location.reload();
+        else $iframe.attr('src', url);
+    }
+
+    /** Hide old page content. */
+    function hideOldPage()
+    {
+        const $page = $('#oldPage');
+        if(!$page.length) return;
+        $page.addClass('in hidden');
+    }
+
     /**
      * Load page with zin way.
      *
@@ -491,8 +512,11 @@
     {
         if(typeof options === 'string') options = {url: options};
         else if(!options) options = {};
-        if(typeof selector === 'string') options.selector = selector;
 
+        if ($.apps.isOldPage(options.url)) return loadOldPage(options.url);
+        else hideOldPage();
+
+        if(typeof selector === 'string') options.selector = selector;
         if (!options.selector && options.url && options.url.includes(' '))
         {
             const parts = url.split(' ', 2);
@@ -757,6 +781,7 @@
     }
 
     $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal});
+    $.extend($.apps, {openUrl: openUrl});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>

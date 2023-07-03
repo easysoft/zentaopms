@@ -36,7 +36,8 @@ const apps =
     defaultCode: '',
     lastCode: '',
     zIndex: 10,
-    frameContent: null
+    frameContent: null,
+    oldPages: new Set(oldPages)
 };
 
 const debug = config.debug;
@@ -51,6 +52,12 @@ function triggerAppEvent(code, event, args)
     if(!Array.isArray(args)) args = [args];
     if(app.$app) app.$app.trigger(event, args);
     if(app.iframe && app.iframe.contentWindow.$) return app.iframe.contentWindow.$(app.iframe.contentWindow.document).trigger(event, args);
+}
+
+function isOldPage(url)
+{
+    if(typeof url !== 'object') url = $.parseLink(url);
+    return apps.oldPages.has(`${url.moduleName}-${url.methodName}`.toLowerCase());
 }
 
 /**
@@ -71,16 +78,12 @@ function openApp(url, code, forceReload)
         }
         else if(url)
         {
-            code = getAppCodeFromUrl(url);
+            code = getAppCode(url);
         }
         if(!code) return openApp('my');
     }
     const app = apps.map[code];
-    if(!app)
-    {
-        zui.Messager.show('App not found', {type: 'danger', time: 2000});
-        return;
-    }
+    if(!app) return zui.Messager.show('App not found', {type: 'danger', time: 2000});
 
     /* Create iframe for app */
     let openedApp = apps.openedMap[code];
@@ -323,7 +326,7 @@ function hideApp(code)
  * @param {String} urlOrModuleName Url string
  * @return {String}
  */
-function getAppCodeFromUrl(urlOrModuleName)
+function getAppCode(urlOrModuleName)
 {
     var code = navGroup[urlOrModuleName];
     if(code) return code;
@@ -689,5 +692,7 @@ $.apps = $.extend(apps,
     showApp:    showApp,
     updateApp:  updateApp,
     getLastApp: getLastApp,
-    goBack:     goBack
+    goBack:     goBack,
+    isOldPage:  isOldPage,
+    getAppCode: getAppCode
 });
