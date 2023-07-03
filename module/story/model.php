@@ -5668,7 +5668,7 @@ class storyModel extends model
     public function linkStory($executionID, $productID, $storyID)
     {
         $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
-        $this->dao->insert(TABLE_PROJECTSTORY)
+        $this->dao->replace(TABLE_PROJECTSTORY)
             ->set('project')->eq($executionID)
             ->set('product')->eq($productID)
             ->set('story')->eq($storyID)
