@@ -73,18 +73,22 @@ panel
             ),
             center
             (
-                set('class', 'rounded-full avatar-border-one my-1'),
+                set('class', 'my-1'),
                 center
                 (
-                    set('class', 'rounded-full avatar-border-two'),
-                    userAvatar
+                    set('class', 'rounded-full avatar-border-one'),
+                    center
                     (
-                        set('class', 'welcome-avatar'),
-                        set('user', $this->app->user)
+                        set('class', 'rounded-full avatar-border-two'),
+                        userAvatar
+                        (
+                            set('class', 'welcome-avatar ellipsis'),
+                            set('user', $this->app->user)
+                        )
                     )
                 )
             ),
-            span(set('class', 'label circle honorary text-xs'), $lang->block->honorary[$honorary])
+            center(span(set('class', 'label circle honorary text-xs'), $lang->block->honorary[$honorary]))
         ),
         cell
         (
