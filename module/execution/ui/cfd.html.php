@@ -173,7 +173,7 @@ panel
         div
         (
             setID('cfdTip'),
-            setClass('tooltip darker p-2'),
+            setClass('tooltip darker p-2 text-lg'),
             html($lang->execution->charts->cfd->cfdTip)
         )
     ),
