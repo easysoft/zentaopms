@@ -221,6 +221,7 @@ if($config->systemMode == 'PLM')
     $lang->story->statusList['developing'] = '研发中';
 }
 
+$lang->story->stageList = array();
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未开始';
 $lang->story->stageList['planned']    = "已计划";

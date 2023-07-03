@@ -888,13 +888,6 @@ class docModel extends model
         if(empty($doc->lib) and strpos($doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
-        if($doc->title)
-        {
-            $condition = "lib = '$doc->lib' AND module = $doc->module";
-            $result    = $this->loadModel('common')->removeDuplicate('doc', $doc, $condition);
-            if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
-        }
-
         /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
@@ -1727,7 +1720,6 @@ class docModel extends model
                     ->andWhere('t1.vision')->eq($this->config->vision)
                     ->andWhere('t1.deleted')->eq(0)
                     ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
-                    ->beginIF($append)->orWhere('t1.id')->eq($append)->fi()
                     ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                     ->fetchPairs();
             }
@@ -1767,9 +1759,6 @@ class docModel extends model
                     $closedObjects[$id] = $project->name;
                 }
             }
-
-            /* Fix bug #34873. */
-            ksort($myObjects);
         }
         elseif($objectType == 'execution')
         {
@@ -1895,6 +1884,7 @@ class docModel extends model
         $idList      = array_keys($docs);
         $docIdList   = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in($idList)->get();
         $searchTitle = $this->post->title;
+        $storyIDList = '';
         if($type == 'product')
         {
             $storyIdList = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($userView)->get();
@@ -1908,6 +1898,10 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
+            $project     = $this->loadModel('project')->getByID($objectID);
+            $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->orWhere('project')->eq($objectID)->fetchPairs('id', 'id');
+            $storyIDList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
+
             if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
@@ -1923,10 +1917,16 @@ class docModel extends model
             $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
 
-            $executionIdList = join(',', $executionIdList);
+            $executionIdList = $executionIdList ? join(',', $executionIdList) : 0;
+            $storyIDList     = $storyIDList ? join(',', $storyIDList) : 0;
         }
         elseif($type == 'execution')
         {
+            $execution   = $this->loadModel('execution')->getByID($objectID);
+
+            $storyIDList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectID)->fetchPairs('story', 'story');
+            $storyIDList = join(',', $storyIDList);
+
             $taskPairs = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($userView)->fetchPairs('id');
             if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
 
@@ -1947,7 +1947,7 @@ class docModel extends model
             ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
             ->fi()
             ->beginIF($type == 'project')
-            ->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")
+            ->orWhere("(objectType = 'execution' and objectID in ($executionIdList))")
             ->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")
             ->orWhere("(objectType = 'review' and objectID in ($reviewIdList))")
             ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
@@ -1956,6 +1956,7 @@ class docModel extends model
             ->beginIF($type == 'project' or $type == 'execution')
             ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
             ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
+            ->beginIF($storyIDList)->orWhere("((objectType = 'story' OR objectType = 'requirement') and objectID in ($storyIDList))")->fi()
             ->fi()
             ->markRight(1)
             ->beginIF($searchTitle !== false)->andWhere('title')->like("%{$searchTitle}%")->fi()
@@ -2852,7 +2853,7 @@ class docModel extends model
             $object->id = 0;
         }
 
-        $tab  = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
+        $tab  = strpos(',my,doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($type == 'mine')   $type = 'my';
         if($type == 'custom') $type = 'team';
         if($tab == 'doc' and !common::hasPriv('doc', $type . 'Space')) return print(js::locate(helper::createLink('user', 'deny', "module=doc&method={$type}Space")));

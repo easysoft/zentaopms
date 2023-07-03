@@ -32,11 +32,14 @@ class admin extends control
 
     /**
      * Index page.
+     *
      * @access public
      * @return void
      */
     public function index()
     {
+        set_time_limit(0);
+
         $community = zget($this->config->global, 'community', '');
         if(!$community or $community == 'na')
         {
@@ -53,19 +56,17 @@ class admin extends control
 
         $this->loadModel('misc');
 
-        $clientLang = $this->app->getClientLang();
         $langNotCN  = common::checkNotCN();
         $dateUsed   = $this->admin->genDateUsed();
-
-        $zentaoData  = $this->admin->getZentaoData();
-        $hasInternet = $zentaoData->hasData;
+        $zentaoData = $this->admin->getZentaoData();
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->position[]  = $this->lang->admin->index;
         $this->view->plugins     = $zentaoData->plugins;
         $this->view->patches     = $zentaoData->patches;
         $this->view->dateUsed    = $dateUsed;
-        $this->view->hasInternet = $hasInternet;
+        $this->view->hasInternet = $zentaoData->hasData;
+        $this->view->isIntranet  = helper::isIntranet();
         $this->view->dynamics    = $zentaoData->news;
         $this->view->publicClass = $zentaoData->publicclass;
         $this->view->langNotCN   = $langNotCN;
@@ -80,6 +81,8 @@ class admin extends control
      */
     public function ajaxSetZentaoData()
     {
+        if(helper::isIntranet()) return $this->send(array('result' => 'ignore'));
+
         $hasInternet = $this->admin->checkInternet();
 
         if($hasInternet)

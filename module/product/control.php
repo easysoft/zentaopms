@@ -149,6 +149,7 @@ class product extends control
 
         if($product && !isset($this->products[$product->id])) $this->products[$product->id] = $product->name;
 
+        if(!is_string($this->cookie->preBranch) and !is_int($this->cookie->preBranch)) $this->cookie->preBranch = (int)$this->cookie->preBranch;
         if($product and $product->type != 'normal')
         {
             $branchPairs = $this->loadModel('branch')->getPairs($productID, 'all');
@@ -1307,6 +1308,10 @@ class product extends control
      *
      * @param  string $browseType
      * @param  string $orderBy
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -1316,7 +1321,7 @@ class product extends control
         $this->loadModel('program');
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
-        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID = $browseType == 'bySearch' ? (int)$param : 0;
 
         if($this->app->viewType == 'mhtml')
         {
@@ -1326,6 +1331,8 @@ class product extends control
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->product->refreshStats(); // Refresh stats fields of products.
 
         /* Process product structure. */
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
@@ -1601,7 +1608,7 @@ class product extends control
      */
     public function track($productID, $branch = '', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branch = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Set menu. The projectstory module does not execute. */

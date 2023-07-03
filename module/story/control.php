@@ -1151,6 +1151,7 @@ class story extends control
             $showFields = str_replace('plan',  '', $showFields);
             $showFields = str_replace('stage', '', $showFields);
         }
+        if(!$branchProduct) unset($customFields['branch']);
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
@@ -1192,7 +1193,7 @@ class story extends control
         $this->view->priList           = array('0' => '', 'ditto' => $this->lang->story->ditto) + $this->lang->story->priList;
         $this->view->sourceList        = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->sourceList;
         $this->view->reasonList        = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->reasonList;
-        $this->view->stageList         = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->stageList;
+        $this->view->stageList         = array('ditto' => $this->lang->story->ditto) + $this->lang->story->stageList;
         $this->view->productID         = $productID;
         $this->view->products          = $products;
         $this->view->branchProduct     = $branchProduct;
@@ -1467,7 +1468,7 @@ class story extends control
         $this->view->hiddenURS  = false;
         if(!empty($product->shadow))
         {
-            $projectInfo = $this->dao->select('t2.model, t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $projectInfo = $this->dao->select('t2.model, t2.multiple, t2.id')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.product')->eq($product->id)
                 ->andWhere('t2.type')->eq('project')
@@ -1484,6 +1485,7 @@ class story extends control
             }
 
             if(!$projectInfo->multiple) $this->view->hiddenPlan = true;
+            $this->loadModel('project')->setMenu($projectInfo->id);
         }
 
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
@@ -1921,7 +1923,7 @@ class story extends control
         }
 
         /* Get story and product. */
-        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
+        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, `type`')->fetch();
 
         $this->story->replaceURLang($story->type);
 
@@ -2068,7 +2070,6 @@ class story extends control
                 if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
                 if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
 
-                $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
                 $this->view->title      = $this->lang->story->batchEdit;
             }
         }
@@ -2080,8 +2081,6 @@ class story extends control
 
         unset($this->lang->story->reasonList['subdivided']);
 
-        $this->view->position[]       = $this->lang->story->common;
-        $this->view->position[]       = $this->lang->story->batchClose;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
         $this->view->productID        = $productID;
@@ -2461,8 +2460,8 @@ class story extends control
 
         if($type == 'remove')
         {
-            $result = $this->story->unlinkStory($storyID, $linkedStoryID);
-            helprt::end();
+            $this->story->unlinkStory($storyID, $linkedStoryID);
+            helper::end();
         }
 
         if($_POST)
@@ -2661,32 +2660,25 @@ class story extends control
      * @param  int    $limit
      * @param  string $type
      * @param  bool   $hasParent
-     * @param  int    $executionID
+     * @param  int    $objectID projectID || executionID
      * @param  int    $number
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $executionID = 0, $number = '')
+    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $objectID = 0, $number = '')
     {
+        $hasParent = (bool)$hasParent;
         if($moduleID)
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
 
-        $storyStatus = '';
-        if($status == 'noclosed')
-        {
-            $storyStatus = $this->lang->story->statusList;
-            unset($storyStatus['closed']);
-            $storyStatus = array_keys($storyStatus);
-        }
+        $storyStatus = $this->story->getStatusList($status);
 
-        if($status == 'active') $storyStatus = $status;
-
-        if($executionID)
+        if($objectID)
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type);
+            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $moduleID, $type);
         }
         else
         {

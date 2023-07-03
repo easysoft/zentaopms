@@ -419,6 +419,8 @@ class extension extends control
      */
     public function upload()
     {
+        $this->app->loadLang('file');
+
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
@@ -463,6 +465,10 @@ class extension extends control
             return print(js::locate($link, 'parent'));
         }
 
+        $maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
+
+        $this->view->maxUploadSize  = $maxUploadSize;
+        $this->view->exceedLimitMsg = sprintf($this->lang->file->errorFileSize, $maxUploadSize);
         $this->display();
     }
 

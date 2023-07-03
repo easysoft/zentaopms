@@ -217,13 +217,13 @@ $config->bug->datatable->fieldList['project']['fixed']      = 'no';
 $config->bug->datatable->fieldList['project']['width']      = '120';
 $config->bug->datatable->fieldList['project']['required']   = 'no';
 $config->bug->datatable->fieldList['project']['control']    = 'hidden';
-$config->bug->datatable->fieldList['project']['dataSource'] = array('module' => 'product', 'method' => 'getProjectPairsByProduct', 'params' => '$productID&');
+$config->bug->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
 
 $config->bug->datatable->fieldList['execution']['title']      = 'execution';
 $config->bug->datatable->fieldList['execution']['fixed']      = 'no';
 $config->bug->datatable->fieldList['execution']['width']      = '120';
 $config->bug->datatable->fieldList['execution']['required']   = 'no';
-$config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'product', 'method' =>'getAllExecutionPairsByProduct', 'params' => '$productID&$branch&0&stagefilter');
+$config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' =>'getPairs');
 
 $config->bug->datatable->fieldList['plan']['title']    = 'plan';
 $config->bug->datatable->fieldList['plan']['fixed']    = 'no';

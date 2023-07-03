@@ -129,9 +129,9 @@
             <td><?php echo $program['changingStories'];?></td>
             <td><?php echo $program['reviewingStories'];?></td>
             <?php $totalStories = $program['totalStories'];?>
-            <td><?php echo $totalStories == 0 ? 0 : round($program['finishClosedStories'] / $totalStories, 3) * 100;?>%</td>
-            <td><?php echo $program['unResolvedBugs'];?></td>
-            <td><?php echo ($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
+            <td><?php echo $totalStories == 0 ? 0 : round($program['finishedStories'] / $totalStories, 3) * 100;?>%</td>
+            <td><?php echo $program['unresolvedBugs'];?></td>
+            <td><?php echo ($program['unresolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unresolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
             <td><?php echo $program['plans'];?></td>
             <td><?php echo $program['releases'];?></td>
             <?php foreach($extendFields as $extendField) echo "<td></td>";?>
@@ -170,9 +170,9 @@
             <td><?php echo isset($line['changingStories']) ? $line['changingStories'] : 0;?></td>
             <td><?php echo isset($line['reviewingStories']) ? $line['reviewingStories'] : 0;?></td>
             <?php $totalStories = (isset($line['totalStories']) ? $line['totalStories'] : 0)?>
-            <td><?php echo $totalStories == 0 ? 0 : round((isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) / $totalStories, 3) * 100;?>%</td>
-            <td><?php echo isset($line['unResolvedBugs']) ? $line['unResolvedBugs'] : 0;?></td>
-            <td><?php echo (isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0;?>%</td>
+            <td><?php echo $totalStories == 0 ? 0 : round((isset($line['finishedStories']) ? $line['finishedStories'] : 0) / $totalStories, 3) * 100;?>%</td>
+            <td><?php echo isset($line['unresolvedBugs']) ? $line['unresolvedBugs'] : 0;?></td>
+            <td><?php echo (isset($line['fixedBugs']) and ($line['unresolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unresolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0;?>%</td>
             <td><?php echo isset($line['plans']) ? $line['plans'] : 0;?></td>
             <td><?php echo isset($line['releases']) ? $line['releases'] : 0;?></td>
             <?php foreach($extendFields as $extendField) echo "<td></td>";?>
@@ -184,7 +184,7 @@
           <?php if(isset($line['products']) and is_array($line['products'])):?>
           <?php foreach($line['products'] as $productID => $product):?>
           <?php
-          $totalStories = $product->stories['totalStories'];
+          $totalStories = $product->totalStories;
 
           $trClass = '';
           if($product->line and in_array($config->systemMode, array('ALM', 'PLM')))
@@ -229,13 +229,13 @@
               }
               ?>
             </td>
-            <td><?php echo $product->stories['draft'];?></td>
-            <td><?php echo $product->stories['active'];?></td>
-            <td><?php echo $product->stories['changing'];?></td>
-            <td><?php echo $product->stories['reviewing'];?></td>
-            <td><?php echo $totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100;?>%</td>
-            <td><?php echo $product->unResolved;?></td>
-            <td><?php echo ($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100;?>%</td>
+            <td><?php echo $product->draftStories;?></td>
+            <td><?php echo $product->activeStories;?></td>
+            <td><?php echo $product->changingStories;?></td>
+            <td><?php echo $product->reviewingStories;?></td>
+            <td><?php echo $totalStories == 0 ? 0 : round($product->finishedStories / $totalStories, 3) * 100;?>%</td>
+            <td><?php echo $product->unresolvedBugs;?></td>
+            <td><?php echo ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;?>%</td>
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
             <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $product) . "</td>";?>

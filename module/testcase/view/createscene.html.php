@@ -20,7 +20,7 @@
 <?php js::set('tab',        $this->app->tab);?>
 <?php js::set('caseBranch', 0);?>
 
-<?php if($this->app->tab == 'project') js::set('objectID', $projectID);?>
+<?php if($this->app->tab == 'project') js::set('objectID', $this->session->project);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

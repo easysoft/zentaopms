@@ -400,9 +400,9 @@ class releaseModel extends model
             }
             elseif($notify == 'SC' and !empty($release->build))
             {
-                $stories  = join(',', $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll());
-                $stories .= $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
-                $stories  = trim($stories, ',');
+                $stories  = join(',', $this->dao->select('id,stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchPairs('id', 'stories'));
+                $stories .= ',' . $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
+                $stories  = trim(str_replace(',,', ',', $stories), ',');
 
                 if(empty($stories)) continue;
 

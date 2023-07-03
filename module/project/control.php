@@ -405,8 +405,10 @@ class project extends control
         $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bySearch&queryID=myQueryID");
         $this->project->buildSearchForm($queryID, $actionURL);
 
+        $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
+
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
-        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
+        $projectStats = $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
         $this->view->title          = $this->lang->project->browse;
         $this->view->projectStats   = $projectStats;
@@ -1097,6 +1099,8 @@ class project extends control
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
 
         $allExecution = $this->execution->getStatData($projectID, 'all');
         $this->view->allExecutionNum = empty($allExecution);

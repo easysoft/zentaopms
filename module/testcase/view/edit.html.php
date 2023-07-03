@@ -17,7 +17,6 @@
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
 <?php js::set('caseID', $case->id);?>
-<?php js::set('executionID', $case->execution);?>
 <?php js::set('tab', $this->app->tab);?>
 <?php js::set('isLibCase', $isLibCase);?>
 <?php js::set('testtasks', $testtasks);?>
@@ -25,6 +24,7 @@
 <?php js::set('confirmUnlinkTesttask', $lang->testcase->confirmUnlinkTesttask);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $case->execution);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $case->project);?>
+<?php if($this->app->tab == 'qa') js::set('objectID', 0);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>

@@ -30,6 +30,8 @@ class langsEntry extends entry
 
         global $filter;
         $rule    = $filter->default->moduleName;
+
+        if($modules == 'all') $modules = 'upgrade,task,block,testtask,execution,story,project,cron,todo,productplan,release,product,doc,file,customer,action,design,bug,mr,webhook,error,effort,report,programplan,my,search,feedback,score,user,api,program,stakeholder,branch,testcase,meeting,searchObjects,index,dev,personnel,workfloweditor,devops,oa';
         $modules = explode(',', $modules);
         foreach($modules as $module)
         {

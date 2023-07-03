@@ -30,8 +30,8 @@ class upgradeModel extends model
     /**
      * Get versions to update
      *
-     * @param  mixed $openVersion
-     * @access public
+     * @param  mixed  $openVersion
+     * @param  string $fromEdition open|pro|biz|max
      * @return array
      */
     public function getVersionsToUpdate($openVersion, $fromEdition)
@@ -498,6 +498,8 @@ class upgradeModel extends model
             case '16_5':
                 $this->updateProjectStatus();
                 $this->updateStoryReviewer($fromVersion);
+
+                if($this->config->edition == 'max') $this->moveResult2Node();
                 break;
             case '17_0_beta1':
                 if(!$executedXuanxuan)
@@ -505,6 +507,8 @@ class upgradeModel extends model
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.5.sql';
                     $this->execSQL($xuanxuanSql);
                 }
+
+                if($this->config->edition != 'open') $this->processViewFields();
                 break;
             case '17_0_beta2':
                 $this->changeStoryNeedReview();
@@ -512,6 +516,8 @@ class upgradeModel extends model
             case '17_0':
                 $this->replaceSetLanePriv();
                 $this->updateProjectData();
+
+                if($this->config->edition != 'open') $this->processFlowPosition();
                 break;
             case '17_1':
                 if(!$executedXuanxuan)
@@ -525,6 +531,9 @@ class upgradeModel extends model
                 }
                 $this->moveProjectAdmins();
                 $this->addStoryViewPriv();
+                break;
+            case '17_2':
+                if($this->config->edition == 'max') $this->addReviewIssusApprovalData();
                 break;
             case '17_3':
                 $this->processBugLinkBug();
@@ -540,6 +549,17 @@ class upgradeModel extends model
                     {
                         $this->dbh->query("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
                     }
+                }
+
+                if($this->config->edition != 'open')
+                {
+                    $this->processCreatedInfo();
+                    $this->processCreatedBy();
+                    $this->updateApproval();
+                    $this->addDefaultRuleToWorkflow();
+                    $this->processReviewLinkages();
+                    $this->addFlowActions('biz7.4');
+                    $this->addFlowFields('biz7.4');
                 }
                 break;
             case '17_5':
@@ -566,6 +586,7 @@ class upgradeModel extends model
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.4.sql';
                     $this->execSQL($xuanxuanSql);
                 }
+                if($this->config->edition != 'open') $this->processFeedbackModule();
                 break;
             case '17_8':
                 if(!$executedXuanxuan)
@@ -583,6 +604,8 @@ class upgradeModel extends model
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
                     $this->execSQL($xuanxuanSql);
                 }
+
+                if($this->config->edition == 'max') $this->initReviewEfforts();
                 break;
             case '18_0_beta3':
                 $this->updateMyBlocks();
@@ -598,10 +621,28 @@ class upgradeModel extends model
                 $this->createDefaultDimension();
                 $this->convertDocCollect();
                 $this->addBIUpdateMark();
+
+                if($this->config->edition != 'open')
+                {
+                    $this->processDataset();
+                    $this->processChart();
+                    $this->processReport();
+                    $this->processDashboard();
+                }
                 break;
             case '18_4_alpha1':
                 if($this->config->edition != 'open') $this->processDataset();
+                $this->setURSwitchStatus($fromVersion);
                 break;
+            case '18_4_beta1':
+                if($this->config->edition != 'open')
+                {
+                    $this->processDeployStepAction();
+                    $this->updateBISQL();
+                    $this->checkPivotSQL();
+                }
+                break;
+
         }
 
         $this->deletePatch();
@@ -740,30 +781,6 @@ class upgradeModel extends model
             case 'biz6_4':
                 $this->importLiteModules();
                 break;
-            case 'biz7_0_beta1':
-                $this->processViewFields();
-                break;
-            case 'biz7_0':
-                $this->processFlowPosition();
-                break;
-            case 'biz7_4':
-                $this->processCreatedInfo();
-                $this->processCreatedBy();
-                $this->updateApproval();
-                $this->addDefaultRuleToWorkflow();
-                $this->processReviewLinkages();
-                $this->addFlowActions('biz7.4');
-                $this->addFlowFields('biz7.4');
-                break;
-            case 'biz7_6_2':
-                $this->processFeedbackModule();
-                break;
-            case 'biz8_3':
-                $this->processDataset();
-                $this->processChart();
-                $this->processReport();
-                $this->processDashboard();
-                break;
         }
     }
 
@@ -780,15 +797,6 @@ class upgradeModel extends model
         {
             case 'max2_2':
                 $this->addDefaultKanbanPri();
-                break;
-            case 'max3_0':
-                $this->moveResult2Node();
-                break;
-            case 'max3_3':
-                $this->addReviewIssusApprovalData();
-                break;
-            case 'max4_0_beta1':
-                $this->initReviewEfforts();
                 break;
         }
     }
@@ -1105,7 +1113,11 @@ class upgradeModel extends model
              case '18_2':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.2'));
              case '18_3':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.3')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.3'));
+             case '18_4_alpha1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.4.alpha1'));
+             case '18_4_beta1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.4.beta1')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -5559,6 +5571,8 @@ class upgradeModel extends model
     public function updateLibType()
     {
         $executionList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->fetchAll('id');
+        if(empty($executionList)) return true;
+
         $this->dao->update(TABLE_DOCLIB)->set('type')->eq('execution')->where('execution')->in(array_keys($executionList))->exec();
 
         return true;
@@ -8050,10 +8064,13 @@ class upgradeModel extends model
      *
      * @param  string $type
      * @access public
-     * @return void
+     * @return void|bool
      */
     public function processDataset()
     {
+        $dataviewData = $this->dao->select('id')->from(TABLE_DATAVIEW)->fetch();
+        if(!empty($dataviewData)) return true;
+
         $this->loadModel('dataset');
         $this->loadModel('dataview');
 
@@ -8497,6 +8514,13 @@ class upgradeModel extends model
 
             if($chart)
             {
+                if($chart->sql)
+                {
+                    $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+                    $stmt = $this->dbh->query($chart->sql);
+                    if(!$stmt) continue;
+                }
+
                 $settings = $chart->settings;
                 if($type == 'chart') $chartType = $chart->builtin ? $chart->type : $settings[0]['type'];
                 if($type == 'pivot') $chartType = 'table';
@@ -9039,6 +9063,7 @@ class upgradeModel extends model
         $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
 
         $this->loadModel('pivot');
+        $this->loadModel('dataview');
 
         foreach($reports as $report)
         {
@@ -9164,7 +9189,18 @@ class upgradeModel extends model
                     $sql = str_replace('$' . $filter->field, $filterDefault, $sql);
                 }
             }
-            $fieldSettings = $this->getFieldSettings($sql);
+
+            $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+            $stmt = $this->dbh->query($sql);
+            if(!$stmt) /* Fix bug #35559. */
+            {
+                $data->stage = 'draft';
+                $fieldSettings = array();
+            }
+            else
+            {
+                $fieldSettings = $this->getFieldSettings($sql);
+            }
 
             $data->settings = json_encode($settings);
             $data->fields   = json_encode($fieldSettings);
@@ -9211,7 +9247,6 @@ class upgradeModel extends model
             $fieldSetting->object = $relatedTable;
             $fieldSetting->field  = $field;
             $fieldSetting->type   = 'string';
-
             $fieldSettings[$field] = $fieldSetting;
         }
 
@@ -9257,5 +9292,101 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Set UR switch status in feature switch.
+     *
+     * @param  string  $fromVersion
+     * @access public
+     * @return bool
+     */
+    public function setURSwitchStatus($fromVersion)
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
+        if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.2', '>=')) return true;
+        if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.2', '>=')) return true;
+        if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.2', '>=')) return true;
+
+        $URSwitchStatus = $this->loadModel('setting')->getItem("owner=system&module=custom&key=URAndSR");
+        if(!$URSwitchStatus)
+        {
+            $closedFeatures = $this->setting->getItem('owner=system&module=common&key=closedFeatures');
+            if(strpos($closedFeatures, 'productUR') === false) $closedFeatures .= ',productUR';
+            $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures, ','));
+        }
+
+        return true;
+    }
+
+    /**
+     * Delete deploystep action where id not in zt_deploy.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processDeployStepAction()
+    {
+        $steps = $this->dao->select('*')->from(TABLE_DEPLOYSTEP)->fetchAll('id');
+        if($steps) $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('deploystep')->andWhere('objectID')->notIN(array_keys($steps))->exec();
+    }
+
+    /**
+     * Update BI SQL for 18.4.stable new function: dataview model.php checkUniColumn().
+     *
+     * @access public
+     * @return void
+     */
+    public function updateBISQL()
+    {
+        $alpha1File = $this->getUpgradeFile('18.4.alpha1');
+        $beta1File  = $this->getUpgradeFile('18.4.beta1');
+
+        $alpha1SQL = explode(";", file_get_contents($alpha1File));
+        $beta1SQL  = explode(";", file_get_contents($beta1File));
+        $execSQL   = array();
+
+        foreach($alpha1SQL as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
+        foreach($beta1SQL  as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
+
+        /* Update stage to published and update sql. */
+        foreach($execSQL as $sql)
+        {
+            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+            $sql = trim($sql);
+
+            $this->dbh->exec($sql);
+        }
+    }
+
+    public function checkPivotSQL()
+    {
+        $this->loadModel('pivot');
+        $this->loadModel('chart');
+        $this->loadModel('dataview');
+        $pivots    = $this->dao->select('*')->from(TABLE_PIVOT)->where('deleted')->eq(0)->fetchAll('id');
+        $pivotList = array_keys($pivots);
+
+        foreach($pivotList as $pivotID)
+        {
+            $pivot   = $this->pivot->getByID($pivotID);
+            $sql     = $this->chart->parseSqlVars($pivot->sql, $pivot->filters);
+            $stage   = $pivot->stage;
+            if($stage == 'draft') continue;
+
+            $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+            $stmt = $this->dbh->query($sql);
+            if(!$stmt) /* Fix bug #35559. */
+            {
+                $stage = 'draft';
+            }
+            elseif(!$this->dataview->checkUniColumn($sql))
+            {
+                $stage = 'draft';
+            }
+
+            $this->dao->update(TABLE_PIVOT)->set('stage')->eq($stage)->where('id')->eq($pivotID)->exec();
+        }
     }
 }

@@ -970,7 +970,6 @@ class commonModel extends model
         $items        = array();
         $lastItem     = end($menuOrder);
         $printDivider = false;
-        $views        = isset($app->user->rights['acls']['views']) ? $app->user->rights['acls']['views'] : array();
 
         foreach($menuOrder as $key => $group)
         {
@@ -983,17 +982,6 @@ class commonModel extends model
             {
                 $items[]      = 'divider';
                 $printDivider = false;
-            }
-
-            /* 权限分组-视野维护-可访问视图的优先级最高，如果没有某个视图的权限，直接跳过。 */
-            /* View management-accessible views have the highest priority, continue if user do not have permission ffor a view. */
-            if(!empty($views))
-            {
-                $menu = isset($lang->navGroup->$currentModule) ? $lang->navGroup->$currentModule : $currentModule;
-                if($menu == 'my' and $currentMethod == 'team') $menu = 'system';
-
-                $openMenu = $menu == 'my' and $currentMethod != 'team';
-                if(!$openMenu and !isset($views[$menu])) continue;
             }
 
             /**
@@ -2502,44 +2490,49 @@ EOF;
     }
 
     /**
-     * Check current page whether is in iframe. If it is not iframe and not allowed to open independently, then redirect to index to open it in iframe
+     * 检查当前页面是否在 iframe 中打开，如果不是 iframe 并且不允许独立打开，则跳转到首页以 iframe 方式打开。
+     * Check current page whether is in iframe. If it is not iframe and not allowed to open independently, then redirect to index to open it in iframe.
      *
      * @access public
      * @return void
      */
     public function checkIframe()
     {
-        if($this->app->getViewType() != 'html' or helper::isAjaxRequest() or isset($_GET['_single'])) return;
+        /**
+         * 忽略如下情况：非 HTML 请求、Ajax 请求、特殊 GET 参数 _single。
+         * Ignore the following situations: non-HTML request, Ajax request, special GET parameter _single.
+         */
+        if($this->app->getViewType() != 'html' || helper::isAjaxRequest() || isset($_GET['_single'])) return;
 
-        if(isset($_SERVER['HTTP_SEC_FETCH_DEST']) and $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe')
-        {
-            return;
-        }
-        elseif((isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER'])) or strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'safari') !== false)
-        {
-            return;
-        }
+        /**
+         * 忽略无请求头 HTTP_SEC_FETCH_DEST 或者 HTTP_SEC_FETCH_DEST 为 iframe 的请求，较新的浏览器在启用 https 的情况下才会正确发送该请求头。
+         * Ignore the request without HTTP_SEC_FETCH_DEST or HTTP_SEC_FETCH_DEST is iframe, the latest browser will send this request header correctly when enable https.
+         */
+        if(!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return;
 
-        $module = $this->app->getModuleName();
-        $method = $this->app->getMethodName();
-        if($module == 'index' or
-           $module == 'tutorial' or
-           $module == 'install' or
-           $module == 'upgrade' or
-           $module == 'sso' or
-          ($module == 'user' and strpos('|login|deny|logout|reset|forgetpassword|resetpassword|', "|{$method}|") !== false) or
-          ($module == 'my' and strpos('|changepassword|preference|', "|{$method}|") !== false) or
-          ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
-          ($module == 'report' && $method == 'annualdata') or
-          ($module == 'misc' && $method == 'captcha') or
-          ($module == 'bug' && $method == 'create') or
-          ($module == 'execution' and $method == 'printkanban') or
-          ($module == 'traincourse' and $method == 'ajaxuploadlargefile') or
-          ($module == 'traincourse' and $method == 'playvideo'))
+        /**
+         * 当有 HTTP_REFERER 请求头时，忽略 safari 浏览器，因为 safari 浏览器不会正确发送 HTTP_SEC_FETCH_DEST 请求头。
+         * Ignore safari browser when there is HTTP_REFERER request header, because safari browser will not send HTTP_SEC_FETCH_DEST request header correctly.
+         */
+        if(isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER']))
         {
-            return;
+            $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+            if(strpos($userAgent, 'chrome') === false && strpos($userAgent, 'safari') !== false) return;
         }
 
+        /**
+         * 以下页面可以允许在非 iframe 中打开，所以要忽略这些页面。
+         * The following pages can be allowed to open in non-iframe, so ignore these pages.
+         */
+        $module    = $this->app->getModuleName();
+        $method    = $this->app->getMethodName();
+        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|';
+        if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return;
+
+        /**
+         * 如果以上条件都不满足，则视为当前页面必须在 iframe 中打开，使用 302 跳转实现。
+         * If none of the above conditions are missed, then the current page must be opened in iframe, using 302 jump to achieve.
+         */
         $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
         $redirectUrl  = helper::createLink('index', 'index');
         $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
@@ -2569,6 +2562,7 @@ EOF;
         if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
         if($module == 'product' and $method == 'browse' and !empty($params['storyType']) and $params['storyType'] == 'requirement') $method = 'requirement';
         if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
+        if($app->config->vision != 'lite' and $module == 'feedback' and $method == 'view') $method = 'adminview';
 
         /* If the user is doing a tutorial, have all tutorial privs. */
         if(defined('TUTORIAL'))
@@ -2877,11 +2871,14 @@ EOF;
             $itemsPinYin     = explode(trim($sign), $convertedPinYin);
             foreach($notConvertedItems as $item)
             {
-                $itemPinYin  = array_shift($itemsPinYin);
+                $key        = key($itemsPinYin);
+                $itemPinYin = $itemsPinYin[$key];
+                unset($itemsPinYin[$key]);
+
                 $wordsPinYin = explode("\t", trim($itemPinYin));
 
                 $abbr = '';
-                foreach($wordsPinYin as $i => $wordPinyin)
+                foreach($wordsPinYin as $wordPinyin)
                 {
                     if($wordPinyin)
                     {
@@ -3640,6 +3637,23 @@ EOF;
 
         return false;
     }
+
+    /**
+     * Check object priv.
+     *
+     * @param  string   $objectType program|project|product|execution
+     * @param  int      $objectID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivByObject($objectType, $objectID)
+    {
+        $objectType = strtolower($objectType);
+        if(in_array($objectType, array('program', 'project', 'product', 'execution'))) return $this->loadModel($objectType)->checkPriv($objectID);
+
+        return false;
+    }
+
 }
 
 class common extends commonModel

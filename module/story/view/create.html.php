@@ -110,7 +110,8 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 <div class='table-col' id='planIdBox'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo $lang->story->plan;?></span>
-                    <?php echo html::select('plans[0]', $plans, $planID, "class='form-control chosen'");?>
+                    <?php $required = strpos($config->story->create->requiredFields, 'plan') === false ? '' : 'required';?>
+                    <?php echo html::select('plans[0]', $plans, $planID, "class='form-control chosen' $required");?>
                   </div>
                 </div>
               </div>
@@ -246,7 +247,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             <td colspan="2" class="<?php if($hiddenURS) echo 'hidden';?>">
               <div class='input-group'>
                 <?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?>
-                <span class='input-group-btn'><?php echo html::commonButton($lang->story->loadAllStories, "class='btn btn-default' onclick='loadProductUserStories()' data-toggle='tooltip'");?></span>
+                <span class='input-group-btn'><?php echo html::commonButton($lang->story->loadAllStories, "class='btn btn-default' onclick='loadURS()' data-toggle='tooltip'");?></span>
               </div>
             </td>
             <?php if($app->tab == 'product'):?>

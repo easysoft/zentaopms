@@ -28,12 +28,6 @@ class report extends control
     public function __construct()
     {
         parent::__construct();
-
-        /* Set report menu group. */
-        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
-        if(!$this->projectID) $this->lang->navGroup->report = 'report';
-
-        if($this->config->edition != 'open' && $this->lang->navGroup->report == 'report' && common::hasPriv('report', 'custom')) $this->lang->report->mainMenuAction = html::a(helper::createLink('report', 'custom'), $this->lang->crystal->custom, '', "class='btn btn-link'");
     }
 
     /**

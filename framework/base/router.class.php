@@ -718,7 +718,7 @@ class baseRouter
      *
      * @return bool
      */
-    protected function outputXhprof()
+    public function outputXhprof()
     {
         if(empty($this->config->debug) || $this->config->debug < 4 || !extension_loaded('xhprof')) return false;
 
@@ -2250,9 +2250,47 @@ class baseRouter
             return $module;
         } catch (EndResponseException $endResponseException) {
             echo $endResponseException->getContent();
+            return false;
         }
 
         return isset($module) ? $module : false;
+    }
+
+    /**
+     * 输出内容。
+     * Output the content.
+     *
+     * @return string
+     */
+    public function outputPage()
+    {
+        $cacheEnable = $this->config->cache->enableFullPage;
+        /* If caching is not turned on, pages that do not need to be cached, or when searching, they are not cached. */
+        if(!$cacheEnable || !in_array("{$this->moduleName}|{$this->methodName}", $this->config->cache->fullPages) || stripos($this->server->request_uri, 'search') !== false || isset($_GET['_nocache']) || $this->server->http_x_zt_refresh)
+        {
+            $this->loadModule();
+            return helper::removeUTF8Bom(ob_get_clean());
+        }
+
+        $this->loadClass('cache', $static = true);
+        $cacheKey  = md5($this->server->request_uri);
+        $namespace = isset($this->session->user->account) ? $this->session->user->account : 'guest';
+        $cache     = cache::create($this->config->cache->fullPageDriver, $namespace, $this->config->cache->fullPageLifetime);
+
+        if($cache->has($cacheKey))
+        {
+            if(!headers_sent()) header('X-Zt-Hit-Cache: 1');
+            $content = $cache->get($cacheKey);
+        }
+        else
+        {
+            ob_start();
+            $result  = $this->loadModule();
+            $content = helper::removeUTF8Bom(ob_get_clean());
+            /* If the module is loaded successfully, cache the content. */
+            if($result !== false) $cache->set($cacheKey, $content);
+        }
+        return $content;
     }
 
     /**

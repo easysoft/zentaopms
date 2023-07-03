@@ -10,11 +10,7 @@ class projectModel extends model
      */
     public function checkPriv($projectID)
     {
-        if(empty($projectID)) return false;
-
-        /* If is admin, return true. */
-        if($this->app->user->admin) return true;
-        return (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false);
+        return !empty($projectID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false));
     }
 
     /**
@@ -236,32 +232,22 @@ class projectModel extends model
         $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, $involved);
         if(empty($projects)) return array();
 
-        $projectIdList = array_keys($projects);
-        $teams = $this->dao->select('t1.root, count(t1.id) as count')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.root')
-            ->fetchAll('root');
+        $projectParentNames = $this->getParentProgram($projects);
 
-        $estimates = $this->dao->select("t2.project as project, sum(t1.estimate) as estimate")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t1.parent')->lt(1)
-            ->andWhere('t2.project')->in($projectIdList)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t2.project')
-            ->fetchAll('project');
+        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('status')->notin('done,closed')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->fetchGroup('project');
 
         $this->app->loadClass('pager', $static = true);
         foreach($projects as $projectID => $project)
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
-            $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
-            $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
-            $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
-            $project->parentName = $this->getParentProgram($project);
+            $project->executions = isset($executions[$projectID]) ? $executions[$projectID] : array();
+            $project->parentName = $projectParentNames[$project->id];
         }
         return $projects;
     }
@@ -269,21 +255,45 @@ class projectModel extends model
     /**
      * Get all parent program of a program.
      *
-     * @param  int    $parentID
+     * @param  array $projects
      * @access public
-     * @return string
+     * @return array
      */
-    public function getParentProgram($project)
+    public function getParentProgram($projects)
     {
-        if($project->parent == 0) return '';
+        if(empty($projects)) return array();
 
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->orderBy('grade asc')->fetchPairs();
+        $parents        = array();
+        $projectParents = array();
+        foreach($projects as $project)
+        {
+            $projectParents[$project->id] = array();
 
-        $parentProgram = '';
-        foreach($parentName as $name) $parentProgram .= $name . '/';
-        $parentProgram = rtrim($parentProgram, '/');
+            if(!$project->parent) continue;
 
-        return $parentProgram;
+            foreach(explode(',', trim($project->path, ',')) as $parent)
+            {
+                if($parent == $project->id) continue;
+
+                $parents[$parent] = $parent;
+
+                $projectParents[$project->id][] = $parent;
+            }
+        }
+
+        $parentNames = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in($parents)->fetchPairs();
+
+        foreach($projectParents as $projectID => $parents)
+        {
+            $programNames = array();
+            foreach($parents as $parent)
+            {
+                $programNames[] = $parentNames[$parent];
+            }
+            $projectParents[$projectID] = implode('/', $programNames);
+        }
+
+        return $projectParents;
     }
 
     /**
@@ -3180,5 +3190,31 @@ class projectModel extends model
         }
 
         return $repoPairs;
+    }
+
+
+    /**
+     * Get project left tasks for project browseByCard view.
+     *
+     * @param  array    $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getProjectLeftTasks($projectIdList)
+    {
+        $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->in($projectIdList)
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->fetchPairs('id');
+
+        $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t1.execution')->in($executionIdList)
+            ->andWhere('t1.status')->notIn('cancel,closed')
+            ->groupBy('t2.parent')
+            ->fetchAll('project');
+
+        return $leftTasks;
     }
 }

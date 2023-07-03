@@ -14,6 +14,7 @@
 /* Set the error reporting. */
 error_reporting(E_ALL);
 define('IN_USE', true);
+define('USE_INTRANET', false);
 
 /* Start output buffer. */
 ob_start();
@@ -71,7 +72,5 @@ $app->parseRequest();
 if(!$app->setParams()) return;
 $common->checkPriv();
 $common->checkIframe();
-$app->loadModule();
 
-/* Flush the buffer. */
-echo helper::removeUTF8Bom(ob_get_clean());
+echo $app->outputPage();

@@ -896,7 +896,7 @@ $(function()
     });
 
     /* Update patch, plugin, news, publicclass from zetao.net. */
-    if(isAdminUser) $.get(createLink('admin', 'ajaxSetZentaoData'));
+    if(isAdminUser && !isIntranet) $.get(createLink('admin', 'ajaxSetZentaoData'));
 });
 
 /* Change the search object according to the module and method. */

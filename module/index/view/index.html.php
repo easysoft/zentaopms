@@ -22,6 +22,7 @@ js::set('defaultOpen',   (isset($open) and !empty($open)) ? $open : '');
 js::set('manualText',    $lang->manual);
 js::set('manualUrl',     ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
 js::set('isAdminUser',   $this->app->user->admin);
+js::set('isIntranet',    helper::isIntranet());
 ?>
 <style>
 #versionTitle {margin: 8px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-upgrade.svg';?>);}
@@ -134,15 +135,15 @@ js::set('isAdminUser',   $this->app->user->admin);
           <div class="version-list">
             <div>
               <i class='version-upgrade icon-version'></i>
-              <h4><?php echo $version->name;?></h4>
+              <h4><?php echo $version['name'];?></h4>
             </div>
-            <div class="version-detail"><?php echo $version->explain;?></div>
+            <div class="version-detail"><?php echo $version['explain'];?></div>
             <div class="version-footer">
               <a href="<?php echo inLink('changeLog', 'version=' . $versionNumber);?>" class="btn btn-link iframe" data-width="800"><?php echo $lang->index->log;?></strong></a>
-              <a href='<?php echo $version->link?>' class='btn btn-primary upgrade-now' style='color: white;' target='_blank'><?php echo $lang->index->upgradeNow;?></a>
+              <a href='<?php echo $version['link']?>' class='btn btn-primary upgrade-now' style='color: white;' target='_blank'><?php echo $lang->index->upgradeNow;?></a>
             </div>
           </div>
-          <?php if($version->name != $lastVersion->name):?>
+          <?php if($version['name'] != $lastVersion['name']):?>
           <hr class='version-hr'>
           <?php endif;?>
           <?php endforeach;?>

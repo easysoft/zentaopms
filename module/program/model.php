@@ -630,58 +630,6 @@ class programModel extends model
     }
 
     /**
-     * Get program and project progress list.
-     *
-     * @access public
-     * @return array
-     */
-    public function getProgressList()
-    {
-        $totalProgress = array();
-        $projectCount  = array();
-        $userPRJCount  = array();
-        $progressList  = array();
-        $programPairs  = $this->getPairs();
-        $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
-
-        /* Add program progress. */
-        foreach(array_keys($programPairs) as $programID)
-        {
-            $totalProgress[$programID] = 0;
-            $projectCount[$programID]  = 0;
-            $userPRJCount[$programID]  = 0;
-            $progressList[$programID]  = 0;
-
-            foreach($projectStats as $project)
-            {
-                if(strpos($project->path, ',' . $programID . ',') === false) continue;
-
-                /* The number of projects under this program that the user can view. */
-                if(strpos(',' . $this->app->user->view->projects . ',', ',' . $project->id . ',') !== false) $userPRJCount[$programID] ++;
-
-                $totalProgress[$programID] += $project->progress;
-                $projectCount[$programID] ++;
-            }
-
-            if(empty($projectCount[$programID])) continue;
-
-            /* Program progress can't see when this user don't have all projects priv. */
-            if(!$this->app->user->admin and $userPRJCount[$programID] != $projectCount[$programID])
-            {
-                unset($progressList[$programID]);
-                continue;
-            }
-
-            $progressList[$programID] = round($totalProgress[$programID] / $projectCount[$programID]);
-        }
-
-        /* Add project progress. */
-        foreach($projectStats as $project) $progressList[$project->id] = $project->progress;
-
-        return $progressList;
-    }
-
-    /**
      * Create a program.
      *
      * @access private
@@ -1238,7 +1186,7 @@ class programModel extends model
         $treeMenu = array();
         foreach($modules as $module)
         {
-            if(strpos($mode, 'all') !== false and strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
+            if(strpos($mode, 'all') === false and strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
 
             $moduleName    = $showRoot ? '/' : '';
             $parentModules = explode(',', $module->path);
@@ -1364,27 +1312,28 @@ class programModel extends model
         $projects = array();
         if($updateTime > date('Y-m-d', strtotime('-14 days')))
         {
-            $projects = $this->dao->select('distinct project')->from(TABLE_ACTION)
-                ->where('date')->ge($updateTime)
-                ->fetchPairs('project');
+            $projects = $this->dao->select('distinct t1.project,t2.model')->from(TABLE_ACTION)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.`date`')->ge($updateTime)
+                ->fetchAll('project');
             if(empty($projects)) return;
         }
 
         /* 1. Get summary and members of executions to be refreshed. */
-        $summary = $this->dao->select('execution, SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed, SUM(`left`) AS totalLeft')->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
-            ->beginIF(!empty($projects))->andWhere('project')->in($projects)->fi()
+        $summary = $this->dao->select('execution, SUM(t1.estimate) AS totalEstimate, SUM(t1.consumed) AS totalConsumed, SUM(t1.`left`) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF(!empty($projects))->andWhere('t1.project')->in(array_keys($projects))->fi()
             ->groupBy('execution')
             ->fetchAll();
 
         $teamMembers = $this->dao->select('t1.root, COUNT(1) AS members')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
             ->where('t1.type')->eq('project')
-            ->beginIF(!empty($projects))->andWhere('t1.root')->in($projects)->fi()
+            ->beginIF(!empty($projects))->andWhere('t1.root')->in(array_keys($projects))->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->groupBy('t1.root')
             ->fetchPairs('root');
-
 
         /* 2. Get all parents to be refreshed. */
         $executions = array();
@@ -1405,6 +1354,17 @@ class programModel extends model
                 $stats[$nodeID]['totalConsumed'] += $execution->totalConsumed;
                 $stats[$nodeID]['totalLeft']     += $execution->totalLeft;
             }
+        }
+
+        $this->loadModel('project');
+        foreach($projects as $projectID => $project)
+        {
+            if($project->model != 'waterfall') continue;
+
+            $projectStats = $this->project->getWaterfallPVEVAC($projectID);
+            $stats[$projectID]['totalEstimate'] = $projectStats['PV'];
+            $stats[$projectID]['totalConsumed'] = $projectStats['AC'];
+            $stats[$projectID]['totalLeft']     = $projectStats['left'];
         }
 
         foreach($teamMembers as $projectID => $teamCount)
@@ -1451,21 +1411,13 @@ class programModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
-        $this->refreshStats(); // Refresh stats fields of projects.
-
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
         if(empty($projects)) return array();
 
-        /* Get the members of project teams. */
-        $teamMembers = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in(array_keys($projects))
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetchGroup('root', 'account');
+        $leftTasks = ($this->cookie->projectType and $this->cookie->projectType == 'bycard') ? $this->loadModel('project')->getProjectLeftTasks(array_keys($projects)) : array();
 
         /* Process projects. */
-        foreach($projects as $key => $project)
+        foreach($projects as $projectID => $project)
         {
             if($project->end == '0000-00-00') $project->end = '';
 
@@ -1476,12 +1428,12 @@ class programModel extends model
                 if($delay > 0) $project->delay = $delay;
             }
 
-            $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
+            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID]->tasks : '—';
 
             /* Convert predefined HTML entities to characters. */
             $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
 
-            $stats[$key] = $project;
+            $stats[$projectID] = $project;
         }
 
         return $stats;
@@ -1670,5 +1622,17 @@ class programModel extends model
         $this->loadModel('action')->create('program', $programID, 'openedbysystem');
 
         return $programID;
+    }
+
+    /**
+     * Check the privilege.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return bool
+     */
+    public function checkPriv($programID)
+    {
+        return !empty($programID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->programs},", ",{$programID},") !== false));
     }
 }

@@ -23,11 +23,7 @@ class executionModel extends model
      */
     public function checkPriv($executionID)
     {
-        if(empty($executionID)) return false;
-
-        /* If is admin, return true. */
-        if($this->app->user->admin) return true;
-        return (strpos(",{$this->app->user->view->sprints},", ",{$executionID},") !== false);
+        return !empty($executionID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->sprints},", ",{$executionID},") !== false));
     }
 
     /**
@@ -1858,6 +1854,35 @@ class executionModel extends model
     }
 
     /**
+     * Get execution count.
+     *
+     * @param  int    $projectID
+     * @param  string $browseType all|undone|wait|doing|suspended|closed|involved|review
+     * @access public
+     * @return int
+     */
+    public function getExecutionCounts($projectID = 0, $browseType = 'all')
+    {
+        $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.type')->in('sprint,stage,kanban')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.multiple')->eq('1')
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch')))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
+            ->beginIF($browseType == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->fetchAll('id');
+
+        return count($executions);
+    }
+
+    /**
      * Get execution stat data.
 
      * @param  int        $projectID
@@ -1900,16 +1925,6 @@ class executionModel extends model
             $executionQuery = preg_replace('/(`\w*`)/', 't1.$1',$executionQuery);
         }
 
-        /* Get involved executions. */
-        $myExecutionIDList = array();
-        if($browseType == 'involved')
-        {
-            $myExecutionIDList = $this->dao->select('root')->from(TABLE_TEAM)
-                ->where('account')->eq($this->app->user->account)
-                ->andWhere('type')->eq('execution')
-                ->fetchPairs();
-        }
-
         $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
@@ -1919,7 +1934,7 @@ class executionModel extends model
             ->andWhere('t1.multiple')->eq('1')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
-            ->beginIF($productID)->andWhere('t3.product')->eq((int)$productID)->fi()
+            ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch')))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
@@ -1933,17 +1948,7 @@ class executionModel extends model
 
         if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, GROUP_CONCAT(product) as product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->groupBy('project')->fetchPairs();
 
-        $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
-
-        /* Get the number of execution teams. */
-        $teams = $this->dao->select('t1.root,count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in(array_keys($executions))
-            ->andWhere('t1.type')->ne('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.root')
-            ->fetchAll('root');
 
         $productNameList = $this->dao->select('t1.id,GROUP_CONCAT(t3.`name`) as productName')->from(TABLE_EXECUTION)->alias('t1')
             ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
@@ -1964,6 +1969,7 @@ class executionModel extends model
         $parentList = array();
         foreach($executions as $key => $execution)
         {
+            $execution->projectName = htmlspecialchars_decode($execution->projectName);
             $execution->productName = isset($productNameList[$execution->id]) ? $productNameList[$execution->id] : '';
 
             /* Process the end time. */
@@ -1980,10 +1986,6 @@ class executionModel extends model
             $execution->burns = array();
             $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
             foreach($burnData as $data) $execution->burns[] = $data->value;
-
-            /* Process the hours. */
-            $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
-            $execution->teamCount   = isset($teams[$execution->id]) ? $teams[$execution->id]->teams : 0;
 
             if(isset($executionTasks) and isset($executionTasks[$execution->id]))
             {
@@ -2036,8 +2038,9 @@ class executionModel extends model
      * @param  int     $projectID
      * @param  string  $status
      * @param  int     $limit
-     * @param  string  $pairs
-     * @param  int     $appenedID
+     * @param  bool    $pairs
+     * @param  bool    $devel
+     * @param  int     $appendedID
      * @access public
      * @return array
      */
@@ -2196,6 +2199,10 @@ class executionModel extends model
         {
             $link = helper::createLink($module, $method, "executionID=%s&type=$extra");
         }
+        elseif($module == 'execution' and $method == 'storyview')
+        {
+            $link = helper::createLink($module, 'story', "executionID=%s");
+        }
         elseif($module == 'execution' and ($method == 'index' or $method == 'all'))
         {
             $link = helper::createLink($module, 'task', "executionID=%s");
@@ -2301,7 +2308,7 @@ class executionModel extends model
     }
 
     /**
-     * Get full name of executons.
+     * Get full name of executions.
      * @param  array $executions
      * @access public
      * @return array
@@ -2739,6 +2746,7 @@ class executionModel extends model
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+        $this->config->product->search['params']['stage']['values']   = array('' => '') + $this->lang->story->stageList;
 
         $this->loadModel('productplan');
         $plans     = array();
@@ -3641,7 +3649,7 @@ class executionModel extends model
             ->markRight(1)
             ->orWhere('id')->eq($projectID)
             ->orderBy('type_asc,openedDate_desc')
-            ->limit('9')
+            ->limit('11')
             ->fetchPairs();
 
         $countPairs = $this->dao->select('root, COUNT(*) as count')->from(TABLE_TEAM)
@@ -5304,10 +5312,10 @@ class executionModel extends model
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
         echo helper::isZeroDate($execution->end) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->end . '</td>';
-        echo "<td class='hours text-right' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
-        echo "<td class='hours text-right' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
-        echo "<td class='hours text-right' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
-        echo '<td>' . html::ring($execution->hours->progress) . '</td>';
+        echo "<td class='hours text-right' title='{$execution->estimate}{$this->lang->execution->workHour}'>" . $execution->estimate . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours text-right' title='{$execution->consumed}{$this->lang->execution->workHour}'>" . $execution->consumed . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours text-right' title='{$execution->left}{$this->lang->execution->workHour}'>" . $execution->left . $this->lang->execution->workHourUnit . '</td>';
+        echo '<td>' . html::ring($execution->progress) . '</td>';
         echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
         echo '<td class="c-actions text-left">';
 
@@ -5782,13 +5790,13 @@ class executionModel extends model
      * @param  array  $users
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return array
      */
     public function generateRow($executions, $users, $productID)
     {
         $today = helper::today();
         $rows  = array();
-        foreach($executions as $id => $execution)
+        foreach($executions as $execution)
         {
             $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
@@ -5798,10 +5806,6 @@ class executionModel extends model
             $execution->asParent = !empty($execution->children);
             $execution->status   = zget($this->lang->execution->statusList, $execution->status);
             $execution->PM       = zget($users, $execution->PM);
-            $execution->progress = $execution->hours->progress;
-            $execution->estimate = $execution->hours->totalEstimate;
-            $execution->consumed = $execution->hours->totalConsumed;
-            $execution->left     = $execution->hours->totalLeft;
 
             $children = isset($execution->children) ? $execution->children : array();
             unset($execution->children);

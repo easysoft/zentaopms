@@ -195,7 +195,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th><?php echo $lang->task->module;?></th>
+                  <th class='task-basic-info'><?php echo $lang->task->module;?></th>
                   <?php
                   $moduleTitle = '';
                   ob_start();

@@ -17,10 +17,10 @@
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter', $lang->testcase->insertAfter);?>
 <?php js::set('isonlybody', isonlybody());?>
-<?php js::set('executionID', $executionID);?>
 <?php js::set('tab', $this->app->tab);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $executionID);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $projectID);?>
+<?php if($this->app->tab == 'qa') js::set('objectID', 0);?>
 <?php
 foreach(explode(',', $config->testcase->create->requiredFields) as $field)
 {

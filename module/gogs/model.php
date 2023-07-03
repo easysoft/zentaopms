@@ -343,7 +343,7 @@ class gogsModel extends model
 
             $gogs  = $this->getByID($gogsID);
             $oauth = "{$gogs->token}@";
-            $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', "\$1$oauth", $project->html_url);
+            $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', '${1}' . $gogs->token . '@', $project->html_url);
         }
 
         return $project;

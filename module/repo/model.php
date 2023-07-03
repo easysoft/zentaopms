@@ -828,7 +828,7 @@ class repoModel extends model
                 ->where('1=1')
                 ->andWhere('t1.repo')->eq($repo->id)
                 ->beginIF($revisionTime)->andWhere('t2.`time`')->le($revisionTime)->fi()
-                ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+                ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
                 ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
                 ->beginIF($type == 'dir')
                 ->andWhere('t1.parent', true)->like(rtrim($entry, '/') . "/%")
@@ -845,7 +845,7 @@ class repoModel extends model
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
             ->beginIF($revisionTime)->andWhere('t1.`time`')->le($revisionTime)->fi()
-            ->andWhere('left(t1.comment, 12)')->ne('Merge branch')
+            ->andWhere('left(t1.`comment`, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->beginIF($entry != '/' and !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
             ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
@@ -1036,7 +1036,7 @@ class repoModel extends model
                         $file->repo     = $repoID;
                         $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
 
-                        if($file->oldPath and $file->action == 'R')
+                        if($file->action == 'R' && !empty($file->oldPath))
                         {
                             $file->path    = $file->oldPath;
                             $file->parent  = dirname($file->path);
@@ -1100,7 +1100,7 @@ class repoModel extends model
                 $repoFile->parent   = $parentPath == '\\' ? '/' : $parentPath;
                 $repoFile->type     = $info['kind'];
                 $repoFile->action   = $info['action'];
-                $repoFile->oldPath  = $info['oldPath'];
+                $repoFile->oldPath  = empty($info['oldPath']) ? '' : $info['oldPath'];
                 $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
 
                 if($repoFile->oldPath and $repoFile->action == 'R')
@@ -2382,11 +2382,11 @@ class repoModel extends model
 
         /* Get file commits by repo. */
         if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
-        $fileCommits = $this->dao->select('t1.id,t1.path,t1.type,t1.action,t1.oldPath,t1.parent,t2.revision,t2.comment,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
+        $fileCommits = $this->dao->select('t1.id,t1.path,t1.type,t1.action,t1.oldPath,t1.parent,t2.revision,t2.`comment`,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
             ->where('t1.repo')->eq($repo->id)
-            ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+            ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
             ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.parent')->eq("$parent")->fi()
             ->beginIF($repo->SCM != 'Subversion')->andWhere('t1.parent')->like("$parent%")->fi()
@@ -2550,7 +2550,7 @@ class repoModel extends model
                 ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
                 ->where('t1.repo')->eq($repo->id)
                 ->andWhere('t1.type')->eq('file')
-                ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+                ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
                 ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
                 ->orderBy('t2.`time` asc')
                 ->fetchAll('path');

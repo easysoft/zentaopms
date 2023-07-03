@@ -435,6 +435,20 @@ class installModel extends model
     }
 
     /**
+    * Exec dm.sql.
+    *
+    * @access public
+    * @return bool
+    */
+    public function execDMSQL()
+    {
+        $dbFile = $this->app->getAppRoot() . 'db' . DS . 'dm.sql';
+        $tables = explode(';', file_get_contents($dbFile));
+
+        foreach($tables as $table) $this->dbh->exec($table);
+    }
+
+    /**
      * Create a comapny, set admin.
      *
      * @access public

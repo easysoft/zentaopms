@@ -319,7 +319,7 @@ function loadProductStories(productID)
     if(typeof(branch) == 'undefined') branch = 0;
     if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleId=0&storyID=' + oldStoryID);
-    $('#storyIdBox').load(link, function(){$('#story').chosen();});
+    $('#storyIdBox').load(link, function(){$('#story').picker();});
 }
 
 /**
@@ -379,6 +379,8 @@ function loadProductExecutions(productID, projectID = 0)
     });
 
     projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
+
+    loadExecutionRelated(execution);
 }
 
 /**
@@ -425,7 +427,7 @@ function changeAssignedTo(projectID)
 function loadProductExecutionsByProject(productID, projectID = 0, num = 0)
 {
     var branch = $('#branches' + num).val();
-    if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(branch) === undefined || branch == null) branch = 0;
 
     if(projectID == 'ditto')
     {
@@ -512,7 +514,6 @@ function loadExecutionRelated(executionID)
     if(executionID)
     {
         if(currentProjectID == 0) loadProjectByExecutionID(executionID);
-        loadExecutionTasks(executionID);
         loadExecutionStories(executionID);
         loadExecutionBuilds(executionID);
         loadAssignedTo(executionID, $('#assignedTo').val());
@@ -536,6 +537,8 @@ function loadExecutionRelated(executionID)
 
         currentProjectID != 0 ? loadProjectBuilds(currentProjectID) : loadProductBuilds(currentProductID);
     }
+
+    loadExecutionTasks(executionID);
 }
 
 /**
@@ -770,7 +773,7 @@ function setStories(moduleID, productID, storyID)
         $('#story').replaceWith(stories);
         $('#story_chosen').remove();
         $('#story').next('.picker').remove();
-        $("#story").chosen();
+        $("#story").picker();
     });
 }
 

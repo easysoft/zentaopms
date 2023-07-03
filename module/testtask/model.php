@@ -82,10 +82,9 @@ class testtaskModel extends model
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t3.project = t5.id')
-
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
-            ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
             ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
@@ -778,6 +777,11 @@ class testtaskModel extends model
             ->join('type', ',')
             ->remove('files,labels,uid,comment,contactListMenu')
             ->get();
+
+        /* Fix bug #35419. */
+        $execution     = $this->loadModel('execution')->getByID($task->execution);
+        $task->project = $execution->project;
+
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
 
         $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles')
@@ -973,7 +977,7 @@ class testtaskModel extends model
         $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
         $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
-        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq((int)$taskID)
@@ -1003,7 +1007,7 @@ class testtaskModel extends model
 
         $cases = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
 
-        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq((int)$taskID)
@@ -1030,7 +1034,7 @@ class testtaskModel extends model
         $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
         $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
-        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq((int)$taskID)
@@ -1106,7 +1110,7 @@ class testtaskModel extends model
             $fieldToSort   = substr($sort, 0, strpos($sort, '_'));
             $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $sort) : ('t2.' . $sort);
 
-            $runs = $this->dao->select('t2.*,t1.*, t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+            $runs = $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
                 ->where($caseQuery)
@@ -1578,7 +1582,7 @@ class testtaskModel extends model
 
         if($action == 'runcase')
         {
-            if(isset($testtask->caseStatus)) return $testtask->version < $testtask->caseVersion ? $testtask->caseStatus == 'wait' : $testtask->caseStatus != 'wait';
+            if(isset($testtask->caseStatus)) return $testtask->caseStatus != 'wait';
             return $testtask->status != 'wait';
         }
 
@@ -1609,7 +1613,6 @@ class testtaskModel extends model
         $caseLink    = helper::createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask&taskID=$run->task");
         $account     = $this->app->user->account;
         $id          = $col->id;
-        $caseChanged = $run->version < $run->caseVersion;
         $fromCaseID  = $run->fromCaseID;
 
         if($col->show)
@@ -1669,19 +1672,12 @@ class testtaskModel extends model
                 foreach(explode(',', trim($run->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
                 break;
             case 'status':
-                if($run->caseStatus != 'wait' and $caseChanged)
-                {
-                    echo "<span title='{$this->lang->testcase->changed}' class='warning'>{$this->lang->testcase->changed}</span>";
-                }
-                else
-                {
-                    $case = new stdClass();
-                    $case->status = $run->caseStatus;
+                $case = new stdClass();
+                $case->status = $run->caseStatus;
 
-                    $status = $this->processStatus('testcase', $case);
-                    if($run->status == $status) $status = $this->processStatus('testtask', $run);
-                    echo $status;
-                }
+                $status = $this->processStatus('testcase', $case);
+                if($run->status == $status) $status = $this->processStatus('testtask', $run);
+                echo $status;
                 break;
             case 'precondition':
                 echo $run->precondition;
@@ -1739,12 +1735,6 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
-                if($run->caseStatus != 'wait' and $caseChanged)
-                {
-                    common::printIcon('testcase', 'confirmChange', "id=$run->case&taskID=$run->task&from=list", $run, 'list', 'search', 'hiddenwin');
-                    break;
-                }
-
                 common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=executionID=$task->execution,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
 
                 common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");

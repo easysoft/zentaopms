@@ -58,14 +58,17 @@ function resizeBlock(blockID, width, callback)
  *
  * @param  object   $panel
  * @param  function afterRefresh
+ * @param  number   forceRefresh
  * @access public
  * @return void
  */
-function refreshBlock($panel, afterRefresh)
+function refreshBlock($panel, afterRefresh, forceRefresh = 0)
 {
     var url = $panel.data('url');
+    var headers = {};
+    if(forceRefresh) headers['X-Zt-Refresh'] = forceRefresh;
     $panel.addClass('load-indicator loading');
-    $.ajax({url: url, dataType: 'html'}).done(function(data)
+    $.ajax({url: url, dataType: 'html', headers: headers}).done(function(data)
     {
         var $data = $(data);
         if($data.hasClass('panel')) $panel.empty().append($data.children());
@@ -284,7 +287,7 @@ $(function()
         always: function(){sortMessager.isShow && sortMessager.hide();}
     }).on('click', '.refresh-panel', function()
     {
-        refreshBlock($(this).closest('.panel'));
+        refreshBlock($(this).closest('.panel'), null, 1);
     });
 });
 

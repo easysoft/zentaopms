@@ -142,9 +142,17 @@
                 <?php if($i > 8) break;?>
                 <div class="col-xs-6 text-ellipsis">
                   <?php if($libID == 'files'):?>
-                  <?php echo html::a($this->createLink('doc', 'showFiles', "type=execution&objectID=$execution->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
+                    <?php if(isonlybody()):?>
+                    <?php echo "<i class='icon icon-folder text-yellow'></i> " . $docLib->name;?>
+                    <?php else:?>
+                    <?php echo html::a($this->createLink('doc', 'showFiles', "type=execution&objectID=$execution->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
+                    <?php endif;?>
                   <?php else:?>
-                  <?php echo html::a($this->createLink('execution', 'doc', "objectID={$execution->id}&libID=$libID"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name, '', "data-app='execution' title='$docLib->name'");?>
+                    <?php if(isonlybody()):?>
+                    <?php echo "<i class='icon icon-folder text-yellow'></i> " . $docLib->name;?>
+                    <?php else:?>
+                    <?php echo html::a($this->createLink('execution', 'doc', "objectID={$execution->id}&libID=$libID"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name, '', "data-app='execution' title='$docLib->name'");?>
+                    <?php endif;?>
                   <?php endif;?>
                 </div>
                 <?php $i++;?>

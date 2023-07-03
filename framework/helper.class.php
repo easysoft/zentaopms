@@ -348,6 +348,17 @@ class helper extends baseHelper
         }
         return $dateInterval;
     }
+
+    /**
+     * 是否是内网。
+     * Check is intranet.
+     *
+     * @return bool
+     */
+    public static function isIntranet()
+    {
+        return !defined('USE_INTRANET') ? false : USE_INTRANET;
+    }
 }
 
 /**

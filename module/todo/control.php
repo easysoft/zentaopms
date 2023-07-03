@@ -453,7 +453,13 @@ class todo extends control
         }
         else
         {
-            $this->todo->delete(TABLE_TODO, $todoID);
+            $result = $this->todo->delete(TABLE_TODO, $todoID);
+            if(!$result)
+            {
+                if(isonlybody()) return print(js::alert($this->lang->error->accessDenied));
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->error->accessDenied));
+                if(helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+            }
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -614,6 +620,8 @@ class todo extends control
                 /* fill some field with useful value. */
                 $todo->begin = $todo->begin == '2400' ? '' : (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
                 $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
+
+                $todo->assignedTo = zget($users, $todo->assignedTo);
 
                 $type = $todo->type;
                 if(isset($users[$todo->account])) $todo->account = $users[$todo->account];

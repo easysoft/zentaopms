@@ -982,6 +982,8 @@ class programplanModel extends model
             $data->days     = helper::diffDate($data->end, $data->begin) + 1;
             $data->order    = current($orders);
 
+            next($orders);
+
             if($data->id)
             {
                 $stageID = $data->id;
@@ -1134,8 +1136,6 @@ class programplanModel extends model
             if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
 
             if(dao::isError()) return print(js::error(dao::getError()));
-
-            next($orders);
         }
     }
 

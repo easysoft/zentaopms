@@ -35,12 +35,13 @@ class userModel extends model
      * Get inside users list of current company.
      *
      * @param  string $params
+     * @param  string $fields
      * @access public
      * @return array
      */
-    public function getList($params = 'nodeleted')
+    public function getList($params = 'nodeleted', $fields = '*')
     {
-        return $this->dao->select('*')->from(TABLE_USER)
+        return $this->dao->select($fields)->from(TABLE_USER)
             ->where('1=1')
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq('inside')->fi()
             ->beginIF(strpos($params, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
@@ -158,7 +159,7 @@ class userModel extends model
     public function getAvatarPairs($params = 'nodeleted')
     {
         $avatarPairs = array();
-        $userList    = $this->getList($params);
+        $userList    = $this->getList($params, 'account,avatar');
         foreach($userList as $user) $avatarPairs[$user->account] = $user->avatar;
 
         return $avatarPairs;
@@ -1840,7 +1841,7 @@ class userModel extends model
             if($stakeholders === null)
             {
                 $stakeholders = array();
-                $stmt         = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)->query();
+                $stmt         = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)->where('deleted')->eq('0')->query();
                 while($stakeholder = $stmt->fetch()) $stakeholders[$stakeholder->objectID][$stakeholder->user] = $stakeholder->user;
             }
 
@@ -2076,23 +2077,17 @@ class userModel extends model
         /* View management has the highest priority, so there is a substitution. */
         if(!empty($acls['programs']) and !$isAdmin)
         {
-            $grantPrograms = '';
-            foreach($acls['programs'] as $programID) $grantPrograms .= ",{$programID}";
-            $userView->programs = $grantPrograms;
+            $userView->programs = implode(',', $acls['program']);
         }
         if(!empty($acls['projects']) and !$isAdmin)
         {
-            $grantProjects = '';
             /* If is project admin, set projectID to userview. */
             if($projects) $acls['projects'] = array_merge($acls['projects'], explode(',', $projects));
-            foreach($acls['projects'] as $projectID) $grantProjects .= ",{$projectID}";
-            $userView->projects = $grantProjects;
+            $userView->projects = implode(',', $acls['projects']);
         }
         if(!empty($acls['products']) and !$isAdmin)
         {
-            $grantProducts = '';
-            foreach($acls['products'] as $productID) $grantProducts .= ",{$productID}";
-            $userView->products = $grantProducts;
+            $userView->products = implode(',', $acls['products']);
         }
 
         /* Set opened sprints and stages into userview. */
@@ -2107,9 +2102,7 @@ class userModel extends model
 
         if(!empty($acls['sprints']) and !$isAdmin)
         {
-            $grantSprints= '';
-            foreach($acls['sprints'] as $sprintID) $grantSprints .= ",{$sprintID}";
-            $userView->sprints = $grantSprints;
+            $userView->sprints = implode(',', $acls['sprints']);
         }
 
         $userView->products = trim($userView->products, ',');

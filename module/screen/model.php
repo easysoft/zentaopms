@@ -361,7 +361,7 @@ class screenModel extends model
             foreach($yStats as $index => $dataList)
             {
                 $field     = zget($fields, $metrics[$index]);
-                $fieldName = $field->name; 
+                $fieldName = $field->name;
                 if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
                 $dimensions[] = $field;
@@ -514,7 +514,7 @@ class screenModel extends model
             foreach($yStats as $index => $dataList)
             {
                 $field     = zget($fields, $metrics[$index]);
-                $fieldName = $field->name; 
+                $fieldName = $field->name;
 
                 if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
@@ -863,7 +863,7 @@ class screenModel extends model
             case 'year':
                 $component->option->value = $this->filter->year;
 
-                $begin = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->ne('0000-00-00')->fetch('year');
+                $begin = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('year');
                 if($begin < 2009) $begin = 2009;
 
                 $options = array();

@@ -239,6 +239,8 @@ class install extends control
     {
         if(!empty($_POST))
         {
+            if($this->config->db->driver == 'dm') $this->install->execDMSQL();
+
             $this->install->grantPriv();
             if(dao::isError()) return print(js::error(dao::getError()));
 

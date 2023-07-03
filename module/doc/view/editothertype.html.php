@@ -46,6 +46,12 @@
           <th><?php echo $lang->doc->keywords;?></th>
           <td colspan='3'><?php echo html::input('keywords', $doc->keywords, "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
         </tr>
+        <?php if(strpos($config->doc->officeTypes, $doc->type) !== false):?>
+        <tr>
+          <th><?php echo $lang->doc->files;?></th>
+          <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->doc->mailto;?></th>
           <td colspan="3">

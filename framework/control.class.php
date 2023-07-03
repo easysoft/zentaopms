@@ -121,7 +121,7 @@ class control extends baseControl
      */
     public function setDefaultPrivByWorkflow()
     {
-        $actionList = $this->dao->select('module, action')->from(TABLE_WORKFLOWACTION)
+        $actionList = $this->dao->select('module, `action`')->from(TABLE_WORKFLOWACTION)
             ->where('createdBy')->eq($this->app->user->account)
             ->andWhere('buildin')->eq('0')
             ->fetchGroup('module');

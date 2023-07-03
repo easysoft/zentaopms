@@ -117,12 +117,14 @@ class prepareUpdate
             foreach($stories as $storyID)
             {
                 $storyTitle   = $this->getStoryOrBugTitle('story', $storyID);
+                $storyTitle   = htmlspecialchars_decode($storyTitle);
                 $doneStories .= $storyTitle ? $storyID . ' ' . $storyTitle . "\n" : '';
             }
 
             foreach($bugs as $bugID)
             {
                 $bugTitle   = $this->getStoryOrBugTitle('bug', $bugID);
+                $bugTitle   = htmlspecialchars_decode($bugTitle);
                 $fixedBugs .= $bugTitle ? $bugID . ' ' . $bugTitle . "\n" : '';
             }
         }

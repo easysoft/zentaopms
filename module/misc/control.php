@@ -179,7 +179,7 @@ class misc extends control
     /**
      * Show version changelog
      * @access public
-     * @return viod
+     * @return void
      */
     public function changeLog($version = '')
     {
@@ -224,13 +224,13 @@ class misc extends control
      * Show captcha and save to session.
      *
      * @param  string $sessionVar
-     * @param  string $uuid
      * @access public
      * @return void
      */
-    public function captcha($sessionVar = 'captcha', $uuid = '')
+    public function captcha($sessionVar = 'captcha')
     {
-        if($sessionVar == 'user') die('The string user is not allowed to be defined as a session field.');
+        if(in_array(strtolower($sessionVar), $this->config->misc->disabledSessionVar)) die("The string {$sessionVar} is not allowed to be defined as a session field.");
+
         $obLevel = ob_get_level();
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
@@ -337,5 +337,24 @@ class misc extends control
         $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
         if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
         $this->loadModel('setting')->setItem('system.common.global.skip' . ucfirst($feature), $accounts);
+    }
+
+    /**
+     * Clean cache files.
+     *
+     * @return void
+     */
+    public function cleanCache()
+    {
+        $cacheConfig = $this->config->cache;
+        if(!$cacheConfig->enable && !$cacheConfig->enableFullPage)
+        {
+            echo 'Cache is disabled.';
+            return;
+        }
+
+        $this->misc->cleanCachaFiles(rtrim($this->app->getCacheRoot(), DS));
+
+        echo 'Cleaned cache files.';
     }
 }

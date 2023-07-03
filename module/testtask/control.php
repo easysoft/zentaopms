@@ -172,8 +172,8 @@ class testtask extends control
         }
         else
         {
+            $this->lang->qa->menu->testcase['subModule'] .= ',testtask';
             $this->loadModel('qa')->setMenu($this->products, $productID);
-            $this->app->rawModule = 'testcase';
         }
 
         /* Load pager. */

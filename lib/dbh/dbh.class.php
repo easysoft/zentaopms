@@ -151,14 +151,15 @@ class dbh
     public function tableExits($tableName)
     {
         $tableName = str_replace('`', "'", $tableName);
-        $sql = "SHOW TABLES FROM {$this->config->name} like $tableName";
+        $tableName = str_replace("'", "", $tableName);
+        $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
         switch($this->config->driver)
         {
             case 'mysql':
-                $sql = "SHOW TABLES FROM {$this->config->name} like {$tableName}";
+                $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
                 break;
             case 'dm':
-                $sql = "SELECT * FROM all_tables WHERE owner='{$this->config->name}' AND table_name={$tableName}";
+                $sql = "SELECT * FROM all_tables WHERE owner='{$this->config->name}' AND table_name='{$tableName}'";
                 break;
             default:
                 $sql = '';
@@ -239,7 +240,6 @@ class dbh
         {
             case 'dm':
                 return $this->formatDmSQL($sql);
-                return $sql;
 
             default:
                 return $sql;
@@ -255,8 +255,11 @@ class dbh
      */
     public function formatDmSQL($sql)
     {
-        $sql       = trim($sql);
-        $sql       = str_replace(array('\r', '\n'), ' ', $sql);
+        $sql = trim($sql);
+        /* '\\\\n' try to compatible screen json like \u0232\\nBug. */
+        $sql = str_replace(array('\\\\n', '\r', '\n'), ' ', $sql);
+        $sql = $this->formatFunction($sql);
+
         $actionPos = strpos($sql, ' ');
         $action    = strtoupper(substr($sql, 0, $actionPos));
         $setPos    = 0;
@@ -277,7 +280,7 @@ class dbh
                 if(strpos($sql, '\\\\') !== FALSE) $sql = str_replace('\\\\', '\\', $sql);
                 break;
             case 'CREATE':
-                if(stripos($sql, 'CREATE VIEW') === 0) return '';
+                if(stripos($sql, 'CREATE VIEW') === 0) $sql = str_replace('CREATE VIEW', 'CREATE OR REPLACE VIEW', $sql);
                 if(stripos($sql, 'CREATE FUNCTION') === 0) return '';
 
                 if(stripos($sql, 'CREATE OR REPLACE VIEW ') === 0)
@@ -303,13 +306,13 @@ class dbh
                         $fieldList[$key] = str_replace($subField, implode(' + ', $fieldParts), $field);
                     }
                     $fields = implode(',', $fieldList);
-                    $sql = substr($sql, 0, $fieldsBegin+6) . $fields . substr($sql, $fieldsEnd);
-                    return str_replace('CREATE OR REPLACE VIEW ', 'CREATE VIEW ', $sql);
+                    return substr($sql, 0, $fieldsBegin+6) . $fields . substr($sql, $fieldsEnd);
                 }
-                elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0)
+                elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0 || stripos($sql, 'CREATE INDEX') === 0)
                 {
                     preg_match('/ON\ +[0-9a-zA-Z\_\.]+\`([0-9a-zA-Z\_]+)\`/', $sql, $matches);
-                    $tableName = explode('_', $matches[1]);
+
+                    $tableName = str_replace($this->config->prefix, '', $matches);
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName[1]) . '_', $sql);
                 }
             case 'ALTER':
@@ -320,6 +323,9 @@ class dbh
                 if(stripos($sql, 'SET SCHEMA') === 0) return $sql;
             case 'USE':
                 return '';
+            case 'DESC';
+                $tableName = str_replace('DESC ', '', $sql);
+                return "select COLUMN_NAME as Field from all_tab_columns where Table_Name='$tableName'";
             case 'DROP':
                 return $this->formatField($sql);
         }
@@ -356,6 +362,28 @@ class dbh
         {
             case 'dm':
                 $sql = str_replace('`', '"', $sql);
+                return $sql;
+
+            default:
+                return $sql;
+        }
+    }
+
+    /**
+     * Format function.
+     *
+     * @param string $sql
+     * @access public
+     * @return string
+     */
+    public function formatFunction($sql)
+    {
+        switch($this->config->driver)
+        {
+            case 'dm':
+                /* DATE convert to TO_CHAR. */
+                $sql = preg_replace("/\bDATE\(([^)]*)\)/",  "TO_CHAR($1, 'yyyy-mm-dd')", $sql, -1);
+
                 return $sql;
 
             default:
@@ -430,7 +458,50 @@ class dbh
                 $sql = preg_replace('/\,\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
                 $sql = preg_replace('/\,\s*(unique|fulltext)*\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
                 $sql = preg_replace('/ float\s*\(+[\,\_\"0-9a-z ]+\)+/i', ' float', $sql);
+
+                /* Convert "date" datetime to "date" datetime(0) to fix bug 25725, dm database datetime default 6 */
+                preg_match_all('/"[0-9a-zA-Z]+" datetime/', $sql, $datetimeMatch);
+                if(!empty($datetimeMatch))
+                {
+                    foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
+                }
+
+                if(strpos($sql, "ALTER TABLE") !== false) $sql = $this->convertAlterTableSql($sql);
         }
+
+        return $sql;
+    }
+
+    /**
+     * Convert alter table sql.
+     *
+     * @param mixed $sql
+     * @access public
+     * @return void
+     */
+    public function convertAlterTableSql($sql)
+    {
+        /* If table has datas and sql no default values defined, add default ''/0. */
+        if(strpos($sql, "NOT NULL") !== false && strpos($sql, "DEFAULT") === false)
+        {
+            $default = '';
+            if(strpos($sql, "integer") !== false) $default = 0;
+            $sql = str_replace("NOT NULL", "NOT NULL DEFAULT '" . $default ."'", $sql);
+        }
+
+        $pattern = '/ALTER TABLE "(.*?)" CHANGE "(.*?)" "(.*?)" (.*?)(?:;|$)/';
+        preg_match($pattern, $sql, $matches);
+        if(count($matches) != 5) return $sql;
+
+        $tableName     = $matches[1];
+        $oldColumnName = $matches[2];
+        $newColumnName = $matches[3];
+        $params        = str_replace("'", "''", $matches[4]);
+
+        $sql  = 'begin ';
+        if($oldColumnName != $newColumnName) $sql .= "execute immediate 'ALTER TABLE $tableName ALTER " . '"' . $oldColumnName . '" RENAME TO "' . $newColumnName . '"' . "';";
+        $sql .= "execute immediate 'ALTER TABLE $tableName MODIFY " . '"' . $newColumnName . '" ' . $params . "';";
+        $sql .= 'end;';
 
         return $sql;
     }
@@ -491,5 +562,17 @@ class dbh
     public function commit()
     {
         return $this->pdo->commit();
+    }
+
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @access public
+     * @return bool
+     */
+    public function prepare($query, $options = array())
+    {
+        return $this->pdo->prepare($query, $options);
     }
 }

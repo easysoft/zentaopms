@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('hasInternet', $hasInternet);?>
+<?php js::set('isIntranet',  $isIntranet);?>
 <div id='mainContent' class='main-content admin'>
   <div class="main <?php if(!$hasInternet) echo 'without-internet';?>">
     <div class="settings panel">

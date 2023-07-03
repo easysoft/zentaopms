@@ -31,6 +31,10 @@ class program extends control
      *
      * @param  string  $status
      * @param  string  $orderBy
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
+     * @param  int     $param
      * @access public
      * @return void
      */
@@ -47,42 +51,39 @@ class program extends control
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
-        if($programType === 'bygrid')
+        $this->program->refreshStats(); // Refresh stats fields of projects.
+
+        if(strtolower($status) == 'bysearch')
         {
-            $programs = $this->program->getProgramStats($status, 20, $orderBy);
+            $programs = $this->program->getListBySearch($orderBy, (int)$param);
         }
         else
         {
-            if(strtolower($status) == 'bysearch')
-            {
-                $queryID  = (int)$param;
-                $programs = $this->program->getListBySearch($orderBy, $queryID);
-            }
-            else
-            {
-                /* Get top programs and projects. */
-                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
-                if(!$topObjects) $topObjects = array(0);
-                $programs   = $this->program->getList($status, $orderBy, NULL, 'child', array_keys($topObjects));
+            /* Get top programs and projects. */
+            $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
+            if(!$topObjects) $topObjects = array(0);
+            $programs   = $this->program->getList($status, $orderBy, null, 'child', array_keys($topObjects));
 
-                /* Get summary. */
-                $topCount = $indCount = 0;
-                foreach($programs as $program)
-                {
-                    if($program->type == 'program' and $program->parent == 0) $topCount ++;
-                    if($program->type == 'project' and $program->parent == 0) $indCount ++;
-                }
-                $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
+            /* Get summary. */
+            $topCount = $indCount = 0;
+            foreach($programs as $program)
+            {
+                if($program->type == 'program' and $program->parent == 0) $topCount ++;
+                if($program->type == 'project' and $program->parent == 0) $indCount ++;
             }
+            $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
         }
 
         /* Get PM id list. */
-        $accounts = array();
+        $accounts   = array_unique(array_column($programs, 'PM'));
         $hasProject = false;
         foreach($programs as $program)
         {
-            if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
-            if($hasProject === false and $program->type != 'program') $hasProject = true;
+            if($hasProject === false and $program->type != 'program')
+            {
+                $hasProject = true;
+                break;
+            }
         }
         $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 
@@ -99,12 +100,8 @@ class program extends control
         $this->view->orderBy      = $orderBy;
         $this->view->summary      = isset($summary) ? $summary : '';
         $this->view->pager        = $pager;
-        $this->view->users        = $this->user->getPairs('noletter');
-        $this->view->userIdPairs  = $this->user->getPairs('noletter|showid');
-        $this->view->usersAvatar  = $this->user->getAvatarPairs('');
         $this->view->programType  = $programType;
         $this->view->PMList       = $PMList;
-        $this->view->progressList = $this->program->getProgressList();
         $this->view->hasProject   = $hasProject;
 
         $this->display();

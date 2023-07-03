@@ -765,18 +765,22 @@ class testcaseModel extends model
     /**
      * Get case pairs by product id and branch.
      *
-     * @param int        $productID
-     * @param int|string $branch
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  string     $search
+     * @param  int        $limit
      * @access public
      * @return void
      */
-    public function getPairsByProduct($productID, $branch = 0)
+    public function getPairsByProduct($productID, $branch = 0, $search = '', $limit = 0)
     {
         return $this->dao->select("id, concat_ws(':', id, title) as title")->from(TABLE_CASE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
             ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF(strlen(trim($search)))->andWhere('title')->like('%' . $search . '%')->fi()
             ->orderBy('id_desc')
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchPairs();
     }
 

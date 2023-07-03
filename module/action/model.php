@@ -249,7 +249,7 @@ class actionModel extends model
                 case 'release':
                     $result = $this->dao->select('product, build')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
                     $record['product'] = $result->product;
-                    $record['project'] = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($result->build)->fetch('project');
+                    $record['project'] = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->in($result->build)->fetch('project');
                     break;
                 case 'task':
                     $fields = 'project, execution, story';
@@ -356,7 +356,7 @@ class actionModel extends model
             ->andWhere('((action')->ne('deleted')->andWhere('objectID')->in($objectID)->markRight(1)
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
-            ->beginIF(strpos('project,case,story,module', $objectType) === false)
+            ->beginIF(!in_array($objectType, array('project', 'case', 'story', 'module')))
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectID)
             ->fi()
@@ -1339,6 +1339,17 @@ class actionModel extends model
         $projectIdList = array();
         foreach($relatedProjects as $objectType => $idList) $projectIdList += $idList;
 
+        /* If idList include ',*,' Format ',*,' to '*'. */
+        foreach($projectIdList as $key => $idList)
+        {
+            $idList = explode(',', $idList);
+
+            foreach($idList as $id) $projectIdList[] = $id;
+            unset($projectIdList[$key]);
+        }
+
+        if($projectIdList) $projectIdList = array_unique($projectIdList);
+
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
         $docList          = $this->loadModel('doc')->getPrivDocs('', 0, 'all');
@@ -1459,7 +1470,7 @@ class actionModel extends model
                 $relatedProject = array();
                 if(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false)
                 {
-                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
+                    $objectInfo = $this->dao->select("id, project, `$field` AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
                     if($objectType == 'gapanalysis') $users = $this->user->getPairs('noletter');
                     foreach($objectInfo as $object)
                     {
@@ -1469,7 +1480,7 @@ class actionModel extends model
                 }
                 elseif($objectType == 'project' or $objectType == 'execution')
                 {
-                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
+                    $objectInfo = $this->dao->select("id, project, `$field` AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
                     foreach($objectInfo as $object)
                     {
                         $objectName[$object->id]     = $object->name;
@@ -1502,7 +1513,7 @@ class actionModel extends model
                 elseif($objectType == 'stakeholder')
                 {
                     $objectName = $this->dao->select("t1.id, t2.realname")->from($table)->alias('t1')
-                        ->leftJoin(TABLE_USER)->alias('t2')->on("t1.{$field} = t2.account")
+                        ->leftJoin(TABLE_USER)->alias('t2')->on("t1.`{$field}` = t2.account")
                         ->where('t1.id')->in($objectIdList)
                         ->fetchPairs();
                 }
@@ -1514,11 +1525,11 @@ class actionModel extends model
                 }
                 elseif($objectType == 'privlang')
                 {
-                    $objectName = $this->dao->select("objectID AS id, $field AS name")->from($table)->where('objectID')->in($objectIdList)->andWhere('objectType')->eq('priv')->fetchPairs();
+                    $objectName = $this->dao->select("objectID AS id, `$field` AS name")->from($table)->where('objectID')->in($objectIdList)->andWhere('objectType')->eq('priv')->fetchPairs();
                 }
                 else
                 {
-                    $objectName = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
+                    $objectName = $this->dao->select("id, `$field` AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
                 }
 
                 $objectNames[$objectType]     = $objectName;
@@ -1832,7 +1843,7 @@ class actionModel extends model
         {
             $func = "get$period";
             extract(date::$func());
-            return array('begin' => $begin, 'end' => $end . ' 23:59:59');
+            return array('begin' => $begin, 'end' => $end);
         }
 
         if($period == 'thismonth')  return date::getThisMonth();

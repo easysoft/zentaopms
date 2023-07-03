@@ -139,7 +139,7 @@ function computeEndDate(delta)
 }
 
 /**
- * Initialization operation.
+ * Initialization.
  *
  * @access public
  * @return void
@@ -160,6 +160,8 @@ $(function()
             $(this).parents('tr').find('input[type=checkbox]').prop('checked', checked);
         }
     });
+
+    $('#subNavbar').find('li[data-id=module] a').attr('data-app', 'project');
 })
 
 /**

@@ -77,7 +77,7 @@ $hasBugButton        = $features['qa'] && ($canCreateBug || $canBatchCreateBug);
 
 $canCreateStory      = $features['story'] && $productID && common::hasPriv('story', 'create');
 $canBatchCreateStory = $features['story'] && $productID && common::hasPriv('story', 'batchCreate');
-$canLinkStory        = $features['story'] && $productID && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct);
+$canLinkStory        = $features['story'] && $productID && common::hasPriv('execution', 'linkStory');
 $canLinkStoryByPlan  = $features['story'] && $productID && common::hasPriv('execution', 'importplanstories') && !empty($project->hasProduct);
 $hasStoryButton      = $features['story'] && ($canCreateStory || $canBatchCreateStory || $canLinkStory || $canLinkStoryByPlan);
 
@@ -216,17 +216,17 @@ js::set('priv',
         <?php if($canLinkStory) echo '<li>' . html::a(helper::createLink('execution', 'linkStory', "execution=$execution->id", '', true), $lang->execution->linkStory, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php if($canLinkStoryByPlan) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . '</li>';?>
         <?php if($hasStoryButton and $hasBugButton) echo '<li class="divider"></li>';?>
-        <?php if($canCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', true), $lang->bug->create, '', "class='iframe'") . '</li>';?>
+        <?php if($canCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', true), $lang->bug->create, '', "class='iframe' data-width=80%") . '</li>';?>
         <?php
         if($canBatchCreateBug)
         {
-            $batchCreateBugLink = '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe'") . '</li>';
+            $batchCreateBugLink = '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe' data-width=80%") . '</li>';
             if($productNum > 1) $batchCreateBugLink = '<li>' . html::a('#batchCreateBug', $lang->bug->batchCreate, '', "data-toggle='modal'") . '</li>';
             echo $batchCreateBugLink;
         }
         ?>
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
-        <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
+        <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe' data-width=80%") . '</li>';?>
         <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width=90%") . '</li>';?>
         <?php if($canImportTask) echo '<li>' . html::a(helper::createLink('execution', 'importTask', "toExecution=$execution->id", '', true), $lang->execution->importTask, '', "class='iframe' data-width=90%") . '</li>';?>
         <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe' data-width=90%") . '</li>';?>

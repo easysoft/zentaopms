@@ -879,4 +879,19 @@ class todoModel extends model
 
         return $projectIdList;
     }
+
+    /**
+     * Delete a todo.
+     *
+     * @param string $table
+     * @param int    $todoID
+     * @return bool
+     */
+    public function delete($table, $todoID)
+    {
+        $todo = $this->dao->select('account, assignedTo')->from($table)->where('id')->eq($todoID)->fetch();
+        if(!$this->app->user->admin && $todo && $todo->account != $this->app->user->account && $todo->assignedTo != $this->app->user->account) return false;
+
+        return parent::delete($table, $todoID);
+    }
 }

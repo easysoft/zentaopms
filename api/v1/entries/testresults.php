@@ -70,10 +70,12 @@ class testresultsEntry extends entry
         {
             $results = array();
             $reals   = array();
+            $count   = 0;
             foreach($this->requestBody->steps as $index => $step)
             {
                 /* When post data more than case steps, break after take useful data. */
-                if($index + 1 > count($steps)) break;
+                $count ++;
+                if($count > count($steps)) break;
 
                 $stepID           = $steps[$index];
                 $results[$stepID] = $step->result;
@@ -103,7 +105,8 @@ class testresultsEntry extends entry
     {
         if($taskID)
         {
-            $run = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
+            $run       = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
+            $run->case = $this->loadModel('testcase')->getById($caseID, $version);
         }
         else
         {

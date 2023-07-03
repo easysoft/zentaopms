@@ -63,7 +63,7 @@
             <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required');?>'><?php echo $lang->testcase->story;?></th>
             <th class='text-left c-title required'><?php echo $lang->testcase->title;?></th>
             <th class='c-type required'><?php echo $lang->testcase->type;?></th>
-            <th class='<?php echo zget($visibleFields, 'precondition', 'hidden') . zget($requiredFields, 'precondition', '', ' required');?>'><?php echo $lang->testcase->precondition;?></th>
+            <th class='c-precondition<?php echo zget($visibleFields, 'precondition', ' hidden') . zget($requiredFields, 'precondition', '', ' required');?>'><?php echo $lang->testcase->precondition;?></th>
             <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->testcase->keywords;?></th>
             <th class='c-stage<?php echo zget($visibleFields, 'stage', ' hidden') . zget($requiredFields, 'stage', '', ' required');?>'><?php echo $lang->testcase->stage;?></th>
             <?php

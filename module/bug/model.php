@@ -745,6 +745,7 @@ class bugModel extends model
             ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF(!$this->post->linkBug, 'linkBug', '')
             ->setIF($this->post->case === '', 'case', 0)
+            ->setIF($this->post->testtask === '', 'testtask', 0)
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
 
@@ -1669,7 +1670,7 @@ class bugModel extends model
     {
         $productIdList = array();
         foreach($bugs as $bug) $productIdList[$bug->product] = $bug->product;
-        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', $params = '');
+        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', 'noterminate, nodone, hasdeleted');
 
         /* Process the openedBuild and resolvedBuild fields. */
         foreach($bugs as $key => $bug)
@@ -2044,18 +2045,22 @@ class bugModel extends model
      *
      * @param  int        $productID
      * @param  int|string $branch
+     * @param  string     $search
+     * @param  int        $limit
      * @access public
      * @return void
      */
-    public function getProductBugPairs($productID, $branch = '')
+    public function getProductBugPairs($productID, $branch = '', $search = '', $limit = 0)
     {
         $bugs = array('' => '');
         $data = $this->dao->select('id, title')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
+            ->beginIF(strlen(trim($search)))->andWhere('title')->like('%' . $search . '%')->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll();
         foreach($data as $bug)
         {
@@ -2399,7 +2404,7 @@ class bugModel extends model
      */
     public function getDataOfOpenedBugsPerDay()
     {
-        return $this->dao->select('DATE_FORMAT(openedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('openedDate')->fetchAll();
+        return $this->dao->select("DATE_FORMAT(openedDate, '%Y-%m-%d') AS name, COUNT(*) AS value")->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('openedDate')->fetchAll();
     }
 
     /**
@@ -2410,7 +2415,7 @@ class bugModel extends model
      */
     public function getDataOfResolvedBugsPerDay()
     {
-        return $this->dao->select('DATE_FORMAT(resolvedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
+        return $this->dao->select("DATE_FORMAT(resolvedDate, '%Y-%m-%d') AS name, COUNT(*) AS value")->from(TABLE_BUG)
             ->where($this->reportCondition())->groupBy('name')
             ->having('name != 0000-00-00')
             ->orderBy('resolvedDate')
@@ -2425,7 +2430,7 @@ class bugModel extends model
      */
     public function getDataOfClosedBugsPerDay()
     {
-        return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
+        return $this->dao->select("DATE_FORMAT(closedDate, '%Y-%m-%d') AS name, COUNT(*) AS value")->from(TABLE_BUG)
             ->where($this->reportCondition())->groupBy('name')
             ->having('name != 0000-00-00')
             ->orderBy('closedDate')->fetchAll();
@@ -3785,5 +3790,20 @@ class bugModel extends model
         }
 
         return $index;
+    }
+
+    /**
+     * Convert array to object array.
+     *
+     * @param  int    $data
+     * @access public
+     * @return array
+     */
+    public function convertArrayToObjectArray($data)
+    {
+        return array_map(function($key, $value)
+        {
+            return (object) array('value' => $key, 'text' => $value);
+        }, array_keys($data), array_values($data));
     }
 }

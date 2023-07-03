@@ -472,7 +472,7 @@ class productplanModel extends model
     public function getBranchPlanPairs($productID, $branches = '', $param = '', $skipParent = false)
     {
         $branchQuery = '';
-        if($branches !== '' and $branches !== 'all')
+        if($branches !== '')
         {
             $branchQuery .= '(';
             if(!is_array($branches)) $branches = explode(',', $branches);
@@ -481,6 +481,7 @@ class productplanModel extends model
                 $branchQuery .= "CONCAT(',', branch, ',') LIKE '%,$branchID,%'";
                 if($branchID != end($branches)) $branchQuery .= ' OR ';
             }
+            $branchQuery .= " OR `branch` IN ('" . implode("','", $branches) . "')";
             $branchQuery .= ')';
         }
 
@@ -490,7 +491,6 @@ class productplanModel extends model
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
-            ->beginIF($branches != '')->andWhere('branch')->in($branches)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');

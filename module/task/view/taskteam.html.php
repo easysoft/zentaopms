@@ -129,7 +129,6 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php if(isset($task->status)):?>
 <?php js::set('taskStatus', $task->status);?>
-<?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <?php if($newRowCount == 0 and $app->rawMethod == 'edit' and $task->mode == 'linear'):?>
 <tr>
   <td colspan='4'>
@@ -247,14 +246,6 @@ $(document).ready(function()
             bootbox.alert(teamMemberError);
             return false;
         }
-
-        <?php if($app->rawMethod == 'edit'):?>
-        if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
-        {
-            bootbox.alert(totalLeftError);
-            return false;
-        }
-        <?php endif;?>
 
         if($taskTeamEditor.find('td > .btn-delete:enabled').length == 1) return false;
 

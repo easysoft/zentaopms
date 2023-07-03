@@ -15,3 +15,5 @@
 .queryBtn {display: flex; align-items: center; padding-bottom: 5px; flex-basis: 60px;}
 .filter-item .picker-selections {width: 128px; overflow: hidden; text-overflow: clip; white-space: nowrap;}
 #filterItems .picker-selections {overflow: hidden; text-overflow: clip; white-space: nowrap;}
+
+#filterItems .picker .picker-selections {width: auto !important;}

@@ -21,13 +21,11 @@ class convertModel extends model
      */
     public function connectDB($dbName = '')
     {
-        $dsn = "mysql:host={$this->config->db->host}; port={$this->config->db->port};dbname={$dbName}";
+        $config       = clone $this->config->db;
+        $config->name = $dbName;
         try
         {
-            $dbh = new PDO($dsn, $this->config->db->user, $this->config->db->password);
-            $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $dbh->exec("SET NAMES {$this->config->db->encoding}");
+            $dbh = new dbh($config);
             $this->sourceDBH = $dbh;
             return $dbh;
         }
@@ -45,7 +43,7 @@ class convertModel extends model
      */
     public function dbExists($dbName = '')
     {
-        if(!$this->checkDBName($dbName)) die('Invalid database name.');
+        if(!$this->checkDBName($dbName)) return false;
         $statement = $this->dbh->prepare('SHOW DATABASES like ?');
         $statement->execute(array($dbName));
         return $statement->fetch();

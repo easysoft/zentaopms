@@ -274,7 +274,7 @@ class convert extends control
             if($method == 'db')
             {
                 $dbName = $this->post->dbName;
-                if(!$this->convert->checkDBName($dbName)) die('Invalid database name.');
+
                 if(!$dbName)
                 {
                     $response['result']  = 'fail';
@@ -375,6 +375,9 @@ class convert extends control
             $resolutionList = $this->convert->getJiraDataFromFile('resolution');
             $statusList     = $this->convert->getJiraDataFromFile('status');
         }
+
+        $dbh = $this->convert->connectDB($this->config->db->name);
+        $this->dao->dbh($dbh);
 
         $this->view->title          = $this->lang->convert->jira->mapJira2Zentao;
         $this->view->issueTypeList  = $issueTypeList;

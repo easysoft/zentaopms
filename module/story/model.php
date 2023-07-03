@@ -258,10 +258,10 @@ class storyModel extends model
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
 
         $product = $this->loadModel('product')->getById($story->product);
-        if($product->type == 'normal' or $story->type == 'requirement')
+        if($product->type == 'normal' or $product->type == 'branch' or $story->type == 'requirement')
         {
-            $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
-            $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
+            if(!$this->post->branches) $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
+            if(!$this->post->modules)  $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
             $this->post->plans    = isset($story->plan) ? array($story->plan) : array(0 => 0);
         }
 
@@ -3295,7 +3295,7 @@ class storyModel extends model
         $stories = $this->dao->select("*,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere('type')->eq($type)
-            ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
+            ->beginIF($branch and $branch != 'all')->andWhere("branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
@@ -4516,38 +4516,39 @@ class storyModel extends model
      */
     public static function isClickable($story, $action)
     {
-        static $shadowProducts = array();
-        if(empty($shadowProducts[$story->product]))
-        {
-            global $dbh;
-            $stmt = $dbh->query('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
-            foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
-        }
-
         $action = strtolower($action);
 
-        global $app, $config;
-
-        if($story->parent < 0 and strpos($config->story->list->actionsOpratedParentStory, ",$action,") === false) return false;
-
-        $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
-        $story->notReview = isset($story->notReview) ? $story->notReview : array();
-
-        $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
-
-        if($action == 'change')       return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and (in_array($story->status, array('active', 'launched', 'developing'))));
-        if($action == 'review')       return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
-        if($action == 'recall')       return strpos('reviewing,changing', $story->status) !== false;
-        if($action == 'close')        return $story->status != 'closed';
-        if($action == 'activate')     return $story->status == 'closed';
-        if($action == 'assignto')     return $story->status != 'closed';
-        if($action == 'submitreview') return ($story->status == 'draft' or $story->status == 'changing');
+        if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
+        if($action == 'close')      return $story->status != 'closed';
+        if($action == 'activate')   return $story->status == 'closed';
+        if($action == 'assignto')   return $story->status != 'closed';
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and !empty($story->twins)) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
+
+        global $app, $config;
+        static $shadowProducts = array();
+        static $hasShadow      = true;
+        if($hasShadow and empty($shadowProducts[$story->product]))
+        {
+            global $dbh;
+            $stmt = $dbh->query('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
+            if(empty($stmt)) $hasShadow = false;
+            foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
+        }
+
+        if($story->parent < 0 and strpos($config->story->list->actionsOpratedParentStory, ",$action,") === false) return false;
+
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
         /* Adjust code, hide split entry. */
         if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
+
+        $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
+        $story->notReview = isset($story->notReview) ? $story->notReview : array();
+        $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
+
+        if($action == 'change')     return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
+        if($action == 'review')     return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
 
         return true;
     }
@@ -5405,7 +5406,9 @@ class storyModel extends model
             if(!$this->session->storyOnlyCondition)
             {
                 preg_match_all('/[`"]' . trim(TABLE_STORY, '`') .'[`"] AS ([\w]+) /', $this->session->storyQueryCondition, $matches);
-                if(isset($matches[1][0])) return 'id in (' . preg_replace('/SELECT .* FROM/', "SELECT {$matches[1][0]}.id FROM", $this->session->storyQueryCondition) . ')';
+
+                $tableAlias = isset($matches[1][0]) ? $matches[1][0] . '.' : '';
+                return 'id in (' . preg_replace('/SELECT .* FROM/', "SELECT $tableAlias" . "id FROM", $this->session->storyQueryCondition) . ')';
             }
             return $this->session->storyQueryCondition;
         }
@@ -5711,7 +5714,7 @@ class storyModel extends model
     public function linkStory($executionID, $productID, $storyID)
     {
         $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
-        $this->dao->insert(TABLE_PROJECTSTORY)
+        $this->dao->replace(TABLE_PROJECTSTORY)
             ->set('project')->eq($executionID)
             ->set('product')->eq($productID)
             ->set('story')->eq($storyID)
@@ -6603,5 +6606,27 @@ class storyModel extends model
                 $this->action->logHistory($actionID, $changes);
             }
         }
+    }
+
+    /**
+     * Get product stroies by status.
+     *
+     * @param  string $status noclosed || active
+     * @access public
+     * @return array || string
+     */
+    public function getStatusList($status)
+    {
+        $storyStatus = '';
+        if($status == 'noclosed')
+        {
+            $storyStatus = $this->lang->story->statusList;
+            unset($storyStatus['closed']);
+            $storyStatus = array_keys($storyStatus);
+        }
+
+        if($status == 'active') $storyStatus = $status;
+
+        return $storyStatus;
     }
 }

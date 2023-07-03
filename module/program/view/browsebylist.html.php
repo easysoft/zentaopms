@@ -74,9 +74,10 @@
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td class="c-manager">
           <?php if(!empty($program->PM)):?>
-          <?php $userName = zget($users, $program->PM);?>
-          <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$program->PM], 'account' => $program->PM, 'name' => $userName), (($program->type == 'program' and $program->grade == 1 )? 'avatar-circle avatar-top avatar-' : 'avatar-circle avatar-') . zget($userIdPairs, $program->PM)); ?>
           <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
+          <?php $userName = isset($PMList[$program->PM]) ? $PMList[$program->PM]->realname : '';?>
+          <?php $avatar   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->avatar : '';?>
+          <?php echo html::smallAvatar(array('avatar' => $avatar, 'account' => $program->PM, 'name' => $userName), (($program->type == 'program' and $program->grade == 1 )? 'avatar-circle avatar-top avatar-' : 'avatar-circle avatar-') . $userID); ?>
           <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
           <?php endif;?>
         </td>
@@ -85,11 +86,9 @@
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td>
-          <?php if(isset($progressList[$program->id])):?>
-          <div class='progress-pie' data-doughnut-size='85' data-color='#00DA88' data-value='<?php echo round($progressList[$program->id])?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
-            <div class='progress-info'><?php echo round($progressList[$program->id]);?></div>
+          <div class='progress-pie' data-doughnut-size='85' data-color='#00DA88' data-value='<?php echo round($program->progress)?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo round($program->progress);?></div>
           </div>
-          <?php endif;?>
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $program) . "</td>";?>
         <td class='c-actions'>

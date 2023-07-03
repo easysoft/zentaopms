@@ -78,4 +78,6 @@ $(document).ready(function()
 {
     toggleCopy(false);
     $('[data-id="edit"] a').modalTrigger({type: 'iframe', width: 500});
+
+    if(tab == 'project') $('#subNavbar').find('li[data-id=module] a').attr('data-app', 'project');
 });

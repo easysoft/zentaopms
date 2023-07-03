@@ -598,12 +598,19 @@ class testcase extends control
             $modules        = $this->tree->getAllChildID($modules);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, 'active', 'id_desc', 50, 'full', 'story', false);
+        $storyStatus = $this->story->getStatusList('noclosed');
+        $stories     = $this->story->getProductStoryPairs($productID, $branch, $modules, $storyStatus, 'id_desc', 0, 'full', 'story', false);
         if($this->app->tab != 'qa' and $this->app->tab != 'product')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules);
         }
+        /* Logic of task 44139. */
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories))
+        {
+            $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', false);
+        }
+
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
         $productInfo = $this->loadModel('product')->getById($productID);
 
@@ -984,6 +991,7 @@ class testcase extends control
         $isLibCase = ($case->lib and empty($case->product));
         if($isLibCase)
         {
+            $productID = isset($this->session->product) ? $this->session->product : 0;
             $libraries = $this->loadModel('caselib')->getLibraries();
             $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
 
@@ -1053,13 +1061,19 @@ class testcase extends control
             $moduleIdList = $case->module;
             if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
 
+            $storyStatus = $this->story->getStatusList('noclosed');
             if($this->app->tab == 'execution')
             {
                 $stories = $this->story->getExecutionStoryPairs($case->execution, $productID, $case->branch, $moduleIdList);
             }
             else
             {
-                $stories = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
+                $stories = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, $storyStatus,'id_desc', 0, 'full', 'story', false);
+            }
+            /* Logic of task 44139. */
+            if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories))
+            {
+                $stories = $this->story->getProductStoryPairs($case->product, $case->branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', false);
             }
 
             $this->view->productID        = $productID;
@@ -1830,6 +1844,7 @@ class testcase extends control
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
             $relatedSteps   = $this->dao->select('id,parent,`case`,version,type,`desc`,expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case', 'id');
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in(@array_keys($cases))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+            $relatedScenes  = $this->testcase->getSceneMenu($productID, 0);
 
             $cases = $this->testcase->appendData($cases);
             foreach($cases as $case)
@@ -1889,6 +1904,7 @@ class testcase extends control
                 $case->branch  = !isset($branches[$case->branch])      ? '' : $branches[$case->branch] . "(#$case->branch)";
                 $case->module  = !isset($relatedModules[$case->module])? '' : $relatedModules[$case->module] . "(#$case->module)";
                 $case->story   = !isset($relatedStories[$case->story]) ? '' : $relatedStories[$case->story] . "(#$case->story)";
+                $case->scene   = !isset($relatedScenes[$case->scene]) ? '' : $relatedScenes[$case->scene] . "(#$case->scene)";
 
                 if(isset($caseLang->priList[$case->pri]))              $case->pri           = $caseLang->priList[$case->pri];
                 if(isset($caseLang->typeList[$case->type]))            $case->type          = $caseLang->typeList[$case->type];
@@ -2496,7 +2512,7 @@ class testcase extends control
 
             // if(!empty($_POST['syncToZentao']))
             //     $this->zanode->syncCasesToZentao($_POST['scriptPath']);
-            
+
             // $nodeID = $_POST['node'];
             // $node   = $this->zanode->getNodeByID($_POST['node']);
 
@@ -2595,8 +2611,15 @@ class testcase extends control
         }
 
         /* Set menu. */
-        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
-        $this->qa->setMenu($this->products, $productID, $branch);
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+            $this->qa->setMenu($this->products, $productID, $branch);
+        }
 
         /* Set branch. */
         $product = $this->product->getById($productID);
@@ -2604,7 +2627,7 @@ class testcase extends control
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
             $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
-            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
+            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
         }

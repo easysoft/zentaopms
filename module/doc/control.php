@@ -377,6 +377,29 @@ class doc extends control
 
         if(!empty($_POST))
         {
+            $doclib   = $this->loadModel('doc')->getLibById($libID);
+            $canVisit = true;
+
+            switch($objectType)
+            {
+                case 'custom':
+                    $account = (string)$this->app->user->account;
+                    if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account) $canVisit = false;
+                    break;
+                case 'product':
+                    $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
+                    break;
+                case 'project':
+                    $canVisit = $this->loadModel('project')->checkPriv($doclib->project);
+                    break;
+                case 'execution':
+                    $canVisit = $this->loadModel('execution')->checkPriv($doclib->execution);
+                    break;
+                default:
+                break;
+            }
+            if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+
             $libID    = $this->post->lib;
             $moduleID = $this->post->module;
             if(empty($libID) and strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
@@ -388,10 +411,6 @@ class doc extends control
             $docID = $docResult['id'];
             $files = zget($docResult, 'files', '');
             $lib   = $this->doc->getLibByID($libID);
-            if($docResult['status'] == 'exists')
-            {
-                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
-            }
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
@@ -1119,7 +1138,7 @@ class doc extends control
             echo(js::alert($this->lang->doc->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
-            helper::end(print(js::locate('back')));
+            helper::end(print(js::locate(inlink('index'))));
         }
 
         if(!$doc or !isset($doc->id))
