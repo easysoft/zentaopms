@@ -58,7 +58,7 @@ formPanel
             ),
             inputGroup
             (
-                setClass('input-control has-suffix'),
+                setClass('input-control'),
                 control
                 (
                     set
@@ -68,47 +68,51 @@ formPanel
                             'class' => 'date',
                             'value' => date('Y-m-d'),
                             'type'  => 'date',
-                            'width' => '1/4'
                         )
                     ),
-                    on::change('changeCreateDate(this)')
+                    on::change('changeCreateDate')
                 ),
                 div
                 (
-                    setClass('input-control-suffix opacity-100 bg-white z-10'),
-                    checkbox
+                    setClass('input-group-btn flex'),
+                    div
                     (
-                        set
+                        setClass('btn btn-default'),
+                        checkbox
                         (
-                            array(
-                                'id'    => 'switchDate',
-                                'name'  => 'switchDate',
-                                'text'  => $lang->todo->periods['future'],
-                                'width' => '100px'
-                            )
-                        ),
-                        on::change('togglePending(this)')
+                            set
+                            (
+                                array(
+                                    'id'    => 'switchDate',
+                                    'name'  => 'switchDate',
+                                    'text'  => $lang->todo->periods['future'],
+                                    'class' => 'dtable-footer'
+                                )
+                            ),
+                            on::change('togglePending(this)')
+                        )
+                    ),
+                    div
+                    (
+                        setClass('btn btn-default'),
+                        checkbox
+                        (
+                            set
+                            (
+                                array(
+                                    'id'    => 'cycle',
+                                    'name'  => 'cycle',
+                                    'value' => 1,
+                                    'text'  => $lang->todo->cycle,
+                                    'class' => 'dtable-footer'
+                                )
+                            ),
+                            on::change('toggleCycle')
+                        )
                     )
                 )
             )
         ),
-        formGroup
-        (
-            setClass('items-center ml-4'),
-            checkbox
-            (
-                set
-                (
-                    array(
-                        'id'    => 'cycle',
-                        'name'  => 'cycle',
-                        'value' => 1,
-                        'text'  => $lang->todo->cycle
-                    )
-                ),
-                on::change('toggleCycle(this)')
-            )
-        )
     ),
     formRow
     (
@@ -143,7 +147,7 @@ formPanel
                 array(
                     'label'    => $lang->todo->cycleConfig,
                     'required' => true,
-                    'width'    => '1/3'
+                    'width'    => '9/24'
                 )
             ),
             inputGroup
@@ -389,7 +393,7 @@ formPanel
                 )
             )
         ),
-        on::change('changeType(this)'),
+        on::change('changeType'),
     ),
     formRow
     (
@@ -504,13 +508,17 @@ formPanel
     ),
     formGroup
     (
-        set
+        set::label($lang->todo->desc),
+        control
         (
-            array(
-                'name'  => 'desc',
-                'type'  => 'editor',
-                'label' => $lang->todo->desc,
-                'value' => isset($desc) ? $desc : ''
+            set
+            (
+                array(
+                    'name'  => 'desc',
+                    'type'  => 'editor',
+                    'value' => isset($desc) ? $desc : '',
+                    'rows'  => '5'
+                )
             )
         )
     ),
@@ -542,7 +550,7 @@ formPanel
         formGroup
         (
             set::label($lang->todo->beginAndEnd),
-            set::width('1/3'),
+            set::width('1/2'),
             inputGroup
             (
                 select
