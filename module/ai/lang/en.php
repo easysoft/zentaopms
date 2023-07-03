@@ -146,8 +146,8 @@ $lang->ai->models->proxyTypes['']       = 'No Proxy';
 $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
 
 $lang->ai->designStepNav = array();
-$lang->ai->designStepNav['role']    = 'Specify Role';
-$lang->ai->designStepNav['data']    = 'Select Object';
-$lang->ai->designStepNav['purpose'] = 'Confirm Action';
-$lang->ai->designStepNav['target']  = 'Process Result';
-$lang->ai->designStepNav['finalize']   = 'Ready to Publish';
+$lang->ai->designStepNav['role']     = 'Specify Role';
+$lang->ai->designStepNav['data']     = 'Select Object';
+$lang->ai->designStepNav['purpose']  = 'Confirm Action';
+$lang->ai->designStepNav['target']   = 'Process Result';
+$lang->ai->designStepNav['finalize'] = 'Ready to Publish';
