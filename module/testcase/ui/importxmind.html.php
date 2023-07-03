@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The exportxmid view file of testcase module of ZenTaoPMS.
+ * The importxmind view file of testcase module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
@@ -10,27 +10,17 @@ declare(strict_types=1);
  */
 namespace zin;
 
-set::title($lang->testcase->exportXmind);
+set::title($lang->testcase->importXmind);
 
 form
 (
-    set::target('_self'),
-    on::submit('setDownloading'),
     formGroup
     (
-        set::width('1/2'),
-        set::label($lang->testcase->product),
-        set::name('product'),
-        set::value($productName),
-        set::disabled(true)
-
-    ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::label($lang->testcase->module),
-        set::name('imodule'),
-        set::control(array('type' => 'select', 'items' => $moduleOptionMenu)),
+        set::label($lang->testcase->importFile),
+        upload
+        (
+            set::name('file')
+        )
     ),
     formRow
     (
@@ -38,7 +28,7 @@ form
         span
         (
             set::class('bg-lighter font-black px-3 py-1'),
-            $lang->testcase->xmindExportSetting
+            $lang->testcase->xmindImportSetting
         ),
     ),
     formRow
@@ -88,33 +78,8 @@ form
         )
     ),
     set::actions(array('submit')),
-    set::submitBtnText($lang->export),
-);
-
-js
-(
-    <<<JAVASCRIPT
-    function setDownloading()
-    {
-        if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true; // Opera don't support, omit it.
-    
-        $.cookie.set('downloading', 0);
-    
-        time = setInterval(function()
-        {
-            if($.cookie.get('downloading') == 1)
-            {
-                $('.modal').trigger('to-hide.modal.zui');
-    
-                $.cookie.set('downloading', null);
-    
-                clearInterval(time);
-            }
-        }, 300);
-    
-        return true;
-    }
-    JAVASCRIPT
+    set::submitBtnText($lang->import)
 );
 
 render('modalDialog');
+

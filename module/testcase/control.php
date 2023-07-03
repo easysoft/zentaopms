@@ -3176,22 +3176,22 @@ class testcase extends control
         if($_FILES)
         {
             $this->classXmind = $this->app->loadClass('xmind');
-            if($_FILES['file']['size'] == 0)  return print(js::alert($this->lang->testcase->errorFileNotEmpty));
+            if($_FILES['file']['size'] == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
 
             $configResult = $this->testcase->saveXmindConfig();
-            if($configResult['result'] == 'fail') return print(js::alert($configResult['message']));
+            if($configResult['result'] == 'fail') return $this->send($configResult);
 
             $tmpName  = $_FILES['file']['tmp_name'];
             $fileName = $_FILES['file']['name'];
             $extName  = trim(strtolower(pathinfo($fileName, PATHINFO_EXTENSION)));
-            if($extName != 'xmind') return print(js::alert($this->lang->testcase->errorFileFormat));
+            if($extName != 'xmind') return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileFormat));
 
             $newPureName  = $this->app->user->id."-xmind";
             $importFolder = $this->app->getTmpRoot() . "import";
             if(!is_dir($importFolder)) mkdir($importFolder, 0755, true);
 
             $dest = $this->app->getTmpRoot() . "import/".$newPureName.$extName;
-            if(!move_uploaded_file($tmpName, $dest)) return print(js::alert($this->lang->testcase->errorXmindUpload));
+            if(!move_uploaded_file($tmpName, $dest)) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload));
 
             $extractFolder   =  $this->app->getTmpRoot() . "import/".$newPureName;
             $this->classFile = $this->app->loadClass('zfile');
@@ -3202,10 +3202,7 @@ class testcase extends control
 
             $files      = $zip->listContent();
             $removePath = $files[0]['filename'];
-            if($zip->extract(PCLZIP_OPT_PATH, $extractFolder, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
-            {
-                return print(js::alert($this->lang->testcase->errorXmindUpload));
-            }
+            if($zip->extract(PCLZIP_OPT_PATH, $extractFolder, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload));
 
             $this->classFile->removeFile($dest);
 
@@ -3220,22 +3217,17 @@ class testcase extends control
                 $fetchResult = $this->fetchByXML($extractFolder, $productID, $branch);
             }
 
-            if($fetchResult['result'] == 'fail')
-            {
-                return print(js::alert($fetchResult['message']));
-            }
+            if($fetchResult['result'] == 'fail') return $this->send($fetchResult);
 
             $this->session->set('xmindImport', $extractFolder);
             $this->session->set('xmindImportType', $fetchResult['type']);
 
             $pId = $fetchResult['pId'];
 
-            return print(js::locate($this->createLink('testcase', 'showXmindImport', "productID=$pId&branch=$branch"), 'parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => $this->createLink('testcase', 'showXmindImport', "productID=$pId&branch=$branch")));
         }
 
-        $config = $this->testcase->getXmindConfig();
-
-        $this->view->settings    = $config;
+        $this->view->settings = $this->testcase->getXmindConfig();
 
         $this->display();
     }
