@@ -207,6 +207,7 @@ $lang->block->availableBlocks['feedback']    = '反馈';
 $lang->block->availableBlocks['ticket']      = '工单';
 
 $lang->block->modules['project'] = new stdclass();
+$lang->block->modules['project']->availableBlocks['overview']      = "{$lang->projectCommon}总览";
 $lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon}列表";
 $lang->block->modules['project']->availableBlocks['recentproject'] = "近期{$lang->projectCommon}";
 $lang->block->modules['project']->availableBlocks['statistic']     = "{$lang->projectCommon}统计";

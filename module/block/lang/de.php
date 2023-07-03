@@ -207,6 +207,7 @@ $lang->block->availableBlocks['feedback']    = 'Feedbacks';
 $lang->block->availableBlocks['ticket']      = 'Tickets';
 
 $lang->block->modules['project'] = new stdclass();
+$lang->block->modules['project']->availableBlocks['overview']      = "{$lang->projectCommon} Overview";
 $lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon} List";
 $lang->block->modules['project']->availableBlocks['recentproject'] = "Recent {$lang->projectCommon}";
 $lang->block->modules['project']->availableBlocks['statistic']     = "{$lang->projectCommon} Statistic";
