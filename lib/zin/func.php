@@ -1106,6 +1106,7 @@ function fileList(): fileList
  * ?array  actions
  * ?array  users
  * ?string methodName
+ * ?bool   commentBtn
  */
 function history(): history
 {

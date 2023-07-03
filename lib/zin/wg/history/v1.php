@@ -10,7 +10,8 @@ class history extends wg
         'actions?: array',
         'users?: array',
         'methodName?: string',
-        'commentUrl?: string'
+        'commentUrl?: string',
+        'commentBtn?: bool'
     );
 
     public static function getPageCSS(): string|false
@@ -219,7 +220,8 @@ class history extends wg
     {
         global $app, $lang;
         $methodName = $this->prop('methodName') !== null ? $this->prop('methodName') : $app->rawMethod;
-        if (!str_contains(',view,objectlibs,viewcard,', ",$methodName,")) return null;
+        $showCommentBtn = $this->prop('commentBtn', false);
+        if(!$showCommentBtn && !str_contains(',view,objectlibs,viewcard,', ",$methodName,")) return null;
         return commentBtn
         (
             set::dataTarget('#comment-dialog'),
