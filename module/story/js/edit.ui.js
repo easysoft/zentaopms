@@ -47,8 +47,7 @@ window.linkStories = function(e)
     var link = $.createLink('story', 'linkStories', 'storyID=' + storyID + '&browseType=&excludeStories=' + storyIdList);
     if(storyType != 'story') link = $.createLink('story', 'linkRequirements', 'storyID=' + storyID + '&browseType=&excludeStories=' + storyIdList);
 
-    var modalTrigger = new zui.ModalTrigger({width: '95%', url: link});
-    modalTrigger.show();
+    $('#linkStoriesLink').attr('data-url', link);
 }
 
 window.changeNeedNotReview = function(obj)

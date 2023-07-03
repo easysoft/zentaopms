@@ -312,7 +312,7 @@ detailBody
                 set::name($lang->story->mailto),
                 inputGroup
                 (
-                    select(set::name('mailto[]'), set::multiple(true), set::items($users), set::value($story->mailto)),
+                    select(set::name('mailto[]'), set::items($users), set::value(empty($story->mailto) ? '' : $story->mailto), set::multiple(true)),
                     $contactList ? select
                     (
                         set::name('contactListMenu'),
@@ -388,8 +388,8 @@ detailBody
             item
             (
                 set::name($story->type == 'story' ? $lang->requirement->linkStory : $lang->story->linkStory),
-                (common::hasPriv('story', 'linkStories') && $story->type == 'story') ? btn(setClass('secondary'), set::id('linkStoriesLink'), on::click('linkStories'), $lang->story->linkStoriesAB) : null,
-                (common::hasPriv('requirement', 'linkRequirements') && $story->type == 'requirement') ? btn(setClass('secondary'), set::id('linkStoriesLink'), on::click('linkStories'), $lang->story->linkRequirementsAB) : null,
+                (common::hasPriv('story', 'linkStories') && $story->type == 'story') ? btn(setClass('secondary'), set::id('linkStoriesLink'), set('data-toggle', 'modal'), set('data-size', 'lg'), on::click('linkStories'), $lang->story->linkStoriesAB) : null,
+                (common::hasPriv('requirement', 'linkRequirements') && $story->type == 'requirement') ? btn(setClass('secondary'), set::id('linkStoriesLink'), set('data-toggle', 'modal'), set('data-size', 'lg'), on::click('linkStories'), $lang->story->linkRequirementsAB) : null,
             ),
             item
             (
@@ -408,7 +408,7 @@ detailBody
                         );
                     }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
                 ) : null,
-                span(set::id('linkStoriesBox')),
+                div(set::id('linkStoriesBox')),
             )
         ),
     )
