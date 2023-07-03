@@ -210,9 +210,26 @@ class ai extends control
      */
     public function promptSetPurpose($promptID)
     {
-        $this->view->promptID   = $promptID;
-        $this->view->title      = $this->lang->ai->prompts->setPurpose . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[] = $this->lang->ai->prompts->common;
+        $prompt = $this->ai->getPromptByID($promptID);
+
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+
+            $prompt->purpose     = $data->purpose;
+            $prompt->elaboration = $data->elaboration;
+
+            $this->ai->updatePrompt($prompt);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
+        }
+
+        $this->view->dataPreview = ''; // TODO: Provide data preview with model method.
+        $this->view->prompt      = $prompt;
+        $this->view->promptID    = $promptID;
+        $this->view->title       = $this->lang->ai->prompts->setPurpose . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->position[]  = $this->lang->ai->prompts->common;
         $this->display();
     }
 

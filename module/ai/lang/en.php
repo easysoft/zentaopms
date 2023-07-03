@@ -52,6 +52,16 @@ $lang->ai->prompts->selectedFormat   = 'Selecting data from {0}, {1} fields sele
 $lang->ai->prompts->nonSelected      = 'No data selected.';
 $lang->ai->prompts->sortTip          = 'Sorting fields by priority is suggested.';
 
+/* Purpose setting. */
+$lang->ai->prompts->purpose        = 'Purpose';
+$lang->ai->prompts->purposeTip     = '';
+$lang->ai->prompts->elaboration    = 'Elaboration';
+$lang->ai->prompts->elaborationTip = '';
+$lang->ai->prompts->inputPreview   = 'Prompt Preview';
+$lang->ai->prompts->dataPreview    = 'Data Prompt Preview';
+$lang->ai->prompts->rolePreview    = 'Role Prompt Preview';
+$lang->ai->prompts->promptPreview  = 'Purpose Prompt Preview';
+
 /* Data source definition. */
 $lang->ai->dataSource = array();
 $lang->ai->dataSource['story']['common']     = 'Story';

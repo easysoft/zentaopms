@@ -52,6 +52,16 @@ $lang->ai->prompts->selectedFormat   = '已选对象为{0}，已选 {1} 条数�
 $lang->ai->prompts->nonSelected      = '暂无所选数据。';
 $lang->ai->prompts->sortTip          = '可根据重要性给数据字段排序。';
 
+/* Purpose setting. */
+$lang->ai->prompts->purpose        = '操作';
+$lang->ai->prompts->purposeTip     = '';
+$lang->ai->prompts->elaboration    = '补充要求';
+$lang->ai->prompts->elaborationTip = '';
+$lang->ai->prompts->inputPreview   = '输入预览';
+$lang->ai->prompts->dataPreview    = '对象数据预览';
+$lang->ai->prompts->rolePreview    = '角色提词预览';
+$lang->ai->prompts->promptPreview  = '操作提词预览';
+
 /* Data source definition. */
 $lang->ai->dataSource = array();
 $lang->ai->dataSource['story']['common']     = '需求';
