@@ -134,14 +134,10 @@ for($i = 1; $i <= 3; $i ++)
             setClass('team-index'),
             span
             (
-                setClass("line-arrow"),
-                '↓'
-            ) ,
-            span
-            (
                 setClass("team-number"),
                 $i
             ),
+            icon('angle-down')
         ),
         h::td
         (
@@ -457,6 +453,7 @@ formPanel
                             set::name("mode"),
                             set::value("linear"),
                             set::items($lang->task->modeList),
+                            set::required(true),
                         ),
                     )
                 ),

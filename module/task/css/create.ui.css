@@ -21,8 +21,6 @@
 
 :root {--modal-base: 45rem;}
 
-.line-arrow {display: inline-block; transform: scaleY(6); font-size: 20px; position: relative; right: 20px; color:#2e7fff;}
-.team-index {overflow: hidden} 
-#teamTable tr:nth-last-child(-n+2) .team-index{overflow:visible; }
-#teamTable tr:nth-child(2) .line-arrow{transform: scaleY(4); top: 20px}
-#teamTable tr:nth-last-child(-n+2) .line-arrow{bottom:12px; transform: scaleY(2)}
+#teamTable tr td:first-child {width: 40px; position: relative;}
+#teamTable tr td:first-child .icon{position:absolute; top: 40px; right: 19px;display: block; font-size: 8px; color: #9ea3bd;}
+#teamTable tr:nth-last-child(2) td:first-child .icon {display: none;}

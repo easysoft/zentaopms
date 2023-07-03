@@ -250,7 +250,7 @@ class execution extends control
         }
 
         $sort        = common::appendOrder($groupBy);
-        $tasks       = $this->loadModel('task')->getExecutionTasks($executionID, 0, 'all', 0, $sort);
+        $tasks       = $this->loadModel('task')->getExecutionTasks($executionID, 0, 'all', array(), $sort);
         $groupBy     = str_replace('`', '', $groupBy);
         $taskLang    = $this->lang->task;
         $groupByList = array();

@@ -451,6 +451,19 @@ $('#teamTable').on('click.team', '.btn-delete', function()
     setLineIndex();
 });
 
+/* 切换串行/并行 展示/隐藏工序图标. */
+$('#teamTable').on('change.team', '#mode', function()
+{
+    if($(this).val() == 'multi')
+    {
+        $('#teamTable td .icon-angle-down').addClass('hidden');
+    }
+    else
+    {
+        $('#teamTable td .icon-angle-down').removeClass('hidden');
+    }
+});
+
 /**
  * Set line number.
  *
