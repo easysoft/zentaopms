@@ -970,15 +970,16 @@ class task extends control
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        $tasks          = $this->task->getUserTaskPairs($account, $status, '', $appendID);
+        $tasks          = $this->task->getUserTaskPairs($account, $status, array(), array($appendID));
         $suspendedTasks = $this->task->getUserSuspendedTasks($account);
         foreach($tasks as $taskid => $task)
         {
             if(isset($suspendedTasks[$taskid])) unset($tasks[$taskid]);
         }
 
-        if($id) return print(html::select("tasks[$id]", $tasks, '', 'class="form-control"'));
-        echo html::select('task', $tasks, '', 'class=form-control');
+        $this->view->id = $id;
+        $this->view->tasks = $tasks;
+        $this->display();
     }
 
     /**
