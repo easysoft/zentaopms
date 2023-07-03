@@ -14,11 +14,11 @@
   <div class='steps'>
     <?php
     $stepstatus = array();
-    $stepstatus['role']    = 'active';
-    $stepstatus['data']    = 'active';
-    $stepstatus['purpose'] = 'current';
-    $stepstatus['target']  = 'clickable';
-    $stepstatus['finalize']   = 'disabled';
+    $stepstatus['role']     = 'active';
+    $stepstatus['data']     = 'active';
+    $stepstatus['purpose']  = 'current';
+    $stepstatus['target']   = 'clickable';
+    $stepstatus['finalize'] = 'disabled';
 
     foreach($lang->ai->designStepNav as $index => $stepLang)
     {
@@ -27,10 +27,7 @@
       $nextStepStatus = next($stepstatus);
       if($index != 'finalize')
       {
-        $arrowClass = $currentStepStatus == $nextStepStatus
-        || ($currentStepStatus == 'clickable' && $nextStepStatus == 'disabled')
-          ? 'outline-arrow'
-          : 'solid-arrow';
+        $arrowClass = $currentStepStatus == $nextStepStatus ||($currentStepStatus == 'clickable' && $nextStepStatus == 'disabled') ? 'outline-arrow' : 'solid-arrow';
         $arrow = "<div class='$arrowClass'></div>";
       }
       echo "<div class='step $currentStepStatus'><a href=''>$stepLang</a>$arrow</div>";
@@ -59,7 +56,7 @@
         });
         step.addEventListener('mouseleave', function (e)
         {
-          if (step.lastElementChild?.classList.contains('hover-arrow'))
+          if(step.lastElementChild?.classList.contains('hover-arrow'))
           {
             step.lastElementChild.classList.remove('hover-arrow');
             step.lastElementChild.classList.add('outline-arrow');
