@@ -31,7 +31,7 @@ panel
             span
             (
                 setClass('text-center'),
-                $lang->block->projectoveview->totalProject
+                $lang->block->projectoverview->totalProject
             )
         ),
         col
