@@ -10,26 +10,25 @@ declare(strict_types=1);
  */
 namespace zin;
 
-set::closeBtn(array('url' => createLink('execution', 'all'), 'class' => 'ghost'));
-to::header(div(
-    set::class('modal-title'),
-    $lang->execution->tips
-));
-
-h::hr(set::class('mb-4'));
-
-span
+set::class('pt-6');
+set::closeBtn(array('url' => createLink('execution', 'create'), 'class' => 'ghost'));
+div
 (
-    set::class('article-h2 tip-title'),
-    $lang->execution->afterInfo
+    set::class('flex items-center'),
+    icon('check-circle text-success icon-2x mr-2'),
+    span
+    (
+        set::class('article-h2 tip-title'),
+        $lang->execution->afterInfo
+    )
 );
 
 div
 (
-    set::class('mt-4'),
+    set::class('my-4'),
     btn
     (
-        set::class('mr-4 tipBtn'),
+        set::class('mr-4 tipBtn ml-1'),
         $lang->execution->setTeam,
         set('data-url', createLink('execution', 'team', "executionID={$executionID}")),
     ),
