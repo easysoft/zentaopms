@@ -10,4 +10,115 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+
+<style>
+  .center-wrapper {display: flex; justify-content: center; height: 100%;}
+  .center-content {width: 100%; height: 100%; display: flex; flex-direction: column;}
+  #select-form {display: flex; flex-direction: row;}
+  #select-form > div {flex-grow: 1; flex-basis: 0; padding: 0px 12px;}
+  .content-row {display: flex; flex-direction: row; padding: 8px 0px;}
+  .input-label {width: 120px; padding: 6px 12px; text-align: right;}
+  .input {flex-grow: 1;}
+  #prompt-preview-wrapper {padding: 6px 0;}
+  #prompt-preview {padding: 8px 0; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f7f8f9; min-height: 100px;}
+  #prompt-preview {cursor: default; user-select: none;}
+  #prompt-preview .active {background-color: #d6e5fe;}
+  #prompt-preview .prompt-data, #prompt-preview .prompt-role, #prompt-preview .prompt-text {border-bottom: 1px solid #ccc; padding: 16px 0;}
+  #prompt-preview .prompt-data {padding-top: 0;}
+  #prompt-preview .prompt-text {border-bottom: unset; padding-bottom: 0;}
+  #prompt-preview .block-header {padding-bottom: 8px;}
+  #prompt-preview .block-content > div + div {margin-top: 4px;}
+  #prompt-preview .prompt-text-part + .prompt-text-part {margin-top: 4px;}
+  #prompt-previewer {font-weight: bold;}
+  #form-selector .header > * {display: inline-block;}
+  #form-selector .content {padding: 6px 0;}
+  .target-form-group {display: grid; grid-template-columns: 120px 1fr; grid-gap: 8px; border: 1px solid #ccc;}
+  .target-form-group + .target-form-group {border-top: unset;}
+  .target-form-group .header {display: flex; align-items: center; padding: 0 12px; background-color: #f8f8f8;}
+  .target-form-group .options {display: grid; padding: 12px 16px; grid-template-columns: repeat(4, 1fr);}
+  .target-form-group .option {padding: 4px 0;}
+  .target-form-group .option label {cursor: pointer;}
+  .target-form-group .option input {cursor: pointer;}
+</style>
+
+<?php include 'promptdesignprogressbar.html.php';?>
+<div id='mainContent' class='main-content' style='height: calc(100vh - 120px);'>
+  <form class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
+    <div class='center-wrapper'>
+      <div class='center-content'>
+        <div id='select-form'>
+          <div id='form-selector'>
+            <div class='header'>
+              <h4><?php echo $lang->ai->prompts->selectTargetForm;?></h4>
+              <small class='text-gray'><?php echo $lang->ai->prompts->selectTargetFormTip;?></small>
+            </div>
+            <div class='content'>
+              <?php foreach ($config->ai->targetForm as $name => $forms):?>
+                <div class='target-form-group'>
+                  <div class='header text-gray'>
+                    <div><?php echo $lang->ai->targetForm[$name]['common'];?></div>
+                  </div>
+                  <div class='options'>
+                    <?php foreach($forms as $form):?>
+                      <div class='option'>
+                        <input type='radio' name='targetForm' value='<?php echo "$name.$form";?>' <?php echo $form == $prompt->targetForm ? 'checked' : '';?>>
+                        <label><?php echo $lang->ai->targetForm[$name][$form];?></label>
+                      </div>
+                    <?php endforeach;?>
+                  </div>
+                </div>
+              <?php endforeach;?>
+            </div>
+          </div>
+          <div>
+            <h4><?php echo $lang->ai->prompts->inputPreview;?></h4>
+            <div id='prompt-preview-wrapper'>
+              <div id='prompt-preview'>
+                <div class='prompt-data'>
+                  <div class='block-header text-gray'><?php echo $lang->ai->prompts->dataPreview;?></div>
+                  <div class='block-content code' style='white-space: pre;'><?php echo $dataPreview;?></div>
+                </div>
+                <div class='prompt-role'>
+                  <div class='block-header text-gray'><?php echo $lang->ai->prompts->rolePreview;?></div>
+                  <div class='block-content'>
+                    <div><?php echo $prompt->role;?></div>
+                    <div><?php echo $prompt->characterization;?></div>
+                  </div>
+                </div>
+                <div class='prompt-text'>
+                  <div class='block-header text-gray'><?php echo $lang->ai->prompts->promptPreview;?></div>
+                  <div class='block-content'>
+                    <div><?php echo $prompt->purpose;?></div>
+                    <div><?php echo $prompt->elaboration;?></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
+          <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->nextStep, 'disabled');?></div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+$(function()
+{
+  $('.target-form-group .option label').click(function()
+  {
+    $(this).parent().find('input').click();
+  });
+
+  $('.target-form-group .option input').change(function()
+  {
+    var $selected = $('.target-form-group').find('.option input:checked');
+    if($selected.length > 0) $('#submit').removeAttr('disabled');
+  });
+  $('.target-form-group .option input:checked').trigger('change');
+});
+</script>
+
 <?php include '../../common/view/footer.html.php';?>

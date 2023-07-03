@@ -62,6 +62,10 @@ $lang->ai->prompts->dataPreview    = '对象数据预览';
 $lang->ai->prompts->rolePreview    = '角色提词预览';
 $lang->ai->prompts->promptPreview  = '操作提词预览';
 
+/* Target form selecting. */
+$lang->ai->prompts->selectTargetForm    = '选择表单';
+$lang->ai->prompts->selectTargetFormTip = '选择后，可以将大语言模型返回的结果直接录入到禅道对应的表单中。';
+
 /* Data source definition. */
 $lang->ai->dataSource = array();
 $lang->ai->dataSource['story']['common']     = '需求';
@@ -94,6 +98,24 @@ $lang->ai->dataSource['execution']['tasks']['estStarted']  = '预计开始';
 $lang->ai->dataSource['execution']['tasks']['realStarted'] = '实际开始';
 $lang->ai->dataSource['execution']['tasks']['finishedDate']= '完成日期';
 $lang->ai->dataSource['execution']['tasks']['closedReason']= '关闭原因';
+
+/* Target form definition. */
+$lang->ai->targetForm = array();
+$lang->ai->targetForm['story']['common']     = '需求';
+$lang->ai->targetForm['execution']['common'] = '执行';
+
+$lang->ai->targetForm['story']['create']         = '提需求';
+$lang->ai->targetForm['story']['batchcreate']    = '批量提需求';
+$lang->ai->targetForm['story']['change']         = '变更需求';
+$lang->ai->targetForm['story']['totask']         = '需求建任务';
+$lang->ai->targetForm['story']['testcasecreate'] = '需求建用例';
+$lang->ai->targetForm['story']['subdivide']      = '需求细分';
+
+$lang->ai->targetForm['execution']['batchcreatetask']  = '批量创建任务';
+$lang->ai->targetForm['execution']['createtestreport'] = '创建测试报告';
+$lang->ai->targetForm['execution']['createqa']         = '创建 QA';
+$lang->ai->targetForm['execution']['createrisk']       = '创建风险';
+$lang->ai->targetForm['execution']['createissue']    = '创建问题';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = '全部';

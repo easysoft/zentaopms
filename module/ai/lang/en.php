@@ -62,6 +62,10 @@ $lang->ai->prompts->dataPreview    = 'Data Prompt Preview';
 $lang->ai->prompts->rolePreview    = 'Role Prompt Preview';
 $lang->ai->prompts->promptPreview  = 'Purpose Prompt Preview';
 
+/* Target form selecting. */
+$lang->ai->prompts->selectTargetForm    = 'Select Target Form';
+$lang->ai->prompts->selectTargetFormTip = 'Results returned from LLMs can be directly inputed into forms within ZenTao.';
+
 /* Data source definition. */
 $lang->ai->dataSource = array();
 $lang->ai->dataSource['story']['common']     = 'Story';
@@ -94,6 +98,24 @@ $lang->ai->dataSource['execution']['tasks']['estStarted']  = 'Estimated start da
 $lang->ai->dataSource['execution']['tasks']['realStarted'] = 'Actual start date';
 $lang->ai->dataSource['execution']['tasks']['finishedDate']= 'Finished date';
 $lang->ai->dataSource['execution']['tasks']['closedReason']= 'Closing reason';
+
+/* Target form definition. */
+$lang->ai->targetForm = array();
+$lang->ai->targetForm['story']['common']     = 'Story';
+$lang->ai->targetForm['execution']['common'] = 'Execution';
+
+$lang->ai->targetForm['story']['create']         = 'Create Story';
+$lang->ai->targetForm['story']['batchcreate']    = 'Batch Create Story';
+$lang->ai->targetForm['story']['change']         = 'Change Story';
+$lang->ai->targetForm['story']['totask']         = 'Story to Task';
+$lang->ai->targetForm['story']['testcasecreate'] = 'Create Test Case';
+$lang->ai->targetForm['story']['subdivide']      = 'Subdivide Story';
+
+$lang->ai->targetForm['execution']['batchcreatetask']  = 'Batch Create Task';
+$lang->ai->targetForm['execution']['createtestreport'] = 'Create Test Report';
+$lang->ai->targetForm['execution']['createqa']         = 'Create QA';
+$lang->ai->targetForm['execution']['createrisk']       = 'Create Risk';
+$lang->ai->targetForm['execution']['createissue']    = 'Create Problem';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = 'All';

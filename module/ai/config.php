@@ -37,3 +37,7 @@ $config->ai->dataSource = array();
 $config->ai->dataSource['story']['story']         = array('title', 'spec', 'verify', 'product', 'module', 'pri', 'category', 'estimate');
 $config->ai->dataSource['execution']['execution'] = array('name', 'desc', 'estimate');
 $config->ai->dataSource['execution']['tasks']     = array('name', 'pri', 'status', 'estimate', 'consumed', 'left', 'progress', 'estStarted', 'realStarted', 'finishedDate', 'closedReason');
+
+$config->ai->targetForm = array();
+$config->ai->targetForm['story']     = array('create', 'batchcreate', 'change', 'totask', 'testcasecreate', 'subdivide');
+$config->ai->targetForm['execution'] = array('batchcreatetask', 'createtestreport', 'createqa', 'createrisk', 'createissue');
