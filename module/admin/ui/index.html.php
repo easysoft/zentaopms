@@ -20,7 +20,7 @@ jsVar('hasInternet', $zentaoData->hasData);
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
         <div class="setting-box" <?php if($menu['disabled']) echo "title={$lang->admin->noPriv}";?> data-id="<?php echo $menuKey;?>">
-          <button class="btn shadow-primary-hover" <?php if($menu['disabled']) echo 'disabled';?>  onclick="openUrl('<?php echo $menu['link']?>');">
+          <button class="btn shadow-primary-hover" <?php if($menu['disabled']) echo 'disabled';?>  data-link="<?php echo $menu['link']?>">
             <h4 class="flex align-center w-full">
               <div class="flex align-center">
                 <img src="static/svg/admin-<?php echo $menuKey;?>.svg"/>

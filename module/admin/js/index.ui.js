@@ -6,9 +6,6 @@ $(function()
     }).on('click', '.setting-box a', function(e)
     {
         e.stopPropagation();
-    }).on('click', '.plugin-item', function()
-    {
-        window.open($(this).data('link'));
     });
 
     if(!hasInternet) $.get(createLink('admin', 'ajaxSetZentaoData'));
