@@ -3065,7 +3065,7 @@ class testcase extends control
             if (isset($_POST['imodule'])) $imoduleID = $_POST['imodule'];
 
             $configResult = $this->testcase->saveXmindConfig();
-            if($configResult['result'] == 'fail') return print(js::alert($configResult['message']));
+            if($configResult['result'] == 'fail') return $this->send($configResult);
 
             $context = $this->testcase->getXmindExport($productID, $imoduleID, $branch);
 

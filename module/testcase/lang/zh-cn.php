@@ -290,10 +290,10 @@ $lang->testcase->close = '关闭';
 $lang->testcase->xmindImportSetting = '导入特征字符设置';
 $lang->testcase->xmindExportSetting = '导出特征字符设置';
 
-$lang->testcase->settingModule = '模&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;块';
-$lang->testcase->settingScene  = '场&nbsp;&nbsp;&nbsp;&nbsp;景';
+$lang->testcase->settingModule = '模块';
+$lang->testcase->settingScene  = '场景';
 $lang->testcase->settingCase   = '测试用例';
-$lang->testcase->settingPri    = '优先级&nbsp;';
+$lang->testcase->settingPri    = '优先级';
 $lang->testcase->settingGroup  = '步骤分组';
 
 $lang->testcase->caseNotExist =  '未识别导入数据中的用例，导入失败';
