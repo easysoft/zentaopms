@@ -399,59 +399,20 @@ class story extends control
     public function batchEdit(int $productID = 0, int $executionID = 0, string $branch = '', string $storyType = 'story', string $from = '')
     {
         $this->story->replaceURLang($storyType);
-
-        $this->view->hiddenPlan = false;
-        if($this->app->tab == 'product')
-        {
-            $this->product->setMenu($productID);
-        }
-        elseif($this->app->tab == 'project')
-        {
-            $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
-            if($project->type == 'project')
-            {
-                if(!($project->model == 'scrum' and !$project->hasProduct and $project->multiple)) $this->view->hiddenPlan = true;
-                $this->project->setMenu($executionID);
-            }
-            else
-            {
-                if(!$project->hasProduct and !$project->multiple) $this->view->hiddenPlan = true;
-                $this->execution->setMenu($executionID);
-            }
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->execution->setMenu($executionID);
-        }
-        elseif($this->app->tab == 'qa')
-        {
-            $this->loadModel('qa')->setMenu('', $productID);
-        }
-        elseif($this->app->tab == 'my')
-        {
-            $this->loadModel('my');
-            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
-            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
-        }
+        $this->storyZen->setMenuForBatchEdit($productID, $branch, $executionID, $from);
 
         /* Load model. */
         $this->loadModel('productplan');
 
-        if($this->post->titles)
+        if($this->post->title)
         {
-            $allChanges = $this->story->batchUpdate();
+            $stories = $this->storyZen->buildStoriesForBatchEdit();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($allChanges)
-            {
-                foreach($allChanges as $storyID => $changes)
-                {
-                    if(empty($changes)) continue;
+            $this->story->batchUpdate($stories);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                    $actionID = $this->action->create('story', $storyID, 'Edited');
-                    $this->action->logHistory($actionID, $changes);
-                }
-            }
-            return print(js::locate($this->session->storyList, 'parent'));
+            return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
         }
 
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
@@ -469,8 +430,8 @@ class story extends control
             $twins .= "#$id ";
             unset($stories[$id]);
         }
-        if(!empty($twins)) echo js::alert(sprintf($this->lang->story->batchEditTip, $twins));
-        if(empty($stories)) return print(js::locate($this->session->storyList));
+        if(!empty($twins))  return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->story->batchEditTip, $twins), 'load' => $this->session->storyList));
+        if(empty($stories)) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
 
         $this->loadModel('branch');
         if($productID and !$executionID)
@@ -532,7 +493,6 @@ class story extends control
 
         /* Set ditto option for users. */
         $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $users = array('' => '', 'ditto' => $this->lang->story->ditto) + $users;
 
         /* Set Custom*/
         foreach(explode(',', $this->config->story->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->story->$field;
@@ -583,10 +543,6 @@ class story extends control
 
         $this->view->title             = $this->lang->story->batchEdit;
         $this->view->users             = $users;
-        $this->view->priList           = array('0' => '', 'ditto' => $this->lang->story->ditto) + $this->lang->story->priList;
-        $this->view->sourceList        = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->sourceList;
-        $this->view->reasonList        = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->reasonList;
-        $this->view->stageList         = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->stageList;
         $this->view->productID         = $productID;
         $this->view->products          = $products;
         $this->view->branchProduct     = $branchProduct;

@@ -130,6 +130,62 @@ class storyZen extends story
     }
 
     /**
+     * 为批量编辑页面设置导航。
+     * Set menu for batch edit page.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $executionID
+     * @param  string    $from
+     * @access protected
+     * @return void
+     */
+    protected function setMenuForBatchEdit(int $productID, string $branch = '', int $executionID = 0, string $from): void
+    {
+        $this->view->hiddenPlan = false;
+        if($this->app->tab == 'product')
+        {
+            $this->product->setMenu($productID);
+            return;
+        }
+
+        if($this->app->tab == 'execution')
+        {
+            $this->execution->setMenu($executionID);
+            return;
+        }
+
+        if($this->app->tab == 'qa')
+        {
+            $this->loadModel('qa')->setMenu('', $productID);
+            return;
+        }
+
+        if($this->app->tab == 'my')
+        {
+            $this->loadModel('my');
+            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
+            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
+            return;
+        }
+
+        if($this->app->tab == 'project')
+        {
+            $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
+            if($project->type == 'project')
+            {
+                if(!($project->model == 'scrum' and !$project->hasProduct and $project->multiple)) $this->view->hiddenPlan = true;
+                $this->project->setMenu($executionID);
+            }
+            else
+            {
+                if(!$project->hasProduct and !$project->multiple) $this->view->hiddenPlan = true;
+                $this->execution->setMenu($executionID);
+            }
+        }
+    }
+
+    /**
      * 如果是看板执行，设置界面中要用到关于看板的视图变量。
      * Set view vars for kanban.
      *
@@ -778,6 +834,47 @@ class storyZen extends story
             $story->version    = 1;
             if($this->post->status == 'draft') $story->status      = 'draft';
             if($this->post->uploadImage[$i])   $story->uploadImage = $this->post->uploadImage[$i];
+        }
+
+        return $stories;
+    }
+
+    /**
+     * 构建批量编辑需求数据。
+     * Build stories for batch edit page.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildStoriesForBatchEdit(): array
+    {
+        $fields  = $this->config->story->form->batchEdit;
+        $account = $this->app->user->account;
+        $now     = helper::now();
+
+        $fields['duplicateStory'] = array('type' => 'int', 'required' => false, 'default' => 0);
+        $fields['childStories']   = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
+
+        $stories    = form::batchData($fields)->get();
+        $oldStories = $this->story->getByList(array_keys($stories));
+        foreach($stories as $storyID => $story)
+        {
+            $oldStory = $oldStories[$storyID];
+            $story->lastEditedBy   = $this->app->user->account;
+            $story->lastEditedDate = $now;
+
+            if($oldStory->assignedTo != $story->assignedTo) $story->assignedDate = $now;
+            if($oldStory->parent < 0) $story->plan = '';
+            if($story->stage != $oldStory->stage) $story->stagedBy = (str_contains('|tested|verified|released|closed|', "|{$story->stage}|")) ? $account : '';
+
+            if($story->closedBy     && helper::isZeroDate($oldStory->closedDate)) $story->closedDate = $now;
+            if($story->closedReason && helper::isZeroDate($oldStory->closedDate)) $story->closedDate = $now;
+            if($story->closedBy     || $story->closedReason)    $story->status   = 'closed';
+            if($story->closedReason && empty($story->closedBy)) $story->closedBy = $account;
+
+            if($story->closedBy && empty($story->closedReason)) dao::$errors['closedReason'] = sprintf($this->lang->error->notempty, $this->lang->story->closedReason);
+            if($story->closedReason == 'done' && empty($story->stage)) dao::$errors['stage'] = sprintf($this->lang->error->notempty, $this->lang->story->stage);
+            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors['stage'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
         }
 
         return $stories;
