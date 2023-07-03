@@ -101,3 +101,11 @@ CREATE TABLE IF NOT EXISTS `zt_solution` (
   `updatedDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `zt_session` (
+    `id` varchar(32) NOT NULL,
+    `data` mediumtext,
+    `timestamp` int(10) unsigned DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `timestamp` (`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -1074,8 +1074,9 @@ class baseControl
                 return print($response);
             }
 
-            $obLevel = ob_get_level();
-            for($i = 0; $i < $obLevel; $i++) ob_end_clean();
+            /* Zand will use ob_get_clean() to print, so cannot clean so early. */
+            // $obLevel = ob_get_level();
+            // for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
             $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
             $this->app->outputXhprof();

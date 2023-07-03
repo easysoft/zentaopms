@@ -795,7 +795,7 @@ class baseRouter
         $xhprofRuns = new \XHProfRuns_Default($outputDir);
         $type       = "{$this->moduleName}_{$this->methodName}";
         $runID      = $xhprofRuns->save_run($log, $type);
-        if(!headers_sent()) header("Xhprof-RunID: {$runID}");
+        if(!headers_sent()) helper::header('Xhprof-RunID', $runID);
 
         return true;
     }
@@ -1336,7 +1336,8 @@ class baseRouter
     {
         if(str_starts_with($_SERVER['REQUEST_URI'], '/data/upload') && !is_file($this->wwwRoot . $_SERVER['REQUEST_URI']))
         {
-            header("HTTP/1.1 404 Not Found", true, 404);
+            helper::setStatus(404);
+            helper::end();
         }
 
         if($this->config->requestType == 'PATH_INFO' or $this->config->requestType == 'PATH_INFO2')
@@ -2237,7 +2238,7 @@ class baseRouter
         $url .= (str_contains($url, '?') ? '&' : '?') . $this->config->sessionVar . '=' . session_id() . '&account=' . $_SESSION['user']->account;
         if($extension == '302')
         {
-            header("location: $url");
+            helper::header('location', $url);
             helper::end();
         }
 
@@ -2900,7 +2901,7 @@ class baseRouter
             if(empty($message))
             {
                 /* Try to repair table. */
-                header("location: {$this->config->webRoot}checktable.php");
+                helper::header('location', "{$this->config->webRoot}checktable.php");
                 helper::end();
             }
             static::triggerError($message, __FILE__, __LINE__, true);

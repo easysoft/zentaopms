@@ -250,6 +250,7 @@ define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');
 define('TABLE_CONFIG',        '`' . $config->db->prefix . 'config`');
 define('TABLE_USER',          '`' . $config->db->prefix . 'user`');
+define('TABLE_SESSION',       '`' . $config->db->prefix . 'session`');
 define('TABLE_TODO',          '`' . $config->db->prefix . 'todo`');
 define('TABLE_GROUP',         '`' . $config->db->prefix . 'group`');
 define('TABLE_GROUPPRIV',     '`' . $config->db->prefix . 'grouppriv`');
