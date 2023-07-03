@@ -1644,8 +1644,9 @@ class project extends control
         $this->project->deleteByTableName('zt_doclib', $projectID);
         $this->loadModel('user')->updateUserView($projectID, 'project');
 
-        $response['closedModal'] = true;
-        $response['load']        = true;
+        $response['result']     = 'success';
+        $response['closeModal'] = true;
+        $response['load']       = true;
 
         $message = $this->executeHooks($projectID);
         if($message) $response['message'] = $message;
@@ -1657,7 +1658,7 @@ class project extends control
 
         $this->session->set('project', '');
         if($from == 'view') $response['load'] = helper::createLink('project', 'browse');
-        return $this->sendSuccess($response);
+        return $this->send($response);
     }
 
     /**
