@@ -900,6 +900,7 @@ class mr extends control
                 {
                     $response['result']  = 'success';
                     $response['message'] = '';
+                    $response['load']    = 'table';
                 }
                 return $this->send($response);
             }

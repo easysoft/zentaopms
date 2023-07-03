@@ -8,14 +8,16 @@ function onRepoChange()
     });
 }
 
-function onNeedCiChange()
+function onNeedCiChange(event)
 {
-    if(this.checked == false)
+    const $needCi = $(event.target) ;
+
+    if($needCi.prop('checked') == false)
     {
         $("#jobID").prop("disabled", true);
         $("#jobID").parent().parent().addClass('hidden');
     }
-    if(this.checked == true)
+    if($needCi.prop('checked') == true)
     {
         $("#jobID").prop("disabled", false);
         $("#jobID").parent().parent().removeClass('hidden');

@@ -23,7 +23,7 @@ $config->repo->dtable->fieldList['project']['width']    = '136';
 
 $config->repo->dtable->fieldList['scm']['name']  = 'SCM';
 $config->repo->dtable->fieldList['scm']['title'] = $lang->repo->type;
-$config->repo->dtable->fieldList['scm']['type']  = 'status';
+$config->repo->dtable->fieldList['scm']['type']  = 'scm';
 $config->repo->dtable->fieldList['scm']['map']   = $lang->repo->scmList;
 $config->repo->dtable->fieldList['scm']['group'] = 1;
 

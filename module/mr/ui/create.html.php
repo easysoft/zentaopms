@@ -21,7 +21,6 @@ formPanel
     set::labelWidth('11em'),
     formGroup
     (
-        set::width('1/2'),
         set::name('hostID'),
         set::label($lang->mr->create),
         set::value('gitService'),
@@ -86,7 +85,6 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/2'),
         set::required(true),
         set::name('repoID'),
         set::label($lang->devops->repo),
@@ -126,7 +124,6 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/2'),
         set::required(true),
         set::name('assignee'),
         set::label($lang->mr->assignee),

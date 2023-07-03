@@ -15,6 +15,8 @@ jsVar('pathSvnTip', $lang->repo->example->path->svn);
 jsVar('clientGitTip', $lang->repo->example->client->git);
 jsVar('clientSvnTip', $lang->repo->example->client->svn);
 
+set::rawContent(false);
+
 formPanel
 (
     on::change('#product', 'onProductChange'),
@@ -39,14 +41,23 @@ formPanel
         set::items($relatedProjects),
         set::value($repo->projects)
     ),
-    formGroup
+    formRow
     (
-        set::name("SCM"),
-        set::label($lang->product->typeAB),
-        set::required(true),
-        set::value($repo->SCM),
-        set::control("picker"),
-        set::items($lang->repo->scmList)
+        formGroup
+        (
+            set::width('1/2'),
+            set::name("SCM"),
+            set::label($lang->product->typeAB),
+            set::required(true),
+            set::value($repo->SCM),
+            set::control("picker"),
+            set::items($lang->repo->scmList)
+        ),
+        h::span
+        (
+            setClass('tips-git leading-8 ml-2'),
+            rawContent(),
+        ),
     ),
     formRow
     (
@@ -193,5 +204,7 @@ formPanel
         set::value($repo->desc),
     )
 );
+
+echo $lang->repo->syncTips;
 
 render();
