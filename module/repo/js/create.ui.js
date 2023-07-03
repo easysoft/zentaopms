@@ -43,6 +43,7 @@ function onScmChange()
 {
     const scm = $('#SCM').val();
 
+    (scm == 'Git') ? $('.tips-git').removeClass('hidden') : $('.tips-git').addClass('hidden');
     if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')
     {
         $('.account-fields').hide();
@@ -63,7 +64,6 @@ function onScmChange()
     }
     else
     {
-        $('.tips').addClass('hidden');
         $('.service').toggle(true);
         if(scm == 'Gitea' || scm == 'Gogs')
         {

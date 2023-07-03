@@ -33,7 +33,6 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
             set::required(true),
             set::label($lang->mr->sourceProject),
             inputGroup
@@ -57,7 +56,6 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
             set::required(true),
             set::label($lang->mr->targetProject),
             inputGroup
@@ -76,14 +74,12 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/2'),
         set::required(true),
         set::name('title'),
         set::label($lang->mr->title),
     ),
     formGroup
     (
-        set::width('1/2'),
         set::name('description'),
         set::label($lang->mr->description),
         set::control('textarea'),
@@ -99,7 +95,6 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/2'),
         set::required(true),
         set::name('removeSourceBranch'),
         set::label($lang->mr->removeSourceBranch),
@@ -107,7 +102,6 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/2'),
         set::name('needCI'),
         set::label($lang->mr->needCI),
         set::control('checkbox'),
@@ -118,7 +112,6 @@ formPanel
         setClass('hidden'),
         formGroup
         (
-            set::width('1/2'),
             set::required(true),
             set::name('jobID'),
             set::label($lang->job->common),
@@ -127,7 +120,6 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/2'),
         set::name('squash'),
         set::label($lang->mr->squash),
         set::control('checkbox'),
