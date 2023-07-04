@@ -30,7 +30,9 @@ class editor extends wg
         {
             if($value === true || (is_string($value) && !empty($value))) $editor->add(set(uncamelize($key), $value));
         }
-        $editor->add(set($this->props->skip(array_keys(static::getDefinedProps()))));
+        $customProps = $this->props->skip(array_keys(static::getDefinedProps()));
+        if(!isset($customProps['id'])) $customProps['id'] = $customProps['name'];
+        $editor->add(set($customProps));
         return $editor;
     }
 }
