@@ -988,6 +988,35 @@ class programModel extends model
         return common::createChanges($oldProgram, $program);
     }
 
+    /**
+     * Suspend a program.
+     *
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function suspend(int $programID) :array
+    {
+        $oldProgram = $this->getByID($programID);
+        $program    = fixer::input('post')
+            ->add('id', $programID)
+            ->setDefault('status', 'suspended')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('suspendedDate', helper::today())
+            ->stripTags($this->config->program->editor->suspend['id'], $this->config->allowedTags)
+            ->remove('comment')->get();
+
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->suspend['id'], $this->post->uid);
+        $this->dao->update(TABLE_PROJECT)->data($program)
+            ->autoCheck()
+            ->checkFlow()
+            ->where('id')->eq((int)$programID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldProgram, $program);
+    }
+
     /*
      * Get program swapper.
      *

@@ -395,24 +395,25 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $changes = $this->project->suspend($programID, 'program');
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $changes = $this->program->suspend($programID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
                 $actionID = $this->action->create('program', $programID, 'Suspended', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
             $this->executeHooks($programID);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
-        $this->view->title      = $this->lang->program->suspend;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('program', $programID);
-        $this->view->project    = $this->project->getByID($programID, 'program');
+        $this->view->title   = $this->lang->program->suspend;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions = $this->action->getList('program', $programID);
+        $this->view->program = $this->program->getByID($programID);
 
-        $this->display('project', 'suspend');
+        $this->display();
     }
 
     /**
