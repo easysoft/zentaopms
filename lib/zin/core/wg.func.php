@@ -21,19 +21,19 @@ require_once __DIR__ . DS . 'context.func.php';
 /**
  * Set widget properties.
  *
- * @param  string|array     $name
- * @param  mixed            $value
+ * @param  string|array|props|null $name
+ * @param  mixed                   $value
  * @return directive|null
  */
-function set(string|array|props|null $name, mixed $value = null): directive | null
+function set(string|array|props|null $name, mixed $value = null): directive|null
 {
     if($name === null) return null;
 
     $props = null;
     if($name instanceof props) $props = $name;
-    else if(is_array($name)) $props = $name;
+    else if(is_array($name))   $props = $name;
     else if(is_object($name))  $props = (array)$name;
-    else if(is_string($name)) $props = array($name => $value);
+    else if(is_string($name))  $props = array($name => $value);
     return $props ? directive('prop', $props) : null;
 }
 
