@@ -394,14 +394,20 @@ class blockModel extends model
     }
 
     /**
-     * Get new block top.
+     * 计算区块距离顶部的高度。
+     * compute block top height.
      *
-     * @param  string $dashboard
+     * @param  object $block
      * @access public
      * @return int
      */
-    public function getNewTop($dashboard): int
+    public function computeBlockTop(object $block): int
     {
-        return $this->dao->select('max(`top` + `height`) AS top')->from(TABLE_BLOCK)->where('dashboard')->eq($dashboard)->andWhere('hidden')->eq('0')->fetch('top');
+        return $this->dao->select('max(`top` + `height`) AS top')->from(TABLE_BLOCK)
+            ->where('dashboard')->eq($block->dashboard)
+            ->andWhere('width')->eq($block->width)
+            ->andWhere('vision')->eq($block->vision)
+            ->andWhere('hidden')->eq('0')
+            ->fetch('top');
     }
 }

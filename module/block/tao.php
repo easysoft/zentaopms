@@ -18,6 +18,7 @@ class blockTao extends blockModel
             ->andWhere('dashboard')->eq($dashboard)
             ->andWhere('hidden')->eq($hidden)
             ->andWhere('vision')->eq($this->config->vision)
+            ->orderBy('width_desc,top_asc')
             ->fetchAll();
     }
 

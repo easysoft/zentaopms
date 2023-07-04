@@ -176,6 +176,23 @@ class blockZen extends block
             /* 生成更多链接。 */
             $this->createMoreLink($block, $projectID);
         }
+
+        $blocks = array_values($blocks);
+        $height = array(1 => 0, 2 => 0);
+        foreach($blocks as $block)
+        {
+            if($block->width == 3)
+            {
+                $block->top = max($height[0], $height[1]);
+                $height[0] += $block->height;
+                $height[1] += $block->height;
+            }
+            else
+            {
+                $block->top = $height[$block->width];
+                $height[$block->width] += $block->height;
+            }
+        }
         return $blocks;
     }
 
