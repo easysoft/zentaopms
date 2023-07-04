@@ -5,7 +5,7 @@ body {padding-bottom: 20px;}
 .block-statistic .nav-stacked {overflow: auto; max-height: 220px;}
 #dashboard .col-side {width: 450px; max-width: 450px;}
 #dashboard .panel {margin-bottom: 20px; position: relative;}
-#dashboard .panel-body {max-height: 400px; overflow: auto;}
+#dashboard .panel-body {overflow: auto;}
 #dashboard .panel-body.has-table {padding-top: 0;}
 #dashboard .panel-move-handler {position: absolute; top: 0; left: 0; right: 50px; height: 40px; z-index: 10; cursor: move;}
 #dashboard .panel-heading {cursor: move;}

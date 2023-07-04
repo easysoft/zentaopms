@@ -1,4 +1,4 @@
-.has-more-menu>.dashboard-block-body .panel-heading {padding-right: 0;}
+.has-more-menu>.dashboard-block-body .welcome-block .panel-heading {padding-right: 0;}
 .welcome-block .panel-heading {padding-left: 0;}
 .welcome-block .panel-body {background-image: linear-gradient( 90deg, #EDF7FE 0%, #FFF 20%); padding: 0;}
 .welcome-block .avatar-border-one {width: 2.8rem; height: 2.8rem; background: #F4F5F3; position: relative;}
