@@ -208,10 +208,9 @@ $lang->block->availableBlocks['ticket']      = '工单';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks['overview']      = "{$lang->projectCommon}总览";
-$lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon}列表";
-$lang->block->modules['project']->availableBlocks['recentproject'] = "近期{$lang->projectCommon}";
+$lang->block->modules['project']->availableBlocks['recentproject'] = "我近期参与的{$lang->projectCommon}";
 $lang->block->modules['project']->availableBlocks['statistic']     = "{$lang->projectCommon}统计";
-$lang->block->modules['project']->availableBlocks['projectteam']   = "{$lang->projectCommon}人力投入";
+$lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon}列表";
 
 $lang->block->modules['scrumProject'] = new stdclass();
 $lang->block->modules['scrumProject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon}概况";
