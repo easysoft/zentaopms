@@ -219,10 +219,10 @@ class blockZen extends block
             $block->moreLink = $this->createLink($moduleName, $method, $vars);
             if($moduleName == 'my' && strpos($this->config->block->workMethods, $method) !== false)
             {
-                /* 处理研发需求列表区块点击更多后的跳转连接。 */
-                if($moduleName == 'my' && $method == 'story' && $block->params->type != 'assignedTo' && $block->params->type != 'reviewBy')
+                /* 处理研发需求或任务列表区块点击更多后的跳转连接。 */
+                if($moduleName == 'my' && $method == 'task' && $block->params->type != 'assignedTo' || $moduleName == 'my' && $method == 'story' && $block->params->type != 'assignedTo' && $block->params->type != 'reviewBy')
                 {
-                    $block->moreLink = $this->createLink('my', 'contribute', 'module=story&type=' . $block->params->type); // 当指派给我时跳转到贡献中由我创建。
+                    $block->moreLink = $this->createLink('my', 'contribute', "module={$method}&type={$block->params->type}");
                 }
                 else
                 {

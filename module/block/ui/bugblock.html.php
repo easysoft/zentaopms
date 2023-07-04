@@ -29,7 +29,7 @@ panel
         a
         (
             set('class', 'text-gray'),
-            set('href', createLink('my', 'work', 'mode=bug&type=' . $block->params->type)),
+            set('href', $block->moreLink),
             $lang->more,
             icon('caret-right')
         )
