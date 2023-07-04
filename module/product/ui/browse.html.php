@@ -19,6 +19,7 @@ $storyBrowseType   = $this->session->storyBrowseType;
 $branchType        = $showBranch ? $product->type : '';
 $storyProductIds   = array();
 
+$storyProductIds = array();
 foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
 $storyProductID = count($storyProductIds) > 1 ? 0 : $productID;
 
