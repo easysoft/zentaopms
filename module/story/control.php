@@ -133,12 +133,12 @@ class story extends control
         if(!empty($_POST))
         {
             $result = $this->loadModel('common')->removeDuplicate('story', (object)$_POST, "product={$productID}");
-            $_POST['title'] = $result['data'];
+            $_POST  = (array)$result['data'];
 
-            $stories = $this->storyZen->buildStoriesForBatchCreate();
+            $stories = $this->storyZen->buildStoriesForBatchCreate($productID, $storyType);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $storyIdList = $this->story->batchCreate($productID, $branch, $storyType, $storyID);
+            $storyIdList = $this->story->batchCreate($stories, $productID, $branch, $storyType, $storyID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Project or execution linked stories. */
@@ -178,15 +178,30 @@ class story extends control
         $fields = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID);
         $fields = $this->storyZen->removeFormFieldsForBatchCreate($productID, $fields, $product->type, $storyType);
 
-        $this->view->title            = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
-        $this->view->product          = $product;
-        $this->view->productID        = $productID;
-        $this->view->storyID          = $storyID;
-        $this->view->moduleID         = $moduleID;
-        $this->view->executionID      = $executionID;
-        $this->view->type             = $storyType;
-        $this->view->fields           = $fields;
-        $this->view->stories          = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
+        /* Generate shown fields. */
+        $showFields = $this->config->story->custom->batchCreateFields;
+        if($product->type == 'normal')
+        {
+            $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
+        if($storyType == 'requirement')
+        {
+            unset($customFields['plan']);
+            $showFields = str_replace('plan', '', $showFields);
+        }
+
+        $this->view->title       = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
+        $this->view->product     = $product;
+        $this->view->productID   = $productID;
+        $this->view->storyID     = $storyID;
+        $this->view->moduleID    = $moduleID;
+        $this->view->executionID = $executionID;
+        $this->view->type        = $storyType;
+        $this->view->fields      = $fields;
+        $this->view->stories     = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
+        $this->view->storyTitle  = isset($story->title) ? $story->title : '';
+        $this->view->showFields  = $showFields;
 
         $this->display();
     }
