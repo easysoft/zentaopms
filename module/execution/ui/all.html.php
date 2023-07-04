@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('typeList', $lang->execution->typeList);
+jsVar('delayed', $lang->execution->delayed);
+
 $footToolbar = array();
 $canBatchEdit         = common::hasPriv('execution', 'batchEdit');
 $canBatchChangeStatus = common::hasPriv('execution', 'batchChangeStatus');
@@ -86,6 +89,7 @@ dtable
     set::fixedLeftWidth('44%'),
     set::customCols(true),
     set::footToolbar($footToolbar),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::footPager(
         usePager(),
         set::recPerPage($recPerPage),

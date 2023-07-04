@@ -5379,15 +5379,13 @@ class executionModel extends model
      */
     public function generateRow(array $executions, array $users, array $avatarList): array
     {
-        $today = helper::today();
-        $rows  = array();
+        $rows = array();
         foreach($executions as $execution)
         {
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
             $execution->rawID         = $execution->id;
             $execution->isExecution   = 1;
             $execution->id            = 'pid' . (string)$execution->id;
-            $execution->name          = "<span class='label secondary-pale'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->isParent) ? html::a($link, $execution->name, '_self', 'class="text-primary"') : $execution->name) . (strtotime($today) > strtotime($execution->end) ? '<span class="label danger-pale">' . $this->lang->execution->delayed . '</span>' : '');
             $execution->project       = $execution->projectName;
             $execution->parent        = ($execution->parent and $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->isParent      = !empty($execution->isParent) or !empty($execution->tasks);
