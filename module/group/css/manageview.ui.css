@@ -1,0 +1,4 @@
+#mainContent {width: 1200px;}
+#manageViewForm .action-title {flex: 0 1 15%;}
+#manageViewForm .action-item {flex: 0 1 18%; overflow: hidden; text-overflow: clip; white-space: nowrap;}
+#manageViewForm div[id$='ActionBox'] {padding: 8px;}

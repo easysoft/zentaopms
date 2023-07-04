@@ -5,7 +5,7 @@
  * @return void
  */
 function toggleProgram()
-{ 
+{
     $('#programBox').toggle($('#program').prop("checked"));
 }
 
@@ -16,7 +16,7 @@ function toggleProgram()
  * @return void
  */
 function toggleProduct()
-{ 
+{
     $('#productBox').toggle($('#product').prop("checked"));
 }
 

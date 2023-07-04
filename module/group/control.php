@@ -131,7 +131,7 @@ class group extends control
      * @access public
      * @return void
      */
-    public function manageView($groupID)
+    public function manageView(int $groupID)
     {
         if($_POST)
         {
