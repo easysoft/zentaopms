@@ -410,7 +410,7 @@ class task extends control
         /* Common actions of task module and task. */
         $this->taskZen->commonAction($taskID);
         $task        = $this->task->getById($taskID);
-        $currentTeam = empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
+        $currentTeam = !empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
 
         /* Submit the data process after start the task form. */
         if(!empty($_POST))
@@ -555,7 +555,7 @@ class task extends control
 
         $this->taskZen->commonAction($taskID);
         $task        = $this->task->getById($taskID);
-        $currentTeam = empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
+        $currentTeam = !empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
 
         if(!empty($_POST))
         {
@@ -662,7 +662,7 @@ class task extends control
         /* Common actions of task module and task. */
         $this->taskZen->commonAction($taskID);
         $task        = $this->task->getById($taskID);
-        $currentTeam = empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
+        $currentTeam = !empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
 
         if(!empty($_POST))
         {

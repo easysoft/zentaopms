@@ -53,7 +53,7 @@ else
         $consumedControl = formGroup
             (
                 set::width('1/3'),
-                set::label($lang->task->currentConsumed),
+                set::label($lang->task->my . $lang->task->hasConsumed),
                 div(
                     set::class('consumed'),
                     $task->myConsumed . $lang->task->suffixHour

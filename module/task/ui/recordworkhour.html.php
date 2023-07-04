@@ -65,61 +65,87 @@ if($efforts)
     );
 }
 
-formBatchPanel
-(
-    set::title($lang->task->addEffort),
-    set::shadow(!isAjaxRequest('modal')),
-    set::actions(array('submit')),
-    formBatchItem
+if(!$this->task->canOperateEffort($task))
+{
+    $notice = '';
+    if(!isset($task->members[$app->user->account]))
+    {
+        $notice = p(sprintf($lang->task->deniedNotice, $lang->task->teamMember, $lang->task->logEfforts));
+    }
+    elseif($task->assignedTo != $app->user->account and $task->mode == 'linear')
+    {
+        $notice = p(sprintf($lang->task->deniedNotice, $task->assignedToRealName, $lang->task->logEfforts));
+    }
+
+    div
     (
-        set::name('id'),
-        set::label($lang->idAB),
-        set::control('index'),
-        set::width('32px'),
-    ),
-    formBatchItem
-    (
-        set::name('date'),
-        set::label($lang->task->date),
-        set::width('120px'),
-        set::control('date'),
-        set::value(helper::today())
-    ),
-    formBatchItem
-    (
-        set::name('work'),
-        set::label($lang->task->work),
-        set::width('auto'),
-        set::control('textarea')
-    ),
-    formBatchItem
-    (
-        set::name('consumed'),
-        set::label($lang->task->consumed),
-        set::width('80px'),
-        set::control
+        setClass('alert with-icon'),
+        icon('exclamation-sign'),
+        div
         (
-            array(
-                'type' => 'inputControl',
-                'suffix' => $lang->task->suffixHour,
-                'suffixWidth' => 20
+            setClass('content'),
+            $notice
+        )
+    );
+}
+else
+{
+    formBatchPanel
+    (
+        set::title($lang->task->addEffort),
+        set::shadow(!isAjaxRequest('modal')),
+        set::actions(array('submit')),
+        formBatchItem
+        (
+            set::name('id'),
+            set::label($lang->idAB),
+            set::control('index'),
+            set::width('32px'),
+        ),
+        formBatchItem
+        (
+            set::name('date'),
+            set::label($lang->task->date),
+            set::width('120px'),
+            set::control('date'),
+            set::value(helper::today())
+        ),
+        formBatchItem
+        (
+            set::name('work'),
+            set::label($lang->task->work),
+            set::width('auto'),
+            set::control('textarea')
+        ),
+        formBatchItem
+        (
+            set::name('consumed'),
+            set::label($lang->task->consumed),
+            set::width('80px'),
+            set::control
+            (
+                array(
+                    'type' => 'inputControl',
+                    'suffix' => $lang->task->suffixHour,
+                    'suffixWidth' => 20
+                )
+            )
+        ),
+        formBatchItem
+        (
+            set::name('left'),
+            set::label($lang->task->left),
+            set::width('80px'),
+            set::control
+            (
+                array(
+                    'type' => 'inputControl',
+                    'suffix' => $lang->task->suffixHour,
+                    'suffixWidth' => 20
+                )
             )
         )
-    ),
-    formBatchItem
-    (
-        set::name('left'),
-        set::label($lang->task->left),
-        set::width('80px'),
-        set::control
-        (
-            array(
-                'type' => 'inputControl',
-                'suffix' => $lang->task->suffixHour,
-                'suffixWidth' => 20
-            )
-        )
-    )
-);
+    );
+}
 
 render();
