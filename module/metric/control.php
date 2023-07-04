@@ -13,19 +13,34 @@ class metric extends control
 {
     public function execMetric()
     {
-        $dataset = $this->metric->getDataset();
+        $dataset         = $this->metric->getDataset();
+        $metricInstances = $this->metric->getInstanceList();
 
-        $metricInstances     = $this->metric->getInstanceList();
-        $classifiedInstances = $this->metric->classifyMetric($metricInstances);
+        list($otherInstances, $classifiedInstances) = $this->metric->classifyMetric($metricInstances);
 
         foreach($classifiedInstances as $dataSource => $metricInstances)
         {
             $fieldList = $this->uniteFieldList($metricInstances);
             $data = $dataset->$dataSource($fieldList)->fetchAll();
 
-            foreach($metricInstances as $metricInstance)
+            foreach($data as $row)
             {
-                $value = $metricInstance->calculate($data);
+                foreach($metricInstances as $instance)
+                {
+                    $instance->calculate((object)$row);
+                }
+            }
+        }
+
+        foreach($otherInstances as $instance) $instance->dao = $this->dao;
+
+        foreach($metricInstances as $instance)
+        {
+            $resultSet = $instance->getResult();
+            foreach($resultSet as $result)
+            {
+                $record = new stdclass();
+                $record->value = $result;
             }
         }
     }

@@ -101,13 +101,13 @@ class metricModel extends model
      */
     public function classifyMetric($metricInstances)
     {
-        $classifiedInstances          = array();
-        $classifiedInstances['other'] = array();
+        $classifiedInstances = array();
+        $otherInstances      = array();
         foreach($metricInstances as $instance)
         {
             if(empty($instance->dataset))
             {
-                $classifiedInstances['other'][] = $instance;
+                $otherInstances[] = $instance;
                 continue;
             }
 
@@ -115,7 +115,7 @@ class metricModel extends model
             if(!isset($classifiedInstances[$dataset])) $classifiedInstances[$dataset] = array();
             $classifiedInstances[$dataset][] = $instance;
         }
-        return $classifiedInstances;
+        return array($otherInstances, $classifiedInstances);
     }
 
     /**
