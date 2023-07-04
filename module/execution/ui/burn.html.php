@@ -102,7 +102,7 @@ panel
 (
     h2
     (
-        setClass('text-center'),
+        setClass('flex items-center justify-center'),
         $executionName . ' ' . $this->lang->execution->burn . '(' . zget($lang->execution->burnByList, $burnBy) . ')',
         isset($execution->delay) ? label(setClass('label danger-pale ring-danger ml-3'), $lang->execution->delayed) : null,
     ),

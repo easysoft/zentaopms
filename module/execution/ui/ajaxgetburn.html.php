@@ -59,6 +59,7 @@ panel
         (
             array
             (
+                'selectedMode' => false,
                 'data' => array($lang->execution->charts->burn->graph->actuality, $lang->execution->charts->burn->graph->reference, $lang->execution->charts->burn->graph->delay),
             )
         ),

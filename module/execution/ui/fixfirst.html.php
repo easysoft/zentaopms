@@ -14,7 +14,17 @@ to::header(
     (
         set::class('article-h2'),
         $lang->execution->fixFirst,
-    )
+    ),
+    span
+    (
+        setClass('flex gap-x-2 mr-3'),
+        $lang->execution->totalEstimate,
+        span
+        (
+            setClass('label secondary-pale rounded-full'),
+            $execution->totalEstimate . $lang->execution->workHour,
+        ),
+    ),
 );
 formPanel
 (
@@ -41,17 +51,5 @@ formPanel
                 set::rootClass('ml-4 w-1/3 items-center'),
             ),
         ),
-    )
-);
-
-div
-(
-    set::class('h-12 flex items-center bg-primary-50'),
-    div
-    (
-        set::class('pl-4'),
-        $lang->execution->totalEstimate . ': ',
-        code($execution->totalEstimate),
-        $lang->execution->workHour
     )
 );
