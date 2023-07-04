@@ -8,11 +8,10 @@ $(function()
 
     $(document).on('change', 'input[name^=members]', function()
     {
-        let checked = true;
-        $(this).closest('.form-group').find('input[name^=members]').each(function()
-        {
-            if(!$(this).prop('checked')) checked = false;
-        });
+        let   checked = true;
+        const checkedCount = $(this).closest('.form-group').find('input[name^=members]:checked').length;
+        const totalCount   = $(this).closest('.form-group').find('input[name^=members]').length;
+        if(checkedCount < totalCount) checked = false;
 
         $(this).closest('.form-row').find('input.check-all').prop('checked', checked);
     });
