@@ -332,7 +332,7 @@ div
 );
 
 $programDom = null;
-if($execution->projectInfo->grade > 1)
+if($config->systemMode == 'ALM' && $execution->projectInfo->grade > 1)
 {
     foreach($programList as $programID => $name)
     {
