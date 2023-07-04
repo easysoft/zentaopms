@@ -1558,3 +1558,14 @@ function formSettingBtn(): formSettingBtn
 {
     return createWg('formSettingBtn', func_get_args());
 }
+
+/**
+ * Overview block widget.
+ *
+ * string id
+ * string title
+ */
+function overviewBlock(): overviewBlock
+{
+    return createWg('overviewBlock', func_get_args());
+}
