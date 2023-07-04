@@ -168,7 +168,7 @@ $lang->block->default['full']['my'][] = array('title' => "Recent {$lang->project
 $lang->block->default['full']['my'][] = array('title' => "Undone {$lang->execution->common} Statistic",     'module' => 'execution',  'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '13', 'params' => array('type' => 'undone',   'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "Unclosed {$lang->productCommon} test statistics", 'module' => 'qa',         'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '18', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "Unclosed {$lang->productCommon} Statistic",       'module' => 'product',    'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '23', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon} Statistic",                'module' => 'project',    'code' => 'statistic',     'width' => '2', 'height' => '6', 'left' => '0', 'top' => '28', 'params' => array('type' => 'undone',   'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon} Statistic",                'module' => 'project',    'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '28', 'params' => array('type' => 'undone',   'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "Undone {$lang->projectCommon} list",              'module' => 'project',    'code' => 'project',       'width' => '2', 'height' => '6', 'left' => '0', 'top' => '33', 'params' => array('type' => 'undone',   'count' => '20', 'orderBy' => 'id_desc'));
 $lang->block->default['full']['my'][] = array('title' => 'Todo',                                            'module' => 'assigntome', 'code' => 'assigntome',    'width' => '2', 'height' => '6', 'left' => '0', 'top' => '39', 'params' => array('todoCount' => '20',  'taskCount' => '20', 'bugCount' => '20', 'riskCount' => '20', 'issueCount' => '20', 'storyCount' => '20', 'reviewCount' => '20', 'meetingCount' => '20', 'feedbackCount' => '20'));
 $lang->block->default['full']['my'][] = array('title' => 'Verlauf',                                         'module' => 'dynamic',    'code' => 'dynamic',       'width' => '1', 'height' => '8', 'left' => '2', 'top' => '0');
@@ -559,6 +559,7 @@ $lang->block->projectstatistic->projectClosed    = "{$lang->projectCommon} has b
 $lang->block->projectstatistic->longTimeProject  = "Long Time {$lang->projectCommon}";
 $lang->block->projectstatistic->totalProgress    = 'Total Progress';
 $lang->block->projectstatistic->totalProgressTip = 'Total Progress = Consumed Man Hours/(Consumed Man Hours + Left Man Hours)';
+$lang->block->projectstatistic->currentCost      = 'Current Cost';
 $lang->block->projectstatistic->sv               = 'Schedule Variance(SV)';
 $lang->block->projectstatistic->pv               = 'Planned Value(PV)';
 $lang->block->projectstatistic->ev               = 'Earned Value(EV)';

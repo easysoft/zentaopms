@@ -18,6 +18,7 @@ $statisticCells = array();
 $preProjectID   = 0;
 $nextProjectID  = 0;
 $projectIdList  = array_keys($projects);
+$config->edition = 'max';
 foreach($projects as $project)
 {
     $projectOverview = array();
@@ -67,7 +68,7 @@ foreach($projects as $project)
     ) : '';
     $lastestExecution = (!empty($project->executions) && $project->multiple) ? cell
     (
-        setClass('flex-1' . (!$longBlock && $config->edition != 'open' ? ' text-left' : ' text-right')),
+        setClass('flex-1' . (!$longBlock && $config->edition != 'open' ? ' text-left w-1/2' : ' text-right')),
         span
         (
             setClass('text-gray'),
@@ -113,11 +114,11 @@ foreach($projects as $project)
             }
             $cells[] = cell
             (
-                setClass('flex-1 pt-4 project-statistic-table scrum' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : '') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
+                setClass('flex-1 project-statistic-table scrum' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : '') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
                 set::width($longBlock ? '25%' : '50%'),
                 div
                 (
-                    setClass('px-2'),
+                    setClass('px-2 pt-1'),
                     span
                     (
                         setClass('font-bold'),
@@ -136,7 +137,7 @@ foreach($projects as $project)
     {
         $cells[] = cell
         (
-            setClass('flex flex-wrap items-center progress-circle pt-6'),
+            setClass('flex flex-wrap items-center progress-circle pt-2 mb-2'),
             set::width($longBlock ? '36%' : '100%'),
             div
             (
@@ -144,23 +145,23 @@ foreach($projects as $project)
                 zui::progressCircle
                 (
                     set('percent', $project->progress),
-                    set('size', 150),
+                    set('size', 135),
                     set('circleWidth', 10),
                     set('text', "{$project->progress}%"),
-                    set('textY', 70),
+                    set('textY', 63),
                     set('textStyle', 'font-size: 35px;'),
                 ),
             ),
             div
             (
-                setClass('flex justify-center w-full'),
+                setClass('flex justify-center w-full h-0'),
                 span
                 (
                     setClass('text-gray text-md progress-text'),
                     $lang->block->projectstatistic->totalProgress,
                     icon
                     (
-                        setClass('pl-1'),
+                        setClass('pl-0.5'),
                         set('data-toggle', 'tooltip'),
                         set('href', 'totalProgressTooltip'),
                         'help'
@@ -176,7 +177,7 @@ foreach($projects as $project)
         );
         $cells[] = cell
         (
-            setClass('flex-1 pt-4 project-statistic-table px-4' . ($longBlock ? ' border-l' : '')),
+            setClass('flex-1 project-statistic-table px-4' . ($longBlock ? ' border-l' : 'mt-4')),
             set::width($longBlock ? '32%' : '50%'),
             div
             (
@@ -290,7 +291,7 @@ foreach($projects as $project)
         );
         $cells[] = cell
         (
-            setClass('flex-1 pt-4 project-statistic-table px-4 border-l'),
+            setClass('flex-1 project-statistic-table px-4 border-l' . (!$longBlock ? ' mt-3' : '')),
             set::width($longBlock ? '32%' : '50%'),
             div
             (
@@ -298,7 +299,7 @@ foreach($projects as $project)
                 span
                 (
                     setClass('font-bold'),
-                    $lang->project->progress
+                    $lang->project->currentCost
                 ),
             ),
             h::table
@@ -408,7 +409,7 @@ foreach($projects as $project)
     (
         div
         (
-            setClass('flex flex-wrap bg-white leading-6 px-2 py-1 my-4 mx-0.5 shadow items-center' . ($longBlock ? ' h-10' : 'h-20')),
+            setClass('flex flex-wrap bg-white leading-6 px-2 py-1 mt-3 mx-0.5 shadow items-center' . ($longBlock ? ' h-10 mb-6' : 'h-20 mb-4')),
             $projectOverview,
             $lastestExecution,
         ),
@@ -460,7 +461,7 @@ foreach($projects as $project)
         (
             ul
             (
-                setClass('nav nav-tabs h-12 px-1 justify-between items-center'),
+                setClass('nav nav-tabs h-10 px-1 justify-between items-center'),
                 set::width('100%'),
                 li
                 (

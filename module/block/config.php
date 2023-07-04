@@ -306,7 +306,8 @@ $config->block->size['product']['story']   = array('2' => '6', '1' => '6');
 $config->block->size['product']['plan']    = array('2' => '6', '1' => '6');
 $config->block->size['product']['release'] = array('2' => '6', '1' => '6');
 
-$config->block->size['project']['overview'] = array('1' => '3');
+$config->block->size['project']['overview']  = array('1' => '3');
+$config->block->size['project']['statistic'] = array('2' => '5', '1' => '8');
 
 $config->block->size['execution']['overview'] = array('1' => '3');
 

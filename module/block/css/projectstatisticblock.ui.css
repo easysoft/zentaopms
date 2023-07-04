@@ -3,7 +3,7 @@
 .projectstatistic-block .tab-content {width: 100%;}
 .projectstatistic-block .bg-secondary-pale {background: #F3F6FA;}
 
-.projectstatistic-block .project-statistic-table table {width: 100%; border-collapse: separate; border-spacing: 0 1rem; padding-right: 1rem;}
+.projectstatistic-block .project-statistic-table table {width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; padding-right: 1rem;}
 .projectstatistic-block .project-statistic-table table tr:first-child {background: url(static/svg/arrow-step1-grey.svg) center no-repeat; background-size: cover;}
 .projectstatistic-block .project-statistic-table table th {padding-right: 0px; margin-top: 1rem;}
 .projectstatistic-block .project-statistic-table table td {padding-left: 0px; margin-top: 1rem;}
@@ -11,5 +11,5 @@
 .projectstatistic-block .scrum table th, .projectstatistic-block .scrum table td {width: 50%}
 .projectstatistic-block .progress-circle text {font-size: 35px;}
 .projectstatistic-block .progress-circle .progress-text {position: relative;}
-.projectstatistic-block.block-long .progress-circle .progress-text {top: -65px;}
-.projectstatistic-block.block-sm .progress-circle .progress-text {top: -60px;}
+.projectstatistic-block.block-long .progress-circle .progress-text {top: -57px;}
+.projectstatistic-block.block-sm .progress-circle .progress-text {top: -55px;}
