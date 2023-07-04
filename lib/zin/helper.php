@@ -114,3 +114,8 @@ else
         return \str_ends_with($haystack, $needle);
     }
 }
+
+function uncamelize($camelCaps, $separator = '-')
+{
+    return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $camelCaps));
+}

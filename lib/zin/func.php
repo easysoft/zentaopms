@@ -1148,14 +1148,15 @@ function formItemDropdown(): formItemDropdown
 /**
  * Zentao editor wg.
  *
- * string   name
- * ?string  id
- * ?string  class
- * ?string  value
- * ?bool    required
- * ?string  placeholder
- * ?int     rows
- * ?int     cols
+ * ?bool   createInput=false
+ * ?string uploadUrl=''
+ * ?string placeholder=''
+ * ?bool   fullscreenable=false
+ * ?bool   resizable=false
+ * ?bool   exposeEditor=true
+ * ?string size='sm'
+ * ?bool   hideMenubar=false
+ * ?bool   bubbleMenu=false
  */
 function editor(): editor
 {
