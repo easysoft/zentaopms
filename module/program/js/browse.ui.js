@@ -35,7 +35,7 @@ window.confirmDelete = function(projectID, module, projectName)
 
     zui.Modal.confirm({message: confirmDeleteLang[module].replace('%s', projectName), icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
-        if(res) $.get(deleteURL, function(){loadCurrentPage();});
+        if(res) $.ajaxSubmit({url: deleteURL, load: true});
     });
 }
 
