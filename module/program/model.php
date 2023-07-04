@@ -954,6 +954,40 @@ class programModel extends model
         }
     }
 
+    /**
+     * Activate a program.
+     *
+     * @param  int $programID
+     * @access public
+     * @return array|false
+     */
+    public function activate(int $programID) :array|false
+    {
+        $oldProgram = $this->getByID($programID);
+        $now        = helper::now();
+
+        $program = fixer::input('post')
+            ->setDefault('realEnd','')
+            ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setIF(!helper::isZeroDate($oldProgram->realBegan), 'realBegan', helper::today())
+            ->stripTags($this->config->program->editor->activate['id'], $this->config->allowedTags)
+            ->remove('comment')
+            ->get();
+
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->activate['id'], $this->post->uid);
+        $this->dao->update(TABLE_PROJECT)->data($program)
+            ->autoCheck()
+            ->checkFlow()
+            ->where('id')->eq((int)$programID)
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        return common::createChanges($oldProgram, $program);
+    }
+
     /*
      * Get program swapper.
      *

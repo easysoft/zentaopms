@@ -354,32 +354,32 @@ class program extends control
     public function activate($programID = 0)
     {
         $this->loadModel('action');
-        $program = $this->project->getByID($programID, 'program');
+        $program = $this->program->getByID($programID);
 
         if(!empty($_POST))
         {
-            $changes = $this->project->activate($programID, 'program');
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $changes = $this->program->activate($programID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
                 $actionID = $this->action->create('program', $programID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $newBegin = date('Y-m-d');
         $dateDiff = helper::diffDate($newBegin, $program->begin);
         $newEnd   = date('Y-m-d', strtotime($program->end) + $dateDiff * 24 * 3600);
 
-        $this->view->title      = $this->lang->program->activate;
-        $this->view->project    = $program;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('program', $programID);
-        $this->view->newBegin   = $newBegin;
-        $this->view->newEnd     = $newEnd;
-        $this->display('project', 'activate');
+        $this->view->title    = $this->lang->program->activate;
+        $this->view->program  = $program;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions  = $this->action->getList('program', $programID);
+        $this->view->newBegin = $newBegin;
+        $this->view->newEnd   = $newEnd;
+        $this->display();
     }
 
     /**
