@@ -193,7 +193,7 @@ function setTeamUser()
 
 
 /* Mange team. */
-$('#teamTable').on('click.team', '.btn-add', function()
+$('#teamForm').on('click.team', '.btn-add', function()
 {
     let $newRow = $(this).closest('tr').clone();
     $newRow.find('td.required').removeClass('required');
@@ -205,7 +205,7 @@ $('#teamTable').on('click.team', '.btn-add', function()
     disableMembers();
 })
 
-$('#teamTable').on('click.team', '.btn-delete', function()
+$('#teamForm').on('click.team', '.btn-delete', function()
 {
     let $row = $(this).closest('tr');
     if(isMultiple && !checkRemove($row.index())) return;
@@ -241,7 +241,7 @@ function setLineIndex()
  */
 function toggleBtn()
 {
-    let $deleteBtn = $('#teamTable').find('.btn-delete');
+    let $deleteBtn = $('#teamForm').find('.btn-delete');
     if($deleteBtn.length == 1)
     {
         $deleteBtn.addClass('hidden');
@@ -264,7 +264,7 @@ function disableMembers()
     if(mode == 'multi')
     {
         let members = [];
-        let $teams  = $('#teamTable').find('select[name^=team]');
+        let $teams  = $('#teamForm').find('select[name^=team]');
         for(i = 0; i < $teams.length; i++)
         {
             let value = $teams.eq(i).val();
@@ -287,7 +287,7 @@ function disableMembers()
                 $this.find('option[value=' + account + ']').attr('disabled', 'disabled');
             })
         });
-        $('#teamTable').find('tr.hidden').remove();
+        $('#teamForm').find('tr.hidden').remove();
     }
 }
 
@@ -300,7 +300,7 @@ function disableMembers()
  */
 function checkRemove(removeIndex)
 {
-    let $teams      = $('#teamTable').find('select#team');
+    let $teams      = $('#teamForm').find('select#team');
     let totalLeft   = 0;
     let memberCount = 0;
     for(i = 0; i < $teams.length; i++)
@@ -328,12 +328,12 @@ function checkRemove(removeIndex)
         return false;
     }
 
-    if($('#teamTable').find('td > .btn-delete:enabled').length == 1) return false;
+    if($('#teamForm').find('td > .btn-delete:enabled').length == 1) return false;
 
     return true;
 }
 
-$('#teamTable').on('change', 'select[name^=team]', function()
+$('#teamForm').on('change', 'select[name^=team]', function()
 {
     $(this).closest('tr').find('input[name^=teamLeft]').closest('td').toggleClass('required', $(this).val() != '')
 
@@ -354,7 +354,7 @@ $('#teamTable').on('change', 'select[name^=team]', function()
     $tr.find('[name^=teamEstimate]').val(estimate);
 });
 
-$('#teamTable').find('select#team:enabled').each(function()
+$('#teamForm').find('select#team:enabled').each(function()
 {
     $(this).closest('tr').find('input[name^=teamLeft]').closest('td').toggleClass('required', $(this).val() != '')
 });

@@ -132,6 +132,7 @@ foreach($task->team as $member)
                 setClass('team-number'),
                 $i
             ),
+            $task->mode == 'linear' ? icon("angle-down") : null
         ),
         h::td
         (
@@ -230,6 +231,7 @@ for($i; $i <= $rowCount; $i ++)
                 setClass("team-number"),
                 $i
             ),
+            $task->mode == 'linear' ? icon("angle-down") : null
         ),
         h::td
         (
@@ -355,7 +357,7 @@ formPanel
             h::table
             (
                 setClass('table table-form'),
-                set::id('teamTable'),
+                set::id('teamForm'),
                 $teamForm
             ),
         )
