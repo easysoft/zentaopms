@@ -3553,9 +3553,9 @@ EOF;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('parsedownextraplugin');
+        $app->loadClass('parsedown');
 
-        $parsedown = new parsedownextraplugin;
+        $parsedown = new parsedown;
 
         $parsedown->voidElementSuffix = '>'; // HTML5
 

@@ -13,7 +13,7 @@
 #
 #
 
-class parsedownextra extends parsedown
+class parsedownextra extends parsedownbase
 {
     # ~
 

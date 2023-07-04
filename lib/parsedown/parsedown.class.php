@@ -15,10 +15,10 @@
 #
 #
 
-require 'parsedown.php';
+require 'parsedownbase.php';
 require 'parsedownextra.php';
 
-class parsedownextraplugin extends parsedownextra {
+class parsedown extends parsedownextra {
 
     const version = '1.3.6';
 

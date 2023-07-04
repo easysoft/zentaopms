@@ -11,7 +11,7 @@
 # with this source code.
 #
 #
-class parsedown
+class parsedownbase
 {
     # ~
 
