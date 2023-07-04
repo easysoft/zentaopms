@@ -477,7 +477,15 @@
         let $page = $('#oldPage');
         if(!$page.length)
         {
-            $page = $('<div/>').append($('<iframe />').attr({name: `app-${currentCode}-old`, frameborder: 'no', allowtransparency: true, scrolling: 'auto', style: 'width:100%;height:100%;'})).attr({id: 'oldPage', class: 'load-indicator', style: 'position:fixed;width:100%;height:100%;left:0;top:0;z-index:100'}).insertAfter('body');
+            $page = $('<div/>')
+                .append($('<iframe />').attr({name: `app-${currentCode}-old`, frameborder: 'no', allowtransparency: true, scrolling: 'auto', style: 'width:100%;height:100%;'}))
+                .attr({id: 'oldPage', class: 'load-indicator', style: 'position:fixed;width:100%;height:100%;left:0;top:0;z-index:100'})
+                .insertAfter('body')
+                .on('oldPageLoad.app', () =>
+                {
+                    $page.removeClass('loading').find('iframe').addClass('in');
+                    $(document).trigger('pageload.app');
+                });
         }
         if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
         const $iframe = $page.find('iframe').removeClass('in');
