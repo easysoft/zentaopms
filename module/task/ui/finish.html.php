@@ -60,7 +60,15 @@ else
                 )
             );
 
-        $assignedToControl = formHidden('assignedTo', $assignedTo);
+        $assignedToControl = formGroup
+            (
+                set::width('1/3'),
+                set::label($lang->story->assignTo),
+                set::control('input'),
+                set::disabled(true),
+                set::value(zget($members, $task->nextBy)),
+                formHidden('assignedTo', $task->nextBy)
+            );
     }
     else
     {

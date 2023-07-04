@@ -1128,6 +1128,8 @@ class taskModel extends model
 
         if(dao::isError()) return false;
 
+        if($currentTeam) $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
+
         if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $oldTask->id);
         return common::createChanges($oldTask, $task);
     }
