@@ -342,7 +342,7 @@ class projectModel extends model
             ->andWhere('t2.model')->eq('waterfall')
             ->fetchGroup('project', 'id');
 
-        $totalHour = $this->dao->select("t1.project, t1.execution, ROUND(SUM(if(t1.status !='closed' && t1.status !='cancel', `left`, 0)), 2) AS totalLeft, ROUND(SUM(consumed), 1) AS totalConsumed")->from(TABLE_TASK)->alias('t1')
+        $totalHour = $this->dao->select("t1.project, t1.execution, ROUND(SUM(if(t1.status !='closed' && t1.status !='cancel', t1.`left`, 0)), 2) AS totalLeft, ROUND(SUM(t1.`consumed`), 1) AS totalConsumed")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.project')->in(array_keys($projectList))
             ->andWhere('t1.deleted')->eq(0)
