@@ -14,13 +14,14 @@
 <style>
   .center-wrapper {display: flex; justify-content: center; height: 100%;}
   .center-content {width: 100%; height: 100%; display: flex; flex-direction: column;}
-  #purpose-setter {display: flex; flex-direction: row;}
+  #purpose-setter {display: flex; flex-direction: row; max-height: calc(100% - 32px);}
   #purpose-setter > div {flex-grow: 1; flex-basis: 0; padding: 0px 12px;}
+  .content-wrapper {height: calc(100% - 48px); padding: 0 12px; overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable;}
   .content-row {display: flex; flex-direction: row; padding: 8px 0px;}
   .input-label {width: 120px; padding: 6px 12px; text-align: right;}
   .input {flex-grow: 1;}
-  #prompt-preview-wrapper {padding: 6px 0;}
-  #prompt-preview {padding: 8px 0; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f7f8f9; min-height: 100px;}
+  #prompt-preview-wrapper {margin: 16px 0; height: calc(100% - 48px);}
+  #prompt-preview {padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f7f8f9; min-height: 100px; height: 100%; overflow-y: auto;}
   #prompt-preview {cursor: default; user-select: none;}
   #prompt-preview .active {background-color: #d6e5fe;}
   #prompt-preview .prompt-data, #prompt-preview .prompt-role, #prompt-preview .prompt-text {border-bottom: 1px solid #ccc; padding: 16px 0;}
@@ -92,13 +93,15 @@ customElements.define('prompt-previewer', PromptPreviewer, {extends: 'div'});
         <div id='purpose-setter'>
           <div id='purpose-input'>
             <h4><?php echo $lang->ai->prompts->purpose;?></h4>
-            <div class='content-row'>
-              <div class='input-label'><span><?php echo $lang->ai->prompts->purpose;?></span></div>
-              <div class='input'><?php echo html::textarea('purpose', $prompt->purpose, "class='form-control' rows='6' placeholder='{$lang->ai->prompts->purposeTip}' required");?></div>
-            </div>
-            <div class='content-row'>
-              <div class='input-label'><span><?php echo $lang->ai->prompts->elaboration;?></span></div>
-              <div class='input'><?php echo html::textarea('elaboration', $prompt->elaboration, "class='form-control' rows='6' placeholder='{$lang->ai->prompts->elaborationTip}'");?></div>
+            <div class='content-wrapper'>
+              <div class='content-row'>
+                <div class='input-label'><span><?php echo $lang->ai->prompts->purpose;?></span></div>
+                <div class='input'><?php echo html::textarea('purpose', $prompt->purpose, "class='form-control' rows='6' placeholder='{$lang->ai->prompts->purposeTip}' required");?></div>
+              </div>
+              <div class='content-row'>
+                <div class='input-label'><span><?php echo $lang->ai->prompts->elaboration;?></span></div>
+                <div class='input'><?php echo html::textarea('elaboration', $prompt->elaboration, "class='form-control' rows='6' placeholder='{$lang->ai->prompts->elaborationTip}'");?></div>
+              </div>
             </div>
           </div>
           <div>
