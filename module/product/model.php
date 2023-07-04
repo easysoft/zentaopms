@@ -1960,6 +1960,13 @@ class productModel extends model
             }
         }
 
+        $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('closedReason')->eq('done')
+            ->fetchPairs('product', 'finish');
+        foreach($products as $productID => $product) $products[$productID]->finishClosedStories = isset($finishClosedStory[$productID]) ? $finishClosedStory[$productID] : 0;
+
         return $products;
     }
 
