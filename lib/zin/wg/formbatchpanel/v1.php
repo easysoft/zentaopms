@@ -88,8 +88,14 @@ class formBatchPanel extends formPanel
             $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
         }
 
-        /* Cusom fields. */
-        if($customFields) $headingActions[] = formSettingBtn(set::customFields($customFields), set::urlParams('module=story&section=custom&key=batchCreateFields'));
+        /* Custom fields. */
+        if($customFields)
+        {
+            global $app;
+            $urlParams = isset($customFields['urlParams']) ? $customFields['urlParams'] : "module={$app->rawModule}&section=custom&key=batchCreateFields";
+
+            $headingActions[] = formSettingBtn(set::customFields($customFields['items']), set::urlParams($urlParams));
+        }
 
         $this->setProp('headingActions', $headingActions);
 
