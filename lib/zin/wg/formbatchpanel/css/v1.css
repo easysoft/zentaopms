@@ -1,0 +1,6 @@
+#customizeBatchForm {width: 280px;}
+#customizeBatchForm .panel-heading, #customizeBatchForm .panel-body {padding-left:0px; padding-right:0px;}
+#customizeBatchForm .panel-body {padding-top: 0px; padding-bottom: 0px;}
+#customizeBatchForm .panel-body form {display: flex; flex-wrap: wrap;}
+#customizeBatchForm .panel-body form .checkbox-primary {width: 50%; margin-top: 0.5rem; margin-bottom: 0.5rem;}
+#customizeBatchForm .panel-body form .form-actions .btn {min-width: auto;}
