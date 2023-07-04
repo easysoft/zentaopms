@@ -76,14 +76,14 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
             if($isProjectStory) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID=$projectID");
             $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
-            $items[] = array('text' => $lang->story->createCommon, 'url' => $link);
+            $items[] = array('text' => $lang->story->createCommon, 'icon' => 'plus', 'url' => $link);
         }
         else
         {
-            $items[] = array('text' => $lang->story->create, 'url' => $createLink);
+            $items[] = array('text' => $lang->story->create, 'icon' => 'plus', 'url' => $createLink);
         }
 
-        $items[] = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
+        $items[] = array('text' => $lang->story->batchCreate, 'icon' => 'plus', 'url' => $batchCreateLink);
 
         return btnGroup
         (
@@ -97,7 +97,8 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
             dropdown
             (
                 span(setClass('caret')),
-                setClass('btn primary'),
+                setClass('btn'),
+                setClass($from == 'project' ? 'secondary' : 'primary'),
                 setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0')),
                 set::placement('bottom-end'),
                 set::items($items),
