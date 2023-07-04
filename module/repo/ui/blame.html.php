@@ -35,11 +35,10 @@ foreach($paths as $pathName)
 }
 if($fileName) $breadcrumbItems[] = h::span($fileName);
 
-echo $revisionName;
 $breadcrumbItems[] = h::span
 (
     setClass('ml-2 label secondary'),
-    rawContent()
+    html($revisionName),
 );
 
 foreach($blames as $key => $blame)
@@ -62,14 +61,13 @@ foreach($lang->repo->encodingList as $key => $val)
 }
 $defaultEncode = $lang->repo->encodingList[$encoding];
 
-set::rawContent(false);
-
 featureBar(
     backBtn
     (
         setClass('mr-5'),
         set::icon('back'),
         set::type('secondary'),
+        set::back('GLOBAL'),
         $lang->goback
     ),
     ...$breadcrumbItems

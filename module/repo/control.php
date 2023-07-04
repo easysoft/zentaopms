@@ -97,7 +97,15 @@ class repo extends control
         }
         $successJobs = $this->loadModel('compile')->getSuccessJobs($jobIDList);
 
+        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $projects = $this->loadModel('project')->getPairs();
+
+        session_start();
+        $this->config->repo->search['params']['product']['values']  = $products;
+        $this->config->repo->search['params']['projects']['values'] = $projects;
         $this->config->repo->search['actionURL'] = $this->createLink('repo', 'maintain');
+        $this->config->repo->search['queryID']   = 0;
+        $this->config->repo->search['onMenuBar']   = 'yes';
         $this->loadModel('search')->setSearchParams($this->config->repo->search);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
@@ -106,8 +114,8 @@ class repo extends control
         $this->view->objectID      = $objectID;
         $this->view->pager         = $pager;
         $this->view->repoList      = $repoList;
-        $this->view->products      = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        $this->view->projects      = $this->loadModel('project')->getPairs();
+        $this->view->products      = $products;
+        $this->view->projects      = $projects;
         $this->view->sonarRepoList = $sonarRepoList;
         $this->view->successJobs   = $successJobs;
 

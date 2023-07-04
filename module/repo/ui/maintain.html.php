@@ -55,9 +55,9 @@ $config->repo->dtable->fieldList['actions']['list']['delete']['url'] = $this->cr
 $repos = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
 
 featureBar
-(
+ (
     set::current('all'),
-    li(searchToggle(set::module('repo')))
+    li(searchToggle()),
 );
 
 toolBar

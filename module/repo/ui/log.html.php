@@ -59,6 +59,7 @@ featureBar(
         setClass('mr-5'),
         set::icon('back'),
         set::type('secondary'),
+        set::back('repo-browse'),
         $lang->goback
     ),
     ...$breadcrumbItems

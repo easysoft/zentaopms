@@ -15,8 +15,6 @@ jsVar('pathSvnTip', $lang->repo->example->path->svn);
 jsVar('clientGitTip', $lang->repo->example->client->git);
 jsVar('clientSvnTip', $lang->repo->example->client->svn);
 
-set::rawContent(false);
-
 formPanel
 (
     on::change('#product', 'onProductChange'),
@@ -56,7 +54,7 @@ formPanel
         h::span
         (
             setClass('tips-git leading-8 ml-2'),
-            rawContent(),
+            html($lang->repo->syncTips),
         ),
     ),
     formRow
@@ -198,7 +196,4 @@ formPanel
     )
 );
 
-echo $lang->repo->syncTips;
-
 render();
-
