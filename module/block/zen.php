@@ -330,9 +330,28 @@ class blockZen extends block
         $usageDays = 1;
         if($firstUseDate) $usageDays = ceil((time() - strtotime($firstUseDate)) / 3600 / 24);
 
+        $assignToMe = array();
+        foreach($this->lang->block->welcome->assignList as $field => $label)
+        {
+            $type = 'assignedTo';
+            if($field == 'testcase') $type = 'assigntome';
+
+            $number = rand(1, 100);
+            $assignToMe[$field] = array('number' => $number, 'delay' => rand(1, 100) >= 90 ? rand(1, $number) : 0, 'href' => helper::createLink('my', 'work', "mode=$field&type=$type"));
+        }
+
+        $reviewByMe = array();
+        foreach($this->lang->block->welcome->reviewList as $field => $label)
+        {
+            $number = rand(1, 100);
+            $reviewByMe[$field] = array('number' => $number, 'delay' => rand(1, 100) >= 90 ? rand(1, $number) : 0);
+        }
+
         $this->view->usageDays    = $usageDays;
         $this->view->welcomeType  = $welcomeType;
         $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())];
+        $this->view->assignToMe   = $assignToMe;
+        $this->view->reviewByMe   = $reviewByMe;
     }
 
     /**

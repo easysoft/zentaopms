@@ -11,17 +11,10 @@ declare(strict_types=1);
 
 namespace zin;
 
-$doneReview = 9999;
-$finishTask = 9999;
-$fixBug     = 9999;
+$doneReview = rand(0, 100);
+$finishTask = rand(0, 100);
+$fixBug     = rand(0, 100);
 
-$reviewByMe['feedback'] = array('number' => '9999', 'delay' => '1111');
-$reviewByMe['testcase'] = array('number' => '9999');
-$reviewByMe['baseline'] = array('number' => '9999');
-$assignToMe['task']     = array('number' => '9999', 'delay' => '1111');
-$assignToMe['bug']      = array('number' => '9999');
-
-$feedbackCount = 9999;
 if($doneReview > $finishTask && $doneReview > $fixBug)
 {
     $honorary = 'review';
@@ -59,12 +52,12 @@ panel
     ),
     div
     (
-        set('class', 'flex py-2'),
+        set('class', 'flex h-32'),
         cell
         (
             set('width', '22%'),
             set('align', 'center'),
-            set('class', 'border-right'),
+            set::class('border-right py-2'),
             center
             (
                 set('class', 'font-bold'),
@@ -72,16 +65,16 @@ panel
             ),
             center
             (
-                set('class', 'my-1'),
+                set::class('my-1'),
                 center
                 (
-                    set('class', 'rounded-full avatar-border-one'),
+                    set::class('rounded-full avatar-border-one'),
                     center
                     (
-                        set('class', 'rounded-full avatar-border-two'),
+                        set::class('rounded-full avatar-border-two'),
                         userAvatar
                         (
-                            set('class', 'welcome-avatar ellipsis'),
+                            set::class('welcome-avatar ellipsis'),
                             set('user', $this->app->user)
                         )
                     )
@@ -91,32 +84,31 @@ panel
         ),
         cell
         (
-            set('width', '45%'),
-            set('class', 'border-right px-4'),
-            div
+            set('width', '78%'),
+            set::class('px-8'),
+            tabs
             (
-                set('class', 'font-bold'),
-                $lang->block->welcome->reviewByMe
-            ),
-            div
-            (
-                setClass('flex justify-around pt-1'),
-                getMeasureItem($reviewByMe)
-            )
-        ),
-        cell
-        (
-            set('width', '35%'),
-            set('class', 'border-right px-4'),
-            div
-            (
-                set('class', 'font-bold'),
-                $lang->block->welcome->assignToMe
-            ),
-            div
-            (
-                setClass('flex justify-around pt-1'),
-                getMeasureItem($assignToMe)
+                tabPane
+                (
+                    set::key('reviewByMe'),
+                    set::title($lang->block->welcome->reviewByMe),
+                    div
+                    (
+                        set::class('flex justify-around text-center'),
+                        getMeasureItem($reviewByMe)
+                    )
+                ),
+                tabPane
+                (
+                    set::key('assignToMe'),
+                    set::title($lang->block->welcome->assignToMe),
+                    set::active(true),
+                    div
+                    (
+                        set::class('flex justify-around text-center'),
+                        getMeasureItem($assignToMe)
+                    )
+                )
             )
         )
     )
@@ -128,18 +120,20 @@ function getMeasureItem($data)
 {
     global $lang;
 
+    $welcomeLabel = array_merge($lang->block->welcome->assignList, $lang->block->welcome->reviewList);
+
     $items = array();
     foreach($data as $key => $info)
     {
-        $items[] = div
+        if(count($items) >= 5) break;
+        $items[] = cell
         (
-            set('class', 'text-center'),
             div
             (
                 set('class', 'text-3xl text-primary font-bold h-40px'),
-                $info['number']
+                a(set('href', $info['href']), $info['number'])
             ),
-            div($lang->block->welcome->{$key}),
+            div(zget($welcomeLabel, $key, '')),
             !empty($info['delay']) ? div
             (
                 set('class', 'label danger-pale circle size-sm'),
