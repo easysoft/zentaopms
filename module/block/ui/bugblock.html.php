@@ -20,16 +20,10 @@ if(!$longBlock)
 
 panel
 (
+    set::title($block->title),
     set('class', 'bug-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
-    to::heading
-    (
-        div
-        (
-            set('class', 'panel-title'),
-            span($block->title),
-        )
-    ),
+
     to::headingActions
     (
         a
