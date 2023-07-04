@@ -94,7 +94,7 @@ class overviewBlock extends wg
             (
                 span
                 (
-                    setClass('text-center mb-2'),
+                    setClass('mb-2'),
                     $group->title
                 ),
                 div
