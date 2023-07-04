@@ -122,7 +122,7 @@ class executionsEntry extends entry
         $account  = $this->app->user->account;
         $projects = $data->data->projects;
         $dropMenu = array('involved' => array(), 'other' => array(), 'closed' => array());
-        foreach($data->data->executions as $projectID => $projectExecutions)
+        foreach($data->data->projectExecutions as $projectID => $projectExecutions)
         {
             foreach($projectExecutions as $execution)
             {
