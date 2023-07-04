@@ -694,12 +694,38 @@ class blockZen extends block
         if($lastYearCount > $maxCount)    $maxCount = $lastYearCount;
         if($lastTwoYearCount > $maxCount) $maxCount = $lastTwoYearCount;
 
-        $projectStats['total']       = array_sum($stats);
-        $projectStats['thisYear']    = array('year' => $thisYear,    'count' => $thisYearCount,    'rate' => $maxCount ? round($thisYearCount    / $maxCount * 100) . '%' : '0%');
-        $projectStats['lastYear']    = array('year' => $lastYear,    'count' => $lastYearCount,    'rate' => $maxCount ? round($lastYearCount    / $maxCount * 100) . '%' : '0%');
-        $projectStats['lastTwoYear'] = array('year' => $lastTwoYear, 'count' => $lastTwoYearCount, 'rate' => $maxCount ? round($lastTwoYearCount / $maxCount * 100) . '%' : '0%');
+        $cards = array();
+        $cards[0] = new stdclass();
+        $cards[0]->value = array_sum($stats);
+        $cards[0]->class = 'text-primary';
+        $cards[0]->label = $this->lang->block->projectoverview->totalProject;
+        $cards[0]->url   = common::hasPriv('project', 'browse') ? helper::createLink('project', 'browse', 'programID=0&browseType=all') : null;
 
-        $this->view->projectStats = $projectStats;
+        $cards[1] = new stdclass();
+        $cards[1]->value = $thisYearCount;
+        $cards[1]->label = $this->lang->block->projectoverview->thisYear;
+
+        $cardGroup = new stdclass();
+        $cardGroup->type  = 'cards';
+        $cardGroup->cards = $cards;
+
+        $bars = array();
+        foreach(array('thisYear', 'lastYear', 'lastTwoYear') as $year)
+        {
+            $bar = new stdclass();
+            $bar->label = $$year;
+            $bar->value = ${$year . 'Count'};
+            $bar->rate  = $maxCount ? round(${$year . 'Count'} / $maxCount * 100) . '%' : '0%';
+
+            $bars[] = $bar;
+        }
+
+        $barGroup = new stdclass();
+        $barGroup->type  = 'barChart';
+        $barGroup->title = $this->lang->block->projectoverview->lastThreeYear;
+        $barGroup->bars  = $bars;
+
+        $this->view->groups = array($cardGroup, $barGroup);
     }
 
     /**
