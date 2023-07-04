@@ -878,57 +878,5 @@
             }
             if(!isInAppTab) loadCurrentPage();
         }
-
-        /* Compatible with old version */
-        if(DEBUG && typeof window.zin !== 'object' && isInAppTab)
-        {
-            console.log('[ZUI3]', 'Compatible with old version');
-            window.jQuery = $;
-            const empty = () => {};
-            window.adjustMenuWidth = empty;
-            window.startCron = empty;
-            $.zui = $.extend(function(){console.warn('[ZUI3]', 'The $.zui() is not supported.');}, zui);
-            $.initSidebar = empty;
-            parent.window.$.apps.openedApps = $.apps.openedApps = $.apps.openedMap;
-            parent.window.$.apps.updateUrl = $.apps.updateUrl = empty;
-            const ajaxOld = $.ajax;
-            window.createLink = $.createLink;
-            window.parseLink = $.parseLink;
-            $.ajax = function(url, settings)
-            {
-                ajaxOld.call(this, url, settings);
-                const deffered = {};
-                const ajaxWarn = function(name)
-                {
-                    console.warn('[ZUI3]', 'The $.ajax().' + name + '() is not supported.');
-                    return deffered;
-                };
-                $.extend(deffered, {done: ajaxWarn.bind(deffered, 'done'), fail: ajaxWarn.bind(deffered, 'fail'), always: ajaxWarn.bind(deffered, 'always')});
-                return deffered;
-            };
-            $.extend($.fn,
-            {
-                sortable: function()
-                {
-                    console.warn('[ZUI3]', 'The $().sortable() is not supported.');
-                    return this;
-                },
-                scroll: function()
-                {
-                    console.warn('[ZUI3]', 'The $().scroll() is not supported.');
-                    return this;
-                },
-                resize: function()
-                {
-                    console.warn('[ZUI3]', 'The $().resize() is not supported.');
-                    return this;
-                },
-                table: function()
-                {
-                    console.warn('[ZUI3]', 'The $().table() is not supported.');
-                    return this;
-                },
-            });
-        }
     });
 }());
