@@ -183,6 +183,10 @@ jsVar('orderBy',        $orderBy);
 jsVar('sortLink',       helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}"));
 jsVar('pageSummary',    $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
+jsVar('multipleAB',     $lang->task->multipleAB);
+jsVar('childrenAB',     $lang->task->childrenAB);
+jsVar('todayLabel',     $lang->today);
+jsVar('yesterdayLabel', $lang->yesterday);
 
 dtable
 (
@@ -192,6 +196,7 @@ dtable
     set::data($tableData),
     set::checkable($canBatchAction),
     set::sortLink(jsRaw('createSortLink')),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::footToolbar($footToolbar),
     set::footPager(
         usePager(),
