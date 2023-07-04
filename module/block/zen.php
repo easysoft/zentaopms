@@ -1531,29 +1531,64 @@ class blockZen extends block
      */
     protected function printExecutionOverviewBlock(object $block): void
     {
-        $projectID  = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
-        $executions = $this->loadModel('execution')->getList($projectID);
+        $query = $this->dao->select('id, status, Year(closedDate) AS year')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->in('sprint, stage, kanban')
+            ->andWhere('multiple')->eq('1')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi();
 
-        $total = 0;
-        foreach($executions as $execution)
+        $statusPairs = $query->fetchPairs('id', 'status');
+        $yearPairs   = $query->fetchPairs('id', 'year');
+        $yearPairs   = array_map(function($year){return $year == null ? 0 : $year;}, $yearPairs);
+        $statusStats = array_count_values($statusPairs);
+        $yearStats   = array_count_values($yearPairs);
+
+        $cards = array();
+        $cards[0] = new stdclass();
+        $cards[0]->value = array_sum($statusStats);
+        $cards[0]->class = 'text-primary';
+        $cards[0]->label = $this->lang->block->executionoverview->totalExecution;
+        $cards[0]->url   = common::hasPriv('execution', 'all') ? helper::createLink('execution', 'all', 'status=all') : null;
+
+        $cards[1] = new stdclass();
+        $cards[1]->value = zget($yearStats, date('Y'), 0);
+        $cards[1]->label = $this->lang->block->executionoverview->thisYear;
+
+        $cardGroup = new stdclass();
+        $cardGroup->type  = 'cards';
+        $cardGroup->cards = $cards;
+
+        $this->app->loadLang('execution');
+
+        $max = 0;
+        foreach($this->lang->execution->statusList as $status => $label)
         {
-            if(empty($execution->multiple)) continue;
-            if(!isset($overview[$execution->status])) $overview[$execution->status] = 0;
-            $overview[$execution->status]++;
-            $total++;
+            if($status == 'closed') continue;
+
+            $$status = zget($statusStats, $status, 0);
+            if($max < $$status) $max = $$status;
         }
 
-        $overviewPercent = array();
-        $this->app->loadLang('project');
-        foreach($this->lang->project->statusList as $statusKey => $statusName)
+        $bars = array();
+        foreach($this->lang->execution->statusList as $status => $label)
         {
-            if(!isset($overview[$statusKey])) $overview[$statusKey] = 0;
-            $overviewPercent[$statusKey] = $total ? round($overview[$statusKey] / $total, 2) * 100 . '%' : '0%';
+            if($status == 'closed') continue;
+
+            $bar = new stdclass();
+            $bar->label = $label;
+            $bar->value = $$status;
+            $bar->rate  = $max ? round($$status / $max, 4) * 100 . '%' : '0%';
+
+            $bars[] = $bar;
         }
 
-        $this->view->total           = $total;
-        $this->view->overview        = $overview;
-        $this->view->overviewPercent = $overviewPercent;
+        $barGroup = new stdclass();
+        $barGroup->type  = 'barChart';
+        $barGroup->title = $this->lang->block->executionoverview->statusCount;
+        $barGroup->bars  = $bars;
+
+        $this->view->groups = array($cardGroup, $barGroup);
     }
 
     /**
