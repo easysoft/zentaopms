@@ -565,6 +565,11 @@ $lang->block->projectstatistic->ev               = 'Earned Value(EV)';
 $lang->block->projectstatistic->cv               = 'Cost Variance(CV)';
 $lang->block->projectstatistic->ac               = 'Actual Cost(AC)';
 
+$lang->block->executionoverview = new stdclass();
+$lang->block->executionoverview->totalExecution = 'Total';
+$lang->block->executionoverview->thisYear       = 'This Year';
+$lang->block->executionoverview->statusCount    = 'Status of unclosed execution';
+
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = 'Total Product Count';
 $lang->block->productoverview->productReleasedThisYear = 'Number Of Releases This Year';

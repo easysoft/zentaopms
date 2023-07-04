@@ -567,6 +567,11 @@ $lang->block->projectstatistic->ev               = '实际完成(EV)';
 $lang->block->projectstatistic->cv               = '成本偏差率(CV)';
 $lang->block->projectstatistic->ac               = '实际花费(AC)';
 
+$lang->block->executionoverview = new stdclass();
+$lang->block->executionoverview->totalExecution = '执行总量';
+$lang->block->executionoverview->thisYear       = '今年完成';
+$lang->block->executionoverview->statusCount    = '未关闭执行状态分布';
+
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = '产品总数';
 $lang->block->productoverview->productReleasedThisYear = '今年发布';
