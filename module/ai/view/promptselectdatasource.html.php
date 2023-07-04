@@ -17,7 +17,7 @@
 <style>
   .center-wrapper {display: flex; justify-content: center; height: 100%;}
   .center-content {width: 100%; height: 100%; display: flex; flex-direction: column;}
-  #data-selector {display: flex; flex-direction: row; height: 100%; margin-bottom: 16px;}
+  #data-selector {display: flex; flex-direction: row; height: 100%; margin-bottom: 16px; max-height: calc(100% - 48px);}
   #data-sources {flex-grow: 2; display: flex; flex-direction: row; margin-right: 16px;}
   #data-selected {flex-grow: 1; display: flex; flex-direction: column;}
   .heading > * {display: inline-block; padding: 4px 0;}
@@ -25,19 +25,19 @@
   #data-category-select > ul {padding: 16px; margin: 0; list-style: none;}
   #data-category-select > ul > li > a.active {font-weight: bold;}
   #data-categories {flex-grow: 1; display: flex; flex-direction: column;}
-  #data-properties {flex-grow: 3; display: flex; flex-direction: column;}
+  #data-properties {flex-grow: 3; display: flex; flex-direction: column; height: 100%;}
   #data-properties > .heading {padding: 4px 20px;}
   #data-properties > .heading > h4 {margin: 6px 0;}
-  #data-property-select {flex-grow: 1; border: 1px solid #eee; border-left: none;}
+  #data-property-select {flex-grow: 1; border: 1px solid #eee; border-left: none; height: calc(100% - 44px); overflow-y: auto;}
   #data-property-selector {height: 100%; width: 100%;}
-  #data-selected-items {flex-grow: 1; border: 1px solid #eee;}
+  #data-selected-items {flex-grow: 1; border: 1px solid #eee; height: calc(100% - 44px); overflow-y: auto; scrollbar-gutter: stable;}
   .obj-view {display: flex; flex-direction: column; padding: 20px;}
   .obj-view:not(:first-of-type) {border-top: 1px solid #eee;}
   .obj-view-body {display: grid; padding: 4px 20px; grid-template-columns: repeat(4, 1fr);}
   .obj-view-header.checkbox-inline, .obj-view-item.checkbox-inline {margin: 4px; cursor: unset;}
   .obj-view-item.checkbox-inline+.obj-view-item.checkbox-inline {margin-left: 4px; margin-top: 4px;}
   .checkbox-inline > label, .checkbox-inline > input {cursor: pointer;}
-  #selected-data-sorter .list-group {padding: 0; margin: 0; list-style: none; overflow-x: hidden;}
+  #selected-data-sorter .list-group {padding: 0; margin: 0; list-style: none; overflow: hidden;}
   #selected-data-sorter .list-group-item {padding: 8px 16px; display: flex; align-items: center; cursor: move; transition: background-color 0.2s ease-in-out;}
   #selected-data-sorter .list-group-item > span {flex-grow: 1;}
   #selected-data-sorter .list-group-item:hover {background-color: #eef5ff;}
