@@ -35,6 +35,9 @@ window.afterPageUpdate = function()
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);
         $('#' + currentElement.id).parent().addClass('selected');
         expandTree();
+
+        $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
+        $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
     }, 200);
 };
 
@@ -50,7 +53,7 @@ window.treeClick = function(info)
     if (info.item.items && info.item.items.length > 0) return;
     $('#' + info.item.id).parent().addClass('selected');
     openTab(info.item.key, info.item.text);
-    arrowTabs('fileTabs', -2);
+    arrowTabs('monacoTabs', -2);
 }
 
 /**
@@ -187,8 +190,8 @@ $(document).ready(function()
         $('.dropdown-menu #inline').hide();
     }
 
-    $('.btn-left').on('click', function()  {arrowTabs('fileTabs', 1);});
-    $('.btn-right').on('click', function() {arrowTabs('fileTabs', -2);});
+    $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
+    $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
 });
 
 $('.inline-appose').on('click', function()

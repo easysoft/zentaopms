@@ -74,7 +74,7 @@ function arrowTabs(domID, shift, hideRightBtn)
     var tabsWidth    = $('#' + domID)[0].clientWidth;
     if($('#' + domID + ' .close-bugs').length) tabsWidth = tabsWidth * 0.7;
 
-    if(tabItemWidth < tabsWidth)
+    if(tabItemWidth <= tabsWidth)
     {
         $leftBtn.hide();
         $rightBtn.hide();
@@ -88,11 +88,13 @@ function arrowTabs(domID, shift, hideRightBtn)
         $leftBtn.hide();
     }
 
-    if((tabItemWidth + distance) < tabsWidth * 0.75)
+    if((tabItemWidth + distance) <= tabsWidth * 0.75)
     {
         $rightBtn.hide();
         return arrowTabs(domID, 1, true);
     }
+
+    if(domID == 'monacoTabs' && distance < -60) distance = distance + 60;
 
     $('#' + domID + ' > .nav-tabs')[0].style.transform = 'translateX('+ distance +'px)';
 }

@@ -34,10 +34,12 @@ if(common::hasPriv('repo', 'blame'))    $dropMenus[] = array('text' => $this->la
 if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'url' => $this->repo->createLink('download', "repoID=$repoID&path=$file&fromRevision=$revision"), 'target' => '_blank');
 div(
     set::id('fileTabs'),
+    setStyle('position', 'relative'),
     tabs
     (
         set::id('monacoTabs'),
         set::class('relative'),
+        div(setStyle(array('position' => 'absolute', 'width' => '100%', 'height' => '35px', 'background' => '#efefef', 'top' => '0px'))),
         tabPane
         (
             set::title($pathInfo['basename']),
@@ -57,6 +59,7 @@ div(
         (
             set::arrow(false),
             set::staticMenu(true),
+            set::key('dropdown'),
             set::class('absolute top-0 right-0 z-10 monaco-dropmenu'),
             btn
             (
@@ -68,6 +71,8 @@ div(
                 $dropMenus
             ),
         ),
+        div(set::class('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
+        div(set::class('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right')),
     )
 );
 
@@ -93,4 +98,4 @@ sidebar
     )
 );
 
-a(set::class('iframe'), setData('width', '90%'), setData('toggle', 'modal'), set::id('linkObject'));
+a(set::class('iframe'), setData('size', '80%'), setData('toggle', 'modal'), set::id('linkObject'));

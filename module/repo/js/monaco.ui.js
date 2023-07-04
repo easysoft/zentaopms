@@ -14,6 +14,8 @@ $('#monacoTabs').on('click', '.monaco-close', function()
     $(eleId).remove();
     $('#' + eleId.substring(5)).parent().removeClass('selected');
     if(isActive) tabsEle.children().last().find('a').trigger('click');
+
+    arrowTabs('monacoTabs', -1);
 });
 
 window.afterPageUpdate = function()
@@ -39,6 +41,9 @@ window.afterPageUpdate = function()
             $('#sourceSwapper').hide();
         }
         expandTree();
+
+        $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
+        $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
     }, 200);
 };
 
@@ -54,7 +59,7 @@ window.treeClick = function(info)
     if (info.item.items && info.item.items.length > 0) return;
     $('#' + info.item.id).parent().addClass('selected');
     openTab(info.item.key, info.item.text);
-    arrowTabs('fileTabs', -2);
+    arrowTabs('monacoTabs', -2);
 }
 
 /**
@@ -101,12 +106,19 @@ window.loadLinkPage = function(link)
     $('#linkObject').trigger('click');
 }
 
+/**
+ * 切换分支或者标签时刷新页面。
+ * Reload page when change branch or tag.
+ *
+ * @param  string $link
+ * @access public
+ * @return void
+ */
 window.changeBranch = function()
 {
     var index = $('#sourceSwapper').prop('selectedIndex');
     var branchOrTag = branchMenus[index - 1].text;
     if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag);
     
-    console.log(111 , currentLink)
     openUrl(currentLink);
 }

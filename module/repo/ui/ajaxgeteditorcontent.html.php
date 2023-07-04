@@ -17,7 +17,6 @@ $canLinkBug      = common::hasPriv('repo', 'linkBug');
 $canLinkTask     = common::hasPriv('repo', 'linkTask');
 $canUnlinkObject = common::hasPriv('repo', 'unlink');
 
-jsVar('jsRoot', $jsRoot);
 jsVar('unlinkTitle', $this->lang->repo->unlink);
 jsVar('canUnlinkObject', $canUnlinkObject);
 jsVar('fileExt', $this->config->repo->fileExt);
@@ -40,7 +39,7 @@ if($showEditor) jsVar('codeContent', $content);
 $lang = 'php';
 foreach($this->config->repo->fileExt as $langName => $exts)
 {
-    foreach($exts as $ext) if(str_contains('.' . $pathInfo['extension'], $ext)) $lang = $langName;
+    foreach($exts as $ext) if(isset($pathInfo['extension']) && str_contains('.' . $pathInfo['extension'], $ext)) $lang = $langName;
 }
 
 if(strpos($config->repo->images, "|$suffix|") !== false)
@@ -138,6 +137,8 @@ $relatedWg = div
             set::id('relationTabs'),
             tabPane
             (
+                set::key('tab1'),
+                set::title(''),
                 tableData()
             ),
         ),
