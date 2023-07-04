@@ -15,7 +15,7 @@ window.randTipInfo = function(params)
     var tooltipString = [];
     newParams = params.reverse();
     newParams.forEach((p) => {
-        const cont = p.marker + " " + p.seriesName + " => " + p.value + "<br/>";
+        const cont = p.marker + " " + p.seriesName + ": " + p.value + "<br/>";
         tooltipString.push(cont);
     });
     return tooltipString.join("");
