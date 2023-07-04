@@ -574,7 +574,8 @@ $lang->block->executionoverview->thisYear       = '今年完成';
 $lang->block->executionoverview->statusCount    = '未关闭执行状态分布';
 
 $lang->block->productoverview = new stdclass();
-$lang->block->productoverview->totalProductCount       = '产品总数';
+$lang->block->productoverview->totalProductCount       = '产品总量';
+$lang->block->productoverview->productLineCount        = '产品线';
 $lang->block->productoverview->productReleasedThisYear = '今年发布';
 $lang->block->productoverview->releaseCount            = '发布里程碑';
 

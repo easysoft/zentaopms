@@ -573,6 +573,7 @@ $lang->block->executionoverview->statusCount    = 'Status of unclosed execution'
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = 'Total Product Count';
+$lang->block->productoverview->productLineCount        = 'Product Line Count';
 $lang->block->productoverview->productReleasedThisYear = 'Number Of Releases This Year';
 $lang->block->productoverview->releaseCount            = 'Total Release Count';
 
