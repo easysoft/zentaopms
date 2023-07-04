@@ -1,5 +1,5 @@
 <?php
-global $lang;
+global $lang, $app;
 $config->testcase->dtable = new stdclass();
 $config->testcase->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->testcase->dtable->fieldList['id']['type']     = 'checkID';
@@ -83,10 +83,12 @@ $config->testcase->dtable->fieldList['lastRunResult']['statusMap'] = $lang->test
 $config->testcase->dtable->fieldList['lastRunResult']['show']      = true;
 $config->testcase->dtable->fieldList['lastRunResult']['group']     = 4;
 
-$config->testcase->dtable->fieldList['bugs']['title'] = $lang->testcase->bugs;
-$config->testcase->dtable->fieldList['bugs']['title'] = $lang->testcase->bugsAB;
-$config->testcase->dtable->fieldList['bugs']['type']  = 'number';
-$config->testcase->dtable->fieldList['bugs']['group'] = 5;
+$config->testcase->dtable->fieldList['bugs']['title']       = $lang->testcase->bugsAB;
+$config->testcase->dtable->fieldList['bugs']['link']        = array('module' => 'testcase', 'method' => 'bugs', 'params' => "runID=0&caseID={id}");
+$config->testcase->dtable->fieldList['bugs']['type']        = 'number';
+$config->testcase->dtable->fieldList['bugs']['data-toggle'] = 'modal';
+$config->testcase->dtable->fieldList['bugs']['data-size']   = 'lg';
+$config->testcase->dtable->fieldList['bugs']['group']       = 5;
 
 $config->testcase->dtable->fieldList['results']['title'] = $lang->testcase->results;
 $config->testcase->dtable->fieldList['results']['title'] = $lang->testcase->resultsAB;
@@ -116,6 +118,22 @@ $config->testcase->dtable->fieldList['actions']['list']     = $config->testcase-
 $config->testcase->dtable->fieldList['actions']['menu']     = array();
 $config->testcase->dtable->fieldList['actions']['required'] = true;
 $config->testcase->dtable->fieldList['actions']['group']    = 7;
+
+$config->testcase->bug = new stdclass();
+$config->testcase->bug->dtable = new stdclass();
+$config->testcase->bug->dtable->fieldList['id']['name']  = 'id';
+$config->testcase->bug->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->testcase->bug->dtable->fieldList['id']['type']  = 'id';
+
+$app->loadLang('bug');
+$app->loadModuleConfig('bug');
+$config->testcase->bug->dtable->fieldList['title']      = $config->bug->dtable->fieldList['title'];
+$config->testcase->bug->dtable->fieldList['pri']        = $config->bug->dtable->fieldList['pri'];
+$config->testcase->bug->dtable->fieldList['status']     = $config->bug->dtable->fieldList['status'];
+$config->testcase->bug->dtable->fieldList['type']       = $config->bug->dtable->fieldList['type'];
+$config->testcase->bug->dtable->fieldList['assignedTo'] = $config->bug->dtable->fieldList['assignedTo'];
+$config->testcase->bug->dtable->fieldList['resolvedBy'] = $config->bug->dtable->fieldList['resolvedBy'];
+$config->testcase->bug->dtable->fieldList['resolution'] = $config->bug->dtable->fieldList['resolution'];
 
 $config->testcase->zerocase->dtable = new stdclass();
 $config->testcase->zerocase->dtable->fieldList['id']['title'] = $lang->idAB;
