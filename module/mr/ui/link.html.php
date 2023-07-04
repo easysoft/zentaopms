@@ -83,6 +83,7 @@ detailHeader
 
 panel
 (
+    setClass('relative'),
     div
     (
         set::id('mrMenu'),
@@ -120,8 +121,20 @@ panel
         tabPane
         (
             set::key('mr-story'),
+            btn(setClass('mr-actions primary'), setData('type', 'story'), set::icon('link'), $this->lang->productplan->linkStory),
+            btn
+            (
+                setClass('mr-actions primary'),
+                setData('linkType', 'bug'),
+                setData('size', '80%'),
+                setData('toggle', 'modal'),
+                set::url($this->createLink('mr', 'linkStory', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}")),
+                set::icon('link'),
+                $this->lang->productplan->linkStory
+            ),
             dtable
             (
+                set::id('storyTable'),
                 set::cols($storyCols),
                 set::data($stories),
             ),
@@ -129,6 +142,16 @@ panel
         tabPane
         (
             set::key('mr-bug'),
+            btn
+            (
+                setClass('mr-actions primary'),
+                setData('linkType', 'bug'),
+                setData('size', '80%'),
+                setData('toggle', 'modal'),
+                set::url($this->createLink('mr', 'linkBug', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}")),
+                set::icon('bug'),
+                $this->lang->productplan->linkBug
+            ),
             dtable
             (
                 set::cols($bugCols),
@@ -138,6 +161,16 @@ panel
         tabPane
         (
             set::key('mr-task'),
+            btn
+            (
+                setClass('mr-actions primary'),
+                setData('linkType', 'task'),
+                setData('size', '80%'),
+                setData('toggle', 'modal'),
+                set::url($this->createLink('mr', 'linkTask', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}")),
+                set::icon('todo'),
+                $this->lang->mr->linkTask
+            ),
             dtable
             (
                 set::cols($taskCols),

@@ -11,27 +11,27 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('orderBy',  $orderBy);
-jsVar('sortLink', createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('sortLink', createLink('mr', 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 detailHeader
 (
     to::prefix(''),
     to::title
     (
-        $lang->repo->linkStory,
+        $lang->mr->linkStory,
     )
 );
 
 $footToolbar = array('items' => array
 (
-    array('text' => $lang->repo->linkStory, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy=$orderBy"))
+    array('text' => $lang->mr->linkStory, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('mr', 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy"))
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'stories'));
 
 div(setID('searchFormPanel'), searchToggle(set::open(true), set::module('story')));
 
 div
 (
-    set('class', 'repo-linkstory-title'),
+    set('class', 'mr-linkstory-title'),
     icon('unlink'),
     span
     (

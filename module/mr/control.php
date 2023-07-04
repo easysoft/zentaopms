@@ -31,7 +31,7 @@ class mr extends control
      */
     public function browse($repoID = 0, $mode = 'status', $param = 'opened', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $repoCount = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
@@ -208,7 +208,6 @@ class mr extends control
         foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
 
         /* Fetch user list both in Zentao and current GitLab project. */
-        $bindedUsers = $this->$scm->getUserIdRealnamePairs($MR->hostID);
         $gitUsers    = $this->$scm->getUserAccountIdPairs($MR->hostID);
 
         /* Check permissions. */
@@ -568,7 +567,7 @@ class mr extends control
         $product  = $this->mr->getMRProduct($MR);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $storyPager = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
         $bugPager   = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $taskPager  = new pager(0, $recPerPage, $type == 'task' ? $pageID : 1);
@@ -616,8 +615,10 @@ class mr extends control
         {
             $this->mr->link($MRID, $productID, 'story');
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::locate(inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy"), 'parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $link = inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy");
+            return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'storyTable')", 'closeModal' => true));
         }
 
         $this->loadModel('story');
@@ -627,7 +628,7 @@ class mr extends control
         $modules = $this->loadModel('tree')->getOptionMenu($productID, 'story');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
@@ -668,7 +669,7 @@ class mr extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,reviewing,active,changing', 'story', 'id_desc', false, array_keys($linkedStories), $pager);
+            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,reviewing,active,changing', 'story', $orderBy, false, array_keys($linkedStories), $pager);
         }
 
         $this->view->modules        = $modules;
@@ -713,10 +714,10 @@ class mr extends control
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         $product = $this->loadModel('product')->getById($productID);
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug');
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
@@ -726,7 +727,7 @@ class mr extends control
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($productID => $productID));
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($productID);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = 'releasetag');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         unset($this->config->bug->search['fields']['product']);
@@ -802,10 +803,10 @@ class mr extends control
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         $product = $this->loadModel('product')->getById($productID);
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'task');
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'task');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
@@ -880,32 +881,25 @@ class mr extends control
     {
         $this->app->loadLang('productplan');
 
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->productplan->confirmUnlinkStory, $this->createLink('mr', 'unlink', "MRID=$MRID&productID=$productID&linkID=$linkID&type=$type&confirm=yes")));
-        }
-        else
-        {
-            $this->mr->unlink($MRID, $productID, $type, $linkID);
+        $this->mr->unlink($MRID, $productID, $type, $linkID);
 
-            /* if ajax request, send result. */
-            if($this->server->ajax)
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
             {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                    $response['load']    = 'table';
-                }
-                return $this->send($response);
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
             }
-            return print(js::reload('parent'));
+            else
+            {
+                $response['result']  = 'success';
+                $response['message'] = '';
+                $response['load']    = true;
+            }
+            return $this->send($response);
         }
+        return print(js::reload('parent'));
     }
 
     /**
@@ -984,7 +978,7 @@ class mr extends control
             foreach($groups as $group) $groupIDList[] = $group->id;
             foreach($projects as $key => $project)
             {
-                if($this->$scm->checkUserAccess($hostID, 0, $project, $groupIDList, 'developer') == false) unset($projects[$key]);
+                if(!$this->$scm->checkUserAccess($hostID, 0, $project, $groupIDList, 'developer')) unset($projects[$key]);
             }
 
             if(!$projects) return $this->send(array('message' => array()));
