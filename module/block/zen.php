@@ -795,7 +795,7 @@ class blockZen extends block
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
             ->andWhere('type')->eq('story')
-            ->andWhere('openedDate')->ge(date('Y-m', strtotime('-5 month')))
+            ->andWhere('openedDate')->ge(date('Y-m-01', strtotime('-5 month')))
             ->groupBy('date, product')
             ->fetchGroup('date', 'product');
 
@@ -815,7 +815,7 @@ class blockZen extends block
         $newPlan = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
-            ->andWhere('begin')->gt(date('Y-m'))
+            ->andWhere('begin')->ge(date('Y-m-01'))
             ->andWhere('status')->eq('wait')
             ->orderBy('begin_desc')
             ->fetchGroup('product', 'product');
@@ -836,7 +836,7 @@ class blockZen extends block
         $newRelease = $this->dao->select('*')->from(TABLE_RELEASE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
-            ->andWhere('date')->lt(date('Y-m'))
+            ->andWhere('date')->lt(date('Y-m-01'))
             ->orderBy('date_asc')
             ->fetchGroup('product', 'product');
 
