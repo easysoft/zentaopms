@@ -31,7 +31,7 @@ class formSettingBtn extends wg
 
     protected function build()
     {
-        $customFields = $this->prop('customFields');
+        $customFields = $this->prop('customFields', array());
 
         global $lang;
 
@@ -54,7 +54,7 @@ class formSettingBtn extends wg
                     (
                         btn(set::text($lang->save), set::btnType('submit'), setClass('primary')),
                         btn(set::text($lang->cancel), set::btnType('reset'), on::click('closeCustomPopupMenu')),
-                        btn(set::text($lang->restore), setClass('text-primary ghost font-bold'), set::url($customLink)),
+                        btn(set::text($lang->restore), setClass('text-primary ghost font-bold'), set::href('#'), set('data-url', $customLink), on::click('revertDefaultFields')),
                     )),
                     to::headingActions(array(btn(set::icon('close'), setClass('ghost'), set::size('sm'), on::click('closeCustomPopupMenu')))),
                     array_map(function($field)
