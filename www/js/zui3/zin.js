@@ -478,8 +478,8 @@
         if(!$page.length)
         {
             $page = $('<div/>')
-                .append($('<iframe />').attr({name: `app-${currentCode}-old`, frameborder: 'no', allowtransparency: true, scrolling: 'auto', style: 'width:100%;height:100%;'}))
-                .attr({id: 'oldPage', class: 'load-indicator', style: 'position:fixed;width:100%;height:100%;left:0;top:0;z-index:100'})
+                .append($('<iframe />').attr({name: `app-${currentCode}-old`, frameborder: 'no', scrolling: 'auto', style: 'width:100%;height:100%;'}))
+                .attr({id: 'oldPage', class: 'canvas fixed w-full h-full top-0 left-0 load-indicator', style: 'z-index:100;'})
                 .insertAfter('body')
                 .on('oldPageLoad.app', () =>
                 {
