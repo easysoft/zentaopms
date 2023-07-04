@@ -14,13 +14,13 @@
 <style>
   .center-wrapper {display: flex; justify-content: center; height: 100%;}
   .center-content {width: 100%; height: 100%; display: flex; flex-direction: column;}
-  #select-form {display: flex; flex-direction: row;}
+  #select-form {display: flex; flex-direction: row; max-height: calc(100% - 32px);}
   #select-form > div {flex-grow: 1; flex-basis: 0; padding: 0px 12px;}
   .content-row {display: flex; flex-direction: row; padding: 8px 0px;}
   .input-label {width: 120px; padding: 6px 12px; text-align: right;}
   .input {flex-grow: 1;}
-  #prompt-preview-wrapper {padding: 6px 0;}
-  #prompt-preview {padding: 8px 0; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f7f8f9; min-height: 100px;}
+  #prompt-preview-wrapper {margin: 16px 0; height: calc(100% - 48px);}
+  #prompt-preview {padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f7f8f9; min-height: 100px; height: 100%; overflow-y: auto;}
   #prompt-preview {cursor: default; user-select: none;}
   #prompt-preview .active {background-color: #d6e5fe;}
   #prompt-preview .prompt-data, #prompt-preview .prompt-role, #prompt-preview .prompt-text {border-bottom: 1px solid #ccc; padding: 16px 0;}
@@ -31,7 +31,7 @@
   #prompt-preview .prompt-text-part + .prompt-text-part {margin-top: 4px;}
   #prompt-previewer {font-weight: bold;}
   #form-selector .header > * {display: inline-block;}
-  #form-selector .content {padding: 6px 0;}
+  #form-selector .content {margin: 6px 0; height: calc(100% - 48px); overflow-y: auto;}
   .target-form-group {display: grid; grid-template-columns: 120px 1fr; grid-gap: 8px; border: 1px solid #ccc;}
   .target-form-group + .target-form-group {border-top: unset;}
   .target-form-group .header {display: flex; align-items: center; padding: 0 12px; background-color: #f8f8f8;}
