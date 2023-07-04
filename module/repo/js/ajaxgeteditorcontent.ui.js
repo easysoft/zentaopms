@@ -50,7 +50,7 @@ function showBlameAndRelation(line)
  * @access public
  * @return void
  */
-function getRelation(commit)
+window.getRelation = function(commit)
 {
     $('.table-empty-tip').show();
     $('#codeContainer').css('height', codeHeight / 5 * 3);

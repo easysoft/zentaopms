@@ -167,3 +167,35 @@ $config->repo->blameDtable->fieldList['line']['sortType'] = false;
 $config->repo->blameDtable->fieldList['content']['title'] = $lang->repo->code;
 $config->repo->blameDtable->fieldList['content']['type']  = 'html';
 $config->repo->blameDtable->fieldList['content']['width'] = '600';
+
+$app->loadLang('story');
+$app->loadModuleConfig('story');
+
+$config->repo->storyDtable = new stdclass();
+$config->repo->storyDtable->fieldList = array();
+$config->repo->storyDtable->fieldList['id']['name']     = 'id';
+$config->repo->storyDtable->fieldList['id']['title']    = $lang->idAB;
+$config->repo->storyDtable->fieldList['id']['type']     = 'id';
+$config->repo->storyDtable->fieldList['id']['checkbox'] = true;
+
+$config->repo->storyDtable->fieldList['pri']        = $config->story->dtable->fieldList['pri'];
+$config->repo->storyDtable->fieldList['plan']       = $config->story->dtable->fieldList['plan'];
+$config->repo->storyDtable->fieldList['module']     = $config->story->dtable->fieldList['module'];
+$config->repo->storyDtable->fieldList['title']      = $config->story->dtable->fieldList['title'];
+$config->repo->storyDtable->fieldList['openedBy']   = $config->story->dtable->fieldList['openedBy'];
+$config->repo->storyDtable->fieldList['assignedTo'] = $config->story->dtable->fieldList['assignedTo'];
+$config->repo->storyDtable->fieldList['estimate']   = $config->story->dtable->fieldList['estimate'];
+$config->repo->storyDtable->fieldList['status']     = $config->story->dtable->fieldList['status'];
+$config->repo->storyDtable->fieldList['stage']      = $config->story->dtable->fieldList['stage'];
+
+$config->repo->storyDtable->fieldList['title']['nestedToggle'] = false;
+$config->repo->storyDtable->fieldList['title']['type']         = 'text';
+$config->repo->storyDtable->fieldList['title']['fixed']        = '';
+$config->repo->storyDtable->fieldList['title']['minWidth']     = '200';
+$config->repo->storyDtable->fieldList['title']['sortType']     = true;
+$config->repo->storyDtable->fieldList['id']['fixed']           = '';
+$config->repo->storyDtable->fieldList['pri']['fixed']          = '';
+$config->repo->storyDtable->fieldList['pri']['sortType']       = true;
+$config->repo->storyDtable->fieldList['plan']['name']          = 'planTitle';
+$config->repo->storyDtable->fieldList['plan']['width']         = 'auto';
+$config->repo->storyDtable->fieldList['assignedTo']['type']    = 'user';

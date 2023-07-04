@@ -1050,8 +1050,9 @@ class repo extends control
         {
             $this->repo->link($repoID, $revision, 'story');
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::closeModal('parent', '', "parent.parent[parent.parent.length - 2].getRelation('$revision')"));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'callback' => "$('.tab-content .active iframe')[0].contentWindow.getRelation('$revision')", 'closeModal' => true));
         }
 
         $this->loadModel('story');
@@ -1100,7 +1101,7 @@ class repo extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories($product->id, 0, '0', 'draft,active,changed', 'story', 'id_desc', false, array_keys($linkedStories), $pager);
+            $allStories = $this->story->getProductStories($product->id, 0, '0', 'draft,active,changed', 'story', $orderBy, false, array_keys($linkedStories), $pager);
         }
 
         $this->view->modules        = $modules;
