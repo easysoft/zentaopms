@@ -1413,20 +1413,21 @@ class storyModel extends model
      */
     public function batchReview($storyIdList, $result, $reason)
     {
-        $now     = helper::now();
-        $actions = array();
+        $now           = helper::now();
+        $reviewedTwins = array();
         $this->loadModel('action');
 
-        $reviewedTwins = array();
-        $oldStories       = $this->getByList($storyIdList);
-        $hasResult        = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($this->app->user->account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
-        $reviewerList     = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
+        $oldStories          = $this->getByList($storyIdList);
+        $hasResult           = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($this->app->user->account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
+        $reviewerList        = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
+        $isSuperReviewer     = $this->storyTao->isSuperReviewer();
+        $cannotReviewStories = array();
+        $cannotReviewTips    = $this->lang->product->reviewStory;
         foreach($storyIdList as $storyID)
         {
             if(!$storyID) continue;
 
-            $isSuperReviewer = $this->storyTao->isSuperReviewer();
-            $oldStory        = $oldStories[$storyID];
+            $oldStory = $oldStories[$storyID];
             if($oldStory->status != 'reviewing') continue;
 
             foreach($reviewerList[$storyID] as $reviewer => $reviewerInfo)
@@ -1434,7 +1435,11 @@ class storyModel extends model
                 if($reviewerInfo->version != $oldStory->version) unset($reviewerList[$storyID][$reviewer]);
             }
 
-            if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) and !$isSuperReviewer) continue;
+            if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) && !$isSuperReviewer)
+            {
+                $cannotReviewStories[$storyID] = "#{$storyID}";
+                continue;
+            }
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
             if($oldStory->version > 1 and $result == 'reject') continue;
 
@@ -1464,9 +1469,9 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story, 'finalResult')->autoCheck()->where('id')->eq($storyID)->exec();
             $this->setStage($storyID);
 
-            $story->id         = $storyID;
-            $story->version    = $oldStory->version;
-            $actions[$storyID] = $this->recordReviewAction($story, $result, $reason);
+            $story->id      = $storyID;
+            $story->version = $oldStory->version;
+            $this->recordReviewAction($story, $result, $reason);
 
             /* Sync twins. */
             $changes = common::createChanges($oldStory, $story);
@@ -1482,7 +1487,8 @@ class storyModel extends model
             }
         }
 
-        return $actions;
+        if($cannotReviewStories) return sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
+        return null;
     }
 
     /**
@@ -1993,13 +1999,13 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function batchChangeStage($storyIdList, $stage)
+    public function batchChangeStage(array $storyIdList, string $stage): string
     {
         $now           = helper::now();
-        $allChanges    = array();
         $account       = $this->app->user->account;
         $oldStories    = $this->getByList($storyIdList);
         $ignoreStories = '';
+        $this->loadModel('action');
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
@@ -2017,10 +2023,17 @@ class storyModel extends model
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
             $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->set('stagedBy')->eq($account)->where('story')->eq((int)$storyID)->exec();
-            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            if(!dao::isError())
+            {
+                $changes  = common::createChanges($oldStory, $story);
+                $action   = $stage == 'verified' ? 'Verified' : 'Edited';
+                $actionID = $this->action->create('story', $storyID, $action);
+                $this->action->logHistory($actionID, $changes);
+            }
         }
-        if($ignoreStories) echo js::alert(sprintf($this->lang->story->ignoreChangeStage, $ignoreStories));
-        return $allChanges;
+
+        if($ignoreStories) return sprintf($this->lang->story->ignoreChangeStage, $ignoreStories);
+        return null;
     }
 
     /**

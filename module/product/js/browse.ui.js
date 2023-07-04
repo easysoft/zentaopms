@@ -1,7 +1,7 @@
 $(document).on('click', '.batch-btn', function()
 {
-    const $this  = $(this);
-    const dtable = zui.DTable.query($('#stories'));
+    const $this       = $(this);
+    const dtable      = zui.DTable.query($('#stories'));
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
@@ -15,7 +15,7 @@ $(document).on('click', '.batch-btn', function()
     }
     else
     {
-        $.ajaxSubmit({"url": $this.data('formaction'), "data": postData, "callback": loadCurrentPage()});
+        $.ajaxSubmit({"url": $this.data('formaction'), "data": postData});
     }
 });
 

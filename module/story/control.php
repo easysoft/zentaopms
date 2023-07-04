@@ -919,17 +919,22 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchReview($result, $reason = '', $storyType = 'story')
+    public function batchReview(string $result, string $reason = '', string $storyType = 'story')
     {
-        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+        if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
+
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
-        $this->story->batchReview($storyIdList, $result, $reason);
-
+        $message = $this->story->batchReview($storyIdList, $result, $reason);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
         $this->loadModel('score')->create('ajax', 'batchOther');
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+
+        $response = array();
+        $response['result'] = 'success';
+        $response['load']   = false;
+        if($message) $response['callback'] = "zui.Modal.alert('{$message}').then((res) => {loadCurrentPage()});";
+        if(empty($message)) $response['load'] = true;
+        return $this->send($response);
     }
 
     /**
@@ -1453,17 +1458,17 @@ class story extends control
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
         $storyIdList = array_unique($this->post->storyIdList);
-        $allChanges  = $this->story->batchChangeStage($storyIdList, $stage);
+        $message     = $this->story->batchChangeStage($storyIdList, $stage);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        $action = $stage == 'verified' ? 'Verified' : 'Edited';
-        foreach($allChanges as $storyID => $changes)
-        {
-            $actionID = $this->action->create('story', $storyID, $action);
-            $this->action->logHistory($actionID, $changes);
-        }
         $this->loadModel('score')->create('ajax', 'batchOther');
-        return $this->send(array('result' => 'success', 'load' => true));
+
+        $response = array();
+        $response['result'] = 'success';
+        $response['load']   = false;
+        if($message) $response['callback'] = "zui.Modal.alert('{$message}').then((res) => {loadCurrentPage()});";
+        if(empty($message)) $response['load'] = true;
+        return $this->send($response);
+
     }
 
     /**
