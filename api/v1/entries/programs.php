@@ -35,12 +35,9 @@ class programsEntry extends entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $programs     = $data->data->programs;
-        $progressList = $data->data->progressList;
-        $users        = $data->data->users;
         $result       = array();
         foreach($programs as $program)
         {
-            if(isset($progressList->{$program->id})) $program->progress = $progressList->{$program->id};
             $program = $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList');
 
             if($mergeChildren)
