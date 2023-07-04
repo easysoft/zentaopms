@@ -113,7 +113,7 @@ foreach($projects as $project)
             }
             $cells[] = cell
             (
-                setClass('flex-1 pt-4 project-statistic-table' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : '') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
+                setClass('flex-1 pt-4 project-statistic-table scrum' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : '') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
                 set::width($longBlock ? '25%' : '50%'),
                 div
                 (
@@ -124,9 +124,284 @@ foreach($projects as $project)
                         $lang->block->projectstatistic->{$module}
                     ),
                 ),
-                tableData($cellItems),
+                tableData
+                (
+                    set::width('100%'),
+                    $cellItems
+                ),
             );
         }
+    }
+    else
+    {
+        $cells[] = cell
+        (
+            setClass('flex flex-wrap items-center progress-circle pt-6'),
+            set::width($longBlock ? '36%' : '100%'),
+            div
+            (
+                setClass('flex justify-center w-full'),
+                zui::progressCircle
+                (
+                    set('percent', $project->progress),
+                    set('size', 150),
+                    set('circleWidth', 10),
+                    set('text', "{$project->progress}%"),
+                    set('textY', 70),
+                    set('textStyle', 'font-size: 35px;'),
+                ),
+            ),
+            div
+            (
+                setClass('flex justify-center w-full'),
+                span
+                (
+                    setClass('text-gray text-md progress-text'),
+                    $lang->block->projectstatistic->totalProgress,
+                    icon
+                    (
+                        setClass('pl-1'),
+                        set('data-toggle', 'tooltip'),
+                        set('href', 'totalProgressTooltip'),
+                        'help'
+                    ),
+                ),
+                div
+                (
+                    setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
+                    set::id('totalProgressTooltip'),
+                    $lang->block->projectstatistic->totalProgressTip
+                ),
+            )
+        );
+        $cells[] = cell
+        (
+            setClass('flex-1 pt-4 project-statistic-table px-4' . ($longBlock ? ' border-l' : '')),
+            set::width($longBlock ? '32%' : '50%'),
+            div
+            (
+                setClass('px-2'),
+                span
+                (
+                    setClass('font-bold'),
+                    $lang->project->progress
+                ),
+            ),
+            h::table
+            (
+                setClass('table-data'),
+                h::tbody
+                (
+                    h::tr
+                    (
+                        h::th
+                        (
+                            setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
+                            $lang->block->projectstatistic->sv,
+                            icon
+                            (
+                                setClass('pl-1.5'),
+                                set('data-toggle', 'tooltip'),
+                                set('href', 'svTooltip'),
+                                'help'
+                            ),
+                            '：',
+                            div
+                            (
+                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
+                                set::id('svTooltip'),
+                                'svTooltip'
+                            ),
+                        ),
+                        h::td
+                        (
+                            setClass('py-1.5 pl-2'),
+                            span
+                            (
+                                setClass('font-bold text-black mr-1'),
+                                zget($project, 'sv', 0) . $lang->percent,
+                            ),
+                        ),
+                    ),
+                    h::tr
+                    (
+                        h::th
+                        (
+                            setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
+                            $lang->block->projectstatistic->pv,
+                            icon
+                            (
+                                setClass('pl-1.5'),
+                                set('data-toggle', 'tooltip'),
+                                set('href', 'pvTooltip'),
+                                'help'
+                            ),
+                            '：',
+                            div
+                            (
+                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
+                                set::id('pvTooltip'),
+                                'pvTooltip'
+                            ),
+                        ),
+                        h::td
+                        (
+                            setClass('py-1.5 pl-2'),
+                            span
+                            (
+                                setClass('font-bold text-black mr-1'),
+                                zget($project, 'pv', 0) . $lang->percent,
+                            ),
+                        ),
+                    ),
+                    h::tr
+                    (
+                        h::th
+                        (
+                            setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
+                            $lang->block->projectstatistic->ev,
+                            icon
+                            (
+                                setClass('pl-1.5'),
+                                set('data-toggle', 'tooltip'),
+                                set('href', 'evTooltip'),
+                                'help'
+                            ),
+                            '：',
+                            div
+                            (
+                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
+                                set::id('evTooltip'),
+                                'evTooltip'
+                            ),
+                        ),
+                        h::td
+                        (
+                            setClass('py-1.5 pl-2'),
+                            span
+                            (
+                                setClass('font-bold text-black mr-1'),
+                                zget($project, 'ev', 0) . $lang->percent,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        );
+        $cells[] = cell
+        (
+            setClass('flex-1 pt-4 project-statistic-table px-4 border-l'),
+            set::width($longBlock ? '32%' : '50%'),
+            div
+            (
+                setClass('px-2'),
+                span
+                (
+                    setClass('font-bold'),
+                    $lang->project->progress
+                ),
+            ),
+            h::table
+            (
+                setClass('table-data'),
+                h::tbody
+                (
+                    h::tr
+                    (
+                        h::th
+                        (
+                            setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
+                            $lang->block->projectstatistic->cv,
+                            icon
+                            (
+                                setClass('pl-1.5'),
+                                set('data-toggle', 'tooltip'),
+                                set('href', 'cvTooltip'),
+                                'help'
+                            ),
+                            '：',
+                            div
+                            (
+                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
+                                set::id('cvTooltip'),
+                                'cvTooltip'
+                            ),
+                        ),
+                        h::td
+                        (
+                            setClass('py-1.5 pl-2'),
+                            span
+                            (
+                                setClass('font-bold text-black mr-1'),
+                                zget($project, 'cv', 0) . $lang->percent,
+                            ),
+                        ),
+                    ),
+                    h::tr
+                    (
+                        h::th
+                        (
+                            setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
+                            $lang->block->projectstatistic->ev,
+                            icon
+                            (
+                                setClass('pl-1.5'),
+                                set('data-toggle', 'tooltip'),
+                                set('href', 'evTooltip'),
+                                'help'
+                            ),
+                            '：',
+                            div
+                            (
+                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
+                                set::id('evTooltip'),
+                                'evTooltip'
+                            ),
+                        ),
+                        h::td
+                        (
+                            setClass('py-1.5 pl-2'),
+                            span
+                            (
+                                setClass('font-bold text-black mr-1'),
+                                zget($project, 'ev', 0) . $lang->percent,
+                            ),
+                        ),
+                    ),
+                    h::tr
+                    (
+                        h::th
+                        (
+                            setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
+                            $lang->block->projectstatistic->ac,
+                            icon
+                            (
+                                setClass('pl-1.5'),
+                                set('data-toggle', 'tooltip'),
+                                set('href', 'acTooltip'),
+                                'help'
+                            ),
+                            '：',
+                            div
+                            (
+                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
+                                set::id('acTooltip'),
+                                'acTooltip'
+                            ),
+                        ),
+                        h::td
+                        (
+                            setClass('py-1.5 pl-2'),
+                            span
+                            (
+                                setClass('font-bold text-black mr-1'),
+                                zget($project, 'ac', 0) . $lang->percent,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        );
     }
 
     $projectInfo = div

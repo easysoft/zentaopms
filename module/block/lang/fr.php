@@ -557,6 +557,13 @@ $lang->block->projectstatistic->existIssues      = 'Existing Issues:';
 $lang->block->projectstatistic->lastestExecution = 'Lastest Execution';
 $lang->block->projectstatistic->projectClosed    = "{$lang->projectCommon} has been closed.";
 $lang->block->projectstatistic->longTimeProject  = "Long Time {$lang->projectCommon}";
+$lang->block->projectstatistic->totalProgress    = 'Total Progress';
+$lang->block->projectstatistic->totalProgressTip = 'Total Progress = Consumed Man Hours/(Consumed Man Hours + Left Man Hours)';
+$lang->block->projectstatistic->sv               = 'Schedule Variance(SV)';
+$lang->block->projectstatistic->pv               = 'Planned Value(PV)';
+$lang->block->projectstatistic->ev               = 'Earned Value(EV)';
+$lang->block->projectstatistic->cv               = 'Cost Variance(CV)';
+$lang->block->projectstatistic->ac               = 'Actual Cost(AC)';
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = 'Total Product Count';

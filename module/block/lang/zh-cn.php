@@ -559,6 +559,13 @@ $lang->block->projectstatistic->existIssues      = '存在问题：';
 $lang->block->projectstatistic->lastestExecution = '最新执行';
 $lang->block->projectstatistic->projectClosed    = "{$lang->projectCommon}已关闭";
 $lang->block->projectstatistic->longTimeProject  = "长期{$lang->projectCommon}";
+$lang->block->projectstatistic->totalProgress    = '总进度';
+$lang->block->projectstatistic->totalProgressTip = '总进度=已消耗工时/（已消耗工时+剩余工时）';
+$lang->block->projectstatistic->sv               = '进度偏差率(SV)';
+$lang->block->projectstatistic->pv               = '计划完成(PV)';
+$lang->block->projectstatistic->ev               = '实际完成(EV)';
+$lang->block->projectstatistic->cv               = '成本偏差率(CV)';
+$lang->block->projectstatistic->ac               = '实际花费(AC)';
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = '产品总数';
