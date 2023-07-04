@@ -678,7 +678,7 @@ class blockZen extends block
      */
     protected function printProjectOverviewBlock(object $block): void
     {
-        $projects = $this->dao->select('id, Year(closedDate) AS year')->from(TABLE_PROJECT)->where('deleted')->eq('0')->fetchPairs();
+        $projects = $this->dao->select('id, Year(closedDate) AS year')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->fetchPairs();
         $projects = array_map(function($year){return $year == null ? 0 : $year;}, $projects);
         $stats    = array_count_values($projects);
 
