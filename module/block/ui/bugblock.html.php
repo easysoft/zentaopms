@@ -43,6 +43,7 @@ panel
     dtable
     (
         set::className('borderless'),
+        set::fixedLeftWidth('50%'),
         set::cols(array_values($config->block->bug->dtable->fieldList)),
         set::data(array_values($bugs)),
         set::horzScrollbarPos('inside'),
