@@ -28,7 +28,7 @@ class overviewBlock extends wg
 
     protected function buildCard($card)
     {
-        $class = 'text-2xl text-center font-bold leading-relaxed';
+        $class = 'text-2xl text-center font-bold leading-relaxed ' . (!empty($card->class) ? $card->class : '');
 
         return col
         (
@@ -39,7 +39,7 @@ class overviewBlock extends wg
                 $card->value
             ) : a
             (
-                setClass($class . ' text-primary'),
+                setClass($class),
                 set::href($card->url),
                 $card->value
             ),
