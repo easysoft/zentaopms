@@ -89,7 +89,8 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           </tr>
           <?php $hiddenSource = strpos(",$showFields,", ',source,') !== false ? '' : 'hidden';?>
           <?php if($type == 'story'):?>
-          <tr class='<?php if(!$branches) echo 'hidden'; ?> switchBranch' >
+          <?php if($branches):?>
+          <tr class='switchBranch' >
             <th><?php echo $lang->product->branchName[$product->type];?></th>
             <td colspan="4">
               <div class='input-group' style='display: flex;'>
@@ -123,6 +124,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
             <?php endif;?>
           </tr>
+          <?php endif;?>
           <tr class='hidden' >
             <th></th>
             <td colspan="4" id="storyNoticeBranch">
