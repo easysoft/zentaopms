@@ -1546,3 +1546,14 @@ function dynamic(): dynamic
 {
     return createWg('dynamic', func_get_args());
 }
+
+/**
+ * Form setting button.
+ *
+ * ?array  customFields
+ * ?string urlParams
+ */
+function formSettingBtn(): formSettingBtn
+{
+    return createWg('formSettingBtn', func_get_args());
+}

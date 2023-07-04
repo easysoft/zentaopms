@@ -56,57 +56,6 @@ class formBatchPanel extends formPanel
         'batch'        => true
     );
 
-    public static function getPageCSS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
-    }
-
-    public static function getPageJS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
-    private function buildCustomizeAction($customFields)
-    {
-        global $lang;
-
-        $customLink = createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchCreateFields');
-        return dropdown
-        (
-            set::arrow('false'),
-            set::placement('bottom-end'),
-            to::trigger(btn(set::icon('cog-outline'), setClass('ghost'), set::caret(false))),
-            to::menu(menu
-            (
-                setClass('dropdown-menu'),
-                on::click('e.stopPropagation();'),
-                formpanel
-                (
-                    set::ID('customizeBatchForm'),
-                    set::title($lang->customField),
-                    set::url($customLink),
-                    set::actions(array
-                    (
-                        btn(set::text($lang->save), set::btnType('submit'), setClass('primary')),
-                        btn(set::text($lang->cancel), set::btnType('reset'), on::click('closeCustomPopupMenu')),
-                        btn(set::text($lang->restore), setClass('text-primary ghost font-bold'), set::url($customLink)),
-                    )),
-                    to::headingActions(array(btn(set::icon('close'), setClass('ghost'), set::size('sm'), on::click('closeCustomPopupMenu')))),
-                    array_map(function($field)
-                    {
-                        return checkbox
-                        (
-                            set::name('fields[]'),
-                            set::value($field['name']),
-                            set::text($field['text']),
-                            set::checked($field['show'])
-                        );
-                    }, $customFields),
-                )
-            ))
-        );
-    }
-
     protected function buildHeadingActions()
     {
         $headingActions = $this->prop('headingActions');
@@ -118,6 +67,7 @@ class formBatchPanel extends formPanel
 
         global $lang;
 
+        /* Upload images. */
         if($uploadImage)
         {
             $headingActions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale bd-primary mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
@@ -130,6 +80,7 @@ class formBatchPanel extends formPanel
             ));
         }
 
+        /* Multi-input. */
         if($pasteField)
         {
             $headingActions[] = array('class' => 'btn primary-pale bd-primary', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText);
@@ -137,7 +88,8 @@ class formBatchPanel extends formPanel
             $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
         }
 
-        if($customFields) $headingActions[] = $this->buildCustomizeAction($customFields);
+        /* Cusom fields. */
+        if($customFields) $headingActions[] = formSettingBtn(set::customFields($customFields), set::urlParams('module=story&section=custom&key=batchCreateFields'));
 
         $this->setProp('headingActions', $headingActions);
 
