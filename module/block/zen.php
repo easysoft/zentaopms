@@ -742,6 +742,7 @@ class blockZen extends block
                 $project->current  = $current;
                 $project->progress = $progress;
             }
+            if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, $today);
         }
 
         $this->view->projects = $projects;

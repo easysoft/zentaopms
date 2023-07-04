@@ -24,7 +24,7 @@ foreach($projects as $project)
     $projectOverview[] = cell
     (
         setClass('text-left mr-6'),
-        span
+        $project->status != 'closed' ? span
         (
             setClass('text-gray'),
             $lang->block->projectstatistic->leftDaysPre,
@@ -34,7 +34,11 @@ foreach($projects as $project)
                 zget($project, 'remainingDays' , 0)
             ),
             $lang->block->projectstatistic->day
-        )
+        ) : span
+        (
+            setClass('text-gray'),
+            $lang->block->projectStatistic->projectClosed
+        ),
     );
     $projectOverview[] = $config->edition != 'open' ? cell
     (
@@ -129,7 +133,7 @@ foreach($projects as $project)
     (
         div
         (
-            setClass('flex flex-wrap bg-white leading-6 px-2 py-1 m-2 shadow items-center' . ($longBlock ? ' h-10' : 'h-20')),
+            setClass('flex flex-wrap bg-white leading-6 px-2 py-1 my-2 mx-0.5 shadow items-center' . ($longBlock ? ' h-10' : 'h-20')),
             $projectOverview,
             $lastestExecution,
         ),

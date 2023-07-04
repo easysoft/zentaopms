@@ -546,6 +546,7 @@ $lang->block->projectstatistic->leftDaysPre      = '距项目结束还剩';
 $lang->block->projectstatistic->existRisks       = '存在风险：';
 $lang->block->projectstatistic->existIssues      = '存在问题：';
 $lang->block->projectstatistic->lastestExecution = '最新执行';
+$lang->block->projectstatistic->projectClosed    = '项目已关闭';
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = '产品总数';
