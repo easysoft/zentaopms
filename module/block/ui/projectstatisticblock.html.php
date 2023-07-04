@@ -24,7 +24,7 @@ foreach($projects as $project)
     $projectOverview[] = cell
     (
         setClass('text-left mr-6'),
-        $project->status != 'closed' ? span
+        $project->status != 'closed' && $project->end != LONG_TIME ? span
         (
             setClass('text-gray'),
             $lang->block->projectstatistic->leftDaysPre,
@@ -37,7 +37,7 @@ foreach($projects as $project)
         ) : span
         (
             setClass('text-gray'),
-            $lang->block->projectStatistic->projectClosed
+            $project->status == 'closed' ? $lang->block->projectstatistic->projectClosed : $lang->block->projectstatistic->longTimeProject
         ),
     );
     $projectOverview[] = $config->edition != 'open' ? cell
@@ -67,7 +67,7 @@ foreach($projects as $project)
     ) : '';
     $lastestExecution = (!empty($project->executions) && $project->multiple) ? cell
     (
-        setClass('flex-1' . ($longBlock && $config->edition != 'open' ? ' text-left' : ' text-right')),
+        setClass('flex-1' . (!$longBlock && $config->edition != 'open' ? ' text-left' : ' text-right')),
         span
         (
             setClass('text-gray'),
@@ -133,7 +133,7 @@ foreach($projects as $project)
     (
         div
         (
-            setClass('flex flex-wrap bg-white leading-6 px-2 py-1 my-2 mx-0.5 shadow items-center' . ($longBlock ? ' h-10' : 'h-20')),
+            setClass('flex flex-wrap bg-white leading-6 px-2 py-1 my-4 mx-0.5 shadow items-center' . ($longBlock ? ' h-10' : 'h-20')),
             $projectOverview,
             $lastestExecution,
         ),

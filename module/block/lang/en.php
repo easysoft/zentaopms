@@ -556,7 +556,8 @@ $lang->block->projectstatistic->leftDaysPre      = 'Before the end of the projec
 $lang->block->projectstatistic->existRisks       = 'Existing Risks:';
 $lang->block->projectstatistic->existIssues      = 'Existing Issues:';
 $lang->block->projectstatistic->lastestExecution = 'Lastest Execution';
-$lang->block->projectstatistic->projectClosed    = 'Project Has been closed.';
+$lang->block->projectstatistic->projectClosed    = "{$lang->projectCommon} has been closed.";
+$lang->block->projectstatistic->longTimeProject  = "Long Time {$lang->projectCommon}";
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = 'Total Product Count';
