@@ -41,3 +41,4 @@ $config->index->oldPages[] = 'pivot-preview';
 $config->index->oldPages[] = 'chart-preview';
 $config->index->oldPages[] = 'company-dynamic';
 $config->index->oldPages[] = 'admin-index';
+$config->index->oldPages[] = 'group-managepriv';

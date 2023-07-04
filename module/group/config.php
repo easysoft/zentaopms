@@ -52,7 +52,7 @@ $config->group->actionList['manageView']['url']  = helper::createLink('group', '
 $config->group->actionList['managePriv']['icon'] = 'lock';
 $config->group->actionList['managePriv']['text'] = $lang->group->managePriv;
 $config->group->actionList['managePriv']['hint'] = $lang->group->managePriv;
-$config->group->actionList['managePriv']['url']  = helper::createLink('group', 'managepriv', 'type=bypackage&groupID={id}');
+$config->group->actionList['managePriv']['url']  = helper::createLink('group', 'managepriv', 'type=byPackage&groupID={id}');
 
 $config->group->actionList['manageProjectAdmin']['icon']        = 'persons';
 $config->group->actionList['manageProjectAdmin']['text']        = $lang->group->manageProjectAdmin;
