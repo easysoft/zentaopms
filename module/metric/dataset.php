@@ -1,13 +1,33 @@
 <?php
 class dataset
 {
+    /**
+     * Database connection.
+     *
+     * @var object
+     * @access public
+     */
     public $dao;
 
+    /**
+     * __construct.
+     *
+     * @param  DAO    $dao
+     * @access public
+     * @return void
+     */
     public function __construct($dao)
     {
         $this->dao = $dao;
     }
 
+    /**
+     * Get all executions.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
     public function getAllExecutions($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_PROJECT)
@@ -16,6 +36,13 @@ class dataset
             ->query();
     }
 
+    /**
+     * Get release list.
+     *
+     * @param  int    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
     public function getReleaseList($fieldList)
     {
         return $this->dao->select($fieldList)
