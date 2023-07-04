@@ -146,16 +146,16 @@ $lang->program->endList[186] = 'Half year';
 $lang->program->endList[365] = 'One year';
 $lang->program->endList[999] = 'Longtime';
 
-$lang->program->aclList['private'] = "Private (accessible to {$lang->projectCommon} portfolio holders and stakeholders, stakeholders can follow up maintenance)";
 $lang->program->aclList['open']    = "Default(user who can visit the program can access it)";
+$lang->program->aclList['private'] = "Private (accessible to {$lang->projectCommon} portfolio holders and stakeholders, stakeholders can follow up maintenance)";
 
-$lang->program->subAclList['private'] = "Private (accessible to this program set leader and stakeholders, stakeholders can follow up maintenance)";
 $lang->program->subAclList['open']    = "Default (user who can visit the program can access it)";
 $lang->program->subAclList['program'] = "Open within the program (accessible to all higher-level program directors and affiliates, as well as to this program director and affiliates)";
+$lang->program->subAclList['private'] = "Private (accessible to this program set leader and stakeholders, stakeholders can follow up maintenance)";
 
-$lang->program->subAcls['private'] = 'Private';
 $lang->program->subAcls['open']    = 'Default';
 $lang->program->subAcls['program'] = 'Open within the program';
+$lang->program->subAcls['private'] = 'Private';
 
 $lang->program->authList['extend'] = 'Inherit (program privileges and company privileges)';
 $lang->program->authList['reset']  = 'Reset (program privileges only)';

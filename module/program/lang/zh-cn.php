@@ -146,16 +146,16 @@ $lang->program->endList[186] = '半年';
 $lang->program->endList[365] = '一年';
 $lang->program->endList[999] = '长期';
 
-$lang->program->aclList['private'] = "私有（项目集负责人和干系人可访问，干系人可后续维护）";
 $lang->program->aclList['open']    = "公开（有项目集视图权限，即可访问）";
+$lang->program->aclList['private'] = "私有（项目集负责人和干系人可访问，干系人可后续维护）";
 
-$lang->program->subAclList['private'] = "私有（本项目集负责人和干系人可访问，干系人可后续维护）";
 $lang->program->subAclList['open']    = "全部公开（有项目集视图权限，即可访问）";
 $lang->program->subAclList['program'] = "项目集内公开（所有上级项目集负责人和干系人、本项目集负责人和干系人可访问）";
+$lang->program->subAclList['private'] = "私有（本项目集负责人和干系人可访问，干系人可后续维护）";
 
-$lang->program->subAcls['private'] = '私有';
 $lang->program->subAcls['open']    = '全部公开';
 $lang->program->subAcls['program'] = '项目集内公开';
+$lang->program->subAcls['private'] = '私有';
 
 $lang->program->authList['extend'] = "继承 (取{$lang->projectCommon}权限与组织权限的并集)";
 $lang->program->authList['reset']  = "重新定义 (只取{$lang->projectCommon}权限)";
