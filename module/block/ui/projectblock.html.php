@@ -26,7 +26,7 @@ if(!$longBlock)
 
 panel
 (
-    set('class', 'project-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set('class', 'project-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
     to::heading
     (
@@ -48,6 +48,7 @@ panel
     ),
     dtable
     (
+        set::id('project'),
         set::height(320),
         set::bordered(false),
         set::horzScrollbarPos('inside'),

@@ -33,3 +33,4 @@ body {padding-bottom: 20px;}
 #dashboard .block-scrumoverview .table thead tr th {padding-left: 0; text-align: right; border-bottom: unset;}
 #dashboard .block-scrumoverview .table tbody tr td {padding-left: 0;}
 #dashboard .block-scrumoverview .table tbody tr th {text-align: right;}
+#dashboard .list-block .panel-body {padding: 0; overflow: hidden;}
