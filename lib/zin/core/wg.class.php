@@ -63,7 +63,7 @@ class wg
     {
         $this->props = new props();
 
-        $this->gid = static::nextGid();
+        $this->gid = 'zin_' . uniqid();
         $this->setDefaultProps(static::getDefaultProps());
         $this->add(func_get_args());
         $this->created();
@@ -626,11 +626,6 @@ class wg
         $wgBlockMap = static::wgBlockMap();
         if(str_starts_with($wgType, 'zin\\')) $wgType = substr($wgType, 4);
         return isset($wgBlockMap[$wgType]) ? $wgBlockMap[$wgType] : null;
-    }
-
-    public static function nextGid()
-    {
-        return 'zin' . (++static::$gidSeed);
     }
 
     protected static function getDefinedProps(string|null $wgName = null): array

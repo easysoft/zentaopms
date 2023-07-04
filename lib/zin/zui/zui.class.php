@@ -36,7 +36,11 @@ class zui extends wg
 
         $options  = $this->props->skip(array_keys(static::getDefinedProps()));
         $selector = $target;
-        if(empty($selector)) $selector = empty($id) ? "[data-zin-id='$this->gid']" : "#$id";
+        if(empty($selector))
+        {
+            if(empty($id)) $id = $this->gid;
+            $selector = "#$id";
+        }
 
         return array
         (
@@ -46,7 +50,6 @@ class zui extends wg
                 set($targetProps),
                 setClass($class),
                 setID($id),
-                (empty($id) && empty($target)) ? set('data-zin-id', $this->gid) : null,
                 setStyle('width', $width),
                 setStyle('height', $height),
             ) : null,
