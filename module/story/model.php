@@ -805,7 +805,6 @@ class storyModel extends model
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,duplicateStory')
             ->cleanFloat('estimate')
-            ->setDefault('assignedDate', $oldStory->assignedDate)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('reviewedBy', $oldStory->reviewedBy)
             ->setDefault('mailto', '')
@@ -1302,6 +1301,7 @@ class storyModel extends model
 
         foreach($stories as $storyID => $story)
         {
+            unset($story->status);
             $oldStory = $oldStories[$storyID];
             if($story->plan != $oldStory->plan)
             {
@@ -1328,7 +1328,7 @@ class storyModel extends model
             if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
 
             $this->executeHooks($storyID);
-            if($story->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
+            if($oldStory->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
             if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
 
             $changes = common::createChanges($oldStory, $story);

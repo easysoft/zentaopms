@@ -412,15 +412,16 @@ class story extends control
             $this->story->batchUpdate($stories);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList));
         }
 
-        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+        if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
+        if(empty($stories)) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
 
         /* Filter twins. */
         $twins = '';
@@ -430,8 +431,7 @@ class story extends control
             $twins .= "#$id ";
             unset($stories[$id]);
         }
-        if(!empty($twins))  return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->story->batchEditTip, $twins), 'load' => $this->session->storyList));
-        if(empty($stories)) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
+        if(!empty($twins)) $this->view->twinsTip = sprintf($this->lang->story->batchEditTip, $twins);
 
         $this->loadModel('branch');
         if($productID and !$executionID)
@@ -506,11 +506,6 @@ class story extends control
         }
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
-
-        /* Judge whether the editedStories is too large and set session. */
-        $countInputVars  = count($stories) * (count(explode(',', $this->config->story->custom->batchEditFields)) + 3);
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Append module when change product type. */
         $moduleList       = array(0 => '/');
