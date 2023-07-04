@@ -367,7 +367,6 @@ window.addItem = function(obj)
     $tr.after($tr.clone());
 }
 
-
 /**
  * Remove a row.
  *
@@ -381,7 +380,7 @@ window.removeItem = function(obj)
     $(obj).closest('tr').remove();
 }
 
-$('#teamTable').on('click.team', '.toolbar-item', function()
+$('#teamTable .team-saveBtn').on('click.team', '.btn', function()
 {
     $('div.assignedToList').html('');
 
@@ -395,7 +394,7 @@ $('#teamTable').on('click.team', '.toolbar-item', function()
     {
         if($(this).val() == '') return;
 
-        const selectObj = $(this)[0];
+        let selectObj = $(this)[0];
 
         let realname = selectObj.options[selectObj.selectedIndex].text;
         if(!team.includes(realname)) team.push(realname);
@@ -434,75 +433,3 @@ $('#teamTable').on('click.team', '.toolbar-item', function()
     zui.Modal.hide();
     return false;
 })
-
-$('#teamTable').on('click.team', '.btn-add', function()
-{
-    var $newRow = $(this).closest('tr').clone();
-    $(this).closest('tr').after($newRow);
-
-    toggleBtn();
-    setLineIndex();
-})
-
-$('#teamTable').on('click.team', '.btn-delete', function()
-{
-    var $row = $(this).closest('tr').remove();
-    toggleBtn();
-    setLineIndex();
-});
-
-/* 切换串行/并行 展示/隐藏工序图标. */
-$('#teamTable').on('change.team', '#mode', function()
-{
-    if($(this).val() == 'multi')
-    {
-        $('#teamTable td .icon-angle-down').addClass('hidden');
-    }
-    else
-    {
-        $('#teamTable td .icon-angle-down').removeClass('hidden');
-    }
-});
-
-/**
- * Set line number.
- *
- * @access public
- * @return void
- */
-function setLineIndex()
-{
-    let index = 1;
-    $('.team-number').each(function()
-    {
-        $(this).text(index);
-        $(this).closest('tr').find('select[name^=team]').attr('name', 'team[' + index + ']');
-        $(this).closest('tr').find('input[name^=teamEstimate]').attr('name', 'teamEstimate[' + index + ']');
-        index ++;
-    });
-
-}
-
-/**
- * Check delete button hide or not.
- *
- * @access public
- * @return void
- */
-function toggleBtn()
-{
-    var $deleteBtn = $('#teamTable').find('.btn-delete');
-    if($deleteBtn.length == 1)
-    {
-        $deleteBtn.addClass('hidden');
-    }
-    else
-    {
-        $deleteBtn.removeClass('hidden');
-    }
-};
-
-function onPageUnmount()
-{
-    $('#modalTeam').off('.saveTeam');
-}

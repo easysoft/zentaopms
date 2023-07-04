@@ -175,8 +175,11 @@ class task extends control
             $task = $this->taskZen->buildTaskForEdit($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            /* For team task. */
+            $teamData = $this->post->team ? form::data($this->config->task->form->team->edit)->get() : new stdclass();
+
             /* Update task. */
-            $changes = $this->task->update($task);
+            $changes = $this->task->update($task, $teamData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Execute hooks and synchronize the status of related objects. */

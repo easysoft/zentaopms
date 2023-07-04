@@ -144,7 +144,7 @@ for($i = 1; $i <= 3; $i ++)
             set::width('240px'),
             select
             (
-                set::name("team[$i]"),
+                set::name("team[]"),
                 set::items($members),
             ),
         ),
@@ -155,7 +155,7 @@ for($i = 1; $i <= 3; $i ++)
             (
                 input
                 (
-                    set::name("teamEstimate[$i]"),
+                    set::name("teamEstimate[]"),
                     set::placeholder($lang->task->estimateAB),
                 ),
                 to::suffix($lang->task->suffixHour),

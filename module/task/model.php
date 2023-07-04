@@ -692,10 +692,11 @@ class taskModel extends model
      * Update a task.
      *
      * @param  object             $task
+     * @param  object             $teamData
      * @access public
      * @return array|string|false
      */
-    public function update(object $task): array|string|false
+    public function update(object $task, object $teamData): array|string|false
     {
         $taskID  = $task->id;
         $oldTask = $this->getByID($taskID);
@@ -709,7 +710,7 @@ class taskModel extends model
         /* Compute hours and manage team for multi-task. */
         if($this->post->team and count(array_filter($this->post->team)) > 1)
         {
-            $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
+            $teams = $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task, array(), false);
         }
 

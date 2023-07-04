@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+include './taskteam.html.php';
+
 /* ====== Preparing and processing page data ====== */
 jsVar('oldStoryID', $task->story);
 jsVar('oldAssignedTo', $task->assignedTo);
@@ -19,7 +21,7 @@ jsVar('oldExecutionID', $task->execution);
 jsVar('oldConsumed', $task->consumed);
 jsVar('taskStatus', $task->status);
 jsVar('currentUser', $app->user->account);
-jsVar('team', $task->members);
+jsVar('team', array_values($task->members));
 jsVar('members', $members);
 jsVar('page', 'edit');
 jsVar('confirmChangeExecution', $lang->task->confirmChangeExecution);
@@ -53,6 +55,7 @@ $canceledByOptions      = $users;
 $closedByOptions        = $users;
 $closedReasonOptions    = $lang->task->reasonList;
 $teamOptions            = $members;
+$hiddenTeam             = $task->mode != '' ? '' : 'hidden';
 
 /* ====== Define the page structure with zin widgets ====== */
 
@@ -191,7 +194,8 @@ detailBody
                         set::name('mode'),
                         set::value($task->mode),
                         set::items($modeOptions),
-                        on::change('changeMode(this.value)')
+                        set::required(true),
+                        on::change('changeMode')
                     )
                 )
                 : item
@@ -216,14 +220,14 @@ detailBody
                         'type' => 'picker',
                         'items' => $assignedToOptions
                     ))),
-                    $task->mode != ''
-                        ? btn(set(array
-                        (
-                            'type' => 'btn',
-                            'text' => $lang->task->team,
-                            'class' => 'input-group-btn team-group'
-                        )))
-                        : null
+                    btn(set(array
+                    (
+                        'type' => 'btn',
+                        'text' => $lang->task->team,
+                        'class' => "input-group-btn team-group $hiddenTeam",
+                        'url' => '#modalTeam',
+                        'data-toggle' => 'modal',
+                    )))
                 )
             ),
             item
@@ -284,6 +288,33 @@ detailBody
                 )
             ),
         ),
+        modalTrigger
+        (
+            modal
+            (
+                set::id('modalTeam'),
+                set::title($lang->task->teamMember),
+                h::table
+                (
+                    set::id('teamTable'),
+                    setClass('table table-form'),
+                    $teamForm,
+                    h::tr
+                    (
+                        h::td
+                        (
+                            setClass('team-saveBtn'),
+                            set(array('colspan' => 6)),
+                            btn
+                            (
+                                setClass('toolbar-item btn primary'),
+                                $lang->save
+                            )
+                        )
+                    )
+                )
+            )
+        ),
         tableData
         (
             set::title($lang->task->legendEffort),
@@ -316,6 +347,7 @@ detailBody
                     (
                         set::name('estimate'),
                         set::value($task->estimate),
+                        !empty($task->team) ? set::readonly(true) : null
                     ),
                     div
                     (
@@ -336,6 +368,7 @@ detailBody
                     span
                     (
                         setClass('span-text mr-1'),
+                        set::id('consumedSpan'),
                         $task->consumed . 'H'
                     ),
                     h::a
@@ -354,6 +387,7 @@ detailBody
                     (
                         set::name('left'),
                         set::value($task->left),
+                        !empty($task->team) ? set::readonly(true) : null
                     ),
                     div
                     (
@@ -451,7 +485,6 @@ detailBody
                 (
                     set::name('closedDate'),
                     set::value($task->closedDate),
-                    set::type('datetime-local')
                 )
             ),
             item
@@ -461,24 +494,9 @@ detailBody
                 (
                     set::name('lastEditedDate'),
                     set::value($task->lastEditedDate),
-                    set::type('datetime-local'),
                     set::id('lastEditedDate'),
-                )
-            ),
-            item
-            (
-                set::trClass('hidden'),
-                control
-                (
-                    set::name('team[]'),
-                    set::type('picker'),
-                    set::id('team'),
-                    set::items($teamOptions)
                 )
             ),
         )
     )
 );
-/* ====== Render page ====== */
-
-render();

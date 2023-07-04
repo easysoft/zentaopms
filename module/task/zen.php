@@ -419,6 +419,7 @@ class taskZen extends task
 
         $now  = helper::now();
         $task = form::data($this->config->task->form->edit)->add('id', $task->id)
+            ->setDefault('deleteFiles', array())
             ->setIF(!$task->assignedTo && !empty($oldTask->team) && !empty($this->post->team), 'assignedTo', $this->task->getAssignedTo4Multi($this->post->team, $oldTask))
             ->setIF($task->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
             ->setIF($task->mode == 'single', 'mode', '')

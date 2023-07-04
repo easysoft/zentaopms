@@ -6,21 +6,9 @@
 #taskCreateForm .selectStoryLabel {top: 50%;}
 #testStoryBox th.required:before {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); margin-right: 0.25rem; position: relative; top: 0.125rem;}
 
-#modalTeam .table tr {border:none}
-#modalTeam .team-saveBtn {text-align: center !important}
-#modalTeam .team-saveBtn .btn{min-width: 96px;}
-#modalTeam .team-index {text-align: right;}
-.team-number {display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 10px; text-align: center; background: #f4f5f7;}
-
 #multipleBox {min-width: 100px}
 
 .assignedToBox {align-items: center !important}
 .assignedToBox .add-team {margin-bottom: 5px}
 .assignedToList {display: flex; align-items: center; flex-wrap: wrap}
 .assignedToList .label, .assignedToList .icon{margin-right: 5px; margin-bottom: 5px}
-
-:root {--modal-base: 45rem;}
-
-#teamTable tr td:first-child {width: 40px; position: relative;}
-#teamTable tr td:first-child .icon{position:absolute; top: 40px; right: 19px;display: block; font-size: 8px; color: #9ea3bd;}
-#teamTable tr:nth-last-child(2) td:first-child .icon {display: none;}
