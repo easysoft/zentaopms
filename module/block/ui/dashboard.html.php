@@ -19,6 +19,7 @@ foreach($blocks as $block)
     $block->size   = array($block->width, $block->height);
     unset($block->title);
 }
+
 $blocks = json_decode(json_encode($blocks), true);
 
 $blockMenuItems = array();
@@ -30,7 +31,7 @@ $blockMenuItems[] = array('text' => $lang->block->reset, 'data-url' => createLin
 
 dashboard
 (
-    set::blocks($blocks),
+    set::blocks(array_values($blocks)),
     set::blockMenu(array('items' => $blockMenuItems))
 );
 
