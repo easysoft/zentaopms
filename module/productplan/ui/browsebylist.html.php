@@ -13,24 +13,23 @@ declare(strict_types=1);
 namespace zin;
 
 /* Get field list for data table. */
-$fnGetTableFieldList = function() use ($config, $browseType, $lang, $product)
+$cols = $this->loadModel('datatable')->getSetting('productplan');
+$fnGetTableFieldList = function() use ($cols, $browseType, $lang, $product)
 {
-    $fieldList = $config->productplan->dtable->fieldList;
-
-    if($browseType != 'all') unset($fieldList['status']);
+    if($browseType != 'all') unset($cols['status']);
 
     if($this->session->currentProductType == 'normal')
     {
-        unset($fieldList['branch']);
+        unset($cols['branch']);
     }
     else
     {
-        $fieldList['branch']['title'] = $lang->product->branchName[$product->type];
+        $cols['branch']['title'] = $lang->product->branchName[$product->type];
     }
 
     // TODO: attach extend fields of Workflow module.
 
-    return array_values($fieldList);
+    return array_values($cols);
 };
 
 $totalParent      = 0;
