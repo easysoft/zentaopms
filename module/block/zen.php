@@ -710,7 +710,7 @@ class blockZen extends block
         $cardGroup->cards = $cards;
 
         $bars = array();
-        foreach(array('thisYear', 'lastYear', 'lastTwoYear') as $year)
+        foreach(array('lastTwoYear', 'lastYear', 'thisYear') as $year)
         {
             $bar = new stdclass();
             $bar->label = $$year;
