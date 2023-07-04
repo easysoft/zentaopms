@@ -29,6 +29,7 @@ if(!$this->story->checkForceReview())
 modalHeader(set::title($lang->story->submitReview));
 formPanel
 (
+    set::submitBtnText($lang->story->submitReview),
     formGroup
     (
         set::label($lang->story->reviewedBy),

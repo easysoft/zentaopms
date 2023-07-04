@@ -950,7 +950,7 @@ class story extends control
         {
             $confirmTips = $story->status == 'changing' ? $this->lang->story->confirmRecallChange : $this->lang->story->confirmRecallReview;
             $confirmURL  = $this->createLink('story', 'recall', "storyID=$storyID&from=$from&confirm=yes&storyType=$storyType");
-            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$confirmTips}').then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'{$confirmTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
         else
         {
