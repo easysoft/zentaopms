@@ -158,6 +158,7 @@ class wg
 
         $rawContent = ob_get_contents();
         if(!is_string($rawContent)) $rawContent = '';
+        ob_end_clean();
 
         if(is_object($result))
         {
