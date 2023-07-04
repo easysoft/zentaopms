@@ -71,17 +71,16 @@ formPanel
             )
         ),
     ),
-    isset($fields['branches']) && $type == 'story' ? formGroup
+    isset($fields['branches']) && $type == 'story' ? formRow
     (
         setClass('switchBranch'),
-        set::label($lang->product->branchName[$product->type]),
-        cell
+        formGroup
         (
-            set::width('200px'),
+            set::width('1/4'),
+            set::label(sprintf($lang->product->branch, $lang->product->branchName[$product->type])),
             inputGroup
             (
                 set::id('branchBox'),
-                sprintf($lang->product->branch, $lang->product->branchName[$product->type]),
                 select
                 (
                     set::name('branches[0]'),
@@ -94,35 +93,28 @@ formPanel
                 )
             ),
         ),
-        cell
+        formGroup
         (
-            set::width('240px'),
+            set::width('1/4'),
+            set::label($lang->story->module),
             inputGroup
             (
-                $lang->story->module,
-                span
-                (
-                    set::id('moduleIdBox'),
-                    select(set::name('modules[0]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']), set::required(true))
-                )
+                set::id('moduleIdBox'),
+                select(set::name('modules[0]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']), set::required(true))
             ),
         ),
-        cell
+        formGroup
         (
-            set::grow('1'),
+            set::label($lang->story->plan),
             inputGroup
             (
-                $lang->story->plan,
-                span
-                (
-                    set::id('planIdBox'),
-                    select(set::name('plans[0]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
-                )
+                set::id('planIdBox'),
+                select(set::name('plans[0]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
             ),
         ),
-        count($branches) > 1 ? cell
+        count($branches) > 1 ? formGroup
         (
-            set::width(80),
+            set::width('50px'),
             setClass('c-actions'),
             btn(setClass('btn-link addNewLine'), set('data-on', 'click'), set('data-call', 'addBranchesBox'), set('data-params', 'event'), set::title(sprintf($lang->story->addBranch, $lang->product->branchName[$product->type])), icon('plus')),
         ) : null,
@@ -134,7 +126,7 @@ formPanel
         formGroup
         (
             set::label(' '),
-            div(icon('exclamation-sign'), $lang->story->notice->branch),
+            div(setClass('text-gray'), icon(setClass('text-warning'), 'help'), set::style(array('font-size' => '12px')), $lang->story->notice->branch),
         )
     ) : null,
     !isset($fields['branch']) && $type == 'story' ? formRow
@@ -318,6 +310,7 @@ formPanel
         ),
         formGroup
         (
+            setClass('no-background'),
             inputGroup
             (
                 $lang->story->category,
@@ -348,8 +341,9 @@ formPanel
     ),
     formGroup
     (
+        set::id('uploadFiles'),
         set::label($lang->story->legendAttatch),
-        upload(set::name('files[]')),
+        upload(set::name('files[]'), set::draggable(true), set::tip(sprintf($lang->noticeDrag, strtoupper(ini_get('upload_max_filesize'))))),
     ),
     formGroup
     (
@@ -382,47 +376,44 @@ isset($fields['branches']) && $type == 'story' ? formRow
     setClass('hidden'),
     formGroup
     (
-        set::label(' '),
-        cell
+        set::width('1/4'),
+        set::label(sprintf($lang->product->branch, $lang->product->branchName[$product->type])),
+        inputGroup
         (
-            set::width('200px'),
-            inputGroup
+            set::id('branchBox'),
+            select
             (
-                set::id('branchBox'),
-                sprintf($lang->product->branch, $lang->product->branchName[$product->type]),
-                select
-                (
-                    set::name('branches[%i%]'),
-                    set::items($fields['branches']['options']),
-                    set::value($fields['branches']['default']),
-                )
-            ),
+                set::name('branches[%i%]'),
+                set::items($fields['branches']['options']),
+                set::value($fields['branches']['default']),
+            )
         ),
-        cell
+    ),
+    formGroup
+    (
+        set::width('1/4'),
+        set::label($lang->story->module),
+        inputGroup
         (
-            set::width('240px'),
-            inputGroup
-            (
-                $lang->story->module,
-                span(set::id('moduleIdBox'), select(set::name('modules[%i%]'), set::items($fields['modules']['options']), set::value($fields['modules']['default'])))
-            ),
+            set::id('moduleIdBox'),
+            select(set::name('modules[%i%]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']))
         ),
-        cell
+    ),
+    formGroup
+    (
+        set::label($lang->story->plan),
+        inputGroup
         (
-            set::grow('1'),
-            inputGroup
-            (
-                $lang->story->plan,
-                span(set::id('planIdBox'), select(set::name('plans[%i%]'), set::items($fields['plans']['options']), set::value($fields['plans']['default'])))
-            ),
+            set::id('planIdBox'),
+            select(set::name('plans[%i%]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
         ),
-        cell
-        (
-            set::width(80),
-            setClass('c-actions'),
-            btn(setClass('btn-link addNewLine'),    set::title(sprintf($lang->story->addBranch,    $lang->product->branchName[$product->type])), icon('plus')),
-            btn(setClass('btn-link removeNewLine'), set::title(sprintf($lang->story->deleteBranch, $lang->product->branchName[$product->type])), icon('close')),
-        ),
+    ),
+    formGroup
+    (
+        set::width('50px'),
+        setClass('c-actions'),
+        btn(setClass('btn-link addNewLine'),    set::title(sprintf($lang->story->addBranch,    $lang->product->branchName[$product->type])), icon('plus')),
+        btn(setClass('btn-link removeNewLine'), set::title(sprintf($lang->story->deleteBranch, $lang->product->branchName[$product->type])), icon('trash')),
     ),
 ) : null;
 

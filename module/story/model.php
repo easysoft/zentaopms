@@ -485,7 +485,7 @@ class storyModel extends model
         $mainStoryID = 0;
         foreach($storyData->branches as $key => $branchID)
         {
-            $storyData->branch = $branchID;
+            $storyData->branch = (int)$branchID;
             $storyData->module = $storyData->modules[$key];
             $storyData->plan   = $storyData->plans[$key];
 

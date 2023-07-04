@@ -125,7 +125,7 @@ window.deleteBranchesBox = function(e)
 
      $('.addNewLine').css('pointer-events', 'auto')
      $('.addNewLine').removeClass('disabled')
-     if($('form select[name^="branches"]').length == 2) $('#storyNoticeBranch').addClass('hidden');
+     if($('form select[name^="branches"]').length < 2) $('#storyNoticeBranch').addClass('hidden');
 };
 
 window.loadProductPlans = function(productID, branch)
