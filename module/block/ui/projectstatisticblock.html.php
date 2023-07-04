@@ -11,371 +11,288 @@ declare(strict_types=1);
 
 namespace zin;
 
-/**
- * 获取区块左侧的项目列表.
- * Get project tabs on the left side.
- *
- * @param  array    $projects
- * @param  string   $blockNavCode
- * @access public
- * @return array
- */
-function getProjectTabs($projects, $blockNavCode): array
+$blockNavCode   = 'nav-' . uniqid();
+$navTabs        = array();
+$selected       = key($projects);
+$statisticCells = array();
+$preProjectID   = 0;
+$nextProjectID  = 0;
+$projectIdList  = array_keys($projects);
+foreach($projects as $project)
 {
-    $navTabs  = array();
-    $selected = key($projects);
-    foreach($projects as $project)
+    $projectOverview = array();
+    $projectOverview[] = cell
+    (
+        setClass('text-left mr-6'),
+        span
+        (
+            setClass('text-gray'),
+            $lang->block->projectstatistic->leftDaysPre,
+            span
+            (
+                setClass('font-bold text-black px-1'),
+                zget($project, 'remainingDays' , 0)
+            ),
+            $lang->block->projectstatistic->day
+        )
+    );
+    $projectOverview[] = $config->edition != 'open' ? cell
+    (
+        setClass('flex-1' . ($longBlock ? ' text-left' : ' text-right')),
+        icon('bullhorn text-warning mr-2'),
+        span
+        (
+            setClass('text-gray mr-5'),
+            $lang->block->projectstatistic->existRisks,
+            span
+            (
+                setClass('font-bold text-warning'),
+                999
+            )
+        ),
+        span
+        (
+            setClass('text-gray'),
+            $lang->block->projectstatistic->existIssues,
+            span
+            (
+                setClass('font-bold text-warning'),
+                999
+            )
+        )
+    ) : '';
+    $lastestExecution = (!empty($project->executions) && $project->multiple) ? cell
+    (
+        setClass('flex-1' . ($longBlock && $config->edition != 'open' ? ' text-left' : ' text-right')),
+        span
+        (
+            setClass('text-gray'),
+            $lang->block->projectstatistic->lastestExecution,
+            hasPriv('execution', 'task') ? a
+            (
+                setClass('pl-2'),
+                set::href(helper::createLink('execution', 'task', "executionID={$project->executions[0]->id}")),
+                set('title', $project->executions[0]->name),
+                $project->executions[0]->name,
+            ) : span
+            (
+                setClass('pl-2'),
+                $project->executions[0]->name,
+            )
+        )
+    ) : null;
+
+    $cells = array();
+    if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
+    {
+        foreach($config->block->projectstatistic->items as $module => $items)
+        {
+            $cellItems = array();
+            foreach($items as $item)
+            {
+                $field = $item['field'];
+                $unit  = $item['unit'];
+                $cellItems[] = item
+                (
+                    set::name($lang->block->projectstatistic->{$field} . ' ：'),
+                    span
+                    (
+                        setClass('font-bold text-black mr-1'),
+                        zget($project, $field, 0)
+                    ),
+                    span
+                    (
+                        setClass('text-gray'),
+                        $lang->block->projectstatistic->{$unit}
+                    )
+                );
+            }
+            $cells[] = cell
+            (
+                setClass('flex-1 pt-4 project-statistic-table' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : '') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
+                set::width($longBlock ? '25%' : '50%'),
+                div
+                (
+                    setClass('px-2'),
+                    span
+                    (
+                        setClass('font-bold'),
+                        $lang->block->projectstatistic->{$module}
+                    ),
+                ),
+                tableData($cellItems),
+            );
+        }
+    }
+
+    $projectInfo = div
+    (
+        div
+        (
+            setClass('flex flex-wrap bg-white leading-6 px-2 py-1 m-2 shadow items-center' . ($longBlock ? ' h-10' : 'h-20')),
+            $projectOverview,
+            $lastestExecution,
+        ),
+        div
+        (
+            setClass('flex flex-wrap'),
+            $cells,
+        )
+    );
+    if($longBlock)
     {
         $navTabs[] = li
         (
-            set('class', 'nav-item'),
+            setClass('nav-item'),
             a
             (
-                set('class', 'ellipsis title ' . ($project->id == $selected ? ' active' : '')),
+                setClass('ellipsis title ' . ($project->id == $selected ? ' active' : '')),
                 set('data-toggle', 'tab'),
-                set('href', "#tab3{$blockNavCode}Content{$project->id}"),
+                set::href("#tab3{$blockNavCode}Content{$project->id}"),
                 $project->name
 
             ),
             a
             (
-                set('class', 'link flex-1 text-right hidden'),
-                set('href', helper::createLink('project', 'index', "projectID=$project->id")),
+                setClass('link flex-1 text-right hidden'),
+                set::href(helper::createLink('project', 'index', "projectID={$project->id}")),
                 icon
                 (
-                    set('class', 'rotate-90 text-primary'),
+                    setClass('rotate-90 text-primary'),
                     'export'
                 )
             )
         );
-    }
-    return $navTabs;
-}
 
-/**
- * 获取区块右侧显示的项目信息.
- * Get project statistical information.
- *
- * @param  object   $projects
- * @param  string   $blockNavID
- * @access public
- * @return array
- */
-function getProjectInfo($projects, $blockNavID): array
-{
-    $selected = key($projects);
-    $tabItems = array();
-    foreach($projects as $project)
-    {
         $tabItems[] = div
         (
-            set('class', 'tab-pane' . ($project->id == $selected ? ' active' : '')),
-            set('id', "tab3{$blockNavID}Content{$project->id}"),
-            in_array($project->model, array('scrum', 'kanban', 'agileplus')) ? getScrumProjectInfo($project) : getWaterfallProjectInfo($project)
+            setClass('tab-pane' . ($project->id == $selected ? ' active' : '')),
+            set('id', "tab3{$blockNavCode}Content{$project->id}"),
+            $projectInfo,
         );
     }
-    return $tabItems;
-}
-
-/**
- * 获取敏捷类项目的统计信息.
- * Get scrum project info.
- *
- * @param  object    $project
- * @access public
- * @return void
- */
-function getScrumProjectInfo($project)
-{
-    global $lang;
-
-    return div
-    (
-        /* 区块右侧顶部的项目概况。 */
-        div
-        (
-            set('class', 'flex bg-white h-10 leading-9 px-4 shadow-sm'),
-            cell
-            (
-                set('class', 'text-left mr-6'),
-                span
-                (
-                    set('class', 'text-gray'),
-                    '距离项目结束还剩',
-                    span
-                    (
-                        set('class', 'font-bold text-black px-1'),
-                        zget($project, 'remainingDays' , 0)
-                    ),
-                    $lang->block->projectstatistic->day
-                )
-            ),
-            cell
-            (
-                set('class', 'flex-1 text-left'),
-                span
-                (
-                    set('class', 'text-gray mr-5'),
-                    '存在风险 : ',
-                    span
-                    (
-                        set('class', 'font-bold text-warning'),
-                        '3'
-                    )
-                ),
-                span
-                (
-                    set('class', 'text-gray'),
-                    '存在问题 : ',
-                    span
-                    (
-                        set('class', 'font-bold text-warning'),
-                        '1'
-                    )
-                )
-            ),
-            (!empty($project->executions) && $project->multiple) ? cell
-            (
-                /* 项目最近的一次执行。 */
-                set('class', 'flex-1 text-right'),
-                span
-                (
-                    set('class', 'text-gray'),
-                    '最近执行 ',
-                    a
-                    (
-                        set('href', helper::createLink('execution', 'task', "executionID={$project->executions[0]->id}")),
-                        set('title', $project->executions[0]->name),
-                        $project->executions[0]->name,
-                    )
-                )
-            ) : null
-        ),
-        div
-        (
-            /* 区块右侧主体显示的项目统计项。 */
-            set('class', 'flex'),
-            getProjectStatisticItems($project)
-        )
-    );
-}
-
-/**
- * 获取项目的统计项.
- * get project statistic items.
- *
- * @param  object    $project
- * @access public
- * @return array
- */
-function getProjectStatisticItems($project): array
-{
-    global $config, $lang;
-
-    $cells = array();
-    foreach($config->block->projectstatistic->items as $module => $items)
+    else
     {
-        $cellItems = array();
-        foreach($items as $item)
-        {
-            $field = $item['field'];
-            $unit  = $item['unit'];
-            $cellItems[] = div
-            (
-                set('class', 'flex py-4'),
-                cell
-                (
-                    set('width', '50%'),
-                    set('class', 'text-right text-gray'),
-                    span($lang->block->projectstatistic->{$field} . ' ：')
-                ),
-                cell
-                (
-                    set('width', '50%'),
-                    set('class', 'text-left'),
-                    span
-                    (
-                        set('class', 'font-bold text-black'),
-                        zget($project, $field, 0)
-                    ),
-                    span($lang->block->projectstatistic->{$unit})
-                )
-            );
-        }
-        $cells[] = cell
-        (
-            set('class', 'flex-1 px-2 py-4'),
-            div
-            (
-                set('class', 'px-2'),
-                span
-                (
-                    set('class', 'font-bold'),
-                    $lang->block->projectstatistic->{$module}
-                ),
-            ),
-            $cellItems
-        );
-    }
-    return $cells;
-}
+        $index         = array_search($project->id, $projectIdList);
+        $nextProjectID = $index !== false && !empty($projectIdList[$index + 1]) ? $projectIdList[$index + 1] : 0;
 
-/**
- * 获取瀑布类项目的统计信息.
- * get waterfall project info.
- *
- * @param  object    $project
- * @access public
- * @return void
- */
-function getWaterfallProjectInfo($project)
-{
-    global $app, $lang;
-    $isChineseLang = in_array($app->getClientLang(), array('zh-cn','zh-tw'));
-    return div
-    (
-        /* 瀑布项目展示概况。 */
-        set('class', 'weekly-row'),
-        div
+        $tabItems   = array();
+        $tabItems[] = cell
         (
-            span
+            ul
             (
-                set('class', 'weekly-title'),
-                $lang->project->weekly
-            ),
-            span
-            (
-                set('class', 'weekly-stage'),
-                $project->current
-            )
-        ),
-        div
-        (
-            set('class', 'flex'),
-            div
-            (
-                set('class', 'flex-1'),
-                div
+                setClass('nav nav-tabs h-12 px-1 justify-between items-center'),
+                set::width('100%'),
+                li
                 (
-                    set('class', 'progress'),
-                    span
+                    setClass('nav-item'),
+                    btn
                     (
-                        set('class', 'mr-4'),
-                        $lang->project->progress . ' : ' . $project->progress . '%'
+                        setClass('size-sm shadow-lg circle pre-button'),
+                        set::square(true),
+                        set::disabled(empty($preProjectID)),
+                        set::href("#tab3{$blockNavCode}Content{$preProjectID}"),
+                        set('data-toggle', 'tab'),
+                        set::iconClass('text-xl text-primary'),
+                        set::icon('angle-left'),
                     ),
-                    div
+                ),
+                li
+                (
+                    setClass('nav-item'),
+                    hasPriv('project', 'index') ? btn
                     (
-                        set('class', 'progress-bar'),
-                        set('role', 'progressbar'),
-                        setStyle(['width' => $project->progress . '%']),
-                    )
-                )
+                        setClass('ghost'),
+                        set::url(createLink('project', 'index', "projectID={$project->id}")),
+                        span
+                        (
+                            setClass('text-primary'),
+                            $project->name
+                        ),
+                        icon
+                        (
+                            setClass('text-primary ml-4 rotate-90'),
+                            'export'
+                        ),
+                    ) : $project->name,
+                ),
+                li
+                (
+                    setClass('nav-item'),
+                    btn
+                    (
+                        setClass('size-sm shadow-lg circle next-button'),
+                        set::square(true),
+                        set::disabled(empty($nextProjectID)),
+                        set::href("#tab3{$blockNavCode}Content{$nextProjectID}"),
+                        set('data-toggle', 'tab'),
+                        set::iconClass('text-xl text-primary'),
+                        set::icon('angle-right'),
+                    ),
+                ),
             ),
-            div
-            (
-                set('class', 'flex-1 text-center'),
-                $lang->project->teamCount . ' : ' . $project->teamCount
-            ),
-            div
-            (
-                set('class', 'flex-1 text-left'),
-                $lang->project->budget . ' : ' . ($project->budget != 0 ? $project->budget : $lang->project->future)
-            ),
-            div(set('class', 'flex-1'))
-        ),
-        div
+        );
+        $tabItems[] = cell
         (
-            set('class', 'flex'),
+            setClass('tab-content'),
+            set::width('100%'),
             div
             (
-                set('class', 'flex-1'),
-                $isChineseLang ? $lang->project->pv . '(' . $lang->project->pvTitle . ')' : $lang->project->pv
+                $projectInfo,
             ),
-            div
-            (
-                set('class', 'flex-1'),
-                $isChineseLang ? $lang->project->ev . '(' . $lang->project->evTitle . ')' : $lang->project->ev
-            ),
-            div
-            (
-                set('class', 'flex-1'),
-                $isChineseLang ? $lang->project->ac . '(' . $lang->project->acTitle . ')' : $lang->project->ac
-            ),
-            div
-            (
-                set('class', 'flex-1'),
-                $isChineseLang ? $lang->project->sv . '(' . $lang->project->svTitle . ')' : $lang->project->sv
-            ),
-            div
-            (
-                set('class', 'flex-1'),
-                $isChineseLang ? $lang->project->cv . '(' . $lang->project->cvTitle . ')' : $lang->project->cv
-            )
-        ),
-        div
+        );
+        $statisticCells[] = cell
         (
-            set('class', 'flex'),
-            div
-            (
-                set('class', 'flex-1'),
-                $project->pv
-            ),
-            div
-            (
-                set('class', 'flex-1'),
-                $project->ev
-            ),
-            div
-            (
-                set('class', 'flex-1'),
-                $project->ac
-            ),
-            div
-            (
-                set('class', 'flex-1'),
-                $project->sv
-            ),
-            div
-            (
-                set('class', 'flex-1'),
-                $project->cv
-            )
-        )
+            setClass('tab-pane w-full' . ($project->id == $selected ? ' active' : '')),
+            set('id', "tab3{$blockNavCode}Content{$project->id}"),
+            $tabItems,
+        );
+        $preProjectID = $project->id;
+    }
+}
+if($longBlock)
+{
+    $statisticCells[] = cell
+    (
+        set::width('22%'),
+        setClass('bg-secondary-pale overflow-y-auto overflow-x-hidden'),
+        ul
+        (
+            setClass('nav nav-tabs nav-stacked'),
+            $navTabs,
+        ),
+    );
+    $statisticCells[] = cell
+    (
+         setClass('tab-content px-4'),
+         set::width('78%'),
+         $tabItems,
     );
 }
 
-$blockNavCode = 'nav-' . uniqid();
 panel
 (
-    set('class', 'projectstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set('headingClass', 'border-b'),
-    to::heading
+    setClass('projectstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm px-4')),
+    set::bodyClass('no-shadow border-t'),
+    set::title($block->title),
+    to::headingActions
     (
-        div
+        hasPriv('project', 'browse') ? h::nav
         (
-            set('class', 'panel-title'),
-            span($block->title),
-        )
+            setClass('toolbar'),
+            btn
+            (
+                setClass('ghost toolbar-item size-sm'),
+                set::url(createLink('project', 'browse', "browseType={$block->params->type}")),
+                $lang->more,
+                span(setClass('caret-right')),
+            )
+        ) : '',
     ),
     div
     (
-        set('class', 'flex h-full overflow-hidden'),
-        cell
-        (
-            set('width', '22%'),
-            set('class', 'bg-secondary-pale overflow-y-auto overflow-x-hidden'),
-            ul
-            (
-                set('class', 'nav nav-tabs nav-stacked'),
-                getProjectTabs($projects, $blockNavCode)
-            ),
-        ),
-        cell
-        (
-            set('class', 'tab-content'),
-            set('width', '78%'),
-            getProjectInfo($projects, $blockNavCode)
-        )
+        setClass('flex h-full' . (!$longBlock ? ' flex-wrap' : '')),
+        $statisticCells,
     )
 );
 

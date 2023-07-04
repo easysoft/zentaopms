@@ -1,13 +1,13 @@
 <?php
 $config->block->projectstatistic = new stdclass();
 $config->block->projectstatistic->items = array();
-$config->block->projectstatistic->items['story'][] = array('field' => 'storyPoints', 'unit' => 'SP');
-$config->block->projectstatistic->items['story'][] = array('field' => 'done',        'unit' => 'unit');
-$config->block->projectstatistic->items['story'][] = array('field' => 'undone',      'unit' => 'unit');
-
 $config->block->projectstatistic->items['cost'][]  = array('field' => 'costs',     'unit' => 'personDay');
 $config->block->projectstatistic->items['cost'][]  = array('field' => 'consumed',  'unit' => 'hour');
 $config->block->projectstatistic->items['cost'][]  = array('field' => 'remainder', 'unit' => 'hour');
+
+$config->block->projectstatistic->items['story'][] = array('field' => 'storyPoints', 'unit' => 'SP');
+$config->block->projectstatistic->items['story'][] = array('field' => 'done',        'unit' => 'unit');
+$config->block->projectstatistic->items['story'][] = array('field' => 'undone',      'unit' => 'unit');
 
 $config->block->projectstatistic->items['task'][]  = array('field' => 'number', 'unit' => 'unit');
 $config->block->projectstatistic->items['task'][]  = array('field' => 'wait',   'unit' => 'unit');

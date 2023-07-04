@@ -2,3 +2,9 @@
 .projectstatistic-block .panel-body {padding: 0;}
 .projectstatistic-block .tab-content {width: 100%;}
 .projectstatistic-block .bg-secondary-pale {background: #F3F6FA;}
+
+.projectstatistic-block .project-statistic-table table {width: 100%; border-collapse: separate; border-spacing: 0 1rem; padding-right: 1rem;}
+.projectstatistic-block .project-statistic-table table tr:first-child {background: url(static/svg/arrow-step1-grey.svg) center no-repeat; background-size: cover;}
+.projectstatistic-block .project-statistic-table table th {padding-right: 0px; width: 50%; margin-top: 1rem;}
+.projectstatistic-block .project-statistic-table table td {padding-left: 0px; width: 50%; margin-top: 1rem;}
+.projectstatistic-block .tab-pane .nav-tabs>.nav-item>a:after {border-bottom: none;}
