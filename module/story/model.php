@@ -559,7 +559,7 @@ class storyModel extends model
         foreach($stories as $i => $story)
         {
             $storyID = $this->storyTao->doCreateStory($story);
-            if(!$storyID) return false;
+            if(!$storyID) return array();
 
             $this->storyTao->doCreateSpec($storyID, $story);
 

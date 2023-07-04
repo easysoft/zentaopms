@@ -826,14 +826,14 @@ class storyZen extends story
         {
             $story->type       = $storyType;
             $story->status     = (empty($story->reviewer) && !$forceReview) ? 'active' : 'reviewing';
+            $story->status     = $saveDraft ? 'draft' : $story->status;
             $story->stage      = ($this->app->tab == 'project' || $this->app->tab == 'execution') ? 'projected' : 'wait';
             $story->product    = $productID;
             $story->openedBy   = $account;
             $story->vision     = $this->config->vision;
             $story->openedDate = $now;
             $story->version    = 1;
-            if($this->post->status == 'draft') $story->status      = 'draft';
-            if($this->post->uploadImage[$i])   $story->uploadImage = $this->post->uploadImage[$i];
+            if($this->post->uploadImage && $this->post->uploadImage[$i]) $story->uploadImage = $this->post->uploadImage[$i];
         }
 
         return $stories;
