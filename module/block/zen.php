@@ -1517,9 +1517,41 @@ class blockZen extends block
      */
     protected function printProductOverviewBlock(): void
     {
-        $this->view->totalProductCount       = 1;
-        $this->view->productReleasedThisYear = 1;
-        $this->view->releaseCount            = $this->loadModel('release')->getReleaseCount('milestone');
+        $productCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('shadow')->eq('0')->fetch('count');
+        $lineCount    = $this->dao->select('COUNT(1) AS count')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('type')->eq('line')->fetch('count');
+        $releaseList  = $this->dao->select('id, marker')->from(TABLE_RELEASE)->where('deleted')->eq('0')->andWhere('createdDate')->like(date('Y') . '-%')->fetchPairs();
+
+        $cards1 = array();
+        $cards1[0] = new stdclass();
+        $cards1[0]->value = $productCount;
+        $cards1[0]->class = 'text-primary';
+        $cards1[0]->label = $this->lang->block->productoverview->totalProductCount;
+        $cards1[0]->url   = common::hasPriv('product', 'all') ? helper::createLink('product', 'all', 'browseType=all') : null;
+
+        $cards1[1] = new stdclass();
+        $cards1[1]->value = $lineCount;
+        $cards1[1]->label = $this->lang->block->productoverview->productLineCount;
+
+        $group1 = new stdclass();
+        $group1->type  = 'cards';
+        $group1->cards = $cards1;
+
+        $cards2 = array();
+        $cards2[0] = new stdclass();
+        $cards2[0]->value = count($releaseList);
+        $cards2[0]->class = 'text-primary';
+        $cards2[0]->label = $this->lang->block->productoverview->productReleasedThisYear;
+
+        $cards2[1] = new stdclass();
+        $cards2[1]->class = 'text-important';
+        $cards2[1]->value = count(array_filter($releaseList));
+        $cards2[1]->label = $this->lang->block->productoverview->releaseCount;
+
+        $group2 = new stdclass();
+        $group2->type  = 'cards';
+        $group2->cards = $cards2;
+
+        $this->view->groups = array($group1, $group2);
     }
 
     /**
