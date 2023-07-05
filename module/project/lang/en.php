@@ -187,7 +187,6 @@ $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
 $lang->project->kanban             = 'Kanban';
 $lang->project->moreActions        = 'More Actions';
-$lang->project->other              = 'Other Actions';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();

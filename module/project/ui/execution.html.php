@@ -56,6 +56,8 @@ $executions = initTableData($executionStats, $config->projectExecution->dtable->
 $executions = $this->execution->generateRow($executions, $users, $avatarList);
 
 /* zin: Define the feature bar on main menu. */
+dropmenu();
+
 $checked = $this->cookie->showTask ? 'checked' : '';
 featureBar
 (
