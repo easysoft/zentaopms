@@ -252,7 +252,7 @@ featureBar
 (
     set::current($browseType),
     set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID")),
-    li(searchToggle(set::module('story'))),
+    li(searchToggle(set::open($browseType == 'bysearch'), set::module('story'))),
     div(
         zui::menu
         (
