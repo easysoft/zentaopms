@@ -46,20 +46,19 @@ class metricModel extends model
         $now         = date('H:i');
 
         $metricList = $this->select('code,collectConf')->from(TABLE_BASICMEAS)
-            ->where('collectType')->eq('crontab')
+            ->where('collectType')->eq('cron')
             ->fetchAll();
 
-        $excutableMetric = array();
+        $excutableMetrics = array();
         foreach($metricList as $metric)
         {
-            $collectConf = json_decode($metric->collectConf);
-            if($collectConf->type == 'week' and strpos($collectConf->week, $currentWeek) === false)  continue;
-            if($collectConf->type == 'month' and strpos($collectConf->month, $currentDay) === false) continue;
+            if($metric->cronType == 'week' and strpos($metric->cronList, $currentWeek) === false)  continue;
+            if($metric->cronType == 'month' and strpos($metric->cronList, $currentDay) === false) continue;
             if($now >= $metric->execTime) continue;
 
             $excutableMetric[] = $metric;
         }
-        return $excutableMetric;
+        return $excutableMetrics;
     }
 
     /**
