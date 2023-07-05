@@ -66,9 +66,7 @@ class feedbacksEntry extends entry
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
-        $feedback = $this->loadModel('feedback')->getById($data->id);
-
-        return $this->send(201, $this->format($feedback, 'openedBy:user,openedDate:time,reviewedBy:user,reviewedDate:time,processedBy:user,processedDate:time,closedBy:user,closedDate:time,editedBy:user,editedDate:time,assignedTo:user,assignedDate:time,feedbackBy:user,mailto:userList,deleted:bool'));
+        return $this->send(200, $data);
     }
 
     /**

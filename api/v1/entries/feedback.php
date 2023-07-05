@@ -28,10 +28,8 @@ class feedbackEntry extends entry
         $feedback = $data->data->feedback;
 
         $feedback->publicStatus = $feedback->public;
-        $feedback->productName  = $data->data->product;
+        $feedback->productName  = is_object($data->data->product) ? $data->data->product->name : $data->data->product;
         $feedback->moduleName   = isset($data->data->modulePath[0]->name) ? $data->data->modulePath[0]->name : '/';
-        $feedback->resultType   = $data->data->type;
-        if(isset($feedback->resultInfo) and $feedback->resultInfo->deleted == 0) $feedback->resultStatus = $this->loadModel('feedback')->processStatus($feedback->resultType, $feedback->resultInfo);
 
         if(!$data or !isset($data->status)) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
