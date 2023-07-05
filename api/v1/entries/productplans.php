@@ -85,7 +85,7 @@ class productplansEntry extends entry
             $plan = $this->loadModel('productplan')->getByID($data->id);
             $plan->stories = array();
             $plan->bugs    = array();
-            return $this->send(200, $this->format($plan, 'begin:date,end:date,deleted:bool,project:int'));
+            return $this->send(201, $this->format($plan, 'begin:date,end:date,deleted:bool,project:int'));
         }
 
         $this->sendError(400, array('message' => isset($data->message) ? $data->message : 'error'));
