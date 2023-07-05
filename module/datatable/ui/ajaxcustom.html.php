@@ -23,7 +23,7 @@ function buildItem(array $item): wg
     $isRequired = $item['required'];
     return li
     (
-        setClass('row', 'items-center', 'border', 'px-5', 'h-9'),
+        setClass('row', 'items-center', 'border', 'px-5', 'h-9', 'cursor-move'),
         set('data-key', $item['name']),
         $isRequired ? setClass('required-col') : null,
         checkbox
@@ -34,7 +34,7 @@ function buildItem(array $item): wg
         ),
         h::label
         (
-            setClass('flex-auto'),
+            setClass('flex-auto cursor-move'),
             set::for($item['name'] . '_'),
             $item['title']
         ),
