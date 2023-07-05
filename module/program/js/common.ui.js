@@ -215,6 +215,7 @@ function compareChildDate()
         var programEnd   = new Date(end);
         var programBegin = new Date(begin);
 
+        if(typeof(programID) == 'undefined') programID = 0;
         $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=program&objectID=' + programID + '&selectedProgramID=' + selectedProgramID), function(data)
         {
             var childInfo = JSON.parse(data);
