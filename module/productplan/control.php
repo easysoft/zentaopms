@@ -63,7 +63,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function create($productID = '', $branchID = 0, $parent = 0)
+    public function create(string $productID = '', int $branchID = 0, int $parent = 0)
     {
         if(!empty($_POST))
         {
@@ -78,8 +78,8 @@ class productplan extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $planID));
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.refreshPlan()'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($this->app->rawModule, 'browse', "productID=$productID")));
+            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => 'true'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($this->app->rawModule, 'browse', "productID=$productID")));
         }
 
         $this->commonAction($productID, $branchID);

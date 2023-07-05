@@ -505,6 +505,7 @@ class productplanModel extends model
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->setDefault('branch,order', 0)
+            ->cleanINT('parent')
             ->join('branch', ',')
             ->remove('delta,uid,future')
             ->get();
