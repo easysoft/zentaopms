@@ -369,15 +369,13 @@ function radioList(): radioList
 /**
  * Color picker widget which extends input.
  *
- * string  name
- * ?string id
- * ?string class
- * ?string value
- * ?bool   required
- * ?string placeholder
- * ?bool   autofocus
- * ?bool   disabled
- * ?bool   autocomplete=false
+ * ?string heading
+ * ?string icon
+ * ?bool   closeBtn=true
+ * ?string syncText
+ * ?string syncColor
+ * ?string syncBackground
+ * ?string syncBorder
  */
 function colorPicker(): colorPicker
 {

@@ -1,11 +1,10 @@
 <?php
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
-
-class colorPicker extends input
+class colorPicker extends wg
 {
-    static $defaultProps = array(
-        'type' => 'color'
-    );
+    protected function build()
+    {
+        return zui::colorPicker(inherit($this));
+    }
 }
