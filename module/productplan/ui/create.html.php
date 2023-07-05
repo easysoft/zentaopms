@@ -51,10 +51,14 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->productplan->branch),
-        set::name('branch[]'),
-        set::items($branches),
-        set::multiple(true),
-        on::change('loadTitle'),
+        set::required(true),
+        select
+        (
+            set::name('branch[]'),
+            set::items($branches),
+            set::multiple(true),
+            on::change('loadTitle'),
+        )
     ) : null,
     formRow
     (

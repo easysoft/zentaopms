@@ -511,10 +511,10 @@ class productplanModel extends model
             ->get();
 
         $product = $this->loadModel('product')->getByID($plan->product);
-        if($product->type != 'normal' and !isset($_POST['branch']))
+        if($product->type != 'normal' and empty($plan->branch))
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+            dao::$errors['branch[]'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
         }
 
         if($plan->parent > 0)
@@ -584,10 +584,10 @@ class productplanModel extends model
         $product = $this->loadModel('product')->getByID($oldPlan->product);
         if($product->type != 'normal')
         {
-            if(!isset($_POST['branch']))
+            if(empty($plan->branch))
             {
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-                dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+                dao::$errors['branch[]'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
             }
             else
             {
@@ -619,6 +619,7 @@ class productplanModel extends model
                 }
             }
         }
+        if(dao::isError()) return false;
 
         $parentPlan = $this->getByID($plan->parent);
         $futureTime = $this->config->productplan->future;

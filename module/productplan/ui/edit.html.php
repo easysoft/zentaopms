@@ -41,10 +41,14 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->productplan->branch),
-        set::name('branch[]'),
-        set::items($branchTagOption),
-        set::value($plan->branch),
-        set::multiple(true),
+        set::required(true),
+        select
+        (
+            set::name('branch[]'),
+            set::items($branchTagOption),
+            set::value($plan->branch),
+            set::multiple(true),
+        )
     ) : null,
     formGroup
     (
