@@ -604,6 +604,9 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
             $item->isParent = true;
         }
 
+        if(!empty($item->parent) && !isset($items[$item->parent])) $items->parent = '';
+        if(!empty($item->parent) && isset($items[$item->parent])) $items[$item->parent]->isParent = true;
+
         if(count($item->actions) > $maxActionCount) $maxActionCount = count($item->actions);
     }
     if(isset($fieldList['actions'])) $fieldList['actions']['minWidth'] = $maxActionCount * 24 + 24;

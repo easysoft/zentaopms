@@ -131,7 +131,7 @@ $config->projectExecution->dtable->fieldList['rawID']['checkbox'] = true;
 $config->projectExecution->dtable->fieldList['rawID']['width']    = '80';
 
 $config->projectExecution->dtable->fieldList['name']['title']        = $lang->execution->name;
-$config->projectExecution->dtable->fieldList['name']['name']         = 'name';
+$config->projectExecution->dtable->fieldList['name']['name']         = 'nameCol';
 $config->projectExecution->dtable->fieldList['name']['fixed']        = 'left';
 $config->projectExecution->dtable->fieldList['name']['flex']         = 1;
 $config->projectExecution->dtable->fieldList['name']['type']         = 'nestedTitle';

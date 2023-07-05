@@ -28,14 +28,16 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 const today = zui.formatDate(new Date(), 'yyyy-MM-dd');
 window.onRenderCell = function(result, {col, row})
 {
-   if(col.name == 'name')
+    if(col.name == 'nameCol')
     {
         const executionLink = $.createLink('execution', 'task', `executionID=${row.data.rawID}`);
         const executionType = typeList[row.data.type];
-        let   executionName = `<span class='label secondary-pale'>${executionType}</span> `;
+
+        let executionName   = `<span class='label secondary-pale'>${executionType}</span> `;
         executionName      += (!row.data.isParent) ? `<a href="${executionLink}" class="text-primary">${row.data.name}</a>` : row.data.name;
         executionName      += (today > row.data.end) ? `<span class="label danger-pale ml-1">${delayed}</span>` : '';
-        result[0] = {html: executionName};
+
+        result[result.length] = {html: executionName};
         return result;
     }
 

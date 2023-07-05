@@ -5396,7 +5396,7 @@ class executionModel extends model
             $execution->isExecution   = 1;
             $execution->id            = 'pid' . (string)$execution->id;
             $execution->project       = $execution->projectName;
-            $execution->parent        = ($execution->parent and $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
+            $execution->parent        = ($execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->isParent      = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->progress      = $execution->hours->progress;
             $execution->totalEstimate = $execution->hours->totalEstimate;
@@ -5414,7 +5414,7 @@ class executionModel extends model
                 $execution->PMAccount = $execution->PM;
             }
 
-            $rows[] = $execution;
+            $rows[$execution->id] = $execution;
 
             /* Append tasks and child stages. */
             if(!empty($execution->tasks)) $rows = $this->appendTasks($execution->tasks, $rows);

@@ -54,8 +54,8 @@ if($canBatchAction)
 /* Waterfall project use another actions. */
 $config->projectExecution->dtable->fieldList['actions']['menu'] = $config->projectExecution->dtable->fieldList['actions'][$project->model];
 
-$executions = initTableData($executionStats, $config->projectExecution->dtable->fieldList, $this->project);
-$executions = $this->execution->generateRow($executions, $users, $avatarList);
+$executions = $this->execution->generateRow($executionStats, $users, $avatarList);
+$executions = initTableData($executions, $config->projectExecution->dtable->fieldList, $this->project);
 
 /* zin: Define the feature bar on main menu. */
 dropmenu();
