@@ -199,3 +199,39 @@ $config->repo->storyDtable->fieldList['pri']['sortType']       = true;
 $config->repo->storyDtable->fieldList['plan']['name']          = 'planTitle';
 $config->repo->storyDtable->fieldList['plan']['width']         = 'auto';
 $config->repo->storyDtable->fieldList['assignedTo']['type']    = 'user';
+
+$app->loadLang('bug');
+$app->loadModuleConfig('bug');
+
+$config->repo->bugDtable = new stdclass();
+$config->repo->bugDtable->fieldList = array();
+$config->repo->bugDtable->fieldList['id']['name']     = 'id';
+$config->repo->bugDtable->fieldList['id']['title']    = $lang->idAB;
+$config->repo->bugDtable->fieldList['id']['type']     = 'id';
+$config->repo->bugDtable->fieldList['id']['checkbox'] = true;
+
+$config->repo->bugDtable->fieldList['pri']        = $config->bug->dtable->fieldList['pri'];
+$config->repo->bugDtable->fieldList['title']      = $config->bug->dtable->fieldList['title'];
+$config->repo->bugDtable->fieldList['openedBy']   = $config->bug->dtable->fieldList['openedBy'];
+$config->repo->bugDtable->fieldList['assignedTo'] = $config->bug->dtable->fieldList['assignedTo'];
+$config->repo->bugDtable->fieldList['status']     = $config->bug->dtable->fieldList['status'];
+
+$config->repo->bugDtable->fieldList['pri']['fixed'] = 'left';
+
+$app->loadLang('task');
+$app->loadModuleConfig('task');
+
+$config->repo->taskDtable = new stdclass();
+$config->repo->taskDtable->fieldList = array();
+$config->repo->taskDtable->fieldList['id']['name']     = 'id';
+$config->repo->taskDtable->fieldList['id']['title']    = $lang->idAB;
+$config->repo->taskDtable->fieldList['id']['type']     = 'id';
+$config->repo->taskDtable->fieldList['id']['checkbox'] = true;
+
+$config->repo->taskDtable->fieldList['pri']        = $config->task->dtable->fieldList['pri'];
+$config->repo->taskDtable->fieldList['name']       = $config->task->dtable->fieldList['name'];
+$config->repo->taskDtable->fieldList['finishedBy'] = $config->task->dtable->fieldList['finishedBy'];
+$config->repo->taskDtable->fieldList['assignedTo'] = $config->task->dtable->fieldList['assignedTo'];
+$config->repo->taskDtable->fieldList['status']     = $config->task->dtable->fieldList['status'];
+
+$config->repo->taskDtable->fieldList['pri']['fixed'] = 'left';

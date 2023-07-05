@@ -1145,8 +1145,9 @@ class repo extends control
         {
             $this->repo->link($repoID, $revision, 'bug');
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::closeModal('parent', '', "parent.parent[parent.parent.length - 2].getRelation('$revision')"));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'callback' => "$('.tab-content .active iframe')[0].contentWindow.getRelation('$revision')", 'closeModal' => true));
         }
 
         $this->loadModel('bug');
@@ -1196,6 +1197,8 @@ class repo extends control
             $allBugs = $this->bug->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager);
         }
 
+        foreach($allBugs as $bug) $bug->statusText = $this->processStatus('bug', $bug);
+
         $this->view->modules     = $modules;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->allBugs     = $allBugs;
@@ -1229,8 +1232,9 @@ class repo extends control
         {
             $this->repo->link($repoID, $revision, 'task');
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::closeModal('parent', '', "parent.parent[parent.parent.length - 2].getRelation('$revision')"));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'callback' => "$('.tab-content .active iframe')[0].contentWindow.getRelation('$revision')", 'closeModal' => true));
         }
 
         $this->loadModel('execution');
