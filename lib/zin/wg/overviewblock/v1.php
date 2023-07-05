@@ -89,9 +89,10 @@ class overviewBlock extends wg
 
         return div
         (
-            setClass('flex justify-center w-1/2'),
+            setClass('bar-chart flex justify-center w-1/2'),
             col
             (
+                setClass('basis-48'),
                 span
                 (
                     setClass('mb-2'),
@@ -102,7 +103,7 @@ class overviewBlock extends wg
                     setClass('border-b'),
                     h::ul
                     (
-                        setClass('flex justify-around items-end w-full h-16'),
+                        setClass('flex justify-around items-end w-full'),
                         $bars
                     )
                 ),
@@ -131,12 +132,13 @@ class overviewBlock extends wg
     {
         list($id, $title, $block, $groups) = $this->prop(array('id', 'title', 'block', 'groups'));
 
-        if(!$id)    $id    = $block->module . '-' . $block->code;
+        if(!$id)    $id    = $block->module . '-' . $block->code . '-' . $block->id;
         if(!$title) $title = $block->title;
 
         return panel
         (
             setID($id),
+            setClass('overview-block'),
             set::title($title),
             set::bodyClass('flex block-base p-0'),
             $this->buildBody($groups)

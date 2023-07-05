@@ -1,1 +1,3 @@
-.cards > .card + .card > :first-child {border-left-width: 1px;}
+.overview-block .cards {margin-top: -20px;}
+.overview-block .cards > .card + .card > :first-child {border-left-width: 1px;}
+.overview-block .bar-chart ul {height: 60px;}
