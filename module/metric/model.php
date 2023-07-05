@@ -54,7 +54,13 @@ class metricModel extends model
         }
 
         $metricList = array();
-        foreach($fileList as $file) $metricList[basename($file)] = $file;
+        $excutableMetric = $this->getExecutableMetric();
+        foreach($fileList as $file)
+        {
+            $code = rtrim(basename($file), '.php');
+            if(!in_array($code, $excutableMetric)) continue;
+            $metricList[$code] = $file;
+        }
 
         return $metricList;
     }
@@ -130,5 +136,32 @@ class metricModel extends model
         $fieldList = array();
         foreach($metricInstances as $metricInstance) $fieldList  = array_merge($fieldList, $metricInstance->fieldList);
         return implode(',', array_unique($fieldList));
+    }
+
+    /**
+     * Get executable metric code list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getExecutableMetric()
+    {
+        $currentWeek = date('w');
+        $currentDay  = date('d');
+        $now         = date('H:i');
+
+        $metricList = $this->select('code,collectConf')->from(TABLE_BASICMEAS)->where('collectType')->eq('crontab')->fetchAll();
+
+        $excutableMetric = array();
+        foreach($metricList as $metric)
+        {
+            $collectConf = json_decode($metric->collectConf);
+            if($collectConf->type == 'week' and strpos($collectConf->week, $currentWeek) === false)  continue;
+            if($collectConf->type == 'month' and strpos($collectConf->month, $currentDay) === false) continue;
+            if($now >= $metric->execTime) continue;
+
+            $excutableMetric[] = $metric;
+        }
+        return $excutableMetric;
     }
 }
