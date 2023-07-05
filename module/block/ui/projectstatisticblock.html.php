@@ -18,7 +18,6 @@ $statisticCells = array();
 $preProjectID   = 0;
 $nextProjectID  = 0;
 $projectIdList  = array_keys($projects);
-$config->edition = 'max';
 foreach($projects as $project)
 {
     $projectOverview = array();
