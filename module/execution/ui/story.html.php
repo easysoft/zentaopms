@@ -104,14 +104,14 @@ toolbar
     (
         btn
         (
-            setClass('btn primary'),
+            setClass('btn secondary'),
             set::icon('plus'),
             set::url($createLink),
             $lang->story->create
         ),
         dropdown
         (
-            btn(setClass('btn primary dropdown-toggle'),
+            btn(setClass('btn secondary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::items(array_filter(array($createItem, $batchCreateItem))),
             set::placement('bottom-end'),

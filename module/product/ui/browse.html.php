@@ -46,6 +46,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 {
     if(!common::canModify('product', $product)) return null;
 
+    global $app;
     $createLink      = createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType");
     $batchCreateLink = createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType");
 
@@ -89,7 +90,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
         (
             btn
             (
-                setClass($from == 'project' ? 'secondary' : 'primary'),
+                setClass($app->tab != 'product' ? 'secondary' : 'primary'),
                 set::icon('plus'),
                 set::text($createBtnTitle),
                 set::url($createBtnLink)
@@ -98,7 +99,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
             (
                 span(setClass('caret')),
                 setClass('btn'),
-                setClass($from == 'project' ? 'secondary' : 'primary'),
+                setClass($app->tab != 'product' ? 'secondary' : 'primary'),
                 setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0')),
                 set::placement('bottom-end'),
                 set::items($items),
@@ -110,7 +111,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
     (
         'text'  => $createBtnTitle,
         'icon'  => 'plus',
-        'class' => $from == 'project' ? 'secondary' : 'primary',
+        'class' => $app->tab != 'product' ? 'secondary' : 'primary',
         'url'   => $createBtnLink
     )));
 };
@@ -136,39 +137,20 @@ $fnBuildLinkStoryButton = function() use($lang, $product, $productID, $projectHa
 
     $buttonLink  = '';
     $buttonTitle = '';
-    $dataToggle  = '';
-    if(common::hasPriv('projectstory', 'importPlanStories'))
-    {
-        $buttonLink  = empty($productID) ? '' : '#linkStoryByPlan';
-        $buttonTitle = $lang->execution->linkStoryByPlan;
-        $dataToggle  = 'data-toggle="modal"';
-    }
     if(common::hasPriv('projectstory', 'linkStory'))
     {
         $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=$projectID");
         $buttonTitle = $lang->execution->linkStory;
-        $dataToggle  = '';
     }
-
     if(empty($buttonLink)) return null;
 
-    if(!empty($productID) && common::hasPriv('projectstory', 'linkStory') && common::hasPriv('projectstory', 'importPlanStories'))
-    {
-        $items = array();
-        $items[] = array('text' => $lang->execution->linkStory,       'url' => createLink('projectstory', 'linkStory', "project=$projectID"));
-        $items[] = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => $dataToggle);
-
-        return dropdown
-        (
-            icon('link'),
-            $buttonTitle,
-            span(setClass('caret')),
-            setClass('btn primary'),
-            set::items($items),
-        );
-    }
-
-    return null;
+    return item(set(array
+    (
+        'text'  => $buttonTitle,
+        'icon'  => 'plus',
+        'class' => 'primary',
+        'url'   => $buttonLink
+    )));
 };
 
 /* DataTable columns. */
