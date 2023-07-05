@@ -1,5 +1,16 @@
 <?php
 include dirname(__FILE__, 4) . DS . 'func.class.php';
+
+/**
+ * 执行中研发完成的需求总数。
+ * Count of developed story in execution.
+ *
+ * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @author    zhouxin <zhouxin@easycorp.ltd>
+ * @package
+ * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @Link      https://www.zentao.net
+ */
 class count_of_developed_story_in_execution
 {
     public function getResult()
