@@ -246,44 +246,6 @@ toolbar
     ) : null
 );
 
-/* No plans. */
-if(empty($plans))
-{
-    $btn = null;
-    if(common::canModify('product', $product) && empty($productPlansNum))
-    {
-        if(common::hasPriv('productplan', 'create') && $isProjectplan)
-        {
-          $btn = btn
-          (
-              setClass('secondary'),
-              set::icon('plus'),
-              set::url(createLink('productplan', 'create', "productID=$product->id&branch=$branch")),
-              $lang->productplan->create,
-          );
-        }
-        elseif(common::hasPriv('productplan', 'create'))
-        {
-          $btn = btn
-          (
-              setClass('secondary'),
-              set::icon('plus'),
-              set::url(createLink('productplan', 'create', "productID=$product->id&branch=$branch")),
-              $lang->productplan->create,
-          );
-        }
-    }
-
-    panel
-    (
-        setClass('flex justify-center'),
-        $lang->productplan->noPlan,
-        $btn
-    );
-
-    return render();
-}
-
 /* Render popup menu for the bution on the toolbar of datatable. */
 $fnGenerateDropdownMenu();
 
@@ -291,6 +253,7 @@ dtable
 (
     set::cols($fnGetTableFieldList()),
     set::data($fnGenerateTableData($plans)),
+    set::emptyTip($lang->productplan->noPlan),
     set::customCols(true),
     set::nested(true),
     set::checkable(true),
