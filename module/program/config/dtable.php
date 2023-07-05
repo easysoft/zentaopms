@@ -66,7 +66,7 @@ $config->program->productview->dtable->fieldList['name']['name']         = 'name
 $config->program->productview->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->program->productview->dtable->fieldList['name']['type']         = 'link';
 $config->program->productview->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(value, row){return window.iconRenderProductView(value, row);}>RAWJS';
-$config->program->productview->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; console.log(info); if(row.data.type == 'product') return {url:$.createLink('product', 'browse', 'productID=' + row.data.id)}; if(row.data.type == 'program') return {url:$.createLink('program', 'view', 'programID=' + row.data.id.replace('program-', ''))};}>RAWJS";
+$config->program->productview->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; if(row.data.type == 'product') return {url:$.createLink('product', 'browse', 'productID=' + row.data.id)}; if(row.data.type == 'program') return {url:$.createLink('program', 'view', 'programID=' + row.data.id.replace('program-', ''))};}>RAWJS";
 $config->program->productview->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->productview->dtable->fieldList['name']['checkbox']     = true;
 $config->program->productview->dtable->fieldList['name']['show']         = true;
@@ -196,7 +196,7 @@ $config->program->projectView->dtable->fieldList['name']['name']         = 'name
 $config->program->projectView->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->program->projectView->dtable->fieldList['name']['width']        = 200;
 $config->program->projectView->dtable->fieldList['name']['type']         = 'link';
-$config->program->projectView->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; console.log(row); if(row.data.type == 'project') return {url:$.createLink('project', 'browse', 'projectID=' + row.data.id)}; if(row.data.type == 'program') return {url:$.createLink('program', 'view', 'programID=' + row.data.id)};}>RAWJS";
+$config->program->projectView->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; if(row.data.type == 'project') return {url:$.createLink('project', 'browse', 'projectID=' + row.data.id)}; if(row.data.type == 'program') return {url:$.createLink('program', 'view', 'programID=' + row.data.id)};}>RAWJS";
 $config->program->projectView->dtable->fieldList['name']['flex']         = 1;
 $config->program->projectView->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->projectView->dtable->fieldList['name']['checkbox']     = true;
