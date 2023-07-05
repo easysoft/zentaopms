@@ -110,6 +110,7 @@ function rearrangeActionBtns($actions)
     $actionMap = array();
     foreach($actions as $action)
     {
+        $action['text'] = '';
         $actionMap[$action['name']] = $action;
     }
 
@@ -173,7 +174,7 @@ function rearrangeActionBtns($actions)
     $result[] = $actionMap['edit'];
     $result[] = array('type' => 'dropdown', 'icon' => 'icon-ellipsis-v', 'caret' => false, 'items' => array
     (
-        $actionMap['edit'],
+        $actionMap['split'],
         $actionMap['trash'],
     ));
 

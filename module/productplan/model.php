@@ -1439,7 +1439,7 @@ class productplanModel extends model
             $actions[] = $this->buildActionBtn($this->app->rawModule, 'edit', $params, $plan, $type);
         }
 
-        $actions[] = $this->buildActionBtn($this->app->rawModule, 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
+        if($canCreateChild) $actions[] = $this->buildActionBtn($this->app->rawModule, 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
 
         if($type == 'browse')
         {
@@ -1510,10 +1510,11 @@ class productplanModel extends model
         $isClick = true;
         if(method_exists($this, 'isClickable')) $isClick = $this->isClickable($data, $method, $module);
 
-        $link = helper::createLink($module, $method, $params, '', $onlyBody);
-        if(isset($this->config->productplan->dtable->fieldList['actions']['actionsMap'][$method]['url']))
+        $link       = helper::createLink($module, $method, $params, '', $onlyBody);
+        $actionName = $icon == 'split' ? 'split' : $method;
+        if(isset($this->config->productplan->dtable->fieldList['actions']['actionsMap'][$actionName]['url']))
         {
-            $link = $this->config->productplan->dtable->fieldList['actions']['actionsMap'][$method]['url'];
+            $link = $this->config->productplan->dtable->fieldList['actions']['actionsMap'][$actionName]['url'];
         }
 
         global $lang;

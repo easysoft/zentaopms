@@ -125,6 +125,8 @@ $config->productplan->dtable->fieldList['actions']['actionsMap']['bug']['hint'] 
 $config->productplan->dtable->fieldList['actions']['actionsMap']['edit']['icon'] = 'edit';
 
 $config->productplan->dtable->fieldList['actions']['actionsMap']['split']['icon'] = 'split';
+$config->productplan->dtable->fieldList['actions']['actionsMap']['split']['hint'] = $lang->productplan->createChildren;
+$config->productplan->dtable->fieldList['actions']['actionsMap']['split']['text'] = $lang->productplan->createChildren;
 
 $config->productplan->dtable->fieldList['actions']['actionsMap']['trash']['icon'] = 'trash';
 $config->productplan->dtable->fieldList['actions']['actionsMap']['trash']['url']  = 'javascript:deleteProductPlan("{planID}")';
