@@ -134,7 +134,7 @@ $config->projectExecution->dtable->fieldList['name']['title']        = $lang->ex
 $config->projectExecution->dtable->fieldList['name']['name']         = 'name';
 $config->projectExecution->dtable->fieldList['name']['fixed']        = 'left';
 $config->projectExecution->dtable->fieldList['name']['flex']         = 1;
-$config->projectExecution->dtable->fieldList['name']['type']         = 'html';
+$config->projectExecution->dtable->fieldList['name']['type']         = 'nestedTitle';
 $config->projectExecution->dtable->fieldList['name']['nestedToggle'] = true;
 $config->projectExecution->dtable->fieldList['name']['sortType']     = true;
 

@@ -16,6 +16,8 @@ jsVar('status',    $status);
 jsVar('projectID', $projectID);
 jsVar('orderBy',   $orderBy);
 jsVar('productID', $productID);
+jsVar('typeList', $lang->execution->typeList);
+jsVar('delayed', $lang->execution->delayed);
 
 $footToolbar = array();
 $canBatchEdit         = common::hasPriv('execution', 'batchEdit');
@@ -112,14 +114,13 @@ dtable
     set::data($executions),
     set::checkable($canBatchAction),
     set::fixedLeftWidth('44%'),
-    //set::onRenderCell(jsRaw('onRenderSparkline')),
-    //set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.isExecution == 1;}')),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::footToolbar($footToolbar),
     set::footPager(
-        usePager(),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}"))
+        usePager
+        (
+            array('linkCreator' => helper::createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}"))
+        ),
     ),
 );
 
