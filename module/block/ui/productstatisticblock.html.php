@@ -364,14 +364,7 @@ panel
     on::click('.nav-prev,.nav-next', 'switchNav'),
     set('class', 'productstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
-    to::heading
-    (
-        div
-        (
-            set('class', 'panel-title'),
-            span($block->title),
-        )
-    ),
+    set::title($block->title),
     to::headingActions
     (
         a

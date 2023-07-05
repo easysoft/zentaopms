@@ -28,14 +28,7 @@ panel
 (
     set('class', 'project-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
-    to::heading
-    (
-        div
-        (
-            set('class', 'panel-title'),
-            span($block->title),
-        )
-    ),
+    set::title($block->title),
     to::headingActions
     (
         a

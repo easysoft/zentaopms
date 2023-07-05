@@ -114,7 +114,7 @@
     <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->updateDynamics?></div>
-        <?php echo html::a($config->admin->dynamicURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
+        <?php echo html::a($config->admin->downloadURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
       <?php foreach($zentaoData->dynamics as $dynamic):?>
       <div class="dynamic-block">

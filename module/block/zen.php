@@ -310,6 +310,48 @@ class blockZen extends block
     }
 
     /**
+     * Latest dynamic by zentao official.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function printZentaoDynamicBlock(): void
+    {
+        $this->app->loadModuleConfig('admin');
+
+        $dynamics = array();
+        $result = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($this->config->admin->dynamicAPIURL)));
+        if(!empty($result->data))
+        {
+            $data = $result->data;
+            if(!empty($data->zentaosalon))
+            {
+                $data->zentaosalon->title     = $this->lang->block->zentaodynamic->zentaosalon;
+                $data->zentaosalon->label     = formatTime($data->zentaosalon->time, DT_DATE4) . ' ' . $data->zentaosalon->name;
+                $data->zentaosalon->linklabel = $this->lang->block->zentaodynamic->registration;
+                $dynamics[] = $data->zentaosalon;
+            }
+            if(!empty($data->publicclass))
+            {
+                $data->publicclass->title     = $this->lang->block->zentaodynamic->publicclass;
+                $data->publicclass->label     = formatTime($data->publicclass->time, DT_DATE4) . $this->lang->datepicker->dayNames[date('w', strtotime($data->publicclass->time))] . ' ' . formatTime($data->publicclass->time, 'H:i');
+                $data->publicclass->linklabel = $this->lang->block->zentaodynamic->reservation;
+                $dynamics[] = $data->publicclass;
+            }
+            if(!empty($data->release))
+            {
+                foreach($data->release as $release)
+                {
+                    $release->title = $this->lang->block->zentaodynamic->release;
+                    $release->label = formatTime($data->publicclass->time, DT_DATE4) . $this->lang->datepicker->dayNames[date('w', strtotime($data->publicclass->time))];
+                    $dynamics[] = $release;
+                }
+            }
+        }
+        $this->view->dynamics = $dynamics;
+    }
+
+    /**
      * Welcome block.
      *
      * @access protected

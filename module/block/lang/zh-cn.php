@@ -37,6 +37,7 @@ $lang->block->lblNum          = '条数';
 $lang->block->lblHtml         = 'HTML内容';
 $lang->block->html            = 'HTML';
 $lang->block->dynamic         = '最新动态';
+$lang->block->zentaoDynamic   = '禅道动态';
 $lang->block->assignToMe      = '待处理';
 $lang->block->wait            = '未开始';
 $lang->block->doing           = '进行中';
@@ -587,6 +588,13 @@ $lang->block->productlist->activatedStory    = '激活需求';
 $lang->block->productlist->storyCompleteRate = '需求完成率';
 $lang->block->productlist->activatedBug      = '激活Bug';
 
+$lang->block->zentaodynamic = new stdclass();
+$lang->block->zentaodynamic->zentaosalon  = '禅道中国行';
+$lang->block->zentaodynamic->publicclass  = '禅道公开课';
+$lang->block->zentaodynamic->release      = '最新发布';
+$lang->block->zentaodynamic->registration = '立即报名';
+$lang->block->zentaodynamic->reservation  = '立即预约';
+
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
 $lang->block->moduleList['execution']       = $lang->execution->common;
@@ -597,4 +605,5 @@ $lang->block->moduleList['teamDynamic']     = $lang->zentaoPMS . $lang->dynamic;
 $lang->block->moduleList['teamAchievement'] = $lang->block->teamAchievement;
 $lang->block->moduleList['assigntome']      = $lang->block->assignToMe;
 $lang->block->moduleList['dynamic']         = $lang->block->dynamic;
+$lang->block->moduleList['zentaoDynamic']   = $lang->block->zentaoDynamic;
 $lang->block->moduleList['html']            = $lang->block->html;
