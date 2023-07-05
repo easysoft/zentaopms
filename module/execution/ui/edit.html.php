@@ -352,7 +352,7 @@ else
                                 set::value($product->id),
                                 set::items($allProducts),
                                 set::last($product->id),
-                                $hasBranch ? set::lastBranch(join(',', $product->branches)) : null,
+                                $hasBranch && $product->branches ? set::lastBranch(join(',', $product->branches)) : null,
                                 set::disabled($project->model == 'waterfall' || $project->model == 'waterfallplus'),
                                 set::required(true),
                                 on::change('productChange'),

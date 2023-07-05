@@ -65,11 +65,30 @@ function computeEndDate()
         delta = (weekend == 2) ? (delta - 2) : (delta - 1);
     }
 
-    endDate = zui.calculateTimestamp((delta - 1) * 24 * 60, 'minute', true, beginDate.getTime());
-    endDate = zui.formatDate(endDate, 'yyyy-MM-dd');
+    let endDate = formatDate(beginDate, delta - 1);
 
     $('#end').val(endDate);
     computeWorkDays();
+}
+
+/**
+ * 给指定日期加上具体天数，并返回格式化后的日期.
+ *
+ * @param  string dateString
+ * @param  int    days
+ * @access public
+ * @return date
+ */
+function formatDate(dateString, days)
+{
+  const date = new Date(dateString);
+  date.setDate(date.getDate() + days);
+
+  const year  = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day   = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 }
 
 /**
