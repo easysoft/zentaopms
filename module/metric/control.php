@@ -30,20 +30,20 @@ class metric extends control
      */
     public function execMetric()
     {
-        $dataset         = $this->metric->getDataset();
+        $dataset         = $this->metric->getDataset($this->dao);
         $metricInstances = $this->metric->getInstanceList();
 
         list($otherInstances, $classifiedInstances) = $this->metric->classifyMetric($metricInstances);
 
         /* 计算根据数据源归类后的度量项。*/
-        foreach($classifiedInstances as $dataSource => $metricInstances)
+        foreach($classifiedInstances as $dataSource => $instances)
         {
-            $fieldList = $this->uniteFieldList($metricInstances);
+            $fieldList = $this->metric->uniteFieldList($instances);
             $rows = $dataset->$dataSource($fieldList)->fetchAll();
 
             foreach($rows as $row)
             {
-                foreach($metricInstances as $instance)
+                foreach($instances as $instance)
                 {
                     $instance->calculate((object)$row);
                 }
@@ -54,9 +54,9 @@ class metric extends control
         foreach($otherInstances as $instance) $instance->dao = $this->dao;
 
         /* 获取度量项的计算结果并保存。*/
-        foreach($metricInstances as $instance)
+        foreach($metricInstances as $metricObj)
         {
-            $resultSet = $instance->getResult();
+            $resultSet = $metricObj->getResult();
             foreach($resultSet as $result)
             {
                 $record = new stdclass();

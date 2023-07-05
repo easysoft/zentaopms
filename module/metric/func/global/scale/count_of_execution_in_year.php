@@ -1,6 +1,4 @@
 <?php
-include dirname(__FILE__, 4) . DS . 'func.class.php';
-
 /**
  * 每年完成的执行总数。
  * Count of execution per year.
@@ -12,17 +10,20 @@ include dirname(__FILE__, 4) . DS . 'func.class.php';
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_execution_in_year extends func
+class count_of_execution_in_year extends baseMetric
 {
     public $dataset = 'getAllExecutions';
 
-    public $fieldList = array('id', 'closedDate');
+    public $fieldList = array('id', 'closedDate', 'status');
 
     public function calculate($data)
     {
-        $closedYear = substr($data->closedDate, 0, 10);
-        if(empty($this->result[$closedYear])) $this->result[$closedYear] = 0;
-        $this->result[$closedYear] ++;
+        if($data->status == 'closed')
+        {
+            $closedYear = substr($data->closedDate, 0, 10);
+            if(empty($this->result[$closedYear])) $this->result[$closedYear] = 0;
+            $this->result[$closedYear] ++;
+        }
     }
 
     public function getResult()

@@ -45,7 +45,7 @@ class metricModel extends model
         $currentDay  = date('d');
         $now         = date('H:i');
 
-        $metricList = $this->select('code,collectConf')->from(TABLE_BASICMEAS)
+        $metricList = $this->dao->select('code,cronType,cronList,execTime')->from(TABLE_METRIC)
             ->where('collectType')->eq('cron')
             ->fetchAll();
 
@@ -54,9 +54,9 @@ class metricModel extends model
         {
             if($metric->cronType == 'week' and strpos($metric->cronList, $currentWeek) === false)  continue;
             if($metric->cronType == 'month' and strpos($metric->cronList, $currentDay) === false) continue;
-            if($now >= $metric->execTime) continue;
+            if($now < $metric->execTime) continue;
 
-            $excutableMetric[] = $metric;
+            $excutableMetrics[] = $metric->code;
         }
         return $excutableMetrics;
     }
@@ -78,7 +78,7 @@ class metricModel extends model
             {
                 $pattern = $funcRoot . $scope . DS . $purpose . DS . '*.php';
                 $matchedFiles = glob($pattern);
-                if($matchedFiles !== false) $fileList = array_merge($fileList, $matchFiles);
+                if($matchedFiles !== false) $fileList = array_merge($fileList, $matchedFiles);
             }
         }
 
@@ -104,10 +104,11 @@ class metricModel extends model
     {
         $metricList = $this->getMetricList();
 
+        include $this->app->getModuleRoot() . DS . 'metric' . DS . 'func.class.php';
         $metricInstances = array();
         foreach($metricList as $className => $file)
         {
-            include_once $file;
+            require_once $file;
             $metricInstances[$className] = new $className;
         }
 

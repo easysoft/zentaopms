@@ -1,6 +1,4 @@
 <?php
-include dirname(__FILE__, 4) . DS . 'func.class.php';
-
 /**
  * 每年发布总数。
  * Count of release in year.
@@ -12,7 +10,7 @@ include dirname(__FILE__, 4) . DS . 'func.class.php';
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_release_in_year extends func
+class count_of_release_in_year extends baseMetric
 {
     public $dataset = 'getReleases';
 

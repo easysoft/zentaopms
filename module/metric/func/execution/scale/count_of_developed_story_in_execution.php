@@ -1,6 +1,4 @@
 <?php
-include dirname(__FILE__, 4) . DS . 'func.class.php';
-
 /**
  * 执行中研发完成的需求总数。
  * Count of developed story in execution.

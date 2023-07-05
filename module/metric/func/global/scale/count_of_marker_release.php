@@ -1,6 +1,4 @@
 <?php
-include dirname(__FILE__, 4) . DS . 'func.class.php';
-
 /**
  * 发布里程碑总数。
  * Count of marker release.
@@ -12,7 +10,7 @@ include dirname(__FILE__, 4) . DS . 'func.class.php';
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_marker_release extends func
+class count_of_marker_release extends baseMetric
 {
     public $dataset = 'getReleases';
 

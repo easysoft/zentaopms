@@ -9,7 +9,7 @@
  * @license   LGPL
  * @Link      https://www.zentao.net
  */
-class func
+class baseMetric
 {
     /**
      * 来源数据集。
