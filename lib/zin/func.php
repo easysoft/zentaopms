@@ -1578,3 +1578,14 @@ function priPicker(): priPicker
 {
     return createWg('priPicker', func_get_args());
 }
+
+/**
+ * Severity picker widget.
+ *
+ * ?string placeholder
+ * ?string[]|object[]|object|array items
+ */
+function severityPicker(): severityPicker
+{
+    return createWg('severityPicker', func_get_args());
+}
