@@ -90,7 +90,7 @@ $fnGenerateTableData = function($plans) use ($config, $lang, &$totalParent, &$to
         /* Description. */
         $this->loadModel('file');
         $plan = $this->file->replaceImgURL($plan, 'desc');
-        $desc = trim(strip_tags(str_replace(array('</p>', '<br />', '<br>', '<br/>'), "\n", str_replace(array("\n", "\r"), '', $plan->desc)), '<img>'));
+        $desc = !empty($plan->desc) ? trim(strip_tags(str_replace(array('</p>', '<br />', '<br>', '<br/>'), "\n", str_replace(array("\n", "\r"), '', $plan->desc)), '<img>')) : '';
         $data->desc = nl2br($desc);
 
         // TODO: values of extend fields.
@@ -282,11 +282,10 @@ dtable
     )),
     set::footPager
     (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&queryID=$queryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={page}"))
+        usePager
+        (
+            array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"))
+        ),
     ),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}"))
 );
