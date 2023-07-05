@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+dropmenu(set::objectID($project->id));
+
 $linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type={key}" . ($type == 'bysearch' ? '' : "&param=$param");
 featureBar
 (
