@@ -74,7 +74,7 @@ if($canBatchActionStory)
     (
         array('type' => 'btn-group', 'items' => array
         (
-            $canBatchUnlinkStory ? array('text' => $lang->productplan->unlinkStoryAB, 'className' => 'batch-btn size-sm primary', 'data-type' => 'story', 'data-formaction' => helper::createLink('productplan', 'batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy")) : null,
+            array('text' => $lang->productplan->unlinkStoryAB, 'className' => 'batch-btn size-sm primary', 'disabled' => ($canBatchUnlinkStory ? '' : 'disabled'), 'data-type' => 'story', 'data-formaction' => helper::createLink('productplan', 'batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy")),
             array('caret' => 'up', 'className' => 'size-sm primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'url' => '#navStoryActions'),
         )),
     ));

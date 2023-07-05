@@ -229,7 +229,7 @@ $footToolbar = $canBatchAction ? array('items' => array
     array('type' => 'btn-group', 'items' => array
     (
         array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-page' => 'batch', 'data-formaction' => $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType")),
-        array('caret' => 'up', 'class' => 'btn btn-caret size-sm secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+        array('caret' => 'up', 'className' => 'size-sm secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     )),
     !$canBatchUnlink ? null : array('text' => $lang->story->unlink, 'className' => 'secondary', 'id' => 'batchUnlinkStory'),
     array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? '' : 'hidden', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
@@ -267,25 +267,25 @@ if($canBatchReview) $navActionItems[] = array('class' => 'not-hide-menu', 'text'
 if($canBatchChangeBranch && $product->type != 'normal') $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->product->branchName[$product->type], 'items' => $branchItems);
 if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->stageAB, 'items' => $stageItems);
 
-menu
+zui::menu
 (
     set::id('navActions'),
     set::class('menu dropdown-menu'),
     set::items($navActionItems),
 );
-menu
+zui::menu
 (
     set::id('navModule'),
     set::class('dropdown-menu'),
     set::items($moduleItems)
 );
-menu
+zui::menu
 (
     set::id('navPlan'),
     set::class('dropdown-menu'),
     set::items($planItems)
 );
-menu
+zui::menu
 (
     set::id('navAssignedTo'),
     set::class('dropdown-menu'),
