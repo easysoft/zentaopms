@@ -33,6 +33,7 @@ class editor extends wg
         $customProps = $this->props->skip(array_keys(static::getDefinedProps()));
         if(!isset($customProps['id'])) $customProps['id'] = $customProps['name'];
         $editor->add(set($customProps));
+        $editor->add($this->children());
         return $editor;
     }
 }
