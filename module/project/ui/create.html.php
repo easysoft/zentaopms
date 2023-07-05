@@ -184,6 +184,12 @@ formPanel
                     set('id', 'programHover'),
                 )
             )
+        ),
+        formGroup
+        (
+            set::name('model'),
+            set::value($model),
+            set::control('hidden'),
         )
     ),
     formGroup
