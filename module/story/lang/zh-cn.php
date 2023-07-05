@@ -27,6 +27,7 @@ $lang->story->submitReview       = "提交评审";
 $lang->story->recall             = '撤销评审';
 $lang->story->recallChange       = '撤销变更';
 $lang->story->recallAction       = '撤销';
+$lang->story->relation           = '查看关联需求';
 $lang->story->needReview         = '需要评审';
 $lang->story->batchReview        = '批量评审';
 $lang->story->edit               = "编辑";

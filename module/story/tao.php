@@ -360,6 +360,17 @@ class storyTao extends storyModel
             $parents  = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
         }
 
+        $mainID  = $type == 'story' ? 'BID' : 'AID';
+        $countID = $type == 'story' ? 'AID' : 'BID';
+
+        $relations = $this->dao->select("$mainID, count($countID) as count")->from(TABLE_RELATION)
+            ->where('AType')->eq('requirement')
+            ->andWhere('BType')->eq('story')
+            ->andWhere('relation')->eq('subdivideinto')
+            ->andWhere('product')->eq($productID)
+            ->groupBy($mainID)
+            ->fetchAll($mainID);
+
         foreach($stories as $story)
         {
             /* Export story linkstories. */
@@ -372,6 +383,13 @@ class storyTao extends storyModel
             $story->planTitle = '';
             $storyPlans       = explode(',', trim($story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
+
+            if(isset($relations[$story->id]))
+            {
+                $link = helper::createLink('story', 'relation', "storyID=$story->id&storyType=$type");
+                if($type == 'story')       $story->URS = html::a($link, $relations[$story->id]->count, '', "data-toggle='modal'");
+                if($type == 'requirement') $story->SRS = html::a($link, $relations[$story->id]->count, '', "data-toggle='modal'");
+            }
         }
 
         /* For save session query. */

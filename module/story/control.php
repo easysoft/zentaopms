@@ -1650,6 +1650,25 @@ class story extends control
     }
 
     /**
+     * URS of a story.
+     *
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @access public
+     * @return void
+     */
+    public function relation($storyID, $storyType = '')
+    {
+        $selectFields = array('id', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status');
+
+        $this->view->relation  = $this->story->getStoryRelation($storyID, $storyType, $selectFields);
+        $this->view->users     = $this->user->getPairs('noletter');
+        $this->view->storyType = $storyType;
+        $this->view->story     = $this->story->getById($storyID);
+        $this->display();
+    }
+
+    /**
      * If type is linkStories, link related stories else link child stories.
      *
      * @param  int    $storyID

@@ -136,8 +136,15 @@ $config->story->dtable->fieldList['caseCount']['group'] = 7;
 
 $config->story->dtable->fieldList['URS']['name']  = 'URS';
 $config->story->dtable->fieldList['URS']['title'] = 'UR';
-$config->story->dtable->fieldList['URS']['width'] = '30';
+$config->story->dtable->fieldList['URS']['width'] = '50';
+$config->story->dtable->fieldList['URS']['type']  = 'html';
 $config->story->dtable->fieldList['URS']['group'] = 6;
+
+$config->story->dtable->fieldList['SRS']['name']  = 'SRS';
+$config->story->dtable->fieldList['SRS']['title'] = 'SR';
+$config->story->dtable->fieldList['SRS']['width'] = '50';
+$config->story->dtable->fieldList['SRS']['type']  = 'html';
+$config->story->dtable->fieldList['SRS']['group'] = 6;
 
 $config->story->dtable->fieldList['closedBy']['name']  = 'closedBy';
 $config->story->dtable->fieldList['closedBy']['title'] = $lang->story->closedBy;

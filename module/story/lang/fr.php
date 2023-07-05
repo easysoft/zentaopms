@@ -27,6 +27,7 @@ $lang->story->submitReview       = "Submit Review";
 $lang->story->recall             = 'Revoke';
 $lang->story->recallChange       = 'Undo Changes';
 $lang->story->recallAction       = 'Undo';
+$lang->story->relation           = 'Relations';
 $lang->story->needReview         = 'Validation requise';
 $lang->story->batchReview        = 'Validation par lot';
 $lang->story->edit               = "Editer Story";
