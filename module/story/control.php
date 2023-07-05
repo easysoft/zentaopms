@@ -1547,9 +1547,11 @@ class story extends control
     {
         $this->loadModel('task');
         $tasks = $this->task->getListByStory($storyID, $executionID);
+
         $this->view->tasks   = $tasks;
         $this->view->users   = $this->user->getPairs('noletter');
         $this->view->summary = $this->execution->summary($tasks);
+        $this->view->story   = $this->story->getById($storyID);
         $this->display();
     }
 
@@ -1564,8 +1566,10 @@ class story extends control
     public function bugs($storyID, $executionID = 0)
     {
         $this->loadModel('bug');
+
         $this->view->bugs  = $this->bug->getStoryBugs($storyID, $executionID);
         $this->view->users = $this->user->getPairs('noletter');
+        $this->view->story = $this->story->getById($storyID);
         $this->display();
     }
 
@@ -1579,9 +1583,11 @@ class story extends control
     public function cases($storyID)
     {
         $this->loadModel('testcase');
+
         $this->view->cases      = $this->testcase->getStoryCases($storyID);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->resultList = array('' => '') + $this->lang->testcase->resultList;
+        $this->view->story      = $this->story->getById($storyID);
         $this->display();
     }
 

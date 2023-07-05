@@ -118,33 +118,46 @@ $config->story->dtable->fieldList['module']['name']       = 'module';
 $config->story->dtable->fieldList['module']['title']      = $lang->story->module;
 $config->story->dtable->fieldList['module']['type']       = 'text';
 
-$config->story->dtable->fieldList['taskCount']['name']  = 'taskCount';
-$config->story->dtable->fieldList['taskCount']['title'] = 'T';
-$config->story->dtable->fieldList['taskCount']['width'] = '30';
-$config->story->dtable->fieldList['taskCount']['show']  = true;
-$config->story->dtable->fieldList['taskCount']['group'] = 7;
+$config->story->dtable->fieldList['taskCount']['name']        = 'taskCount';
+$config->story->dtable->fieldList['taskCount']['title']       = 'T';
+$config->story->dtable->fieldList['taskCount']['width']       = '30';
+$config->story->dtable->fieldList['taskCount']['type']        = 'text';
+$config->story->dtable->fieldList['taskCount']['link']        = helper::createLink('story', 'tasks', 'storyID={id}');
+$config->story->dtable->fieldList['taskCount']['data-toggle'] = 'modal';
+$config->story->dtable->fieldList['taskCount']['show']        = true;
+$config->story->dtable->fieldList['taskCount']['group']       = 7;
 
-$config->story->dtable->fieldList['bugCount']['name']  = 'bugCount';
-$config->story->dtable->fieldList['bugCount']['title'] = 'B';
-$config->story->dtable->fieldList['bugCount']['width'] = '30';
-$config->story->dtable->fieldList['bugCount']['group'] = 7;
+$config->story->dtable->fieldList['bugCount']['name']        = 'bugCount';
+$config->story->dtable->fieldList['bugCount']['title']       = 'B';
+$config->story->dtable->fieldList['bugCount']['width']       = '30';
+$config->story->dtable->fieldList['bugCount']['type']        = 'text';
+$config->story->dtable->fieldList['bugCount']['link']        = helper::createLink('story', 'tasks', 'storyID={id}');
+$config->story->dtable->fieldList['bugCount']['data-toggle'] = 'modal';
+$config->story->dtable->fieldList['bugCount']['group']       = 7;
 
-$config->story->dtable->fieldList['caseCount']['name']  = 'caseCount';
-$config->story->dtable->fieldList['caseCount']['title'] = 'C';
-$config->story->dtable->fieldList['caseCount']['width'] = '30';
-$config->story->dtable->fieldList['caseCount']['group'] = 7;
+$config->story->dtable->fieldList['caseCount']['name']        = 'caseCount';
+$config->story->dtable->fieldList['caseCount']['title']       = 'C';
+$config->story->dtable->fieldList['caseCount']['width']       = '30';
+$config->story->dtable->fieldList['caseCount']['type']        = 'text';
+$config->story->dtable->fieldList['caseCount']['link']        = helper::createLink('story', 'tasks', 'storyID={id}');
+$config->story->dtable->fieldList['caseCount']['data-toggle'] = 'modal';
+$config->story->dtable->fieldList['caseCount']['group']       = 7;
 
-$config->story->dtable->fieldList['URS']['name']  = 'URS';
-$config->story->dtable->fieldList['URS']['title'] = 'UR';
-$config->story->dtable->fieldList['URS']['width'] = '50';
-$config->story->dtable->fieldList['URS']['type']  = 'html';
-$config->story->dtable->fieldList['URS']['group'] = 6;
+$config->story->dtable->fieldList['URS']['name']        = 'URS';
+$config->story->dtable->fieldList['URS']['title']       = 'UR';
+$config->story->dtable->fieldList['URS']['width']       = '50';
+$config->story->dtable->fieldList['URS']['type']        = 'text';
+$config->story->dtable->fieldList['URS']['link']        = helper::createLink('story', 'relation', 'storyID={id}&storyType={type}');
+$config->story->dtable->fieldList['URS']['data-toggle'] = 'modal';
+$config->story->dtable->fieldList['URS']['group']       = 6;
 
-$config->story->dtable->fieldList['SRS']['name']  = 'SRS';
-$config->story->dtable->fieldList['SRS']['title'] = 'SR';
-$config->story->dtable->fieldList['SRS']['width'] = '50';
-$config->story->dtable->fieldList['SRS']['type']  = 'html';
-$config->story->dtable->fieldList['SRS']['group'] = 6;
+$config->story->dtable->fieldList['SRS']['name']        = 'SRS';
+$config->story->dtable->fieldList['SRS']['title']       = 'SR';
+$config->story->dtable->fieldList['SRS']['width']       = '50';
+$config->story->dtable->fieldList['SRS']['type']        = 'text';
+$config->story->dtable->fieldList['SRS']['link']        = helper::createLink('story', 'relation', 'storyID={id}&storyType={type}');
+$config->story->dtable->fieldList['SRS']['data-toggle'] = 'modal';
+$config->story->dtable->fieldList['SRS']['group']       = 6;
 
 $config->story->dtable->fieldList['closedBy']['name']  = 'closedBy';
 $config->story->dtable->fieldList['closedBy']['title'] = $lang->story->closedBy;
@@ -272,3 +285,59 @@ $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['hin
 $app->loadLang('execution');
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['icon'] = 'unlink';
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['hint'] = $lang->execution->unlinkStory;
+
+$config->story->taskTable = new stdclass();
+$config->story->taskTable->fieldList['id']['name']     = 'id';
+$config->story->taskTable->fieldList['id']['title']    = $lang->idAB;
+$config->story->taskTable->fieldList['id']['fixed']    = 'left';
+$config->story->taskTable->fieldList['id']['type']     = 'checkID';
+$config->story->taskTable->fieldList['id']['sortType'] = false;
+$config->story->taskTable->fieldList['id']['group']    = 1;
+
+$config->story->taskTable->fieldList['name']['name']  = 'name';
+$config->story->taskTable->fieldList['name']['title'] = $lang->task->name;
+$config->story->taskTable->fieldList['name']['type']  = 'text';
+$config->story->taskTable->fieldList['name']['group'] = 2;
+
+$config->story->taskTable->fieldList['pri']['name']     = 'pri';
+$config->story->taskTable->fieldList['pri']['title']    = $lang->priAB;
+$config->story->taskTable->fieldList['pri']['type']     = 'pri';
+$config->story->taskTable->fieldList['pri']['group']    = 3;
+$config->story->taskTable->fieldList['pri']['sortType'] = false;
+
+$config->story->taskTable->fieldList['status']['name']      = 'status';
+$config->story->taskTable->fieldList['status']['title']     = $lang->statusAB;
+$config->story->taskTable->fieldList['status']['type']      = 'status';
+$config->story->taskTable->fieldList['status']['statusMap'] = $lang->task->statusList;
+$config->story->taskTable->fieldList['status']['group']     = 3;
+$config->story->taskTable->fieldList['status']['sortType']  = false;
+
+$config->story->taskTable->fieldList['assignedTo']['name']     = 'assignedTo';
+$config->story->taskTable->fieldList['assignedTo']['title']    = $lang->task->assignedToAB;
+$config->story->taskTable->fieldList['assignedTo']['type']     = 'user';
+$config->story->taskTable->fieldList['assignedTo']['sortType'] = false;
+$config->story->taskTable->fieldList['assignedTo']['group']    = 3;
+
+$config->story->taskTable->fieldList['estimate']['name']     = 'estimate';
+$config->story->taskTable->fieldList['estimate']['title']    = $lang->task->estimateAB;
+$config->story->taskTable->fieldList['estimate']['type']     = 'number';
+$config->story->taskTable->fieldList['estimate']['sortType'] = false;
+$config->story->taskTable->fieldList['estimate']['group']    = 4;
+
+$config->story->taskTable->fieldList['consumed']['name']     = 'consumed';
+$config->story->taskTable->fieldList['consumed']['title']    = $lang->task->consumedAB;
+$config->story->taskTable->fieldList['consumed']['type']     = 'number';
+$config->story->taskTable->fieldList['consumed']['sortType'] = false;
+$config->story->taskTable->fieldList['consumed']['group']    = 4;
+
+$config->story->taskTable->fieldList['left']['name']     = 'left';
+$config->story->taskTable->fieldList['left']['title']    = $lang->task->leftAB;
+$config->story->taskTable->fieldList['left']['type']     = 'number';
+$config->story->taskTable->fieldList['left']['sortType'] = false;
+$config->story->taskTable->fieldList['left']['group']    = 4;
+
+$config->story->taskTable->fieldList['progress']['name']     = 'progress';
+$config->story->taskTable->fieldList['progress']['title']    = $lang->task->progress;
+$config->story->taskTable->fieldList['progress']['type']     = 'progress';
+$config->story->taskTable->fieldList['progress']['sortType'] = false;
+$config->story->taskTable->fieldList['progress']['group']    = 5;

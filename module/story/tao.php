@@ -387,8 +387,8 @@ class storyTao extends storyModel
             if(isset($relations[$story->id]))
             {
                 $link = helper::createLink('story', 'relation', "storyID=$story->id&storyType=$type");
-                if($type == 'story')       $story->URS = html::a($link, $relations[$story->id]->count, '', "data-toggle='modal'");
-                if($type == 'requirement') $story->SRS = html::a($link, $relations[$story->id]->count, '', "data-toggle='modal'");
+                if($type == 'story')       $story->URS = $relations[$story->id]->count;
+                if($type == 'requirement') $story->SRS = $relations[$story->id]->count;
             }
         }
 
