@@ -193,25 +193,6 @@ foreach($stories as $story)
 
 data('storyBrowseType', $storyBrowseType);
 
-/* Layout. */
-$fnGenerateSideBar();
-
-featureBar
-(
-    set::current($browseType),
-    set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID")),
-    li(searchToggle(set::module('story')))
-);
-
-toolbar
-(
-    item(set(array('text' => $lang->project->report, 'icon' => 'bar-chart', 'class' => 'ghost'))),
-    item(set(array('text' => $lang->export, 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType"), 'data-toggle' => 'modal'))),
-    item(set(array('text' => $lang->import, 'icon' => 'import', 'class' => 'ghost', 'url' => helper::createLink('story', 'import', "productID=$productID")))),
-    $fnBuildCreateStoryButton(),
-    $fnBuildLinkStoryButton()
-);
-
 $canBeChanged         = common::canModify('product', $product);
 $canBatchEdit         = ($canBeChanged and common::hasPriv($storyType, 'batchEdit'));
 $canBatchClose        = (common::hasPriv($storyType, 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
@@ -267,30 +248,50 @@ if($canBatchReview) $navActionItems[] = array('class' => 'not-hide-menu', 'text'
 if($canBatchChangeBranch && $product->type != 'normal') $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->product->branchName[$product->type], 'items' => $branchItems);
 if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->stageAB, 'items' => $stageItems);
 
-zui::menu
+featureBar
 (
-    set::id('navActions'),
-    set::class('menu dropdown-menu'),
-    set::items($navActionItems),
+    set::current($browseType),
+    set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID")),
+    li(searchToggle(set::module('story'))),
+    div(
+        zui::menu
+        (
+            set::id('navActions'),
+            set::class('menu dropdown-menu'),
+            set::items($navActionItems),
+        ),
+        zui::menu
+        (
+            set::id('navModule'),
+            set::class('dropdown-menu'),
+            set::items($moduleItems)
+        ),
+        zui::menu
+        (
+            set::id('navPlan'),
+            set::class('dropdown-menu'),
+            set::items($planItems)
+        ),
+        zui::menu
+        (
+            set::id('navAssignedTo'),
+            set::class('dropdown-menu'),
+            set::items($assignItems)
+        ),
+    ),
 );
-zui::menu
+
+toolbar
 (
-    set::id('navModule'),
-    set::class('dropdown-menu'),
-    set::items($moduleItems)
+    item(set(array('text' => $lang->project->report, 'icon' => 'bar-chart', 'class' => 'ghost'))),
+    item(set(array('text' => $lang->export, 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType"), 'data-toggle' => 'modal'))),
+    item(set(array('text' => $lang->import, 'icon' => 'import', 'class' => 'ghost', 'url' => helper::createLink('story', 'import', "productID=$productID")))),
+    $fnBuildCreateStoryButton(),
+    $fnBuildLinkStoryButton(),
 );
-zui::menu
-(
-    set::id('navPlan'),
-    set::class('dropdown-menu'),
-    set::items($planItems)
-);
-zui::menu
-(
-    set::id('navAssignedTo'),
-    set::class('dropdown-menu'),
-    set::items($assignItems)
-);
+
+/* Layout. */
+$fnGenerateSideBar();
 
 dtable
 (
