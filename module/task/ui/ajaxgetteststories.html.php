@@ -98,6 +98,7 @@ foreach($testStories as $storyID => $storyTitle)
                 )
             )
         );
+    $i ++;
 }
 
 formGroup
