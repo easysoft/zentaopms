@@ -122,9 +122,19 @@ foreach($projects as $projectID => $project)
 
 panel
 (
-    set('class', 'recentproject-block'),
+    set('class', 'bug-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
     set::title($lang->block->titleList['recentproject']),
+    to::headingActions
+    (
+        a
+        (
+            set('class', 'text-gray'),
+            set('href', $block->moreLink),
+            $lang->more,
+            icon('caret-right')
+        )
+    ),
     div
     (
         set('class', 'flex flex-wrap cards justify-between'),

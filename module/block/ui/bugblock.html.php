@@ -23,7 +23,6 @@ panel
     set::title($block->title),
     set('class', 'bug-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
-
     to::headingActions
     (
         a
