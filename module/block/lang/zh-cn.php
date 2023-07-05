@@ -101,11 +101,13 @@ $lang->block->cannotPlaceInLeft  = '此区块无法放置在左侧。';
 $lang->block->cannotPlaceInRight = '此区块无法放置在右侧。';
 $lang->block->tutorial           = '进入新手教程';
 
-$lang->block->productName  = $lang->productCommon . '名称';
-$lang->block->totalStory   = '总' . $lang->SRCommon;
-$lang->block->totalBug     = '总Bug';
-$lang->block->totalRelease = '发布次数';
-$lang->block->totalTask    = '总' . $lang->task->common;
+$lang->block->productName   = $lang->productCommon . '名称';
+$lang->block->totalStory    = '总' . $lang->SRCommon;
+$lang->block->totalBug      = '总Bug';
+$lang->block->totalRelease  = '发布次数';
+$lang->block->totalTask     = '总' . $lang->task->common;
+$lang->block->projectMember = '团队成员';
+$lang->block->totalMember   = '共 %s 人';
 
 $lang->block->totalInvestment = '已投入';
 $lang->block->totalPeople     = '总人数';

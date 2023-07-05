@@ -101,11 +101,13 @@ $lang->block->cannotPlaceInLeft  = 'Impossible de placer le bloc à gauche.';
 $lang->block->cannotPlaceInRight = 'Impossible de placer le bloc à droite.';
 $lang->block->tutorial           = 'Enter the tutorial';
 
-$lang->block->productName  = $lang->productCommon . ' Name';
-$lang->block->totalStory   = 'Total Story';
-$lang->block->totalBug     = 'Total Bug';
-$lang->block->totalRelease = 'Release The Number';
-$lang->block->totalTask    = 'The Total ' . $lang->task->common;
+$lang->block->productName   = $lang->productCommon . ' Name';
+$lang->block->totalStory    = 'Total Story';
+$lang->block->totalBug      = 'Total Bug';
+$lang->block->totalRelease  = 'Release The Number';
+$lang->block->totalTask     = 'The Total ' . $lang->task->common;
+$lang->block->projectMember = 'Team Member';
+$lang->block->totalMember   = '%s members in total';
 
 $lang->block->totalInvestment = 'Have Invested';
 $lang->block->totalPeople     = 'Total';
