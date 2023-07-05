@@ -43,7 +43,7 @@ class dataset
      * @access public
      * @return PDOStatement
      */
-    public function getReleaseList($fieldList)
+    public function getReleases($fieldList)
     {
         return $this->dao->select($fieldList)
             ->from(TABLE_RELEASE)->alias('t1')
