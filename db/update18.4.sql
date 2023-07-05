@@ -48,3 +48,9 @@ UPDATE `zt_im_userdevice`         SET `lastLogin`      = NULL WHERE `lastLogin` 
 UPDATE `zt_im_userdevice`         SET `lastLogout`     = NULL WHERE `lastLogout`     = '0000-00-00 00:00:00';
 
 CREATE INDEX `project`  ON `zt_project` (`project`);
+
+ALTER TABLE `zt_charter` ADD `closedBy`      char(30) NULL;
+ALTER TABLE `zt_charter` ADD `closedDate`    datetime NULL;
+ALTER TABLE `zt_charter` ADD `closedReason`  varchar(255) NULL;
+ALTER TABLE `zt_charter` ADD `activatedBy`   char(30) NULL;
+ALTER TABLE `zt_charter` ADD `activatedDate` datetime NULL;
