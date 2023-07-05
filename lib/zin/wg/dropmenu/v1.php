@@ -50,7 +50,7 @@ class dropmenu extends wg
 
         $app = data('app');
 
-        if(empty($module))   $module = $app->moduleName;
+        if(empty($module))   $module = $app->tab;
         if(empty($method))   $method = $app->methodName;
         if(empty($extra))    $extra  = '';
         if(empty($objectID)) $objectID = data($module . 'ID');
