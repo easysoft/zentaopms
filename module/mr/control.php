@@ -705,8 +705,10 @@ class mr extends control
         {
             $this->mr->link($MRID, $productID, 'bug');
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::locate(inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy"), 'parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $link = inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy");
+            return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'bugTable')", 'closeModal' => true));
         }
 
         $this->loadModel('bug');
@@ -757,6 +759,10 @@ class mr extends control
             $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), $pager);
         }
 
+        list($order, $sort) = explode('_', $orderBy);
+        $sortCol = array_column($allBugs, $order);
+        array_multisort($sortCol, $sort == 'asc' ? SORT_ASC : SORT_DESC, $allBugs);
+
         $this->view->modules     = $modules;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->allBugs     = $allBugs;
@@ -790,8 +796,10 @@ class mr extends control
         {
             $this->mr->link($MRID, $productID, 'task');
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::locate(inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy"), 'parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $link = inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy");
+            return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'taskTable')", 'closeModal' => true));
         }
 
         $this->loadModel('execution');
@@ -877,7 +885,7 @@ class mr extends control
      * @access public
      * @return mix
      */
-    public function unlink($MRID, $productID, $type, $linkID, $confirm = 'no')
+    public function unlink($MRID, $productID, $type, $linkID)
     {
         $this->app->loadLang('productplan');
 
@@ -893,9 +901,10 @@ class mr extends control
             }
             else
             {
+                $link = inlink('link', "MRID=$MRID&type=$type");
                 $response['result']  = 'success';
                 $response['message'] = '';
-                $response['load']    = true;
+                $response['load']    = $link;
             }
             return $this->send($response);
         }

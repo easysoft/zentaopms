@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('type', $type);
+jsVar('orderBy', $orderBy);
+jsVar('sortLink', createLink('mr', 'link', "MRID={$MR->id}&type={type}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 $actionMenu = array();
 $actionMenu['title'] = $lang->actions;
@@ -91,27 +93,27 @@ panel
         (
             li
             (
-                setClass('nav-item'),
+                setClass('nav-item' . ($type == 'view' ? ' active' : '')),
                 a($lang->mr->view, set::href(inlink('view', "MRID={$MR->id}")))
             ),
             li
             (
-                setClass('nav-item'),
+                setClass('nav-item' . ($type == 'diff' ? ' active' : '')),
                 a($lang->mr->viewDiff, set::href(inlink('diff', "MRID={$MR->id}")))
             ),
             li
             (
-                setClass('nav-item story'),
+                setClass('nav-item story' . ($type == 'story' ? ' active' : '')),
                 a(icon($lang->icons['story']), $lang->productplan->linkedStories, set::href('#mr-story'), set('data-toggle', 'tab'))
             ),
             li
             (
-                setClass('nav-item bug'),
+                setClass('nav-item bug' . ($type == 'bug' ? ' active' : '')),
                 a(icon($lang->icons['bug']), $lang->productplan->linkedBugs, set::href('#mr-bug'), set('data-toggle', 'tab'))
             ),
             li
             (
-                setClass('nav-item task'),
+                setClass('nav-item task' . ($type == 'task' ? ' active' : '')),
                 a(icon('todo'), $lang->mr->linkedTasks, set::href('#mr-task'), set('data-toggle', 'tab'))
             ),
         )
@@ -126,7 +128,7 @@ panel
             (
                 setClass('mr-actions primary'),
                 setData('linkType', 'bug'),
-                setData('size', '80%'),
+                setData('size', '1000px'),
                 setData('toggle', 'modal'),
                 set::url($this->createLink('mr', 'linkStory', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}")),
                 set::icon('link'),
@@ -135,8 +137,11 @@ panel
             dtable
             (
                 set::id('storyTable'),
+                set::userMap($users),
                 set::cols($storyCols),
                 set::data($stories),
+                set::sortLink(jsRaw('createStorySortLink')),
+                set::footPager(usePager(null, 'storyPager')),
             ),
         ),
         tabPane
@@ -146,7 +151,7 @@ panel
             (
                 setClass('mr-actions primary'),
                 setData('linkType', 'bug'),
-                setData('size', '80%'),
+                setData('size', '900px'),
                 setData('toggle', 'modal'),
                 set::url($this->createLink('mr', 'linkBug', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}")),
                 set::icon('bug'),
@@ -154,8 +159,12 @@ panel
             ),
             dtable
             (
+                set::id('bugTable'),
+                set::userMap($users),
                 set::cols($bugCols),
                 set::data($bugs),
+                set::sortLink(jsRaw('createBugSortLink')),
+                set::footPager(usePager(null, 'bugPager')),
             ),
         ),
         tabPane
@@ -165,16 +174,20 @@ panel
             (
                 setClass('mr-actions primary'),
                 setData('linkType', 'task'),
-                setData('size', '80%'),
+                setData('size', '900px'),
                 setData('toggle', 'modal'),
-                set::url($this->createLink('mr', 'linkTask', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}")),
+                set::url($this->createLink('mr', 'linkTask', "MRID={$MR->id}&productID={$product->id}{$param}&browseType=unclosed&orderBy={$orderBy}")),
                 set::icon('todo'),
                 $this->lang->mr->linkTask
             ),
             dtable
             (
+                set::id('taskTable'),
+                set::userMap($users),
                 set::cols($taskCols),
                 set::data($tasks),
+                set::sortLink(jsRaw('createTaskSortLink')),
+                set::footPager(usePager(null, 'taskPager')),
             ),
         ),
     ),
