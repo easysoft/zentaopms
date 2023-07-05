@@ -10,37 +10,22 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('branchTagOption', $branchTagOption);
-jsVar('moduleList', $moduleList);
-jsVar('planGroups', $plans);
-jsVar('meeting', isset($meetings) ? $meetings : array());
-jsVar('researchReports', isset($researchReports) ? $researchReports : array());
-jsVar('productStoryList', $productStoryList);
+jsVar('twinsCount', $twinsCount);
+jsVar('langTwins', $lang->story->twins . ': ');
+if(!empty($errorTips)) js("zui.Modal.alert({message: '{$errorTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
-if(!empty($twinsTip)) js("zui.Modal.alert({message: '{$twinsTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
-
-$fields = $config->story->form->batchEdit;
+unset($lang->story->reasonList['subdivided']);
+$fields = $config->story->form->batchClose;
+$fields['closedReason']['options'] = array_filter($lang->story->reasonList);
 
 $items = array();
 $items['storyIdList'] = array('name' => 'storyIdList', 'label' => '', 'control' => 'hidden', 'hidden' => true);
 $items['id']          = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '60px');
 foreach($fields as $fieldName => $field)
 {
-    if(isset($field['options']) && $field['options'] == 'users') $field['options'] = $users;
     $items[$fieldName] = array('name' => $fieldName, 'label' => zget($lang->story, $fieldName), 'control' => $field['control'], 'width' => $field['width'], 'required' => $field['required'], 'items' => zget($field, 'options', array()));
 }
-$items['assignedTo']['ditto'] = true;
-$items['source']['ditto']     = true;
-$items['stage']['ditto']      = true;
-$items['assignedTo']['defaultDitto'] = 'off';
-$items['source']['defaultDitto']     = 'off';
-$items['stage']['defaultDitto']      = 'off';
-
-if(!$branchProduct) unset($items['branch']);
-foreach($customFields as $fieldName => $fieldTitle)
-{
-    if(!str_contains(",{$showFields},", ",{$fieldName},")) unset($items[$fieldName]);
-}
+$items['comment']['label'] = $lang->comment;
 
 /* Build form field value for batch edit. */
 $fieldNameList = array_keys($items);
@@ -50,18 +35,14 @@ foreach($stories as $storyID => $story)
     $data[$storyID] = $story;
     foreach($fieldNameList as $fieldName)
     {
-        if($fieldName == 'storyIdList')$data[$storyID]->storyIdList = $story->id;
-        if($fieldName == 'status')
-        {
-            $data[$storyID]->rawStatus  = $story->status;
-            $data[$storyID]->$fieldName = $this->processStatus('story', $story);
-        }
+        if($fieldName == 'storyIdList') $data[$storyID]->storyIdList = $story->id;
+        if(!isset($story->$fieldName)) $story->$fieldName = '';
     }
 }
 
 formBatchPanel
 (
-    set::title($lang->story->batchEdit),
+    set::title($lang->story->batchClose),
     set::mode('edit'),
     set::items($items),
     set::data(array_values($data)),

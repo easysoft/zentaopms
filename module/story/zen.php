@@ -140,7 +140,7 @@ class storyZen extends story
      * @access protected
      * @return void
      */
-    protected function setMenuForBatchEdit(int $productID, string $branch = '', int $executionID = 0, string $from): void
+    protected function setMenuForBatchEdit(int $productID, string $branch = '', int $executionID = 0, string $from = ''): void
     {
         $this->view->hiddenPlan = false;
         if($this->app->tab == 'product')
@@ -181,6 +181,54 @@ class storyZen extends story
             {
                 if(!$project->hasProduct and !$project->multiple) $this->view->hiddenPlan = true;
                 $this->execution->setMenu($executionID);
+            }
+        }
+    }
+
+    /**
+     * 设置批量关闭需求页面的导航。
+     * Set menu for batch close.
+     *
+     * @param  int       $productID
+     * @param  int       $executionID
+     * @param  string    $from
+     * @access protected
+     * @return void
+     */
+    protected function setMenuForBatchClose(int $productID, int $executionID = 0, string $from = ''): void
+    {
+        /* The stories of a product. */
+        if($this->app->tab == 'product')
+        {
+            $this->product->setMenu($productID);
+            $product = $this->product->getByID($productID);
+            $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
+        }
+        /* The stories of a execution. */
+        elseif($executionID)
+        {
+            $this->lang->story->menu      = $this->lang->execution->menu;
+            $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
+            $this->execution->setMenu($executionID);
+            $execution = $this->execution->getByID($executionID);
+            $this->view->title = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
+        }
+        else
+        {
+            if($this->app->tab == 'project')
+            {
+                $this->project->setMenu($this->session->project);
+                $this->view->title = $this->lang->story->batchClose;
+            }
+            else
+            {
+                $this->lang->story->menu      = $this->lang->my->menu;
+                $this->lang->story->menuOrder = $this->lang->my->menuOrder;
+
+                if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
+                if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
+
+                $this->view->title = $this->lang->story->batchClose;
             }
         }
     }
@@ -874,7 +922,49 @@ class storyZen extends story
 
             if($story->closedBy && empty($story->closedReason)) dao::$errors['closedReason'] = sprintf($this->lang->error->notempty, $this->lang->story->closedReason);
             if($story->closedReason == 'done' && empty($story->stage)) dao::$errors['stage'] = sprintf($this->lang->error->notempty, $this->lang->story->stage);
-            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors['stage'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors['duplicateStory'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+        }
+
+        return $stories;
+    }
+
+    /**
+     * 构建批量关闭需求数据。
+     * Build stories for batch close.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildStoriesForBatchClose(): array
+    {
+        $fields  = $this->config->story->form->batchClose;
+        $account = $this->app->user->account;
+        $now     = helper::now();
+
+        $fields['duplicateStory'] = array('type' => 'int', 'required' => false, 'default' => 0);
+
+        $data       = form::batchData($fields)->get();
+        $oldStories = $this->story->getByList(array_keys($data));
+        $stories    = array();
+        foreach($data as $storyID => $story)
+        {
+            $oldStory = $oldStories[$storyID];
+            if($oldStory->parent == -1) continue;
+            if($oldStory->status == 'closed') continue;
+
+            $story->lastEditedBy   = $account;
+            $story->lastEditedDate = $now;
+            $story->closedBy       = $account;
+            $story->closedDate     = $now;
+            $story->assignedTo     = 'closed';
+            $story->assignedDate   = $now;
+            $story->status         = 'closed';
+            $story->stage          = 'closed';
+
+            if($story->closedReason != 'done') $story->plan  = '';
+            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors['duplicateStory'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+
+            $stories[$storyID] = $story;
         }
 
         return $stories;

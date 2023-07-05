@@ -1723,76 +1723,51 @@ class storyModel extends model
     /**
      * Batch close story.
      *
+     * @param  array $stories
      * @access public
      * @return void
      */
-    public function batchClose()
+    public function batchClose(array $stories)
     {
-        /* Init vars. */
-        $stories     = array();
-        $allChanges  = array();
-        $now         = helper::now();
-        $data        = fixer::input('post')->get();
-        $storyIdList = $data->storyIdList ? $data->storyIdList : array();
-
-        $oldStories   = $this->getByList($storyIdList);
-        foreach($storyIdList as $storyID)
-        {
-            $oldStory = $oldStories[$storyID];
-            if($oldStory->parent == -1) continue;
-            if($oldStory->status == 'closed') continue;
-
-            $story = new stdclass();
-            $story->lastEditedBy   = $this->app->user->account;
-            $story->lastEditedDate = $now;
-            $story->closedBy       = $this->app->user->account;
-            $story->closedDate     = $now;
-            $story->assignedDate   = $now;
-            $story->status         = 'closed';
-            $story->stage          = 'closed';
-
-            $story->closedReason   = $data->closedReasons[$storyID];
-            $story->duplicateStory = $data->duplicateStoryIDList[$storyID] ? $data->duplicateStoryIDList[$storyID] : $oldStory->duplicateStory;
-            $story->childStories   = $data->childStoriesIDList[$storyID] ? $data->childStoriesIDList[$storyID] : $oldStory->childStories;
-
-            if($story->closedReason != 'done') $story->plan  = '';
-
-            $stories[$storyID] = $story;
-            unset($story);
-        }
-
+        $this->loadModel('action');
+        $oldStories = $this->getByList(array_keys($stories));
         foreach($stories as $storyID => $story)
         {
-            if(!$story->closedReason) continue;
+            if(empty($story->closedReason)) continue;
 
             $oldStory = $oldStories[$storyID];
 
-            $this->dao->update(TABLE_STORY)->data($story)
-                ->autoCheck()
+            $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()
                 ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
                 ->where('id')->eq($storyID)->exec();
 
-            if(!dao::isError())
-            {
-                /* Update parent story status. */
-                if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-                $this->setStage($storyID);
-                $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            if(dao::isError()) return dao::$errors[] = 'story#' . $storyID . dao::getError(true);
 
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
-                {
-                    $feedbacks[$oldStory->feedback] = $oldStory->feedback;
-                    $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
-                }
-            }
-            else
+            /* Update parent story status. */
+            if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+            $this->setStage($storyID);
+
+            $changes = common::createChanges($oldStory, $story);
+            if($changes)
             {
-                helper::end(js::error('story#' . $storyID . dao::getError(true)));
+                $preStatus = $oldStory->status;
+                $isChanged = $oldStory->changedBy ? true : false;
+                if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
+
+                $actionID = $this->action->create('story', $storyID, 'Closed', $story->comment, ucfirst($story->closedReason) . ($story->duplicateStory ? ':' . (int)$story->duplicateStory : '') . "|{$preStatus}");
+                $this->action->logHistory($actionID, $changes);
+
+                if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
             }
-            if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
+
+            if($this->config->edition != 'open' && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
+            {
+                $feedbacks[$oldStory->feedback] = $oldStory->feedback;
+                $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+            }
+
+            $this->loadModel('score')->create('story', 'close', $storyID);
         }
-
-        return $allChanges;
     }
 
     /**

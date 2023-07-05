@@ -1166,17 +1166,31 @@ class story extends control
      */
     public function batchClose($productID = 0, $executionID = 0, $storyType = 'story', $from = '')
     {
-        $this->app->loadLang('bug');
-        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+        if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
+        $this->app->loadLang('bug');
         $this->story->replaceURLang($storyType);
 
+        if($this->post->comment)
+        {
+            $stories = $this->storyZen->buildStoriesForBatchClose();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->story->batchClose($stories);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('score')->create('ajax', 'batchOther');
+            return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
+        }
+
+        $this->storyZen->setMenuForBatchClose($productID, $executionID, $from);
+
         /* Get edited stories. */
-        $stories = $this->story->getByList($storyIdList);
-        $ignoreTwins      = array();
-        $twinsCount       = array();
+        $stories     = $this->story->getByList($storyIdList);
+        $ignoreTwins = array();
+        $twinsCount  = array();
         foreach($stories as $story)
         {
             if(!empty($ignoreTwins) and isset($ignoreTwins[$story->id]))
@@ -1185,16 +1199,9 @@ class story extends control
                 continue;
             }
 
-            if($story->parent == -1)
-            {
-                $skipStory[] = $story->id;
-                unset($stories[$story->id]);
-            }
-            if($story->status == 'closed')
-            {
-                $closedStory[] = $story->id;
-                unset($stories[$story->id]);
-            }
+            if($story->parent == -1)       $skipStory[]   = $story->id;
+            if($story->status == 'closed') $closedStory[] = $story->id;
+            if($story->parent == -1 || $story->status == 'closed') unset($stories[$story->id]);
 
             if(!empty($story->twins))
             {
@@ -1207,86 +1214,15 @@ class story extends control
             }
         }
 
-        if($this->post->comments)
-        {
-            $allChanges = $this->story->batchClose();
-
-            if($allChanges)
-            {
-                foreach($allChanges as $storyID => $changes)
-                {
-                    $preStatus = $stories[$storyID]->status;
-                    $isChanged = $stories[$storyID]->changedBy ? true : false;
-                    if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
-
-                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : '') . "|$preStatus");
-                    $this->action->logHistory($actionID, $changes);
-
-                    if(!empty($stories[$storyID]->twins)) $this->story->syncTwins($storyID, $stories[$storyID]->twins, $changes, 'Closed');
-                }
-
-                $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->in(array_keys($allChanges))->exec();
-            }
-
-            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-            return print(js::locate($this->session->storyList, 'parent'));
-        }
-
         $errorTips = '';
         if(isset($closedStory)) $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
         if(isset($skipStory))   $errorTips .= sprintf($this->lang->story->skipStory, implode(',', $skipStory));
-        if(isset($skipStory) || isset($closedStory)) echo js::alert($errorTips);
 
-        /* The stories of a product. */
-        if($this->app->tab == 'product')
-        {
-            $this->product->setMenu($productID);
-            $product = $this->product->getByID($productID);
-            $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchClose;
-        }
-        /* The stories of a execution. */
-        elseif($executionID)
-        {
-            $this->lang->story->menu      = $this->lang->execution->menu;
-            $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
-            $this->execution->setMenu($executionID);
-            $execution = $this->execution->getByID($executionID);
-            $this->view->title      = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
-        }
-        else
-        {
-            if($this->app->tab == 'project')
-            {
-                $this->project->setMenu($this->session->project);
-                $this->view->title = $this->lang->story->batchEdit;
-            }
-            else
-            {
-                $this->lang->story->menu      = $this->lang->my->menu;
-                $this->lang->story->menuOrder = $this->lang->my->menuOrder;
-
-                if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
-                if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
-
-                $this->view->title      = $this->lang->story->batchEdit;
-            }
-        }
-
-        /* Judge whether the editedStories is too large and set session. */
-        $countInputVars  = count($stories) * $this->config->story->batchClose->columns;
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-
-        unset($this->lang->story->reasonList['subdivided']);
-
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'story');
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
-        $this->view->storyIdList      = $storyIdList;
         $this->view->storyType        = $storyType;
-        $this->view->reasonList       = $this->lang->story->reasonList;
         $this->view->twinsCount       = $twinsCount;
+        $this->view->errorTips        = $errorTips;
 
         $this->display();
     }
@@ -2374,6 +2310,6 @@ class story extends control
         $story   = $this->story->getByID($storyID);
         $stories = $this->story->getProductStoryPairs($story->product, $story->branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
-        return print html::select("duplicateStoryIDList[$storyID]", $stories, '', "class='form-control' placeholder='{$this->lang->bug->placeholder->duplicate}'");
+        return print html::select("duplicateStory[$storyID]", $stories, '', "class='form-control' placeholder='{$this->lang->bug->placeholder->duplicate}'");
     }
 }
