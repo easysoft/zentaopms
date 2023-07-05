@@ -28,6 +28,7 @@ else
     $honorary = 'bug';
 }
 
+$blockNavCode = 'nav-' . uniqid();
 panel
 (
     set('class', 'welcome-block'),
@@ -90,7 +91,7 @@ panel
             (
                 tabPane
                 (
-                    set::key('reviewByMe'),
+                    set::key("reviewByMe_$blockNavCode"),
                     set::title($lang->block->welcome->reviewByMe),
                     div
                     (
@@ -100,7 +101,7 @@ panel
                 ),
                 tabPane
                 (
-                    set::key('assignToMe'),
+                    set::key("assignToMe_$blockNavCode"),
                     set::title($lang->block->welcome->assignToMe),
                     set::active(true),
                     div
