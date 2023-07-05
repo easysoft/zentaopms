@@ -113,8 +113,8 @@ foreach($projects as $project)
             }
             $cells[] = cell
             (
-                setClass('flex-1 project-statistic-table scrum pl-4' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : '') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
-                set::width($longBlock ? '25%' : '50%'),
+                setClass('flex-1 project-statistic-table scrum' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : ' ml-4') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
+                set::width($longBlock ? ($module == 'cost' ? 'calc(25% - 1rem)' : '25%') : 'calc(50% - 1rem)'),
                 div
                 (
                     setClass('pt-1'),
