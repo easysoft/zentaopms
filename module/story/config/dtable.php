@@ -381,20 +381,20 @@ $config->story->bugTable->fieldList['assignedTo']['name']     = 'assignedTo';
 $config->story->bugTable->fieldList['assignedTo']['title']    = $lang->bug->assignedTo;
 $config->story->bugTable->fieldList['assignedTo']['type']     = 'user';
 $config->story->bugTable->fieldList['assignedTo']['sortType'] = false;
-$config->story->bugTable->fieldList['assignedTo']['group']    = 3;
+$config->story->bugTable->fieldList['assignedTo']['group']    = 4;
 
 $config->story->bugTable->fieldList['resolvedBy']['name']     = 'resolvedBy';
 $config->story->bugTable->fieldList['resolvedBy']['title']    = $lang->bug->resolvedBy;
 $config->story->bugTable->fieldList['resolvedBy']['type']     = 'user';
 $config->story->bugTable->fieldList['resolvedBy']['sortType'] = false;
-$config->story->bugTable->fieldList['resolvedBy']['group']    = 3;
+$config->story->bugTable->fieldList['resolvedBy']['group']    = 5;
 
 $config->story->bugTable->fieldList['resolution']['name']     = 'resolution';
 $config->story->bugTable->fieldList['resolution']['title']    = $lang->bug->resolution;
 $config->story->bugTable->fieldList['resolution']['type']     = 'category';
 $config->story->bugTable->fieldList['resolution']['map']      = $lang->bug->resolutionList;
 $config->story->bugTable->fieldList['resolution']['sortType'] = false;
-$config->story->bugTable->fieldList['resolution']['group']    = 3;
+$config->story->bugTable->fieldList['resolution']['group']    = 5;
 
 $app->loadLang('testcase');
 $config->story->caseTable = new stdclass();
@@ -435,17 +435,17 @@ $config->story->caseTable->fieldList['lastRunner']['name']     = 'lastRunner';
 $config->story->caseTable->fieldList['lastRunner']['title']    = $lang->testcase->lastRunner;
 $config->story->caseTable->fieldList['lastRunner']['type']     = 'user';
 $config->story->caseTable->fieldList['lastRunner']['sortType'] = false;
-$config->story->caseTable->fieldList['lastRunner']['group']    = 3;
+$config->story->caseTable->fieldList['lastRunner']['group']    = 4;
 
 $config->story->caseTable->fieldList['lastRunDate']['name']     = 'lastRunDate';
 $config->story->caseTable->fieldList['lastRunDate']['title']    = $lang->testcase->lastRunDate;
 $config->story->caseTable->fieldList['lastRunDate']['type']     = 'date';
 $config->story->caseTable->fieldList['lastRunDate']['sortType'] = false;
-$config->story->caseTable->fieldList['lastRunDate']['group']    = 3;
+$config->story->caseTable->fieldList['lastRunDate']['group']    = 4;
 
 $config->story->caseTable->fieldList['lastRunResult']['name']     = 'lastRunResult';
 $config->story->caseTable->fieldList['lastRunResult']['title']    = $lang->testcase->lastRunResult;
 $config->story->caseTable->fieldList['lastRunResult']['type']     = 'category';
 $config->story->caseTable->fieldList['lastRunResult']['map']      = $lang->testcase->resultList;
 $config->story->caseTable->fieldList['lastRunResult']['sortType'] = false;
-$config->story->caseTable->fieldList['lastRunResult']['group']    = 3;
+$config->story->caseTable->fieldList['lastRunResult']['group']    = 5;
