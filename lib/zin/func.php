@@ -1567,3 +1567,14 @@ function overviewBlock(): overviewBlock
 {
     return createWg('overviewBlock', func_get_args());
 }
+
+/**
+ * Pri picker widget.
+ *
+ * ?string placeholder
+ * ?string[]|object[]|object|array items
+ */
+function priPicker(): priPicker
+{
+    return createWg('priPicker', func_get_args());
+}
