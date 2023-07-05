@@ -113,11 +113,11 @@ foreach($projects as $project)
             }
             $cells[] = cell
             (
-                setClass('flex-1 project-statistic-table scrum' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : '') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
+                setClass('flex-1 project-statistic-table scrum pl-4' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : '') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
                 set::width($longBlock ? '25%' : '50%'),
                 div
                 (
-                    setClass('px-2 pt-1'),
+                    setClass('pt-1'),
                     span
                     (
                         setClass('font-bold'),
@@ -144,11 +144,11 @@ foreach($projects as $project)
                 zui::progressCircle
                 (
                     set('percent', $project->progress),
-                    set('size', 135),
-                    set('circleWidth', 10),
+                    set('size', 112),
+                    set('circleWidth', 6),
                     set('text', "{$project->progress}%"),
-                    set('textY', 63),
-                    set('textStyle', 'font-size: 35px;'),
+                    set('textY', 50),
+                    set('textStyle', 'font-size: 30px;'),
                 ),
             ),
             div
@@ -176,11 +176,11 @@ foreach($projects as $project)
         );
         $cells[] = cell
         (
-            setClass('flex-1 project-statistic-table px-4' . ($longBlock ? ' border-l' : 'mt-4')),
+            setClass('project-statistic-table pl-4' . ($longBlock ? ' border-l' : ' mt-4')),
             set::width($longBlock ? '32%' : '50%'),
             div
             (
-                setClass('px-2'),
+                setClass('w-full'),
                 span
                 (
                     setClass('font-bold'),
@@ -200,12 +200,11 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->sv,
                             icon
                             (
-                                setClass('pl-1.5'),
                                 set('data-toggle', 'tooltip'),
                                 set('href', 'svTooltip'),
                                 'help'
                             ),
-                            '：',
+                            ':',
                             div
                             (
                                 setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
@@ -231,12 +230,11 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->pv,
                             icon
                             (
-                                setClass('pl-1.5'),
                                 set('data-toggle', 'tooltip'),
                                 set('href', 'pvTooltip'),
                                 'help'
                             ),
-                            '：',
+                            ':',
                             div
                             (
                                 setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
@@ -262,12 +260,11 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->ev,
                             icon
                             (
-                                setClass('pl-1.5'),
                                 set('data-toggle', 'tooltip'),
                                 set('href', 'evTooltip'),
                                 'help'
                             ),
-                            '：',
+                            ':',
                             div
                             (
                                 setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
@@ -290,15 +287,15 @@ foreach($projects as $project)
         );
         $cells[] = cell
         (
-            setClass('flex-1 project-statistic-table px-4 border-l' . (!$longBlock ? ' mt-3' : '')),
+            setClass('project-statistic-table pl-4 border-l' . (!$longBlock ? ' mt-3' : '')),
             set::width($longBlock ? '32%' : '50%'),
             div
             (
-                setClass('px-2'),
+                setClass('w-full'),
                 span
                 (
                     setClass('font-bold'),
-                    $lang->project->currentCost
+                    $lang->block->projectstatistic->currentCost
                 ),
             ),
             h::table
@@ -314,12 +311,11 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->cv,
                             icon
                             (
-                                setClass('pl-1.5'),
                                 set('data-toggle', 'tooltip'),
                                 set('href', 'cvTooltip'),
                                 'help'
                             ),
-                            '：',
+                            ':',
                             div
                             (
                                 setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
@@ -345,12 +341,11 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->ev,
                             icon
                             (
-                                setClass('pl-1.5'),
                                 set('data-toggle', 'tooltip'),
                                 set('href', 'evTooltip'),
                                 'help'
                             ),
-                            '：',
+                            ':',
                             div
                             (
                                 setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
@@ -376,12 +371,11 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->ac,
                             icon
                             (
-                                setClass('pl-1.5'),
                                 set('data-toggle', 'tooltip'),
                                 set('href', 'acTooltip'),
                                 'help'
                             ),
-                            '：',
+                            ':',
                             div
                             (
                                 setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
@@ -408,13 +402,13 @@ foreach($projects as $project)
     (
         div
         (
-            setClass('flex flex-wrap bg-white leading-6 px-2 py-1 mt-3 mx-0.5 shadow items-center' . ($longBlock ? ' h-10 mb-6' : 'h-20 mb-4')),
+            setClass('flex flex-wrap bg-white leading-6 px-2 py-1 mt-3 mx-4 shadow items-center' . ($longBlock ? ' h-10 mb-6' : 'h-20 mb-4')),
             $projectOverview,
             $lastestExecution,
         ),
         div
         (
-            setClass('flex flex-wrap'),
+            setClass('flex' . (!$longBlock ? ' flex-wrap' : '')),
             $cells,
         )
     );
@@ -543,7 +537,7 @@ if($longBlock)
     );
     $statisticCells[] = cell
     (
-         setClass('tab-content px-4'),
+         setClass('tab-content'),
          set::width('78%'),
          $tabItems,
     );
@@ -551,7 +545,7 @@ if($longBlock)
 
 panel
 (
-    setClass('projectstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm px-4')),
+    setClass('projectstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::bodyClass('no-shadow border-t'),
     set::title($block->title),
     to::headingActions
