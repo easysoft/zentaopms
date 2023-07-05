@@ -21,7 +21,7 @@ INSERT INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2108, 'depend', 
 
 ALTER TABLE `zt_traincourse` ADD `importedStatus` enum('','wait','doing','done') NOT NULL DEFAULT '' AFTER `desc`;
 ALTER TABLE `zt_traincourse` ADD `lastUpdatedTime` int UNSIGNED NOT NULL DEFAULT 0 AFTER `importedStatus`;
-ALTER TABLE `zt_traincourse` MODIFY COLUMN `code` varchar(255) DEFAULT '' NOT NULL;
+ALTER TABLE `zt_traincourse` MODIFY COLUMN `code` varchar(255) NOT NULL DEFAULT '';
 
 UPDATE `zt_im_chat`               SET `createdDate`    = NULL WHERE `createdDate`    = '0000-00-00 00:00:00';
 UPDATE `zt_im_chat`               SET `editedDate`     = NULL WHERE `editedDate`     = '0000-00-00 00:00:00';

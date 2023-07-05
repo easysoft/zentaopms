@@ -104,6 +104,7 @@ $lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.5']        = '2023-07-05';
 $lang->misc->releaseDate['18.4']        = '2023-06-14';
 $lang->misc->releaseDate['18.4.beta1']  = '2023-05-31';
 $lang->misc->releaseDate['18.4.alpha1'] = '2023-04-21';
@@ -204,6 +205,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.5'][]        = array('title' => '学堂课程支持从云端导入，支持课程中PDF文件的预览，同时还优化了常用列表的加载速度，修复了多处Bug。', 'desc' => '');
 $lang->misc->feature->all['18.4'][]        = array('title' => '本次发布优化了核心列表的性能，兼容达梦数据库，修复了多处Bug。', 'desc' => '');
 $lang->misc->feature->all['18.4.beta1'][]  = array('title' => '解Bug。', 'desc' => '');
 $lang->misc->feature->all['18.4.alpha1'][] = array('title' => '优化权限、文档交互体验，测试新增场景概念，用例支持xmind导入，并对BI模块中的大屏、透视表、图表、数据表进行了全面升级。', 'desc' => '');

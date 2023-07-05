@@ -37,7 +37,8 @@ $config->upgrade->maxVersion['max4_2']        = '18_2';
 $config->upgrade->maxVersion['max4_3']        = '18_3';
 $config->upgrade->maxVersion['max4_4_alpha1'] = '18_4_alpha1';
 $config->upgrade->maxVersion['max4_4_beta1']  = '18_4_beta1';
-$config->upgrade->maxVersion['max4_4']        = '18_4'; // max insert position.
+$config->upgrade->maxVersion['max4_4']        = '18_4';
+$config->upgrade->maxVersion['max4_5']        = '18_5'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']        = '9_5_1';
@@ -113,7 +114,8 @@ $config->upgrade->bizVersion['biz8_2']        = '18_2';
 $config->upgrade->bizVersion['biz8_3']        = '18_3';
 $config->upgrade->bizVersion['biz8_4_alpha1'] = '18_4_alpha1';
 $config->upgrade->bizVersion['biz8_4_beta1']  = '18_4_beta1';
-$config->upgrade->bizVersion['biz8_4']        = '18_4'; // biz insert position.
+$config->upgrade->bizVersion['biz8_4']        = '18_4';
+$config->upgrade->bizVersion['biz8_5']        = '18_5'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
