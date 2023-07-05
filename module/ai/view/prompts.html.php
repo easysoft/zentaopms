@@ -72,7 +72,15 @@
                 </td>
                 <td class='c-createdby'><?php echo $prompt->createdBy;?></td>
                 <td class='c-createddate'><?php echo $prompt->createdDate;?></td>
-                <td class='c-targetform'><?php echo $prompt->targetForm;?></td>
+                <td class='c-targetform'>
+                  <?php
+                    if($prompt->targetForm)
+                    {
+                      $targetFormPath = explode('.', $prompt->targetForm);
+                      if(count($targetFormPath) == 2) echo $lang->ai->targetForm[$targetFormPath[0]]['common'] . ' / ' . $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]];
+                    }
+                  ?>
+                </td>
                 <td class='c-description'><?php echo $prompt->desc;?></td>
                 <td class='text-center c-actions'>
                   <?php
