@@ -81,6 +81,8 @@ class tableData extends wg
 
     public function onBuildItem($item)
     {
+        $item->setProp(array('thClass' => $this->prop('thClass'), 'tdClass' => $this->prop('tdClass')));
+
         $useTable = $this->prop('useTable');
         if($useTable) return $this->buildItemWithTr($item);
 
