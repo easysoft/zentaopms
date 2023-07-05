@@ -38,6 +38,7 @@ class datatable extends control
     {
         if($branchType) $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, isset($this->lang->datatable->$branchType) ? $this->lang->datatable->$branchType : $this->lang->datatable->branch);
 
+        $this->app->loadLang($currentModule);
         $this->app->loadConfig($currentModule);
 
         $this->view->datatableId   = $datatableId;
