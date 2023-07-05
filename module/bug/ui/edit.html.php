@@ -99,6 +99,7 @@ detailBody
         tableData
         (
             set::title($lang->bug->legendBasicInfo),
+            set::tdClass('w-64'),
             item
             (
                 set::class($product->shadow ? 'hidden' : ''),
@@ -359,6 +360,7 @@ detailBody
         tableData
         (
             set::title(!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask),
+            set::tdClass('w-64'),
             item
             (
                 set::name($lang->bug->project),
@@ -420,6 +422,7 @@ detailBody
         tableData
         (
             set::title($lang->bug->legendLife),
+            set::tdClass('w-64'),
             item
             (
                 set::name($lang->bug->openedBy),
@@ -543,6 +546,7 @@ detailBody
         tableData
         (
             set::title($lang->bug->legendMisc),
+            set::tdClass('w-64'),
             item
             (
                 set::name($lang->bug->relatedBug),
