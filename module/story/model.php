@@ -3654,8 +3654,8 @@ class storyModel extends model
             {
                 $this->app->loadLang('testcase');
                 $mainMenu[] = array('url' => '#caseActions', 'text' => $this->lang->testcase->common, 'data-toggle' => 'dropdown', 'data-placement' => 'top-end', 'caret' => 'up');
-                $dropMenus['caseActions'][] = commonModel::buildActionItem('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", $story, array('text' => $this->lang->testcase->create, 'data-toggle' => 'modal'));
-                $dropMenus['caseActions'][] = commonModel::buildActionItem('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", null, array('text' => $this->lang->testcase->batchCreate, 'data-toggle' => 'modal'));
+                $dropMenus['caseActions'][] = commonModel::buildActionItem('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", $story, array('text' => $this->lang->testcase->create, 'data-toggle' => 'modal', 'data-size' => 'lg'));
+                $dropMenus['caseActions'][] = commonModel::buildActionItem('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", null, array('text' => $this->lang->testcase->batchCreate, 'data-toggle' => 'modal', 'data-size' => 'lg'));
             }
 
             if(($this->app->tab == 'execution' or (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active' and $story->type == 'story')
