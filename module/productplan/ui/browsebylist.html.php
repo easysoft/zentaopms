@@ -241,7 +241,7 @@ toolbar
     (
         set::icon('plus'),
         setClass('primary'),
-        set::url(createLink('projectplan', 'create', "productID=$product->id&branch=$branch")),
+        set::url(createLink('productplan', 'create', "productID=$product->id&branch=$branch")),
         $lang->productplan->create
     ) : null
 );
@@ -252,13 +252,13 @@ if(empty($plans))
     $btn = null;
     if(common::canModify('product', $product) && empty($productPlansNum))
     {
-        if(common::hasPriv('projectplan', 'create') && $isProjectplan)
+        if(common::hasPriv('productplan', 'create') && $isProjectplan)
         {
           $btn = btn
           (
               setClass('secondary'),
               set::icon('plus'),
-              set::url(createLink('projectplan', 'create', "productID=$product->id&branch=$branch")),
+              set::url(createLink('productplan', 'create', "productID=$product->id&branch=$branch")),
               $lang->productplan->create,
           );
         }
