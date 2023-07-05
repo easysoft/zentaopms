@@ -74,6 +74,8 @@ class block extends control
                 $typeName   = empty($typeOptions) ? '' : $typeOptions[array_keys($typeOptions)[0]];
                 $blockTitle = vsprintf($this->lang->block->blockTitle, array($typeName, $blockTitle));
             }
+
+            if(empty($blockTitle) && !in_array($module, array('product', 'project', 'execution', 'qa'))) $blockTitle = zget($modules, $module);
         }
         $widths       = !empty($this->config->block->size[$module][$code]) ? array_keys($this->config->block->size[$module][$code]) : array('1', '2');
         $widthOptions = array();
