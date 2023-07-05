@@ -356,9 +356,9 @@ class bugModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldBug, $bug);
-        if($changes || $bug->comment)
+        if($changes || !empty($bug->comment))
         {
-            $actionID = $this->loadModel('action')->create('bug', $bug->id, $changes ? $action : 'Commented', $bug->comment);
+            $actionID = $this->loadModel('action')->create('bug', $bug->id, $changes ? $action : 'Commented', zget($bug, 'comment', ''));
             if($changes) $this->action->logHistory($actionID, $changes);
         }
 
