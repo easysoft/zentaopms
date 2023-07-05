@@ -31,7 +31,7 @@ class dataset
     public function getAllExecutions($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_PROJECT)
-            ->where('deleted')->eqw(0)
+            ->where('deleted')->eq(0)
             ->andWhere('type')->in('sprint,stage,kanban')
             ->query();
     }
