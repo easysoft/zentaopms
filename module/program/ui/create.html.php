@@ -1,11 +1,9 @@
 <?php
 namespace zin;
 
-$parentID          = $parentProgram->id ?? 0;
-$currency          = $parentID ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
-$aclList           = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;
-$budgetPlaceholder = $parentProgram ? $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft : '';
-$budgetAvaliable   = !$parentID || $budgetLeft;
+$parentID = $parentProgram->id ?? 0;
+$currency = $parentID ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
+$aclList  = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;
 
 jsVar('longTime', $lang->project->longTime);
 jsVar('weekend', $config->execution->weekend);
@@ -18,8 +16,6 @@ jsVar('currencySymbol', $lang->project->currencySymbol);
 jsVar('budgetOverrun', $lang->project->budgetOverrun);
 
 set::title($parentID ? $lang->program->children : $lang->program->create);
-
-$currency = $parentProgram ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
 formPanel
 (
     to::heading
