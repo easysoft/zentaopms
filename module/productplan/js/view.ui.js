@@ -71,3 +71,9 @@ $(document).on('click', '.linkObjectBtn', function()
 
     $.ajaxSubmit({"url": $(this).data('url'), "data": postData, "callback": loadPage(locateURL[type])});
 });
+
+if(initLink == 'true')
+{
+    var idName = type == 'story' ? '#stories' : '#bugs';
+    window.showLink($(idName).find('.link'));
+}

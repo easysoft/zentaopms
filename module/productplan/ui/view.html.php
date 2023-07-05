@@ -22,13 +22,18 @@ $confirmLang['finish']   = $lang->productplan->confirmFinish;
 $confirmLang['activate'] = $lang->productplan->confirmActivate;
 $confirmLang['delete']   = $lang->productplan->confirmDelete;
 
+jsVar('initLink',    $link);
+jsVar('type',        $type);
+jsVar('orderBy',     $orderBy);
+jsVar('planID',      $plan->id);
 jsVar('confirmLang', $confirmLang);
 jsVar('unlinkURL',   $unlinkURL);
 jsVar('locateURL',   $locateURL);
 jsVar('childrenAB',  $lang->story->childrenAB);
 
-$bugCols  = array();
-$storyCols = array();
+$decodeParam = helper::safe64Decode($param);
+$bugCols     = array();
+$storyCols   = array();
 foreach($config->productplan->defaultFields['story'] as $field) $storyCols[$field] = zget($config->story->dtable->fieldList, $field, array());
 foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]   = zget($config->bug->dtable->fieldList, $field, array());
 
@@ -199,7 +204,7 @@ detailBody
                         set::trigger('hover'),
                         set::placement('bottom-end'),
                     ),
-                    !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}&browseType=&param={$param}&orderBy={$orderBy}"))),
+                    !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}&browseType=&param={$decodeParam}&orderBy={$orderBy}"))),
                 ),
                 dtable
                 (
@@ -214,10 +219,11 @@ detailBody
                     set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
                     set::footPager
                     (
-                        usePager(null, 'storyPager'),
-                        set::recPerPage($storyPager->recPerPage),
-                        set::recTotal($storyPager->recTotal),
-                        set::linkCreator(helper::createLink('build', 'view', "buildID={$build->id}&type=story&orderBy={$orderBy}&link={$link}&param={$param}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                        usePager(array(
+                            'recPerPage' => $storyPager->recPerPage,
+                            'recTotal' => $storyPager->recTotal,
+                            'linkCreator' => helper::createLink('productplan', 'view', "planID={$plan->id}&type=story&orderBy={$orderBy}&link=false&param={$param}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")
+                        ), 'storyPager'),
                     ),
                 )
             ),
@@ -230,7 +236,7 @@ detailBody
                 div
                 (
                     setClass('tabnActions'),
-                    !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}&browseType=&param={$param}&orderBy={$orderBy}"))),
+                    !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}&browseType=&param={$decodeParam}&orderBy={$orderBy}"))),
                 ),
                 dtable
                 (
@@ -244,10 +250,11 @@ detailBody
                     set::footer(array('checkbox', 'toolbar', array('html' => sprintf($lang->productplan->bugSummary, count($planBugs)), 'className' => "text-dark"), 'flex', 'pager')),
                     set::footPager
                     (
-                        usePager(null, 'bugPager'),
-                        set::recPerPage($bugPager->recPerPage),
-                        set::recTotal($bugPager->recTotal),
-                        set::linkCreator(helper::createLink('build', 'view', "buildID={$build->id}&type=bug&orderBy={$orderBy}&link={$link}&param={$param}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                        usePager(array(
+                            'recPerPage' => $bugPager->recPerPage,
+                            'recTotal' => $bugPager->recTotal,
+                            'linkCreator' => helper::createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={$orderBy}&link=false&param={$param}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
+                        ), 'bugPager'),
                     ),
                 )
             ),

@@ -15,6 +15,7 @@ foreach($config->productplan->defaultFields['linkBug'] as $field) $cols[$field] 
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['assignedTo']['type'] = 'user';
 
+div(setID('searchFormPanel'), searchToggle(set::open(true), set::module('bug')));
 dtable
 (
     set::id('unlinkBugList'),
@@ -34,7 +35,14 @@ dtable
         ))
     )),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
-    set::footPager(usePager()),
+    set::footPager
+    (
+        usePager(array(
+            'recPerPage' => $pager->recPerPage,
+            'recTotal' => $pager->recTotal,
+            'linkCreator' => helper::createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={$orderBy}&link=true&param=" . helper::safe64Encode("&browseType={$browseType}&param={$param}") . "&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
+        ))
+    ),
 );
 
 render();

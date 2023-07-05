@@ -1409,9 +1409,9 @@ class storyModel extends model
      * @param  string  $result
      * @param  string  $reason
      * @access public
-     * @return array
+     * @return string|null
      */
-    public function batchReview($storyIdList, $result, $reason)
+    public function batchReview(array $storyIdList, string $result, string $reason): string|null
     {
         $now           = helper::now();
         $reviewedTwins = array();
@@ -1972,9 +1972,9 @@ class storyModel extends model
      * @param string $stage
      *
      * @access public
-     * @return array
+     * @return string|null
      */
-    public function batchChangeStage(array $storyIdList, string $stage): string
+    public function batchChangeStage(array $storyIdList, string $stage): string|null
     {
         $now           = helper::now();
         $account       = $this->app->user->account;

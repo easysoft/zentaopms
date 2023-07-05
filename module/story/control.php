@@ -418,7 +418,6 @@ class story extends control
 
         /* Load model. */
         $this->loadModel('productplan');
-
         if($this->post->title)
         {
             $stories = $this->storyZen->buildStoriesForBatchEdit();
