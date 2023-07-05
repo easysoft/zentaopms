@@ -11,6 +11,23 @@
  */
 class metric extends control
 {
+    /**
+     * __construct.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Excute metric.
+     *
+     * @access public
+     * @return void
+     */
     public function execMetric()
     {
         $dataset         = $this->metric->getDataset();
