@@ -13,6 +13,7 @@
   <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> $lang->goback", '', 'btn btn-info');?>
   <div class='steps'>
     <?php
+    $step = preg_replace('/^prompt/', '', $app->methodName);
     $stepSequence = array('assignrole', 'selectdatasource', 'setpurpose', 'settargetform', 'finalize');
 
     $currentStepIndex = array_search($step, $stepSequence);
