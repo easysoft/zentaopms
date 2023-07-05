@@ -70,11 +70,11 @@ if(!$this->task->canOperateEffort($task))
     $notice = '';
     if(!isset($task->members[$app->user->account]))
     {
-        $notice = p(sprintf($lang->task->deniedNotice, $lang->task->teamMember, $lang->task->logEfforts));
+        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts));
     }
     elseif($task->assignedTo != $app->user->account and $task->mode == 'linear')
     {
-        $notice = p(sprintf($lang->task->deniedNotice, $task->assignedToRealName, $lang->task->logEfforts));
+        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts));
     }
 
     div
