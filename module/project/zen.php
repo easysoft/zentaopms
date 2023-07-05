@@ -850,6 +850,7 @@ class projectZen extends project
         /* Build the product from other linked products. */
         if($this->config->systemMode == 'ALM') $this->buildProductForm($project, $allProducts, $linkedBranchIdList, $linkedBranches, $linkedProducts);
 
+        $this->view->linkedProducts           = $linkedProducts;
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;

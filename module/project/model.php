@@ -2060,7 +2060,7 @@ class projectModel extends model
         }
 
         /* Link products of current program of the project. */
-        $products           = isset($_POST['products']) ? $_POST['products'] : $products;
+        $products           = isset($_POST['products']) ? (array)$_POST['products'] : $products;
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
 
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();

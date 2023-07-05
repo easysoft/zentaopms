@@ -32,7 +32,11 @@ $(function()
             products.push(currentProductID);
             branches.push(currentBranchID);
 
-            postAndLoadPage($.createLink('project', 'manageProducts', 'projectID=' + selectProjectID), {'products' : products, 'branch' : branches});
+            $.ajaxSubmit({
+                url:  $.createLink('project', 'manageProducts', 'projectID=' + selectProjectID), 
+                data: {'products' : products, 'branch' : branches},
+                load: true
+            });
         });
     });
 });
