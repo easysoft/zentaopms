@@ -281,16 +281,16 @@ class program extends control
     public function close($programID)
     {
         $this->loadModel('action');
-        $program = $this->project->getByID($programID, 'program');
+        $program = $this->program->getByID($programID);
 
         if(!empty($_POST))
         {
             /* Only when all subprograms and subprojects are closed can the program be closed. */
             $hasUnfinished = $this->program->hasUnfinished($program);
-            if($hasUnfinished) return print(js::error($this->lang->program->closeErrorMessage));
+            if($hasUnfinished) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->closeErrorMessage}');"));
 
-            $changes = $this->project->close($programID, 'program');
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $changes = $this->program->close($programID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -299,15 +299,15 @@ class program extends control
             }
 
             $this->executeHooks($programID);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
-        $this->view->title      = $this->lang->program->close;
-        $this->view->project    = $program;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('program', $programID);
+        $this->view->title   = $this->lang->program->close;
+        $this->view->program = $program;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions = $this->action->getList('program', $programID);
 
-        $this->display('project', 'close');
+        $this->display();
     }
 
     /**

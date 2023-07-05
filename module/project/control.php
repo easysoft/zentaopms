@@ -1583,7 +1583,7 @@ class project extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Process the data returned after the closed. */
-            $comment = strip_tags($this->post->comment, $this->config->allowedTags);
+            $comment = strip_tags((string)$this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterClose($projectID, $changes, $comment);
 
             return $this->sendSuccess(array('closeModal' => true, 'load' => true));

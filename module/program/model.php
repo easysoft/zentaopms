@@ -955,6 +955,41 @@ class programModel extends model
     }
 
     /**
+     * Close program.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function close(int $programID) :array
+    {
+        $oldProgram = $this->getById($programID);
+        $now        = helper::now();
+
+        $program = fixer::input('post')
+            ->setDefault('status', 'closed')
+            ->setDefault('closedBy', $this->app->user->account)
+            ->setDefault('closedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->stripTags($this->config->program->editor->close['id'], $this->config->allowedTags)
+            ->remove('comment')
+            ->get();
+
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->close['id'], $this->post->uid);
+
+        $this->dao->update(TABLE_PROJECT)->data($program)
+            ->autoCheck()
+            ->checkIF($program->realEnd != '', 'realEnd', 'le', helper::today())
+            ->checkIF($program->realEnd != '', 'realEnd', 'ge', $oldProgram->realBegan)
+            ->checkFlow()
+            ->where('id')->eq((int)$programID)
+            ->exec();
+
+        return common::createChanges($oldProgram, $program);
+    }
+
+    /**
      * Activate a program.
      *
      * @param  int $programID
