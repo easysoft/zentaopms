@@ -660,7 +660,7 @@ class personnelModel extends model
      */
     public function addWhitelist($objectType = '', $objectID = 0)
     {
-        $users = $this->post->accounts;
+        $users = $this->post->account;
         $this->updateWhitelist($users, $objectType, $objectID);
     }
 
