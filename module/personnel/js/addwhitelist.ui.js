@@ -16,8 +16,8 @@ window.renderRowData = function($row, index, row)
 function setObjectUsers()
 {
     var copyID = $('#object').val();
-    var deptID   = $('#dept').val();
-    var link     = $.createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&copyID=' + copyID + '&objectType=' + objectType + '&module=' + module);
+    var deptID = $('#dept').val();
+    var link   = $.createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&copyID=' + copyID + '&objectType=' + objectType + '&module=' + module);
     if(module == 'program') link = $.createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&copyID=' + copyID + '&programID=' + programID + '&from=' + from);
 
     loadPage(link, '.panel-body');
