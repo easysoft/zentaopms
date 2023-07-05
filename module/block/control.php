@@ -44,9 +44,12 @@ class block extends control
             $formData->vision    = $this->config->vision;
             $formData->params    = json_encode($formData->params);
 
-            if(empty($formData->width))  $formData->width = 1;
+            $defaultSize = array(1 => 3);
+            if(!empty($this->config->block->size[$formData->module][$formData->code]))                   $defaultSize      = $this->config->block->size[$formData->module][$formData->code];
             if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
-            if(empty($formData->height)) $formData->height = 3;
+
+            if(empty($formData->width))  $formData->width  = reset(array_keys($defaultSize));
+            if(empty($formData->height)) $formData->height = reset($defaultSize);
             $formData->left = $formData->width == 2 ? 0 : 2;
             $formData->top  = $this->block->computeBlockTop($formData);
 
