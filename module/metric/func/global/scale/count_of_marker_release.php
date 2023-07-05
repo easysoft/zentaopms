@@ -18,6 +18,8 @@ class count_of_marker_release extends func
 
     public $fieldList = array('t1.id', 't1.marker');
 
+    public $result = 0;
+
     public function calculate($data)
     {
         if(!empty($data->marker) and $data->marker == 1) $this->result ++;

@@ -18,6 +18,8 @@ class count_of_release_in_year extends func
 
     public $fieldList = array('t1.id', 't1.createdDate');
 
+    public $result = array();
+
     public function calculate($data)
     {
         $value = $data->createdDate;

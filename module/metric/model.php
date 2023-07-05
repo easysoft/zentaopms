@@ -45,7 +45,9 @@ class metricModel extends model
         $currentDay  = date('d');
         $now         = date('H:i');
 
-        $metricList = $this->select('code,collectConf')->from(TABLE_BASICMEAS)->where('collectType')->eq('crontab')->fetchAll();
+        $metricList = $this->select('code,collectConf')->from(TABLE_BASICMEAS)
+            ->where('collectType')->eq('crontab')
+            ->fetchAll();
 
         $excutableMetric = array();
         foreach($metricList as $metric)
@@ -76,7 +78,8 @@ class metricModel extends model
             foreach($this->config->metric->purposeList as $purpose)
             {
                 $pattern = $funcRoot . $scope . DS . $purpose . DS . '*.php';
-                $fileList = array_merge($fileList, glob($pattern));
+                $matchedFiles = glob($pattern);
+                if($matchedFiles !== false) $fileList = array_merge($fileList, $matchFiles);
             }
         }
 
