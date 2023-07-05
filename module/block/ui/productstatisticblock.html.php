@@ -37,7 +37,7 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
             set('class', 'nav-item nav-switch w-full'),
             a
             (
-                set('class', 'ellipsis text-dark title ' . ($product->id == $selected ? ' active' : '')),
+                set('class', 'ellipsis text-dark title ' . ($longBlock && $product->id == $selected ? ' active' : '')),
                 $longBlock ? set('data-toggle', 'tab') : null,
                 set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
                 set('href', $longBlock ? "#tab3{$blockNavCode}Content{$product->id}" : helper::createLink('product', 'browse', "productID=$product->id")),
@@ -46,7 +46,7 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
             ),
             !$longBlock ? a
             (
-                set('class', 'hidden'),
+                set('class', 'hidden' . ($product->id == $selected ? ' active' : '')),
                 set('data-toggle', 'tab'),
                 set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
                 set('href', "#tab3{$blockNavCode}Content{$product->id}"),
@@ -100,17 +100,17 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                 cell
                 (
                     set('class', 'flex-1'),
-                    set('width', '70%'),
+                    $longBlock ? set('width', '70%') : null,
                     div
                     (
                         set('class', 'flex h-full ' . ($longBlock ? '' : 'col')),
                         cell
                         (
-                            set('width', '40%'),
-                            set('class', 'p-4'),
+                            $longBlock ? set('width', '40%') : null,
+                            set('class', $longBlock ? 'p-4' : 'px-4'),
                             div
                             (
-                                set('class', 'py-6 chart pie-chart'),
+                                set('class', 'chart pie-chart ' . ($longBlock ? 'py-6' : 'py-1')),
                                 echarts
                                 (
                                     set::color(array('#2B80FF', '#E3E4E9')),
@@ -218,7 +218,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                         ),
                         cell
                         (
-                            set('width', '60%'),
+                            $longBlock ? set('width', '60%') : null,
                             set('class', 'py-4'),
                             div
                             (
@@ -287,11 +287,11 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                     ),
                     $product->newPlan ? div
                     (
-                        set('class', 'pb-4'),
+                        set('class', 'pb-4' . ($longBlock ? '' : 'flex')),
                         div(span(set('class', 'text-sm text-gray'), $lang->block->productstatistic->newPlan)),
                         div
                         (
-                            set('class', 'py-1'),
+                            set('class', $longBlock ? 'py-1' : 'pl-2'),
                             common::hasPriv('productplan', 'view') ? a
                             (
                                 set('href', helper::createLink('productplan', 'view', "planID={$product->newPlan->id}")),
@@ -309,11 +309,11 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                     ) : null,
                     $product->newExecution ? div
                     (
-                        set('class', 'pb-4'),
+                        set('class', 'pb-4 ' . ($longBlock ? '' : 'flex')),
                         div(span(set('class', 'text-sm text-gray'), $lang->block->productstatistic->newExecution)),
                         div
                         (
-                            set('class', 'py-1'),
+                            set('class', $longBlock ? 'py-1' : 'pl-2'),
                             common::hasPriv('execution', 'task') ? a
                             (
                                 set('href', helper::createLink('execution', 'task', "executionID={$product->newExecution->id}")),
@@ -331,10 +331,11 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                     ) : null,
                     $product->newRelease ? div
                     (
+                        set('class', $longBlock ? '' : 'flex'),
                         div(span(set('class', 'text-sm text-gray'), $lang->block->productstatistic->newRelease)),
                         div
                         (
-                            set('class', 'py-1'),
+                            set('class', $longBlock ? 'py-1' : 'pl-2'),
                             common::hasPriv('release', 'view') ? a
                             (
                                 set('href', helper::createLink('release', 'view', "releaseID={$product->newRelease->id}")),
@@ -386,7 +387,7 @@ panel
         set('class', "flex h-full overflow-hidden " . ($longBlock ? '' : 'col')),
         cell
         (
-            set('width', '22%'),
+            $longBlock ? set('width', '22%') : null,
             set('class', $longBlock ? 'bg-secondary-pale overflow-y-auto overflow-x-hidden' : ''),
             ul
             (

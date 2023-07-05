@@ -1,6 +1,5 @@
-.productstatistic-block {background: #FCFDFE; height: 256px;}
+.productstatistic-block {background: #FCFDFE;}
 .productstatistic-block .panel-body {padding: 0;}
-.productstatistic-block.block-sm {height: auto;}
 
 .productstatistic-block .tab-content {width: 100%;}
 .productstatistic-block .tab-pane {padding: 0;}
