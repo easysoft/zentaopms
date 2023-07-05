@@ -853,7 +853,11 @@ class story extends control
         if(!empty($_POST))
         {
             $this->story->update($storyID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return print(js::error(dao::getError()));
+            }
 
             $this->executeHooks($storyID);
 
