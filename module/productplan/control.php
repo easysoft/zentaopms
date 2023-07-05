@@ -127,7 +127,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function edit($planID)
+    public function edit(int $planID)
     {
         if(!empty($_POST))
         {
@@ -142,7 +142,7 @@ class productplan extends control
             }
             $message = $this->executeHooks($planID);
             if($message) $this->lang->saveSuccess = $message;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($this->app->rawModule, 'view', "planID=$planID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($this->app->rawModule, 'view', "planID=$planID")));
         }
 
         $plan = $this->productplan->getByID($planID);

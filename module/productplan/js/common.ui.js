@@ -68,12 +68,12 @@ function toggleDateBox(e)
     if($(e.target).prop('checked'))
     {
         $('#begin').attr('disabled', 'disabled');
-        $('#end').attr('disabled', 'disabled').parents('.form-row').hide();
+        $('#end').attr('disabled', 'disabled').parents('.form-row').addClass('hidden');
     }
     else
     {
         $('#begin').removeAttr('disabled');
-        $('#end').removeAttr('disabled').parents('.form-row').show();
+        $('#end').removeAttr('disabled').parents('.form-row').removeClass('hidden');
     }
 }
 

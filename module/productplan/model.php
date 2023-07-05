@@ -27,7 +27,7 @@ class productplanModel extends model
         if(!$plan) return false;
 
         $plan = $this->loadModel('file')->replaceImgURL($plan, 'desc');
-        if($setImgSize) $plan->desc = $this->file->setImgSize($plan->desc);
+        if($setImgSize) $plan->desc = $this->file->setImgSize((string)$plan->desc);
         return $plan;
     }
 
@@ -575,6 +575,7 @@ class productplanModel extends model
             ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
             ->setDefault('branch', 0)
+            ->cleanINT('parent')
             ->join('branch', ',')
             ->add('id', $planID)
             ->remove('delta,uid,future')

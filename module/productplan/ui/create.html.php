@@ -47,7 +47,7 @@ formPanel
         set::items($parentPlanPairs),
         $product->type != 'normal' ? on::change('loadBranches') : '',
     ) : null,
-    $product->type != 'normal' ? formGroup
+    !$product->shadow && $product->type != 'normal' ? formGroup
     (
         set::width('1/2'),
         set::label($lang->productplan->branch),
