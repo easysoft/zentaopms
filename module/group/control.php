@@ -209,7 +209,7 @@ class group extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($type == 'byGroup' or $type == 'byPackage') return $this->send(array('result' => 'success', 'message' => ($result ? $this->lang->group->dependPrivsSaveTip : $this->lang->saveSuccess), 'locate' => 'reload'));
-            if($type == 'byModule') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if($type == 'byModule') return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
         if($type == 'byGroup' or $type == 'byPackage')
@@ -370,7 +370,15 @@ class group extends control
             $this->view->packageGroup = $packageGroup;
             $this->view->indexPrivs   = $indexPrivs;
         }
-        $this->display();
+
+        if($type == 'byModule')
+        {
+            $this->display('group', 'privbymodule');
+        }
+        else
+        {
+            $this->display();
+        }
     }
 
     /**

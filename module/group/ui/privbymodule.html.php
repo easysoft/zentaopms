@@ -129,3 +129,4 @@ form
 );
 
 /* ====== Render page ====== */
+render();
