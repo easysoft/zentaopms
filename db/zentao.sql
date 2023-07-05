@@ -3079,7 +3079,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincourse` (
   `status` varchar(10) NOT NULL DEFAULT '',
   `teacher` varchar(30) NOT NULL default '',
   `desc` mediumtext NULL,
-  `importedStatus` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
+  `importedStatus` enum('','wait','doing','done') NOT NULL DEFAULT '',
   `lastUpdatedTime` int UNSIGNED NOT NULL DEFAULT 0,
   `createdBy` varchar(255) NOT NULL DEFAULT '',
   `createdDate` date NULL,

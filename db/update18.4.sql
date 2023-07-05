@@ -19,7 +19,7 @@ INSERT INTO zt_privlang (objectID, objectType, lang, `key`, value, `desc`) VALUE
 INSERT INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2108, 'depend', 1648);
 INSERT INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2108, 'depend', 1651);
 
-ALTER TABLE `zt_traincourse` ADD `importedStatus` enum('wait','doing','done') NOT NULL DEFAULT 'wait' AFTER `desc`;
+ALTER TABLE `zt_traincourse` ADD `importedStatus` enum('','wait','doing','done') NOT NULL DEFAULT '' AFTER `desc`;
 ALTER TABLE `zt_traincourse` ADD `lastUpdatedTime` int UNSIGNED NOT NULL DEFAULT 0 AFTER `importedStatus`;
 ALTER TABLE `zt_traincourse` MODIFY COLUMN `code` varchar(255) DEFAULT '' NOT NULL;
 
