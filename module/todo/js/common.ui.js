@@ -67,19 +67,15 @@ function changeAssignedTo()
  * @param  object switcher
  * @return void
  */
-function togglePending(switcher)
+function togglePending(e)
 {
-    if(switcher.checked)
+    if($(e.target).prop('checked'))
     {
-        $('.date').removeAttr('disabled');
-        $('.date').prop('value','');
-        $('.cycle-date').prop('value', '');
-        $('#type').closest('.form-row').removeClass('hidden');
-        if($('#cycle').length)
-        {
-            $('#cycle').prop('checked', false);
-            $('.cycle-config').addClass('hidden');
-        }
+        $("[name='date']").attr('disabled','disabled');
+    }
+    else
+    {
+        $("[name='date']").removeAttr('disabled');
     }
 }
 
@@ -160,15 +156,15 @@ function selectNext()
  * @param  object switcher
  * @return void
  */
-function switchDateFeature(switcher)
+function switchDateFeature(e)
 {
-    if(switcher.checked)
+    if($(e.target).prop('checked'))
     {
-        $('#begin, #end').attr('disabled','disabled').trigger('chosen:updated');
+        $("[name='begin'], [name='end']").attr('disabled','disabled').trigger('chosen:updated');
     }
     else
     {
-        $('#begin, #end').removeAttr('disabled').trigger('chosen:updated');
+        $("[name='begin'], [name='end']").removeAttr('disabled').trigger('chosen:updated');
     }
 }
 
