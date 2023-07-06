@@ -53,6 +53,48 @@ class formPanel extends panel
     );
 
     /**
+     * Define default properties.
+     *
+     * @var    array
+     * @access protected
+     */
+    protected static $defaultProps = array(
+        'customFields' => array(),
+    );
+
+    public static function getPageJS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
+    /**
+     * Build heading actions.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function buildHeadingActions()
+    {
+        $headingActions = $this->prop('headingActions');
+        if(!$headingActions) $headingActions = array();
+
+        $customFields = $this->prop('customFields');
+
+        /* Custom fields. */
+        if($customFields)
+        {
+            global $app;
+            $urlParams = isset($customFields['urlParams']) ? $customFields['urlParams'] : "module={$app->rawModule}&section=custom&key=batchCreateFields";
+
+            $headingActions[] = formSettingBtn(set::customFields($customFields['items']), set::urlParams($urlParams));
+        }
+
+        $this->setProp('headingActions', $headingActions);
+
+        return parent::buildHeadingActions();
+    }
+
+    /**
      * Build form widget by mode.
      *
      * @access protected
@@ -60,12 +102,24 @@ class formPanel extends panel
      */
     protected function buildForm()
     {
+        $customFields = $this->prop('customFields');
+        $hiddenFields = array();
+        if(!empty($customFields['items']))
+        {
+            $hiddenFields = array_values(array_filter(array_map(function($item)
+            {
+                return $item['show'] ? false : $item['name'];
+            }, $customFields['items'])));
+        }
+
         if($this->prop('batch'))
         {
             return new formBatch
             (
                 set($this->props->pick(array_keys(formBatch::getDefinedProps()))),
-                $this->children()
+                $this->children(),
+                jsVar('formBatch', true),
+                $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null,
             );
         }
 
@@ -73,7 +127,8 @@ class formPanel extends panel
         (
             set::class($this->prop('formClass')),
             set($this->props->pick(array_keys(form::getDefinedProps()))),
-            $this->children()
+            $this->children(),
+            $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null,
         );
     }
 

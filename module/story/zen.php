@@ -697,16 +697,7 @@ class storyZen extends story
             $fields['assignedTo']['options'] = $teamUsers;
         }
 
-        /* Set Custom. */
-        //$customFields = explode(',', $this->config->story->list->customCreateFields);
-        //$showFields   = trim($this->config->story->custom->createFields, ',');
-        //foreach($customFields as $field)
-        //{
-        //    if(!str_contains($showFields, $field)) unset($fields[$field]);
-        //}
-
         $this->view->hiddenParent = $hiddenParent;
-
         return $fields;
     }
 

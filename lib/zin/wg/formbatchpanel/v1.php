@@ -63,7 +63,6 @@ class formBatchPanel extends formPanel
 
         $uploadImage  = $this->prop('uploadParams') && hasPriv('file', 'uploadImages');
         $pasteField   = $this->prop('pasteField');
-        $customFields = $this->prop('customFields');
 
         global $lang;
 
@@ -86,15 +85,6 @@ class formBatchPanel extends formPanel
             $headingActions[] = array('class' => 'btn primary-pale bd-primary', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText);
 
             $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
-        }
-
-        /* Custom fields. */
-        if($customFields)
-        {
-            global $app;
-            $urlParams = isset($customFields['urlParams']) ? $customFields['urlParams'] : "module={$app->rawModule}&section=custom&key=batchCreateFields";
-
-            $headingActions[] = formSettingBtn(set::customFields($customFields['items']), set::urlParams($urlParams));
         }
 
         $this->setProp('headingActions', $headingActions);

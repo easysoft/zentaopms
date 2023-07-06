@@ -9,7 +9,6 @@ declare(strict_types=1);
 * @package     story
 * @link        https://www.zentao.net
 */
-
 namespace zin;
 
 $forceReview = $this->story->checkForceReview();
@@ -20,6 +19,15 @@ jsVar('createParams', http_build_query($params));
 jsVar('storyType', $type);
 jsVar('feedbackSource', $config->story->feedbackSource);
 
+$showFields = $config->story->custom->createFields;
+$fnGenerateCustomizedFields = function() use ($showFields, $customFields)
+{
+    $showFields = ",{$showFields},";
+    $fields     = array();
+    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"));
+    return $fields;
+};
+
 formPanel
 (
     on::click('#saveButton', 'customSubmit'),
@@ -27,6 +35,7 @@ formPanel
     set::id('dataform'),
     set::title($lang->story->create),
     set::actions(false),
+    set::customFields(array('items' => $fnGenerateCustomizedFields(), 'urlParams' => 'module=story&section=custom&key=createFields')),
     to::headingActions
     (
         $forceReview ? checkbox(set::id('needNotReview'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview), on::change('toggleReviewer(e.target)')) : null,

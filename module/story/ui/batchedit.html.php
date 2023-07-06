@@ -37,10 +37,6 @@ $items['source']['defaultDitto']     = 'off';
 $items['stage']['defaultDitto']      = 'off';
 
 if(!$branchProduct) unset($items['branch']);
-foreach($customFields as $fieldName => $fieldTitle)
-{
-    if(!str_contains(",{$showFields},", ",{$fieldName},")) unset($items[$fieldName]);
-}
 
 /* Build form field value for batch edit. */
 $fieldNameList = array_keys($items);
@@ -59,12 +55,21 @@ foreach($stories as $storyID => $story)
     }
 }
 
+$fnGenerateCustomizedFields = function() use ($showFields, $customFields)
+{
+    $showFields = ",{$showFields},";
+    $fields     = array();
+    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"));
+    return $fields;
+};
+
 formBatchPanel
 (
     set::title($lang->story->batchEdit),
     set::mode('edit'),
     set::items($items),
     set::data(array_values($data)),
+    set::customFields(array('items' => $fnGenerateCustomizedFields(), 'urlParams' => 'module=story&section=custom&key=batchEditFields')),
     set::onRenderRow(jsRaw('renderRowData')),
 );
 
