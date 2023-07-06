@@ -591,10 +591,7 @@
         options = $.extend({url}, options);
         if(!id) return zui.Modal.open(options);
 
-        const $modal = $('#' + id);
-        if(!$modal.length) return;
-
-        const modal = $modal.data('zui.Modal');
+        const modal = zui.Modal.query(`#${id}`);
         if(!modal) return;
         modal.render(options);
     }
