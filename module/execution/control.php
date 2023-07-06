@@ -446,13 +446,12 @@ class execution extends control
      * @param  int    $executionID
      * @param  int    $fromExecution
      * @param  string $orderBy
-     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function importTask($toExecution, $fromExecution = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function importTask($toExecution, $fromExecution = 0, $orderBy = 'id_desc', $recPerPage = 20, $pageID = 1)
     {
         if(!empty($_POST)) $this->execution->importTask($toExecution);
 
@@ -1840,12 +1839,11 @@ class execution extends control
      */
     public function edit(int $executionID, string $action = 'edit', string $extra = '', string $newPlans = '', string $confirm = 'no')
     {
-        /* Load language files and get browseExecutionLink. */
+        /* Load language files. */
         $this->loadModel('product');
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
-        $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
         $execution           = $this->execution->getById($executionID);
         $branches            = $this->project->getBranchesByProject($executionID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
@@ -1950,10 +1948,6 @@ class execution extends control
         /* Remove current execution from the executions. */
         unset($executions[$executionID]);
 
-        $title      = $this->lang->execution->edit . $this->lang->colon . $execution->name;
-        $position[] = html::a($browseExecutionLink, $execution->name);
-        $position[] = $this->lang->execution->edit;
-
         $allProducts = $this->product->getProducts($execution->project, 'noclosed', '', false, $linkedProductIdList);
         $allProducts = array(0 => '') + $allProducts;
 
@@ -2019,7 +2013,7 @@ class execution extends control
             unset($parentStageList[0]);
         }
 
-        $this->view->title                = $title;
+        $this->view->title                = $this->lang->execution->edit . $this->lang->colon . $execution->name;
         $this->view->position             = $position;
         $this->view->executions           = $executions;
         $this->view->execution            = $execution;
@@ -3041,8 +3035,6 @@ class execution extends control
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
-        $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
-
         $this->loadModel('product');
         $execution = $this->execution->getById($executionID);
         $project   = $this->loadModel('project')->getByID($execution->project);
@@ -3052,8 +3044,6 @@ class execution extends control
         if(!empty($_POST))
         {
             $oldProducts = $this->product->getProducts($executionID);
-
-            if($from == 'buildCreate' && $this->session->buildCreate) $browseExecutionLink = $this->session->buildCreate;
 
             $this->execution->updateProducts($executionID);
             if(dao::isError()) return $this->sendError(dao::getError());
@@ -3071,10 +3061,6 @@ class execution extends control
         $this->execution->setMenu($execution->id);
 
         /* Title and position. */
-        $title      = $this->lang->execution->manageProducts . $this->lang->colon . $execution->name;
-        $position[] = html::a($browseExecutionLink, $execution->name);
-        $position[] = $this->lang->execution->manageProducts;
-
         $branches            = $this->project->getBranchesByProject($executionID);
         $linkedProductIdList = empty($branches) ? array() : array_keys($branches);
         $allProducts         = $this->product->getProductPairsByProject($execution->project, 'all', implode(',', $linkedProductIdList));
@@ -3105,7 +3091,7 @@ class execution extends control
         }
 
         /* Assign. */
-        $this->view->title                = $title;
+        $this->view->title                = $this->lang->execution->manageProducts . $this->lang->colon . $execution->name;
         $this->view->position             = $position;
         $this->view->allProducts          = $allProducts;
         $this->view->execution            = $execution;
@@ -3213,14 +3199,13 @@ class execution extends control
      * @param  int    $objectID
      * @param  string $browseType
      * @param  int    $param
-     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1, $extra = '')
+    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recPerPage = 50, $pageID = 1, $extra = '')
     {
         $this->loadModel('story');
         $this->loadModel('product');
@@ -4063,13 +4048,12 @@ class execution extends control
      * @param  int    $executionID
      * @param  int    $planID
      * @param  int    $productID
-     * @param  string $fromMethod
      * @param  string $extra
      * @param  string $param
      * @access public
      * @return void
      */
-    public function importPlanStories(int $executionID, int $planID, int $productID = 0, string $fromMethod = 'story', string $extra = '', string $param = '')
+    public function importPlanStories(int $executionID, int $planID, int $productID = 0, string $extra = '', string $param = '')
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
