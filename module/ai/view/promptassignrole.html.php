@@ -40,7 +40,7 @@
           </div>
           <div class='content-row'>
             <div class='input-label'><span><?php echo $lang->ai->prompts->characterization;?></span></div>
-            <div class='input'><?php echo html::textarea('characterization', $prompt->characterization, "class='form-control'  placeholder='{$lang->ai->prompts->charPlaceholder}'");?></div>
+            <div class='input'><?php echo html::textarea('characterization', $prompt->characterization, "class='form-control' rows='4' placeholder='{$lang->ai->prompts->charPlaceholder}'");?></div>
           </div>
         </div>
         <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
