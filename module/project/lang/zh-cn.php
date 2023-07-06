@@ -53,6 +53,7 @@ $lang->project->errorSamePlans      = "{$lang->projectCommon}不能关联多个�
 $lang->project->errorNoProducts     = "最少关联一个{$lang->productCommon}";
 $lang->project->copyNoProject       = "没有可用的{$lang->projectCommon}来复制";
 $lang->project->searchByName        = "输入{$lang->projectCommon}名称进行检索";
+$lang->project->emptyProgram        = "无项目集归属项目";
 $lang->project->deleted             = '已删除';
 $lang->project->linkedProducts      = "已关联{$lang->productCommon}";
 $lang->project->unlinkedProducts    = '未关联';

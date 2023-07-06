@@ -244,7 +244,7 @@ class projectZen extends project
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
         if($copyProjectID) $copyProject = $this->getCopyProject((int)$copyProjectID);
-        $shadow = empty($copyProject->hasProduct) ? 1 : 0;
+        $shadow = $copyProjectID && empty($copyProject->hasProduct) ? 1 : 0;
 
         if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
         $topProgramID = $this->program->getTopByID($programID);

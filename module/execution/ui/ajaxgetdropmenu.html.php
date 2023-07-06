@@ -22,7 +22,7 @@ function getExecutionGroup(object $execution): string
 {
     global $app;
     if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $app->user->account or isset($execution->teams[$app->user->account]))) return 'my';
-    if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $app->user->account and !isset($execution->teams[$app->user->account])) return 'others';
+    if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $app->user->account and !isset($execution->teams[$app->user->account])) return 'other';
     if($execution->status == 'done' or $execution->status == 'closed') return 'closed';
 }
 
@@ -38,10 +38,8 @@ foreach($projectExecutions as $projectID => $executions)
     $projectItem = array();
     $projectItem['id']    = $projectID;
     $projectItem['type']  = 'project';
-    $projectItem['text']  = $projectID ? zget($projects, $projectID) : $lang->execution->emptyProgram;
+    $projectItem['text']  = zget($projects, $projectID);
     $projectItem['items'] = array();
-
-    if(!$projectID) $projectItem['label'] = '';
 
     foreach($executions as $index => $execution)
     {

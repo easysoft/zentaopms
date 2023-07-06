@@ -53,6 +53,7 @@ $lang->project->errorSamePlans      = "{$lang->projectCommon} cannot be associat
 $lang->project->errorNoProducts     = "At least one {$lang->productCommon} is associated";
 $lang->project->copyNoProject       = 'There are no items available to copy.';
 $lang->project->searchByName        = "Enter the {$lang->projectCommon} name to search";
+$lang->project->emptyProgram        = "Independent Programs";
 $lang->project->deleted             = 'Deleted';
 $lang->project->linkedProducts      = "Linked {$lang->productCommon}s";
 $lang->project->unlinkedProducts    = "Unlinked {$lang->productCommon}s";

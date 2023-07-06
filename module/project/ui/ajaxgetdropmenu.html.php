@@ -22,7 +22,7 @@ function getProjectGroup(object $project): string
 {
     global $app;
     if($project->status != 'done' and $project->status != 'closed' and $project->PM == $app->user->account)    return 'my';
-    if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $app->user->account)) return 'others';
+    if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $app->user->account)) return 'other';
     return 'closed';
 }
 
@@ -35,10 +35,12 @@ $data = array('my' => array(), 'other' => array(), 'closed' => array());
 /* 处理分组数据。Process grouped data. */
 foreach($projects as $programID => $programProjects)
 {
+    $programID = isset($programs[$programID]) ? $programID : 0;
+
     $programItem = array();
     $programItem['id']    = $programID;
     $programItem['type']  = 'program';
-    $programItem['text']  = $programID ? zget($programs, $programID) : $lang->project->emptyProgram;
+    $programItem['text']  = isset($programs[$programID]) ? zget($programs, $programID) : $lang->project->emptyProgram;
     $programItem['items'] = array();
 
     if(!$programID) $programItem['label'] = '';
