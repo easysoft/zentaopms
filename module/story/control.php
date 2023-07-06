@@ -187,7 +187,6 @@ class story extends control
         }
         if($storyType == 'requirement')
         {
-            unset($customFields['plan']);
             $showFields = str_replace('plan', '', $showFields);
         }
 
