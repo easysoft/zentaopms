@@ -206,6 +206,7 @@ $lang->ai->demoData->story     = array(
     (
         'title'    => 'Entwicklung einer Online-Lernplattform',
         'spec'     => 'Wir müssen eine Online-Lernplattform entwickeln, die Funktionen wie Kursverwaltung, Studentenverwaltung, Lehrerverwaltung usw. bietet.',
+        'verify' => '1. Alle Funktionen können ordnungsgemäß ohne offensichtliche Fehler oder Abnormalitäten ausgeführt werden.2. Die Benutzeroberfläche ist ästhetisch ansprechend und benutzerfreundlich.3. Die Plattform kann den Bedürfnissen der Benutzer gerecht werden und hat einen hohen Grad an Benutzerzufriedenheit.4. Der Code hat eine gute Qualität, mit klarer Struktur und einfacher Wartung.',
         'module'   => 7,
         'pri'      => 1,
         'estimate' => 1,

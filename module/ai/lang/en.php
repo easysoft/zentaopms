@@ -206,6 +206,7 @@ $lang->ai->demoData->story     = array(
     (
         'title'    => 'Develop an online learning platform',
         'spec'     => 'We need to develop an online learning platform that provides course management, student management, teacher management, and other functions.',
+        'verify' => '1. All functions can operate properly without any obvious errors or abnormalities.2. The interface is aesthetically pleasing and user-friendly.3. The platform can meet user needs and has a high level of user satisfaction.4. The code has good quality, with clear structure and easy maintenance.',
         'module'   => 7,
         'pri'      => 1,
         'estimate' => 1,

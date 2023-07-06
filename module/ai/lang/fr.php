@@ -206,6 +206,7 @@ $lang->ai->demoData->story     = array(
     (
         'title'    => 'Développer une plate-forme d\'apprentissage en ligne',
         'spec'     => 'Nous devons développer une plate-forme d\'apprentissage en ligne qui offre des fonctionnalités de gestion de cours, d\'étudiants et d\'enseignants, etc.',
+        'verify'   => '1. Toutes les fonctions peuvent fonctionner correctement sans erreurs ni anomalies évidentes.2. L\'interface est esthétique et conviviale.3. La plateforme peut répondre aux besoins des utilisateurs et a un niveau élevé de satisfaction de l\'utilisateur.4. Le code a une bonne qualité, avec une structure claire et facile à entretenir.',
         'module'   => 7,
         'pri'      => 1,
         'estimate' => 1,
