@@ -21,7 +21,7 @@ $app->loadLang('execution');
  * @param  bool   $longBlock
  * @return array
  */
-$getProductTabs = function(array $products, string $blockNavCode, bool $longBlock): array
+function getProductTabs(array $products, string $blockNavCode, bool $longBlock): array
 {
     $navTabs  = array();
     $selected = key($products);
@@ -80,7 +80,7 @@ $getProductTabs = function(array $products, string $blockNavCode, bool $longBloc
  * @param  bool   $longBlock
  * @return array
  */
-$getProductInfo = function(array $products, string $blockNavID, bool $longBlock): array
+function getProductInfo(array $products, string $blockNavID, bool $longBlock): array
 {
     global $lang;
 
@@ -385,14 +385,14 @@ panel
             ul
             (
                 set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked' : 'pt-4 px-4')),
-                $getProductTabs($products, $blockNavCode, $longBlock)
+                getProductTabs($products, $blockNavCode, $longBlock)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
             set('width', '78%'),
-            $getProductInfo($products, $blockNavCode, $longBlock)
+            getProductInfo($products, $blockNavCode, $longBlock)
         )
     )
 );

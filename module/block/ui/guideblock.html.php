@@ -18,7 +18,7 @@ namespace zin;
  * @param  string $blockNavCode
  * @return array
  */
-$getGuideTabs = function(string $blockNavCode): array
+function getGuideTabs(string $blockNavCode): array
 {
     global $lang, $config, $app;
 
@@ -56,7 +56,7 @@ $getGuideTabs = function(string $blockNavCode): array
  * @param  string $blockNavCode
  * @return array
  */
-$getGuideInfo = function($blockNavID): array
+function getGuideInfo($blockNavID): array
 {
     global $lang;
 
@@ -113,14 +113,14 @@ panel
             ul
             (
                 set('class', 'nav nav-tabs nav-stacked'),
-                $getGuideTabs($blockNavCode)
+                getGuideTabs($blockNavCode)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
             set('width', '82%'),
-            $getGuideInfo($blockNavCode)
+            getGuideInfo($blockNavCode)
         )
     )
 );
