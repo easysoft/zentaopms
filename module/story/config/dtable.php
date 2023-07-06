@@ -401,51 +401,51 @@ $config->story->caseTable = new stdclass();
 $config->story->caseTable->fieldList['id']['name']     = 'id';
 $config->story->caseTable->fieldList['id']['title']    = $lang->idAB;
 $config->story->caseTable->fieldList['id']['type']     = 'checkID';
-$config->story->caseTable->fieldList['id']['sortType'] = false;
+$config->story->caseTable->fieldList['id']['sortType'] = true;
 $config->story->caseTable->fieldList['id']['fixed']    = 'left';
 $config->story->caseTable->fieldList['id']['group']    = 1;
 
 $config->story->caseTable->fieldList['title']['name']     = 'title';
 $config->story->caseTable->fieldList['title']['title']    = $lang->testcase->title;
 $config->story->caseTable->fieldList['title']['type']     = 'text';
-$config->story->caseTable->fieldList['title']['sortType'] = false;
+$config->story->caseTable->fieldList['title']['sortType'] = true;
 $config->story->caseTable->fieldList['title']['group']    = 2;
 
 $config->story->caseTable->fieldList['pri']['name']     = 'pri';
 $config->story->caseTable->fieldList['pri']['title']    = $lang->priAB;
 $config->story->caseTable->fieldList['pri']['type']     = 'pri';
-$config->story->caseTable->fieldList['pri']['sortType'] = false;
+$config->story->caseTable->fieldList['pri']['sortType'] = true;
 $config->story->caseTable->fieldList['pri']['group']    = 3;
 
 $config->story->caseTable->fieldList['type']['name']     = 'type';
 $config->story->caseTable->fieldList['type']['title']    = $lang->testcase->type;
 $config->story->caseTable->fieldList['type']['type']     = 'category';
 $config->story->caseTable->fieldList['type']['map']      = $lang->testcase->typeList;
-$config->story->caseTable->fieldList['type']['sortType'] = false;
+$config->story->caseTable->fieldList['type']['sortType'] = true;
 $config->story->caseTable->fieldList['type']['group']    = 3;
 
 $config->story->caseTable->fieldList['status']['name']      = 'status';
 $config->story->caseTable->fieldList['status']['title']     = $lang->statusAB;
 $config->story->caseTable->fieldList['status']['type']      = 'status';
 $config->story->caseTable->fieldList['status']['statusMap'] = $lang->testcase->statusList;
-$config->story->caseTable->fieldList['status']['sortType']  = false;
+$config->story->caseTable->fieldList['status']['sortType']  = true;
 $config->story->caseTable->fieldList['status']['group']     = 3;
 
 $config->story->caseTable->fieldList['lastRunner']['name']     = 'lastRunner';
 $config->story->caseTable->fieldList['lastRunner']['title']    = $lang->testcase->lastRunner;
 $config->story->caseTable->fieldList['lastRunner']['type']     = 'user';
-$config->story->caseTable->fieldList['lastRunner']['sortType'] = false;
+$config->story->caseTable->fieldList['lastRunner']['sortType'] = true;
 $config->story->caseTable->fieldList['lastRunner']['group']    = 4;
 
 $config->story->caseTable->fieldList['lastRunDate']['name']     = 'lastRunDate';
 $config->story->caseTable->fieldList['lastRunDate']['title']    = $lang->testcase->lastRunDate;
 $config->story->caseTable->fieldList['lastRunDate']['type']     = 'date';
-$config->story->caseTable->fieldList['lastRunDate']['sortType'] = false;
+$config->story->caseTable->fieldList['lastRunDate']['sortType'] = true;
 $config->story->caseTable->fieldList['lastRunDate']['group']    = 4;
 
 $config->story->caseTable->fieldList['lastRunResult']['name']     = 'lastRunResult';
 $config->story->caseTable->fieldList['lastRunResult']['title']    = $lang->testcase->lastRunResult;
 $config->story->caseTable->fieldList['lastRunResult']['type']     = 'category';
 $config->story->caseTable->fieldList['lastRunResult']['map']      = $lang->testcase->resultList;
-$config->story->caseTable->fieldList['lastRunResult']['sortType'] = false;
+$config->story->caseTable->fieldList['lastRunResult']['sortType'] = true;
 $config->story->caseTable->fieldList['lastRunResult']['group']    = 5;
