@@ -16,19 +16,20 @@ modalHeader();
 
 formPanel
 (
-    set::actions(array('submit')),
     set::submitBtnText($lang->productplan->closeAB),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
     formGroup
     (
-        set::id('closedReasonBox'),
-        set::name('closedReason'),
-        set::label($lang->productplan->closedReason),
         set::width('1/3'),
-        set::strong(false),
-        set::value(''),
-        set::items($reasonList),
+        set::label($lang->productplan->closedReason),
+        set::required(true),
+        select
+        (
+            set::id('closedReasonBox'),
+            set::name('closedReason'),
+            set::strong(false),
+            set::items($lang->productplan->closedReasonList),
+            set::required(true),
+        )
     ),
     formGroup
     (
@@ -39,7 +40,6 @@ formPanel
     ),
 );
 
-h::hr(set::class('mt-6'));
 history();
 
 render();

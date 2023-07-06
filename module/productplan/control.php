@@ -548,21 +548,20 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function close($planID)
+    public function close(int $planID)
     {
-        $plan = $this->productplan->getById($planID);
-
         if(!empty($_POST))
         {
             $this->productplan->updateStatus($planID, 'closed', 'closed');
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::reload('parent.parent'));
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->productplan = $plan;
-        $this->view->reasonList  = $this->lang->productplan->closedReasonList;
+        $this->view->productplan = $this->productplan->getById($planID);
         $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
         $this->view->users       = $this->loadModel('user')->getPairs();
+
         $this->display();
     }
 
