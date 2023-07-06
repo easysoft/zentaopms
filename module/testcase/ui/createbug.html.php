@@ -10,8 +10,23 @@ declare(strict_types=1);
  */
 namespace zin;
 
-panel
+jsVar('resultsLink', createLink('testtask', 'results', "runID={$runID}&caseID={$caseID}&version={$version}") . '#casesResults');
+
+modalHeader
 (
-)
+    set::title($lang->testtask->createBug),
+    set::entityText($case->title),
+    set::entityID($case->id),
+);
+
+div
+(
+    setClass('main'),
+    set::id('resultsContainer'),
+    div
+    (
+        set::id('casesResults'),
+    ),
+);
 
 render('modalDialog');
