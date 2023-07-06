@@ -155,10 +155,16 @@ $lang->block->default['waterfallproject'][] = array('title' => '最新动态',  
 
 $lang->block->default['waterfallplusproject'] = $lang->block->default['waterfallproject'];
 
-$lang->block->default['product'][] = array('title' => "{$lang->productCommon}统计",     'module' => 'product', 'code' => 'statistic', 'width' => '2', 'params' => array('type' => 'all',        'count' => '20'));
-$lang->block->default['product'][] = array('title' => "未关闭的{$lang->productCommon}", 'module' => 'product', 'code' => 'list',      'width' => '2', 'params' => array('type' => 'noclosed',   'count' => '15'));
-$lang->block->default['product'][] = array('title' => "{$lang->productCommon}总览",     'module' => 'product', 'code' => 'overview',  'width' => '1');
-$lang->block->default['product'][] = array('title' => "指派给我的{$lang->SRCommon}",    'module' => 'product', 'code' => 'story',     'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['product'][] = array('title' => "{$lang->productCommon}总览",             'module' => 'product', 'code' => 'overview',         'width' => '3');
+$lang->block->default['product'][] = array('title' => "未关闭的{$lang->productCommon}统计",     'module' => 'product', 'code' => 'statistic',        'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['product'][] = array('title' => "未关闭的{$lang->productCommon}列表",     'module' => 'product', 'code' => 'list',             'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['product'][] = array('title' => "未关闭{$lang->productCommon}的发布统计", 'module' => 'product', 'code' => 'release',          'width' => '1', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['product'][] = array('title' => "未关闭{$lang->productCommon}的Bug数据",  'module' => 'product', 'code' => 'bugstatistic',     'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['product'][] = array('title' => "{$lang->productCommon}月度推进分析",     'module' => 'product', 'code' => 'monthlyprogress',  'width' => '2');
+$lang->block->default['product'][] = array('title' => "{$lang->productCommon}年度工作量统计",   'module' => 'product', 'code' => 'annualworkload',   'width' => '2');
+$lang->block->default['product'][] = array('title' => "未关闭{$lang->productCommon}的计划列表", 'module' => 'product', 'code' => 'plan',             'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['product'][] = array('title' => "{$lang->productCommon}发布统计",         'module' => 'product', 'code' => 'releasestatistic', 'width' => '1');
+$lang->block->default['product'][] = array('title' => "指派给我的{$lang->SRCommon}",            'module' => 'product', 'code' => 'story',            'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
 $lang->block->default['qa'][] = array('title' => '测试统计',       'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'params' => array('type' => 'noclosed',   'count' => '20'));
 $lang->block->default['qa'][] = array('title' => '待测版本列表',   'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
@@ -175,8 +181,8 @@ $lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->pr
 $lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->execution->common}统计", 'module' => 'execution',       'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "未关闭的{$lang->productCommon}统计",     'module' => 'product',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->projectCommon}列表",     'module' => 'project',         'code' => 'project',         'width' => '2', 'params' => array('type' => 'undone',   'count' => '20', 'orderBy' => 'id_desc'));
-$lang->block->default['full']['my'][] = array('title' => "禅道动态",                               'module' => 'zentaoDynamic',   'code' => 'zentaoDynamic',   'width' => '1');
-$lang->block->default['full']['my'][] = array('title' => "团队成就",                               'module' => 'teamAchievement', 'code' => 'teamAchievement', 'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "禅道动态",                               'module' => 'zentaodynamic',   'code' => 'zentaodynamic',   'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "团队成就",                               'module' => 'teamachievement', 'code' => 'teamachievement', 'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "最新动态",                               'module' => 'dynamic',         'code' => 'dynamic',         'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon}总览",             'module' => 'project',         'code' => 'overview',        'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->productCommon}总览",             'module' => 'product',         'code' => 'overview',        'width' => '1');
@@ -234,12 +240,18 @@ $lang->block->modules['agileplus']     = $lang->block->modules['scrumProject'];
 $lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallProject'];
 
 $lang->block->modules['product'] = new stdclass();
-$lang->block->modules['product']->availableBlocks['statistic'] = $lang->productCommon . '统计';
-$lang->block->modules['product']->availableBlocks['overview']  = $lang->productCommon . '总览';
-$lang->block->modules['product']->availableBlocks['list']      = $lang->productCommon . '列表';
-$lang->block->modules['product']->availableBlocks['story']     = "{$lang->SRCommon}列表";
-$lang->block->modules['product']->availableBlocks['plan']      = "计划列表";
-$lang->block->modules['product']->availableBlocks['release']   = '发布列表';
+
+$lang->block->modules['product']->availableBlocks['statistic']        = $lang->productCommon . '统计';
+$lang->block->modules['product']->availableBlocks['overview']         = $lang->productCommon . '总览';
+$lang->block->modules['product']->availableBlocks['list']             = $lang->productCommon . '列表';
+$lang->block->modules['product']->availableBlocks['bugstatistic']     = "{$lang->productCommon}的Bug数据";
+$lang->block->modules['product']->availableBlocks['releasestatistic'] = "{$lang->productCommon}发布统计";
+$lang->block->modules['product']->availableBlocks['monthlyprogress']  = "{$lang->productCommon}月度推进分析";
+$lang->block->modules['product']->availableBlocks['annualworkload']   = "{$lang->productCommon}年度工作量统计";
+$lang->block->modules['product']->availableBlocks['bug']              = "测试列表";
+$lang->block->modules['product']->availableBlocks['story']            = "{$lang->SRCommon}列表";
+$lang->block->modules['product']->availableBlocks['plan']             = "计划列表";
+$lang->block->modules['product']->availableBlocks['release']          = '发布列表';
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks['statistic'] = $lang->execution->common . '统计';
@@ -605,8 +617,8 @@ $lang->block->moduleList['execution']       = $lang->execution->common;
 $lang->block->moduleList['qa']              = $lang->qa->common;
 $lang->block->moduleList['welcome']         = $lang->block->welcome->common;
 $lang->block->moduleList['guide']           = $lang->block->guide;
-$lang->block->moduleList['zentaoDynamic']   = $lang->block->zentaoDynamic;
-$lang->block->moduleList['teamAchievement'] = $lang->block->teamAchievement;
+$lang->block->moduleList['zentaodynamic']   = $lang->block->zentaoDynamic;
+$lang->block->moduleList['teamachievement'] = $lang->block->teamAchievement;
 $lang->block->moduleList['assigntome']      = $lang->block->assignToMe;
 $lang->block->moduleList['dynamic']         = $lang->block->dynamic;
 $lang->block->moduleList['html']            = $lang->block->html;

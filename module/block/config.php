@@ -135,6 +135,18 @@ $config->block->params['projectstatistic']->type['options'] = $lang->block->type
 $config->block->params['projectstatistic']->type['control'] = 'select';
 $config->block->params['projectstatistic']->count = $config->block->params['default']->count;
 
+$config->block->params['bugstatistic'] = new stdclass();
+$config->block->params['bugstatistic']->type['name']    = $lang->block->type;
+$config->block->params['bugstatistic']->type['options'] = $lang->block->typeList->project;
+$config->block->params['bugstatistic']->type['control'] = 'select';
+$config->block->params['bugstatistic']->count = $config->block->params['default']->count;
+
+$config->block->params['releasestatistic'] = new stdclass();
+$config->block->params['releasestatistic']->type['name']    = $lang->block->type;
+$config->block->params['releasestatistic']->type['options'] = $lang->block->typeList->project;
+$config->block->params['releasestatistic']->type['control'] = 'select';
+$config->block->params['releasestatistic']->count = $config->block->params['default']->count;
+
 $config->block->params['executionstatistic'] = new stdclass();
 $config->block->params['executionstatistic']->type['name']    = $lang->block->type;
 $config->block->params['executionstatistic']->type['options'] = $lang->block->typeList->execution;
@@ -301,12 +313,17 @@ $config->block->modules['doc']->moreLinkList->productdoc      = 'doc|productspac
 $config->block->modules['doc']->moreLinkList->projectdoc      = 'doc|projectspace|';
 
 $config->block->size = array();
-$config->block->size['product']['list']      = array('2' => '6', '1' => '6');
-$config->block->size['product']['story']     = array('2' => '6', '1' => '6');
-$config->block->size['product']['plan']      = array('2' => '6', '1' => '6');
-$config->block->size['product']['release']   = array('2' => '6', '1' => '6');
-$config->block->size['product']['statistic'] = array('2' => '5', '1' => '8');
-$config->block->size['product']['overview']  = array('1' => '3');
+$config->block->size['product']['list']             = array('2' => '6', '1' => '6');
+$config->block->size['product']['story']            = array('2' => '6', '1' => '6');
+$config->block->size['product']['plan']             = array('2' => '6', '1' => '6');
+$config->block->size['product']['bug']              = array('2' => '6', '1' => '6');
+$config->block->size['product']['release']          = array('2' => '6', '1' => '6');
+$config->block->size['product']['statistic']        = array('2' => '5', '1' => '8');
+$config->block->size['product']['bugstatistic']     = array('2' => '5', '1' => '8');
+$config->block->size['product']['monthlyprogress']  = array('2' => '5');
+$config->block->size['product']['annualworkload']   = array('2' => '6');
+$config->block->size['product']['overview']         = array('1' => '3', '3' => '3');
+$config->block->size['product']['releasestatistic'] = array('1' => '8');
 
 $config->block->size['project']['overview']      = array('1' => '3');
 $config->block->size['project']['statistic']     = array('2' => '5', '1' => '8');
@@ -331,5 +348,5 @@ $config->block->size['welcome']['welcome']                 = array('2' => '3');
 $config->block->size['guide']['guide']                     = array('2' => '6');
 $config->block->size['assigntome']['assigntome']           = array('2' => '6');
 $config->block->size['dynamic']['dynamic']                 = array('1' => '8');
-$config->block->size['zentaoDynamic']['zentaoDynamic']     = array('1' => '4');
-$config->block->size['teamAchievement']['teamAchievement'] = array('1' => '6');
+$config->block->size['zentaodynamic']['zentaodynamic']     = array('1' => '4');
+$config->block->size['teamachievement']['teamachievement'] = array('1' => '6');

@@ -56,6 +56,7 @@ panel
             cell
             (
                 set::width('50%'),
+                set::class('border-r'),
                 div
                 (
                     '完成任务数量'
@@ -69,6 +70,7 @@ panel
             cell
             (
                 set::width('50%'),
+                set::class('ml-4'),
                 div
                 (
                     '创建需求数量'
@@ -86,6 +88,7 @@ panel
             cell
             (
                 set::width('50%'),
+                set::class('border-r'),
                 div
                 (
                     '消耗工时'
@@ -99,6 +102,7 @@ panel
             cell
             (
                 set::width('50%'),
+                set::class('ml-4'),
                 div
                 (
                     '累计工作量'

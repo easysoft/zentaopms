@@ -367,7 +367,7 @@ class storyTao extends storyModel
             ->where('AType')->eq('requirement')
             ->andWhere('BType')->eq('story')
             ->andWhere('relation')->eq('subdivideinto')
-            ->andWhere('product')->eq($productID)
+            ->andWhere('product')->in($productID)
             ->groupBy($mainID)
             ->fetchAll($mainID);
 

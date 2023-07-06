@@ -278,7 +278,7 @@ class blockModel extends model
             $block['dashboard'] = $dashboard;
             $block['params']    = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
             $block['vision']    = $this->config->vision;
-            $block['left']      = $block['width'] == 2 ? 0 : 2;
+            $block['left']      = $block['width'] == 1 ? 2 : 0;
             $block['top']       = $this->computeBlockTop((object)$block);
 
             $this->blockTao->insert((object)$block);
@@ -414,7 +414,9 @@ class blockModel extends model
     {
         $top = $this->dao->select('max(`top` + `height`) AS top')->from(TABLE_BLOCK)
             ->where('dashboard')->eq($block->dashboard)
-            ->andWhere('width')->eq($block->width)
+            ->andWhere('width', true)->eq($block->width)
+            ->orWhere('width')->eq(3)
+            ->markRight(1)
             ->andWhere('vision')->eq($block->vision)
             ->andWhere('hidden')->eq('0')
             ->fetch('top');
