@@ -17,10 +17,10 @@ formPanel
     (
         entityLabel
         (
-            to::suffix($entry->name),
+            to::prefix($lang->entry->edit),
             set::entityID($entry->id),
             set::level(1),
-            set::text($lang->entry->edit),
+            set::text($entry->name),
             set::reverse(true),
         ),
     ),
@@ -153,8 +153,6 @@ formPanel
             set::value($entry->desc),
         )
     ),
-
 );
 
 render();
-
