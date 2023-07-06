@@ -207,6 +207,31 @@ class aiModel extends model
     }
 
     /**
+     * Parse function call argument of chat responses from chat completion API.
+     *
+     * @param  string   $response  json string
+     * @access private
+     * @return mixed    false if error, array of function call arguments (choices) if success
+     */
+    private function parseFunctionCallResponse($response)
+    {
+        $response = json_decode($response);
+        if(isset($response->error)) return false;
+
+        /* Extract function call choices. */
+        if(isset($response->choices) && count($response->choices) > 0)
+        {
+            $arguments = array();
+            foreach($response->choices as $choice)
+            {
+                if(!empty($choice->message->function_call)) $arguments[] = $choice->message->function_call->arguments;
+            }
+            return $arguments;
+        }
+        return false;
+    }
+
+    /**
      * Complete text with OpenAI GPT.
      *
      * @param   string   $prompt     text to complete
@@ -297,6 +322,43 @@ class aiModel extends model
 
         $response = $this->makeRequest('chat', $postData);
         return $this->parseChatResponse($response);
+    }
+
+    /**
+     * Generate conversation with OpenAI GPT, but for JSON as output.
+     *
+     * Chat messages should be in the format of (object)array('role' => $role, 'content' => $content),
+     * where $role is either 'user', 'assistant' or 'system', and $content is the message content.
+     *
+     * Schema should be in the format of JSON schema, see https://json-schema.org/understanding-json-schema/.
+     *
+     * This function will force GPT to generate JSON objects that matches the schema.
+     *
+     * For technical details, see https://platform.openai.com/docs/guides/gpt/function-calling.
+     *
+     * @param  array  $messages  array of chat messages
+     * @param  object $schema    schema of the output
+     * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
+     * @access public
+     * @return mixed  false if error, array of JSON object if success
+     */
+    public function converseForJSON($messages, $schema, $options = array())
+    {
+        $functions    = array((object)array('name' => 'function', 'parameters' => $schema));
+        $functionCall = (object)array('name' => 'function');
+
+        $data = compact('messages', 'functions', 'functionCall');
+
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
+        }
+
+        $postData = $this->assembleRequestData('function', $data);
+        if(!$postData) return false;
+
+        $response = $this->makeRequest('function', $postData);
+        return $this->parseFunctionCallResponse($response);
     }
 
     /**

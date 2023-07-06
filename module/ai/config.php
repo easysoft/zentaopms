@@ -9,10 +9,13 @@ $config->ai->openai->api->methods    = array('chat' => 'chat/completions', 'comp
 
 $config->ai->openai->params = new stdclass();
 $config->ai->openai->params->chat       = new stdclass();
+$config->ai->openai->params->function   = new stdclass();
 $config->ai->openai->params->completion = new stdclass();
 $config->ai->openai->params->edit       = new stdclass();
 $config->ai->openai->params->chat->required = array('messages');
 $config->ai->openai->params->chat->optional = array('max_tokens', 'temperature', 'top_p', 'n', 'stream', 'stop', 'presence_penalty', 'frequency_penalty', 'logit_bias', 'user');
+$config->ai->openai->params->function->required = array('messages', 'functions', 'function_call');
+$config->ai->openai->params->function->optional = array('max_tokens', 'temperature', 'top_p', 'n', 'stream', 'stop', 'presence_penalty', 'frequency_penalty', 'logit_bias', 'user');
 $config->ai->openai->params->completion->required = array('prompt', 'max_tokens');
 $config->ai->openai->params->completion->optional = array('suffix', 'temperature', 'top_p', 'n', 'stream', 'logprobs', 'echo', 'stop', 'presence_penalty', 'frequency_penalty', 'best_of', 'logit_bias', 'user');
 $config->ai->openai->params->edit->required = array('input', 'instruction');
@@ -20,6 +23,7 @@ $config->ai->openai->params->edit->optional = array('temperature', 'top_p', 'n')
 
 $config->ai->openai->model = new stdclass();
 $config->ai->openai->model->chat       = 'gpt-3.5-turbo';
+$config->ai->openai->model->function   = 'gpt-3.5-turbo-0613';
 $config->ai->openai->model->completion = 'text-davinci-003';
 $config->ai->openai->model->edit       = 'text-davinci-edit-001';
 
