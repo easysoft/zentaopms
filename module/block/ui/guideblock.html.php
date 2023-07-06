@@ -43,15 +43,6 @@ function getGuideTabs(string $blockNavCode): array
                 set('data-toggle', 'tab'),
                 set('href', "#tab{$blockNavCode}Content{$tab}"),
                 $tabName
-            ),
-            span
-            (
-                set('class', 'link flex-1 text-right px-4 hidden'),
-                icon
-                (
-                    set('class', 'text-primary'),
-                    'arrow-right'
-                )
             )
         );
     }
@@ -117,7 +108,7 @@ panel
         cell
         (
             set('width', '18%'),
-            set('class', 'bg-secondary-pale overflow-y-auto'),
+            set('class', 'border-r overflow-y-auto'),
             ul
             (
                 set('class', 'nav nav-tabs nav-stacked'),

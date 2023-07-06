@@ -410,11 +410,14 @@ class blockModel extends model
      */
     public function computeBlockTop(object $block): int
     {
-        return $this->dao->select('max(`top` + `height`) AS top')->from(TABLE_BLOCK)
+        $top = $this->dao->select('max(`top` + `height`) AS top')->from(TABLE_BLOCK)
             ->where('dashboard')->eq($block->dashboard)
             ->andWhere('width')->eq($block->width)
             ->andWhere('vision')->eq($block->vision)
             ->andWhere('hidden')->eq('0')
             ->fetch('top');
+
+        if(!$top) $top = 0;
+        return $top;
     }
 }

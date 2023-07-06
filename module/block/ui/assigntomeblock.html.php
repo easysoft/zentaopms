@@ -14,6 +14,14 @@ namespace zin;
 panel
 (
     set('class', 'assigntome-block'),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title flex w-full'),
+            $block->title,
+        )
+    ),
     div
     (
         '我的待处理',

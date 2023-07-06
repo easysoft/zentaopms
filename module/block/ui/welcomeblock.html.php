@@ -58,7 +58,7 @@ panel
         (
             set('width', '22%'),
             set('align', 'center'),
-            set::class('border-right py-2'),
+            set::class('gradient border-right py-2'),
             center
             (
                 set('class', 'font-bold'),

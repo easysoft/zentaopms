@@ -15,8 +15,10 @@ set::title($title);
 jsVar('dashboard', $dashboard);
 jsVar('blockTitle', $lang->block->blockTitle);
 
-$showModules = ($dashboard == 'my' && $modules);
-$showCodes   = (($showModules && $module && $codes) || $dashboard != 'my');
+$showModules  = ($dashboard == 'my' && $modules);
+$showCodes    = (($showModules && $module && $codes) || $dashboard != 'my');
+$code         = $showCodes ? $code : $module;
+$defaultWidth = !empty($config->block->size[$module][$code]) ? reset(array_keys($this->config->block->size[$module][$code])) : 1;
 
 $paramsRows  = array();
 foreach($params as $key => $row)
@@ -106,7 +108,7 @@ div
                 (
                     set::label($lang->block->lblBlock),
                     set::name('code'),
-                    set::value($showCodes ? $code : $module),
+                    set::value($code),
                     set::control
                     (
                         $showCodes ? array
@@ -141,6 +143,7 @@ div
                         (
                             set::name('width'),
                             set::items($widthOptions),
+                            set::value($defaultWidth),
                             set::required(true),
                         ),
                     )

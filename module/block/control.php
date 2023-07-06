@@ -91,7 +91,7 @@ class block extends control
         $this->view->modules      = $modules;
         $this->view->codes        = $codes;
         $this->view->params       = $params;
-        $this->view->blockTitle   = $blockTitle ?: '';
+        $this->view->blockTitle   = $blockTitle ? $blockTitle : '';
         $this->view->widthOptions = $widthOptions;
         $this->display();
     }
