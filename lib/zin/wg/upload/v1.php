@@ -48,6 +48,7 @@ class upload extends wg
     protected function build()
     {
         // $this->setDefaultText();
-        return zui::upload(inherit($this));
+        $otherProps = $this->props->skip(array_keys(static::getDefinedProps()));
+        return zui::upload(inherit($this), set('_props', $otherProps));
     }
 }
