@@ -140,7 +140,7 @@ $lang->testtask->browseBySuite = 'Browse by Suite';
 $lang->testtask->passAll       = 'Tout Réussir';
 $lang->testtask->pass          = 'Réussite';
 $lang->testtask->fail          = 'Echec';
-$lang->testtask->showResult    = 'Jouée <span class="text-info">%s</span> fois';
+$lang->testtask->showResult    = 'Jouée <span class="text-primary">%s</span> fois';
 $lang->testtask->showFail      = 'Echouée <span class="text-danger">%s</span> fois';
 
 $lang->testtask->confirmDelete     = 'Voulez-vous supprimer ce build ?';

@@ -140,7 +140,7 @@ $lang->testtask->browseBySuite = 'Browse by Suite';
 $lang->testtask->passAll       = 'Pass All';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Failed';
-$lang->testtask->showResult    = 'Run <span class="text-info">%s</span> times';
+$lang->testtask->showResult    = 'Run <span class="text-primary">%s</span> times';
 $lang->testtask->showFail      = 'Failed <span class="text-danger">%s</span> times';
 
 $lang->testtask->confirmDelete     = 'Do you want to delete this build?';

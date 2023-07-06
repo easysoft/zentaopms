@@ -140,7 +140,7 @@ $lang->testtask->browseBySuite = '按套件查看';
 $lang->testtask->passAll       = '全部通过';
 $lang->testtask->pass          = '通过';
 $lang->testtask->fail          = '失败';
-$lang->testtask->showResult    = '共执行<span class="text-info">%s</span>次';
+$lang->testtask->showResult    = '共执行<span class="text-primary">%s</span>次';
 $lang->testtask->showFail      = '失败<span class="text-danger">%s</span>次';
 
 $lang->testtask->confirmDelete     = '您确认要删除该测试单吗？';
@@ -162,7 +162,7 @@ $lang->testtask->allCases      = '全部用例';
 $lang->testtask->lblCases      = '用例列表';
 $lang->testtask->lblUnlinkCase = '移除用例';
 $lang->testtask->lblRunCase    = '执行用例';
-$lang->testtask->lblResults    = '执行结果';
+$lang->testtask->lblResults    = '用例执行结果';
 
 $lang->testtask->placeholder = new stdclass();
 $lang->testtask->placeholder->begin = '开始日期';

@@ -1288,6 +1288,7 @@ class testtask extends control
             $nextCase['version'] = $preAndNext->next->version;
         }
 
+        $this->view->title    = $this->lang->testtask->lblRunCase;
         $this->view->run      = $run;
         $this->view->preCase  = $preCase;
         $this->view->nextCase = $nextCase;
@@ -1441,6 +1442,7 @@ class testtask extends control
             $results = $this->testtask->getResults(0, $caseID, $status);
         }
 
+        if(empty($this->testcase)) $this->app->loadLang('testcase');
         $this->view->case    = $case;
         $this->view->runID   = $runID;
         $this->view->results = $results;
