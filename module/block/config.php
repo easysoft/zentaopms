@@ -331,4 +331,4 @@ $config->block->size['welcome']['welcome']              = array('2' => '3');
 $config->block->size['guide']['guide']                  = array('2' => '6');
 $config->block->size['assigntome']['assigntome']        = array('2' => '6');
 $config->block->size['dynamic']['dynamic']              = array('1' => '8');
-$config->block->size['zentaoDynamic']['zentaoDynamic']  = array('1' => '3');
+$config->block->size['zentaoDynamic']['zentaoDynamic']  = array('1' => '4');

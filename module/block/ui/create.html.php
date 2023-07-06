@@ -18,7 +18,12 @@ jsVar('blockTitle', $lang->block->blockTitle);
 $showModules  = ($dashboard == 'my' && $modules);
 $showCodes    = (($showModules && $module && $codes) || $dashboard != 'my');
 $code         = $showCodes ? $code : $module;
-$defaultWidth = !empty($config->block->size[$module][$code]) ? reset(array_keys($this->config->block->size[$module][$code])) : 1;
+
+$widths       = !empty($config->block->size[$module][$code]) ? array_keys($config->block->size[$module][$code]) : array('1', '2');
+$widthOptions = array();
+foreach($widths as $width) $widthOptions[$width] = zget($lang->block->widthOptions, $width);
+
+$defaultWidth = !empty($config->block->size[$module][$code]) ? reset(array_keys($config->block->size[$module][$code])) : 1;
 
 $paramsRows  = array();
 foreach($params as $key => $row)

@@ -80,9 +80,6 @@ class block extends control
 
             if(empty($blockTitle) && !in_array($module, array('product', 'project', 'execution', 'qa'))) $blockTitle = zget($modules, $module);
         }
-        $widths       = !empty($this->config->block->size[$module][$code]) ? array_keys($this->config->block->size[$module][$code]) : array('1', '2');
-        $widthOptions = array();
-        foreach($widths as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
 
         $this->view->title        = $this->lang->block->createBlock;
         $this->view->dashboard    = $dashboard;
@@ -92,7 +89,6 @@ class block extends control
         $this->view->codes        = $codes;
         $this->view->params       = $params;
         $this->view->blockTitle   = $blockTitle ? $blockTitle : '';
-        $this->view->widthOptions = $widthOptions;
         $this->display();
     }
 
