@@ -55,7 +55,6 @@ if($isCustomExport)
         setID('tplBox'),
         formGroup
         (
-            set::width('1/2'),
             set::label($lang->file->tplTitleAB),
             inputGroup
             (
@@ -128,7 +127,6 @@ form
     ),
     formGroup
     (
-        set::width('1/2'),
         set::label($lang->file->extension),
         set::control('select'),
         set::name('fileType'),
@@ -138,7 +136,6 @@ form
     ),
     formGroup
     (
-        set::width('1/2'),
         set::label($lang->file->encoding),
         set::control('select'),
         set::name('encode'),
@@ -151,7 +148,6 @@ form
         $hideExportRange ? setClass('hidden') : null,
         formGroup
         (
-            set::width('1/2'),
             set::label($lang->file->exportRange),
             set::control('select'),
             set::name('exportType'),

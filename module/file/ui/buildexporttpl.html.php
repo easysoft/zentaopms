@@ -8,7 +8,6 @@ foreach($templates as $template) $templateList[] = span(setID("template{$templat
 
 formGroup
 (
-    set::width('1/2'),
     set::label($lang->file->tplTitleAB),
     inputGroup
     (
