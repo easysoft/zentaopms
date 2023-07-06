@@ -1535,7 +1535,6 @@ class repoModel extends model
                     {
                         $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"  > "' . $this->app->getTmpRoot() . "log/clone.progress.$module.{$this->post->name}.log\" 2>&1 &";
                         if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
-                        var_dump($cmd);exit;
                         exec($cmd);
                     }
                     $_POST['path'] = $path;
