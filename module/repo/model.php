@@ -531,6 +531,7 @@ class repoModel extends model
      */
     public function getByID($repoID)
     {
+        if(empty($repoID)) return new stdclass();
         $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
@@ -758,6 +759,7 @@ class repoModel extends model
      */
     public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
     {
+        if(empty($repo)) return array();
         if($repo->SCM == 'Gitlab') return $this->loadModel('gitlab')->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end);
 
         $entry = ltrim($entry, '/');
