@@ -28,15 +28,16 @@ class dropmenu extends wg
      */
     protected static $defineProps = array
     (
-        'tab?:      string,',       // 应用名。
-        'module?:   string,',       // 模块名。
-        'method?:   string,',       // 方法名。
-        'objectID?: string,',       // 对象 ID。
-        'extra?:    string,',       // 额外参数。
-        'url?:      string',        // 异步获取下拉菜单选项数据的 URL，如果已经指定 module， method，objectID，extra 等参数则可以忽略。
-        'text?:     string',        // 选择按钮上显示的文本。
-        'cache?:    bool|int=true', // 是否启用缓存。
-        'data?:     array',         // 手动指定数据。
+        'id?:       string="dropmenu"', // ID，当页面有多个 dropmenu 时确保有唯一的 ID。
+        'tab?:      string,',           // 应用名。
+        'module?:   string,',           // 模块名。
+        'method?:   string,',           // 方法名。
+        'objectID?: string,',           // 对象 ID。
+        'extra?:    string,',           // 额外参数。
+        'url?:      string',            // 异步获取下拉菜单选项数据的 URL，如果已经指定 module， method，objectID，extra 等参数则可以忽略。
+        'text?:     string',            // 选择按钮上显示的文本。
+        'cache?:    bool|int=true',     // 是否启用缓存。
+        'data?:     array',             // 手动指定数据。
     );
 
     /**
@@ -47,7 +48,7 @@ class dropmenu extends wg
      */
     protected function build(): wg
     {
-        list($url, $text, $objectID, $cache, $tab, $module, $method, $objectID, $extra) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'objectID', 'extra'));
+        list($url, $text, $objectID, $cache, $tab, $module, $method, $objectID, $extra, $id) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'objectID', 'extra', 'id'));
 
         $app = data('app');
 
@@ -70,7 +71,7 @@ class dropmenu extends wg
 
         return zui::dropmenu
         (
-            set('_id', "dropmenu"),
+            set('_id', $id),
             set('data-fetcher', $url),
             set(array('fetcher' => $url, 'text' => $text, 'defaultValue' => $objectID, 'cache' => $cache)),
             set($this->getRestProps())
