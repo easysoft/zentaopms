@@ -53,7 +53,7 @@ detailBody
         section
         (
             set::title($lang->bug->title),
-            formGroup
+            input
             (
                 set::name('title'),
                 set::value($bug->title)
@@ -62,34 +62,23 @@ detailBody
         section
         (
             set::title($lang->bug->legendSteps),
-            formGroup
+            editor
             (
-                editor
-                (
-                    set::name('steps'),
-                    set::value($bug->steps)
-                )
+                set::name('steps'),
+                html($bug->steps)
             )
         ),
         section
         (
             set::title($lang->files),
-            formGroup
-            (
-                set::name('files[]'),
-                set::control('file')
-            ),
+            upload()
         ),
         section
         (
             set::title($lang->bug->legendComment),
-            formGroup
+            editor
             (
-                editor
-                (
-                    set::name('comment'),
-                    set::value()
-                )
+                set::name('comment'),
             )
         )
     ),

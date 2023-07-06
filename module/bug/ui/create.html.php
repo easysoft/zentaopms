@@ -313,7 +313,7 @@ formPanel
             editor
             (
                 set::name('steps'),
-                set::value($bug->steps ? htmlSpecialString($bug->steps) : '')
+                html($bug->steps)
             )
         ),
     ),
@@ -402,9 +402,8 @@ formPanel
         formGroup
         (
             set::label($lang->bug->files),
-            set::name('files[]'),
-            set::control('file')
-        ),
+            upload()
+        )
     )
 );
 
