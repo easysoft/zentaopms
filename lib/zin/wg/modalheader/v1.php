@@ -5,6 +5,7 @@ class modalHeader extends wg
 {
     static $defineProps = array(
         'title?: string',
+        'titleClass?: string',
         'entityText?: string',
         'entityID?: int'
     );
@@ -41,6 +42,7 @@ class modalHeader extends wg
             (
                 $title,
                 set::class('pl-3'),
+                set::class($this->prop('titleClass')),
             ) : null,
             ($entityText || $entityID) ? entityLabel
             (
