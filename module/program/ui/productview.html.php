@@ -22,7 +22,7 @@ $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
 
     hasPriv('program', 'create')     && $items[] = array('text' => $lang->program->create,        'icon' => 'plus', 'url'      => createLink('program', 'create'));
     hasPriv('product', 'create')     && $items[] = array('text' => $lang->program->createProduct, 'icon' => 'plus', 'url'      => createLink('product', 'create'));
-    hasPriv('product', 'manageLine') && $items[] = array('text' => $lang->program->manageLine,    'icon' => 'edit', 'data-url' => createLink('product', 'manageLine', $browseType), 'data-toggle' => 'modal' );
+    hasPriv('product', 'manageLine') && $items[] = array('text' => $lang->program->manageLine,    'icon' => 'edit', 'data-url' => createLink('product', 'manageLine', $browseType), 'data-toggle' => 'modal', 'data-id' => 'manageLineModal');
 
     return btnGroup
     (
