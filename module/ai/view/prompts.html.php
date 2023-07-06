@@ -66,7 +66,7 @@
             <?php foreach($prompts as $prompt):?>
               <tr>
                 <td class='c-id'><?php echo $prompt->id;?></td>
-                <td class='c-name'>
+                <td class='c-name' title='<?php echo $prompt->name;?>'>
                   <?php echo $prompt->name;?>
                   <?php if($prompt->status == 'draft') echo "<span class='label label-light label-badge'>{$this->lang->ai->prompts->statuses[$prompt->status]}</span>";?>
                 </td>
@@ -81,7 +81,7 @@
                     }
                   ?>
                 </td>
-                <td class='c-description'><?php echo $prompt->desc;?></td>
+                <td class='c-description' title='<?php echo $prompt->desc;?>'><?php echo $prompt->desc;?></td>
                 <td class='text-center c-actions'>
                   <?php
                     echo html::a('#', '<i class="icon-bars text-primary"></i>', '', "class='btn'");
