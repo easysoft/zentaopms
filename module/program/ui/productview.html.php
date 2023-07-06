@@ -255,8 +255,7 @@ featureBar
         set('data-load', 'table'),
         set::checked($this->cookie->editProject)
     )) : NULL,
-    li(searchToggle(set::open($browseType == 'bySearch'), set::module('program'))),
-    li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
+    li(searchToggle(set::open($browseType == 'bySearch'), set::module('program')))
 );
 
 toolbar

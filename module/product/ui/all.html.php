@@ -104,8 +104,7 @@ featureBar
         set::text($lang->product->edit),
         set::checked($this->cookie->editProject)
     ) : null,
-    li(searchToggle(set::open($browseType == 'bySearch'))),
-    li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
+    li(searchToggle(set::open($browseType == 'bySearch')))
 );
 
 toolbar

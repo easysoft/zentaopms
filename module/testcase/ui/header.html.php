@@ -162,8 +162,7 @@ featureBar
             $lang->testcase->onlyAutomated
         )
     ) : null,
-    $rawMethod != 'browseunits' ? (searchToggle(set::open($browseType == 'bysearch'))) : null,
-    $rawMethod != 'browseunits' ? li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort)) : null
+    $rawMethod != 'browseunits' ? (searchToggle(set::open($browseType == 'bysearch'))) : null
 );
 
 $viewItems   = array(array('text' => $lang->testcase->listView, 'active' => true));

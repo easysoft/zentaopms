@@ -77,8 +77,7 @@ featureBar
         ),
         set::items($suiteItems)
     ),
-    li(searchToggle(set::open($browseType == 'bysearch'))),
-    li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
+    li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
 toolbar
