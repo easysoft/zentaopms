@@ -33,6 +33,7 @@ function getProductTabs($products, $blockNavCode): array
             (
                 set('class', 'ellipsis title ' . ($product->id == $selected ? 'active' : '')),
                 set('data-toggle', 'tab'),
+                set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
                 set('href', "#tab3{$blockNavCode}Content{$product->id}"),
                 $product->name
 
@@ -85,10 +86,34 @@ function getProductInfo($products, $blockNavID): array
                         cell
                         (
                             set('width', '45%'),
-                            set('class', 'px-3 py-2'),
+                            set('class', 'p-4'),
                             div
                             (
-                                set('class', 'w-full h-44'),
+                                set('class', 'chart pie-chart py-6'),
+                                echarts
+                                (
+                                    set::color(array('#2B80FF', '#E3E4E9')),
+                                    set::series
+                                    (
+                                        array
+                                        (
+                                            array
+                                            (
+                                                'type'   => 'pie',
+                                                'radius' => array('80%', '90%'),
+                                                'itemStyle' => array('borderRadius' => '40'),
+                                                'label'  => array('show' => false),
+                                                'data'   => array(69.9, 100-69.9)
+                                            )
+                                        )
+                                    )
+                                )->size('100%', 120),
+                                div
+                                (
+                                    set::class('pie-chart-title text-center'),
+                                    div(span(set::class('text-2xl font-bold'), '69.9%')),
+                                    div(span(set::class('text-sm text-gray'), $lang->block->qastatistic->fixBugRate, icon('help', set('data-toggle', 'tooltip'), set('id', 'storyTip'), set('class', 'text-light'))))
+                                )
                             ),
                             div
                             (
@@ -135,13 +160,13 @@ function getProductInfo($products, $blockNavID): array
                                     set('class', 'flex-1 px-3'),
                                     div
                                     (
-                                        set('class', 'py-1'),
+                                        set('class', 'pt-2'),
                                         div
                                         (
-                                            set('class', 'progress'),
+                                            set('class', 'progress h-2'),
                                             div
                                             (
-                                                set('class', 'progress-bar'),
+                                                set('class', 'progress-bar secondary'),
                                                 set('role', 'progressbar'),
                                                 setStyle(['width' => '36%']),
                                             )
@@ -149,10 +174,10 @@ function getProductInfo($products, $blockNavID): array
                                     ),
                                     div
                                     (
-                                        set('class', 'py-1'),
+                                        set('class', 'pt-5'),
                                         div
                                         (
-                                            set('class', 'progress'),
+                                            set('class', 'progress h-2'),
                                             div
                                             (
                                                 set('class', 'progress-bar'),
@@ -176,13 +201,13 @@ function getProductInfo($products, $blockNavID): array
                                     set('class', 'flex-1 px-3'),
                                     div
                                     (
-                                        set('class', 'py-1'),
+                                        set('class', 'pt-2'),
                                         div
                                         (
-                                            set('class', 'progress'),
+                                            set('class', 'progress h-2'),
                                             div
                                             (
-                                                set('class', 'progress-bar'),
+                                                set('class', 'progress-bar secondary'),
                                                 set('role', 'progressbar'),
                                                 setStyle(['width' => '84%']),
                                             )
@@ -190,10 +215,10 @@ function getProductInfo($products, $blockNavID): array
                                     ),
                                     div
                                     (
-                                        set('class', 'py-1'),
+                                        set('class', 'pt-5'),
                                         div
                                         (
-                                            set('class', 'progress'),
+                                            set('class', 'progress h-2'),
                                             div
                                             (
                                                 set('class', 'progress-bar'),
@@ -217,13 +242,13 @@ function getProductInfo($products, $blockNavID): array
                                     set('class', 'flex-1 px-3'),
                                     div
                                     (
-                                        set('class', 'py-1'),
+                                        set('class', 'pt-2'),
                                         div
                                         (
-                                            set('class', 'progress'),
+                                            set('class', 'progress h-2'),
                                             div
                                             (
-                                                set('class', 'progress-bar'),
+                                                set('class', 'progress-bar secondary'),
                                                 set('role', 'progressbar'),
                                                 setStyle(['width' => '60%']),
                                             )
@@ -231,10 +256,10 @@ function getProductInfo($products, $blockNavID): array
                                     ),
                                     div
                                     (
-                                        set('class', 'py-1'),
+                                        set('class', 'pt-5'),
                                         div
                                         (
-                                            set('class', 'progress'),
+                                            set('class', 'progress h-2'),
                                             div
                                             (
                                                 set('class', 'progress-bar'),
