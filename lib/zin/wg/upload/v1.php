@@ -5,7 +5,7 @@ namespace zin;
 class upload extends wg
 {
     protected static $defineProps = array(
-        'name: string',                    // 字段名
+        'name: string="files[]"',          // 字段名
         'icon?: string',                   // 文件图标
         'showIcon?: bool=true',            // 是否展示文件图标
         'showSize?: bool=true',            // 是否展示文件大小
@@ -29,7 +29,7 @@ class upload extends wg
         'onDelete?: callable',             // 删除文件回调
         'onRename?: callable',             // 重命名文件回调
         'onSizeChange?: callable',         // 文件大小变更回调
-        'draggable?: bool',                // 是否启用拖拽上传
+        'draggable?: bool=true',           // 是否启用拖拽上传
         'limitCount?: int',                // 上传文件数量限制
         'accept?: string',                 // input accept 属性
         'defaultFileList?: object[]',      // 默认文件列表
@@ -39,15 +39,13 @@ class upload extends wg
         'exceededCountHint?: string',      // 上传超出个数限制提示
     );
 
-    private function setDefaultText()
-    {
-        global $lang;
-        $this->setDefaultProps(array());
-    }
-
     protected function build()
     {
-        // $this->setDefaultText();
+        global $lang;
+
+        if(!$this->prop('class')) $this->setProp('class', 'w-full');
+        if(!$this->prop('tip'))   $this->setProp('tip', sprintf($lang->noticeDrag, strtoupper(ini_get('upload_max_filesize'))));
+
         $otherProps = $this->props->skip(array_keys(static::getDefinedProps()));
         return zui::upload(inherit($this), set('_props', $otherProps));
     }
