@@ -13,6 +13,7 @@ $(function()
         });
 
         const $dashboard = $('#executionDashBoard').data('zui.Dashboard')
+        $('#executionDashBoard .dashboard-block').attr('draggable', false);
         $dashboard.render({blocks: blocks});
     }, 10);
 });
