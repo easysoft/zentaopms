@@ -278,6 +278,8 @@ class blockModel extends model
             $block['dashboard'] = $dashboard;
             $block['params']    = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
             $block['vision']    = $this->config->vision;
+            $block['left']      = $block['width'] == 2 ? 0 : 2;
+            $block['top']       = $this->computeBlockTop((object)$block);
 
             $this->blockTao->insert((object)$block);
         }

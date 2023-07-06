@@ -88,8 +88,7 @@ function getProductInfo($products, $blockNavID): array
                             set('class', 'px-3 py-2'),
                             div
                             (
-                                set('class', 'mx-6 my-4 bg-primary aspect-square text-center align-middle'),
-                                span('BUG修复率')
+                                set('class', 'w-full h-44'),
                             ),
                             div
                             (
