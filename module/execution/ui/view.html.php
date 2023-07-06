@@ -507,22 +507,23 @@ div
             setClass('border-b pb-4'),
             div
             (
+                setClass('flex items-center'),
                 label
                 (
-                    setClass('text-dark'),
+                    setClass('text-dark mr-2'),
                     $execution->id
                 ),
                 !empty($config->setCode) ? label
                 (
-                    setClass('dark-outline text-dark mx-2'),
+                    setClass('dark-outline text-dark mx-2 mr-2'),
                     $execution->code
                 ) : null,
                 span(setClass('article-h2'), $execution->name),
             ),
             div
             (
-                set::class('detail-content article-content'),
-                span($execution->desc),
+                set::class('detail-content mt-2'),
+                html($execution->desc),
             ),
             div
             (
