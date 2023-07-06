@@ -42,7 +42,7 @@ panel
     dtable
     (
         set::id('project'),
-        set::height(320),
+        set::height(318),
         set::bordered(false),
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->project->dtable->fieldList)),
