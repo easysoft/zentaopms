@@ -165,8 +165,7 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->files),
-        set::name('files[]'),
-        set::control('file')
+        upload()
     ),
     formGroup
     (

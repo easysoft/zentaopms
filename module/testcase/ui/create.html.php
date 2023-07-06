@@ -233,8 +233,7 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->files),
-            set::name('files[]'),
-            set::control('file')
+            upload()
         )
     )
 );

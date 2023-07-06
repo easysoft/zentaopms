@@ -165,8 +165,7 @@ formPanel
         formGroup
         (
             set::label($lang->files),
-            set::name('files[]'),
-            set::control('file')
+            upload()
         )
     )
 );
