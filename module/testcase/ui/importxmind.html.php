@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('xmindSettingTip', $lang->testcase->xmindSettingTip);
+
 set::title($lang->testcase->importXmind);
 
 form
@@ -28,7 +30,14 @@ form
         span
         (
             set::class('bg-lighter font-black px-3 py-1'),
-            $lang->testcase->xmindImportSetting
+            $lang->testcase->xmindImportSetting,
+            icon
+            (
+                'help',
+                set::class('text-gray pl-1'),
+                set('data-toggle', 'tooltip'),
+                set::id('xmindSettingTip'),
+            )
         ),
     ),
     formRow

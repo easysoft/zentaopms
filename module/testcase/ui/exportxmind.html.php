@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('xmindSettingTip', $lang->testcase->xmindSettingTip);
+
 set::title($lang->testcase->exportXmind);
 
 form
@@ -38,7 +40,14 @@ form
         span
         (
             set::class('bg-lighter font-black px-3 py-1'),
-            $lang->testcase->xmindExportSetting
+            $lang->testcase->xmindExportSetting,
+            icon
+            (
+                'help',
+                set::class('text-gray pl-1'),
+                set('data-toggle', 'tooltip'),
+                set::id('xmindSettingTip'),
+            )
         ),
     ),
     formRow
@@ -89,32 +98,6 @@ form
     ),
     set::actions(array('submit')),
     set::submitBtnText($lang->export),
-);
-
-js
-(
-    <<<JAVASCRIPT
-    function setDownloading()
-    {
-        if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true; // Opera don't support, omit it.
-    
-        $.cookie.set('downloading', 0);
-    
-        time = setInterval(function()
-        {
-            if($.cookie.get('downloading') == 1)
-            {
-                $('.modal').trigger('to-hide.modal.zui');
-    
-                $.cookie.set('downloading', null);
-    
-                clearInterval(time);
-            }
-        }, 300);
-    
-        return true;
-    }
-    JAVASCRIPT
 );
 
 render('modalDialog');
