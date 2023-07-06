@@ -110,7 +110,7 @@ customElements.define('prompt-previewer', PromptPreviewer, {extends: 'div'});
               <div id='prompt-preview'>
                 <div class='prompt-data'>
                   <div class='block-header text-gray'><?php echo $lang->ai->prompts->dataPreview;?></div>
-                  <div class='block-content code' style='white-space: pre-wrap; word-break: break-word'><?php echo $dataPreview;?></div>
+                  <div class='block-content code' style='white-space: pre-wrap; word-break: break-word;'><?php echo $dataPreview;?></div>
                 </div>
                 <div class='prompt-role'>
                   <div class='block-header text-gray'><?php echo $lang->ai->prompts->rolePreview;?></div>
