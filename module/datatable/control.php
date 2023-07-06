@@ -64,7 +64,8 @@ class datatable extends control
             $account = $this->app->user->account;
             if($account == 'guest') return $this->send(array('result' => 'fail', 'target' => $target, 'message' => 'guest.'));
 
-            $this->loadModel('setting')->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showModule', $this->post->value);
+            $name = 'datatable.' . $this->post->target . '.' . $this->post->name;
+            $this->loadModel('setting')->setItem($account . '.' . $name, $this->post->value);
             if($this->post->allModule !== false)  $this->setting->setItem("$account.execution.task.allModule", $this->post->allModule);
             if($this->post->showBranch !== false) $this->setting->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showBranch', $this->post->showBranch);
 
