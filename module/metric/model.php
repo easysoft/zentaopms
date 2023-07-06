@@ -45,7 +45,7 @@ class metricModel extends model
         $currentDay  = date('d');
         $now         = date('H:i');
 
-        $metricList = $this->dao->select('code,cronType,cronList,execTime')->from(TABLE_METRIC)
+        $metricList = $this->dao->select('code,crontab,cronList,time')->from(TABLE_METRIC)
             ->where('when')->eq('cron')
             ->fetchAll();
 
