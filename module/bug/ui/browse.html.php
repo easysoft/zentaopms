@@ -101,18 +101,6 @@ sidebar
     )))
 );
 
-$config->bug->dtable->fieldList['module']['map']    = $modulePairs;
-$config->bug->dtable->fieldList['product']['map']   = $products;
-$config->bug->dtable->fieldList['story']['map']     = $stories;
-$config->bug->dtable->fieldList['task']['map']      = $tasks;
-$config->bug->dtable->fieldList['toTask']['map']    = $tasks;
-$config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
-$config->bug->dtable->fieldList['project']['map']   = $projectPairs;
-$config->bug->dtable->fieldList['execution']['map'] = $executions;
-
-if($product->type == 'normal') unset($config->bug->dtable->fieldList['branch']);
-if(!$canBatchAction) $config->bug->dtable->fieldList['id']['type'] = 'id';
-
 $footToolbar = $canBatchAction ? array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
@@ -210,6 +198,13 @@ if(empty($bugs))
 else
 {
     $cols = $this->loadModel('datatable')->getSetting('bug');
+    if(isset($cols['module']))    $cols['module']['map']    = $modulePairs;
+    if(isset($cols['branch']))    $cols['branch']['map']    = $branchTagOption;
+    if(isset($cols['project']))   $cols['project']['map']   = $projectPairs;
+    if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
+
+    if($product->type == 'normal') unset($cols['branch']);
+
     $bugs = initTableData($bugs, $cols, $this->bug);
 
     dtable
