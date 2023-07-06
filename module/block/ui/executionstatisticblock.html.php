@@ -20,7 +20,7 @@ namespace zin;
  * @access public
  * @return array
  */
-function getExecutionTabs($executions, $blockNavCode): array
+$getExecutionTabs = function($executions, $blockNavCode): array
 {
     $navTabs  = array();
     $selected = key($executions);
@@ -50,7 +50,7 @@ function getExecutionTabs($executions, $blockNavCode): array
         );
     }
     return $navTabs;
-}
+};
 
 /**
  * 获取区块右侧显示的执行信息.
@@ -61,7 +61,7 @@ function getExecutionTabs($executions, $blockNavCode): array
  * @access public
  * @return array
  */
-function getExecutionInfo($executions, $blockNavID): array
+$getExecutionInfo = function($executions, $blockNavID): array
 {
     global $lang;
 
@@ -77,7 +77,7 @@ function getExecutionInfo($executions, $blockNavID): array
         );
     }
     return $tabItems;
-}
+};
 
 $blockNavCode = 'nav-' . uniqid();
 panel
@@ -102,14 +102,14 @@ panel
             ul
             (
                 set('class', 'nav nav-tabs nav-stacked'),
-                getExecutionTabs($executions, $blockNavCode)
+                $getExecutionTabs($executions, $blockNavCode)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
             set('width', '78%'),
-            getExecutionInfo($executions, $blockNavCode)
+            $getExecutionInfo($executions, $blockNavCode)
         )
     )
 );

@@ -21,7 +21,7 @@ $app->loadLang('execution');
  * @param  bool   $longBlock
  * @return array
  */
-function getProductTabs(array $products, string $blockNavCode, bool $longBlock): array
+$getProductTabs = function(array $products, string $blockNavCode, bool $longBlock): array
 {
     $navTabs  = array();
     $selected = key($products);
@@ -69,7 +69,7 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
         a(icon(set('size', '24'), 'angle-right'))
     );
     return $navTabs;
-}
+};
 
 /**
  * 获取区块右侧显示的产品信息。
@@ -80,7 +80,7 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
  * @param  bool   $longBlock
  * @return array
  */
-function getProductInfo(array $products, string $blockNavID, bool $longBlock): array
+$getProductInfo = function(array $products, string $blockNavID, bool $longBlock): array
 {
     global $lang;
 
@@ -356,7 +356,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
         );
     }
     return $tabItems;
-}
+};
 
 $blockNavCode = 'nav-' . uniqid();
 panel
@@ -385,14 +385,14 @@ panel
             ul
             (
                 set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked' : 'pt-4 px-4')),
-                getProductTabs($products, $blockNavCode, $longBlock)
+                $getProductTabs($products, $blockNavCode, $longBlock)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
             set('width', '78%'),
-            getProductInfo($products, $blockNavCode, $longBlock)
+            $getProductInfo($products, $blockNavCode, $longBlock)
         )
     )
 );

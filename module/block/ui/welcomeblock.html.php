@@ -11,6 +11,34 @@ declare(strict_types=1);
 
 namespace zin;
 
+$getMeasureItem = function(array $data): array
+{
+    global $lang;
+
+    $welcomeLabel = array_merge($lang->block->welcome->assignList, $lang->block->welcome->reviewList);
+
+    $items = array();
+    foreach($data as $key => $info)
+    {
+        if(count($items) >= 5) break;
+        $items[] = cell
+        (
+            div
+            (
+                set('class', 'text-3xl text-primary font-bold h-40px'),
+                a(set('href', $info['href']), $info['number'])
+            ),
+            div(zget($welcomeLabel, $key, '')),
+            !empty($info['delay']) ? div
+            (
+                set('class', 'label danger-pale circle size-sm'),
+                $lang->block->delay . ' ' . $info['delay']
+            ) : null
+        );
+    }
+    return $items;
+};
+
 $doneReview = rand(0, 100);
 $finishTask = rand(0, 100);
 $fixBug     = rand(0, 100);
@@ -96,7 +124,7 @@ panel
                     div
                     (
                         set::class('flex justify-around text-center'),
-                        getMeasureItem($reviewByMe)
+                        $getMeasureItem($reviewByMe)
                     )
                 ),
                 tabPane
@@ -107,7 +135,7 @@ panel
                     div
                     (
                         set::class('flex justify-around text-center'),
-                        getMeasureItem($assignToMe)
+                        $getMeasureItem($assignToMe)
                     )
                 )
             )
@@ -116,31 +144,3 @@ panel
 );
 
 render();
-
-function getMeasureItem($data)
-{
-    global $lang;
-
-    $welcomeLabel = array_merge($lang->block->welcome->assignList, $lang->block->welcome->reviewList);
-
-    $items = array();
-    foreach($data as $key => $info)
-    {
-        if(count($items) >= 5) break;
-        $items[] = cell
-        (
-            div
-            (
-                set('class', 'text-3xl text-primary font-bold h-40px'),
-                a(set('href', $info['href']), $info['number'])
-            ),
-            div(zget($welcomeLabel, $key, '')),
-            !empty($info['delay']) ? div
-            (
-                set('class', 'label danger-pale circle size-sm'),
-                $lang->block->delay . ' ' . $info['delay']
-            ) : null
-        );
-    }
-    return $items;
-}

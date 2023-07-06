@@ -20,7 +20,7 @@ namespace zin;
  * @access public
  * @return array
  */
-function getProductTabs($products, $blockNavCode): array
+$getProductTabs = function($products, $blockNavCode): array
 {
     $navTabs  = array();
     $selected = key($products);
@@ -50,7 +50,7 @@ function getProductTabs($products, $blockNavCode): array
         );
     }
     return $navTabs;
-}
+};
 
 /**
  * 获取区块右侧显示的项目信息.
@@ -61,7 +61,7 @@ function getProductTabs($products, $blockNavCode): array
  * @access public
  * @return array
  */
-function getProductInfo($products, $blockNavID): array
+$getProductInfo = function($products, $blockNavID): array
 {
     global $lang;
 
@@ -262,7 +262,7 @@ function getProductInfo($products, $blockNavID): array
         );
     }
     return $tabItems;
-}
+};
 
 $blockNavCode = 'nav-' . uniqid();
 panel
@@ -287,14 +287,14 @@ panel
             ul
             (
                 set('class', 'nav nav-tabs nav-stacked'),
-                getProductTabs($products, $blockNavCode)
+                $getProductTabs($products, $blockNavCode)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
             set('width', '78%'),
-            getProductInfo($products, $blockNavCode)
+            $getProductInfo($products, $blockNavCode)
         )
     )
 );
