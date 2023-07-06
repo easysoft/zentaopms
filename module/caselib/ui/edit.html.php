@@ -12,6 +12,9 @@ namespace zin;
 
 formPanel
 (
+    set::title($lang->caselib->edit),
+    set::formClass('border-0'),
+    set::submitBtnText($lang->save),
     formGroup
     (
         set::label($lang->caselib->name),
@@ -24,11 +27,10 @@ formPanel
         editor
         (
             set::name('desc'),
-            set::value(htmlSpecialString($lib->desc)),
-            set::rows(10)
+            set::rows(10),
+            html($lib->desc)
         )
     ),
 );
 
 render();
-

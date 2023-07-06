@@ -41,6 +41,7 @@ toolbar
         setClass('toolbar-item ghost btn btn-default'),
         set::href(createLink('caselib', 'view', "libID={$libID}")),
         set('data-toggle', 'modal'),
+        set('data-id', 'viewLibModal'),
         icon('list-alt'),
         $lang->caselib->view,
     ) : '',

@@ -57,18 +57,11 @@ class caselib extends control
      */
     public function edit($libID)
     {
-        $lib = $this->caselib->getById($libID);
         if(!empty($_POST))
         {
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
             $changes = $this->caselib->update($libID);
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('caselib', $libID, 'edited');
@@ -76,10 +69,10 @@ class caselib extends control
             }
 
             $message = $this->executeHooks($libID);
-            if($message) $response['message'] = $message;
+            if(!$message) $message = $this->lang->saveSuccess;
 
-            $response['load'] = inlink('view', "libID=$libID");
-            return $this->send($response);
+            $link = inlink('view', "libID={$libID}");
+            return $this->sendSuccess(array('message' => $message, 'callback' => "loadModal(\"$link\", 'viewLibModal');"));
         }
 
         /* Set lib menu. */
@@ -87,9 +80,8 @@ class caselib extends control
         $libID     = $this->caselib->saveLibState($libID, $libraries);
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->caselib->edit;
-
-        $this->view->lib = $lib;
+        $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->caselib->edit;
+        $this->view->lib   = $this->caselib->getById($libID);
         $this->display();
     }
 
