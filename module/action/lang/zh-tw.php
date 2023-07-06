@@ -140,6 +140,7 @@ $lang->action->objectTypes['kanbancard']       = '看板卡片';
 $lang->action->objectTypes['repo']             = '代码库';
 $lang->action->objectTypes['dataview']         = '数据表';
 $lang->action->objectTypes['scene']            = 'Scene';
+$lang->action->objectTypes['pivot']            = '透视表';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();

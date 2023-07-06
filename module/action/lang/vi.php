@@ -127,6 +127,7 @@ $lang->action->objectTypes['patch']            = 'Patch';
 $lang->action->objectTypes['repo']             = 'Repo';
 $lang->action->objectTypes['dataview']         = 'Data View';
 $lang->action->objectTypes['scene']            = 'Scene';
+$lang->action->objectTypes['pivot']            = 'Pivot';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
