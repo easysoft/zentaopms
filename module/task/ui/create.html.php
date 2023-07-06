@@ -395,10 +395,7 @@ formPanel
     formGroup
     (
         set::label($lang->story->files),
-        upload
-        (
-            set::name('files'),
-        )
+        upload()
     ),
     formGroup
     (

@@ -163,10 +163,7 @@ formPanel
         formGroup
         (
             set::label($lang->build->files),
-            upload
-            (
-                set::name('files'),
-            )
+            upload()
         ),
     ),
     formRow

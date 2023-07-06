@@ -158,10 +158,7 @@ else
         (
             set::width('2/3'),
             set::label($lang->story->files),
-            upload
-            (
-                set::name('files'),
-            )
+            upload()
         ),
         formGroup
         (

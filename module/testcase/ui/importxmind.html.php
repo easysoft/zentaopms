@@ -19,10 +19,7 @@ form
     formGroup
     (
         set::label($lang->testcase->importFile),
-        upload
-        (
-            set::name('file')
-        )
+        upload()
     ),
     formRow
     (

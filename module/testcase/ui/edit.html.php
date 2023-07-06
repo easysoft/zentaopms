@@ -117,13 +117,7 @@ detailBody
                 set::showEdit(true),
                 set::showDelete(true),
             ) : null,
-            formGroup
-            (
-                upload
-                (
-                    set::name('files'),
-                ),
-            )
+            upload()
         ),
         section
         (
@@ -197,7 +191,7 @@ detailBody
                             set('data-toggle', 'modal'),
                             $lang->tree->manage,
                         ),
-                        btn 
+                        btn
                         (
                             set::class('refresh'),
                             set::icon('refresh'),

@@ -341,9 +341,8 @@ formPanel
     ),
     formGroup
     (
-        set::id('uploadFiles'),
         set::label($lang->story->legendAttatch),
-        upload(set::name('files[]'), set::draggable(true), set::tip(sprintf($lang->noticeDrag, strtoupper(ini_get('upload_max_filesize'))))),
+        upload()
     ),
     formGroup
     (

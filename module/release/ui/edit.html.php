@@ -93,10 +93,7 @@ formPanel
     formGroup
     (
         set::label($lang->release->files),
-        upload
-        (
-            set::name('files'),
-        )
+        upload()
     ),
 );
 /* ====== Render page ====== */

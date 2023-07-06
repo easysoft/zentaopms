@@ -122,10 +122,7 @@ detailBody
         section
         (
             set::title($lang->files),
-            upload
-            (
-                set::name('files'),
-            )
+            upload()
         ),
     ),
     history
