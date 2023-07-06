@@ -73,7 +73,8 @@ class pageBase extends wg
 
         $currentLang = $this->props->get('lang');
         if(empty($currentLang)) $currentLang = $app->getClientLang();
-        $zeneditorPath = $app->getWebRoot() . 'js/zeneditor/tiptap-component.esm.js';
+        // $zeneditorPath = $app->getWebRoot() . 'js/zeneditor/tiptap-component.esm.js';
+        $zeneditorPath = 'https://zui-dist.oop.cc/zeneditor/tiptap-component.esm.js';
 
         return h::html
         (
