@@ -154,7 +154,6 @@ class xuanxuanMessage extends messageModel
                 elseif($objectType == 'feedback')
                 {
                     $subcontent->headTitle  = $object->productName;
-                    $subcontent->headSubTitle = $object->execuName;
                     $subcontent->parentType = 'product';
                     $subcontent->parent     = $object->product;
                     $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('feedback', 'browse', "id=$object->product", 'html'));
