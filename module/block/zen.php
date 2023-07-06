@@ -183,9 +183,9 @@ class blockZen extends block
         {
             if($block->width == 3)
             {
-                $block->top = max($height[0], $height[1]);
-                $height[0] += $block->height;
+                $block->top = max($height[1], $height[2]);
                 $height[1] += $block->height;
+                $height[2] += $block->height;
             }
             else
             {

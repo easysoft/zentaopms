@@ -13,10 +13,10 @@ namespace zin;
 
 panel
 (
-    set('class', 'dynamic-block'),
+    set('headingClass', 'border-b'),
+    set::title($block->title),
     div
     (
-        '最新动态',
         '正在开发中...'
     )
 );
