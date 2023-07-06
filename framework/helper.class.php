@@ -509,6 +509,7 @@ function initPageEntity(object $object): array
  */
 function initTableData(array $items, array &$fieldList, object $model = null): array
 {
+    $items = setParent($items);
     if(empty($fieldList['actions'])) return $items;
 
     foreach($fieldList['actions']['menu'] as $actionMenu)
@@ -595,6 +596,24 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
             }
         }
 
+        if(count($item->actions) > $maxActionCount) $maxActionCount = count($item->actions);
+    }
+    if(isset($fieldList['actions'])) $fieldList['actions']['minWidth'] = $maxActionCount * 24 + 24;
+
+    return array_values($items);
+}
+
+/**
+ * Set the parent property of the data.
+ *
+ * @param  array  $items
+ * @access public
+ * @return array
+ */
+function setParent(array $items)
+{
+    foreach($items as $item)
+    {
         /* Set parent attribute. */
         $item->isParent = false;
         if(isset($item->parent) && $item->parent == -1)
@@ -606,12 +625,8 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
 
         if(!empty($item->parent) && !isset($items[$item->parent])) $item->parent = '';
         if(!empty($item->parent) && isset($items[$item->parent])) $items[$item->parent]->isParent = true;
-
-        if(count($item->actions) > $maxActionCount) $maxActionCount = count($item->actions);
     }
-    if(isset($fieldList['actions'])) $fieldList['actions']['minWidth'] = $maxActionCount * 24 + 24;
-
-    return array_values($items);
+    return $items;
 }
 
 /**
