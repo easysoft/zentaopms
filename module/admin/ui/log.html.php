@@ -15,6 +15,7 @@ formPanel
 (
     set::title($title),
     set::formClass('border-0'),
+    set::submitBtnText($lang->save),
     formGroup
     (
         set::label($lang->admin->days),
