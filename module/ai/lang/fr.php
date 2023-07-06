@@ -173,3 +173,95 @@ $lang->ai->designStepNav['selectdatasource'] = 'Select Object';
 $lang->ai->designStepNav['setpurpose']       = 'Confirm Action';
 $lang->ai->designStepNav['settargetform']    = 'Process Result';
 $lang->ai->designStepNav['finalize']         = 'Ready to Publish';
+
+$lang->ai->dataTypeDesc = '%s est de type %s, %s';
+
+$lang->ai->dataType            = new stdclass();
+$lang->ai->dataType->pri       = new stdClass();
+$lang->ai->dataType->pri->type = 'Nombre';
+$lang->ai->dataType->pri->desc = '1 est la priorité maximale, 4 est la priorité minimale.';
+
+$lang->ai->dataType->estimate       = new stdClass();
+$lang->ai->dataType->estimate->type = 'Nombre';
+$lang->ai->dataType->estimate->desc = 'Unité en heures.';
+
+$lang->ai->dataType->consumed = $lang->ai->dataType->estimate;
+$lang->ai->dataType->left     = $lang->ai->dataType->estimate;
+
+$lang->ai->dataType->progress       = new stdClass();
+$lang->ai->dataType->progress->type = 'Pourcentage';
+$lang->ai->dataType->progress->desc = '0 indique non commencé, 100 indique terminé.';
+
+$lang->ai->dataType->datetime       = new stdClass();
+$lang->ai->dataType->datetime->type = 'Date et heure';
+$lang->ai->dataType->datetime->desc = 'Format : 1970-01-01 00:00:01, laisser vide s’il n’y en a pas.';
+
+$lang->ai->dataType->estStarted   = $lang->ai->dataType->datetime;
+$lang->ai->dataType->realStarted  = $lang->ai->dataType->datetime;
+$lang->ai->dataType->finishedDate = $lang->ai->dataType->datetime;
+
+$lang->ai->demoData            = new stdclass();
+$lang->ai->demoData->story     = array(
+    'story' => array
+    (
+        'title'    => 'Développer une plate-forme d\'apprentissage en ligne',
+        'spec'     => 'Nous devons développer une plate-forme d\'apprentissage en ligne qui offre des fonctionnalités de gestion de cours, d\'étudiants et d\'enseignants, etc.',
+        'module'   => 7,
+        'pri'      => 1,
+        'estimate' => 1,
+        'product'  => 1,
+        'category' => 'feature',
+    ),
+);
+$lang->ai->demoData->execution = array
+(
+    'execution' => array(
+        'name'     => 'Développement de logiciel de plateforme d\'apprentissage en ligne',
+        'desc'     => 'Ce plan vise à développer un logiciel de plateforme d\'apprentissage en ligne qui fournira des ressources d\'apprentissage accessibles, y compris du texte, des vidéos et des fichiers audio, ainsi que des outils d\'apprentissage tels que des examens, des tests et des forums de discussion.',
+        'estimate' => 7,
+    ),
+    'tasks'     => array(
+        0 =>
+            array(
+                'name'         => 'Sélection de la technologie',
+                'pri'          => 1,
+                'status'       => 'done',
+                'estimate'     => 1,
+                'consumed'     => 1,
+                'left'         => 0,
+                'progress'     => 100,
+                'estStarted'   => '2023-07-02 00:00:00',
+                'realStarted'  => '2023-07-02 00:00:00',
+                'finishedDate' => '2023-07-02 00:00:00',
+                'closedReason' => 'terminé',
+            ),
+        1 =>
+            array(
+                'name'         => 'Conception de l’interface utilisateur',
+                'pri'          => 1,
+                'status'       => 'doing',
+                'estimate'     => 2,
+                'consumed'     => 1,
+                'left'         => 1,
+                'progress'     => 50,
+                'estStarted'   => '2023-07-03 00:00:00',
+                'realStarted'  => '2023-07-03 00:00:00',
+                'finishedDate' => '',
+                'closedReason' => '',
+            ),
+        2 =>
+            array(
+                'name'         => 'Développement',
+                'pri'          => 1,
+                'status'       => 'wait',
+                'estimate'     => 1,
+                'consumed'     => 0,
+                'left'         => 1,
+                'progress'     => 0,
+                'estStarted'   => '',
+                'realStarted'  => '',
+                'finishedDate' => '',
+                'closedReason' => '',
+            ),
+    ),
+);

@@ -225,7 +225,7 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
         }
 
-        $this->view->dataPreview = ''; // TODO: Provide data preview with model method.
+        $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
         $this->view->prompt      = $prompt;
         $this->view->promptID    = $promptID;
         $this->view->title       = $this->lang->ai->prompts->setPurpose . " {$this->lang->colon} " . $this->lang->ai->prompts->common;

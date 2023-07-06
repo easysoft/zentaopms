@@ -173,3 +173,95 @@ $lang->ai->designStepNav['selectdatasource'] = '选择对象';
 $lang->ai->designStepNav['setpurpose']       = '确认操作';
 $lang->ai->designStepNav['settargetform']    = '结果处理';
 $lang->ai->designStepNav['finalize']         = '准备发布';
+
+$lang->ai->dataTypeDesc = '%s是%s类型，%s';
+
+$lang->ai->dataType            = new stdclass();
+$lang->ai->dataType->pri       = new stdClass();
+$lang->ai->dataType->pri->type = '数值';
+$lang->ai->dataType->pri->desc = '1 是最高优先级，4 是最低优先级。';
+
+$lang->ai->dataType->estimate       = new stdClass();
+$lang->ai->dataType->estimate->type = '数值';
+$lang->ai->dataType->estimate->desc = '单位为小时。';
+
+$lang->ai->dataType->consumed = $lang->ai->dataType->estimate;
+$lang->ai->dataType->left     = $lang->ai->dataType->estimate;
+
+$lang->ai->dataType->progress       = new stdClass();
+$lang->ai->dataType->progress->type = '百分比';
+$lang->ai->dataType->progress->desc = '0 是未开始，100是已完成。';
+
+$lang->ai->dataType->datetime       = new stdClass();
+$lang->ai->dataType->datetime->type = '日期时间';
+$lang->ai->dataType->datetime->desc = '格式为：1970-01-01 00:00:01，没有则留空。';
+
+$lang->ai->dataType->estStarted   = $lang->ai->dataType->datetime;
+$lang->ai->dataType->realStarted  = $lang->ai->dataType->datetime;
+$lang->ai->dataType->finishedDate = $lang->ai->dataType->datetime;
+
+$lang->ai->demoData            = new stdclass();
+$lang->ai->demoData->story     = array(
+    'story' => array
+    (
+        'title'    => '开发一个在线学习平台',
+        'spec'     => '我们需要开发一个在线学习平台，能够提供课程管理、学生管理、教师管理等功能。',
+        'module'   => 7,
+        'pri'      => 1,
+        'estimate' => 1,
+        'product'  => 1,
+        'category' => 'feature',
+    ),
+);
+$lang->ai->demoData->execution = array
+(
+    'execution' => array(
+        'name'     => '在线学习平台软件开发',
+        'desc'     => '本计划旨在开发一款在线学习平台软件，该软件将提供可访问的学习资源，包括文本、视频和音频等，以及一些学习工具如考试、测试和讨论论坛等。',
+        'estimate' => 7,
+    ),
+    'tasks'     => array(
+        0 =>
+            array(
+                'name'         => '技术选型',
+                'pri'          => 1,
+                'status'       => 'done',
+                'estimate'     => 1,
+                'consumed'     => 1,
+                'left'         => 0,
+                'progress'     => 100,
+                'estStarted'   => '2023-07-02 00:00:00',
+                'realStarted'  => '2023-07-02 00:00:00',
+                'finishedDate' => '2023-07-02 00:00:00',
+                'closedReason' => '已完成',
+            ),
+        1 =>
+            array(
+                'name'         => 'UI设计',
+                'pri'          => 1,
+                'status'       => 'doing',
+                'estimate'     => 2,
+                'consumed'     => 1,
+                'left'         => 1,
+                'progress'     => 50,
+                'estStarted'   => '2023-07-03 00:00:00',
+                'realStarted'  => '2023-07-03 00:00:00',
+                'finishedDate' => '',
+                'closedReason' => '',
+            ),
+        2 =>
+            array(
+                'name'         => '开发',
+                'pri'          => 1,
+                'status'       => 'wait',
+                'estimate'     => 1,
+                'consumed'     => 0,
+                'left'         => 1,
+                'progress'     => 0,
+                'estStarted'   => '',
+                'realStarted'  => '',
+                'finishedDate' => '',
+                'closedReason' => '',
+            ),
+    ),
+);

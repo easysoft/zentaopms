@@ -382,4 +382,111 @@ class aiModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * serialize data to prompt.
+     *
+     * @param  string $module
+     * @param  array  $sources
+     * @param  array  $data
+     * @access public
+     * @return string
+     */
+    public function serializeDataToPrompt($module, $sources, $data)
+    {
+        $newData = array();
+
+        $supplement = '';
+        $supplementTypes = array();
+
+        foreach($sources as $source)
+        {
+            $objectName = $source[0];
+            $objectKey  = $source[1];
+
+            $semanticName = $this->lang->ai->dataSource[$module][$objectName]['common'];
+            $semanticKey  = $this->lang->ai->dataSource[$module][$objectName][$objectKey];
+
+            if(empty($newData[$semanticName])) $newData[$semanticName] = array();
+
+            $objectData = $data[$objectName];
+            if($this->isAssoc($objectData))
+            {
+                $newData[$semanticName][$semanticKey] = $data[$objectName][$objectKey];
+            }
+            else
+            {
+                foreach($objectData as $index => $value)
+                {
+                    if(empty($newData[$semanticName][$index])) $newData[$semanticName][$index] = array();
+                    $newData[$semanticName][$index][$semanticKey] = $data[$objectName][$index][$objectKey];
+                }
+            }
+
+            if(in_array($objectKey, $supplementTypes)) continue;
+
+            if(!isset($this->lang->ai->dataType->$objectKey)) continue;
+
+            $supplementTypes[] = $objectKey;
+            $supplement .= sprintf($this->lang->ai->dataTypeDesc, $semanticKey, $this->lang->ai->dataType->$objectKey->type, $this->lang->ai->dataType->$objectKey->desc) . "\n";
+        }
+
+        /* @see https://stackoverflow.com/a/2934602 */
+        return "'''\n" . preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');}, json_encode($newData)) . "\n'''\n" . $supplement;
+    }
+
+    /**
+     * generate demo data prompt by source.
+     *
+     * @param  string $module
+     * @param  string $source
+     * @access public
+     * @return string
+     */
+    public function generateDemoDataPrompt($module,$source)
+    {
+        $sources = explode(',', $source);
+        $sources = array_filter($sources);
+        foreach($sources as $index => $source)
+        {
+            $sources[$index] = explode('.', $source);
+        }
+
+        $data = array();
+        foreach($sources as $source)
+        {
+            $objectName = $source[0];
+            $objectKey  = $source[1];
+            if(empty($data[$objectName])) $data[$objectName] = array();
+
+            $demoData = $this->lang->ai->demoData->$module[$objectName];
+            if($this->isAssoc($demoData))
+            {
+                $data[$objectName][$objectKey] = $demoData[$objectKey];
+            }
+            else
+            {
+                foreach($demoData as $index => $value)
+                {
+                    if(empty($data[$objectName][$index])) $data[$objectName][$index] = array();
+                    $data[$objectName][$index][$objectKey] = $value[$objectKey];
+                }
+            }
+        }
+
+        return $this->serializeDataToPrompt($module, $sources, $data);
+    }
+
+    /**
+     * Determines if an array is associative.
+     *
+     * @param  array $array
+     * @access public
+     * @return bool
+     */
+    public function isAssoc($array)
+    {
+        $keys = array_keys($array);
+        return array_keys($keys) !== $keys;
+    }
 }

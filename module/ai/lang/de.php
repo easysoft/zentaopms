@@ -173,3 +173,95 @@ $lang->ai->designStepNav['selectdatasource'] = 'Select Object';
 $lang->ai->designStepNav['setpurpose']       = 'Confirm Action';
 $lang->ai->designStepNav['settargetform']    = 'Process Result';
 $lang->ai->designStepNav['finalize']         = 'Ready to Publish';
+
+$lang->ai->dataTypeDesc = '%s ist die art %s, %s';
+
+$lang->ai->dataType            = new stdclass();
+$lang->ai->dataType->pri       = new stdClass();
+$lang->ai->dataType->pri->type = 'Nummer';
+$lang->ai->dataType->pri->desc = '1 ist die höchste Priorität, 4 ist die niedrigste Priorität.';
+
+$lang->ai->dataType->estimate       = new stdClass();
+$lang->ai->dataType->estimate->type = 'Nummer';
+$lang->ai->dataType->estimate->desc = 'in Stunden.';
+
+$lang->ai->dataType->consumed = $lang->ai->dataType->estimate;
+$lang->ai->dataType->left     = $lang->ai->dataType->estimate;
+
+$lang->ai->dataType->progress       = new stdClass();
+$lang->ai->dataType->progress->type = 'Prozent';
+$lang->ai->dataType->progress->desc = '0 bedeutet "nicht begonnen", 100 bedeutet "abgeschlossen" .';
+
+$lang->ai->dataType->datetime       = new stdClass();
+$lang->ai->dataType->datetime->type = 'Datum & Zeit';
+$lang->ai->dataType->datetime->desc = 'im Format: 1970-01-01 00:00:01, oder leer lassen.';
+
+$lang->ai->dataType->estStarted   = $lang->ai->dataType->datetime;
+$lang->ai->dataType->realStarted  = $lang->ai->dataType->datetime;
+$lang->ai->dataType->finishedDate = $lang->ai->dataType->datetime;
+
+$lang->ai->demoData            = new stdclass();
+$lang->ai->demoData->story     = array(
+    'story' => array
+    (
+        'title'    => 'Entwicklung einer Online-Lernplattform',
+        'spec'     => 'Wir müssen eine Online-Lernplattform entwickeln, die Funktionen wie Kursverwaltung, Studentenverwaltung, Lehrerverwaltung usw. bietet.',
+        'module'   => 7,
+        'pri'      => 1,
+        'estimate' => 1,
+        'product'  => 1,
+        'category' => 'feature',
+    ),
+);
+$lang->ai->demoData->execution = array
+(
+    'execution' => array(
+        'name'     => 'Softwareentwicklung für die Online-Lernplattform',
+        'desc'     => 'Dieses Projekt zielt darauf ab, eine Software für eine Online-Lernplattform zu entwickeln, die zugängliche Lernressourcen wie Texte, Videos, Audios usw. sowie einige Lernwerkzeuge wie Prüfungen, Tests und Diskussionsforen bietet.',
+        'estimate' => 7,
+    ),
+    'tasks'     => array(
+        0 =>
+            array(
+                'name'         => 'Technologieauswahl',
+                'pri'          => 1,
+                'status'       => 'done',
+                'estimate'     => 1,
+                'consumed'     => 1,
+                'left'         => 0,
+                'progress'     => 100,
+                'estStarted'   => '2023-07-02 00:00:00',
+                'realStarted'  => '2023-07-02 00:00:00',
+                'finishedDate' => '2023-07-02 00:00:00',
+                'closedReason' => 'Erledigt',
+            ),
+        1 =>
+            array(
+                'name'         => 'UI-Design',
+                'pri'          => 1,
+                'status'       => 'doing',
+                'estimate'     => 2,
+                'consumed'     => 1,
+                'left'         => 1,
+                'progress'     => 50,
+                'estStarted'   => '2023-07-03 00:00:00',
+                'realStarted'  => '2023-07-03 00:00:00',
+                'finishedDate' => '',
+                'closedReason' => '',
+            ),
+        2 =>
+            array(
+                'name'         => 'Entwicklung',
+                'pri'          => 1,
+                'status'       => 'wait',
+                'estimate'     => 1,
+                'consumed'     => 0,
+                'left'         => 1,
+                'progress'     => 0,
+                'estStarted'   => '',
+                'realStarted'  => '',
+                'finishedDate' => '',
+                'closedReason' => '',
+            ),
+    ),
+);

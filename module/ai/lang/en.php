@@ -173,3 +173,95 @@ $lang->ai->designStepNav['selectdatasource'] = 'Select Object';
 $lang->ai->designStepNav['setpurpose']       = 'Confirm Action';
 $lang->ai->designStepNav['settargetform']    = 'Process Result';
 $lang->ai->designStepNav['finalize']         = 'Ready to Publish';
+
+$lang->ai->dataTypeDesc = '%s is %s type, %s';
+
+$lang->ai->dataType            = new stdclass();
+$lang->ai->dataType->pri       = new stdClass();
+$lang->ai->dataType->pri->type = 'numeric';
+$lang->ai->dataType->pri->desc = '1 is the highest priority, 4 is the lowest priority.';
+
+$lang->ai->dataType->estimate       = new stdClass();
+$lang->ai->dataType->estimate->type = 'numeric';
+$lang->ai->dataType->estimate->desc = 'Unit is in hours.';
+
+$lang->ai->dataType->consumed = $lang->ai->dataType->estimate;
+$lang->ai->dataType->left     = $lang->ai->dataType->estimate;
+
+$lang->ai->dataType->progress       = new stdClass();
+$lang->ai->dataType->progress->type = 'percentage';
+$lang->ai->dataType->progress->desc = '0 means not started, 100 means completed.';
+
+$lang->ai->dataType->datetime       = new stdClass();
+$lang->ai->dataType->datetime->type = 'datetime';
+$lang->ai->dataType->datetime->desc = 'Format is: 1970-01-01 00:00:01, or leave it blank.';
+
+$lang->ai->dataType->estStarted   = $lang->ai->dataType->datetime;
+$lang->ai->dataType->realStarted  = $lang->ai->dataType->datetime;
+$lang->ai->dataType->finishedDate = $lang->ai->dataType->datetime;
+
+$lang->ai->demoData            = new stdclass();
+$lang->ai->demoData->story     = array(
+    'story' => array
+    (
+        'title'    => 'Develop an online learning platform',
+        'spec'     => 'We need to develop an online learning platform that provides course management, student management, teacher management, and other functions.',
+        'module'   => 7,
+        'pri'      => 1,
+        'estimate' => 1,
+        'product'  => 1,
+        'category' => 'feature',
+    ),
+);
+$lang->ai->demoData->execution = array
+(
+    'execution' => array(
+        'name'     => 'Online Learning Platform Software Development',
+        'desc'     => 'This plan aims to develop an online learning platform software that provides accessible learning resources, including text, video, and audio, as well as some learning tools such as exams, tests, and discussion forums.',
+        'estimate' => 7,
+    ),
+    'tasks'     => array(
+        0 =>
+            array(
+                'name'         => 'Technology Selection',
+                'pri'          => 1,
+                'status'       => 'done',
+                'estimate'     => 1,
+                'consumed'     => 1,
+                'left'         => 0,
+                'progress'     => 100,
+                'estStarted'   => '2023-07-02 00:00:00',
+                'realStarted'  => '2023-07-02 00:00:00',
+                'finishedDate' => '2023-07-02 00:00:00',
+                'closedReason' => 'Completed',
+            ),
+        1 =>
+            array(
+                'name'         => 'UI Design',
+                'pri'          => 1,
+                'status'       => 'doing',
+                'estimate'     => 2,
+                'consumed'     => 1,
+                'left'         => 1,
+                'progress'     => 50,
+                'estStarted'   => '2023-07-03 00:00:00',
+                'realStarted'  => '2023-07-03 00:00:00',
+                'finishedDate' => '',
+                'closedReason' => '',
+            ),
+        2 =>
+            array(
+                'name'         => 'Development',
+                'pri'          => 1,
+                'status'       => 'wait',
+                'estimate'     => 1,
+                'consumed'     => 0,
+                'left'         => 1,
+                'progress'     => 0,
+                'estStarted'   => '',
+                'realStarted'  => '',
+                'finishedDate' => '',
+                'closedReason' => '',
+            ),
+    ),
+);
