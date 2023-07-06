@@ -32,9 +32,13 @@ $(function()
             products.push(currentProductID);
             branches.push(currentBranchID);
 
+            const formData = new FormData();
+            formData.append('products', products);
+            formData.append('branch', branches);
+
             $.ajaxSubmit({
                 url:  $.createLink('project', 'manageProducts', 'projectID=' + selectProjectID), 
-                data: {'products' : products, 'branch' : branches},
+                data: formData,
                 load: true
             });
         });
