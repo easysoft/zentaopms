@@ -28,6 +28,7 @@ class dropmenu extends wg
      */
     protected static $defineProps = array
     (
+        'tab?:      string,',       // 应用名。
         'module?:   string,',       // 模块名。
         'method?:   string,',       // 方法名。
         'objectID?: string,',       // 对象 ID。
@@ -46,18 +47,19 @@ class dropmenu extends wg
      */
     protected function build(): wg
     {
-        list($url, $text, $objectID, $cache, $module, $method, $objectID, $extra) = $this->prop(array('url', 'text', 'objectID', 'cache', 'module', 'method', 'objectID', 'extra'));
+        list($url, $text, $objectID, $cache, $tab, $module, $method, $objectID, $extra) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'objectID', 'extra'));
 
         $app = data('app');
 
-        if(empty($module))   $module = $app->tab;
+        if(empty($tab))      $tab    = $app->tab;
+        if(empty($module))   $module = $app->moduleName;
         if(empty($method))   $method = $app->methodName;
         if(empty($extra))    $extra  = '';
         if(empty($objectID)) $objectID = data($module . 'ID');
 
         if(empty($url))
         {
-            $url = createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
+            $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
         }
 
         if(empty($text) && !empty($module))

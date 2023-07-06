@@ -43,7 +43,7 @@ if($branchStatus != 'closed')
             'text'        => $lang->product->link2Project,
             'class'       => "secondary",
             'url'         => '#link2Project',
-            'data-toggle' => 'modal'
+            'data-toggle' => 'modal',
         ))),
         !common::hasPriv('project', 'create') ? null : item(set(array
         (
@@ -63,6 +63,7 @@ modal
     set::id('link2Project'),
     set::title($lang->product->link2Project),
     set::footerClass('form-actions'),
+    setData('size', '500px'),
     to::footer
     (
         btn(setClass('primary'), set::id('saveButton'), $lang->save),

@@ -66,7 +66,7 @@ class heading extends wg
         if(in_array($app->tab, $config->hasDropmenuApps))
         {
             $module = $app->tab == 'qa' ? 'product' : $app->tab;
-            return new dropmenu(set::module($module));
+            return new dropmenu(set::tab($module));
         }
 
         return null;
