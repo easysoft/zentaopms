@@ -1,3 +1,11 @@
+$(function()
+{
+    $('#resultsContainer').off('click', '.result-item').on('click', '.result-item', toggleShowResults);
+    $('#resultsContainer').off('click', '.check-all').on('click', '.check-all', toggleCheckAll);
+    $('#resultsContainer').off('click', '.check-item').on('click', '.check-item', toggleCheckChildItem);
+    $('#resultsContainer').off('click', '.to-bug-button').on('click', '.to-bug-button', toggleCheckChildItem);
+});
+
 /**
  * Load execution related
  *
