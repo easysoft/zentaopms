@@ -92,8 +92,10 @@ formPanel
             set::label($lang->testtask->resultFile),
             set::width('1/2'),
             set::required(true),
-            set::name('resultFile'),
-            set::control('file'),
+            fileInput
+            (
+                set::name('resultFile')
+            ),
         ),
         div
         (

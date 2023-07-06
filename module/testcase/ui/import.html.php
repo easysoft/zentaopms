@@ -17,8 +17,7 @@ form
     formGroup
     (
         set::label($lang->testcase->importFile),
-        set::name('file'),
-        set::control('file'),
+        fileInput()
     ),
     formGroup
     (

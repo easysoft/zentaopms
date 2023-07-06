@@ -25,8 +25,7 @@ formPanel
         formGroup
         (
             set::label($lang->caselib->selectFile),
-            set::name('files[]'),
-            set::control('file')
+            fileInput()
         ),
     ),
     formRow
