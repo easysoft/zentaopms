@@ -94,8 +94,7 @@
         const zinDebug = window.zinDebug;
         if(zinDebug && zinDebug.basePath) data = data.split(zinDebug.basePath).join('<i class="icon icon-file-text opacity-50"></i>/');
         if(data.startsWith('<br />\n'))   data = data.replace('<br />\n', '');
-
-        $('body').empty().append($(`<div class="panel shadow-xl mx-auto mt-4 rounded-lg border border-danger text-canvas" style="max-width: 1000px"><div class="panel-heading bg-danger bg-opacity-80"><style>body{background: var(--color-gray-800)}</style><div class="panel-title font-bold text-lg">Fatal error: ${options.url}</div></div></div>`).append($('<div class="panel-body font-mono overflow-y-auto bg-danger bg-opacity-20" style="max-height: calc(100vh - 70px)"></div>').append(data)));
+        zui.Modal.alert({message: {html: data}, title: `Fatal error: ${options.url}`, actions: [], size: 'lg', custom: {className: 'backdrop-blur border-2 border-canvas bg-opacity-80 rounded-xl', bodyClass: 'font-mono', headerClass: 'text-danger'}});
     }
 
     function initZinbar()
@@ -363,6 +362,7 @@
             {
                 updatePerfInfo(options, 'requestEnd', {dataSize: data.length});
                 options.result = 'success';
+                let hasFatal = false;
                 try
                 {
                     if(data.includes('RAWJS<'))
@@ -378,9 +378,10 @@
                 catch(e)
                 {
                     if(!isInAppTab && config.zin) return;
-                    data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];
+                    hasFatal = data.includes('Fatal error');
+                    data = [{name: hasFatal ? 'fatal' : 'html', data: data}];
                 }
-                if(!options.partial) currentAppUrl = url;
+                if(!options.partial && !hasFatal) currentAppUrl = url;
                 if(Array.isArray(data))
                 {
                     data.forEach((item, idx) => item.selector = selectors[idx]);
