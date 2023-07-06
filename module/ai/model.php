@@ -432,7 +432,7 @@ class aiModel extends model
         }
 
         /* @see https://stackoverflow.com/a/2934602 */
-        return "'''\n" . preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');}, json_encode($newData)) . "\n'''\n" . $supplement;
+        return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');}, json_encode($newData)) . "\n" . $supplement;
     }
 
     /**
