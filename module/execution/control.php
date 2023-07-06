@@ -2014,7 +2014,6 @@ class execution extends control
         }
 
         $this->view->title                = $this->lang->execution->edit . $this->lang->colon . $execution->name;
-        $this->view->position             = $position;
         $this->view->executions           = $executions;
         $this->view->execution            = $execution;
         $this->view->project              = $project;
@@ -3092,7 +3091,6 @@ class execution extends control
 
         /* Assign. */
         $this->view->title                = $this->lang->execution->manageProducts . $this->lang->colon . $execution->name;
-        $this->view->position             = $position;
         $this->view->allProducts          = $allProducts;
         $this->view->execution            = $execution;
         $this->view->linkedProducts       = $linkedProducts;
