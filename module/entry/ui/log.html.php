@@ -30,6 +30,7 @@ toolbar
         setClass('btn primary'),
         set::icon('cog'),
         set::url(helper::createLink('admin', 'log')),
+        set(array('data-toggle' => 'modal')),
         $lang->entry->setting
     ),
     backBtn
