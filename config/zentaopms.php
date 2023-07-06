@@ -484,3 +484,6 @@ $config->featureGroup->other         = array('devops', 'kanban');
 
 $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;
+
+$config->hasDropmenuApps     = array('project', 'product', 'execution', 'qa');
+$config->excludeDropmenuList = array('program-browse', 'product-all', 'execuiton-all', 'project-browse');

@@ -62,7 +62,7 @@ class dropmenu extends wg
 
         if(empty($text) && !empty($module))
         {
-            $object = $app->control->loadModel($module)->getByID($objectID);
+            $object = $app->control->loadModel($module)->getByID((int)$objectID);
             $text   = $object->name;
         }
 

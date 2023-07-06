@@ -56,17 +56,20 @@ class heading extends wg
      */
     protected function buildDropmenu(): dropmenu|array|null
     {
-       if($this->hasBlock('dropmenu')) return $this->block('dropmenu');
+        global $app, $config;
+        if($this->hasBlock('dropmenu')) return $this->block('dropmenu');
 
-       $dropmenuProps = $this->prop('dropmenu');
+        $moduleName = $app->moduleName;
+        $methodName = $app->methodName;
+        if(in_array("$moduleName-$methodName", $config->excludeDropmenuList)) return null;
 
-       /**
-        * 如果需要根据配置自动添加 dropmenu 就在这里进行处理。
-        * If need to automatically add a dropmenu based on the configuration, handle it here.
-        */
-       if(empty($dropmenuProps)) return null;
+        if(in_array($app->tab, $config->hasDropmenuApps))
+        {
+            $module = $app->tab == 'qa' ? 'product' : $app->tab;
+            return new dropmenu(set::module($module));
+        }
 
-       return new dropmenu(set($dropmenuProps));
+        return null;
     }
 
     protected function buildToolbar()
