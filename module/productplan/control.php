@@ -500,7 +500,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function start($planID)
+    public function start(int $planID)
     {
         $this->productplan->updateStatus($planID, 'doing', 'started');
         if(dao::isError())
@@ -524,7 +524,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function finish($planID)
+    public function finish(int $planID)
     {
         $this->productplan->updateStatus($planID, 'done', 'finished');
         if(dao::isError())

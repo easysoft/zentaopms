@@ -680,7 +680,7 @@ class productplanModel extends model
      * @access public
      * @return bool
      */
-    public function updateStatus($planID, $status = '', $action = '')
+    public function updateStatus(int $planID, string $status = '', string $action = '')
     {
         $oldPlan = $this->getByID($planID);
 
