@@ -67,17 +67,7 @@ class formBatchPanel extends formPanel
         global $lang;
 
         /* Upload images. */
-        if($uploadImage)
-        {
-            $headingActions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale bd-primary mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
-
-            $this->addToBlock('headingActions', modal
-            (
-                set::id('upload-dialog'),
-                set::title(array('html' => div(span($lang->uploadImages), span(set::class('text-gray text-sm font-normal'), $lang->uploadImagesTip)))),
-                uploadImgs()
-            ));
-        }
+        if($uploadImage) $headingActions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale bd-primary mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
 
         /* Multi-input. */
         if($pasteField)
