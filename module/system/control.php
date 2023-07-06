@@ -632,7 +632,7 @@ class system extends control
 
         $url = $this->loadModel('instance')->url($ossDomain);
 
-        if($ossAccount and $ossAccount) return  $this->send(array('result' => 'success', 'message' => '', 'data' => array('account' => $ossAccount, 'url' => $url)));
+        if($ossAccount and $ossDomain) return  $this->send(array('result' => 'success', 'message' => '', 'data' => array('account' => $ossAccount, 'url' => $url)));
 
         $this->send(array('result' => 'fail', 'message' => $this->lang->system->errors->failGetOssAccount));
     }
