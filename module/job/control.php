@@ -201,8 +201,8 @@ class job extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', "repoID={$job->repo}")));
         }
 
-        $repo = $this->loadModel('repo')->getRepoByID($job->repo);
-        $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
+        $repo = $this->loadModel('repo')->getByID($job->repo);
+        $this->view->repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
 
@@ -328,7 +328,7 @@ class job extends control
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->job     = $job;
         $this->view->compile = $compile;
-        $this->view->repo    = $this->loadModel('repo')->getRepoByID($job->repo);
+        $this->view->repo    = $this->loadModel('repo')->getByID($job->repo);
         $this->view->jenkins = $this->loadModel('jenkins')->getById($job->server);
         $this->view->product = $this->loadModel('product')->getById($job->product);
         $this->display();
@@ -368,7 +368,7 @@ class job extends control
      */
     public function ajaxGetProductByRepo($repoID)
     {
-        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo = $this->loadModel('repo')->getByID($repoID);
         if(empty($repo)) return print(json_encode(array(""=>"")));
 
         $product = $repo->product;
@@ -401,7 +401,7 @@ class job extends control
      */
     public function ajaxGetRefList($repoID)
     {
-        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo = $this->loadModel('repo')->getByID($repoID);
         if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
         if($repo->SCM != 'Gitlab') $refList = $this->repo->getBranches($repo, true);
         $this->send(array('result' => 'success', 'refList' => $refList));
@@ -442,7 +442,7 @@ class job extends control
      */
     public function ajaxGetRepoType($repoID)
     {
-        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo = $this->loadModel('repo')->getByID($repoID);
         $this->send(array('result' => 'success', 'type' => strtolower($repo->SCM)));
     }
 

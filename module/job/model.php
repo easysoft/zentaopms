@@ -186,7 +186,7 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
+            $repo    = $this->loadModel('repo')->getByID($job->repo);
             $project = zget($repo, 'project');
             if(!empty($repo))
             {
@@ -312,7 +312,7 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->gitlabRepo);
+            $repo    = $this->loadModel('repo')->getByID($job->gitlabRepo);
             $project = zget($repo, 'project');
             if(!empty($repo))
             {
@@ -437,7 +437,7 @@ class jobModel extends model
 
         if($job->triggerType == 'tag')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
+            $repo    = $this->loadModel('repo')->getByID($job->repo);
             $lastTag = '';
             if($repoType == 'Subversion')
             {

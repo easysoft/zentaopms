@@ -42,14 +42,19 @@ class mr extends control
         if($repoCount == 0) $this->locate($this->loadModel('repo')->createLink('create'));
 
         $repoID = $this->loadModel('repo')->saveState($repoID, $objectID);
-        $repo   = $this->repo->getRepoByID($repoID);
+        $repo   = $this->repo->getByID($repoID);
         if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList))
         {
             $repoID = $this->dao->select('id')->from(TABLE_REPO)->where('deleted')->eq('0')->andWhere('SCM')->in(array('Gitlab', 'Gitea', 'Gogs'))->andWhere('synced')->eq(1)->orderBy('id')->fetch('id');
-            $repo   = $this->repo->getRepoByID($repoID);
+            $repo   = $this->repo->getByID($repoID);
         }
         $this->loadModel('ci')->setMenu($repo->id);
 
+        if($param == 'assignee' || $param == 'creator')
+        {
+            $mode  = $param;
+            $param = $this->app->user->account;
+        }
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => array($repo->serviceProject => $repo->serviceProject));
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $pager, $filterProjects, $repoID);
         if($repo->SCM == 'Gitlab')
@@ -131,7 +136,7 @@ class mr extends control
         }
 
         $repoID = $this->loadModel('repo')->saveState(0);
-        $repo   = $this->repo->getRepoByID($repoID);
+        $repo   = $this->repo->getByID($repoID);
 
         $this->loadModel('gitlab');
         $this->loadModel('gitea');
@@ -468,7 +473,7 @@ class mr extends control
             }
         }
 
-        $this->view->repo         = $this->loadModel('repo')->getRepoByID($MR->repoID);
+        $this->view->repo         = $this->loadModel('repo')->getByID($MR->repoID);
         $this->view->repoID       = $MR->repoID;
         $this->view->diffs        = $diffs;
         $this->view->encoding     = $encoding;

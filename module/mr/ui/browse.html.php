@@ -10,8 +10,24 @@ declare(strict_types=1);
  */
 namespace zin;
 
+dropmenu(set::module('repo'));
+
 foreach($MRList as $MR)
 {
+    $MR->canDelete = ($app->user->admin or (isset($openIDList[$MR->hostID]) and isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
+    if($repo->SCM == 'Gitlab')
+    {
+        $MR->canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->isDeveloper) and $projects[$MR->hostID][$MR->sourceProject]->isDeveloper == true) ? '' : 'disabled';
+    }
+    elseif($repo->SCM == 'Gitea')
+    {
+        $MR->canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->allow_merge_commits) and $projects[$MR->hostID][$MR->sourceProject]->allow_merge_commits == true) ? '' : 'disabled';
+    }
+    elseif($repo->SCM == 'Gogs')
+    {
+        $MR->canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->permissions->push) and $projects[$MR->hostID][$MR->sourceProject]->permissions->push) ? '' : 'disabled';
+    }
+
     if($repo->SCM == 'Gitlab')
     {
         $MR->sourceProject = isset($projects[$MR->hostID][$MR->sourceProject]) ? $projects[$MR->hostID][$MR->sourceProject]->name_with_namespace . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch;
@@ -33,27 +49,13 @@ foreach($MRList as $MR)
     {
         $MR->approvalStatus = empty($MR->approvalStatus) ? $lang->mr->approvalStatusList['notReviewed'] : $lang->mr->approvalStatusList[$MR->approvalStatus];
     }
-
-    $MR->canDelete = ($app->user->admin or (isset($openIDList[$MR->hostID]) and isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
-    if($repo->SCM == 'Gitlab')
-    {
-        $MR->canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->isDeveloper) and $projects[$MR->hostID][$MR->sourceProject]->isDeveloper == true) ? '' : 'disabled';
-    }
-    elseif($repo->SCM == 'Gitea')
-    {
-        $MR->canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->allow_merge_commits) and $projects[$MR->hostID][$MR->sourceProject]->allow_merge_commits == true) ? '' : 'disabled';
-    }
-    elseif($repo->SCM == 'Gogs')
-    {
-        $MR->canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->permissions->push) and $projects[$MR->hostID][$MR->sourceProject]->permissions->push) ? '' : 'disabled';
-    }
 }
 
 $MRs = initTableData($MRList, $config->mr->dtable->fieldList, $this->mr);
 
 featureBar
 (
-    set::current($param),
+    set::current($mode != 'status' ? $mode : $param),
     set::linkParams("repoID={$repoID}&mode=status&param={key}"),
 );
 

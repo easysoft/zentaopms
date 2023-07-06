@@ -37,6 +37,7 @@ formPanel
     (
         formGroup
         (
+            set::width('2/3'),
             set::required(true),
             set::label($lang->mr->targetProject),
             inputGroup

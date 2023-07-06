@@ -127,7 +127,7 @@ function onHostChange()
         if(repo.project)
         {
             $('#sourceProject').val(repo.project);
-            onSourceProjectChange();
+            $('#sourceProject').trigger('change');
         }
     });
 }

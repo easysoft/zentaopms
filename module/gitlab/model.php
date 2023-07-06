@@ -1290,6 +1290,7 @@ class gitlabModel extends model
         $hookList = $this->apiGetHooks($repo->gitService, $repo->project);
         foreach($hookList as $hook)
         {
+            if(empty($hook->url)) continue;
             if($hook->url == $url) return true;
         }
         return false;

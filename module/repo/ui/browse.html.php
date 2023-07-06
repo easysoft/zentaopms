@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+dropMenu(set::module('repo'));
+
 /* Prepare repo select data. */
 $menus    = array();
 $selected = '';

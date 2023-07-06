@@ -44,7 +44,7 @@ class repoModel extends model
         /* Check the privilege. */
         if($repoID)
         {
-            $repo = $this->getRepoByID($repoID);
+            $repo = $this->getByID($repoID);
             if(empty($repo))
             {
                 echo(js::alert($this->lang->repo->error->noFound));
@@ -81,7 +81,7 @@ class repoModel extends model
         if(!in_array($currentModule, $this->config->repo->switcherModuleList)) return '';
         if($currentModule == 'repo' and !in_array($currentMethod, $this->config->repo->switcherMethodList)) return '';
 
-        $currentRepo     = $this->getRepoByID($repoID);
+        $currentRepo     = $this->getByID($repoID);
         $currentRepoName = $currentRepo->name;
 
         if($this->app->viewType == 'mhtml' and $repoID)
@@ -260,7 +260,7 @@ class repoModel extends model
             if($repo->SCM == 'Gitlab')
             {
                 /* Add webhook. */
-                $repo = $this->getRepoByID($repoID);
+                $repo = $this->getByID($repoID);
                 $this->loadModel('gitlab')->addPushWebhook($repo);
             }
 
@@ -279,7 +279,7 @@ class repoModel extends model
      */
     public function update($id)
     {
-        $repo = $this->getRepoByID($id);
+        $repo = $this->getByID($id);
         if($repo->client != $this->post->client and !$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
 
@@ -331,7 +331,7 @@ class repoModel extends model
 
         $this->rmClientVersionFile();
 
-        if($data->SCM == 'Gitlab') $data->path = $this->getRepoByID($id)->path;
+        if($data->SCM == 'Gitlab') $data->path = $this->getByID($id)->path;
 
         if($repo->path != $data->path)
         {
@@ -529,7 +529,7 @@ class repoModel extends model
      * @access public
      * @return object
      */
-    public function getRepoByID($repoID)
+    public function getByID($repoID)
     {
         $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
@@ -842,7 +842,7 @@ class repoModel extends model
             ->fetch();
         if(empty($lastComment)) return null;
 
-        $repo = $this->getRepoByID($repoID);
+        $repo = $this->getByID($repoID);
         if($repo->SCM == 'Git' and $lastComment->commit != $count)
         {
             $this->fixCommit($repo->id);
@@ -940,7 +940,7 @@ class repoModel extends model
      */
     public function getProductsByRepo($repoID)
     {
-        $repo = $this->getRepoByID($repoID);
+        $repo = $this->getByID($repoID);
         if(empty($repo)) return array();
 
         return $this->dao->select('id,name')->from(TABLE_PRODUCT)
@@ -1535,6 +1535,7 @@ class repoModel extends model
                     {
                         $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"  > "' . $this->app->getTmpRoot() . "log/clone.progress.$module.{$this->post->name}.log\" 2>&1 &";
                         if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
+                        var_dump($cmd);exit;
                         exec($cmd);
                     }
                     $_POST['path'] = $path;
@@ -2667,7 +2668,7 @@ class repoModel extends model
         $output = new stdClass();
 
         $scm  = $this->app->loadClass('scm');
-        $repo = $this->getRepoByID($repoID);
+        $repo = $this->getByID($repoID);
         if(!$repo) return $output;
 
         $scm->setEngine($repo);
@@ -2802,7 +2803,7 @@ class repoModel extends model
     public function insertDeleteRecord($repoID)
     {
         set_time_limit(0);
-        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo = $this->loadModel('repo')->getByID($repoID);
         if(empty($repo)) return false;
 
         $scm = $this->app->loadClass('scm');
@@ -2908,7 +2909,7 @@ class repoModel extends model
      */
     public function updateCommit($repoID, $objectID = 0, $branchID = 0)
     {
-        $repo = $this->getRepoByID($repoID);
+        $repo = $this->getByID($repoID);
         /* Update code commit history. */
         $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repoID));
 

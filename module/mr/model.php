@@ -1141,7 +1141,7 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         $scm  = $host->type;
 
-        $repo = $this->loadModel('repo')->getRepoByID($MR->repoID);
+        $repo = $this->loadModel('repo')->getByID($MR->repoID);
         $repo->gitService = $host->id;
         $repo->project    = $MR->targetProject;
         $repo->password   = $host->token;
@@ -1796,7 +1796,7 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         if($host->type == 'gogs')
         {
-            $repo = $this->loadModel('repo')->getRepoByID($MR->repoID);
+            $repo = $this->loadModel('repo')->getByID($MR->repoID);
             $scm  = $this->app->loadClass('scm');
             $scm->setEngine($repo);
             return $scm->getMRCommits($MR->sourceBranch, $MR->targetBranch);
@@ -2104,8 +2104,8 @@ class mrModel extends model
     public static function isClickable(object $MR, string $action): bool
     {
         if($action == 'edit' and !$MR->synced) return false;
-        if($action == 'edit')   return $MR->canEdit;
-        if($action == 'delete') return $MR->canDelete;
+        if($action == 'edit')   return $MR->canEdit != 'disabled';
+        if($action == 'delete') return $MR->canDelete != 'disabled';
 
         return true;
     }

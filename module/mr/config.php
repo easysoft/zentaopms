@@ -52,10 +52,11 @@ $config->mr->actionList['link']['icon'] = 'link';
 $config->mr->actionList['link']['hint'] = $lang->mr->link;
 $config->mr->actionList['link']['url']  = helper::createLink('mr', 'link', "MRID={id}");
 
-$config->mr->actionList['delete']['icon']        = 'trash';
-$config->mr->actionList['delete']['hint']        = $lang->mr->delete;
-$config->mr->actionList['delete']['url']         = helper::createLink('mr', 'delete', "MRID={id}");
-$config->mr->actionList['delete']['data-toggle'] = 'modal';
+$config->mr->actionList['delete']['icon']         = 'trash';
+$config->mr->actionList['delete']['hint']         = $lang->mr->delete;
+$config->mr->actionList['delete']['url']          = helper::createLink('mr', 'delete', "MRID={id}&confirm=yes");
+$config->mr->actionList['delete']['data-toggle']  = 'modal';
+$config->mr->actionList['delete']['data-confirm'] = $lang->mr->confirmDelete;
 
 $config->mr->actionList['accept']['icon']        = 'flow';
 $config->mr->actionList['accept']['text']        = $lang->mr->acceptMR;
