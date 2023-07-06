@@ -92,4 +92,4 @@ formPanel
     )
 );
 
-render();
+history();
