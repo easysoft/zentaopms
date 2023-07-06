@@ -58,13 +58,21 @@ class metric extends control
         }
 
         /* 获取度量项的计算结果并保存。*/
-        foreach($metricInstances as $metricObj)
+        foreach($metricInstances as $code => $metricObj)
         {
             $resultSet = $metricObj->getResult();
+            if(empty($resultSet)) continue;
             foreach($resultSet as $result)
             {
-                $record = new stdclass();
-                $record->value = $result;
+                $record             = $result;
+                $record->mid        = $metricObj->id;
+                $record->metricCode = $code;
+                $record->date       = helper::today();
+                $record->year       = date('Y');
+                $record->month      = date('Ym');
+                $record->week       = date('W');
+                $record->day        = date('Ymd');
+                $this->dao->insert(TABLE_METRICRECORDS)->data($record)->exec();
             }
         }
     }

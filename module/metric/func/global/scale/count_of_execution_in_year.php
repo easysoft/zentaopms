@@ -18,13 +18,17 @@ class count_of_execution_in_year extends baseMetric
 
     public function calculate($data)
     {
-        $openedYear = substr($data->openedDate, 0, 4);
-        if(empty($this->result[$openedYear])) $this->result[$openedYear] = 0;
-        $this->result[$openedYear] ++;
+        if(!empty($data->openedDate))
+        {
+            $openedYear = substr($data->openedDate, 0, 4);
+            if(empty($this->result[$openedYear])) $this->result[$openedYear] = 0;
+            $this->result[$openedYear] ++;
+        }
     }
 
     public function getResult()
     {
+        if(empty($this->result)) return null;
         ksort($this->result);
         $records = array();
         foreach($this->result as $year => $value)

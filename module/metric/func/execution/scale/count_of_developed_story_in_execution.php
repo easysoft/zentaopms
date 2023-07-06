@@ -36,4 +36,3 @@ class count_of_developed_story_in_execution extends baseMetric
         return $this->result;
     }
 }
-

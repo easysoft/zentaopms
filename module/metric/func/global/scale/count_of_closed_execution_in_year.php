@@ -28,6 +28,7 @@ class count_of_closed_execution_in_year extends baseMetric
 
     public function getResult()
     {
+        if(empty($this->result)) return null;
         ksort($this->result);
         $records = array();
         foreach($this->result as $year => $value)

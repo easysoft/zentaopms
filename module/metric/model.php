@@ -45,7 +45,7 @@ class metricModel extends model
         $currentDay  = date('d');
         $now         = date('H:i');
 
-        $metricList = $this->dao->select('code,crontab,cronList,time')->from(TABLE_METRIC)
+        $metricList = $this->dao->select('id,code,crontab,cronList,time')->from(TABLE_METRIC)
             ->where('when')->eq('cron')
             ->fetchAll();
 
@@ -56,7 +56,7 @@ class metricModel extends model
             if($metric->crontab == 'month' and strpos($metric->cronList, $currentDay) === false) continue;
             if($now < $metric->time) continue;
 
-            $excutableMetrics[] = $metric->code;
+            $excutableMetrics[$metric->id] = $metric->code;
         }
         return $excutableMetrics;
     }
@@ -88,7 +88,12 @@ class metricModel extends model
         {
             $code = rtrim(basename($file), '.php');
             if(!in_array($code, $excutableMetric)) continue;
-            $metricList[$code] = $file;
+            $id = array_search($code, $excutableMetric);
+
+            $metric = new stdclass();
+            $metric->code = $code;
+            $metric->file = $file;
+            $metricList[$id] = $metric;
         }
 
         return $metricList;
@@ -106,10 +111,16 @@ class metricModel extends model
 
         include $this->app->getModuleRoot() . DS . 'metric' . DS . 'func.class.php';
         $metricInstances = array();
-        foreach($metricList as $className => $file)
+        foreach($metricList as $id => $metric)
         {
+            $file      = $metric->file;
+            $className = $metric->code;
+
             require_once $file;
-            $metricInstances[$className] = new $className;
+            $metricInstance = new $className;
+            $metricInstance->id = $id;
+
+            $metricInstances[$className] = $metricInstance;
         }
 
         return $metricInstances;

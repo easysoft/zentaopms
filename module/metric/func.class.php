@@ -19,6 +19,7 @@ class baseMetric
      * @access public
      */
     public $dataset;
+
     /**
      * 参数列表。
      * fieldList
@@ -97,22 +98,7 @@ class baseMetric
      */
     public function getResult()
     {
-        return (object)array('value' => $this->result);
-    }
-
-    /**
-     * 根据字段分组。
-     * Group by field.
-     *
-     * @param  string $field
-     * @param  object $data
-     * @access public
-     * @return void
-     */
-    public function groupBy($field, $data)
-    {
-        $value = $data->$field;
-        if(empty($this->result[$value])) $this->result[$value] = array();
-        $this->result[$value][] = $data;
+        if(empty($this->result)) return null;
+        return array((object)array('value' => $this->result));
     }
 }
