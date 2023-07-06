@@ -82,7 +82,7 @@ class aiModel extends model
         if(!empty($this->modelConfig->proxyType) && !empty($this->modelConfig->proxyAddr))
         {
             curl_setopt($ch, CURLOPT_PROXY,     $this->modelConfig->proxyAddr);
-            curl_setopt($ch, CURLOPT_PROXYTYPE, self::getProxyType($this->modelConfig->proxyType));
+            curl_setopt($ch, CURLOPT_PROXYTYPE, static::getProxyType($this->modelConfig->proxyType));
         }
 
         $result = curl_exec($ch);
@@ -127,7 +127,7 @@ class aiModel extends model
     private static function standardizeParams($data)
     {
         $standardizedData = new stdclass();
-        foreach($data as $key => $value) $standardizedData->{self::camelCaseToSnakeCase($key)} = $value;
+        foreach($data as $key => $value) $standardizedData->{static::camelCaseToSnakeCase($key)} = $value;
         return $standardizedData;
     }
 
@@ -144,7 +144,7 @@ class aiModel extends model
         $postData = new stdclass();
         $postData->model = $this->config->ai->openai->model->$type;
 
-        $data = self::standardizeParams($data);
+        $data = static::standardizeParams($data);
 
         /* Set required params, abort if missing. */
         foreach($this->config->ai->openai->params->$type->required as $param)
@@ -460,7 +460,7 @@ class aiModel extends model
             if(empty($data[$objectName])) $data[$objectName] = array();
 
             $demoData = $this->lang->ai->demoData->$module[$objectName];
-            if($this->isAssoc($demoData))
+            if(static::isAssoc($demoData))
             {
                 $data[$objectName][$objectKey] = $demoData[$objectKey];
             }
@@ -481,10 +481,10 @@ class aiModel extends model
      * Determines if an array is associative.
      *
      * @param  array $array
-     * @access public
+     * @access private
      * @return bool
      */
-    public function isAssoc($array)
+    private static function isAssoc($array)
     {
         $keys = array_keys($array);
         return array_keys($keys) !== $keys;
