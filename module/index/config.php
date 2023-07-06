@@ -26,6 +26,7 @@ $config->index->oldPages = array();
 $config->index->oldPages[] = 'my-dynamic';
 $config->index->oldPages[] = 'my-managecontacts';
 $config->index->oldPages[] = 'product-roadmap';
+$config->index->oldPages[] = 'program-kanban';
 $config->index->oldPages[] = 'project-kanban';
 $config->index->oldPages[] = 'project-dynamic';
 $config->index->oldPages[] = 'execution-taskkanban';
