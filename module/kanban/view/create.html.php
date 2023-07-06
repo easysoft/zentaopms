@@ -159,4 +159,4 @@
     </div>
   </div>
 </div>
-<?php include '../../common/view/footer.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>
