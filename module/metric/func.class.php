@@ -65,6 +65,18 @@ class baseMetric
     public $result;
 
     /**
+     * 获取数据查询句柄。
+     * Get pdo statement of sql query.
+     *
+     * @param  object    $dao
+     * @access public
+     * @return PDOStatement
+     */
+    public function getStatement($dao)
+    {
+    }
+
+    /**
      * 计算度量项。
      * Calculate metric.
      *
@@ -74,10 +86,7 @@ class baseMetric
      */
     public function calculate($data)
     {
-        /* 1. 判断过滤条件是否满足，不满足则不计算。*/
-        /* 2. 遍历指标，进行计算。*/
-        /* 2.1 如果指标中包含了分组类型，则在result中维护分组。*/
-        /* 2.2 指标包含了筛选条件，满足筛选条件时记录数据, 否则直接记录数据。*/
+        $this->result += 1;
     }
 
     /**
@@ -88,6 +97,7 @@ class baseMetric
      */
     public function getResult()
     {
+        return (object)array('value' => $this->result);
     }
 
     /**

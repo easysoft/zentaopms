@@ -20,13 +20,21 @@ class count_of_release_in_year extends baseMetric
 
     public function calculate($data)
     {
-        $value = $data->createdDate;
-        if(empty($this->result[$value])) $this->result[$value] = 0;
-        $this->result[$value] ++;
+        $closedYear = substr($data->createdDate, 0, 4);
+        if(empty($this->result[$closedYear])) $this->result[$closedYear] = 0;
+        $this->result[$closedYear] ++;
     }
 
     public function getResult()
     {
-        return $this->result;
+        ksort($this->result);
+        $records = array();
+        foreach($this->result as $year => $value)
+        {
+            if($year == '0000') continue;
+            $records[] = (object)array('year' => $year, 'value' => $value);
+        }
+
+        return $records;
     }
 }

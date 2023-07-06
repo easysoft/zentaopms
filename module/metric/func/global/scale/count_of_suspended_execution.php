@@ -20,9 +20,4 @@ class count_of_suspended_execution extends baseMetric
     {
         if($data->status == 'suspended') $this->result ++;
     }
-
-    public function getResult()
-    {
-        return $this->result;
-    }
 }

@@ -50,8 +50,12 @@ class metric extends control
             }
         }
 
-        /* 处理无法归类的度量项，直接赋值dao。*/
-        foreach($otherInstances as $instance) $instance->dao = $this->dao;
+        /* 处理无法归类的度量项，使用句柄获取数据源。*/
+        foreach($otherInstances as $instance)
+        {
+            $rows = $instance->getStatement($this->dao)->fetchAll();
+            foreach($rows as $row) $instance->calculate((object)$row);
+        }
 
         /* 获取度量项的计算结果并保存。*/
         foreach($metricInstances as $metricObj)

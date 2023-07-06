@@ -15,14 +15,4 @@ class count_of_execution extends baseMetric
     public $dataset = 'getAllExecutions';
 
     public $fieldList = array('id');
-
-    public function calculate($data)
-    {
-        $this->result ++;
-    }
-
-    public function getResult()
-    {
-        return $this->result;
-    }
 }

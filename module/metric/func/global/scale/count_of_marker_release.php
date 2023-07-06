@@ -22,9 +22,4 @@ class count_of_marker_release extends baseMetric
     {
         if(!empty($data->marker) and $data->marker == 1) $this->result ++;
     }
-
-    public function getResult()
-    {
-        return $this->result;
-    }
 }

@@ -14,15 +14,27 @@ class count_of_closed_execution_in_year extends baseMetric
 {
     public $dataset = 'getAllExecutions';
 
-    public $fieldList = array('id');
+    public $fieldList = array('id', 'closedDate', 'status');
 
     public function calculate($data)
     {
-        $this->result ++;
+        if($data->status == 'closed')
+        {
+            $closedYear = substr($data->closedDate, 0, 4);
+            if(empty($this->result[$closedYear])) $this->result[$closedYear] = 0;
+            $this->result[$closedYear] ++;
+        }
     }
 
     public function getResult()
     {
-        return $this->result;
+        ksort($this->result);
+        $records = array();
+        foreach($this->result as $year => $value)
+        {
+            if($year == '0000') continue;
+            $records[] = (object)array('year' => $year, 'value' => $value);
+        }
+        return $records;
     }
 }

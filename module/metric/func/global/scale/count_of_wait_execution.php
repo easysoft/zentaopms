@@ -20,9 +20,4 @@ class count_of_wait_execution extends baseMetric
     {
         if($data->status == 'wait') $this->result ++;
     }
-
-    public function getResult()
-    {
-        return $this->result;
-    }
 }

@@ -20,9 +20,4 @@ class count_of_doing_execution extends baseMetric
     {
         if($data->status == 'doing') $this->result ++;
     }
-
-    public function getResult()
-    {
-        return $this->result;
-    }
 }

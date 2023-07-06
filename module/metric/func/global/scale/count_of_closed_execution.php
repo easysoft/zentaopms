@@ -20,9 +20,4 @@ class count_of_closed_execution extends baseMetric
     {
         if($data->status == 'closed') $this->result ++;
     }
-
-    public function getResult()
-    {
-        return $this->result;
-    }
 }

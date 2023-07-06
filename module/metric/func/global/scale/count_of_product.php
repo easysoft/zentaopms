@@ -13,14 +13,18 @@
 class count_of_product extends baseMetric
 {
     public $dao = null;
+    public $result = 0;
 
-    public function getResult()
+    public function getStatement($dao)
     {
-        $record = $this->dao->select('count(id) as count')->from(TABLE_PRODUCT)
+        return $dao->select('count(id) as count')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->andWhere('shadow')->eq(0)
-            ->fetch();
-
-        return $record->count;
+            ->andWhere('shadow')->eq(0);
     }
+
+    public function calculate($data)
+    {
+        $this->result = $data->count;
+    }
+
 }
