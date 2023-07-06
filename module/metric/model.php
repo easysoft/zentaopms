@@ -46,14 +46,14 @@ class metricModel extends model
         $now         = date('H:i');
 
         $metricList = $this->dao->select('code,cronType,cronList,execTime')->from(TABLE_METRIC)
-            ->where('collectType')->eq('cron')
+            ->where('when')->eq('cron')
             ->fetchAll();
 
         $excutableMetrics = array();
         foreach($metricList as $metric)
         {
-            if($metric->cronType == 'week' and strpos($metric->cronList, $currentWeek) === false)  continue;
-            if($metric->cronType == 'month' and strpos($metric->cronList, $currentDay) === false) continue;
+            if($metric->crontab == 'week' and strpos($metric->cronList, $currentWeek) === false)  continue;
+            if($metric->crontab == 'month' and strpos($metric->cronList, $currentDay) === false) continue;
             if($now < $metric->execTime) continue;
 
             $excutableMetrics[] = $metric->code;
