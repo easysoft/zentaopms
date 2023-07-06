@@ -24,6 +24,7 @@ $lang->null      = 'Null';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
+$lang->slash     = '/';
 $lang->and       = 'and';
 $lang->to        = 'To';
 

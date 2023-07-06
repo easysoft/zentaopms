@@ -1321,12 +1321,15 @@ class testtask extends control
         if($this->post->results)
         {
             $this->testtask->batchRun($from, $taskID);
+
             $this->loadModel('action');
             foreach(array_keys($this->post->results) as $caseID) $this->action->create('case', $caseID, 'run', '', $taskID);
-            return print(js::locate($url, 'parent'));
+
+            return $this->send(array('result' => 'success', 'load' => $url));
         }
 
         if(!$this->post->caseIdList) return print(js::locate($url, 'parent'));
+
         $caseIdList = array_unique($this->post->caseIdList);
 
         /* The case of tasks of qa. */

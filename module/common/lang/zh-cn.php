@@ -24,6 +24,7 @@ $lang->null      = '空';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
+$lang->slash     = '/';
 $lang->and       = '和';
 $lang->to        = '至';
 
