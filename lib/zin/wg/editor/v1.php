@@ -15,6 +15,7 @@ class editor extends wg
         'size?: string="sm"',          // 尺寸
         'hideMenubar?: bool=false',    // 是否隐藏 menubar
         'bubbleMenu?: bool=false',     // 是否启用菜单冒泡
+        'menubarMode?: string',        // 菜单栏模式
         'value?: string'               // 内容
         // 'collaborative?: bool=false',
         // 'hocuspocus?: string=""',
@@ -25,7 +26,7 @@ class editor extends wg
 
     protected function build()
     {
-        $props = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
+        $props = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
         $editor = new h(set::tagName('tiptap-editor'));
         foreach ($props as $key => $value)
         {
