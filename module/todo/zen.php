@@ -331,7 +331,7 @@ class todoZen extends todo
 
         $bugs      = $this->loadModel('bug')->getUserBugPairs($account, true, 0, array(), array(), isset($objectIdList['bug']) ? $objectIdList['bug'] : array());
         $tasks     = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', array(), isset($objectIdList['task']) ? $objectIdList['task'] : array());
-        $storys    = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : array());
+        $stories   = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : array());
         $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
         $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
         if($this->config->edition != 'open') $feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIdList['feedback']) ? $objectIdList['feedback'] : '');
@@ -350,11 +350,14 @@ class todoZen extends todo
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
         $this->view->bugs        = $bugs;
         $this->view->tasks       = $tasks;
-        $this->view->storys      = $storys;
+        $this->view->stories     = $stories;
         $this->view->reviews     = $reviews;
         $this->view->testtasks   = $testtasks;
         $this->view->editedTodos = $editedTodos;
         $this->view->users       = $users;
+        $this->view->type        = $type;
+        $this->view->userID      = $userID;
+        $this->view->status      = $status;
         if($this->config->edition != 'open') $this->view->feedback = $feedbacks;
         if($this->config->edition == 'max')
         {
@@ -384,7 +387,7 @@ class todoZen extends todo
         $todoIdList   = array();
 
         $allTodos = $this->todo->getList($type, $account, $status);
-        if($form->data->todoIDList) $todoIdList = $form->data->todoIDList;
+        if($form->data->todoIdList) $todoIdList = $form->data->todoIdList;
 
         /* Initialize todos whose need to edited. */
         foreach($allTodos as $todo)
@@ -435,7 +438,7 @@ class todoZen extends todo
     {
         $todos      = array();
         $data       = $form->data;
-        $todoIdList = $form->data->todoIDList ? $form->data->todoIDList : array();
+        $todoIdList = $form->data->id ? $form->data->id : array();
 
         if(!empty($todoIdList))
         {
