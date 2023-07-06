@@ -18,13 +18,13 @@ namespace zin;
  * @param object $project
  * @return string
  */
-function getProjectGroup(object $project): string
+$getProjectGroup = function($project): string
 {
     global $app;
     if($project->status != 'done' and $project->status != 'closed' and $project->PM == $app->user->account)    return 'my';
     if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $app->user->account)) return 'other';
     return 'closed';
-}
+};
 
 /**
  * 定义每个分组下的选项数据列表。
@@ -47,7 +47,7 @@ foreach($projects as $programID => $programProjects)
 
     foreach($programProjects as $index => $project)
     {
-        $group = getProjectGroup($project);
+        $group = $getProjectGroup($project);
 
         $item = array();
         $item['id']    = $project->id;

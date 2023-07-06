@@ -18,13 +18,13 @@ namespace zin;
  * @param object $product
  * @return string
  */
-function getProductGroup(object $product): string
+$getProductGroup = function($product): string
 {
     global $app;
     if($product->status == 'normal' and $product->PO == $app->user->account) return 'my';
     if($product->status == 'closed') return 'closed';
     return 'other';
-}
+};
 
 /**
  * 定义每个分组下的选项数据列表。
@@ -45,7 +45,7 @@ foreach($products as $programID => $programProducts)
 
     foreach($programProducts as $index => $product)
     {
-        $group = getProductGroup($product);
+        $group = $getProductGroup($product);
         $name  = ($config->systemMode == 'ALM' and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
 
         $item = array();

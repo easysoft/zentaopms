@@ -18,13 +18,13 @@ namespace zin;
  * @param object $execution
  * @return string
  */
-function getExecutionGroup(object $execution): string
+$getExecutionGroup = function($execution): string
 {
     global $app;
     if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $app->user->account or isset($execution->teams[$app->user->account]))) return 'my';
     if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $app->user->account and !isset($execution->teams[$app->user->account])) return 'other';
     if($execution->status == 'done' or $execution->status == 'closed') return 'closed';
-}
+};
 
 /**
  * 定义每个分组下的选项数据列表。
@@ -43,7 +43,7 @@ foreach($projectExecutions as $projectID => $executions)
 
     foreach($executions as $index => $execution)
     {
-        $group = getExecutionGroup($execution);
+        $group = $getExecutionGroup($execution);
 
         $item = array();
         $item['id']    = $execution->id;
