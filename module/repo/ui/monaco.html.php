@@ -20,7 +20,7 @@ jsVar('repoID', $repoID);
 jsVar('repo', $repo);
 jsVar('revision', $revision);
 jsVar('branchID', $branchID);
-jsVar('branchMenus', $branchMenus);
+jsVar('branchMenus', $dropMenus);
 jsVar('file', $file);
 jsVar('tree', $tree);
 jsVar('openedFiles', array($entry));
@@ -29,9 +29,13 @@ jsVar('currentLink', $this->createLink('repo', 'view', "repoID=$repoID&objectID=
 
 featureBar();
 
-$dropMenus = array();
-if(common::hasPriv('repo', 'blame'))    $dropMenus[] = array('text' => $this->lang->repo->blame,    'icon' => 'blame',    'url' => $this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$file&revision=$revision&encoding=$encoding"));
-if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'url' => $this->repo->createLink('download', "repoID=$repoID&path=$file&fromRevision=$revision"), 'target' => '_blank');
+$monacoDropMenus = array();
+if(common::hasPriv('repo', 'blame'))    $monacoDropMenus[] = array('text' => $this->lang->repo->blame,    'icon' => 'blame',    'data-link' => $this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry={path}&revision=$revision&encoding=$encoding"), 'class' => 'repoDropDownMenu');
+if(common::hasPriv('repo', 'download')) $monacoDropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$revision"), 'class' => 'repoDropDownMenu');
+
+$tabs = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
+$menuData = array('branch' => $dropMenus['branchMenus'], 'tag' => $dropMenus['tagMenus']);
+
 div(
     set::id('fileTabs'),
     setStyle('position', 'relative'),
@@ -68,7 +72,7 @@ div(
             ),
             set::items
             (
-                $dropMenus
+                $monacoDropMenus
             ),
         ),
         div(set::class('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
@@ -79,12 +83,14 @@ div(
 sidebar
 (
     set::side('left'),
-    select
+    dropmenu
     (
-        set::id('sourceSwapper'),
-        set::items($branchMenus),
-        set::value($branchID),
-        on::change('window.changeBranch')
+        setID('repoBranchDropMenu'),
+        on::click('window.changeBranch'),
+        on::change('window.changeBranch'),
+        set::objectID($dropMenus['selected']),
+        set::text($dropMenus['selected']),
+        set::data(array('data' => $menuData, 'tabs' => $tabs)),
     ),
     tree
     (

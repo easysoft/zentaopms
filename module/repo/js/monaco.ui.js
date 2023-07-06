@@ -44,6 +44,34 @@ window.afterPageUpdate = function()
 
         $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
         $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
+
+        /* Reload current page when click dropmeu. */
+        $('body').on('click', '.dropmenu-tree .dropmenu-item', function()
+        {
+            var branchOrTag = $(this).attr('title');
+            var url         = $(this).data('url');
+
+            if(url != 'javascript:;') return;
+
+            if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag);
+            
+            openUrl(currentLink);
+        })
+
+        $('.repoDropDownMenu').on('click', function()
+        {
+            var url            = $(this).data('link');
+            var activeFilePath = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
+            if(url.indexOf('blame') >=0 && url.indexOf('download') == -1)
+            {
+                openUrl(url.replace('{path}', activeFilePath));
+            }
+            else
+            {
+                window.open(url.replace('{path}', activeFilePath));
+            }
+            return;
+        })
     }, 200);
 };
 
@@ -104,21 +132,4 @@ window.loadLinkPage = function(link)
 {
     $('#linkObject').attr('href', link);
     $('#linkObject').trigger('click');
-}
-
-/**
- * 切换分支或者标签时刷新页面。
- * Reload page when change branch or tag.
- *
- * @param  string $link
- * @access public
- * @return void
- */
-window.changeBranch = function()
-{
-    var index = $('#sourceSwapper').prop('selectedIndex');
-    var branchOrTag = branchMenus[index - 1].text;
-    if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag);
-    
-    openUrl(currentLink);
 }
