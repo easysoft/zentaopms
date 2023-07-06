@@ -816,6 +816,8 @@ class baseHelper
      */
     static public function setStatus(int $code)
     {
+        global $app;
+
         if(isset($app->worker))
         {
             $app->worker->response->setStatus($code);
