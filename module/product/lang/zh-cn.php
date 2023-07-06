@@ -34,6 +34,7 @@ $lang->product->export           = '导出数据';
 $lang->product->dashboard        = "{$lang->productCommon}仪表盘";
 $lang->product->changeProgram    = "{$lang->productCommon}调整所属项目集影响范围确认";
 $lang->product->changeProgramTip = "%s > 修改项目集";
+$lang->product->selectProgram    = '筛选项目集';
 $lang->product->addWhitelist     = '添加白名单';
 $lang->product->unbindWhitelist  = '移除白名单';
 $lang->product->track            = "查看需求矩阵";

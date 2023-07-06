@@ -1,6 +1,8 @@
 <?php
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'dropmenu' . DS . 'v1.php';
+
 class programMenu extends wg
 {
     private $programs = array();
@@ -70,10 +72,6 @@ class programMenu extends wg
 
     private function getTreeProps()
     {
-        $items = $this->buildMenuTree(array(), 0);
-        array_unshift($items, array('type' => 'heading', 'text' => '筛选项目集'));
-        $props = array('items' => $items);
-
         /* Attach click event function. */
         $onClickItem = $this->prop('onClickItem');
         if($onClickItem) $props['onClickItem'] = $onClickItem;
@@ -101,44 +99,15 @@ class programMenu extends wg
     {
         $this->programs = (array)$this->prop('programs');
         $activeKey      = $this->prop('activeKey');
-
-        return div
+        return zui::dropmenu
         (
-            setClass('program-menu col shrink-0'),
-            set('data-show', '0'),
-            popovers
-            (
-                set::placement('bottom-start'),
-                to::trigger
-                (
-                    button
-                    (
-                        setClass('h-10 border border-primary flex justify-between items-center cursor-pointer pl-3 rounded'),
-                        on::click('toggleIcon'),
-                        div
-                        (
-                            setClass('flex gap-x-2'),
-                            div
-                            (
-                                setClass('icon-container down'),
-                                icon('angle-down'),
-                            ),
-                            div
-                            (
-                                setClass('icon-container up'),
-                                icon('angle-top', setClass('text-white')),
-                            ),
-                            span
-                            (
-                                setClass('font-bold leading-5'),
-                                $this->getTitle($activeKey),
-                            )
-                        ),
-                        $this->closeBtn(),
-                    )
-                ),
-                to::target(zui::tree(set($this->getTreeProps()))),
-            )
+            set('_id', 'programMenu'),
+            set::className('program-menu btn'),
+            set::defaultValue($activeKey),
+            set::text($this->getTitle($activeKey)),
+            set::caret(true),
+            set::popClass('popup text-md'),
+            set::data(array('search' => false, 'checkIcon' => true, 'title' => data('lang.product.selectProgram'), 'data' => $this->buildMenuTree(array(), 0), 'link' => '#')),
         );
     }
 }

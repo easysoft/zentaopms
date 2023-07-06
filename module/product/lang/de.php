@@ -33,6 +33,7 @@ $lang->product->newLine          = "Create Product Line";
 $lang->product->export           = 'Exportiere Daten';
 $lang->product->dashboard        = 'Dashboard';
 $lang->product->changeProgram    = "{$lang->productCommon} confirmation of the scope of influence of adjustment of the program set";
+$lang->product->selectProgram    = 'Select Program';
 $lang->product->changeProgramTip = "%s > Change Program";
 $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Remove Whitelist';
