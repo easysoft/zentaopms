@@ -113,6 +113,7 @@ $config->productplan->dtable->fieldList['actions']['actionsMap']['close']['data-
 
 $config->productplan->dtable->fieldList['actions']['actionsMap']['activate']['icon'] = 'active';
 $config->productplan->dtable->fieldList['actions']['actionsMap']['activate']['hint'] = $this->lang->productplan->activateAB;
+$config->productplan->dtable->fieldList['actions']['actionsMap']['activate']['url']  = 'javascript:activateProductPlan("{planID}")';
 
 $config->productplan->dtable->fieldList['actions']['actionsMap']['plus']['icon'] = 'plus';
 

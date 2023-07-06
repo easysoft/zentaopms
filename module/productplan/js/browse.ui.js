@@ -71,6 +71,14 @@ window.finishProductPlan = function(planID)
     });
 }
 
+window.activateProductPlan = function(planID)
+{
+    zui.Modal.confirm({message: confirmActivate, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    {
+        if(res) $.ajaxSubmit({url: $.createLink('productplan', 'activate', 'planID=' + planID)});
+    });
+}
+
 window.deleteProductPlan = function(planID)
 {
     zui.Modal.confirm({message: confirmDelete, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>

@@ -498,18 +498,8 @@ class productplan extends control
     public function start(int $planID)
     {
         $this->productplan->updateStatus($planID, 'doing', 'started');
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $response['result']  = 'success';
-            $response['message'] = '';
-            $response['load']    = array('back' => true);
-        }
-        return $this->send($response);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
     }
 
     /**
@@ -568,19 +558,12 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function activate($planID, $confirm = 'no')
+    public function activate(int $planID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->productplan->confirmActivate, $this->createLink('productplan', 'activate', "planID=$planID&confirm=yes"), 'parent'));
-        }
-        else
-        {
-            $this->productplan->updateStatus($planID, 'doing', 'activated');
+        $this->productplan->updateStatus($planID, 'doing', 'activated');
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::reload('parent'));
-        }
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
     }
 
     /**
