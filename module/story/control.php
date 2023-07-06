@@ -2133,7 +2133,7 @@ class story extends control
 
         $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->exportFields;
-        $this->view->customExport    = false;
+        $this->view->customExport    = true;
         $this->display();
     }
 
