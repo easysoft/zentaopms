@@ -51,10 +51,11 @@ window.onRenderCell = function(result, {col, row})
     {
         const executionLink = $.createLink('execution', 'task', `executionID=${row.data.rawID}`);
         const executionType = typeList[row.data.type];
+        let executionName   = '';
 
-        let executionName  = `<span class='label secondary-pale'>${executionType}</span> `;
-        executionName     += (!row.data.isParent) ? `<a href="${executionLink}" class="text-primary">${row.data.name}</a>` : row.data.name;
-        executionName     += (today > row.data.end) ? `<span class="label danger-pale ml-1">${delayed}</span>` : '';
+        if(typeof executionType != 'undefined') executionName += `<span class='label secondary-pale'>${executionType}</span> `;
+        executionName += (!row.data.isParent) ? `<a href="${executionLink}" class="text-primary">${row.data.name}</a>` : row.data.name;
+        executionName += (today > row.data.end) ? `<span class="label danger-pale ml-1">${delayed}</span>` : '';
 
         result[result.length] = {html: executionName};
         return result;
