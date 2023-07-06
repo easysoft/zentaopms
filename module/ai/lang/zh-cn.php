@@ -115,7 +115,7 @@ $lang->ai->targetForm['execution']['batchcreatetask']  = '批量创建任务';
 $lang->ai->targetForm['execution']['createtestreport'] = '创建测试报告';
 $lang->ai->targetForm['execution']['createqa']         = '创建 QA';
 $lang->ai->targetForm['execution']['createrisk']       = '创建风险';
-$lang->ai->targetForm['execution']['createissue']    = '创建问题';
+$lang->ai->targetForm['execution']['createissue']      = '创建问题';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = '全部';

@@ -115,7 +115,7 @@ $lang->ai->targetForm['execution']['batchcreatetask']  = 'Batch Create Task';
 $lang->ai->targetForm['execution']['createtestreport'] = 'Create Test Report';
 $lang->ai->targetForm['execution']['createqa']         = 'Create QA';
 $lang->ai->targetForm['execution']['createrisk']       = 'Create Risk';
-$lang->ai->targetForm['execution']['createissue']    = 'Create Problem';
+$lang->ai->targetForm['execution']['createissue']      = 'Create Issue';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = 'All';
