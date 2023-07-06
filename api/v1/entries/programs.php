@@ -28,7 +28,7 @@ class programsEntry extends entry
         if(stripos(strtolower(",{$fields},"), ",dropmenu,") !== false) return $this->getDropMenu();
 
         $program = $this->loadController('program', 'browse');
-        $program->browse($this->param('status', 'all'), $this->param('order', 'order_asc'));
+        $program->browse($this->param('status', 'all'), $this->param('order', 'order_asc'), 0, 10000, 1);
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
