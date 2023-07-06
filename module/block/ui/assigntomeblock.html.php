@@ -66,7 +66,7 @@ panel
     (
         div
         (
-            set('class', 'panel-title flex w-full'),
+            set('class', 'panel-title flex justify-between w-full'),
             $block->title,
             div
             (
