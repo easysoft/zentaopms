@@ -390,7 +390,7 @@ class repo extends control
         $pathInfo = pathinfo($entry);
 
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
-        $this->view->branchMenus = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch, $objectID, $file);
+        $this->view->dropMenus   = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
         $this->view->type        = 'view';
         $this->view->branchID    = $this->cookie->repoBranch;
         $this->view->showBug     = $showBug;

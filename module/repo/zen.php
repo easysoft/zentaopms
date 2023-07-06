@@ -371,12 +371,10 @@ class repoZen extends repo
      *
      * @param  object    $repo
      * @param  string    $branchID
-     * @param  string    $objectID
-     * @param  string    $entry
      * @access protected
      * @return array
      */
-    protected function getBranchAndTagItems(object $repo, string $branchID, string $objectID, string $entry): array
+    protected function getBranchAndTagItems(object $repo, string $branchID): array
     {
         /* Set branch or tag for git. */
         $branches = $tags = array();
@@ -388,19 +386,21 @@ class repoZen extends repo
         $initTags = $scm->tags('');
         foreach($initTags as $tag) $tags[$tag] = $tag;
 
-        $selected = '';
+        $selected    = '';
+        $branchMenus = array();
+        $tagMenus    = array();
         foreach($branches as $branchName)
         {
             $selected = ($branchName == $branchID) ? $branchName : $selected;
-            $menus[]  = array('text' => $branchName, 'value' => $branchName);
+            $branchMenus[]  = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName)), $branchName, ''), 'url' => 'javascript:;');
         }
         foreach($tags as $tagName)
         {
             $selected = ($tagName == $branchID) ? $tagName : $selected;
-            $menus[]  = array('text' => $tagName, 'value' => $tagName);
+            $tagMenus[]  = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName)), $tagName, ''), 'url' => 'javascript:;');
         }
 
-        return $menus;
+        return array('branchMenus' => $branchMenus, 'tagMenus' => $tagMenus, 'selected' => $selected);
     }
 }
 

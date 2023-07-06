@@ -24,7 +24,7 @@ foreach($branches as $branchName)
     $base64BranchID = helper::safe64Encode(base64_encode($branchName));
     $branchLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID");
 
-    $branchMenus[] = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName), $branchName), ''), 'url' => $branchLink);
+    $branchMenus[] = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName)), $branchName, ''), 'url' => $branchLink);
 }
 foreach($tags as $tagName)
 {
@@ -32,7 +32,7 @@ foreach($tags as $tagName)
     $base64TagID = helper::safe64Encode(base64_encode($tagName));
     $tagLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64TagID&objectID=$objectID&path=&revision=HEAD&refresh=0&branchOrTag=tag");
 
-    $tagMenus[] = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName), $tagName), ''), 'url' => $tagLink);
+    $tagMenus[] = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName)), $tagName, ''), 'url' => $tagLink);
 }
 
 $tabs = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
@@ -76,12 +76,6 @@ featureBar(
             set::text($selected),
             set::data(array('data' => $menuData, 'tabs' => $tabs)),
         ),
-        // select
-        // (
-        //     set::id('repo-select'),
-        //     set::items($menus),
-        //     set::value($selected)
-        // )
     ),
     ...$breadcrumbItems
 );

@@ -26,7 +26,7 @@
 .sync-main-content p {color: #313c52;}
 .sync-main-content .alert > [class*="icon-"] {font-size: 42px;opacity: 0.8;}
 .repo-linkstory-title {background-color: #e6f0ff; color: #2e7fff; padding: 4px 0 12px;}
-#sourceSwapper {text-align: left; margin-bottom: 2px;}
+#repoBranchDropMenu .dropmenu-btn {justify-content: space-between; width: 100%;}
 .sidebar {background-color: white}
 #monacoTabs .nav > li > a {padding: 8px 10px; display: flex; white-space: pre;}
 #monacoTabs .nav-tabs > li > a > span {margin-right: 5px;}
