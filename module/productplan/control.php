@@ -256,7 +256,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function delete($planID)
+    public function delete(int $planID)
     {
         $response = array();
         $response['result']  = 'fail';
@@ -271,25 +271,20 @@ class productplan extends control
 
         $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
         if($plan->parent > 0) $this->productplan->changeParentField($planID);
+
         $message = $this->executeHooks($planID);
         if($message) $this->lang->saveSuccess = $message;
 
         /* if ajax request, send result. */
-        if($this->server->ajax)
+        if(dao::isError())
         {
-            if(dao::isError())
-            {
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['load']    = array('back' => true);
-            }
-            return $this->send($response);
+            $response['message'] = dao::getError();
         }
-
-        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+        else
+        {
+            $response['result']  = 'success';
+            $response['load']    = true;
+        }
         return $this->send($response);
     }
 
