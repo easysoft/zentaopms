@@ -842,7 +842,7 @@ class execution extends control
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan|unexpired|noclosed', $executionID);
+        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan|unexpired|noclosed|sortedByDate', $executionID);
         $allPlans = array('' => '');
         if(!empty($plans))
         {

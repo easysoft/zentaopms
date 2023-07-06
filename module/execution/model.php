@@ -5088,8 +5088,26 @@ class executionModel extends model
             ->andWhere($branchQuery)
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
-            ->orderBy('t1.begin desc')
+            ->orderBy('t1.begin desc, t1.id desc')
             ->fetchAll('id');
+
+        if(strpos($param, 'sortedbydate') !== false)
+        {
+            $pendPlans   = array();
+            $normalPlans = array();
+            foreach($plans as $plan)
+            {
+                if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01')
+                {
+                    $pendPlans[$plan->id] = $plan;
+                }
+                else
+                {
+                    $normalPlans[$plan->id] = $plan;
+                }
+            }
+            $plans = array_merge($normalPlans, $pendPlans);
+        }
 
         $plans        = $this->productplan->reorder4Children($plans);
         $plans        = $this->productplan->relationBranch($plans);
