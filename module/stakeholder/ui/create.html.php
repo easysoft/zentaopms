@@ -166,17 +166,17 @@ formPanel
     formGroup
     (
         set::label($lang->stakeholder->nature),
-        set::control(array('name' => 'nature', 'type' => 'textarea'))
+        set::control(array('name' => 'nature', 'type' => 'editor'))
     ),
     formGroup
     (
         set::label($lang->stakeholder->analysis),
-        set::control(array('name' => 'analysis', 'type' => 'textarea'))
+        set::control(array('name' => 'analysis', 'type' => 'editor'))
     ),
     formGroup
     (
         set::label($lang->stakeholder->strategy),
-        set::control(array('name' => 'strategy', 'type' => 'textarea'))
+        set::control(array('name' => 'strategy', 'type' => 'editor'))
     ),
 );
 
