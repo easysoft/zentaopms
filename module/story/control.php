@@ -175,32 +175,26 @@ class story extends control
             if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
         }
 
-        $fields = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID);
-        $fields = $this->storyZen->removeFormFieldsForBatchCreate($productID, $fields, $product->type, $storyType);
+        /* The 'batchCreateFields' of global variable $config will be changed and used by the following business logic. */
+        $customFields = $this->storyZen->getCustomFields($this->config, $storyType, $this->view->hiddenPlan, $product);
 
-        /* Generate shown fields. */
-        $showFields = $this->config->story->custom->batchCreateFields;
-        if($product->type == 'normal')
-        {
-            $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
-            $showFields = trim($showFields, ',');
-        }
-        if($storyType == 'requirement')
-        {
-            $showFields = str_replace('plan', '', $showFields);
-        }
+        $showFields = $this->storyZen->getShowFields($this->config->story->custom->batchCreateFields, $storyType, $product);
+        $fields     = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID);
+        $fields     = $this->storyZen->removeFormFieldsForBatchCreate($fields, $this->view->hiddenPlan, isset($this->view->execution) ? $this->view->execution->type : '');
 
-        $this->view->title       = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
-        $this->view->product     = $product;
-        $this->view->productID   = $productID;
-        $this->view->storyID     = $storyID;
-        $this->view->moduleID    = $moduleID;
-        $this->view->executionID = $executionID;
-        $this->view->type        = $storyType;
-        $this->view->fields      = $fields;
-        $this->view->stories     = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
-        $this->view->storyTitle  = isset($story->title) ? $story->title : '';
-        $this->view->showFields  = $showFields;
+        $this->view->title        = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $showFields;
+        $this->view->product      = $product;
+        $this->view->productID    = $productID;
+        $this->view->storyID      = $storyID;
+        $this->view->moduleID     = $moduleID;
+        $this->view->executionID  = $executionID;
+        $this->view->type         = $storyType;
+        $this->view->fields       = $fields;
+        $this->view->stories      = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
+        $this->view->storyTitle   = isset($story->title) ? $story->title : '';
+        $this->view->forceReview  = $this->story->checkForceReview();
 
         $this->display();
     }

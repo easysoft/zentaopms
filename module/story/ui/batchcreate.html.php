@@ -12,13 +12,23 @@ declare(strict_types=1);
 
 namespace zin;
 
-if($forceReview) $config->story->create->requiredFields .= ',reviewer';
-
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($config, $lang, $fields, $execution)
+$fnGenerateFields = function() use ($config, $lang, $forceReview, $fields, $showFields)
 {
+    /* Gather the fields that are displayed. */
     $visibleFields  = array_keys($fields);
+    foreach(explode(',', $showFields) as $field)
+    {
+        if($field) $visibleFields[$field] = '';
+    }
+    $visibleFields['module']   = '';
+    $visibleFields['title']    = '';
+    $visibleFields['category'] = '';
+    $forceReview && $visibleFields['reviewer'] = '';
+
+    /* Collect required fields. */
     $requiredFields = array();
+    if($forceReview) $config->story->create->requiredFields .= ',reviewer';
     foreach(explode(',', $config->story->create->requiredFields) as $field)
     {
         if(!$field) continue;
@@ -26,77 +36,28 @@ $fnGenerateFields = function() use ($config, $lang, $fields, $execution)
         $requiredFields[$field] = '';
         if(strpos(",{$config->story->list->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
     }
-    unset($visibleFields['module']);
 
+    /* Generate fields with the appropriate properties. */
     $items = array();
-
-    /* Field of id. */
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
 
-    $cols = array('normal', 'branch', 'module', 'plan', 'region', 'lane', 'title', 'spec', 'source', 'sourceNote', 'verify', 'category', 'pri', 'estimate', 'reviewer', 'keywords');
-    foreach($cols as $col)
+    return array_merge($items, array_map(function($name, $field) use($requiredFields, $visibleFields)
     {
-        if(!isset($fields[$col])) continue;
-        if(in_array($col, array('region', 'lane')) && (!isset($execution) || $execution->type != 'kanban')) continue;
-
-        $field = $fields[$col];
-        $field['name'] = $col;
+        $field['name'] = $name;
         if(isset($field['options']) && !isset($field['items'])) $field['items'] = $field['options'];
 
-        switch($col)
-        {
-            case 'normal':
-            case 'platform':
-            case 'branch':
-                $items[] = array_merge($field, array('label' => $lang->product->branch));
-                break;
-            case 'module':
-                $items[] = array_merge($field, array('label' => $lang->story->module, 'required' => true, 'ditto' => true));
-                break;
-            case 'plan':
-                $items[] = array_merge($field, array('label' => $lang->story->plan, 'required' => true, 'ditto' => true));
-                break;
-            case 'region':
-                $items[] = array_merge($field, array('label' => $lang->kanbancard->region));
-                break;
-            case 'lane':
-                $items[] = array_merge($field, array('label' => $lang->kanbancard->lane));
-                break;
-            case 'title':
-                $items[] = array_merge($field, array('label' => $lang->story->title, 'required' => true));
-                break;
-            case 'spec':
-                $items[] = array_merge($field, array('label' => $lang->story->spec));
-                break;
-            case 'source':
-                $items[] = array_merge($field, array('label' => $lang->story->source));
-                break;
-            case 'sourceNote':
-                $items[] = array_merge($field, array('label' => $lang->story->sourceNote));
-                break;
-            case 'verify':
-                $items[] = array_merge($field, array('label' => $lang->story->verify));
-                break;
-            case 'category':
-                $items[] = array_merge($field, array('label' => $lang->story->category, 'ditto' => true));
-                break;
-            case 'pri':
-                $items[] = array_merge($field, array('label' => $lang->story->pri));
-                break;
-            case 'estimate':
-                $items[] = array_merge($field, array('label' => $lang->story->estimate));
-                break;
-            case 'reviewer':
-                $field['control'] = 'select';
-                $items[] = array_merge($field, array('label' => $lang->story->reviewedBy, 'ditto' => true));
-                break;
-            case 'keywords':
-                $items[] = array_merge($field, array('label' => $lang->story->keywords));
-                break;
-        }
-    }
+        /* Set required flag to field. */
+        if(isset($requiredFields[$name])) $field['required'] = true;
 
-    return $items;
+        /* Set hidden property to field. */
+        if(!isset($visibleFields[$name])) $field['hidden'] = true;
+        if($name == 'sourceNote' && isset($visibleFields['source']))
+        {
+            unset($field['hidden']);
+        }
+
+        return $field;
+    }, array_keys($fields), array_values($fields)));
 };
 
 /* Generate customized fields. */

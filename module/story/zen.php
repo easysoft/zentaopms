@@ -522,11 +522,21 @@ class storyZen extends story
         $branch    = current(explode(',', $branch));
         $modules   = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
         $plans     = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'skipParent|unexpired|noclosed');
-        $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $reviewers = $this->story->getProductReviewers($productID);
 
         /* 设置下拉菜单内容。 */
-        $fields['branch']['options']   = $branches;
+        $fields['branch']['options'] = $branches;
+        switch ($product->type)
+        {
+            case 'normal':
+                unset($fields['branch']);
+                break;
+            case 'platform':
+                $fieldPlatform = array('platform' => $fields['branch']);
+                unset($fields['branch']);
+                $fields = array_merge($fieldPlatform, $fields);
+                break;
+        }
         $fields['module']['options']   = $modules;
         $fields['plan']['options']     = $plans;
         $fields['reviewer']['options'] = $reviewers;
@@ -552,7 +562,7 @@ class storyZen extends story
         $story  = $this->view->story;
         $fields = $this->config->story->form->change;
 
-        foreach($fields as $field => $attr)
+        foreach(array_keys($fields) as $field)
         {
             if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
             if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->story, $field);
@@ -658,9 +668,9 @@ class storyZen extends story
      */
     protected function removeFormFieldsForCreate(array $fields, string $storyType = 'story'): array
     {
-       $productID = $this->view->productID;
-       $branch    = $this->view->branch;
-       $objectID  = $this->view->objectID;
+        $productID = $this->view->productID;
+        $branch    = $this->view->branch;
+        $objectID  = $this->view->objectID;
 
         /* Hidden some fields of projects without products. */
         $hiddenProduct = $hiddenParent = $hiddenPlan = $hiddenURS = false;
@@ -712,30 +722,16 @@ class storyZen extends story
      * @access protected
      * @return array
      */
-    protected function removeFormFieldsForBatchCreate(int $productID, array $fields, string $productType, string $storyType = 'story'): array
+    protected function removeFormFieldsForBatchCreate(array $fields, bool $hiddenPlan, string $executionType): array
     {
-        $product = $this->product->getByID($productID);
+        if($hiddenPlan) unset($fields['plan']);
 
-        /* Set Custom*/
-        foreach(explode(',', $this->config->story->list->customBatchCreateFields) as $field)
+        if($executionType != 'kanban')
         {
-            if($productType != 'normal') $customFields[$productType] = $this->lang->product->branchName[$productType];
-            $customFields[$field] = $this->lang->story->$field;
+            unset($fields['region']);
+            unset($fields['lane']);
         }
 
-        $showFields = $this->config->story->custom->batchCreateFields;
-        if($storyType == 'requirement')
-        {
-            unset($customFields['plan']);
-            $showFields = str_replace(',plan,', ',', ",$showFields,");
-        }
-
-        foreach($customFields as $field => $fieldName)
-        {
-            if(!str_contains(",$showFields,", ",$field,")) unset($fields[$field]);
-        }
-
-        $this->view->customFields = $customFields;
         return $fields;
     }
 
@@ -1176,5 +1172,73 @@ class storyZen extends story
             $stories[] = $initStory;
         }
         return $stories;
+    }
+
+    /**
+     * Get custom fields list.
+     *
+     * @param  object    $config
+     * @param  string    $storyType
+     * @param  bool      $hiddenPlan
+     * @param  object    $product
+     * @access protected
+     * @return array
+     */
+    protected function getCustomFields(object &$config, string $storyType, bool $hiddenPlan, object $product): array
+    {
+        $customFields = array();
+
+        /* Attach multi-branch or multi-platform field. */
+        if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+
+        foreach(explode(',', $config->story->list->customBatchCreateFields) as $field)
+        {
+            $customFields[$field] = $this->lang->story->$field;
+        }
+
+        if($hiddenPlan) unset($customFields['plan']);
+
+        if($product->type != 'normal')
+        {
+            $config->story->custom->batchCreateFields = sprintf($config->story->custom->batchCreateFields, $product->type);
+        }
+        else
+        {
+            $config->story->custom->batchCreateFields = trim(sprintf($config->story->custom->batchCreateFields, ''), ',');
+        }
+
+        /* User requirement without plan field. */
+        if($storyType == 'requirement')
+        {
+            unset($customFields['plan']);
+        }
+
+        return $customFields;
+    }
+
+    /**
+     * Get show fields list.
+     *
+     * @param  string    $fieldListStr
+     * @param  bool      $hiddenPlan
+     * @param  object    $product
+     * @access protected
+     * @return array
+     */
+    protected function getShowFields(string $fieldListStr, string $storyType, object $product): string
+    {
+        $showFields = $fieldListStr;
+
+        if($product->type == 'normal')
+        {
+            $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
+        if($storyType == 'requirement')
+        {
+            $showFields = str_replace('plan', '', $showFields);
+        }
+
+        return $showFields;
     }
 }
