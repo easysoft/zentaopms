@@ -661,7 +661,7 @@ class custom extends control
             $fields = $this->post->fields;
             if(is_array($fields)) $fields = implode(',', $fields);
             $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
-            if(in_array($module, array('task', 'testcase')) and $section == 'custom' and in_array($key, array('createFields', 'batchCreateFields'))) return;
+            if(in_array($module, array('story', 'task', 'testcase')) and $section == 'custom' and in_array($key, array('createFields', 'batchCreateFields'))) return;
             if($module == 'bug' and $section == 'custom' and $key == 'batchCreateFields') return;
         }
         else

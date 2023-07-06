@@ -65,13 +65,15 @@ $fnGenerateCustomizedFields = function() use ($showFields, $customFields)
 {
     $showFields = ",$showFields,";
     $fields = array();
+    $defaultFields = explode(',', 'branch,platform,plan,spec,pri,estimate');
     foreach($customFields as $name => $text)
     {
         $fields[] = array
         (
-            'name' => $name,
-            'text' => $text,
-            'show' => strpos($showFields, ",$name,") !== false
+            'name'    => $name,
+            'text'    => $text,
+            'show'    => strpos($showFields, ",$name,") !== false,
+            'default' => in_array($name, $defaultFields)
         );
     }
 
