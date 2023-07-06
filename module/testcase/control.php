@@ -764,8 +764,7 @@ class testcase extends control
     public function createBug($productID, $branch = 0, $extras = '')
     {
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras, $params);
-        extract($params);
+        parse_str($extras);
 
         $this->loadModel('testtask');
         $case = '';
@@ -780,7 +779,7 @@ class testcase extends control
             $results = $this->testtask->getResults(0, $caseID);
         }
 
-        if(!$case) return print(js::error($this->lang->notFound) . js::locate('back', 'parent'));
+        if(!$case) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'closeModal' => true));
 
         if(!isset($this->products[$productID]))
         {
