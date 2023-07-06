@@ -6,11 +6,11 @@ require_once dirname(__DIR__) . DS . 'textarea' . DS . 'v1.php';
 class editor extends wg
 {
     protected static $defineProps = array(
-        'createInput?: bool=false',    // 是否创建一个隐藏的 input 存储编辑器内容
+        'createInput?: bool=true',    // 是否创建一个隐藏的 input 存储编辑器内容
         'uploadUrl?: string=""',       // 图片上传链接
         'placeholder?: string=""',     // 占位文本
-        'fullscreenable?: bool=false', // 是否可全屏
-        'resizable?: bool=false',      // 是否可自适应
+        'fullscreenable?: bool=true', // 是否可全屏
+        'resizable?: bool=true',      // 是否可自适应
         'exposeEditor?: bool=true',    // 是否将编辑器实例挂载到 window
         'size?: string="sm"',          // 尺寸
         'hideMenubar?: bool=false',    // 是否隐藏 menubar
