@@ -47,7 +47,7 @@ class product extends control
     public function index(int $productID = 0)
     {
         /* Check product id and get product branch. */
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
 
         /* Set Menu. */
@@ -140,7 +140,7 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Generate data. */
-        $productID = $this->app->tab != 'project' ? $this->product->saveVisitState($productID, $this->products) : $productID;
+        $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $product   = $this->productZen->getBrowseProduct($productID);
         $project   = $this->loadModel('project')->getByID($projectID);
         $branchID  = $this->productZen->getBranchID($product, $branch);
@@ -286,7 +286,7 @@ class product extends control
         $this->productZen->setEditMenu($productID, $programID);
 
         $product   = $this->product->getByID($productID);
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
 
         $this->view->title   = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->product = $product;
@@ -519,7 +519,7 @@ class product extends control
     public function dashboard(int $productID = 0)
     {
         /* Check and get product ID. */
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
 
         /* Get product. */
         $product   = $this->product->getStatByID($productID);

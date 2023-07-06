@@ -101,7 +101,7 @@ class bug extends control
      */
     public function browse(int $productID, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $productID  = $this->product->saveVisitState($productID, $this->products);
+        $productID  = $this->product->saveState($productID, $this->products);
         $product    = $this->product->getByID($productID);
         $branch     = $this->bugZen->getBrowseBranch($branch, $product->type);
         $browseType = $browseType ? strtolower($browseType) : 'unclosed';
@@ -229,7 +229,7 @@ class bug extends control
             return $this->responseAfterCreate($bug, $output, $message);
         }
 
-        $productID      = $this->product->saveVisitState($productID, $this->products);
+        $productID      = $this->product->saveState($productID, $this->products);
         $currentProduct = $this->product->getByID($productID);
         $this->bugZen->setCreateMenu($productID, $branch, $output);
 
@@ -730,7 +730,7 @@ class bug extends control
         }
 
         /* Get product, then set menu. */
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getById($productID);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);

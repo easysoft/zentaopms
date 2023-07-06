@@ -96,7 +96,7 @@ class testcase extends control
         $browseType = strtolower($browseType);
 
         /* Set browseType, productID, moduleID and queryID. */
-        $productID = $this->app->tab != 'project' ? $this->product->saveVisitState($productID, $this->products) : $productID;
+        $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         helper::setcookie('preProductID', $productID);
         helper::setcookie('preBranch', $branch);
@@ -299,7 +299,7 @@ class testcase extends control
     public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $projectID = 0, string $caseType = '')
     {
         $groupBy   = empty($groupBy) ? 'story' : $groupBy;
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getByID($productID);
         if($branch === '') $branch = $this->cookie->preBranch;
 
@@ -377,7 +377,7 @@ class testcase extends control
         {
             $this->loadModel('project')->setMenu($this->session->project);
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
-            $productID = $this->product->saveVisitState($productID, $products);
+            $productID = $this->product->saveState($productID, $products);
             $productID = (int)$productID;
             $product   = $this->product->getByID($productID);
             if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', $projectID, $branchID);
@@ -385,7 +385,7 @@ class testcase extends control
         else
         {
             $products  = $this->product->getPairs();
-            $productID = $this->product->saveVisitState($productID, $products);
+            $productID = $this->product->saveState($productID, $products);
             $productID = (int)$productID;
             $product   = $this->product->getByID($productID);
             $this->loadModel('qa');
@@ -525,7 +525,7 @@ class testcase extends control
         }
 
         /* Set productID and branch. */
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = $this->cookie->preBranch;
 
         /* Set menu. */
@@ -672,7 +672,7 @@ class testcase extends control
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
         /* Set productID and currentModuleID. */
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = $this->cookie->preBranch;
         if($storyID and empty($moduleID))
         {

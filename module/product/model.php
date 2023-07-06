@@ -1538,7 +1538,7 @@ class productModel extends model
      * @access public
      * @return int
      */
-    public function saveVisitState(int $productID, array $products): int
+    public function saveState(int $productID, array $products): int
     {
         if(defined('TUTORIAL')) return $productID;
 
