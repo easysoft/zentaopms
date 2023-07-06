@@ -12,6 +12,7 @@ namespace zin;
 
 formPanel
 (
+    set::back('GLOBAL'),
     set::title($lang->entry->create),
     to::headingActions
     (

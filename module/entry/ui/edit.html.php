@@ -12,6 +12,7 @@ namespace zin;
 
 formPanel
 (
+    set::back('GLOBAL'),
     to::heading
     (
         entityLabel
