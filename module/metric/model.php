@@ -54,7 +54,7 @@ class metricModel extends model
         {
             if($metric->crontab == 'week' and strpos($metric->cronList, $currentWeek) === false)  continue;
             if($metric->crontab == 'month' and strpos($metric->cronList, $currentDay) === false) continue;
-            if($now < $metric->execTime) continue;
+            if($now < $metric->time) continue;
 
             $excutableMetrics[] = $metric->code;
         }
