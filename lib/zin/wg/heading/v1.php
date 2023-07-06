@@ -61,9 +61,9 @@ class heading extends wg
 
         $moduleName = $app->moduleName;
         $methodName = $app->methodName;
-        if(in_array("$moduleName-$methodName", $config->excludeDropmenuList)) return null;
+        if(in_array("$moduleName-$methodName", is_array($config->excludeDropmenuList) ? $config->excludeDropmenuList : array())) return null;
 
-        if(in_array($app->tab, $config->hasDropmenuApps))
+        if(in_array($app->tab, is_array($config->hasDropmenuApps) ? $config->hasDropmenuApps : array()))
         {
             $module = $app->tab == 'qa' ? 'product' : $app->tab;
             return new dropmenu(set::tab($module));
