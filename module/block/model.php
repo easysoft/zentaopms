@@ -267,6 +267,13 @@ class blockModel extends model
 
         foreach($blocks as $block)
         {
+            $defaultSize = array('1' => '3');
+            if(!empty($this->config->block->size[$block['module']][$block['code']]))                  $defaultSize     = $this->config->block->size[$block['module']][$block['code']];
+            if(!empty($this->config->block->size[$block['module']][$block['code']][$block['width']])) $block['height'] = $this->config->block->size[$block['module']][$block['code']][$block['width']];
+
+            if(empty($block['width']))  $block['width']  = reset(array_keys($defaultSize));
+            if(empty($block['height'])) $block['height'] = reset($defaultSize);
+
             $block['account']   = $account;
             $block['dashboard'] = $dashboard;
             $block['params']    = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
