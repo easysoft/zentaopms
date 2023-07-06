@@ -55,10 +55,7 @@ formPanel
     formGroup
     (
         set::label($lang->bug->files),
-        fileinput
-        (
-            set::name('files[]')
-        )
+        upload()
     )
 );
 
