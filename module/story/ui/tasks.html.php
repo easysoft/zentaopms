@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader();
+modalHeader(set::titleClass('icon icon-bar-chart'));
 
 $tableData = initTableData($tasks, $config->story->taskTable->fieldList, $this->story);
 
