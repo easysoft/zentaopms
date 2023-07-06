@@ -1454,6 +1454,7 @@ class story extends control
         elseif($from == 'project')
         {
             $projectID = $param ? $param : $this->session->project;
+            if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->fetch('project');
             $this->loadModel('project')->setMenu($projectID);
         }
         elseif($from == 'qa')
