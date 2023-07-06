@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * The link view file of repo module of ZenTaoPMS.
+ * The link view file of mr module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Zeng Gang<zenggang@easycorp.ltd>
- * @package     repo
+ * @package     mr
  * @link        https://www.zentao.net
  */
 namespace zin;
@@ -128,7 +128,7 @@ panel
             (
                 setClass('mr-actions primary'),
                 setData('linkType', 'bug'),
-                setData('size', '1000px'),
+                setData('size', 'lg'),
                 setData('toggle', 'modal'),
                 set::url($this->createLink('mr', 'linkStory', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}")),
                 set::icon('link'),

@@ -558,7 +558,7 @@ class mr extends control
      * @param  int    $pageID
      * @return void
      */
-    public function link($MRID, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function link($MRID, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -614,7 +614,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function linkStory($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkStory($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
@@ -704,7 +704,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function linkBug($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkBug($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(!empty($_POST['bugs']))
         {
@@ -795,7 +795,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function linkTask($MRID, $productID = 0, $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkTask($MRID, $productID = 0, $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(!empty($_POST['tasks']))
         {
