@@ -12,9 +12,10 @@ $lang->ai->common = 'AI';
 
 /* Definitions of table columns, used to sprintf error messages to dao::$errors. */
 $lang->prompt = new stdclass();
-$lang->prompt->name  = 'Name';
-$lang->prompt->desc  = 'Description';
-$lang->prompt->model = 'Model';
+$lang->prompt->name   = 'Name';
+$lang->prompt->desc   = 'Description';
+$lang->prompt->model  = 'Model';
+$lang->prompt->module = 'Module';
 
 $lang->ai->nextStep = 'Next';
 
@@ -65,6 +66,9 @@ $lang->ai->prompts->promptPreview  = 'Purpose Prompt Preview';
 /* Target form selecting. */
 $lang->ai->prompts->selectTargetForm    = 'Select Target Form';
 $lang->ai->prompts->selectTargetFormTip = 'Results returned from LLMs can be directly inputed into forms within ZenTao.';
+
+/* Finalize page. */
+$lang->ai->moduleDisableTip = 'Module is automatically selected based on selected objects.';
 
 /* Data source definition. */
 $lang->ai->dataSource = array();

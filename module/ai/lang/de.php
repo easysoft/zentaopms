@@ -12,9 +12,10 @@ $lang->ai->common = 'AI';
 
 /* Definitions of table columns, used to sprintf error messages to dao::$errors. */
 $lang->prompt = new stdclass();
-$lang->prompt->name  = 'Name';
-$lang->prompt->desc  = 'Description';
-$lang->prompt->model = 'Model';
+$lang->prompt->name   = 'Name';
+$lang->prompt->desc   = 'Description';
+$lang->prompt->model  = 'Model';
+$lang->prompt->module = 'Module';
 
 $lang->ai->nextStep = 'Next';
 
@@ -65,6 +66,9 @@ $lang->ai->prompts->promptPreview  = 'Purpose Prompt Preview';
 /* Target form selecting. */
 $lang->ai->prompts->selectTargetForm    = 'Select Target Form';
 $lang->ai->prompts->selectTargetFormTip = 'Results returned from LLMs can be directly inputed into forms within ZenTao.';
+
+/* Finalize page. */
+$lang->ai->moduleDisableTip = 'Module is automatically selected based on selected objects.';
 
 /* Data source definition. */
 $lang->ai->dataSource = array();
@@ -174,27 +178,27 @@ $lang->ai->designStepNav['setpurpose']       = 'Confirm Action';
 $lang->ai->designStepNav['settargetform']    = 'Process Result';
 $lang->ai->designStepNav['finalize']         = 'Ready to Publish';
 
-$lang->ai->dataTypeDesc = '%s ist die art %s, %s';
+$lang->ai->dataTypeDesc = '%s is %s type, %s';
 
 $lang->ai->dataType            = new stdclass();
 $lang->ai->dataType->pri       = new stdClass();
-$lang->ai->dataType->pri->type = 'Nummer';
-$lang->ai->dataType->pri->desc = '1 ist die höchste Priorität, 4 ist die niedrigste Priorität.';
+$lang->ai->dataType->pri->type = 'numeric';
+$lang->ai->dataType->pri->desc = '1 is the highest priority, 4 is the lowest priority.';
 
 $lang->ai->dataType->estimate       = new stdClass();
-$lang->ai->dataType->estimate->type = 'Nummer';
-$lang->ai->dataType->estimate->desc = 'in Stunden.';
+$lang->ai->dataType->estimate->type = 'numeric';
+$lang->ai->dataType->estimate->desc = 'Unit is in hours.';
 
 $lang->ai->dataType->consumed = $lang->ai->dataType->estimate;
 $lang->ai->dataType->left     = $lang->ai->dataType->estimate;
 
 $lang->ai->dataType->progress       = new stdClass();
-$lang->ai->dataType->progress->type = 'Prozent';
-$lang->ai->dataType->progress->desc = '0 bedeutet "nicht begonnen", 100 bedeutet "abgeschlossen" .';
+$lang->ai->dataType->progress->type = 'percentage';
+$lang->ai->dataType->progress->desc = '0 means not started, 100 means completed.';
 
 $lang->ai->dataType->datetime       = new stdClass();
-$lang->ai->dataType->datetime->type = 'Datum & Zeit';
-$lang->ai->dataType->datetime->desc = 'im Format: 1970-01-01 00:00:01, oder leer lassen.';
+$lang->ai->dataType->datetime->type = 'datetime';
+$lang->ai->dataType->datetime->desc = 'Format is: 1970-01-01 00:00:01, or leave it blank.';
 
 $lang->ai->dataType->estStarted   = $lang->ai->dataType->datetime;
 $lang->ai->dataType->realStarted  = $lang->ai->dataType->datetime;
@@ -204,9 +208,9 @@ $lang->ai->demoData            = new stdclass();
 $lang->ai->demoData->story     = array(
     'story' => array
     (
-        'title'    => 'Entwicklung einer Online-Lernplattform',
-        'spec'     => 'Wir müssen eine Online-Lernplattform entwickeln, die Funktionen wie Kursverwaltung, Studentenverwaltung, Lehrerverwaltung usw. bietet.',
-        'verify' => '1. Alle Funktionen können ordnungsgemäß ohne offensichtliche Fehler oder Abnormalitäten ausgeführt werden.2. Die Benutzeroberfläche ist ästhetisch ansprechend und benutzerfreundlich.3. Die Plattform kann den Bedürfnissen der Benutzer gerecht werden und hat einen hohen Grad an Benutzerzufriedenheit.4. Der Code hat eine gute Qualität, mit klarer Struktur und einfacher Wartung.',
+        'title'    => 'Develop an online learning platform',
+        'spec'     => 'We need to develop an online learning platform that provides course management, student management, teacher management, and other functions.',
+        'verify' => '1. All functions can operate properly without any obvious errors or abnormalities.2. The interface is aesthetically pleasing and user-friendly.3. The platform can meet user needs and has a high level of user satisfaction.4. The code has good quality, with clear structure and easy maintenance.',
         'module'   => 7,
         'pri'      => 1,
         'estimate' => 1,
@@ -217,14 +221,14 @@ $lang->ai->demoData->story     = array(
 $lang->ai->demoData->execution = array
 (
     'execution' => array(
-        'name'     => 'Softwareentwicklung für die Online-Lernplattform',
-        'desc'     => 'Dieses Projekt zielt darauf ab, eine Software für eine Online-Lernplattform zu entwickeln, die zugängliche Lernressourcen wie Texte, Videos, Audios usw. sowie einige Lernwerkzeuge wie Prüfungen, Tests und Diskussionsforen bietet.',
+        'name'     => 'Online Learning Platform Software Development',
+        'desc'     => 'This plan aims to develop an online learning platform software that provides accessible learning resources, including text, video, and audio, as well as some learning tools such as exams, tests, and discussion forums.',
         'estimate' => 7,
     ),
     'tasks'     => array(
         0 =>
             array(
-                'name'         => 'Technologieauswahl',
+                'name'         => 'Technology Selection',
                 'pri'          => 1,
                 'status'       => 'done',
                 'estimate'     => 1,
@@ -234,11 +238,11 @@ $lang->ai->demoData->execution = array
                 'estStarted'   => '2023-07-02 00:00:00',
                 'realStarted'  => '2023-07-02 00:00:00',
                 'finishedDate' => '2023-07-02 00:00:00',
-                'closedReason' => 'Erledigt',
+                'closedReason' => 'Completed',
             ),
         1 =>
             array(
-                'name'         => 'UI-Design',
+                'name'         => 'UI Design',
                 'pri'          => 1,
                 'status'       => 'doing',
                 'estimate'     => 2,
@@ -252,7 +256,7 @@ $lang->ai->demoData->execution = array
             ),
         2 =>
             array(
-                'name'         => 'Entwicklung',
+                'name'         => 'Development',
                 'pri'          => 1,
                 'status'       => 'wait',
                 'estimate'     => 1,

@@ -275,6 +275,19 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptByID($promptID);
 
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+
+            $prompt->name = $data->name;
+            $prompt->desc = $data->desc;
+
+            $this->ai->updatePrompt($prompt);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts') . '#app=admin'));
+        }
+
         $this->view->prompt     = $prompt;
         $this->view->promptID   = $promptID;
         $this->view->title      = $this->lang->ai->prompts->finalize . " {$this->lang->colon} " . $this->lang->ai->prompts->common;

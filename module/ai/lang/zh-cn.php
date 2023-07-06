@@ -12,9 +12,10 @@ $lang->ai->common = 'AI';
 
 /* Definitions of table columns, used to sprintf error messages to dao::$errors. */
 $lang->prompt = new stdclass();
-$lang->prompt->name  = '名称';
-$lang->prompt->desc  = '描述';
-$lang->prompt->model = '语言模型';
+$lang->prompt->name   = '名称';
+$lang->prompt->desc   = '描述';
+$lang->prompt->model  = '语言模型';
+$lang->prompt->module = '所属分组';
 
 $lang->ai->nextStep = '下一步';
 
@@ -65,6 +66,9 @@ $lang->ai->prompts->promptPreview  = '操作提词预览';
 /* Target form selecting. */
 $lang->ai->prompts->selectTargetForm    = '选择表单';
 $lang->ai->prompts->selectTargetFormTip = '选择后，可以将大语言模型返回的结果直接录入到禅道对应的表单中。';
+
+/* Finalize page. */
+$lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
 
 /* Data source definition. */
 $lang->ai->dataSource = array();
