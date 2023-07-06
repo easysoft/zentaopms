@@ -220,7 +220,7 @@ foreach($results as $i => $result)
         ),
         h::td
         (
-            set('colspan', '5'),
+            set('colspan', '4'),
         ),
         h::td
         (
@@ -289,7 +289,7 @@ foreach($results as $i => $result)
                             ),
                             h::td
                             (
-                                width('5%'),
+                                width('60px'),
                                 setClass('text-left'),
                                 $lang->testcase->stepVersion,
                             ),
@@ -301,7 +301,7 @@ foreach($results as $i => $result)
                             ),
                             h::td
                             (
-                                width('20%'),
+                                width('100px'),
                                 setClass('text-left'),
                                 $lang->testcase->real,
                             ),
