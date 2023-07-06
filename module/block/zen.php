@@ -1848,7 +1848,6 @@ class blockZen extends block
             {
                 $this->app->loadLang('feedback');
                 $this->app->loadLang('ticket');
-                $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
                 $this->view->products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
             }
 
@@ -1881,7 +1880,6 @@ class blockZen extends block
             $count['meeting'] = count($meetings);
             $this->view->meetings = $meetings;
             $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
-            $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
         }
 
         $limitCount = !empty($params->reviewCount) ? $params->reviewCount : 20;
@@ -1900,6 +1898,7 @@ class blockZen extends block
             }
         }
 
+        $this->view->users          = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->isExternalCall = $this->isExternalCall();
         $this->view->hasViewPriv    = $hasViewPriv;
         $this->view->count          = $count;

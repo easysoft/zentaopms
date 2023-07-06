@@ -32,7 +32,13 @@ foreach($hasViewPriv as $type => $bool)
 $contents = array();
 foreach($hasViewPriv as $type => $bool)
 {
-    if(empty($config->block->{$type}->dtable->fieldList) || empty(${"{$type}s"})) continue;
+    $data       = ${"{$type}s"};
+    $configType = $type;
+    if($type == 'story')       $data       = $stories;
+    if($type == 'requirement') $configType = 'story';
+
+    if(empty($config->block->{$configType}->dtable->fieldList)) continue;
+    if(empty($data)) $data = array();
 
     $selected  = key($hasViewPriv);
     $contents[] = div
@@ -44,8 +50,8 @@ foreach($hasViewPriv as $type => $bool)
             set::height(318),
             set::bordered(false),
             set::horzScrollbarPos('inside'),
-            set::cols(array_values($config->block->{$type}->dtable->fieldList)),
-            set::data(array_values(${"{$type}s"})),
+            set::cols(array_values($config->block->{$configType}->dtable->fieldList)),
+            set::data(array_values($data)),
             set::userMap($users),
         )
     );
