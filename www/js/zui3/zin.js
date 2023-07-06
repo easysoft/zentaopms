@@ -430,6 +430,12 @@
                 toggleLoading(target, false);
                 if(options.complete) options.complete();
                 $(document).trigger('pageload.app');
+                const frameElement = window.frameElement;
+                if(frameElement)
+                {
+                    frameElement.classList.remove('loading');
+                    frameElement.classList.add('in');
+                }
             }
         };
         return $.ajax(ajaxOptions);
