@@ -389,10 +389,9 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->loadModel('message');
-        $this->loadModel('webhook');
+        $this->app->loadLang('webhook');
 
-        $this->view->title      = $this->lang->admin->log;
+        $this->view->title = $this->lang->webhook->setting;
         $this->display();
     }
 
