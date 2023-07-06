@@ -48,7 +48,7 @@ class dropmenu extends wg
      */
     protected function build(): wg
     {
-        list($url, $text, $objectID, $cache, $tab, $module, $method, $objectID, $extra, $id) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'objectID', 'extra', 'id'));
+        list($url, $text, $objectID, $cache, $tab, $module, $method, $objectID, $extra, $id, $data) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'objectID', 'extra', 'id', 'data'));
 
         $app = data('app');
 
@@ -72,6 +72,8 @@ class dropmenu extends wg
         return zui::dropmenu
         (
             set('_id', $id),
+            set('_id', $id ? $id : 'dropmenu'),
+            set('data', $data),
             set('data-fetcher', $url),
             set(array('fetcher' => $url, 'text' => $text, 'defaultValue' => $objectID, 'cache' => $cache)),
             set($this->getRestProps())

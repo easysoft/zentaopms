@@ -15,15 +15,16 @@ namespace zin;
 dropMenu(set::module('repo'));
 
 /* Prepare repo select data. */
-$menus    = array();
-$selected = '';
+$branchMenus = array();
+$tagMenus    = array();
+$selected    = '';
 foreach($branches as $branchName)
 {
     $selected       = ($branchName == $branchID and $branchOrTag == 'branch') ? $branchName : $selected;
     $base64BranchID = helper::safe64Encode(base64_encode($branchName));
     $branchLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID");
 
-    $menus[] = array('text' => $branchName, 'value' => $branchName, 'url' => $branchLink);
+    $branchMenus[] = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName), $branchName), ''), 'url' => $branchLink);
 }
 foreach($tags as $tagName)
 {
@@ -31,8 +32,11 @@ foreach($tags as $tagName)
     $base64TagID = helper::safe64Encode(base64_encode($tagName));
     $tagLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64TagID&objectID=$objectID&path=&revision=HEAD&refresh=0&branchOrTag=tag");
 
-    $menus[] = array('text' => $tagName, 'value' => $tagName, 'url' => $tagLink);
+    $tagMenus[] = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName), $tagName), ''), 'url' => $tagLink);
 }
+
+$tabs = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
+$menuData = array('branch' => $branchMenus, 'tag' => $tagMenus);
 
 /* Prepare breadcrumb navigation data. */
 $base64BranchID    = helper::safe64Encode(base64_encode($branchID));
@@ -63,15 +67,21 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
 featureBar(
     formGroup
     (
-        set::width('200px'),
         set::class('repo-select'),
         set::required(true),
-        select
+        dropmenu
         (
-            set::id('repo-select'),
-            set::items($menus),
-            set::value($selected)
-        )
+            setID('repoBranchDropMenu'),
+            set::objectID($selected),
+            set::text($selected),
+            set::data(array('data' => $menuData, 'tabs' => $tabs)),
+        ),
+        // select
+        // (
+        //     set::id('repo-select'),
+        //     set::items($menus),
+        //     set::value($selected)
+        // )
     ),
     ...$breadcrumbItems
 );

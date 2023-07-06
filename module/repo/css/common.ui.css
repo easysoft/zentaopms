@@ -45,3 +45,5 @@
 .monaco-dropmenu{background: #efefef; height: 35px; line-height: 35px;}
 #fileTabs > .btn {background: #efefef; border: none; --tw-ring-shadow: none;}
 #fileTabs > .btn-right {padding-right: 40px;}
+#repoBranchDropMenu > .dropmenu-btn {background: inherit; --tw-ring-color: none; color: inherit;}
+#repoBranchDropMenu > .dropmenu-btn > .icon-angle-right {display: none;}
