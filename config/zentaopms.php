@@ -383,6 +383,9 @@ if(!defined('TABLE_MEASRECORDS'))        define('TABLE_MEASRECORDS', '`' . $conf
 if(!defined('TABLE_MEASQUEUE'))          define('TABLE_MEASQUEUE', '`' . $config->db->prefix . 'measqueue`');
 if(!defined('TABLE_MEASTEMPLATE'))       define('TABLE_MEASTEMPLATE', '`' . $config->db->prefix . 'meastemplate`');
 
+if(!defined('TABLE_METRIC'))        define('TABLE_METRIC', '`' . $config->db->prefix . 'metric`');
+if(!defined('TABLE_METRICRECORDS')) define('TABLE_METRICRECORDS', '`' . $config->db->prefix . 'metricrecords`');
+
 define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
 define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
 define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
