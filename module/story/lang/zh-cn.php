@@ -199,6 +199,7 @@ $lang->story->reviewed         = '已评审';
 $lang->story->toBeReviewed     = '待评审';
 $lang->story->linkMR           = '相关合并请求';
 $lang->story->linkCommit       = '相关代码版本';
+$lang->story->URS              = '用户需求';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->SRCommon}与上一{$lang->SRCommon}不属于同一{$lang->productCommon}！";
