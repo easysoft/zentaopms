@@ -103,6 +103,7 @@ $lang->product->programEmpty         = '项目集不能为空';
 $lang->product->nameIsDuplicate      = "『%s』产品线已经存在，请重新设置！";
 $lang->product->nameIsDuplicated     = "产品线已经有『%s』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。";
 $lang->product->reviewStory          = '您不是研发需求 "%s" 的评审人，无法评审，本次操作已被过滤。';
+$lang->product->confirmDeleteLine    = "您确定删除该产品线吗？";
 
 $lang->product->id             = '编号';
 $lang->product->program        = "所属项目集";

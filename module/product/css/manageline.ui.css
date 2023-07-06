@@ -1,0 +1,4 @@
+#manageLineModal .lineTree {overflow: hidden;}
+#manageLineModal .lineTree .line-item > span {overflow: hidden; white-space: nowrap; text-overflow: clip;}
+#manageLineModal .form-group.required {position: relative;}
+#manageLineModal .form-group.required:after {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); position: absolute; top: 0.5rem; right: -0.875rem;}

@@ -125,6 +125,7 @@ toolbar
         set::icon('edit'),
         set('data-toggle', 'modal'),
         set('data-url', createLink('product', 'manageLine', $browseType)),
+        set('data-id', 'manageLineModal'),
         $lang->product->editLine
     ) : null,
     item(set(array

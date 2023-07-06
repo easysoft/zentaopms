@@ -1130,4 +1130,20 @@ class product extends control
         $this->session->set('product', $productID, $this->app->tab);
         return $this->send(array('result' => 'success', 'productID' => $this->session->product));
     }
+
+    /**
+     * Delete a prodcut line.
+     *
+     * @param  int    $lineID
+     * @access public
+     * @return void
+     */
+    public function ajaxDeleteLine(int $lineID)
+    {
+        $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->eq($lineID)->exec();
+        $this->dao->update(TABLE_PRODUCT)->set('line')->eq('0')->where('line')->eq($lineID)->exec();
+
+        $link = inlink('manageLine');
+        return $this->send(array('result' => 'success', 'callback' => "loadModal(\"$link\", 'manageLineModal');"));
+    }
 }

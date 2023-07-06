@@ -651,7 +651,7 @@ class productZen extends product
             if(empty($name)) continue;
             if($this->config->systemMode == 'ALM' and empty($data->programs[$id]))
             {
-                dao::$errors[] = $this->lang->product->programEmpty;
+                dao::$errors["programs[{$id}]"] = $this->lang->product->programEmpty;
                 return false;
             }
 
@@ -659,7 +659,7 @@ class productZen extends product
             if(!isset($lines[$programID])) $lines[$programID] = array();
             if(in_array($name, $lines[$programID]))
             {
-                dao::$errors[] = sprintf($this->lang->product->nameIsDuplicate, $name);
+                dao::$errors["modules[$id]"] = sprintf($this->lang->product->nameIsDuplicate, $name);
                 return false;
             }
             $lines[$programID][$id] = $name;
