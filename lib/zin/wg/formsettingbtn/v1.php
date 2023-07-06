@@ -50,6 +50,7 @@ class formSettingBtn extends wg
                     setClass('form-setting-btn'),
                     set::title($lang->customField),
                     set::url($customLink),
+                    on::submit('onSubmitFormtSetting'),
                     set::actions(array
                     (
                         btn(set::text($lang->save), set::btnType('submit'), setClass('primary')),
@@ -64,7 +65,8 @@ class formSettingBtn extends wg
                             set::name('fields[]'),
                             set::value($field['name']),
                             set::text($field['text']),
-                            set::checked($field['show'])
+                            set::checked(isset($field['show']) ? $field['show'] : false),
+                            set('data-default', isset($field['default']) ? $field['default'] : false)
                         );
                     }, $customFields),
                 )
