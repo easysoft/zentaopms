@@ -46,7 +46,7 @@ class pasteDialog extends wg
                     )
                 )
             ),
-            editor
+            textarea
             (
                 setID($name),
                 set::name($name),
