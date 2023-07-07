@@ -497,17 +497,15 @@ class fileModel extends model
     /**
      * Insert the set image size code.
      *
-     * @param  string    $content
-     * @param  int       $maxSize
+     * @param  string|null $content
+     * @param  int         $maxSize
      * @access public
-     * @return string
+     * @return string|null
      */
-    public function setImgSize(string $content, int $maxSize = 0): string
+    public function setImgSize(string|null $content, int $maxSize = 0): string
     {
+        $content = (string)$content;
         if(empty($content)) return $content;
-
-        $isonlybody = isonlybody();
-        unset($_GET['onlybody']);
 
         $readLinkReg = str_replace(array('%fileID%', '/', '.', '?'), array('[0-9]+', '\/', '\.', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)', '\w+'));
 
