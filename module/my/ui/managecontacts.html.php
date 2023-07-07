@@ -10,6 +10,17 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$myContactList = array();
+foreach($lists as $id => $listName)
+{
+    $myContactList[] = li
+    (
+        set::class('editContact ellipsis pl-2 ' . ($id == $listID ? 'active' : '')),
+        set('data-id', $id),
+        $listName
+    );
+}
+
 formPanel
 (
     set::actions(array()),
@@ -22,7 +33,7 @@ formPanel
         cell
         (
             set::width('180px'),
-            set::class('border-r'),
+            set::class('border-r overflow-hidden'),
             div
             (
                 set::class('border-b py-4 pr-4'),
@@ -33,7 +44,7 @@ formPanel
                     a
                     (
                         set::id('createContact'),
-                        set::class('btn secondary-pale btn-secondary w-full'),
+                        set::class('btn secondary-pale w-full'),
                         set::href('javascript:;'),
                         icon('plus'),
                         $lang->user->contacts->createList
@@ -44,26 +55,19 @@ formPanel
             (
                 tabs
                 (
+                    set::class('pr-4'),
                     tabPane
                     (
                         set::key('my'),
                         set::title($lang->my->myContact),
                         set::active(true),
-                        ul
-                        (
-                            li(set::class('active'), a(set::href('123'), 123)),
-                            li(a(set::href('123'), 456))
-                        )
+                        ul($myContactList)
                     ),
                     tabPane
                     (
                         set::key('public'),
                         set::title($lang->my->publicContact),
-                        ul
-                        (
-                            li(set::class('active'), 123),
-                            li(456)
-                        )
+                        ul($publicContactList)
                     )
                 )
             )

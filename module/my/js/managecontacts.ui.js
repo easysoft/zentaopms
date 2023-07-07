@@ -6,7 +6,7 @@ function getCreateForm(event)
 
 function getEditForm(event)
 {
-    const listID = '3';
+    const listID = $(event.target).data('id');
     const url    = $.createLink('my', 'manageContacts', 'listID=' + listID + '&mode=edit');
-    loadPage(url, '#dataForm');
+    loadPage(url, '#manageContacts');
 }
