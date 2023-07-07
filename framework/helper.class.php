@@ -623,7 +623,6 @@ function setParent(array $items)
             $item->isParent = true;
         }
 
-        if(!empty($item->parent) && !isset($items[$item->parent])) $item->parent = '';
         if(!empty($item->parent) && isset($items[$item->parent])) $items[$item->parent]->isParent = true;
     }
     return $items;
