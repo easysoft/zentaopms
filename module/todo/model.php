@@ -78,15 +78,18 @@ class todoModel extends model
             {
                 unset($todo->config['week']);
                 unset($todo->config['month']);
-                if(!$todo->config['day'])
+                if(empty($todo->config['specifiedDate']))
                 {
-                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
-                    return false;
-                }
-                if(!validater::checkInt($todo->config['day']))
-                {
-                    dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
-                    return false;
+                    if(!$todo->config['day'])
+                    {
+                        dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
+                        return false;
+                    }
+                    if(!validater::checkInt($todo->config['day']))
+                    {
+                        dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
+                        return false;
+                    }
                 }
             }
             if($todo->config['type'] == 'week')
