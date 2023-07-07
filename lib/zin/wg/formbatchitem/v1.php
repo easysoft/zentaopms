@@ -34,7 +34,7 @@ class formBatchItem extends wg
         'labelClass?: string',          // 列标题类名。
         'labelProps?: string',          // 列标题属性，例如 `array('data-toggle' => 'tooltip', 'data-title' 。=> 'This is a tip')`
         'required?:bool|string="auto"', // 是否必填，如果设置为 `"auto"`，则自动从当前模块 config 中查询。
-        'control?: array|string',       // 控件类型或控件配置。
+        'control?: array|string|false', // 控件类型或控件配置。
         'width?: number|string',        // 列宽度，如果设置为 `"auto"` 则自动填充剩余宽度。
         'minWidth?: number|string',     // 列最小宽度。
         'value?: string|array',         // 默认值。
@@ -63,18 +63,21 @@ class formBatchItem extends wg
 
         if($required === 'auto') $required = isFieldRequired($name);
 
-        if(is_string($control)) $control = array('type' => $control, 'name' => $name);
-        if(empty($control))     $control = array();
+        if($control !== false)
+        {
+            if(is_string($control)) $control = array('type' => $control, 'name' => $name);
+            if(empty($control))     $control = array();
 
-        if(!isset($control['type'])) $control['type']        = 'text';
-        if($required !== null)       $control['required']    = $required;
-        if($name !== null)           $control['name']        = $name;
-        if($value !== null)          $control['value']       = $value;
-        if($disabled !== null)       $control['disabled']    = $disabled;
-        if($multiple !== null)       $control['multiple']    = $multiple;
-        if($items !== null)          $control['items']       = $items;
-        if($placeholder !== null)    $control['placeholder'] = $placeholder;
-        if($readonly !== null)       $control['readonly']    = $readonly;
+            if(!isset($control['type'])) $control['type']        = 'text';
+            if($required !== null)       $control['required']    = $required;
+            if($name !== null)           $control['name']        = $name;
+            if($value !== null)          $control['value']       = $value;
+            if($disabled !== null)       $control['disabled']    = $disabled;
+            if($multiple !== null)       $control['multiple']    = $multiple;
+            if($items !== null)          $control['items']       = $items;
+            if($placeholder !== null)    $control['placeholder'] = $placeholder;
+            if($readonly !== null)       $control['readonly']    = $readonly;
+        }
 
         $asIndex = $control['type'] === 'index';
         if($asIndex) $control['type'] = 'static';
