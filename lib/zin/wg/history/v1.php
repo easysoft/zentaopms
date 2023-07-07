@@ -55,18 +55,7 @@ class history extends wg
             setClass('btn-expand btn-mini px-0'),
             set::title($lang->switchDisplay),
             h::i(setClass('change-show icon icon-plus icon-sm')),
-            on::click
-            (
-                <<<EXPAND
-                const btn = e.target.closest('button');
-                const changeBox = btn.nextElementSibling;
-                const icon = e.target.querySelector('.icon');
-                icon.classList.toggle('icon-plus');
-                icon.classList.toggle('icon-minus');
-                if (icon.classList.contains('icon-plus')) changeBox.classList.remove('show');
-                else                                      changeBox.classList.add('show');
-                EXPAND
-            ),
+            on::click('expand'),
         );
     }
 
