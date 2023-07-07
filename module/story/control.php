@@ -1174,7 +1174,7 @@ class story extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('score')->create('ajax', 'batchOther');
-            return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList));
         }
 
         $this->storyZen->setMenuForBatchClose($productID, $executionID, $from);
