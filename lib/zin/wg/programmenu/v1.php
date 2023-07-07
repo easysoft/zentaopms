@@ -77,6 +77,7 @@ class programMenu extends wg
             set::defaultValue($activeKey),
             set::text($this->getTitle($activeKey)),
             set::caret(true),
+            set::popWidth(200),
             set::popClass('popup text-md'),
             set::onClick(jsRaw("(event) => {if(!event.target.closest('.is-caret')) return; openUrl('$closeLink'); return false}")),
             set::data(array('search' => false, 'checkIcon' => true, 'title' => data('lang.product.selectProgram'), 'link' => $link, 'data' => $this->buildMenuTree(array(), 0))),
