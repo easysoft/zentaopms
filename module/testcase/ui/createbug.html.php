@@ -12,12 +12,7 @@ namespace zin;
 
 jsVar('resultsLink', createLink('testtask', 'results', "runID={$runID}&caseID={$caseID}&version={$version}") . '#casesResults');
 
-modalHeader
-(
-    set::title($lang->testtask->createBug),
-    set::entityText($case->title),
-    set::entityID($case->id),
-);
+set::title($lang->testcase->createBug);
 
 div
 (
