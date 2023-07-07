@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+dropmenu(set::module('repo'), set::tab('repo'));
+
 $diffLink = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision={oldRevision}&newRevision={newRevision}");
 
 jsVar('diffLink', $diffLink);

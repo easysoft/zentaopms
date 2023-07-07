@@ -1620,7 +1620,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($repoID, $module = 'repo', $method = 'browse', $projectID = 0)
+    public function ajaxGetDropMenu(int $repoID, string $module = 'repo', string $method = 'browse', int $projectID = 0)
     {
         if($module == 'repo' and !in_array($method, array('review', 'diff'))) $method = 'browse';
         if($module == 'mr')  $method = 'browse';
@@ -1633,14 +1633,8 @@ class repo extends control
         }
 
         /* Get repo group by type. */
-        $repoGroup = $this->repo->getRepoGroup($this->app->tab, $projectID);
-        if($module == 'mr')
-        {
-            foreach($repoGroup as $type => $group)
-            {
-                if(!in_array(strtolower($type), $this->config->repo->gitServiceList)) unset($repoGroup[$type]);
-            }
-        }
+        $repoType  = $module == 'mr' ? 'git' : '';
+        $repoGroup = $this->repo->getRepoGroup('project', $projectID, $repoType);
 
         $this->view->repoID    = $repoID;
         $this->view->repoGroup = $repoGroup;
@@ -1686,8 +1680,9 @@ class repo extends control
             ->setDefault('products', array())
             ->setDefault('projects', array())
             ->get();
+        $productIds = $postData->products ? explode(',', $postData->products) : array();
+        $projectIds = $postData->projects ? explode(',', $postData->projects) : array();
 
-        $productIds = explode(',', $postData->products);
         if(empty($productIds))
         {
             $products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
@@ -1696,7 +1691,7 @@ class repo extends control
         /* Get all projects that can be accessed. */
         $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($productIds);
 
-        $selectedProjects = array_intersect(array_keys($accessProjects), $postData->projects);
+        $selectedProjects = array_intersect(array_keys($accessProjects), $projectIds);
 
         $name = isset($postData->number) ? "projects[{$postData->number}][]" : 'projects[]';
         return print (html::select($name, $accessProjects, $selectedProjects, "class='form-control chosen' multiple"));

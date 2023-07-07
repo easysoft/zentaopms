@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+dropmenu(set::module('repo'), set::tab('repo'));
+
 $browser = helper::getBrowser();
 jsVar('browser', $browser['name']);
 jsVar('edition', $config->edition);

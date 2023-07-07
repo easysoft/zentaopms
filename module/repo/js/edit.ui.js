@@ -7,6 +7,7 @@ function onProductChange(event)
 {
     var projects = $('#projects').val();
     var products = $('#product').val();
+
     $.post($.createLink('repo', 'ajaxProjectsOfProducts'), {products, projects}, function(response)
     {
         $('#projects').replaceWith(response);

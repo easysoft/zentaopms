@@ -479,47 +479,70 @@ class repoModel extends model
     /**
      * Get repos group by repo type.
      *
-     * @param  string type
+     * @param  string $type
      * @param  int    $projectID
+     * @param  string $repoType
      * @access public
      * @return array
      */
-    public function getRepoGroup($type, $projectID = 0)
+    public function getRepoGroup(string $type, int $projectID = 0, string $repoType = ''): array
     {
-        $repoPairs = $this->getRepoPairs($type, $projectID);
+        $repos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->beginIF($repoType == 'git')->andWhere('SCM')->in($this->config->repo->gitServiceTypeList)->fi()
+            ->fetchAll();
 
-        $repos = array();
-        foreach($this->lang->repo->scmList as $scmType => $scm) $repos[$scmType] = array();
-
-        foreach($repoPairs as $id => $repo)
+        $productIds = $productItems = array();
+        foreach($repos as $repo)
         {
-            if(strpos($repo, '[gitlab]') !== false)
+            $productIds = array_merge($productIds, explode(',', $repo->product));
+        }
+        $products = $this->loadModel('product')->getByIdList(array_filter(array_unique($productIds)));
+        foreach($products as $productID => $product)
+        {
+            $productItem = array();
+            $productItem['id']    = $productID;
+            $productItem['type']  = 'product';
+            $productItem['text']  = $product->name;
+            $productItem['items'] = array();
+
+            $productItems[$productID] = $productItem;
+        }
+
+        /* Get project products. */
+        $projectProductIds = ($type == 'project' or $type == 'execution') ? $this->loadModel('product')->getProductIDByProject((int)$projectID, false) : array();
+
+        /* Get repo data for dropmenu. */
+        $repoPairs = array();
+        foreach($repos as $repo)
+        {
+            $repo->acl = json_decode($repo->acl);
+            $scm = $repo->SCM == 'Subversion' ? 'svn' : strtolower($repo->SCM);
+            if($this->checkPriv($repo))
             {
-                $repo = str_replace('[gitlab]', '', $repo);
-                $repos['Gitlab'][$id] = $repo;
-            }
-            elseif(strpos($repo, '[gogs]') !== false)
-            {
-                $repo = str_replace('[gogs]', '', $repo);
-                $repos['Gogs'][$id] = $repo;
-            }
-            elseif(strpos($repo, '[gitea]') !== false)
-            {
-                $repo = str_replace('[gitea]', '', $repo);
-                $repos['Gitea'][$id] = $repo;
-            }
-            elseif(strpos($repo, '[svn]') !== false)
-            {
-                $repo = str_replace('[svn]', '', $repo);
-                $repos['SVN'][$id] = $repo;
-            }
-            elseif(strpos($repo, '[git]') !== false)
-            {
-                $repo = str_replace('[git]', '', $repo);
-                $repos['Git'][$id] = $repo;
+                $repoItem = array();
+                $repoItem['id']   = $repo->id;
+                $repoItem['text'] = $repo->name;
+                $repoItem['keys'] = zget(common::convert2Pinyin(array($repo->name)), $repo->name, '');
+
+                $repoProducts = explode(',', $repo->product);
+                foreach($repoProducts as $productID)
+                {
+                    if(($type == 'project' or $type == 'execution') and $projectID)
+                    {
+                        if(!in_array($productID, $projectProductIds)) continue;
+                    }
+
+                    if(strpos(",$repo->product,", ",$productID,") !== false)
+                    {
+                        if(!isset($repoPairs[$productID])) $repoPairs[$productID] = $productItems[$productID];
+                        $repoPairs[$productID]['items'][] = $repoItem;
+                    }
+                }
             }
         }
-        return $repos;
+
+        return $repoPairs;
     }
 
     /**

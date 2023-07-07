@@ -88,6 +88,7 @@ set::rawContent(false);
 
 detailHeader
 (
+    set::back('mr-browse'),
     to::title
     (
         entityLabel

@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+dropmenu(set::module('repo'), set::tab('repo'), set::objectID($repo->id));
+
 /* Prepare breadcrumb navigation data. */
 $base64BranchID    = helper::safe64Encode(base64_encode($branchID));
 $breadcrumbItems   = array();
@@ -51,7 +53,9 @@ foreach($blames as $key => $blame)
     $blames[$key]['content'] = htmlSpecialString($blame['content']);
 }
 
-$blames = initTableData($blames, $config->repo->blameDtable->fieldList);
+foreach($blames as $key => $blame) $blames[$key] = (object)$blame;
+
+$blames = initTableData($blames, $config->repo->blameDtable->fieldList, $this->repo);
 
 $encodePath = $this->repo->encodePath($entry);
 $encodes    = array();

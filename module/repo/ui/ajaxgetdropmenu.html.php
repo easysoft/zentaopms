@@ -10,12 +10,17 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$data = array('repo');
+$data = array('repo' => array_values($repoGroup));
+
+$tabs = array();
+$tabs[] = array('name' => 'repo', 'text' => $lang->repo->codeRepo);
 
 $json = array();
 $json['data']       = $data;
+$json['tabs']       = $tabs;
 $json['searchHint'] = $lang->searchAB;
+$json['labelMap']   = array('product' => $lang->product->common);
 $json['link']       = sprintf($link, '{id}');
-$json['itemType']   = 'product';
+$json['itemType']   = 'repo';
 
 renderJson($json);

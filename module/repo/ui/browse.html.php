@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-dropMenu(set::module('repo'));
+dropmenu(set::module('repo'), set::tab('repo'));
 
 /* Prepare repo select data. */
 $branchMenus = array();

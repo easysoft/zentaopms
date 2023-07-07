@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-dropmenu(set::module('repo'));
+dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 
 foreach($MRList as $MR)
 {

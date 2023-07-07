@@ -79,7 +79,6 @@ formPanel
     ),
     formGroup
     (
-        set::required(true),
         set::name('removeSourceBranch'),
         set::label($lang->mr->removeSourceBranch),
         set::control('checkbox'),
