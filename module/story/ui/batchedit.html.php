@@ -36,7 +36,7 @@ $items['assignedTo']['defaultDitto'] = 'off';
 $items['source']['defaultDitto']     = 'off';
 $items['stage']['defaultDitto']      = 'off';
 
-if(!$branchProduct) unset($items['branch']);
+if(!$branchProduct) unset($items['branch'], $customFields['branch']);
 
 /* Build form field value for batch edit. */
 $fieldNameList = array_keys($items);
@@ -57,9 +57,10 @@ foreach($stories as $storyID => $story)
 
 $fnGenerateCustomizedFields = function() use ($showFields, $customFields)
 {
-    $showFields = ",{$showFields},";
-    $fields     = array();
-    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"));
+    $showFields    = ",{$showFields},";
+    $fields        = array();
+    $defaultFields = explode(',', 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason');
+    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
     return $fields;
 };
 

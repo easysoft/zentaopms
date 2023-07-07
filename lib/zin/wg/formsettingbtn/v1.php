@@ -50,10 +50,9 @@ class formSettingBtn extends wg
                     setClass('form-setting-btn'),
                     set::title($lang->customField),
                     set::url($customLink),
-                    on::submit('onSubmitFormtSetting'),
                     set::actions(array
                     (
-                        btn(set::text($lang->save), set::btnType('submit'), setClass('primary')),
+                        btn(set::text($lang->save), setClass('primary'), on::click('onSubmitFormtSetting')),
                         btn(set::text($lang->cancel), set::btnType('reset'), on::click('closeCustomPopupMenu')),
                         btn(set::text($lang->restore), setClass('text-primary ghost font-bold'), set::href('#'), set('data-url', $customLink), on::click('revertDefaultFields')),
                     )),

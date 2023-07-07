@@ -26,8 +26,8 @@ function toggleLine(obj)
     }
 }
 
-function setParentProgram(obj)
+function setParentProgram(e)
 {
-    var $obj = $(obj);
+    var $obj = $(e.target);
     loadPage($.createLink('product', 'create', 'programID=' + $obj.val()));
 }

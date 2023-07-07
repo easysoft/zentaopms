@@ -22,9 +22,11 @@ jsVar('feedbackSource', $config->story->feedbackSource);
 $showFields = $config->story->custom->createFields;
 $fnGenerateCustomizedFields = function() use ($showFields, $customFields)
 {
-    $showFields = ",{$showFields},";
-    $fields     = array();
-    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"));
+    global $config;
+    $showFields    = ",{$showFields},";
+    $fields        = array();
+    $defaultFields = explode(',', $config->story->list->customCreateFields);
+    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
     return $fields;
 };
 
