@@ -88,7 +88,7 @@ formPanel
         set::required(true),
         set::name('repoID'),
         set::label($lang->devops->repo),
-        set::control('picker'),
+        set::control('select'),
         on::change('onRepoChange'),
     ),
     formGroup

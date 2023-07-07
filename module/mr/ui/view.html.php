@@ -29,6 +29,7 @@ foreach($config->mr->view->operateList as $operate)
             if($rawMR->has_conflicts || $compileNotSuccess || $MR->approvalStatus == 'approved') continue;
         }
     }
+    if($operate == 'reopen' && (!$MR->synced || $rawMR->state != 'closed')) continue;
 
     $mainActions[] = $config->mr->actionList[$operate];
 }
@@ -83,8 +84,6 @@ else
             $lang->mr->noCompileJob,
         );
 }
-
-set::rawContent(false);
 
 detailHeader
 (
@@ -206,14 +205,14 @@ panel
                         item
                         (
                             set::name($lang->mr->description),
-                            !empty($MR->description) ? $MR->description : $lang->noDatat,
+                            !empty($MR->description) ? $MR->description : $lang->noData,
                         ),
                     ),
                 ),
                 cell
                 (
                     setClass('cell mb-2'),
-                    rawContent(),
+                    html(sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch)),
                 ),
                 cell
                 (
@@ -242,7 +241,5 @@ floatToolbar
     isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
     set::main($mainActions),
 );
-
-echo sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch);
 
 render();

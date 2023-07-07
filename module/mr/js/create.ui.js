@@ -64,7 +64,7 @@ function onSourceProjectChange()
     {
         $('#repoID').html('').append(response);
         $('#repoID').val(repo.id);
-        onReopChange();
+        onRepoChange();
     });
 
     if(sourceProject) getBranchPriv(sourceProject);
