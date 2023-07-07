@@ -136,7 +136,8 @@ class story extends control
             $_POST  = (array)$result['data'];
 
             $stories = $this->storyZen->buildStoriesForBatchCreate($productID, $storyType);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(empty($stories)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->noData));
+            if(dao::isError())  return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $storyIdList = $this->story->batchCreate($stories, $productID, $branch, $storyType, $storyID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
