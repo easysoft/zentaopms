@@ -75,7 +75,7 @@ $json = array();
 $json['data']       = $data;
 $json['tabs']       = $tabs;
 $json['searchHint'] = $lang->searchAB;
-$json['link']       = sprintf($link, '{id}');
+$json['link']       = array('execution' => sprintf($link, '{id}'));
 $json['labelMap']   = array('project' => $lang->project->common);
 $json['expandName'] = 'closed';
 $json['itemType']   = 'execution';

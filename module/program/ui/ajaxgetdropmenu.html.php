@@ -44,7 +44,7 @@ $data[0]['items'] = buildTree($programs);
 $json = array();
 $json['data']       = $data;
 $json['searchHint'] = $lang->searchAB;
-$json['link']       = sprintf($link, '{id}');
+$json['link']       = $link;
 $json['labelMap']   = array('program' => $lang->program->common);
 $json['expandName'] = 'closed';
 $json['itemType']   = 'program';

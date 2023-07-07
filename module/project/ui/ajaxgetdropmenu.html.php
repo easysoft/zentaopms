@@ -79,7 +79,7 @@ $json = array();
 $json['data']       = $data;
 $json['tabs']       = $tabs;
 $json['searchHint'] = $lang->searchAB;
-$json['link']       = sprintf($link, '{id}');
+$json['link']       = array('project' => sprintf($link, '{id}'));
 $json['labelMap']   = array('program' => $lang->program->common);
 $json['expandName'] = 'closed';
 $json['itemType']   = 'project';
