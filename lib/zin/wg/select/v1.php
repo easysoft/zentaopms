@@ -89,7 +89,7 @@ class select extends wg
     public function getValueList()
     {
         list($value, $multiple) = $this->prop(array('value', 'multiple'));
-        if($multiple) return is_array($value) ? $value : explode(',', $value);
+        if($multiple) return is_array($value) ? $value : explode(',', (string)$value);
         return array($value);
     }
 
