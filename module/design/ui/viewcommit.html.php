@@ -51,10 +51,10 @@ else
         set::cols($config->design->viewcommit->dtable->fieldList),
         set::data($tableData),
         set::footPager(
-            usePager(),
-            set::recPerPage($pager->recPerPage),
-            set::recTotal($pager->recTotal),
-            set::linkCreator(helper::createLink('design', 'viewCommit', "designID={$designID}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={pageID}", '', true)),
+            usePager
+            (
+                array('linkCreator' => helper::createLink('design', 'viewCommit', "designID={$design->id}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}")),
+            ),
         ),
     );
 }
