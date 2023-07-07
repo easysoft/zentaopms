@@ -19,7 +19,7 @@ if(!$longBlock)
 
 panel
 (
-    set::class('task-block' . $longBlock ? 'block-long' : 'block-sm'),
+    set::class('task-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::title($block->title),
     set('headingClass', 'border-b'),
     to::headingActions
@@ -34,11 +34,11 @@ panel
     ),
     dtable
     (
-        set::className('borderless'),
-        set::fixedLeftWidth('50%'),
+        set::id('task'),
+        set::bordered(false),
+        set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->task->dtable->fieldList)),
         set::data(array_values($tasks)),
-        set::horzScrollbarPos('inside'),
     ),
 );
 

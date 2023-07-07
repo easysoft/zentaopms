@@ -19,7 +19,7 @@ if(!$longBlock)
 panel
 (
     set::title($block->title),
-    set::class('build-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set::class('build-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::headingClass('border-b'),
     to::headingActions
     (
@@ -33,9 +33,8 @@ panel
     ),
     dtable
     (
-        set::className('borderless'),
         set::bordered(false),
-        set::height(320),
+        set::height(318),
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->build->dtable->fieldList)),
         set::data(array_values($builds)),
