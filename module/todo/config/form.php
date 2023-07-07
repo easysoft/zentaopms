@@ -66,7 +66,19 @@ $config->todo->batchClose->form['todoIdList'] = array('required' => true, 'type'
 
 $config->todo->batchEdit = new stdclass();
 $config->todo->batchEdit->form = array();
-$config->todo->batchEdit->form['todoIdList'] = array('required' => true, 'type' => 'array');
+$config->todo->batchEdit->form['id']         = array('required' => true,  'type' => 'int', 'base' => true);
+$config->todo->batchEdit->form['date']       = array('required' => true,  'type' => 'date');
+$config->todo->batchEdit->form['type']       = array('required' => true,  'type' => 'string');
+$config->todo->batchEdit->form['pri']        = array('required' => true,  'type' => 'int');
+$config->todo->batchEdit->form['name']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->todo->batchEdit->form['assignedTo'] = array('required' => false, 'type' => 'string', 'default' => '');
+$config->todo->batchEdit->form['begin']      = array('required' => false, 'type' => 'string', 'default' => '');
+$config->todo->batchEdit->form['end']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->todo->batchEdit->form['status']     = array('required' => true,  'type' => 'string');
+foreach($config->todo->moduleList as $module)
+{
+    $config->todo->batchEdit->form[$module] = array('required' => false, 'type' => 'int', 'default' => 0);
+}
 
 $config->todo->batchFinish = new stdclass();
 $config->todo->batchFinish->form = array();
