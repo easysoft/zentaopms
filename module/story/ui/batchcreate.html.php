@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($config, $lang, $forceReview, $fields, $users)
+$fnGenerateFields = function() use ($lang, $fields)
 {
     /* Generate fields with the appropriate properties. */
     $items   = array();
@@ -44,9 +44,16 @@ formBatchPanel
     set::title($storID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate),
     set::uploadParams(createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type"))),
     set::pasteField('title'),
+    set::ajax(array('beforeSend' => jsRaw('window.beforeSubmitBatchCreateForm'))),
     set::customFields(array('items' => $fnGenerateCustomizedFields())),
     set::items($fnGenerateFields()),
     set::onRenderRowCol(jsRaw('renderCellData')),
+    set::actions(array
+    (
+        array('text' => $lang->save,            'onclick' => 'window.onClickActionBtn(event)', 'id' => 'save',      'btnType' => 'submit', 'class' => 'primary'),
+        array('text' => $lang->story->saveDraft,'onclick' => 'window.onClickActionBtn(event)', 'id' => 'saveDraft', 'btnType' => 'submit', 'class' => 'secondary'),
+        array('text' => $lang->goback)
+    ))
 );
 
 render();
