@@ -36,10 +36,6 @@ class fileList extends wg
         $object       = (object)$this->prop('object');
         $fileListView = h::ul(setClass('files-list col relative'));
 
-        jsVar('window.method', $method);
-        jsVar('window.showDelete', $showDelete);
-        jsVar('window.sessionString', session_name() . '=' . session_id());
-
         foreach($files as $file)
         {
             $fileItemView = li
@@ -63,6 +59,22 @@ class fileList extends wg
         $px = $isInModal ? 'px-3' : 'px-6';
         $pb = $isInModal ? 'pb-3' : 'pb-6';
 
+        $method     = $this->prop('method');
+        $showDelete = $this->prop('showDelete');
+
+        $fileDiv = div
+        (
+            set
+            (
+                array(
+                    'data-method' => $method,
+                    'data-showDelete' => $showDelete,
+                    'data-session' => session_name() . '=' . session_id(),
+                )
+            ),
+            $this->fileList()
+        );
+
         return $fieldset ? new section
         (
             setClass('files', 'pt-4', $px, $pb, 'canvas'),
@@ -71,7 +83,7 @@ class fileList extends wg
             (
                 icon('paper-clip'),
             ),
-            div($this->fileList()),
-        ) : div($this->fileList());
+            $fileDiv
+        ) : $fileDiv;
     }
 }
