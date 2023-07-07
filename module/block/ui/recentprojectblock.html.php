@@ -42,7 +42,7 @@ foreach($projects as $projectID => $project)
     $cards[] = cell
     (
         set('width', $longBlock ? '32%' : '100%'),
-        set('class', 'border p-4' . ($longBlock ? '' : ' mb-2')),
+        set('class', 'border p-4 overflow-hidden  ' . ($longBlock ? '' : ' mb-2')),
         div
         (
             set('class', 'pb-2'),
