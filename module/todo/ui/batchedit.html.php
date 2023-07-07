@@ -22,7 +22,7 @@ foreach($lang->todo->typeList as $type => $typeName)
         control
         (
             setClass('inited'),
-            set::type('picker'),
+            set::type('select'),
             set::name($type),
             set::items($$itemName),
         )
@@ -68,14 +68,16 @@ div
         control
         (
             setClass('time-input'),
-            set::type('time'),
+            set::type('select'),
             set::name('begin'),
+            set::items($times)
         ),
         control
         (
             setClass('time-input'),
-            set::type('time'),
+            set::type('select'),
             set::name('end'),
+            set::items($times)
         ),
         span
         (
@@ -128,7 +130,7 @@ formBatchPanel
         set::name('type'),
         set::label($lang->todo->type),
         set::width('100px'),
-        set::control('picker'),
+        set::control('select'),
         set::items($lang->todo->typeList),
     ),
     formBatchItem
@@ -136,7 +138,7 @@ formBatchPanel
         set::name('pri'),
         set::label($lang->todo->pri),
         set::width('60px'),
-        set::control('picker'),
+        set::control('select'),
         set::hidden(!isset($visibleFields['pri'])),
         set::items($lang->todo->priList),
     ),
@@ -150,7 +152,7 @@ formBatchPanel
         set::name('assignedTo'),
         set::label($lang->todo->assignedTo),
         set::width('120px'),
-        set::control('picker'),
+        set::control('select'),
         set::items($users),
     ),
     formBatchItem
@@ -165,7 +167,7 @@ formBatchPanel
         set::name('status'),
         set::label($lang->todo->status),
         set::width('100px'),
-        set::control('picker'),
+        set::control('select'),
         set::hidden(!isset($visibleFields['status'])),
         set::items($lang->todo->statusList)
     ),

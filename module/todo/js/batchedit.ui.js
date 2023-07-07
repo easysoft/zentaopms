@@ -20,15 +20,16 @@ window.renderRowData = function($row, index, row)
 
     if($row.find('td[data-name="beginAndEnd"] .inited').length == 0)
     {
+        if(row.begin == 2400) row.begin = '';
+
         $tdDom = $row.find('td[data-name="beginAndEnd"]');
         $tdDom.empty().html($('#dateCellData').html());
 
-        $tdDom.find('input[name="begin"]').attr('name', `begin[${row.id}]`).val(row.begin).prop('disabled', !row.begin);
-        $tdDom.find('input[name="end"]').attr('name', `end[${row.id}]`).val(row.end).prop('disabled', !row.begin);
+        $tdDom.find('select[name="begin"]').attr('name', `begin[${row.id}]`).val(row.begin.replace(':', '')).prop('disabled', !row.begin);
+        $tdDom.find('select[name="end"]').attr('name', `end[${row.id}]`).val(row.end.replace(':', '')).prop('disabled', !row.begin);
 
         $tdDom.find('input[name="switchTime"]').attr('name', `switchTime[${row.id}]`).attr('id', `switchTime_${row.id}`).prop('checked', !row.begin);
         $tdDom.find('label[for="switchTime_"]').attr('for', `switchTime_${row.id}`);
-        $tdDom.find('.inited').attr('data-tr-index', index);
     }
 }
 
