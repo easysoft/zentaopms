@@ -29,8 +29,8 @@ function setDate()
  */
 function computeDaysDelta(date1, date2)
 {
-    date1 = convertStringToDate(date1);
-    date2 = convertStringToDate(date2);
+    date1 = zui.createDate(date1);
+    date2 = zui.createDate(date2);
     delta = (date2 - date1) / (1000 * 60 * 60 * 24) + 1;
 
     if(isNaN(delta)) return;
@@ -76,12 +76,14 @@ window.computeWorkDays = function(e)
         beginDate = $('#begin').val();
         endDate   = $('#end').val();
 
-        var begin = new Date(beginDate.replace(/-/g,"/"));
-        var end   = new Date(endDate.replace(/-/g,"/"));
-        var time  = end.getTime() - begin.getTime();
-        var days  = parseInt(time / (1000 * 60 * 60 * 24)) + 1;
-        if(days != $("input[name='delta']:checked").val()) $("input[name='delta']:checked").attr('checked', false);
-        if(endDate == longTime) $("#delta999").prop('checked', true);
+        var begin    = zui.createDate(beginDate);
+        var end      = zui.createDate(endDate);
+        var time     = end.getTime() - begin.getTime();
+        var days     = String(parseInt(time / zui.TIME_DAY) + 1);
+        var $checked = $("input[name='delta']:checked");
+
+        if(days !== $checked.val()) $checked.prop('checked', false);
+        if(endDate === longTime) $("#delta999").prop('checked', true);
     }
 
     outOfDateTip(isBactchEdit ? index : 0);
@@ -97,10 +99,10 @@ window.computeWorkDays = function(e)
  */
 function computeEndDate(delta)
 {
-    beginDate = $('#begin').val();
+    let beginDate = $('#begin').val();
     if(!beginDate) return;
 
-    delta     = parseInt(delta);
+    delta = parseInt(delta);
     if(delta == 999)
     {
         $('#end').val('').attr('disabled', true);
@@ -111,48 +113,15 @@ function computeEndDate(delta)
     $('#end').removeAttr('disabled');
     $('#days').closest('.form-row').removeClass('hidden');
 
-    beginDate = convertStringToDate(beginDate);
+    beginDate = zui.createDate(beginDate);
     if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
     {
         delta = (weekend == 2) ? (delta - 2) : (delta - 1);
     }
 
-    endDate = formatDate(beginDate, delta - 1);
-    $('#end').val(endDate);
+    const endDate = zui.formatDate(zui.addDate(beginDate, delta - 1), 'yyyy-MM-dd');
+    $('#end').val(endDate).trigger('change');
     computeWorkDays();
-}
-
-/**
- * 给指定日期加上具体天数，并返回格式化后的日期.
- *
- * @param  string dateString
- * @param  int    days
- * @access public
- * @return date
- */
-function formatDate(dateString, days)
-{
-  const date = new Date(dateString);
-  date.setDate(date.getDate() + days);
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-}
-
-/**
- * Convert a date string like 2011-11-11 to date object in js.
- *
- * @param  string dateString
- * @access public
- * @return date
- */
-function convertStringToDate(dateString)
-{
-    dateString = dateString.split('-');
-    return new Date(dateString[0], dateString[1] - 1, dateString[2]);
 }
 
 /**

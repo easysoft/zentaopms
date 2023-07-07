@@ -89,9 +89,8 @@ formPanel
             inputGroup
             (
                 set::seg(true),
-                input
+                datePicker
                 (
-                    set::type('date'),
                     set::name('begin'),
                     set::id('begin'),
                     set::value(date('Y-m-d')),
@@ -100,13 +99,13 @@ formPanel
                     on::change('computeWorkDays')
                 ),
                 $lang->project->to,
-                input
+                datePicker
                 (
-                    set::type('date'),
                     set::name('end'),
                     set::id('end'),
                     set::placeholder($lang->project->end),
                     set::required(true),
+                    set::value(''),
                     on::change('computeWorkDays')
                 ),
             )
@@ -115,7 +114,7 @@ formPanel
         (
             set::name('delta'),
             set::class('pl-4 items-center'),
-            set::control(['type' => 'radioList', 'inline' => true, 'rootClass' => 'ml-4', 'items' => $lang->program->endList]),
+            set::control(array('type' => 'radioList', 'inline' => true, 'rootClass' => 'ml-4', 'items' => $lang->program->endList)),
             on::change('setDate'),
         ),
     ),
