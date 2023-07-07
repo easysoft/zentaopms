@@ -53,8 +53,10 @@ class backBtn extends btn
             'testreport'     => 'testreport-browse,project-testreport',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace',
             'design'         => 'design-browse',
-            'release'        => 'release-browse',
+            'release'        => 'release-browse,release-view',
             'projectrelease' => 'projectrelease-browse',
+            'build'          => 'execution-build,build-view',
+            'projectbuild'   => 'projectbuild-browse,projectbuild-view',
         );
 
         $props = parent::getProps();
