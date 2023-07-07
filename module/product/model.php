@@ -1958,7 +1958,9 @@ class productModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('closed')
             ->andWhere('closedReason')->eq('done')
+            ->groupBy('product')
             ->fetchPairs('product', 'finish');
+
         foreach($products as $productID => $product) $products[$productID]->finishClosedStories = isset($finishClosedStory[$productID]) ? $finishClosedStory[$productID] : 0;
 
         return $products;
