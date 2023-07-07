@@ -1,168 +1,390 @@
 pipeline {
   agent {
     kubernetes {
-      inheritFrom "build-docker code-scan xuanim mysql-server"
+      inheritFrom "xuanim"
     }
+  }
+
+  options {
+    skipDefaultCheckout()
   }
 
   environment {
-    ZENTAO_VERSION = """${sh(
-                            returnStdout: true,
-                            script: 'cat VERSION'
-    ).trim()}"""
-    MYSQL_SERVER_HOST = """${sh(
-                            returnStdout: true,
-                            script: 'hostname -I'
-    ).trim()}"""
-    MYSQL_ROOT_PASSWORD = 'pass4ci'
+    ZENTAO_RELEASE_PATH = "${WORKSPACE}/release"
 
-    MIDDLE_IMAGE_REPO = "hub.qc.oop.cc/zentao-ztf"
-    MIDDLE_IMAGE_TAG = """${sh(
-                            returnStdout: true,
-                            script: 'echo $BUILD_ID-${GIT_COMMIT}'
-    ).trim()}"""
+    XUANXUAN_SRC_PATH = "${WORKSPACE}/xuanxuan"
+    
+    SRC_ZDOO_PATH = "${WORKSPACE}/zdoo"
+    SRC_ZDOOEXT_PATH = "${WORKSPACE}/zdooext"
+
+    SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
   }
 
   stages {
-     stage("checkout code") {
-       steps {
-           echo "checkout code success"
-       }
-     }
 
-     stage('Sonar Scanner') {
-       parallel {
-         stage('SonarQube') {
-           steps {
-             container('sonar') {
-                 withSonarQubeEnv('sonarqube') {
-                     sh 'git config --global --add safe.directory $(pwd)'
-                     sh 'sonar-scanner -Dsonar.inclusions=$(git diff --name-only HEAD~1|tr "\\n" ",") -Dsonar.analysis.user=$(git show -s --format=%an)'
-               }
-             }
-           }
-           post {
-             success {
-                 container('xuanimbot') {
-                     sh 'git config --global --add safe.directory $(pwd)'
-                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner success" --debug --custom'
-                 }
-             }
-             failure {
-                 container('xuanimbot') {
-                     sh 'git config --global --add safe.directory $(pwd)'
-                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner failure" --debug --custom'
-                 }
+    stage("Package") {
+      when {
+        allOf {
+          buildingTag()
+        }
+        beforeAgent true
+      }
+
+      agent {
+        kubernetes {
+          inheritFrom "zentao-package build-docker xuanim"
+        }
+      }
+
+      environment {
+        MIDDLE_IMAGE_REPO = "hub.qc.oop.cc/zentao-package-ext"
+        MIDDLE_IMAGE_TAG = """${sh(
+                            returnStdout: true,
+                            script: 'date +%y%m%d%H%M-${BUILD_ID}'
+        ).trim()}"""
+      }
+
+      stages {
+        stage("Pull") {
+          steps {
+            checkout scm
+          }
+        }
+
+        stage("PullExt") {
+          environment {
+            XUANVERSION = """${sh(
+                      returnStdout: true,
+                      script: 'cat extension/xuanxuan/XUANVERSION'
+            ).trim()}"""
+          }
+
+          steps {
+            dir('xuanxuan') {
+              checkout scmGit(branches: [[name: "${env.XUANVERSION}"]],
+                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/xuanxuan.git']]
+              )
+            }
+
+            dir('zdoo') {
+              checkout scmGit(branches: [[name: "master"]],
+                extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zdoo.git']]
+              )
+            }
+
+            dir('zdooext') {
+              checkout scmGit(branches: [[name: "master"]],
+                extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zdooext.git']]
+              )
+            }
+
+            dir('zentaoext') {
+              checkout scmGit(branches: [[name: "master"]],
+                extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zentaoext.git']]
+              )
             }
           }
         }
 
-         stage('Build Image') {
-           steps {
-             container('docker') {
-                 sh 'docker build --pull . -f Dockerfile.test --build-arg VERSION=${ZENTAO_VERSION} --build-arg MIRROR=true --build-arg MYSQL_HOST=${MYSQL_SERVER_HOST} --build-arg MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD} -t ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
-                 sh 'docker push ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
-             }
-           }
-           post {
-             success {
-                 echo 'build image success'
-             }
-             failure {
-                 container('xuanimbot') {
-                     sh 'git config --global --add safe.directory $(pwd)'
-                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "build image" --url "${RUN_DISPLAY_URL}" --content "Build unit test image failure" --debug --custom'
-                 }
-             }
-           }
-        }
-      }
-    }
+        stage("Build") {
+          environment {
+            GIT_TAG_BUILD_TYPE = """${sh(
+                              returnStdout: true,
+                              script: 'misc/parse_tag.sh $TAG_NAME type'
+            ).trim()}"""
 
-     stage('Unit Test'){
-      stages{
-        stage('Init') {
-              agent {
-                  kubernetes {
-                      inheritFrom "xuanim"
-                          containerTemplate {
-                              name "zentao"
-                              image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
-                              command "sleep"
-                              args "99d"
-                          }
-                  }
-              }
-              options { skipDefaultCheckout() }
-
-              steps {
-                  container('zentao') {
-                      sh 'initdb.php ; /apps/zentao/test/ztest init'
-                  }
-              }
-              post {
-                success {
-                    sh 'echo "stage unit init success"'
-                }
-                failure {
-                 container('xuanimbot') {
-                     sh 'git config --global --add safe.directory $(pwd)'
-                     sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest init" --url "${RUN_DISPLAY_URL}" --content "Unit test database initialization failed" --debug --custom'
-                 }
-                }
-              }
+            GIT_TAG_BUILD_GROUP = """${sh(
+                              returnStdout: true,
+                              script: 'misc/parse_tag.sh $TAG_NAME group'
+            ).trim()}"""
           }
 
-        stage('Run') {
-            matrix {
-                agent {
-                    kubernetes {
-                       inheritFrom "xuanim"
-                       containerTemplate {
-                           name "zentao"
-                           image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
-                           command "sleep"
-                           args "99d"
-                       }
-                    }
-                }
+          stages {
+            stage("make ciCommon") {
+              steps {
 
+                sh "echo $GIT_TAG_BUILD_TYPE/abc"
+                sh "echo $GIT_TAG_BUILD_GROUP/def"
+                withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http',gitToolName: 'git-tool')]) {
+                  container('package') {
+                    sh 'mkdir ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
+                    sh 'git config --global pull.ff only'
+                    sh 'pwd && ls -l && make ciCommon'
+                    sh 'ls -l ${ZENTAO_RELEASE_PATH}'
+                  }
+                }
+              }
+            }
+
+            stage("encrypt ext code") {
+              steps {
+                container('package') {
+                  sh 'cd $SRC_ZENTAOEXT_PATH && make'
+                  sh 'cp ${ZENTAO_BUILD_PATH}/docker/Dockerfile.release.ext ./Dockerfile.release.ext'
+                }
+                container('docker') {
+                  sh 'docker build --pull -t ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG} -f Dockerfile.release.ext ${ZENTAO_RELEASE_PATH}'
+                  sh 'docker push ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
+                }
+              }
+            }
+
+          }
+        }
+
+        stage("Publish") {
+          environment {
+            PMS_VERSION = """${sh(
+                                returnStdout: true,
+                                script: 'cat ${SRC_ZENTAOEXT_PATH}/VERSION'
+            ).trim()}"""
+            BIZ_VERSION = """${sh(
+                                returnStdout: true,
+                                script: 'cat ${SRC_ZENTAOEXT_PATH}/BIZVERSION'
+            ).trim()}"""
+            MAX_VERSION = """${sh(
+                                returnStdout: true,
+                                script: 'cat ${SRC_ZENTAOEXT_PATH}/MAXVERSION'
+            ).trim()}"""
+
+            GIT_TAG_BUILD_TYPE = """${sh(
+                              returnStdout: true,
+                              script: 'misc/parse_tag.sh $TAG_NAME type'
+            ).trim()}"""
+
+            GIT_TAG_BUILD_GROUP = """${sh(
+                              returnStdout: true,
+                              script: 'misc/parse_tag.sh $TAG_NAME group'
+            ).trim()}"""
+
+            OUTPUT_PKG_PATH = "${ZENTAO_RELEASE_PATH}/output"
+
+            ARTIFACT_REPOSITORY = """${sh(
+                                returnStdout: true,
+                                script: 'echo easycorp-snapshot'
+                ).trim()}"""
+            ARTIFACT_HOST = "nexus.qc.oop.cc"
+            ARTIFACT_PROTOCOL = "https"
+            ARTIFACT_CRED_ID = "nexus-jenkins"
+          }
+
+          stages {
+            stage("Merge and Upload") {
+              matrix {
+                agent {
+                  kubernetes {
+                    containerTemplate {
+                       name "package"
+                       image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
+                       command "sleep"
+                       args "99d"
+                    }
+                    inheritFrom "publish-qiniu"
+                  }
+                }
                 options { skipDefaultCheckout() }
 
                 axes {
+                  axis {
+                    name "ZLANG"
+                    values "cn", "en"
+                  }
+                  axis {
+                    name "PHPVERSION"
+                    values "php5.4_5.6", "php7.0", "php7.1",  "php7.2_7.4", "php8.1", "k8s.php7.2_7.4", "k8s.php8.1"
+                  }
+                }
+                excludes {
+                  exclude {
                     axis {
-                        name "SEQUENCE"
-                        values "P1", "P2", "P3", "P4", "P5", "P6", "P7"
+                      name 'ZLANG'
+                      values 'en'
                     }
+                    axis {
+                      name "PHPVERSION"
+                      values "k8s.php7.2_7.4", "k8s.php8.1"
+                    }
+                  }
                 }
                 stages {
-                    stage("Run") {
-                        steps {
-                            container('zentao') {
-                                sh 'initdb.php config'
-                                sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest ${SEQUENCE} | tee /apps/zentao/test/${SEQUENCE}.log'
-                                sh 'pipeline-unittest.sh /apps/zentao/test/${SEQUENCE}.log'
+                  
+                  stage("frame") {
+                    environment {
+                      ARTIFACT_NAME = """${sh(
+                                returnStdout: true,
+                                script: 'test ${ZLANG} = cn && echo -n zentaopms || echo -n zentaoalm'
+                      ).trim()}"""
+                    }
+
+                    stages {
+                      stage("package zip") {
+                        steps{
+                            echo "${env.ZLANG} <=> ${env.PHPVERSION}"
+                            container('package') {
+                              sh 'mkdir $ZENTAO_RELEASE_PATH'
+                              sh '${ZENTAO_BUILD_PATH}/package.sh zip'
+                              sh 'mkdir $OUTPUT_PKG_PATH'
+                              sh 'env | grep GIT_TAG'
                             }
                         }
-                    }
-                }
-            }
-      post{
-          success{
-              container('xuanimbot') {
-                  sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
-                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test passed" --debug --custom'
-              }
-          }
-          failure{
-              container('xuanimbot') {
+                      }
+
+                      stage("upload zip") {
+                        steps {
+                          nexusArtifactUploader(
+                            nexusVersion: 'nexus3',
+                            protocol: env.ARTIFACT_PROTOCOL,
+                            nexusUrl: env.ARTIFACT_HOST,
+                            groupId: 'zentao.base' + '.' + env.GIT_TAG_BUILD_GROUP,
+                            version: env.PMS_VERSION,
+                            repository: env.ARTIFACT_REPOSITORY,
+                            credentialsId: env.ARTIFACT_CRED_ID,
+                            artifacts: [
+                              [artifactId: env.ARTIFACT_NAME,
+                               classifier: env.PHPVERSION,
+                               file: env.ZENTAO_RELEASE_PATH + '/base.zip',
+                               type: 'zip']
+                            ]
+                          )
+                          nexusArtifactUploader(
+                            nexusVersion: 'nexus3',
+                            protocol: env.ARTIFACT_PROTOCOL,
+                            nexusUrl: env.ARTIFACT_HOST,
+                            groupId: 'zentao.biz' + '.' + env.GIT_TAG_BUILD_GROUP,
+                            version: env.BIZ_VERSION,
+                            repository: env.ARTIFACT_REPOSITORY,
+                            credentialsId: env.ARTIFACT_CRED_ID,
+                            artifacts: [
+                              [artifactId: env.ARTIFACT_NAME,
+                               classifier: env.PHPVERSION,
+                               file: env.ZENTAO_RELEASE_PATH + '/biz.zip',
+                               type: 'zip'],
+                              [artifactId: env.ARTIFACT_NAME + '.update',
+                               classifier: env.PHPVERSION,
+                               file: env.ZENTAO_RELEASE_PATH + '/biz.update.zip',
+                               type: 'zip'] 
+                            ]
+                          )
+                          nexusArtifactUploader(
+                            nexusVersion: 'nexus3',
+                            protocol: env.ARTIFACT_PROTOCOL,
+                            nexusUrl: env.ARTIFACT_HOST,
+                            groupId: 'zentao.max' + '.' + env.GIT_TAG_BUILD_GROUP,
+                            version: env.MAX_VERSION,
+                            repository: env.ARTIFACT_REPOSITORY,
+                            credentialsId: env.ARTIFACT_CRED_ID,
+                            artifacts: [
+                              [artifactId: env.ARTIFACT_NAME,
+                               classifier: env.PHPVERSION,
+                               file: env.ZENTAO_RELEASE_PATH + '/max.zip',
+                               type: 'zip'],
+                              [artifactId: env.ARTIFACT_NAME + '.update',
+                               classifier: env.PHPVERSION,
+                               file: env.ZENTAO_RELEASE_PATH + '/max.update.zip',
+                               type: 'zip'] 
+                            ]
+                          )
+
+                          sh 'mkdir ${OUTPUT_PKG_PATH}/${PMS_VERSION} ${OUTPUT_PKG_PATH}/${BIZ_VERSION} ${OUTPUT_PKG_PATH}/${MAX_VERSION}'
+                          sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.zip'
+                          sh 'mv ${ZENTAO_RELEASE_PATH}/biz.zip ${OUTPUT_PKG_PATH}/${BIZ_VERSION}/${ARTIFACT_NAME}-${BIZ_VERSION}-${PHPVERSION}.zip'
+                          sh 'mv ${ZENTAO_RELEASE_PATH}/biz.update.zip ${OUTPUT_PKG_PATH}/${BIZ_VERSION}/${ARTIFACT_NAME}.update-${BIZ_VERSION}-${PHPVERSION}.zip'
+                          sh 'mv ${ZENTAO_RELEASE_PATH}/max.zip ${OUTPUT_PKG_PATH}/${MAX_VERSION}/${ARTIFACT_NAME}-${MAX_VERSION}-${PHPVERSION}.zip'
+                          sh 'mv ${ZENTAO_RELEASE_PATH}/max.update.zip ${OUTPUT_PKG_PATH}/${MAX_VERSION}/${ARTIFACT_NAME}.update-${MAX_VERSION}-${PHPVERSION}.zip'
+                        }
+                      } // End upload zip
+
+                      stage("syspack") {
+                        when {
+                          buildingTag()
+                          // environment name: 'GIT_TAG_BUILD_TYPE', value: 'release'
+                        }
+                        steps{
+                          sh 'env | grep GIT_TAG'
+                            container('package') {
+                              sh '${ZENTAO_BUILD_PATH}/package.sh deb'
+                              sh '${ZENTAO_BUILD_PATH}/package.sh rpm'
+                            }
+                        }
+                      }
+
+                      stage("upload syspack") {
+                        when {
+                          environment name: 'GIT_TAG_BUILD_TYPE', value: 'release'
+                        }
+
+                        steps {
+                          nexusArtifactUploader(
+                            nexusVersion: 'nexus3',
+                            protocol: env.ARTIFACT_PROTOCOL,
+                            nexusUrl: env.ARTIFACT_HOST,
+                            groupId: 'zentao.pms' + '.' + env.GIT_TAG_BUILD_GROUP,
+                            version: env.PMS_VERSION,
+                            repository: env.ARTIFACT_REPOSITORY,
+                            credentialsId: env.ARTIFACT_CRED_ID,
+                            artifacts: [
+                              [artifactId: env.ARTIFACT_NAME,
+                               classifier: env.PHPVERSION + '-1.noarch',
+                               file: env.ZENTAO_RELEASE_PATH + '/zentao.rpm',
+                               type: 'rpm'],
+                              [artifactId: env.ARTIFACT_NAME,
+                               classifier: env.PHPVERSION + '.1.all',
+                               file: env.ZENTAO_RELEASE_PATH + '/zentao.deb',
+                               type: 'deb']
+                            ]
+                          )
+
+                          sh 'mv ${ZENTAO_RELEASE_PATH}/zentao.rpm ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}-1.noarch.rpm'
+                          sh 'mv ${ZENTAO_RELEASE_PATH}/zentao.deb ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.1.all.deb'
+                        }
+                      } // End upload syspack cn
+
+                      stage("Upload Qiniu") {
+                        when {
+                          environment name: 'GIT_TAG_BUILD_TYPE', value: 'release'
+                        }
+
+                        environment {
+                          QINIU_BUCKET = "qisytest"
+                          OBJECT_KEY_PREFIX = "zentao/"
+                          QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
+                          QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
+                        }
+
+                        steps {
+                          sh 'ls -l ${OUTPUT_PKG_PATH}'
+                          container('qiniu') {
+                            sh "qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader"
+                            sh "qshell qupload2 --bucket ${QINIU_BUCKET} --overwrite --src-dir ${OUTPUT_PKG_PATH} --key-prefix ${OBJECT_KEY_PREFIX}"
+                          }
+                        }
+                      }
+
+                    } // end stages
+                  } // end stage frame
+
+                } // End matrix stages
+              } // End matrix
+
+            } // End Merge and Upload Max
+
+            stage("Notice") {
+              steps {
+                container('xuanimbot') {
                   sh 'git config --global --add safe.directory $(pwd)'
-                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test failed" --debug --custom'
+                  sh '/usr/local/bin/xuanimbot  --users "qishiyao" --groups "fced7fb3-0d48-449f-b408-ecae52a50f89" --title "zentao build with tag ${TAG_NAME} success" --url ""${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/#browse/browse:${ARTIFACT_REPOSITORY}:zentao"" --content "zentaopms build success, click buttom below for browse artifacts" --debug --custom'
+                }
               }
+            }
           }
-        }
-      }//End unittest
-    }
-    }
-  } // End Root Stages
-} // End pipeline
+        } // end publish
+      }
+    } // end package
+
+  }
+
+}
+
