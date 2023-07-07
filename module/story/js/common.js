@@ -104,7 +104,7 @@ function getStatus(method, params)
 function loadURS()
 {
     var productID       = $('#product').val();
-    var branchID        = $('#branch').val();
+    var branchID        = $('#branch').val() ? $('#branch').val() : 0;
     var requirementList = $('#URS').val();
     requirementList     = requirementList ? requirementList.join(',') : '';
 
