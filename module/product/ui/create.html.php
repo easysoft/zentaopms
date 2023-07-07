@@ -82,8 +82,6 @@ foreach($fields as $field => $attr)
     $formItems[$field] = $formGroup;
 }
 
-$formItems['program']->add(on::change('setParentProgram(e.target);'));
-$formItems['acl']->add(on::change('setWhite(e.target);'));
 if(empty($programID)) $formItems['line'] = formRow(set::hidden(true), $formItems['line']);
 
 /* Set whitelist box. */
@@ -134,6 +132,8 @@ $formItems['whitelist'] = formRow
 formPanel
 (
     set::title($title),
+    on::change('#program', 'setParentProgram'),
+    on::change('#acl', 'setWhite(e.target)'),
     $formItems
 );
 
