@@ -52,7 +52,7 @@ foreach($projectStats as $project)
 }
 
 $summary     = $browseType == 'all' ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));
-$footToolbar = common::hasPriv('project', 'batchEdit') ? array('items' => array(array('text' => $lang->edit, 'class' => 'btn batch-btn size-sm primary', 'data-url' => $this->createLink('project', 'batchEdit', "from=pgmproject&programID={$programID}")))) : null;
+$footToolbar = common::hasPriv('project', 'batchEdit') ? array('items' => array(array('text' => $lang->edit, 'class' => 'btn batch-btn size-sm secondary', 'data-url' => $this->createLink('project', 'batchEdit', "from=pgmproject&programID={$programID}")))) : null;
 
 dtable
 (
