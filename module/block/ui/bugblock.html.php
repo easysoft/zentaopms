@@ -21,7 +21,7 @@ if(!$longBlock)
 panel
 (
     set::title($block->title),
-    set('class', 'bug-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set('class', 'bug-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
     to::headingActions
     (
@@ -35,11 +35,12 @@ panel
     ),
     dtable
     (
-        set::className('borderless'),
-        set::fixedLeftWidth('50%'),
+        set::id('bug'),
+        set::height(318),
+        set::bordered(false),
+        set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->bug->dtable->fieldList)),
         set::data(array_values($bugs)),
-        set::horzScrollbarPos('inside'),
     ),
 );
 
