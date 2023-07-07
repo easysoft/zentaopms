@@ -475,7 +475,7 @@ class jobModel extends model
 
         if(!$job) return false;
 
-        $repo = $this->loadModel('repo')->getRepoById($job->repo);
+        $repo = $this->loadModel('repo')->getByID($job->repo);
         $now  = helper::now();
 
         /* Save compile data. */

@@ -78,6 +78,7 @@ function arrowTabs(domID, shift, hideRightBtn)
     {
         $leftBtn.hide();
         $rightBtn.hide();
+        $('#' + domID + ' > .nav-tabs')[0].style.transform = 'translateX(0px)';
         return;
     }
 
