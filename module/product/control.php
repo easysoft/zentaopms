@@ -882,7 +882,7 @@ class product extends control
         $status   = empty($this->config->CRProduct) ? 'noclosed' : 'all';
         $products = $this->product->getProductPairsByProject($executionID, $status);
 
-        if(empty($products)) return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
+        if(empty($products)) return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID", '', 'true'), 'project');
         return print(html::select('product', $products, '', "onchange='loadBranches();' class='form-control chosen' required"));
     }
 

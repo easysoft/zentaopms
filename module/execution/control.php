@@ -3025,11 +3025,10 @@ class execution extends control
      * Manage products.
      *
      * @param  int    $executionID
-     * @param  string $from
      * @access public
      * @return void
      */
-    public function manageProducts($executionID, $from = '')
+    public function manageProducts($executionID)
     {
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);

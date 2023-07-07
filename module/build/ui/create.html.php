@@ -77,7 +77,7 @@ if(!$hidden)
             set::id('productBox'),
             set::label($lang->build->product),
             setClass('items-center'),
-            html(sprintf($lang->build->noProduct, helper::createLink('execution', 'manageproducts', "executionID={$executionID}&from=buildCreate", '', true), $app->tab)),
+            html(sprintf($lang->build->noProduct, helper::createLink('execution', 'manageproducts', "executionID={$executionID}", '', true), $app->tab)),
         );
     }
     $productRow = formRow(
