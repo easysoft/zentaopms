@@ -3683,6 +3683,7 @@ class storyModel extends model
      */
     public function mergeReviewer($stories, $isObject = false)
     {
+        $rawQuery = $this->dao->get();
         if($isObject)
         {
             $story   = $stories;
@@ -3734,6 +3735,8 @@ class storyModel extends model
                 }
             }
         }
+
+        $this->dao->sqlobj->sql = $rawQuery;
 
         if($isObject) return $stories[$story->id];
         return $stories;

@@ -617,4 +617,10 @@ modal
     )
 );
 
+floatPreNextBtn
+(
+    !empty($preAndNext->pre)  ? set::preLink(createLink('story', 'view', "id={$preAndNext->pre->id}"))   : null,
+    !empty($preAndNext->next) ? set::nextLink(createLink('story', 'view', "id={$preAndNext->next->id}")) : null
+);
+
 render();

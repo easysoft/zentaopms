@@ -66,3 +66,4 @@ $config->index->oldPages[] = 'dev-editor';
 $config->index->oldPages[] = 'stage-settype';
 $config->index->oldPages[] = 'action-trash';
 $config->index->oldPages[] = 'dept-browse';
+$config->index->oldPages[] = 'story-report';
