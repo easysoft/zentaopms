@@ -1436,12 +1436,13 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX `parent` ON `zt_project` (`parent`);
-CREATE INDEX `begin`  ON `zt_project` (`begin`);
-CREATE INDEX `end`    ON `zt_project` (`end`);
-CREATE INDEX `status` ON `zt_project` (`status`);
-CREATE INDEX `acl`    ON `zt_project` (`acl`);
-CREATE INDEX `order`  ON `zt_project` (`order`);
+CREATE INDEX `parent`  ON `zt_project` (`parent`);
+CREATE INDEX `begin`   ON `zt_project` (`begin`);
+CREATE INDEX `end`     ON `zt_project` (`end`);
+CREATE INDEX `status`  ON `zt_project` (`status`);
+CREATE INDEX `acl`     ON `zt_project` (`acl`);
+CREATE INDEX `order`   ON `zt_project` (`order`);
+CREATE INDEX `project` ON `zt_project` (`project`);
 
 -- DROP TABLE IF EXISTS `zt_projectadmin`;
 CREATE TABLE IF NOT EXISTS `zt_projectadmin` (
