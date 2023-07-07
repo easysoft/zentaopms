@@ -1356,7 +1356,7 @@ class testtaskModel extends model
             $postReals   = $postData->reals[$caseID];
 
             $caseResult  = $result ? $result : 'pass';
-            if($postData->node) $caseResult = '';
+            if(!empty($postData->node)) $caseResult = '';
             $stepResults = array();
             if($dbSteps)
             {
