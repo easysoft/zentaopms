@@ -9,6 +9,7 @@ class uploadImgs extends wg
         'showSize?: bool=true',            // 是否展示文件大小
         'multiple?: bool=true',            // 是否启用多文件上传
         'uploadText?: string',             // 上传按钮文本
+        'uploadIcon?: string',             // 上传按钮图标
         'renameBtn?: bool=true',           // 是否启用重命名按钮
         'renameIcon?: string',             // 重命名图标
         'renameText?: string',             // 重命名文本

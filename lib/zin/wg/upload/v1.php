@@ -12,6 +12,7 @@ class upload extends wg
         'multiple?: bool=true',            // 是否启用多文件上传
         'listPosition?: string="bottom"',  // 文件列表位置
         'uploadText?: string',             // 上传按钮文本
+        'uploadIcon?: string',             // 上传按钮图标
         'renameBtn?: bool=true',           // 是否启用重命名按钮
         'renameIcon?: string',             // 重命名图标
         'renameText?: string',             // 重命名文本

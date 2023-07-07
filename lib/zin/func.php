@@ -1443,6 +1443,7 @@ function floatPreNextBtn(): floatPreNextBtn
  * ?bool             multiple=true
  * ?string           listPosition="bottom"
  * ?string           uploadText
+ * ?string           uploadIcon
  * ?bool             renameBtn=true
  * ?string           renameIcon
  * ?string           renameText
@@ -1481,6 +1482,7 @@ function upload(): upload
  * ?bool             showSize=true
  * ?bool             multiple=true
  * ?string           uploadText
+ * ?string           uploadIcon
  * ?bool             renameBtn=true
  * ?string           renameIcon
  * ?string           renameText
