@@ -24,7 +24,7 @@ function loadCommit()
         return false;
     }
 
-    loadPage($.createLink('design', 'linkCommit', "designID=" + designID + '&repoID=' + repoID + '&begin=' + begin + '&end=' + end));
+    loadModal($.createLink('design', 'linkCommit', "designID=" + designID + '&repoID=' + repoID + '&begin=' + begin + '&end=' + end), 'viewCommitModal');
 }
 
 $(document).off('click','.batch-btn').on('click', '.batch-btn', function()

@@ -80,17 +80,25 @@ else
         )
     );
 
+    $footToolbar['items'][] = array(
+        'text' => $lang->save,
+        'class' => 'btn batch-btn secondary size-sm',
+        'data-url' => inlink('linkCommit', "designID={$designID}&repoID={$repoID}&begin={$begin}&end={$end}"),
+    );
+
     dtable
     (
         set::className('mt-2'),
         set::userMap($users),
         set::cols($config->design->linkcommit->dtable->fieldList),
         set::data($revisions),
+        set::footToolbar($footToolbar),
+        set::checkInfo(jsRaw('function(checkedIDList){return \'\';}')),
         set::footPager(
-            usePager(),
-            set::recPerPage($pager->recPerPage),
-            set::recTotal($pager->recTotal),
-            set::linkCreator(helper::createLink('design', 'linkCommit', "designID={$designID}&repoID={$repoID}&begin={$begin}&end={$end}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={pageID}")),
+            usePager
+            (
+                array('linkCreator' => helper::createLink('design', 'linkCommit', "designID={$designID}&repoID={$repoID}&begin={$begin}&end={$end}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}")),
+            ),
         ),
     );
 }
