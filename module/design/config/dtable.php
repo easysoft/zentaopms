@@ -9,7 +9,7 @@ $config->design->viewcommit->dtable = new stdclass();
 $config->design->viewcommit->actionList['unlinkCommit']['icon']         = 'unlink';
 $config->design->viewcommit->actionList['unlinkCommit']['hint']         = $lang->design->unlinkCommit;
 $config->design->viewcommit->actionList['unlinkCommit']['url']          = helper::createLink('design', 'unlinkCommit', "designID=%s&commitID={id}");
-$config->design->viewcommit->actionList['unlinkCommit']['class']        = 'ajax-submit';
+$config->design->viewcommit->actionList['unlinkCommit']['className']    = 'ajax-submit';
 $config->design->viewcommit->actionList['unlinkCommit']['data-confirm'] = $lang->design->confirmUnlink;
 
 $config->design->dtable->fieldList['id']['title'] = $lang->idAB;

@@ -148,10 +148,10 @@ $config->my->score->dtable->fieldList['desc']['type']  = 'desc';
 
 $config->my->task = new stdclass();
 $config->my->task->actionList = array();
-$config->my->task->actionList['confirmStoryChange']['icon']  = 'search';
-$config->my->task->actionList['confirmStoryChange']['text']  = $lang->task->confirmStoryChange;
-$config->my->task->actionList['confirmStoryChange']['hint']  = $lang->task->confirmStoryChange;
-$config->my->task->actionList['confirmStoryChange']['url']   = array('module' => 'task', 'method' => 'confirmStoryChange', 'params' => 'taskID={id}');
+$config->my->task->actionList['confirmStoryChange']['icon']      = 'search';
+$config->my->task->actionList['confirmStoryChange']['text']      = $lang->task->confirmStoryChange;
+$config->my->task->actionList['confirmStoryChange']['hint']      = $lang->task->confirmStoryChange;
+$config->my->task->actionList['confirmStoryChange']['url']       = array('module' => 'task', 'method' => 'confirmStoryChange', 'params' => 'taskID={id}');
 $config->my->task->actionList['confirmStoryChange']['className'] = 'ajax-submit';
 
 $config->my->task->actionList['start']['icon']        = 'play';

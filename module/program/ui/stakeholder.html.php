@@ -68,11 +68,11 @@ $cols = $this->loadModel('datatable')->getSetting('stakeholder');
 
 /* Set list and menu of actions to customize the actions of stakeholder in program module. */
 $cols['actions']['list'] = array('unlinkStakeholder' => array(
-    'icon'  => 'unlink',
-    'class' => 'ajax-submit',
-    'text'  => $lang->program->unlinkStakeholder,
-    'hint'  => $lang->program->unlinkStakeholder,
-    'url'   => $this->createLink('program', 'unlinkStakeholder', "id={id}&programID={$programID}&confirm=no"
+    'icon'      => 'unlink',
+    'className' => 'ajax-submit',
+    'text'      => $lang->program->unlinkStakeholder,
+    'hint'      => $lang->program->unlinkStakeholder,
+    'url'       => $this->createLink('program', 'unlinkStakeholder', "id={id}&programID={$programID}&confirm=no"
     )
 ));
 $cols['actions']['menu'] = array('unlinkStakeholder');
