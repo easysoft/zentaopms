@@ -11,6 +11,7 @@ require_once dirname(__DIR__) . DS . 'radiolist' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'select' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'picker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'datepicker' . DS . 'v1.php';
 
 class control extends wg
 {
@@ -117,6 +118,14 @@ class control extends wg
         return new radioList
         (
             set::inline(true),
+            set($this->props->skip('type'))
+        );
+    }
+
+    protected function buildDate(): wg
+    {
+        return new datePicker
+        (
             set($this->props->skip('type'))
         );
     }
