@@ -60,9 +60,10 @@ class backBtn extends btn
         );
 
         $props = parent::getProps();
-        if($this->prop('back') != 'APP')
+        $back = $this->prop('back');
+        if($back != 'APP')
         {
-            $props['data-back'] = $this->prop('back');
+            $props['data-back'] = $back;
         }
         elseif(isset($backs[$app->rawModule]))
         {
@@ -74,9 +75,9 @@ class backBtn extends btn
                 $props['data-url'] = $backLinks[0];
             }
         }
-        elseif(!$this->prop('back'))
+        else
         {
-            $props['data-back'] = 'APP';
+            $props['data-back'] = empty($back) ? 'APP' : $back;
         }
 
         return $props;
