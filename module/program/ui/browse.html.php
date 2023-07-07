@@ -96,7 +96,7 @@ toolbar
     ])),
 );
 
-$footToolbar = common::hasPriv('project', 'batchEdit') ? array('items' => array(array('text' => $lang->project->edit, 'class' => 'btn batch-btn size-sm primary', 'data-url' => createLink('project', 'batchEdit')))) : null;
+$footToolbar = common::hasPriv('project', 'batchEdit') ? array('items' => array(array('text' => $lang->project->edit, 'class' => 'btn batch-btn size-sm secondary', 'data-url' => createLink('project', 'batchEdit')))) : null;
 dtable
 (
     set::cols($cols),

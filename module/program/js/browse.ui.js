@@ -48,7 +48,7 @@ $(document).on('click', '.batch-btn', function()
 
     const postData = new FormData();
     checkedList.forEach((id) => postData.append('projectIdList[]', id));
-    postAndLoadPage($(this).data('url'), postData);
+    postAndLoadPage($(this).data('url'), postData, '', {app: 'project'});
 })
 
 /* Put the checked projects to cookie for exporting. */
