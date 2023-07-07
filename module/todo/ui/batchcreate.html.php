@@ -54,9 +54,37 @@ foreach(explode(',', $showFields) as $field)
 formBatchPanel
 (
     set::id('batchCreateTodoForm'),
+    set::title($lang->todo->batchCreate . $lang->todo->common),
     set::url(createLink('todo', 'batchEdit', "from=todoBatchEdit&type={$type}&userID={$userID}&status={$status}")),
     on::change('[data-name="type"]', 'setNameCell'),
     on::click('.time-check', "$(event.target).closest('.input-group').find('.time-input').prop('disabled', !!event.target.checked)"),
+    set::headingClass('justify-start'),
+    to::headingActions
+    (
+        inputGroup
+        (
+            span
+            (
+                setClass('input-group-addon'),
+                $lang->todo->date
+            ),
+            input
+            (
+                set::type('date'),
+                set::name('date'),
+                set::value($date),
+            ),
+            span
+            (
+                setClass('input-group-addon'),
+                checkBox
+                (
+                    set::name('switchTime'),
+                    $lang->todo->periods['future'],
+                )
+            ),
+        ),
+    ),
     formBatchItem
     (
         set::name('id'),
