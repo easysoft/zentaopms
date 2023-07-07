@@ -33,10 +33,11 @@ div
     ),
 );
 
-$count     = count($results);
-$trs       = array();
-$trCount   = 1;
-$failCount = 0;
+$count      = count($results);
+$trs        = array();
+$fileModals = array();
+$trCount    = 1;
+$failCount  = 0;
 foreach($results as $i => $result)
 {
     $class     = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : '')));
@@ -111,6 +112,12 @@ foreach($results as $i => $result)
         ),
     );
 
+    $fileModals[] = modal
+    (
+        set::id("caseResult{$result->id}"),
+        !empty($result->files) ? fileList(set::files($result->files)) : '',
+    );
+
     $stepID = $childID = 0;
     $stepResultTrs = array();
     foreach($result->stepResults as $key => $stepResult)
@@ -152,11 +159,16 @@ foreach($results as $i => $result)
                 setClass('text-center'),
                 !empty($stepResult['files']) ? h::a
                 (
-                    set::href("#caseResult{$modalID}"),
+                    set::href("#stepResult{$modalID}"),
                     set('data-toggle', 'modal'),
                     $lang->files . $fileCount,
                 ) : '',
             ) : h::td();
+            $fileModals[] = modal
+            (
+                set::id("stepResult{$modalID}"),
+                !empty($stepResult['files']) ? fileList(set::files($stepResult['files'])) : '',
+            );
         }
 
         $stepResultTrs[] = h::tr
@@ -193,11 +205,12 @@ foreach($results as $i => $result)
                         setClass('step-item-id mr-2'),
                         "{$stepID}.{$childID}",
                     ) : '',
-                    isset($stepResult['desc']) ? html(nl2br($stepResult['desc'])) : '',
+                    isset($stepResult['desc']) ? nl2br($stepResult['desc']) : '',
                 ),
             ),
             $itemTds,
         );
+
         $childID ++;
     }
     $stepResultTrs[] = $result->caseResult == 'fail' && common::hasPriv('testcase', 'createBug') ? h::tr
@@ -316,12 +329,6 @@ foreach($results as $i => $result)
                         $stepResultTrs,
                     ),
                 ),
-                modal
-                (
-                    set::id("stepResult{$result->id}-{$stepID}"),
-                    set::title($lang->files),
-                    !empty($stepResult['files']) ? fileList(set::files($stepResult['files'])) : '',
-                ),
             ),
         ),
     );
@@ -356,6 +363,7 @@ div
             ) : '',
             $trs,
         ),
+        $fileModals,
     ),
 );
 jsVar('bugCreateParams', $linkParams);

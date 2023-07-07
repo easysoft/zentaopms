@@ -22,53 +22,235 @@ modalHeader
     set::entityID($caseID),
 );
 
+$stepTrs    = array();
+$fileModals = array();
+if($confirm != 'yes')
+{
+    if(empty($run->case->steps))
+    {
+        $step = new stdclass();
+        $step->id     = 0;
+        $step->parent = 0;
+        $step->case   = $run->case->id;
+        $step->type   = 'step';
+        $step->desc   = '';
+        $step->expect = '';
+        $run->case->steps[] = $step;
+    }
+    $stepID = $childID = 0;
+    foreach($run->case->steps as $key => $step)
+    {
+        $stepClass = "step-{$step->type}";
+        if($step->type == 'group' or $step->type == 'step')
+        {
+            $stepID ++;
+            $childID = 0;
+        }
+
+        $itemTds = array();
+        if($step->type != 'group')
+        {
+            $itemTds[] = h::td
+            (
+                setClass('text-left'),
+                nl2br(zget($step, 'expect', '')),
+            );
+            $itemTds[] = h::td
+            (
+                setClass("text-center"),
+                select
+                (
+                    on::change('checkStepValue'),
+                    set::name("steps[{$step->id}]"),
+                    set::items($lang->testcase->resultList),
+                    set::value('pass'),
+                ),
+            );
+            $itemTds[] = h::td
+            (
+                h::table
+                (
+                    setClass('w-full'),
+                    h::tr
+                    (
+                        h::td
+                        (
+                            setClass('p-0 bd-0'),
+                            h::textarea
+                            (
+                                on::keyup('realChange'),
+                                setClass('leading-4 w-full'),
+                                set('rows', '1'),
+                                set::name("reals[{$step->id}]"),
+                                nl2br(zget($step, 'real', '')),
+                            )
+                        ),
+                        h::td
+                        (
+                            setClass('p-0 bd-0 text-right'),
+                            width('50px'),
+                            btn
+                            (
+                                setClass('ml-4'),
+                                set::url("#fileModal{$step->id}"),
+                                set('data-toggle', 'modal'),
+                                set('title', $lang->testtask->files),
+                                set::icon('paper-clip'),
+                            ),
+                        ),
+                    ),
+                ),
+            );
+        }
+
+        $stepTrs[] = h::tr
+        (
+            setClass("step {$stepClass}"),
+            h::th
+            (
+                setClass('step-id'),
+                $stepID,
+            ),
+            h::td
+            (
+                setClass('text-left'),
+                $step->type == 'group' ? set('colspan', '4') : '',
+                div
+                (
+                    setClass('inputGroup'),
+                    $step->type == 'item' ? h::span
+                    (
+                        setClass('step-item-id mr-2'),
+                        "{$stepID}.{$childID}",
+                    ) : '',
+                    nl2br(zget($step, 'desc', '')),
+                ),
+            ),
+            $itemTds,
+        );
+
+        $childId ++;
+
+        $fileModals[] = modal
+        (
+            set::id("fileModal{$step->id}"),
+            set::title($lang->testtask->files),
+            upload
+            (
+                set::name("files{$step->id}[]"),
+            ),
+            div
+            (
+                setClass('text-center'),
+                btn
+                (
+                    setClass('btn-wide primary'),
+                    set('data-dismiss', 'modal'),
+                    $lang->save,
+                ),
+            ),
+        );
+    }
+}
+
+
 form
 (
     set::actions(array()),
     h::table
     (
         setClass('table bordered'),
-        h::tr
+        h::thead
         (
-            set('colspan', '5'),
-            h::td
+            h::tr
             (
-                h::strong($lang->testcase->precondition),
-                h::br(),
-                nl2br($run->case->precondition),
+                h::td
+                (
+                    set('colspan', '5'),
+                    h::strong($lang->testcase->precondition),
+                    h::br(),
+                    nl2br(zget($run->case, 'precondition', '')),
+                ),
             ),
-        ),
-        h::tr
-        (
-            set('colspan', '5'),
-            h::td
+            $confirm != 'yes' ? h::tr
             (
-                setClass('flex justify-center gap-x-4'),
-                $preCase ? h::a
+                h::td
                 (
-                    setClass('btn btn-wide'),
-                    set::id('pre'),
-                    set::href(createLink('testcase', 'runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}")),
-                    $lang->testtask->pre,
-                ) : '',
-                $run->case->status != 'wait' && $confirm != 'yes' ? h::a
+                    width('50px'),
+                    $lang->testcase->stepID,
+                ),
+                h::td
                 (
-                    setClass('btn primary btn-wide'),
-                    set::id('submit'),
-                    set::href(createLink('testcase', 'runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}")),
-                    $lang->save,
-                ) : '',
-                $preCase ? h::a
+                    width('cal(30%)'),
+                    $lang->testcase->stepDesc,
+                ),
+                h::td
                 (
-                    setClass('btn btn-wide'),
-                    set::id('next'),
-                    set::href(createLink('testcase', 'runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}")),
-                    $lang->testtask->pre,
-                ) : '',
+                    width('calc(30%)'),
+                    $lang->testcase->stepExpect,
+                ),
+                h::td
+                (
+                    width('100px'),
+                    $lang->testcase->result,
+                ),
+                h::td
+                (
+                    $lang->testcase->real,
+                ),
+            ) : '',
+        ),
+        h::tbody
+        (
+            $stepTrs,
+            h::tr
+            (
+                h::td
+                (
+                    set('colspan', '5'),
+                    div
+                    (
+                        setClass('text-center'),
+                        $preCase ? h::a
+                        (
+                            setClass('btn btn-wide w-24'),
+                            set::id('pre'),
+                            set::href(createLink('testtask', 'runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}")),
+                            $lang->testtask->pre,
+                        ) : '',
+                        $run->case->status != 'wait' && $confirm != 'yes' ? btn
+                        (
+                            setClass('primary btn-wide w-24 mx-6'),
+                            set::btnType('submit'),
+                            $lang->save,
+                        ) : '',
+                        $nextCase ? h::a
+                        (
+                            setClass('btn btn-wide w-24'),
+                            set::id('next'),
+                            set::href(createLink('testtask', 'runCase', "runID={$nextCase['runID']}&caseID={$nextCase['caseID']}&version={$nextCase['version']}")),
+                            $lang->testtask->next,
+                        ) : '',
+                        input
+                        (
+                            setClass('hidden'),
+                            set::name('case'),
+                            set::value($run->case->id),
+                        ),
+                        input
+                        (
+                            setClass('hidden'),
+                            set::name('version'),
+                            set::value($run->case->currentVersion),
+                        ),
+                    ),
+                ),
             ),
         ),
     ),
+    $fileModals,
 );
+
 div
 (
     setClass('main'),
@@ -78,6 +260,8 @@ div
         set::id('casesResults'),
     ),
 );
+
+set::id('runCaseModal');
 
 render();
 

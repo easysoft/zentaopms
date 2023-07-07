@@ -1236,15 +1236,17 @@ class testtask extends control
         if(!empty($_POST))
         {
             $caseResult = $this->testtask->createResult($runID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $taskID = empty($run->task) ? 0 : $run->task;
             $this->loadModel('action')->create('case', $caseID, 'run', '', $taskID);
             if($caseResult == 'fail')
             {
+                $link = $this->createLink('testtask', 'results',"runID=$runID&caseID=$caseID&version=$version");
 
-                $response['result']  = 'success';
-                $response['locate']  = $this->createLink('testtask', 'results',"runID=$runID&caseID=$caseID&version=$version");
+                $response['result']   = 'success';
+                $response['message']  = $this->lang->saveSuccess;
+                $response['callback'] = "loadModal('$link', 'runCaseModal')";
                 return $this->send($response);
             }
             else
@@ -1257,17 +1259,18 @@ class testtask extends control
                     $nextRunID   = $runID ? $preAndNext->next->id : 0;
                     $nextCaseID  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
                     $nextVersion = $preAndNext->next->version;
+                    $link        = inlink('runCase', "runID={$nextRunID}&caseID={$nextCaseID}&version={$nextVersion}");
 
-                    $response['result'] = 'success';
-                    $response['next']   = 'success';
-                    $response['locate'] = inlink('runCase', "runID=$nextRunID&caseID=$nextCaseID&version=$nextVersion");
+                    $response['result']   = 'success';
+                    $response['message']  = $this->lang->saveSuccess;
+                    $response['callback'] = "loadModal('$link', 'runCaseModal')";
                     return $this->send($response);
                 }
                 else
                 {
-                    $response['result'] = 'success';
-                    $response['locate'] = 'reload';
-                    $response['target'] = 'parent';
+                    $response['result']     = 'success';
+                    $response['load']       = true;
+                    $response['closeModal'] = true;
                     return $this->send($response);
                 }
             }
