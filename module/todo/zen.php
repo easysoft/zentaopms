@@ -180,7 +180,7 @@ class todoZen extends todo
 
         if($todo->end < $todo->begin)
         {
-            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            dao::$errors['end'] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
             return false;
         }
 
@@ -539,12 +539,12 @@ class todoZen extends todo
             {
                 if(!$todoData->config['day'])
                 {
-                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
+                    dao::$errors['config[day]'] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
                     return false;
                 }
                 if(!validater::checkInt($todoData->config['day']))
                 {
-                    dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
+                    dao::$errors['config[day]'] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
                     return false;
                 }
             }
@@ -568,7 +568,7 @@ class todoZen extends todo
 
         if($todoData->config['beforeDays'] and !validater::checkInt($todoData->config['beforeDays']))
         {
-            dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
+            dao::$errors['config[beforeDays]'] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
             return false;
         }
         $todoData->config['beforeDays'] = !empty($todoData->config['beforeDays']) ? $todoData->config['beforeDays'] : 0;
