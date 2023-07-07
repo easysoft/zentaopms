@@ -12,18 +12,12 @@ class programMenu extends wg
         'activeClass?: string="active"',
         'activeIcon?: string="check"',
         'activeKey?: string',
-        'closeLink?: string',
-        'onClickItem?: string'
+        'link?: string',
     );
 
     public static function getPageCSS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
-    }
-
-    public static function getPageJS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
     private function buildMenuTree($parent, $parentID)
@@ -33,7 +27,7 @@ class programMenu extends wg
 
         foreach($children as $child)
         {
-            $item = array('key' => $child->id, 'text' => $child->name, 'items' => array());
+            $item = array('id' => $child->id, 'icon' => 'icon-cards-view', 'text' => $child->name, 'items' => array());
             if(isset($child->icon)) $item['icon'] = $child->icon;
 
             $items = $this->buildMenuTree($item['items'], $child->id);
@@ -70,35 +64,12 @@ class programMenu extends wg
         return array_filter($this->programs, function($program) use($id) {return $program->parent == $id;});
     }
 
-    private function getTreeProps()
-    {
-        /* Attach click event function. */
-        $onClickItem = $this->prop('onClickItem');
-        if($onClickItem) $props['onClickItem'] = $onClickItem;
-
-        return $props;
-    }
-
-    private function closeBtn()
-    {
-        $activeKey = $this->prop('activeKey');
-        if(empty($activeKey)) return null;
-
-        return a
-        (
-            set('href', $this->prop('closeLink')),
-            h::i
-            (
-                setClass('icon icon-close p-3 cursor-pointer'),
-                setStyle('color', '#313C52'),
-            )
-        );
-    }
-
     protected function build()
     {
         $this->programs = (array)$this->prop('programs');
         $activeKey      = $this->prop('activeKey');
+        $link           = $this->prop('link');
+        $closeLink      = str_replace('{id}', '0', $link);
         return zui::dropmenu
         (
             set('_id', 'programMenu'),
@@ -107,7 +78,8 @@ class programMenu extends wg
             set::text($this->getTitle($activeKey)),
             set::caret(true),
             set::popClass('popup text-md'),
-            set::data(array('search' => false, 'checkIcon' => true, 'title' => data('lang.product.selectProgram'), 'data' => $this->buildMenuTree(array(), 0), 'link' => '#')),
+            set::onClick(jsRaw("(event) => {if(!event.target.closest('.is-caret')) return; openUrl('$closeLink'); return false}")),
+            set::data(array('search' => false, 'checkIcon' => true, 'title' => data('lang.product.selectProgram'), 'link' => $link, 'data' => $this->buildMenuTree(array(), 0))),
         );
     }
 }

@@ -54,16 +54,9 @@ $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseTy
             'recTotal'   => $recTotal,
             'recPerPage' => $recPerPage,
             'pageID'     => $pageID,
-            'programID'  => '%d'
+            'programID'  => '{id}'
         )
     );
-
-    /* Attach icon to each program. */
-    $programs = array_map(function($program)
-    {
-        $program->icon = 'icon-cards-view';
-        return $program;
-    }, $programList);
 
     return programMenu
     (
@@ -71,10 +64,9 @@ $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseTy
         set(array
         (
             'title'       => $lang->program->all,
-            'programs'    => $programs,
+            'programs'    => $programList,
             'activeKey'   => !empty($programList) ? $programID : null,
-            'closeLink'   => sprintf($programMenuLink, 0),
-            'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
+            'link'        => sprintf($programMenuLink, 0),
         ))
     );
 };
