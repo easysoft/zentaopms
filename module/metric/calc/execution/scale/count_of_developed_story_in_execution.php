@@ -9,7 +9,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_developed_story_in_execution extends baseMetric
+class count_of_developed_story_in_execution extends baseCalc
 {
     public $dao = null;
     public $result = array();

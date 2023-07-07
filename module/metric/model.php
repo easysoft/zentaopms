@@ -107,23 +107,23 @@ class metricModel extends model
      */
     public function getCalcInstanceList()
     {
-        $metricList = $this->getCalcList();
+        $calcList = $this->getCalcList();
 
-        include $this->app->getModuleRoot() . DS . 'metric' . DS . 'func.class.php';
-        $metricInstances = array();
-        foreach($metricList as $id => $metric)
+        include $this->app->getModuleRoot() . DS . 'metric' . DS . 'calc.class.php';
+        $calcInstances = array();
+        foreach($calcList as $id => $calc)
         {
-            $file      = $metric->file;
-            $className = $metric->code;
+            $file      = $calc->file;
+            $className = $calc->code;
 
             require_once $file;
             $metricInstance = new $className;
             $metricInstance->id = $id;
 
-            $metricInstances[$className] = $metricInstance;
+            $calcInstances[$className] = $metricInstance;
         }
 
-        return $metricInstances;
+        return $calcInstances;
     }
 
     /**
@@ -140,42 +140,42 @@ class metricModel extends model
     }
 
     /**
-     * Classify metric by its data set.
+     * Classify calc instance list by its data set.
      *
-     * @param  array  $metricInstances
+     * @param  array  $calcInstanceList
      * @access public
      * @return array
      */
-    public function classifyCalc($metricInstances)
+    public function classifyCalc($calcInstanceList)
     {
-        $classifiedInstances = array();
-        $otherInstances      = array();
-        foreach($metricInstances as $instance)
+        $classifiedCalcList = array();
+        $otherCalcList      = array();
+        foreach($calcInstanceList as $calcInstance)
         {
-            if(empty($instance->dataset))
+            if(empty($calcInstance->dataset))
             {
-                $otherInstances[] = $instance;
+                $otherCalcList[] = $calcInstance;
                 continue;
             }
 
-            $dataset = $instance->dataset;
-            if(!isset($classifiedInstances[$dataset])) $classifiedInstances[$dataset] = array();
-            $classifiedInstances[$dataset][] = $instance;
+            $dataset = $calcInstance->dataset;
+            if(!isset($classifiedCalcList[$dataset])) $classifiedCalcList[$dataset] = array();
+            $classifiedCalcList[$dataset][] = $calcInstance;
         }
-        return array($otherInstances, $classifiedInstances);
+        return array($otherCalcList, $classifiedCalcList);
     }
 
     /**
-     * Unite field list of each metric.
+     * Unite field list of each calc.
      *
-     * @param  array  $metricInstances
+     * @param  array  $calcList
      * @access public
      * @return string
      */
-    public function uniteFieldList($metricInstances)
+    public function uniteFieldList($calcList)
     {
         $fieldList = array();
-        foreach($metricInstances as $metricInstance) $fieldList  = array_merge($fieldList, $metricInstance->fieldList);
+        foreach($calcList as $calcInstance) $fieldList  = array_merge($fieldList, $calcInstance->fieldList);
         return implode(',', array_unique($fieldList));
     }
 }
