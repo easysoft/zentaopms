@@ -17,7 +17,8 @@ $lang->prompt->desc   = 'Description';
 $lang->prompt->model  = 'Model';
 $lang->prompt->module = 'Module';
 
-$lang->ai->nextStep = 'Next';
+$lang->ai->nextStep  = 'Next';
+$lang->ai->goTesting = 'Go testing';
 
 $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = 'Prompt';

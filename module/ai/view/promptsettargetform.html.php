@@ -39,6 +39,7 @@
   .target-form-group .option {padding: 4px 0;}
   .target-form-group .option label {cursor: pointer;}
   .target-form-group .option input {cursor: pointer;}
+  #go-test-btn {margin-left: 16px;}
 </style>
 
 <?php include 'promptdesignprogressbar.html.php';?>
@@ -97,7 +98,10 @@
           </div>
         </div>
         <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
-          <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->nextStep, 'disabled');?></div>
+          <div style='display: flex; justify-content: center;'>
+            <?php echo html::submitButton($lang->ai->nextStep, 'disabled');?>
+            <button type='submit' name='goTesting' value='1' id='go-test-btn' disabled class='btn btn-wide btn-secondary'><?php echo $lang->ai->goTesting;?></button>
+          </div>
         </div>
       </div>
     </div>
@@ -115,7 +119,11 @@ $(function()
   $('.target-form-group .option input').change(function()
   {
     var $selected = $('.target-form-group').find('.option input:checked');
-    if($selected.length > 0) $('#submit').removeAttr('disabled');
+    if($selected.length > 0)
+    {
+      $('#submit').removeAttr('disabled');
+      $('#go-test-btn').removeAttr('disabled');
+    }
   });
   $('.target-form-group .option input:checked').trigger('change');
 });

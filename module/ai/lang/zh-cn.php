@@ -17,7 +17,8 @@ $lang->prompt->desc   = '描述';
 $lang->prompt->model  = '语言模型';
 $lang->prompt->module = '所属分组';
 
-$lang->ai->nextStep = '下一步';
+$lang->ai->nextStep  = '下一步';
+$lang->ai->goTesting = '去调试';
 
 $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = '提词';

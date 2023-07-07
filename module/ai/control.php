@@ -253,6 +253,9 @@ class ai extends control
             $this->ai->updatePrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(!empty($data->goTesting)) return $this->send(array('result' => 'success')); // TODO: go to proper prompt testing page.
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
         }
 
