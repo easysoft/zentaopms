@@ -397,6 +397,7 @@ $config->my->story->actionList['edit']['text']        = $lang->story->edit;
 $config->my->story->actionList['edit']['hint']        = $lang->story->edit;
 $config->my->story->actionList['edit']['url']         = array('module' => 'story', 'method' => 'edit', 'params' => 'storyID={id}');
 $config->my->story->actionList['edit']['data-toggle'] = 'modal';
+$config->my->story->actionList['edit']['data-size']   = 'lg';
 
 $config->my->story->actionList['create']['icon']        = 'sitemap';
 $config->my->story->actionList['create']['text']        = $lang->testcase->create;
@@ -543,8 +544,10 @@ $config->my->testcase->dtable->fieldList['lastRunDate']   = $config->testcase->d
 $config->my->testcase->dtable->fieldList['lastRunResult'] = $config->testcase->dtable->fieldList['lastRunResult'];
 $config->my->testcase->dtable->fieldList['actions']       = $config->testcase->dtable->fieldList['actions'];
 
-$config->my->testcase->dtable->fieldList['actions']['list']['edit']['data-toggle'] = 'modal';
-$config->my->testcase->dtable->fieldList['actions']['list']['edit']['data-size']   = 'lg';
+$config->my->testcase->dtable->fieldList['actions']['list']['edit']['data-toggle']   = 'modal';
+$config->my->testcase->dtable->fieldList['actions']['list']['edit']['data-size']     = 'lg';
+$config->my->testcase->dtable->fieldList['actions']['list']['create']['data-toggle'] = 'modal';
+$config->my->testcase->dtable->fieldList['actions']['list']['create']['data-size']   = 'lg';
 $config->my->testcase->dtable->fieldList['actions']['menu'] = array('runCase', 'runResult', 'edit', 'createBug', 'create');
 
 $config->my->audit = new stdclass();

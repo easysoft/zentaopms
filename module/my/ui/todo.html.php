@@ -14,7 +14,7 @@ jsVar('changeDateLabel', $lang->todo->changeDate);
 featureBar
 (
     set::current($type),
-    set::linkParams('date={key}'),
+    set::linkParams('type={key}'),
     inputGroup
     (
         set::class('ml-4'),
