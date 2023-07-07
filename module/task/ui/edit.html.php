@@ -161,6 +161,7 @@ detailBody
                     ))),
                     checkList
                     (
+                        setClass('shrink-0 ml-3'),
                         set::name('showAllModule'),
                         set::items(array('1' => $lang->all)),
                         set::value($showAllModule ? '1' : ''),
@@ -263,23 +264,30 @@ detailBody
                 set::name($lang->task->mailto),
                 inputGroup
                 (
-                    control(set(array
+                    div
                     (
-                        'name' => 'mailto[]',
-                        'id' => 'mailto',
-                        'value' => $task->mailto,
-                        'type' => 'picker',
-                        'items' => $mailtoOptions,
-                        'multiple' => true
-                    ))),
-                    control
+                        setStyle('width', '70%'),
+                        control(set(array
+                        (
+                            'name' => 'mailto[]',
+                            'id' => 'mailto',
+                            'value' => $task->mailto,
+                            'type' => 'picker',
+                            'items' => $mailtoOptions,
+                            'multiple' => true
+                        ))),
+                    ),
+                    div
                     (
                         setStyle('width', '30%'),
-                        set::name('contactListMenu'),
-                        set::type('picker'),
-                        set::items($contactListMenuOptions),
-                        on::change('setMailto')
-                    ),
+                        control
+                        (
+                            set::name('contactListMenu'),
+                            set::type('picker'),
+                            set::items($contactListMenuOptions),
+                            on::change('setMailto')
+                        ),
+                    )
                 )
             ),
         ),

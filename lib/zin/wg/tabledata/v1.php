@@ -31,7 +31,7 @@ class tableData extends wg
             ),
             h::td
             (
-                setClass('py-1.5 pl-2', $item->prop('tdClass')),
+                setClass('py-1.5 pl-2 w-full', $item->prop('tdClass')),
                 $item->children()
             )
         );
