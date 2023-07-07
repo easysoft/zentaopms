@@ -199,10 +199,6 @@ $config->bug->dtable->fieldList['closedDate']['title'] = $lang->bug->closedDate;
 $config->bug->dtable->fieldList['closedDate']['type']  = 'date';
 $config->bug->dtable->fieldList['closedDate']['group'] = '10';
 
-$config->bug->dtable->fieldList['module']['name']  = 'module';
-$config->bug->dtable->fieldList['module']['title'] = $lang->bug->module;
-$config->bug->dtable->fieldList['module']['type']  = 'text';
-
 $config->bug->dtable->fieldList['actions']['name']     = 'actions';
 $config->bug->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->bug->dtable->fieldList['actions']['type']     = 'actions';

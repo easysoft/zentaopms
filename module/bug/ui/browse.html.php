@@ -198,7 +198,6 @@ if(empty($bugs))
 else
 {
     $cols = $this->loadModel('datatable')->getSetting('bug');
-    if(isset($cols['module']))    $cols['module']['map']    = $modulePairs;
     if(isset($cols['branch']))    $cols['branch']['map']    = $branchTagOption;
     if(isset($cols['project']))   $cols['project']['map']   = $projectPairs;
     if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
