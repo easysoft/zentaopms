@@ -1158,7 +1158,7 @@ class programModel extends model
      */
     public function getLink($moduleName, $methodName, $programID, $vars = '', $from = 'program')
     {
-        if($from != 'program') return helper::createLink('product', 'all', "programID=$programID" . $vars);
+        if($from != 'program') return helper::createLink('product', 'all', "programID=%s" . $vars);
 
         if($moduleName == 'project')
         {
@@ -1171,7 +1171,7 @@ class programModel extends model
             $methodName = 'product';
         }
 
-        return helper::createLink($moduleName, $methodName, "programID=$programID");
+        return helper::createLink($moduleName, $methodName, "programID=%s");
     }
 
     /**
