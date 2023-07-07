@@ -44,6 +44,7 @@ class formSettingBtn extends wg
             to::menu(menu
             (
                 setClass('dropdown-menu'),
+                on::click('e.stopPropagation();'),
                 formpanel
                 (
                     setClass('form-setting-btn'),

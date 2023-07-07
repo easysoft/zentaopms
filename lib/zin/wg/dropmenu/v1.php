@@ -48,7 +48,7 @@ class dropmenu extends wg
      */
     protected function build(): wg
     {
-        list($url, $text, $objectID, $cache, $tab, $module, $method, $objectID, $extra, $id, $data) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'objectID', 'extra', 'id', 'data'));
+        list($url, $text, $objectID, $cache, $tab, $module, $method, $extra, $id, $data) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'extra', 'id', 'data'));
 
         $app = data('app');
 
@@ -56,16 +56,12 @@ class dropmenu extends wg
         if(empty($module))   $module = $app->moduleName;
         if(empty($method))   $method = $app->methodName;
         if(empty($extra))    $extra  = '';
-        if(empty($objectID)) $objectID = data($module . 'ID');
+        if(empty($objectID)) $objectID = data($tab . 'ID');
 
-        if(empty($url) && empty($data))
+        if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
+        if(empty($text) && !empty($tab))
         {
-            $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
-        }
-
-        if(empty($text) && !empty($module))
-        {
-            $object = $app->control->loadModel($module)->getByID((int)$objectID);
+            $object = $app->control->loadModel($tab)->getByID((int)$objectID);
             $text   = $object->name;
         }
 

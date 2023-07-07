@@ -230,6 +230,7 @@ class story extends control
 
         /* Assign. */
         $this->view->product          = $this->product->getByID($story->product);
+        $this->view->productID        = $this->view->product->id;
         $this->view->products         = $this->product->getPairs();
         $this->view->story            = $story;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
@@ -682,25 +683,16 @@ class story extends control
      * @access public
      * @return void
      */
-    public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
+    public function view(int $storyID, int $version = 0, int $param = 0, string $storyType = 'story')
     {
         $uri     = $this->app->getURI(true);
         $tab     = $this->app->tab;
-        $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
         $product = $this->product->getByID($story->product);
-        if($tab == 'product' and !empty($product->shadow))
-        {
-            $backLink = $this->session->productList ? $this->session->productList : inlink('product', 'all');
-            $js       = js::start();
-            $js      .= "setTimeout(\"parent.$.apps.open('$uri#app=project')\", 100)";
-            $js      .= js::end();
-            return print(js::refresh($backLink . '#app=product', 'self', '10') . $js);
-        }
+        if($tab == 'product' and !empty($product->shadow)) return $this->send(array('result' => 'success', 'load' => "{$uri}##app=project"));
 
         $buildApp   = $tab == 'product' ?   'project' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
-        if(!isonlybody()) $this->session->set('buildList', $uri, $buildApp);
         $this->app->loadLang('bug');
 
         $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
@@ -713,6 +705,7 @@ class story extends control
         $story   = $this->story->mergeReviewer($story, true);
 
         $this->story->replaceURLang($story->type);
+        $this->commonAction($storyID);
 
         $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
@@ -726,18 +719,17 @@ class story extends control
         $storyProducts = $this->dao->select('id,product')->from(TABLE_STORY)->where('id')->in($linkedStories)->fetchPairs();
 
         /* Set the menu. */
-        $from = $this->app->tab;
-        if($from == 'execution')
+        if($tab == 'execution')
         {
             $result = $this->execution->setMenu($param);
             if($result) return;
         }
-        elseif($from == 'project')
+        elseif($tab == 'project')
         {
             $projectID = $param ? $param : $this->session->project;
             $this->loadModel('project')->setMenu($projectID);
         }
-        elseif($from == 'qa')
+        elseif($tab == 'qa')
         {
             $products = $this->product->getProductPairsByProject(0, 'noclosed');
             $this->loadModel('qa')->setMenu($products, $story->product);
@@ -772,20 +764,11 @@ class story extends control
 
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-        $reviewers  = $this->story->getReviewerPairs($storyID, $story->version);
-
-        $this->executeHooks($storyID);
-
-        $title      = "STORY #$story->id $story->title - $product->name";
-        $position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
-        $position[] = $this->lang->story->common;
-        $position[] = $this->lang->story->view;
-
+        $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $execution = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
         $project   = $param ? $this->dao->findById($param)->from(TABLE_PROJECT)->fetch() : array();
 
-        $this->view->title         = $title;
-        $this->view->position      = $position;
+        $this->view->title         = "STORY #$story->id $story->title - $product->name";
         $this->view->product       = $product;
         $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->twins         = !empty($story->twins) ? $this->story->getByList($story->twins) : array();
