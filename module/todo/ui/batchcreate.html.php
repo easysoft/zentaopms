@@ -53,9 +53,10 @@ foreach(explode(',', $showFields) as $field)
 }
 formBatchPanel
 (
+    set::id('batchCreateTodoForm'),
     set::url(createLink('todo', 'batchEdit', "from=todoBatchEdit&type={$type}&userID={$userID}&status={$status}")),
-    set::onRenderRow(jsRaw('renderRowData')),
     on::change('[data-name="type"]', 'setNameCell'),
+    on::click('.time-check', "$(event.target).closest('.input-group').find('.time-input').prop('disabled', !!event.target.checked)"),
     formBatchItem
     (
         set::name('id'),
@@ -93,7 +94,6 @@ formBatchPanel
         set::name('desc'),
         set::label($lang->todo->desc),
         set::control('textarea'),
-        set::width('100px'),
     ),
     formBatchItem
     (
@@ -107,11 +107,41 @@ formBatchPanel
     ),
     formBatchItem
     (
-        set::name('beginAndEnd'),
         set::label($lang->todo->beginAndEnd),
         set::width('232px'),
-        set::hidden(!isset($visibleFields['beginAndEnd'])),
+        set::control(false),
+        set::name('beginAndEnd'),
+        inputGroup
+        (
+            set::seg(true),
+            control
+            (
+                setClass('time-input'),
+                set::type('select'),
+                set::name('begin'),
+                set::items($times)
+            ),
+            control
+            (
+                setClass('time-input'),
+                set::type('select'),
+                set::name('end'),
+                set::items($times)
+            ),
+            span
+            (
+                setClass('input-group-addon'),
+                checkBox
+                (
+                    setClass('time-check'),
+                    set::name('switchTime'),
+                    $lang->todo->periods['future'],
+                )
+            )
+        )
     ),
 );
+
 /* ====== Render page ====== */
+if(isInModal()) set::size('xl');
 render();
