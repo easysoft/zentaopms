@@ -383,6 +383,7 @@ $lang->action->label->estimated             = '估算了';
 $lang->action->label->reviewpassed          = '确认通过';
 $lang->action->label->reviewrejected        = '拒绝了';
 $lang->action->label->reviewclarified       = '有待明确';
+$lang->action->label->reviewreverted        = '撤销变更';
 $lang->action->label->commitsummary         = '提交了培训总结';
 $lang->action->label->updatetrainee         = '更新了培训人员';
 $lang->action->label->setdefaultbranch      = '设置了默认分支';
