@@ -1477,7 +1477,7 @@ class storyTao extends storyModel
 
         /* Change button. */
         $canChange = common::hasPriv('story', 'change') && $this->isClickable($story, 'change');
-        $title     = $canChange ? '' : $this->lang->story->changeTip;
+        $title     = $canChange ? $lang->story->change : $this->lang->story->changeTip;
         $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange);
 
         /* Submitreview, review, recall buttons. */
