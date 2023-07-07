@@ -318,7 +318,7 @@ $config->project->team->actionList['unlink']['url']  = 'javascript:deleteMember(
 $config->project->actionList = array();
 $config->project->actionList['start']['icon']        = 'play';
 $config->project->actionList['start']['hint']        = $lang->project->start;
-$config->project->actionList['start']['url']         = array('module' => 'project', 'method' => 'start', 'params' => 'projectID={id}');
+$config->project->actionList['start']['url']         = helper::createLink('project', 'start', 'projectID={id}');
 $config->project->actionList['start']['data-toggle'] = 'modal';
 
 $config->project->actionList['close']['icon']        = 'off';
