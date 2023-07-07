@@ -12,29 +12,7 @@
 class metricModel extends model
 {
     /**
-     * Get metric func root.
-     *
-     * @access public
-     * @return string
-     */
-    public function getCalcRoot()
-    {
-        return $this->app->getModuleRoot() . 'metric' . DS . 'calc' . DS;
-    }
-
-    /**
-     * Get metric data set path.
-     *
-     * @access public
-     * @return string
-     */
-    public function getDatasetPath()
-    {
-        return $this->app->getModuleRoot() . 'metric' . DS . 'dataset.php';
-    }
-
-    /**
-     * Get executable metric code list.
+     * Get executable metric list.
      *
      * @access public
      * @return array
@@ -62,14 +40,14 @@ class metricModel extends model
     }
 
     /**
-     * Get calc list.
+     * Get executable calculator list.
      *
      * @access public
      * @return array
      */
-    public function getCalcList()
+    public function getExecutableCalcList()
     {
-        $funcRoot = $this->getCalcRoot();
+        $funcRoot = $this->metricTao->getCalcRoot();
 
         $fileList = array();
         foreach($this->config->metric->scopeList as $scope)
@@ -100,14 +78,14 @@ class metricModel extends model
     }
 
     /**
-     * Get calc instance list.
+     * Get calculator instance list.
      *
      * @access public
-     * @return mixed
+     * @return array
      */
     public function getCalcInstanceList()
     {
-        $calcList = $this->getCalcList();
+        $calcList = $this->getExecutableCalcList();
 
         include $this->app->getModuleRoot() . DS . 'metric' . DS . 'calc.class.php';
         $calcInstances = array();
@@ -130,17 +108,17 @@ class metricModel extends model
      * Get instance of data set object.
      *
      * @access public
-     * @return mixed
+     * @return dataset
      */
     public function getDataset()
     {
-        $datasetPath = $this->getDatasetPath();
+        $datasetPath = $this->metricTao->getDatasetPath();
         include $datasetPath;
         return new dataset($this->dao);
     }
 
     /**
-     * Classify calc instance list by its data set.
+     * Classify calculator instance list by its data set.
      *
      * @param  array  $calcInstanceList
      * @access public
