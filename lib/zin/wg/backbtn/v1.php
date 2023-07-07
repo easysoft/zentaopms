@@ -57,6 +57,9 @@ class backBtn extends btn
             'projectrelease' => 'projectrelease-browse',
             'build'          => 'execution-build,build-view',
             'projectbuild'   => 'projectbuild-browse,projectbuild-view',
+            'mr'             => 'mr-browse',
+            'repo'           => 'repo-log,repo-browse',
+            'compile'        => 'compile-browse',
         );
 
         $props = parent::getProps();
