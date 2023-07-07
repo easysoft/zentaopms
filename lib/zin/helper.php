@@ -104,7 +104,11 @@ if(!function_exists('str_ends_with'))
      */
     function str_ends_with($haystack, $needle)
     {
-        return strpos($haystack, $needle) === strlen($haystack) - 1;
+        $length = strlen($needle);
+        if ($length === 0) return true;
+
+        $position = strpos($haystack, $needle);
+        return $position !== false && $position === strlen($haystack) - $length;
     }
 }
 else
