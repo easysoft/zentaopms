@@ -677,6 +677,7 @@ class program extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->programs  = $this->program->getList('all');
+        $this->view->link      = $this->program->getLink($module, $method, $programID, '', 'program');
         $this->display();
     }
 
