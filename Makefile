@@ -1,6 +1,6 @@
 VERSION        = $(shell head -n 1 VERSION)
-XUANVERSION    = $(shell head -n 1 xuanxuan/XUANVERSION)
-XVERSION       = $(shell head -n 1 xuanxuan/XVERSION)
+XUANVERSION    = $(shell jq -r .pkg.xuanxuan.gitVersion < dependency.json)
+XVERSION       = $(shell jq -r .pkg.xuanxuan.ersion < dependency.json)
 XHPROF_VERSION = 2.3.9
 
 XUANPATH      := $(XUANXUAN_SRC_PATH)
@@ -68,9 +68,9 @@ zentaoxx:
 	mkdir -p zentaoxx/db
 	mkdir -p zentaoxx/www
 	mkdir -p zentaoxx/extension/xuan/common/ext/model/
-	cd $(XUANPATH); git pull; git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
+	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
 	mv $(XUANPATH)/xuan.zip .
-	unzip xuan.zip
+	unzip -q xuan.zip
 	cp xuan/xxb/config/ext/_0_xuanxuan.php zentaoxx/config/ext/
 	cp -r xuan/xxb/lib/phpaes zentaoxx/lib/
 	cp -r xuan/xxb/framework/xuanxuan.class.php zentaoxx/framework/
@@ -258,8 +258,6 @@ enrpm:
 cleanAssets:
 	find zentaopms/ -type f \( -name "*.js.map" -o -name "*.gz" \) -delete
 ciCommon:
-	make clean
-	git pull
 	make common
 
         ifneq ($(XUANPATH), )

@@ -12,7 +12,7 @@ pipeline {
   environment {
     ZENTAO_RELEASE_PATH = "${WORKSPACE}/release"
 
-    XUANXUAN_SRC_PATH = "${WORKSPACE}/xuanxuan"
+    XUANXUAN_SRC_PATH = "${WORKSPACE}/xuansrc"
     
     SRC_ZDOO_PATH = "${WORKSPACE}/zdoo"
     SRC_ZDOOEXT_PATH = "${WORKSPACE}/zdooext"
@@ -55,35 +55,47 @@ pipeline {
           environment {
             XUANVERSION = """${sh(
                       returnStdout: true,
-                      script: 'cat extension/xuanxuan/XUANVERSION'
+                      script: 'jq -r .pkg.xuanxuan.gitVersion < dependency.json'
+            ).trim()}"""
+            ZENTAOEXT_VERSION = """${sh(
+                      returnStdout: true,
+                      script: 'jq -r .pkg.zentaoext.gitVersion < dependency.json'
+            ).trim()}"""
+            ZDOO_VERSION = """${sh(
+                      returnStdout: true,
+                      script: 'jq -r .pkg.zdoo.gitVersion < dependency.json'
+            ).trim()}"""
+            ZDOOEXT_VERSION = """${sh(
+                      returnStdout: true,
+                      script: 'jq -r .pkg.zdooext.gitVersion < dependency.json'
             ).trim()}"""
           }
 
           steps {
-            dir('xuanxuan') {
+            dir('xuansrc') {
               checkout scmGit(branches: [[name: "${env.XUANVERSION}"]],
                 userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/xuanxuan.git']]
               )
             }
 
             dir('zdoo') {
-              checkout scmGit(branches: [[name: "master"]],
+              checkout scmGit(branches: [[name: "${env.ZDOO_VERSION}"]],
                 extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                 userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zdoo.git']]
               )
             }
 
             dir('zdooext') {
-              checkout scmGit(branches: [[name: "master"]],
+              checkout scmGit(branches: [[name: "${env.ZDOOEXT_VERSION}"]],
                 extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                 userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zdooext.git']]
               )
             }
 
             dir('zentaoext') {
-              checkout scmGit(branches: [[name: "master"]],
+              checkout scmGit(branches: [[name: "${env.ZENTAOEXT_VERSION}"]],
                 extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zentaoext.git']]
+                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/demo/zentaoext.git']]
               )
             }
           }
@@ -375,6 +387,7 @@ pipeline {
               steps {
                 container('xuanimbot') {
                   sh 'git config --global --add safe.directory $(pwd)'
+                  //sh '/usr/local/bin/xuanimbot  --users "qishiyao" --title "zentao build with tag ${TAG_NAME} success" --url ""${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/#browse/browse:${ARTIFACT_REPOSITORY}:zentao"" --content "zentaopms build success, click buttom below for browse artifacts" --debug --custom'
                   sh '/usr/local/bin/xuanimbot  --users "qishiyao" --groups "fced7fb3-0d48-449f-b408-ecae52a50f89" --title "zentao build with tag ${TAG_NAME} success" --url ""${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/#browse/browse:${ARTIFACT_REPOSITORY}:zentao"" --content "zentaopms build success, click buttom below for browse artifacts" --debug --custom'
                 }
               }
@@ -387,4 +400,5 @@ pipeline {
   }
 
 }
+
 
