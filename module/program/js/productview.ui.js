@@ -51,7 +51,7 @@ window.onClickBatchEdit = function(event)
         formData.append('productIDList[]', id);
     });
 
-    postAndLoadPage($(event.target.closest('button')).data('url'), formData);
+    postAndLoadPage($(event.target.closest('button')).data('url'), formData, '', {app: 'product'});
 };
 
 onClickCheckBatchEdit = function(event)
