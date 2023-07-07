@@ -86,9 +86,13 @@ formPanel
     formGroup
     (
         set::label($lang->release->mailto),
-        set::name('mailto[]'),
-        set::value($release->mailto),
-        set::items($users),
+        select
+        (
+            set::name('mailto[]'),
+            set::value($release->mailto),
+            set::items($users),
+            set::multiple(true),
+        )
     ),
     formGroup
     (
