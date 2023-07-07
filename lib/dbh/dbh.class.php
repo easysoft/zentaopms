@@ -268,8 +268,7 @@ class dbh
             case 'SELECT':
                 return $this->formatField($sql);
             case 'REPLACE':
-                $sql = str_replace('REPLACE', 'INSERT', $sql);
-                $action = 'INSERT';
+                return $this->processReplace($sql);
             case 'INSERT':
             case 'UPDATE':
                 $setPos = stripos($sql, ' VALUES');
@@ -467,6 +466,67 @@ class dbh
                 }
 
                 if(strpos($sql, "ALTER TABLE") !== false) $sql = $this->convertAlterTableSql($sql);
+        }
+
+        return $sql;
+    }
+
+    /**
+     * Process replace into sql.
+     *
+     * @param mixed $sql
+     * @access public
+     * @return void
+     */
+    public function processReplace($sql)
+    {
+        // 解析REPLACE INTO语句，提取出表名、字段和值
+        $matches = [];
+        preg_match('/^REPLACE\s+INTO\s+`?([\w_]+)`?\s*\((.*)\)\s+VALUES\s*\((.*?)\)\s*$/i', $sql, $matches);
+        $table_name = $matches[1];
+        $columns = array_map('trim', explode(',', $matches[2]));
+        $values = array_map('trim', explode(', ', $matches[3]));
+        if($table_name == '' or $columns == '' or $values == '') return $sql;
+
+        // 构造SELECT语句，查询数据是否存在
+        $where = [];
+        foreach ($columns as $index => $column) {
+            $value  = trim($values[$index], "'");
+            $column = trim($column, '`');
+            $values[$index]  = $value;
+            $columns[$index] = $column;
+            $where[] = "`$column` = '$value'";
+        }
+
+        $select_sql = "SELECT * FROM `$table_name` WHERE " . implode(' AND ', $where);
+
+        $result = $this->query($select_sql);
+        $result = $result->fetchAll();
+        $sql    = in_array('id', $columns) ? "SET IDENTITY_INSERT `$table_name` ON;" : '';
+
+        if($result)
+        {
+            // 数据已存在，构造UPDATE语句并执行
+            $set   = [];
+            $where = [];
+            foreach ($columns as $index => $column) {
+                $value   = $values[$index];
+                $set[]   = "`$column` = '$value'";
+                $where[] = "`$column` = '$value'";
+            }
+
+            $sql .= "UPDATE `$table_name` SET " . implode(', ', $set) . " WHERE " . implode(' AND ', $where);
+        }
+        else
+        {
+            // 数据不存在，构造INSERT INTO语句并执行
+            $selectColumn = array();
+            $selectValue  = array();
+            foreach ($columns as $index => $column) {
+                $selectColumn[] .= "`$column`";
+                $selectValue[]  .= "'{$values[$index]}'";
+            }
+            $sql .= "INSERT INTO `$table_name` (" . implode(', ', $selectColumn) . ") VALUES (" . implode(', ', $selectValue) . ")";
         }
 
         return $sql;
