@@ -119,7 +119,7 @@ class history extends wg
             div
             (
                 setClass('comment-content mt-2 ml-6 p-2.5'),
-                $comment,
+                isHTML($comment) ? html($comment) : $comment,
             ),
         );
     }

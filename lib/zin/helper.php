@@ -115,7 +115,12 @@ else
     }
 }
 
-function uncamelize($camelCaps, $separator = '-')
+function uncamelize(string $camelCaps, string $separator = '-'): string
 {
     return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $camelCaps));
+}
+
+function isHTML(string $string): bool
+{
+    return $string !== strip_tags($string) ? true : false;
 }
