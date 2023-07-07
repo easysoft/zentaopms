@@ -72,8 +72,8 @@ class dropmenu extends wg
         return zui::dropmenu
         (
             set('_id', $id),
+            set('_props', array('data-fetcher' => $url)),
             set('data', $data),
-            set('data-fetcher', $url),
             set(array('fetcher' => $url, 'text' => $text, 'defaultValue' => $objectID, 'cache' => $cache)),
             set($this->getRestProps())
         );
