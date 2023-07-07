@@ -63,12 +63,23 @@ function isOldPage(url)
 /**
  * Open app
  * @param {string} url
- * @param {string} [code]
- * @param {boolean} [forceReload]
+ * @param {string|object} [code]
+ * @param {boolean|object} [options]
  * @returns {ZentaoOpenedApp|undefined}
  */
-function openApp(url, code, forceReload)
+function openApp(url, code, options)
 {
+    const loadOptions = {};
+    if(typeof code === 'object') $.extend(loadOptions, code);
+    else if(code) loadOptions.code = code;
+    if(typeof options === 'boolean') loadOptions.forceReload;
+    else if(typeof options === 'object') $.extend(loadOptions, options);
+    options = loadOptions;
+    code = options.code;
+    let forceReload = options.forceReload;
+    delete options.forceReload;
+    delete options.code;
+
     if(!code)
     {
         if(apps.map[url])
@@ -140,7 +151,7 @@ function openApp(url, code, forceReload)
     const needLoad = !isSameUrl || forceReload !== false;
     if(needLoad)
     {
-        reloadApp(code, url);
+        reloadApp(code, url, options);
         openedApp.$app.toggleClass('open-from-hidden', openedApp.zIndex < apps.zIndex)
     }
     else
@@ -173,7 +184,7 @@ function openApp(url, code, forceReload)
         $tabs.find('li[data-app="' + code + '"]>a').addClass('active');
     }
 
-    if(debug) console.log('[APPS]', 'open:', code, {url, forceReload});
+    if(debug) console.log('[APPS]', 'open:', code, {url, options, forceReload});
     triggerAppEvent(code, 'openapp', [openedApp, {load: needLoad}]);
 
     return openedApp;
@@ -192,8 +203,9 @@ function showApp(code)
  * Reload app
  * @param {string} code
  * @param {string} url
+ * @param {object} options
  */
-function reloadApp(code, url)
+function reloadApp(code, url, options)
 {
     const app = apps.openedMap[code];
     if(!app) return;
@@ -205,7 +217,7 @@ function reloadApp(code, url)
     try
     {
         if(app.external) iframe.src = url;
-        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url);
+        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, options);
         else console.error('[APPS]', 'reload: Cannot load page when iframe is not ready.');
     }
     catch(error)

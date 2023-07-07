@@ -532,7 +532,8 @@
         if ($.apps.isOldPage(options.url)) return loadOldPage(options.url);
         else hideOldPage();
 
-        if(typeof selector === 'string') options.selector = selector;
+        if(typeof selector === 'string')      options.selector = selector;
+        else if(typeof selector === 'object') options = $.extend({}, options, selector);
         if (!options.selector && options.url && options.url.includes(' '))
         {
             const parts = url.split(' ', 2);
@@ -604,7 +605,14 @@
 
     function postAndLoadPage(url, data, selector, options)
     {
-        loadPage($.extend({url: url, selector: selector, method: 'POST', data, contentType: false}, options));
+        if(typeof selector === 'object')
+        {
+            options = selector;
+            selector = null;
+        }
+        options = $.extend({url: url, selector: selector, method: 'POST', data, contentType: false}, options);
+        if(options.app) openPage(url, options.app, options);
+        else            loadPage(options);
     }
 
     function loadCurrentPage(options)
@@ -613,7 +621,7 @@
         return loadPage(options);
     }
 
-    function openPage(url, appCode)
+    function openPage(url, appCode, options)
     {
         if(DEBUG) console.log('[APP] ', 'open:', url, appCode);
         if(!window.config.zin)
@@ -621,7 +629,7 @@
             location.href = $.createLink('index', 'app', 'url=' + btoa(url));
             return;
         }
-        $.apps.openApp(url, appCode, true);
+        $.apps.openApp(url, $.extend({code: appCode, forceReload: true}, options));
     }
 
     /**
