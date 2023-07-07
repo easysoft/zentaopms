@@ -10,10 +10,13 @@ $config->block->bug->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->block->bug->dtable->fieldList['id']['type']  = 'id';
 $config->block->bug->dtable->fieldList['id']['fixed'] = false;
 
-$config->block->bug->dtable->fieldList['title']['name']  = 'title';
-$config->block->bug->dtable->fieldList['title']['title'] = $lang->bug->title;
-$config->block->bug->dtable->fieldList['title']['type']  = 'title';
-$config->block->bug->dtable->fieldList['title']['fixed'] = false;
+$config->block->bug->dtable->fieldList['title']['name']        = 'title';
+$config->block->bug->dtable->fieldList['title']['title']       = $lang->bug->title;
+$config->block->bug->dtable->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
+$config->block->bug->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->block->bug->dtable->fieldList['title']['data-size']   = 'lg';
+$config->block->bug->dtable->fieldList['title']['type']        = 'title';
+$config->block->bug->dtable->fieldList['title']['fixed']       = false;
 
 $config->block->bug->dtable->fieldList['severity']['name']  = 'severity';
 $config->block->bug->dtable->fieldList['severity']['title'] = $lang->bug->abbr->severity;

@@ -41,6 +41,7 @@ namespace zin;
   foreach($actions as $action)
   {
       $user  = zget($users, $action->actor);
+      if($action->action == 'login' or $action->action == 'logout') $action->objectName = $action->objectLabel = '';
       $class = $action->major ? 'active' : '';
       if(in_array($action->action, array('releaseddoc', 'collected'))) $class .= " {$action->action}";
       echo "<li class='$class'><div>";
