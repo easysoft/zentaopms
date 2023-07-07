@@ -9,7 +9,6 @@ body {padding-bottom: 20px;}
 #dashboard .panel-body.has-table {padding-top: 0;}
 #dashboard .panel-move-handler {position: absolute; top: 0; left: 0; right: 50px; height: 40px; z-index: 10; cursor: move;}
 #dashboard .panel-heading {cursor: move;}
-#dashboard .panel-heading a {z-index: 999;}
 #dashboard .panel-actions > a {padding: 0 5px; line-height: 22px;}
 @media (min-width: 992px)
 {
