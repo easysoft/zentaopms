@@ -16,6 +16,10 @@ $config->testcase->dtable->fieldList['title']['link']         = array('module' =
 $config->testcase->dtable->fieldList['title']['required']     = true;
 $config->testcase->dtable->fieldList['title']['group']        = 1;
 
+$config->testcase->dtable->fieldList['branch']['name']  = 'branch';
+$config->testcase->dtable->fieldList['branch']['title'] = $lang->testcase->branch;
+$config->testcase->dtable->fieldList['branch']['type']  = 'text';
+
 $config->testcase->dtable->fieldList['pri']['title']    = $lang->testcase->pri;
 $config->testcase->dtable->fieldList['pri']['type']     = 'pri';
 $config->testcase->dtable->fieldList['pri']['sortType'] = true;
