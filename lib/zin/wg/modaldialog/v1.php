@@ -6,6 +6,7 @@ class modalDialog extends wg
     static $defineProps = array(
         'title?: string',
         'titleClass?: string',
+        'size?: string|number',
         'itemID?: int',
         'headerClass?: string',
         'headerProps?: array',
@@ -93,10 +94,17 @@ class modalDialog extends wg
 
     protected function build()
     {
+        $size = $this->prop('size');
+        if($size)
+        {
+            if(is_string($size)) $size = set('data-size', $size);
+            else                 $size = setStyle('width', "{$size}px");
+        }
         return div
         (
             setClass('modal-dialog'),
             set($this->getRestProps()),
+            $size,
             div
             (
                 setClass('modal-content'),
