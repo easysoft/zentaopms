@@ -298,7 +298,7 @@ formPanel
                             'value'    => 0
                         )
                     ),
-                    on::change('setDays(this.value)')
+                    on::change('setDays')
                 ),
                 select
                 (

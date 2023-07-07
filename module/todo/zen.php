@@ -535,15 +535,22 @@ class todoZen extends todo
         if($todoData->config['type'] == 'day')
         {
             unset($todoData->config['week'], $todoData->config['month']);
-            if(!$todoData->config['day'] && empty($todoData->config['specifiedDate']))
+            if(empty($todoData->config['specifiedDate']))
             {
-                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
-                return false;
+                if(!$todoData->config['day'])
+                {
+                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
+                    return false;
+                }
+                if(!validater::checkInt($todoData->config['day']))
+                {
+                    dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
+                    return false;
+                }
             }
-            if(!validater::checkInt($todoData->config['day']) && empty($todoData->config['specifiedDate']))
+            else
             {
-                dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
-                return false;
+                unset($todoData->config['day']);
             }
         }
         if($todoData->config['type'] == 'week')

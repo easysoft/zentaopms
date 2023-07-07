@@ -316,7 +316,7 @@ function buildCycleOfYearConfig(object $todo): mixed
                             'value'    => isset($todo->config->specify->month) ? $todo->config->specify->month : 0
                         )
                     ),
-                    on::change('setDays(this.value)')
+                    on::change('setDays')
                 ),
                 select
                 (

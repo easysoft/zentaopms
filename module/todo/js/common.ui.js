@@ -194,8 +194,10 @@ function showEvery(switcher)
  * @param  int specifiedMonth
  * @return void
  */
-function setDays(specifiedMonth)
+function setDays(e)
 {
+    var specifiedMonth = $(e.target).val()
+
     /* Get last day in specified month. */
     var date = new Date();
     date.setMonth(specifiedMonth);
