@@ -95,7 +95,7 @@ pipeline {
             dir('zentaoext') {
               checkout scmGit(branches: [[name: "${env.ZENTAOEXT_VERSION}"]],
                 extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/demo/zentaoext.git']]
+                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zentaoext.git']]
               )
             }
           }
