@@ -126,7 +126,7 @@ class tabs extends wg
         return div
         (
             setClass('tabs', $isVertical ? 'flex' : null),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
 
             $this->buildTabHeader($titleViews),
             $this->buildTabBody($contentViews),

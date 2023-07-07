@@ -96,7 +96,7 @@ class entityLabel extends wg
         return div
         (
             setClass('entity-label', 'flex', 'items-center', 'gap-x-2'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $prefix,
             $reverse ? array($entityName, $entityID) : array($entityID, $entityName),
             $suffix

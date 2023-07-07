@@ -42,7 +42,7 @@ class toolbar extends wg
         return div
         (
             setClass('toolbar'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
             $this->children()
         );

@@ -27,7 +27,7 @@ class severityLabel extends wg
 
         return span
         (
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             setClass($isIcon ? 'severity' : 'severity severity-label'),
             set('data-severity', $level),
             $text

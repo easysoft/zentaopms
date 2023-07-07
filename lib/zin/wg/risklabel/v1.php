@@ -36,7 +36,7 @@ class riskLabel extends wg
         $text = $this->prop('text');
         return span
         (
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             setClass($this->getThemeClass()),
             $text
         );

@@ -9,7 +9,7 @@ class center extends wg
         return div
         (
             setClass("flex justify-center items-center"),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->children()
         );
     }

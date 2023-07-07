@@ -46,7 +46,7 @@ class upload extends wg
         if(!$this->prop('class')) $this->setProp('class', 'w-full');
         if(!$this->prop('tip'))   $this->setProp('tip', sprintf($lang->noticeDrag, strtoupper(ini_get('upload_max_filesize'))));
 
-        $otherProps = $this->props->skip(array_keys(static::getDefinedProps()));
+        $otherProps = $this->getRestProps();
         return zui::upload(inherit($this), set('_props', $otherProps));
     }
 }

@@ -61,7 +61,7 @@ class avatar extends wg
         (
             setClass($this->finalClass),
             setStyle($finalStyle),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $content,
             $this->children()
         );

@@ -23,7 +23,7 @@ class priLabel extends wg
 
         return span
         (
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             setClass("pri-$pri"),
             $pri
         );

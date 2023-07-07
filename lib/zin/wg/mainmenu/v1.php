@@ -46,7 +46,7 @@ class mainMenu extends wg
         (
             setID('mainMenu'),
             setClass('flex justify-between'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             div
             (
                 setClass('flex'),

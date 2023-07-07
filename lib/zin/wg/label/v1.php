@@ -19,7 +19,7 @@ class label extends wg
         return span
         (
             setClass('label'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->prop('text'),
             $this->children()
         );

@@ -24,7 +24,7 @@ class tabPane extends wg
         (
             setID($key),
             setClass('tab-pane', $active ? 'active' : null),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->children()
         );
     }

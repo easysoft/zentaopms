@@ -18,7 +18,7 @@ class row extends wg
         return div
         (
             setClass($classList),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->children()
         );
     }

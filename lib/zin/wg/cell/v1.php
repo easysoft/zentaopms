@@ -30,7 +30,7 @@ class cell extends wg
         return div
         (
             setStyle($style),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->children()
         );
     }

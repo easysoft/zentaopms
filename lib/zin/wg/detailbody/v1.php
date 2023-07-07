@@ -38,7 +38,7 @@ class detailBody extends wg
             return div
             (
                 setClass('detail-body rounded flex gap-1'),
-                set($this->props->skip(array_keys(static::getDefinedProps()))),
+                set($this->getRestProps()),
                 div
                 (
                     setClass('col gap-1 grow'),
@@ -54,7 +54,7 @@ class detailBody extends wg
         (
             set::actionsClass('h-14 flex flex-none items-center justify-center shadow'),
             setClass('detail-body rounded col overflow-y-hidden bg-white'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             setStyle('height', 'calc(100vh - 120px)'),
             div
             (

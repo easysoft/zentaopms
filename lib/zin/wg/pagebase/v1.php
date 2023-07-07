@@ -55,7 +55,7 @@ class pageBase extends wg
         $metas      = $this->prop('metas');
         $rawContent = $this->prop('rawContent', !zin::$rawContentCalled);
         $title      = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
-        $attrs      = $this->props->skip(array_keys(static::getDefinedProps()));
+        $attrs      = $this->getRestProps();
         $css        = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
         $js         = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
         $imports    = context::current()->getImportList();

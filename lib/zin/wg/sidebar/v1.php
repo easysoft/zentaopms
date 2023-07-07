@@ -24,7 +24,7 @@ class sidebar extends wg
         return div
         (
             setClass("sidebar sidebar-$side"),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->children(),
             $showToggle ? div
             (

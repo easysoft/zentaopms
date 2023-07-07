@@ -35,7 +35,7 @@ class btnGroup extends wg
         return div
         (
             setClass($className),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
             $this->children()
         );

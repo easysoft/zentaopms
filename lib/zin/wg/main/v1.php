@@ -121,7 +121,7 @@ class main extends wg
         return div
         (
             set::id('main'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->buildMainNavbar(),
             div
             (

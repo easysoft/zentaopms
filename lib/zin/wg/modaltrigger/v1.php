@@ -56,7 +56,7 @@ class modalTrigger extends wg
 
         if($triggerBlock instanceof wg)
         {
-            $triggerBlock->setProp($this->props->skip(array_keys(static::getDefinedProps())));
+            $triggerBlock->setProp($this->getRestProps());
 
             $triggerProps = array(
                 'data-toggle'         => 'modal',

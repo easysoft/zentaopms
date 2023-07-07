@@ -47,7 +47,7 @@ class dropdown extends wg
         if($triggerBlock instanceof wg)
         {
             if($triggerBlock instanceof btn) $triggerBlock->setDefaultProps(array('caret' => true));
-            $triggerBlock->setProp($this->props->skip(array_keys(static::getDefinedProps())));
+            $triggerBlock->setProp($this->getRestProps());
 
             $triggerProps = array
             (

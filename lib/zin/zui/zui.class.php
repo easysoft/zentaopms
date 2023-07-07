@@ -34,7 +34,7 @@ class zui extends wg
         list($name, $target, $tagName, $targetProps, $size, $id, $class) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class'));
         list($width, $height) = $size;
 
-        $options  = $this->props->skip(array_keys(static::getDefinedProps()));
+        $options  = $this->getRestProps();
         $selector = $target;
         if(empty($selector))
         {

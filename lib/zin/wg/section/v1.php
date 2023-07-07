@@ -64,7 +64,7 @@ class section extends wg
         return div
         (
             setClass('section'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->title(),
             $this->block('subtitle'),
             $this->buildContent(),
