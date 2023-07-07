@@ -2471,13 +2471,24 @@ CREATE TABLE IF NOT EXISTS `zt_im_conference` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `rid` char(40) NOT NULL DEFAULT '',
   `cgid` char(40) NOT NULL DEFAULT '',
-  `status` enum('closed','open') NOT NULL DEFAULT 'closed',
+  `status` enum ('closed', 'open', 'notStarted') DEFAULT 'closed' NOT NULL,
   `participants` text NULL,
+  `subscribers` text NOT NULL,
   `invitee` text NULL,
   `openedBy` mediumint(8) NOT NULL DEFAULT 0,
   `openedDate` datetime NULL,
+  `topic` text NOT NULL,
+  `startTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `endTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `password` char(20) NOT NULL DEFAULT '',
+  `type` enum('default', 'periodic', 'scheduled') NOT NULL DEFAULT 'default',
+  `number` char(20) NOT NULL DEFAULT '',
+  `note` text NOT NULL,
+  `sentNotify` tinyint(1) NOT NULL DEFAULT 0,
+  `reminderTime` int NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE INDEX `status` ON `zt_im_conference` (`status`);
 
 -- DROP TABLE IF EXISTS `zt_im_conferenceaction`;
 CREATE TABLE IF NOT EXISTS `zt_im_conferenceaction` (
@@ -2491,6 +2502,16 @@ CREATE TABLE IF NOT EXISTS `zt_im_conferenceaction` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_im_conferenceuser`;
+CREATE TABLE IF NOT EXISTS `zt_im_conferenceuser` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `conference` mediumint(8) NOT NULL DEFAULT 0,
+  `user` mediumint(8) NOT NULL DEFAULT 0,
+  `hide` enum('0', '1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `conferenceuser` ON `zt_im_conferenceuser`(`conference`, `user`);
+
 -- DROP TABLE IF EXISTS `zt_im_userdevice`;
 CREATE TABLE IF NOT EXISTS `zt_im_userdevice` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -2501,6 +2522,8 @@ CREATE TABLE IF NOT EXISTS `zt_im_userdevice` (
   `validUntil` datetime NULL,
   `lastLogin` datetime NULL,
   `lastLogout` datetime NULL,
+  `online` tinyint(1) DEFAULT 0 NOT NULL,
+  `version` char(10) DEFAULT '' NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `userdevice` ON `zt_im_userdevice`(`user`, `device`);

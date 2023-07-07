@@ -1315,17 +1315,27 @@ CREATE TABLE `zt_im_client` (
   `status` enum('released','wait') NOT NULL DEFAULT 'wait',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_im_conference` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `zt_im_conference` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
   `rid` char(40) NOT NULL DEFAULT '',
   `cgid` char(40) NOT NULL DEFAULT '',
-  `status` enum('closed','open') NOT NULL DEFAULT 'closed',
-  `participants` text NOT NULL,
-  `invitee` text NOT NULL,
-  `openedBy` mediumint(8) NOT NULL DEFAULT '0',
-  `openedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `status` enum ('closed', 'open', 'notStarted') DEFAULT 'closed' NOT NULL,
+  `participants` text NULL,
+  `subscribers` text NOT NULL,
+  `invitee` text NULL,
+  `openedBy` mediumint(8) NOT NULL DEFAULT 0,
+  `openedDate` datetime NULL,
+  `topic` text NOT NULL,
+  `startTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `endTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `password` char(20) NOT NULL DEFAULT '',
+  `type` enum('default', 'periodic', 'scheduled') NOT NULL DEFAULT 'default',
+  `number` char(20) NOT NULL DEFAULT '',
+  `note` text NOT NULL,
+  `sentNotify` tinyint(1) NOT NULL DEFAULT 0,
+  `reminderTime` int NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_conferenceaction` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `rid` char(40) NOT NULL DEFAULT '',
@@ -1336,6 +1346,13 @@ CREATE TABLE `zt_im_conferenceaction` (
   `device` char(40) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_im_conferenceuser` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `conference` mediumint(8) NOT NULL DEFAULT 0,
+  `user` mediumint(8) NOT NULL DEFAULT 0,
+  `hide` enum('0', '1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_message` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `gid` char(40) NOT NULL DEFAULT '',
@@ -1398,21 +1415,19 @@ CREATE TABLE `zt_im_queue` (
   `status` char(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_im_userdevice` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `user` mediumint(8) NOT NULL DEFAULT '0',
+CREATE TABLE IF NOT EXISTS `zt_im_userdevice` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `user` mediumint(8) NOT NULL DEFAULT 0,
   `device` char(40) NOT NULL DEFAULT 'default',
   `deviceID` char(40) NOT NULL DEFAULT '',
   `token` char(64) NOT NULL DEFAULT '',
-  `validUntil` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `lastLogin` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `lastLogout` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `userdevice` (`user`,`device`),
-  KEY `user` (`user`),
-  KEY `lastLogin` (`lastLogin`),
-  KEY `lastLogout` (`lastLogout`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `validUntil` datetime NULL,
+  `lastLogin` datetime NULL,
+  `lastLogout` datetime NULL,
+  `online` tinyint(1) DEFAULT 0 NOT NULL,
+  `version` char(10) DEFAULT '' NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_image` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `host` int(11) unsigned NOT NULL DEFAULT '0',
