@@ -47,14 +47,17 @@ window.onRenderCell = function(result, {row, col})
     if(result && col.name == 'title')
     {
         const data = row.data;
-        if(data.isCase == 1 && data.auto == 'auto')
+        const module = this.options.customData.modules[data.module];
+        if(data.isCase == 1) // 用例
         {
-            result.unshift({html: '<span class="label lighter rounded-full">' + automated + '</span>'}); // 添加自动化标签
+            if(data.auto == 'auto') result.unshift({html: '<span class="label lighter rounded-full">' + automated + '</span>'}); // 添加自动化标签
+            if(module) result.unshift({html: '<span class="label lighter rounded-full">' + module + '</span>'}); // 添加模块标签
         }
-        else if(data.isCase == 2)
+        else if(data.isCase == 2) // 场景
         {
             result.pop(); // 移除带链接的场景名称
             result.push({html: data.title}); // 添加不带链接的场景名称
+            if(data.grade == 1 && module) result.unshift({html: '<span class="label lighter rounded-full">' + module + '</span>'}); // 顶级场景添加模块标签
             result.unshift({html: '<span class="label light-outline text-gray rounded-full">' + scene + '</span>'}); // 添加场景标签
             if(!this.options.customData.isOnlyScene && this.options.customData.caseScenes[data.id] === undefined) result.push({html: '<span class="text-gray">(' + noCase + ')</span>'}); // 添加暂无用例标签
         }

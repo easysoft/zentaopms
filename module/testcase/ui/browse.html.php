@@ -163,7 +163,7 @@ dtable
     set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::customData(array('isOnlyScene' => $isOnlyScene, 'caseScenes' => $caseScenes, 'pageSummary' => $pageSummary))
+    set::customData(array('isOnlyScene' => $isOnlyScene, 'caseScenes' => $caseScenes, 'pageSummary' => $pageSummary, 'modules' => $modulePairs))
 );
 
 modal
