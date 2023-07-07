@@ -271,6 +271,7 @@ formPanel
         (
             set::width('1/4'),
             set::name('future'),
+            setClass('items-center'),
             set::control(array('type' => 'checkList', 'inline' => true)),
             set::items(array('1' => $lang->project->future)),
             on::change('toggleBudget')
@@ -310,6 +311,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
+            setClass('items-center'),
             radioList
             (
                 on::change('setDate'),
