@@ -6,10 +6,12 @@ window.customSubmit = function(e)
     $saveButton.attr('disabled', 'disabled');
     $saveDraftButton.attr('disabled', 'disabled');
 
-    var $this = $(e.target);
+    var $dataform = $('#dataform');
+    var $this     = $(e.target);
     if($this.prop('tagName') != 'BUTTON') $this = $this.closest('button');
 
-    var storyStatus = !$('#reviewer').val().join(',') || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
+    var storyStatus = 'active';
+    if(!$dataform.hasClass('form-batch')) storyStatus = !$('#reviewer').val().join(',') || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
     if($this.attr('id') == 'saveDraftButton')
     {
         storyStatus = 'draft';
@@ -19,7 +21,6 @@ window.customSubmit = function(e)
     if($('#dataform #status').length == 0) $('<input />').attr('type', 'hidden').attr('name', 'status').attr('id', 'status').attr('value', storyStatus).appendTo('#dataform .form-actions');
     $('#dataform #status').val(storyStatus);
 
-    $dataform = $('#dataform');
     $.ajaxSubmit(
     {
         data: new FormData($dataform[0]),

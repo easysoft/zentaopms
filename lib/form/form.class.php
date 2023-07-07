@@ -177,6 +177,7 @@ class form extends fixer
 
                 $rowData->$field = isset($this->rawdata->$field) ? zget($this->rawdata->$field, $rowIndex, $defaultValue) : $defaultValue;
                 $rowData->$field = helper::convertType($rowData->$field, $config['type']);
+                if(isset($config['filter'])) $rowData->$field = $this->filter($rowData->$field, $config['filter']);
 
                 /* 检查必填字段。Check required fields. */
                 if(isset($config['required']) && $config['required'] && empty($rowData->$field))

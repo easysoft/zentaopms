@@ -36,7 +36,12 @@ formPanel
     on::click('#saveDraftButton', 'customSubmit'),
     set::id('dataform'),
     set::title($lang->story->create),
-    set::actions(false),
+    set::actions(array
+    (
+        array('text' => $lang->save,             'id' => 'saveButton',      'class' => 'primary'),
+        array('text' => $lang->story->saveDraft, 'id' => 'saveDraftButton', 'class' => 'secondary'),
+        array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url'),
+    )),
     set::customFields(array('items' => $fnGenerateCustomizedFields(), 'urlParams' => 'module=story&section=custom&key=createFields')),
     to::headingActions
     (
@@ -371,13 +376,6 @@ formPanel
         set::values($fields['keywords']['default']),
     ),
     formHidden('type', $type),
-    formRow
-    (
-        setClass('form-actions form-group no-label'),
-        btn(setClass('primary'), set::id('saveButton'), $lang->save),
-        btn(setClass('secondary'), set::id('saveDraftButton'), $lang->story->saveDraft),
-        backBtn($lang->goback),
-    ),
 );
 
 isset($fields['branches']) && $type == 'story' ? formRow

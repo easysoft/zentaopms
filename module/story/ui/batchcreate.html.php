@@ -41,18 +41,20 @@ $fnGenerateCustomizedFields = function() use ($showFields, $customFields)
 
 formBatchPanel
 (
+    on::click('#saveButton', 'customSubmit'),
+    on::click('#saveDraftButton', 'customSubmit'),
+    set::id('dataform'),
     set::title($storID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate),
     set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")),
     set::pasteField('title'),
-    set::ajax(array('beforeSend' => jsRaw('window.beforeSubmitBatchCreateForm'))),
     set::customFields(array('items' => $fnGenerateCustomizedFields())),
     set::items($fnGenerateFields()),
     set::onRenderRow(jsRaw('renderRowData')),
     set::actions(array
     (
-        array('text' => $lang->save,            'onclick' => 'window.onClickActionBtn(event)', 'id' => 'save',      'btnType' => 'submit', 'class' => 'primary'),
-        array('text' => $lang->story->saveDraft,'onclick' => 'window.onClickActionBtn(event)', 'id' => 'saveDraft', 'btnType' => 'submit', 'class' => 'secondary'),
-        array('text' => $lang->goback)
+        array('text' => $lang->save,             'id' => 'saveButton',      'class' => 'primary'),
+        array('text' => $lang->story->saveDraft, 'id' => 'saveDraftButton', 'class' => 'secondary'),
+        array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url'),
     ))
 );
 
