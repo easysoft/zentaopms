@@ -28,51 +28,51 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function execMetric()
+    public function updateMetricLib()
     {
-        $dataset         = $this->metric->getDataset($this->dao);
-        $metricInstances = $this->metric->getInstanceList();
+        $dataset          = $this->metric->getDataset($this->dao);
+        $calcInstanceList = $this->metric->getCalcInstanceList();
 
-        list($otherInstances, $classifiedInstances) = $this->metric->classifyMetric($metricInstances);
+        list($otherCalcList, $classifiedCalcList) = $this->metric->classifyCalc($calcInstanceList);
 
         /* 计算根据数据源归类后的度量项。*/
-        foreach($classifiedInstances as $dataSource => $instances)
+        foreach($classifiedCalcList as $dataSource => $calcList)
         {
-            $fieldList = $this->metric->uniteFieldList($instances);
+            $fieldList = $this->metric->uniteFieldList($calcList);
             $rows = $dataset->$dataSource($fieldList)->fetchAll();
 
             foreach($rows as $row)
             {
-                foreach($instances as $instance)
+                foreach($calcList as $calc)
                 {
-                    $instance->calculate((object)$row);
+                    $calc->calculate((object)$row);
                 }
             }
         }
 
         /* 处理无法归类的度量项，使用句柄获取数据源。*/
-        foreach($otherInstances as $instance)
+        foreach($otherCalcList as $calc)
         {
-            $rows = $instance->getStatement($this->dao)->fetchAll();
-            foreach($rows as $row) $instance->calculate((object)$row);
+            $rows = $calc->getStatement($this->dao)->fetchAll();
+            foreach($rows as $row) $calc->calculate((object)$row);
         }
 
         /* 获取度量项的计算结果并保存。*/
-        foreach($metricInstances as $code => $metricObj)
+        foreach($calcInstanceList as $code => $calc)
         {
-            $resultSet = $metricObj->getResult();
-            if(empty($resultSet)) continue;
-            foreach($resultSet as $result)
+            $rows = $calc->getResult();
+            if(empty($rows)) continue;
+
+            foreach($rows as $row)
             {
-                $record             = $result;
-                $record->mid        = $metricObj->id;
-                $record->metricCode = $code;
-                $record->date       = helper::today();
-                $record->year       = date('Y');
-                $record->month      = date('Ym');
-                $record->week       = date('W');
-                $record->day        = date('Ymd');
-                $this->dao->insert(TABLE_METRICRECORDS)->data($record)->exec();
+                $row->metricID   = $calc->id;
+                $row->metricCode = $code;
+                $row->date       = helper::today();
+                $row->year       = date('Y');
+                $row->month      = date('Ym');
+                $row->week       = date('W');
+                $row->day        = date('Ymd');
+                $this->dao->insert(TABLE_METRICBASELIB)->data($row)->exec();
             }
         }
     }

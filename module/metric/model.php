@@ -17,9 +17,9 @@ class metricModel extends model
      * @access public
      * @return string
      */
-    public function getFuncRoot()
+    public function getCalcRoot()
     {
-        return $this->app->getModuleRoot() . 'metric' . DS . 'func' . DS;
+        return $this->app->getModuleRoot() . 'metric' . DS . 'calc' . DS;
     }
 
     /**
@@ -62,14 +62,14 @@ class metricModel extends model
     }
 
     /**
-     * Get metric list.
+     * Get calc list.
      *
      * @access public
      * @return array
      */
-    public function getMetricList()
+    public function getCalcList()
     {
-        $funcRoot = $this->getFuncRoot();
+        $funcRoot = $this->getCalcRoot();
 
         $fileList = array();
         foreach($this->config->metric->scopeList as $scope)
@@ -82,7 +82,7 @@ class metricModel extends model
             }
         }
 
-        $metricList = array();
+        $calcList = array();
         $excutableMetric = $this->getExecutableMetric();
         foreach($fileList as $file)
         {
@@ -90,24 +90,24 @@ class metricModel extends model
             if(!in_array($code, $excutableMetric)) continue;
             $id = array_search($code, $excutableMetric);
 
-            $metric = new stdclass();
-            $metric->code = $code;
-            $metric->file = $file;
-            $metricList[$id] = $metric;
+            $calc = new stdclass();
+            $calc->code = $code;
+            $calc->file = $file;
+            $calcList[$id] = $calc;
         }
 
-        return $metricList;
+        return $calcList;
     }
 
     /**
-     * Get metric instance list.
+     * Get calc instance list.
      *
      * @access public
      * @return mixed
      */
-    public function getInstanceList()
+    public function getCalcInstanceList()
     {
-        $metricList = $this->getMetricList();
+        $metricList = $this->getCalcList();
 
         include $this->app->getModuleRoot() . DS . 'metric' . DS . 'func.class.php';
         $metricInstances = array();
@@ -146,7 +146,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function classifyMetric($metricInstances)
+    public function classifyCalc($metricInstances)
     {
         $classifiedInstances = array();
         $otherInstances      = array();

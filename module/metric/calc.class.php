@@ -9,7 +9,7 @@
  * @license   LGPL
  * @Link      https://www.zentao.net
  */
-class baseMetric
+class baseCalc
 {
     /**
      * 来源数据集。

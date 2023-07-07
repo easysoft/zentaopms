@@ -16,8 +16,8 @@ class count_of_closed_execution extends baseMetric
 
     public $fieldList = array('id', 'status');
 
-    public function calculate($data)
+    public function calculate($row)
     {
-        if($data->status == 'closed') $this->result ++;
+        if($row->status == 'closed') $this->result ++;
     }
 }
