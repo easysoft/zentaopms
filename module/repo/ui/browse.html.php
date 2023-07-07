@@ -83,9 +83,105 @@ featureBar(
 /* zin: Define the toolbar on main menu. */
 $refreshLink   = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1");
 $refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh');
-$downloadItem  = array('text' => $lang->repo->download, 'url' => '#modal-downloadCode', 'class' => 'primary download-btn', 'icon' => 'download', 'data-toggle' => 'modal', 'data-size' => '500px');
 
 $tableData = initTableData($infos, $config->repo->repoDtable->fieldList, $this->repo);
+
+$downloadWg = div
+(
+    set::id('modal-downloadCode'),
+    set::title($lang->repo->downloadCode),
+    on('click', '', array('capture' => true, 'prevent' => true, 'stop' => true)),
+    $cloneUrl->svn ? div
+    (
+        p(set::class('repo-downloadCode'), $lang->repo->cloneUrl),
+        formRow
+        (
+            formGroup
+            (
+                set::width('450px'),
+                input
+                (
+                    set::type('text'),
+                    set::value($cloneUrl->svn),
+                    set::readOnly(true),
+                ),
+            ),
+            formGroup
+            (
+                set::width('50px'),
+                btn
+                (
+                    set::icon('copy'),
+                )
+            )
+        ),
+    ) : null,
+
+    $cloneUrl->ssh ? div
+    (
+        p(set::class('repo-downloadCode'), $lang->repo->sshClone),
+        formRow
+        (
+            formGroup
+            (
+                set::width('450px'),
+                input
+                (
+                    set::type('text'),
+                    set::value($cloneUrl->ssh),
+                    set::readOnly(true),
+                ),
+            ),
+            formGroup
+            (
+                set::width('50px'),
+                btn
+                (
+                    set::class('copy-btn'),
+                    set::icon('copy'),
+                )
+            )
+        ),
+    ) : null,
+
+    $cloneUrl->http ? div
+    (
+        p(set::class('repo-downloadCode'), $lang->repo->httpClone),
+        formRow
+        (
+            formGroup
+            (
+                set::width('450px'),
+                input
+                (
+                    set::type('text'),
+                    set::value($cloneUrl->http),
+                    set::readOnly(true),
+                ),
+            ),
+            formGroup
+            (
+                set::width('50px'),
+                btn
+                (
+                    set::class('copy-btn'),
+                    set::icon('copy'),
+                )
+            )
+        ),
+    ) : null,
+
+    div
+    (
+        setStyle(array('margin-top' => '20px')),
+        btn
+        (
+            set::icon('down-circle'),
+            set::class('downloadZip-btn'),
+            set::text($lang->repo->downloadZip),
+        )
+    ),
+);
 
 toolbar
 (
@@ -94,104 +190,19 @@ toolbar
         $lang->repo->notice->lastSyncTime . $cacheTime
     ),
     item(set($refreshItem)),
-    item(set($downloadItem)),
-);
-
-modalTrigger
-(
-    modal
+    dropdown
     (
-        set::id('modal-downloadCode'),
-        set::title($lang->repo->downloadCode),
-        $cloneUrl->svn ? div
+        set::staticMenu(true),
+        set::subMenuTrigger('manual'),
+        btn
         (
-            p(set::class('repo-downloadCode'), $lang->repo->cloneUrl),
-            formRow
-            (
-                formGroup
-                (
-                    set::width('450px'),
-                    input
-                    (
-                        set::type('text'),
-                        set::value($cloneUrl->svn),
-                        set::readOnly(true),
-                    ),
-                ),
-                formGroup
-                (
-                    set::width('50px'),
-                    btn
-                    (
-                        set::icon('copy'),
-                    )
-                )
-            ),
-        ) : null,
-
-        $cloneUrl->ssh ? div
+            setClass('primary download-btn'),
+            set::icon('download'),
+            $lang->repo->download
+        ),
+        to::items
         (
-            p(set::class('repo-downloadCode'), $lang->repo->sshClone),
-            formRow
-            (
-                formGroup
-                (
-                    set::width('450px'),
-                    input
-                    (
-                        set::type('text'),
-                        set::value($cloneUrl->ssh),
-                        set::readOnly(true),
-                    ),
-                ),
-                formGroup
-                (
-                    set::width('50px'),
-                    btn
-                    (
-                        set::class('copy-btn'),
-                        set::icon('copy'),
-                    )
-                )
-            ),
-        ) : null,
-
-        $cloneUrl->http ? div
-        (
-            p(set::class('repo-downloadCode'), $lang->repo->httpClone),
-            formRow
-            (
-                formGroup
-                (
-                    set::width('450px'),
-                    input
-                    (
-                        set::type('text'),
-                        set::value($cloneUrl->http),
-                        set::readOnly(true),
-                    ),
-                ),
-                formGroup
-                (
-                    set::width('50px'),
-                    btn
-                    (
-                        set::class('copy-btn'),
-                        set::icon('copy'),
-                    )
-                )
-            ),
-        ) : null,
-
-        to::footer
-        (
-            set::footerClass('flex-center'),
-            btn
-            (
-                set::icon('down-circle'),
-                set::class('downloadZip-btn'),
-                set::text($lang->repo->downloadZip),
-            )
+           array($downloadWg)
         ),
     )
 );

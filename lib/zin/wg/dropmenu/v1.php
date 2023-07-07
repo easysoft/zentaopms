@@ -58,7 +58,7 @@ class dropmenu extends wg
         if(empty($extra))    $extra  = '';
         if(empty($objectID)) $objectID = data($module . 'ID');
 
-        if(empty($url))
+        if(empty($url) && empty($data))
         {
             $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
         }
@@ -72,7 +72,6 @@ class dropmenu extends wg
         return zui::dropmenu
         (
             set('_id', $id),
-            set('_id', $id ? $id : 'dropmenu'),
             set('data', $data),
             set('data-fetcher', $url),
             set(array('fetcher' => $url, 'text' => $text, 'defaultValue' => $objectID, 'cache' => $cache)),
