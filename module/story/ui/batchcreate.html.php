@@ -13,48 +13,17 @@ declare(strict_types=1);
 namespace zin;
 
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($config, $lang, $forceReview, $fields, $showFields)
+$fnGenerateFields = function() use ($config, $lang, $forceReview, $fields, $users)
 {
-    /* Gather the fields that are displayed. */
-    $visibleFields  = array_keys($fields);
-    foreach(explode(',', $showFields) as $field)
-    {
-        if($field) $visibleFields[$field] = '';
-    }
-    $visibleFields['module']   = '';
-    $visibleFields['title']    = '';
-    $visibleFields['category'] = '';
-    $forceReview && $visibleFields['reviewer'] = '';
-
-    /* Collect required fields. */
-    $requiredFields = array();
-    if($forceReview) $config->story->create->requiredFields .= ',reviewer';
-    foreach(explode(',', $config->story->create->requiredFields) as $field)
-    {
-        if(!$field) continue;
-
-        $requiredFields[$field] = '';
-        if(strpos(",{$config->story->list->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
-    }
-
     /* Generate fields with the appropriate properties. */
-    $items = array();
+    $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
 
-    return array_merge($items, array_map(function($name, $field) use($requiredFields, $visibleFields)
+    return array_merge($items, array_map(function($name, $field)
     {
         $field['name'] = $name;
-        if(isset($field['options']) && !isset($field['items'])) $field['items'] = $field['options'];
-
-        /* Set required flag to field. */
-        if(isset($requiredFields[$name])) $field['required'] = true;
-
-        /* Set hidden property to field. */
-        if(!isset($visibleFields[$name])) $field['hidden'] = true;
-        if($name == 'sourceNote' && isset($visibleFields['source']))
-        {
-            unset($field['hidden']);
-        }
+        if(!empty($field['options'])) $field['items'] = $field['options'];
+        unset($field['options']);
 
         return $field;
     }, array_keys($fields), array_values($fields)));
@@ -63,20 +32,10 @@ $fnGenerateFields = function() use ($config, $lang, $forceReview, $fields, $show
 /* Generate customized fields. */
 $fnGenerateCustomizedFields = function() use ($showFields, $customFields)
 {
-    $showFields = ",$showFields,";
-    $fields = array();
+    $showFields    = ",$showFields,";
+    $fields        = array();
     $defaultFields = explode(',', 'branch,platform,plan,spec,pri,estimate');
-    foreach($customFields as $name => $text)
-    {
-        $fields[] = array
-        (
-            'name'    => $name,
-            'text'    => $text,
-            'show'    => strpos($showFields, ",$name,") !== false,
-            'default' => in_array($name, $defaultFields)
-        );
-    }
-
+    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
     return $fields;
 };
 
@@ -87,6 +46,7 @@ formBatchPanel
     set::pasteField('title'),
     set::customFields(array('items' => $fnGenerateCustomizedFields())),
     set::items($fnGenerateFields()),
+    set::onRenderRowCol(jsRaw('renderCellData')),
 );
 
 render();

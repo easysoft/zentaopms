@@ -504,7 +504,7 @@ class storyZen extends story
      * @access protected
      * @return array
      */
-    protected function getFormFieldsForBatchCreate(int $productID, string $branch, int $executionID = 0): array
+    protected function getFormFieldsForBatchCreate(int $productID, string $branch, int $executionID = 0, string $storyType = ''): array
     {
         $product = $this->loadModel('product')->getByID($productID);
         $fields  = $this->config->story->form->batchCreate;
@@ -514,6 +514,14 @@ class storyZen extends story
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
+
+            if($this->view->execution->type == 'kanban')
+            {
+                $fields['region']['options'] = zget($this->view, 'regionPairs', array());
+                $fields['lane']['options']   = zget($this->view, 'lanePairs', array());
+                $fields['region']['default'] = zget($this->view, 'regionID', 0);
+                $fields['lane']['default']   = zget($this->view, 'laneID', 0);
+            }
         }
         else
         {
@@ -523,6 +531,9 @@ class storyZen extends story
         $modules   = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
         $plans     = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'skipParent|unexpired|noclosed');
         $reviewers = $this->story->getProductReviewers($productID);
+        $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
+        $stories   = $this->story->getParentStoryPairs($productID);
+        $URS       = $storyType != 'story' ? array() : $this->story->getProductStoryPairs($productID, $branch, 0, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
 
         /* 设置下拉菜单内容。 */
         $fields['branch']['options'] = $branches;
@@ -537,9 +548,13 @@ class storyZen extends story
                 $fields = array_merge($fieldPlatform, $fields);
                 break;
         }
-        $fields['module']['options']   = $modules;
-        $fields['plan']['options']     = $plans;
-        $fields['reviewer']['options'] = $reviewers;
+        $fields['module']['options']     = $modules;
+        $fields['plan']['options']       = $plans;
+        $fields['reviewer']['options']   = $reviewers;
+        $fields['assignedTo']['options'] = $users;
+        $fields['mailto']['options']     = $users;
+        $fields['parent']['options']     = array_filter($stories);
+        $fields['URS']['options']        = $URS;
 
         if($this->story->checkForceReview()) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);

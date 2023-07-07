@@ -59,7 +59,7 @@ class formBatchItem extends wg
      */
     protected function build()
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $defaultDitto, $hidden, $readonly) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'defaultDitto', 'hidden', 'readonly'));
+        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $defaultDitto, $hidden, $readonly, $multiple) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'defaultDitto', 'hidden', 'readonly', 'multiple'));
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -71,9 +71,10 @@ class formBatchItem extends wg
         if($name !== null)           $control['name']        = $name;
         if($value !== null)          $control['value']       = $value;
         if($disabled !== null)       $control['disabled']    = $disabled;
+        if($multiple !== null)       $control['multiple']    = $multiple;
         if($items !== null)          $control['items']       = $items;
         if($placeholder !== null)    $control['placeholder'] = $placeholder;
-        if($readonly !== null)       $control['readonly'] = $readonly;
+        if($readonly !== null)       $control['readonly']    = $readonly;
 
         $asIndex = $control['type'] === 'index';
         if($asIndex) $control['type'] = 'static';

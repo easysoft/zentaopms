@@ -177,10 +177,10 @@ class story extends control
 
         /* The 'batchCreateFields' of global variable $config will be changed and used by the following business logic. */
         $customFields = $this->storyZen->getCustomFields($this->config, $storyType, $this->view->hiddenPlan, $product);
+        $showFields   = $this->storyZen->getShowFields($this->config->story->custom->batchCreateFields, $storyType, $product);
 
-        $showFields = $this->storyZen->getShowFields($this->config->story->custom->batchCreateFields, $storyType, $product);
-        $fields     = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID);
-        $fields     = $this->storyZen->removeFormFieldsForBatchCreate($fields, $this->view->hiddenPlan, isset($this->view->execution) ? $this->view->execution->type : '');
+        $fields = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID, $storyType);
+        $fields = $this->storyZen->removeFormFieldsForBatchCreate($fields, $this->view->hiddenPlan, isset($this->view->execution) ? $this->view->execution->type : '');
 
         $this->view->title        = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
         $this->view->customFields = $customFields;
