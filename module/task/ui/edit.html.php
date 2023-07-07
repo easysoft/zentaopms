@@ -96,12 +96,10 @@ detailBody
         section
         (
             set::title($lang->task->desc),
-            textarea
+            editor
             (
-                set::label($lang->task->desc),
                 set::name('desc'),
-                set::value($task->desc ? htmlSpecialString($task->desc) : ''),
-                set::control('textarea'),
+                isHTML($task->desc) ? html($task->desc) : $task->desc
             )
         ),
         section
