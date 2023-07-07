@@ -147,14 +147,7 @@ dtable
             'onClick'  => jsRaw('onClickBatchEdit')
         ))
     )),
-    set::footPager
-    (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(createLink('product', 'all', "browseType={$browseType}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={page}"))
-    )
+    set::footPager(usePager())
 );
 
 jsVar('langSummary', $lang->product->pageSummary);

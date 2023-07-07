@@ -4,6 +4,5 @@
 #mainContent .detail-header .btn-group .icon {--tw-text-opacity: 1; color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity));}
 #mainContent .detail-body .section-list .tabs ul {border-bottom-width: 1px; border-bottom-style: solid;}
 #mainContent .detail-body .section-list .tab-content .table-data caption {padding-top: 16px;}
-#stories, #bugs {padding-top: 16px;}
 #planInfo table caption {font-size: 1rem; font-weight: bold;}
 #planInfo .history {padding: 16px 0px;}

@@ -156,12 +156,12 @@ detailBody
                     set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
                     set::sortLink(jsRaw('window.createSortLink')),
                     set::footToolbar($storyFootToolbar),
-                    set::footPager(
-                        usePager(null, 'storyPager'),
-                        set::recPerPage($storyPager->recPerPage),
-                        set::recTotal($storyPager->recTotal),
-                        set::linkCreator(helper::createLink('build', 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
-                    ),
+                    set::footPager(usePager(array
+                    (
+                        'recPerPage' => $storyPager->recPerPage,
+                        'recTotal' => $storyPager->recTotal,
+                        'linkCreator' => helper::createLink('build', 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")
+                    ), 'storyPager')),
                 )
             ),
 
@@ -180,12 +180,12 @@ detailBody
                     set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
                     set::sortLink(jsRaw('window.createSortLink')),
                     set::footToolbar($bugFootToolbar),
-                    set::footPager(
-                        usePager(null, 'bugPager'),
-                        set::recPerPage($bugPager->recPerPage),
-                        set::recTotal($bugPager->recTotal),
-                        set::linkCreator(helper::createLink('build', 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
-                    ),
+                    set::footPager(usePager(array
+                    (
+                        'recPerPage'  => $bugPager->recPerPage,
+                        'recTotal'    => $bugPager->recTotal,
+                        'linkCreator' => helper::createLink('build', 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
+                    ), 'bugPager')),
                 )
             ),
 

@@ -752,8 +752,8 @@ class program extends control
         $program   = $this->program->getByID($programID);
         if(!$program) return print(js::error($this->lang->notFound) . js::locate('back'));
 
-        if(common::hasPriv('program', 'product')) return $this->locate(inlink('product', "programID=$programID"));
-        if(common::hasPriv('program', 'project')) return $this->locate(inlink('project', "programID=$programID"));
+        if(common::hasPriv('program', 'product')) $this->locate(inlink('product', "programID=$programID"));
+        if(common::hasPriv('program', 'project')) $this->locate(inlink('project', "programID=$programID"));
     }
 
     /**

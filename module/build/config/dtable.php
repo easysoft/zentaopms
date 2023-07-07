@@ -67,6 +67,7 @@ $config->build->story->dtable->fieldList['title']['name']        = 'title';
 $config->build->story->dtable->fieldList['title']['type']        = 'title';
 $config->build->story->dtable->fieldList['title']['link']        = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}');
 $config->build->story->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->build->story->dtable->fieldList['title']['data-size']   = 'lg';
 
 $config->build->story->dtable->fieldList['pri']['title'] = $lang->priAB;
 $config->build->story->dtable->fieldList['pri']['name']  = 'pri';
@@ -111,6 +112,7 @@ $config->build->bug->dtable->fieldList['title']['name']        = 'title';
 $config->build->bug->dtable->fieldList['title']['type']        = 'title';
 $config->build->bug->dtable->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
 $config->build->bug->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->build->bug->dtable->fieldList['title']['data-size']   = 'lg';
 
 $config->build->bug->dtable->fieldList['severity']['title'] = $lang->bug->severity;
 $config->build->bug->dtable->fieldList['severity']['name']  = 'severity';
