@@ -54,4 +54,14 @@ class dataset
             ->andWhere('t2.hasProduct')->eq(1)
             ->query();
     }
+
+    public function getPlans($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_PRODUCTPLAN)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->query();
+    }
 }
