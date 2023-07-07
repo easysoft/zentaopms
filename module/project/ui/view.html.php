@@ -214,7 +214,7 @@ if($project->grade > 1)
     $programDom = div
     (
         icon('program mr-2'),
-        html(implode('/ ', $programList))
+        html($programList ? implode('/ ', $programList) : '')
     );
 }
 
