@@ -23,6 +23,7 @@ class zui extends wg
         '_name:string',
         '_to?:string',
         '_tag:string="div"',
+        '_map?:array',
         '_props?: array',
         '_size?: array',
         '_id?: string',
@@ -31,15 +32,25 @@ class zui extends wg
 
     protected function build()
     {
-        list($name, $target, $tagName, $targetProps, $size, $id, $class) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class'));
+        list($name, $target, $tagName, $targetProps, $size, $id, $class, $map) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map'));
         list($width, $height) = $size;
 
         $options  = $this->getRestProps();
+        $children = $this->children();
         $selector = $target;
         if(empty($selector))
         {
             if(empty($id)) $id = $this->gid;
             $selector = "#$id";
+        }
+        if(is_array($map))
+        {
+            foreach($options as $key => $value)
+            {
+                if(!isset($map[$key])) continue;
+                $options[$map[$key]] = $value;
+                unset($options[$key]);
+            }
         }
 
         return array
@@ -52,8 +63,8 @@ class zui extends wg
                 setID($id),
                 setStyle('width', $width),
                 setStyle('height', $height),
-            ) : null,
-            $this->children(),
+                $children,
+            ) : $children,
             h::jsCall('~zui.create', $name, $selector, $options)
         );
     }
