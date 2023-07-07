@@ -112,7 +112,7 @@ function openApp(url, code, options)
                 'name="app-' + code + '"',
                 'class="fade"',
                 'allowfullscreen="true"',
-                'src="' + $.createLink('index', 'app', 'url=' + btoa(url)) + '"',
+                'src="' + $.createLink('index', 'app') + '"',
                 'frameborder="no"',
                 'allowtransparency="true"',
                 'scrolling="auto"',
@@ -124,6 +124,10 @@ function openApp(url, code, options)
             .append($iframe)
             .appendTo('#apps');
 
+        $iframe.on('ready.app', () =>
+        {
+            openApp(url, code, options);
+        });
         iframe.onload = iframe.onreadystatechange = function(e)
         {
             const finishLoad = () => $iframe.removeClass('loading').addClass('in');
@@ -131,6 +135,7 @@ function openApp(url, code, options)
             setTimeout(finishLoad, 10000);
             triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
+        return;
     }
     if(!url) url = openedApp.currentUrl;
 

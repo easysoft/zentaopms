@@ -874,11 +874,14 @@
     {
         initZinbar();
 
-        if(window.defaultAppUrl)
+        if(window.defaultAppUrl) loadPage(window.defaultAppUrl);
+        if(isInAppTab)
         {
-            loadPage(window.defaultAppUrl);
+            const frameElement = window.frameElement;
+            if(frameElement && parent.window.$) parent.window.$(frameElement).trigger('ready.app');
         }
-        else if(DEBUG)
+
+        if(DEBUG)
         {
             if(window.zinDebug)
             {
