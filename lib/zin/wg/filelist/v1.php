@@ -36,9 +36,9 @@ class fileList extends wg
         $object       = (object)$this->prop('object');
         $fileListView = h::ul(setClass('files-list col relative'));
 
-        jsVar('method', $method);
-        jsVar('showDelete', $showDelete);
-        jsVar('sessionString', session_name() . '=' . session_id());
+        jsVar('window.method', $method);
+        jsVar('window.showDelete', $showDelete);
+        jsVar('window.sessionString', session_name() . '=' . session_id());
 
         foreach($files as $file)
         {
