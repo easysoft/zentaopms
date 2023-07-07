@@ -139,7 +139,7 @@ class todoModel extends model
             }
             else
             {
-                return print(js::error('todo#' . $todoID . dao::getError(true)));
+                dao::$errors[] = 'todo#' . $todoID . dao::getError(true);
             }
         }
 

@@ -162,19 +162,27 @@ class todo extends control
      */
     public function batchEdit(string $from = '', string $type = 'today', int $userID = 0, string $status = 'all')
     {
-        $form = form::data($this->config->todo->batchEdit->form);
-
         /* Get form data for my-todo. */
-        if($from == 'myTodo') $this->todoZen->batchEditFromMyTodo($form, $type, $userID, $status);
+        if($from == 'myTodo')
+        {
+            if(!$this->post->todoIdList) return $this->send(array('result' => 'fail', 'load' => true));
+
+            $this->todoZen->batchEditFromMyTodo($this->post->todoIdList, $type, $userID, $status);
+        }
 
         /* Save the todo data for batch edit. */
         if($from == 'todoBatchEdit')
         {
-            $todos      = $this->todoZen->beforeBatchEdit($form);
-            $allChanges = $this->todo->batchUpdate($todos, $form->data->todoIdList);
+            $formData   = form::batchData($this->config->todo->batchEdit->form)->get();
+            $todos      = $this->todoZen->beforeBatchEdit($formData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $allChanges = $this->todo->batchUpdate($todos, array_keys($formData));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->todoZen->afterBatchEdit($allChanges);
 
-            return print(js::locate($this->session->todoList, 'parent'));
+            return $this->sendSuccess(array('locate' => $this->session->todoList));
         }
     }
 
