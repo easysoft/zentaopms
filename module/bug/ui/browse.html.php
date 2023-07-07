@@ -215,6 +215,8 @@ else
         set::checkable($canBatchAction),
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
+        set::onRenderCell(jsRaw('window.onRenderCell')),
+        set::modules($modulePairs)
     );
 }
 
