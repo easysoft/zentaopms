@@ -1,10 +1,10 @@
-window.renderCellData = function($cell)
+window.renderRowData = function($row)
 {
-    var $select = $cell.find('select');
-    if($select.length > 0)
+    $row.find('select').each(function()
     {
+        $select = $(this);
         if($select.prop('multiple')){$select.attr('name', $select.attr('name') + '[]');}
-    }
+    });
 };
 
 /**

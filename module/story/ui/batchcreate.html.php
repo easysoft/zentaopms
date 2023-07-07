@@ -42,12 +42,12 @@ $fnGenerateCustomizedFields = function() use ($showFields, $customFields)
 formBatchPanel
 (
     set::title($storID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate),
-    set::uploadParams(createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type"))),
+    set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")),
     set::pasteField('title'),
     set::ajax(array('beforeSend' => jsRaw('window.beforeSubmitBatchCreateForm'))),
     set::customFields(array('items' => $fnGenerateCustomizedFields())),
     set::items($fnGenerateFields()),
-    set::onRenderRowCol(jsRaw('renderCellData')),
+    set::onRenderRow(jsRaw('renderRowData')),
     set::actions(array
     (
         array('text' => $lang->save,            'onclick' => 'window.onClickActionBtn(event)', 'id' => 'save',      'btnType' => 'submit', 'class' => 'primary'),
