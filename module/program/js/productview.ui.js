@@ -40,44 +40,25 @@ window.iconRenderProductView = function(value, row)
  */
 window.onClickBatchEdit = function(event)
 {
-    event.stopPropagation();
-    event.preventDefault();
-
-    /* Get checked product ID list. */
     const dtable      = zui.DTable.query(event.target);
     const checkedList = dtable.$.getChecks();
 
-    if(checkedList.length === 0) return;
+    if(!checkedList.length) return;
 
-    /* Create form. */
-    const f = document.createElement("form");
-    f.action = $(event.target).attr('href');
-    f.method = "POST";
-    f.target = "_self";
-
-    /* Create element to carry data. */
+    const formData = new FormData();
     checkedList.forEach(function(id)
     {
-        if(id.includes('-')) return;
-
-        const item = document.createElement('input');
-        item.name  = 'productIDList[]';
-        item.value = id;
-
-        f.appendChild(item);
+        formData.append('productIDList[]', id);
     });
 
-    /* Append form to body. */
-    document.body.appendChild(f);
-
-    f.submit();
-}
+    postAndLoadPage($(event.target.closest('button')).data('url'), formData);
+};
 
 onClickCheckBatchEdit = function(event)
 {
     $.cookie.set('checkedEditProduct', 1);
     loadCurrentPage(["table/#dtable:type=json&data=props"]);
-}
+};
 
 window.footerSummary = function(checkedIdList)
 {
@@ -96,4 +77,4 @@ window.footerSummary = function(checkedIdList)
     var summary = checkedSummary.replace('%total%', totalProducts);
 
     return {html: summary};
-}
+};

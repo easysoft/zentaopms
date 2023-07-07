@@ -283,7 +283,7 @@ dtable
             (
                 'text'    => $lang->edit,
                 'btnType' => 'secondary',
-                'url'     => createLink('product', 'batchEdit'),
+                'data-url'=> createLink('product', 'batchEdit'),
                 'onClick' => jsRaw('window.onClickBatchEdit')
             ) : null
         )
