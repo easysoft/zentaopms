@@ -44,7 +44,7 @@ formBatchPanel
     on::click('#saveButton', 'customSubmit'),
     on::click('#saveDraftButton', 'customSubmit'),
     set::id('dataform'),
-    set::title($storyID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate),
+    set::title($storyID ? $storyTitle . $lang->colon . $this->lang->story->subdivide : $this->lang->story->batchCreate),
     set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")),
     set::pasteField('title'),
     set::customFields(array('items' => $fnGenerateCustomizedFields())),
