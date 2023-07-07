@@ -122,7 +122,7 @@ foreach($projects as $projectID => $project)
 
 panel
 (
-    set('class', 'bug-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set('class', 'recentproject-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
     set::title($lang->block->titleList['recentproject']),
     to::headingActions
@@ -138,6 +138,7 @@ panel
     div
     (
         set('class', 'flex flex-wrap cards justify-between'),
+        setStyle('height', $longBlock ? '167px' : '487px'),
         $cards
     )
 );
