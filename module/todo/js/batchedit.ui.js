@@ -3,14 +3,18 @@ window.renderRowData = function($row, index, row)
     if(row.type != 'custom')
     {
         /* Init type cell data. */
-        if(row.type == 'cycle') $row.find('td[data-name="type"]').empty().html($('#cycleCellData').html());
+        if(row.type == 'cycle')
+        {
+            $row.find('td[data-name="type"]').empty().html($('#cycleCellData').html());
+            $row.find('td[data-name="type"]').find('input[name="type"]').attr('name', `type[${wor.id}]`);
+        }
 
         /* Init name cell data. */
         const $nameBox = $(`#nameCellData .${row.type}-data`).html();
         if($nameBox && $row.find('td[data-name="name"] .inited').length == 0)
         {
             $row.find('td[data-name="name"]').empty().html($nameBox);
-            $row.find('td[data-name="name"] .inited').val(row.objectID);
+            $row.find('td[data-name="name"] .inited').attr('name', `${row.type}[${row.id}]`).val(row.objectID);
         }
     }
 
@@ -19,8 +23,8 @@ window.renderRowData = function($row, index, row)
         $tdDom = $row.find('td[data-name="beginAndEnd"]');
         $tdDom.empty().html($('#dateCellData').html());
 
-        $tdDom.find('input[name="begin"]').val(row.begin).prop('disabled', !row.begin);
-        $tdDom.find('input[name="end"]').val(row.end).prop('disabled', !row.begin);
+        $tdDom.find('input[name="begin"]').attr('name', `begin[${row.id}]`).val(row.begin).prop('disabled', !row.begin);
+        $tdDom.find('input[name="end"]').attr('name', `end[${row.id}]`).val(row.end).prop('disabled', !row.begin);
 
         $tdDom.find('input[name="switchTime"]').attr('name', `switchTime[${row.id}]`).attr('id', `switchTime_${row.id}`).prop('checked', !row.begin);
         $tdDom.find('label[for="switchTime_"]').attr('for', `switchTime_${row.id}`);
