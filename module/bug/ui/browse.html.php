@@ -214,14 +214,7 @@ else
         set::customCols(true),
         set::checkable($canBatchAction),
         set::footToolbar($footToolbar),
-        set::footPager
-        (
-            usePager(),
-            set::page($pager->pageID),
-            set::recPerPage($pager->recPerPage),
-            set::recTotal($pager->recTotal),
-            set::linkCreator(helper::createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
-        ),
+        set::footPager(usePager()),
     );
 }
 
