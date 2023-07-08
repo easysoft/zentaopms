@@ -1,4 +1,4 @@
-let timeIndex = times.findIndex(key => `${key}` === `${time}`);
+const timeIndex = times.findIndex(key => `${key}` === `${time}`);
 window.renderRowData = function($row, index, row)
 {
     if($row.find('td[data-name="beginAndEnd"] .inited').length == 0)
@@ -6,11 +6,11 @@ window.renderRowData = function($row, index, row)
         $tdDom = $row.find('td[data-name="beginAndEnd"]');
         $tdDom.empty().html($('#dateCellData').html());
 
-        $tdDom.find('select[name="begin"]').attr('name', `begin[${index}]`).val(times[timeIndex]);
-        $tdDom.find('select[name="end"]').attr('name', `end[${index}]`).val(times[timeIndex + 3]);
-        timeIndex += 3;
+        const beginIndex = timeIndex + index * 3;
+        $tdDom.find('select[name="begin"]').attr('name', `begin[${index + 1}]`).val(times[beginIndex]);
+        $tdDom.find('select[name="end"]').attr('name', `end[${index + 1}]`).val(times[beginIndex + 3]);
 
-        $tdDom.find('input[name="switchTime"]').attr('name', `switchTime[${index}]`).attr('id', `switchTime_${index}`);
+        $tdDom.find('input[name="switchTime"]').attr('name', `switchTime[${index + 1}]`).attr('id', `switchTime_${index}`);
         $tdDom.find('label[for="switchTime_"]').attr('for', `switchTime_${index}`);
     }
 
