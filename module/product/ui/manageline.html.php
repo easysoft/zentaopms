@@ -15,90 +15,76 @@ $formRowList  = null;
 foreach($lines as $line)
 {
     $lineMenuList[] = div
+    (
+        set::class('ml-4 line-item flex items-center'),
+        span($line->name),
+        btn
         (
-            set::class('ml-4 line-item flex items-center'),
-            span
-            (
-                $line->name
-            ),
-            btn
-            (
-                icon('trash'),
-                set::size('sm'),
-                setClass('ghost text-gray ajax-submit'),
-                set::url(createLink('product', 'ajaxDeleteLine', "lineID={$line->id}")),
-                set('data-confirm', $lang->product->confirmDeleteLine),
-            )
-        );
+            icon('trash'),
+            set::size('sm'),
+            setClass('ghost text-gray ajax-submit'),
+            set::url(createLink('product', 'ajaxDeleteLine', "lineID={$line->id}")),
+            set('data-confirm', $lang->product->confirmDeleteLine),
+        )
+    );
 
     $formRowList[] = formRow
+    (
+        formGroup
         (
-            formGroup
-            (
-                set::width('1/3'),
-                set::name("modules[id$line->id]"),
-                set::value($line->name),
-            ),
-            $config->systemMode == 'ALM' ? formGroup
-            (
-                set::width('1/3'),
-                set::class('ml-4 required'),
-                set::name("programs[id$line->id]"),
-                set::items($programs),
-                set::value($line->root),
-            ) : null,
-        );
+            set::width('1/3'),
+            set::name("modules[id$line->id]"),
+            set::value($line->name),
+        ),
+        $config->systemMode == 'ALM' ? formGroup
+        (
+            set::width('1/3'),
+            set::class('ml-4 required'),
+            set::name("programs[id$line->id]"),
+            set::items($programs),
+            set::value($line->root),
+        ) : null,
+    );
 }
 
 for($i = 0; $i <= 5; $i ++)
 {
     $formRowList[] = formRow
+    (
+        set::class('line-row-add'),
+        formGroup(set::width('1/3'), set::name("modules[$i]")),
+        $config->systemMode == 'ALM' ? formGroup
         (
-            set::class('line-row-add'),
-            formGroup
+            set::width('1/3'),
+            set::class('ml-4 required'),
+            set::name("programs[$i]"),
+            set::items($programs),
+        ) : null,
+        formGroup
+        (
+            setClass('ml-2 pl-2 flex self-center'),
+            btn
             (
-                set::width('1/3'),
-                set::name("modules[$i]"),
+                setClass('btn btn-link text-gray addLine'),
+                icon('plus'),
+                on::click('addNewLine')
             ),
-            $config->systemMode == 'ALM' ? formGroup
+            btn
             (
-                set::width('1/3'),
-                set::class('ml-4 required'),
-                set::name("programs[$i]"),
-                set::items($programs),
-            ) : null,
-            formGroup
-            (
-                setClass('ml-2 pl-2 flex self-center'),
-                btn
-                (
-                    setClass('btn btn-link text-gray addLine'),
-                    icon('plus'),
-                    on::click('addNewLine')
-                ),
-                btn
-                (
-                    setClass('btn btn-link text-gray removeLine'),
-                    icon('trash'),
-                    on::click('removeLine'),
-                ),
-            )
-        );
+                setClass('btn btn-link text-gray removeLine'),
+                icon('trash'),
+                on::click('removeLine'),
+            ),
+        )
+    );
 }
 
 jsVar('+index', $i);
 
-to::header(
-    span
-    (
-        set::class('article-h2 w-1/4'),
-        $lang->product->line,
-    ),
-    span
-    (
-        set::class('article-h2'),
-        $lang->product->manageLine,
-    ),
+to::header
+(
+    span(set::class('article-h2 w-1/4'), $lang->product->line),
+    span(set::class('article-h2'), $lang->product->manageLine),
 );
 
 div
