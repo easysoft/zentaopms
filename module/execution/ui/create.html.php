@@ -88,7 +88,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
     {
         $hasBranch = $product->type != 'normal' && isset($branchGroups[$product->id]);
         $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
-        if(!isset($linkedBranches)) $branchIdList = isset($product->branches) ? join(',', $product->branches) : '';
+        if(!isset($linkedBranches)) $branchIdList = isset($product->branches) ? implode(',', $product->branches) : '';
         if(isset($linkedBranches))  $branchIdList = !empty($linkedBranches[$product->id]) ? $linkedBranches[$product->id] : '';
         if(empty($productID) || (!empty($productID) || $productID != $product->id))
         {

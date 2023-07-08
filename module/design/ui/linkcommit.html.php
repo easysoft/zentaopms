@@ -97,7 +97,7 @@ else
         set::footPager(
             usePager
             (
-                array('linkCreator' => helper::createLink('design', 'linkCommit', "designID={$designID}&repoID={$repoID}&begin={$begin}&end={$end}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}")),
+                array('linkCreator' => helper::createLink('design', 'linkCommit', "designID={$designID}&repoID={$repoID}&begin={$begin}&end={$end}&recPerPage={recPerPage}&pageID={page}")),
             ),
         ),
     );

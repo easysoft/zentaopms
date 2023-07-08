@@ -22,7 +22,7 @@ $getProjectGroup = function($project): string
 {
     global $app;
     if($project->status != 'done' and $project->status != 'closed' and $project->PM == $app->user->account)    return 'my';
-    if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $app->user->account)) return 'other';
+    if($project->status != 'done' and $project->status != 'closed' and $project->PM != $app->user->account) return 'other';
     return 'closed';
 };
 

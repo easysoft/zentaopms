@@ -74,7 +74,7 @@ if($linkedProducts)
                             set::value($product->id),
                             set::items($allProducts),
                             set::last($product->id),
-                            $hasBranch ? set::lastBranch(join(',', $product->branches)) : null,
+                            $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null,
                             on::change('productChange')
                         )
                     ),
@@ -91,7 +91,7 @@ if($linkedProducts)
                     (
                         set::name("branch[$i][]"),
                         set::items($branches),
-                        set::value(join(',', $product->branches)),
+                        set::value(implode(',', $product->branches)),
                         on::change('branchChange')
                     )
                 ),

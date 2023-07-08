@@ -290,13 +290,12 @@ class design extends control
      * @param  int    $repoID
      * @param  string $begin
      * @param  string $end
-     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkCommit(int $designID = 0, int $repoID = 0, string $begin = '', string $end = '', int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
+    public function linkCommit(int $designID = 0, int $repoID = 0, string $begin = '', string $end = '', int $recPerPage = 50, int $pageID = 1)
     {
         $design = $this->design->getById($designID);
         $this->commonAction($design->project, (int)$design->product, $designID);

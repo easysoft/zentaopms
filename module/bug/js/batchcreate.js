@@ -99,7 +99,7 @@ function loadExecutionBuilds(productID, executionID, index)
     }
     else
     {
-        link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch + "&index=" + index);
+        link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch);
     }
 
     setOpenedBuilds(link, index);

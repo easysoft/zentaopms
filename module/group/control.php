@@ -492,13 +492,12 @@ class group extends control
      * @param  string $browseType
      * @param  string $view
      * @param  int    $paramID
-     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function editManagePriv($browseType = '', $view = '', $paramID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function editManagePriv($browseType = '', $view = '', $paramID = 0, $recPerPage = 100, $pageID = 1)
     {
         if(empty($browseType) and $browseType != 'bysearch') $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';
         if($browseType == 'bysearch' and $this->cookie->managePrivEditType == 'bycard') $browseType = 'bycard';
@@ -536,7 +535,7 @@ class group extends control
 
             /* Build the search form. */
             $queryID   = ($browseType == 'bysearch') ? (int)$paramID : 0;
-            $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$total&recPerPage=$recPerPage");
+            $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recPerPage=$recPerPage");
             $this->group->buildPrivSearchForm($queryID, $actionURL);
 
             $privRelations = $this->group->getPrivRelationsByIdList(array_keys($privList));

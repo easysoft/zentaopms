@@ -388,13 +388,12 @@ class build extends control
      * @param  string     $varName      the name of the select object to create
      * @param  string     $build        build to selected
      * @param  string|int $branch
-     * @param  int        $index        the index of batch create bug.
      * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
      * @param  string     $extra
      * @access public
      * @return string
      */
-    public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 'all', $index = 0, $type = 'normal', $extra = '')
+    public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 'all', $type = 'normal', $extra = '')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
