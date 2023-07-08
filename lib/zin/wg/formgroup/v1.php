@@ -11,6 +11,7 @@ class formGroup extends wg
         'label?: string|bool',
         'labelClass?: string',
         'labelProps?: string',
+        'labelWidth?: int|string',
         'required?:bool|string="auto"',
         'tip?: string',
         'tipClass?: string|array',
@@ -27,7 +28,7 @@ class formGroup extends wg
 
     protected function build()
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly']);
+        list($name, $label, $labelClass, $labelProps, $labelWidth, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'labelWidth', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly']);
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -50,6 +51,7 @@ class formGroup extends wg
             set::class('form-group', $required ? 'required' : null, ($label === false || $label === null) ? 'no-label' : null, empty($width) ? null : 'grow-0'),
             zui::width($width),
             set($this->getRestProps()),
+            setCssVar('form-grid-label-width', $labelWidth),
             empty($label) ? null : new formLabel
             (
                 set::class($labelClass, $strong ? 'font-bold' : null),

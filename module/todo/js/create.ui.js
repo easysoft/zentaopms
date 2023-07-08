@@ -42,15 +42,3 @@ function changeCreateDate(e)
     $('#begin').val(selectTime);
     selectNext();
 }
-
-/**
- * 更改待办类型。
- * Change todo type.
- *
- * @param  object typeSelect
- * @return void
- */
-function changeType(typeSelect)
-{
-    loadList($(typeSelect.target).val(), '');
-}
