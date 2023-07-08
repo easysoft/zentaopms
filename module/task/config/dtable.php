@@ -34,6 +34,12 @@ $config->task->dtable->fieldList['type']['map']      = $lang->task->typeList;
 $config->task->dtable->fieldList['type']['sortType'] = true;
 $config->task->dtable->fieldList['type']['group']    = 1;
 
+$config->task->dtable->fieldList['branch']['title']    = $lang->branchName;
+$config->task->dtable->fieldList['branch']['type']     = 'text';
+$config->task->dtable->fieldList['branch']['sortType'] = false;
+$config->task->dtable->fieldList['branch']['width']    = '100';
+$config->task->dtable->fieldList['branch']['group']    = 1;
+
 $config->task->dtable->fieldList['openedBy']['title']    = $lang->task->openedByAB;
 $config->task->dtable->fieldList['openedBy']['type']     = 'user';
 $config->task->dtable->fieldList['openedBy']['sortType'] = true;

@@ -16,7 +16,7 @@ global $lang, $app;
 $app->loadLang('datatable');
 $showModule    = isset($config->$currentModule->$currentMethod->showModule) ? $config->$currentModule->$currentMethod->showModule : '0';
 $showBranch    = isset($config->$currentModule->$currentMethod->showBranch) ? $config->$currentModule->$currentMethod->showBranch : '0';
-$showAllModule = isset($config->execution->task->allModule)          ? $config->execution->task->allModule          : 0;
+$showAllModule = isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0;
 
 set::title($lang->datatable->displaySetting);
 form
@@ -55,17 +55,6 @@ form
             set::inline(true),
             set::items($lang->datatable->showAllModuleList),
             set::value($showAllModule),
-        ),
-    ) : null,
-    $isShowBranch ? formGroup
-    (
-        set::label($lang->datatable->showBranch),
-        radiolist
-        (
-            set::name('showBranch'),
-            set::inline(true),
-            set::items($lang->datatable->showBranchList),
-            set::value($showBranch),
         ),
     ) : null,
     input

@@ -95,6 +95,7 @@ $lang->waterfallPlusModel = '融合瀑布模型';
 $lang->all                = '全部';
 $lang->viewDetails        = '查看详情';
 $lang->childrenAB         = '子';
+$lang->branchName         = '分支/平台';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';

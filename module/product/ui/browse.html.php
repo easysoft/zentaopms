@@ -36,7 +36,6 @@ $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branch
             'activeKey'   => $moduleID,
             'settingLink' => $this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID"),
             'closeLink'   => createLink('execution', 'task'),
-            'branchType'  => $branchType
         )))
     );
 };

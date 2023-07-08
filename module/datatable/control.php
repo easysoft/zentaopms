@@ -30,14 +30,11 @@ class datatable extends control
      * @param  string $methodName
      * @param  string $currentModule
      * @param  string $currentMethod
-     * @param  string $branchType
      * @access public
      * @return void
      */
-    public function ajaxDisplay(string $datatableId, string $moduleName, string $methodName, string $currentModule, string $currentMethod, string $branchType)
+    public function ajaxDisplay(string $datatableId, string $moduleName, string $methodName, string $currentModule, string $currentMethod)
     {
-        if($branchType) $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, isset($this->lang->datatable->$branchType) ? $this->lang->datatable->$branchType : $this->lang->datatable->branch);
-
         $this->app->loadLang($currentModule);
         $this->app->loadConfig($currentModule);
 
@@ -46,8 +43,6 @@ class datatable extends control
         $this->view->methodName    = $methodName;
         $this->view->currentModule = $currentModule;
         $this->view->currentMethod = $currentMethod;
-        $this->view->isShowBranch  = $branchType && $branchType != 'normal';
-        $this->view->showBranch    = isset($this->config->$currentModule->$currentMethod->showBranch) ? $this->config->$currentModule->$currentMethod->showBranch : 1;
         $this->render();
     }
 

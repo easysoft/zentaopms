@@ -43,13 +43,6 @@ class datatableModel extends model
 
         foreach($fieldList as $fieldName => $items)
         {
-            if($fieldName === 'branch')
-            {
-                if($this->session->currentProductType === 'branch')   $fieldList[$fieldName]['title'] = $this->lang->datatable->branch;
-                if($this->session->currentProductType === 'platform') $fieldList[$fieldName]['title'] = $this->lang->datatable->platform;
-                continue;
-            }
-
             /* Translate field title. */
             if(!isset($items['title'])) $items['title'] = $fieldName;
             $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));

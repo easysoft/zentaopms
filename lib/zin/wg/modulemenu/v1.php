@@ -11,7 +11,6 @@ class moduleMenu extends wg
         'activeKey?: int',
         'settingLink?: string',
         'closeLink: string',
-        'branchType?: string=""',
         'showDisplay?: bool=true',
         'allText?: string'
     );
@@ -80,7 +79,6 @@ class moduleMenu extends wg
     {
         $settingLink = $this->prop('settingLink');
         $showDisplay = $this->prop('showDisplay');
-        $branchType  = $this->prop('branchType');
         if(!$settingLink && !$showDisplay) return null;
 
         global $app;
@@ -108,7 +106,7 @@ class moduleMenu extends wg
                 (
                     setClass('btn white'),
                     set('data-toggle', 'modal'),
-                    set::href(helper::createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod&branchType=$branchType")),
+                    set::href(helper::createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
                     $lang->displaySetting
                 )
                 : null,

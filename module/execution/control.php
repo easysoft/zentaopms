@@ -204,6 +204,13 @@ class execution extends control
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $extra         = $showAllModule ? 'allModule' : '';
 
+        /* Append branches to task. */
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($this->view->products));
+        foreach($tasks as $id => $task)
+        {
+            if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
+        }
+
         /* Assign. */
         $this->view->tasks        = $tasks;
         $this->view->pager        = $pager;

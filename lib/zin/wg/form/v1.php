@@ -27,7 +27,7 @@ class form extends formBase
         global $app, $lang;
         $module = $app->getModuleName();
         $method = $app->getMethodName();
-        $text   = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method);
+        $text   = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method, '');
 
         $defaultProps = array();
         $defaultProps['submitBtnText'] = $text;
