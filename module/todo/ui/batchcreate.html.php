@@ -28,14 +28,14 @@ div
         setClass('inited'),
         control
         (
-            setClass('time-input'),
+            setClass('time-input begin'),
             set::type('select'),
             set::name('begin'),
             set::items($times)
         ),
         control
         (
-            setClass('time-input'),
+            setClass('time-input end'),
             set::type('select'),
             set::name('end'),
             set::items($times)
@@ -75,8 +75,10 @@ formBatchPanel
     set::title($lang->todo->batchCreate . $lang->todo->common),
     set::onRenderRow(jsRaw('renderRowData')),
 
-    on::change('[data-name="type"]', "changeType"),
+    on::change('[data-name="type"]', 'changeType'),
+    on::change('.time-input', 'initTime'),
     on::click('.time-check', "$(event.target).closest('.input-group').find('.time-input').prop('disabled', !!event.target.checked)"),
+    on::click('.form-batch-row-actions .btn', 'initTime'),
 
     set::headingClass('justify-start'),
     to::headingActions

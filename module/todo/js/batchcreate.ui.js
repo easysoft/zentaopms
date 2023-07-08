@@ -53,3 +53,33 @@ window.changFuture = function()
 
     $('#futureDate').closest('.input-group').find('input[name=date]').prop('disabled', isChecked);
 }
+
+window.initTime = function(e)
+{
+    setTimeout(function()
+    {
+        let   $this     = $(e.target);
+        const isBegin   = $this.hasClass('begin');
+        if(!isBegin && !$this.hasClass('end')) $this = $this.closest('tr').find('.end');
+
+        const index     = parseInt($this.closest('tr').data('index'));
+        let   timeIndex = times.findIndex(key => `${key}` == $this.val());
+        if(isBegin)
+        {
+            timeIndex += 3;
+            $(`tr[data-index="${index}"]`).find('select.end').val(times[timeIndex]);
+        }
+
+        $('#batchCreateTodoForm tbody tr').each(function()
+        {
+            const trIndex = parseInt($(this).data('index'));
+            if(trIndex > index)
+            {
+                const beginIndex = timeIndex + (trIndex - index - 1) * 3;
+
+                $(this).find('select.begin').val(times[beginIndex]);
+                $(this).find('select.end').val(times[beginIndex + 3]);
+            }
+        });
+    }, 10);
+}
