@@ -1378,52 +1378,23 @@ EOF;
     {
         if($_POST)
         {
-            $data = fixer::input('post')->setDefault('users', array())->get();
-            if(empty($data->listID))
-            {
-                if(empty($data->newList))
-                {
-                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
+            if($listID)  $this->user->updateContactList($listID);
+            if(!$listID) $this->user->createContactList();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                    return $this->send($response);
-                }
-                $listID = $this->user->createContactList($data->newList, $data->users);
-                if(dao::isError())
-                {
-                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                }
-                $this->user->setGlobalContacts($listID, isset($data->share));
-                if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID&mode=edit")));
-            }
-            elseif($data->mode == 'edit')
-            {
-                $response['result']  = 'success';
-                $response['message'] = $this->lang->saveSuccess;
-
-                $this->user->updateContactList($data->listID, $data->listName, $data->users);
-                $this->user->setGlobalContacts($data->listID, isset($data->share));
-
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                    return $this->send($response);
-                }
-
-                $response['locate'] = inlink('manageContacts', "listID=$listID&mode=edit");
-                return $this->send($response);
-            }
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
         }
 
-        $list = $listID ? $this->user->getContactListByID($listID) : null;
+        $list     = $listID ? $this->user->getContactListByID($listID) : null;
+        $userList = !empty($list->userList) ? $list->userList : '';
+        $canEdit  = empty($list) || (!empty($list->account) && $list->account == $this->app->user->account);
 
-        $this->view->title = $this->lang->my->common . $this->lang->colon . ($listID ? $this->lang->user->contacts->createList : $this->lang->user->contacts->manage);
-        $this->view->users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', zget($list, 'userList', ''), $this->config->maxCount);
-        $this->view->lists = $this->user->getContactLists($this->app->user->account, '', 'list');
-        $this->view->list  = $list;
+        $this->view->title   = $this->lang->my->common . $this->lang->colon . ($listID ? $this->lang->user->contacts->createList : $this->lang->user->contacts->manage);
+        $this->view->users   = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $userList, $this->config->maxCount);
+        $this->view->lists   = $this->user->getContactLists($this->app->user->account, '', 'list');
+        $this->view->canEdit = $canEdit;
+        $this->view->list    = $list;
         $this->display();
     }
 
