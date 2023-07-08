@@ -18,7 +18,7 @@ foreach($lists as $contactList)
     {
         $myContactList[] = li
         (
-            setClass('editContact ellipsis pl-2 ' . ($list->id == $contactList->id ? 'active' : '')),
+            setClass('contact ellipsis pl-2 ' . ($list->id == $contactList->id ? 'active' : '')),
             set('data-id', $contactList->id),
             $contactList->listName
         );
@@ -27,101 +27,103 @@ foreach($lists as $contactList)
     {
         $publicContactList[] = li
         (
-            setClass('ellipsis pl-2'),
+            setClass('contact ellipsis pl-2'),
             set('data-id', $contactList->id),
             $contactList->listName
         );
     }
 }
 
-formPanel
+$userList = array();
+if(!empty($list->userList))
+{
+    foreach(explode(',', $list->userList) as $account) $userList[] = zget($users, $account);
+}
+
+panel
 (
-    set::actions(array()),
-    on::click('#createContact', 'getCreateForm'),
-    on::click('.editContact',   'getEditForm'),
+    setClass('panel-form px-4 mx-auto size-lg'),
+    on::click('#createContact', 'createContact'),
+    on::click('.contact', 'getContact'),
     div
     (
-        set::id('manageContacts'),
-        set::class('w-full flex'),
+        setID('manageContacts'),
+        setClass('w-full flex'),
         cell
         (
             set::width('180px'),
-            set::class('border-r overflow-hidden'),
+            setClass('border-r overflow-hidden'),
             div
             (
-                set::class('border-b py-4 pr-4'),
-                div(span(set::class('text-gray'), $lang->my->contactList)),
+                setClass('border-b py-3 pr-4'),
+                div(span(setClass('text-gray'), $lang->my->contactList)),
                 div
                 (
-                    set::class('pt-2'),
+                    setClass('pt-3'),
                     a
                     (
-                        set::id('createContact'),
-                        set::class('btn secondary-pale w-full'),
-                        set::href('javascript:;'),
+                        setID('createContact'),
+                        setClass('btn primary-pale bd-primary w-full'),
                         icon('plus'),
-                        $lang->user->contacts->createList
+                        $lang->my->createContacts
                     )
                 )
             ),
-            div
+            tabs
             (
-                tabs
+                setID('contactTab'),
+                setClass('pr-4'),
+                tabPane
                 (
-                    set::class('pr-4'),
-                    tabPane
-                    (
-                        set::key('my'),
-                        set::title($lang->my->myContact),
-                        set::active(true),
-                        ul($myContactList)
-                    ),
-                    tabPane
-                    (
-                        set::key('public'),
-                        set::title($lang->my->publicContact),
-                        ul($publicContactList)
-                    )
+                    set::key('my'),
+                    set::title($lang->my->myContact),
+                    set::active(true),
+                    ul($myContactList)
+                ),
+                tabPane
+                (
+                    set::key('public'),
+                    set::title($lang->my->publicContact),
+                    ul($publicContactList)
                 )
             )
         ),
         cell
         (
-            set::id('dataForm'),
-            set::class('flex-1 px-8'),
+            setID('contactPanel'),
+            setClass('flex-1 px-8'),
             div
             (
                 set('class', 'panel-title text-lg flex w-full py-6'),
-                '创建联系人'
+                $list ? $lang->my->manageContacts : $lang->my->createContacts
             ),
-            div
+            $canEdit ? form
             (
+                set::actions(array()),
                 formRow
                 (
-                    set::class('py-2'),
                     formGroup
                     (
                         set::width('1/2'),
-                        set::label('名称'),
+                        set::label($lang->user->contacts->listName),
                         input
                         (
-                            set::name('newList'),
-                            set::value()
+                            set::name('listName'),
+                            set::value(!empty($list->listName) ? $list->listName : '')
                         )
                     )
                 ),
                 formRow
                 (
-                    set::class('py-2'),
                     formGroup
                     (
-                        set::label('选择用户'),
+                        set::label($lang->user->contacts->selectedUsers),
                         select
                         (
                             set::multiple(true),
-                            set::name('users[]'),
+                            set::name('userList[]'),
                             set::items($users),
-                            set::value()
+                            set::value(!empty($list->userList) ? $list->userList : '')
                         )
                     )
                 ),
@@ -134,18 +136,32 @@ formPanel
                         checkbox
                         (
                             set::name('public'),
-                            set::text('公开联系人'),
+                            set::value(1),
+                            set::checked(!empty($list->public)),
+                            set::text($lang->my->shareContacts)
                         )
                     )
                 ),
                 formRow
                 (
+                    setClass('form-actions'),
                     formGroup
                     (
                         set::label(''),
-                        set::class('form-actions justify-start'),
-                        button(set::class('btn primary'), set::type('submit'), $lang->save)
+                        button(setClass('btn primary'), set::type('submit'), $lang->save)
                     )
+                )
+            ) : tableData
+            (
+                item
+                (
+                    set::name($lang->user->contacts->listName),
+                    $list->listName
+                ),
+                item
+                (
+                    set::name($lang->user->contacts->userList),
+                    implode($lang->comma, array_filter($userList))
                 )
             )
         )
