@@ -180,6 +180,41 @@ $config->testcase->zerocase->dtable->fieldList['actions']['menu']     = array('c
 $config->testcase->zerocase->dtable->fieldList['actions']['required'] = true;
 $config->testcase->zerocase->dtable->fieldList['actions']['group']    = '7';
 
+$config->testcase->importfromlib = new stdclass();
+$config->testcase->importfromlib->dtable = new stdclass();
+$config->testcase->importfromlib->dtable->fieldList['id']['name']  = 'id';
+$config->testcase->importfromlib->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->testcase->importfromlib->dtable->fieldList['id']['type']  = 'checkID';
+$config->testcase->importfromlib->dtable->fieldList['id']['fixed'] = false;
+
+$config->testcase->importfromlib->dtable->fieldList['branch']['name']  = 'branch';
+$config->testcase->importfromlib->dtable->fieldList['branch']['title'] = $lang->testcase->branch;
+$config->testcase->importfromlib->dtable->fieldList['branch']['type']  = 'category';
+
+$config->testcase->importfromlib->dtable->fieldList['pri']['name']  = 'pri';
+$config->testcase->importfromlib->dtable->fieldList['pri']['title'] = $lang->testcase->pri;
+$config->testcase->importfromlib->dtable->fieldList['pri']['type']  = 'pri';
+
+$config->testcase->importfromlib->dtable->fieldList['title']['name']        = 'title';
+$config->testcase->importfromlib->dtable->fieldList['title']['title']       = $lang->testcase->title;
+$config->testcase->importfromlib->dtable->fieldList['title']['type']        = 'title';
+$config->testcase->importfromlib->dtable->fieldList['title']['fixed']       = false;
+$config->testcase->importfromlib->dtable->fieldList['title']['link']        = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
+$config->testcase->importfromlib->dtable->fieldList['title']['data-toggle'] = 'modal';
+
+$config->testcase->importfromlib->dtable->fieldList['fromModule']['name']  = 'fromModule';
+$config->testcase->importfromlib->dtable->fieldList['fromModule']['title'] = $lang->testcase->fromModule;
+$config->testcase->importfromlib->dtable->fieldList['fromModule']['type']  = 'category';
+
+$config->testcase->importfromlib->dtable->fieldList['module']['name']  = 'module';
+$config->testcase->importfromlib->dtable->fieldList['module']['title'] = $lang->testcase->module;
+$config->testcase->importfromlib->dtable->fieldList['module']['type']  = 'html';
+
+$config->testcase->importfromlib->dtable->fieldList['type']['name']  = 'type';
+$config->testcase->importfromlib->dtable->fieldList['type']['title'] = $lang->testcase->type;
+$config->testcase->importfromlib->dtable->fieldList['type']['type']  = 'status';
+$config->testcase->importfromlib->dtable->fieldList['type']['statusMap'] = $lang->testcase->typeList;
+
 $config->scene->dtable = new stdclass();
 $config->scene->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->scene->dtable->fieldList['id']['type']     = 'checkID';

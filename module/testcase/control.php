@@ -2058,17 +2058,23 @@ class testcase extends control
         if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
 
         $libraries = $this->loadModel('caselib')->getLibraries();
-        if(empty($libraries))
-        {
-            echo js::alert($this->lang->testcase->noLibrary);
-            return print(js::locate($this->session->caseList));
-        }
+        if(empty($libraries)) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->noLibrary, 'load' => $this->session->caseList));
+
         if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);
 
         if($_POST)
         {
-            $this->testcase->importFromLib($productID, $libID, $branch);
-            return print(js::reload('parent'));
+            $result = $this->testcase->importFromLib($productID, $libID, $branch);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(!empty($result) && is_string($result))
+            {
+                $imported = trim($result, ',');
+                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedCases, $imported)));
+            }
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => true));
         }
 
         $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);

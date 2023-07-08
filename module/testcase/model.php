@@ -1830,11 +1830,10 @@ class testcaseModel extends model
                 $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $case->lib);
             }
         }
-        if(!empty($imported))
-        {
-            $imported = trim($imported, ',');
-            return print(js::error(sprintf($this->lang->testcase->importedCases, $imported)));
-        }
+
+        if(!empty($imported)) return $imported;
+
+        return !dao::isError();
     }
 
     /**
