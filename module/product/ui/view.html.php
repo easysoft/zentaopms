@@ -169,6 +169,8 @@ function generateOtherInfoItemList($product, $lang)
 $actionMenuList = !$product->deleted ? $this->product->buildOperateMenu($product, 'view') : array();
 
 /* Layout. */
+dropmenu(set::text($product->name));
+
 detailBody
 (
     sectionList

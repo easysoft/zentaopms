@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+dropmenu(set::text($product->name));
+
 /* Set feature bar. */
 featureBar
 (

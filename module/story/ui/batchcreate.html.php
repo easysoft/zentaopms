@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+dropmenu();
+
 /* Generate fields for the batch create form. */
 $fnGenerateFields = function() use ($lang, $fields)
 {

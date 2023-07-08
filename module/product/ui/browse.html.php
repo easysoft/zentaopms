@@ -41,7 +41,7 @@ $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branch
 };
 
 /* Build create story button. */
-$fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $storyType, $productID, $branch, $moduleID, $projectID, $from)
+$fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $storyType, $productID, $branch, $moduleID, $projectID)
 {
     if(!common::canModify('product', $product)) return null;
 
@@ -116,7 +116,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 };
 
 /* Build link story button. */
-$fnBuildLinkStoryButton = function() use($lang, $product, $productID, $projectHasProduct, $project, $projectID)
+$fnBuildLinkStoryButton = function() use($lang, $product, $projectHasProduct, $project, $projectID)
 {
     if(!common::canModify('product', $product)) return null;
 
