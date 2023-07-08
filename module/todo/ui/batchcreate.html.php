@@ -12,6 +12,12 @@ namespace zin;
 
 jsVar('time', $time);
 jsVar('times', $times);
+jsVar('userID', $app->user->id);
+jsVar('noOptions', $lang->todo->noOptions);
+jsVar('moduleList', $config->todo->moduleList);
+jsVar('objectsMethod', $config->todo->getUserObjectsMethod);
+jsVar('nameBoxLabel', array('custom' => $lang->todo->name, 'objectID' => $lang->todo->objectID));
+
 div
 (
     setID('dateCellData'),
@@ -46,6 +52,17 @@ div
     ),
 );
 
+div
+(
+    setID('nameInputBox'),
+    setClass('hidden'),
+    input
+    (
+        set::name('name'),
+        setClass('form-batch-input')
+    )
+);
+
 $visibleFields = array();
 foreach(explode(',', $showFields) as $field)
 {
@@ -55,9 +72,11 @@ formBatchPanel
 (
     set::id('batchCreateTodoForm'),
     set::title($lang->todo->batchCreate . $lang->todo->common),
-    set::url(createLink('todo', 'batchEdit', "from=todoBatchEdit&type={$type}&userID={$userID}&status={$status}")),
-    on::change('[data-name="type"]', 'setNameCell'),
+    set::onRenderRow(jsRaw('renderRowData')),
+
+    on::change('[data-name="type"]', "changeType"),
     on::click('.time-check', "$(event.target).closest('.input-group').find('.time-input').prop('disabled', !!event.target.checked)"),
+
     set::headingClass('justify-start'),
     to::headingActions
     (
@@ -70,17 +89,21 @@ formBatchPanel
             ),
             input
             (
-                set::type('date'),
+                setID('todoDate'),
                 set::name('date'),
+                set::type('date'),
                 set::value($date),
+                on::change('window.changFuture')
             ),
             span
             (
                 setClass('input-group-addon'),
                 checkBox
                 (
-                    set::name('switchTime'),
+                    setID('futureDate'),
+                    set::name('futureDate'),
                     $lang->todo->periods['future'],
+                    on::click('window.changFuture')
                 )
             ),
         ),
@@ -91,6 +114,14 @@ formBatchPanel
         set::label($lang->idAB),
         set::control('index'),
         set::width('30px'),
+    ),
+    formBatchItem
+    (
+        set::name('date'),
+        set::label(''),
+        set::control('hidden'),
+        set::value(date('Y-m-d')),
+        set::hidden(true)
     ),
     formBatchItem
     (
@@ -115,7 +146,7 @@ formBatchPanel
     (
         set::name('name'),
         set::label($lang->todo->name),
-        set::minWidth('100px')
+        set::minWidth('100px'),
     ),
     formBatchItem
     (

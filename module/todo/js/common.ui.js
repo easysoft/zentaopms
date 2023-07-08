@@ -116,12 +116,12 @@ function loadList(type, id, todoDefaultType, todoID)
             if(data.length != 0)
             {
                 if($(nameBoxClass).find('#nameInputBox').html(data).find('select').chosen) $(nameBoxClass).find('#nameInputBox').html(data).find('select').chosen();
-                if(config.currentMethod == 'edit' || type == 'feedback') $(nameBoxClass).find('select').val(todoID).trigger('chosen:updated');
-                if($(nameBoxClass + ' select').val() == null) $(nameBoxClass + ' select').attr('data-placeholder', noOptions.replace('%s', chosenType[type])).trigger('chosen:updated');
+                if(config.currentMethod == 'edit' || type == 'feedback') $(nameBoxClass).find('select').val(todoID);
+                if($(nameBoxClass + ' select').val() == null) $(nameBoxClass + ' select').attr('data-placeholder', noOptions);
             }
             else
             {
-                if($(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen) $(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
+                if($(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen) $(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select');
             }
         });
     }
