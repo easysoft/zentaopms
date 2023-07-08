@@ -15,6 +15,7 @@ require_once dirname(__DIR__) . DS . 'datepicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'timepicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'pripicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'severitypicker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'color' . DS . 'v1.php';
 
 class control extends wg
 {
@@ -143,6 +144,11 @@ class control extends wg
     protected function buildSeverity(): wg
     {
         return new severityPicker(set($this->props->skip('type')));
+    }
+
+    protected function buildColor(): wg
+    {
+        return new colorPicker(set($this->props->skip('type')));
     }
 
     protected function build(): wg
