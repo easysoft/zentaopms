@@ -1415,7 +1415,7 @@ class productplanModel extends model
                 $actions[] = $this->buildActionBtn('none', 'plus', $params, $plan, $type, '', '', '', false, 'disabled', $this->lang->productplan->createExecution);
             }
 
-            if($type == 'browse' and ($canStart or $canFinish or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
+            if($type == 'browse' and in_array(true, array($canStart, $canFinish, $canClose, $canCreateExec)) and in_array(true, array($canLinkStory, $canLinkBug, $canEdit, $canCreateChild, $canDelete)))
             {
                 $actions[] = $this->buildActionBtn('none', 'divider', $params, $plan, $type);
             }
@@ -1445,7 +1445,7 @@ class productplanModel extends model
 
         if($type == 'browse')
         {
-            if(($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
+            if(in_array(true, array($canLinkStory, $canLinkBug, $canEdit, $canCreateChild)) and $canDelete)
             {
                 $actions[] = $this->buildActionBtn('none', 'divider', $params, $plan, $type);
             }
