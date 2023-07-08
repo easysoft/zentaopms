@@ -208,7 +208,7 @@ class execution extends control
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($this->view->products));
         if($branchGroups)
         {
-            foreach($tasks as $id => $task)
+            foreach($tasks as $task)
             {
                 if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
             }
