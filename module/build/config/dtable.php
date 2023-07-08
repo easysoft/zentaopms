@@ -153,3 +153,6 @@ $config->build->bug->dtable->fieldList['actions']['minWidth'] = '60';
 $config->build->generatedBug->dtable = clone $config->build->bug->dtable;
 $config->build->generatedBug->dtable->fieldList['id']['checkbox'] = false;
 unset($config->build->generatedBug->dtable->fieldList['actions']);
+
+$config->build->defaultFields['linkStory'] = array('id', 'pri', 'title', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage');
+$config->build->defaultFields['linkBug']   = array('id', 'pri', 'title', 'openedBy', 'resolvedBy', 'status');

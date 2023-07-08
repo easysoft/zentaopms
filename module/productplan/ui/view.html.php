@@ -12,8 +12,6 @@ namespace zin;
 
 $unlinkURL['story'] = helper::createLink('productplan', 'unlinkStory', "storyID=%s&planID={$plan->id}&confirm=yes");
 $unlinkURL['bug']   = helper::createLink('productplan', 'unlinkBug',   "bugID=%s&planID={$plan->id}&confirm=yes");
-$locateURL['story'] = helper::createLink('productplan', 'view', "planID={$plan->id}&type=story&orderBy=$orderBy");
-$locateURL['bug']   = helper::createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy=$orderBy");
 
 $confirmLang['story']    = $lang->productplan->confirmUnlinkStory;
 $confirmLang['bug']      = $lang->productplan->confirmUnlinkBug;
@@ -28,7 +26,6 @@ jsVar('orderBy',     $orderBy);
 jsVar('planID',      $plan->id);
 jsVar('confirmLang', $confirmLang);
 jsVar('unlinkURL',   $unlinkURL);
-jsVar('locateURL',   $locateURL);
 jsVar('childrenAB',  $lang->story->childrenAB);
 
 $decodeParam = helper::safe64Decode($param);

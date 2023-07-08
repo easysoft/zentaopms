@@ -52,7 +52,7 @@ window.fnLinkStories = function(e)
     checkedList.forEach(function(id)
     {
         var linkStoryField = '{$storyType}' == 'story' ? 'linkStories' : 'linkRequirements';
-        var storyInfo      = dtable.$.getRowInfo(checkedList[0]).data;
+        var storyInfo      = dtable.$.getRowInfo(id).data;
         var checkbox       = "<div class='checkbox-primary inline'><input type='checkbox' id='" + linkStoryField + '_' + index + "' checked='checked' name='" + linkStoryField + "[]' " + "value=" + storyInfo.id + " /><label for='" + linkStoryField + '_' + index + "'></label></div>";
         var idLabel        = "<span class='label circle size-sm'>" + storyInfo.id + "</span>";
         var titleSpan      = "<span class='linkStoryTitle'>" + storyInfo.title + "</span>";

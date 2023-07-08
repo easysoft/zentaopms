@@ -2,7 +2,7 @@ window.unlinkObject = function(objectType, objectID)
 {
     zui.Modal.confirm({message: confirmLang[objectType], icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
-        if(res) $.get(unlinkURL[objectType].replace('%s', objectID), function(){loadPage(locateURL[objectType])});
+        if(res) $.ajaxSubmit({'url': unlinkURL[objectType].replace('%s', objectID)});
     });
 };
 
@@ -53,7 +53,7 @@ $(document).on('click', '.batch-btn', function()
     }
     else
     {
-        $.ajaxSubmit({"url": $(this).data('formaction'), "data": postData, "callback": loadPage(locateURL[type])});
+        $.ajaxSubmit({"url": $(this).data('formaction'), "data": postData});
     }
 });
 
@@ -69,7 +69,7 @@ $(document).on('click', '.linkObjectBtn', function()
     const postData = new FormData();
     checkedList.forEach((id) => postData.append(postKey + '[]', id));
 
-    $.ajaxSubmit({"url": $(this).data('url'), "data": postData, "callback": loadPage(locateURL[type])});
+    $.ajaxSubmit({"url": $(this).data('url'), "data": postData});
 });
 
 if(initLink == 'true')

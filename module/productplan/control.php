@@ -637,7 +637,7 @@ class productplan extends control
         {
             $this->productplan->linkStory($planID);
             if($this->viewType == 'json') return $this->send(array('result' => 'success'));
-            return print(js::locate(inlink('view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => inlink('view', "planID=$planID&type=story&orderBy=$orderBy")));
         }
 
         $this->session->set('storyList', inlink('view', "planID=$planID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
@@ -730,14 +730,8 @@ class productplan extends control
             $this->productplan->unlinkStory($storyID, $planID);
             $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', $storyID);
 
-            if($this->session->storyList)
-            {
-                return print(js::locate($this->session->storyList, 'parent'));
-            }
-            else
-            {
-                return print(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story"), 'parent'));
-            }
+            if($this->session->storyList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
+            return $this->send(array('result' => 'success', 'load' => $this->createLink('productplan', 'view', "planID=$planID&type=story")));
         }
     }
 
@@ -776,7 +770,7 @@ class productplan extends control
         {
             $this->productplan->linkBug($planID);
             if($this->viewType == 'json') return $this->send(array('result' => 'success'));
-            return print(js::locate(inlink('view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => inlink('view', "planID=$planID&type=bug&orderBy=$orderBy")));
         }
 
         /* Load module and set session. */
@@ -867,7 +861,7 @@ class productplan extends control
             $this->productplan->unlinkBug($bugID);
             $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', $bugID);
 
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'load' => true));
         }
     }
 
@@ -884,7 +878,7 @@ class productplan extends control
     {
         foreach($this->post->bugIdList as $bugID) $this->productplan->unlinkBug($bugID);
         $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIdList));
-        return print(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy")));
     }
 
     /**

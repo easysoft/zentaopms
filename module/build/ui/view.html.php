@@ -12,6 +12,7 @@ namespace zin;
 
 $canBeChanged = common::canBeChanged('build', $build);
 $menus        = $this->build->buildOperateMenu($build);
+$decodeParam  = helper::safe64Decode($param);
 
 $buildItems = array();
 foreach($buildPairs as $id => $name)
@@ -54,10 +55,12 @@ detailHeader
     !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
 );
 
-jsVar('orderBy', $orderBy);
-jsVar('buildID', $build->id);
+jsVar('initLink',      $link);
+jsVar('type',          $type);
+jsVar('orderBy',       $orderBy);
+jsVar('buildID',       $build->id);
+jsVar('sortLink',      helper::createLink('build', 'view', "buildID={$build->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 jsVar('confirmDelete', $lang->build->confirmDelete);
-jsVar('sortLink', helper::createLink('build', 'view', "buildID={$build->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 
 /* Story's batch btn. */
 $canBatchUnlinkStory = $canBeChanged && common::hasPriv('build', 'batchUnlinkStory');
@@ -98,45 +101,9 @@ $config->build->story->dtable->fieldList['actions']['list']['unlinkStory']['url'
 $stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
 $bugs    = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
 
-if($canBeChanged)
-{
-    $linkBtnList = array();
-    if(common::hasPriv('build', 'linkStory'))
-    {
-        $linkBtnList[] = array(
-            'text'        => $lang->build->linkStory,
-            'icon'        => 'link',
-            'url'         => inlink('linkStory', "buildID={$build->id}&browseType=story"),
-            'class'       => 'btn link-story',
-            'type'        => 'primary',
-            'data-toggle' => 'modal'
-        );
-    }
-
-    if(common::hasPriv('build', 'linkBug'))
-    {
-        $linkBtnList[] = array(
-            'text'        => $lang->build->linkBug,
-            'icon'        => 'bug',
-            'url'         => inlink('linkBug', "buildID={$build->id}&browseType=bug"),
-            'class'       => 'btn link-bug',
-            'type'        => 'primary',
-            'data-toggle' => 'modal'
-        );
-    }
-
-    btnGroup(
-        set::items($linkBtnList),
-        setClass('link-btns hidden')
-    );
-}
-
 detailBody
 (
     sectionList(
-        btnGroup(
-            setClass('right-menu px-6')
-        ),
         tabs
         (
             set::class('w-full'),
@@ -148,8 +115,14 @@ detailBody
                 set::key('story'),
                 set::title($lang->build->stories),
                 set::active($type == 'story'),
+                div
+                (
+                    setClass('tabnActions'),
+                    !common::hasPriv('build', 'linkStory') ? null : btn(set::text($lang->build->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "buildID={$build->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param=")))),
+                ),
                 dtable
                 (
+                    set::id('storyDTable'),
                     set::userMap($users),
                     set::cols(array_values($config->build->story->dtable->fieldList)),
                     set::data($stories),
@@ -172,8 +145,14 @@ detailBody
                 set::key('bug'),
                 set::title($lang->build->bugs),
                 set::active($type == 'bug'),
+                div
+                (
+                    setClass('tabnActions'),
+                    !common::hasPriv('build', 'linkBug') ? null : btn(set::text($lang->build->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "buildID={$build->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param=")))),
+                ),
                 dtable
                 (
+                    set::id('bugDTable'),
                     set::userMap($users),
                     set::cols(array_values($config->build->bug->dtable->fieldList)),
                     set::data($bugs),

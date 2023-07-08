@@ -572,7 +572,7 @@ class build extends control
         if(!empty($_POST['stories']))
         {
             $this->build->linkStory($buildID);
-            return print(js::locate(inlink('view', "buildID=$buildID&type=story"), 'parent'));
+            return $this->send(array('result' => 'success', 'load' =>inlink('view', "buildID=$buildID&type=story")));
         }
 
         $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->tab);
@@ -793,7 +793,7 @@ class build extends control
         if(!empty($_POST['bugs']))
         {
             $this->build->linkBug($buildID);
-            return print(js::locate(inlink('view', "buildID=$buildID&type=bug"), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => inlink('view', "buildID=$buildID&type=bug")));
         }
 
         $this->session->set('bugList', inlink('view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
