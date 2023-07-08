@@ -3,6 +3,8 @@ namespace zin;
 
 jsVar('confirmDeleteTip', $lang->project->confirmDelete);
 
+dropmenu();
+
 featureBar
 (
     set::current($browseType),

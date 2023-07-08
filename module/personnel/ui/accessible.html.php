@@ -15,6 +15,8 @@ $config->personnel->accessible->dtable->fieldList['dept']['map'] = $deptList;
 $cols = array_values($config->personnel->accessible->dtable->fieldList);
 $data = array_values($personnelList);
 
+dropmenu();
+
 featureBar
 (
     li(searchToggle())

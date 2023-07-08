@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The browse view file of stakeholder module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
@@ -8,7 +9,6 @@
  * @link        https://www.zentao.net
  */
 
-declare(strict_types=1);
 namespace zin;
 
 /* Level 3 navigator. */

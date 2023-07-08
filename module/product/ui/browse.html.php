@@ -26,7 +26,7 @@ $storyProductID = count($storyProductIds) > 1 ? 0 : $productID;
 dropmenu();
 
 /* Generate sidebar to display module tree menu. */
-$fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branchID, $branchType)
+$fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branchID)
 {
     sidebar
     (

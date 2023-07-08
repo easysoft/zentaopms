@@ -19,6 +19,8 @@ $whitelist = initTableData($whitelist, $config->personnel->whitelist->dtable->fi
 $cols = array_values($config->personnel->whitelist->dtable->fieldList);
 $data = array_values($whitelist);
 
+dropmenu();
+
 featureBar
 (
     set::current('all'),
