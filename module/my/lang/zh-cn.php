@@ -52,6 +52,7 @@ $lang->my->byQuery         = '搜索';
 $lang->my->contactList     = '联系人列表';
 $lang->my->myContact       = '我的联系人';
 $lang->my->publicContact   = '公共联系人';
+$lang->my->manageSelf      = '仅可维护自己创建的联系人';
 
 $lang->my->indexAction      = '地盘仪表盘';
 $lang->my->calendarAction   = '我的日程';
