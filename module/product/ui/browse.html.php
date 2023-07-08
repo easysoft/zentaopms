@@ -146,7 +146,7 @@ $fnBuildLinkStoryButton = function() use($lang, $product, $productID, $projectHa
     return item(set(array
     (
         'text'  => $buttonTitle,
-        'icon'  => 'plus',
+        'icon'  => 'link',
         'class' => 'primary',
         'url'   => $buttonLink
     )));

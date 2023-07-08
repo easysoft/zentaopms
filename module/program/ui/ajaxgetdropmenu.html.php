@@ -11,31 +11,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-function buildTree($programs, $parentID = 0)
-{
-    $result = array();
-    foreach($programs as $program)
-    {
-        if($program->type != 'program') continue;
-
-        if($program->parent == $parentID)
-        {
-            $itemArray = array
-            (
-                'id'    => $program->id,
-                'text'  => $program->name,
-                'keys'  => zget(common::convert2Pinyin(array($program->name)), $program->name, ''),
-                'items' => buildTree($programs, $program->id)
-            );
-
-            if(empty($itemArray['items'])) unset($itemArray['items']);
-            $result[] = $itemArray;
-        }
-    }
-    return $result;
-}
-
-$data[0]['items'] = buildTree($programs);
+$data[0]['items'] = $this->program->buildTree($programs);
 
 /**
  * 定义最终的 JSON 数据。
