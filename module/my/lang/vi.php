@@ -26,6 +26,7 @@ $lang->my->changePassword  = 'Edit Password';
 $lang->my->preference      = 'Preference';
 $lang->my->unbind          = 'Unbind from Zdoo';
 $lang->my->manageContacts  = 'Manage Contact';
+$lang->my->createContacts  = 'Create Contact';
 $lang->my->deleteContacts  = 'Delete Contact';
 $lang->my->shareContacts   = 'Public';
 $lang->my->limited         = 'Limited Actions (Users can only edit what involves them.)';
