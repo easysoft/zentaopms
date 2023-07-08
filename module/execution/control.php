@@ -206,9 +206,12 @@ class execution extends control
 
         /* Append branches to task. */
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($this->view->products));
-        foreach($tasks as $id => $task)
+        if($branchGroups)
         {
-            if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
+            foreach($tasks as $id => $task)
+            {
+                if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
+            }
         }
 
         /* Assign. */
