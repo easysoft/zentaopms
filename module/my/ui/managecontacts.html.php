@@ -40,6 +40,10 @@ if(!empty($list->userList))
     foreach(explode(',', $list->userList) as $account) $userList[] = zget($users, $account);
 }
 
+$manageTitle = $lang->my->createContacts;
+if($canEdit && $list) $manageTitle = $lang->my->manageContacts;
+if(!$canEdit) $manageTitle = $lang->my->viewContacts;
+
 panel
 (
     setClass('panel-form px-4 mx-auto size-lg'),
@@ -95,7 +99,7 @@ panel
             div
             (
                 set('class', 'panel-title text-lg flex w-full py-6'),
-                $list ? $lang->my->manageContacts : $lang->my->createContacts
+                $manageTitle
             ),
             $canEdit ? form
             (
