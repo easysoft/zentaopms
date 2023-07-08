@@ -41,7 +41,7 @@ class priPicker extends wg
         'multiple?: boolean|number=false',  // 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
         'required?: boolean',               // 是否必选（不允许空值，不可以被清除）。
         'placeholder?: string',             // 选择框上的占位文本。
-        'items?: string[]|array'            // 选项列表，默认为 $lang->$moduleName->severityList。
+        'items?: string[]|array'            // 选项列表，默认为 $lang->$moduleName->priList。
     );
 
     /**
