@@ -419,7 +419,7 @@ detailBody
                             set::title($relation->title),
                             label(setClass('circle size-sm'), $relation->id),
                             $canViewStory ? a(set::href(helper::createLink('story', 'view', "id={$relation->id}&version=0&param=0&storyType=$relationType")), setClass('title'), set('data-toggle', 'modal'), $relation->title) : span(setClass('title'), $relation->title),
-                            $canLinkStory ? a(set('data-url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('link')) : null,
+                            $canLinkStory ? a(set('url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('link')) : null,
                         );
                     }, $relations)),
                     !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), set('data-toggle', 'modal'), set::id('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story))),

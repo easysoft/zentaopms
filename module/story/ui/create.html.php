@@ -83,7 +83,7 @@ formPanel
                     select(set::name('module'), set::items($fields['module']['options']), set::value($fields['module']['default']), set::required(true)),
                 ),
                 empty($fields['module']['options']) ? btn(set::url($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch")), setClass('primary'), set('data-toggle', 'modal'), $lang->tree->manage) : null,
-                empty($fields['module']['options']) ? btn(set('data-on', 'click'), set('data-call', 'loadProductModules'), set('data-param', $productID), setClass('refresh'), icon('refresh')) : null,
+                empty($fields['module']['options']) ? btn(set('data-on', 'click'), set('data-call', 'loadProductModules'), set('data-params', $productID), setClass('refresh'), icon('refresh')) : null,
             )
         ),
     ),

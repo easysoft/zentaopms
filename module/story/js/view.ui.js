@@ -15,7 +15,7 @@ $(document).on('click', '.unlinkStory', function(e)
     const $this = $(e.target).closest('li').find('.unlinkStory');
     zui.Modal.confirm({message: unlinkStoryTip, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
-        if(res) $.get($this.data('url'), function(){$this.closest('li').remove()});
+        if(res) $.get($this.attr('url'), function(){$this.closest('li').remove()});
     });
 });
 

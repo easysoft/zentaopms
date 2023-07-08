@@ -1582,8 +1582,8 @@ class story extends control
         {
             $this->story->linkStories($storyID);
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::closeModal('parent.parent', 'this'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'callback' => 'loadCurrentPage()', 'closeModal' => true));
         }
 
         /* Get story, product, products, and queryID. */

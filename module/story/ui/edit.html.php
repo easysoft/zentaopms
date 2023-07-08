@@ -66,8 +66,8 @@ detailBody
     set::isForm(true),
     $canEditContent ? set::actions(array
     (
-        array('tag' => 'button', 'class' => 'primary', 'id' => 'saveButton', 'data-on' => 'click', 'data-call' => 'customSubmit', 'text' => $lang->save),
-        array('tag' => 'button', 'class' => 'secondary', 'id' => 'saveDraftButton', 'data-on' => 'click', 'data-call' => 'customSubmit', 'text' => $story->status == 'changing' ? $lang->story->doNotSubmit : $lang->story->saveDraft),
+        array('tag' => 'button', 'class' => 'primary', 'id' => 'saveButton', 'data-on' => 'click', 'data-call' => 'customSubmit', 'data-params' => 'event', 'text' => $lang->save),
+        array('tag' => 'button', 'class' => 'secondary', 'id' => 'saveDraftButton', 'data-on' => 'click', 'data-call' => 'customSubmit', 'data-params' => 'event', 'text' => $story->status == 'changing' ? $lang->story->doNotSubmit : $lang->story->saveDraft),
         isInModal() ? null : array('text' => $lang->goback, 'back' => 'APP'),
     )) : null,
     sectionList
@@ -228,7 +228,7 @@ detailBody
                         ),
                     ),
                     count($moduleOptionMenu) == 1 ? btn(set::url($this->createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}")), set('data-toggle', 'modal'), $lang->tree->manage) : null,
-                    count($moduleOptionMenu) == 1 ? btn(set('data-on', 'click'), set('data-call', 'loadProductModules'), set('data-param', $story->product), setClass('refresh'), icon('refresh')) : null,
+                    count($moduleOptionMenu) == 1 ? btn(set('data-on', 'click'), set('data-call', 'loadProductModules'), set('data-params', $story->product), setClass('refresh'), icon('refresh')) : null,
                 )
             ),
             $story->parent >= 0 && $story->type == 'story' ? item
@@ -249,7 +249,7 @@ detailBody
                         select(set::name($multiplePlan ? 'plan[]' : 'plan'), set::items($plans), set::value($story->plan), set::multiple($multiplePlan)),
                     ),
                     empty($plans) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), set('data-toggle', 'modal'), $lang->productplan->manage) : null,
-                    empty($plans) ? btn(set('data-on', 'click'), set('data-call', 'loadProductPlans'), set('data-param', $story->product), setClass('refresh'), icon('refresh')) : null,
+                    empty($plans) ? btn(set('data-on', 'click'), set('data-call', 'loadProductPlans'), set('data-params', $story->product), setClass('refresh'), icon('refresh')) : null,
                 )
             ),
             item
@@ -396,13 +396,14 @@ detailBody
                 set::name(' '),
                 !empty($story->linkStoryTitles) ? h::ul
                 (
+                    setID('linkedStories'),
                     array_values(array_map(function($linkStoryID, $linkStoryTitle) use($story)
                     {
                         $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
                         return h::li
                         (
                             set::title($linkStoryTitle),
-                            checkbox(set::name($linkStoryField . '[]'), set::value($linkStoryID), set::checked(true)),
+                            checkbox(set::name($linkStoryField . '[]'), set::rootClass('inline'), set::value($linkStoryID), set::checked(true)),
                             label(setClass('circle size-sm'), $linkStoryID),
                             span(setClass('linkStoryTitle'), $linkStoryTitle)
                         );

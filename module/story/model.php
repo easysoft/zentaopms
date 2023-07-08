@@ -828,11 +828,12 @@ class storyModel extends model
             ->setIF(!isset($_POST['verify']), 'verify', $oldStory->verify)
             ->stripTags($this->config->story->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->join('linkStories', ',')
-            ->join('linkRequirements', ',')
             ->join('childStories', ',')
             ->remove('files,labels,comment,contactListMenu,reviewer,needNotReview')
             ->get();
+
+        if($this->post->linkStories)      $story->linkStories      = implode(',', array_unique($this->post->linkStories));
+        if($this->post->linkRequirements) $story->linkRequirements = implode(',', array_unique($this->post->linkRequirements));
 
         /* Relieve twins when change product. */
         if(!empty($oldStory->twins) and $story->product != $oldStory->product)

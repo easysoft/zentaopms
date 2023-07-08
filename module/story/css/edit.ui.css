@@ -4,3 +4,5 @@
 .branchIdBox{width:120px;}
 .reviewerRow .checkbox-primary{width:110px; padding-left:8px;}
 .detail-side .table-data{width:100%;}
+
+#linkedStories .label, #linkStoriesBox .label{margin-right:8px;}
