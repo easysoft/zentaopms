@@ -15,16 +15,12 @@ featureBar
 (
     set::current($type),
     set::linkParams('type={key}'),
-    inputGroup
+    datePicker
     (
-        set::class('ml-4'),
-        input
-        (
-            set::name('date'),
-            set::type('date'),
-            set::value($date),
-        )
-    )
+        set::_class('w-32'),
+        set::value($date),
+        set::onChange(jsRaw("(value) => loadPage($.createLink('my', 'todo', 'date=' + (value ? zui.formatDate(value, 'yyyyMMdd') : '')), '#mainContent')"))
+    ),
 );
 
 toolbar

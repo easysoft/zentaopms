@@ -20,7 +20,8 @@ class datePicker extends wg
             set::_map(array('value' => 'defaultValue')),
             set::icon('calendar'),
             set($this->props),
-            h::formHidden($name, $defaultValue, setID($id))
+            $this->children(),
+            $name ? h::formHidden($name, $defaultValue, setID($id)) : null
         );
     }
 }
