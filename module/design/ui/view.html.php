@@ -30,6 +30,7 @@ $commonActions = array();
 foreach($config->design->view->operateList['common'] as $operate)
 {
     if(!common::hasPriv('design', $operate)) continue;
+    if($operate == 'delete') $config->design->actionList['delete']['class'] = 'ajax-submit';
     $commonActions[] = $config->design->actionList[$operate];
 }
 

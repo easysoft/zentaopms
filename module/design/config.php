@@ -1,4 +1,5 @@
 <?php
+global $lang;
 $config->design = new stdclass();
 $config->design->editor = new stdclass();
 $config->design->editor->create   = array('id' => 'desc',    'tools' => 'simpleTools');
@@ -45,10 +46,11 @@ $config->design->actionList['viewCommit']['data-toggle']   = 'modal';
 $config->design->actionList['viewCommit']['data-position'] = 'center';
 $config->design->actionList['viewCommit']['data-id']       = 'viewCommitModal';
 
-$config->design->actionList['delete']['icon']       = 'trash';
-$config->design->actionList['delete']['hint']       = $lang->design->delete;
-$config->design->actionList['delete']['url']        = helper::createLink('design', 'delete', 'designID={id}');
-$config->design->actionList['delete']['ajaxSubmit'] = true;
+$config->design->actionList['delete']['icon']         = 'trash';
+$config->design->actionList['delete']['hint']         = $lang->design->delete;
+$config->design->actionList['delete']['url']          = helper::createLink('design', 'delete', 'designID={id}');
+$config->design->actionList['delete']['className']    = 'ajax-submit';
+$config->design->actionList['delete']['data-confirm'] = $lang->design->confirmDelete;
 
 $config->design->actionList['assignTo']['icon']        = 'hand-right';
 $config->design->actionList['assignTo']['text']        = $lang->design->assignTo;
