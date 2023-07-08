@@ -19,6 +19,6 @@ namespace zin;
 function toggle($name, $dataset = null): directive
 {
     if(empty($dataset)) $dataset = array();
-    $dataset['data-toggle'] = $name;
+    $dataset['toggle'] = $name;
     return setData($dataset);
 }
