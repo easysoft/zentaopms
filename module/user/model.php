@@ -1451,20 +1451,11 @@ class userModel extends model
      */
     public function getContactLists($account, $params = '')
     {
-        $contacts  = $this->getListByAccount($account);
-        $globalIDs = isset($this->config->my->global->globalContacts) ? $this->config->my->global->globalContacts : '';
-
-        if(!empty($globalIDs))
-        {
-            $globalIDs      = explode(',', $globalIDs);
-            $globalContacts = $this->dao->select('id, listName')->from(TABLE_USERCONTACT)->where('id')->in($globalIDs)->fetchPairs();
-            foreach($globalContacts as $id => $contact)
-            {
-                if(in_array($id, array_keys($contacts))) unset($globalContacts[$id]);
-            }
-            if(!empty($globalContacts)) $contacts = $globalContacts + $contacts;
-        }
-
+        $contacts = $this->dao->select('id, listName')->from(TABLE_USERCONTACT)
+            ->where('account')->eq($account)
+            ->orWhere('public')->eq(1)
+            ->orderBy('public, id_desc')
+            ->fetchPairs();
         if(empty($contacts)) return array();
 
         if(strpos($params, 'withempty') !== false) $contacts = array('' => '') + $contacts;
