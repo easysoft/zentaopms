@@ -1409,11 +1409,11 @@ class productModel extends model
 
         $params = "product=$product->id";
 
-        if($type == 'view') $menuList['main'][] = $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
+        if($type == 'view') $menuList['main'][] = $this->config->product->actionList['close'];
 
         $menuList['suffix'][] = $this->buildMenu('product', 'edit', $params, $product, $type);
 
-        if($type == 'view') $menuList['suffix'][] = $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
+        if($type == 'view') $menuList['suffix'][] = $this->config->product->actionList['delete'];
 
         return $menuList;
     }

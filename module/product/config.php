@@ -54,3 +54,15 @@ $config->product->actionList['edit']['icon'] = 'edit';
 $config->product->actionList['edit']['text'] = $lang->edit;
 $config->product->actionList['edit']['hint'] = $lang->edit;
 $config->product->actionList['edit']['url']  = array('module' => 'product', 'method' => 'edit', 'params' => "productID={id}");
+
+$config->product->actionList['close']['icon']        = 'off';
+$config->product->actionList['close']['text']        = $lang->product->close;
+$config->product->actionList['close']['hint']        = $lang->product->close;
+$config->product->actionList['close']['url']         = helper::createLink('product', 'close', 'productID={id}');
+$config->product->actionList['close']['data-toggle'] = 'modal';
+
+$config->product->actionList['delete']['icon']         = 'trash';
+$config->product->actionList['delete']['hint']         = $lang->product->delete;
+$config->product->actionList['delete']['url']          = helper::createLink('product', 'delete', 'productID={id}');
+$config->product->actionList['delete']['class']        = 'ajax-submit';
+$config->product->actionList['delete']['data-confirm'] = $lang->product->confirmDelete;

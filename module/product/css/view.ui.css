@@ -8,3 +8,5 @@
 .detail .detail-content .item-label span{margin-left: auto;}
 .detail .detail-content .item-content{font-weight: 700; align-self: center; padding-left: 8px;}
 .detail .detail-content .item-content.normal{color:#00da88;}
+.actions-menu {bottom: 12px;}
+.actions-menu.no-divider .divider{display: none;}

@@ -166,6 +166,8 @@ function generateOtherInfoItemList($product, $lang)
     );
 }
 
+$actionMenuList = !$product->deleted ? $this->product->buildOperateMenu($product, 'view') : array();
+
 /* Layout. */
 detailBody
 (
@@ -209,18 +211,18 @@ detailBody
         ),
         /* Extend Fields. */
         /* Float action toolbar. */
-        center(floatToolbar
+        div
         (
-            set(array_merge
+            setClass('w-2/3 text-center fixed actions-menu'),
+            setClass($product->deleted ? 'no-divider' : ''),
+            floatToolbar
             (
-                array('prefix' => isonlybody() ? null : array(array(
-                    'icon' => 'back',
-                    'url'  => ($goBackLink),
-                    'text' => $lang->goback
-                ))),
-                $this->product->buildOperateMenu($product, 'view')
-            ))
-        ))
+                isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
+                !empty($actionMenuList['main']) ? set::main($actionMenuList['main']) : null,
+                !empty($actionMenuList['suffix']) ? set::suffix($actionMenuList['suffix']) : null,
+                set::object($product)
+            )
+        )
     ),
     detailSide
     (
