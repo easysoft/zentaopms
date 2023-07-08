@@ -13,11 +13,12 @@ require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'picker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'datepicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'pripicker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'severitypicker' . DS . 'v1.php';
 
 class control extends wg
 {
     static $defineProps = array(
-        'type?: string',         // 表单输入元素类型，值可以为：static, text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
+        'type?: string',         // 表单输入元素类型，值可以为：static, text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
         'name: string',          // HTML name 属性
         'id?: string',           // HTML id 属性
         'value?: string',        // HTML value 属性
@@ -131,6 +132,11 @@ class control extends wg
     protected function buildPri(): wg
     {
         return new priPicker(set($this->props->skip('type')));
+    }
+
+    protected function buildSeverity(): wg
+    {
+        return new severityPicker(set($this->props->skip('type')));
     }
 
     protected function build(): wg
