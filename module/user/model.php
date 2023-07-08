@@ -1451,12 +1451,12 @@ class userModel extends model
      */
     public function getContactLists(string $account, string $params = '', string $mode = 'pairs'): array
     {
-        $this->dao->select('id, listName')->from(TABLE_USERCONTACT)
+        $this->dao->select('*')->from(TABLE_USERCONTACT)
             ->where('account')->eq($account)
             ->orWhere('public')->eq(1)
             ->orderBy('public, id_desc');
 
-        $contacts = $mode == 'pairs' ? $this->dao->fetchPairs() : $this->dao->fetchAll();
+        $contacts = $mode == 'pairs' ? $this->dao->fetchPairs('id', 'listName') : $this->dao->fetchAll();
         if(empty($contacts)) return array();
 
         if(strpos($params, 'withempty') !== false) $contacts = array('' => '') + $contacts;
