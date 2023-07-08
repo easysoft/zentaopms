@@ -1450,7 +1450,6 @@ EOF;
         }
 
         $users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);
-        if(isset($this->config->user->moreLink)) $this->config->moreLinks['users[]'] = $this->config->user->moreLink;
 
         $this->view->mode           = $mode;
         $this->view->lists          = $lists;
