@@ -90,12 +90,6 @@ featureBar
             'programID'  => $programID
         )
     )),
-    hasPriv('product', 'batchEdit') ? item
-    (
-        set::type('checkbox'),
-        set::text($lang->product->edit),
-        set::checked($this->cookie->editProject)
-    ) : null,
     li(searchToggle(set::open($browseType == 'bySearch')))
 );
 

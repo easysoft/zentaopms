@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-$canBatchEdit = common::hasPriv('product', 'batchEdit');
 $hasProduct   = false;
 
 /* Closure creating program buttons. */
@@ -42,23 +41,6 @@ $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
             span(setClass('caret'))
         ) : null
     );
-};
-
-/* Generate cols for the data table. */
-$fnGenerateCols = function() use ($canBatchEdit)
-{
-    $cols = $this->loadModel('datatable') ->getSetting('program');
-
-    foreach($cols as $colName => &$setting)
-    {
-        if($colName == 'name')
-        {
-            $setting['checkbox'] = $canBatchEdit;
-            break;
-        }
-    }
-
-    return $cols;
 };
 
 /* Closure for generating program row data. */
@@ -242,26 +224,33 @@ foreach($productStructure as $programID => $program)
     }
 }
 
+$canBatchEdit = (common::hasPriv('product', 'batchEdit') && $hasProduct === true);
+
+/* Generate cols for the data table. */
+$fnGenerateCols = function() use ($canBatchEdit)
+{
+    $cols = $this->loadModel('datatable') ->getSetting('program');
+
+    foreach($cols as $colName => &$setting)
+    {
+        if($colName == 'name')
+        {
+            $setting['checkbox'] = $canBatchEdit;
+            break;
+        }
+    }
+
+    return $cols;
+};
+
 /* ZIN: layout. */
 featureBar
 (
     set::current($browseType),
     set::linkParams("status={key}&orderBy=$orderBy"),
-    (hasPriv('product', 'batchEdit') && $hasProduct === true) ? li(checkbox
-    (
-        on::click('onClickCheckBatchEdit'),
-        set::text($lang->project->edit),
-        set('data-id', 'checkbox-batchedit'),
-        set('data-load', 'table'),
-        set::checked($this->cookie->editProject)
-    )) : NULL,
     li(searchToggle(set::open($browseType == 'bySearch'), set::module('program')))
 );
-
-toolbar
-(
-    $fnGenerateCreateProgramBtns()
-);
+toolbar($fnGenerateCreateProgramBtns());
 
 dtable
 (
