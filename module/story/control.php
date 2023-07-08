@@ -119,7 +119,7 @@ class story extends control
      * @param  string $branch
      * @param  int    $moduleID
      * @param  int    $storyID
-     * @param  int    $executionID
+     * @param  int    $executionID projectID|executionID
      * @param  int    $plan
      * @param  string $storyType requirement|story
      * @param  string $extra for example feedbackID=0

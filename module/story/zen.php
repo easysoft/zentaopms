@@ -513,7 +513,7 @@ class storyZen extends story
         {
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            $branch          = key($branches);
+            $branch          = empty($branches) ? '' : key($branches);
 
             if($this->view->execution->type == 'kanban')
             {
