@@ -11,8 +11,9 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('time', $time);
-jsVar('times', $times);
+jsVar('times', array_keys($times));
 jsVar('userID', $app->user->id);
+jsVar('futureDate', FUTURE_TIME);
 jsVar('noOptions', $lang->todo->noOptions);
 jsVar('moduleList', $config->todo->moduleList);
 jsVar('objectsMethod', $config->todo->getUserObjectsMethod);

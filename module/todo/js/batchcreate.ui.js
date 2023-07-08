@@ -1,3 +1,4 @@
+let timeIndex = times.findIndex(key => `${key}` === `${time}`);
 window.renderRowData = function($row, index, row)
 {
     if($row.find('td[data-name="beginAndEnd"] .inited').length == 0)
@@ -5,8 +6,9 @@ window.renderRowData = function($row, index, row)
         $tdDom = $row.find('td[data-name="beginAndEnd"]');
         $tdDom.empty().html($('#dateCellData').html());
 
-        $tdDom.find('input[name="begin"]').attr('name', `begin[${index}]`);
-        $tdDom.find('input[name="end"]').attr('name', `end[${index}]`);
+        $tdDom.find('select[name="begin"]').attr('name', `begin[${index}]`).val(times[timeIndex]);
+        $tdDom.find('select[name="end"]').attr('name', `end[${index}]`).val(times[timeIndex + 3]);
+        timeIndex += 3;
 
         $tdDom.find('input[name="switchTime"]').attr('name', `switchTime[${index}]`).attr('id', `switchTime_${index}`);
         $tdDom.find('label[for="switchTime_"]').attr('for', `switchTime_${index}`);
@@ -46,9 +48,8 @@ window.changeType = function(e)
 window.changFuture = function()
 {
     const isChecked = $('#futureDate').is(':checked');
-    console.log(isChecked, $('#todoDate').val())
     $('#batchCreateTodoForm td[data-name="date"] .form-batch-input').val($('#todoDate').val());
-    if(isChecked) $('#batchCreateTodoForm td[data-name="date"] .form-batch-input').val('2030-01-01');
+    if(isChecked) $('#batchCreateTodoForm td[data-name="date"] .form-batch-input').val(futureDate);
 
-    $('#futureDate').closest('.input-group').find('input[name=date]').prop('disabled', isChecked)
+    $('#futureDate').closest('.input-group').find('input[name=date]').prop('disabled', isChecked);
 }
