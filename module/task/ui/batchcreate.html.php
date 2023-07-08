@@ -212,7 +212,7 @@ formBatchPanel
     (
         set::name('desc'),
         set::label($lang->task->desc),
-        set::control('editor'),
+        set::control('textarea'),
         set::width('240px'),
     ),
     to::headingActions
