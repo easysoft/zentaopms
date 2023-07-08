@@ -204,7 +204,7 @@ if(!empty($productID))
         if($canImportFromLib)
         {
             $link  = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=0&orderBy=id_desc&browseType=&queryID=10&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
-            $importItems[] = array('url' => $link, 'text' => $lang->testcase->importFromLib, 'data-toggle' => 'modal', 'data-app' => $app->tab);
+            $importItems[] = array('url' => $link, 'text' => $lang->testcase->importFromLib, 'data-app' => $app->tab);
         }
 
         if($canImportXmind)
