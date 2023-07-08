@@ -816,23 +816,26 @@ class buildModel extends model
         $canBeChanged = common::canBeChanged('build', $build);
         if($build->deleted || !$canBeChanged) return $menu;
 
-        if(common::hasPriv('build', 'edit', $build))
+        $moduleName = $this->app->tab == 'project' ? 'projectbuild' : 'build';
+
+        if(common::hasPriv($moduleName, 'edit', $build))
         {
             $menu[] = array(
                 'text'  => $this->lang->build->edit,
                 'icon'  => 'edit',
-                'url'   => helper::createLink('build', 'edit', $params),
+                'url'   => helper::createLink($moduleName, 'edit', $params),
                 'class' => 'btn ghost'
             );
         }
 
-        if(common::hasPriv('build', 'delete', $build))
+        if(common::hasPriv($moduleName, 'delete', $build))
         {
             $menu[] = array(
                 'text'  => $this->lang->build->delete,
                 'icon'  => 'trash',
-                'url'   => "javascript:confirmDelete('{$build->id}')",
-                'class' => 'btn ghost'
+                'url'   => helper::createLink($moduleName, 'delete', $params),
+                'class' => 'btn ghost ajax-submit',
+                'data-confirm' => $this->lang->build->confirmDelete
             );
         }
 
