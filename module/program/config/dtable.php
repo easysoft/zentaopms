@@ -187,139 +187,8 @@ $config->program->productview->dtable->fieldList['latestRelease']['type']       
 $config->program->productview->dtable->fieldList['latestRelease']['filterType'] = true;
 $config->program->productview->dtable->fieldList['latestRelease']['group']      = 'g8';
 
-/* DataTable fields of Project View. */
-$config->program->projectView = new stdClass();
-$config->program->projectView->dtable = new stdClass();
-$config->program->projectView->dtable->fieldList = array();
-
-$config->program->projectView->dtable->fieldList['name']['name']         = 'name';
-$config->program->projectView->dtable->fieldList['name']['title']        = $lang->nameAB;
-$config->program->projectView->dtable->fieldList['name']['width']        = 200;
-$config->program->projectView->dtable->fieldList['name']['type']         = 'link';
-$config->program->projectView->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; if(row.data.type == 'project') return {url:$.createLink('project', 'browse', 'projectID=' + row.data.id)}; if(row.data.type == 'program') return {url:$.createLink('program', 'view', 'programID=' + row.data.id)};}>RAWJS";
-$config->program->projectView->dtable->fieldList['name']['flex']         = 1;
-$config->program->projectView->dtable->fieldList['name']['nestedToggle'] = true;
-$config->program->projectView->dtable->fieldList['name']['checkbox']     = true;
-$config->program->projectView->dtable->fieldList['name']['sortType']     = true;
-$config->program->projectView->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
-$config->program->projectView->dtable->fieldList['name']['show']         = true;
-$config->program->projectView->dtable->fieldList['name']['group']        = 1;
-
-$config->program->projectView->dtable->fieldList['status']['name']      = 'status';
-$config->program->projectView->dtable->fieldList['status']['title']     = $lang->program->status;
-$config->program->projectView->dtable->fieldList['status']['minWidth']  = 60;
-$config->program->projectView->dtable->fieldList['status']['type']      = 'status';
-$config->program->projectView->dtable->fieldList['status']['sortType']  = true;
-$config->program->projectView->dtable->fieldList['status']['statusMap'] = $lang->program->statusList;
-$config->program->projectView->dtable->fieldList['status']['show']      = true;
-$config->program->projectView->dtable->fieldList['status']['group']     = 2;
-
-$config->program->projectView->dtable->fieldList['PM']['name']     = 'PM';
-$config->program->projectView->dtable->fieldList['PM']['title']    = $lang->program->PM;
-$config->program->projectView->dtable->fieldList['PM']['minWidth'] = 80;
-$config->program->projectView->dtable->fieldList['PM']['type']     = 'avatarBtn';
-$config->program->projectView->dtable->fieldList['PM']['sortType'] = true;
-$config->program->projectView->dtable->fieldList['PM']['show']     = true;
-$config->program->projectView->dtable->fieldList['PM']['group']    = 3;
-
-$config->program->projectView->dtable->fieldList['budget']['name']     = 'budget';
-$config->program->projectView->dtable->fieldList['budget']['title']    = $lang->program->budget;
-$config->program->projectView->dtable->fieldList['budget']['width']    = 90;
-$config->program->projectView->dtable->fieldList['budget']['type']     = 'format';
-$config->program->projectView->dtable->fieldList['budget']['sortType'] = true;
-$config->program->projectView->dtable->fieldList['budget']['show']     = true;
-$config->program->projectView->dtable->fieldList['budget']['group']    = 4;
-
-$config->program->projectView->dtable->fieldList['invested']['name']     = 'invested';
-$config->program->projectView->dtable->fieldList['invested']['title']    = $lang->program->invested;
-$config->program->projectView->dtable->fieldList['invested']['minWidth'] = 70;
-$config->program->projectView->dtable->fieldList['invested']['type']     = 'format';
-$config->program->projectView->dtable->fieldList['invested']['sortType'] = true;
-$config->program->projectView->dtable->fieldList['invested']['show']     = true;
-$config->program->projectView->dtable->fieldList['invested']['group']    = 4;
-
-$config->program->projectView->dtable->fieldList['openedDate']['name']     = 'openedDate';
-$config->program->projectView->dtable->fieldList['openedDate']['title']    = $lang->program->openedDate;
-$config->program->projectView->dtable->fieldList['openedDate']['type']     = 'date';
-$config->program->projectView->dtable->fieldList['openedDate']['sortType'] = true;
-$config->program->projectView->dtable->fieldList['openedDate']['minWidth'] = 90;
-$config->program->projectView->dtable->fieldList['openedDate']['group']    = 5;
-
-$config->program->projectView->dtable->fieldList['openedBy']['name']     = 'openedBy';
-$config->program->projectView->dtable->fieldList['openedBy']['title']    = $lang->program->openedBy;
-$config->program->projectView->dtable->fieldList['openedBy']['type']     = 'user';
-$config->program->projectView->dtable->fieldList['openedBy']['sortType'] = true;
-$config->program->projectView->dtable->fieldList['openedBy']['minWidth'] = 80;
-$config->program->projectView->dtable->fieldList['openedBy']['group']    = 5;
-
-$config->program->projectView->dtable->fieldList['begin']['name']     = 'begin';
-$config->program->projectView->dtable->fieldList['begin']['title']    = $lang->program->begin;
-$config->program->projectView->dtable->fieldList['begin']['minWidth'] = 90;
-$config->program->projectView->dtable->fieldList['begin']['type']     = 'date';
-$config->program->projectView->dtable->fieldList['begin']['sortType'] = true;
-$config->program->projectView->dtable->fieldList['begin']['show']     = true;
-$config->program->projectView->dtable->fieldList['begin']['group']    = 6;
-
-$config->program->projectView->dtable->fieldList['end']['name']     = 'end';
-$config->program->projectView->dtable->fieldList['end']['title']    = $lang->program->end;
-$config->program->projectView->dtable->fieldList['end']['minWidth'] = 90;
-$config->program->projectView->dtable->fieldList['end']['type']     = 'date';
-$config->program->projectView->dtable->fieldList['end']['sortType'] = true;
-$config->program->projectView->dtable->fieldList['end']['show']     = true;
-$config->program->projectView->dtable->fieldList['end']['group']    = 6;
-
-$config->program->projectView->dtable->fieldList['realBegan']['name']     = 'realBegan';
-$config->program->projectView->dtable->fieldList['realBegan']['title']    = $lang->program->realBeganAB;
-$config->program->projectView->dtable->fieldList['realBegan']['minWidth'] = 90;
-$config->program->projectView->dtable->fieldList['realBegan']['type']     = 'date';
-$config->program->projectView->dtable->fieldList['realBegan']['sortType'] = true;
-$config->program->projectView->dtable->fieldList['realBegan']['group']    = 7;
-
-$config->program->projectView->dtable->fieldList['realEnd']['name']     = 'realEnd';
-$config->program->projectView->dtable->fieldList['realEnd']['title']    = $lang->program->realEndAB;
-$config->program->projectView->dtable->fieldList['realEnd']['minWidth'] = 90;
-$config->program->projectView->dtable->fieldList['realEnd']['type']     = 'date';
-$config->program->projectView->dtable->fieldList['realEnd']['sortType'] = true;
-$config->program->projectView->dtable->fieldList['realEnd']['group']    = 7;
-
-$config->program->projectView->dtable->fieldList['progress']['name']     = 'progress';
-$config->program->projectView->dtable->fieldList['progress']['title']    = $lang->program->progressAB;
-$config->program->projectView->dtable->fieldList['progress']['minWidth'] = 100;
-$config->program->projectView->dtable->fieldList['progress']['type']     = 'progress';
-$config->program->projectView->dtable->fieldList['progress']['show']     = true;
-$config->program->projectView->dtable->fieldList['progress']['group']    = 8;
-
 global $app;
 $app->loadLang('project');
-
-$config->program->projectView->dtable->fieldList['actions']['name']       = 'actions';
-$config->program->projectView->dtable->fieldList['actions']['title']      = $lang->actions;
-$config->program->projectView->dtable->fieldList['actions']['width']      = 160;
-$config->program->projectView->dtable->fieldList['actions']['type']       = 'actions';
-$config->program->projectView->dtable->fieldList['actions']['fixed']      = 'right';
-$config->program->projectView->dtable->fieldList['actions']['actionsMap'] = array
-(
-    'program_start'     => array('icon'  => 'icon-start',        'hint' => $lang->program->start),
-    'program_suspend'   => array('icon'  => 'icon-pause',        'hint' => $lang->program->suspend),
-    'program_close'     => array('icon'  => 'icon-off',          'hint' => $lang->program->close),
-    'program_activate'  => array('icon'  => 'icon-active',       'hint' => $lang->program->activate),
-    'program_other'     => array('caret' => true,                'hint' => $lang->other, 'type' => 'dropdown'),
-    'program_edit'      => array('icon'  => 'icon-edit',         'hint' => $lang->program->edit),
-    'program_create'    => array('icon'  => 'icon-split',        'hint' => $lang->program->create),
-    'program_delete'    => array('icon'  => 'icon-trash',        'hint' => $lang->program->delete),
-    'project_start'     => array('icon'  => 'icon-start',        'hint' => $lang->project->start),
-    'project_suspend'   => array('icon'  => 'icon-pause',        'hint' => $lang->project->suspend),
-    'project_close'     => array('icon'  => 'icon-off',          'hint' => $lang->project->close),
-    'project_activate'  => array('icon'  => 'icon-active',       'hint' => $lang->project->activate),
-    'project_other'     => array('caret' => true,                'hint' => $lang->project->other, 'type' => 'dropdown'),
-    'project_edit'      => array('icon'  => 'icon-edit',         'hint' => $lang->project->edit),
-    'project_team'      => array('icon'  => 'icon-groups',       'hint' => $lang->project->manageMembers),
-    'project_group'     => array('icon'  => 'icon-lock',         'hint' => $lang->project->group),
-    'project_more'      => array('icon'  => 'icon-ellipsis-v',   'hint' => $lang->project->moreActions, 'type' => 'dropdown', 'caret' => false),
-    'project_link'      => array('icon'  => 'icon-link',         'hint' => $lang->project->manageProducts),
-    'project_whitelist' => array('icon'  => 'icon-shield-check', 'hint' => $lang->project->whitelist),
-    'project_delete'    => array('icon'  => 'icon-trash',        'hint' => $lang->project->delete)
-);
 
 /* DataTable fields of browse View. */
 $config->program->browse = new stdClass();
@@ -330,7 +199,7 @@ $config->program->browse->dtable->fieldList['name']['name']         = 'name';
 $config->program->browse->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->program->browse->dtable->fieldList['name']['width']        = 200;
 $config->program->browse->dtable->fieldList['name']['type']         = 'link';
-$config->program->browse->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; if(row.data.type == 'project') return {url:$.createLink('project', 'browse', 'projectID=' + row.data.id)}; if(row.data.type == 'program') return {url:$.createLink('program', 'view', 'programID=' + row.data.id)};}>RAWJS";
+$config->program->browse->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; if(row.data.type == 'project') return {url:$.createLink('project', 'browse', 'projectID=' + row.data.id)}; if(row.data.type == 'program') return {url:$.createLink('program', 'project', 'programID=' + row.data.id)};}>RAWJS";
 $config->program->browse->dtable->fieldList['name']['flex']         = 1;
 $config->program->browse->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->browse->dtable->fieldList['name']['checkbox']     = true;

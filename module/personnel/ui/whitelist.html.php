@@ -25,8 +25,8 @@ featureBar
     set::linkParams("objectID={$objectID}&module=whitelist&objectType={$objectType}"),
 );
 
-$whitelistVars    = $module == 'program' ? "objectID={$objectID}&programID={$programID}&module={$module}&from={$from}" : "objectID={$objectID}";
-$addWhitelistVars = $module == 'program' ? "objectID={$objectID}&deptID=0&copyID=0&programID={$programID}&from={$from}" : "objectID={$objectID}";
+$whitelistVars    = $module == 'program' ? "objectID={$objectID}&programID={$projectProgramID}&module={$module}&from={$from}" : "objectID={$objectID}";
+$addWhitelistVars = $module == 'program' ? "objectID={$objectID}&deptID=0&copyID=0&programID={$projectProgramID}&from={$from}" : "objectID={$objectID}";
 toolbar
 (
     btngroup

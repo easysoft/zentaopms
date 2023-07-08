@@ -53,10 +53,15 @@ class dropmenu extends wg
         $app = data('app');
 
         if(empty($tab))      $tab    = $app->tab;
-        if(empty($module))   $module = $app->moduleName;
-        if(empty($method))   $method = $app->methodName;
+        if(empty($module))   $module = $app->rawModule;
+        if(empty($method))   $method = $app->rawMethod;
         if(empty($extra))    $extra  = '';
         if(empty($objectID)) $objectID = data($tab . 'ID');
+        if(empty($objectID))
+        {
+            $object = data($tab);
+            if(isset($object->id)) $objectID = $object->id;
+        }
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
         if(empty($text) && !empty($tab))

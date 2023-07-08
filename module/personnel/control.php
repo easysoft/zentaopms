@@ -117,7 +117,7 @@ class personnel extends control
         if($from == 'program')  $goback = $this->createLink('program', 'browse');
         if($from == 'programproject') $goback = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "programID=$programID");
 
-        $this->view->title      = $this->lang->personnel->whitelist;
+        $this->view->title = $this->lang->personnel->whitelist;
 
         $this->view->pager     = $pager;
         $this->view->objectID  = $objectID;
@@ -125,8 +125,11 @@ class personnel extends control
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->module    = $module;
         $this->view->goback    = $goback;
-        $this->view->programID = $programID;
         $this->view->from      = $from;
+
+        $dropMenuObjectID = $objectType . 'ID';
+        $this->view->{$dropMenuObjectID} = $objectID;
+        $this->view->projectProgramID    = $programID;
 
         $this->display();
     }

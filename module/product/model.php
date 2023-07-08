@@ -1709,6 +1709,7 @@ class productModel extends model
         $item->releases          = $product->releases;
         $item->latestReleaseDate = $product->latestReleaseDate;
         $item->latestRelease     = $product->latestRelease;
+        if(isset($product->actions)) $item->actions = $product->actions;
 
         return $item;
     }

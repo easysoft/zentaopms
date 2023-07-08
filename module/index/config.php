@@ -24,6 +24,7 @@ $config->index->appGroup['user']        = 'admin';
 
 $config->index->oldPages = array();
 $config->index->oldPages[] = 'my-dynamic';
+$config->index->oldPages[] = 'product-dynamic';
 $config->index->oldPages[] = 'product-roadmap';
 $config->index->oldPages[] = 'program-kanban';
 $config->index->oldPages[] = 'project-kanban';
@@ -66,3 +67,4 @@ $config->index->oldPages[] = 'stage-settype';
 $config->index->oldPages[] = 'action-trash';
 $config->index->oldPages[] = 'dept-browse';
 $config->index->oldPages[] = 'story-report';
+$config->index->oldPages[] = 'tree-browse';
