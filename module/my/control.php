@@ -1371,16 +1371,15 @@ EOF;
      * Manage contacts.
      *
      * @param  int    $listID
-     * @param  string $mode
      * @access public
      * @return void
      */
-    public function manageContacts($listID = 0, $mode = 'new')
+    public function manageContacts(int $listID = 0)
     {
         if($_POST)
         {
             $data = fixer::input('post')->setDefault('users', array())->get();
-            if($data->mode == 'new')
+            if(empty($data->listID))
             {
                 if(empty($data->newList))
                 {
@@ -1419,44 +1418,12 @@ EOF;
             }
         }
 
-        $mode  = empty($mode) ? 'edit' : $mode;
-        $lists = $this->user->getContactLists($this->app->user->account);
+        $list = $listID ? $this->user->getContactListByID($listID) : null;
 
-        $globalContacts = isset($this->config->my->global->globalContacts) ? $this->config->my->global->globalContacts : '';
-        $globalContacts = !empty($globalContacts) ? explode(',', $globalContacts) : array();
-
-        $myContacts = $this->user->getListByAccount($this->app->user->account);
-        $disabled   = $globalContacts;
-
-        if(!empty($myContacts) && !empty($globalContacts))
-        {
-            foreach($globalContacts as $id)
-            {
-                if(in_array($id, array_keys($myContacts))) unset($disabled[array_search($id, $disabled)]);
-            }
-        }
-
-        $listID = $listID ? $listID : key($lists);
-
-        /* Create or manage list according to mode. */
-        if($mode == 'new')
-        {
-            $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->user->contacts->createList;
-        }
-        else
-        {
-            $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->user->contacts->manage;
-            $this->view->list       = $this->user->getContactListByID($listID);
-        }
-
-        $users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);
-
-        $this->view->mode           = $mode;
-        $this->view->lists          = $lists;
-        $this->view->listID         = $listID;
-        $this->view->users          = $users;
-        $this->view->disabled       = $disabled;
-        $this->view->globalContacts = $globalContacts;
+        $this->view->title = $this->lang->my->common . $this->lang->colon . ($listID ? $this->lang->user->contacts->createList : $this->lang->user->contacts->manage);
+        $this->view->users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', zget($list, 'userList', ''), $this->config->maxCount);
+        $this->view->lists = $this->user->getContactLists($this->app->user->account, '', 'list');
+        $this->view->list  = $list;
         $this->display();
     }
 
