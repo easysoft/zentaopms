@@ -137,10 +137,12 @@ $config->task->actionList['create']['hint'] = $lang->task->children;
 $config->task->actionList['create']['text'] = $lang->task->children;
 $config->task->actionList['create']['url']  = helper::createLink('task', 'create', 'projctID={execution}&storyID=0&moduleID=0&taskID={id}');
 
-$config->task->actionList['delete']['icon'] = 'trash';
-$config->task->actionList['delete']['hint'] = $lang->task->delete;
-$config->task->actionList['delete']['text'] = $lang->task->delete;
-$config->task->actionList['delete']['url']  = helper::createLink('task', 'delete', 'executionID={execution}&taskID={id}');
+$config->task->actionList['delete']['icon']         = 'trash';
+$config->task->actionList['delete']['hint']         = $lang->task->delete;
+$config->task->actionList['delete']['text']         = $lang->task->delete;
+$config->task->actionList['delete']['url']          = helper::createLink('task', 'delete', 'executionID={execution}&taskID={id}');
+$config->task->actionList['delete']['data-confirm'] = $lang->task->confirmDelete;
+$config->task->actionList['delete']['class']        = 'ajax-submit';
 
 $config->task->actionList['view']['icon'] = 'chevron-double-up';
 $config->task->actionList['view']['hint'] = $lang->task->parent;

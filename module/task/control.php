@@ -913,48 +913,26 @@ class task extends control
      * @param  int    $executionID
      * @param  int    $taskID
      * @param  string $confirm yes|no
-     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function delete($executionID, $taskID, $confirm = 'no', $from = '')
+    public function delete($executionID, $taskID, $confirm = 'no')
     {
         $task = $this->task->getById($taskID);
-        if($task->parent < 0) return print(js::alert($this->lang->task->cannotDeleteParent));
+        if($task->parent == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->task->cannotDeleteParent));
 
-        if($confirm == 'no')
+        $this->task->delete(TABLE_TASK, $taskID);
+        if($task->parent > 0)
         {
-            return print(js::confirm($this->lang->task->confirmDelete, inlink('delete', "executionID=$executionID&taskID=$taskID&confirm=yes&from=$from")));
+            $this->task->updateParentStatus($task->id);
+            $this->loadModel('action')->create('task', $task->parent, 'deleteChildrenTask', '', $taskID);
         }
-        else
-        {
-            $this->task->delete(TABLE_TASK, $taskID);
-            if($task->parent > 0)
-            {
-                $this->task->updateParentStatus($task->id);
-                $this->loadModel('action')->create('task', $task->parent, 'deleteChildrenTask', '', $taskID);
-            }
-            if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
-            if($task->story) $this->loadModel('story')->setStage($task->story);
+        if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
+        if($task->story) $this->loadModel('story')->setStage($task->story);
 
-            $this->executeHooks($taskID);
+        $this->executeHooks($taskID);
 
-            if(isonlybody()) return print(js::reload('parent.parent'));
-            if($from == 'taskkanban')
-            {
-                $executionLaneType    = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy     = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                $kanbanType      = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-                $kanbanData      = $kanbanData[$kanbanType];
-                $kanbanData      = json_encode($kanbanData);
-                return print(js::closeModal('parent', '', "parent.updateKanban(\"task\", $kanbanData)"));
-            }
-
-            $locateLink = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
-            return print(js::locate($locateLink, 'parent'));
-        }
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
