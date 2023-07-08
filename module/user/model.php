@@ -1517,58 +1517,47 @@ class userModel extends model
     /**
      * Create a contact list.
      *
-     * @param  string    $listName
-     * @param  array     $userList
      * @access public
-     * @return int
+     * @return bool
      */
-    public function createContactList($listName, $userList)
+    public function createContactList(): bool
     {
-        $data = new stdclass();
-        $data->listName = $listName;
-        $data->userList = join(',', $userList);
-        $data->account  = $this->app->user->account;
-
-        if(empty($data->listName))
-        {
-            dao::$errors['listName'][] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
-            return print(js::error(dao::getError()));
-        }
+        $data = fixer::input('post')
+            ->add('account', $this->app->user->account)
+            ->setDefault('public', 0)
+            ->join('userList', ',')
+            ->get();
 
         $this->dao->insert(TABLE_USERCONTACT)->data($data)
+            ->batchCheck('listName,userList', 'notempty')
             ->check('listName', 'unique', "account = '{$data->account}'")
             ->autoCheck()
             ->exec();
-        if(dao::isError()) return false;
-
-        return $this->dao->lastInsertID();
+        return !dao::isError();
     }
 
     /**
      * Update a contact list.
      *
      * @param  int    $listID
-     * @param  string $listName
-     * @param  array  $userList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateContactList($listID, $listName, $userList)
+    public function updateContactList($listID): bool
     {
-        $data = new stdclass();
-        $data->listName = $listName;
-        $data->userList = join(',', $userList);
-
-        if(empty($data->listName))
-        {
-            dao::$errors['listName'][] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
-            return false;
-        }
+        $data = fixer::input('post')
+            ->add('account', $this->app->user->account)
+            ->setDefault('public', 0)
+            ->join('userList', ',')
+            ->get();
 
         $this->dao->update(TABLE_USERCONTACT)->data($data)
+            ->batchCheck('listName,userList', 'notempty')
+            ->check('listName', 'unique', "id != '$listID' AND account = '{$data->account}'")
+            ->autoCheck()
             ->where('id')->eq($listID)
             ->exec();
-        if(dao::isError()) return false;
+        return !dao::isError();
     }
 
     /**
