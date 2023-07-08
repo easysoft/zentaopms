@@ -1443,19 +1443,20 @@ class userModel extends model
     /**
      * Get contact list of a user.
      *
-     * @param string $account
-     * @param string $params  withempty|withnote
-     *
+     * @param  string $account
+     * @param  string $params  withempty|withnote
+     * @param  string $mode    pairs|list
      * @access public
      * @return array
      */
-    public function getContactLists($account, $params = '')
+    public function getContactLists(string $account, string $params = '', string $mode = 'pairs'): array
     {
-        $contacts = $this->dao->select('id, listName')->from(TABLE_USERCONTACT)
+        $this->dao->select('id, listName')->from(TABLE_USERCONTACT)
             ->where('account')->eq($account)
             ->orWhere('public')->eq(1)
-            ->orderBy('public, id_desc')
-            ->fetchPairs();
+            ->orderBy('public, id_desc');
+
+        $contacts = $mode == 'pairs' ? $this->dao->fetchPairs() : $this->dao->fetchAll();
         if(empty($contacts)) return array();
 
         if(strpos($params, 'withempty') !== false) $contacts = array('' => '') + $contacts;
