@@ -56,30 +56,29 @@ window.changFuture = function()
 
 window.initTime = function(e)
 {
-    setTimeout(function()
+    let   $this     = $(e.target);
+    const isBegin   = $this.hasClass('begin');
+    if(!isBegin && !$this.hasClass('end')) $this = $this.closest('tr').find('.end');
+
+    const index     = parseInt($this.closest('tr').data('index'));
+    let   timeIndex = times.findIndex(key => `${key}` == $this.val());
+    if(isBegin)
     {
-        let   $this     = $(e.target);
-        const isBegin   = $this.hasClass('begin');
-        if(!isBegin && !$this.hasClass('end')) $this = $this.closest('tr').find('.end');
+        timeIndex += 3;
+        if(timeIndex > times.length - 1) timeIndex = 0;
+        $(`tr[data-index="${index}"]`).find('select.end').val(times[timeIndex]);
+    }
 
-        const index     = parseInt($this.closest('tr').data('index'));
-        let   timeIndex = times.findIndex(key => `${key}` == $this.val());
-        if(isBegin)
+    $('#batchCreateTodoForm tbody tr').each(function()
+    {
+        const trIndex = parseInt($(this).data('index'));
+        if(trIndex > index)
         {
-            timeIndex += 3;
-            $(`tr[data-index="${index}"]`).find('select.end').val(times[timeIndex]);
+            let beginIndex = timeIndex + (trIndex - index - 1) * 3;
+            if(beginIndex > times.length - 1) beginIndex = 0;
+
+            $(this).find('select.begin').val(times[beginIndex]);
+            $(this).find('select.end').val(times[beginIndex + 4 > times.length ? 0 : beginIndex + 3]);
         }
-
-        $('#batchCreateTodoForm tbody tr').each(function()
-        {
-            const trIndex = parseInt($(this).data('index'));
-            if(trIndex > index)
-            {
-                const beginIndex = timeIndex + (trIndex - index - 1) * 3;
-
-                $(this).find('select.begin').val(times[beginIndex]);
-                $(this).find('select.end').val(times[beginIndex + 3]);
-            }
-        });
-    }, 10);
+    });
 }

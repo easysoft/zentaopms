@@ -31,6 +31,7 @@ div
             setClass('time-input begin'),
             set::type('select'),
             set::name('begin'),
+            set::required(true),
             set::items($times)
         ),
         control
@@ -38,6 +39,7 @@ div
             setClass('time-input end'),
             set::type('select'),
             set::name('end'),
+            set::required(true),
             set::items($times)
         ),
         span
