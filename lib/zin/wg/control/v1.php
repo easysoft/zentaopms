@@ -12,6 +12,7 @@ require_once dirname(__DIR__) . DS . 'select' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'picker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'datepicker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'pripicker' . DS . 'v1.php';
 
 class control extends wg
 {
@@ -124,10 +125,12 @@ class control extends wg
 
     protected function buildDate(): wg
     {
-        return new datePicker
-        (
-            set($this->props->skip('type'))
-        );
+        return new datePicker(set($this->props->skip('type')));
+    }
+
+    protected function buildPri(): wg
+    {
+        return new priPicker(set($this->props->skip('type')));
     }
 
     protected function build(): wg
