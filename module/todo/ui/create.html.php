@@ -395,9 +395,9 @@ formPanel
             set::labelWidth('80px'),
             set::name('pri'),
             set::width(40),
-            set::items($lang->todo->priList),
             set::required(true),
-            set::value(3)
+            set::value(3),
+            set::control('pri')
         )
     ),
     formGroup

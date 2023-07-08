@@ -56,6 +56,7 @@ class datePicker extends wg
         'actions?: array',                  // 底部工具栏设置。
         'onInvalid?: function',             // 日期值无效时的回调函数。
     );
+
     /**
      * Build the widget.
      *
