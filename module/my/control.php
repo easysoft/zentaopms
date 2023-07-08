@@ -1388,13 +1388,21 @@ EOF;
 
         $list     = $listID ? $this->user->getContactListByID($listID) : null;
         $userList = !empty($list->userList) ? $list->userList : '';
-        $canEdit  = empty($list) || (!empty($list->account) && $list->account == $this->app->user->account);
 
-        $this->view->title   = $this->lang->my->common . $this->lang->colon . ($listID ? $this->lang->user->contacts->createList : $this->lang->user->contacts->manage);
-        $this->view->users   = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $userList, $this->config->maxCount);
-        $this->view->lists   = $this->user->getContactLists($this->app->user->account, '', 'list');
-        $this->view->canEdit = $canEdit;
-        $this->view->list    = $list;
+        $mode  = 'create';
+        $label = $this->lang->my->createContacts;
+        if($list)
+        {
+            $mode  = $list->account == $this->app->user->account ? 'edit' : 'view';
+            $label = $list->account == $this->app->user->account ? $this->lang->my->manageContacts : $this->lang->my->viewContacts;
+        }
+
+        $this->view->title = $this->lang->my->common . $this->lang->colon . $label;
+        $this->view->users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $userList, $this->config->maxCount);
+        $this->view->lists = $this->user->getContactLists($this->app->user->account, '', 'list');
+        $this->view->mode  = $mode;
+        $this->view->label = $label;
+        $this->view->list  = $list;
         $this->display();
     }
 
