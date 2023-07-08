@@ -24,16 +24,15 @@ $config->todo->create->form['config']       = array('required' => false, 'type' 
 
 $config->todo->batchCreate = new stdclass();
 $config->todo->batchCreate->form = array();
-$config->todo->batchCreate->form['types']       = array('required' => false, 'type' => 'array');
-$config->todo->batchCreate->form['pris']        = array('required' => false, 'type' => 'array');
-$config->todo->batchCreate->form['names']       = array('required' => false, 'type' => 'array');
-$config->todo->batchCreate->form['descs']       = array('required' => false, 'type' => 'array');
-$config->todo->batchCreate->form['assignedTos'] = array('required' => false, 'type' => 'array');
-$config->todo->batchCreate->form['begins']      = array('required' => false, 'type' => 'array');
-$config->todo->batchCreate->form['ends']        = array('required' => false, 'type' => 'array');
-$config->todo->batchCreate->form['switchTime']  = array('required' => false, 'type' => 'array');
-$config->todo->batchCreate->form['date']        = array('required' => false, 'type' => 'string', 'default' => '');
-$config->todo->batchCreate->form['switchDate']  = array('required' => false, 'type' => 'string', 'default' => '');
+$config->todo->batchCreate->form['type']       = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['pri']        = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['name']       = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['desc']       = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['assignedTo'] = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['begin']      = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['end']        = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['date']       = array('required' => false, 'type' => 'array');
+$config->todo->batchCreate->form['switchDate'] = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->todo->edit->form = array();
 if($this->post->type && !in_array($this->post->type, $this->config->todo->moduleList)) $config->todo->edit->form['name'] = array('required' => true,  'type' => 'string');

@@ -248,15 +248,13 @@ class todoTao extends todoModel
         $todo = new stdclass();
         $todo->account = $this->app->user->account;
 
-        $todo->date = $todos->date;
-        if($todos->switchDate == 'on' || !$todos->date) $todo->date = '2030-01-01';
-
-        $todo->type         = $todos->types[$loop];
-        $todo->pri          = $todos->pris[$loop];
-        $todo->name         = isset($todos->names[$loop]) ? $todos->names[$loop] : '';
-        $todo->desc         = $todos->descs[$loop];
-        $todo->begin        = isset($todos->begins[$loop]) ? $todos->begins[$loop] : 2400;
-        $todo->end          = isset($todos->ends[$loop]) ? $todos->ends[$loop] : 2400;
+        $todo->date         = $todos->date[$loop];
+        $todo->type         = $todos->type[$loop];
+        $todo->pri          = $todos->pri[$loop];
+        $todo->name         = isset($todos->name[$loop]) ? $todos->name[$loop] : '';
+        $todo->desc         = $todos->desc[$loop];
+        $todo->begin        = !empty($todos->begin[$loop]) ? $todos->begin[$loop] : 2400;
+        $todo->end          = !empty($todos->end[$loop]) ? $todos->end[$loop] : 2400;
         $todo->status       = 'wait';
         $todo->private      = 0;
         $todo->objectID     = 0;

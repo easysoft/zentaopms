@@ -92,12 +92,12 @@ class todo extends control
             $form       = form::data($this->config->todo->batchCreate->form);
             $todosData  = $this->todoZen->beforeBatchCreate($form);
             $todoIdList = $this->todo->batchCreate($todosData);
-            if(dao::isError()) return send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Locate the browser. */
-            $date = str_replace('-', '', $this->post->date);
+            $date = str_replace('-', '', $this->post->date[1]);
             if($date == '') $date = 'future';
-            if($date == date('Ymd')) $date= 'today';
+            if($date == date('Ymd')) $date = 'today';
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIdList));
             if(helper::isAjaxRequest('modal')) return send(array('result' => 'success', 'load' => true, 'closeModal' => true));
