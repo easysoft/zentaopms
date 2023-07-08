@@ -1,12 +1,15 @@
-function getCreateForm(event)
+function createContact()
 {
-    const url = $.createLink('my', 'manageContacts', 'listID=&mode=new');
-    loadPage(url, '#dataForm');
+    $('#contactTab').find('.contact').removeClass('active');
+    const url    = $.createLink('my', 'manageContacts');
+    loadPage(url, '#contactPanel');
 }
 
-function getEditForm(event)
+function getContact(event)
 {
-    const listID = $(event.target).data('id');
-    const url    = $.createLink('my', 'manageContacts', 'listID=' + listID + '&mode=edit');
-    loadPage(url, '#manageContacts');
+    $('#contactTab').find('.contact').removeClass('active');
+    const $li    = $(event.target).addClass('active');
+    const listID = $li.data('id');
+    const url    = $.createLink('my', 'manageContacts', 'listID=' + listID);
+    loadPage(url, '#contactPanel');
 }
