@@ -278,7 +278,7 @@ class todoTao extends todoModel
             if(isset($object->title)) $todo->name = $object->title;
         }
 
-        if($todo->end < $todo->begin) dao::$errors['message'][] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+        if($todo->end < $todo->begin) dao::$errors["end[$loop]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
 
         return $todo;
     }

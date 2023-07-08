@@ -92,7 +92,7 @@ class todo extends control
             $form       = form::data($this->config->todo->batchCreate->form);
             $todosData  = $this->todoZen->beforeBatchCreate($form);
             $todoIdList = $this->todo->batchCreate($todosData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Locate the browser. */
             $date = str_replace('-', '', $this->post->date);
@@ -100,8 +100,8 @@ class todo extends control
             if($date == date('Ymd')) $date= 'today';
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIdList));
-            if(isonlybody()) return print(js::reload('parent.parent'));
-            return print(js::locate($this->createLink('my', 'todo', "type={$date}"), 'parent'));
+            if(helper::isAjaxRequest('modal')) return send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+            return $this->sendSuccess(array('load' => $this->createLink('my', 'todo', "type={$date}")));
         }
 
         unset($this->lang->todo->typeList['cycle']);
