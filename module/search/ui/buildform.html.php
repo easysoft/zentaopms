@@ -11,11 +11,13 @@ $opts->formSession     = $formSession;
 $opts->module          = $module;
 $opts->actionURL       = $actionURL;
 $opts->groupItems      = $groupItems;
+$opts->onApplyQuery    = jsRaw('window.onApplyQuery');
 $opts->onDeleteQuery   = jsRaw('window.onDeleteQuery');
 
 if(empty($opts->savedQuery)) unset($opts->savedQuery);
 
-zui::searchform(set((array)$opts), set::_to('#searchFormPanel'), set::className('shadow'));
+$formName = empty($formName) ? '#searchFormPanel[data-module="' . $module . '"]' : $formName;
+zui::searchform(set((array)$opts), set::_to($formName), set::className('shadow'));
 
 jsVar('onDeleteQueryURL', $opts->deleteQueryURL);
 jsVar('options',          isset($options) ? $options : null);

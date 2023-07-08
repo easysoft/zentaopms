@@ -13,3 +13,12 @@ window.onDeleteQuery = function(event, queryID)
             else throw new Error('Failed: ' + text);
         });
 };
+
+window.onApplyQuery = function(event, queryID)
+{
+    event.stopPropagation();
+
+    if(!queryID) return;
+    const actionURL = $(event.target).closest('form#searchForm').find('input[type="hidden"][name="actionURL"]').val();
+    loadPage(actionURL.replace('myQueryID', queryID));
+};

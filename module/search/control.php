@@ -24,7 +24,7 @@ class search extends control
      * @access public
      * @return void
      */
-    public function buildForm($module = '', $fields = '', $params = '', $actionURL = '', $queryID = 0)
+    public function buildForm($module = '', $fields = '', $params = '', $actionURL = '', $queryID = 0, $formName = '')
     {
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';
@@ -55,6 +55,7 @@ class search extends control
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
         $this->view->formSession  = $_SESSION[$module . 'Form'];
         $this->view->fields       = $fields;
+        $this->view->formName     = $formName;
 
         if($module == 'program')
         {

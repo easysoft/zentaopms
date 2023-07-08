@@ -22,7 +22,7 @@ $cols['module']['map']         = $modules;
 
 foreach($allStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 
-div(setID('searchFormPanel'), searchToggle(set::open(true), set::module('story')));
+div(setID('searchFormPanel'), set('data-module', 'story'), searchToggle(set::open(true), set::module('story')));
 dtable
 (
     set::id('unlinkStoryList'),

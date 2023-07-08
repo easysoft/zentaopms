@@ -204,7 +204,7 @@ detailBody
                         set::trigger('hover'),
                         set::placement('bottom-end'),
                     ),
-                    !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}&browseType=&param={$decodeParam}&orderBy={$orderBy}"))),
+                    !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}"))),
                 ),
                 dtable
                 (
@@ -236,7 +236,7 @@ detailBody
                 div
                 (
                     setClass('tabnActions'),
-                    !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}&browseType=&param={$decodeParam}&orderBy={$orderBy}"))),
+                    !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}"))),
                 ),
                 dtable
                 (

@@ -830,7 +830,7 @@ class productplan extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($productID, $plan->branch, $queryID, 'id_desc', array_keys($planBugs), $pager);
+            $allBugs = $this->bug->getBySearch(array($productID), $plan->branch, 0, (int)$queryID, implode(',', array_keys($planBugs)), 'id_desc', $pager);
         }
         else
         {

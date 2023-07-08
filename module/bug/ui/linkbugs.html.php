@@ -20,10 +20,7 @@ foreach($bugs2Link as $bug)
 $cols = array_values($config->bug->linkBugs->dtable->fieldList);
 $data = array_values($bugs2Link);
 
-div
-(
-    set::id('searchFormPanel'),
-);
+div(setID('searchFormPanel'), set('data-module', 'bug'), searchToggle(set::open(true), set::module('bug')));
 
 form
 (

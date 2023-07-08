@@ -15,7 +15,7 @@ foreach($config->productplan->defaultFields['linkBug'] as $field) $cols[$field] 
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['assignedTo']['type'] = 'user';
 
-div(setID('searchFormPanel'), searchToggle(set::open(true), set::module('bug')));
+div(setID('searchFormPanel'), set('data-module', 'bug'), searchToggle(set::open(true), set::module('bug')));
 dtable
 (
     set::id('unlinkBugList'),
