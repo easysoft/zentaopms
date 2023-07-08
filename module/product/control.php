@@ -348,7 +348,7 @@ class product extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->executeHooks($productID);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $this->product->setMenu($productID);
@@ -400,15 +400,11 @@ class product extends control
      * Delete a product.
      *
      * @param  int    $productID
-     * @param  string $confirm   yes|no
      * @access public
      * @return void
      */
-    public function delete(int $productID, string $confirm = 'no')
+    public function delete(int $productID)
     {
-        /* Not confirm. */
-        if($confirm == 'no') return print(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
-
         /* Delete product. */
         $this->product->deleteByID($productID);
 
@@ -420,7 +416,7 @@ class product extends control
         if($message) $this->lang->saveSuccess = $message;
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
-        print(js::locate($this->createLink('product', 'all'), 'parent'));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('product', 'all')));
     }
 
     /**
