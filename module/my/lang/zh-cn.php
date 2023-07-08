@@ -31,6 +31,7 @@ $lang->my->unbind          = '解除ZDOO绑定';
 $lang->my->manageContacts  = '维护联系人';
 $lang->my->createContacts  = '创建联系人';
 $lang->my->deleteContacts  = '删除联系人';
+$lang->my->viewContacts    = '查看联系人';
 $lang->my->shareContacts   = '公开联系人';
 $lang->my->limited         = '受限操作(只能编辑与自己相关的内容)';
 $lang->my->score           = '我的积分';

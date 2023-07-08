@@ -31,6 +31,7 @@ $lang->my->unbind          = 'Unbind from Zdoo';
 $lang->my->manageContacts  = 'Manage Contact';
 $lang->my->createContacts  = 'Create Contact';
 $lang->my->deleteContacts  = 'Delete Contact';
+$lang->my->viewContacts    = 'View Contact';
 $lang->my->shareContacts   = 'Public';
 $lang->my->limited         = 'Limited Actions (Users can only edit what involves them.)';
 $lang->my->score           = 'My Points';
