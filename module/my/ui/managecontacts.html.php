@@ -10,15 +10,28 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$myContactList = array();
-foreach($lists as $id => $listName)
+$myContactList     = array();
+$publicContactList = array();
+foreach($lists as $contactList)
 {
-    $myContactList[] = li
-    (
-        set::class('editContact ellipsis pl-2 ' . ($id == $listID ? 'active' : '')),
-        set('data-id', $id),
-        $listName
-    );
+    if($contactList->account == $app->user->account)
+    {
+        $myContactList[] = li
+        (
+            setClass('editContact ellipsis pl-2 ' . ($list->id == $contactList->id ? 'active' : '')),
+            set('data-id', $contactList->id),
+            $contactList->listName
+        );
+    }
+    else if($contactList->public)
+    {
+        $publicContactList[] = li
+        (
+            setClass('ellipsis pl-2'),
+            set('data-id', $contactList->id),
+            $contactList->listName
+        );
+    }
 }
 
 formPanel
@@ -83,7 +96,6 @@ formPanel
             ),
             div
             (
-                input(set::class('hidden'), set::name('mode'), set::value($mode)),
                 formRow
                 (
                     set::class('py-2'),
