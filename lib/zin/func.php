@@ -339,6 +339,14 @@ function inputGroup(): inputGroup
 }
 
 /**
+ * Input group addon widget.
+ */
+function inputGroupAddon(): inputGroupAddon
+{
+    return createWg('inputGroupAddon', func_get_args());
+}
+
+/**
  * Checkbox list widget.
  *
  * ?string           name
