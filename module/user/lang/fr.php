@@ -280,6 +280,7 @@ $lang->user->contacts->userList = 'Liste Utilisateurs';
 
 $lang->usercontact = new stdclass;
 $lang->usercontact->listName = 'List Name';
+$lang->usercontact->userList = 'Liste Utilisateurs';
 
 $lang->user->contacts->manage        = 'Gérer la Liste';
 $lang->user->contacts->contactsList  = 'Liste de Contacts';

@@ -280,6 +280,7 @@ $lang->user->contacts->userList = '用户列表';
 
 $lang->usercontact = new stdclass;
 $lang->usercontact->listName = '列表名称';
+$lang->usercontact->userList = '用户列表';
 
 $lang->user->contacts->manage        = '维护列表';
 $lang->user->contacts->contactsList  = '已有列表';
