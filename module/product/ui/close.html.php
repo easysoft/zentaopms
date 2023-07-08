@@ -14,7 +14,7 @@ modalHeader();
 
 formPanel
 (
-    setClass('border-0'),
+    set::submitBtnText($lang->product->closeAction),
     formGroup
     (
         set::label($lang->comment),
