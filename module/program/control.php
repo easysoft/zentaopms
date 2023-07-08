@@ -673,10 +673,17 @@ class program extends control
      */
     public function ajaxGetDropMenu($programID, $module, $method)
     {
+        $programs = $this->program->getList('all');
+        foreach($programs as $programID => $program)
+        {
+            if($program->type != 'program') unset($programs[$programID]);
+            if($module == 'program' && $method == 'product' && $program->parent != 0) unset($programs[$programID]);
+        }
+
         $this->view->programID = $programID;
         $this->view->module    = $module;
         $this->view->method    = $method;
-        $this->view->programs  = $this->program->getList('all');
+        $this->view->programs  = $programs;
         $this->view->link      = $this->program->getLink($module, $method, '{id}', '', 'program');
         $this->display();
     }
