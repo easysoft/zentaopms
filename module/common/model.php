@@ -260,7 +260,7 @@ class commonModel extends model
             if(!defined('IN_UPGRADE')) $this->session->user->view = $this->loadModel('user')->grantUserView();
             $this->app->user = $this->session->user;
         }
-        elseif($this->app->company->guest || (PHP_SAPI == 'cli' && !isset($_SERVER['RR_MODE'])))
+        elseif($this->app->company->guest || (PHP_SAPI == 'cli' && (!isset($_SERVER['RR_MODE']) || $_SERVER['RR_MODE'] == 'jobs')))
         {
             $user             = new stdClass();
             $user->id         = 0;
