@@ -180,6 +180,34 @@ detailHeader
     )
 );
 
+/**
+ * Build content of table data.
+ *
+ * @param  array  $items
+ * @access public
+ * @return array
+ */
+$buildItems = function($items): array
+{
+    $itemList = array();
+    foreach($items as $item)
+    {
+        $itemList[] = item
+        (
+            set::name($item['name']),
+            !empty($item['href']) ? a
+            (
+                set::href($item['href']),
+                !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
+                $item['text']
+            ) : $item['text'],
+            set::collapse(!empty($item['text'])),
+        );
+    }
+
+    return $itemList;
+};
+
 detailBody
 (
     sectionList
@@ -217,7 +245,7 @@ detailBody
                 set::active(true),
                 tableData
                 (
-                    buildItems($legendBasic)
+                    $buildItems($legendBasic)
                 )
             ),
             tabPane
@@ -226,7 +254,7 @@ detailBody
                 set::title($lang->bug->legendLife),
                 tableData
                 (
-                    buildItems($legendLife)
+                    $buildItems($legendLife)
                 )
             )
         ),
@@ -240,7 +268,7 @@ detailBody
                 set::active(true),
                 tableData
                 (
-                    buildItems($legendMain)
+                    $buildItems($legendMain)
                 )
             ),
             tabPane
@@ -250,7 +278,7 @@ detailBody
                 tableData
                 (
                     set::useTable(false),
-                    buildItems($legendMisc)
+                    $buildItems($legendMisc)
                 )
             )
         )
@@ -306,31 +334,3 @@ modal
 );
 
 render();
-
-/**
- * Build content of table data.
- *
- * @param  array  $items
- * @access public
- * @return string
- */
-function buildItems($items)
-{
-    $itemList = array();
-    foreach($items as $item)
-    {
-        $itemList[] = item
-        (
-            set::name($item['name']),
-            !empty($item['href']) ? a
-            (
-                set::href($item['href']),
-                !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
-                $item['text']
-            ) : $item['text'],
-            set::collapse(!empty($item['text'])),
-        );
-    }
-
-    return $itemList;
-}

@@ -44,7 +44,7 @@ else
  * @param  object $todo
  * @return mixed
  */
-function buildDateControl(object $todo): mixed
+$buildDateControl = function(object $todo): mixed
 {
     global $lang;
 
@@ -96,7 +96,7 @@ function buildDateControl(object $todo): mixed
             )
         )
     );
-}
+};
 
 /**
  * 构建周期为天的设置。
@@ -105,7 +105,7 @@ function buildDateControl(object $todo): mixed
  * @param  object $todo
  * @return mixed
  */
-function buildCycleOfDayConfig(object $todo): mixed
+$buildCycleOfDayConfig = function(object $todo): mixed
 {
     global $lang;
 
@@ -164,7 +164,7 @@ function buildCycleOfDayConfig(object $todo): mixed
             )
         )
     );
-}
+};
 
 /**
  * 构建周期为周的设置。
@@ -173,7 +173,7 @@ function buildCycleOfDayConfig(object $todo): mixed
  * @param  object $todo
  * @return mixed
  */
-function buildCycleOfWeekConfig(object $todo): mixed
+$buildCycleOfWeekConfig = function(object $todo): mixed
 {
     global $lang;
 
@@ -213,7 +213,7 @@ function buildCycleOfWeekConfig(object $todo): mixed
             )
         )
     );
-}
+};
 
 /**
  * 构建周期为月的设置。
@@ -222,7 +222,7 @@ function buildCycleOfWeekConfig(object $todo): mixed
  * @param  object $todo
  * @return mixed
  */
-function buildCycleOfMonthConfig(object $todo): mixed
+$buildCycleOfMonthConfig = function(object $todo): mixed
 {
     global $lang;
 
@@ -266,7 +266,7 @@ function buildCycleOfMonthConfig(object $todo): mixed
             )
         )
     );
-}
+};
 
 /**
  * 构建周期为年的设置。
@@ -275,7 +275,7 @@ function buildCycleOfMonthConfig(object $todo): mixed
  * @param  object $todo
  * @return mixed
  */
-function buildCycleOfYearConfig(object $todo): mixed
+$buildCycleOfYearConfig = function(object $todo): mixed
 {
     global $lang;
 
@@ -335,7 +335,7 @@ function buildCycleOfYearConfig(object $todo): mixed
             )
         )
     );
-}
+};
 
 /**
  * 构建生成待办控件。
@@ -344,7 +344,7 @@ function buildCycleOfYearConfig(object $todo): mixed
  * @param  object $todo
  * @return mixed
  */
-function buildBeforeDays($todo): mixed
+$buildBeforeDays = function($todo): mixed
 {
     global $lang;
 
@@ -381,7 +381,7 @@ function buildBeforeDays($todo): mixed
             )
         )
     );
-}
+};
 
 /**
  * 构建周期时间控件。
@@ -390,7 +390,7 @@ function buildBeforeDays($todo): mixed
  * @param  object $todo
  * @return mixed
  */
-function buildDeadline($todo): mixed
+$buildDeadline = function($todo): mixed
 {
     global $lang;
     return formRow
@@ -418,7 +418,7 @@ function buildDeadline($todo): mixed
             )
         )
     );
-}
+};
 
 /**
  * 构建周期类型。
@@ -427,7 +427,7 @@ function buildDeadline($todo): mixed
  * @param  object $todo
  * @return mixed
  */
-function buildCycleType(object $todo)
+$buildCycleType = function(object $todo)
 {
     global $lang;
 
@@ -464,7 +464,7 @@ function buildCycleType(object $todo)
             )
         )
     );
-}
+};
 
 /**
  * 构建周期类型和设置。
@@ -473,7 +473,7 @@ function buildCycleType(object $todo)
  * @param  object $todo
  * @return mixed
  */
-function buildCycleConfig(object $todo): mixed
+$buildCycleConfig = function(object $todo): mixed
 {
     global $lang;
 
@@ -481,15 +481,15 @@ function buildCycleConfig(object $todo): mixed
 
     return fragment
     (
-        buildCycleType($todo),
-        buildCycleOfDayConfig($todo),
-        buildCycleOfWeekConfig($todo),
-        buildCycleOfMonthConfig($todo),
-        buildCycleOfYearConfig($todo),
-        buildBeforeDays($todo),
-        buildDeadline($todo)
+        $buildCycleType($todo),
+        $buildCycleOfDayConfig($todo),
+        $buildCycleOfWeekConfig($todo),
+        $buildCycleOfMonthConfig($todo),
+        $buildCycleOfYearConfig($todo),
+        $buildBeforeDays($todo),
+        $buildDeadline($todo)
     );
-}
+};
 
 /**
  * 构建待办类型，用于非周期待办展示。
@@ -499,7 +499,7 @@ function buildCycleConfig(object $todo): mixed
  * @return mixed
 
  */
-function buildTodoType(object $todo)
+$buildTodoType = function(object $todo)
 {
     global $lang;
 
@@ -528,7 +528,8 @@ function buildTodoType(object $todo)
         ),
         on::change('changeType(this)')
     );
-}
+};
+
 formPanel
 (
     set::title(''),
@@ -546,9 +547,9 @@ formPanel
             setClass('circle ml-2 label-id px-2')
         )
     ),
-    buildDateControl($todo),
-    buildCycleConfig($todo),
-    buildTodoType($todo),
+    $buildDateControl($todo),
+    $buildCycleConfig($todo),
+    $buildTodoType($todo),
     formRow
     (
         formGroup
