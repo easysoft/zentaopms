@@ -1365,15 +1365,12 @@ class userModel extends model
         $fails ++;
         if($fails < $this->config->user->failTimes)
         {
-            $locked    = '0000-00-00 00:00:00';
-            $failTimes = $fails;
+            $this->dao->update(TABLE_USER)->set('fails')->eq($fails)->set('locked = NULL')->where('account')->eq($account)->exec();
         }
         else
         {
-            $locked    = date('Y-m-d H:i:s');
-            $failTimes = 0;
+            $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq(date('Y-m-d H:i:s'))->where('account')->eq($account)->exec();
         }
-        $this->dao->update(TABLE_USER)->set('fails')->eq($failTimes)->set('locked')->eq($locked)->where('account')->eq($account)->exec();
 
         return $fails;
     }

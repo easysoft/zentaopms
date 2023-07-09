@@ -34,6 +34,16 @@ include dirname(__DIR__) . '/router.class.php';
 class zandRouter extends router
 {
     /**
+     * 全局变量的快照
+     * Snaps for global variables.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $snaps = array();
+
+    /**
      * 构造方法, 设置路径，类，超级变量等。注意：
      * 1.应该使用createApp()方法实例化router类；
      * 2.如果$appRoot为空，框架会根据$appName计算应用路径。
@@ -59,6 +69,57 @@ class zandRouter extends router
         $this->consumer = new Consumer();
 
         parent::__construct($appName, $appRoot);
+
+        /* Snap. */
+        global $filter;
+
+        self::$snaps['config'] = clone $this->config;
+        self::$snaps['lang']   = clone $this->lang;
+        self::$snaps['filter'] = clone $filter;
+    }
+
+    /**
+     * 初始化全局变量和客户端信息。
+     * Init global variables and client.
+     *
+     * @access public
+     * @return void
+     */
+    public function initRequest(): void
+    {
+        global $config, $lang, $filter, $loadedTargets;
+
+        $config        = clone self::$snaps['config'];
+        $lang          = clone self::$snaps['lang'];
+        $filter        = clone self::$snaps['filter'];
+        $loadedTargets = array();
+
+        $this->config     = $config;
+        $this->lang       = $lang;
+        $this->moduleName = NULL;
+        $this->methodName = NULL;
+        $this->rawModule  = NULL;
+        $this->rawMethod  = NULL;
+
+        self::$loadedConfigs = array();
+        self::$loadedLangs   = array();
+
+        $this->setClient();
+    }
+
+    /**
+     * 关闭请求会话
+     * Close request.
+     *
+     * @access public
+     * @return void
+     */
+    public function closeRequest()
+    {
+        $obLevel = ob_get_level();
+        for($i = 0; $i < $obLevel; $i++) ob_end_clean();
+
+        session_write_close();
     }
 
     /**
@@ -68,7 +129,7 @@ class zandRouter extends router
      * @access public
      * @return void
      */
-    public function startSession()
+    public function startSession(): void
     {
         $sessionName = $this->config->sessionVar;
 
@@ -219,6 +280,13 @@ class zandWorker
         $_SERVER['PATH_TRANSLATED']    = 'index.php';
         $_SERVER['HTTP_HOST']          = $_SERVER['SERVER_NAME'] . (in_array($_SERVER['SERVER_PORT'], array(80, 443)) ? '' : ':' . $_SERVER['SERVER_PORT']);
 
+        $query = $request->getUri()->getQuery();
+        if(!empty($query))
+        {
+            $_SERVER['REQUEST_URI'] .= '?' . $query;
+            $_SERVER['QUERY_STRING'] = $query;
+        }
+
         $_GET    = $request->getQueryParams();
         $_POST   = $request->getParsedBody();
         $_COOKIE = $request->getCookieParams();
@@ -342,7 +410,7 @@ class zandSession
      */
     public function destroy($id)
     {
-        $this->dao->delete(TABLE_SESSION)->where('id')->eq($id)->exec();
+        $this->dao->delete()->from(TABLE_SESSION)->where('id')->eq($id)->exec();
         return true;
     }
 

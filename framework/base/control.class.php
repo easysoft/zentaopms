@@ -971,13 +971,12 @@ class baseControl
             return;
         }
 
-        define('ZIN', true);
-
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($methodName)) $methodName = $this->methodName;
 
         /* Load zin lib */
         $this->app->loadClass('zin', true);
+        \zin\loadConfig();
 
         /**
          * 设置视图文件。(PHP7有一个bug，不能直接$viewFile = $this->setViewFile())。
@@ -1007,6 +1006,11 @@ class baseControl
         /**
          * Set zin context data
          */
+        \zin\zin::$globalRenderList = array();
+        \zin\zin::$enabledGlobalRender = true;
+        \zin\zin::$rendered = false;
+        \zin\zin::$rawContentCalled = false;
+
         \zin\zin::$data = (array)$this->view;
         \zin\zin::$data['zinDebug'] = array();
         if($this->config->debug && $this->config->debug >= 2)
@@ -1184,7 +1188,7 @@ class baseControl
      */
     public function locate(string $url)
     {
-        header("location: $url");
+        helper::header('location', $url);
         helper::end();
     }
 }

@@ -42,9 +42,10 @@ class mainNavbar extends nav
         $currentMethod = $app->getMethodName();
         if($app->tab == 'admin') $app->control->loadModel('admin')->setMenu();
 
-        commonModel::setMainMenu();
-        $activeMenu = commonModel::printMainMenu(false);
+        \commonModel::setMainMenu();
+        $activeMenu = \commonModel::printMainMenu(false);
         $items = \customModel::getModuleMenu($activeMenu);
+
         if($items)
         {
             $items = json_decode(json_encode($items), true);

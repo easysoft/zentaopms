@@ -268,6 +268,26 @@ class baseRouter
     public $config;
 
     /**
+     * 已加载的配置文件.
+     * Configs loaded.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $loadedConfigs = array();
+
+    /**
+     * 已加载的语言文件.
+     * Languages loaded.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $loadedLangs = array();
+
+    /**
      * 全局$lang对象。
      * The global $lang object.
      *
@@ -414,8 +434,6 @@ class baseRouter
         $this->loadClass('mobile', $static = true);
 
         $this->setCookieSecure();
-        $this->setOpenApp();
-        $this->setSuperVars();
         $this->setDebug();
         $this->setErrorHandler();
         $this->setTimezone();
@@ -439,6 +457,9 @@ class baseRouter
      */
     public function setClient(): void
     {
+        $this->setOpenApp();
+        $this->setSuperVars();
+
         $this->startSession();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
@@ -1157,7 +1178,7 @@ class baseRouter
 
         $module    = $this->rawModule;
         $this->tab = 'my';
-        if(isset($this->lang->navGroup)) $this->tab = zget($this->lang->navGroup, $module, 'my');
+        if(isset($this->lang->navGroup) && $module) $this->tab = zget($this->lang->navGroup, $module, 'my');
         if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', (string) $_COOKIE['tab'])) $this->tab = $_COOKIE['tab'];
     }
 
@@ -1510,11 +1531,27 @@ class baseRouter
 
         helper::import($commonModelFile);
 
-        if($this->config->framework->extensionLevel == 0 and class_exists('commonModel'))    return new commonModel();
-        if($this->config->framework->extensionLevel > 0  and class_exists('extCommonModel')) return new extCommonModel();
+        if($this->config->framework->extensionLevel == 0 and class_exists('commonModel'))
+        {
+            $common = new commonModel();
+        }
+        elseif($this->config->framework->extensionLevel > 0  and class_exists('extCommonModel'))
+        {
+            $common = new extCommonModel();
+        }
+        elseif(class_exists('commonModel'))
+        {
+            $common = new commonModel();
+        }
+        else
+        {
+            return false;
+        }
 
-        if(class_exists('commonModel')) return new commonModel();
-        return false;
+        $this->loadLang('company');
+        $common->setUserConfig();
+
+        return $common;
     }
 
     /**
@@ -2682,15 +2719,15 @@ class baseRouter
 
         /* 将主配置文件和扩展配置文件合并在一起。Put the main config file and extension config files together. */
         $configFiles = $this->getMainAndExtFiles($moduleName, $appName, 'config');
+
         if(empty($configFiles)) return false;
 
         /* 加载每一个配置文件。Load every config file. */
-        static $loadedConfigs = array();
         foreach($configFiles as $configFile)
         {
-            if(in_array($configFile, $loadedConfigs)) continue;
+            if(in_array($configFile, self::$loadedConfigs)) continue;
             if(is_string($configFile) && file_exists($configFile)) include $configFile;
-            $loadedConfigs[] = $configFile;
+            self::$loadedConfigs[] = $configFile;
         }
 
         /* 加载数据库中与本模块相关的配置项。Merge from the db configs. */
@@ -2833,12 +2870,11 @@ class baseRouter
         if(!is_object($lang)) $lang = new language();
         if(!isset($lang->$moduleName)) $lang->$moduleName = new stdclass();
 
-        static $loadedLangs = array();
         foreach($langFilesToLoad as $langFile)
         {
-            if(in_array($langFile, $loadedLangs)) continue;
+            if(in_array($langFile, self::$loadedLangs)) continue;
             include $langFile;
-            $loadedLangs[] = $langFile;
+            self::$loadedLangs[] = $langFile;
         }
 
         $this->lang = $lang;

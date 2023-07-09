@@ -188,6 +188,7 @@ class wg
             $result = str_replace('<!-- {{RAW_CONTENT}} -->', $rawContent, $result);
         }
 
+        ob_start();
         echo $result;
 
         $this->displayed = true;

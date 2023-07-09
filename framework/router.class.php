@@ -396,12 +396,11 @@ class router extends baseRouter
         $configFiles = array_merge(array($mainConfigFile), $configDirFiles, $extConfigFiles);
 
         /* 加载每一个配置文件。Load every config file. */
-        static $loadedConfigs = array();
         foreach($configFiles as $configFile)
         {
-            if(in_array($configFile, $loadedConfigs)) continue;
+            if(in_array($configFile, self::$loadedConfigs)) continue;
             if(file_exists($configFile)) include $configFile;
-            $loadedConfigs[] = $configFile;
+            self::$loadedConfigs[] = $configFile;
         }
 
         /* 加载数据库中与本模块相关的配置项。Merge from the db configs. */
@@ -422,7 +421,7 @@ class router extends baseRouter
      */
     public function loadConfig($moduleName, $appName = '')
     {
-        return parent::loadModuleConfig($moduleName);
+        return $this->loadModuleConfig($moduleName);
     }
 
     /**

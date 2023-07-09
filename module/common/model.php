@@ -14,23 +14,6 @@ class commonModel extends model
     public static $requestErrors = array();
 
     /**
-     * The construc method, to do some auto things.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        if(!defined('FIRST_RUN'))
-        {
-            define('FIRST_RUN', true);
-            $this->app->loadLang('company');
-            $this->setUserConfig();
-        }
-    }
-
-    /**
      * Set config of user.
      *
      * @access public
