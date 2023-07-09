@@ -56,7 +56,7 @@ class priPicker extends wg
         {
             global $app, $lang;
             $moduleName = $app->getModuleName();
-            $items = $lang->$moduleName->priList;
+            if(isset($lang->$moduleName->priList)) $items = $lang->$moduleName->priList;
         }
         return zui::priPicker
         (

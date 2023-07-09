@@ -56,7 +56,7 @@ class severityPicker extends wg
         {
             global $app, $lang;
             $moduleName = $app->getModuleName();
-            $items = $lang->$moduleName->severityList;
+            if(isset($lang->$moduleName->severityList)) $items = $lang->$moduleName->severityList;
         }
         return zui::severityPicker
         (
