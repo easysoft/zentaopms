@@ -222,8 +222,14 @@ class avatar extends wg
         if(!$background)
         {
             $val = 0;
-            if(is_numeric($avatarCode)) $val = intval($avatarCode);
-            else for($i = 0; $i < strlen($avatarCode); $i++) $val += ord($avatarCode[$i]);
+            if(is_numeric($avatarCode))
+            {
+                $val = intval($avatarCode);
+            }
+            else
+            {
+                for($i = 0; $i < strlen($avatarCode); $i++) $val += ord($avatarCode[$i]);
+            }
 
             $hue         = $val * $hueDistance % 360;
             $actualSat   = $saturation * 100;
@@ -236,7 +242,10 @@ class avatar extends wg
                 $this->finalStyle->color = $this->contrastColor($rgb);
             }
         }
-        elseif (!$foreColor and $background) $this->finalStyle->color = $this->contrastColor($background);
+        elseif (!$foreColor && $background)
+        {
+            $this->finalStyle->color = $this->contrastColor($background);
+        }
 
         $textStyle = null;
         if($this->actualSize and $this->actualSize < (14 * $this->displayTextLen))
@@ -281,7 +290,7 @@ class avatar extends wg
         (
             setClass('avatar-text'),
             set('data-actualSize', $this->actualSize),
-            set('style', $textStyle),
+            $textStyle ? set('style', $textStyle) : null,
             $displayText
         );
     }
