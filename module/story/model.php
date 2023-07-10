@@ -210,7 +210,6 @@ class storyModel extends model
         $orderBy = str_replace('branch_', 't2.branch_', $orderBy);
         $type    = strtolower($type);
         if(is_string($excludeStories))$excludeStories = explode(',', $excludeStories);
-        if(empty($productID)) $productID = (int)key($this->loadModel('product')->getProducts($executionID));
 
         /* 获取需求。 */
         if($type == 'bysearch') $stories = $this->storyTao->getExecutionStoriesBySearch($executionID, (int)$param, $productID, $orderBy, $storyType, $excludeStories, $pager);
