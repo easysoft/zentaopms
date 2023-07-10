@@ -56,7 +56,6 @@ $config->index->oldPages[] = 'admin-checkweak';
 $config->index->oldPages[] = 'admin-resetpwdsetting';
 $config->index->oldPages[] = 'admin-tableengine';
 $config->index->oldPages[] = 'custom-timezone';
-$config->index->oldPages[] = 'custom-set';
 $config->index->oldPages[] = 'webhook-browse';
 $config->index->oldPages[] = 'webhook-create';
 $config->index->oldPages[] = 'dev-api';
