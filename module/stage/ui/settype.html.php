@@ -10,13 +10,18 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$formItems[] = formGroup
+$formItems[] = formRow
 (
     set::width('1/3'),
-    set::label($lang->custom->key),
-    set::name(''),
-    set::value($lang->custom->value),
-    set::control('static')
+    formGroup
+    (
+        set::label($lang->custom->key),
+    ),
+    formGroup
+    (
+        set::label($lang->custom->value),
+    ),
+    formGroup()
 );
 
 div
