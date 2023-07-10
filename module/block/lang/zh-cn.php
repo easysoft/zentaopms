@@ -573,6 +573,7 @@ $lang->block->projectstatistic->personDay        = '人天';
 $lang->block->projectstatistic->day              = '天';
 $lang->block->projectstatistic->hour             = 'h';
 $lang->block->projectstatistic->leftDaysPre      = '距项目结束还剩';
+$lang->block->projectstatistic->delayDaysPre     = '项目已延期';
 $lang->block->projectstatistic->existRisks       = '存在风险：';
 $lang->block->projectstatistic->existIssues      = '存在问题：';
 $lang->block->projectstatistic->lastestExecution = '最新执行';

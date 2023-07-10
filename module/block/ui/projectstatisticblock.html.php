@@ -20,18 +20,19 @@ $nextProjectID  = 0;
 $projectIdList  = array_keys($projects);
 foreach($projects as $project)
 {
+    $remainingDays   = zget($project, 'remainingDays' , 0);
     $projectOverview = array();
     $projectOverview[] = cell
     (
-        setClass('text-left mr-6'),
+        setClass('flex-1 text-left mr-6'),
         $project->status != 'closed' && $project->end != LONG_TIME ? span
         (
             setClass('text-gray'),
-            $lang->block->projectstatistic->leftDaysPre,
+            $remainingDays >= 0 ? $lang->block->projectstatistic->leftDaysPre : $lang->block->projectstatistic->delayDaysPre,
             span
             (
                 setClass('font-bold text-black px-1'),
-                zget($project, 'remainingDays' , 0)
+                abs($remainingDays),
             ),
             $lang->block->projectstatistic->day
         ) : span
@@ -42,8 +43,8 @@ foreach($projects as $project)
     );
     $projectOverview[] = $config->edition != 'open' ? cell
     (
-        setClass('flex-1' . ($longBlock ? ' text-left' : ' text-right')),
-        icon('bullhorn text-warning mr-2'),
+        setClass('flex-1 text-left' . (!$longBlock ? ' w-full' : '')),
+        icon('bullhorn text-warning'),
         span
         (
             setClass('text-gray mr-5'),
@@ -65,9 +66,13 @@ foreach($projects as $project)
             )
         )
     ) : '';
+
+    $width = $config->edition != 'open' ? '33%' : '50%';
+
     $lastestExecution = (!empty($project->executions) && $project->multiple) ? cell
     (
-        setClass('flex-1' . (!$longBlock && $config->edition != 'open' ? ' text-left w-1/2' : ' text-right')),
+        setClass('flex-1 hidden-nowrap' . (!$longBlock ? ' text-left' : ' text-right')),
+        $longBlock ? set::width($width) : '',
         span
         (
             setClass('text-gray'),
@@ -98,10 +103,10 @@ foreach($projects as $project)
                 $unit  = $item['unit'];
                 $cellItems[] = item
                 (
-                    set::name($lang->block->projectstatistic->{$field} . ' ：'),
+                    set::name($lang->block->projectstatistic->{$field} . ': '),
                     span
                     (
-                        setClass('font-bold text-black mr-1'),
+                        setClass('font-bold text-black mr-0.5'),
                         zget($project, $field, 0)
                     ),
                     span
@@ -113,7 +118,7 @@ foreach($projects as $project)
             }
             $cells[] = cell
             (
-                setClass('flex-1 project-statistic-table scrum' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : ' ml-4') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
+                setClass('flex-1 hidden-nowrap project-statistic-table scrum' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : ' ml-4') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
                 set::width($longBlock ? ($module == 'cost' ? 'calc(25% - 1rem)' : '25%') : 'calc(50% - 1rem)'),
                 div
                 (
@@ -402,7 +407,7 @@ foreach($projects as $project)
     (
         div
         (
-            setClass('flex flex-wrap bg-white leading-6 px-2 py-1 mt-3 mx-4 shadow items-center' . ($longBlock ? ' h-10 mb-6' : 'h-20 mb-4')),
+            setClass('flex bg-white leading-6 px-2 py-1 mt-1 mx-3 shadow items-center gap-x-2 justify-between' . ($longBlock ? ' h-10 mb-6 flex-nowrap' : 'h-20 mb-4 flex-wrap')),
             $projectOverview,
             $lastestExecution,
         ),
