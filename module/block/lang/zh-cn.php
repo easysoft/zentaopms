@@ -132,7 +132,7 @@ $lang->block->titleList['project']        = "{$lang->projectCommon}列表";
 $lang->block->titleList['dynamic']        = '最新动态';
 $lang->block->titleList['list']           = '我的待办';
 $lang->block->titleList['contribute']     = '我的贡献';
-$lang->block->titleList['scrumoverview']  = "{$lang->projectCommon}概况";
+$lang->block->titleList['scrumoverview']  = "{$lang->projectCommon}总览";
 $lang->block->titleList['scrumtest']      = '待测版本';
 $lang->block->titleList['scrumlist']      = '迭代列表';
 $lang->block->titleList['sprint']         = '迭代总览';
@@ -226,7 +226,7 @@ $lang->block->modules['project']->availableBlocks['statistic']     = "{$lang->pr
 $lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon}列表";
 
 $lang->block->modules['scrumproject'] = new stdclass();
-$lang->block->modules['scrumproject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon}概况";
+$lang->block->modules['scrumproject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon}总览";
 $lang->block->modules['scrumproject']->availableBlocks['scrumlist']      = $lang->executionCommon . '列表';
 $lang->block->modules['scrumproject']->availableBlocks['sprint']         = $lang->executionCommon . '总览';
 $lang->block->modules['scrumproject']->availableBlocks['scrumtest']      = '待测版本';
