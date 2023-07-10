@@ -503,7 +503,7 @@ detailBody
             item
             (
                 set::id('duplicateBugBox'),
-                set('style', $bug->resolution != 'duplicate' ? array('display' => 'none') : null),
+                $bug->resolution != 'duplicate' ? setStyle(array('display' => 'none')) : null,
                 set::name($lang->bug->duplicateBug),
                 select
                 (

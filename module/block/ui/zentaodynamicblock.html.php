@@ -29,7 +29,7 @@ foreach($dynamics as $key => $dynamic)
                 label(set('class', 'text-black font-bold ml-1 ' . ($key > 0 ? 'special-pale' : 'secondary-pale')), $dynamic->label),
                 $dynamic->linklabel ? span
                 (
-                    set('style', array('float' => 'right')),
+                    setStyle(array('float' => 'right')),
                     $dynamic->linklabel,
                     icon('arrow-right')
                 ) : null

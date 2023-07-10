@@ -46,7 +46,7 @@ $getProductTabs = function(array $products, string $blockNavCode, bool $longBloc
                 icon
                 (
                     set('class', 'rotate-90 text-primary'),
-                    set('style', array('--tw-rotate' => '270deg')),
+                    setStyle(array('--tw-rotate' => '270deg')),
                     'import'
                 )
             )

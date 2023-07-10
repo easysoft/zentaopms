@@ -247,7 +247,7 @@ class avatar extends wg
             $this->finalStyle->color = $this->contrastColor($background);
         }
 
-        $textStyle = null;
+        $textStyle = array();
         if($this->actualSize and $this->actualSize < (14 * $this->displayTextLen))
         {
             $textStyle = array(
@@ -290,7 +290,7 @@ class avatar extends wg
         (
             setClass('avatar-text'),
             set('data-actualSize', $this->actualSize),
-            $textStyle ? set('style', $textStyle) : null,
+            $textStyle ? setStyle($textStyle) : null,
             $displayText
         );
     }

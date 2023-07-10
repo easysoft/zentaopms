@@ -163,7 +163,7 @@ formPanel
                 (
                     set('id', 'buildBoxActions'),
                     set('class', 'input-group-addon'),
-                    set('style', array('display' => 'none'))
+                    setStyle(array('display' => 'none'))
                 ),
                 span
                 (
