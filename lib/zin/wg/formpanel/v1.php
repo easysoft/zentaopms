@@ -73,7 +73,7 @@ class formPanel extends panel
      * @access protected
      * @return void
      */
-    protected function buildHeadingActions()
+    protected function buildHeadingActions(): ?wg
     {
         $headingActions = $this->prop('headingActions');
         if(!$headingActions) $headingActions = array();
