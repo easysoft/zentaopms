@@ -357,9 +357,26 @@ formPanel
         (
             set::width('3/4'),
             set::label($lang->task->name),
-            set::name('name'),
-            set::value($task->name),
             set::strong(true),
+            inputControl
+            (
+                input
+                (
+                    set::name('name'),
+                    set::value($task->name),
+                ),
+                set::suffixWidth('icon'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::heading($lang->task->colorTag),
+                        set::name('color'),
+                        set::value($task->color),
+                        set::syncColor('#name')
+                    )
+                )
+            )
         ),
         formGroup
         (
