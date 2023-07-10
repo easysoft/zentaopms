@@ -159,7 +159,7 @@ class storyModel extends model
      */
     public function getAffectedScope($story)
     {
-        $users = $this->loadModel('user')->getPairs('pofirst|nodeleted|noclosed', "{$story->lastEditedBy},{$story->openedBy},{$story->assignedTo}");
+        $users = $this->loadModel('user')->getPairs('pofirst|nodeleted', "{$story->lastEditedBy},{$story->openedBy},{$story->assignedTo}");
 
         $story = $this->storyTao->getAffectedProjects($story, $users);
         $story = $this->storyTao->getAffectedBugs($story, $users);
