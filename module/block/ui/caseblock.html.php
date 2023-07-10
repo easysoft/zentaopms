@@ -18,8 +18,6 @@ if(!$longBlock)
     unset($config->block->case->dtable->fieldList['lastRunResult']);
 }
 
-$config->block->case->dtable->fieldList['title']['width'] = $longBlock ? '50%' : '80%';
-
 foreach($cases as $case) $case->lastRunDate = formatTime($case->lastRunDate, DT_DATE1);
 
 panel
