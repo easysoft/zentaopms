@@ -873,7 +873,7 @@ class execution extends control
         /* Get execution's product. */
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
 
-        if(empty($productID)) $productID = key($productPairs);
+        if(empty($productID)) $productID = (int)key($productPairs);
         $showModule  = !empty($this->config->datatable->executionStory->showModule) ? $this->config->datatable->executionStory->showModule : '';
         $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
 
