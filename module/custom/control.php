@@ -553,7 +553,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.CRProduct', $this->post->product);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->title      = $this->lang->custom->productName;
