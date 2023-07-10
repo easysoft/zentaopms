@@ -642,11 +642,11 @@ class aiModel extends model
     /**
      * Auto prepend newline to text if text has newline in the middle.
      *
-     * @param  string $text
-     * @access public
+     * @param  string  $text
+     * @access private
      * @return string
      */
-    public static function autoPrependNewline($text)
+    private static function autoPrependNewline($text)
     {
         preg_match('/\n[^$]/', $text, $matches);
 
@@ -656,12 +656,12 @@ class aiModel extends model
     /**
      * Try to punctuate sentence if sentence is not ended with punctuation.
      *
-     * @param  string $sentence
-     * @param  bool   $newline
-     * @access public
+     * @param  string  $sentence
+     * @param  bool    $newline
+     * @access private
      * @return string
      */
-    public static function tryPunctuate($sentence, $newline = false)
+    private static function tryPunctuate($sentence, $newline = false)
     {
         preg_match('/\p{P}$/u', $sentence, $matches);
         if(empty($matches)) $sentence .= '.';
