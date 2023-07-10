@@ -23,7 +23,7 @@ foreach($requiredFields as $method => $requiredField)
 
     $requiredRows[] = formGroup
         (
-            set::width('1/3'),
+            set::width('1/2'),
             set::label($actionTitle . $lang->custom->page),
             set::labelClass('font-bold'),
             select
@@ -48,17 +48,25 @@ if(common::hasPriv('custom', 'resetRequired'))
     );
 }
 
-formPanel
+if(!in_array($module, array('productplan', 'release', 'testsuite', 'testreport', 'caselib', 'doc')) && $config->vision == 'rnd') include 'sidebar.html.php';
+div
 (
-    set::id('requiredForm'),
-    set::actionsClass('w-1/3'),
-    set::actions($formActions),
-    span
+    setClass('flex'),
+    $sidebarMenu,
+    formPanel
     (
-        setClass('article-h2'),
-        $lang->custom->required
-    ),
-    $requiredRows
+        set::id('requiredForm'),
+        setClass('flex-auto'),
+        setClass($sidebarMenu ? 'ml-4' : null),
+        set::actionsClass('w-1/2'),
+        set::actions($formActions),
+        span
+        (
+            setClass('article-h2'),
+            $lang->custom->required
+        ),
+        $requiredRows
+    )
 );
 
 /* ====== Render page ====== */

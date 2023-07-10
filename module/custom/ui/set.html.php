@@ -10,48 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$menuItems = array();
-if(!in_array($module, array('block', 'baseline')) && !empty($lang->custom->{$module}->fields))
-{
-    foreach($lang->custom->{$module}->fields as $key => $value)
-    {
-        $currentModule = 'custom';
-        $method        = $key;
-        $params        = $key == 'required' ? "module=$module" : '';
-        $active        = $app->rawMethod == strtolower($key) ? 'active' : '';
-        if(!in_array($key, $config->custom->notSetMethods))
-        {
-            $params = "module=$module&field=$key";
-            $method = 'set';
-            $active = (isset($field) and $field == $key) ? 'active' : $active;
-        }
-
-        if($module == 'approvalflow')
-        {
-            $currentModule = 'approvalflow';
-            if(in_array($key, array('project', 'workflow')))
-            {
-                $method = 'browse';
-                $params = "type=$key";
-                $active = (isset($type) and $type == $key) ? 'active' : $active;
-            }
-        }
-
-        if(common::hasPriv($currentModule, $method))
-        {
-            $menuItems[] = li
-            (
-                setClass('menu-item py-1 px-4'),
-                a
-                (
-                    setClass($active),
-                    set::href(inlink($method, $params)),
-                    $value,
-                )
-            );
-        }
-    }
-}
+if(!in_array($module, array('block', 'baseline'))) include 'sidebar.html.php';
 
 $formItems   = array();
 $formActions = array('submit');
@@ -417,17 +376,13 @@ else
 div
 (
     setClass('flex'),
-    $menuItems ? menu
-    (
-        setClass('w-48'),
-        $menuItems
-    ) : null,
+    $sidebarMenu,
     formPanel
     (
         set::headingClass('justify-start'),
         to::headingActions($headingTips),
         setClass('flex-auto'),
-        setClass($menuItems ? 'ml-4' : null),
+        setClass($sidebarMenu ? 'ml-4' : null),
         set::actionsClass($actionWidth),
         set::title($lang->custom->$module->fields[$field]),
         set::actions($formActions),

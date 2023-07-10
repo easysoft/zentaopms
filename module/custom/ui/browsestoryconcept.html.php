@@ -15,31 +15,37 @@ jsVar('defaultKey', $config->custom->URSR);
 $canCreate = hasPriv('custom', 'setstoryconcept');
 if($canCreate) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->custom->setStoryConcept, 'url' => $this->createLink('custom', 'setstoryconcept'), 'data-toggle' => 'modal');
 
+$tableData = initTableData($URSRList, $config->custom->browseStoryConcept->dtable->fieldList);
+include 'sidebar.html.php';
 div
 (
-    setClass('story-concept-panel'),
+    setClass('flex'),
+    $sidebarMenu,
     div
     (
-        setClass('panel-header flex-auto'),
+        setClass('story-concept-panel flex-auto col ml-4'),
         div
         (
-            setClass('flex-auto article-h2'),
-            $lang->custom->product->fields['browsestoryconcept']
+            setClass('panel-header flex-auto'),
+            div
+            (
+                setClass('flex-auto article-h2'),
+                $lang->custom->product->fields['browsestoryconcept']
+            ),
+            toolbar
+            (
+                !empty($createItem) ? item(set($createItem)) : null,
+            ),
         ),
-        toolbar
+        dtable
         (
-            !empty($createItem) ? item(set($createItem)) : null,
-        ),
-    ),
+            set::cols($config->custom->browseStoryConcept->dtable->fieldList),
+            set::data($tableData),
+            set::onRenderCell(jsRaw('window.renderCell')),
+        )
+    )
 );
 
-$tableData = initTableData($URSRList, $config->custom->browseStoryConcept->dtable->fieldList);
-dtable
-(
-    set::cols($config->custom->browseStoryConcept->dtable->fieldList),
-    set::data($tableData),
-    set::onRenderCell(jsRaw('window.renderCell')),
-);
 
 /* ====== Render page ====== */
 render();

@@ -9,34 +9,41 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+include 'sidebar.html.php';
 
-formPanel
+div
 (
-    set::id('closedProductForm'),
-    set::actions(array('submit')),
-    set::actionsClass('w-2/3'),
-    span
+    setClass('flex'),
+    $sidebarMenu,
+    formPanel
     (
-        setClass('article-h2'),
-        $lang->custom->$module->fields['product']
-    ),
-    formGroup
-    (
-        set::width('2/3'),
-        setClass('closed-product-box'),
-        set::label($lang->custom->closedProduct),
-        radioList
-        (
-            set::name('product'),
-            set::items($lang->custom->CRProduct),
-            set::value(isset($config->CRProduct) ? $config->CRProduct : 0),
-            set::inline(true),
-        ),
+        set::id('closedProductForm'),
+        set::actions(array('submit')),
+        set::actionsClass('w-2/3'),
+        setClass('flex-auto ml-4'),
         span
         (
-            icon('info text-warning mr-2'),
-            $lang->custom->notice->readOnlyOfProduct
-        )
+            setClass('article-h2'),
+            $lang->custom->$module->fields['product']
+        ),
+        formGroup
+        (
+            set::width('2/3'),
+            setClass('closed-product-box'),
+            set::label($lang->custom->closedProduct),
+            radioList
+            (
+                set::name('product'),
+                set::items($lang->custom->CRProduct),
+                set::value(isset($config->CRProduct) ? $config->CRProduct : 0),
+                set::inline(true),
+            ),
+            span
+            (
+                icon('info text-warning mr-2'),
+                $lang->custom->notice->readOnlyOfProduct
+            )
+        ),
     ),
 );
 
