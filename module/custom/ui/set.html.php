@@ -178,6 +178,10 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
     }
     elseif($module == 'testcase')
     {
+        jsVar('+stopSubmit', true);
+        jsVar('oldNeedReview', $needReview);
+        jsVar('confirmReviewCase', $lang->custom->notice->confirmReviewCase);
+
         $formItems[] = div
         (
             setClass($needReview ? '' : 'hidden'),
@@ -222,6 +226,12 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
         );
 
         $actionWidth = 'w-2/3';
+        $formActions = array(array(
+            'text'    => $lang->save,
+            'type'    => 'primary',
+            'btnType' => 'button',
+            'onclick' => 'savaTestcaseReview()'
+        ));
     }
 }
 elseif($module == 'bug' && $field == 'longlife')
@@ -437,6 +447,7 @@ div
     $sidebarMenu,
     formPanel
     (
+        setID('settingForm'),
         set::headingClass('justify-start'),
         to::headingActions($headingTips),
         setClass('flex-auto'),

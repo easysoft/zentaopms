@@ -46,3 +46,41 @@ window.changeUnit = function()
 
      $('#defaultCurrency').val(defaultCurrency);
 }
+
+window.savaTestcaseReview = function()
+{
+    const url  = $("#settingForm").attr('action');
+    const form = new FormData($("#settingForm")[0]);
+    if(stopSubmit && oldNeedReview)
+    {
+        stopSubmit = false;
+
+        const needReview = $('input[name="needReview"]:checked').val();
+        if(needReview == 0)
+        {
+            $.ajaxSubmit({
+                url: $.createLink('testcase', 'ajaxGetReviewCount'),
+                onComplete: function(count)
+                {
+                    stopSubmit = true;
+
+                    if(count == 0)
+                    {
+                        $.ajaxSubmit({url, data:form});
+                        return true;
+                    }
+
+                    zui.Modal.confirm(confirmReviewCase).then((result) =>
+                    {
+                        if(result) form.append('reviewCase', '1');
+                        $.ajaxSubmit({url, data:form});
+                    })
+                }
+            });
+
+            return false;
+        }
+    }
+
+    $.ajaxSubmit({url, data:form});
+}
