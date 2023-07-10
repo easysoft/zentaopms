@@ -342,14 +342,14 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function required($moduleName = '')
+    public function required(string $moduleName = '')
     {
         if(empty($moduleName)) $moduleName = current($this->config->custom->requiredModules);
 
         if($this->server->request_method == 'POST')
         {
             $this->custom->saveRequiredFields($moduleName);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('required', "moduleName=$moduleName")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('required', "moduleName=$moduleName")));
         }
 
         foreach($this->config->custom->requiredModules as $requiredModule) $this->app->loadLang($requiredModule);
@@ -365,8 +365,7 @@ class custom extends control
             unset($requiredFields['editlib']);
         }
 
-        $this->view->title      = $this->lang->custom->required;
-
+        $this->view->title          = $this->lang->custom->required;
         $this->view->requiredFields = $requiredFields;
         $this->view->module         = $moduleName;
         $this->display();
@@ -495,7 +494,6 @@ class custom extends control
      * Delete story concept.
      *
      * @param  int    $key
-     * @param  string $confirm yse|no
      * @access public
      * @return void
      */
@@ -807,16 +805,13 @@ class custom extends control
      * Reset required.
      *
      * @param  string $module
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function resetRequired($module, $confirm = 'no')
+    public function resetRequired(string $module)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->custom->confirmRestore, inlink('resetRequired', "module=$module&confirm=yes")));
-
         $this->loadModel('setting')->deleteItems("owner=system&module={$module}&key=requiredFields");
-        return print(js::reload('parent.parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
