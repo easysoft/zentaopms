@@ -41,7 +41,7 @@ class panel extends wg
         );
     }
 
-    protected function buildHeading(): wg
+    protected function buildHeading(): ?wg
     {
         list($title, $size) = $this->prop(['title', 'size']);
         $headingBlock       = $this->block('heading');
