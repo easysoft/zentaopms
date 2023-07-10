@@ -18,24 +18,21 @@ if(!$longBlock)
     unset($config->block->case->dtable->fieldList['lastRunResult']);
 }
 
+$config->block->case->dtable->fieldList['title']['width'] = $longBlock ? '50%' : '80%';
+
+foreach($cases as $case) $case->lastRunDate = formatTime($case->lastRunDate, DT_DATE1);
+
 panel
 (
+    set::title($block->title),
     set('class', 'case-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
-    to::heading
-    (
-        div
-        (
-            set('class', 'panel-title'),
-            span($block->title),
-        )
-    ),
     to::headingActions
     (
         a
         (
             set('class', 'text-gray'),
-            set('href', createLink('my',  $block->params->type == 'openedbyme' ? 'contribute' : 'work', 'mode=testcase&type=' . $block->params->type)),
+            set('href', $block->moreLink),
             $lang->more,
             icon('caret-right')
         )
@@ -48,7 +45,6 @@ panel
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->case->dtable->fieldList)),
         set::data(array_values($cases)),
-        set::fixedLeftWidth($longBlock ? '50%' : '80%'),
     )
 );
 
