@@ -1248,12 +1248,18 @@ class blockZen extends block
     protected function printScrumOverviewBlock(): void
     {
         $projectID = $this->session->project;
-        $this->app->loadLang('execution');
         $this->app->loadLang('bug');
         $totalData = $this->loadModel('project')->getOverviewList('', $projectID, 'id_desc', 1);
 
+        $project = zget($totalData, $projectID, new stdclass());
+        $this->app->loadClass('pager', true);
+        $pager = pager::init(0, 3, 1);
+        $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
+        $project->executions = $this->loadModel('execution')->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
+
         $this->view->totalData = $totalData;
         $this->view->projectID = $projectID;
+        $this->view->project   = $project;
     }
 
     /**
