@@ -35,7 +35,12 @@ formPanel
     on::click('#saveButton', 'customSubmit'),
     on::click('#saveDraftButton', 'customSubmit'),
     set::id('dataform'),
-    set::title($lang->story->create),
+    to::heading(div
+    (
+        setClass('panel-title text-lg'),
+        $lang->story->create,
+        $forceReview ? checkbox(set::id('needNotReview'), set::rootClass('text-base font-medium'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview), on::change('toggleReviewer(e.target)')) : null,
+    )),
     set::actions(array
     (
         array('text' => $lang->save,             'id' => 'saveButton',      'class' => 'primary'),
@@ -43,17 +48,13 @@ formPanel
         array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url'),
     )),
     set::customFields(array('items' => $fnGenerateCustomizedFields(), 'urlParams' => 'module=story&section=custom&key=createFields')),
-    to::headingActions
-    (
-        $forceReview ? checkbox(set::id('needNotReview'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview), on::change('toggleReviewer(e.target)')) : null,
-    ),
     formRow
     (
         on::change('#product', 'loadProduct'),
         on::change('#branch', 'loadBranch'),
         formGroup
         (
-            setClass($hiddenProduct ? 'hidden' : null),
+            setClass($hiddenProduct ? 'hidden' : ''),
             set::label($lang->story->product),
             set::width('1/2'),
             inputGroup
@@ -272,7 +273,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            setClass($hiddenParent ? 'hidden' : null),
+            setClass($hiddenParent ? 'hidden' : ''),
             set::label($lang->story->parent),
             set::control('select'),
             set::name('parent'),
@@ -282,7 +283,7 @@ formPanel
     ) : null,
     $type == 'story' && !$this->config->URAndSR ? formRow
     (
-        setClass($hiddenParent ? 'hidden' : null),
+        setClass($hiddenParent ? 'hidden' : ''),
         formGroup
         (
             set::label($lang->story->parent),
