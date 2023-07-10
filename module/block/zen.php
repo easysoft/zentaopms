@@ -324,14 +324,14 @@ class blockZen extends block
         if(!empty($result->data))
         {
             $data = $result->data;
-            if(!empty($data->zentaosalon))
+            if(!empty($data->zentaosalon) && time() < strtotime($data->zentaosalon->time))
             {
                 $data->zentaosalon->title     = $this->lang->block->zentaodynamic->zentaosalon;
                 $data->zentaosalon->label     = formatTime($data->zentaosalon->time, DT_DATE4) . ' ' . $data->zentaosalon->name;
                 $data->zentaosalon->linklabel = $this->lang->block->zentaodynamic->registration;
                 $dynamics[] = $data->zentaosalon;
             }
-            if(!empty($data->publicclass))
+            if(!empty($data->publicclass) && time() < strtotime($data->zentaosalon->time))
             {
                 $data->publicclass->title     = $this->lang->block->zentaodynamic->publicclass;
                 $data->publicclass->label     = formatTime($data->publicclass->time, DT_DATE4) . $this->lang->datepicker->dayNames[date('w', strtotime($data->publicclass->time))] . ' ' . formatTime($data->publicclass->time, 'H:i');
