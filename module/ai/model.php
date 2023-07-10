@@ -701,7 +701,7 @@ class aiModel extends model
     public function executePrompt($promptId, $objectId)
     {
         $prompt = $this->getPromptById($promptId);
-        if(empty($prompt)) return;
+        if(empty($prompt)) return false;
 
         $objectData = $this->getObjectForPromptById($prompt, $objectId);
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
