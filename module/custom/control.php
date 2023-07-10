@@ -312,6 +312,7 @@ class custom extends control
         {
             $this->custom->deleteItems("module=$module&section=$field");
         }
+
         return $this->sendSuccess(array('load' => true));
     }
 

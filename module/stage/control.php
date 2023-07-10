@@ -206,7 +206,7 @@ class stage extends control
                 if(!$value or !$key) continue;
                 $this->custom->setItem("{$data->lang}.stage.typeList.{$key}", $value);
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('stage', 'settype', "lang2Set=" . ($data->lang == 'all' ? 'all' : ''))));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->setType;
