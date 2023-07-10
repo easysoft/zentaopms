@@ -24,6 +24,8 @@ foreach($appendUsers as $account => $realname)
     $members[]       = $member;
 }
 
+dropmenu(set::objectID($objectID));
+
 formBatchPanel
 (
     setClass('add-whitelist-panel'),
