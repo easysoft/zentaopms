@@ -41,7 +41,6 @@ div
         ),
         formGroup
         (
-            set::label(''),
             span
             (
                 icon('info text-warning mr-2'),
