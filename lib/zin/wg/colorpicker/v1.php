@@ -41,7 +41,7 @@ class colorPicker extends wg
         'multiple?: boolean|number=false',  // 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
         'required?: boolean',               // 是否必选（不允许空值，不可以被清除）。
         'items?: string | string[]',        // 颜色选项列表。
-        'icon?: IconType',                  // 将触发按钮显示为图标。
+        'icon?: string|array="color"',      // 将触发按钮显示为图标。
         'syncValue?: string',               // 指定选择器同步颜色值作为文本到的元素。
         'syncColor?: string',               // 指定选择器同步文字颜色到的元素。
         'syncBackground?: string',          // 指定选择器同步背景颜色到的元素。
