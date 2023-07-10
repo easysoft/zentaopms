@@ -73,6 +73,48 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
     $tabItems = array();
     foreach($products as $product)
     {
+        $product->addYesterday      = 12;
+        $product->addToday          = 6;
+        $product->resolvedYesterday = 36;
+        $product->resolvedToday     = 12;
+        $product->closedYesterday   = 24;
+        $product->closedToday       = 12;
+        $progressMax = max($product->addYesterday, $product->addToday, $product->resolvedYesterday, $product->resolvedToday, $product->closedYesterday, $product->closedToday);
+        $progressBlcok = array();
+        foreach(array(array('addYesterday', 'addToday'), array('resolvedYesterday', 'resolvedToday'), array('closedYesterday', 'closedToday')) as $group)
+        {
+            $progress = array();
+            $progressLabel = array();
+            foreach($group as $key => $field)
+            {
+                $progressLabel[] = div(set('class', 'py-1 ' . ($key === 0 ? '' : 'text-gray')), span($lang->block->qastatistic->{$field}), span(set('class', 'ml-1'), $product->{$field}));
+                $progress[] = div
+                (
+                    set('class', $key === 0 ? 'pt-2' : 'pt-5'),
+                    div
+                    (
+                        set('class', 'progress h-2'),
+                        div
+                        (
+                            set('class', 'progress-bar'),
+                            set('role', 'progressbar'),
+                            setStyle(array('width' => ($product->{$field} / $progressMax * 100) . '%', 'background' => $key === 0 ? 'var(--color-secondary-200)' : 'var(--color-primary-300)')),
+                        )
+                    )
+                );
+            }
+            $progressBlcok[] = div
+            (
+                set('class', 'flex border-r py-1 pr-4'),
+                cell($progressLabel),
+                cell
+                (
+                    set('class', 'flex-1 px-3'),
+                    $progress
+                )
+            );
+        }
+
         $tabItems[] = div
         (
             set('class', 'tab-pane h-full' . ($product->id == $selected ? ' active' : '')),
@@ -103,11 +145,11 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                         (
                                             array
                                             (
-                                                'type'   => 'pie',
-                                                'radius' => array('80%', '90%'),
+                                                'type'      => 'pie',
+                                                'radius'    => array('80%', '90%'),
                                                 'itemStyle' => array('borderRadius' => '40'),
-                                                'label'  => array('show' => false),
-                                                'data'   => array(69.9, 100-69.9)
+                                                'label'     => array('show' => false),
+                                                'data'      => array(55.7, 100-55.7)
                                             )
                                         )
                                     )
@@ -150,7 +192,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                         span
                                         (
                                             set('class', 'text-sm text-gray'),
-                                            $lang->block->qastatistic->closedBug
+                                            $lang->bug->statusList['closed']
                                         )
                                     )
                                 ),
@@ -166,7 +208,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                         span
                                         (
                                             set('class', 'text-sm text-gray'),
-                                            $lang->block->qastatistic->activatedBug
+                                            $lang->bug->statusList['active']
                                         )
                                     )
                                 )
@@ -180,145 +222,37 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                             (
                                 div
                                 (
-                                    set('class', 'px-4 pb-2'),
+                                    set('class', 'pb-2'),
                                     $lang->block->qastatistic->bugStatistics
                                 ),
-                                div
-                                (
-                                    set('class', 'flex border-r py-1'),
-                                    cell
-                                    (
-                                        div(set('class', 'py-1'), span('昨日新增'), span(set('class', 'ml-1'), '12')),
-                                        div(set('class', 'py-1'), span('今日新增'), span(set('class', 'ml-1'), '6')),
-                                    ),
-                                    cell
-                                    (
-                                        set('class', 'flex-1 px-3'),
-                                        div
-                                        (
-                                            set('class', 'pt-2'),
-                                            div
-                                            (
-                                                set('class', 'progress h-2'),
-                                                div
-                                                (
-                                                    set('class', 'progress-bar secondary'),
-                                                    set('role', 'progressbar'),
-                                                    setStyle(['width' => '36%']),
-                                                )
-                                            )
-                                        ),
-                                        div
-                                        (
-                                            set('class', 'pt-5'),
-                                            div
-                                            (
-                                                set('class', 'progress h-2'),
-                                                div
-                                                (
-                                                    set('class', 'progress-bar'),
-                                                    set('role', 'progressbar'),
-                                                    setStyle(['width' => '18%']),
-                                                )
-                                            )
-                                        )
-                                    )
-                                ),
-                                div
-                                (
-                                    set('class', 'flex border-r py-1'),
-                                    cell
-                                    (
-                                        div(set('class', 'py-1'), span('昨日解决'), span(set('class', 'ml-1'), '36')),
-                                        div(set('class', 'py-1'), span('今日解决'), span(set('class', 'ml-1'), '12')),
-                                    ),
-                                    cell
-                                    (
-                                        set('class', 'flex-1 px-3'),
-                                        div
-                                        (
-                                            set('class', 'pt-2'),
-                                            div
-                                            (
-                                                set('class', 'progress h-2'),
-                                                div
-                                                (
-                                                    set('class', 'progress-bar secondary'),
-                                                    set('role', 'progressbar'),
-                                                    setStyle(['width' => '84%']),
-                                                )
-                                            )
-                                        ),
-                                        div
-                                        (
-                                            set('class', 'pt-5'),
-                                            div
-                                            (
-                                                set('class', 'progress h-2'),
-                                                div
-                                                (
-                                                    set('class', 'progress-bar'),
-                                                    set('role', 'progressbar'),
-                                                    setStyle(['width' => '28%']),
-                                                )
-                                            )
-                                        )
-                                    )
-                                ),
-                                div
-                                (
-                                    set('class', 'flex border-r py-1'),
-                                    cell
-                                    (
-                                        div(set('class', 'py-1'), span('昨日关闭'), span(set('class', 'ml-1'), '24')),
-                                        div(set('class', 'py-1'), span('今日关闭'), span(set('class', 'ml-1'), '12')),
-                                    ),
-                                    cell
-                                    (
-                                        set('class', 'flex-1 px-3'),
-                                        div
-                                        (
-                                            set('class', 'pt-2'),
-                                            div
-                                            (
-                                                set('class', 'progress h-2'),
-                                                div
-                                                (
-                                                    set('class', 'progress-bar secondary'),
-                                                    set('role', 'progressbar'),
-                                                    setStyle(['width' => '60%']),
-                                                )
-                                            )
-                                        ),
-                                        div
-                                        (
-                                            set('class', 'pt-5'),
-                                            div
-                                            (
-                                                set('class', 'progress h-2'),
-                                                div
-                                                (
-                                                    set('class', 'progress-bar'),
-                                                    set('role', 'progressbar'),
-                                                    setStyle(['width' => '30%']),
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
+                                $progressBlcok
                             )
                         )
                     )
                 ),
                 cell
                 (
-                    set('width', '32%'),
+                    set('width', '30%'),
                     set('class', 'py-2 px-6'),
                     div
                     (
                         set('class', 'py-2'),
-                        span('近期测试单')
+                        span($lang->block->qastatistic->latestTesttask)
                     ),
+                    div
+                    (
+                        set('class', 'py-2'),
+                        div(set('class', 'text-sm pb-2'), $lang->testtask->statusList['doing']),
+                        div(set('class', 'py-1'), a('aaaa')),
+                        div(set('class', 'py-1'), a('bbbb')),
+                    ),
+                    div
+                    (
+                        set('class', 'py-2'),
+                        div(set('class', 'text-sm pb-2'), $lang->testtask->statusList['wait']),
+                        div(set('class', 'py-1'), a('aaaa')),
+                        div(set('class', 'py-1'), a('bbbb')),
+                    )
                 )
             )
         );

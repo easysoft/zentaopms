@@ -159,10 +159,10 @@ $lang->block->default['product'][] = array('title' => "Offene {$lang->productCom
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon} Overview",  'module' => 'product', 'code' => 'overview',  'width' => '1', 'height' => '3', 'left' => '2', 'top' => '0');
 $lang->block->default['product'][] = array('title' => "Meine {$lang->SRCommon}",          'module' => 'product', 'code' => 'story',     'width' => '1', 'height' => '6', 'left' => '2', 'top' => '3', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
-$lang->block->default['qa'][] = array('title' => 'Test Report',        'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'height' => '5', 'left' => '0', 'top' => '0', 'params' => array('type' => 'noclosed',   'count' => '20'));
-$lang->block->default['qa'][] = array('title' => 'Ausstehende Builds', 'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'height' => '6', 'left' => '0', 'top' => '5', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
-$lang->block->default['qa'][] = array('title' => 'My Bugs',            'module' => 'qa', 'code' => 'bug',       'width' => '1', 'height' => '6', 'left' => '2', 'top' => '0', 'params' => array('type' => 'assignedTo', 'count' => '15', 'orderBy' => 'id_desc'));
-$lang->block->default['qa'][] = array('title' => 'My Cases',           'module' => 'qa', 'code' => 'case',      'width' => '1', 'height' => '6', 'left' => '2', 'top' => '6', 'params' => array('type' => 'assigntome', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => "Unclosed {$lang->productCommon} Test Report", 'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'height' => '5', 'left' => '0', 'top' => '0', 'params' => array('type' => 'noclosed',   'count' => '20'));
+$lang->block->default['qa'][] = array('title' => 'Ausstehende Builds',                          'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'height' => '6', 'left' => '0', 'top' => '5', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => 'My Bugs',                                     'module' => 'qa', 'code' => 'bug',       'width' => '1', 'height' => '6', 'left' => '2', 'top' => '0', 'params' => array('type' => 'assignedTo', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => 'My Cases',                                    'module' => 'qa', 'code' => 'case',      'width' => '1', 'height' => '6', 'left' => '2', 'top' => '6', 'params' => array('type' => 'assigntome', 'count' => '15', 'orderBy' => 'id_desc'));
 
 $lang->block->default['full']['my'][] = array('title' => 'Willkommen',                                      'module' => 'welcome',    'code' => 'welcome',       'width' => '2', 'height' => '3', 'left' => '0', 'top' => '0');
 $lang->block->default['full']['my'][] = array('title' => 'Guides',                                          'module' => 'guide',      'code' => 'guide',         'width' => '2', 'height' => '6', 'left' => '0', 'top' => '3');
@@ -244,7 +244,7 @@ $lang->block->modules['execution']->availableBlocks['task']      = 'Tâches';
 $lang->block->modules['execution']->availableBlocks['build']     = 'Build';
 
 $lang->block->modules['qa'] = new stdclass();
-$lang->block->modules['qa']->availableBlocks['statistic'] = 'Rapport de Tests';
+$lang->block->modules['qa']->availableBlocks['statistic'] = "Rapport de {$lang->productCommon} Tests";
 $lang->block->modules['qa']->availableBlocks['bug']       = 'Bug';
 $lang->block->modules['qa']->availableBlocks['case']      = 'CasTests';
 $lang->block->modules['qa']->availableBlocks['testtask']  = 'Build';
@@ -568,6 +568,19 @@ $lang->block->projectstatistic->pv               = 'Planned Value(PV)';
 $lang->block->projectstatistic->ev               = 'Earned Value(EV)';
 $lang->block->projectstatistic->cv               = 'Cost Variance(CV)';
 $lang->block->projectstatistic->ac               = 'Actual Cost(AC)';
+
+$lang->block->qastatistic = new stdclass();
+$lang->block->qastatistic->fixBugRate        = 'Fix Bug Rate';
+$lang->block->qastatistic->closedBugRate     = 'Closed Bug Rate';
+$lang->block->qastatistic->totalBug          = 'Bug Total';
+$lang->block->qastatistic->bugStatistics     = 'Bug Statistics';
+$lang->block->qastatistic->addYesterday      = 'Added Yesterday';
+$lang->block->qastatistic->addToday          = 'Added Today';
+$lang->block->qastatistic->resolvedYesterday = 'Resolved Yesterday';
+$lang->block->qastatistic->resolvedToday     = 'Resolved Today';
+$lang->block->qastatistic->closedYesterday   = 'Closed Yesterday';
+$lang->block->qastatistic->closedToday       = 'Closed Today';
+$lang->block->qastatistic->latestTesttask    = 'Latest Testtask';
 
 $lang->block->executionoverview = new stdclass();
 $lang->block->executionoverview->totalExecution = 'Total';
