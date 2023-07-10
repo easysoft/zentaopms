@@ -330,7 +330,7 @@ $config->block->size['project']['statistic']     = array('2' => '5', '1' => '8')
 $config->block->size['project']['recentproject'] = array('2' => '4', '1' => '4');
 $config->block->size['project']['project']       = array('2' => '6', '1' => '6');
 
-$config->block->size['scrumproject']['scrumoverview']  = array('2' => '3', '1' => '3');
+$config->block->size['scrumproject']['scrumoverview']  = array('2' => '5', '1' => '8');
 $config->block->size['scrumproject']['scrumlist']      = array('2' => '6', '1' => '6');
 $config->block->size['scrumproject']['scrumtest']      = array('2' => '6', '1' => '6');
 $config->block->size['scrumproject']['sprint']         = array('1' => '3');
