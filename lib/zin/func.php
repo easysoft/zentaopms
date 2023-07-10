@@ -1579,6 +1579,14 @@ function overviewBlock(): overviewBlock
 }
 
 /**
+ * Picker widget.
+ */
+function picker(): picker
+{
+    return createWg('picker', func_get_args());
+}
+
+/**
  * Pri picker widget.
  *
  * ?string placeholder
