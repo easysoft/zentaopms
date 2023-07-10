@@ -487,4 +487,4 @@ $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;
 
 $config->hasDropmenuApps     = array('program', 'project', 'product', 'execution', 'qa');
-$config->excludeDropmenuList = array('program-browse', 'product-all', 'execuiton-all', 'project-browse');
+$config->excludeDropmenuList = array('program-browse', 'product-all', 'execution-all', 'project-browse');

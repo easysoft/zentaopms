@@ -68,3 +68,4 @@ $config->index->oldPages[] = 'dept-browse';
 $config->index->oldPages[] = 'story-report';
 $config->index->oldPages[] = 'tree-browse';
 $config->index->oldPages[] = 'user-dynamic';
+$config->index->oldPages[] = 'product-dashboard';

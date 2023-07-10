@@ -267,6 +267,9 @@ class block extends control
         /* 如果页面渲染方式为 json 的话，直接返回 json 格式数据 ，主要是为了给应用提供数据。 */
         if($this->app->getViewType() == 'json') return print(json_encode($blocks));
 
+        /* 为项目仪表盘页面，设置1.5级导航的项目ID. */
+        if($this->app->rawModule == 'project' && $this->app->rawMethod == 'index') $this->view->projectID = $this->session->project;
+
         /* 组织渲染页面需要数据。 */
         $this->view->title     = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
         $this->view->blocks    = $blocks;
