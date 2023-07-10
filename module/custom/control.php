@@ -40,7 +40,7 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function set($module = 'story', $field = 'priList', $lang = '')
+    public function set(string $module = 'story', string $field = 'priList', string $lang = '')
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
         if($module == 'user' and $field == 'priList') $field = 'statusList';
@@ -206,6 +206,7 @@ class custom extends control
             }
             else
             {
+                if(!$this->post->keys) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->custom->key));
                 $lang = $_POST['lang'];
                 $oldCustoms = $this->custom->getItems("lang=$lang&module=$module&section=$field");
                 foreach($_POST['keys'] as $index => $key)
@@ -261,7 +262,7 @@ class custom extends control
                 }
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
+            return $this->sendSuccess(array('load' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
         }
 
         /* Check whether the current language has been customized. */
@@ -298,14 +299,11 @@ class custom extends control
      *
      * @param  string $module
      * @param  string $field
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function restore($module, $field, $confirm = 'no')
+    public function restore(string $module, string $field)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->custom->confirmRestore, inlink('restore', "module=$module&field=$field&confirm=yes")));
-
         if($module == 'user' and $field == 'contactField')
         {
             $this->loadModel('setting')->deleteItems("module=$module&key=$field");
@@ -314,7 +312,7 @@ class custom extends control
         {
             $this->custom->deleteItems("module=$module&section=$field");
         }
-        return print(js::reload('parent'));
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**

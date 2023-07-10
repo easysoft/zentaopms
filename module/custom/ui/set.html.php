@@ -308,7 +308,7 @@ elseif($module == 'user' && $field == 'contactField')
     if(common::hasPriv('custom', 'restore'))
     {
         $formActions[] = array(
-            'url'          => inlink('restore', "module=user&field=contactField&confirm=yes"),
+            'url'          => inlink('restore', "module=user&field=contactField"),
             'text'         => $lang->custom->restore,
             'class'        => 'btn-wide ajax-submit',
             'data-confirm' => $lang->custom->confirmRestore,
@@ -347,6 +347,12 @@ else
 
             formRow
             (
+                input
+                (
+                    set::type('hidden'),
+                    set::name('systems[]'),
+                    set::value('0')
+                ),
                 formGroup
                 (
                     set::width('1/2'),
@@ -380,7 +386,13 @@ else
                 (
                     set::type('hidden'),
                     set::name('keys[]'),
-                    set::value(isset($dbFields[$key]) ? $dbFields[$key]->value : $value)
+                    set::value($key)
+                ),
+                input
+                (
+                    set::type('hidden'),
+                    set::name('systems[]'),
+                    set::value($system)
                 ),
                 formGroup
                 (
@@ -422,7 +434,7 @@ else
         if(common::hasPriv('custom', 'restore'))
         {
             $formActions[] = array(
-                'url'          => inlink('restore', "module={$module}&field={$field}&confirm=yes"),
+                'url'          => inlink('restore', "module={$module}&field={$field}"),
                 'text'         => $lang->custom->restore,
                 'class'        => 'btn-wide ajax-submit',
                 'data-confirm' => $lang->custom->confirmRestore,
