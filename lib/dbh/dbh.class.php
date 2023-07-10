@@ -268,7 +268,11 @@ class dbh
             case 'SELECT':
                 return $this->formatField($sql);
             case 'REPLACE':
-                return $this->processReplace($sql);
+                $result = $this->processReplace($sql);
+                if($result != $sql) return $result;
+
+                $sql    = str_replace('REPLACE', 'INSERT', $sql);
+                $action = 'INSERT';
             case 'INSERT':
             case 'UPDATE':
                 $setPos = stripos($sql, ' VALUES');
