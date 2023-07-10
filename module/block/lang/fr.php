@@ -572,7 +572,7 @@ $lang->block->projectstatistic->ac               = 'Actual Cost(AC)';
 $lang->block->executionoverview = new stdclass();
 $lang->block->executionoverview->totalExecution = 'Total';
 $lang->block->executionoverview->thisYear       = 'This Year';
-$lang->block->executionoverview->statusCount    = 'Status of unclosed execution';
+$lang->block->executionoverview->statusCount    = "Status of unclosed {$lang->executionCommon}";
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = 'Total Product Count';

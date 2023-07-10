@@ -592,9 +592,9 @@ $lang->block->qastatistic = new stdclass();
 $lang->block->qastatistic->fixBugRate = 'Bug修复率';
 
 $lang->block->executionoverview = new stdclass();
-$lang->block->executionoverview->totalExecution = '执行总量';
+$lang->block->executionoverview->totalExecution = "{$lang->executionCommon}总量";
 $lang->block->executionoverview->thisYear       = '今年完成';
-$lang->block->executionoverview->statusCount    = '未关闭执行状态分布';
+$lang->block->executionoverview->statusCount    = "未关闭{$lang->executionCommon}状态分布";
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = '产品总量';
