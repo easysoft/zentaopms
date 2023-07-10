@@ -5,7 +5,7 @@ $config->ai->openai->api = new stdclass();
 $config->ai->openai->api->version    = 'v1';                           // OpenAI API version, required.
 $config->ai->openai->api->format     = 'https://api.openai.com/%s/%s'; // OpenAI API format, args: API version, API name.
 $config->ai->openai->api->authFormat = 'Authorization: Bearer %s';     // OpenAI API auth header format.
-$config->ai->openai->api->methods    = array('chat' => 'chat/completions', 'completion' => 'completions', 'edit' => 'edits');
+$config->ai->openai->api->methods    = array('function' => 'chat/completions', 'chat' => 'chat/completions', 'completion' => 'completions', 'edit' => 'edits');
 
 $config->ai->openai->params = new stdclass();
 $config->ai->openai->params->chat       = new stdclass();

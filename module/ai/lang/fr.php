@@ -271,3 +271,20 @@ $lang->ai->demoData->execution = array
             ),
     ),
 );
+
+/* Forms as JSON Schemas. */
+$lang->ai->formSchema = array();
+$lang->ai->formSchema['story']['change'] = new stdclass();
+$lang->ai->formSchema['story']['change']->title = 'Story';
+$lang->ai->formSchema['story']['change']->type  = 'object';
+$lang->ai->formSchema['story']['change']->properties = new stdclass();
+$lang->ai->formSchema['story']['change']->properties->title  = new stdclass();
+$lang->ai->formSchema['story']['change']->properties->spec   = new stdclass();
+$lang->ai->formSchema['story']['change']->properties->verify = new stdclass();
+$lang->ai->formSchema['story']['change']->properties->title->type         = 'string';
+$lang->ai->formSchema['story']['change']->properties->title->description  = 'Title of the story';
+$lang->ai->formSchema['story']['change']->properties->spec->type          = 'string';
+$lang->ai->formSchema['story']['change']->properties->spec->description   = 'Description of the story';
+$lang->ai->formSchema['story']['change']->properties->verify->type        = 'string';
+$lang->ai->formSchema['story']['change']->properties->verify->description = 'Acceptance criteria of the story';
+$lang->ai->formSchema['story']['change']->required = array('title', 'spec', 'verify');

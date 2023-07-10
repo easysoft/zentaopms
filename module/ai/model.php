@@ -446,17 +446,27 @@ class aiModel extends model
     }
 
     /**
-     * serialize data to prompt.
+     * Serialize data to prompt.
      *
-     * @param  string $module
-     * @param  array  $sources
-     * @param  array  $data
+     * @param  string        $module
+     * @param  array|string  $sources   both raw `$prompt->sources` and `array(array('objectName', 'objectKey'), ...)` are supported.
+     * @param  array|object  $data      array of data to be serialized
      * @access public
      * @return string
      */
     public function serializeDataToPrompt($module, $sources, $data)
     {
-        $newData = array();
+        /* Handle object data. */
+        if(is_object($data)) $data = (array)$data;
+
+        /* Handle raw (non-exploded) sources. */
+        if(is_string($sources) && strpos($sources, ',') !== false)
+        {
+            $sources = array_filter(explode(',', $sources));
+            $sources = array_map(function($source) { return explode('.', $source); }, $sources);
+        }
+
+        $dataObject = array();
 
         $supplement = '';
         $supplementTypes = array();
@@ -469,43 +479,41 @@ class aiModel extends model
             $semanticName = $this->lang->ai->dataSource[$module][$objectName]['common'];
             $semanticKey  = $this->lang->ai->dataSource[$module][$objectName][$objectKey];
 
-            if(empty($newData[$semanticName])) $newData[$semanticName] = array();
+            if(empty($dataObject[$semanticName])) $dataObject[$semanticName] = array();
 
-            $objectData = $data[$objectName];
-            if($this->isAssoc($objectData))
+            $obj = $data[$objectName];
+            if(static::isAssoc($obj))
             {
-                $newData[$semanticName][$semanticKey] = $data[$objectName][$objectKey];
+                $dataObject[$semanticName][$semanticKey] = $data[$objectName][$objectKey];
             }
             else
             {
-                foreach($objectData as $index => $value)
+                foreach(array_keys($obj) as $idx)
                 {
-                    if(empty($newData[$semanticName][$index])) $newData[$semanticName][$index] = array();
-                    $newData[$semanticName][$index][$semanticKey] = $data[$objectName][$index][$objectKey];
+                    if(empty($dataObject[$semanticName][$idx])) $dataObject[$semanticName][$idx] = array();
+                    $dataObject[$semanticName][$idx][$semanticKey] = $data[$objectName][$idx][$objectKey];
                 }
             }
 
-            if(in_array($objectKey, $supplementTypes)) continue;
-
-            if(!isset($this->lang->ai->dataType->$objectKey)) continue;
+            if(in_array($objectKey, $supplementTypes) || !isset($this->lang->ai->dataType->$objectKey)) continue;
 
             $supplementTypes[] = $objectKey;
             $supplement .= sprintf($this->lang->ai->dataTypeDesc, $semanticKey, $this->lang->ai->dataType->$objectKey->type, $this->lang->ai->dataType->$objectKey->desc) . "\n";
         }
 
         /* @see https://stackoverflow.com/a/2934602 */
-        return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');}, json_encode($newData)) . "\n" . $supplement;
+        return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');}, json_encode($dataObject)) . "\n" . $supplement;
     }
 
     /**
-     * generate demo data prompt by source.
+     * Generate demo data prompt by source.
      *
      * @param  string $module
      * @param  string $source
      * @access public
      * @return string
      */
-    public function generateDemoDataPrompt($module,$source)
+    public function generateDemoDataPrompt($module, $source)
     {
         $sources = explode(',', $source);
         $sources = array_filter($sources);
@@ -550,5 +558,160 @@ class aiModel extends model
     {
         $keys = array_keys($array);
         return array_keys($keys) !== $keys;
+    }
+
+    /**
+     * Get function call schema for form.
+     *
+     * @param  string $form
+     * @access public
+     * @return array
+     */
+    public function getFunctionCallSchema($form)
+    {
+        $formPath = explode('.', $form);
+        if(count($formPath) !== 2) return array();
+
+        $schema = $this->lang->ai->formSchema[$formPath[0]][$formPath[1]];
+
+        return empty($schema) ? array() : $schema;
+    }
+
+    /**
+     * Get object data for prompt by id.
+     *
+     * @param  object $prompt
+     * @param  int    $objectId
+     * @access public
+     * @return object
+     */
+    public function getObjectForPromptById($prompt, $objectId)
+    {
+        $module  = $prompt->module;
+        $sources = array_filter(explode(',', $prompt->source));
+
+        /* Explode into grouped sources list. */
+        $sourceGroups = array();
+        foreach($sources as $source)
+        {
+            $source = explode('.', $source);
+            $objectName = $source[0];
+            $objectKey  = $source[1];
+            if(empty($sourceGroups[$objectName])) $sourceGroups[$objectName] = array();
+            $sourceGroups[$objectName][] = $objectKey;
+        }
+
+        $object     = new stdclass();
+        $objectData = new stdclass();
+
+        /* Query necessary object data from zentao. TODO: add more later. */
+        if($module == 'story')
+        {
+            if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
+        }
+        if($module == 'execution')
+        {
+            if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
+            if(isset($sourceGroups['tasks']))     $object->tasks     = $this->loadModel('task')->getExecutionTasks($objectId);
+        }
+
+        /* Format data as per data source definitions. */
+        foreach($sourceGroups as $objectName => $objectKeys)
+        {
+            $objectData->$objectName = array();
+            foreach($objectKeys as $objectKey)
+            {
+                /* Check if is plain object, data might contain arrays. */
+                if(is_object($object->$objectName))
+                {
+                    if(isset($object->$objectName->$objectKey)) $objectData->$objectName[$objectKey] = $object->$objectName->$objectKey;
+                }
+                elseif(is_array($object->$objectName))
+                {
+                    foreach($object->$objectName as $idx => $obj)
+                    {
+                        if(isset($obj->$objectKey)) $objectData->$objectName[$idx][$objectKey] = $obj->$objectKey;
+                    }
+                }
+            }
+        }
+
+        return $objectData;
+    }
+
+    /**
+     * Auto prepend newline to text if text has newline in the middle.
+     *
+     * @param  string $text
+     * @access public
+     * @return string
+     */
+    public static function autoPrependNewline($text)
+    {
+        preg_match('/\n[^$]/', $text, $matches);
+
+        return empty($matches) ? $text : "\n$text";
+    }
+
+    /**
+     * Try to punctuate sentence if sentence is not ended with punctuation.
+     *
+     * @param  string $sentence
+     * @param  bool   $newline
+     * @access public
+     * @return string
+     */
+    public static function tryPunctuate($sentence, $newline = false)
+    {
+        preg_match('/\p{P}$/u', $sentence, $matches);
+        if(empty($matches)) $sentence .= '.';
+
+        return $newline ? "$sentence\n" : $sentence;
+    }
+
+    /**
+     * Assemble prompt with prompt data.
+     *
+     * @param  object $prompt
+     * @param  string $dataPrompt
+     * @access public
+     * @return string
+     */
+    public function assemblePrompt($prompt, $dataPrompt)
+    {
+        $wholePrompt = "$dataPrompt\n";
+
+        $wholePrompt .= static::tryPunctuate($prompt->role);
+        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
+
+        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->purpose));
+        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->elaboration, true));
+
+        return $wholePrompt;
+    }
+
+    /**
+     * Execute prompt on object.
+     *
+     * @param  int           $promptID
+     * @param  int           $objectID  object to execute prompt on.
+     * @access public
+     * @return string|false  returns either JSON string or false.
+     */
+    public function executePrompt($promptId, $objectId)
+    {
+        $prompt = $this->getPromptById($promptId);
+        if(empty($prompt)) return;
+
+        $objectData = $this->getObjectForPromptById($prompt, $objectId);
+        $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
+
+        $wholePrompt = $this->assemblePrompt($prompt, $dataPrompt);
+        $schema      = $this->getFunctionCallSchema($prompt->targetForm);
+
+        $response = $this->converseForJSON(array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
+        if(empty($response)) return false;
+
+        return $response;
     }
 }
