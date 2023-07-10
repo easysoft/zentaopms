@@ -844,7 +844,9 @@ class treeModel extends model
                     /* If not manage, ignore unused modules. */
                     if(!isset($executionModules[$module->id])) continue;
 
-                    $menu[] = $this->buildTree($module, 'story', 0, $userFunc, $extra);
+                    $treeMenu = $this->buildTree($module, 'story', 0, $userFunc, $extra);
+                    if($productNum > 1 && $module->parent == 0) $treeMenu->parent = $module->root;
+                    $menu[] = $treeMenu;
                 }
             }
         }
