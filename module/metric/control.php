@@ -30,50 +30,17 @@ class metric extends control
      */
     public function updateMetricLib()
     {
-        $dataset          = $this->metric->getDataset($this->dao);
-        $calcInstanceList = $this->metric->getCalcInstanceList();
+        $calcList = $this->metric->getCalcList();
+        $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
 
-        list($otherCalcList, $classifiedCalcList) = $this->metric->classifyCalc($calcInstanceList);
-
-        /* 计算根据数据源归类后的度量项。*/
-        foreach($classifiedCalcList as $dataSource => $calcList)
+        foreach($classifiedCalcGroup as $calcGroup)
         {
-            $fieldList = $this->metric->uniteFieldList($calcList);
-            $rows = $dataset->$dataSource($fieldList)->fetchAll();
-
-            foreach($rows as $row)
-            {
-                foreach($calcList as $calc)
-                {
-                    $calc->calculate((object)$row);
-                }
-            }
+            $rows = $this->metricZen->prepareDataset($calcGroup)->fetchAll();
+            $this->metricZen->calcMetric($rows, $calcGroup->calcList);
         }
 
-        /* 处理无法归类的度量项，使用句柄获取数据源。*/
-        foreach($otherCalcList as $calc)
-        {
-            $rows = $calc->getStatement($this->dao)->fetchAll();
-            foreach($rows as $row) $calc->calculate((object)$row);
-        }
+        $records = $this->metricZen->prepareMetricRecord($calcList);
 
-        /* 获取度量项的计算结果并保存。*/
-        foreach($calcInstanceList as $code => $calc)
-        {
-            $rows = $calc->getResult();
-            if(empty($rows)) continue;
-
-            foreach($rows as $row)
-            {
-                $row->metricID   = $calc->id;
-                $row->metricCode = $code;
-                $row->date       = helper::today();
-                $row->year       = date('Y');
-                $row->month      = date('Ym');
-                $row->week       = date('W');
-                $row->day        = date('Ymd');
-                $this->dao->insert(TABLE_METRICBASELIB)->data($row)->exec();
-            }
-        }
+        $this->metric->insertMetricLib($records);
     }
 }

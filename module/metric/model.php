@@ -171,23 +171,34 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function classifyCalc($calcInstanceList)
+    public function classifyCalc($calcList)
     {
-        $classifiedCalcList = array();
-        $otherCalcList      = array();
-        foreach($calcInstanceList as $calcInstance)
+        $datasetCalcGroup = array();
+        $otherCalcList    = array();
+        foreach($calcList as $calc)
         {
-            if(empty($calcInstance->dataset))
+            if(empty($calc->dataset))
             {
-                $otherCalcList[] = $calcInstance;
+                $otherCalcList[] = $calc;
                 continue;
             }
 
-            $dataset = $calcInstance->dataset;
-            if(!isset($classifiedCalcList[$dataset])) $classifiedCalcList[$dataset] = array();
-            $classifiedCalcList[$dataset][] = $calcInstance;
+            $dataset = $calc->dataset;
+            if(!isset($datasetCalcGroup[$dataset])) $datasetCalcGroup[$dataset] = array();
+            $datasetCalcGroup[$dataset][] = $calc;
         }
-        return array($otherCalcList, $classifiedCalcList);
+
+        $classifiedCalcGroup = array();
+        foreach($datasetCalcGroup as $dataset => $calcList)
+        {
+            $classifiedCalcGroup[] = (object)array('dataset' => $dataset, 'calcList' => $calcList);
+        }
+
+        foreach($otherCalcList as $calc)
+        {
+            $classifiedCalcGroup[] = (object)array('dataset' => '', 'calcList' => $calcList);
+        }
+        return $classifiedCalcGroup;
     }
 
     /**

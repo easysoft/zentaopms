@@ -11,4 +11,73 @@ declare(strict_types=1);
  */
 class metricZen extends metric
 {
+    /**
+     * 根据分类后的度量项，准备数据源句柄。
+     * Prepare the data source handle based on the classified measures.
+     *
+     * @param  object    $classifiedCalc
+     * @param  object    $dataset
+     * @access protected
+     * @return object
+     */
+    protected function prepareDataset($calcGroup)
+    {
+        $dataSource = $calcGroup->dataset;
+        $calcList   = $calcGroup->clacList;
+
+        if(empty($dataSource))
+        {
+            $calc = current($calcList);
+            return $calc->getStatement($this->dao);
+        }
+
+        $dataset   = $this->metric->getDataset($this->dao);
+        $fieldList = $this->metric->uniteFieldList($calcList);
+
+        return $dataset->$dataSource($fieldList);
+    }
+
+    /**
+     * 根据度量项计算的结果，构建可插入表的度量数据。
+     * Build measurements that can be inserted into tables based on the results of the measurements computed.
+     *
+     * @param  array    $calcList
+     * @access protected
+     * @return array
+     */
+    protected function prepareMetricRecord($calcList)
+    {
+        $records = array();
+        foreach($calcList as $code => $calc)
+        {
+            $calcResult = $calc->getResult();
+            if($records) continue;
+
+            foreach($calcResult as $record)
+            {
+                $record->metricID   = $calc->id;
+                $record->metricCode = $code;
+                $record->date       = helper::today();
+                $record->year       = date('Y');
+                $record->month      = date('Ym');
+                $record->week       = date('W');
+                $record->day        = date('Ymd');
+
+                $records[] = $record;
+            }
+        }
+
+        return $records;
+    }
+
+    protected function calcMetric($rows, $calcList)
+    {
+        foreach($rows as $row)
+        {
+            foreach($calcList as $calc)
+            {
+                $calc->calculate((object)$row);
+            }
+        }
+    }
 }
