@@ -440,10 +440,10 @@ class custom extends control
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title      = $this->lang->custom->setStoryConcept;
+        $this->view->title = $this->lang->custom->setStoryConcept;
 
         $this->display();
     }
@@ -463,7 +463,7 @@ class custom extends control
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $lang = $this->app->getClientLang();
@@ -488,7 +488,7 @@ class custom extends control
     public function setDefaultConcept($key = 0)
     {
         $this->loadModel('setting')->setItem('system.custom.URSR', $key);
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => inlink('browsestoryconcept')));
     }
 
     /**
@@ -499,27 +499,20 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function deleteStoryConcept($key = 0, $confirm = 'no')
+    public function deleteStoryConcept($key = 0)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('custom', 'deleteStoryConcept', "key=$key&confirm=yes"), ''));
-        }
-        else
-        {
-            $lang = $this->app->getClientLang();
-            $this->custom->deleteItems("lang=$lang&section=URSRList&key=$key");
+        $lang = $this->app->getClientLang();
+        $this->custom->deleteItems("lang=$lang&section=URSRList&key=$key");
 
-            $defaultConcept = $this->loadModel('setting')->getItem('owner=system&module=custom&key=URSR');
-            $this->dao->update(TABLE_CONFIG)
-                ->set('`value`')->eq($defaultConcept)
-                ->where('module')->eq('common')
-                ->andWhere('`key`')->eq('URSR')
-                ->andWhere('`value`')->eq($key)
-                ->exec();
+        $defaultConcept = $this->loadModel('setting')->getItem('owner=system&module=custom&key=URSR');
+        $this->dao->update(TABLE_CONFIG)
+                  ->set('`value`')->eq($defaultConcept)
+                  ->where('module')->eq('common')
+                  ->andWhere('`key`')->eq('URSR')
+                  ->andWhere('`value`')->eq($key)
+                  ->exec();
 
-            return print(js::locate(inlink('browseStoryConcept'), 'parent'));
-        }
+        return $this->send(array('result' => 'success', 'load' => inlink('browseStoryConcept')));
     }
 
     /**

@@ -675,9 +675,11 @@ class customModel extends model
         foreach($langData as $content)
         {
             $value = json_decode($content->value);
-            $URSRList[$content->key]['SRName'] = $value->SRName;
-            $URSRList[$content->key]['URName'] = $value->URName;
-            $URSRList[$content->key]['system'] = $content->system;
+            $URSRList[$content->key] = new stdclass();
+            $URSRList[$content->key]->key    = $content->key;
+            $URSRList[$content->key]->SRName = $value->SRName;
+            $URSRList[$content->key]->URName = $value->URName;
+            $URSRList[$content->key]->system = $content->system;
         }
 
         return $URSRList;

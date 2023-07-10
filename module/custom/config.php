@@ -75,3 +75,17 @@ $config->custom->notSetMethods = array('required', 'browsestoryconcept', 'produc
 
 global $lang;
 $config->custom->commonLang = array('$URCOMMON' => $lang->URCommon, '$SRCOMMON' => $lang->SRCommon, '$PRODUCTCOMMON' => $lang->productCommon, '$PROJECTCOMMON' => $lang->projectCommon, '$EXECUTIONCOMMON' => $lang->executionCommon);
+
+$config->custom->browseStoryConcept = new stdclass();
+
+$config->custom->browseStoryConcept->actionList['edit']['icon']        = 'edit';
+$config->custom->browseStoryConcept->actionList['edit']['hint']        = $lang->edit;
+$config->custom->browseStoryConcept->actionList['edit']['url']         = array('module' => 'custom', 'method' => 'editStoryConcept', 'params' => 'id={key}');
+$config->custom->browseStoryConcept->actionList['edit']['data-toggle'] = 'modal';
+$config->custom->browseStoryConcept->actionList['edit']['data-size']   = 'sm';
+
+$config->custom->browseStoryConcept->actionList['delete']['icon']         = 'trash';
+$config->custom->browseStoryConcept->actionList['delete']['hint']         = $lang->delete;
+$config->custom->browseStoryConcept->actionList['delete']['url']          = array('module' => 'custom', 'method' => 'deleteStoryConcept', 'params' => 'id={key}');
+$config->custom->browseStoryConcept->actionList['delete']['className']    = 'ajax-submit';
+$config->custom->browseStoryConcept->actionList['delete']['data-confirm'] = $lang->custom->notice->confirmDelete;
