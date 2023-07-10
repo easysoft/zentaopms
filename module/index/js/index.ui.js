@@ -72,11 +72,11 @@ function openApp(url, code, options)
     const loadOptions = {};
     if(typeof code === 'object') $.extend(loadOptions, code);
     else if(code) loadOptions.code = code;
-    if(typeof options === 'boolean') loadOptions.forceReload;
+    if(typeof options === 'boolean') loadOptions.forceReload = options;
     else if(typeof options === 'object') $.extend(loadOptions, options);
     options = loadOptions;
     code = options.code;
-    let forceReload = options.forceReload;
+    let forceReload = options.forceReload !== false;
     delete options.forceReload;
     delete options.code;
 
