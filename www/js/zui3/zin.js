@@ -541,7 +541,7 @@
             options.selector = parts[1];
         }
 
-        options  = $.extend({url: currentAppUrl, id: options.selector || 'page'}, options);
+        options  = $.extend({url: currentAppUrl, id: options.selector || options.target || 'page'}, options);
         if(!options.selector)
         {
             if($('#main').length)
@@ -553,7 +553,6 @@
                 options.selector = 'body>*,title>*,#configJS';
             }
         }
-        if(!options.id) options.id = options.selector || 'page';
 
         if(DEBUG) console.log('[APP] ', 'load:', options.url);
         fetchContent(options.url, options.selector, options);
@@ -563,25 +562,26 @@
      * Load dtable content.
      *
      * @param {string} [url]
-     * @param {string} [id]
+     * @param {string} [target]
      * @param {Object} [options]
      * @returns
      */
-    function loadTable(url, id, options)
+    function loadTable(url, target, options)
     {
-        if(!id)
+        if(!target)
         {
             const urlInfo = $.parseLink(url);
-            id = urlInfo.moduleName ? `table-${urlInfo.moduleName}-${urlInfo.methodName}` : ($('.dtable').attr('id') || 'dtable');
+            target = urlInfo.moduleName ? `table-${urlInfo.moduleName}-${urlInfo.methodName}` : ($('.dtable').attr('id') || 'dtable');
         }
-        if(!$(`#${id}`).length) return loadPage({id: id, url: url});
+        if(target[0] !== '#' || target[0] !== '.') target = `#${target}`;
+        if(!$(target).length) return loadPage({id: target, url: url});
 
         loadPage($.extend(
         {
             url: url,
-            id: '#' + id,
-            target: '#' + id,
-            selector: 'table/#' + id + ':type=json&data=props,#featureBar>*'
+            id: target,
+            target: target,
+            selector: `table/${target}:type=json&data=props,#featureBar>*`
         }, options));
     }
 
@@ -589,16 +589,17 @@
      * Load modal content.
      *
      * @param {string} [url]
-     * @param {string} [id]
+     * @param {string} [target]
      * @param {Object} [options]
      * @returns
      */
-    function loadModal(url, id, options)
+    function loadModal(url, target, options)
     {
         options = $.extend({url}, options);
-        if(!id) return zui.Modal.open(options);
+        if(!target) return zui.Modal.open(options);
 
-        const modal = zui.Modal.query(`#${id}`);
+        if(target[0] !== '#' || target[0] !== '.') target = `#${target}`;
+        const modal = zui.Modal.query(target);
         if(!modal) return;
         modal.render(options);
     }
@@ -674,20 +675,19 @@
         const load = options.load;
         if(typeof load === 'string' || load)
         {
-            if(options.id)     delete options.id;
-            if(url)            options.url = url;
-            if(options.loadId) {options.id = options.loadId; delete options.loadId;}
+            if(!options.target) options.target = options.loadId;
+            if(url) options.url = url;
             if(load)
             {
                 if(load === 'table')
                 {
-                    if(!options.id && event) options.id = $(event.target).closest('.dtable').attr('id');
-                    return loadTable(options.url, options.id, options);
+                    if(!options.target && event) options.target = $(event.target).closest('.dtable').attr('id');
+                    return loadTable(options.url, options.target, options);
                 }
                 if(load === 'modal')
                 {
-                    if(!options.id && event) options.id = $(event.target).closest('.modal').attr('id');
-                    return loadModal(options.url, options.id, options);
+                    if(!options.target && event) options.target = $(event.target).closest('.modal').attr('id');
+                    return loadModal(options.url, options.target, options);
                 }
                 if(load !== 'APP' && typeof load === 'string') options.selector = load;
                 delete options.load;
@@ -817,10 +817,15 @@
 
         const url = options.url || $link.attr('href');
         const $modal = $link.closest('.modal');
+        if(options.loadId)
+        {
+            options.target = options.loadId;
+            delete options.loadId;
+        }
         if($modal.length)
         {
             if(!options.load) options.load   = 'modal';
-            if(options.load === 'modal' && !options.loadId) options.loadId = $modal.attr('id');
+            if(options.load === 'modal' && !options.target) options.target = $modal.attr('id');
             if(options.load === 'table')
             {
                 options.partial = true;
@@ -829,7 +834,7 @@
         }
         else
         {
-            if(options.load === 'modal' && !options.loadId) delete options.load;
+            if(options.load === 'modal' && !options.target) delete options.load;
         }
         if(url && (/^(https?|javascript):/.test(url) || url.startsWith('#'))) return;
         if(!url && $link.is('a') && !options.back && !options.load) return;

@@ -75,7 +75,7 @@ class featureBar extends wg
                     $subItem['text']   = $text;
                     $subItem['active'] = $key == $current;
                     $subItem['url']    = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', $key, $link);
-                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-load-id' => $loadID];
+                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID];
 
                     if($item->name == 'QUERY')
                     {
@@ -116,7 +116,7 @@ class featureBar extends wg
                 'active' => $isActive,
                 'url'    => str_replace('{key}', $item->name, $link),
                 'badge'  => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : null,
-                'props'  => array('data-id' => $item->name, 'data-load' => $load, 'data-load-id' => $loadID)
+                'props'  => array('data-id' => $item->name, 'data-load' => $load, 'data-target' => $loadID)
             );
         }
 
