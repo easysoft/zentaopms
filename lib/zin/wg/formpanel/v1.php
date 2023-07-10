@@ -98,9 +98,9 @@ class formPanel extends panel
      * Build form widget by mode.
      *
      * @access protected
-     * @return void
+     * @return wg
      */
-    protected function buildForm()
+    protected function buildForm(): wg
     {
         $customFields = $this->prop('customFields');
         $hiddenFields = array();
