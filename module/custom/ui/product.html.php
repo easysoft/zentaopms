@@ -38,12 +38,16 @@ div
                 set::value(isset($config->CRProduct) ? $config->CRProduct : 0),
                 set::inline(true),
             ),
+        ),
+        formGroup
+        (
+            set::label(''),
             span
             (
                 icon('info text-warning mr-2'),
                 $lang->custom->notice->readOnlyOfProduct
             )
-        ),
+        )
     ),
 );
 
