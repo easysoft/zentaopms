@@ -79,9 +79,9 @@ function isFieldRequired($name)
 /**
  * Determine whether the request is ajax.
  *
- * @param string|null $type 'zin'|'modal'|null
+ * @param ?string $type 'zin'|'modal'|null
  */
-function isAjaxRequest(string|null $type = null): bool
+function isAjaxRequest(?string $type = null): bool
 {
     return \helper::isAjaxRequest($type);
 }
