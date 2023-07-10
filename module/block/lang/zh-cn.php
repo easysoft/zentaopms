@@ -608,6 +608,11 @@ $lang->block->productlist->activatedStory    = '激活需求';
 $lang->block->productlist->storyCompleteRate = '需求完成率';
 $lang->block->productlist->activatedBug      = '激活Bug';
 
+$lang->block->sprint = new stdclass();
+$lang->block->sprint->totalExecution = "{$lang->executionCommon}总量";
+$lang->block->sprint->thisYear       = '今年完成';
+$lang->block->sprint->statusCount    = "{$lang->executionCommon}状态分布";
+
 $lang->block->zentaodynamic = new stdclass();
 $lang->block->zentaodynamic->zentaosalon  = '禅道中国行';
 $lang->block->zentaodynamic->publicclass  = '禅道公开课';

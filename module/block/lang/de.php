@@ -586,6 +586,11 @@ $lang->block->productlist->activatedStory    = 'Activate Requirements';
 $lang->block->productlist->storyCompleteRate = 'Requirement Completion Rate';
 $lang->block->productlist->activatedBug      = 'Activate Bugs';
 
+$lang->block->sprint = new stdclass();
+$lang->block->sprint->totalExecution = 'Total';
+$lang->block->sprint->thisYear       = 'This Year';
+$lang->block->sprint->statusCount    = "Status of {$lang->executionCommon}";
+
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
 $lang->block->moduleList['execution']       = $lang->execution->common;
