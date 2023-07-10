@@ -1,11 +1,7 @@
 <?php
 $config->custom->browseStoryConcept->dtable = new stdclass();
-
-if(common::hasPriv('custom', 'setDefaultConcept'))
-{
-    $config->custom->browseStoryConcept->dtable->fieldList['default']['type'] = 'id';
-    $config->custom->browseStoryConcept->dtable->fieldList['default']['sortType'] = false;
-}
+$config->custom->browseStoryConcept->dtable->fieldList['default']['type'] = 'id';
+$config->custom->browseStoryConcept->dtable->fieldList['default']['sortType'] = false;
 
 if($config->URAndSR)
 {

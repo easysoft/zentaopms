@@ -442,8 +442,8 @@ class custom extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
+        if(!common::hasPriv('custom', 'setDefaultConcept')) unset($this->config->custom->browseStoryConcept->dtable->fieldList['default']);
         $this->view->title = $this->lang->custom->setStoryConcept;
-
         $this->display();
     }
 
