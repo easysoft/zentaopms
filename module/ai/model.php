@@ -737,7 +737,7 @@ class aiModel extends model
         {
             $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
             $executionId  = max($executionIds);
-            if(!empty($executionId)) return helper::createLink('story', 'view', "executionID=$executionId");
+            if(!empty($executionId)) return helper::createLink('execution', 'view', "executionID=$executionId");
         }
 
         return false;
