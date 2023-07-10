@@ -1109,6 +1109,13 @@ class task extends control
             /* Create field lists. */
             $sort   = common::appendOrder($orderBy);
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $allExportFields);
+
+            /* Compatible with the new UI widget. */
+            if($this->post->exportFields && str_contains($fields[0], ','))
+            {
+                $fields = explode(',', $fields[0]);
+            }
+
             foreach($fields as $key => $fieldName)
             {
                 $fieldName = trim($fieldName);

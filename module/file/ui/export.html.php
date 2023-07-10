@@ -80,11 +80,12 @@ if($isCustomExport)
             (
                 set::title($lang->file->exportFields),
                 setClass('w-full'),
-                select
+                control
                 (
+                    set::type('picker'),
                     set::name('exportFields[]'),
                     set::items($exportFieldPairs),
-                    set::value($selectedFields),
+                    set::defaultValue($selectedFields),
                     set::multiple(true),
                     set::required(true),
                 ),
@@ -98,8 +99,8 @@ if($isCustomExport)
                         setClass('input-group-addon'),
                         checkbox(set::name('public'), set::value(1), $lang->public),
                     ) : null,
-                    btn(setClass('btn-link'), on::click('saveTemplate'), icon('save')),
-                    btn(setClass('btn-link'), on::click('deleteTemplate'), icon('trash'))
+                    btn(setClass('btn-link'), on::click('window.saveTemplate'), icon('save')),
+                    btn(setClass('btn-link'), on::click('window.deleteTemplate'), icon('trash'))
                 )
             )
         )
@@ -181,7 +182,7 @@ set::title($lang->file->exportData);
 h::js
 (
 <<<JAVASCRIPT
-function setDownloading(event)
+window.setDownloading = function(event)
 {
     /* Doesn't support Opera, omit it. */
     if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true;
@@ -202,7 +203,7 @@ function setDownloading(event)
 }
 
 /* If file type is CSV, then user can select encode type. */
-function onChangeFileType(event)
+window.onChangeFileType = function(event)
 {
     var fileType = $(event.target).val();
     var encode   = $('#encode');
@@ -217,7 +218,7 @@ function onChangeFileType(event)
     encode.attr('disabled', 'disabled');
 }
 
-function onChangeFileName(event)
+window.onChangeFileName = function(event)
 {
     var objFileName = $(event.target);
 
@@ -265,7 +266,12 @@ window.setTemplate = function(obj)
     var template  =  $('#template' + templateID);
     var exportFields = template.length > 0 ? template.html() : '{$defaultExportFields}';
     exportFields = exportFields.split(',');
-    $('#exportFields').val(exportFields);
+
+    const fieldsPicker = zui.Picker.query('div.modal-body form .form-group .panel .panel-body div');
+    if(fieldsPicker && fieldsPicker.ref && fieldsPicker.ref.current)
+    {
+        fieldsPicker.ref.current.setState({value:exportFields});
+    }
 
     var customFieldsBox = $('.customFieldsBox');
     customFieldsBox.find('input[name="public"]').prop('checked', template.data('public'));
