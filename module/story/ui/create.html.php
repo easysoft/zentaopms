@@ -332,7 +332,7 @@ formPanel
                 $lang->story->category,
                 select(set::name('category'), set::items($fields['category']['options']), set::value($fields['category']['default'])),
                 $lang->story->pri,
-                select(set::name('pri'), set::items($fields['pri']['options']), set::value($fields['pri']['default'])),
+                priPicker(set::name('pri'), set::items($fields['pri']['options']), set::value($fields['pri']['default'])),
                 $lang->story->estimateAB,
                 input(set::name('estimate'), set::placeholder($lang->story->hour), set::value($fields['estimate']['default'])),
             )
