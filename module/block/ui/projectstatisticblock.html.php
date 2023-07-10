@@ -71,7 +71,7 @@ foreach($projects as $project)
 
     $lastestExecution = (!empty($project->executions) && $project->multiple) ? cell
     (
-        setClass('flex-1 hidden-nowrap' . (!$longBlock ? ' text-left' : ' text-right')),
+        setClass('flex-1 hidden-nowrap' . (!$longBlock ? ' text-left w-full' : ' text-right')),
         $longBlock ? set::width($width) : '',
         span
         (
