@@ -57,7 +57,7 @@
     }
     ?>
   </div>
-  <?php echo html::submitButton("<i class='icon icon-save icon-sm'></i> $lang->save", 'form="mainForm"', 'btn btn-primary');?>
+  <button type="submit" class="btn btn-primary" form="mainForm"><i class="icon icon-save icon-sm"></i> <?php echo $lang->save ?></button>
   <script>
     (function()
     {
