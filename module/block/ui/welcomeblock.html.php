@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-function getMeasureItem($data)
+$getMeasureItem = function($data)
 {
     global $lang;
 
@@ -37,7 +37,7 @@ function getMeasureItem($data)
         );
     }
     return $items;
-}
+};
 
 $doneReview = rand(0, 100);
 $finishTask = rand(0, 100);
@@ -124,7 +124,7 @@ panel
                     div
                     (
                         set::class('flex justify-around text-center'),
-                        getMeasureItem($reviewByMe)
+                        $getMeasureItem($reviewByMe)
                     )
                 ),
                 tabPane
@@ -135,7 +135,7 @@ panel
                     div
                     (
                         set::class('flex justify-around text-center'),
-                        getMeasureItem($assignToMe)
+                        $getMeasureItem($assignToMe)
                     )
                 )
             )

@@ -21,7 +21,7 @@ namespace zin;
  * @access public
  * @return array
  */
-function getProductTabs(array $products, string $blockNavCode, bool $longBlock): array
+$getProductTabs = function(array $products, string $blockNavCode, bool $longBlock): array
 {
     $navTabs  = array();
     $selected = key($products);
@@ -65,7 +65,7 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
  * @access public
  * @return array
  */
-function getProductInfo(array $products, string $blockNavID, bool $longBlock): array
+$getProductInfo = function(array $products, string $blockNavID, bool $longBlock): array
 {
     global $lang;
 
@@ -353,14 +353,14 @@ panel
             ul
             (
                 set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked' : 'pt-4 px-4')),
-                getProductTabs($products, $blockNavCode, $longBlock)
+                $getProductTabs($products, $blockNavCode, $longBlock)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
             set('width', '78%'),
-            getProductInfo($products, $blockNavCode, $longBlock)
+            $getProductInfo($products, $blockNavCode, $longBlock)
         )
     )
 );

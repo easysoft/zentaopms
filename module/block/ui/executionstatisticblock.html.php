@@ -20,7 +20,7 @@ namespace zin;
  * @access public
  * @return array
  */
-function getExecutionTabs($executions, $blockNavCode): array
+$getExecutionTabs = function($executions, $blockNavCode): array
 {
     $navTabs  = array();
     $selected = key($executions);
@@ -61,7 +61,7 @@ function getExecutionTabs($executions, $blockNavCode): array
  * @access public
  * @return array
  */
-function getExecutionInfo($executions, $blockNavID): array
+$getExecutionInfo = function($executions, $blockNavID): array
 {
     global $lang;
 
@@ -102,14 +102,14 @@ panel
             ul
             (
                 set('class', 'nav nav-tabs nav-stacked'),
-                getExecutionTabs($executions, $blockNavCode)
+                $getExecutionTabs($executions, $blockNavCode)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
             set('width', '78%'),
-            getExecutionInfo($executions, $blockNavCode)
+            $getExecutionInfo($executions, $blockNavCode)
         )
     )
 );
