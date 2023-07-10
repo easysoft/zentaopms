@@ -70,34 +70,43 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
         set::value($needReview),
         set::control('radioListInline'),
         set::items($lang->custom->reviewList),
+        on::change('changeReview'),
     );
 
     if($module == 'story')
     {
-        $formItems[] = formGroup
+        $formItems[] = formRow
         (
-            set::width('1/2'),
             setClass($needReview ? 'hidden' : ''),
-            set::label(''),
-            set::name(''),
-            set::value(sprintf($lang->custom->notice->forceReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip),
-            set::control('static'),
+            setClass('open-review'),
+            formGroup
+            (
+                set::label(''),
+                set::name(''),
+                set::value(sprintf($lang->custom->notice->forceReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip),
+                set::control('static'),
+            )
         );
 
-        $formItems[] = formGroup
+        $formItems[] = formRow
         (
-            set::width('1/2'),
             setClass($needReview ? '' : 'hidden'),
-            set::label(''),
-            set::name(''),
-            set::value(sprintf($lang->custom->notice->forceNotReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip),
-            set::control('static'),
+            setClass('close-review'),
+            formGroup
+            (
+                set::label(''),
+                set::name(''),
+                set::value(sprintf($lang->custom->notice->forceNotReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip),
+                set::control('static'),
+            )
         );
 
         $space = ($app->getClientLang() != 'zh-cn' and $app->getClientLang() != 'zh-tw') ? ' ' : '';
-        if($needReview)
-        {
-            $formItems[] = formGroup
+        $formItems[] = div
+        (
+            setClass($needReview ? 'hidden' : ''),
+            setClass('open-review'),
+            formGroup
             (
                 set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->account),
@@ -105,9 +114,8 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::value($forceNotReview),
                 set::items($users),
                 set::control(array('type' => 'select', 'multiple' => true)),
-            );
-
-            $formItems[] = formGroup
+            ),
+            formGroup
             (
                 set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->role),
@@ -115,9 +123,8 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::value($forceNotReviewRoles),
                 set::items($lang->user->roleList),
                 set::control(array('type' => 'select', 'multiple' => true)),
-            );
-
-            $formItems[] = formGroup
+            ),
+            formGroup
             (
                 set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->dept),
@@ -125,51 +132,53 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::value($forceNotReviewDepts),
                 set::items($depts),
                 set::control(array('type' => 'select', 'multiple' => true)),
-            );
-        }
-        else
-        {
-            $formItems[] = formGroup
+            ),
+        );
+        $formItems[] = div
+        (
+            setClass($needReview ? '' : 'hidden'),
+            setClass('close-review'),
+            formGroup
             (
                 set::width('1/2'),
-                set::label($lang->custom->forceReview . $space . $lang->custom->account),
-                set::name('forceReview'),
-                set::value($forceReview),
+                set::label($lang->custom->forceNotReview . $space . $lang->custom->account),
+                set::name('forceNotReview'),
+                set::value($forceNotReview),
                 set::items($users),
                 set::control(array('type' => 'select', 'multiple' => true)),
-            );
-
-            $formItems[] = formGroup
+            ),
+            formGroup
             (
                 set::width('1/2'),
-                set::label($lang->custom->forceReview . $space . $lang->custom->role),
-                set::name('forceReviewRoles'),
-                set::value($forceReviewRoles),
+                set::label($lang->custom->forceNotReview . $space . $lang->custom->role),
+                set::name('forceNotReviewRoles'),
+                set::value($forceNotReviewRoles),
                 set::items($lang->user->roleList),
                 set::control(array('type' => 'select', 'multiple' => true)),
-            );
-
-            $formItems[] = formGroup
+            ),
+            formGroup
             (
                 set::width('1/2'),
-                set::label($lang->custom->forceReview . $space . $lang->custom->dept),
-                set::name('forceReviewDepts'),
-                set::value($forceReviewDepts),
+                set::label($lang->custom->forceNotReview . $space . $lang->custom->dept),
+                set::name('forceNotReviewDepts'),
+                set::value($forceNotReviewDepts),
                 set::items($depts),
                 set::control(array('type' => 'select', 'multiple' => true)),
-            );
-        }
+            )
+        );
     }
     elseif($module == 'testcase')
     {
-        if($needReview)
-        {
-            $formItems[] = formRow
+        $formItems[] = div
+        (
+            setClass($needReview ? '' : 'hidden'),
+            setClass('close-review'),
+            formRow
             (
                 formGroup
                 (
                     set::width('2/3'),
-                    set::label($lang->custom->forceReview . $space . $lang->custom->forceNotReview),
+                    set::label($lang->custom->forceNotReview),
                     set::name('forceNotReview'),
                     set::value($forceNotReview),
                     set::items($users),
@@ -177,18 +186,20 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 ),
                 span(
                     setClass('pl-4'),
-                    sprintf($lang->custom->notice->forceReview, $lang->$module->common)
+                    sprintf($lang->custom->notice->forceNotReview, $lang->$module->common)
                 )
-            );
-        }
-        else
-        {
-            $formItems[] = formRow
+            )
+        );
+        $formItems[] = div
+        (
+            setClass($needReview ? 'hidden' : ''),
+            setClass('open-review'),
+            formRow
             (
                 formGroup
                 (
                     set::width('2/3'),
-                    set::label($lang->custom->forceReview . $space . $lang->custom->forceReview),
+                    set::label($lang->custom->forceReview),
                     set::name('forceReview'),
                     set::value($forceReview),
                     set::items($users),
@@ -198,8 +209,8 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     setClass('pl-4'),
                     sprintf($lang->custom->notice->forceReview, $lang->$module->common)
                 )
-            );
-        }
+            )
+        );
 
         $actionWidth = 'w-2/3';
     }

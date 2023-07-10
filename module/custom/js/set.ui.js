@@ -14,3 +14,16 @@ window.removeRow = function()
 {
     $(this).closest('.form-row').remove();
 }
+
+window.changeReview = function(e)
+{
+    $('.close-review, .open-review').addClass('hidden');
+    if(e.target.value > 0)
+    {
+        $('.close-review').removeClass('hidden');
+    }
+    else
+    {
+        $('.open-review').removeClass('hidden');
+    }
+}
