@@ -65,7 +65,7 @@ class programMenu extends wg
         return array_filter($this->programs, function($program) use($id) {return $program->parent == $id;});
     }
 
-    protected function build()
+    protected function build(): zui
     {
         $this->programs = (array)$this->prop('programs');
         $activeKey      = $this->prop('activeKey');

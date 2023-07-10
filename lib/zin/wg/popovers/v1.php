@@ -23,7 +23,7 @@ class popovers extends wg
         'target' => array(),
     );
 
-    protected function build()
+    protected function build(): array
     {
         $trigger = $this->block('trigger')[0]->children()[0];
         $target  = $this->block('target')[0];

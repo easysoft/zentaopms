@@ -24,7 +24,7 @@ class checkList extends wg
         return [$value];
     }
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): checkbox
     {
         if($item instanceof item) $item = $item->props->toJsonData();
 
@@ -40,7 +40,7 @@ class checkList extends wg
         return new checkbox(set($props), set($item));
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($items, $inline) = $this->prop(['items', 'inline']);
 

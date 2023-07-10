@@ -23,12 +23,12 @@ class h extends wg
         'selfClose?: bool'
     );
 
-    public function getTagName()
+    public function getTagName(): string
     {
         return $this->props->get('tagName');
     }
 
-    public function isDomElement()
+    public function isDomElement(): bool
     {
         return true;
     }
@@ -41,70 +41,70 @@ class h extends wg
         return in_array($this->getTagName(), static::$selfCloseTags);
     }
 
-    public function build()
+    public function build(): array
     {
         if($this->isSelfClose()) return array($this->buildSelfCloseTag());
 
         return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
     }
 
-    public function toJsonData()
+    public function toJsonData(): array
     {
         $data = parent::toJsonData();
         $data['type'] = 'h:' . $this->getTagName();
         return $data;
     }
 
-    public function type()
+    public function type(): string
     {
         return $this->getTagName();
     }
 
-    public function shortType()
+    public function shortType(): string
     {
         return $this->getTagName();
     }
 
-    protected function getPropsStr()
+    protected function getPropsStr(): string
     {
         $propStr = $this->props->toStr(array_keys(static::getDefinedProps()));
         if($this->props->hasEvent() && empty($this->id()) && $this->getTagName() !== 'html') $propStr = "$propStr id='$this->gid'";
         return empty($propStr) ? '' : " $propStr";
     }
 
-    protected function buildSelfCloseTag()
+    protected function buildSelfCloseTag(): string
     {
         $tagName = $this->getTagName();
         $propStr = $this->getPropsStr();
         return "<$tagName$propStr />";
     }
 
-    protected function buildTagBegin()
+    protected function buildTagBegin(): string
     {
         $tagName = $this->getTagName();
         $propStr = $this->getPropsStr();
         return "<$tagName$propStr>";
     }
 
-    protected function buildTagEnd()
+    protected function buildTagEnd(): string
     {
         $tagName = $this->getTagName();
         return "</$tagName>";
     }
 
-    public static function create()
+    public static function create(): h
     {
         $args = func_get_args();
         $tagName = array_shift($args);
         return new h(is_string($tagName) ? set('tagName', $tagName) : $tagName, $args);
     }
 
-    public static function __callStatic($tagName, $args)
+    public static function __callStatic(string $tagName, array $args): h
     {
         return new h(set('tagName', $tagName), $args);
     }
 
-    public static function a()
+    public static function a(): h
     {
         $a = static::create('a', func_get_args());
         if($a->prop('target') === '_blank' && !$a->hasProp('rel')) $a->prop('rel', 'noopener noreferrer');
@@ -271,7 +271,7 @@ class h extends wg
         return "(function(){\n$codes\n}());";
     }
 
-    public static function jsRaw()
+    public static function jsRaw(): string
     {
         return 'RAWJS<' . implode("\n", func_get_args()) . '>RAWJS';
     }

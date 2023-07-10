@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The rawContent class file of zin lib.
  *
@@ -15,7 +16,7 @@ require_once __DIR__ . DS . 'wg.class.php';
 
 class rawContent extends wg
 {
-    protected function build()
+    protected function build(): directive
     {
         return h::comment('{{RAW_CONTENT}}');
     }

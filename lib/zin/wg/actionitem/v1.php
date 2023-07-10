@@ -123,7 +123,7 @@ class actionItem extends wg
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($name, $type, $outerTag, $outerProps, $outerClass) = $this->prop(array('name', 'type', 'outerTag', 'outerProps', 'outerClass'));
 

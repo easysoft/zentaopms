@@ -53,7 +53,7 @@ class checkbox extends wg
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         if($this->prop('primary')) return $this->buildPrimary();
         list($text, $type, $typeClass) = $this->prop(array('text', 'type', 'typeClass'));

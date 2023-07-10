@@ -26,7 +26,7 @@ class overviewBlock extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildCard($card)
+    protected function buildCard($card): wg
     {
         $class = 'text-2xl text-center font-bold leading-relaxed ' . (!empty($card->class) ? $card->class : '');
 
@@ -51,7 +51,7 @@ class overviewBlock extends wg
         );
     }
 
-    protected function buildCards($group)
+    protected function buildCards($group): wg
     {
         $cards = array();
         foreach($group->cards as $card) $cards[] = $this->buildCard($card);
@@ -63,7 +63,7 @@ class overviewBlock extends wg
         );
     }
 
-    protected function buildBarChart($group)
+    protected function buildBarChart($group): wg
     {
         $bars   = array();
         $labels = array();
@@ -116,7 +116,7 @@ class overviewBlock extends wg
         );
     }
 
-    protected function buildBody($groups)
+    protected function buildBody($groups): array
     {
         $body = array();
         foreach($groups as $group)
@@ -128,7 +128,7 @@ class overviewBlock extends wg
         return $body;
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($id, $title, $block, $groups) = $this->prop(array('id', 'title', 'block', 'groups'));
 

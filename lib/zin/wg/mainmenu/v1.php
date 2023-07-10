@@ -27,7 +27,7 @@ class mainMenu extends wg
         return null;
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $others = $this->prop('others');
 

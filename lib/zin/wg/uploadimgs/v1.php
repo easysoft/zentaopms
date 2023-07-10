@@ -35,7 +35,7 @@ class uploadImgs extends wg
         'totalCountText?: string',         // 文件数量文本
     );
 
-    protected function build()
+    protected function build(): zui
     {
         return zui::uploadImgs(inherit($this));
     }

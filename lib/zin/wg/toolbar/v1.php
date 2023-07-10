@@ -13,7 +13,7 @@ class toolbar extends wg
         'btnProps?: array'
     );
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): wg
     {
         if($item === null) return null;
 
@@ -37,7 +37,7 @@ class toolbar extends wg
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $items = $this->prop('items');
         return div

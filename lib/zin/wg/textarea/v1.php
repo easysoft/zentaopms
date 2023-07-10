@@ -19,7 +19,7 @@ class textarea extends wg
         'rows' => 10
     );
 
-    protected function build()
+    protected function build(): wg
     {
         return h::textarea(set($this->props), $this->children());
     }

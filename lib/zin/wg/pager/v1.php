@@ -4,7 +4,7 @@ namespace zin;
 
 class pager extends wg
 {
-    protected function build()
+    protected function build(): zui
     {
         return zui::pager(inherit($this));
     }

@@ -83,7 +83,7 @@ class mainNavbar extends nav
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build(): h
     {
         if(!$this->prop('items')) return div();
 

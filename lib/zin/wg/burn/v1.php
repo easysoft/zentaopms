@@ -26,8 +26,7 @@ class burn extends wg
      * @var    array
      * @access protected
      */
-    protected static array $defineProps = array
-    (
+    protected static array $defineProps = array(
         'data?: string|array',       // 数据源
         'referenceLine?: bool=false' // 参考线
     );
@@ -35,7 +34,7 @@ class burn extends wg
     /**
      * Build widget.
      */
-    protected function build(): wg
+    protected function build(): zui
     {
         return zui::burn(inherit($this));
     }

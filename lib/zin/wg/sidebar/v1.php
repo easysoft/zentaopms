@@ -19,7 +19,7 @@ class sidebar extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($side, $showToggle) = $this->prop(array('side', 'showToggle'));
         return div

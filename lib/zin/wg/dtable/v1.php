@@ -113,7 +113,7 @@ class dtable extends wg
         return $setting;
     }
 
-    protected function build()
+    protected function build(): zui
     {
         if(empty($this->prop('data')))
         {

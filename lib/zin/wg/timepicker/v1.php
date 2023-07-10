@@ -52,7 +52,7 @@ class timePicker extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build(): zui
     {
         list($name, $id, $defaultValue) = $this->prop(array('name', 'id', 'defaultValue'));
         return zui::timePicker

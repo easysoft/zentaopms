@@ -32,7 +32,7 @@ class modalTrigger extends wg
         'modal' => array('map' => 'modal')
     );
 
-    protected function build()
+    protected function build(): array
     {
         list($target, $url, $type) = $this->prop(['target', 'url', 'type']);
 

@@ -9,7 +9,7 @@ class col extends wg
         'align?:string'
     );
 
-    protected function build()
+    protected function build(): wg
     {
         $classList = 'col';
         list($justify, $align) = $this->prop(array('justify', 'align'));

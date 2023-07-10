@@ -31,7 +31,7 @@ class dropdown extends wg
         'items'   => array('map' => 'item')
     );
 
-    protected function build()
+    protected function build(): array
     {
         list($items, $placement, $strategy, $offset, $flip, $subMenuTrigger, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'subMenuTrigger', 'arrow', 'trigger', 'menuProps', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu'));
 

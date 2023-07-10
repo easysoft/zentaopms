@@ -22,7 +22,7 @@ class dataset
      * @var    array
      * @access public
      */
-    public $data = array();
+    public array $data = array();
 
     /**
      * Create an instance, the initialed data can be passed
@@ -30,7 +30,7 @@ class dataset
      * @access public
      * @param array $data - Properties list array
      */
-    public function __construct($data = null)
+    public function __construct(?array $data = null)
     {
         if($data !== null) $this->set($data);
     }
@@ -43,7 +43,7 @@ class dataset
      * @param mixed  $value - Property value
      * @return void
      */
-    public function __set($name, $value)
+    public function __set(string $name, mixed $value)
     {
         $this->set($name, $value);
     }
@@ -55,7 +55,7 @@ class dataset
      * @param string $prop - Property name
      * @return mixed
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         $this->get($name);
     }
@@ -67,7 +67,7 @@ class dataset
      * @param string $prop - Property name
      * @return bool
      */
-    public function __isset($name)
+    public function __isset(string $name): bool
     {
         return $this->has($name);
     }
@@ -79,7 +79,7 @@ class dataset
      * @param string $prop - Property name
      * @return void
      */
-    public function __unset($name)
+    public function __unset(string $name)
     {
         $this->remove($name);
     }
@@ -90,7 +90,7 @@ class dataset
      * @access public
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toStr();
     }
@@ -101,7 +101,7 @@ class dataset
      * @access public
      * @return string
      */
-    public function __invoke($name = null, $value = null)
+    public function __invoke(string|array $name = null, mixed $value = null): string
     {
         if($value !== null || is_array($name)) return $this->set($name, $value);
         if(is_string($name)) return $this->get($name);
@@ -125,7 +125,7 @@ class dataset
      * @access public
      * @return mixed
      */
-    public function __call($name, $args)
+    public function __call(string $name, array $args): mixed
     {
         if(count($args)) return $this->set($name, $args[0]);
 
@@ -135,18 +135,18 @@ class dataset
     /**
      * Method for sub class to modify value on setting it
      *
-     * @access public
-     * @param array|string   $prop        - Property name or properties list
+     * @access protected
+     * @param string   $prop        - Property name or properties list
      * @param mixed          $value       - Property value
      * @return dataset
      */
-    protected function setVal($prop, $value)
+    protected function setVal(string $prop, mixed $value): dataset
     {
         $this->data[$prop] = $value;
         return $this;
     }
 
-    protected function getVal($prop)
+    protected function getVal(string $prop): mixed
     {
         return isset($this->data[$prop]) ? $this->data[$prop] : null;
     }
@@ -158,7 +158,7 @@ class dataset
      * @param bool $skipEmpty - Whether to skip to count empty value
      * @return int
      */
-    public function count($skipEmpty = false)
+    public function count($skipEmpty = false): int
     {
         if(!$skipEmpty) return count($this->data);
 
@@ -176,12 +176,13 @@ class dataset
      * @access public
      * @return string
      */
-    public function toStr()
+    public function toStr(): string
     {
         return json_encode($this->toJsonData());
     }
 
-    public function toJsonData() {
+    public function toJsonData(): array
+    {
         return $this->data;
     }
 
@@ -191,10 +192,9 @@ class dataset
      * @access public
      * @param array|string   $prop        - Property name or properties list
      * @param mixed          $value       - Property value
-     * @param bool           $removeEmpty - Whether to remove empty value
      * @return dataset
      */
-    public function set($prop, $value = null)
+    public function set(array|string $prop, mixed $value = null): dataset
     {
         if(is_array($prop))
         {

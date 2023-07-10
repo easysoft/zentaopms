@@ -31,7 +31,7 @@ class zui extends wg
         '_class?: string'
     );
 
-    protected function build()
+    protected function build(): array
     {
         list($name, $target, $tagName, $targetProps, $size, $id, $class, $map) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map'));
         list($width, $height) = $size;

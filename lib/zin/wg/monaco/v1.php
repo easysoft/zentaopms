@@ -23,7 +23,7 @@ class monaco extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build()
+    protected function build(): wg
     {
         global $app;
         $vsPath      = $app->getWebRoot() . 'js/monaco-editor/min/vs';

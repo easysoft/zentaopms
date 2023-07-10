@@ -13,7 +13,7 @@ class cell extends wg
         'flex:string'
     );
 
-    protected function build()
+    protected function build(): wg
     {
         $basis = empty($this->prop('width')) ? 'auto' : $this->prop('width');
         if(is_numeric($basis)) $basis .= 'px';

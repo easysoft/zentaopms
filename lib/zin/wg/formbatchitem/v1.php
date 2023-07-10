@@ -54,10 +54,9 @@ class formBatchItem extends wg
     /**
      * Define default properties.
      *
-     * @var    array
      * @access protected
      */
-    protected function build()
+    protected function build(): array
     {
         list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $defaultDitto, $hidden, $readonly, $multiple) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'defaultDitto', 'hidden', 'readonly', 'multiple'));
 

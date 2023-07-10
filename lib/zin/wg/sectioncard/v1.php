@@ -17,7 +17,7 @@ class sectionCard extends wg
         );
     }
 
-    public function onBuildItem(item $item)
+    public function onBuildItem(item $item): wg
     {
         return div
         (
@@ -27,7 +27,7 @@ class sectionCard extends wg
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $title = $this->block('title');
 

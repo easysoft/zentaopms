@@ -135,7 +135,7 @@ class featureBar extends wg
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         return div
         (

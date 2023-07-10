@@ -19,7 +19,7 @@ class formLabel extends wg
         }
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($text, $required, $for) = $this->prop(['text', 'required', 'for']);
         return h::label

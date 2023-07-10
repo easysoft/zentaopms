@@ -15,7 +15,7 @@ class modal extends modalDialog
         'modalProps' => array()
     );
 
-    protected function build()
+    protected function build(): wg
     {
         list($id, $modalProps) = $this->prop(array('id', 'modalProps'));
 

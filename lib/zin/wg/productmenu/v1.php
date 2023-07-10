@@ -16,7 +16,7 @@ class productMenu extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function buildMenu()
+    private function buildMenu(): array
     {
         $link      = $this->prop('link');
         $items     = $this->prop('items');
@@ -36,7 +36,7 @@ class productMenu extends wg
         return $menus;
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $title = $this->prop('title');
         $items = $this->buildMenu();

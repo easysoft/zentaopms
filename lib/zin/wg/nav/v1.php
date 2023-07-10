@@ -10,7 +10,7 @@ class nav extends wg
         'items?:array' // 使用数组指定导航中的每一项。
     );
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): wg
     {
         return new actionItem
         (
@@ -19,10 +19,7 @@ class nav extends wg
         );
     }
 
-    /**
-     * @return builder
-     */
-    protected function build()
+    protected function build(): wg
     {
         $items = $this->prop('items');
         return h::menu

@@ -16,7 +16,7 @@ class tabPane extends wg
         'divider' => false,
     );
 
-    protected function build()
+    protected function build(): wg
     {
         $key    = $this->prop('key');
         $active = $this->prop('active');

@@ -25,7 +25,7 @@ class editor extends wg
         // 'userColor?: string="#ffcc00"'
     );
 
-    protected function build()
+    protected function build(): wg
     {
         $editor = new h(set::tagName('tiptap-editor'));
         $props  = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));

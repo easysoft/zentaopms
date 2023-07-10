@@ -40,7 +40,7 @@ class upload extends wg
         'exceededCountHint?: string',      // 上传超出个数限制提示
     );
 
-    protected function build()
+    protected function build(): zui
     {
         global $lang;
 

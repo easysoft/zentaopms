@@ -4,7 +4,7 @@ namespace zin;
 
 class center extends wg
 {
-    protected function build()
+    protected function build(): wg
     {
         return div
         (

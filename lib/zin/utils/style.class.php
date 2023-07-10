@@ -56,14 +56,14 @@ class style extends dataset
      *     $style->cssVar('text-size', '14px');
      *
      *     // Set multiple variables
-     *     $style->cssVar(array('text-color' => 'yellow', 'background-image': 'none'));
+     *     $style->cssVar(array('text-color' => 'yellow', 'background-image' => 'none'));
      *
      *     // Get variable value
      *     echo $style->cssVar('text-size'); // Output "14px"
      *
      *     // Get all variables value
      *     echo $style->cssVar();
-     *     // Output array('text-size' => '14px', 'color' => 'yellow', 'background': 'none');
+     *     // Output array('text-size' => '14px', 'color' => 'yellow', 'background' => 'none');
      *
      *     // Remove variable by setting value with an empty string
      *     $style->cssVar('text-color', '');
@@ -73,7 +73,7 @@ class style extends dataset
      * @param mixed          $value - Property value
      * @return mixed
      */
-    public function cssVar($name = '', $value = null)
+    public function cssVar(array|string $name = '', ?string $value = null): style|array|string
     {
         /* Support for setting multiple variables by an array */
         if(is_array($name))
@@ -110,7 +110,7 @@ class style extends dataset
      * @access public
      * @return string
      */
-    public function toStr()
+    public function toStr(): string
     {
         return $this->toCss();
     }
@@ -121,7 +121,7 @@ class style extends dataset
      * @access public
      * @return string
      */
-    public function toCss()
+    public function toCss(): string
     {
         $pairs = array();
 
@@ -139,10 +139,10 @@ class style extends dataset
     /**
      * Create an instance
      *
-     * @param string $style - CSS style list
+     * @param ?array $style - CSS style list
      * @return style
      */
-    static public function new($style = null)
+    public static function new(?array $style = null): style
     {
         return new style($style);
     }
@@ -151,10 +151,10 @@ class style extends dataset
      * Create css from style list
      *
      * @access public
-     * @param string $style - CSS style list
+     * @param ?array $style - CSS style list
      * @return string
      */
-    static public function css($style)
+    public static function css(?array $style): string
     {
         return (new style($style))->toCss();
     }
@@ -166,7 +166,7 @@ class style extends dataset
      * @param string $name - CSS variable name
      * @return string
      */
-    static public function formatVarName($name)
+    public static function formatVarName(string $name): string
     {
         return \zin\str_starts_with($name, '--') ? $name : "--$name";
     }

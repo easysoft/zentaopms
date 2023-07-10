@@ -10,7 +10,7 @@ class menu extends wg
         'items?:array'
     );
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): wg
     {
         if(!($item instanceof item)) $item = item(set($item));
         return actionItem
@@ -23,7 +23,7 @@ class menu extends wg
     /**
      * @return builder
      */
-    protected function build()
+    protected function build(): wg
     {
         $items = $this->prop('items');
         return h::menu

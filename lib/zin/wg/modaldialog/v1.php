@@ -93,7 +93,7 @@ class modalDialog extends wg
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $size = $this->prop('size');
         if($size)

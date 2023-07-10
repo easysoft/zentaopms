@@ -46,7 +46,7 @@ class dropmenu extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build(): zui
     {
         list($url, $text, $objectID, $cache, $tab, $module, $method, $extra, $id, $data) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'extra', 'id', 'data'));
 

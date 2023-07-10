@@ -90,12 +90,9 @@ class heading extends wg
      * Build.
      *
      * @access protected
-     * @return object
      */
-    protected function build()
+    protected function build(): wg
     {
-        $showAppName = $this->prop('showAppName');
-
         return div
         (
             set::id('heading'),

@@ -29,7 +29,7 @@ class formSettingBtn extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $customFields = $this->prop('customFields', array());
 

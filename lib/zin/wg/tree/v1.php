@@ -10,7 +10,7 @@ class tree extends wg
         'class?: string',
     );
 
-    protected function build()
+    protected function build(): zui
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
         return zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'id'))));

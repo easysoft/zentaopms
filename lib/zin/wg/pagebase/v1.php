@@ -42,7 +42,7 @@ class pageBase extends wg
         return $this->children();
     }
 
-    protected function build()
+    protected function build(): wg
     {
         global $lang, $config, $app;
 

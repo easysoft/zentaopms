@@ -92,7 +92,7 @@ class tabs extends wg
         }
     }
 
-    private function buildCollapseBtn()
+    private function buildCollapseBtn(): ?wg
     {
         $collapse = $this->prop('collapse');
         if(!$collapse) return null;

@@ -27,7 +27,7 @@ class formGroup extends wg
         'placeholder?: string'
     );
 
-    protected function build()
+    protected function build(): wg
     {
         list($name, $label, $labelClass, $labelProps, $labelWidth, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'labelWidth', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly']);
 

@@ -18,7 +18,7 @@ class icon extends wg
         }
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($name, $size) = $this->prop(array('name', 'size'));
         return h::i

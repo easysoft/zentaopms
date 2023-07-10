@@ -25,8 +25,7 @@ class picker extends wg
      * @var    array
      * @access protected
      */
-    protected static array $defineProps = array
-    (
+    protected static array $defineProps = array(
         'id?: string',                      // 组件根元素的 ID。
         'className?: string|array',         // 类名。
         'style?: array',                    // 样式。
@@ -74,7 +73,7 @@ class picker extends wg
      * @access protected
      * @return array
      */
-    protected function getPickerProps():array
+    protected function getPickerProps(): array
     {
         $props = $this->props->toJsonData();
         $items = $props['items'];
@@ -103,7 +102,7 @@ class picker extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build(): zui
     {
         return zui::picker
         (

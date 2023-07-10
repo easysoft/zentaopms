@@ -100,7 +100,7 @@ class dragUl extends wg
         $this->ul->add(on::drop($func));
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $ul = ul
         (

@@ -13,7 +13,7 @@ class inputGroup extends wg
         'seg?:bool'
     );
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): wg
     {
         if(is_string($item)) $item = new item(set(['type' => 'addon', 'text' => $item]));
         elseif(is_array($item)) $item = new item(set($item));
@@ -37,7 +37,7 @@ class inputGroup extends wg
         return new input(inherit($item));
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($items, $seg) = $this->prop(['items', 'seg']);
         $children = $this->children();

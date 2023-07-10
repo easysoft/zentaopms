@@ -20,10 +20,10 @@ require_once __DIR__ . DS . 'zin.class.php';
  *
  * @access public
  * @param  string       $wgName
- * @param  string|array $options
+ * @param  array $options
  * @return void
  */
-function render(string $wgName = '', string|array $options = null)
+function render(string $wgName = '', array $options = array())
 {
     /* 获取全局渲染部件实例和指令。 Get global render widgets and directives. */
     $globalItems = zin::getGlobalRenderList();
@@ -32,8 +32,8 @@ function render(string $wgName = '', string|array $options = null)
     if(empty($wgName))
     {
         $wgName = 'page';
-        if(isAjaxRequest() && !isAjaxRequest('zin')) $wgName = 'fragment';
         if(isAjaxRequest('modal')) $wgName = 'modalDialog';
+        else if(isAjaxRequest() && !isAjaxRequest('zin')) $wgName = 'fragment';
     }
 
     /* 判断是否渲染为完整页面。 Check if render in full page. */
@@ -41,7 +41,7 @@ function render(string $wgName = '', string|array $options = null)
     if($isFullPage) $globalItems[] = set::display(false);
 
     /* 获取部件渲染选项。 Get widget display options. */
-    if($options === null && isset($_SERVER['HTTP_X_ZIN_OPTIONS']) && !empty($_SERVER['HTTP_X_ZIN_OPTIONS']))
+    if(empty($options) && isset($_SERVER['HTTP_X_ZIN_OPTIONS']) && !empty($_SERVER['HTTP_X_ZIN_OPTIONS']))
     {
         $setting = $_SERVER['HTTP_X_ZIN_OPTIONS'];
         $options = $setting[0] === '{' ? json_decode($setting, true) : array('selector' => $setting);

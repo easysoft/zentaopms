@@ -44,19 +44,17 @@ class wg
      * @access public
      * @var    props
      */
-    public $props;
+    public props $props;
 
-    public $blocks = array();
+    public array $blocks = array();
 
-    public $parent = null;
+    public ?wg $parent = null;
 
-    public $gid;
+    public string $gid;
 
-    public $displayed = false;
+    public bool $displayed = false;
 
-    protected $matchedPortals = null;
-
-    protected $renderOptions = null;
+    protected array $renderOptions = array();
 
     public function __construct(/* string|element|object|array|null ...$args */)
     {
@@ -73,12 +71,12 @@ class wg
         $this->checkErrors();
     }
 
-    public function __debugInfo()
+    public function __debugInfo(): array
     {
         return $this->toJsonData();
     }
 
-    public function isDomElement()
+    public function isDomElement(): bool
     {
         return false;
     }
@@ -87,7 +85,7 @@ class wg
      * Check if the element is match any of the selectors
      * @param  string|array|object $selectors
      */
-    public function isMatch($selectors)
+    public function isMatch(string|array|object $selectors): bool
     {
         $list = parseWgSelectors($selectors);
         foreach($list as $selector)
@@ -105,7 +103,7 @@ class wg
      * Build dom object
      * @return dom
      */
-    public function buildDom()
+    public function buildDom(): dom
     {
         $before    = $this->buildBefore();
         $children  = $this->build();
@@ -127,7 +125,7 @@ class wg
      * Render widget to html
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $dom    = $this->buildDom();
         $result = $dom->render();
@@ -135,7 +133,7 @@ class wg
         return is_string($result) ? $result : json_encode($result);
     }
 
-    public function display(?array $options = array()): wg
+    public function display(array $options = array()): wg
     {
         zin::disableGlobalRender();
         $this->renderOptions = $options;
@@ -197,22 +195,22 @@ class wg
 
     protected function created() {}
 
-    protected function buildBefore()
+    protected function buildBefore(): array
     {
         return $this->block('before');
     }
 
-    protected function buildAfter()
+    protected function buildAfter(): array
     {
         return $this->block('after');
     }
 
-    protected function build()
+    protected function build(): array|wg|directive
     {
         return $this->children();
     }
 
-    public function buildEvents()
+    public function buildEvents(): ?string
     {
         $events = $this->props->events();
         if(empty($events)) return null;
@@ -250,17 +248,17 @@ class wg
     }
 
 
-    protected function onAddBlock($child, $name)
+    protected function onAddBlock(array|string|wg|directive $child, string $name)
     {
         return $child;
     }
 
-    protected function onAddChild($child)
+    protected function onAddChild(array|string|wg|directive $child)
     {
         return $child;
     }
 
-    protected function onSetProp($prop, $value)
+    protected function onSetProp(array|string $prop, mixed $value)
     {
         if($prop === 'id' && $value === '$GID') $value = $this->gid;
         if($prop[0] === '@')
@@ -271,12 +269,12 @@ class wg
         $this->props->set($prop, $value);
     }
 
-    protected function onGetProp($prop, $defaultValue)
+    protected function onGetProp(string $prop, mixed $defaultValue): mixed
     {
         return $this->props->get($prop, $defaultValue);
     }
 
-    public function add($item, $blockName = 'children')
+    public function add($item, string $blockName = 'children')
     {
         if($item === null || is_bool($item)) return $this;
 
@@ -298,7 +296,7 @@ class wg
         return $this;
     }
 
-    public function addToBlock($name, $child = null)
+    public function addToBlock(array|string $name, array|string|null|wg|directive $child = null)
     {
         if(is_array($name))
         {
@@ -334,12 +332,12 @@ class wg
         else $this->blocks[$name] = array($child);
     }
 
-    public function children()
+    public function children(): array
     {
         return $this->block('children');
     }
 
-    public function block($name)
+    public function block(string $name): array
     {
         $list = array();
         if(isset($this->blocks[$name]))
@@ -356,16 +354,15 @@ class wg
         return $list;
     }
 
-    public function hasBlock($name)
+    public function hasBlock(string $name): bool
     {
         return isset($this->blocks[$name]);
     }
 
     /**
      * Apply directive
-     * @param object $directive
      */
-    public function directive(&$directive, $blockName)
+    public function directive(directive &$directive, array|string $blockName)
     {
         $data = $directive->data;
         $type = $directive->type;
@@ -402,11 +399,10 @@ class wg
             {
                 $this->add($blockChildren, $blockName);
             }
-            return;
         }
     }
 
-    public function prop($name, $defaultValue = null)
+    public function prop(array|string $name, mixed $defaultValue = null): mixed
     {
         if(is_array($name))
         {
@@ -425,11 +421,10 @@ class wg
      * Set property, an array can be passed to set multiple properties
      *
      * @access public
-     * @param array|string   $prop        - Property name or properties list
+     * @param props|array|string   $prop        - Property name or properties list
      * @param mixed          $value       - Property value
-     * @return dataset
      */
-    public function setProp($prop, $value = null)
+    public function setProp(props|array|string $prop, mixed $value = null)
     {
         if($prop instanceof props) $prop = $prop->toJsonData();
 
@@ -444,22 +439,25 @@ class wg
         if($prop[0] === '#')
         {
             $this->add($value, substr($prop, 1));
-            return;
+            return $this;
         }
 
         $this->onSetProp($prop, $value);
         return $this;
     }
 
-    public function hasProp()
+    public function hasProp(): bool
     {
         $names = func_get_args();
         if(empty($names)) return false;
-        foreach ($names as $name) if(!$this->props->has($name)) return false;
+        foreach($names as $name)
+        {
+            if(!$this->props->has($name)) return false;
+        }
         return true;
     }
 
-    public function setDefaultProps($props)
+    public function setDefaultProps(array $props)
     {
         if(!is_array($props) || empty($props)) return;
 
@@ -470,29 +468,29 @@ class wg
         }
     }
 
-    public function getRestProps()
+    public function getRestProps(): array
     {
         return $this->props->skip(array_keys(static::getDefinedProps()));
     }
 
-    public function type()
+    public function type(): string
     {
         return get_called_class();
     }
 
-    public function shortType()
+    public function shortType(): string
     {
         $type = $this->type();
         $pos = strrpos($type, '\\');
         return $pos === false ? $type : substr($type, $pos + 1);
     }
 
-    public function id()
+    public function id(): ?string
     {
         return $this->prop('id');
     }
 
-    public function toJsonData()
+    public function toJsonData(): array
     {
         $data = array();
         $data['gid'] = $this->gid;
@@ -599,7 +597,7 @@ class wg
         if(!empty($pageJS))  context::js($pageJS);
     }
 
-    public static function wgBlockMap()
+    public static function wgBlockMap(): array
     {
         $wgName = get_called_class();
         if(!isset(wg::$wgToBlockMap[$wgName]))
@@ -620,7 +618,7 @@ class wg
         return wg::$wgToBlockMap[$wgName];
     }
 
-    public static function getBlockNameForWg($wg)
+    public static function getBlockNameForWg(wg|string $wg): ?string
     {
         $wgType = ($wg instanceof wg) ? $wg->type() : $wg;
         $wgBlockMap = static::wgBlockMap();
@@ -628,7 +626,7 @@ class wg
         return isset($wgBlockMap[$wgType]) ? $wgBlockMap[$wgType] : null;
     }
 
-    protected static function getDefinedProps(string|null $wgName = null): array
+    protected static function getDefinedProps(?string $wgName = null): array
     {
         if($wgName === null) $wgName = get_called_class();
 
@@ -639,7 +637,7 @@ class wg
         return wg::$definedPropsMap[$wgName];
     }
 
-    protected static function getDefaultProps(string|null $wgName = null): array
+    protected static function getDefaultProps(?string $wgName = null): array
     {
         $defaultProps = array();
         foreach(static::getDefinedProps($wgName) as $name => $definition)

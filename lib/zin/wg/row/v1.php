@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class row extends wg
@@ -8,7 +9,7 @@ class row extends wg
         'align?:string'
     );
 
-    protected function build()
+    protected function build(): wg
     {
         $classList = 'row';
         list($justify, $align) = $this->prop(array('justify', 'align'));

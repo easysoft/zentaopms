@@ -17,7 +17,7 @@ class label extends wg
         }
     }
 
-    public function build()
+    public function build(): wg
     {
         return span
         (

@@ -49,7 +49,7 @@ class priPicker extends wg
      *
      * @access protected
      */
-    protected function build(): wg
+    protected function build(): zui
     {
         $items = $this->prop('items');
         if($items === null)

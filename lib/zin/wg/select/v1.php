@@ -62,7 +62,7 @@ class select extends wg
      * @access public
      * @return wg
      */
-    public function onBuildItem($item): wg|array
+    public function onBuildItem(wg|array $item): wg
     {
         if($item instanceof item) $item = $item->props->toJsonData();
 
@@ -99,7 +99,7 @@ class select extends wg
      * @access protected
      * @return wg
      */
-    protected function build()
+    protected function build(): wg
     {
         list($items, $multiple, $required) = $this->prop(array('items', 'multiple', 'required'));
 

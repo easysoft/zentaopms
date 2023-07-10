@@ -9,7 +9,7 @@ class fragment extends wg
         'rawContent?: bool'
     );
 
-    protected function build()
+    protected function build(): array
     {
         $css        = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
         $js         = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));

@@ -12,7 +12,7 @@ class formRow extends wg
         'hidden?: boolean'
     );
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): wg
     {
         if(!($item instanceof item))
         {
@@ -23,7 +23,7 @@ class formRow extends wg
         return new formGroup(inherit($item));
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($width, $items, $hidden) = $this->prop(['width', 'items', 'hidden']);
 

@@ -11,8 +11,7 @@ class page extends pageBase
 {
     protected static array $defaultProps = array('zui' => true);
 
-    protected static array $defineBlocks = array
-    (
+    protected static array $defineBlocks = array(
         'head'     => array(),
         'header'   => array('map' => 'header'),
         'heading'  => array('map' => 'heading'),
@@ -21,7 +20,7 @@ class page extends pageBase
         'footer'   => array(),
     );
 
-    protected function buildHeader()
+    protected function buildHeader(): array|wg
     {
         if($this->hasBlock('header')) return $this->block('header');
 
@@ -32,7 +31,7 @@ class page extends pageBase
         return new header(new heading($dropmenuBlock));
     }
 
-    protected function buildBody()
+    protected function buildBody(): array
     {
         if($this->hasBlock('main'))
         {

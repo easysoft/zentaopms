@@ -11,7 +11,7 @@ class pageForm extends page
         'formPanel?: array'
     );
 
-    public function children()
+    public function children(): array
     {
         return array(
             formPanel(set($this->prop('formPanel')), parent::children())

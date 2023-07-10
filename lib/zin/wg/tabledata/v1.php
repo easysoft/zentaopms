@@ -19,7 +19,7 @@ class tableData extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function buildItemWithTr($item)
+    private function buildItemWithTr($item): wg
     {
         return h::tr
         (
@@ -37,7 +37,7 @@ class tableData extends wg
         );
     }
 
-    private function buildItemWithDiv($item)
+    private function buildItemWithDiv($item): wg
     {
         if($item->prop('collapse'))
         {
@@ -79,7 +79,7 @@ class tableData extends wg
         );
     }
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): wg
     {
         $item->setProp(array('thClass' => $this->prop('thClass'), 'tdClass' => $this->prop('tdClass')));
 
@@ -89,7 +89,7 @@ class tableData extends wg
         return $this->buildItemWithDiv($item);
     }
 
-    private function caption()
+    private function caption(): ?wg
     {
         $title = $this->prop('title');
         if(empty($title)) return null;

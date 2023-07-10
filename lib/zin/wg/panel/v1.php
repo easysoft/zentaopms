@@ -4,8 +4,7 @@ namespace zin;
 
 class panel extends wg
 {
-    protected static array $defineProps = array
-    (
+    protected static array $defineProps = array(
         'class?: string="rounded shadow ring-0 canvas"', // 类名。
         'size?: "sm"|"lg"',         // 额外尺寸。
         'title?: string',           // 标题。
@@ -21,14 +20,13 @@ class panel extends wg
         'footerProps?: array'       // 底部属性。
     );
 
-    protected static array $defineBlocks = array
-    (
+    protected static array $defineBlocks = array(
         'heading' => array(),
         'headingActions' => array('map' => 'toolbar'),
         'footer'  => array('map' => 'nav')
     );
 
-    protected function buildHeadingActions()
+    protected function buildHeadingActions(): ?wg
     {
         $actionsBlock = $this->block('headingActions');
         $actions      = $this->prop('headingActions');
@@ -43,7 +41,7 @@ class panel extends wg
         );
     }
 
-    protected function buildHeading()
+    protected function buildHeading(): wg
     {
         list($title, $size) = $this->prop(['title', 'size']);
         $headingBlock       = $this->block('heading');
@@ -61,7 +59,7 @@ class panel extends wg
         );
     }
 
-    protected function buildBody()
+    protected function buildBody(): wg
     {
         return div
         (
@@ -71,12 +69,12 @@ class panel extends wg
         );
     }
 
-    protected function buildFooter()
+    protected function buildFooter(): ?wg
     {
         list($footerActions) = $this->prop(array('footerActions'));
         $footerBlock         = $this->block('footer');
 
-        if(empty($footerActions) && empty($footerBlock)) return;
+        if(empty($footerActions) && empty($footerBlock)) return null;
 
         return div
         (
@@ -93,7 +91,7 @@ class panel extends wg
         return array(setClass('panel', $class, empty($size) ? null : "size-$size"));
     }
 
-    protected function build()
+    protected function build(): wg
     {
         return div
         (

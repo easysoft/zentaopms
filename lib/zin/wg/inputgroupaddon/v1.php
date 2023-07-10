@@ -20,7 +20,7 @@ namespace zin;
  */
 class inputGroupAddon extends wg
 {
-    protected function build()
+    protected function build(): wg
     {
         return h::span(setClass('input-group-addon'), set($this->props), $this->children());
     }

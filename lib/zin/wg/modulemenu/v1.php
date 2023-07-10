@@ -4,7 +4,7 @@ namespace zin;
 
 class moduleMenu extends wg
 {
-    private $modules = array();
+    private array $modules = array();
 
     protected static array $defineProps = array(
         'modules: array',
@@ -75,7 +75,7 @@ class moduleMenu extends wg
         return '';
     }
 
-    private function buildBtns()
+    private function buildBtns(): wg
     {
         $settingLink = $this->prop('settingLink');
         $showDisplay = $this->prop('showDisplay');
@@ -113,7 +113,7 @@ class moduleMenu extends wg
         );
     }
 
-    private function buildCloseBtn()
+    private function buildCloseBtn(): ?wg
     {
         $activeKey = $this->prop('activeKey');
         if(empty($activeKey)) return null;
