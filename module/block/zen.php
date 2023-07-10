@@ -1361,31 +1361,13 @@ class blockZen extends block
     /**
      * Print sprint block.
      *
+     * @param  object $block
      * @access protected
      * @return void
      */
-    protected function printSprintBlock(): void
+    protected function printSprintBlock(object $block): void
     {
-        $sprints = $this->dao->select('status, count(*) as sprints')->from(TABLE_EXECUTION)
-            ->where('deleted')->eq(0)
-            ->beginIF($this->config->vision == 'lite')->andWhere('type')->eq('kanban')->fi()
-            ->beginIF($this->config->vision == 'rnd')->andWhere('type')->in('sprint,kanban')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('project')->eq($this->session->project)
-            ->groupBy('status')
-            ->fetchPairs();
-
-        $summary = new stdclass();
-        $summary->total  = array_sum($sprints);
-        $summary->doing  = zget($sprints, 'doing', 0);
-        $summary->closed = zget($sprints, 'closed', 0);
-
-        $progress = new stdclass();
-        $progress->doing  = $summary->total == 0 ? 0 : round($summary->doing  / $summary->total, 3);
-        $progress->closed = $summary->total == 0 ? 0 : round($summary->closed / $summary->total, 3);
-
-        $this->view->summary  = $summary;
-        $this->view->progress = $progress;
+        $this->printExecutionOverviewBlock($block, 'sprint', (int)$this->session->project, true);
     }
 
     /**
@@ -1600,16 +1582,20 @@ class blockZen extends block
      * Print execution overview block.
      *
      * @param  object    $block
+     * @param  string    $code          executionoverview|sprint
+     * @param  int       $project
+     * @param  bool      $showClosed    true|false
      * @access protected
      * @return void
      */
-    protected function printExecutionOverviewBlock(object $block): void
+    protected function printExecutionOverviewBlock(object $block, string $code = 'executionoverview', int $project = 0, bool $showClosed = false): void
     {
         $query = $this->dao->select('id, status, Year(closedDate) AS year')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('type')->in('sprint, stage, kanban')
             ->andWhere('multiple')->eq('1')
             ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($project)->andWhere('project')->eq($project)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi();
 
         $statusPairs = $query->fetchPairs('id', 'status');
@@ -1622,12 +1608,15 @@ class blockZen extends block
         $cards[0] = new stdclass();
         $cards[0]->value = array_sum($statusStats);
         $cards[0]->class = 'text-primary';
-        $cards[0]->label = $this->lang->block->executionoverview->totalExecution;
-        $cards[0]->url   = common::hasPriv('execution', 'all') ? helper::createLink('execution', 'all', 'status=all') : null;
+        $cards[0]->label = $this->lang->block->{$code}->totalExecution;
+
+        $url = common::hasPriv('execution', 'all') ? helper::createLink('execution', 'all', 'status=all') : null;
+        if($project) $url = common::hasPriv('project', 'execution') ? helper::createLink('project', 'execution', "status=all&projectID=$project") : null;
+        $cards[0]->url = $url;
 
         $cards[1] = new stdclass();
         $cards[1]->value = zget($yearStats, date('Y'), 0);
-        $cards[1]->label = $this->lang->block->executionoverview->thisYear;
+        $cards[1]->label = $this->lang->block->{$code}->thisYear;
 
         $cardGroup = new stdclass();
         $cardGroup->type  = 'cards';
@@ -1638,7 +1627,7 @@ class blockZen extends block
         $max = 0;
         foreach($this->lang->execution->statusList as $status => $label)
         {
-            if($status == 'closed') continue;
+            if(!$showClosed && $status == 'closed') continue;
 
             $$status = zget($statusStats, $status, 0);
             if($max < $$status) $max = $$status;
@@ -1647,7 +1636,7 @@ class blockZen extends block
         $bars = array();
         foreach($this->lang->execution->statusList as $status => $label)
         {
-            if($status == 'closed') continue;
+            if(!$showClosed && $status == 'closed') continue;
 
             $bar = new stdclass();
             $bar->label = $label;
@@ -1659,7 +1648,7 @@ class blockZen extends block
 
         $barGroup = new stdclass();
         $barGroup->type  = 'barChart';
-        $barGroup->title = $this->lang->block->executionoverview->statusCount;
+        $barGroup->title = $this->lang->block->{$code}->statusCount;
         $barGroup->bars  = $bars;
 
         $this->view->groups = array($cardGroup, $barGroup);
