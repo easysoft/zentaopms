@@ -49,7 +49,6 @@ class projectStory extends control
         $this->session->set('exportProductList', $this->products);
 
         if(empty($this->products)) $this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID));
-        if(empty($productID)) $productID = key($this->products);
 
         echo $this->fetch('product', 'browse', array
         (

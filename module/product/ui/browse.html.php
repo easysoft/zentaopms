@@ -19,7 +19,6 @@ $storyBrowseType   = $this->session->storyBrowseType;
 $branchType        = $showBranch ? $product->type : '';
 $storyProductIds   = array();
 
-$storyProductIds = array();
 foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
 $storyProductID = count($storyProductIds) > 1 ? 0 : $productID;
 
@@ -28,14 +27,21 @@ dropmenu();
 /* Generate sidebar to display module tree menu. */
 $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branchID)
 {
+    global $app;
+    $params = $app->rawParams;
+    if(isset($params['browseType'])) $params['browseType'] = 'byModule';
+    if(isset($params['param']))      $params['param']      = '';
+    if(isset($params['recTotal']))   $params['recTotal']   = 0;
+    if(isset($params['pageID']))     $params['pageID']     = 1;
+
     sidebar
     (
         moduleMenu(set(array
         (
             'modules'     => $moduleTree,
             'activeKey'   => $moduleID,
-            'settingLink' => $this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID"),
-            'closeLink'   => createLink('execution', 'task'),
+            'settingLink' => helper::createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID"),
+            'closeLink'   => helper::createLink($app->rawModule, $app->rawMethod, http_build_query($params)),
         )))
     );
 };
@@ -231,7 +237,7 @@ if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu', 
 
 featureBar
 (
-    set::current($browseType),
+    set::current($storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID")),
     li(searchToggle(set::open($browseType == 'bysearch'), set::module('story'))),
     div(

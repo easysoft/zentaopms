@@ -838,7 +838,7 @@ class productZen extends product
         if($browseType == 'bymodule') return $param;
 
         $cookieModule = $this->app->tab == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
-        if($browseType != 'bysearch' && $browseType != 'bybranch' && $cookieModule) return $cookieModule;
+        if($browseType != 'bysearch' && $browseType != 'bybranch' && $cookieModule) return (int)$cookieModule;
 
         return 0;
     }
@@ -871,7 +871,7 @@ class productZen extends product
 
         /* If invoked by projectstory module and not choose product, then get the modules of project story. */
         if(!isset($this->tree)) $this->loadModel('tree');
-        if(empty($productID) && $this->app->rawModule == 'projectstory')
+        if(!empty($projectID) && $this->app->rawModule == 'projectstory')
         {
             return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
         }
@@ -1039,14 +1039,14 @@ class productZen extends product
      * 保存需求页面session变量。
      * Save session variables for browse page.
      *
-     * @param  object  $product
-     * @param  string  $storyType
-     * @param  string  $browseType
-     * @param  bool    $isProjectStory
+     * @param  object|null $product
+     * @param  string      $storyType
+     * @param  string      $browseType
+     * @param  bool        $isProjectStory
      * @access protected
      * @return void
      */
-    protected function saveSession4Browse(object $product, string $storyType, string $browseType, bool $isProjectStory): void
+    protected function saveSession4Browse(object|null $product, string $storyType, string $browseType, bool $isProjectStory): void
     {
         $uri = $this->app->getURI(true);
 

@@ -14,7 +14,7 @@ namespace zin;
 /* Show feature bar. */
 featureBar
 (
-    set::current($type),
+    set::current($this->session->storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type={key}")),
     li(searchToggle(set::module('executionStory')))
 );
@@ -145,7 +145,7 @@ sidebar
     moduleMenu(set(array(
         'modules'     => $moduleTree,
         'activeKey'   => $param,
-        'closeLink'   => $this->createLink('execution', 'story')
+        'closeLink'   => $this->createLink('execution', 'story', "executionID={$executionID}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0")
     )))
 );
 
