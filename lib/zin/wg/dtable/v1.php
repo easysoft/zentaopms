@@ -113,7 +113,7 @@ class dtable extends wg
         return $setting;
     }
 
-    protected function build(): zui
+    protected function build(): wg
     {
         if(empty($this->prop('data')))
         {
@@ -128,15 +128,17 @@ class dtable extends wg
                     span
                     (
                         setClass('text-gray'),
-                        !empty($this->prop('emptyTip')) ? $this->prop('emptyTip'): $lang->noData,
+                        !empty($this->prop('emptyTip')) ? $this->prop('emptyTip') : $lang->noData,
                     ),
-                    !empty($createLink) ? a
-                    (
-                        setClass('btn primary-pale bd-primary ml-0.5'),
-                        set::href($createLink),
-                        icon('plus'),
-                        !empty($this->prop('createTip')) ? $this->prop('createTip') : $lang->create,
-                    ) : '',
+                    !empty($createLink)
+                        ? a
+                        (
+                            setClass('btn primary-pale bd-primary ml-0.5'),
+                            set::href($createLink),
+                            icon('plus'),
+                            !empty($this->prop('createTip')) ? $this->prop('createTip') : $lang->create,
+                        )
+                        : '',
                 )
             );
         }
