@@ -47,3 +47,5 @@ UPDATE `zt_im_userdevice`         SET `lastLogin`      = NULL WHERE `lastLogin` 
 UPDATE `zt_im_userdevice`         SET `lastLogout`     = NULL WHERE `lastLogout`     = '0000-00-00 00:00:00';
 
 CREATE INDEX `project` ON `zt_project` (`project`);
+
+UPDATE `zt_privlang` SET `value`='删除风险' WHERE `objectID`=197 AND `objectType`='manager';
