@@ -17,6 +17,7 @@
     $stepSequence = array('assignrole', 'selectdatasource', 'setpurpose', 'settargetform', 'finalize');
 
     $currentStepIndex = array_search($step, $stepSequence);
+    $lastActiveStepIndex = array_search($lastActiveStep, $stepSequence);
 
     $stepstatus = array();
 
@@ -26,17 +27,18 @@
       {
         $stepstatus[$stepName] = 'active';
       }
-      elseif($index == $currentStepIndex)
-      {
-        $stepstatus[$stepName] = 'current';
-      }
-      elseif($index == $currentStepIndex + 1)
+      elseif($index > $currentStepIndex && $index <= $lastActiveStepIndex + 1)
       {
         $stepstatus[$stepName] = 'clickable';
       }
       else
       {
         $stepstatus[$stepName] = 'disabled';
+      }
+
+      if($index == $currentStepIndex)
+      {
+        $stepstatus[$stepName] = 'current';
       }
     }
 

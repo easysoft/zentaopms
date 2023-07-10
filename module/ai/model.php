@@ -745,4 +745,26 @@ class aiModel extends model
 
         return false;
     }
+
+    /**
+     * Get the last active step of prompt by id.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return string
+     */
+    public function getLastActiveStep($prompt)
+    {
+        if(empty($prompt)) return 'assignrole';
+
+        if($prompt->status == 'active') return 'finalize';
+
+        if(!empty($prompt->targetForm)) return 'settargetform';
+
+        if(!empty($prompt->purpose)) return 'setpurpose';
+
+        if(!empty($prompt->source)) return 'selectdatasource';
+
+        return 'assignrole';
+    }
 }

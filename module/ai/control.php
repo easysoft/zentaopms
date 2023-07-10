@@ -170,10 +170,11 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptAssignRole', "promptID=$promptID") . '#app=admin'));
         }
 
-        $this->view->prompt     = $prompt;
-        $this->view->promptID   = $promptID;
-        $this->view->title      = $this->lang->ai->prompts->assignRole . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[] = $this->lang->ai->prompts->common;
+        $this->view->prompt         = $prompt;
+        $this->view->promptID       = $promptID;
+        $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
+        $this->view->title          = $this->lang->ai->prompts->assignRole . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->position[]     = $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -214,6 +215,7 @@ class ai extends control
         $this->view->dataSource       = $this->config->ai->dataSource;
         $this->view->prompt           = $prompt;
         $this->view->promptID         = $promptID;
+        $this->view->lastActiveStep   = $this->ai->getLastActiveStep($prompt);
         $this->view->title            = $this->lang->ai->prompts->selectDataSource . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
         $this->view->position[]       = $this->lang->ai->prompts->common;
         $this->display();
@@ -251,11 +253,12 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
         }
 
-        $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
-        $this->view->prompt      = $prompt;
-        $this->view->promptID    = $promptID;
-        $this->view->title       = $this->lang->ai->prompts->setPurpose . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[]  = $this->lang->ai->prompts->common;
+        $this->view->dataPreview    = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
+        $this->view->prompt         = $prompt;
+        $this->view->promptID       = $promptID;
+        $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
+        $this->view->title          = $this->lang->ai->prompts->setPurpose . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->position[]     = $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -297,11 +300,12 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
         }
 
-        $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
-        $this->view->prompt      = $prompt;
-        $this->view->promptID    = $promptID;
-        $this->view->title       = $this->lang->ai->prompts->setTargetForm . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[]  = $this->lang->ai->prompts->common;
+        $this->view->dataPreview    = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
+        $this->view->prompt         = $prompt;
+        $this->view->promptID       = $promptID;
+        $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
+        $this->view->title          = $this->lang->ai->prompts->setTargetForm . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->position[]     = $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -337,10 +341,11 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
         }
 
-        $this->view->prompt     = $prompt;
-        $this->view->promptID   = $promptID;
-        $this->view->title      = $this->lang->ai->prompts->finalize . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[] = $this->lang->ai->prompts->common;
+        $this->view->prompt         = $prompt;
+        $this->view->promptID       = $promptID;
+        $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
+        $this->view->title          = $this->lang->ai->prompts->finalize . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->position[]     = $this->lang->ai->prompts->common;
         $this->display();
     }
 }
