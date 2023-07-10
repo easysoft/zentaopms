@@ -33,7 +33,7 @@ class modalHeader extends wg
         $this->setDefaultProps(array('title' => $title, 'entityText' => $entityText, 'entityID' => $entityID));
     }
 
-    protected function build(): wg
+    protected function build(): wg|array
     {
         list($title, $entityText, $entityID) = $this->prop(array('title', 'entityText', 'entityID'));
 
