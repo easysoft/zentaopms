@@ -4,6 +4,11 @@ global $lang, $app;
 $config->product = new stdclass();
 $config->product->showAllProjects = 0;
 
+$config->product->create = new stdclass();
+$config->product->edit   = new stdclass();
+$config->product->create->requiredFields = 'name,code';
+$config->product->edit->requiredFields   = 'name,code';
+
 $config->product->browse = new stdclass();
 $config->product->custom = new stdclass();
 $config->product->custom->batchEditFields = 'PO,QD,RD,status,type,acl';
