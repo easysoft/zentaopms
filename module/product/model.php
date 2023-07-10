@@ -122,7 +122,7 @@ class productModel extends model
      */
     public function getByID(int $productID): object|false
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProduct();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProduct();
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(!$product) return false;
 
@@ -180,7 +180,7 @@ class productModel extends model
      */
     public function getPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductPairs();
         return $this->productTao->fetchPairs($mode, $programID, $append, $shadow);
     }
 
@@ -237,7 +237,7 @@ class productModel extends model
     public function getProducts(int $projectID = 0, string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true): array
     {
         /* 如果是新手教程模式，直接返回测试数据。*/
-        if(defined('TUTORIAL'))
+        if(commonModel::isTutorialMode())
         {
             $this->loadModel('tutorial');
             if(!$withBranch) return $this->tutorial->getProductPairs();
@@ -754,7 +754,7 @@ class productModel extends model
      */
     public function getStories(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $type = 'story', string $sort = 'id_desc', object|null$pager = null): array
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
 
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : '0';
@@ -1540,7 +1540,7 @@ class productModel extends model
      */
     public function saveState(int $productID, array $products): int
     {
-        if(defined('TUTORIAL')) return $productID;
+        if(commonModel::isTutorialMode()) return $productID;
 
         $productID = $this->getAccessableProductID($productID, $products);
 
@@ -1603,7 +1603,7 @@ class productModel extends model
      */
     public function accessDenied(string $tips)
     {
-        if(defined('TUTORIAL')) return true;
+        if(commonModel::isTutorialMode()) return true;
 
         echo js::alert($tips);
 
@@ -1627,7 +1627,7 @@ class productModel extends model
      */
     public function setMenu(int $productID = 0, string|int $branch = '', string $extra = ''): void
     {
-        if(!defined('TUTORIAL') and $productID != 0 and !$this->checkPriv($productID))
+        if(!commonModel::isTutorialMode() and $productID != 0 and !$this->checkPriv($productID))
         {
             $this->accessDenied($this->lang->product->accessDenied);
             return;

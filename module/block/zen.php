@@ -1272,7 +1272,7 @@ class blockZen extends block
         $this->app->loadClass('pager', true);
         $pager = pager::init(0, $count, 1);
         $this->loadModel('execution');
-        $this->view->executionStats = !defined('TUTORIAL') ? $this->execution->getStatData($this->session->project, $type, 0, 0, false, '', 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
+        $this->view->executionStats = !commonModel::isTutorialMode() ? $this->execution->getStatData($this->session->project, $type, 0, 0, false, '', 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
     }
 
     /**

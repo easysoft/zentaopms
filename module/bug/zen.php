@@ -1149,12 +1149,12 @@ class bugZen extends bug
         $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
-        $this->view->projects              = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs()   : $bug->projects;
+        $this->view->projects              = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProjectPairs() : $bug->projects;
         $this->view->products              = $bug->products;
         $this->view->branches              = $bug->branches;
         $this->view->builds                = $bug->builds;
         $this->view->bug                   = $bug;
-        $this->view->executions            = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
+        $this->view->executions            = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->product               = $currentProduct;

@@ -21,6 +21,24 @@ include __DIR__ . '/base/router.class.php';
 class router extends baseRouter
 {
     /**
+     * 系统是否正在安装中。
+     * Whether is installing.
+     *
+     * @var array
+     * @access public
+     */
+    public $installing = false;
+
+    /**
+     * 系统是否正在升级中。
+     * Whether is upgrading.
+     *
+     * @var array
+     * @access public
+     */
+    public $upgrading = false;
+
+    /**
      * 请求的原始参数。
      * The requested params parsed from a URL.
      *
@@ -296,7 +314,7 @@ class router extends baseRouter
                 list($productCommon, $projectCommon) = explode('_', $productProject);
                 $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][0];
             }
-            if(!defined('IN_UPGRADE'))
+            if(!$this->upgrading)
             {
                 /* Get story concept in project and product. */
                 $clientLang = $this->clientLang == 'zh-tw' ? 'zh-cn' : $this->clientLang;
@@ -476,7 +494,7 @@ class router extends baseRouter
         if(empty($this->rawMethod)) $this->rawMethod = $this->methodName;
 
         /* If is not a biz version or is in install mode or in in upgrade mode, call parent method. */
-        if($this->config->edition == 'open' or defined('IN_INSTALL') or defined('IN_UPGRADE')) return parent::setControlFile($exitIfNone);
+        if($this->config->edition == 'open' or $this->installing or $this->upgrading) return parent::setControlFile($exitIfNone);
 
         /* Check if the requested module is defined in workflow. */
         $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();

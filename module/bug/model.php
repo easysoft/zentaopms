@@ -1124,7 +1124,7 @@ class bugModel extends model
      */
     public function getProductMemberPairs(int $productID, string $branchID = ''): array
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branchID);
 

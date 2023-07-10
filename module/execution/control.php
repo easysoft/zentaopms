@@ -40,7 +40,7 @@ class execution extends control
 
         $this->loadModel('project');
 
-        if(defined('IN_UPGRADE') and IN_UPGRADE) return false;
+        if($this->app->upgrading) return false;
         if(!isset($this->app->user)) return;
 
         $mode = $this->app->tab == 'execution' ? 'multiple' : '';
@@ -802,7 +802,7 @@ class execution extends control
             foreach($products as $product) $productModules += $this->tree->getOptionMenu($product->id, 'story', 0, $product->branches);
         }
 
-        if(defined('TUTORIAL'))
+        if(commonModel::isTutorialMode())
         {
             $modules = $this->loadModel('tutorial')->getModulePairs();
         }
@@ -3296,7 +3296,7 @@ class execution extends control
         $branches     = $this->project->getBranchesByProject($objectID);
         $productType  = 'normal';
 
-        if(defined('TUTORIAL'))
+        if(commonModel::isTutorialMode())
         {
             $modules = $this->loadModel('tutorial')->getModulePairs();
         }

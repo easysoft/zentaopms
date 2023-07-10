@@ -66,7 +66,7 @@ class messageModel extends model
      */
     public function send($objectType, $objectID, $actionType, $actionID, $actor = '', $extra = '')
     {
-        if(defined('TUTORIAL')) return;
+        if(commonModel::isTutorialMode()) return;
 
         $objectType     = strtolower($objectType);
         $messageSetting = $this->config->message->setting;

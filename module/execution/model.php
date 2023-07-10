@@ -38,7 +38,7 @@ class executionModel extends model
      */
     public function accessDenied()
     {
-        if(defined('TUTORIAL')) return true;
+        if(commonModel::isTutorialMode()) return true;
 
         echo(js::alert($this->lang->execution->accessDenied));
 
@@ -132,7 +132,7 @@ class executionModel extends model
 
         if($execution->type == 'stage' or (!empty($project) and $project->model == 'waterfallplus')) unset($this->lang->execution->menu->settings['subMenu']->products);
 
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) return print(js::error($this->lang->execution->accessDenied) . js::locate('back'));
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !commonModel::isTutorialMode() and $executionID != 0) return print(js::error($this->lang->execution->accessDenied) . js::locate('back'));
 
         $executions = $this->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
@@ -300,7 +300,7 @@ class executionModel extends model
      */
     public function checkAccess(int $executionID, array $executions): int
     {
-        if(defined('TUTORIAL')) return $executionID;
+        if(commonModel::isTutorialMode()) return $executionID;
 
         /* When the cookie and session do not exist, get it from the config. */
         if(!$executionID)
@@ -1580,7 +1580,7 @@ class executionModel extends model
      */
     public function getPairs($projectID = 0, $type = 'all', $mode = '')
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionPairs();
 
         $mode   .= $this->cookie->executionMode;
         $orderBy = $this->config->execution->orderBy;
@@ -1836,7 +1836,7 @@ class executionModel extends model
      */
     public function getStatData($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null)
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStats($browseType);
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStats($browseType);
 
         $productID = (int)$productID;
 
@@ -1976,7 +1976,7 @@ class executionModel extends model
      */
     public function getByProject($projectID, $status = 'all', $limit = 0, $pairs = false, $devel = false, $appendedID = 0)
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionPairs();
 
         $project    = $this->loadModel('project')->getByID($projectID);
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
@@ -2478,7 +2478,7 @@ class executionModel extends model
      */
     public function getByID($executionID, $setImgSize = false)
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecution();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecution();
 
         $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
         if(!$execution) return false;
@@ -3468,7 +3468,7 @@ class executionModel extends model
      */
     public function getTeamMembers($executionID)
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembers();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembers();
 
         return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')

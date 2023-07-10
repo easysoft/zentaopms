@@ -103,7 +103,7 @@ class customModel extends model
         $item->value   = $value;
         $item->system  = $system;
 
-        if(!defined('IN_UPGRADE')) $item->vision = $this->config->vision;
+        if(!$this->app->upgrading) $item->vision = $this->config->vision;
 
         $this->dao->replace(TABLE_LANG)->data($item)->exec();
     }

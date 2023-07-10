@@ -236,8 +236,6 @@ $lang->createIcons['kanban']      = 'kanban';
 
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'project', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage', 'entry', 'jenkins', 'gitlab', 'gitea');
 
-if(isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode'] and !defined('TUTORIAL')) define('TUTORIAL', true);
-
 if(!defined('LONG_TIME'))         define('LONG_TIME', '2059-12-31');
 if(!defined('FUTURE_TIME'))       define('FUTURE_TIME', '2030-01-01');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');

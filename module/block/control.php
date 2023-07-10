@@ -255,7 +255,7 @@ class block extends control
         $isInitiated = $this->block->getBlockInitStatus($dashboard);
 
         /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式。 */
-        if(empty($blocks) && !$isInitiated && !defined('TUTORIAL'))
+        if(empty($blocks) && !$isInitiated && !commonModel::isTutorialMode())
         {
             $this->block->initBlock($dashboard); // 初始化该 app 下区块数据。
             $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表。

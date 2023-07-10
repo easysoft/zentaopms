@@ -2398,7 +2398,7 @@ class testtaskModel extends model
     public function setMenu($products, $productID, $branch = '', $taskID = 0)
     {
         if($this->session->branch) $branch = $this->session->branch;
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !commonModel::isTutorialMode())
         {
             $this->app->loadLang('product');
             return print(js::error($this->lang->product->accessDenied) . js::locate('back'));

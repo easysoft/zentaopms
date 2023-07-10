@@ -1306,7 +1306,7 @@ class productTao extends productModel
      */
     protected function statisticProgram(array $productStats): array
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductStats();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductStats();
 
         $programStructure = array();
 

@@ -88,7 +88,7 @@ class projectModel extends model
      */
     public function saveState($projectID = 0, $projects = array())
     {
-        if(defined('TUTORIAL')) return $projectID;
+        if(commonModel::isTutorialMode()) return $projectID;
 
         if($projectID == 0 and $this->cookie->lastProject) $projectID = $this->cookie->lastProject;
         if($projectID == 0 and (int)$this->session->project == 0) $projectID = (int)key($projects);
@@ -207,7 +207,7 @@ class projectModel extends model
     public function getByID(int $projectID): object|false
     {
         /* Using demo data during tutorials. */
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProject();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProject();
 
         /* Get project info. */
         $project = $this->projectTao->fetchProjectInfo($projectID);
@@ -623,7 +623,7 @@ class projectModel extends model
      */
     public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '', $model = '', $param = '')
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
@@ -915,7 +915,7 @@ class projectModel extends model
      */
     public function getPairsByModel($model = 'all', $programID = 0, $param = '', $append = '', $orderBy = 'order_asc')
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectPairs();
 
         if($model == 'agileplus')     $model = array('scrum', 'agileplus');
         if($model == 'waterfallplus') $model = array('waterfall', 'waterfallplus');
@@ -2173,7 +2173,7 @@ class projectModel extends model
      */
     public function getTeamMembers($projectID)
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembers();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembers();
 
         $project = $this->projectTao->fetchProjectInfo($projectID);
         if(empty($project)) return array();

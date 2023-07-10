@@ -202,7 +202,7 @@ class storyModel extends model
      */
     public function getExecutionStories(int $executionID = 0, int $productID = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null)
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStories();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStories();
 
         if(empty($executionID)) return array();
 
@@ -324,7 +324,8 @@ class storyModel extends model
      */
     public function getExecutionStoryPairs($executionID = 0, $productID = 0, $branch = 'all', $moduleIdList = 0, $type = 'full', $status = 'all')
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStoryPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStoryPairs();
+
         $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -428,7 +429,7 @@ class storyModel extends model
      */
     public function create(object $story, int $executionID = 0, int $bugID = 0, string $extra = ''): int|false
     {
-        if(defined('TUTORIAL')) return false;
+        if(commonModel::isTutorialMode()) return false;
 
         $storyID = $this->storyTao->doCreateStory($story);
         if(!$storyID) return false;
@@ -2412,7 +2413,7 @@ class storyModel extends model
      */
     public function getProductStories(string|int $productID = 0, array|string|int $branch = 0, array|string $moduleIdList = '', array|string $status = 'all', string $type = 'story', string $orderBy = 'id_desc', bool $hasParent = true, array|string $excludeStories = '', object|null $pager = null): array
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
 
         $productQuery = $this->storyTao->buildProductsCondition($productID, $branch);
         $stories      = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)

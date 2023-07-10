@@ -33,7 +33,7 @@ list($productModule, $productMethod)     = explode('-', $config->productLink);
 list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
 list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 
-if(defined('TUTORIAL'))
+if(isset($_SESSION['tutorialMode']) && $_SESSION['tutorialMode'])
 {
     $programModule   = 'program';
     $programMethod   = 'browse';

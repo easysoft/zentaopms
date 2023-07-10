@@ -77,7 +77,7 @@ class userModel extends model
      */
     public function getPairs($params = '', $usersToAppended = '', $maxCount = 0, $accounts = '')
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getUserPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getUserPairs();
         /* Set the query fields and orderBy condition.
          *
          * If there's xxfirst in the params, use INSTR function to get the position of role fields in a order string,
@@ -1119,7 +1119,7 @@ class userModel extends model
         $canManagePrograms   = '';
         $canManageProducts   = '';
         $canManageExecutions = '';
-        if(!defined('IN_UPGRADE'))
+        if(!$this->app->upgrading)
         {
             $canManageObjects = $this->dao->select('programs,projects,products,executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchAll();
             foreach($canManageObjects as $object)
@@ -2746,7 +2746,7 @@ class userModel extends model
      */
     public function getTeamMemberPairs($objectIds, $type = 'project', $params = '', $usersToAppended = '')
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
         $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')

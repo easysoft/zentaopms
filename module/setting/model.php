@@ -237,7 +237,7 @@ class settingModel extends model
         $owner   = 'system,' . ($account ? $account : '');
         $records = $this->dao->select('*')->from(TABLE_CONFIG)
             ->where('owner')->in($owner)
-            ->beginIF(!defined('IN_UPGRADE'))->andWhere('vision')->in(array('', $this->config->vision))->fi()
+            ->beginIF(!$this->app->upgrading)->andWhere('vision')->in(array('', $this->config->vision))->fi()
             ->orderBy('id')
             ->fetchAll('id');
         if(!$records) return array();

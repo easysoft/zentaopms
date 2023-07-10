@@ -48,7 +48,7 @@ class actionModel extends model
         $action->action     = $actionType;
         $action->date       = helper::now();
         $action->extra      = $extra;
-        if(!defined('IN_UPGRADE')) $action->vision = $this->config->vision;
+        if(!$this->app->upgrading) $action->vision = $this->config->vision;
 
         if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,synctwins,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 

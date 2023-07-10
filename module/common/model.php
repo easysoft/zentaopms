@@ -257,23 +257,23 @@ class commonModel extends model
     {
         if($this->session->user)
         {
-            if(!defined('IN_UPGRADE')) $this->session->user->view = $this->loadModel('user')->grantUserView();
+            if(!$this->app->upgrading) $this->session->user->view = $this->loadModel('user')->grantUserView();
             $this->app->user = $this->session->user;
         }
         elseif($this->app->company->guest || (PHP_SAPI == 'cli' && (!isset($_SERVER['RR_MODE']) || $_SERVER['RR_MODE'] == 'jobs')))
         {
-            $user             = new stdClass();
-            $user->id         = 0;
-            $user->account    = 'guest';
-            $user->realname   = 'guest';
-            $user->dept       = 0;
-            $user->avatar     = '';
-            $user->role       = 'guest';
-            $user->admin      = false;
-            $user->rights     = $this->loadModel('user')->authorize('guest');
-            $user->groups     = array('group');
-            $user->visions    = $this->config->vision;
-            if(!defined('IN_UPGRADE')) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
+            $user           = new stdClass();
+            $user->id       = 0;
+            $user->account  = 'guest';
+            $user->realname = 'guest';
+            $user->dept     = 0;
+            $user->avatar   = '';
+            $user->role     = 'guest';
+            $user->admin    = false;
+            $user->rights   = $this->loadModel('user')->authorize('guest');
+            $user->groups   = array('group');
+            $user->visions  = $this->config->vision;
+            if(!$this->app->upgrading) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
         }
@@ -354,7 +354,7 @@ class commonModel extends model
     {
         $this->loadModel('custom');
 
-        if(defined('IN_UPGRADE')) return;
+        if($this->app->upgrading) return;
         if(!$this->config->db->name) return;
 
         $records = $this->custom->getAllLang();
@@ -657,7 +657,7 @@ class commonModel extends model
                     {
                         $params = "model=kanban";
                     }
-                    elseif(!defined('TUTORIAL'))
+                    elseif(!commonModel::isTutorialMode())
                     {
                         $params       = "programID=0&from=global";
                         $createMethod = 'createGuide';
@@ -1145,8 +1145,8 @@ class commonModel extends model
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;
 
-        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
-        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
+        if($isTutorialMode && isset($_SESSION['wizardModule'])) $currentModule = $_SESSION['wizardModule'];
+        if($isTutorialMode && isset($_SESSION['wizardMethod'])) $currentMethod = $_SESSION['wizardMethod'];
 
         /* Print all main menus. */
         $menu = customModel::getMainMenu();
@@ -1345,8 +1345,8 @@ class commonModel extends model
             $currentMethod = $app->rawMethod;
         }
 
-        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule = WIZARD_MODULE;
-        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod = WIZARD_METHOD;
+        if($isTutorialMode and isset($_SESSION['wizardModule'])) $currentModule = $_SESSION['wizardModule'];
+        if($isTutorialMode and isset($_SESSION['wizardMethod'])) $currentMethod = $_SESSION['wizardMethod'];
 
         /* The beginning of the menu. */
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
@@ -1800,9 +1800,9 @@ EOF;
      */
     public static function buildMoreButton(int $executionID, bool $printHtml = true): bool
     {
-        if(defined('TUTORIAL')) return false;
-
         global $lang, $app;
+
+        if(commonModel::isTutorialMode()) return false;
 
         $object = $app->dbh->query('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         if(empty($object)) return false;
@@ -1855,8 +1855,9 @@ EOF;
      */
     public static function buildAppButton(bool $printHtml = true): bool
     {
-        if(defined('TUTORIAL')) return false;
         global $app, $config, $lang;
+
+        if(commonModel::isTutorialMode()) return false;
 
         $condition     = '';
         if(!$app->user->admin)
@@ -2595,7 +2596,7 @@ EOF;
         if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
 
         /* If the user is doing a tutorial, have all tutorial privs. */
-        if(defined('TUTORIAL'))
+        if(commonModel::isTutorialMode())
         {
             $app->loadLang('tutorial');
             foreach($lang->tutorial->tasks as $task)

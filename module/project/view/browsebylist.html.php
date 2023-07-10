@@ -49,7 +49,7 @@
       <?php echo html::a('#',"<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->project->bycard}' id='switchButton' data-type='bycard'");?>
     </div>
     <?php common::printLink('project', 'export', "status=$browseType&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
-    <?php if(!defined('TUTORIAL')):?>
+    <?php if(!commonModel::isTutorialMode()):?>
     <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary create-project-btn" data-toggle="modal"');?>
     <?php else:?>
     <?php common::printLink('project', 'create', "mode=scrum&programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary create-project-btn"');?>
@@ -81,7 +81,7 @@ $closedCount    = 0;
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
         <?php if(empty($allProjectsNum)):?>
-          <?php if(!defined('TUTORIAL')):?>
+          <?php if(!commonModel::isTutorialMode()):?>
             <?php if(common::hasPriv('project', 'create') and $browseType != 'bysearch') common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
           <?php else:?>
             <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
