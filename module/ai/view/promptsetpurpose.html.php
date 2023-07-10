@@ -87,7 +87,7 @@ customElements.define('prompt-previewer', PromptPreviewer, {extends: 'div'});
 
 <?php include 'promptdesignprogressbar.html.php';?>
 <div id='mainContent' class='main-content' style='height: calc(100vh - 120px);'>
-  <form class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
+  <form id="mainForm" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
     <div class='center-wrapper'>
       <div class='center-content'>
         <div id='purpose-setter'>
@@ -128,8 +128,7 @@ customElements.define('prompt-previewer', PromptPreviewer, {extends: 'div'});
           </div>
         </div>
         <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
-          <?php echo html::hidden('jumpToNext', "1");?>
-          <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->nextStep, 'disabled');?></div>
+          <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->nextStep, 'disabled name="jumpToNext" value="1"');?></div>
         </div>
       </div>
     </div>

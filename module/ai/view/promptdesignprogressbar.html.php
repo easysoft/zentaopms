@@ -55,7 +55,7 @@
     }
     ?>
   </div>
-  <?php echo html::commonButton("<i class='icon icon-save icon-sm'></i> $lang->save", 'id="saveStepButton"', 'btn btn-primary');?>
+  <?php echo html::submitButton("<i class='icon icon-save icon-sm'></i> $lang->save", 'form="mainForm"', 'btn btn-primary');?>
   <script>
     (function()
     {
@@ -91,22 +91,6 @@
             }
           });
         }
-      }
-
-      const saveButton = document.getElementById('saveStepButton');
-      if(saveButton)
-      {
-        saveButton.addEventListener('click', function()
-        {
-          const mainForm = document.querySelector('.main-form');
-          if(!mainForm) return;
-
-          const jumpToNext = document.getElementById('jumpToNext');
-          if(!jumpToNext) return;
-
-          jumpToNext.value = "0";
-          mainForm.submit.click();
-        });
       }
     })();
   </script>
