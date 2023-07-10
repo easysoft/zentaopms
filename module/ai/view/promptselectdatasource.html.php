@@ -460,7 +460,6 @@ $(function()
   /* Toggle disabled submit button. */
   window.dataSourceStore.subscribe(function(value)
   {
-    _isPromptDesignStepComplete = !!value.length;
     $('#submit').attr('disabled', !value.length);
   });
 
