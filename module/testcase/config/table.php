@@ -189,7 +189,8 @@ $config->testcase->importfromlib->dtable->fieldList['id']['fixed'] = false;
 
 $config->testcase->importfromlib->dtable->fieldList['branch']['name']  = 'branch';
 $config->testcase->importfromlib->dtable->fieldList['branch']['title'] = $lang->testcase->branch;
-$config->testcase->importfromlib->dtable->fieldList['branch']['type']  = 'category';
+$config->testcase->importfromlib->dtable->fieldList['branch']['type']  = 'html';
+$config->testcase->importfromlib->dtable->fieldList['branch']['width'] = '200px';
 
 $config->testcase->importfromlib->dtable->fieldList['pri']['name']  = 'pri';
 $config->testcase->importfromlib->dtable->fieldList['pri']['title'] = $lang->testcase->pri;
@@ -209,6 +210,7 @@ $config->testcase->importfromlib->dtable->fieldList['fromModule']['type']  = 'ca
 $config->testcase->importfromlib->dtable->fieldList['module']['name']  = 'module';
 $config->testcase->importfromlib->dtable->fieldList['module']['title'] = $lang->testcase->module;
 $config->testcase->importfromlib->dtable->fieldList['module']['type']  = 'html';
+$config->testcase->importfromlib->dtable->fieldList['module']['width'] = '200px';
 
 $config->testcase->importfromlib->dtable->fieldList['type']['name']  = 'type';
 $config->testcase->importfromlib->dtable->fieldList['type']['title'] = $lang->testcase->type;

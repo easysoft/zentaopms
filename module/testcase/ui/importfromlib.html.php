@@ -13,6 +13,7 @@ namespace zin;
 jsVar('app', $app->tab);
 jsVar('productID', $productID);
 jsVar('branch', $branch);
+jsVar('canImportModules', $canImportModules);
 
 featureBar
 (
@@ -67,6 +68,8 @@ foreach($cases as $case)
     }
 
     $case->moduleItems = $canImportModules[$caseBranch][$case->id];
+    $case->branchItems = $caseBranches;
+    $case->branch      = $caseBranch;
 }
 
 $footToolbar = array('items' => array(array('text' => $lang->testcase->import, 'btnType' => 'secondary', 'className' => 'import-btn')));
@@ -76,6 +79,7 @@ formBase
     setID('importFromLibForm'),
     set::action(createLink('testcase', 'importFromLib', "product={$productID}&branch={$branch}&libID={$libID}")),
     set::actions(array()),
+    on::change('[name*=branch]', 'updateModules'),
 
     dtable
     (
@@ -90,10 +94,22 @@ formBase
 
 div
 (
+    setID('branchSelect'),
+    setClass('hidden'),
+    select
+    (
+        zui::width('176px'),
+        set::name('branch[]'),
+    )
+);
+
+div
+(
     setID('moduleSelect'),
     setClass('hidden'),
     select
     (
+        zui::width('176px'),
         set::name('module[]'),
     )
 );
