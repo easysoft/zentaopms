@@ -154,9 +154,9 @@ class formPanel extends panel
      * Build panel body.
      *
      * @access protected
-     * @return void
+     * @return wg
      */
-    protected function buildBody()
+    protected function buildBody(): wg
     {
         return div
         (
