@@ -39,8 +39,9 @@ class dropdown extends wg
         $menu         = $this->block('menu');
         $itemsList    = $this->block('items');
 
-        if(empty($id))     $id = $this->gid;
-        if(empty($target)) $target = "#$id";
+        if(empty($id))        $id        = $this->gid;
+        if(empty($target))    $target    = "#$id";
+        if(empty($menuProps)) $menuProps = array();
 
         if(empty($triggerBlock))        $triggerBlock = h::a($this->children());
         elseif(is_array($triggerBlock)) $triggerBlock = $triggerBlock[0];
