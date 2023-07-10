@@ -4,7 +4,7 @@ namespace zin;
 
 class severityLabel extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'text?: string',      // 标签文本
         'level?: string|int', // 严重程度等级
         'isIcon?: bool=false' // 是否显示为图标

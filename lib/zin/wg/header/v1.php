@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'heading' . DS . 'v1.php';
@@ -8,7 +9,7 @@ require_once dirname(__DIR__) . DS . 'useravatar' . DS . 'v1.php';
 
 class header extends wg
 {
-    static $defineBlocks = array
+    protected static array $defineBlocks = array
     (
         'heading'         => array('map' => 'heading'),
         'headingToolbar'  => array('map' => 'toolbar'),

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'formgroup' . DS . 'v1.php';
@@ -11,7 +12,7 @@ require_once dirname(__DIR__) . DS . 'formbase' . DS . 'v1.php';
  */
 class form extends formBase
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'items?: array',    // 使用一个列定义对象数组来定义表单项。
         'grid?: bool=true', // 是否启用网格部件，禅道中所有表单都是网格布局，除非有特殊目的，无需设置此项。
         'labelWidth?: int', // 标签宽度，单位为像素。

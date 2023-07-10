@@ -13,7 +13,7 @@ class tabs extends wg
      */
     private $tabPanes = array();
 
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         /* Tabs direction: h - horizontal, v - vertical */
         'direction?:string="h"',
         'collapse?: bool=false',

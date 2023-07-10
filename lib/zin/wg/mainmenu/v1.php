@@ -1,10 +1,10 @@
 <?php
-
+declare(strict_types=1);
 namespace zin;
 
 class mainMenu extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'statuses?:array',
         'btnGroup?:array',
         'others?:array'

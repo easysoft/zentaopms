@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'toolbar' . DS . 'v1.php';
@@ -6,14 +7,14 @@ require_once dirname(__DIR__) . DS . 'dropmenu' . DS . 'v1.php';
 
 class heading extends wg
 {
-    static $defineProps = array
+    protected static array $defineProps = array
     (
         'items?: array',            // 标题上显示的按钮。
         'showAppName?: bool=true',  // 是否自动显示当前应用名称。
         'dropmenu?: array'          // 1.5 级导航配置。
     );
 
-    static $defineBlocks = array
+    protected static array $defineBlocks = array
     (
         'toolbar'  => array('map' => 'toolbar'),
         'dropmenu' => array('map' => 'dropmenu')

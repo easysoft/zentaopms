@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class icon extends wg
 {
-    protected static $defineProps = array(
-        'name:string',
-        'size?:string|int'
+    protected static array $defineProps = array(
+        'name: string',
+        'size?: string|int'
     );
 
     public function onAddChild($child)

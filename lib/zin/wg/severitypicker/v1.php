@@ -24,7 +24,7 @@ class severityPicker extends wg
      * @var    array
      * @access protected
      */
-    static $defineProps = array
+    protected static array $defineProps = array
     (
         'id?: string',                      // 组件根元素的 ID。
         'className?: string|array',         // 类名。

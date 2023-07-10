@@ -25,7 +25,7 @@ class select extends wg
      * @var    array
      * @access protected
      */
-    static $defineProps = array
+    protected static array $defineProps = array
     (
         'name: string',
         'id?: string',

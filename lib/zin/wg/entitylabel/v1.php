@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . DS . 'label' . DS . 'v1.php';
 
 class entityLabel extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'entityID?: string|int', // 实体编号
         'level?: string|int',    // 标题层级
         'text: string',          // 实体文本
@@ -18,7 +18,7 @@ class entityLabel extends wg
         'labelProps?: array'     // 标签属性
     );
 
-    protected static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'prefix' => array(),
         'suffix' => array()
     );

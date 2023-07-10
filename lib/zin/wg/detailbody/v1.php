@@ -4,11 +4,11 @@ namespace zin;
 
 class detailBody extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'isForm?: bool=false'
     );
 
-    protected static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'main' => array('map' => 'sectionList'),
         'side' => array('map' => 'detailSide'),
         'bottom' => array('map' => 'history,fileList'),

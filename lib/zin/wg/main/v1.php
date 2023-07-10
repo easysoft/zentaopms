@@ -29,7 +29,7 @@ class main extends wg
      * @var array
      * @access protected
      */
-    static $defineBlocks = array
+    protected static array $defineBlocks = array
     (
         'navbar'  => array('map' => 'mainNavbar'),
         'menu'    => array('map' => 'featureBar,nav,toolbar'),

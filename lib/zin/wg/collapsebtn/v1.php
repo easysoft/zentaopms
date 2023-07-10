@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 class collapseBtn extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'target: string', // 展开折叠的目标元素选择器。
         'parent: string' // 目标元素与按钮共同的父级元素选择器，使用 closest 辅助目标元素的确定。
     );

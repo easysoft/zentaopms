@@ -1,9 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class searchToggle extends wg
 {
-    protected static $defineProps = 'open?:bool,module?:string="",formName?:string=""';
+    protected static array $defineProps = array(
+        'open?:bool',
+        'module?:string=""',
+        'formName?:string=""'
+    );
 
     public static function getPageCSS(): string|false
     {

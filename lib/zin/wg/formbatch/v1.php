@@ -29,7 +29,7 @@ class formBatch extends formBase
      * @var    array
      * @access protected
      */
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'items?: array[]',              // 使用一个列定义对象数组来定义批量表单项。
         'minRows?: int',                // 最小显示的行数目。
         'maxRows?: int',                // 最多显示的行数目。
@@ -49,7 +49,7 @@ class formBatch extends formBase
      * @var    array
      * @access protected
      */
-    static $defaultProps = array(
+    protected static array $defaultProps = array(
         'minRows' => 1,
         'maxRows' => 100,
         'mode'    => 'add'

@@ -4,7 +4,7 @@ namespace zin;
 
 class sectionCard extends wg
 {
-    protected static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'title' => array('map' => 'entityLabel'),
     );
 

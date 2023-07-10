@@ -1,18 +1,19 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
 
 class inputControl extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'prefix?: mixed',
         'suffix?: mixed',
         'prefixWidth?: string|int',
         'suffixWidth?: string|int',
     );
 
-    public static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'prefix' => array(),
         'suffix' => array(),
     );

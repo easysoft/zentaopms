@@ -28,7 +28,7 @@ class mainNavbar extends nav
      * @var array
      * @access protected
      */
-    static $defineBlocks = array
+    protected static array $defineBlocks = array
     (
         'left' => array('map' => 'dropdown'),
         'right' => array('map' => 'toolbar'),

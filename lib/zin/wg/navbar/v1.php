@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 
 class navbar extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'items: array'
     );
 

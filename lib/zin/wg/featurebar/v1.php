@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 
 class featureBar extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'items?:array',
         'current?:string',
         'link?:string',
@@ -17,7 +18,7 @@ class featureBar extends wg
         'loadID?: string'
     );
 
-    static $defineBlocks = array
+    protected static array $defineBlocks = array
     (
         'nav'      => array('map' => 'nav'),
         'leading'  => array(),

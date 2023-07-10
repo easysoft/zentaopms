@@ -1,16 +1,17 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class floatToolbar extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'prefix?:array',
         'main?:array',
         'suffix?:array',
         'object?:object'
     );
 
-    protected static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'prefix' => array(),
         'main'   => array(),
         'suffix' => array(),

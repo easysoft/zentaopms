@@ -1,15 +1,16 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class tabPane extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'key: string',
         'title: string',
         'active?: bool=false',
     );
 
-    protected static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'prefix'  => array(),
         'suffix'  => array(),
         'divider' => false,

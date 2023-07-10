@@ -28,7 +28,7 @@ class formBatchItem extends wg
      * @var    array
      * @access protected
      */
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'name: string',                 // 表单项名称，无需包含 `[]`。
         'label: string|bool',           // 列标题。
         'labelClass?: string',          // 列标题类名。

@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'avatar' . DS . 'v1.php';
 
 class userAvatar extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'className?:string',
         'style?:array',
         'size?:int=32',

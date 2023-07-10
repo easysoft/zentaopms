@@ -4,7 +4,7 @@ namespace zin;
 
 class dynamic extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'dynamics?: array',
         'users?: array',
         'className?: string',

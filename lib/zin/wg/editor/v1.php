@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'textarea' . DS . 'v1.php';
 
 class editor extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'createInput?: bool=true',        // 是否创建一个隐藏的 input 存储编辑器内容
         'uploadUrl?: string=""',          // 图片上传链接
         'placeholder?: string=""',        // 占位文本

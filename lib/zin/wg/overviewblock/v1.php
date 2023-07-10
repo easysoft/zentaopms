@@ -14,7 +14,7 @@ namespace zin;
 
 class overviewBlock extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'id?: string',
         'title?: string',
         'block?: object',

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
@@ -7,7 +8,10 @@ require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
 
 class inputGroup extends wg
 {
-    protected static $defineProps = 'items?:array, seg?:bool';
+    protected static array $defineProps = array(
+        'items?:array',
+        'seg?:bool'
+    );
 
     public function onBuildItem($item)
     {

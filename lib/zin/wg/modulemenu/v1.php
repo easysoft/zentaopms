@@ -6,7 +6,7 @@ class moduleMenu extends wg
 {
     private $modules = array();
 
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'modules: array',
         'activeKey?: int',
         'settingLink?: string',

@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class textarea extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'name: string',
         'id?: string',
         'class?: string',
@@ -13,7 +14,7 @@ class textarea extends wg
         'cols?: int',
     );
 
-    static $defaultProps = array(
+    protected static array $defaultProps = array(
         'class' => 'form-control',
         'rows' => 10
     );

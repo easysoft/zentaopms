@@ -5,7 +5,7 @@ namespace zin;
 class popovers extends wg
 {
 
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'placement?: string="bottom"', // 位置
         'strategy?: string="fixed"',   // 定位类型
         'flip?: bool=true',            // 是否启用 flip
@@ -14,11 +14,11 @@ class popovers extends wg
         'offset?: int=1',              // 偏移量
     );
 
-    protected static $defaultProps = array(
+    protected static array $defaultProps = array(
         'shift' => array('padding' => 5),
     );
 
-    protected static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'trigger' => array(),
         'target' => array(),
     );

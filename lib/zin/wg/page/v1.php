@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'pagebase' . DS . 'v1.php';
@@ -8,9 +9,9 @@ require_once dirname(__DIR__) . DS . 'main' . DS . 'v1.php';
 
 class page extends pageBase
 {
-    static $defaultProps = array('zui' => true);
+    protected static array $defaultProps = array('zui' => true);
 
-    static $defineBlocks = array
+    protected static array $defineBlocks = array
     (
         'head'     => array(),
         'header'   => array('map' => 'header'),

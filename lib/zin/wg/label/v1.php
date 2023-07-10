@@ -1,9 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class label extends wg
 {
-    static $defineProps = 'text?:string';
+    protected static array $defineProps = array(
+        'text?:string'
+    );
 
     public function onAddChild($child)
     {

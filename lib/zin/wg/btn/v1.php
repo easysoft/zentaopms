@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class btn extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'text?:string',              // 按钮的文本。
         'icon?:string',              // 图标名称。
         'iconClass?:string',         // 图标的样式类。

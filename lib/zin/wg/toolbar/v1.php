@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
@@ -6,7 +7,7 @@ require_once dirname(__DIR__) . DS . 'backbtn' . DS . 'v1.php';
 
 class toolbar extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'items?:array',
         'btnClass?:string',
         'btnProps?: array'

@@ -1,10 +1,10 @@
 <?php
-
+declare(strict_types=1);
 namespace zin;
 
 class cell extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'order:int',
         'grow:int',
         'shrink:int',

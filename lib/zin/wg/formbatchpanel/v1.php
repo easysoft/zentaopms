@@ -28,7 +28,7 @@ class formBatchPanel extends formPanel
      * @var    array
      * @access protected
      */
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'uploadParams?: string|false',  // 多图上传的参数，如果设置为 `false` 则不显示按钮
         'pasteField?: string|false',    // 多行录入的字段名，如果设置为 `false` 则不显示按钮
         'items?: array[]',              // 使用一个列定义对象数组来定义批量表单项。
@@ -49,7 +49,7 @@ class formBatchPanel extends formPanel
      * @var    array
      * @access protected
      */
-    protected static $defaultProps = array(
+    protected static array $defaultProps = array(
         'uploadParams' => false,
         'pasteField'   => false,
         'customFields' => array(),

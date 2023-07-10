@@ -1,16 +1,17 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class modalHeader extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'title?: string',
         'titleClass?: string',
         'entityText?: string',
         'entityID?: int'
     );
 
-    static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'suffix' => array()
     );
 

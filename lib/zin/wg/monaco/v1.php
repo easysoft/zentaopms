@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class monaco extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'id:string',
         'action?:string',
         'options?:array',
@@ -11,7 +12,7 @@ class monaco extends wg
         'onMouseDown?:string',
     );
 
-    protected static $defaultProps = array(
+    protected static array $defaultProps = array(
         'action'  => 'create',
         'options' => array(),
         'diffContent' => array(),

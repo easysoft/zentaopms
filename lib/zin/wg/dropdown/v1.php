@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'menu' . DS . 'v1.php';
@@ -6,7 +7,7 @@ require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 class dropdown extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'items?:array',
         'placement?:string',
         'strategy?:string',
@@ -23,7 +24,7 @@ class dropdown extends wg
         'staticMenu?: bool'
     );
 
-    static $defineBlocks = array
+    protected static array $defineBlocks = array
     (
         'trigger' => array('map' => 'btn,a'),
         'menu'    => array('map' => 'menu'),

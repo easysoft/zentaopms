@@ -32,7 +32,7 @@ class formPanel extends panel
      * @var    array
      * @access protected
      */
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'class?: string="panel-form rounded-md ring-0 canvas px-4 pb-4 mb-4 mx-auto"', // 类名。
         'size?: string="lg"',                          // 额外尺寸。
         'id?: string="$GID"',                          // ID，如果不指定则自动生成（使用 zin 部件 GID）。
@@ -58,7 +58,7 @@ class formPanel extends panel
      * @var    array
      * @access protected
      */
-    protected static $defaultProps = array(
+    protected static array $defaultProps = array(
         'customFields' => array(),
     );
 

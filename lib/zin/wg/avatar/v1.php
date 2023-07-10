@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class avatar extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'className?:string',
         'style?:array',
         'size?:int=32',

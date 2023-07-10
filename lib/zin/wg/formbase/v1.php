@@ -17,7 +17,7 @@ namespace zin;
  */
 class formBase extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'id?: string="$GID"',                  // ID，如果不指定则自动生成（使用 zin 部件 GID）。
         'method?: "get"|"post"="post"',        // 表单提交方式。
         'url?: string',                        // 表单提交地址。

@@ -5,7 +5,7 @@ namespace zin;
 
 class formItemDropdown extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'items?:array',
         'value?:array',
         'method?: string',

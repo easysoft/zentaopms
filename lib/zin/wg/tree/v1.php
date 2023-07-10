@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class tree extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'items: array',
         'id?: string',
         'class?: string',

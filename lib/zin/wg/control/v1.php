@@ -19,7 +19,7 @@ require_once dirname(__DIR__) . DS . 'colorpicker' . DS . 'v1.php';
 
 class control extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'type?: string',         // 表单输入元素类型，值可以为：static, text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
         'name: string',          // HTML name 属性
         'id?: string',           // HTML id 属性

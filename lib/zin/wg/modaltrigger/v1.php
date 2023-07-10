@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class modalTrigger extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'target?:string',
         'position?:string|int|object|function',
         'size?:string|int|object',
@@ -26,7 +27,7 @@ class modalTrigger extends wg
         'dataType?:string',
     );
 
-    static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'trigger' => array('map' => 'btn,a'),
         'modal' => array('map' => 'modal')
     );

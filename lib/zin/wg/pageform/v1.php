@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'page' . DS . 'v1.php';
@@ -6,7 +7,9 @@ require_once dirname(__DIR__) . DS . 'formpanel' . DS . 'v1.php';
 
 class pageForm extends page
 {
-    static $defineProps = 'formPanel?:array';
+    protected static array $defineProps = array(
+        'formPanel?: array'
+    );
 
     public function children()
     {

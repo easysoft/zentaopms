@@ -1,11 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'actionitem' . DS . 'v1.php';
 
 class menu extends wg
 {
-    static $defineProps = 'items?:array';
+    protected static array $defineProps = array(
+        'items?:array'
+    );
 
     public function onBuildItem($item)
     {

@@ -5,7 +5,7 @@ namespace zin;
 
 class pasteDialog extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'field: string',              // 表单中多行录入列的字段名，必选
         'title?: string',             // 弹窗的标题，默认为“多行录入”
         'name?: string="importLines"' // 多行文本控件名称，默认为“importLines”

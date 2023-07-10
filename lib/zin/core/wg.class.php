@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The base widget class file of zin of ZenTaoPMS.
  *
@@ -23,21 +24,19 @@ class wg
     /**
      * Define props for the element
      *
-     * @var array|string
+     * @var array
      */
-    protected static $defineProps = null;
+    protected static array $defineProps = array();
 
-    protected static $defaultProps = null;
+    protected static array $defaultProps = array();
 
-    protected static $defineBlocks = null;
+    protected static array $defineBlocks = array();
 
-    protected static $wgToBlockMap = array();
+    protected static array $wgToBlockMap = array();
 
-    protected static $definedPropsMap = array();
+    protected static array $definedPropsMap = array();
 
-    private static $gidSeed = 0;
-
-    private static $pageResources = array();
+    private static array $pageResources = array();
 
     /**
      * The props of the element
@@ -606,7 +605,7 @@ class wg
         if(!isset(wg::$wgToBlockMap[$wgName]))
         {
             $wgBlockMap = array();
-            if(isset(static::$defineBlocks))
+            if(!empty(static::$defineBlocks))
             {
                 foreach(static::$defineBlocks as $blockName => $setting)
                 {
@@ -656,22 +655,24 @@ class wg
      * @param $definition
      * @example
      *
-     * $definition = 'name,desc:string,title?:string|element,icon?:string="star"'
      * $definition = array('name', 'desc:string', 'title?:string|element', 'icon?:string="star"');
      * $definition = array('name' => 'mixed', 'desc' => 'string', 'title' => array('type' => 'string|element', 'optional' => true), 'icon' => array('type' => 'string', 'default' => 'star', 'optional' => true))))
      */
-    private static function parsePropsDefinition($definition)
+    private static function parsePropsDefinition(array $definition): array
     {
         $parentClass = get_parent_class(get_called_class());
+        /**
+         * @var array
+         */
         $props = $parentClass ? call_user_func("$parentClass::getDefinedProps") : array();
 
-        if((!is_array($definition) && !is_string($definition)) || ($parentClass && $definition === $parentClass::$defineProps))
+        if($parentClass !== false && $definition === $parentClass::$defineProps)
         {
-            if(static::$defaultProps && static::$defaultProps !== $parentClass::$defaultProps)
+            if(!empty(static::$defaultProps) && static::$defaultProps !== $parentClass::$defaultProps)
             {
                 foreach($props as $name => $value)
                 {
-                    if(is_array(static::$defaultProps) && isset(static::$defaultProps[$name]))
+                    if(isset(static::$defaultProps[$name]))
                     {
                         $value['default'] = static::$defaultProps[$name];
                         $props[$name]     = $value;
@@ -680,8 +681,6 @@ class wg
             }
             return $props;
         }
-
-        if(is_string($definition)) $definition = explode(',', $definition);
 
         foreach($definition as $name => $value)
         {

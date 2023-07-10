@@ -26,7 +26,7 @@ class burn extends wg
      * @var    array
      * @access protected
      */
-    static $defineProps = array
+    protected static array $defineProps = array
     (
         'data?: string|array',       // 数据源
         'referenceLine?: bool=false' // 参考线

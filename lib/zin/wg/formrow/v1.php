@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'formgroup' . DS . 'v1.php';
 
 class formRow extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'width?: string',
         'items?: array',
         'hidden?: boolean'

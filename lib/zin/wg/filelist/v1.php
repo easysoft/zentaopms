@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . DS . 'section' . DS . 'v1.php';
 
 class fileList extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'files?:array',
         'fieldset?:bool=true',
         'method?:string="view"',

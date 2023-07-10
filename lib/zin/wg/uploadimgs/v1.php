@@ -4,7 +4,7 @@ namespace zin;
 
 class uploadImgs extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'name: string',                    // 字段名
         'showSize?: bool=true',            // 是否展示文件大小
         'multiple?: bool=true',            // 是否启用多文件上传

@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class productMenu extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'title?:string',
         'items?:array',
         'activeKey?:string',

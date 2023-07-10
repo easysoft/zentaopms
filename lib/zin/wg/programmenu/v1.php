@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'dropmenu' . DS . 'v1.php';
@@ -7,7 +8,7 @@ class programMenu extends wg
 {
     private $programs = array();
 
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'programs?: array',
         'activeClass?: string="active"',
         'activeIcon?: string="check"',

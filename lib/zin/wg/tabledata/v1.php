@@ -9,7 +9,7 @@ require_once dirname(__DIR__) . DS . 'collapsebtn' . DS . 'v1.php';
 
 class tableData extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'title?: string',
         'useTable?: bool=true'
     );

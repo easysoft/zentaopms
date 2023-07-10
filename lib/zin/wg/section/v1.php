@@ -4,13 +4,13 @@ namespace zin;
 
 class section extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'title: string',          // 标题
         'content?: string|array', // 内容
         'useHtml?: bool=false',   // 内容是否解析 HTML 标签
     );
 
-    protected static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'subtitle' => array(),
         'actions'  => array(),
     );

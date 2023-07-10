@@ -1,16 +1,17 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'modaldialog' . DS . 'v1.php';
 
 class modal extends modalDialog
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'id?:string="$GID"',
         'modalProps?:array'
     );
 
-    static $defaultProps = array(
+    protected static array $defaultProps = array(
         'modalProps' => array()
     );
 

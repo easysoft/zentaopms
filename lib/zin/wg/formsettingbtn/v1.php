@@ -14,7 +14,7 @@ namespace zin;
 
 class formSettingBtn extends wg
 {
-    protected static $defaultProps = array(
+    protected static array $defaultProps = array(
         'customFields' => array(),
         'urlParams'    => ''
     );

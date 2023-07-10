@@ -4,12 +4,12 @@ namespace zin;
 
 class detailHeader extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'back?: string="APP"',
         'backUrl?: string',
     );
 
-    protected static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'prefix' => array(),
         'title'  => array(),
         'suffix' => array(),

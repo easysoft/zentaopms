@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The zui component class file of zin lib.
  *
@@ -19,7 +20,7 @@ require_once __DIR__ . DS . 'toggle.class.php';
 
 class zui extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         '_name:string',
         '_to?:string',
         '_tag:string="div"',

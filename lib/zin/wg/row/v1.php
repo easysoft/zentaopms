@@ -3,7 +3,7 @@ namespace zin;
 
 class row extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'justify?:string',
         'align?:string'
     );

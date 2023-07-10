@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
@@ -8,7 +9,7 @@ require_once dirname(__DIR__) . DS . 'btngroup' . DS . 'v1.php';
 
 class actionItem extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'name:string="action"',
         'type:string="item"',
         'outerTag:string="li"',

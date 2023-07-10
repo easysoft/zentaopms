@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class formLabel extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'text?:string',
         'required?:bool',
         'for?:string'

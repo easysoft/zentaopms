@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class dtable extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'className?:string="shadow rounded"', // 表格样式。
         'id?:string',                         // ID。
         'customCols?: bool|array',            // 是否支持自定义列。

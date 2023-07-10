@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The html element class file of zin of ZenTaoPMS.
  *
@@ -17,7 +18,10 @@ require_once __DIR__ . DS . 'wg.func.php';
 
 class h extends wg
 {
-    protected static $defineProps = 'tagName, selfClose?:bool';
+    protected static array $defineProps = array(
+        'tagName: string',
+        'selfClose?: bool'
+    );
 
     public function getTagName()
     {

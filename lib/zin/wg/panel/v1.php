@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class panel extends wg
 {
-    protected static $defineProps = array
+    protected static array $defineProps = array
     (
         'class?: string="rounded shadow ring-0 canvas"', // 类名。
         'size?: "sm"|"lg"',         // 额外尺寸。
@@ -20,7 +21,7 @@ class panel extends wg
         'footerProps?: array'       // 底部属性。
     );
 
-    static $defineBlocks = array
+    protected static array $defineBlocks = array
     (
         'heading' => array(),
         'headingActions' => array('map' => 'toolbar'),

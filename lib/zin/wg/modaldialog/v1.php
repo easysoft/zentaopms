@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class modalDialog extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'title?: string',
         'titleClass?: string',
         'size?: string|number',
@@ -18,7 +19,7 @@ class modalDialog extends wg
         'rawContent?: bool'
     );
 
-    static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'header' => array('map' => 'modalHeader'),
         'actions' => array(),
         'footer' => array('map' => 'toolbar')

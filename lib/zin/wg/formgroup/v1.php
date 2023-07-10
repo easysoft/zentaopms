@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'formlabel' . DS . 'v1.php';
@@ -6,7 +7,7 @@ require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
 
 class formGroup extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'name?: string',
         'label?: string|bool',
         'labelClass?: string',

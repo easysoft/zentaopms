@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class fragment extends wg
 {
-    static $defineProps = array
+    protected static array $defineProps = array
     (
         'rawContent?: bool'
     );

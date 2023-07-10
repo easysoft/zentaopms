@@ -4,7 +4,7 @@ namespace zin;
 
 class commentDialog extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'title?:string',
         'url?:string',
         'name?:string="comment"',
