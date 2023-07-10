@@ -454,7 +454,7 @@ class baseEntry
         /* Use htmlspecialcharts for rich text fields. */
         foreach($fields as $field)
         {
-            if(in_array($field, array('desc', 'spec', 'verify', 'steps')) and isset($_POST[$field])) $_POST[$field] = htmlspecialchars_decode($_POST[$field]);
+            if(in_array($field, array('desc', 'spec', 'verify', 'steps')) and isset($_POST[$field])) $_POST[$field] = htmlspecialchars($_POST[$field]);
         }
     }
 
