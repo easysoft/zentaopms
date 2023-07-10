@@ -55,10 +55,13 @@ if(!in_array($module, array('block', 'baseline')) && !empty($lang->custom->{$mod
 
 $formItems   = array();
 $formActions = array('submit');
+$headingTips = null;
+$actionWidth = 'w-1/2';
 if($module == 'project' && $field == 'unitList')
 {
     $formItems[] = formGroup
     (
+        set::width('1/2'),
         set::label($lang->custom->project->currencySetting),
         set::name('unitList'),
         set::value($unitList),
@@ -68,6 +71,7 @@ if($module == 'project' && $field == 'unitList')
 
     $formItems[] = formGroup
     (
+        set::width('1/2'),
         set::label($lang->custom->project->defaultCurrency),
         set::control('select'),
         set::name('defaultCurrency'),
@@ -79,6 +83,7 @@ elseif($module == 'story' && $field == 'reviewRules')
 {
     $formItems[] = formGroup
     (
+        set::width('1/2'),
         set::label($lang->custom->reviewRule),
         set::name('reviewRules'),
         set::value($needReview),
@@ -88,6 +93,7 @@ elseif($module == 'story' && $field == 'reviewRules')
 
     $formItems[] = formGroup
     (
+        set::width('1/2'),
         set::label($lang->custom->superReviewers),
         set::name('superReviewers'),
         set::value($superReviewers),
@@ -99,6 +105,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
 {
     $formItems[] = formGroup
     (
+        set::width('1/2'),
         set::label($lang->custom->storyReview),
         set::name('needReview'),
         set::value($needReview),
@@ -110,6 +117,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
     {
         $formItems[] = formGroup
         (
+            set::width('1/2'),
             setClass($needReview ? 'hidden' : ''),
             set::label(''),
             set::name(''),
@@ -119,6 +127,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
 
         $formItems[] = formGroup
         (
+            set::width('1/2'),
             setClass($needReview ? '' : 'hidden'),
             set::label(''),
             set::name(''),
@@ -131,6 +140,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
         {
             $formItems[] = formGroup
             (
+                set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->account),
                 set::name('forceNotReview'),
                 set::value($forceNotReview),
@@ -140,6 +150,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
 
             $formItems[] = formGroup
             (
+                set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->role),
                 set::name('forceNotReviewRoles'),
                 set::value($forceNotReviewRoles),
@@ -149,6 +160,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
 
             $formItems[] = formGroup
             (
+                set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->dept),
                 set::name('forceNotReviewDepts'),
                 set::value($forceNotReviewDepts),
@@ -160,6 +172,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
         {
             $formItems[] = formGroup
             (
+                set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->account),
                 set::name('forceReview'),
                 set::value($forceReview),
@@ -169,6 +182,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
 
             $formItems[] = formGroup
             (
+                set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->role),
                 set::name('forceReviewRoles'),
                 set::value($forceReviewRoles),
@@ -178,6 +192,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
 
             $formItems[] = formGroup
             (
+                set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->dept),
                 set::name('forceReviewDepts'),
                 set::value($forceReviewDepts),
@@ -226,6 +241,8 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 )
             );
         }
+
+        $actionWidth = 'w-2/3';
     }
 }
 elseif($module == 'bug' && $field == 'longlife')
@@ -242,11 +259,14 @@ elseif($module == 'bug' && $field == 'longlife')
         ))
     );
 
-    $formItems[] = div
+    $headingTips = div
     (
-        setClass('alert alert-info alert-block'),
+        setClass('flex-auto pt-1'),
+        icon('info text-warning mr-2'),
         $lang->custom->notice->longlife
     );
+
+    $actionWidth = 'w-1/3';
 }
 elseif($module == 'block' && $field == 'closed')
 {
@@ -254,6 +274,7 @@ elseif($module == 'block' && $field == 'closed')
     {
         $formItems[] = formGroup
         (
+            set::width('1/2'),
             set::label($lang->custom->block->fields['closed']),
             set::name('closed'),
             set::value($lang->custom->notice->noClosedBlock),
@@ -265,6 +286,7 @@ elseif($module == 'block' && $field == 'closed')
     {
         $formItems[] = formGroup
         (
+            set::width('1/2'),
             set::label($lang->custom->block->fields['closed']),
             set::name('closed'),
             set::value($closedBlock),
@@ -283,6 +305,7 @@ elseif($module == 'user' && $field == 'contactField')
 
     $formItems[] = formGroup
     (
+        set::width('1/2'),
         set::label($lang->custom->user->fields['contactField']),
         set::name('contactField'),
         set::value($config->user->contactField),
@@ -299,7 +322,7 @@ elseif($module == 'user' && $field == 'contactField')
             'url'          => inlink('restore', "module=user&field=contactField&confirm=yes"),
             'text'         => $lang->custom->restore,
             'class'        => 'btn-wide ajax-submit',
-            'data-confirm' => $lang->custom->confirmRestorelang->custom->confirmRestore,
+            'data-confirm' => $lang->custom->confirmRestore,
         );
     }
 }
@@ -307,6 +330,7 @@ elseif($module == 'user' && $field == 'deleted')
 {
     $formItems[] = formGroup
     (
+        set::width('1/2'),
         set::label($lang->custom->user->fields['deleted']),
         set::name('showDeleted'),
         set::value($showDeleted),
@@ -320,6 +344,7 @@ else
     {
         $formItems[] = formGroup
         (
+            set::width('1/2'),
             set::label($lang->custom->key),
             set::name(''),
             set::value($lang->custom->value),
@@ -350,7 +375,7 @@ else
                     icon
                     (
                         setClass('del-item ml-2'),
-                        'close',
+                        'trash',
                     ),
                 ) : null,
             );
@@ -359,6 +384,7 @@ else
         $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
         $formItems[] = formGroup
         (
+            set::width('1/2'),
             set::label(''),
             set::name('lang'),
             set::items($appliedTo),
@@ -372,15 +398,16 @@ else
                 'url'          => inlink('restore', "module={$module}&field={$field}&confirm=yes"),
                 'text'         => $lang->custom->restore,
                 'class'        => 'btn-wide ajax-submit',
-                'data-confirm' => $lang->custom->confirmRestorelang->custom->confirmRestore,
+                'data-confirm' => $lang->custom->confirmRestore,
             );
         }
 
         if(!$canAdd)
         {
-            $formItems[] = div
+            $headingTips = div
             (
-                setClass('alert alert-info alert-block'),
+                setClass('flex-auto pt-1'),
+                icon('info text-warning mr-2'),
                 $lang->custom->notice->canNotAdd
             );
         }
@@ -397,8 +424,11 @@ div
     ) : null,
     formPanel
     (
+        set::headingClass('justify-start'),
+        to::headingActions($headingTips),
         setClass('flex-auto'),
         setClass($menuItems ? 'ml-4' : null),
+        set::actionsClass($actionWidth),
         set::title($lang->custom->$module->fields[$field]),
         set::actions($formActions),
         $formItems,
