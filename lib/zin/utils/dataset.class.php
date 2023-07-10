@@ -202,8 +202,7 @@ class dataset
             return $this;
         }
 
-        $value = $this->setVal($prop, $value);
-        return $this;
+        return $this->setVal($prop, $value);
     }
 
     /**

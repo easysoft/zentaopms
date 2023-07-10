@@ -25,7 +25,7 @@ require_once __DIR__ . DS . 'context.func.php';
  * @param  mixed                   $value
  * @return directive|null
  */
-function set(string|array|props|null $name, mixed $value = null): directive|null
+function set(string|array|props|null $name, mixed $value = null): ?directive
 {
     if($name === null) return null;
 
@@ -53,7 +53,7 @@ function setClass(/* array|string|null ...$classList */): directive
  *
  * @return directive
  */
-function setStyle(array|string $name, mixed $value = null): directive
+function setStyle(array|string $name, ?string $value = null): directive
 {
     return directive('style', is_array($name) ? $name : array($name => $value));
 }
@@ -63,7 +63,7 @@ function setStyle(array|string $name, mixed $value = null): directive
  *
  * @return directive
  */
-function setCssVar(array|string $name, mixed $value = null): directive
+function setCssVar(array|string $name, ?string $value = null): directive
 {
     return directive('cssVar', is_array($name) ? $name : array($name => $value));
 }
@@ -71,9 +71,9 @@ function setCssVar(array|string $name, mixed $value = null): directive
 /**
  * Set widget ID attribute.
  *
- * @return directive
+ * @return ?directive
  */
-function setID($id)
+function setID(string $id): directive
 {
     return set('id', $id);
 }
@@ -83,7 +83,7 @@ function setID($id)
  *
  * @return directive
  */
-function setTag($id): directive
+function setTag(string $id): directive
 {
     return set('tagName', $id);
 }
