@@ -416,6 +416,7 @@ customElements.define('selected-data-sorter', SelectedDataSorter, {extends: 'div
           </div>
         </div>
         <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
+          <?php echo html::hidden('jumpToNext', "1");?>
           <?php echo html::hidden('datasource', $prompt->source);?>
           <?php echo html::hidden('datagroup', $activeDataSource);?>
           <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->nextStep, 'disabled');?></div>
@@ -459,6 +460,7 @@ $(function()
   /* Toggle disabled submit button. */
   window.dataSourceStore.subscribe(function(value)
   {
+    _isPromptDesignStepComplete = !!value.length;
     $('#submit').attr('disabled', !value.length);
   });
 

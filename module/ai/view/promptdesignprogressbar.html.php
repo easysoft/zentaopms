@@ -55,40 +55,59 @@
     }
     ?>
   </div>
-  <?php echo html::commonButton("<i class='icon icon-save icon-sm'></i> $lang->save", '', 'btn btn-primary');?>
+  <?php echo html::commonButton("<i class='icon icon-save icon-sm'></i> $lang->save", 'id="saveStepButton"', 'btn btn-primary');?>
   <script>
-    const steps = document.getElementsByClassName('steps')[0];
-    if(steps)
+    (function()
     {
-      for(let step of steps.children)
+      const steps = document.getElementsByClassName('steps')[0];
+      if(steps)
       {
-        step.addEventListener('mouseenter', function (e)
+        for(let step of steps.children)
         {
-          if(step.lastElementChild?.classList.contains('outline-arrow'))
+          step.addEventListener('mouseenter', function (e)
           {
-            step.lastElementChild.classList.remove('outline-arrow');
-            step.lastElementChild.classList.add('hover-arrow');
-          }
+            if(step.lastElementChild?.classList.contains('outline-arrow'))
+            {
+              step.lastElementChild.classList.remove('outline-arrow');
+              step.lastElementChild.classList.add('hover-arrow');
+            }
 
-          if(step.previousElementSibling?.lastElementChild?.classList.contains('outline-arrow'))
+            if(step.previousElementSibling?.lastElementChild?.classList.contains('outline-arrow'))
+            {
+              step.previousElementSibling.lastElementChild.classList.add('solid-arrow');
+            }
+          });
+          step.addEventListener('mouseleave', function (e)
           {
-            step.previousElementSibling.lastElementChild.classList.add('solid-arrow');
-          }
-        });
-        step.addEventListener('mouseleave', function (e)
+            if(step.lastElementChild?.classList.contains('hover-arrow'))
+            {
+              step.lastElementChild.classList.remove('hover-arrow');
+              step.lastElementChild.classList.add('outline-arrow');
+            }
+
+            if(step.previousElementSibling?.lastElementChild?.classList.contains('outline-arrow') && step.previousElementSibling?.lastElementChild?.classList.contains('solid-arrow'))
+            {
+              step.previousElementSibling.lastElementChild.classList.remove('solid-arrow');
+            }
+          });
+        }
+      }
+
+      const saveButton = document.getElementById('saveStepButton');
+      if(saveButton)
+      {
+        saveButton.addEventListener('click', function()
         {
-          if(step.lastElementChild?.classList.contains('hover-arrow'))
-          {
-            step.lastElementChild.classList.remove('hover-arrow');
-            step.lastElementChild.classList.add('outline-arrow');
-          }
+          const mainForm = document.querySelector('.main-form');
+          if(!mainForm) return;
 
-          if(step.previousElementSibling?.lastElementChild?.classList.contains('outline-arrow') && step.previousElementSibling?.lastElementChild?.classList.contains('solid-arrow'))
-          {
-            step.previousElementSibling.lastElementChild.classList.remove('solid-arrow');
-          }
+          const jumpToNext = document.getElementById('jumpToNext');
+          if(!jumpToNext) return;
+
+          jumpToNext.value = "0";
+          mainForm.submit.click();
         });
       }
-    }
+    })();
   </script>
 </header>

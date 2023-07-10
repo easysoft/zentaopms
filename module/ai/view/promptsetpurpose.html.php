@@ -128,6 +128,7 @@ customElements.define('prompt-previewer', PromptPreviewer, {extends: 'div'});
           </div>
         </div>
         <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
+          <?php echo html::hidden('jumpToNext', "1");?>
           <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->nextStep, 'disabled');?></div>
         </div>
       </div>

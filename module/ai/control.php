@@ -151,6 +151,9 @@ class ai extends control
         {
             $role = fixer::input('post')->get();
 
+            $isJumpToNext = $role->jumpToNext == '1';
+            unset($role->jumpToNext);
+
             $prompt->model            = $role->model;
             $prompt->role             = $role->role;
             $prompt->characterization = $role->characterization;
@@ -158,7 +161,13 @@ class ai extends control
             $this->ai->updatePrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID") . '#app=admin'));
+
+            if($isJumpToNext)
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID") . '#app=admin'));
+            }
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptAssignRole', "promptID=$promptID") . '#app=admin'));
         }
 
         $this->view->prompt     = $prompt;
@@ -183,13 +192,22 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
+            $isJumpToNext = $data->jumpToNext == '1';
+            unset($data->jumpToNext);
+
             $prompt->module = $data->datagroup;
             $prompt->source = ",$data->datasource,";
 
             $this->ai->updatePrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
+
+            if($isJumpToNext)
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
+            }
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID") . '#app=admin'));
         }
 
         $this->view->activeDataSource = empty($prompt->module) ? 'story' : $prompt->module;
@@ -216,13 +234,21 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
+            $isJumpToNext = $data->jumpToNext == '1';
+            unset($data->jumpToNext);
+
             $prompt->purpose     = $data->purpose;
             $prompt->elaboration = $data->elaboration;
 
             $this->ai->updatePrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
+
+            if($isJumpToNext)
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
+            }
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
         }
 
         $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
@@ -248,6 +274,9 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
+            $isJumpToNext = $data->jumpToNext == '1';
+            unset($data->jumpToNext);
+
             $prompt->targetForm = $data->targetForm;
 
             $this->ai->updatePrompt($prompt);
@@ -260,7 +289,12 @@ class ai extends control
                 return $this->send(empty($location) ? array('result' => 'fail', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'message' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
+            if($isJumpToNext)
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
+            }
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
         }
 
         $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
@@ -286,13 +320,21 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
+            $isJumpToNext = $data->jumpToNext == '1';
+            unset($data->jumpToNext);
+
             $prompt->name = $data->name;
             $prompt->desc = $data->desc;
 
             $this->ai->updatePrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts') . '#app=admin'));
+            if($isJumpToNext)
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts') . '#app=admin'));
+            }
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
         }
 
         $this->view->prompt     = $prompt;

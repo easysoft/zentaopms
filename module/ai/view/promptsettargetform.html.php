@@ -99,6 +99,7 @@
         </div>
         <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
           <div style='display: flex; justify-content: center;'>
+            <?php echo html::hidden('jumpToNext', "1");?>
             <?php echo html::submitButton($lang->ai->nextStep, 'disabled');?>
             <button type='submit' name='goTesting' value='1' id='go-test-btn' disabled class='btn btn-wide btn-secondary'><?php echo $lang->ai->goTesting;?></button>
           </div>
