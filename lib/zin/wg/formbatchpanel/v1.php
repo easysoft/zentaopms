@@ -56,7 +56,7 @@ class formBatchPanel extends formPanel
         'batch'        => true
     );
 
-    protected function buildHeadingActions()
+    protected function buildHeadingActions(): ?wg
     {
         $headingActions = $this->prop('headingActions');
         if(!$headingActions) $headingActions = array();

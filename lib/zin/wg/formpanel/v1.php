@@ -71,7 +71,7 @@ class formPanel extends panel
      * Build heading actions.
      *
      * @access protected
-     * @return void
+     * @return ?wg
      */
     protected function buildHeadingActions(): ?wg
     {
