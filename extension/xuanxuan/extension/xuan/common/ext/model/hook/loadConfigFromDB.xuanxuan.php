@@ -1,5 +1,5 @@
 <?php
-if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api'))
+if($this->app->isServing() || (defined('RUN_MODE') && RUN_MODE == 'api'))
 {
     $this->loadModel('setting');
     $xxItems  = $this->setting->getItems('owner=system&module=common&section=xuanxuan');

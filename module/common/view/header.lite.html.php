@@ -48,7 +48,7 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
   }
   if($this->app->getViewType() == 'xhtml') css::import($defaultTheme . 'x.style.css');
 
-  if(defined('IN_USE') and commonModel::isTutorialMode())
+  if($this->app->isServing() && commonModel::isTutorialMode())
   {
       $wizardModule    = isset($_SESSION['wizardModule']) ? $_SESSION['wizardModule'] : $this->moduleName;
       $wizardMethod    = isset($_SESSION['wizardMethod']) ? $_SESSION['wizardMethod'] : $this->methodName;

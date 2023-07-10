@@ -74,6 +74,16 @@ class router extends baseRouter
     public $fetchModule;
 
     /**
+     * Check whether app is serving.
+     * @access public
+     * @return bool
+     */
+    public function isServing()
+    {
+        return !$this->installing && !$this->upgrading;
+    }
+
+    /**
      * Get the $moduleRoot var.
      *
      * @param  string $appName
