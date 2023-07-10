@@ -24,7 +24,7 @@ foreach($projects as $project)
     $projectOverview = array();
     $projectOverview[] = cell
     (
-        setClass('flex-1 text-left mr-6'),
+        setClass('text-left'),
         $project->status != 'closed' && $project->end != LONG_TIME ? span
         (
             setClass('text-gray'),
