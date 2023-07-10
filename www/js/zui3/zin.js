@@ -604,6 +604,71 @@
         modal.render(options);
     }
 
+    function loadTarget(url, target, options)
+    {
+        options = $.extend({}, options);
+        if(typeof target === 'string') options.target = target;
+        else if(typeof target === 'object') options = $.extend(options, target);
+        if(typeof url === 'string') options.url = url;
+        else if(typeof url === 'object') options = $.extend(options, url);
+        if(!options.target) return loadPage(options);
+
+        let remoteData;
+        let loadError;
+        const ajaxOptions =
+        {
+            url:         url,
+            header:      options.header,
+            type:        options.method || 'GET',
+            data:        options.data,
+            contentType: options.contentType,
+            beforeSend: () =>
+            {
+                toggleLoading(options.target);
+                if(options.beforeSend) return options.beforeSend();
+            },
+            success: (data) =>
+            {
+                remoteData = data;
+                if(options.beforeUpdate)
+                {
+                    const result = options.beforeUpdate(data, options);
+                    if(result === false) return;
+                    if(typeof result === 'string') data = result;
+                }
+                let target = options.target;
+                if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
+                const $target = $(target);
+                if($target.length)
+                {
+                    if(options.success) options.success(data, options);
+                    let $content = $(data);
+                    if(options.selector) $content = $('<div>').append($content).find(options.selector);
+                    if(options.replace) $target.replaceWith($content);
+                    else $target.empty().append($content);
+                }
+                else
+                {
+                    loadError = new Error(`ZIN: Target "${target}" not found.`);
+                    if(options.error) options.error(data, loadError);
+                }
+            },
+            error: (xhr, type, error) =>
+            {
+                loadError = error;
+                if(options.error) options.error(error, options);
+                if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {xhr, type, error});
+                zui.Messager.show('ZIN: Fetch data failed from ' + url);
+            },
+            complete: () =>
+            {
+                toggleLoading(target, false);
+                if(options.complete) options.complete(remoteData, loadError, options);
+            }
+        };
+        return $.ajax(ajaxOptions);
+    }
+
     function postAndLoadPage(url, data, selector, options)
     {
         if(typeof selector === 'object')
@@ -689,6 +754,7 @@
                     if(!options.target && event) options.target = $(event.target).closest('.modal').attr('id');
                     return loadModal(options.url, options.target, options);
                 }
+                if(load === 'target') return loadTarget(options);
                 if(load !== 'APP' && typeof load === 'string') options.selector = load;
                 delete options.load;
             }
@@ -801,7 +867,7 @@
         return result;
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget});
     $.extend($.apps, {openUrl: openUrl});
 
     /* Transfer click event to parent */
