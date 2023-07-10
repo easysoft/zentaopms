@@ -41,5 +41,3 @@ $lang->stage->confirmDelete = '您确定要执行删除操作吗？';
 $lang->stage->error              = new stdclass();
 $lang->stage->error->percentOver = '工作量占比累计不应当超过100%';
 $lang->stage->error->notNum      = '工作量占比应当是数字';
-
-$lang->stage->featureBar['browse']['all'] = '阶段列表';
