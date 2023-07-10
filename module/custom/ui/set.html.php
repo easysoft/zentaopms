@@ -197,9 +197,12 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::items($users),
                     set::control(array('type' => 'select', 'multiple' => true)),
                 ),
-                span(
-                    setClass('pl-4'),
-                    sprintf($lang->custom->notice->forceNotReview, $lang->$module->common)
+                icon
+                (
+                    'help',
+                    setClass('pl-4 pt-2'),
+                    set('data-toggle', 'tooltip'),
+                    set('data-title', sprintf($lang->custom->notice->forceNotReview, $lang->$module->common)),
                 )
             )
         );
@@ -218,9 +221,12 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::items($users),
                     set::control(array('type' => 'select', 'multiple' => true)),
                 ),
-                span(
-                    setClass('pl-4'),
-                    sprintf($lang->custom->notice->forceReview, $lang->$module->common)
+                icon
+                (
+                    'help',
+                    setClass('pl-4 pt-2'),
+                    set('data-toggle', 'tooltip'),
+                    set('data-title', sprintf($lang->custom->notice->forceReview, $lang->$module->common)),
                 )
             )
         );
