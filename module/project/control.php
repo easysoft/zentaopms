@@ -889,14 +889,10 @@ class project extends control
         $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&branchID=$branchID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->loadModel('execution')->buildBugSearchForm($products, $queryID, $actionURL, 'project');
 
-        $showBranch      = false;
         $branchOption    = array();
         $branchTagOption = array();
         if($product and $product->type != 'normal')
         {
-            /* Display of branch label. */
-            $showBranch = $this->loadModel('branch')->showBranch($productID);
-
             /* Display status of branch. */
             $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
             foreach($branches as $branchInfo)
@@ -975,7 +971,6 @@ class project extends control
         $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
         $this->view->setModule       = true;
-        $this->view->showBranch      = false;
 
         $this->display();
     }
@@ -1739,11 +1734,10 @@ class project extends control
      * Manage products of project.
      *
      * @param  string $projectID
-     * @param  string $from  project|program|programproject
      * @access public
      * @return void
      */
-    public function manageProducts(string $projectID, string $from = 'project')
+    public function manageProducts(string $projectID)
     {
         /* 如果是无产品项目，则返回。*/
         /* If hasProduct is 0, return. */
