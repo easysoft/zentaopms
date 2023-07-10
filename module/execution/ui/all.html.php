@@ -90,12 +90,12 @@ dtable
     set::customCols(true),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.onRenderCell')),
-    set::footPager(
-        usePager(),
-        set::recPerPage($recPerPage),
-        set::recTotal($recTotal),
-        set::linkCreator(helper::createLink('execution', 'all', "status={$status}&orderBy={$orderBy}&productID={$productID}&param=$param&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}"))
-    ),
+    set::footPager(usePager(array
+    (
+        'recPerPage' => $recPerPage,
+        'recTotal' => $recTotal,
+        'linkCreator' => helper::createLink('execution', 'all', "status={$status}&orderBy={$orderBy}&productID={$productID}&param=$param&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}")
+    ))),
 );
 
 render();
