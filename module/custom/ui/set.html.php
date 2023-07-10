@@ -310,22 +310,22 @@ else
             set::control('static')
         );
 
-        foreach($fieldList as $key => $value)
-        {
-            $system = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;
+        div
+        (
+            setClass('hidden'),
+            setID('customFieldRow'),
 
-            $formItems[] = formRow
+            formRow
             (
                 formGroup
                 (
                     set::width('1/2'),
-                    set::label($key === '' ? 'NULL' : $key),
-                    set::name('values'),
-                    set::value(isset($dbFields[$key]) ? $dbFields[$key]->value : $value),
-                    set::readonly(empty($key))
+                    set::label('addRow'),
+                    set::name('values[]'),
                 ),
-                $canAdd ? span(
-                    setClass('pl-4'),
+                span
+                (
+                    setClass('pl-4 pt-2'),
                     icon
                     (
                         setClass('add-item'),
@@ -334,6 +334,44 @@ else
                     icon
                     (
                         setClass('del-item ml-2'),
+                        'trash',
+                    ),
+                )
+            )
+        );
+
+        foreach($fieldList as $key => $value)
+        {
+            $system = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;
+
+            $formItems[] = formRow
+            (
+                input
+                (
+                    set::type('hidden'),
+                    set::name('keys[]'),
+                    set::value(isset($dbFields[$key]) ? $dbFields[$key]->value : $value)
+                ),
+                formGroup
+                (
+                    set::width('1/2'),
+                    set::label($key === '' ? 'NULL' : $key),
+                    set::name('values[]'),
+                    set::value(isset($dbFields[$key]) ? $dbFields[$key]->value : $value),
+                    set::readonly(empty($key))
+                ),
+                $canAdd ? span(
+                    setClass('pl-4 pt-2'),
+                    icon
+                    (
+                        setClass('add-item'),
+                        on::click('addRow'),
+                        'plus',
+                    ),
+                    icon
+                    (
+                        setClass('del-item ml-2'),
+                        on::click('removeRow'),
                         'trash',
                     ),
                 ) : null,
