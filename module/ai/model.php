@@ -714,4 +714,32 @@ class aiModel extends model
 
         return $response;
     }
+
+    /**
+     * Get testing location for prompt, usually a link to object with max id and is accessable by user.
+     *
+     * @param  object        $prompt
+     * @access public
+     * @return string|false
+     */
+    public function getTestingLocation($prompt)
+    {
+        $module = $prompt->module;
+
+        if($module == 'story')
+        {
+            $storyId = $this->dao->select('max(id) as maxId')->from(TABLE_STORY)
+                ->where('product')->in($this->app->user->view->products)
+                ->fetch('maxId');
+            if(!empty($storyId)) return helper::createLink('story', 'view', "storyID=$storyId");
+        }
+        if($module == 'execution')
+        {
+            $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
+            $executionId  = max($executionIds);
+            if(!empty($executionId)) return helper::createLink('story', 'view', "executionID=$executionId");
+        }
+
+        return false;
+    }
 }

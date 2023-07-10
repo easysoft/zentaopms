@@ -254,7 +254,11 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->goTesting)) return $this->send(array('result' => 'success')); // TODO: go to proper prompt testing page.
+            if(!empty($data->goTesting)) // Go to testing object view.
+            {
+                $location = $this->ai->getTestingLocation($prompt);
+                return $this->send(empty($location) ? array('result' => 'fail', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'message' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
+            }
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
         }
