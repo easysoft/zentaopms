@@ -648,8 +648,9 @@ class aiModel extends model
      */
     private static function autoPrependNewline($text)
     {
-        preg_match('/\n[^$]/', $text, $matches);
+        if(empty($text)) return '';
 
+        preg_match('/\n[^$]/', $text, $matches);
         return empty($matches) ? $text : "\n$text";
     }
 
@@ -663,6 +664,8 @@ class aiModel extends model
      */
     private static function tryPunctuate($sentence, $newline = false)
     {
+        if(empty($sentence)) return '';
+
         preg_match('/\p{P}$/u', $sentence, $matches);
         if(empty($matches)) $sentence .= '.';
 
