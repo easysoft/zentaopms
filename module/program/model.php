@@ -196,7 +196,7 @@ class programModel extends model
             ->beginIF($this->app->rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->fi()
             ->beginIF($this->app->rawMethod == 'browse' and ($type === 'child' or !$this->app->user->admin))->andWhere('id')->in($objectIdList)->fi()
             ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
-            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($this->app->rawMethod != 'ajaxgetdropmenu' and !$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
