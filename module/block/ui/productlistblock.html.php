@@ -49,6 +49,7 @@ panel
     ),
     dtable
     (
+        set::height(318),
         set::shadow(false),
         set::fixedLeftWidth('0.25'),
         set::cols(array_values($config->block->product->dtable->fieldList)),

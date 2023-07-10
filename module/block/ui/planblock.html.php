@@ -31,6 +31,7 @@ panel
     set::bodyClass('p-0 no-shadow border-t'),
     dtable
     (
+        set::height(318),
         set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
         set::cols(array_values($config->block->plan->dtable->fieldList)),
         set::data(array_values($plans))
