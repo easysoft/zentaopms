@@ -330,19 +330,19 @@ $lang->block->modules['project']->availableBlocks['recentproject'] = "Recent {$l
 $lang->block->modules['project']->availableBlocks['statistic']     = "{$lang->projectCommon} Statistic";
 $lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon} List";
 
-$lang->block->modules['scrumProject'] = new stdclass();
-$lang->block->modules['scrumProject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon} Overview";
-$lang->block->modules['scrumProject']->availableBlocks['scrumlist']      = $lang->executionCommon . ' List';
-$lang->block->modules['scrumProject']->availableBlocks['sprint']         = $lang->executionCommon . ' Overview';
-$lang->block->modules['scrumProject']->availableBlocks['scrumtest']      = 'Test Version';
-$lang->block->modules['scrumProject']->availableBlocks['projectdynamic'] = 'Dynamics';
+$lang->block->modules['scrumproject'] = new stdclass();
+$lang->block->modules['scrumproject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon} Overview";
+$lang->block->modules['scrumproject']->availableBlocks['scrumlist']      = $lang->executionCommon . ' List';
+$lang->block->modules['scrumproject']->availableBlocks['sprint']         = $lang->executionCommon . ' Overview';
+$lang->block->modules['scrumproject']->availableBlocks['scrumtest']      = 'Test Version';
+$lang->block->modules['scrumproject']->availableBlocks['projectdynamic'] = 'Dynamics';
 
-$lang->block->modules['waterfallProject'] = new stdclass();
-$lang->block->modules['waterfallProject']->availableBlocks['waterfallgantt'] = "{$lang->projectCommon} Plan";
-$lang->block->modules['waterfallProject']->availableBlocks['projectdynamic'] = 'Dynamics';
+$lang->block->modules['waterfallproject'] = new stdclass();
+$lang->block->modules['waterfallproject']->availableBlocks['waterfallgantt'] = "{$lang->projectCommon} Plan";
+$lang->block->modules['waterfallproject']->availableBlocks['projectdynamic'] = 'Dynamics';
 
-$lang->block->modules['agileplus']     = $lang->block->modules['scrumProject'];
-$lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallProject'];
+$lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
+$lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks['statistic'] = $lang->productCommon . ' Report';

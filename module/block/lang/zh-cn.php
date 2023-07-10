@@ -225,19 +225,19 @@ $lang->block->modules['project']->availableBlocks['recentproject'] = "我近期�
 $lang->block->modules['project']->availableBlocks['statistic']     = "{$lang->projectCommon}统计";
 $lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon}列表";
 
-$lang->block->modules['scrumProject'] = new stdclass();
-$lang->block->modules['scrumProject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon}概况";
-$lang->block->modules['scrumProject']->availableBlocks['scrumlist']      = $lang->executionCommon . '列表';
-$lang->block->modules['scrumProject']->availableBlocks['sprint']         = $lang->executionCommon . '总览';
-$lang->block->modules['scrumProject']->availableBlocks['scrumtest']      = '待测版本';
-$lang->block->modules['scrumProject']->availableBlocks['projectdynamic'] = '最新动态';
+$lang->block->modules['scrumproject'] = new stdclass();
+$lang->block->modules['scrumproject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon}概况";
+$lang->block->modules['scrumproject']->availableBlocks['scrumlist']      = $lang->executionCommon . '列表';
+$lang->block->modules['scrumproject']->availableBlocks['sprint']         = $lang->executionCommon . '总览';
+$lang->block->modules['scrumproject']->availableBlocks['scrumtest']      = '待测版本';
+$lang->block->modules['scrumproject']->availableBlocks['projectdynamic'] = '最新动态';
 
-$lang->block->modules['waterfallProject'] = new stdclass();
-$lang->block->modules['waterfallProject']->availableBlocks['waterfallgantt'] = "{$lang->projectCommon}计划";
-$lang->block->modules['waterfallProject']->availableBlocks['projectdynamic'] = '最新动态';
+$lang->block->modules['waterfallproject'] = new stdclass();
+$lang->block->modules['waterfallproject']->availableBlocks['waterfallgantt'] = "{$lang->projectCommon}计划";
+$lang->block->modules['waterfallproject']->availableBlocks['projectdynamic'] = '最新动态';
 
-$lang->block->modules['agileplus']     = $lang->block->modules['scrumProject'];
-$lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallProject'];
+$lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
+$lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
 
