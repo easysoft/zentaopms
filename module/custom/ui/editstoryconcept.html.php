@@ -39,13 +39,14 @@ formPanel
     ),
     formRow
     (
-        $config->URAndSR ? formGroup
+        formGroup
         (
             setClass('mr-8'),
+            setClass(!$this->config->URAndSR ? 'hidden' : ''),
             set::width('1/2'),
             set::name('URName'),
             set::value($URSR->URName),
-        ) : null,
+        ),
         formGroup
         (
             set::width('1/2'),
