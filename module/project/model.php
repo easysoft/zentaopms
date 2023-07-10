@@ -2779,7 +2779,7 @@ class projectModel extends model
                 }
 
                 $planStories = array_keys($planStory);
-                $this->loadModel('execution')->linkStory($projectID, $planStories, $planProducts);
+                $this->loadModel('execution')->linkStory($projectID, $planStories);
             }
         }
 

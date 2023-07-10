@@ -3207,26 +3207,24 @@ class executionModel extends model
      *
      * @param int    $executionID
      * @param array  $stories
-     * @param array  $products
      * @param string $extra
      * @param array  $lanes
      *
      * @access public
      * @return bool
      */
-    public function linkStory($executionID, $stories = array(), $products = array(), $extra = '', $lanes = array())
+    public function linkStory($executionID, $stories = array(), $extra = '', $lanes = array())
     {
         if(empty($executionID)) return false;
         if(empty($stories)) $stories = $this->post->stories;
         if(empty($stories)) return false;
-        if(empty($products)) $products = $this->post->products;
 
         $this->loadModel('action');
         $this->loadModel('kanban');
         $versions      = $this->loadModel('story')->getVersions($stories);
         $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder     = reset($linkedStories);
-        $storyList     = $this->dao->select('id, status, branch')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
+        $storyList     = $this->dao->select('id, status, branch, product')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
         $execution     = $this->getById($executionID);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -3249,7 +3247,7 @@ class executionModel extends model
 
             $data = new stdclass();
             $data->project = $executionID;
-            $data->product = (int)$products[$storyID];
+            $data->product = (int)$storyList[$storyID]->product;
             $data->branch  = $storyList[$storyID]->branch;
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
@@ -3257,7 +3255,7 @@ class executionModel extends model
             $this->dao->replace(TABLE_PROJECTSTORY)->data($data)->exec();
 
             $this->story->setStage($storyID);
-            $this->linkCases($executionID, (int)$products[$storyID], $storyID);
+            $this->linkCases($executionID, $data->product, $storyID);
 
             $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
             if($action == 'linked2execution' and $execution->type == 'kanban') $action = 'linked2kanban';

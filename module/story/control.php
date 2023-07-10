@@ -153,8 +153,8 @@ class story extends control
                     $products[$newStoryID] = $productID;
                 }
 
-                if($this->session->project && $executionID != $this->session->project) $this->execution->linkStory($this->session->project, $storieIdList, $products);
-                $this->execution->linkStory($executionID, $storieIdList, $products, $extra, $lanes);
+                if($this->session->project && $executionID != $this->session->project) $this->execution->linkStory($this->session->project, $storieIdList);
+                $this->execution->linkStory($executionID, $storieIdList, $extra, $lanes);
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));

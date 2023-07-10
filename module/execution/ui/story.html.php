@@ -70,7 +70,7 @@ $batchCreateItem = array('text' => $lang->story->batchCreate, 'url' => $batchCre
 
 $canLinkStory     = $canModifyProduct && hasPriv('story', 'linkStory');
 $canlinkPlanStory = $canModifyProduct && hasPriv('story', 'importPlanStories');
-$linkStoryUrl     = createLink('story', 'linkStory', "project={$executionID}");
+$linkStoryUrl     = createLink('execution', 'linkStory', "project={$executionID}");
 
 if(commonModel::isTutorialMode())
 {
@@ -124,7 +124,7 @@ toolbar
     (
         btn(
             setClass('btn primary'),
-            set::icon('plus'),
+            set::icon('link'),
             set::url($linkStoryUrl),
             $lang->story->linkStory
         ),

@@ -3249,7 +3249,7 @@ class execution extends control
         if(!empty($_POST))
         {
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
-            $this->execution->linkStory($objectID, array(), array(), $extra);
+            $this->execution->linkStory($objectID, array(), $extra);
 
             if(isonlybody())
             {
@@ -3261,7 +3261,7 @@ class execution extends control
                     {
                         $kanbanData = $this->loadModel('kanban')->getRDKanban($objectID, $execLaneType, 'id_desc', 0, $execGroupBy);
                         $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+                        return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "parent.updateKanban($kanbanData)"));
                     }
                     else
                     {
@@ -3269,16 +3269,16 @@ class execution extends control
                         $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
                         $kanbanData = $kanbanData[$kanbanType];
                         $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
+                        return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "parent.updateKanban(\"story\", $kanbanData)"));
                     }
                 }
                 else
                 {
-                    return print(js::reload('parent'));
+                    return $this->sendSuccess(array('closeModal' => true, 'load' => true));
                 }
             }
 
-            return print(js::locate($browseLink));
+            return $this->sendSuccess(array('load' => $browseLink));
         }
 
         if($object->type == 'project')
@@ -3356,11 +3356,16 @@ class execution extends control
         $project = $object;
         if(strpos('sprint,stage,kanban', $object->type) !== false) $project = $this->loadModel('project')->getByID($object->project);
 
+        $productPairs = array();
+        foreach($products as $id => $product) $productPairs[$id] = $product->name;
+
         /* Assign. */
         $this->view->title        = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
         $this->view->objectID     = $originObjectID;
         $this->view->object       = $object;
-        $this->view->products     = $products;
+        $this->view->executionID  = $object->id;
+        $this->view->projectID    = $object->id;
+        $this->view->productPairs = $productPairs;
         $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
         $this->view->pager        = $pager;
         $this->view->browseType   = $browseType;
@@ -4085,8 +4090,8 @@ class execution extends control
             $projectID   = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch('project');
             $planStories = array_keys($planStory);
 
-            if($executionID != $projectID) $this->execution->linkStory($projectID, $planStories, $planProducts);
-            $this->execution->linkStory($executionID, $planStories, $planProducts, $extra);
+            if($executionID != $projectID) $this->execution->linkStory($projectID, $planStories);
+            $this->execution->linkStory($executionID, $planStories, $extra);
         }
 
         $moduleName = 'execution';

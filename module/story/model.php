@@ -2802,7 +2802,7 @@ class storyModel extends model
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->fetchPairs();
 
-        $review = $this->storyTao->getRevertStoryIdList($productID);
+        $review = $this->storyTao->getRevertStoryIdList((int)$productID);
         $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
         if(strpos($sql, 'result') !== false)
         {

@@ -1095,7 +1095,7 @@ class productplanModel extends model
                     $planProducts[$story->id] = $story->product;
                 }
                 $planStories = array_keys($planStory);
-                $this->execution->linkStory($projectID, $planStories, $planProducts);
+                $this->execution->linkStory($projectID, $planStories);
             }
         }
     }
