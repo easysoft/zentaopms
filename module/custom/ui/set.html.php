@@ -18,25 +18,34 @@ $headingTips = null;
 $actionWidth = 'w-1/2';
 if($module == 'project' && $field == 'unitList')
 {
+    $checkedUnitList = array();
+    foreach($lang->project->unitList as $unit => $unitName)
+    {
+        if(in_array($unit, $unitList)) $checkedUnitList[$unit] = $unitName;
+    }
+
     $formItems[] = formGroup
     (
-        set::width('1/2'),
+        set::width('3/4'),
         set::label($lang->custom->project->currencySetting),
-        set::name('unitList'),
+        set::name('unitList[]'),
         set::value($unitList),
         set::control('checkListInline'),
         set::items($lang->project->unitList),
+        on::change('changeUnit')
     );
 
     $formItems[] = formGroup
     (
-        set::width('1/2'),
+        set::width('1/3'),
         set::label($lang->custom->project->defaultCurrency),
         set::control('select'),
         set::name('defaultCurrency'),
-        set::value($lang->project->unitList),
-        set::items($defaultCurrency)
+        set::items($checkedUnitList),
+        set::value($defaultCurrency),
+        set::required(true),
     );
+    $actionWidth = 'w-3/4';
 }
 elseif($module == 'story' && $field == 'reviewRules')
 {

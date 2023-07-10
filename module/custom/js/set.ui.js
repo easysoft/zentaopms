@@ -27,3 +27,22 @@ window.changeReview = function(e)
         $('.open-review').removeClass('hidden');
     }
 }
+
+window.changeUnit = function()
+{
+    const defaultCurrency = $('#defaultCurrency').val();
+    $('#defaultCurrency').empty().append('<option></option>');
+    $('[name^=unitList]').each(function()
+    {
+        if($(this).prop('checked'))
+        {
+            let   text     = $(this).parent().html();
+            const firstStr = $(this).val() + '">';
+
+            text = text.substring(text.lastIndexOf(firstStr) + firstStr.length, text.lastIndexOf('<'));
+            $('#defaultCurrency').append("<option value='" + $(this).val() + "'>" + text + '</option>');
+                                                                                }
+    });
+
+     $('#defaultCurrency').val(defaultCurrency);
+}
