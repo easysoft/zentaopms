@@ -75,4 +75,4 @@ $getAffectedTabs = function($story, $users)
             ),
         )
     );
-}
+};
