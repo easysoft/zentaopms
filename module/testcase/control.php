@@ -972,13 +972,6 @@ class testcase extends control
             }
         }
 
-        if($case->auto == 'unit')
-        {
-            $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
-            $this->lang->testcase->subMenu->testcase->unit['alias']     = 'view';
-            $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
-        }
-
         if(empty($case->steps))
         {
             $step = new stdclass();
