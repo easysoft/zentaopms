@@ -345,7 +345,8 @@ class mailModel extends model
                 $encoding = mb_detect_encoding($mailError, array('ASCII','UTF-8','GB2312','GBK','BIG5'));
                 if($encoding != 'UTF-8') $mailError = mb_convert_encoding($mailError, 'utf8', $encoding);
             }
-            $this->errors[] = nl2br(trim(strip_tags($e->errorMessage()))) . '<br />' . $mailError;
+            $this->errors[] = nl2br(trim(strip_tags($e->errorMessage())));
+            $this->errors[] = $mailError;
         }
         catch (Exception $e)
         {
