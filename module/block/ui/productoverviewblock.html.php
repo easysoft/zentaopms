@@ -76,7 +76,7 @@ if($block->width == 3)
     foreach($years as $year)
     {
         $url = createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("year={$year}"));
-        $items[] = array('text' => $year . $suffix, 'data-on' => 'click', 'data-call' => "loadPage('{$url}', '#{$id}')");
+        $items[] = array('text' => $year . $suffix, 'url' => $url, 'data-load' => 'target', 'data-selector' => "#{$id}-annual", 'data-partial' => true);
     }
 
     panel
@@ -88,6 +88,7 @@ if($block->width == 3)
         set::bodyClass('gradient flex p-0'),
         col
         (
+            setID("{$id}-overview"),
             setStyle(array('width' => '62.5%')),
             div
             (
@@ -180,6 +181,7 @@ if($block->width == 3)
         ),
         col
         (
+            setID("{$id}-annual"),
             setStyle(array('width' => '37.5%')),
             div
             (
