@@ -349,7 +349,7 @@ class mail extends control
 
         if($data->status == 'fail')
         {
-            return $this->send(array('callback' => "zui.Modal.confirm('{$data->failReason}')"));
+            return $this->send(array('callback' => "zui.Modal.alert('{$data->failReason}')"));
         }
 
         return $this->sendSuccess(array('message' => $this->lang->mail->noticeResend, 'load' => true));
