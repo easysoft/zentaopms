@@ -49,15 +49,17 @@ jsVar('executionID', isset($objectID) ? $objectID : 0);
 
 detailHeader
 (
+    to::prefix($lang->story->edit),
     to::title
     (
         entityLabel
         (
-            set::entityID($story->id),
             set::level(1),
+            set::entityID($story->id),
+            set::reverse(true),
             $story->title
         )
-    )
+    ),
 );
 
 detailBody
