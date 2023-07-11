@@ -609,6 +609,11 @@ $lang->block->sprint->totalExecution = 'Total';
 $lang->block->sprint->thisYear       = 'This Year';
 $lang->block->sprint->statusCount    = "Status of {$lang->executionCommon}";
 
+$lang->block->monthlyprogress = new stdclass();
+$lang->block->monthlyprogress->doneStoryEstimateTrendChart = "The Finished {$lang->SRCommon} Scale Trend Chart";
+$lang->block->monthlyprogress->storyTrendChart             = "The New and Finished {$lang->SRCommon} Trend Chart";
+$lang->block->monthlyprogress->bugTrendChart               = 'The New and Resolved Bugs Trend Chart';
+
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
 $lang->block->moduleList['execution']       = $lang->execution->common;

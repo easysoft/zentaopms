@@ -2210,6 +2210,53 @@ class blockZen extends block
     }
 
     /**
+     * 打印产品月度推进分析区块。
+     * Print product monthly progress block.
+     *
+     * @param  object    $block
+     * @access protected
+     * @return void
+     */
+    protected function printMonthlyProgressBlock()
+    {
+        $months            = array();
+        $doneStoryEstimate = array();
+        $doneStoryCount    = array();
+        $createStoryCount  = array();
+        $fixedBugCount     = array();
+        $createBugCount    = array();
+
+        $today = strtotime(helper::today());
+        $begin = strtotime(date('Y-m', strtotime('+2 month', $today)));
+        $end   = strtotime(date('Y-m', $today));
+        $begin = strtotime('2023-09');
+        $end   = strtotime('2024-02');
+        for($date = $begin; $date <= $end; $date = strtotime('+1 month', $date))
+        {
+            $month = date('Y-m', $date);
+            $doneStoryEstimate[$month] = rand(100, 400);
+            $doneStoryCount[$month]     = rand(100, 400);
+            $createStoryCount[$month]   = rand(100, 400);
+            $fixedBugCount[$month]     = rand(100, 400);
+            $createBugCount[$month]     = rand(100, 400);
+
+            $month = (int)ltrim(date('m', $date), '0');
+
+            $monthName = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? "{$month}{$this->lang->block->month}" : zget($this->lang->datepicker->monthNames, $month - 1, '');
+            if($month == 1) $monthName .= "\n" . date('Y', $date) . (in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $this->lang->year : '');
+
+            $months[] = $monthName;
+        }
+
+        $this->view->months            = $months;
+        $this->view->doneStoryEstimate = $doneStoryEstimate;
+        $this->view->doneStoryCount    = $doneStoryCount;
+        $this->view->createStoryCount  = $createStoryCount;
+        $this->view->fixedBugCount     = $fixedBugCount;
+        $this->view->createBugCount    = $createBugCount;
+    }
+
+    /**
      * 判断是否为内部调用。
      * Check request client is chandao or not.
      *

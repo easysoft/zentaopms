@@ -320,7 +320,7 @@ $config->block->size['product']['bug']              = array('2' => '6', '1' => '
 $config->block->size['product']['release']          = array('2' => '6', '1' => '6');
 $config->block->size['product']['statistic']        = array('2' => '5', '1' => '11');
 $config->block->size['product']['bugstatistic']     = array('2' => '5', '1' => '8');
-$config->block->size['product']['monthlyprogress']  = array('2' => '5');
+$config->block->size['product']['monthlyprogress']  = array('2' => '5', '1' => '13');
 $config->block->size['product']['annualworkload']   = array('2' => '6');
 $config->block->size['product']['overview']         = array('1' => '3', '3' => '3');
 $config->block->size['product']['releasestatistic'] = array('1' => '8');

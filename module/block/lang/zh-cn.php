@@ -630,6 +630,11 @@ $lang->block->zentaodynamic->release      = '最新发布';
 $lang->block->zentaodynamic->registration = '立即报名';
 $lang->block->zentaodynamic->reservation  = '立即预约';
 
+$lang->block->monthlyprogress = new stdclass();
+$lang->block->monthlyprogress->doneStoryEstimateTrendChart = '完成需求规模趋势图';
+$lang->block->monthlyprogress->storyTrendChart             = '需求新增和完成趋势图';
+$lang->block->monthlyprogress->bugTrendChart               = 'Bug新增和解决趋势图';
+
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
 $lang->block->moduleList['execution']       = $lang->execution->common;
