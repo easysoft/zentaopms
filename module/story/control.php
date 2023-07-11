@@ -1021,7 +1021,7 @@ class story extends control
             $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
             {
-                if(!($project->model == 'scrum' and !$project->hasProduct and $project->multiple)) $this->view->hiddenPlan = true;
+                if((in_array($project->model, array('waterfallplus', 'waterfall')) and !$project->hasProduct) or !$project->multiple) $this->view->hiddenPlan = true;
                 $this->project->setMenu($executionID);
             }
             else
@@ -1156,6 +1156,7 @@ class story extends control
             $showFields = str_replace('stage', '', $showFields);
         }
         if(!$branchProduct) unset($customFields['branch']);
+        if($this->view->hiddenPlan) unset($customFields['plan']);
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
