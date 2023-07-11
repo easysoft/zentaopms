@@ -44,6 +44,7 @@ div
             set::label(''),
             span
             (
+                setClass('flex items-center'),
                 icon('info text-warning mr-2'),
                 $lang->custom->notice->readOnlyOfProduct
             )

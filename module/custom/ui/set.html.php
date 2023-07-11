@@ -256,8 +256,8 @@ elseif($module == 'bug' && $field == 'longlife')
 
     $headingTips = div
     (
-        setClass('flex-auto pt-1'),
-        icon('info text-warning mr-2'),
+        setClass('flex flex-auto items-center pt-1'),
+        icon('info text-warning mr-1'),
         $lang->custom->notice->longlife
     );
 
@@ -451,8 +451,8 @@ else
         {
             $headingTips = div
             (
-                setClass('flex-auto pt-1'),
-                icon('info text-warning mr-2'),
+                setClass('flex flex-auto items-center pt-1'),
+                icon('info text-warning mr-1'),
                 $lang->custom->notice->canNotAdd
             );
         }
