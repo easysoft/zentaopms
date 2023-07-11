@@ -18,9 +18,8 @@ class productMenu extends wg
 
     private function buildMenu(): array
     {
-        $link      = $this->prop('link', '');
-        $items     = $this->prop('items');
-        $activeKey = $this->prop('activeKey');
+        $link  = $this->prop('link');
+        $items = $this->prop('items');
 
         $menus = array();
         foreach($items as $itemKey => $item)
@@ -31,39 +30,46 @@ class productMenu extends wg
                 continue;
             }
 
-            $menus[] = array('text' => $item, 'active' => $itemKey == $activeKey, 'url' => sprintf($link, $itemKey));
+            $menus[] = array('text' => $item, 'url' => sprintf($link, $itemKey));
         }
         return $menus;
     }
 
-    protected function build(): wg
+    private function getTitle()
     {
-        $title = $this->prop('title');
+        global $lang;
+        $activeKey = $this->prop('activeKey');
+        if(empty($activeKey)) return $lang->product->all;
+
+        $items = $this->prop('items');
+
+        foreach($items as $itemID => $itemName)
+        {
+            if($itemID == $activeKey) return $itemName;
+        }
+
+        return $lang->product->all;
+    }
+
+    protected function build(): zui 
+    {
         $items = $this->buildMenu();
 
-        return div
+        $activeKey = $this->prop('activeKey');
+        $link      = $this->prop('link');
+        $closeLink = str_replace('{id}', '0', $link);
+
+        return zui::dropmenu
         (
-            setClass('program-menu'),
-            set('data-zin-id', $this->gid),
-            h::header
-            (
-                set('data-toggle', 'dropdown'),
-                div
-                (
-                    setClass('title-container'),
-                    div
-                    (
-                        setClass('icon-container down'),
-                        h::i(setClass('gg-chevron-down')),
-                    ),
-                    span($title)
-                ),
-            ),
-            menu
-            (
-                set::class('dropdown-menu'),
-                set::items($items)
-            )
+            set('_id', 'productMenu'),
+            set::className('product-menu btn'),
+            set::defaultValue($activeKey),
+            set::text($this->getTitle()),
+            set::caret(true),
+            set::popWidth(200),
+            set::popClass('popup text-md'),
+            set::onClick(jsRaw("(event) => {if(!event.target.closest('.is-caret')) return; openUrl('$closeLink'); return false}")),
+            set::data(array('search' => false, 'checkIcon' => true, 'link' => $link, 'data' => $items)),
         );
     }
 }

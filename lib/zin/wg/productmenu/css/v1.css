@@ -1,75 +1,10 @@
-.program-menu {
-    width: 112px;
-    max-height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    margin: -5px 0;
-}
-
-.program-menu > header {
-    height: 40px;
-    border: 1px solid #2e7fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    padding-left: 12px;
-    flex: none;
-    border-radius: 2px;
-}
-
-.program-menu .title-container {
-    display: flex;
-    column-gap: 8px;
-}
-
-.program-menu .title-container > span {
-    font-size: 13px;
-    line-height: 20px;
-    font-weight: bold;
-}
-
-.program-menu .icon-container {
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    border: 1px solid #0066fa;
-}
-
-.program-menu .icon-container.down {
-    background-color: inherit;
-}
-
-.program-menu .icon-container.up {
-    background-color: #0066fa;
-}
-
-.gg-chevron-down {
-    box-sizing: border-box;
-    position: relative;
-    display: block;
-    transform: scale(var(--ggs,1));
-    width: 22px;
-    height: 22px;
-    border: 2px solid transparent;
-    border-radius: 100px
-}
-
-.gg-chevron-down::after {
-    content: "";
-    display: block;
-    box-sizing: border-box;
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-bottom: 2px solid;
-    border-right: 2px solid;
-    transform: rotate(45deg);
-    left: 3px;
-    top: 3px;
-    color: #313C52;
-}
+.product-menu {width: 200px; max-height: 100%; margin: -5px 0; justify-content: flex-start;}
+.product-menu > .text {flex: auto; display: flex; align-items: center; justify-content: flex-start; font-weight: bold; font-size: 16px; padding: 0 4px;}
+.product-menu > .icon.is-leading {width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--color-primary-500); display: flex; align-items: center; justify-content: center; transform: rotate(90deg); transition: .2s all;}
+.product-menu.is-open > .icon.is-leading {color: var(--color-canvas); background: var(--color-primary-500); transform: rotate(-90deg);}
+.product-menu > .is-caret {width: 20px; margin-right: -8px; transition: background-color .2s; border-radius: var(--radius)}
+.product-menu[data-value=""] > .is-caret,
+.product-menu[data-value="0"] > .is-caret {display: none;}
+.product-menu > .is-caret:hover {color: var(--color-primary-500); background: var(--color-primary-100);}
+.product-menu > .is-caret > .caret {display: none;}
+.product-menu > .is-caret::after {content: '\e936'; font-family: ZentaoIcon;}

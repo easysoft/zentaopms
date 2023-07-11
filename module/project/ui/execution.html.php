@@ -59,6 +59,16 @@ $executions = initTableData($executions, $config->projectExecution->dtable->fiel
 
 /* zin: Define the feature bar on main menu. */
 $checked = $this->cookie->showTask ? 'checked' : '';
+$productMenuLink = createLink(
+    $this->app->rawModule,
+    $this->app->rawMethod,
+    array(
+        'status'     => $status,
+        'projectID'  => $projectID,
+        'orderBy'    => $orderBy,
+        'productID'  => '%s'
+    )
+);
 featureBar
 (
     to::before(productMenu(set
@@ -66,7 +76,8 @@ featureBar
         'title' => $lang->product->allProduct,
         'items' => $productList,
         'activeKey' => $productID,
-        'closeLink' => '#'
+        'closeLink' => '#',
+        'link' => $productMenuLink
     ]))),
     set::current($status),
     set::linkParams("status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
