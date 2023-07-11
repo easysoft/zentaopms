@@ -355,11 +355,10 @@ formPanel
                 div
                 (
                     setClass('grow'),
-                    select
+                    picker
                     (
                         set::name('products[0]'),
                         set::items($allProducts),
-                        set::multiple(false),
                         on::change('productChange')
                     )
                 ),
@@ -382,7 +381,7 @@ formPanel
             inputGroup
             (
                 $lang->product->branchName['branch'],
-                select
+                picker
                 (
                     set::name("branch[0][]"),
                     on::change('branchChange')
@@ -396,11 +395,10 @@ formPanel
             (
                 set::id("plan0"),
                 $lang->project->associatePlan,
-                select
+                picker
                 (
                     set::name('plans[0][]'),
                     set::items(null),
-                    set::multiple(false)
                 )
             ),
             div
@@ -503,10 +501,13 @@ formPanel
     formGroup
     (
         set::width('1/2'),
-        set::name('whitelist[]'),
         set::label($lang->whitelist),
-        set::items($users),
-        set::control(['type' => 'select', 'multiple' => false])
+        picker
+        (
+            set::name('whitelist[]'),
+            set::items($users),
+            set::multiple(true)
+        )
     ),
     formGroup
     (

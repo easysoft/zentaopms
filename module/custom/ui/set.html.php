@@ -302,13 +302,13 @@ elseif($module == 'user' && $field == 'contactField')
     (
         set::width('1/2'),
         set::label($lang->custom->user->fields['contactField']),
-        set::name('contactField'),
-        set::value($config->user->contactField),
-        set::control(array(
-            'type'     => 'select',
-            'multiple' => true,
-        )),
-        set::items($lang->user->contactFieldList)
+        picker
+        (
+            set::name('contactField'),
+            set::value($config->user->contactField),
+            set::multiple(true),
+            set::items($lang->user->contactFieldList)
+        )
     );
 
     if(common::hasPriv('custom', 'restore'))

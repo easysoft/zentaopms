@@ -68,7 +68,7 @@ if($linkedProducts)
                     div
                     (
                         setClass('grow'),
-                        select
+                        picker
                         (
                             set::name("products[$i]"),
                             set::value($product->id),
@@ -87,7 +87,7 @@ if($linkedProducts)
                 inputGroup
                 (
                     $lang->product->branchName['branch'],
-                    select
+                    picker
                     (
                         set::name("branch[$i][]"),
                         set::items($branches),
@@ -103,7 +103,7 @@ if($linkedProducts)
                 (
                     set::id("plan{$i}"),
                     $lang->project->associatePlan,
-                    select
+                    picker
                     (
                         set::name("plans[$product->id][]"),
                         set::items($plans),
@@ -400,11 +400,14 @@ formPanel
     formGroup
     (
         set::width('1/2'),
-        set::name('whitelist[]'),
         set::label($lang->whitelist),
-        set::value($project->whitelist),
-        set::items($users),
-        set::control(['type' => 'select', 'multiple' => false])
+        picker
+        (
+            set::name('whitelist[]'),
+            set::value($project->whitelist),
+            set::items($users),
+            set::multiple(true)
+        )
     ),
     formGroup
     (
