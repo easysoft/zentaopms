@@ -1539,7 +1539,14 @@ class pivotModel extends model
                 }
                 else
                 {
-                    $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                    if($fields[$field]['type'] == 'number')
+                    {
+                        $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                    }
+                    else
+                    {
+                        $columnSQL = "$stat(0) as `$uuName`";
+                    }
                 }
 
                 if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
