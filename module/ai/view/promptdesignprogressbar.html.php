@@ -66,7 +66,7 @@
       {
         for(let step of steps.children)
         {
-          step.addEventListener('mouseenter', function (e)
+          step.addEventListener('mouseenter', function()
           {
             if(step.lastElementChild?.classList.contains('outline-arrow'))
             {
@@ -79,7 +79,7 @@
               step.previousElementSibling.lastElementChild.classList.add('solid-arrow');
             }
           });
-          step.addEventListener('mouseleave', function (e)
+          step.addEventListener('mouseleave', function()
           {
             if(step.lastElementChild?.classList.contains('hover-arrow'))
             {
@@ -92,6 +92,15 @@
               step.previousElementSibling.lastElementChild.classList.remove('solid-arrow');
             }
           });
+          const link = step.querySelector('a');
+          if(!link) continue;
+          step.addEventListener('click', function(e)
+          {
+            const result = validateForm();
+            if(result) return;
+
+            e.preventDefault();
+          })
         }
       }
     })();
