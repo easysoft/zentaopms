@@ -45,3 +45,11 @@ $config->ai->dataSource['execution']['tasks']     = array('name', 'pri', 'status
 $config->ai->targetForm = array();
 $config->ai->targetForm['story']     = array('create', 'batchcreate', 'change', 'totask', 'testcasecreate', 'subdivide');
 $config->ai->targetForm['execution'] = array('batchcreatetask', 'createtestreport', 'createqa', 'createrisk', 'createissue');
+
+/* Menu printing configurations. */
+$config->ai->menuPrint = new stdclass();
+$config->ai->menuPrint->locations = array(); // Menu location definations, defines acceptable module-methods and on page menu locations.
+$config->ai->menuPrint->locations['story']['view']          = (object)array('module' => 'story', 'targetContainer' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title', 'class' => 'pull-right', 'stylesheet' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}');
+$config->ai->menuPrint->locations['projectstory']['view']   = $config->ai->menuPrint->locations['story']['view'];
+$config->ai->menuPrint->locations['execution']['storyView'] = $config->ai->menuPrint->locations['story']['view'];
+$config->ai->menuPrint->locations['execution']['view']      = (object)array('module' => 'execution', 'injectMethod' => 'prepend', 'targetContainer' => '#mainContent.main-row > .col-4.side-col .detail:first-child', 'class' => 'pull-right');

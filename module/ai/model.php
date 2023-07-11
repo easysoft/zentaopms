@@ -767,4 +767,19 @@ class aiModel extends model
 
         return 'assignrole';
     }
+
+    /**
+     * Get prompts available for calling (which are either active or created by the user) of a module for user.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getPromptsForUser($module)
+    {
+        return $this->dao->select('*')->from(TABLE_PROMPT)
+            ->where('module')->eq($module)
+            ->andWhere('status', true)->eq('active')->orWhere('createdBy')->eq($this->app->user->account)->markRight(1)
+            ->fetchAll();
+    }
 }
