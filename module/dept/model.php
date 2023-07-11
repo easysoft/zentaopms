@@ -129,11 +129,12 @@ class deptModel extends model
      * Get the treemenu of departments.
      *
      * @param  int    $rootDeptID
+     * @param  array  $userFunc
      * @param  int    $param
      * @access public
-     * @return string
+     * @return array
      */
-    public function getTreeMenu($rootDeptID = 0, $param = 0)
+    public function getTreeMenu(int $rootDeptID = 0, array $userFunc = array(), int $param = 0): array
     {
         $deptMenu = array();
         $data     = new stdclass();
@@ -144,7 +145,7 @@ class deptModel extends model
             $data->id     = $dept->id;
             $data->parent = $dept->parent;
             $data->name   = $dept->name;
-            $data->url    = helper::createLink('personnel', 'accessible', "program={$param}&deptID={$dept->id}");
+            $data->url    = call_user_func($userFunc, $dept, $param);
 
             $deptMenu[] = $data;
         }
@@ -200,8 +201,7 @@ class deptModel extends model
      */
     public function createMemberLink($dept)
     {
-        $linkHtml = html::a(helper::createLink('company', 'browse', "browseType=inside&dept={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
-        return $linkHtml;
+        return helper::createLink('company', 'browse', "browseType=inside&dept={$dept->id}");
     }
 
     /**
@@ -227,7 +227,7 @@ class deptModel extends model
      */
     public function createGroupManageMemberLink($dept, $groupID)
     {
-        return html::a(helper::createLink('group', 'managemember', "groupID=$groupID&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
+        return helper::createLink('group', 'managemember', "groupID=$groupID&deptID={$dept->id}");
     }
 
     /**

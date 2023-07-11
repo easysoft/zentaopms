@@ -101,7 +101,7 @@ class bug extends control
      */
     public function browse(int $productID, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $productID  = $this->product->saveVisitState($productID, $this->products);
+        $productID  = $this->product->saveState($productID, $this->products);
         $product    = $this->product->getByID($productID);
         $branch     = $this->bugZen->getBrowseBranch($branch, $product->type);
         $browseType = $browseType ? strtolower($browseType) : 'unclosed';
@@ -176,8 +176,11 @@ class bug extends control
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all');
         $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bugID, 'bug');
-        $this->view->actionList  = $this->loadModel('bug')->buildOperateMenu($bug, 'view');
         $this->view->actions     = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->legendBasic = $this->bugZen->getBasicInfoTable($this->view);
+        $this->view->legendLife  = $this->bugZen->getBugLifeTable($this->view);
+        $this->view->legendMain  = $this->bugZen->getMainRelatedTable($this->view);
+        $this->view->legendMisc  = $this->bugZen->getOtherRelatedTable($this->view);
         $this->display();
     }
 
@@ -226,7 +229,7 @@ class bug extends control
             return $this->responseAfterCreate($bug, $output, $message);
         }
 
-        $productID      = $this->product->saveVisitState($productID, $this->products);
+        $productID      = $this->product->saveState($productID, $this->products);
         $currentProduct = $this->product->getByID($productID);
         $this->bugZen->setCreateMenu($productID, $branch, $output);
 
@@ -331,9 +334,10 @@ class bug extends control
         }
 
         /* Show the variables associated. */
-        $this->view->title = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
-        $this->view->users = $users;
-        $this->view->bug   = $oldBug;
+        $this->view->title   = $this->lang->bug->assignTo;
+        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->users   = $users;
+        $this->view->bug     = $oldBug;
         $this->display();
     }
 
@@ -376,7 +380,7 @@ class bug extends control
 
         $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
 
-        $this->view->title   = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->confirm;
+        $this->view->title   = $this->lang->bug->confirm;
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed', $oldBug->assignedTo);
         $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
@@ -433,7 +437,7 @@ class bug extends control
         $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
 
         /* Show the variables associated. */
-        $this->view->title      = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->resolve;
+        $this->view->title      = $this->lang->bug->resolve;
         $this->view->bug        = $oldBug;
         $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($oldBug->execution) : '';
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
@@ -482,7 +486,7 @@ class bug extends control
         $productID = $oldBug->product;
         $this->qa->setMenu($this->products, $productID, $oldBug->branch);
 
-        $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
+        $this->view->title   = $this->lang->bug->activate;
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed', $oldBug->resolvedBy);
         $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $oldBug->branch, 'noempty,noreleased', 0, 'execution', $oldBug->openedBuild);
@@ -520,6 +524,7 @@ class bug extends control
             return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
         }
 
+        $this->view->title   = $this->lang->bug->close;
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->loadModel('action')->getList('bug', $oldBug->id);
@@ -725,7 +730,7 @@ class bug extends control
         }
 
         /* Get product, then set menu. */
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getById($productID);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);
@@ -1195,7 +1200,7 @@ class bug extends control
         if($userID == 0) $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
-        $bugs    = $this->bug->getUserBugPairs($account, true, 0, '', '', $appendID);
+        $bugs    = $this->bug->getUserBugPairs($account, true, 0, array(), array(), $appendID);
 
         if($id) return print(html::select("bugs[$id]", $bugs, '', 'class="form-control"'));
         return print(html::select('bug', $bugs, '', 'class=form-control'));

@@ -26,7 +26,7 @@ window.renderReleaseCountCell = function(result, {col, row})
     return result;
 }
 
-$(document).on('click', '.batch-btn', function()
+$(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);
     const checkedList = dtable.$.getChecks();
@@ -36,4 +36,11 @@ $(document).on('click', '.batch-btn', function()
     const url  = $(this).data('url');
     checkedList.forEach((id) => form.append('projectIdList[]', id));
     postAndLoadPage(url, form);
+}).off('click', '#actionBar .export').on('click', '#actionBar .export', function()
+{
+    const dtable = zui.DTable.query($('#table-project-browse'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    $.cookie.set('checkedItem', checkedList);
 });

@@ -46,7 +46,7 @@ $lang->todo->reasonList['bug']   = '转Bug';
 $lang->todo->reasonList['done']  = '完成';
 
 $lang->todo->id           = '编号';
-$lang->todo->account      = '所有者';
+$lang->todo->account      = '由谁创建';
 $lang->todo->date         = '日期';
 $lang->todo->begin        = '开始';
 $lang->todo->end          = '结束';
@@ -99,6 +99,10 @@ $lang->todo->noOptions      = '您暂时没有待处理的%s，请重新选择�
 $lang->todo->summary        = '本页共 <strong>%s</strong> 项待办，未开始 <strong>%s</strong>，进行中 <strong>%s</strong>。';
 $lang->todo->checkedSummary = '共选择 <strong>%total%</strong> 项待办，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>。';
 
+$lang->todo->abbr = new stdclass();
+$lang->todo->abbr->start  = '开始';
+$lang->todo->abbr->finish = '完成';
+
 $lang->todo->statusList['wait']   = '未开始';
 $lang->todo->statusList['doing']  = '进行中';
 $lang->todo->statusList['done']   = '已完成';
@@ -117,6 +121,10 @@ $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = '任务';
 $lang->todo->typeList['story']    = $lang->SRCommon;
 $lang->todo->typeList['testtask'] = '测试单';
+
+$lang->todo->fromList['bug']   = '相关Bug';
+$lang->todo->fromList['task']  = '相关任务';
+$lang->todo->fromList['story'] = '相关' . $lang->SRCommon;
 
 $lang->todo->confirmDelete  = '您确定要删除这条待办吗？';
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';

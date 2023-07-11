@@ -27,6 +27,7 @@ $lang->story->submitReview       = "提交评审";
 $lang->story->recall             = '撤销评审';
 $lang->story->recallChange       = '撤销变更';
 $lang->story->recallAction       = '撤销';
+$lang->story->relation           = '查看关联需求';
 $lang->story->needReview         = '需要评审';
 $lang->story->batchReview        = '批量评审';
 $lang->story->edit               = "编辑";
@@ -198,6 +199,7 @@ $lang->story->reviewed         = '已评审';
 $lang->story->toBeReviewed     = '待评审';
 $lang->story->linkMR           = '相关合并请求';
 $lang->story->linkCommit       = '相关代码版本';
+$lang->story->URS              = '用户需求';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->SRCommon}与上一{$lang->SRCommon}不属于同一{$lang->productCommon}！";

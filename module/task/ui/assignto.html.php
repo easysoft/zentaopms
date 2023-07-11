@@ -13,24 +13,14 @@ declare(strict_types=1);
 namespace zin;
 
 /* zin: Define the form in main content */
-formPanel
+modalHeader
 (
     set::title($lang->task->assignAction),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
-    set::shadow(!isonlybody()),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($task->name),
-            set::entityID($task->id),
-            set::reverse(true),
-        )
-    ),
-    set::shadow(!isonlybody()),
+);
+
+formPanel
+(
+    set::submitBtnText($lang->task->assignedTo),
     formGroup
     (
         set::width("1/3"),
@@ -66,8 +56,6 @@ formPanel
     )
 );
 
-h::hr(set::class('mt-6'));
-
 history();
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

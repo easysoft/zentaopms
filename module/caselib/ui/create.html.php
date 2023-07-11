@@ -12,25 +12,30 @@ declare(strict_types=1);
  */
 
 namespace zin;
-$nameGroup = formGroup
-(
-    set::name("name"),
-    set::label($lang->caselib->name),
-    set::required(true),
-    set::control("text")
-);
-$descGroup = formGroup
-(
-    set::name("desc"),
-    set::label($lang->caselib->desc),
-    set::control("editor")
-);
 
-$formItems = array();
-$formItems['name'] = $nameGroup;
-$formItems['desc'] = $descGroup;
-
-/* TODO:printExtendFields */
-formPanel($formItems);
+formPanel
+(
+    set::title($lang->caselib->create),
+    set::formClass('border-0'),
+    set::submitBtnText($lang->save),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->caselib->name),
+        set::required(true),
+        input
+        (
+            set::name('name')
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->caselib->desc),
+        editor
+        (
+            set::name('desc'),
+        )
+    )
+);
 
 render();

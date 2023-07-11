@@ -10,58 +10,143 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$tableData = initTableData($efforts, $config->task->effortTable->fieldList['actions'], $this->task);
-dtable
-(
-    set::cols(array_values($config->task->effortTable->fieldList)),
-    set::data($tableData),
-);
+jsVar('confirmRecord', $lang->task->confirmRecord);
 
-formBatch
+to::header
 (
-    formBatchItem
+    $lang->task->addEffort,
+    entityLabel
     (
-        set::name('date'),
-        set::label($lang->task->date),
-        set::width('120px'),
-        set::control('date'),
-        set::value(helper::today())
+        set::level(1),
+        set::text($task->name),
+        set::entityID($task->id),
+        set::reverse(true),
     ),
-    formBatchItem
+    span
     (
-        set::name('work'),
-        set::label($lang->task->work),
-        set::width('auto'),
-        set::control('input')
-    ),
-    formBatchItem
-    (
-        set::name('consumed'),
-        set::label($lang->task->consumed),
-        set::width('80px'),
-        set::control
+        setClass('flex gap-x-2 mr-3'),
+        $lang->task->estimate,
+        span
         (
-            array(
-                'type' => 'inputControl',
-                'suffix' => $lang->task->suffixHour,
-                'suffixWidth' => 20
-            )
-        )
+            setClass('label secondary-pale'),
+            $task->estimate . $lang->task->suffixHour,
+        ),
     ),
-    formBatchItem
+    span
     (
-        set::name('left'),
-        set::label($lang->task->left),
-        set::width('80px'),
-        set::control
+        setClass('flex gap-x-2'),
+        $lang->task->consumed,
+        span
         (
-            array(
-                'type' => 'inputControl',
-                'suffix' => $lang->task->suffixHour,
-                'suffixWidth' => 20
-            )
+            setClass('label warning-pale'),
+            span
+            (
+                setID('totalConsumed'),
+                $task->consumed
+            ),
+            $lang->task->suffixHour,
         )
     )
 );
 
-render(isonlybody() ? 'modalDialog' : 'page');
+
+if($efforts)
+{
+    div
+    (
+        setClass('table-title'),
+        $lang->task->committed
+    );
+    $tableData = initTableData($efforts, $config->task->effortTable->fieldList, $this->task);
+    dtable
+    (
+        set::cols(array_values($config->task->effortTable->fieldList)),
+        set::data($tableData),
+    );
+}
+
+if(!$this->task->canOperateEffort($task))
+{
+    $notice = '';
+    if(!isset($task->members[$app->user->account]))
+    {
+        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts));
+    }
+    elseif($task->assignedTo != $app->user->account and $task->mode == 'linear')
+    {
+        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts));
+    }
+
+    div
+    (
+        setClass('alert with-icon'),
+        icon('exclamation-sign'),
+        div
+        (
+            setClass('content'),
+            $notice
+        )
+    );
+}
+else
+{
+    formBatchPanel
+    (
+        set::title($lang->task->addEffort),
+        set::shadow(!isAjaxRequest('modal')),
+        set::actions(array('submit')),
+        set::maxRows(3),
+        formBatchItem
+        (
+            set::name('id'),
+            set::label($lang->idAB),
+            set::control('index'),
+            set::width('32px'),
+        ),
+        formBatchItem
+        (
+            set::name('date'),
+            set::label($lang->task->date),
+            set::width('120px'),
+            set::control('date'),
+            set::value(helper::today())
+        ),
+        formBatchItem
+        (
+            set::name('work'),
+            set::label($lang->task->work),
+            set::width('auto'),
+            set::control('textarea')
+        ),
+        formBatchItem
+        (
+            set::name('consumed'),
+            set::label($lang->task->consumed),
+            set::width('80px'),
+            set::control
+            (
+                array(
+                    'type' => 'inputControl',
+                    'suffix' => $lang->task->suffixHour,
+                    'suffixWidth' => 20
+                )
+            )
+        ),
+        formBatchItem
+        (
+            set::name('left'),
+            set::label($lang->task->left),
+            set::width('80px'),
+            set::control
+            (
+                array(
+                    'type' => 'inputControl',
+                    'suffix' => $lang->task->suffixHour,
+                    'suffixWidth' => 20
+                )
+            )
+        )
+    );
+}
+
+render();

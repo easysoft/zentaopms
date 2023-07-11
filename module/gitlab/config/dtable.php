@@ -1,4 +1,7 @@
 <?php
+global $lang, $app;
+$app->loadLang('gitlab');
+
 $config->gitlab->dtable = new stdclass();
 
 $config->gitlab->dtable->fieldList['id']['title']    = 'ID';
@@ -22,10 +25,6 @@ $config->gitlab->dtable->fieldList['url']['sortType'] = true;
 $config->gitlab->dtable->fieldList['url']['hint']     = true;
 $config->gitlab->dtable->fieldList['url']['minWidth'] = '356';
 
-
-global $lang, $app;
-$app->loadLang('gitlab');
-
 $config->gitlab->actionList = array();
 $config->gitlab->actionList['edit']['icon'] = 'edit';
 $config->gitlab->actionList['edit']['text'] = $lang->gitlab->edit;
@@ -37,10 +36,11 @@ $config->gitlab->actionList['bindUser']['text'] = $lang->gitlab->bindUser;
 $config->gitlab->actionList['bindUser']['hint'] = $lang->gitlab->bindUser;
 $config->gitlab->actionList['bindUser']['url']  = helper::createLink('gitlab', 'bindUser',"gitlabID={id}");
 
-$config->gitlab->actionList['delete']['icon'] = 'trash';
-$config->gitlab->actionList['delete']['text'] = $lang->gitlab->delete;
-$config->gitlab->actionList['delete']['hint'] = $lang->gitlab->delete;
-$config->gitlab->actionList['delete']['url']  = helper::createLink('gitlab', 'delete',"gitlabID={id}");
+$config->gitlab->actionList['delete']['icon']       = 'trash';
+$config->gitlab->actionList['delete']['text']       = $lang->gitlab->delete;
+$config->gitlab->actionList['delete']['hint']       = $lang->gitlab->delete;
+$config->gitlab->actionList['delete']['ajaxSubmit'] = true;
+$config->gitlab->actionList['delete']['url']        = helper::createLink('gitlab', 'delete',"gitlabID={id}");
 
 $config->gitlab->dtable->fieldList['actions']['name']     = 'actions';
 $config->gitlab->dtable->fieldList['actions']['title']    = $lang->actions;

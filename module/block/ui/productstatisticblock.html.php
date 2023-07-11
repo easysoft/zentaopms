@@ -21,32 +21,34 @@ $app->loadLang('execution');
  * @param  bool   $longBlock
  * @return array
  */
-function getProductTabs(array $products, string $blockNavCode, bool $longBlock): array
+$getProductTabs = function(array $products, string $blockNavCode, bool $longBlock): array
 {
     $navTabs  = array();
     $selected = key($products);
     $navTabs[] = li
     (
-        set('class', 'nav-item of-hidden nav-prev rounded-full bg-white shadow-md h-6 w-6'),
+        set('class', 'nav-item overflow-hidden nav-prev rounded-full bg-white shadow-md h-6 w-6'),
         a(icon(set('size', '24'), 'angle-left'))
     );
     foreach($products as $product)
     {
         $navTabs[] = li
         (
-            set('class', 'nav-item nav-switch w-full' . ($product->id == $selected ? ' active' : '')),
+            set('class', 'nav-item nav-switch w-full'),
             a
             (
-                set('class', 'ellipsis text-dark'),
+                set('class', 'ellipsis text-dark title ' . ($longBlock && $product->id == $selected ? ' active' : '')),
                 $longBlock ? set('data-toggle', 'tab') : null,
+                set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
                 set('href', $longBlock ? "#tab3{$blockNavCode}Content{$product->id}" : helper::createLink('product', 'browse', "productID=$product->id")),
                 $product->name
 
             ),
             !$longBlock ? a
             (
-                set('class', 'hidden'),
+                set('class', 'hidden' . ($product->id == $selected ? ' active' : '')),
                 set('data-toggle', 'tab'),
+                set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
                 set('href', "#tab3{$blockNavCode}Content{$product->id}"),
             ) : null,
             a
@@ -56,18 +58,19 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
                 icon
                 (
                     set('class', 'rotate-90 text-primary'),
-                    'export'
+                    setStyle(array('--tw-rotate' => '270deg')),
+                    'import'
                 )
             )
         );
     }
     $navTabs[] = li
     (
-        set('class', 'nav-item of-hidden nav-next rounded-full bg-white shadow-md h-6 w-6'),
+        set('class', 'nav-item overflow-hidden nav-next rounded-full bg-white shadow-md h-6 w-6'),
         a(icon(set('size', '24'), 'angle-right'))
     );
     return $navTabs;
-}
+};
 
 /**
  * 获取区块右侧显示的产品信息。
@@ -78,7 +81,7 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
  * @param  bool   $longBlock
  * @return array
  */
-function getProductInfo(array $products, string $blockNavID, bool $longBlock): array
+$getProductInfo = function(array $products, string $blockNavID, bool $longBlock): array
 {
     global $lang;
 
@@ -86,9 +89,31 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
     $tabItems = array();
     foreach($products as $product)
     {
+        $product->storyDeliveryRate = rand(0, 100);
+        $product->monthStories = array();
+        $product->monthStories[date('Y-m')] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+        $product->monthStories[date('Y-m', strtotime('first day of -1 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+        $product->monthStories[date('Y-m', strtotime('first day of -2 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+        $product->monthStories[date('Y-m', strtotime('first day of -3 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+        $product->monthStories[date('Y-m', strtotime('first day of -4 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+        $product->monthStories[date('Y-m', strtotime('first day of -5 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+
+        $doneData   = array();
+        $openedData = array();
+        foreach($product->monthStories as $date => $monthStories)
+        {
+            if($date == date('Y-m'))
+            {
+                $product->monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH] = $monthStories;
+                unset($product->monthStories[$date]);
+            }
+            $doneData[]   = $monthStories['done'];
+            $openedData[] = $monthStories['opened'];
+        }
+
         $stories      = $product->stories;
         $monthStories = $product->monthStories;
-        $tabItems[] = div
+        $tabItems[]   = div
         (
             set('class', 'tab-pane h-full' . ($product->id == $selected ? ' active' : '')),
             set('id', "tab3{$blockNavID}Content{$product->id}"),
@@ -98,18 +123,41 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                 cell
                 (
                     set('class', 'flex-1'),
-                    set('width', '70%'),
+                    $longBlock ? set('width', '70%') : null,
                     div
                     (
                         set('class', 'flex h-full ' . ($longBlock ? '' : 'col')),
                         cell
                         (
-                            set('width', '40%'),
-                            set('class', 'p-4'),
+                            $longBlock ? set('width', '40%') : null,
+                            set('class', $longBlock ? 'p-4' : 'px-4'),
                             div
                             (
-                                set('class', 'py-6'),
-                                div(set('class', 'bg-primary aspect-square w-28 chart'))
+                                set('class', 'chart pie-chart ' . ($longBlock ? 'py-6' : 'py-1')),
+                                echarts
+                                (
+                                    set::color(array('#2B80FF', '#E3E4E9')),
+                                    set::series
+                                    (
+                                        array
+                                        (
+                                            array
+                                            (
+                                                'type'   => 'pie',
+                                                'radius' => array('80%', '90%'),
+                                                'itemStyle' => array('borderRadius' => '40'),
+                                                'label'  => array('show' => false),
+                                                'data'   => array($product->storyDeliveryRate, 100 - $product->storyDeliveryRate)
+                                            )
+                                        )
+                                    )
+                                )->size('100%', 120),
+                                div
+                                (
+                                    set::class('pie-chart-title text-center'),
+                                    div(span(set::class('text-2xl font-bold'), $product->storyDeliveryRate)),
+                                    div(span(set::class('text-sm text-gray'), $lang->block->productstatistic->deliveryRate, icon('help', set('data-toggle', 'tooltip'), set('id', 'storyTip'), set('class', 'text-light'))))
+                                )
                             ),
                             div
                             (
@@ -121,7 +169,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                     (
                                         common::hasPriv('product', 'browse') ? a
                                         (
-                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=allStory-0-story")),
+                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=allStory&param=0&storyType=story")),
                                             set('class', 'text-black'),
                                             $stories ? $stories['total'] : 0
                                         ) : span
@@ -146,7 +194,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                     (
                                         common::hasPriv('product', 'browse') ? a
                                         (
-                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=closedstory-0-story")),
+                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=closedstory&param=0&storyType=story")),
                                             set('class', 'text-black'),
                                             $stories ? $stories['closed'] : 0
                                         ) : span
@@ -171,7 +219,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                     (
                                         common::hasPriv('product', 'browse') ? a
                                         (
-                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=unclosed-0-story")),
+                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=unclosed&param=0&storyType=story")),
                                             set('class', 'text-black'),
                                             $stories ? $stories['notClosed'] : 0
                                         ) : span
@@ -193,7 +241,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                         ),
                         cell
                         (
-                            set('width', '60%'),
+                            $longBlock ? set('width', '60%') : null,
                             set('class', 'py-4'),
                             div
                             (
@@ -209,21 +257,43 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                     span
                                     (
                                         set('class', 'border-r pr-2 text-sm text-gray'),
-                                        html(sprintf($lang->block->productstatistic->monthDone, !empty($monthStories[date('Y-m')]) ? $monthStories[date('Y-m')]->done : 0))
+                                        html(sprintf($lang->block->productstatistic->monthDone, !empty($monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['done']) ? $monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['done'] : 0))
                                     ),
                                     span
                                     (
                                         set('class', 'pl-2 text-sm text-gray'),
-                                        html(sprintf($lang->block->productstatistic->monthOpened, !empty($monthStories[date('Y-m')]) ? $monthStories[date('Y-m')]->opened : 0))
+                                        html(sprintf($lang->block->productstatistic->monthOpened, !empty($monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['opened']) ? $monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['opened'] : 0))
                                     )
                                 ),
                                 div
                                 (
-                                    set('class', 'px-4 py-2'),
-                                    div
+                                    set('class', 'px-4 py-2 chart'),
+                                    echarts
                                     (
-                                        set('class', 'bg-primary h-44 w-full'),
-                                    )
+                                        set::color(array('#2B80FF', '#17CE97')),
+                                        set::grid(array('left' => '10px', 'top' => '30px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
+                                        set::legend(array('show' => true, 'right' => '0')),
+                                        set::xAxis(array('type' => 'category', 'data' => array_keys($monthStories), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
+                                        set::yAxis(array('type' => 'value', 'name' => '个', 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
+                                        set::series
+                                        (
+                                            array
+                                            (
+                                                array
+                                                (
+                                                    'type' => 'line',
+                                                    'name' => $lang->block->productstatistic->opened,
+                                                    'data' => $openedData
+                                                ),
+                                                array
+                                                (
+                                                    'type' => 'line',
+                                                    'name' => $lang->block->productstatistic->done,
+                                                    'data' => $doneData
+                                                )
+                                            )
+                                        )
+                                    )->size('100%', 170),
                                 )
                             )
                         )
@@ -240,11 +310,11 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                     ),
                     $product->newPlan ? div
                     (
-                        set('class', 'pb-4'),
+                        set('class', 'pb-4' . ($longBlock ? '' : 'flex')),
                         div(span(set('class', 'text-sm text-gray'), $lang->block->productstatistic->newPlan)),
                         div
                         (
-                            set('class', 'py-1'),
+                            set('class', $longBlock ? 'py-1' : 'pl-2'),
                             common::hasPriv('productplan', 'view') ? a
                             (
                                 set('href', helper::createLink('productplan', 'view', "planID={$product->newPlan->id}")),
@@ -262,11 +332,11 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                     ) : null,
                     $product->newExecution ? div
                     (
-                        set('class', 'pb-4'),
+                        set('class', 'pb-4 ' . ($longBlock ? '' : 'flex')),
                         div(span(set('class', 'text-sm text-gray'), $lang->block->productstatistic->newExecution)),
                         div
                         (
-                            set('class', 'py-1'),
+                            set('class', $longBlock ? 'py-1' : 'pl-2'),
                             common::hasPriv('execution', 'task') ? a
                             (
                                 set('href', helper::createLink('execution', 'task', "executionID={$product->newExecution->id}")),
@@ -284,10 +354,11 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                     ) : null,
                     $product->newRelease ? div
                     (
+                        set('class', $longBlock ? '' : 'flex'),
                         div(span(set('class', 'text-sm text-gray'), $lang->block->productstatistic->newRelease)),
                         div
                         (
-                            set('class', 'py-1'),
+                            set('class', $longBlock ? 'py-1' : 'pl-2'),
                             common::hasPriv('release', 'view') ? a
                             (
                                 set('href', helper::createLink('release', 'view', "releaseID={$product->newRelease->id}")),
@@ -308,34 +379,44 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
         );
     }
     return $tabItems;
-}
+};
 
-$longBlock    = $block->width >= 2;
 $blockNavCode = 'nav-' . uniqid();
-div
+panel
 (
     on::click('.nav-prev,.nav-next', 'switchNav'),
-    set('class', 'productstatistic-block of-hidden ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set('class', 'productstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set('headingClass', 'border-b'),
+    set::title($block->title),
+    to::headingActions
+    (
+        a
+        (
+            set('class', 'text-gray'),
+            set('href', createLink('product', 'all', 'browseType=' . $block->params->type)),
+            $lang->more,
+            icon('caret-right')
+        )
+    ),
     div
     (
-        set('class', "flex h-full " . ($longBlock ? '' : 'col')),
+        set('class', "flex h-full overflow-hidden " . ($longBlock ? '' : 'col')),
         cell
         (
-            set('width', '22%'),
-            set('class', $longBlock ? 'bg-secondary-pale' : ''),
+            $longBlock ? set('width', '22%') : null,
+            set('class', $longBlock ? 'bg-secondary-pale overflow-y-auto overflow-x-hidden' : ''),
             ul
             (
-                set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked h-full of-y-auto of-x-hidden' : 'pt-4 px-4')),
-                getProductTabs($products, $blockNavCode, $longBlock)
+                set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked' : 'pt-4 px-4')),
+                $getProductTabs($products, $blockNavCode, $longBlock)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
             set('width', '78%'),
-            getProductInfo($products, $blockNavCode, $longBlock)
+            $getProductInfo($products, $blockNavCode, $longBlock)
         )
     )
 );
-
-render('|fragment');
+render();

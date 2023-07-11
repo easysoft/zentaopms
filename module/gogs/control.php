@@ -131,24 +131,32 @@ class gogs extends control
     }
 
     /**
+     * 删除一条gogs数据。
      * Delete a gogs.
      *
      * @param  int    $gogsID
      * @access public
      * @return void
      */
-    public function delete($gogsID, $confirm = 'no')
+    public function delete($gogsID)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gogs->confirmDelete, inlink('delete', "id=$gogsID&confirm=yes")));
-
         $oldGogs  = $this->loadModel('pipeline')->getByID($gogsID);
         $actionID = $this->pipeline->delete($gogsID, 'gogs');
-        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+
+            return $this->send($response);
+        }
 
         $gogs    = $this->pipeline->getByID($gogsID);
         $changes = common::createChanges($oldGogs, $gogs);
         $this->loadModel('action')->logHistory($actionID, $changes);
-        return print(js::reload('parent'));
+
+        $response['load']   = true;
+        $response['result'] = 'success';
+        return $this->send($response);
     }
 
     /**

@@ -1,10 +1,10 @@
 function getForm(event)
 {
     const field  = $(event.target).attr('id');
-    const module = $('#module').val();
-    const code   = field == 'module' ? '' : $('#code').val();
+    const module = field == 'code' ? $('#blockEditForm #module').val() : $(event.target).attr('data-tab');
+    const code   = field == 'code' ? $('#blockEditForm #code').val() : '';
     const url    = $.createLink('block', 'edit', 'blockID=' + blockID + '&module=' + module + '&code=' + (code ? code : ''));
-    loadPage(url, '#codesRow, #paramsRow');
+    loadPage(url, '#blockEditForm #codesRow, #blockEditForm #paramsRow, #blockEditForm #module');
 }
 
 /**

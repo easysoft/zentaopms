@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class formLabel extends wg
 {
-    protected static $defineProps = array
-    (
+    protected static array $defineProps = array(
         'text?:string',
         'required?:bool',
         'for?:string'
@@ -19,7 +19,7 @@ class formLabel extends wg
         }
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($text, $required, $for) = $this->prop(['text', 'required', 'for']);
         return h::label

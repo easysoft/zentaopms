@@ -10,12 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-set::title($bug->title);
-form
+modalHeader();
+
+formPanel
 (
-    set::actions(array('submit')),
-    set::submitBtnText($lang->bug->close),
-    set::class('pb-6 border-b'),
     formGroup
     (
         set::label($lang->comment),
@@ -23,6 +21,7 @@ form
         set::control('editor')
     )
 );
+
 history();
 
-render('modalDialog');
+render();

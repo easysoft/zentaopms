@@ -1,0 +1,10 @@
+.sidebar > .cell {padding: 10px; background-color: #fff; border-radius: 4px; position: relative; left: 0; width: 180px; -webkit-transition: left .2s,opacity .2s; -o-transition: left .2s,opacity .2s; transition: left .2s,opacity .2s;}
+.list-group.tab-menu > a {padding: 6px 24px;}
+
+.main-col.main-content .main-header {display: flex}
+.check-year {display: inline-flex}
+.check-year .form-name {margin: 8px 10px; white-space: pre;}
+.check-year select {min-width: 80px;}
+.main-col.main-content {display: table-cell; vertical-align: top; padding: 20px; background-color: #fff; border-radius: 4px; -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045); box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045);}
+.main-col.main-content > .flex-center {display: flex; align-items: center; justify-content: center; position: relative; min-height: 40px; padding: 6px 15px; background: #fff; border-radius: 0 0 4px 4px; }
+.main-col.main-content > .flex-center > .table-import {box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 25%); padding: 6px 5px 5px 5px;}

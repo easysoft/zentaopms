@@ -28,8 +28,9 @@ class formBatchPanel extends formPanel
      * @var    array
      * @access protected
      */
-    protected static $defineProps = array
-    (
+    protected static array $defineProps = array(
+        'uploadParams?: string|false',  // 多图上传的参数，如果设置为 `false` 则不显示按钮
+        'pasteField?: string|false',    // 多行录入的字段名，如果设置为 `false` 则不显示按钮
         'items?: array[]',              // 使用一个列定义对象数组来定义批量表单项。
         'minRows?: int',                // 最小显示的行数目。
         'maxRows?: int',                // 最多显示的行数目。
@@ -48,8 +49,36 @@ class formBatchPanel extends formPanel
      * @var    array
      * @access protected
      */
-    protected static $defaultProps = array
-    (
-        'batch' => true
+    protected static array $defaultProps = array(
+        'uploadParams' => false,
+        'pasteField'   => false,
+        'customFields' => array(),
+        'batch'        => true
     );
+
+    protected function buildHeadingActions(): ?wg
+    {
+        $headingActions = $this->prop('headingActions');
+        if(!$headingActions) $headingActions = array();
+
+        $uploadImage  = $this->prop('uploadParams') && hasPriv('file', 'uploadImages');
+        $pasteField   = $this->prop('pasteField');
+
+        global $lang;
+
+        /* Upload images. */
+        if($uploadImage) $headingActions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale bd-primary mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
+
+        /* Multi-input. */
+        if($pasteField)
+        {
+            $headingActions[] = array('class' => 'btn primary-pale bd-primary', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText);
+
+            $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
+        }
+
+        $this->setProp('headingActions', $headingActions);
+
+        return parent::buildHeadingActions();
+    }
 }

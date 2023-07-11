@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The html element class file of zin of ZenTaoPMS.
  *
@@ -17,14 +18,17 @@ require_once __DIR__ . DS . 'wg.func.php';
 
 class h extends wg
 {
-    protected static $defineProps = 'tagName, selfClose?:bool';
+    protected static array $defineProps = array(
+        'tagName: string',
+        'selfClose?: bool'
+    );
 
-    public function getTagName()
+    public function getTagName(): string
     {
         return $this->props->get('tagName');
     }
 
-    public function isDomElement()
+    public function isDomElement(): bool
     {
         return true;
     }
@@ -37,70 +41,70 @@ class h extends wg
         return in_array($this->getTagName(), static::$selfCloseTags);
     }
 
-    public function build()
+    public function build(): array
     {
         if($this->isSelfClose()) return array($this->buildSelfCloseTag());
 
         return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
     }
 
-    public function toJsonData()
+    public function toJsonData(): array
     {
         $data = parent::toJsonData();
         $data['type'] = 'h:' . $this->getTagName();
         return $data;
     }
 
-    public function type()
+    public function type(): string
     {
         return $this->getTagName();
     }
 
-    public function shortType()
+    public function shortType(): string
     {
         return $this->getTagName();
     }
 
-    protected function getPropsStr()
+    protected function getPropsStr(): string
     {
         $propStr = $this->props->toStr(array_keys(static::getDefinedProps()));
         if($this->props->hasEvent() && empty($this->id()) && $this->getTagName() !== 'html') $propStr = "$propStr id='$this->gid'";
         return empty($propStr) ? '' : " $propStr";
     }
 
-    protected function buildSelfCloseTag()
+    protected function buildSelfCloseTag(): string
     {
         $tagName = $this->getTagName();
         $propStr = $this->getPropsStr();
         return "<$tagName$propStr />";
     }
 
-    protected function buildTagBegin()
+    protected function buildTagBegin(): string
     {
         $tagName = $this->getTagName();
         $propStr = $this->getPropsStr();
         return "<$tagName$propStr>";
     }
 
-    protected function buildTagEnd()
+    protected function buildTagEnd(): string
     {
         $tagName = $this->getTagName();
         return "</$tagName>";
     }
 
-    public static function create()
+    public static function create(): h
     {
         $args = func_get_args();
         $tagName = array_shift($args);
-        return new h(is_string($tagName) ? prop('tagName', $tagName) : $tagName, $args);
+        return new h(is_string($tagName) ? set('tagName', $tagName) : $tagName, $args);
     }
 
-    public static function __callStatic($tagName, $args)
+    public static function __callStatic(string $tagName, array $args): h
     {
-        return new h(prop('tagName', $tagName), $args);
+        return new h(set('tagName', $tagName), $args);
     }
 
-    public static function a()
+    public static function a(): h
     {
         $a = static::create('a', func_get_args());
         if($a->prop('target') === '_blank' && !$a->hasProp('rel')) $a->prop('rel', 'noopener noreferrer');
@@ -109,37 +113,37 @@ class h extends wg
 
     public static function button()
     {
-        return static::create('button', prop('type', 'button'), func_get_args());
+        return static::create('button', set('type', 'button'), func_get_args());
     }
 
     public static function input()
     {
-        return static::create('input', prop('type', 'text'), func_get_args());
+        return static::create('input', set('type', 'text'), func_get_args());
     }
 
     public static function formHidden($name, $value, ...$args)
     {
-        return static::create('input', prop('type', 'hidden'), set::name($name), set::value($value), $args);
+        return static::create('input', set('type', 'hidden'), set::name($name), set::value($value), $args);
     }
 
     public static function checkbox()
     {
-        return static::create('input', prop('type', 'checkbox'), func_get_args());
+        return static::create('input', set('type', 'checkbox'), func_get_args());
     }
 
     public static function radio()
     {
-        return static::create('input', prop('type', 'radio'), func_get_args());
+        return static::create('input', set('type', 'radio'), func_get_args());
     }
 
     public static function date()
     {
-        return static::create('input', prop('type', 'date'), func_get_args());
+        return static::create('input', set('type', 'date'), func_get_args());
     }
 
     public static function file()
     {
-        return static::create('input', prop('type', 'file'), func_get_args());
+        return static::create('input', set('type', 'file'), func_get_args());
     }
 
     public static function textarea(...$args)
@@ -162,12 +166,12 @@ class h extends wg
 
     public static function importJs($src, ...$args)
     {
-        return static::create('script', prop('src', $src), ...$args);
+        return static::create('script', set('src', $src), ...$args);
     }
 
     public static function importCss($src, ...$args)
     {
-        return static::create('link', prop('rel', 'stylesheet'), prop('href', $src), ...$args);
+        return static::create('link', set('rel', 'stylesheet'), set('href', $src), ...$args);
     }
 
     public static function import($file, $type = null, ...$args)
@@ -249,7 +253,11 @@ class h extends wg
         foreach($vars as $var => $val)
         {
             if(empty($var)) continue;
-            $val = h::encodeJsonWithRawJs($val);
+
+            $rawVal = $val;
+            $val    = h::encodeJsonWithRawJs($val);
+            if(empty($val) && (is_array($rawVal) || is_object($rawVal))) $val = '[]';
+
             if(str_starts_with($var, 'window.')) $jsCode .= "$var=" . $val . ';';
             elseif(str_starts_with($var, '+')) $jsCode .= 'let ' . substr($var, 1) . '=' . $val . ';';
             else $jsCode .= "const $var=" . $val . ';';
@@ -263,7 +271,7 @@ class h extends wg
         return "(function(){\n$codes\n}());";
     }
 
-    public static function jsRaw()
+    public static function jsRaw(): string
     {
         return 'RAWJS<' . implode("\n", func_get_args()) . '>RAWJS';
     }

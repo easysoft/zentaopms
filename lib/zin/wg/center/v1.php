@@ -1,15 +1,15 @@
 <?php
-
+declare(strict_types=1);
 namespace zin;
 
 class center extends wg
 {
-    protected function build()
+    protected function build(): wg
     {
         return div
         (
             setClass("flex justify-center items-center"),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->children()
         );
     }

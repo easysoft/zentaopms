@@ -4,7 +4,7 @@ namespace zin;
 
 class riskLabel extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'text?: string', // 标签文本
         'level?: string' // 风险等级：高('high' 或 'h')、中('middle' 或 'm')、低('low' 或 'l')
     );
@@ -36,7 +36,7 @@ class riskLabel extends wg
         $text = $this->prop('text');
         return span
         (
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             setClass($this->getThemeClass()),
             $text
         );

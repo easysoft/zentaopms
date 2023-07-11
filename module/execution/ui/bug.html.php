@@ -61,7 +61,7 @@ sidebar
     moduleMenu(set(array(
         'modules'   => $moduleTree,
         'activeKey' => $moduleID,
-        'closeLink' => $this->createLink('execution', 'testcase', "executionID={$execution->id}")
+        'closeLink' => $this->createLink('execution', 'bug', "executionID={$execution->id}")
     )))
 );
 
@@ -102,14 +102,23 @@ jsVar('sortLink', helper::createLink('execution', 'bug', "executionID={$executio
 jsVar('pageSummary', $summary);
 jsVar('checkedSummary', $lang->selectedItems);
 
+$cols = $this->loadModel('datatable')->getSetting('execution');
+if(isset($cols['module']))      $cols['module']['map']      = $modulePairs;
+if(isset($cols['branch']))      $cols['branch']['map']      = $branchOption;
+if(isset($cols['project']))     $cols['project']['map']     = $projectPairs;
+if(isset($cols['openedBuild'])) $cols['openedBuild']['map'] = $builds;
+
+$bugs = initTableData($bugs, $cols, $this->execution);
+
 dtable
 (
     set::userMap($users),
-    set::cols(array_values($config->bug->dtable->fieldList)),
+    set::cols($cols),
     set::data(array_values($bugs)),
     set::checkable($canBatchAssignTo),
     set::sortLink(jsRaw('createSortLink')),
     set::footToolbar($footToolbar),
+    set::customCols(true),
     set::footPager(
         usePager(),
         set::recPerPage($pager->recPerPage),

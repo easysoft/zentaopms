@@ -1,19 +1,29 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'toolbar' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'dropmenu' . DS . 'v1.php';
 
 class heading extends wg
 {
-    static $defineProps = array(
-        'items?:array',
-        'showAppName?:bool=true'
+    protected static array $defineProps = array
+    (
+        'items?: array',            // 标题上显示的按钮。
+        'showAppName?: bool=true',  // 是否自动显示当前应用名称。
+        'dropmenu?: array'          // 1.5 级导航配置。
+    );
+
+    protected static array $defineBlocks = array
+    (
+        'toolbar'  => array('map' => 'toolbar'),
+        'dropmenu' => array('map' => 'dropmenu')
     );
 
     protected function buildAppName()
     {
         list($tab, $lang) = data(['app.tab', 'lang']);
-        $icon = zget($lang->navIcons, $tab, '');
+        $icon = zget($lang->navIconNames, $tab, '');
 
         if(!in_array($tab, array('program', 'product', 'project')))
         {
@@ -33,9 +43,46 @@ class heading extends wg
         (
             set::url($url),
             set::hint($lang->$tab->common),
-            $tab == 'devops' ? set::class('num') : null,
-            html($icon),
-            span(set::class('text'), $lang->$tab->common),
+            $tab == 'devops' ? setClass('num') : null,
+            set::icon($icon),
+            set::text($lang->$tab->common)
+        );
+    }
+
+    /**
+     * Build dropmenu.
+     *
+     * @access protected
+     * @return dropmenu
+     */
+    protected function buildDropmenu(): dropmenu|array|null
+    {
+        global $app, $config;
+        if($this->hasBlock('dropmenu')) return $this->block('dropmenu');
+
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
+        if(in_array("$moduleName-$methodName", is_array($config->excludeDropmenuList) ? $config->excludeDropmenuList : array())) return null;
+
+        if(in_array($app->tab, is_array($config->hasDropmenuApps) ? $config->hasDropmenuApps : array()))
+        {
+            $module = $app->tab == 'qa' ? 'product' : $app->tab;
+            return new dropmenu(set::tab($module));
+        }
+
+        return null;
+    }
+
+    protected function buildToolbar()
+    {
+        $showAppName = $this->prop('showAppName');
+        if($this->hasBlock('toolbar')) $this->prop('toolbar');
+        return new toolbar
+        (
+            $showAppName ? $this->buildAppName() : null,
+            set::btnClass('primary'),
+            set::items($this->prop('items')),
+            $this->children()
         );
     }
 
@@ -43,22 +90,14 @@ class heading extends wg
      * Build.
      *
      * @access protected
-     * @return object
      */
-    protected function build()
+    protected function build(): wg
     {
-        $showAppName = $this->prop('showAppName');
-
         return div
         (
             set::id('heading'),
-            new toolbar
-            (
-                $showAppName ? $this->buildAppName() : null,
-                set::btnClass('primary'),
-                set::items($this->prop('items')),
-                $this->children()
-            )
+            $this->buildToolbar(),
+            $this->buildDropmenu()
         );
     }
 }

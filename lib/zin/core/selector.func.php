@@ -16,7 +16,7 @@ namespace zin;
  * @param string|object $selector
  * @return object|null
  */
-function parseWgSelector($selector)
+function parseWgSelector(string|object $selector): ?object
 {
     if(is_object($selector)) return $selector;
 
@@ -25,7 +25,15 @@ function parseWgSelector($selector)
 
     if($len < 1) return null;
 
-    $result = ['class' => [], 'id' => null, 'tag' => null, 'inner' => false, 'name' => null, 'first' => false, 'selector' => $selector];
+    $result = array(
+        'class' => array(),
+        'id' => null,
+        'tag' => null,
+        'inner' => false,
+        'name' => null,
+        'first' => false,
+        'selector' => $selector
+    );
     if(str_contains($selector, '/'))
     {
         $parts          = explode('/', $selector, 2);
@@ -113,15 +121,15 @@ function parseWgSelector($selector)
 }
 
 /**
- * Parse wg selectors
- * @param array|string|object $selectors
- * @return array
+ * Parse wg selectors.
+ * @param object|string|object[]|string[] $selectors
+ * @return object[]
  */
-function parseWgSelectors($selectors)
+function parseWgSelectors(object|string|array $selectors): array
 {
-    if(is_object($selectors)) return [$selectors];
+    if(is_object($selectors)) return array($selectors);
     if(is_string($selectors)) $selectors = explode(',', trim($selectors));
-    $results = [];
+    $results = array();
     foreach($selectors as $selector)
     {
         $selector = parseWgSelector($selector);
@@ -130,7 +138,12 @@ function parseWgSelectors($selectors)
     return $results;
 }
 
-function stringifyWgSelectors($selector)
+/**
+ * Stringify wg selectors.
+ * @param object|object[] $selector
+ * @return string
+ */
+function stringifyWgSelectors(array|object $selector): string
 {
     if(empty($selector)) return '';
     if(is_array($selector))

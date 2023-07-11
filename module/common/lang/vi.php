@@ -87,6 +87,7 @@ $lang->addFiles        = 'Tập tin đã thêm ';
 $lang->files           = 'Files ';
 $lang->pasteText       = 'Dán nhiều dòng';
 $lang->uploadImages    = 'Tải lên nhiều ảnh';
+$lang->uploadImagesTip = 'The program will have a file name as the title and an image as the content.';
 $lang->timeout         = 'Hết giờ. Check your newtwork connections, or try it again!';
 $lang->repairTable     = 'Database table might be damaged. Run phpmyadmin or myisamchk to fix it.';
 $lang->duplicate       = '%s has the same title as a file đã tồn tại.';

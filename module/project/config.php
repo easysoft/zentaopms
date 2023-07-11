@@ -33,6 +33,12 @@ $config->project->sortFields->end    = 'end';
 $config->project->sortFields->status = 'status';
 $config->project->sortFields->budget = 'budget';
 
+$config->project->labelClass['scrum']         = 'secondary-outline';
+$config->project->labelClass['waterfall']     = 'warning-outline';
+$config->project->labelClass['kanban']        = 'special-outline';
+$config->project->labelClass['agileplus']     = 'secondary-outline';
+$config->project->labelClass['waterfallplus'] = 'warning-outline';
+
 $config->project->multiple['project']   = ',qa,devops,doc,build,release,dynamic,settings,';
 $config->project->multiple['execution'] = ',task,kanban,burn,view,story,CFD,';
 
@@ -303,3 +309,57 @@ $config->project->budget = new stdclass();
 $config->project->budget->precision         = 2;
 $config->project->budget->tenThousand       = 10000;
 $config->project->budget->oneHundredMillion = 100000000;
+
+$config->project->team = new stdclass();
+$config->project->team->actionList['unlink']['icon'] = 'unlink';
+$config->project->team->actionList['unlink']['hint'] = $lang->project->unlinkMember;
+$config->project->team->actionList['unlink']['url']  = 'javascript:deleteMember("{root}", "{account}", "{userID}")';
+
+$config->project->actionList = array();
+$config->project->actionList['start']['icon']        = 'play';
+$config->project->actionList['start']['hint']        = $lang->project->start;
+$config->project->actionList['start']['url']         = helper::createLink('project', 'start', 'projectID={id}');
+$config->project->actionList['start']['data-toggle'] = 'modal';
+
+$config->project->actionList['close']['icon']        = 'off';
+$config->project->actionList['close']['hint']        = $lang->project->close;
+$config->project->actionList['close']['url']         = helper::createLink('project', 'close', 'projectID={id}');
+$config->project->actionList['close']['data-toggle'] = 'modal';
+
+$config->project->actionList['activate']['icon']        = 'magic';
+$config->project->actionList['activate']['hint']        = $lang->project->activate;
+$config->project->actionList['activate']['url']         = helper::createLink('project', 'activate', 'projectID={id}');
+$config->project->actionList['activate']['data-toggle'] = 'modal';
+
+$config->project->actionList['edit']['icon'] = 'edit';
+$config->project->actionList['edit']['hint'] = $lang->project->edit;
+$config->project->actionList['edit']['url']  = array('module' => 'project', 'method' => 'edit', 'params' => 'projectID={id}');
+
+$config->project->actionList['suspend']['icon']        = 'pause';
+$config->project->actionList['suspend']['hint']        = $lang->project->suspend;
+$config->project->actionList['suspend']['url']         = helper::createLink('project', 'suspend', 'projectID={id}');
+$config->project->actionList['suspend']['data-toggle'] = 'modal';
+
+$config->project->actionList['group']['icon'] = 'group';
+$config->project->actionList['group']['hint'] = $lang->project->team;
+$config->project->actionList['group']['url']  = array('module' => 'project', 'method' => 'team', 'params' => 'projectID={id}');
+
+$config->project->actionList['perm']['icon'] = 'lock';
+$config->project->actionList['perm']['hint'] = $lang->project->group;
+$config->project->actionList['perm']['url']  = array('module' => 'project', 'method' => 'group', 'params' => 'projectID={id}');
+
+$config->project->actionList['link']['icon'] = 'link';
+$config->project->actionList['link']['hint'] = $lang->project->manageProducts;
+$config->project->actionList['link']['url']  = array('module' => 'project', 'method' => 'manageProducts', 'params' => 'projectID={id}');
+
+$config->project->actionList['whitelist']['icon'] = 'shield-check';
+$config->project->actionList['whitelist']['hint'] = $lang->project->whitelist;
+$config->project->actionList['whitelist']['url']  = array('module' => 'project', 'method' => 'whitelist', 'params' => 'projectID={id}');
+
+$config->project->actionList['delete']['icon'] = 'trash';
+$config->project->actionList['delete']['hint'] = $lang->project->delete;
+$config->project->actionList['delete']['url']  = 'javascript:confirmDelete("{id}", "{name}")';
+
+$config->project->view = new stdclass();
+$config->project->view->operateList['main']   = array('start', 'activate', 'suspend', 'close');
+$config->project->view->operateList['common'] = array('edit', 'delete');

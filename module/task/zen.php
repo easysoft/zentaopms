@@ -419,6 +419,7 @@ class taskZen extends task
 
         $now  = helper::now();
         $task = form::data($this->config->task->form->edit)->add('id', $task->id)
+            ->setDefault('deleteFiles', array())
             ->setIF(!$task->assignedTo && !empty($oldTask->team) && !empty($this->post->team), 'assignedTo', $this->task->getAssignedTo4Multi($this->post->team, $oldTask))
             ->setIF($task->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
             ->setIF($task->mode == 'single', 'mode', '')
@@ -531,12 +532,13 @@ class taskZen extends task
     protected function buildTaskForCreate(int $executionID): object
     {
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-        $team      = !empty($this->post->team) ? array_filter($this->post->team) : array();
+        $team      = $this->post->team ? array_filter($this->post->team) : array();
         $task      = form::data()->setDefault('execution', $executionID)
             ->setDefault('project', $execution->project)
             ->setIF($this->post->estimate, 'left', $this->post->estimate)
+            ->setIF($this->post->mode, 'mode', $this->post->mode)
             ->setIF($this->post->story, 'storyVersion', isset($this->post->story) ? $this->loadModel('story')->getVersion($this->post->story) : 0)
-            ->setIF(empty($this->post->multiple) || count($team) < 1, 'mode', '')
+            ->setIF(!$this->post->multiple || count($team) < 1, 'mode', '')
             ->setIF($this->task->isNoStoryExecution($execution), 'story', 0)
             ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
             ->setIF(!$this->post->estStarted, 'estStarted', null)
@@ -656,7 +658,7 @@ class taskZen extends task
             ->setDefault('finishedBy', '')
             ->setDefault('canceledBy, lastEditedBy', $this->app->user->account)
             ->setDefault('canceledDate, lastEditedDate', $now)
-            ->setIF(empty($oldTask->finishedDate), 'finishedDate', '')
+            ->setIF(empty($oldTask->finishedDate), 'finishedDate', null)
             ->remove('comment')
             ->get();
 
@@ -692,8 +694,8 @@ class taskZen extends task
             $task->execution  = $executionID;
             $task->story      = $storyID;
             $task->pri        = $postData->testPri[$key];
-            $task->estStarted = $estStarted;
-            $task->deadline   = $deadline;
+            $task->estStarted = empty($estStarted) ? null : $estStarted;
+            $task->deadline   = empty($deadline) ? null : $deadline;
             $task->assignedTo = $assignedTo;
             $task->estimate   = (float)$postData->testEstimate[$key];
             $task->left       = (float)$postData->testEstimate[$key];
@@ -749,13 +751,13 @@ class taskZen extends task
         if(!$this->post->currentConsumed) dao::$errors['currentConsumed'][] = $this->lang->task->error->consumedEmpty;
         if($task->realStarted > $task->finishedDate) dao::$errors['realStarted'][] = $this->lang->task->error->finishedDateSmall;
 
-        $task->consumed += (float)$this->post->currentConsumed;
+        $task->consumed = $oldTask->consumed + (float)$this->post->currentConsumed;
         return $task;
     }
 
     /**
-     * 处理开始任务的日志数据。
-     * Process the effort data for the start task.
+     * 处理完成任务的日志数据。
+     * Process the effort data for the finish task.
      *
      * @param  object    $oldTask
      * @param  object    $task
@@ -765,16 +767,18 @@ class taskZen extends task
     protected function buildEffortForFinish(object $oldTask, object $task): object
     {
         /* Record consumed and left. */
+        $consumed = $task->consumed;
         if(empty($oldTask->team))
         {
-            $task->consumed = $task->consumed - $oldTask->consumed;
+            $consumed = $task->consumed - $oldTask->consumed;
         }
         else
         {
             $currentTeam = $this->task->getTeamByAccount($oldTask->team);
-            $task->consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $task->consumed;
+            $consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $task->consumed;
         }
-        if($task->consumed < 0) dao::$errors[] = $this->lang->task->error->consumedSmall;
+
+        if($consumed < 0) dao::$errors[] = $this->lang->task->error->consumedSmall;
 
         $estimate = new stdclass();
         $estimate->date     = helper::isZeroDate($task->finishedDate) ? helper::today() : substr($task->finishedDate, 0, 10);
@@ -782,7 +786,7 @@ class taskZen extends task
         $estimate->left     = 0;
         $estimate->work     = zget($task, 'work', '');
         $estimate->account  = $this->app->user->account;
-        $estimate->consumed = $task->consumed;
+        $estimate->consumed = $consumed;
 
         return $estimate;
     }
@@ -881,21 +885,18 @@ class taskZen extends task
             if(!empty($this->config->limitTaskDate))
             {
                 $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
-                if(dao::isError()) return false;
             }
 
             /* Check start and end date. */
             if(!helper::isZeroDate($task->deadline) && $task->deadline < $task->estStarted)
             {
                 dao::$errors["deadline[$rowIndex]"] = $this->lang->task->error->deadlineSmall;
-                return false;
             }
 
             /* Check if the estimate is positive. */
             if($task->estimate < 0)
             {
                 dao::$errors["estimate[$rowIndex]"] = $this->lang->task->error->recordMinus;
-                return false;
             }
 
             /* Check if the required fields are empty. */
@@ -904,11 +905,11 @@ class taskZen extends task
                 if(empty($task->$field))
                 {
                     dao::$errors[$field . "[$rowIndex]"] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
-                    return false;
                 }
             }
         }
 
+        if(dao::isError()) return false;
         return true;
     }
 
@@ -1342,7 +1343,7 @@ class taskZen extends task
         $response['message']    = $this->lang->saveSuccess;
         $response['closeModal'] = true;
 
-        $execution  = $this->execution->getByID((int)$task->execution);
+        $execution  = $this->loadModel('execution')->getByID((int)$task->execution);
         $kanbanData = $this->getKanbanData($execution, $regionID);
 
         $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
@@ -1464,7 +1465,7 @@ class taskZen extends task
     protected function responseAfterChangeStatus(object $task, string $from): array
     {
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
-        if(isonlybody()) return $this->responseModal($task, $from);
+        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID={$task->id}"));
     }
 

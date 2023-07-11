@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
 
 class checkList extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'primary: bool=true',
         'type: string="checkbox"',
         'name?: string',
@@ -23,7 +24,7 @@ class checkList extends wg
         return [$value];
     }
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): checkbox
     {
         if($item instanceof item) $item = $item->props->toJsonData();
 
@@ -39,7 +40,7 @@ class checkList extends wg
         return new checkbox(set($props), set($item));
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($items, $inline) = $this->prop(['items', 'inline']);
 

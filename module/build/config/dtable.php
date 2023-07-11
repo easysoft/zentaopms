@@ -10,7 +10,7 @@ $config->build->dtable->fieldList['id']['type']  = 'id';
 
 $config->build->dtable->fieldList['name']['title']    = $lang->build->nameAB;
 $config->build->dtable->fieldList['name']['name']     = 'name';
-$config->build->dtable->fieldList['name']['link']     = helper::createLink('build', 'view', 'buildID={id}');
+$config->build->dtable->fieldList['name']['link']     = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}');
 $config->build->dtable->fieldList['name']['type']     = 'title';
 $config->build->dtable->fieldList['name']['sortType'] = false;
 
@@ -65,8 +65,9 @@ $config->build->story->dtable->fieldList['id']['checkbox'] = true;
 $config->build->story->dtable->fieldList['title']['title']       = $lang->story->title;
 $config->build->story->dtable->fieldList['title']['name']        = 'title';
 $config->build->story->dtable->fieldList['title']['type']        = 'title';
-$config->build->story->dtable->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}', '', true);
+$config->build->story->dtable->fieldList['title']['link']        = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}');
 $config->build->story->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->build->story->dtable->fieldList['title']['data-size']   = 'lg';
 
 $config->build->story->dtable->fieldList['pri']['title'] = $lang->priAB;
 $config->build->story->dtable->fieldList['pri']['name']  = 'pri';
@@ -94,11 +95,12 @@ $config->build->story->dtable->fieldList['stage']['name']  = 'stage';
 $config->build->story->dtable->fieldList['stage']['type']  = 'category';
 $config->build->story->dtable->fieldList['stage']['map']   = $lang->story->stageList;
 
-$config->build->story->dtable->fieldList['actions']['title'] = $lang->actions;
-$config->build->story->dtable->fieldList['actions']['name']  = 'actions';
-$config->build->story->dtable->fieldList['actions']['type']  = 'actions';
-$config->build->story->dtable->fieldList['actions']['menu']  = array('unlinkStory');
-$config->build->story->dtable->fieldList['actions']['list']  = $config->build->actionList;
+$config->build->story->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->build->story->dtable->fieldList['actions']['name']     = 'actions';
+$config->build->story->dtable->fieldList['actions']['type']     = 'actions';
+$config->build->story->dtable->fieldList['actions']['menu']     = array('unlinkStory');
+$config->build->story->dtable->fieldList['actions']['list']     = $config->build->actionList;
+$config->build->story->dtable->fieldList['actions']['minWidth'] = '60';
 
 $config->build->bug->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->build->bug->dtable->fieldList['id']['name']     = 'id';
@@ -108,8 +110,9 @@ $config->build->bug->dtable->fieldList['id']['sortType'] = 'desc';
 $config->build->bug->dtable->fieldList['title']['title']       = $lang->bug->title;
 $config->build->bug->dtable->fieldList['title']['name']        = 'title';
 $config->build->bug->dtable->fieldList['title']['type']        = 'title';
-$config->build->bug->dtable->fieldList['title']['link']        = helper::createLink('bug', 'view', 'bugID={id}', '', true);
+$config->build->bug->dtable->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
 $config->build->bug->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->build->bug->dtable->fieldList['title']['data-size']   = 'lg';
 
 $config->build->bug->dtable->fieldList['severity']['title'] = $lang->bug->severity;
 $config->build->bug->dtable->fieldList['severity']['name']  = 'severity';
@@ -150,3 +153,6 @@ $config->build->bug->dtable->fieldList['actions']['minWidth'] = '60';
 $config->build->generatedBug->dtable = clone $config->build->bug->dtable;
 $config->build->generatedBug->dtable->fieldList['id']['checkbox'] = false;
 unset($config->build->generatedBug->dtable->fieldList['actions']);
+
+$config->build->defaultFields['linkStory'] = array('id', 'pri', 'title', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage');
+$config->build->defaultFields['linkBug']   = array('id', 'pri', 'title', 'openedBy', 'resolvedBy', 'status');

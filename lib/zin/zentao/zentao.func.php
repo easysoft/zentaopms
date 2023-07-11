@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The helper functions and classes for ZentaoPHP file of zin of ZenTaoPMS.
  *
@@ -38,9 +39,10 @@ class stdClass extends \stdClass
 {
 }
 
-function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '')
+function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '', $onlybody = false)
 {
-    return \helper::createLink($moduleName, $methodName, $vars, $viewType);
+    if(empty($moduleName)) return '';
+    return \helper::createLink($moduleName, $methodName, $vars, $viewType, $onlybody);
 }
 
 function inLink($methodName = 'index', $vars = '', $viewType = '', $onlybody = false)
@@ -69,7 +71,7 @@ function isFieldRequired($name)
     $moduleName = $app->moduleName;
     $methodName = $app->methodName;
     $required   = false;
-    if(isset($config->$moduleName->$methodName->requiredFields)) $required = in_array($name, explode(',', $config->$moduleName->$methodName->requiredFields));
+    if (isset($config->$moduleName->$methodName->requiredFields)) $required = in_array($name, explode(',', $config->$moduleName->$methodName->requiredFields));
 
     return $required;
 }
@@ -77,14 +79,41 @@ function isFieldRequired($name)
 /**
  * Determine whether the request is ajax.
  *
- * @param string|null $type 'zin'|null
+ * @param ?string $type 'zin'|'modal'|null
  */
-function isAjaxRequest(string|null $type = null): bool
+function isAjaxRequest(?string $type = null): bool
 {
-    $isAjax = \helper::isAjaxRequest();
-    if($isAjax === false) return false;
+    return \helper::isAjaxRequest($type);
+}
 
-    if($type === 'zin') return array_key_exists('HTTP_X_ZIN_OPTIONS', $_SERVER);
+/**
+ * Bind global event listener to widget element.
+ *
+ * @param string       $name
+ * @param string|array $callback
+ * @param array|null   $options
+ * @return directive
+ */
+function bind(string $name, string|array $callback, array $options = null): directive
+{
+    $data = array('on' => $name);
+    if(is_string($callback)) $data['call'] = $callback;
+    if(is_array($callback))  $data = array_merge($data, $callback);
+    if($options)             $data = array_merge($data, $options);
 
-    return $isAjax;
+    return setData($data);
+}
+
+/**
+ * Render data to json.
+ *
+ * @param mixed $data   data.
+ * @param int   $flags  json encode flags.
+ * @return void
+ */
+function renderJson(mixed $data, int $flags = 0)
+{
+    ob_end_flush();
+    zin::$rendered = true;
+    echo json_encode($data, $flags);
 }

@@ -4,15 +4,15 @@ namespace zin;
 
 class moduleMenu extends wg
 {
-    private $modules = array();
+    private array $modules = array();
 
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'modules: array',
-        'activeKey: int',
-        'settingLink: string',
+        'activeKey?: int',
+        'settingLink?: string',
         'closeLink: string',
-        'activeText: string=""',
-        'displaySetting: bool=true'
+        'showDisplay?: bool=true',
+        'allText?: string'
     );
 
     public static function getPageCSS(): string|false
@@ -25,9 +25,17 @@ class moduleMenu extends wg
         $children = $this->getChildModule($parentID);
         if(count($children) === 0) return [];
 
+        $activeKey = $this->prop('activeKey');
+
         foreach($children as $child)
         {
-            $item = array('key' => $child->id, 'text' => $child->name, 'url' => $child->url, 'items' => []);
+            $item = array(
+                'key' => $child->id,
+                'text' => $child->name,
+                'url' => $child->url,
+                'items' => array(),
+                'active' => $child->id == $activeKey,
+            );
             $items = $this->buildMenuTree($item['items'], $child->id);
             if(count($items) !== 0) $item['items'] = $items;
             else unset($item['items']);
@@ -44,25 +52,34 @@ class moduleMenu extends wg
     private function setMenuTreeProps(): void
     {
         $this->modules = $this->prop('modules');
-        $this->setProp('items', $this->buildMenuTree([], 0));
-        $this->setDefaultProps(array('activeClass' => 'active'));
+        $this->setProp('items', $this->buildMenuTree(array(), 0));
     }
 
-    private function getTitle($activeKey): string
+    private function getTitle(): string
     {
+        global $lang;
+        $activeKey = $this->prop('activeKey');
+
+        if(empty($activeKey))
+        {
+            $allText = $this->prop('allText');
+            if(empty($allText)) return $lang->all;
+            return $allText;
+        }
+
         foreach($this->modules as $module)
         {
             if($module->id == $activeKey) return $module->name;
         }
 
-        return $this->prop('activeText');
+        return '';
     }
 
-    private function buildBtns()
+    private function buildBtns(): wg
     {
         $settingLink = $this->prop('settingLink');
-        $displaySetting = $this->prop('displaySetting');
-        if(!$settingLink && !$displaySetting) return null;
+        $showDisplay = $this->prop('showDisplay');
+        if(!$settingLink && !$showDisplay) return null;
 
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
@@ -73,58 +90,65 @@ class moduleMenu extends wg
 
         return div
         (
-            setClass('setting-btns'),
-            $settingLink ? a
-            (
-                setClass('btn'),
-                setStyle('background', '#EEF5FF'),
-                setStyle('border', 'none'),
-                set::href($settingLink),
-                $lang->moduleSetting
-            ) : null,
-            $displaySetting ?
-                a(
+            setClass('col gap-2 py-3 px-7'),
+            $settingLink
+                ? a
+                (
+                    setClass('btn'),
+                    setStyle('background', '#EEF5FF'),
+                    setStyle('box-shadow', 'none'),
+                    set::href($settingLink),
+                    $lang->moduleSetting
+                )
+                : null,
+            $showDisplay
+                ? a
+                (
                     setClass('btn white'),
-                    set::href(helper::createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
                     set('data-toggle', 'modal'),
+                    set::href(helper::createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
                     $lang->displaySetting
                 )
-            : null,
+                : null,
+        );
+    }
+
+    private function buildCloseBtn(): ?wg
+    {
+        $activeKey = $this->prop('activeKey');
+        if(empty($activeKey)) return null;
+
+        return a
+        (
+            set('href', $this->prop('closeLink')),
+            icon('close', setStyle('color', 'var(--color-slate-600)'))
         );
     }
 
     protected function build(): wg
     {
         $this->setMenuTreeProps();
-        $activeKey = $this->prop('activeKey');
-        $title = $this->getTitle($activeKey);
-        $closeBtn = null;
-        if(!empty($activeKey))
-        {
-            $closeBtn = a
-            (
-                set('href', $this->prop('closeLink')),
-                h::i
-                (
-                    setClass('icon icon-close'),
-                    setStyle('color', '#313C52')
-                )
-            );
-        }
+        $title = $this->getTitle();
+
 
         return div
         (
-            setClass('module-menu rounded shadow-sm'),
-            $title ? h::header
+            setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
+            h::header
             (
+                setClass('h-10 flex items-center pl-4 flex-none gap-3'),
                 span
                 (
-                    setClass('module-title'),
+                    setClass('module-title text-lg font-semibold'),
                     $title
                 ),
-                $closeBtn
-            ) : null,
-            h::main(zui::menutree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'))))),
+                $this->buildCloseBtn(),
+            ),
+            h::main
+            (
+                setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
+                zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'))))
+            ),
             $this->buildBtns(),
         );
     }

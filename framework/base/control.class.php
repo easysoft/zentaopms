@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * ZenTaoPHP的baseControl类。
  * The baseControl class file of ZenTaoPHP framework.
@@ -788,25 +789,35 @@ class baseControl
         $this->app->setMethodName($methodName);
         $this->app->setControlFile();
 
-        if(!is_array($params)) parse_str($params, $params);
-        $this->app->setParams();
-
-        /*
-         * 设置要fetch的方法的参数类型。
-         * Set fetch method param type.
-         */
-        $paramKeys   = array_keys($this->app->params);
-        $keyIndex    = 0;
         $fetchParams = array();
-        foreach($params as $param => $value)
+        if(!is_array($params))
         {
-            if(empty($paramKeys[$keyIndex])) break;
+            parse_str($params, $params);
+            $defaultParams     = $this->app->getDefaultParams();
+            $this->app->params = empty($defaultParams) ? array() : $this->app->mergeParams($defaultParams, $params);
 
-            $paramKey = $paramKeys[$keyIndex];
-            settype($value, gettype($this->app->params[$paramKey]));
+            /*
+             * 设置要fetch的方法的参数类型。
+             * Set fetch method param type.
+             */
+            $paramKeys = array_keys($this->app->params);
+            $keyIndex  = 0;
+            foreach($params as $param => $value)
+            {
+                if(empty($paramKeys[$keyIndex])) break;
 
-            $fetchParams[] = $value;
-            $keyIndex ++;
+                $paramKey = $paramKeys[$keyIndex];
+                settype($value, gettype($this->app->params[$paramKey]));
+
+                $fetchParams[] = $value;
+                $keyIndex ++;
+            }
+        }
+        else
+        {
+            $params            = array_values($params);
+            $fetchParams       = $params;
+            $this->app->params = $params;
         }
 
         $currentPWD = getcwd();
@@ -960,13 +971,12 @@ class baseControl
             return;
         }
 
-        define('ZIN', true);
-
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($methodName)) $methodName = $this->methodName;
 
         /* Load zin lib */
         $this->app->loadClass('zin', true);
+        \zin\loadConfig();
 
         /**
          * 设置视图文件。(PHP7有一个bug，不能直接$viewFile = $this->setViewFile())。
@@ -996,10 +1006,13 @@ class baseControl
         /**
          * Set zin context data
          */
+        \zin\zin::$globalRenderList = array();
+        \zin\zin::$enabledGlobalRender = true;
+        \zin\zin::$rendered = false;
+        \zin\zin::$rawContentCalled = false;
+
         \zin\zin::$data = (array)$this->view;
-
         \zin\zin::$data['zinDebug'] = array();
-
         if($this->config->debug && $this->config->debug >= 2)
         {
             \zin\zin::$data['zinDebug']['trace'] = $this->app->loadClass('trace')->getTrace();
@@ -1010,15 +1023,10 @@ class baseControl
          * Use extract and ob functions to eval the codes in $viewFile.
          */
         extract(\zin\zin::$data);
-
-        include $viewFile;
-        /*
-        extract((array)$this->view);
         ob_start();
-        if(isset($hookFiles)) foreach($hookFiles as $hookFile) if(file_exists($hookFile)) include $hookFile;
-        $this->output .= ob_get_contents();
-        ob_end_clean();
-         */
+        include $viewFile;
+        if(!\zin\zin::$rendered) \zin\render();
+        ob_end_flush();
 
         /**
          * 渲染完毕后，再切换回之前的路径。
@@ -1070,8 +1078,9 @@ class baseControl
                 return print($response);
             }
 
-            $obLevel = ob_get_level();
-            for($i = 0; $i < $obLevel; $i++) ob_end_clean();
+            /* Zand will use ob_get_clean() to print, so cannot clean so early. */
+            // $obLevel = ob_get_level();
+            // for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
             $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
             $this->app->outputXhprof();
@@ -1131,6 +1140,7 @@ class baseControl
     {
         $data['result'] = 'success';
         if(empty($data['message'])) $data['message'] = $this->lang->saveSuccess;
+        if(!isset($data['closeModal']) && helper::isAjaxRequest('modal')) $data['closeModal'] = true;
         return $this->send($data);
     }
 
@@ -1178,7 +1188,7 @@ class baseControl
      */
     public function locate(string $url)
     {
-        header("location: $url");
+        helper::header('location', $url);
         helper::end();
     }
 }

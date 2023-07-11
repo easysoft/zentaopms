@@ -234,7 +234,7 @@ class misc extends control
         $obLevel = ob_get_level();
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
-        header('Content-Type: image/jpeg');
+        helper::header('Content-Type', 'image/jpeg');
         $captcha = $this->app->loadClass('captcha');
         $this->session->set($sessionVar, $captcha->getPhrase());
         $captcha->build()->output();

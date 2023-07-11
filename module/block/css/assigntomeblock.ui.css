@@ -1,0 +1,4 @@
+.assigntome-block .nav-tabs>.nav-item>a:after {border-width: 0;}
+.assigntome-block .nav-tabs>.nav-item>a:before {background: none;}
+.assigntome-block .nav-tabs>.nav-item>a.active {color: var(--color-primary-500);}
+.assigntome-block .nav-tabs>.nav-item>a.active:after {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px; bottom: -0.5rem}

@@ -13,8 +13,7 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams("mode=testtask&type={key}&param={$param}"),
-    li(searchToggle())
+    set::linkParams("mode=testtask&type={key}&param={$param}")
 );
 
 $tasks      = initTableData($tasks, $config->my->testtask->dtable->fieldList, $this->testtask);
@@ -26,7 +25,7 @@ dtable
     set::cols($cols),
     set::data($data),
     set::userMap($users),
-    set::fixedLeftWidth('44%'),
+    set::fixedLeftWidth('20%'),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),
 );

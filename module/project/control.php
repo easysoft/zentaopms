@@ -123,31 +123,6 @@ class project extends control
     }
 
     /**
-     * 获取可复制看板项目通过页面检索。
-     * Ajax retrieve cloneable Kanban projects based on search.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxRetrieveCloneableProject()
-    {
-        /* 获取可复制的看板项目键值对。*/
-        /* Get cloneable kanban project pairs by model. */
-        $projectKeys = $this->project->getCopyProjectPairs($this->post->name, $this->post->model);
-        $projects    = $this->project->getPairsByModel('', 0, '', $projectKeys);
-
-        /* 页面渲染出可复制的项目。*/
-        /* Rendering cloneable projects on page. */
-        $html = empty($projects) ? "<div class='text-center'>{$this->lang->noData}</div>" : '';
-        foreach($projects as $id => $name)
-        {
-            $active = $this->post->cpoyProjectID == $id ? 'active' : '';
-            $html  .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . '</a></div>';
-        }
-        echo $html;
-    }
-
-    /**
      * 移除项目团队成员时进行提示。
      * Ajax prompts when removing project team members.
      *
@@ -441,10 +416,11 @@ class project extends control
 
         if($_POST)
         {
-            $postData  = form::data($this->config->project->form->create);
-            $project   = $this->projectZen->prepareCreateExtras($postData);
-            $projectID = $this->project->create($project, $postData);
+            $postData = form::data($this->config->project->form->create);
+            $project  = $this->projectZen->prepareCreateExtras($postData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $projectID = $this->project->create($project, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($project->model == 'kanban') $this->project->addTeamMembers($projectID, $project, (array)$this->post->teamMembers);
             $this->loadModel('action')->create('project', $projectID, 'opened');
@@ -466,8 +442,8 @@ class project extends control
                 if($model == 'waterfall' or $model == 'waterfallplus')
                 {
                     $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
-                    $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
+                    $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID), 'project');
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', false, $projectID)));
                 }
 
                 $parent     = (int)$project->parent;
@@ -505,7 +481,7 @@ class project extends control
             $postData   = form::data($this->config->project->form->edit);
             $newProject = $this->projectZen->prepareProject($postData, $project->hasProduct);
 
-            $changes = $this->project->update($newProject, $project, $this->post->uid);
+            $changes = $this->project->update($newProject, $project);
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
@@ -513,7 +489,7 @@ class project extends control
             }
 
             $this->project->updatePlans($projectID, (array)$this->post->plans);                        // 更新关联的计划列表。
-            $this->project->updateProducts($projectID, (array)$this->post->products);                  // 更新关联的项目列表。
+            $this->project->updateProducts($projectID, (array)$this->post->products);                  // 更新关联的产品列表。
             $this->project->updateTeamMembers($newProject, $project, (array)$this->post->teamMembers); // 更新关联的用户信息。
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -541,7 +517,7 @@ class project extends control
         $this->loadModel('action');
         $this->loadModel('execution');
 
-        if($this->post->names)
+        if($this->post->name)
         {
             $allChanges = $this->project->batchUpdate();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -574,7 +550,7 @@ class project extends control
         }
         $unauthorizedPrograms = $this->program->getPairsByList($unauthorizedIDList);
 
-        $this->view->title      = $this->lang->project->batchEdit;
+        $this->view->title = $this->lang->project->batchEdit;
 
         $this->view->projects             = $projects;
         $this->view->programs             = $programs;
@@ -708,7 +684,7 @@ class project extends control
             return print(js::closeModal('parent.parent'));
         }
 
-        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
+        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
 
         $this->display('group', 'create');
     }
@@ -824,13 +800,8 @@ class project extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $allExecution = $this->execution->getStatData($projectID, 'all');
-        $this->view->allExecutionNum = empty($allExecution);
-
-        $executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
-
         $this->view->title          = $this->lang->execution->allExecutions;
-        $this->view->executionStats = $executionStats;
+        $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
         $this->view->productID      = $productID;
         $this->view->product        = $this->product->getByID($productID);
@@ -918,14 +889,10 @@ class project extends control
         $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&branchID=$branchID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->loadModel('execution')->buildBugSearchForm($products, $queryID, $actionURL, 'project');
 
-        $showBranch      = false;
         $branchOption    = array();
         $branchTagOption = array();
         if($product and $product->type != 'normal')
         {
-            /* Display of branch label. */
-            $showBranch = $this->loadModel('branch')->showBranch($productID);
-
             /* Display status of branch. */
             $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
             foreach($branches as $branchInfo)
@@ -1004,7 +971,6 @@ class project extends control
         $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
         $this->view->setModule       = true;
-        $this->view->showBranch      = false;
 
         $this->display();
     }
@@ -1308,7 +1274,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function team(string $projectID = '0')
+    public function team(int $projectID = 0)
     {
         $projectID = (int)$projectID;
         $this->session->set('teamList', $this->app->getURI(true), 'project');
@@ -1316,14 +1282,24 @@ class project extends control
         $this->app->loadLang('execution');
         $this->project->setMenu($projectID);
 
-        $project = $this->project->getById($projectID);
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $project     = $this->project->getById($projectID);
+        $deptID      = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $teamMembers = $this->project->getTeamMembers($projectID);
+        foreach($teamMembers as $member)
+        {
+            $member->days    = $member->days . $this->lang->execution->day;
+            $member->hours   = $member->hours . $this->lang->execution->workHour;
+            $member->total   = $member->totalHours . $this->lang->execution->workHour;
+            $member->actions = array();
+            if(common::hasPriv('project', 'unlinkMember', $member) && common::canModify('project', $project)) $member->actions = array('unlink');
+        }
 
         $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->team;
         $this->view->projectID    = $projectID;
-        $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
+        $this->view->teamMembers  = $teamMembers;
         $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         $this->view->canBeChanged = common::canModify('project', $project);
+        $this->view->recTotal     = count($teamMembers);
 
         $this->display();
     }
@@ -1333,15 +1309,12 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $userID
-     * @param  string $confirm  yes|no
      * @param  string $removeExecution  yes|no
      * @access public
      * @return void
      */
-    public function unlinkMember($projectID, $userID, $confirm = 'no', $removeExecution = 'no')
+    public function unlinkMember(int $projectID, int $userID, string $removeExecution = 'no')
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->project->confirmUnlinkMember, $this->inlink('unlinkMember', "projectID=$projectID&userID=$userID&confirm=yes")));
-
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
@@ -1349,21 +1322,18 @@ class project extends control
         if(!dao::isError()) $this->loadModel('action')->create('team', $projectID, 'managedTeam');
 
         /* if ajax request, send result. */
-        if($this->server->ajax)
+        if(dao::isError())
         {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            return $this->send($response);
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
-        echo js::locate($this->inlink('team', "projectID=$projectID"), 'parent');
+        else
+        {
+            $response['result']  = 'success';
+            $response['message'] = '';
+            $response['load']    = helper::createLink('project', 'team', "projectID={$projectID}");
+        }
+        return $this->send($response);
     }
 
     /**
@@ -1375,7 +1345,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageMembers($projectID, $dept = '', $copyProjectID = 0)
+    public function manageMembers(int $projectID, string $dept = '', int $copyProjectID = 0)
     {
         /* Load model. */
         $this->loadModel('user');
@@ -1398,7 +1368,7 @@ class project extends control
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
             $link = $this->session->teamList ? $this->session->teamList : $this->createLink('project', 'team', "projectID=$projectID");
-            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
+            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => $link));
         }
 
         $users        = $this->user->getPairs('noclosed|nodeleted|devfirst');
@@ -1409,19 +1379,17 @@ class project extends control
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
 
-        $this->view->title      = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
-
+        $this->view->title          = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
         $this->view->project        = $project;
         $this->view->users          = $users;
-        $this->view->deptUsers      = $deptUsers;
         $this->view->userInfoList   = $userInfoList;
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->currentMembers = $currentMembers;
-        $this->view->members2Import = $members2Import;
         $this->view->teams2Import   = array('' => '') + $this->loadModel('personnel')->getCopiedObjects($projectID, 'project', true);
+        $this->view->currentMembers = $currentMembers;
         $this->view->copyProjectID  = $copyProjectID;
+        $this->view->teamMembers    = $this->projectZen->buildMembers($currentMembers, $members2Import, $deptUsers, $project->days);
         $this->display();
     }
 
@@ -1534,27 +1502,24 @@ class project extends control
     /**
      * Start a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      * @access public
      * @return void
      */
-    public function start(string $projectID)
+    public function start(int $projectID)
     {
-        $projectID = (int)$projectID;
-        $project   = $this->project->getByID($projectID);
+        $project = $this->project->getByID($projectID);
 
         if(!empty($_POST))
         {
             $postData = form::data($this->config->project->form->start);
-
             $postData = $this->projectZen->prepareStartExtras($postData);
-
             $changes  = $this->project->start($projectID, $postData);
 
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->projectZen->responseAfterStart($project, $changes, $this->post->comment);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildStartForm($project);
@@ -1564,15 +1529,13 @@ class project extends control
      * 挂起一个项目
      * Suspend a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      *
      * @access public
      * @return void
      */
-    public function suspend(string $projectID)
+    public function suspend(int $projectID)
     {
-        $projectID = (int)$projectID;
-
         /* Processing parameter passing while suspend project. */
         if(!empty($_POST))
         {
@@ -1581,12 +1544,13 @@ class project extends control
 
             /* Update the database status to suspended. */
             $changes = $this->project->suspend($projectID, $postData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Process the data returned after the suspended. */
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterSuspend($projectID, $changes, $comment);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildSuspendForm($projectID);
@@ -1596,15 +1560,13 @@ class project extends control
      * 关闭一个项目
      * Close a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      * @access public
      *
      * @return void
      */
-    public function close(string $projectID)
+    public function close(int $projectID)
     {
-        $projectID = (int)$projectID;
-
         /* Processing parameter passing while close project. */
         if(!empty($_POST))
         {
@@ -1613,12 +1575,13 @@ class project extends control
 
             /* Update the database status to closed. */
             $changes = $this->project->close($projectID, $postData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Process the data returned after the closed. */
-            $comment = strip_tags($this->post->comment, $this->config->allowedTags);
+            $comment = strip_tags((string)$this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterClose($projectID, $changes, $comment);
-            return print(js::reload('parent.parent'));
+
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildClosedForm($projectID);
@@ -1628,14 +1591,13 @@ class project extends control
      * 激活项目并更新其状态
      * Activate a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      * @access public
      *
      * @return void
      */
-    public function activate(string $projectID)
+    public function activate(int $projectID)
     {
-        $projectID = (int)$projectID;
         $project   = $this->project->getByID($projectID);
 
         if(!empty($_POST))
@@ -1644,10 +1606,11 @@ class project extends control
             $postData = $this->projectZen->prepareActivateExtras($projectID, $postData);
 
             $changes = $this->project->activate($projectID, $postData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->projectZen->responseAfterActivate($projectID, $changes);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildActivateForm($project);
@@ -1658,47 +1621,34 @@ class project extends control
      * Delete a project and confirm.
      *
      * @param  string  $projectID
-     * @param  string  $confirm
      * @param  string  $from browse|view
      *
      * @access public
-     * @return int
+     * @return void
      */
-    public function delete(string $projectID, string $confirm = 'no', string $from = 'browse'): int
+    public function delete(int $projectID, string $from = 'browse')
     {
         $projectID = (int)$projectID;
         $project   = $this->project->getByID($projectID);
+        $this->project->delete(TABLE_PROJECT, $projectID);
+        $this->project->deleteByTableName('zt_doclib', $projectID);
+        $this->loadModel('user')->updateUserView($projectID, 'project');
 
-        if($confirm == 'no')
-        {
-            return print(js::confirm(sprintf($this->lang->project->confirmDelete, $project->name), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes&from=$from")));
-        }
-        else
-        {
-            $this->project->delete(TABLE_PROJECT, $projectID);
-            $this->project->deleteByTableName('zt_doclib', $projectID);
-            $this->loadModel('user')->updateUserView($projectID, 'project');
+        $response['result']     = 'success';
+        $response['closeModal'] = true;
+        $response['load']       = true;
 
-            $message = $this->executeHooks($projectID);
-            if($message) $this->lang->saveSuccess = $message;
+        $message = $this->executeHooks($projectID);
+        if($message) $response['message'] = $message;
 
-            /* Delete the execution and product under the project. */
-            $executionIdList = $this->loadModel('execution')->getPairs($projectID);
-            if(empty($executionIdList))
-            {
-                if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-                if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
-                return print(js::reload('parent'));
-            }
-            $this->projectZen->removeAssociatedExecutions($executionIdList);
-            $this->projectZen->removeAssociatedProducts($project);
+        /* Delete the execution and product under the project. */
+        $executionIdList = $this->loadModel('execution')->getPairs($projectID);
+        if(!empty($executionIdList)) $this->projectZen->removeAssociatedExecutions($executionIdList);
+        $this->projectZen->removeAssociatedProducts($project);
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-
-            $this->session->set('project', '');
-            if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
-            return print(js::reload('parent'));
-        }
+        $this->session->set('project', '');
+        if($from == 'view') $response['load'] = helper::createLink('project', 'browse');
+        return $this->send($response);
     }
 
     /**
@@ -1784,11 +1734,10 @@ class project extends control
      * Manage products of project.
      *
      * @param  string $projectID
-     * @param  string $from  project|program|programproject
      * @access public
      * @return void
      */
-    public function manageProducts(string $projectID, string $from = 'project')
+    public function manageProducts(string $projectID)
     {
         /* 如果是无产品项目，则返回。*/
         /* If hasProduct is 0, return. */
@@ -1804,7 +1753,7 @@ class project extends control
             /* If no product is selected, prompt error. */
             $postProducts     = $this->post->products;
             $postOtherProduct = $this->post->otherProducts;
-            if(!isset($postProducts) and !isset($postOtherProduct))
+            if(!isset($postProducts) && !isset($postOtherProduct))
             {
                 return $this->send(array('result' => 'fail', 'message' => $this->lang->project->errorNoProducts));
             }
@@ -1814,9 +1763,7 @@ class project extends control
 
             /* 成功关联产品后，跳转页面。*/
             /* After successfully associating the product, jump to the page. */
-            $locateLink = inLink('manageProducts', "projectID=$projectID");
-            if($from == 'program')  $locateLink = $this->session->projectList;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         /* Set menu. */

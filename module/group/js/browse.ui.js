@@ -3,13 +3,14 @@
  * Delete group with tips.
  *
  * @param  int    groupID
+ * @param  string groupName
  * @access public
  * @return void
  */
-window.confirmDelete = function(groupID)
+window.confirmDelete = function(groupID, groupName)
 {
-    if(window.confirm(confirmDelete))
+    zui.Modal.confirm(confirmDelete.replace('%s', groupName)).then((res) =>
     {
-        $.ajaxSubmit({url: $.createLink('group', 'delete', 'groupID=' + groupID)});
-    }
+        if(res) $.ajaxSubmit({url: $.createLink('group', 'delete', 'groupID=' + groupID)});
+    });
 }

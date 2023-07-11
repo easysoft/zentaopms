@@ -64,7 +64,7 @@ class testsuite extends control
         $this->session->set('testsuiteList', $this->app->getURI(true), 'qa');
 
         /* Set menu. */
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Load pager. */
@@ -109,27 +109,35 @@ class testsuite extends control
     }
 
     /**
+     * 创建一个测试套件。
      * Create a test suite.
      *
      * @param  int    $productID
      * @access public
      * @return void
      */
-    public function create($productID)
+    public function create(int $productID)
     {
         if(!empty($_POST))
         {
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->testsuite->successSaved;
-            $suiteID = $this->testsuite->create($productID);
+            $suite = form::data($this->config->testsuite->form->create)
+                ->setIF($this->lang->navGroup->testsuite != 'qa', 'project', $this->session->project)
+                ->add('product', (int)$productID)
+                ->get();
+            $suite = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->create['id'], $this->post->uid);
+
+            $suiteID = $this->testsuite->create($suite);
             if(dao::isError())
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
                 return $this->send($response);
             }
-            $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
 
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->testsuite->successSaved;
+
+            $this->file->updateObjectID($this->post->uid, $suiteID, 'testsuite');
             $message = $this->executeHooks($suiteID);
             if($message) $response['message'] = $message;
 
@@ -140,12 +148,11 @@ class testsuite extends control
         }
 
         /* Set menu. */
-        $productID  = $this->product->saveVisitState($productID, $this->products);
+        $productID  = $this->product->saveState($productID, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->create;
-
-        $this->view->productID    = $productID;
+        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->create;
+        $this->view->productID = $productID;
         $this->display();
     }
 
@@ -160,7 +167,7 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function view($suiteID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function view($suiteID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('testtask');
 
@@ -170,7 +177,7 @@ class testsuite extends control
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
         /* Set product session. */
-        $productID = $this->product->saveVisitState($suite->product, $this->products);
+        $productID = $this->product->saveState($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Save session. */
@@ -239,7 +246,7 @@ class testsuite extends control
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
         /* Set product session. */
-        $productID = $this->product->saveVisitState($suite->product, $this->products);
+        $productID = $this->product->saveState($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
@@ -310,13 +317,14 @@ class testsuite extends control
         if(!empty($_POST))
         {
             $this->testsuite->linkCase($suiteID);
-            $this->locate(inlink('view', "suiteID=$suiteID"));
+            if(dao::isError()) return $this->send(array('result' => 'success', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "suiteID=$suiteID")));
         }
 
         $suite = $this->testsuite->getById($suiteID);
 
         /* Set product session. */
-        $productID = $this->product->saveVisitState($suite->product, $this->products);
+        $productID = $this->product->saveState($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Load pager. */

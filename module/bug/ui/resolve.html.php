@@ -21,7 +21,7 @@ if(common::hasPriv('build', 'create'))
     $createBuild = formGroup
     (
         set::id('createBuildBox'),
-        set::width('90px'),
+        set::width('1/3'),
         checkbox
         (
             set::id('createBuild'),
@@ -32,22 +32,11 @@ if(common::hasPriv('build', 'create'))
     );
 }
 
+modalHeader();
+
 /* zin: Define the form in main content. */
 formPanel
 (
-    set::title($lang->bug->resolve),
-    set::headingClass('status-heading'),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($bug->title),
-            set::entityID($bug->id),
-            set::reverse(true),
-        )
-    ),
     formGroup
     (
         set::width('1/3'),
@@ -60,12 +49,12 @@ formPanel
     formRow
     (
         setClass('hidden'),
-        set::id('duplicateBox'),
+        set::id('duplicateBugBox'),
         formGroup
         (
             set::width('1/3'),
-            set::name('duplicate'),
-            set::label($lang->bug->duplicate),
+            set::name('duplicateBug'),
+            set::label($lang->bug->duplicateBug),
             set::items(array()),
             set::placeholder($lang->bug->placeholder->duplicate),
             set::value(''),
@@ -76,7 +65,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/3'),
             set::id('newBuildExecutionBox'),
             setClass('hidden'),
             set::label(!empty($execution) && $execution->type == 'kanban' ? $lang->bug->kanban : $lang->build->execution),
@@ -89,7 +78,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/3'),
             set::id('resolvedBuildBox'),
             set::label($lang->bug->resolvedBuild),
             inputGroup
@@ -105,24 +94,24 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/3'),
+            setClass('hidden'),
+            set::id('newBuildBox'),
             inputGroup
             (
                 formGroup
                 (
-                    set::id('newBuildBox'),
                     set::label($lang->bug->resolvedBuild),
-                    setClass('hidden'),
+                    set::required(true),
                     input
                     (
                         set::name('buildName'),
                         set::value(''),
-                        set::required(true)
                     ),
                 ),
-                $createBuild,
             ),
         ),
+        $createBuild,
     ),
     formGroup
     (
@@ -146,9 +135,8 @@ formPanel
     ),
     formGroup
     (
-        set::name('files[]'),
         set::label($lang->bug->files),
-        set::control('file')
+        upload()
     ),
     formGroup
     (
@@ -158,6 +146,7 @@ formPanel
         set::rows(6),
     ),
 );
+
 history();
 
-render('modalDialog');
+render();

@@ -4,13 +4,25 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    const postData = [];
-    postData['taskIdList[]'] = checkedList;
+    const url  = $(this).data('url');
+    const form = new FormData();
+    checkedList.forEach((id) => form.append('taskIdList[]', id));
 
-    $.ajaxSubmit({
-        url:  $(this).data('url'),
-        data: postData
-    });
+    if($(this).hasClass('ajax-btn'))
+    {
+        $.ajaxSubmit({url, data: form});
+    }
+    else
+    {
+        postAndLoadPage(url, form);
+    }
+}).off('click', '#actionBar .export').on('click', '#actionBar .export', function()
+{
+    const dtable = zui.DTable.query($('#table-execution-task'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    $.cookie.set('checkedItem', checkedList);
 });
 
 /**
@@ -71,4 +83,49 @@ window.createSortLink = function(col)
     var sort = col.name + '_asc';
     if(sort == orderBy) sort = col.name + '_desc';
     return sortLink.replace('{orderBy}', sort);
+}
+
+/**
+ * 对部分列进行重定义。
+ * Redefine the partial column.
+ *
+ * @param  array  result
+ * @param  array  info
+ * @access public
+ * @return string|array
+ */
+window.renderCell = function(result, info)
+{
+    if(info.col.name == 'name' && result)
+    {
+        const task = info.row.data;
+        let html = '';
+        if(task.team)
+        {
+            html += "<span class='label gray-pale rounded-xl'>" + multipleAB + "</span>";
+        }
+        if(task.parent)
+        {
+            html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        }
+        if(html) result.unshift({html});
+    }
+    if(info.col.name == 'deadline' && result[0])
+    {
+        const today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
+        const yesterday = zui.formatDate(convertStringToDate(today) - 24 * 60 * 60 * 1000, 'yyyy-MM-dd');
+        if(result[0] == today)
+        {
+            result[0] = {html: '<span class="label warning-pale rounded-full size-sm">' + todayLabel + '</span>'};
+        }
+        else if(result == yesterday)
+        {
+            result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + yesterdayLabel + '</span>'};
+        }
+        else if(result < yesterday)
+        {
+            result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result + '</span>'};
+        }
+    }
+    return result;
 }

@@ -30,7 +30,7 @@ class echarts extends wg
         return $this;
     }
 
-    protected function build()
+    protected function build(): zui
     {
         return zui::echarts(inherit($this));
     }

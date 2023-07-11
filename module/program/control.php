@@ -91,8 +91,7 @@ class program extends control
         $this->config->program->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 
-        $this->view->title      = $this->lang->program->browse;
-
+        $this->view->title        = $this->lang->program->browse;
         $this->view->programs     = $programs;
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
@@ -166,7 +165,7 @@ class program extends control
             $program   = $this->program->getByID($programID);
             $path      = explode(',', $program->path);
             $path      = array_filter($path);
-            $programID = current($path);
+            $programID = (int)current($path);
 
             $this->view->program = $program;
         }
@@ -282,16 +281,16 @@ class program extends control
     public function close($programID)
     {
         $this->loadModel('action');
-        $program = $this->project->getByID($programID, 'program');
+        $program = $this->program->getByID($programID);
 
         if(!empty($_POST))
         {
             /* Only when all subprograms and subprojects are closed can the program be closed. */
             $hasUnfinished = $this->program->hasUnfinished($program);
-            if($hasUnfinished) return print(js::error($this->lang->program->closeErrorMessage));
+            if($hasUnfinished) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->closeErrorMessage}');"));
 
-            $changes = $this->project->close($programID, 'program');
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $changes = $this->program->close($programID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -300,15 +299,15 @@ class program extends control
             }
 
             $this->executeHooks($programID);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
-        $this->view->title      = $this->lang->program->close;
-        $this->view->project    = $program;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('program', $programID);
+        $this->view->title   = $this->lang->program->close;
+        $this->view->program = $program;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions = $this->action->getList('program', $programID);
 
-        $this->display('project', 'close');
+        $this->display();
     }
 
     /**
@@ -355,32 +354,32 @@ class program extends control
     public function activate($programID = 0)
     {
         $this->loadModel('action');
-        $program = $this->project->getByID($programID, 'program');
+        $program = $this->program->getByID($programID);
 
         if(!empty($_POST))
         {
-            $changes = $this->project->activate($programID, 'program');
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $changes = $this->program->activate($programID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
                 $actionID = $this->action->create('program', $programID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $newBegin = date('Y-m-d');
         $dateDiff = helper::diffDate($newBegin, $program->begin);
         $newEnd   = date('Y-m-d', strtotime($program->end) + $dateDiff * 24 * 3600);
 
-        $this->view->title      = $this->lang->program->activate;
-        $this->view->project    = $program;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('program', $programID);
-        $this->view->newBegin   = $newBegin;
-        $this->view->newEnd     = $newEnd;
-        $this->display('project', 'activate');
+        $this->view->title    = $this->lang->program->activate;
+        $this->view->program  = $program;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions  = $this->action->getList('program', $programID);
+        $this->view->newBegin = $newBegin;
+        $this->view->newEnd   = $newEnd;
+        $this->display();
     }
 
     /**
@@ -396,53 +395,52 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $changes = $this->project->suspend($programID, 'program');
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $changes = $this->program->suspend($programID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
                 $actionID = $this->action->create('program', $programID, 'Suspended', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
             $this->executeHooks($programID);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
-        $this->view->title      = $this->lang->program->suspend;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('program', $programID);
-        $this->view->project    = $this->project->getByID($programID, 'program');
+        $this->view->title   = $this->lang->program->suspend;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions = $this->action->getList('program', $programID);
+        $this->view->program = $this->program->getByID($programID);
 
-        $this->display('project', 'suspend');
+        $this->display();
     }
 
     /**
      * Delete a program.
      *
      * @param  int    $programID
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function delete($programID, $confirm = 'no')
+    public function delete($programID)
     {
         $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
         if($childrenCount)
         {
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'Cannot delete the program has children'));
-            return print(js::alert($this->lang->program->hasChildren));
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->hasChildren}');"));
         }
 
         $productCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
-        if($productCount) return print(js::alert($this->lang->program->hasProduct));
+        if($productCount) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->hasProduct}');"));
 
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-        if($confirm == 'no') return print(js::confirm(sprintf($this->lang->program->confirmDelete, $program->name), $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
 
         $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
         $this->loadModel('action')->create('program', $programID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
-        echo js::reload('parent');
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -483,12 +481,13 @@ class program extends control
         $allProjectsNum = $this->program->getProjectStats($programID, 'all');
         $this->view->allProjectsNum = $allProjectsNum;
 
-        $this->view->title      = $this->lang->program->project;
+        $this->view->title = $this->lang->program->project;
 
         $this->view->projectStats  = $projectStats;
         $this->view->pager         = $pager;
         $this->view->programID     = $programID;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->PMList        = $this->loadModel('product')->getPMList($projectStats);
         $this->view->browseType    = $browseType;
         $this->view->orderBy       = $orderBy;
         $this->view->showBatchEdit = $this->cookie->showProjectBatchEdit;
@@ -512,14 +511,12 @@ class program extends control
         $this->app->loadLang('stakeholder');
         $this->program->setMenu($programID);
 
-        /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, $recPerPage, $pageID);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->program->stakeholder;
-
-        $this->view->stakeholders = $this->program->getStakeholders($programID, $orderBy, $pager);
+        $this->view->title        = $this->lang->program->stakeholder;
         $this->view->pager        = $pager;
+        $this->view->stakeholders = $this->program->getStakeholders($programID, $orderBy, $pager);
         $this->view->programID    = $programID;
         $this->view->program      = $this->program->getByID($programID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
@@ -553,18 +550,17 @@ class program extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->program->confirmUnlink, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
+            $actionUrl = $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->program->confirmUnlink, 'callback' => "unlinkStakeholderConfirm('{$this->lang->program->confirmUnlink}', '$actionUrl')"));
         }
-        else
-        {
-            $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch('user');
-            $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
 
-            $this->loadModel('user')->updateUserView($programID, 'program', array($account));
-            $this->updateChildUserView($programID, $account);
+        $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch('user');
+        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
 
-            return print(js::reload('parent'));
-         }
+        $this->loadModel('user')->updateUserView($programID, 'program', array($account));
+        $this->updateChildUserView($programID, $account);
+
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -582,18 +578,17 @@ class program extends control
 
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->program->confirmBatchUnlink, $this->inlink('batchUnlinkStakeholders', "programID=$programID&stakeholderIDList=$stakeholderIDList&confirm=yes")));
+            $actionUrl = $this->inlink('batchUnlinkStakeholders', "programID=$programID&stakeholderIDList=$stakeholderIDList&confirm=yes");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->program->confirmBatchUnlink, 'callback' => "unlinkStakeholderConfirm('{$this->lang->program->confirmBatchUnlink}', '$actionUrl')"));
         }
-        else
-        {
-            $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
-            $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->exec();
 
-            $this->loadModel('user')->updateUserView($programID, 'program', $account);
-            $this->updateChildUserView($programID, $account);
+        $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
+        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->exec();
 
-            return print(js::reload('parent'));
-        }
+        $this->loadModel('user')->updateUserView($programID, 'program', $account);
+        $this->updateChildUserView($programID, $account);
+
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -645,9 +640,9 @@ class program extends control
             {
                 $program->PM       = zget($users, $program->PM);
                 $program->status   = $this->processStatus('project', $program);
-                $program->model    = zget($programLang->modelList, $program->model);
-                $program->product  = zget($programLang->productList, $program->product);
-                $program->budget   = $program->budget . zget($programLang->unitList, $program->budgetUnit);
+                $program->model    = zget($this->lang->project->modelList, $program->model);
+                $program->product  = implode(",", $this->dao->select('name')->from(TABLE_PRODUCT)->where('program')->eq($program->id)->fetchPairs('name'));
+                $program->budget   = $program->budget . zget($this->lang->project->unitList, $program->budgetUnit);
 
                 if($this->post->exportType == 'selected')
                 {
@@ -661,7 +656,7 @@ class program extends control
             $this->post->set('fields', $fields);
             $this->post->set('rows', $programs);
             $this->post->set('kind', 'program');
-            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+            $this->fetch('file', 'export2' . $this->post->fileType);
         }
 
         $this->display();
@@ -678,10 +673,18 @@ class program extends control
      */
     public function ajaxGetDropMenu($programID, $module, $method)
     {
+        $programs = $this->program->getList('all');
+        foreach($programs as $programID => $program)
+        {
+            if($program->type != 'program') unset($programs[$programID]);
+            if($module == 'program' && $method == 'product' && $program->parent != 0) unset($programs[$programID]);
+        }
+
         $this->view->programID = $programID;
         $this->view->module    = $module;
         $this->view->method    = $method;
-        $this->view->programs  = $this->program->getList('all');
+        $this->view->programs  = $programs;
+        $this->view->link      = $this->program->getLink($module, $method, '{id}', '', 'program');
         $this->display();
     }
 
@@ -750,13 +753,14 @@ class program extends control
      * @access public
      * @return void
      */
-    public function view($programID)
+    public function view(int $programID)
     {
         $programID = (int)$programID;
         $program   = $this->program->getByID($programID);
         if(!$program) return print(js::error($this->lang->notFound) . js::locate('back'));
 
-        echo $this->fetch('program', 'product', "programID=$programID");
+        if(common::hasPriv('program', 'product')) $this->locate(inlink('product', "programID=$programID"));
+        if(common::hasPriv('program', 'project')) $this->locate(inlink('project', "programID=$programID"));
     }
 
     /**
@@ -826,6 +830,9 @@ class program extends control
             }
         }
 
+        /* Set the default work hours from config. */
+        $defaultWorkhours = $this->config->execution->defaultWorkhours;
+
         /* Get PM id list. */
         $accounts = array();
         $hasProject = false;
@@ -833,6 +840,11 @@ class program extends control
         {
             if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
             if($hasProject === false and $program->type != 'program') $hasProject = true;
+            if($program->type == 'project')
+            {
+                $workhour = $this->loadModel('project')->getWorkhour($program->id);
+                $program->invested = round($workhour->totalConsumed / $defaultWorkhours, 1);
+            }
         }
         $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 
@@ -841,8 +853,7 @@ class program extends control
         $this->config->program->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 
-        $this->view->title      = $this->lang->program->projectView;
-
+        $this->view->title        = $this->lang->program->projectView;
         $this->view->programs     = $programs;
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
@@ -879,7 +890,7 @@ class program extends control
         /* Load module and set session. */
         $this->loadModel('product');
         $this->loadModel('user');
-        $this->session->set('productView', $this->app->getURI(true), 'program');
+        $this->session->set('productList', $this->app->getURI(true), 'program');
 
         $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
 
@@ -906,22 +917,21 @@ class program extends control
             $programLines[$productLine->root][$productLine->id] = $productLine->name;
         }
 
-        $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
-        $this->product->buildProductSearchForm($param, $actionURL);
+        $actionURL = $this->createLink('program', 'productview', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
+        $this->config->program->search['actionURL'] = $actionURL;
+        $this->loadModel('search')->setSearchParams($this->config->program->search);
 
-        $this->view->title            = $this->lang->product->common;
-        $this->view->recTotal         = $pager->recTotal;
-        $this->view->productStats     = $productStats;
-        $this->view->productStructure = $productStructure;
-        $this->view->productLines     = $productLines;
-        $this->view->programLines     = $programLines;
-        $this->view->users            = $this->user->getPairs('noletter');
-        $this->view->userIdPairs      = $this->user->getPairs('noletter|showid');
-        $this->view->usersAvatar      = $this->user->getAvatarPairs('');
-        $this->view->orderBy          = $orderBy;
-        $this->view->browseType       = $browseType;
-        $this->view->pager            = $pager;
-        $this->view->showBatchEdit    = $this->cookie->showProductBatchEdit;
+        $this->view->title              = $this->lang->product->common;
+        $this->view->recTotal           = $pager->recTotal;
+        $this->view->productStats       = $productStats;
+        $this->view->productStructure   = $productStructure;
+        $this->view->productLines       = $productLines;
+        $this->view->programLines       = $programLines;
+        $this->view->users              = $this->user->getPairs('noletter');
+        $this->view->orderBy            = $orderBy;
+        $this->view->browseType         = $browseType;
+        $this->view->pager              = $pager;
+        $this->view->checkedEditProduct = !empty((int)$this->cookie->checkedEditProduct);
 
         $this->render();
     }

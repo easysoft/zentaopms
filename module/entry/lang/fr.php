@@ -36,6 +36,8 @@ $lang->entry->notify        = 'Notification';
 $lang->entry->helpLink   = 'https://www.zentao.pm/book/zentaomanual/scrum-tool-open-source-integrate-third-party-application-221.html';
 $lang->entry->notifyLink = 'https://www.zentao.pm/book/zentaopmshelp/301.html';
 
+$lang->entry->summaryTip = 'There are %s applications on this page';
+
 $lang->entry->note = new stdClass();
 $lang->entry->note->name    = 'Nom';
 $lang->entry->note->code    = 'Code doit ?tre compos? de lettres et de chiffres';

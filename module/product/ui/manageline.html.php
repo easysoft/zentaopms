@@ -1,111 +1,113 @@
 <?php
+declare(strict_types=1);
+/**
+ * The manageLine view file of product module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Shujie Tian<tianshujie@easycorp.ltd>
+ * @package     product
+ * @link        https://www.zentao.net
+ */
 namespace zin;
 
-$lineMenuList = array();
-$formRowList  = array();
+$lineMenuList = null;
+$formRowList  = null;
 foreach($lines as $line)
 {
     $lineMenuList[] = div
     (
-        setClass('flex items-center'),
-        $line->name,
-        div
+        set::class('ml-4 line-item flex items-center'),
+        span($line->name),
+        btn
         (
-            setClass('self-end ml-auto'),
-            btn(set::size('sm'), setClass('ghost'), icon('move')),
-            btn
-            (
-                icon('trash'),
-                set::size('sm'),
-                setClass('ghost'),
-                set::url(createLink('tree', 'delete', array('rootID' => 0, 'moduleID' => $line->id)))
-            )
+            icon('trash'),
+            set::size('sm'),
+            setClass('ghost text-gray ajax-submit'),
+            set::url(createLink('product', 'ajaxDeleteLine', "lineID={$line->id}")),
+            set('data-confirm', $lang->product->confirmDeleteLine),
         )
     );
 
     $formRowList[] = formRow
     (
-        set::width('full'),
         formGroup
         (
-            set::width('2/5'),
-            input
-            (
-                set::name("modules[id{$line->id}]"),
-                set::value($line->name)
-            )
+            set::width('1/3'),
+            set::name("modules[id$line->id]"),
+            set::value($line->name),
         ),
-        formGroup
+        $config->systemMode == 'ALM' ? formGroup
         (
-            set::width('2/5'),
-            setClass('ml-4'),
-            $this->config->systemMode == 'ALM' ? select
-            (
-                set::name("programs[id{$line->id}]"),
-                set::value($line->root),
-                set::items($programs)
-            ) : ''
-        ),
-        formGroup
-        (
-            set::width('1/5'),
-            setClass('ml-4')
-        )
+            set::width('1/3'),
+            set::class('ml-4 required'),
+            set::name("programs[id$line->id]"),
+            set::items($programs),
+            set::value($line->root),
+        ) : null,
     );
 }
 
-/* Attach input group rows. */
-for($i = 0; $i <= 5; $i++)
+for($i = 0; $i <= 5; $i ++)
 {
     $formRowList[] = formRow
     (
-        set::width('full'),
-        formGroup(set::width('2/5'), input(set::name('modules[]'))),
-        formGroup(set::width('2/5'), setClass('ml-4'), $this->config->systemMode == 'ALM' ? select(set::name('programs[]'), set::items($programs)) : ''),
-        formGroup(set::width('1/5'), setClass('ml-4'), btn(icon('plus')), btn(icon('close')))
+        set::class('line-row-add'),
+        formGroup(set::width('1/3'), set::name("modules[$i]")),
+        $config->systemMode == 'ALM' ? formGroup
+        (
+            set::width('1/3'),
+            set::class('ml-4 required'),
+            set::name("programs[$i]"),
+            set::items($programs),
+        ) : null,
+        formGroup
+        (
+            setClass('ml-2 pl-2 flex self-center'),
+            btn
+            (
+                setClass('btn btn-link text-gray addLine'),
+                icon('plus'),
+                on::click('addNewLine')
+            ),
+            btn
+            (
+                setClass('btn btn-link text-gray removeLine'),
+                icon('trash'),
+                on::click('removeLine'),
+            ),
+        )
     );
 }
 
-div(
-    on::click('window.onClickPanel'),
-    setClass('w-full flex'),
+jsVar('+index', $i);
 
-    /* Product line list. */
+to::header
+(
+    span(set::class('article-h2 w-1/4'), $lang->product->line),
+    span(set::class('article-h2'), $lang->product->manageLine),
+);
+
+div
+(
+    set::class('flex'),
     cell
     (
-        setClass('w-2/6'),
-        panel
-        (
-            set::title($lang->product->line),
-            menu($lineMenuList)
-        )
+        set::width('1/3'),
+        set::class('lineTree mr-1'),
+        $lineMenuList
     ),
-    /* Manage product line. */
     cell
     (
-        setClass('w-4/6 pl-6'),
-        panel
+        set::width('2/3'),
+        form
         (
-            set::title($lang->product->manageLine),
-            form(
-                formRow
-                (
-                    set::width('full'),
-                    formGroup
-                    (
-                        set::width('2/5'),
-                        $lang->product->lineName
-                    ),
-                    formGroup
-                    (
-                        set::width('2/5'),
-                        $this->config->systemMode == 'ALM' ? $lang->product->program : ''
-                    )
-                ),
-                $formRowList
-            )
+            set::submitBtnText($lang->save),
+            set::actionsClass('justify-start'),
+            set::class('border-b-0'),
+            $formRowList
         )
     )
 );
 
-render('modalDialog');
+/* ====== Render page ====== */
+render();

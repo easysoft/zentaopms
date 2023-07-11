@@ -9,17 +9,19 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('unexecuted', $lang->testcase->unexecuted);
 
 featureBar
 (
     set::current($type),
     set::linkParams("mode=testcase&type={key}&param={$param}"),
-    li(searchToggle())
+    li(searchToggle(set::module('testcase')))
 );
 
-$footToolbar = array('items' => array
+$canBatchEdit = common::hasPriv('testcase', 'batchEdit');
+$footToolbar  = array('items' => array
 (
-    array('text' => $lang->edit, 'className' => 'batch-btn ' . (common::hasPriv('testcase', 'batchEdit') ? '' : 'hidden'), 'data-url' => helper::createLink('testcase', 'batchEdit', 'productID=0&branch=all&type=case&tab=my'))
+    $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', 'productID=0&branch=all&type=case&tab=my')) : null
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 if($type == 'openedbyme')
@@ -28,16 +30,22 @@ if($type == 'openedbyme')
     unset($config->my->testcase->dtable->fieldList['openedBy']);
 }
 
+if($type == 'assigntome') $config->my->testcase->dtable->fieldList['title']['link']['params'] .= "&from=testtask&taskID={task}";
+
 $cases = initTableData($cases, $config->my->testcase->dtable->fieldList, $this->testcase);
-$cols  = array_values($config->my->testcase->dtable->fieldList);
 $data  = array_values($cases);
+
+$defaultSummary = sprintf($lang->testcase->failSummary, count($cases), $failCount);
 dtable
 (
-    set::cols($cols),
     set::data($data),
+    set::cols($config->my->testcase->dtable->fieldList),
     set::userMap($users),
-    set::fixedLeftWidth('44%'),
+    set::fixedLeftWidth('50%'),
     set::checkable(true),
+    set::defaultSummary(array('html' => $defaultSummary)),
+    set::checkedSummary($lang->testcase->failCheckedSummary),
+    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
 );

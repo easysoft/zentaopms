@@ -3,7 +3,7 @@ window.footerGenerator = function()
     const count = this.layout.allRows.filter((x) => x.data.type === "product").length;
     const statistic = langSummary.replace('%s', ' ' + count + ' ');
     return [{children: statistic, className: "text-dark"}, "flex", "pager"];
-}
+};
 
 window.renderReleaseCountCell = function(result, {col, row})
 {
@@ -16,18 +16,12 @@ window.renderReleaseCountCell = function(result, {col, row})
     if(changed < 0)   result[0] = {html: row.data.releases + ' <span class="label size-sm circle warning-pale bd-warning">' + changed + '</span>'};
 
     return result;
-}
+};
 
 window.programMenuOnClick = function(data, url)
 {
-    location.href = url.replace('%d', data.item.key);
-}
-
-onRenderPage(function(info)
-{
-    loadCurrentPage('#mainMenu>*');
-    return false;
-});
+    loadPage(url.replace('%d', data.item.key));
+};
 
 /**
  * Submit data to product batch edit page by html form while click on the batch edit button.
@@ -36,32 +30,15 @@ onRenderPage(function(info)
  * @access public
  * @return void
  */
-onClickBatchEdit = function(event)
+window.onClickBatchEdit = function(event)
 {
-    /* Get checked product ID list. */
-    const dtable      = zui.DTable.query(event.target);
-    const checkedList = dtable.$.getChecks();
+    const dtable = zui.DTable.query(event.target);
 
+    const checkedList = dtable.$.getChecks();
     if(checkedList.length === 0) return;
 
-    /* Create form. */
-    const f = document.createElement("form");
-    f.action = $(event.target).attr('href');
-    f.method = "POST";
-    f.target = "_self";
+    const postData = new FormData();
+    checkedList.forEach((id) => postData.append('productIDList[]', id));
 
-    /* Create element to carry data. */
-    checkedList.forEach(function(id)
-    {
-        const item = document.createElement('input');
-        item.name  = 'productIDList[]';
-        item.value = id;
-
-        f.appendChild(item);
-    });
-
-    /* Append form to body. */
-    document.body.appendChild(f);
-
-    f.submit();
-}
+    postAndLoadPage($(event.target).parents('button').data('url'), postData);
+};

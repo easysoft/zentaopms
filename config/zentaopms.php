@@ -250,6 +250,7 @@ define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');
 define('TABLE_CONFIG',        '`' . $config->db->prefix . 'config`');
 define('TABLE_USER',          '`' . $config->db->prefix . 'user`');
+define('TABLE_SESSION',       '`' . $config->db->prefix . 'session`');
 define('TABLE_TODO',          '`' . $config->db->prefix . 'todo`');
 define('TABLE_GROUP',         '`' . $config->db->prefix . 'group`');
 define('TABLE_GROUPPRIV',     '`' . $config->db->prefix . 'grouppriv`');
@@ -451,6 +452,7 @@ $config->objectTables['privlang']     = TABLE_PRIVLANG;
 $config->objectTables['privmanager']  = TABLE_PRIVMANAGER;
 $config->objectTables['privrelation'] = TABLE_PRIVRELATION;
 $config->objectTables['scene']        = TABLE_SCENE;
+$config->objectTables['pivot']        = TABLE_PIVOT;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';
@@ -491,3 +493,5 @@ $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;
 
 $config->db->sqliteBlacklist = array('sqlite_queue', 'cron');
+$config->hasDropmenuApps     = array('program', 'project', 'product', 'execution', 'qa');
+$config->excludeDropmenuList = array('program-browse', 'product-all', 'product-index', 'execution-all', 'project-browse', 'product-batchedit');

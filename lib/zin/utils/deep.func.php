@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace zin\utils;
 
-function deepGet(&$data, $namePath, $defaultValue = null)
+function deepGet(object|array &$data, string $namePath, mixed $defaultValue = null): mixed
 {
     $names = explode('.', $namePath);
     foreach($names as $name)
@@ -18,7 +19,7 @@ function deepGet(&$data, $namePath, $defaultValue = null)
     return $data === null ? $defaultValue : $data;
 }
 
-function deepSet(&$data, $namePath, $value)
+function deepSet(array &$data, string $namePath, mixed $value)
 {
     $names = explode('.', $namePath);
     $lastName = array_pop($names);

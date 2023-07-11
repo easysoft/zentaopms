@@ -14,6 +14,7 @@ else
 
 jsVar('vision',        $config->vision);
 jsVar('navGroup',      $lang->navGroup);
+jsVar('oldPages',      $config->index->oldPages);
 jsVar('appsItems',     commonModel::getMainNavList($app->rawModule));
 jsVar('defaultOpen',   (isset($open) and !empty($open)) ? $open : '');
 jsVar('manualText',    $lang->manual);
@@ -27,15 +28,15 @@ set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');
 /* The menu fixed on left */
 div
 (
-    set::id('menu'),
+    setID('menu'),
     div
     (
-        set::id('menuNav'),
-        ul(set::class('nav'), set::id('menuMainNav')),
+        setID('menuNav'),
+        ul(set::class('nav'), setID('menuMainNav')),
         ul
         (
             set::class('nav'),
-            set::id('menuMoreNav'),
+            setID('menuMoreNav'),
             li(set::class('divider')),
             li
             (
@@ -47,22 +48,22 @@ div
                     span(set::class('text'), $lang->more),
                     toggle('dropdown')
                 ),
-                ul(set::class('menu dropdown-menu menu-popup'), set::id('menuMoreList'))
+                ul(set::class('menu dropdown-menu menu-popup'), setID('menuMoreList'))
             )
         ),
     ),
     div
     (
-        set::id('menuFooter'),
+        setID('menuFooter'),
         ul
         (
             set::class('nav'),
             li
             (
-                set::id('menuToggleMenu'),
+                setID('menuToggleMenu'),
                 a
                 (
-                    set::class('menu-toggle justify-center'),
+                    set::class('menu-toggle justify-center cursor-pointer'),
                     toggle::tooltip(['placement' => 'right', 'collapse-text' => $lang->collapseMenu, 'unfold-text' => $lang->unfoldMenu]),
                     icon('menu-collapse icon-sm')
                 )
@@ -73,15 +74,15 @@ div
 
 div
 (
-    set::id('appsBar'),
+    setID('appsBar'),
     ul
     (
-        set::id('appTabs'),
+        setID('appTabs'),
         set::class('nav')
     ),
     toolbar
     (
-        set::id('appsToolbar'),
+        setID('appsToolbar'),
         item
         (
             set::class('ghost btn-zentao'),
@@ -96,7 +97,7 @@ div
 
 div
 (
-    set::id('apps'),
+    setID('apps'),
 );
 
 render('pagebase');

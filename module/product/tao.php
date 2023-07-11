@@ -291,6 +291,17 @@ class productTao extends productModel
             ->fetchPairs();
     }
 
+    /* TODO move to release module. */
+    protected function getLatestReleasesTODO(array $productIDs): array
+    {
+        return $this->dao->select('product, name, date')
+            ->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productIDs)
+            ->orderBy('id_desc')
+            ->fetchGroup('product');
+    }
+
     /* TODO move to bug module. */
     protected function getBugsTODO(array $productIDs): array
     {
@@ -309,6 +320,18 @@ class productTao extends productModel
             ->from(TABLE_BUG)
             ->where('status')->eq('active')
             ->orWhere('resolution')->eq('postponed')
+            ->andWhere('product')->in($productIDs)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('product')
+            ->fetchPairs();
+    }
+
+    /* TODO move to bug module. */
+    protected function getActiveBugsTODO(array $productIDs): array
+    {
+        return $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('status')->eq('active')
             ->andWhere('product')->in($productIDs)
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
@@ -381,8 +404,14 @@ class productTao extends productModel
     {
         $this->loadModel('program');
 
-        if($orderBy == 'program_asc') $products = $this->getPagerProductsWithProgramIn($productIdList, $pager);
-        else $products = $this->getPagerProductsIn($productIdList, $pager, $orderBy);
+        if($orderBy == 'program_asc')
+        {
+            $products = $this->getPagerProductsWithProgramIn($productIdList, $pager);
+        }
+        else
+        {
+            $products = $this->getPagerProductsIn($productIdList, $pager, $orderBy);
+        }
 
         /* Fetch product lines. */
         $linePairs = $this->getLinePairs();
@@ -1104,6 +1133,27 @@ class productTao extends productModel
     }
 
     /**
+     * 获取多个产品关联的项目数的键值对。
+     * Retrieve key-value pairs of product IDs and their corresponding project counts.
+     *
+     * @param  array     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function getProjectCountPairs(array $productIdList): array
+    {
+        return $this->dao->select('t1.product, COUNT(*) AS count')
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t1.product')->in($productIdList)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.status')->eq('doing')
+            ->groupBy('t1.product')
+            ->fetchPairs('product');
+    }
+
+    /**
      * 获取多个产品关联需求用例覆盖率的键值对。
      * Get K-V pairs of product ID and test case coverage.
      *
@@ -1239,7 +1289,7 @@ class productTao extends productModel
         $stmt = $this->dbh->query($this->tree->buildMenuQuery($productID, 'story', 0, $branch));
         while($module = $stmt->fetch())
         {
-            $module->url  = call_user_func_array(array($this->tree, $userFunc[1]), array('story', $module, $extra));
+            $module->url  = call_user_func_array(array($this->tree, $userFunc[1]), array('story', $module, 0, $extra));
             $moduleTree[] = $module;
         }
 
@@ -1256,7 +1306,7 @@ class productTao extends productModel
      */
     protected function statisticProgram(array $productStats): array
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductStats();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductStats();
 
         $programStructure = array();
 
@@ -1341,5 +1391,22 @@ class productTao extends productModel
         }
 
         return $data;
+    }
+
+    /**
+     * Get project PM List
+     *
+     * @param  array     $projectStats
+     * @access protected
+     * @return string[]
+     */
+    protected function getPMList(array $projectStats): array
+    {
+        $accounts = array();
+        foreach($projectStats as $project) $accounts[] = $project->PM;
+        $accounts = array_filter(array_unique($accounts));
+
+        if(empty($accounts)) return array();
+        return $this->loadModel('user')->getListByAccounts($accounts, 'account');
     }
 }

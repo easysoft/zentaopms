@@ -14,23 +14,15 @@ jsVar('changeDateLabel', $lang->todo->changeDate);
 featureBar
 (
     set::current($type),
-    set::linkParams('date={key}'),
-    inputGroup
+    set::linkParams('type={key}'),
+    datePicker
     (
-        set::class('ml-4'),
-        input
-        (
-            set::name('date'),
-            set::type('date'),
-            set::value($date),
-        )
-    )
+        set::_class('w-32'),
+        set::value($date),
+        set::onChange(jsRaw("(value) => loadPage($.createLink('my', 'todo', 'date=' + (value ? zui.formatDate(value, 'yyyyMMdd') : '')), '#mainContent')"))
+    ),
 );
 
-$todos = initTableData($todos, $config->my->todo->dtable->fieldList, $this->todo);
-
-$cols = array_values($config->my->todo->dtable->fieldList);
-$data = array_values($todos);
 toolbar
 (
     common::hasPriv('todo', 'export') ? item
@@ -50,6 +42,7 @@ toolbar
             setClass('btn primary'),
             set::icon('plus'),
             set::url(helper::createLink('todo', 'create')),
+            set('data-toggle', 'modal'),
             $lang->todo->create
         ) : btn
         (
@@ -64,20 +57,29 @@ toolbar
             set::items(array
             (
                 array('text' => $lang->todo->create, 'url' => helper::createLink('todo', 'create'), 'data-toggle' => 'modal'),
-                array('text' => $lang->todo->batchCreate, 'url' => helper::createLink('todo', 'batchCreate'), 'data-toggle' => 'modal')
+                array('text' => $lang->todo->batchCreate, 'url' => helper::createLink('todo', 'batchCreate'), 'data-toggle' => 'modal', 'data-size' => 'lg')
             )),
             set::placement('bottom-end')
         ) : null
     ) : null
 );
 
+$batchEdit   = common::hasPriv('todo', 'batchEdit');
+$batchFinish = common::hasPriv('todo', 'batchFinish');
+$batchClose  = common::hasPriv('todo', 'batchClose');
 $footToolbar = array('items' => array
 (
-    array('text' => $lang->edit, 'className' => 'batch-btn ' . (common::hasPriv('todo', 'batchEdit') ? '' : 'hidden'), 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status")),
-    array('text' => $lang->todo->finish, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('todo', 'batchFinish') ? '' : 'hidden'), 'data-url' => helper::createLink('todo', 'batchFinish')),
-    array('text' => $lang->todo->close, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('todo', 'batchClose') ? '' : 'hidden'), 'data-url' => helper::createLink('todo', 'batchClose'))
+    $batchEdit   ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status")) : null,
+    $batchFinish ? array('text' => $lang->todo->finish, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('todo', 'batchFinish')) : null,
+    $batchClose  ? array('text' => $lang->todo->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('todo', 'batchClose')) : null
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
+if($type == 'assignedToOther') unset($config->my->todo->dtable->fieldList['assignedBy']);
+if($type != 'assignedToOther') unset($config->my->todo->dtable->fieldList['assignedTo']);
+
+$todos          = initTableData($todos, $config->my->todo->dtable->fieldList, $this->todo);
+$cols           = array_values($config->my->todo->dtable->fieldList);
+$data           = array_values($todos);
 $defaultSummary = sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);
 dtable
 (

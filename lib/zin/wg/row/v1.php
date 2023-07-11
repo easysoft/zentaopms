@@ -1,14 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class row extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'justify?:string',
         'align?:string'
     );
 
-    protected function build()
+    protected function build(): wg
     {
         $classList = 'row';
         list($justify, $align) = $this->prop(array('justify', 'align'));
@@ -18,7 +19,7 @@ class row extends wg
         return div
         (
             setClass($classList),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->children()
         );
     }

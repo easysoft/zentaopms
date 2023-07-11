@@ -196,6 +196,7 @@ class caselibModel extends model
         {
             $libID = $this->dao->lastInsertID();
             $this->loadModel('file')->updateObjectID($uid, $libID, 'caselib');
+            $this->loadModel('action')->create('caselib', $libID, 'opened');
             return $libID;
         }
         return false;
@@ -543,21 +544,14 @@ class caselibModel extends model
 
         foreach($cases->title as $i => $title)
         {
-            if(!empty($cases->title[$i]) and empty($cases->type[$i])) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
+            if(empty($title)) continue;
+            foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field && empty($cases->{$field}[$i])) dao::$errors["{$field}[{$i}]"][] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
+            }
         }
-
-        $module = 0;
-        $type   = '';
-        $pri    = 3;
-        foreach($cases->title as $i => $title)
-        {
-            $module = $cases->module[$i] == 'ditto' ? $module : $cases->module[$i];
-            $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
-            $pri    = $cases->pri[$i] == 'ditto'    ? $pri    : $cases->pri[$i];
-            $cases->module[$i] = (int)$module;
-            $cases->type[$i]   = $type;
-            $cases->pri[$i]    = $pri;
-        }
+        if(dao::isError()) return false;
 
         $forceNotReview = $this->testcase->forceNotReview();
         foreach($cases->title as $i => $title)
@@ -569,8 +563,8 @@ class caselibModel extends model
                 $data[$i]->module       = $cases->module[$i];
                 $data[$i]->type         = $cases->type[$i];
                 $data[$i]->pri          = $cases->pri[$i];
-                $data[$i]->stage        = empty($cases->stage[$i]) ? '' : implode(',', $cases->stage[$i]);
-                $data[$i]->color        = $cases->color[$i];
+                $data[$i]->stage        = $cases->stage[$i];
+                $data[$i]->color        = !empty($cases->color[$i]) ? $cases->color[$i] : '';
                 $data[$i]->title        = $cases->title[$i];
                 $data[$i]->precondition = $cases->precondition[$i];
                 $data[$i]->keywords     = $cases->keywords[$i];
@@ -586,10 +580,7 @@ class caselibModel extends model
                     ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
                     ->exec();
 
-                if(dao::isError())
-                {
-                    return helper::end(js::error(dao::getError()));
-                }
+                if(dao::isError()) return false;
 
                 $caseID   = $this->dao->lastInsertID();
                 $actionID = $this->action->create('case', $caseID, 'Opened');

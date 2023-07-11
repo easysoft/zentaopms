@@ -121,6 +121,54 @@ class cron extends control
     }
 
     /**
+     * Ajax run cron job.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSchedule()
+    {
+        if(empty($this->config->global->cron)) return;
+
+        /* Zand queue. */
+        $queue = new zandQueue('crons');
+
+        /* Schedule loop. */
+        $cronTimes = array();
+        while(true)
+        {
+            /* Get and parse crons. */
+            $crons       = $this->cron->getCrons('nostop');
+            $parsedCrons = $this->cron->parseCron($crons);
+
+            $now = date(DT_DATETIME1);
+            foreach($parsedCrons as $id => $cron)
+            {
+                $cronInfo = $crons[$id];
+
+                /* Skip empty and stop cron.*/
+                if(empty($cronInfo) or $cronInfo->status == 'stop') continue;
+
+                if(!$cron['command'] || !isset($crons[$id])) continue;
+
+                /* Check time. */
+                $cronTime = $cron['time']->format(DT_DATETIME1);
+                if(!isset($cronTimes[$id])) $cronTimes[$id] = $cronTime;
+
+                if($now < $cronTimes[$id]) continue;
+
+                /* Push message into queue. */
+                $message = array('id' => $id, 'type' => $crons[$id]->type, 'command' => $cron['command']);
+                $queue->push($message);
+
+                $cronTimes[$id] = $cron['cron']->getNextRunDate()->format(DT_DATETIME1);
+            }
+
+            sleep(10);
+        }
+    }
+
+    /**
      * Ajax exec cron.
      *
      * @param  bool    $restart
@@ -129,12 +177,13 @@ class cron extends control
      */
     public function ajaxExec($restart = false)
     {
-        if ('cli' !== PHP_SAPI)
+        if('cli' !== PHP_SAPI)
         {
             ignore_user_abort(true);
             set_time_limit(0);
             session_write_close();
         }
+
         /* Check cron turnon. */
         if(empty($this->config->global->cron)) return;
 
@@ -176,10 +225,13 @@ class cron extends control
             foreach($parsedCrons as $id => $cron)
             {
                 $cronInfo = $this->cron->getById($id);
+
                 /* Skip empty and stop cron.*/
                 if(empty($cronInfo) or $cronInfo->status == 'stop') continue;
+
                 /* Skip cron that status is running and run time is less than max. */
                 if($cronInfo->status == 'running' and (time() - strtotime($cronInfo->lastTime)) < $this->config->cron->maxRunTime) continue;
+
                 /* Skip cron that last time is more than this cron time. */
                 if('cli' === PHP_SAPI)
                 {

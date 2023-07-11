@@ -4,7 +4,7 @@ namespace zin;
 
 class severityLabel extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'text?: string',      // 标签文本
         'level?: string|int', // 严重程度等级
         'isIcon?: bool=false' // 是否显示为图标
@@ -19,7 +19,7 @@ class severityLabel extends wg
         }
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $text   = $this->prop('text');
         $level  = $this->prop('level');
@@ -27,7 +27,7 @@ class severityLabel extends wg
 
         return span
         (
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             setClass($isIcon ? 'severity' : 'severity severity-label'),
             set('data-severity', $level),
             $text

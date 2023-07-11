@@ -359,7 +359,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <tr>
             <td colspan="5" class="text-center form-actions">
               <?php echo html::hidden('type', $type);?>
-              <?php if(defined('TUTORIAL')):?>
+              <?php if(commonModel::isTutorialMode()):?>
               <?php echo html::submitButton();?>
               <?php else:?>
               <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>

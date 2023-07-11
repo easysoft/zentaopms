@@ -34,7 +34,7 @@ $lang->design->affectedTasks = '影响任务';
 $lang->design->reviewObject  = '评审对象';
 $lang->design->createdBy     = '由谁创建';
 $lang->design->createdByAB   = '创建者';
-$lang->design->createdDate   = '创建时间';
+$lang->design->createdDate   = '创建日期';
 $lang->design->basicInfo     = '基本信息';
 $lang->design->noAssigned    = '未指派';
 $lang->design->comment       = '注释';
@@ -53,6 +53,7 @@ $lang->design->linkCommit   = '关联提交';
 $lang->design->unlinkCommit = '取消关联';
 $lang->design->submit       = '提交评审';
 $lang->design->assignTo     = '指派';
+$lang->design->assignAction = '指派设计';
 $lang->design->revision     = '查看关联代码';
 
 $lang->design->browseAction = '设计列表';
@@ -70,9 +71,6 @@ $lang->design->plusTypeList = $lang->design->typeList;
 $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = '全部记录';
 $lang->design->rangeList['assign'] = '选中记录';
-
-$lang->design->featureBar['all'] = '所有';
-$lang->design->featureBar += $lang->design->typeList;
 
 /* 提示信息. */
 $lang->design->errorSelection = '还没有选中记录!';

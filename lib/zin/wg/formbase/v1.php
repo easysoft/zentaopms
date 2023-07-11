@@ -17,17 +17,27 @@ namespace zin;
  */
 class formBase extends wg
 {
-    protected static $defineProps = array
-    (
+    protected static array $defineProps = array(
         'id?: string="$GID"',                  // ID，如果不指定则自动生成（使用 zin 部件 GID）。
         'method?: "get"|"post"="post"',        // 表单提交方式。
         'url?: string',                        // 表单提交地址。
-        'actions?: array=["submit","cancel"]', // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
+        'actions?: array',                     // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
         'actionsClass?: string',               // 表单操作按钮栏类名。
         'target?: string="ajax"',              // 表单提交目标，如果是 `'ajax'` 提交则为 ajax，在禅道中除非特殊目的，都使用 ajax 进行提交。
         'submitBtnText?: string',              // 表单提交按钮文本，如果不指定则使用 `$lang->save` 的值。
         'cancelBtnText?: string',              // 表单取消按钮文本，如果不指定则使用 `$lang->goback` 的值。
+        'back?: string="APP"',                 // 表单返回行为
+        'backUrl?: string',                    // 表单返回链接
+        'ajax?:array'                          // Ajax 表单选项
     );
+
+    protected function created()
+    {
+        if($this->prop('actions') !== null) return;
+
+        $actions = isAjaxRequest('modal') ? array('submit') : array('submit', 'cancel');
+        $this->setDefaultProps(array('actions' => $actions));
+    }
 
     protected function buildActions(): wg|null
     {
@@ -35,11 +45,17 @@ class formBase extends wg
         if(empty($actions)) return null;
 
         global $lang;
+        $submitBtnText = $this->prop('submitBtnText');
+        $cancelBtnText = $this->prop('cancelBtnText');
+        $backUrl       = $this->prop('backUrl');
+        $back          = $this->prop('back');
+        if(empty($submitBtnText)) $submitBtnText = $lang->save;
+        if(empty($cancelBtnText)) $cancelBtnText = $lang->goback;
         foreach($actions as $key => $action)
         {
-            if($action === 'submit')     $actions[$key] = ['text' => $this->prop('submitBtnText') ?? $lang->save, 'btnType' => 'submit', 'type' => 'primary'];
-            elseif($action === 'cancel') $actions[$key] = ['text' => $this->prop('cancelBtnText') ?? $lang->goback, 'url' => html::getGobackLink()];
-            elseif(is_string($action))   $actions[$key] = ['text' => $action];
+            if($action === 'submit')     $actions[$key] = array('text' => $submitBtnText, 'btnType' => 'submit', 'type' => 'primary');
+            elseif($action === 'cancel') $actions[$key] = array('text' => $cancelBtnText, 'url' => $backUrl, 'back' => $back);
+            elseif(is_string($action))   $actions[$key] = array('text' => $action);
         }
 
         return toolbar
@@ -56,13 +72,11 @@ class formBase extends wg
 
     protected function buildProps(): array
     {
-        list($url, $target, $method, $id) = $this->prop(['url', 'target', 'method', 'id']);
-        return array
-        (
+        list($url, $target, $method, $id) = $this->prop(array('url', 'target', 'method', 'id'));
+        return array(
             set::class('form load-indicator'),
             $target === 'ajax' ? set::class('form-ajax') : null,
-            set(array
-            (
+            set(array(
                 'id'     => $id,
                 'action' => empty($url) ? $_SERVER['REQUEST_URI'] : $url,
                 'target' => $target === 'ajax' ? null: $target,
@@ -74,7 +88,10 @@ class formBase extends wg
     protected function buildAfter(): array
     {
         $after = parent::buildAfter();
-        if($this->prop('target') === 'ajax') $after[] = zui::ajaxForm(set::_to('#' . $this->id()));
+        if($this->prop('target') === 'ajax')
+        {
+            $after[] = zui::ajaxForm(set::_to('#' . $this->id()), set($this->prop('ajax')));
+        }
         return $after;
     }
 

@@ -36,6 +36,8 @@ class holiday extends control
         $holidays = $this->holiday->getList($year);
         $yearList = $this->holiday->getYearPairs();
 
+        foreach($holidays as $holiday) $holiday->holiday = formatTime($holiday->begin, DT_DATE1) . ' ~ ' . formatTime($holiday->end, DT_DATE1);
+
         $yearAndNext = array(date('Y'), date('Y') + 1);
         foreach($yearAndNext as $date)
         {
@@ -63,7 +65,7 @@ class holiday extends control
             $holidayID = $this->holiday->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $actionID = $this->loadModel('action')->create('holiday', $holidayID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $this->view->title = $this->lang->holiday->create;
@@ -84,7 +86,7 @@ class holiday extends control
         {
             $this->holiday->update($id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $this->view->title   = $this->lang->holiday->edit;
@@ -96,32 +98,24 @@ class holiday extends control
      * Delete holiday.
      *
      * @param  int    $id
-     * @param  int    $confirm
      * @access public
      * @return void
      */
-    public function delete($id, $confirm = 'no')
+    public function delete($id)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->holiday->confirmDelete, inLink('delete', "id=$id&confirm=yes")));
-        }
-        else
-        {
-            $holidayInformation = $this->dao->select('begin, end')->from(TABLE_HOLIDAY)->where('id')->eq($id)->fetch();
-            $this->dao->delete()->from(TABLE_HOLIDAY)->where('id')->eq($id)->exec();
+        $holidayInformation = $this->dao->select('begin, end')->from(TABLE_HOLIDAY)->where('id')->eq($id)->fetch();
+        $this->dao->delete()->from(TABLE_HOLIDAY)->where('id')->eq($id)->exec();
 
-            /* Update project. */
-            $this->holiday->updateProgramPlanDuration($holidayInformation->begin, $holidayInformation->end);
-            $this->holiday->updateProjectRealDuration($holidayInformation->begin, $holidayInformation->end);
+        /* Update project. */
+        $this->holiday->updateProgramPlanDuration($holidayInformation->begin, $holidayInformation->end);
+        $this->holiday->updateProjectRealDuration($holidayInformation->begin, $holidayInformation->end);
 
-            /* Update task. */
-            $this->holiday->updateTaskPlanDuration($holidayInformation->begin, $holidayInformation->end);
-            $this->holiday->updateTaskRealDuration($holidayInformation->begin, $holidayInformation->end);
+        /* Update task. */
+        $this->holiday->updateTaskPlanDuration($holidayInformation->begin, $holidayInformation->end);
+        $this->holiday->updateTaskRealDuration($holidayInformation->begin, $holidayInformation->end);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return print(js::reload('parent'));
-        }
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
     }
 
     /**
@@ -136,13 +130,16 @@ class holiday extends control
         if(empty($year)) $year = date('Y');
 
         $holidays = $this->holiday->getHolidayByAPI($year);
-        if(helper::isAjaxRequest())
+
+        if(!empty($_POST))
         {
             $this->holiday->batchCreate($holidays);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
+
+        foreach($holidays as $holiday) $holiday->holiday = formatTime($holiday->begin, DT_DATE1) . ' ~ ' . formatTime($holiday->end, DT_DATE1);
 
         $this->view->holidays = $holidays;
         $this->display();

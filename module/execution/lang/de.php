@@ -79,6 +79,7 @@ $lang->execution->release             = 'Release';
 $lang->execution->acl                 = 'Zugriffskontrolle';
 $lang->execution->auth                = 'Privileges';
 $lang->execution->teamname            = 'Team Name';
+$lang->execution->teamSetting         = 'Team Setting';
 $lang->execution->updateOrder         = 'Rank';
 $lang->execution->order               = "Sortierung {$lang->executionCommon}";
 $lang->execution->orderAB             = "Rank";
@@ -141,6 +142,7 @@ $lang->execution->list                = "{$lang->executionCommon} List";
 $lang->execution->allProject          = 'All';
 $lang->execution->method              = 'Management Method';
 $lang->execution->sameAsParent        = "Same as parent";
+$lang->execution->selectStoryPlan     = 'Select Plan';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
@@ -351,7 +353,7 @@ $lang->execution->timeSummary          = '<div class="table-col"><div class="cle
 $lang->execution->groupSummaryAB       = "<div>Aufgaben <strong>%s</strong></div><div><span class='text-muted'>Wartend</span> %s &nbsp; <span class='text-muted'>In Arbeit</span> %s</div><div>Geplant <strong>%s</strong></div><div><span class='text-muted'>Genutzt</span> %s &nbsp; <span class='text-muted'>Rest</span> %s</div>";
 $lang->execution->wbs                  = "Aufgaben aufteilen";
 $lang->execution->batchWBS             = "Mehrere aufteilen";
-$lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Wie wird der Burndown Chart aktualisiert?' class='btn btn-link'>Hilfe <i class='icon icon-help'></i></a>";
+$lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Wie wird der Burndown Chart aktualisiert?'>Hilfe <i class='icon icon-help text-gray'></i></a>";
 $lang->execution->whyNoStories         = "Keine Story kann verknüpft werden. Bitte prüfen Sie ob ein Story mit {$lang->executionCommon} verknüpft ist {$lang->productCommon} und stellen Sie sicher das diese geprüft ist.";
 $lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in {$lang->projectCommon} and make sure it has been reviewed.";
 $lang->execution->productStories       = "{$lang->executionCommon} verknüpfte Story ist ein Subset von {$lang->productCommon}, welche nur nach überprüfung verknüpft werden kann. Bitte <a href='%s'> Story verknüpfen</a>。";
@@ -554,6 +556,8 @@ $lang->execution->featureBar['testcase']['all'] = 'All';
 
 $lang->execution->featureBar['importtask']['all'] = $lang->execution->importTask;
 
+$lang->execution->featureBar['importbug']['all'] = $lang->execution->importBug;
+
 $lang->execution->myExecutions = 'Ich bin beteiligt.';
 $lang->execution->doingProject = "Ongoing {$lang->projectCommon}s";
 
@@ -665,3 +669,7 @@ $lang->execution->featureBar['dynamic']['thisWeek']  = 'This Week';
 $lang->execution->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->execution->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->execution->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->execution->featureBar['team']['all'] = 'Members';
+
+$lang->execution->featureBar['managemembers']['all'] = 'Manage Team';

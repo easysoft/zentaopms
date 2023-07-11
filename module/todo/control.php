@@ -46,17 +46,16 @@ class todo extends control
             $form     = $this->todoZen->addCycleYearConfig($form);
             $todoData = $this->todoZen->beforeCreate($form);
 
-            $uid  = isset($form->data->uid) ? $form->data->uid : '';
-            $todo = $this->todoZen->prepareCreateData($todoData, $uid);
-            if(!$todo) return print(js::error(dao::getError()));
+            $todo = $this->todoZen->prepareCreateData($todoData);
+            if(!$todo) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $todoID = $this->todo->create($todo);
-            if($todoID === false) return print(js::error(dao::getError()));
+            if($todoID === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $todo->id = $todoID;
             $this->todoZen->afterCreate($todo, $form);
 
-            if(!empty($todoData->objectID)) return $this->send(array('result' => 'success'));
+            if(!empty($todoData->objectID)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
             if($from == 'block')
             {
@@ -67,8 +66,8 @@ class todo extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
             if($this->viewType == 'xhtml') return print(js::locate($this->createLink('todo', 'view', "todoID=$todoID", 'html'), 'parent'));
-            if(isonlybody()) return print(js::closeModal('parent.parent'));
-            return print(js::locate($this->createLink('my', 'todo', 'type=all&userID=&status=all&orderBy=id_desc'), 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('my', 'todo', 'type=all&userID=&status=all&orderBy=id_desc')));
         }
 
         unset($this->lang->todo->typeList['cycle']);
@@ -92,17 +91,17 @@ class todo extends control
         {
             $form       = form::data($this->config->todo->batchCreate->form);
             $todosData  = $this->todoZen->beforeBatchCreate($form);
-            $todoIDList = $this->todo->batchCreate($todosData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $todoIdList = $this->todo->batchCreate($todosData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Locate the browser. */
-            $date = str_replace('-', '', $this->post->date);
+            $date = str_replace('-', '', $this->post->date[1]);
             if($date == '') $date = 'future';
-            if($date == date('Ymd')) $date= 'today';
+            if($date == date('Ymd')) $date = 'today';
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIDList));
-            if(isonlybody()) return print(js::reload('parent.parent'));
-            return print(js::locate($this->createLink('my', 'todo', "type={$date}"), 'parent'));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIdList));
+            if(helper::isAjaxRequest('modal')) return send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+            return $this->sendSuccess(array('load' => $this->createLink('my', 'todo', "type={$date}")));
         }
 
         unset($this->lang->todo->typeList['cycle']);
@@ -127,25 +126,17 @@ class todo extends control
 
             /* Processing edit request data. */
             $todo = $this->todoZen->beforeEdit($todoID, $form);
-            if(dao::isError())
-            {
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
-            }
+            if(dao::isError()) return $this->send(array('status' => 'fail', 'message' => dao::getError()));
 
             /* update a todo. */
             $changes = $this->todo->update($todoID, $todo);
-            if(dao::isError())
-            {
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
-            }
+            if(dao::isError()) return $this->send(array('status' => 'fail', 'message' => dao::getError()));
 
             /* Handle data after edit todo. */
             $this->todoZen->afterEdit($todoID, $changes);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return print(js::locate($this->session->todoList, 'parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
         }
 
         /* Judge a private todo or not, If private, die. */
@@ -171,19 +162,27 @@ class todo extends control
      */
     public function batchEdit(string $from = '', string $type = 'today', int $userID = 0, string $status = 'all')
     {
-        $form = form::data($this->config->todo->batchEdit->form);
-
         /* Get form data for my-todo. */
-        if($from == 'myTodo') $this->todoZen->batchEditFromMyTodo($form, $type, $userID, $status);
+        if($from == 'myTodo')
+        {
+            if(!$this->post->todoIdList) return $this->send(array('result' => 'fail', 'load' => true));
+
+            $this->todoZen->batchEditFromMyTodo($this->post->todoIdList, $type, $userID, $status);
+        }
 
         /* Save the todo data for batch edit. */
         if($from == 'todoBatchEdit')
         {
-            $todos      = $this->todoZen->beforeBatchEdit($form);
-            $allChanges = $this->todo->batchUpdate($todos, $form->data->todoIDList);
+            $formData   = form::batchData($this->config->todo->batchEdit->form)->get();
+            $todos      = $this->todoZen->beforeBatchEdit($formData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $allChanges = $this->todo->batchUpdate($todos, array_keys($formData));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->todoZen->afterBatchEdit($allChanges);
 
-            return print(js::locate($this->session->todoList, 'parent'));
+            return $this->sendSuccess(array('locate' => $this->session->todoList));
         }
     }
 
@@ -205,9 +204,8 @@ class todo extends control
         }
 
         if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printStartConfirm($todo);
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -228,9 +226,8 @@ class todo extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -248,7 +245,7 @@ class todo extends control
         if($todo->status == 'done')
         {
             $isClosed = $this->todo->close($todoID);
-            if(!$isClosed) return print(js::error(dao::getError()));
+            if(!$isClosed) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
 
         /* Return json if run mode is API. */
@@ -257,9 +254,8 @@ class todo extends control
             $this->send(array('status' => 'success'));
         }
 
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -279,9 +275,10 @@ class todo extends control
 
             $todo->id   = $todoID;
             $isAssigned = $this->todoZen->doAssignTo($todo);
-            if(!$isAssigned) return print(js::error(dao::getError()));
+            if(!$isAssigned) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return print(js::reload('parent.parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
         }
 
         $this->todoZen->buildAssignToView($todoID);
@@ -333,13 +330,13 @@ class todo extends control
      */
     public function delete(int $todoID, string $confirm = 'no')
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes")));
+        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->todo->confirmDelete, 'confirmed' => $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes"), 'canceled' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'))));
 
         $this->todo->delete(TABLE_TODO, $todoID);
 
         if(helper::isAjaxRequest())
         {
-            $response = array('result' => 'success', 'message' => '');
+            $response = array('result' => 'success', 'message' => '', 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'));
             if(dao::isError())
             {
                 $response['result']  = 'fail';
@@ -349,10 +346,8 @@ class todo extends control
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        $browseLink = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
-        return print(js::locate($browseLink, 'parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -384,17 +379,16 @@ class todo extends control
             if($todo->type == 'task')  $app = 'execution';
             if($todo->type == 'story') $app = 'product';
 
-            $cancelURL   = $this->server->http_referer;
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => sprintf($this->lang->todo->$confirmNote, $todo->objectID), 'locate' => $confirmURL));
-            return print(strpos($cancelURL, 'calendar') ? json_encode(array(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL)) : js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+            $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
+            return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api')
         {
             return $this->send(array('status' => 'success'));
         }
-        if(isonlybody()) return print(js::reload('parent.parent'));
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -406,8 +400,8 @@ class todo extends control
      */
     public function batchFinish()
     {
-        $todoIDList = form::data($this->config->todo->batchFinish->form)->get('todoIDList');
-        $todoList   = $this->todo->getByList($todoIDList);
+        $todoIdList = form::data($this->config->todo->batchFinish->form)->get('todoIdList');
+        $todoList   = $this->todo->getByList($todoIdList);
         foreach($todoList as $todoID => $todo)
         {
             if($todo->status == 'done' || $todo->status == 'closed') unset($todoList[$todoID]);
@@ -416,7 +410,7 @@ class todo extends control
         $isBatchFinished = $this->todo->batchFinish(array_keys($todoList));
         if(!$isBatchFinished) return false;
 
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -429,16 +423,17 @@ class todo extends control
     public function batchClose()
     {
         $waitIdList = array();
-        $todoIdList = form::data($this->config->todo->batchClose->form)->get('todoIDList');
+        $todoIdList = form::data($this->config->todo->batchClose->form)->get('todoIdList');
         foreach($todoIdList as $todoID)
         {
-            $todo   = $this->todo->getByID($todoID);
+            $todoID = (int)$todoID;
+            $todo = $this->todo->getByID($todoID);
             if($todo->status == 'done') $this->todo->close($todoID);
             if($todo->status != 'done' and $todo->status != 'closed') $waitIdList[] = $todoID;
         }
         if(!empty($waitIdList)) echo js::alert(sprintf($this->lang->todo->unfinishedTodo, implode(',', $waitIdList)));
 
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**

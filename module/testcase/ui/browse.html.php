@@ -10,273 +10,25 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include 'header.html.php';
+
+$caseScenes    = array_flip(array_filter(array_map(function($scene){if($scene->isCase == 1 && $scene->scene > 0) return $scene->scene;}, $scenes)));
 $topSceneCount = count(array_filter(array_map(function($scene){return $scene->isCase == 2 && $scene->grade == 1;}, $scenes)));
 $topCaseCount  = count(array_filter(array_map(function($scene){return $scene->isCase == 1 && $scene->scene == 0;}, $scenes)));
+$pageSummary   = sprintf($isOnlyScene ? $lang->testcase->summaryScene : $lang->testcase->summary, $topSceneCount, $topCaseCount);
 
-jsVar('pageSummary', sprintf($lang->testcase->summary, $topSceneCount, $topCaseCount));
-jsVar('checkedSummary', $lang->testcase->checkedSummary);
-
-$isProjectApp  = $this->app->tab == 'project';
-$currentModule = $isProjectApp ? 'project'  : 'testcase';
-$currentMethod = $isProjectApp ? 'testcase' : 'browse';
-$projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';
-$initModule    = isset($moduleID) ? (int)$moduleID : 0;
-
-$canModify                  = common::canModify('product', $product);
-$canSwitchCaseType          = $this->app->tab == 'qa';
-$canDisplaySuite            = $this->app->tab == 'qa';
-$canCreateSuite             = hasPriv('testsuite', 'create');
-$canBrowseUnits             = hasPriv('testtask', 'browseunits');
-$canBrowseZeroCase          = hasPriv('testcase', 'zerocase');
-$canBrowseGroupCase         = hasPriv('testcase', 'groupcase');
-$canAutomation              = hasPriv('testcase', 'automation') && !empty($productID);
-$canExport                  = hasPriv('testcase', 'export');
-$canExportTemplate          = hasPriv('testcase', 'exportTemplate');
-$canExportXmind             = hasPriv('testcase', 'exportXmind');
-$canImport                  = hasPriv('testcase', 'import');
-$canImportFromLib           = hasPriv('testcase', 'importFromLib');
-$canImportXmind             = hasPriv('testcase', 'importXmind');
-$canBatchRun                = hasPriv('testtask', 'batchRun');
-$canBatchEdit               = hasPriv('testcase', 'batchEdit');
-$canBatchReview             = hasPriv('testcase', 'batchReview') && ($config->testcase->needReview || !empty($config->testcase->forceReview));
-$canBatchDelete             = hasPriv('testcase', 'batchDelete');
-$canBatchCaseTypeChange     = hasPriv('testcase', 'batchCaseTypeChange');
-$canBatchConfirmStoryChange = hasPriv('testcase', 'batchConfirmStoryChange');
-$canBatchChangeBranch       = hasPriv('testcase', 'batchChangeBranch') && $this->session->currentProductType && $this->session->currentProductType != 'normal';
+$canBatchRun                = hasPriv('testtask', 'batchRun') && !$isOnlyScene;
+$canBatchEdit               = hasPriv('testcase', 'batchEdit') && !$isOnlyScene;
+$canBatchReview             = hasPriv('testcase', 'batchReview') && !$isOnlyScene && ($config->testcase->needReview || !empty($config->testcase->forceReview));
+$canBatchDelete             = hasPriv('testcase', 'batchDelete') && !$isOnlyScene;
+$canBatchCaseTypeChange     = hasPriv('testcase', 'batchCaseTypeChange') && !$isOnlyScene;
+$canBatchConfirmStoryChange = hasPriv('testcase', 'batchConfirmStoryChange') && !$isOnlyScene;
+$canBatchChangeBranch       = hasPriv('testcase', 'batchChangeBranch') && !$isOnlyScene && $this->session->currentProductType && $this->session->currentProductType != 'normal';
 $canBatchChangeModule       = hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ($product->type == 'normal' || $branch !== 'all');
-$canBatchChangeScene        = hasPriv('testcase', 'batchChangeScene');
-$canImportToLib             = hasPriv('testcase', 'importToLib');
-$canBatchAction             = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange || $canBatchChangeBranch || $canBatchChangeModule || $canBatchChangeScene || $canImportToLib);
-
-$lang->testcase->typeList[''] = $lang->testcase->allType;
-if(!isset($param)) $param = 0;
-
-if($canSwitchCaseType)
-{
-    /* Process variables of case type menu. */
-    $currentCaseType = zget($lang->testcase->typeList, $caseType, '');
-    $currentTypeName = empty($currentCaseType) ? $lang->testcase->allType : $currentCaseType;
-    $caseTypeItems   = array();
-    foreach($lang->testcase->typeList as $type => $typeName)
-    {
-        if($canBrowseUnits and $type == 'unit')
-        {
-            $url  = $this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
-            $text = $lang->testcase->browseUnits;
-        }
-        elseif(isset($groupBy))
-        {
-            $url  = $this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$type");
-            $text = $typeName;
-        }
-        else
-        {
-            $url  = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type");
-            $text = $typeName;
-        }
-
-        $caseTypeItems[] = array('text' => $text, 'url' => $url, 'active' => $type == $caseType);
-    }
-}
-
-if($canDisplaySuite)
-{
-    /* Process variables of sutie menu. */
-    $currentSuiteID   = isset($suiteID) ? (int)$suiteID : 0;
-    $currentSuite     = zget($suiteList, $currentSuiteID, '');
-    $currentSuiteName = empty($currentSuite) ? $lang->testsuite->common : $currentSuite->name;
-    $suiteItems       = array();
-    if(empty($suiteList))
-    {
-        if($canCreateSuite && (empty($productID) || common::canModify('product', $product)))
-        {
-            $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID=$productID"));
-        }
-    }
-    else
-    {
-        foreach($suiteList as $suiteID => $suite)
-        {
-            $suiteItems[] = array('text' => $suite->name, 'url' => $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), 'active' => $suiteID == (int)$currentSuiteID);
-        }
-    }
-}
-
-/* Process variables of other menu. */
-$currentOtherName = $this->cookie->onlyScene ? $lang->testcase->onlyScene : $lang->other;
-$otherItems   = array();
-$otherItems[] = array('text' => $lang->testcase->onlyScene);
-
-featureBar
-(
-    set::linkParams($projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType=$caseType"),
-    $canSwitchCaseType ? to::before
-    (
-        productMenu
-        (
-            set::title($currentTypeName),
-            set::items($caseTypeItems)
-        )
-    ) : null,
-    $canBrowseZeroCase ? li
-    (
-        set::class('nav-item'),
-        a
-        (
-            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=" . ($isProjectApp ? $this->session->project : 0))),
-            set('data-app', $app->tab),
-            set('data-id', 'zerocaseTab'),
-            $lang->testcase->zeroCase
-        )
-    ) : null,
-    $canDisplaySuite ? dropdown
-    (
-        btn
-        (
-            setClass('ghost'),
-            $currentSuiteName
-        ),
-        set::items($suiteItems)
-    ) : null,
-    dropdown
-    (
-        btn
-        (
-            setClass('ghost'),
-            $currentOtherName
-        ),
-        set::items($otherItems)
-    ),
-    li(searchToggle(set::open($browseType == 'bysearch'))),
-    li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
-);
-
-$viewItems   = array();
-$exportItems = array();
-$importItems = array();
-if($canBrowseGroupCase)
-{
-    $link = inlink('groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID");
-    $viewItems[] = array('text' => $lang->testcase->groupView, 'url' => $link, 'data-app' => $app->tab);
-}
-
-if(!empty($productID))
-{
-    if($canExport)
-    {
-        $link = $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType");
-        $exportItems[] = array('text' => $lang->testcase->export, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
-    }
-    if($canExportTemplate)
-    {
-        $link = $this->createLink('testcase', 'exportTemplate', "productID=$productID");
-        $exportItems[] = array('text' => $lang->testcase->exportTemplate, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab, 'data-width' => '65%');
-    }
-    if($canExportXmind)
-    {
-        $link = $this->createLink('testcase', 'exportXmind', "productID=$productID&moduleID=$moduleID&branch=$branch");
-        $exportItems[] = array('text' => $lang->testcase->xmindExport, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
-    }
-
-    if($canModify)
-    {
-        if($canImport)
-        {
-            $link = $this->createlink('testcase', 'import', "productID=$productID&branch=$branch");
-            $importItems[] = array('text' => $lang->testcase->fileImport, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
-        }
-
-        if($canImportFromLib)
-        {
-            $link  = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=0&orderBy=id_desc&browseType=&queryID=10&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
-            $importItems[] = array('url' => $link, 'text' => $lang->testcase->importFromLib, 'data-toggle' => 'modal', 'data-app' => $app->tab);
-        }
-
-        if($canImportXmind)
-        {
-            $link = $this->createLink('testcase', 'importXmind', "productID=$productID&branch=$branch");
-            $importItems[] = array('url' => $link, 'text' => $lang->testcase->xmindImport, 'data-toggle' => 'modal', 'data-app' => $app->tab);
-        }
-    }
-}
-
-toolbar
-(
-    $viewItems ? dropdown
-    (
-        btn
-        (
-            setClass('btn btn-link ghost square'),
-            set::icon('kanban')
-        ),
-        set::items($viewItems),
-        set::placement('bottom-end'),
-    ) : null,
-    $canAutomation ? btn
-    (
-        set
-        (
-            array('icon' => 'wrench', 'hint' => $lang->testcase->automation, 'url' => inlink('automation', "productID=$productID"), 'class' => 'btn btn-link ghost square', 'data-toggle' => 'modal', 'data-width' => '50%')
-        )
-    ) : null,
-    $exportItems ? dropdown
-    (
-        btn
-        (
-            setClass('btn btn-link ghost square'),
-            set::icon('export')
-        ),
-        set::arrow(false),
-        set::items($exportItems),
-        set::placement('bottom-end'),
-    ) : null,
-    $importItems ? dropdown
-    (
-        btn
-        (
-            setClass('btn btn-link ghost square'),
-            set::icon('import')
-        ),
-        set::arrow(false),
-        set::items($importItems),
-        set::placement('bottom-end'),
-    ) : null,
-    btngroup
-    (
-        btn
-        (
-            setClass('btn primary'),
-            set::icon('plus'),
-            set::url(helper::createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule")),
-            $lang->testcase->create
-        ),
-        dropdown
-        (
-            btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-            set::items
-            (
-                array
-                (
-                    array('text' => $lang->testcase->create,      'url' => helper::createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule")),
-                    array('text' => $lang->testcase->batchCreate, 'url' => helper::createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule")),
-                    array('text' => $lang->testcase->newScene,    'url' => helper::createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule"))
-                )
-            ),
-            set::placement('bottom-end'),
-        )
-    )
-);
-
-$closeLink = $browseType == 'bymodule' ? createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
-sidebar
-(
-    moduleMenu(set(array
-    (
-        'modules'   => $moduleTree,
-        'activeKey' => $moduleID,
-        'closeLink' => $closeLink
-    )))
-);
+$canBatchChangeScene        = hasPriv('testcase', 'batchChangeScene') && !$isOnlyScene;
+$canImportToLib             = hasPriv('testcase', 'importToLib') && !$isOnlyScene;
+$canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange);
+$canBatchAction             = ($canGroupBatch || $canBatchChangeBranch || $canBatchChangeModule || $canBatchChangeScene || $canImportToLib);
 
 $caseProductIds = array();
 foreach($cases as $case) $caseProductIds[$case->product] = $case->product;
@@ -284,15 +36,16 @@ $caseProductID = count($caseProductIds) > 1 ? 0 : $productID;
 
 $footToolbar = $canBatchAction ? array('items' => array
 (
-    array('type' => 'btn-group', 'items' => array
+    $canGroupBatch ? array('type' => 'btn-group', 'items' => array
     (
-        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
-        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
-        ($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange) ? array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
-    )),
-    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
-    $canBatchChangeScene ? array('caret' => 'up', 'text' => $lang->testcase->scene, 'btnType' => 'primary', 'url' => '#navScene','data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
-    $canImportToLib ? array('text' => $lang->testcase->importToLib, 'btnType' => 'primary', 'data-toggle' => 'modal', 'data-url' => '#importToLib') : null,
+        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
+        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
+        ($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange) ? array('caret' => 'up', 'className' => 'secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
+    )) : null,
+    $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'btnType' => 'secondary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
+    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'btnType' => 'secondary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
+    $canBatchChangeScene ? array('caret' => 'up', 'text' => $lang->testcase->scene, 'btnType' => 'secondary', 'url' => '#navScene','data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
+    $canImportToLib ? array('text' => $lang->testcase->importToLib, 'btnType' => 'secondary', 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
 )) : null;
 
 if($canBatchReview)
@@ -316,7 +69,7 @@ if($canBatchCaseTypeChange)
 
 if($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange)
 {
-    zui::menu
+    menu
     (
         set::id('navActions'),
         set::class('menu dropdown-menu'),
@@ -327,6 +80,19 @@ if($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchCon
             $canBatchCaseTypeChange ? array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $typeItems) : null,
             $canBatchConfirmStoryChange ? array('text' => $lang->testcase->confirmStoryChange, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchConfirmStoryChange', "productID=$productID")) : null,
         ))
+    );
+}
+
+if($canBatchChangeBranch)
+{
+    $branchItems = array();
+    foreach($branchTagOption as $branchID => $branchName) $branchItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchId"));
+
+    menu
+    (
+        set::id('navBranch'),
+        set::class('dropdown-menu'),
+        set::items($branchItems)
     );
 }
 
@@ -356,22 +122,28 @@ if($canBatchChangeScene)
     );
 }
 
+$cols = $isOnlyScene ? $this->config->scene->dtable->fieldList : $this->loadModel('datatable')->getSetting('testcase');
+if(!empty($cols['actions']['list']))
+{
+    $executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
+    foreach($cols['actions']['list'] as $method => $methodParams)
+    {
+        if(!isset($methodParams['url'])) continue;
 
-$executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
-$url         = $config->testcase->dtable->fieldList['actions']['list']['edit']['url'];
-$url         = str_replace('%executionID%', (string)$executionID, $url);
+        $cols['actions']['list'][$method]['url'] = str_replace('%executionID%', (string)$executionID, $methodParams['url']);
+    }
+}
 
-$config->testcase->dtable->fieldList['title']['nestedToggle'] = $topSceneCount > 0;
-$config->testcase->dtable->fieldList['story']['map']          = $stories;
-$config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = $url;
+if(isset($cols['title'])) $cols['title']['nestedToggle'] = $topSceneCount > 0;
+if(isset($cols['story'])) $cols['story']['map']          = $stories;
 
 foreach($scenes as $scene)
 {
     $actionType = $scene->isCase == 1 ? 'testcase' : 'scene';
-    $config->testcase->dtable->fieldList['actions']['menu'] = $config->$actionType->menu;
+    $cols['actions']['menu'] = $config->$actionType->menu;
 
     $scene->browseType = $browseType;
-    initTableData(array($scene), $config->testcase->dtable->fieldList, $this->testcase);
+    initTableData(array($scene), $cols, $this->testcase);
 
     if($scene->isCase != 1) continue;
 
@@ -382,15 +154,49 @@ foreach($scenes as $scene)
 
 dtable
 (
-    set::customCols(true),
+    set::customCols(!$isOnlyScene),
     set::userMap($users),
-    set::cols($config->testcase->dtable->fieldList),
+    set::cols($cols),
     set::data(array_values($scenes)),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::checkable($canBatchAction),
-    set::canRowCheckable(jsRaw('function(rowID){const row = this.getRowInfo(rowID); return row && row.data.isCase == 1;}')),
     set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
     set::footToolbar($footToolbar),
-    set::footPager(usePager())
+    set::footPager(usePager()),
+    set::customData(array('isOnlyScene' => $isOnlyScene, 'caseScenes' => $caseScenes, 'pageSummary' => $pageSummary, 'modules' => $modulePairs))
+);
+
+modal
+(
+    on::click('button[type="submit"]', 'getCheckedCaseIdList'),
+    set::id('importToLib'),
+    set::modalProps(array('title' => $lang->testcase->importToLib)),
+    form
+    (
+        set::url(createLink('testcase', 'importToLib')),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->testcase->import),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->testcase->selectLibAB),
+                set::name('lib'),
+                set::items($libraries),
+                set::value(''),
+                set::required(true),
+            ),
+        ),
+        formRow
+        (
+            setClass('hidden'),
+            formGroup
+            (
+                set::name('caseIdList'),
+                set::value(''),
+            ),
+        ),
+    ),
 );
 
 render();

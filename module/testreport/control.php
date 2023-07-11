@@ -170,10 +170,10 @@ class testreport extends control
         if($_POST)
         {
             $reportID = $this->testreport->create();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('action')->create('testreport', $reportID, 'Opened');
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $reportID));
-            return print(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "reportID=$reportID"), 'id' => $reportID));
         }
 
         if($objectType == 'testtask')
@@ -272,7 +272,7 @@ class testreport extends control
 
             if($this->app->tab == 'qa')
             {
-                $productID = $this->product->saveVisitState(key($productIdList), $this->products);
+                $productID = $this->product->saveState(key($productIdList), $this->products);
                 $this->loadModel('qa')->setMenu($this->products, $productID);
             }
             elseif($this->app->tab == 'project')
@@ -330,6 +330,7 @@ class testreport extends control
         $this->view->legacyBugs = $bugSummary['legacyBugs'];
         $this->view->bugSummary = $bugSummary;
 
+        $this->view->caseList   = $caseList;
         $this->view->objectID   = $objectID;
         $this->view->objectType = $objectType;
         $this->view->extra      = $extra;
@@ -447,6 +448,13 @@ class testreport extends control
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
 
+        $caseList = array();
+        foreach($cases as $taskID => $casesList)
+        {
+            foreach($casesList as $caseID => $case) $caseList[$caseID] = $case;
+        }
+        $this->view->caseList = $caseList;
+
         $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $report->cases, $begin, $end);
         $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $report->cases, $begin, $end);
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
@@ -532,6 +540,13 @@ class testreport extends control
             foreach($tasks as $task) $this->setChartDatas($task->id);
         }
 
+        $cases    = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases, $pager);
+        $caseList = array();
+        foreach($cases as $taskID => $casesList)
+        {
+            foreach($casesList as $caseID => $case) $caseList[$caseID] = $case;
+        }
+
         $this->view->title      = $report->title;
         $this->view->browseLink = $browseLink;
 
@@ -542,7 +557,7 @@ class testreport extends control
         $this->view->stories   = $stories;
         $this->view->bugs      = $report->bugs ? $this->bug->getByIdList($report->bugs) : array();
         $this->view->builds    = $builds;
-        $this->view->cases     = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases, $pager);
+        $this->view->caseList  = $caseList;
         $this->view->users     = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->actions   = $this->loadModel('action')->getList('testreport', $reportID);
 
@@ -597,7 +612,7 @@ class testreport extends control
     {
         if($objectType == 'product')
         {
-            $productID = $this->product->saveVisitState($objectID, $this->products);
+            $productID = $this->product->saveState($objectID, $this->products);
             $this->loadModel('qa')->setMenu($this->products, $productID);
             return $productID;
         }

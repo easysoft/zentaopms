@@ -19,12 +19,11 @@ class set
     {
         $value = array_shift($args);
         if(is_object($value)) $value = (array)$value;
-        if($prop === '_' && is_array($value)) return directive('prop', $value);
         return directive('prop', array($prop => $value));
     }
 
     public static function class(...$args)
     {
-        return directive('prop', ['class' => $args]);
+        return directive('prop', array('class' => $args));
     }
 }

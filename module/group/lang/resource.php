@@ -536,6 +536,7 @@ $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->processStoryChange = 'processStoryChange';
 $lang->resource->story->linkStories        = 'linkStoriesAB';
 $lang->resource->story->relieved           = 'relievedTwins';
+$lang->resource->story->relation           = 'relation';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -566,6 +567,7 @@ $lang->story->methodOrder[125] = 'batchToTask';
 $lang->story->methodOrder[130] = 'processStoryChange';
 $lang->story->methodOrder[135] = 'linkStories';
 $lang->story->methodOrder[140] = 'relieved';
+$lang->story->methodOrder[145] = 'relation';
 
 /* Requirement. */
 $lang->resource->requirement = new stdclass();
@@ -2097,9 +2099,8 @@ $lang->resource->projectreview      = new stdclass();
 $lang->resource->projecttrack       = new stdclass();
 $lang->resource->projectqa          = new stdclass();
 
-global $config;
-$inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);
-if(!$inUpgrade)
+global $config, $app;
+if(!$app->upgrading)
 {
     if(!$config->URAndSR)
     {

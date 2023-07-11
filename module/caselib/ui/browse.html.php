@@ -22,9 +22,10 @@ $canBatchReview       = common::hasPriv('testcase', 'batchReview') and ($config-
 $canBatchChangeModule = common::hasPriv('testcase', 'batchChangeModule');
 $canBatchAction       = ($canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule);
 
-$tableData = initTableData($cases, $config->caselib->testcase->dtable->fieldList, $this->testcase);
+$cols = $this->loadModel('datatable')->getSetting('caselib');
+$tableData = initTableData($cases, $cols, $this->testcase);
 
-$config->caselib->testcase->dtable->fieldList['openedBy']['map'] = $users;
+$config->caselib->dtable->fieldList['openedBy']['map'] = $users;
 
 featureBar
 (
@@ -39,6 +40,8 @@ toolbar
     (
         setClass('toolbar-item ghost btn btn-default'),
         set::href(createLink('caselib', 'view', "libID={$libID}")),
+        set('data-toggle', 'modal'),
+        set('data-id', 'viewLibModal'),
         icon('list-alt'),
         $lang->caselib->view,
     ) : '',
@@ -49,6 +52,7 @@ toolbar
             setClass('toolbar-item ghost btn btn-default'),
             set::href(createLink('caselib', 'exportTemplate', "libID={$libID}")),
             set('data-toggle', 'modal'),
+            set('data-size', 'sm'),
             icon('export'),
             $lang->caselib->exportTemplate,
         ) : '',
@@ -57,6 +61,7 @@ toolbar
             setClass('toolbar-item ghost btn btn-default'),
             set::href(createLink('caselib', 'import', "libID={$libID}")),
             set('data-toggle', 'modal'),
+            set('data-size', 'sm'),
             icon('import'),
             $lang->testcase->fileImport,
         ) : '',
@@ -66,6 +71,7 @@ toolbar
         setClass('btn secondary'),
         set::icon('plus'),
         set::url(helper::createLink('caselib', 'create')),
+        set('data-toggle', 'modal'),
         $lang->caselib->create
     ) : '',
     $canCreateCase && $canBatchCreateCase ? btngroup
@@ -94,16 +100,16 @@ toolbar
     ) : '',
 );
 
-$closeLink = $this->createLink('caselib', 'browse', "libID=$libID&browseType=$browseType&param=0&orderBy=$orderBy");
+$settingLink = $this->createLink('tree', 'browse', "libID={$libID}&view=caselib&currentModuleID=0&branch=0&from={$lang->navGroup->caselib}");
+$closeLink   = $this->createLink('caselib', 'browse', "libID=$libID&browseType=$browseType&param=0&orderBy=$orderBy");
 sidebar
 (
     moduleMenu
     (
         set::modules($moduleTree),
         set::activeKey($moduleID),
+        set::settingLink($settingLink),
         set::closeLink($closeLink),
-        set::moduleSetting(false),
-        set::displaySetting(false),
     ),
 );
 
@@ -133,7 +139,7 @@ if($canBatchChangeModule)
 
 if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
 {
-    zui::menu
+    menu
     (
         set::id('navActions'),
         set::class('menu dropdown-menu'),
@@ -148,9 +154,11 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
 
 dtable
 (
-    set::cols(array_values($config->caselib->testcase->dtable->fieldList)),
+    set::userMap($users),
+    set::cols($cols),
     set::data(array_values($tableData)),
     set::checkable($canBatchAction),
+    set::customCols(true),
     set::footToolbar($footToolbar),
     set::footPager(usePager())
 );

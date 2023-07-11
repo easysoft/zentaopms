@@ -734,7 +734,7 @@ class instance extends control
     {
         if(!$this->checkCneToken())
         {
-            header("HTTP/1.1 401");
+            helper::setStatus(401);
             return print(json_encode(array('code' => 401, 'message' => 'Invalid token.')));
         }
 
@@ -760,7 +760,7 @@ class instance extends control
     {
         if(!$this->checkCneToken())
         {
-            header("HTTP/1.1 401");
+            helper::setStatus(401);
             return print(json_encode(array('code' => 401, 'message' => 'Invalid token.')));
         }
 
@@ -796,7 +796,7 @@ class instance extends control
     {
         if(!$this->checkCneToken())
         {
-            header("HTTP/1.1 401");
+            helper::setStatus(401);
             return print(json_encode(array('code' => 401, 'message' => 'Invalid token.')));
         }
 

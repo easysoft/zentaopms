@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The stroy view file of execution module of ZenTaoPMS.
+ * The story view file of execution module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      dingguodong <dingguodong@easycorp.ltd>
@@ -14,187 +14,362 @@ namespace zin;
 /* Show feature bar. */
 featureBar
 (
-    set::current($type),
+    set::current($this->session->storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type={key}")),
-    li(searchToggle(set::module('story')))
+    li(searchToggle(set::module('executionStory')))
 );
 
-/* Build create story button. */
-$fnBuildCreateStoryButton = function() use ($lang, $product, $storyType, $productID)
-{
-    if(!common::canModify('product', $product)) return null;
-
-    $createLink      = createLink('story', 'create', "product=$productID&branch=0&moduleID=0&storyID=0&objectID=$executionID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType");
-    $batchCreateLink = createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&storyID=0&executionID=$executionID&plan=0&storyType=$storyType");
-
-    $createBtnLink  = '';
-    $createBtnTitle = '';
-    if(hasPriv($storyType, 'create'))
-    {
-        $createBtnLink  = $createLink;
-        $createBtnTitle = $lang->story->create;
-    }
-    elseif(hasPriv($storyType, 'batchCreate'))
-    {
-        $createBtnLink  = empty($productID) ? '' : $batchCreateLink;
-        $createBtnTitle = $lang->story->batchCreate;
-    }
-
-    /* Without privilege, don't render create button. */
-    if(empty($createBtnLink)) return null;
-
-    if(!empty($productID) && hasPriv($storyType, 'batchCreate') && hasPriv($storyType, 'create'))
-    {
-        $items = array();
-
-        if(commonModel::isTutorialMode())
-        {
-            /* Tutorial create link. */
-            $wizardParams = helper::safe64Encode("productID=$productID&branch=0&moduleID=0");
-            $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
-            $items[] = array('text' => $lang->story->createCommon, 'url' => $link);
-        }
-        else
-        {
-            $items[] = array('text' => $lang->story->create, 'url' => $createLink);
-        }
-
-        $items[] = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
-
-        return dropdown
-        (
-            icon('plus'),
-            $createBtnTitle,
-            span(setClass('caret')),
-            setClass('btn secondary'),
-            set::items($items),
-        );
-    }
-
-    return item(set(array
+jsVar('executionID', $executionID);
+$linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
+$linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
+modal
+(
+    setID('linkStoryByPlan'),
+    set::modalProps(array('title' => $lang->execution->linkStoryByPlan)),
+    div
     (
-        'text'  => $createBtnTitle,
-        'icon'  => 'plus',
-        'type'  => 'dropdown',
-        'class' => 'secondary',
-        'url'   => $createBtnLink
-    )));
-};
-
-/* Build link story button. */
-$fnBuildLinkStoryButton = function() use($lang, $product, $productID)
-{
-    if(!common::canModify('product', $product)) return null;
-
-    /* Tutorial mode. */
-    if(commonModel::isTutorialMode())
-    {
-        $wizardParams = helper::safe64Encode("project={$execution->id}");
-
-        return item(set(array
+        setClass('flex-auto'),
+        icon('info-sign', setClass('warning-pale rounded-full mr-1')),
+        $linkStoryByPlanTips
+    ),
+    form
+    (
+        setClass('text-center', 'py-4'),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->execution->linkStory),
+        formGroup
         (
-            'text' => $lang->project->linkStory,
-            'url'  => createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams")
-        )));
-    }
-
-    $buttonLink  = '';
-    $buttonTitle = '';
-    $dataToggle  = '';
-    if(common::hasPriv('projectstory', 'importPlanStories'))
-    {
-        $buttonLink  = empty($productID) ? '' : '#linkStoryByPlan';
-        $buttonTitle = $lang->execution->linkStoryByPlan;
-        $dataToggle  = 'data-toggle="modal"';
-    }
-    if(common::hasPriv('projectstory', 'linkStory'))
-    {
-        $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=0");
-        $buttonTitle = $lang->execution->linkStory;
-        $dataToggle  = '';
-    }
-
-    if(empty($buttonLink)) return null;
-
-    if(!empty($productID) && common::hasPriv('projectstory', 'linkStory') && common::hasPriv('projectstory', 'importPlanStories'))
-    {
-        $items = array();
-        $items[] = array('text' => $lang->execution->linkStory,       'url' => createLink('projectstory', 'linkStory', "project=0"));
-        $items[] = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => $dataToggle);
-
-        return dropdown
-        (
-            icon('link'),
-            $buttonTitle,
-            span(setClass('caret')),
-            setClass('btn primary'),
-            set::items($items),
-        );
-    }
-
-    return null;
-};
+            set::label($lang->execution->selectStoryPlan),
+            set::required(true),
+            select
+            (
+                set::name('plan'),
+                set::items($allPlans)
+            )
+        ),
+    )
+);
 
 /* Show tool bar. */
+$canModifyProduct = common::canModify('product', $product);
+$canCreate        = $canModifyProduct && hasPriv('story', 'create');
+$canBatchCreate   = $canModifyProduct && hasPriv('story', 'canBatchCreate');
+$createLink       = createLink('story', 'create', "product={$productID}&branch=0&moduleID=0&storyID=0&objectID={$executionID}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}");
+$batchCreateLink  = createLink('story', 'batchCreate', "productID={$productID}&branch=0&moduleID=0&storyID=0&executionID={$executionID}&plan=0&storyType={$storyType}");
+
+/* Tutorial create link. */
+if(commonModel::isTutorialMode())
+{
+    $wizardParams   = helper::safe64Encode("productID={$productID}&branch=0&moduleID=0");
+    $createLink     = $this->createLink('tutorial', 'wizard', "module=story&method=create&params={$wizardParams}");
+    $canBatchCreate = false;
+}
+
+$createItem      = array('text' => $lang->story->create,      'url' => $createLink);
+$batchCreateItem = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
+
+$canLinkStory     = $canModifyProduct && hasPriv('story', 'linkStory');
+$canlinkPlanStory = $canModifyProduct && hasPriv('story', 'importPlanStories');
+$linkStoryUrl     = createLink('execution', 'linkStory', "project={$executionID}");
+
+if(commonModel::isTutorialMode())
+{
+    $wizardParams     = helper::safe64Encode("project={$executionID}");
+    $linkStoryUrl     = createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams");
+    $canlinkPlanStory = false;
+}
+
+$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl);
+$linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
+
 toolbar
 (
-    item(set(array
+    hasPriv('story', 'report') ? item(set(array
     (
-        'text' => $lang->story->report->common,
-        'icon' => 'common-report icon-bar-chart muted',
-        'class' => 'ghost'
-    ))),
-    item(set(array
-    (
-        'text'  => $lang->story->export,
-        'icon'  => 'export',
+        'text'  => $lang->story->report->common,
+        'icon'  => 'bar-chart',
         'class' => 'ghost',
-        'url'   => createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$executionID&browseType=$type&storyType=$storyType"),
-    ))),
-    $fnBuildCreateStoryButton(),
-    $fnBuildLinkStoryButton()
+        'url'   => createLink('story', 'report', "productID={$productID}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}"),
+    ))) : null,
+    hasPriv('story', 'export') ? item(set(array
+    (
+        'text'        => $lang->story->export,
+        'icon'        => 'export',
+        'class'       => 'ghost',
+        'url'         => createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$executionID&browseType=$type&storyType=$storyType"),
+        'data-toggle' => 'modal'
+    ))) : null,
+
+    $canCreate && $canBatchCreate ? btngroup
+    (
+        btn
+        (
+            setClass('btn secondary'),
+            set::icon('plus'),
+            set::url($createLink),
+            $lang->story->create
+        ),
+        dropdown
+        (
+            btn(setClass('btn secondary dropdown-toggle'),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::items(array_filter(array($createItem, $batchCreateItem))),
+            set::placement('bottom-end'),
+        )
+    ) : null,
+    $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+
+    $canLinkStory && $canlinkPlanStory ? btngroup
+    (
+        btn(
+            setClass('btn primary'),
+            set::icon('link'),
+            set::url($linkStoryUrl),
+            $lang->story->linkStory
+        ),
+        dropdown
+        (
+            btn(setClass('btn primary dropdown-toggle'),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::items(array_filter(array($linkItem, $linkPlanItem))),
+            set::placement('bottom-end'),
+        )
+    ) : null,
+    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
 );
 
+sidebar
+(
+    moduleMenu(set(array(
+        'modules'     => $moduleTree,
+        'activeKey'   => $param,
+        'closeLink'   => $this->createLink('execution', 'story', "executionID={$executionID}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0")
+    )))
+);
 
-/* DataTable columns. */
-$setting = $this->datatable->getSetting('story');
-$cols    = array_values($setting);
-foreach($cols as $key => $col)
+modal
+(
+    setID('taskModal'),
+    set::modalProps(array('title' => $lang->story->batchToTask, 'titleClass' => 'flex-initial')),
+    to::header
+    (
+        div
+        (
+            setClass('flex-auto'),
+            icon('info-sign', setClass('warning-pale rounded-full mr-1')),
+            $lang->story->batchToTaskTips
+        )
+    ),
+    form
+    (
+        setClass('text-center', 'py-4'),
+        setID('toTaskForm'),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->execution->next),
+        set::url(createLink('story', 'batchToTask', "executionID={$execution->id}&projectID={$execution->project}")),
+        formGroup
+        (
+            set::label($lang->task->type),
+            set::required(true),
+            set::width('1/2'),
+            select
+            (
+                set::name('type'),
+                set::items($lang->task->typeList)
+            )
+        ),
+        $lang->hourCommon !== $lang->workingHour ? formGroup
+        (
+            set::label($lang->story->one . $lang->hourCommon),
+            set::required(true),
+            set::width('1/2'),
+            inputGroup
+            (
+                span
+                (
+                    setClass('input-group-addon'),
+                    "≈ "
+                ),
+                input(set::name('hourPointValue')),
+                span
+                (
+                    setClass('input-group-addon'),
+                    $lang->workingHour
+                )
+            ),
+        ) : null,
+        formGroup
+        (
+            set::label($lang->story->field),
+            checkList
+            (
+                set::name('fields[]'),
+                set::inline(true),
+                set::value(array_keys($lang->story->convertToTask->fieldList)),
+                set::items($lang->story->convertToTask->fieldList)
+            ),
+            input
+            (
+                set::type('hidden'),
+                set::name('storyIdList')
+            )
+        )
+    )
+);
+
+$canBatchEdit        = common::hasPriv('story', 'batchEdit');
+$canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
+$canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
+$canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
+$canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject) && $storyType != 'requirement';
+$canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
+$canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
+
+$footToolbar = array();
+if($canBatchAction)
 {
-    $col->name  = $col->id;
-    if($col->id == 'title')
+    if($canBatchToTask)
     {
-        $col->link = sprintf($col->link, createLink('story', 'view', array('storyID' => '${row.id}', 'version' => '0', 'param' => '0', 'storyType' => $storyType)));
+        menu
+        (
+            set::id('batchToTask'),
+            set::class('dropdown-menu'),
+            $canBatchToTask ? item(set(array(
+                'text'  => $lang->story->batchToTask,
+                'url'   => '#taskModal',
+                'data-toggle' => 'modal'
+            ))) : null,
+        );
     }
 
-    $cols[$key] = $col;
+    if($canBatchToTask || $canBatchEdit)
+    {
+        $editClass = $canBatchEdit ? 'batch-btn' : 'disabled';
+        $footToolbar['items'][] = array(
+            'type'  => 'btn-group',
+            'items' => array(
+                array('text' => $lang->edit, 'class' => "btn secondary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('story', 'batchEdit', "productID=0&executionID={$execution->id}&branch=0&storyType={$storyType}")),
+                array('caret' => 'up', 'class' => 'btn btn-caret size-sm secondary', 'url' => '#batchToTask', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+            )
+        );
+    }
+
+    if($canBatchAssignTo)
+    {
+        $assignedToItems = array();
+        foreach ($users as $account => $name)
+        {
+            $assignedToItems[] = array(
+                'text'     => $name,
+                'class'    => 'batch-btn ajax-btn',
+                'data-url' => createLink('story', 'batchAssignTo', "toryType={$storyType}&assignedTo={$account}")
+            );
+        }
+
+        menu
+        (
+            set::id('navAssignedTo'),
+            set::class('dropdown-menu'),
+            set::items($assignedToItems)
+        );
+    }
+
+    if($canBatchAssignTo)
+    {
+        $footToolbar['items'][] = array(
+            'caret'       => 'up',
+            'text'        => $lang->story->assignedTo,
+            'class'       => 'btn btn-caret size-sm secondary',
+            'url'         => '#navAssignedTo',
+            'data-toggle' => 'dropdown'
+        );
+    }
+
+    if($canBatchClose)
+    {
+        $footToolbar['items'][] = array(
+            'text'     => $lang->close,
+            'class'    => 'btn batch-btn size-sm secondary',
+            'data-url' => $this->createLink('story', 'batchClose', "productID=0&executionID={$execution->id}")
+        );
+    }
+
+    if($canBatchChangeStage)
+    {
+        $stageItems = array();
+        foreach($lang->story->stageList as $stageID => $stage)
+        {
+            $stageItems[] = array(
+                'text'     => $stage,
+                'class'    => 'batch-btn ajax-btn',
+                'data-url' => createLink('story', 'batchChangeStage', "stageID=$stageID")
+            );
+        }
+
+        menu
+        (
+            set::id('navStage'),
+            set::class('dropdown-menu'),
+            set::items($stageItems)
+        );
+    }
+
+    if($canBatchChangeStage)
+    {
+        $footToolbar['items'][] = array(
+            'caret'          => 'up',
+            'text'           => $lang->story->stageAB,
+            'class'          => 'btn btn-caret size-sm secondary',
+            'url'            => '#navStage',
+            'data-toggle'    => 'dropdown',
+            'data-placement' => 'top-start'
+        );
+    }
+
+    if($canBatchUnlink)
+    {
+        $footToolbar['items'][] = array(
+            'text'  => $lang->execution->unlinkStoryAB,
+            'class' => 'btn batch-btn ajax-btn size-sm secondary',
+            'url'   => $this->createLink('execution', 'batchUnlinkStory', "executionID={$execution->id}")
+        );
+    }
+}
+
+/* DataTable columns. */
+$setting = $this->datatable->getSetting('execution');
+$cols    = array();
+foreach($setting as $col)
+{
+    if(!$execution->hasProduct and $col['id'] == 'branch') continue;
+    if(!$execution->hasProduct and !$execution->multiple and $value['id'] == 'plan') continue;
+    if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value['id'] == 'stage') continue;
+
+    $col['name'] = $col['id'];
+    if($col['id'] == 'title') $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $executionID)));
+
+    $cols[] = $col;
 }
 
 
 /* DataTable data. */
-$this->loadModel('story');
-
 $data = array();
+$actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'unlink');
+$options     = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules, 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus);
 foreach($stories as $story)
 {
-    $story->taskCount = $storyTasks[$story->id];
-    $story->actions   = $this->story->buildActionButtonList($story, 'browse');
-    $story->plan      = isset($story->planTitle) ? $story->planTitle : $plans[$story->plan];
-
-    $data[] = $story;
-
+    $data[] = $this->story->formatStoryForList($story, $options);
     if(!isset($story->children)) continue;
 
     /* Children. */
-    foreach($story->children as $key => $child)
-    {
-        $child->taskCount = $storyTasks[$child->id];
-        $child->actions   = $this->story->buildActionButtonList($child, 'browse');
-
-        $data[] = $child;
-    }
+    foreach($story->children as $key => $child) $data[] = $this->story->formatStoryForList($child, $options);
 }
 
+jsVar('cases', $storyCases);
+jsVar('summary', $summary);
+jsVar('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->product->checkedSummary));
 dtable
 (
     set::userMap($users),
@@ -203,10 +378,14 @@ dtable
     set::cols($cols),
     set::data($data),
     set::className('shadow rounded'),
-    set::footPager(usePager()),
-    set::nested(true),
-    set::footer(jsRaw("function(){return window.footerGenerator.call(this, '{$summary}');}"))
+    set::footToolbar($footToolbar),
+    set::footPager(
+        usePager(),
+        set::recPerPage($pager->recPerPage),
+        set::recTotal($pager->recTotal),
+        set::linkCreator(helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}"))
+    ),
+    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
 );
 
 render();
-

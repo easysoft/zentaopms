@@ -12,9 +12,15 @@ declare(strict_types=1);
 
 namespace zin;
 
-$this->app->loadLang('file');
+$this->loadModel('file');
 
-$isCustomExport = (!empty($customExport) and !empty($allExportFields));
+/* Unset useless export type. */
+if(isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'calendar')) unset($lang->exportTypeList['selected']);
+
+/* Generate custom export fields. */
+$hideExportRange     = isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'kanban');
+$customExportRowList = array();
+$isCustomExport      = (!empty($customExport) and !empty($allExportFields));
 if($isCustomExport)
 {
     $allExportFields  = explode(',', $allExportFields);
@@ -32,54 +38,56 @@ if($isCustomExport)
         if(!$hasDefaultField) $selectedFields[] = $field;
     }
 
-    jsVar('defaultExportFields', implode(',', $selectedFields));
-}
+    $defaultExportFields = implode(',', $selectedFields);
 
-/* Unset useless export type. */
-if(isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'calendar')) unset($lang->exportTypeList['selected']);
+    $templates       = $this->file->getExportTemplate($app->moduleName);
+    $templateList    = array();
+    $templatePairs[] = $this->lang->file->defaultTPL;
+    foreach($templates as $template)
+    {
+        $templatePairs[$template->id] = ($template->public ? "[{$this->lang->public}] " : '') . $template->title;
+        $templateList[] = span(setID("template{$template->id}"), setClass('hidden'), set('data-public', $template->public), set('data-title', $template->title), $template->content);
+    }
 
-$hideExportRange = isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'kanban');
-
-/* Generate custom export fields. */
-$customExportRowList = array();
-if($isCustomExport)
-{
     /* Choose template. */
     $customExportRowList[] = formRow
     (
+        setID('tplBox'),
         formGroup
         (
-            set::width('1/2'),
             set::label($lang->file->tplTitleAB),
-            set::control('select'),
-            set::name('template'),
-            set::items(array())
+            inputGroup
+            (
+                select(set::name('template'), set::items($templatePairs), on::change('setTemplate(e.target)'), set::required(true)),
+                span
+                (
+                    setClass('input-group-addon'),
+                    checkbox(setID('showCustomFieldsBox'), set::checked(false), on::change('setExportTPL'), $lang->file->setExportTPL),
+                )
+            ),
+            $templateList ? $templateList : null,
         ),
-        btn
-        (
-            setClass('ml-4'),
-            $lang->file->setExportTPL
-        )
     );
 
     /* Panel for customize template. */
     $customExportRowList[] = formRow
     (
+        setClass('customFieldsBox'),
         formGroup
         (
             set::width('full'),
-            set::label(''),
             panel
             (
                 set::title($lang->file->exportFields),
                 setClass('w-full'),
-                setStyle('background-color', 'rgb(249 250 251)'),
-                set('headingActions', array(array('type'=>'button', 'icon'=>'close', 'size'=>'sm'))),
-                select
+                control
                 (
+                    set::type('picker'),
                     set::name('exportFields[]'),
                     set::items($exportFieldPairs),
+                    set::defaultValue($selectedFields),
                     set::multiple(true),
+                    set::required(true),
                 ),
                 inputGroup
                 (
@@ -89,11 +97,10 @@ if($isCustomExport)
                     hasPriv('file', 'setPublic') ? div
                     (
                         setClass('input-group-addon'),
-                        div(input(set::type('checkbox'), set::name('public'))),
-                        div(setClass('ml-2'), $lang->public)
+                        checkbox(set::name('public'), set::value(1), $lang->public),
                     ) : null,
-                    btn(setClass('primary'), $lang->save),
-                    btn($lang->delete)
+                    btn(setClass('btn-link'), on::click('window.saveTemplate'), icon('save')),
+                    btn(setClass('btn-link'), on::click('window.deleteTemplate'), icon('trash'))
                 )
             )
         )
@@ -121,7 +128,6 @@ form
     ),
     formGroup
     (
-        set::width('1/2'),
         set::label($lang->file->extension),
         set::control('select'),
         set::name('fileType'),
@@ -131,7 +137,6 @@ form
     ),
     formGroup
     (
-        set::width('1/2'),
         set::label($lang->file->encoding),
         set::control('select'),
         set::name('encode'),
@@ -144,7 +149,6 @@ form
         $hideExportRange ? setClass('hidden') : null,
         formGroup
         (
-            set::width('1/2'),
             set::label($lang->file->exportRange),
             set::control('select'),
             set::name('exportType'),
@@ -175,10 +179,10 @@ form
 
 set::title($lang->file->exportData);
 
-js
+h::js
 (
 <<<JAVASCRIPT
-function setDownloading(event)
+window.setDownloading = function(event)
 {
     /* Doesn't support Opera, omit it. */
     if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true;
@@ -199,7 +203,7 @@ function setDownloading(event)
 }
 
 /* If file type is CSV, then user can select encode type. */
-function onChangeFileType(event)
+window.onChangeFileType = function(event)
 {
     var fileType = $(event.target).val();
     var encode   = $('#encode');
@@ -214,7 +218,7 @@ function onChangeFileType(event)
     encode.attr('disabled', 'disabled');
 }
 
-function onChangeFileName(event)
+window.onChangeFileName = function(event)
 {
     var objFileName = $(event.target);
 
@@ -224,7 +228,71 @@ function onChangeFileName(event)
         return;
     }
 }
+
+window.saveTemplate = function()
+{
+    var customFieldsBox = $('.customFieldsBox');
+    var publicBox       = customFieldsBox.find('input[name="public"]');
+    var title           = customFieldsBox.find('#title').val();
+    var content         = customFieldsBox.find('#exportFields').val();
+    var isPublic        = (publicBox.length > 0 && publicBox.prop('checked')) ? 1 : 0;
+    if(!title || !content) return;
+
+    saveTemplateLink = $.createLink('file', 'ajaxSaveTemplate', 'module={$this->moduleName}');
+    $.post(saveTemplateLink, {title:title, content:content, public:isPublic}, function(data)
+    {
+        var defaultValue = $('#tplBox [name="template"]').val();
+        $('#tplBox').html(data);
+    });
+};
+
+window.deleteTemplate = function()
+{
+    var template   = $('#tplBox [name="template"]');
+    var templateID = template.val();
+    if(templateID == 0) return;
+
+    deleteLink = $.createLink('file', 'ajaxDeleteTemplate', 'templateID=' + templateID);
+    $.get(deleteLink, function()
+    {
+        template.find('option[value="'+ templateID +'"]').remove();
+        setTemplate(template);
+    });
+};
+
+window.setTemplate = function(obj)
+{
+    var templateID = $(obj).val();
+    var template  =  $('#template' + templateID);
+    var exportFields = template.length > 0 ? template.html() : '{$defaultExportFields}';
+    exportFields = exportFields.split(',');
+
+    const fieldsPicker = zui.Picker.query('div.modal-body form .form-group .panel .panel-body div');
+    if(fieldsPicker && fieldsPicker.ref && fieldsPicker.ref.current)
+    {
+        fieldsPicker.ref.current.setState({value:exportFields});
+    }
+
+    var customFieldsBox = $('.customFieldsBox');
+    customFieldsBox.find('input[name="public"]').prop('checked', template.data('public'));
+    customFieldsBox.find('#title').val(template.data('title'));
+};
+
+window.setExportTPL = function()
+{
+    $('.customFieldsBox').toggleClass('hidden', !$('#showCustomFieldsBox').prop('checked'));
+};
+setExportTPL();
+
+/* Auto select selected item for exportRange. */
+if($('.dtable .dtable-header .has-checkbox').length > 0)
+{
+    const dtable = zui.DTable.query($('.dtable .dtable-header .has-checkbox').closest('.dtable')[0]);
+    const checkedList = dtable.$.getChecks();
+    if(checkedList.length) $('#exportType').val('selected');
+}
+
 JAVASCRIPT
 );
 
-render('modalDialog');
+render();

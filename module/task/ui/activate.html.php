@@ -24,6 +24,7 @@ jsVar('taskMode', $task->mode);
 if($isMultiple) jsVar('assignedToHtml', html::select('assignedTo', $teamMembers, '', "class='form-control' disabled"));
 
 /* zin: Set variables to define control for form. */
+modalHeader();
 $taskModeBox = '';
 if($isMultiple)
 {
@@ -53,6 +54,7 @@ if($isMultiple)
         setClass('items-center'),
         checkbox
         (
+            set::id('multiple'),
             set::name('multiple'),
             set::text($lang->task->manageTeam),
             set::rootClass('ml-4'),
@@ -64,7 +66,7 @@ $leftBox = '';
 if($task->parent != '-1')
 {
     $leftBox = formGroup(
-        set::width('1/4'),
+        set::width('1/3'),
         set::label($lang->task->left),
         set::name('left'),
         inputControl
@@ -86,30 +88,230 @@ if($isMultiple)
     );
 }
 
+$teamData = array();
+if($isMultiple)
+{
+    $index = 1;
+    foreach($task->team as $member)
+    {
+        $member->id           = $index;
+        $member->team         = $member->account;
+        $member->teamSource   = $member->account;
+        $member->teamEstimate = $member->estimate;
+        $member->teamConsumed = $member->consumed;
+        $member->teamLeft     = $member->left;
+
+        $teamData[] = $member;
+        $index ++;
+    }
+}
+
+$rowCount = (!empty($task->team) and count($task->team) < 6) ? 6 : 1 + count($task->team);
+$teamForm = array();
+$i        = 1;
+foreach($task->team as $member)
+{
+    $memberDisabled = false;
+    if($member->status == 'done') $memberDisabled = true;
+
+    $hourDisabled = $memberDisabled;
+    if($task->mode == 'multi') $hourDisabled = false;
+
+    $teamForm[] = h::tr
+    (
+        setClass("member member-{$member->status}"),
+        set('data-estimate', (float)$member->estimate),
+        set('data-consumed', (float)$member->consumed),
+        set('data-left', (float)$member->left),
+        h::td
+        (
+            setClass('team-index'),
+            set::width('32px'),
+            span
+            (
+                setClass('team-number'),
+                $i
+            ),
+            $task->mode == 'linear' ? icon("angle-down") : null
+        ),
+        h::td
+        (
+            set::width('240px'),
+            select
+            (
+                set::name('team[]'),
+                set::value($member->account),
+                set::items($members),
+                set::placeholder($lang->task->assignedTo),
+            ),
+            input
+            (
+                set::type('hidden'),
+                set::name('teamSource[]'),
+                set::value($member->account),
+            ),
+            $memberDisabled ? input(
+                set::type('hidden'),
+                set::name('team[]'),
+                set::value($member->account),
+            ) : null
+        ),
+        h::td
+        (
+            inputControl
+            (
+                input
+                (
+                    set::name('teamEstimate[]'),
+                    set::value((float)$member->estimate),
+                    set::placeholder($lang->task->estimateAB),
+                    set::readonly($hourDisabled),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
+            ),
+        ),
+        h::td
+        (
+            inputControl
+            (
+                input
+                (
+                    set::name('teamConsumed[]'),
+                    set::value((float)$member->consumed),
+                    set::placeholder($lang->task->consumed),
+                    set::readonly($hourDisabled),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
+            ),
+        ),
+        h::td
+        (
+            setClass('required'),
+            inputControl
+            (
+                input
+                (
+                    set::name('teamLeft[]'),
+                    set::value((float)$member->left),
+                    set::placeholder($lang->task->left),
+                    set::readonly($hourDisabled),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
+            ),
+        ),
+        h::td
+        (
+            set::width('100px'),
+            setClass('center'),
+            btnGroup
+            (
+                set::items(array(
+                    array('icon' => 'plus',  'class' => 'btn btn-link btn-add text-gray', 'disabled' => $memberDisabled ? 'disabled' : ''),
+                    array('icon' => 'trash', 'class' => 'btn btn-link btn-delete text-gray', 'disabled' => $memberDisabled ? 'disabled' : ''),
+                ))
+            )
+        )
+    );
+    $i ++;
+}
+
+for($i; $i <= $rowCount; $i ++)
+{
+    $teamForm[] = h::tr
+    (
+        setClass('member-wait'),
+        h::td
+        (
+            setClass('team-index'),
+            span
+            (
+                setClass("team-number"),
+                $i
+            ),
+            $task->mode == 'linear' ? icon("angle-down") : null
+        ),
+        h::td
+        (
+            set::width('240px'),
+            select
+            (
+                set::name('team[]'),
+                set::items($members),
+                set::placeholder($lang->task->assignedTo),
+            ),
+            input
+            (
+                set::type('hidden'),
+                set::name('teamSource[]'),
+                set::value(''),
+            )
+        ),
+        h::td
+        (
+            inputControl
+            (
+                input
+                (
+                    set::name('teamEstimate[]'),
+                    set::placeholder($lang->task->estimateAB),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
+            ),
+        ),
+        h::td
+        (
+            inputControl
+            (
+                input
+                (
+                    set::name('teamConsumed[]'),
+                    set::placeholder($lang->task->consumed),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
+            ),
+        ),
+        h::td
+        (
+            inputControl
+            (
+                input
+                (
+                    set::name('teamLeft[]'),
+                    set::placeholder($lang->task->left),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
+            ),
+        ),
+        h::td
+        (
+            set::width('100px'),
+            setClass('center'),
+            btnGroup
+            (
+                set::items(array(
+                    array('icon' => 'plus',  'class' => 'btn btn-link btn-add text-gray'),
+                    array('icon' => 'trash', 'class' => 'btn btn-link btn-delete text-gray'),
+                ))
+            )
+        )
+    );
+}
+
 /* ====== Define the page structure with zin widgets ====== */
 formPanel
 (
-    set::title($lang->task->activateAction),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
-    set::shadow(!isonlybody()),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($task->name),
-            set::entityID($task->id),
-            set::reverse(true),
-        )
-    ),
     $taskModeBox,
     formRow
     (
         formGroup
         (
-            set::width('1/4'),
+            set::width('1/3'),
             set::label($lang->task->assignedTo),
             set::required($isMultiple),
             inputGroup
@@ -135,94 +337,34 @@ formPanel
             set::rows('5'),
         )
     ),
-    history()
-);
-
-$teamData = array();
-if($isMultiple)
-{
-    $index = 1;
-    foreach($task->team as $member)
-    {
-        $member->id           = $index;
-        $member->team         = $member->account;
-        $member->teamSource   = $member->account;
-        $member->teamEstimate = $member->estimate;
-        $member->teamConsumed = $member->consumed;
-        $member->teamLeft     = $member->left;
-
-        $teamData[] = $member;
-        $index ++;
-    }
-}
-
-modalTrigger
-(
-    modal
+    modalTrigger
     (
-        set::id('modalTeam'),
-        set::title($lang->task->team),
-        to::footer
+        modal
         (
+            set::id('modalTeam'),
+            set::title($lang->task->team),
             set::footerClass('flex-center'),
-            btn
+            set('data-backdrop', false),
+            to::footer
             (
-                set::class('primary btn-wide'),
-                set::id('confirmButton'),
-                set::text($lang->confirm),
-            )
-        ),
-        formBatch
-        (
-            set::mode('edit'),
-            set::data($teamData),
-            set::minRows(10),
-            set::actions(array()),
-            formBatchItem
-            (
-                set::name('id'),
-                set::label($lang->task->id),
-                set::control('index'),
-                set::width('10px'),
-            ),
-            formBatchItem
-            (
-                set::name('team'),
-                set::label($lang->task->assignedTo),
-                set::control('select'),
-                set::items($members),
-                set::width('50px'),
-                input
+                btn
                 (
-                    set::name('teamSource'),
-                    set::class('hidden'),
+                    setClass('primary btn-wide'),
+                    set::id('confirmButton'),
+                    set::text($lang->confirm),
                 )
             ),
-            formBatchItem
+            h::table
             (
-                set::name('teamEstimate'),
-                set::label($lang->task->estimate),
-                set::width('50px'),
+                setClass('table table-form'),
+                set::id('teamForm'),
+                $teamForm
             ),
-            formBatchItem
-            (
-                set::name('teamConsumed'),
-                set::label($lang->task->consumed),
-                set::width('50px'),
-            ),
-            formBatchItem
-            (
-                set::name('teamLeft'),
-                set::label($lang->task->left),
-                set::width('50px'),
-            ),
-        ),
-    )
+        )
+    ),
 );
-
-h::hr(set::class('mt-6'));
 
 history();
 
 /* ====== Render page ====== */
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

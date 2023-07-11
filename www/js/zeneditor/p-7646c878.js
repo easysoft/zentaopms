@@ -1,0 +1,2 @@
+ShadowRoot.prototype["createRange"]=document.createRange.bind(document);document.head.insertAdjacentHTML("beforeend",`<style> body > div.monaco-aria-container {display: none;} </style>`);const e=performance.getEntriesByType("resource").slice(-1)[0].name;document.head.insertAdjacentHTML("beforeend",`<link href="${e.replace(/(.*\/).*?$/,"$1")}codicon.css?t=${Date.now()}" rel="stylesheet" />`);
+//# sourceMappingURL=p-7646c878.js.map

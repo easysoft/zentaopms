@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('typeList', $lang->execution->typeList);
+jsVar('delayed', $lang->execution->delayed);
+
 $footToolbar = array();
 $canBatchEdit         = common::hasPriv('execution', 'batchEdit');
 $canBatchChangeStatus = common::hasPriv('execution', 'batchChangeStatus');
@@ -51,6 +54,7 @@ $tableData  = initTableData($executions, $config->execution->dtable->fieldList, 
 featureBar
 (
     set::current($status),
+    set::linkParams("status={key}"),
     li(searchToggle())
 );
 
@@ -59,10 +63,11 @@ toolbar
 (
     hasPriv('execution', 'export') ? item(set(array
     (
-        'icon'  => 'export',
-        'text'  => $lang->programplan->exporting,
-        'class' => "ghost export",
-        'url'   => createLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from"),
+        'icon'        => 'export',
+        'text'        => $lang->programplan->exporting,
+        'class'       => "ghost export",
+        'url'         => createLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from"),
+        'data-toggle' => 'modal'
     ))) : null,
     hasPriv('execution', 'create') ? item(set(array
     (
@@ -73,21 +78,24 @@ toolbar
     ))) : null
 );
 
+$setting = $this->datatable->getSetting('execution');
+
 dtable
 (
     set::userMap($users),
-    set::cols(array_values($config->execution->dtable->fieldList)),
+    set::cols($setting),
     set::data($tableData),
     set::checkable($canBatchAction),
     set::fixedLeftWidth('44%'),
-    set::onRenderCell(jsRaw('onRenderSparkline')),
+    set::customCols(true),
     set::footToolbar($footToolbar),
-    set::footPager(
-        usePager(),
-        set::recPerPage($recPerPage),
-        set::recTotal($recTotal),
-        set::linkCreator(helper::createLink('execution', 'all', "status={$status}&orderBy={$orderBy}&productID={$productID}&param=$param&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}"))
-    ),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::footPager(usePager(array
+    (
+        'recPerPage' => $recPerPage,
+        'recTotal' => $recTotal,
+        'linkCreator' => helper::createLink('execution', 'all', "status={$status}&orderBy={$orderBy}&productID={$productID}&param=$param&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}")
+    ))),
 );
 
 render();

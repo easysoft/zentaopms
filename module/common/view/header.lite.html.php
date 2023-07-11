@@ -48,10 +48,10 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
   }
   if($this->app->getViewType() == 'xhtml') css::import($defaultTheme . 'x.style.css');
 
-  if(defined('IN_USE') and commonModel::isTutorialMode())
+  if($this->app->isServing() && commonModel::isTutorialMode())
   {
-      $wizardModule    = defined('WIZARD_MODULE') ? WIZARD_MODULE : $this->moduleName;
-      $wizardMethod    = defined('WIZARD_METHOD') ? WIZARD_METHOD : $this->methodName;
+      $wizardModule    = isset($_SESSION['wizardModule']) ? $_SESSION['wizardModule'] : $this->moduleName;
+      $wizardMethod    = isset($_SESSION['wizardMethod']) ? $_SESSION['wizardMethod'] : $this->methodName;
       $requiredFields  = '';
       if(isset($config->$wizardModule->$wizardMethod->requiredFields)) $requiredFields = str_replace(' ', '', $config->$wizardModule->$wizardMethod->requiredFields);
       echo "<script>window.TUTORIAL = {'module': '$wizardModule', 'method': '$wizardMethod', tip: '$lang->tutorialConfirm'}; if(config) config.requiredFields = '$requiredFields'; $(function(){window.top.checkTutorialState && setTimeout(window.top.checkTutorialState, 500);});</script>";

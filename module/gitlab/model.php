@@ -406,6 +406,8 @@ class gitlabModel extends model
         $scm->setEngine($repo);
         $comments = $scm->engine->getCommitsByPath($entry, '', '', isset($pager->recPerPage) ? $pager->recPerPage : 10, isset($pager->pageID) ? $pager->pageID : 1);
 
+        if(isset($pager->recTotal)) $pager->recTotal = count($comments) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
+
         $designNames = $this->dao->select("commit, name")->from(TABLE_DESIGN)->where('deleted')->eq(0)->fetchPairs();
         $designIds   = $this->dao->select("commit, id")->from(TABLE_DESIGN)->where('deleted')->eq(0)->fetchPairs();
         $commitIds   = array();
@@ -1050,10 +1052,10 @@ class gitlabModel extends model
             $requests[$id]['url'] = sprintf($this->getApiRoot($repo->serviceHost, false), "/projects/{$repo->serviceProject}");
         }
         $this->app->loadClass('requests', true);
-        $results = requests::request_multiple($requests);
+        $results = requests::request_multiple($requests, array('timeout' => 2));
         foreach($results as $id => $result)
         {
-            if(!empty($result->body) and substr($result->body, 0, 1) == '{') $this->projects[$repos[$id]->serviceHost][$repos[$id]->serviceProject] = json_decode($result->body);
+            $this->projects[$repos[$id]->serviceHost][$repos[$id]->serviceProject] = (!empty($result->body) and substr($result->body, 0, 1) == '{') ? json_decode($result->body) : '';
         }
     }
 
@@ -1288,6 +1290,7 @@ class gitlabModel extends model
         $hookList = $this->apiGetHooks($repo->gitService, $repo->project);
         foreach($hookList as $hook)
         {
+            if(empty($hook->url)) continue;
             if($hook->url == $url) return true;
         }
         return false;
@@ -2961,5 +2964,26 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/$projectID/pipelines") . "&ref=$branch";
         return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * 更新版本库的代码地址。
+     * Update repo code path.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $repoID
+     * @access public
+     * @return bool
+     */
+    public function updateCodePath(int $gitlabID, int $projectID, int $repoID): bool
+    {
+        $project = $this->apiGetSingleProject($gitlabID, $projectID);
+        if(is_object($project) and !empty($project->web_url))
+        {
+            return $this->dao->update(TABLE_REPO)->set('path')->eq($project->web_url)->where('id')->eq($repoID)->exec();
+        }
+
+        return false;
     }
 }

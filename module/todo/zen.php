@@ -109,7 +109,7 @@ class todoZen extends todo
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
         $objectID = 0;
-        if($hasObject && $objectType) $objectID = $rawData->uid ? $rawData->$objectType : $rawData->objectID;
+        if($hasObject && $objectType) $objectID = $rawData->$objectType ? $rawData->$objectType : $rawData->objectID;
         $rawData->date = !empty($rawData->config['date']) ? $rawData->config['date'] : $rawData->date;
 
         return $form->add('account', $this->app->user->account)
@@ -119,7 +119,7 @@ class todoZen extends todo
             ->setDefault('assignedBy', $this->app->user->account)
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end, private')
-            ->setIF($hasObject && $objectType,  'objectID', $objectID)
+            ->setIF($hasObject && $objectType,  'objectID', (int)$objectID)
             ->setIF(empty($rawData->date),  'date', '2030-01-01')
             ->setIF(empty($rawData->begin), 'begin', '2400')
             ->setIF(empty($rawData->begin) || empty($rawData->end), 'end', '2400')
@@ -156,11 +156,10 @@ class todoZen extends todo
      * Prepare the creation data.
      *
      * @param  object       $todo
-     * @param  string       $uid
      * @access protected
      * @return object|false
      */
-    protected function prepareCreateData(object $todo, string $uid = ''): object|false
+    protected function prepareCreateData(object $todo): object|false
     {
         if(!isset($todo->pri) && in_array($todo->type, $this->config->todo->moduleList) && !in_array($todo->type, array('review', 'feedback')))
         {
@@ -171,17 +170,17 @@ class todoZen extends todo
             if($todo->pri == 'low')    $todo->pri = 3;
         }
 
-        if($todo->type != 'custom' && $todo->objectID)
+        if($todo->type != 'custom' && !empty($todo->objectID))
         {
             $type   = $todo->type;
-            $object = $this->loadModel($type)->getByID($todo->{$type});
+            $object = $this->loadModel($type)->getByID($todo->objectID);
             if(isset($object->name))  $todo->name = $object->name;
             if(isset($object->title)) $todo->name = $object->title;
         }
 
         if($todo->end < $todo->begin)
         {
-            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            dao::$errors['end'] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
             return false;
         }
 
@@ -192,7 +191,7 @@ class todoZen extends todo
         }
         if(empty($todo->cycle)) unset($todo->config);
 
-        if($uid) $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $uid);
+        $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $this->post->uid);
 
         return $todo;
     }
@@ -279,7 +278,7 @@ class todoZen extends todo
 
         if($todo->end < $todo->begin)
         {
-            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            dao::$errors['end'] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
             return false;
         }
 
@@ -310,14 +309,14 @@ class todoZen extends todo
      * 批量编辑页面渲染。
      * Batch edit view display.
      *
-     * @param  form      $form
-     * @param  string    $type
-     * @param  int       $userID
-     * @param  string    $status
+     * @param  array|false $todoIdList
+     * @param  string      $type
+     * @param  int         $userID
+     * @param  string      $status
      * @access protected
      * @return void
      */
-    protected function batchEditFromMyTodo(form $form, string $type, int $userID, string $status): void
+    protected function batchEditFromMyTodo(array|false $todoIdList, string $type, int $userID, string $status): void
     {
         /* Initialize vars. */
         $editedTodos = $objectIdList = $reviews = array();
@@ -328,11 +327,11 @@ class todoZen extends todo
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        list($editedTodos, $objectIdList) = $this->getBatchEditInitTodos($form, $type, $account, $status);
+        list($editedTodos, $objectIdList) = $this->getBatchEditInitTodos($todoIdList, $type, $account, $status);
 
-        $bugs      = $this->loadModel('bug')->getUserBugPairs($account, true, 0, '', '', isset($objectIdList['bug']) ? $objectIdList['bug'] : '');
-        $tasks     = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', '', isset($objectIdList['task']) ? $objectIdList['task'] : '');
-        $storys    = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : '');
+        $bugs      = $this->loadModel('bug')->getUserBugPairs($account, true, 0, array(), array(), isset($objectIdList['bug']) ? $objectIdList['bug'] : array());
+        $tasks     = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', array(), isset($objectIdList['task']) ? $objectIdList['task'] : array());
+        $stories   = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : array());
         $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
         $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
         if($this->config->edition != 'open') $feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIdList['feedback']) ? $objectIdList['feedback'] : '');
@@ -351,11 +350,14 @@ class todoZen extends todo
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
         $this->view->bugs        = $bugs;
         $this->view->tasks       = $tasks;
-        $this->view->storys      = $storys;
+        $this->view->stories     = $stories;
         $this->view->reviews     = $reviews;
         $this->view->testtasks   = $testtasks;
         $this->view->editedTodos = $editedTodos;
         $this->view->users       = $users;
+        $this->view->type        = $type;
+        $this->view->userID      = $userID;
+        $this->view->status      = $status;
         if($this->config->edition != 'open') $this->view->feedback = $feedbacks;
         if($this->config->edition == 'max')
         {
@@ -371,21 +373,20 @@ class todoZen extends todo
      * 获取批量编辑页面初始化待办数据。
      * Get batch edit page initialization todo data.
      *
-     * @param  form      $form
+     * @param  array     $todoIdList
      * @param  string    $type
      * @param  string    $account
      * @param  string    $status
      * @access protected
      * @return array
      */
-    private function getBatchEditInitTodos(form $form, string $type, string $account, string $status): array
+    private function getBatchEditInitTodos(array $todoIdList, string $type, string $account, string $status): array
     {
         $editedTodos  = array();
         $objectIdList = array();
-        $todoIdList   = array();
 
         $allTodos = $this->todo->getList($type, $account, $status);
-        if($form->data->todoIDList) $todoIdList = $form->data->todoIDList;
+        if($form->data->todoIdList) $todoIdList = $form->data->todoIdList;
 
         /* Initialize todos whose need to edited. */
         foreach($allTodos as $todo)
@@ -432,35 +433,34 @@ class todoZen extends todo
      * @access protected
      * @return array
      */
-    protected function beforeBatchEdit(form $form): array
+    protected function beforeBatchEdit(array $formData): array
     {
         $todos      = array();
-        $data       = $form->data;
-        $todoIdList = $form->data->todoIDList ? $form->data->todoIDList : array();
+        $todoIdList = array_keys($formData);
 
         if(!empty($todoIdList))
         {
             /* Initialize todos from the post data. */
-            $oldTodos = $this->todo->getTodosByIdList($todoIdList);
             foreach($todoIdList as $todoID)
             {
-                $oldTodo = $oldTodos[$todoID];
+                $todo = zget($formData, $todoID, array());
+                if(empty($todo)) continue;
 
-                $todo = new stdclass();
-                $todo->date       = $data->dates[$todoID];
-                $todo->type       = $data->types[$todoID];
-                $todo->pri        = $data->pris[$todoID];
-                $todo->status     = $data->status[$todoID];
-                $todo->name       = !in_array($todo->type, $this->config->todo->moduleList) ? $data->names[$todoID] : '';
-                $todo->begin      = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
-                $todo->end        = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
-                $todo->assignedTo = isset($data->assignedTos[$todoID]) ? $data->assignedTos[$todoID] : $oldTodo->assignedTo;
-
-                if(in_array($todo->type, $this->config->todo->moduleList))
+                if($todo->end < $todo->begin)
                 {
-                    $todo->objectID = isset($data->{$this->config->todo->objectList[$todo->type]}[$todoID]) ? $data->{$this->config->todo->objectList[$todo->type]}[$todoID] : 0;
+                    dao::$errors["begin[{$todoID}]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+                    continue;
                 }
-                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+
+                $todo->name  = !in_array($todo->type, $this->config->todo->moduleList) ? $todo->name : '';
+                $todo->begin = empty($todo->begin) ? 2400 : (int)str_replace(':', '', $todo->begin);
+                $todo->end   = empty($todo->end)   ? 2400 : (int)str_replace(':', '', $todo->end);
+
+                foreach($this->config->todo->moduleList as $module)
+                {
+                    if($todo->type == $module) $todo->objectID = $todo->{$todo->type};
+                    unset($todo->$module);
+                }
 
                 $todos[$todoID] = $todo;
             }
@@ -535,15 +535,22 @@ class todoZen extends todo
         if($todoData->config['type'] == 'day')
         {
             unset($todoData->config['week'], $todoData->config['month']);
-            if(!$todoData->config['day'] && empty($todoData->config['specifiedDate']))
+            if(empty($todoData->config['specifiedDate']))
             {
-                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
-                return false;
+                if(!$todoData->config['day'])
+                {
+                    dao::$errors['config[day]'] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
+                    return false;
+                }
+                if(!validater::checkInt($todoData->config['day']))
+                {
+                    dao::$errors['config[day]'] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
+                    return false;
+                }
             }
-            if(!validater::checkInt($todoData->config['day']) && empty($todoData->config['specifiedDate']))
+            else
             {
-                dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
-                return false;
+                unset($todoData->config['day']);
             }
         }
         if($todoData->config['type'] == 'week')
@@ -561,7 +568,7 @@ class todoZen extends todo
 
         if($todoData->config['beforeDays'] and !validater::checkInt($todoData->config['beforeDays']))
         {
-            dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
+            dao::$errors['config[beforeDays]'] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
             return false;
         }
         $todoData->config['beforeDays'] = !empty($todoData->config['beforeDays']) ? $todoData->config['beforeDays'] : 0;
@@ -588,9 +595,9 @@ class todoZen extends todo
         if($todo->type == 'bug')   $app = 'qa';
         if($todo->type == 'task')  $app = 'execution';
         if($todo->type == 'story') $app = 'product';
-        $cancelURL = $this->server->http_referer;
+        $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
 
-        return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+        return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
     }
 
     /**

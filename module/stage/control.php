@@ -19,16 +19,16 @@ class stage extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = "id_asc", $type = 'waterfall')
+    public function browse(string $orderBy = "id_asc", string $type = 'waterfall')
     {
         if($type == 'waterfallplus') $this->locate($this->createLink('stage', 'plusBrowse', "orderBy=$orderBy&type=waterfallplus"));
 
         $this->stage->setMenu($type);
 
-        $this->view->stages      = $this->stage->getStages($orderBy, 0, $type);
-        $this->view->orderBy     = $orderBy;
-        $this->view->type        = $type;
-        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
+        $this->view->title   = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
+        $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
+        $this->view->orderBy = $orderBy;
+        $this->view->type    = $type;
 
         $this->display();
     }
@@ -57,20 +57,16 @@ class stage extends control
     /**
      * Create a stage.
      *
-     * @param  string $type
+     * @param  string $type waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function create($type = 'waterfall')
+    public function create(string $type = 'waterfall')
     {
-        $this->stage->setMenu($type);
         if($_POST)
         {
             $stageID = $this->stage->create($type);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
             if(!$stageID)
             {
                 $response['result']  = 'fail';
@@ -79,11 +75,15 @@ class stage extends control
             }
 
             $this->loadModel('action')->create('stage', $stageID, 'Opened');
-            $response['locate']  = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type");
+
+            $response['result']     = 'success';
+            $response['message']    = $this->lang->saveSuccess;
+            $response['closeModal'] = true;
+            $response['load']       = true;
             return $this->send($response);
         }
 
-        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->create;
+        $this->view->title = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->create;
 
         $this->display();
     }
@@ -102,8 +102,6 @@ class stage extends control
         {
             $this->stage->batchCreate($type);
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
             if(dao::isError())
             {
                 $response['result']  = 'fail';
@@ -111,7 +109,9 @@ class stage extends control
                 return $this->send($response);
             }
 
-            $response['locate']  = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type");
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['load']    = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type");
             return $this->send($response);
         }
 
@@ -127,7 +127,7 @@ class stage extends control
      * @access public
      * @return void
      */
-    public function edit($stageID = 0)
+    public function edit(int $stageID = 0)
     {
         $stage = $this->stage->getByID($stageID);
         $this->stage->setMenu($stage->projectType);
@@ -146,12 +146,13 @@ class stage extends control
 
             $actionID = $this->loadModel('action')->create('stage', $stageID, 'Edited');
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            $response['locate']  = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$stage->projectType");
+            $response['closeModal'] = true;
+            $response['load']       = true;
             return $this->send($response);
         }
 
-        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->edit;
-        $this->view->stage       = $stage;
+        $this->view->title = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->edit;
+        $this->view->stage = $stage;
 
         $this->display();
     }
@@ -205,7 +206,7 @@ class stage extends control
                 if(!$value or !$key) continue;
                 $this->custom->setItem("{$data->lang}.stage.typeList.{$key}", $value);
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('stage', 'settype', "lang2Set=" . ($data->lang == 'all' ? 'all' : ''))));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->setType;
@@ -219,23 +220,26 @@ class stage extends control
      * Delete a stage.
      *
      * @param  int    $stageID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($stageID, $confirm = 'no')
+    public function delete(int $stageID)
     {
         $stage = $this->stage->getById($stageID);
 
-        if($confirm == 'no')
+        $this->stage->delete(TABLE_STAGE, $stageID);
+
+        if(dao::isError())
         {
-            return print(js::confirm($this->lang->stage->confirmDelete, inlink('delete', "stageID=$stageID&confirm=yes")));
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
         else
         {
-            $this->stage->delete(TABLE_STAGE, $stageID);
-
-            return print(js::reload('parent'));
+            $response['result'] = 'success';
+            $response['load']   = true;
         }
+
+        return $this->send($response);
     }
 }

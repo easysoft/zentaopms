@@ -14,9 +14,25 @@ window.renderCell = function(result, info)
         const doc      = info.row.data;
         const docIcon  = doc.type == 'text' ? 'wiki-file' : doc.type;
         const starIcon = doc.collector.includes(account) ? 'star' : 'star-empty';
-        let html = "<a href='" + $.createLink('doc', 'view', 'docID=' + doc.id) + "' class='doc-title'><img src='static/svg/" + docIcon + ".svg' class='file-icon'/>" + doc.title + "</a>";
-        html += "<a href='" + $.createLink('doc', 'collect', 'objectID=' + doc.id + '&objectType=doc') + "' class='btn btn-link ajax-submit star'><img src='static/svg/" + starIcon + ".svg'/></a>";
-        result[0] = {html};
+        let html = "<img src='static/svg/" + docIcon + ".svg' class='file-icon'/>";
+        result.unshift({html});
+        if(doc.status == 'draft')
+        {
+            html = "<span class='label label-badge draft'>" + draftLabel + '</span>';
+            result.push({html});
+        }
+        if(canCollect)
+        {
+            html = "<a href='" + $.createLink('doc', 'collect', 'objectID=' + doc.id + '&objectType=doc') + "' class='btn btn-link ajax-submit star'><img src='static/svg/" + starIcon + ".svg'/></a>";
+            result.push({html});
+        }
+    }
+    if(info.col.name == 'objectName' && result[0])
+    {
+        const doc  = info.row.data;
+        const icon = objectIconList[doc.objectType];
+        const html = "<i class='icon " + icon + "'></i>";
+        result.unshift({html});
     }
     return result;
 }

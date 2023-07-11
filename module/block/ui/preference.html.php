@@ -21,7 +21,7 @@ function printPreference()
 
     return div
     (
-        set('class', 'p-6'),
+        set('class', 'preference-block pt-6 px-6'),
         form
         (
             set::url(helper::createLink('my', 'preference', "showTip=false")),
@@ -34,7 +34,7 @@ function printPreference()
                 set::name('URSR'),
                 set::control(array
                 (
-                    'type'  => 'select',
+                    'type'  => 'picker',
                     'items' => $config->URSRList
                 ))
             ),
@@ -45,7 +45,7 @@ function printPreference()
                 set::name('programLink'),
                 set::control(array
                 (
-                    'type'  => 'select',
+                    'type'  => 'picker',
                     'items' => $lang->my->programLinkList
                 ))
             ) : null,
@@ -56,7 +56,7 @@ function printPreference()
                 set::name('productLink'),
                 set::control(array
                 (
-                    'type'  => 'select',
+                    'type'  => 'picker',
                     'items' => $lang->my->productLinkList
                 ))
             ),
@@ -67,7 +67,7 @@ function printPreference()
                 set::name('projectLink'),
                 set::control(array
                 (
-                    'type'  => 'select',
+                    'type'  => 'picker',
                     'items' => $lang->my->projectLinkList
                 ))
             ),
@@ -78,7 +78,7 @@ function printPreference()
                 set::name('executionLink'),
                 set::control(array
                 (
-                    'type'  => 'select',
+                    'type'  => 'picker',
                     'items' => $lang->my->executionLinkList
                 ))
             )

@@ -40,14 +40,14 @@ $config->story->exportFields = '
     childStories, linkStories, duplicateStory, files';
 
 $config->story->list->customCreateFields      = 'source,verify,pri,estimate,mailto,keywords';
-$config->story->list->customBatchCreateFields = 'plan,spec,source,verify,pri,estimate,review,keywords';
+$config->story->list->customBatchCreateFields = 'plan,assignedTo,spec,source,verify,pri,estimate,URS,parent,keywords,mailto';
 $config->story->list->customBatchEditFields   = 'branch,plan,estimate,pri,assignedTo,source,stage,closedBy,closedReason,keywords';
 
 $config->story->list->actionsOpratedParentStory = ',edit,batchcreate,change,review,recall,submitreview,';
 
 $config->story->custom = new stdclass();
 $config->story->custom->createFields      = $config->story->list->customCreateFields;
-$config->story->custom->batchCreateFields = 'plan,spec,pri,estimate,review';
+$config->story->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
 $config->story->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
 
 $config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto,lanes,regions,branch,pri,';

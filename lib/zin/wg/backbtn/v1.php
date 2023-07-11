@@ -28,8 +28,7 @@ class backBtn extends btn
      * @var    array
      * @access protected
      */
-    static $defineProps = array
-    (
+    protected static array $defineProps = array(
         'back?: string="APP"'  // 定义返回行为，可以为 `'APP'`（默认值，返回打开当前页面时的上一个历史记录）、 `'GLOBAL'`（返回上一个全局历史记录）、`'moduleName-methodName'`（从历史记录中向后查找符合指定路径的历史记录）。
     );
 
@@ -41,8 +40,48 @@ class backBtn extends btn
      */
     protected function getProps(): array
     {
+        global $app;
+
+        $backs = array(
+            'task'           => 'execution-task,my-work,my-contribute,',
+            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,',
+            'bug'            => 'bug-browse,project-bug,my-work,my-contribute,',
+            'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,',
+            'testsuite'      => 'testsuite-browse,testsuite-view,',
+            'testtask'       => 'testtask-browse,testtask-cases,',
+            'testreport'     => 'testreport-browse,project-testreport',
+            'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace',
+            'design'         => 'design-browse',
+            'release'        => 'release-browse,release-view',
+            'projectrelease' => 'projectrelease-browse',
+            'build'          => 'execution-build,build-view',
+            'projectbuild'   => 'projectbuild-browse,projectbuild-view',
+            'mr'             => 'mr-browse',
+            'repo'           => 'repo-log,repo-browse',
+            'compile'        => 'compile-browse',
+        );
+
         $props = parent::getProps();
-        $props['data-back'] = $this->prop('back');
+        $back = $this->prop('back');
+        if($back != 'APP')
+        {
+            $props['data-back'] = $back;
+        }
+        elseif(isset($backs[$app->rawModule]))
+        {
+            $props['data-back'] = $backs[$app->rawModule];
+
+            if(!$this->prop('url'))
+            {
+                $backLinks = explode(',', $backs[$app->rawModule]);
+                $props['data-url'] = $backLinks[0];
+            }
+        }
+        else
+        {
+            $props['data-back'] = empty($back) ? 'APP' : $back;
+        }
+
         return $props;
     }
 

@@ -22,11 +22,23 @@ featureBar
     li(searchToggle())
 );
 
+$canBeChanged         = common::canModify('product', $product);
+$canBatchEdit         = $canBeChanged && hasPriv('bug', 'batchEdit');
+$canBatchConfirm      = $canBeChanged && hasPriv('bug', 'batchConfirm');
+$canBatchActivate     = $canBeChanged && hasPriv('bug', 'batchActivate');
+$canBatchChangeBranch = $canBeChanged && hasPriv('bug', 'batchChangeBranch');
+$canBatchChangeModule = $canBeChanged && hasPriv('bug', 'batchChangeModule');
+$canBatchResolve      = $canBeChanged && hasPriv('bug', 'batchResolve');
+$canBatchAssignTo     = $canBeChanged && hasPriv('bug', 'batchAssignTo');
+$canBatchClose        = common::hasPriv('bug', 'batchClose');
+$canManageModule      = hasPriv('tree', 'browse');
+$canBatchAction       = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchActivate || $canBatchChangeBranch || $canBatchChangeModule || $canBatchResolve || $canBatchAssignTo;
+
 if(!isonlybody())
 {
     $canCreate      = false;
     $canBatchCreate = false;
-    if(common::canModify('product', $product))
+    if($canBeChanged)
     {
         $canCreate      = hasPriv('bug', 'create');
         $canBatchCreate = hasPriv('bug', 'batchCreate');
@@ -71,47 +83,35 @@ if(!isonlybody())
                 set::placement('bottom-end'),
             )
         ) : null,
-        $canCreate && !$canBatchCreate ? item(set($createItem)) : null,
-        $canBatchCreate && !$canCreate ? item(set($batchCreateItem)) : null,
+        $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+        $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
     );
 }
 
-$closeLink = $browseType == 'bymodule' ? createLink('bug', 'browse', "productID={$product->id}&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
+$closeLink   = createLink('bug', 'browse', "productID={$product->id}&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
+$settingLink = $canManageModule ? createLink('tree', 'browse', "productID={$product->id}&view=bug&currentModuleID=0&branch=0&from={$this->lang->navGroup->bug}") : '';
 sidebar
 (
     moduleMenu(set(array
     (
-        'modules'   => $moduleTree,
-        'activeKey' => $currentModuleID,
-        'closeLink' => $closeLink
+        'modules'     => $moduleTree,
+        'activeKey'   => $currentModuleID,
+        'closeLink'   => $closeLink,
+        'settingLink' => $settingLink,
     )))
 );
 
-$config->bug->dtable->fieldList['module']['map']    = $modulePairs;
-$config->bug->dtable->fieldList['product']['map']   = $products;
-$config->bug->dtable->fieldList['story']['map']     = $stories;
-$config->bug->dtable->fieldList['task']['map']      = $tasks;
-$config->bug->dtable->fieldList['toTask']['map']    = $tasks;
-$config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
-$config->bug->dtable->fieldList['project']['map']   = $projectPairs;
-$config->bug->dtable->fieldList['execution']['map'] = $executions;
-
-$bugs = initTableData($bugs, $config->bug->dtable->fieldList, $this->bug);
-
-$cols = array_values($config->bug->dtable->fieldList);
-$data = array_values($bugs);
-
-$footToolbar = array('items' => array
+$footToolbar = $canBatchAction ? array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
     (
-        array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
-        array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+        array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
+        array('caret' => 'up', 'class' => 'btn btn-caret size-sm secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-end'),
     )),
-    array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => $this->session->currentProductType == 'normal' ? 'hidden' : '' , 'btnType' => 'primary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-));
+    array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => ($this->session->currentProductType == 'normal' || !$canBatchChangeBranch ? 'hidden' : '') , 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'className' => $canBatchChangeModule ? '' : 'hidden', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $resolveItems = array();
 foreach($lang->bug->resolutionList as $key => $resolution)
@@ -120,13 +120,13 @@ foreach($lang->bug->resolutionList as $key => $resolution)
     if($key == 'fixed')
     {
         $buildItems = array();
-        foreach($builds as $key => $build) $buildItems[] = array('text' => $build, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key"));
+        foreach($builds as $key => $build) $buildItems[] = array('text' => $build, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key"));
 
         $resolveItems[] = array('text' => $resolution, 'class' => 'not-hide-menu', 'items' => $buildItems);
     }
     else
     {
-        $resolveItems[] = array('text' => $resolution, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchResolve', "resolution=$key"));
+        $resolveItems[] = array('text' => $resolution, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchResolve', "resolution=$key"));
     }
 }
 
@@ -136,10 +136,10 @@ menu
     set::class('menu dropdown-menu'),
     set::items(array
     (
-        array('text' => $lang->bug->confirm, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchConfirm')),
-        array('text' => $lang->bug->close, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchClose')),
-        array('text' => $lang->bug->activate, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchActivate', "productID=$product->id&branch=$branch")),
-        array('text' => $lang->bug->resolve, 'class' => 'not-hide-menu', 'items' => $resolveItems),
+        array('text' => $lang->bug->confirm,  'class' => 'batch-btn ajax-btn', 'disabled' => ($canBatchConfirm ? '' : 'disabled'), 'data-url' => helper::createLink('bug', 'batchConfirm')),
+        array('text' => $lang->bug->close,    'class' => 'batch-btn ajax-btn', 'disabled' => ($canBatchClose ? '' : 'disabled'), 'data-url' => helper::createLink('bug', 'batchClose')),
+        array('text' => $lang->bug->activate, 'class' => 'batch-btn', 'disabled' => ($canBatchActivate ? '' : 'disabled'), 'data-url' => helper::createLink('bug', 'batchActivate', "productID=$product->id&branch=$branch")),
+        array('text' => $lang->bug->resolve,  'class' => 'not-hide-menu' . ($canBatchResolve ? '' : ' hidden'), 'items' => $resolveItems),
     ))
 );
 
@@ -182,21 +182,42 @@ menu
     set::items($assignedToItems)
 );
 
-dtable
-(
-    set::userMap($users),
-    set::cols($cols),
-    set::data($data),
-    set::checkable(true),
-    set::footToolbar($footToolbar),
-    set::footPager
+if(empty($bugs))
+{
+    panel
     (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
-    ),
-);
+        p
+        (
+            span($lang->bug->notice->noBug, set('class', 'text-gray')),
+            $canBeChanged && common::hasPriv('bug', 'create') ? a(icon('plus'), $lang->bug->create, set('href', createLink('bug', 'create', "productID={$product->id}&branch={$branch}&extra=moduleID=$currentModuleID"))) : null,
+        ),
+        setClass('text-center'),
+        setStyle('padding', '80px 10px'),
+    );
+}
+else
+{
+    $cols = $this->loadModel('datatable')->getSetting('bug');
+    if(isset($cols['branch']))    $cols['branch']['map']    = $branchTagOption;
+    if(isset($cols['project']))   $cols['project']['map']   = $projectPairs;
+    if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
+
+    if($product->type == 'normal') unset($cols['branch']);
+
+    $bugs = initTableData($bugs, $cols, $this->bug);
+
+    dtable
+    (
+        set::cols($cols),
+        set::data(array_values($bugs)),
+        set::userMap($users),
+        set::customCols(true),
+        set::checkable($canBatchAction),
+        set::footToolbar($footToolbar),
+        set::footPager(usePager()),
+        set::onRenderCell(jsRaw('window.onRenderCell')),
+        set::modules($modulePairs)
+    );
+}
 
 render();

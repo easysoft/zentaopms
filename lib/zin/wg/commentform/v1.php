@@ -4,7 +4,7 @@ namespace zin;
 
 class commentForm extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'url?:string',
         'name?:string="comment"',
         'method?:string="POST"'

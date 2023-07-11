@@ -12,25 +12,11 @@ declare(strict_types=1);
 
 namespace zin;
 
+modalHeader();
 formPanel
 (
-    set::title($lang->story->close . $lang->story->story),
-    set::actions(array('submit')),
     set::submitBtnText($lang->story->closeAction),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
     on::change('#closedReasonBox', 'setStory'),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::entityID($story->id),
-            set::text($story->title),
-            set::level(1),
-            set::reverse(true),
-        )
-    ),
     formGroup
     (
         set::id('closedReasonBox'),
@@ -62,7 +48,6 @@ formPanel
     ),
 );
 
-h::hr(set::class('mt-6'));
 history();
 
-render('modalDialog');
+render();

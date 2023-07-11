@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class input extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'type: string',
         'name: string',
         'id?: string',
@@ -16,12 +17,12 @@ class input extends wg
         'disabled?: bool',
     );
 
-    static $defaultProps = array(
+    protected static array $defaultProps = array(
         'type' => 'text',
         'class' => 'form-control',
     );
 
-    protected function build()
+    protected function build(): wg
     {
         $props    = $this->props->skip('required');
         $required = $this->prop('required');

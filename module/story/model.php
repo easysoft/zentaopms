@@ -202,7 +202,7 @@ class storyModel extends model
      */
     public function getExecutionStories(int $executionID = 0, int $productID = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null)
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStories();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStories();
 
         if(empty($executionID)) return array();
 
@@ -210,7 +210,6 @@ class storyModel extends model
         $orderBy = str_replace('branch_', 't2.branch_', $orderBy);
         $type    = strtolower($type);
         if(is_string($excludeStories))$excludeStories = explode(',', $excludeStories);
-        if(empty($productID)) $productID = (int)key($this->loadModel('product')->getProducts($executionID));
 
         /* 获取需求。 */
         if($type == 'bysearch') $stories = $this->storyTao->getExecutionStoriesBySearch($executionID, (int)$param, $productID, $orderBy, $storyType, $excludeStories, $pager);
@@ -324,7 +323,8 @@ class storyModel extends model
      */
     public function getExecutionStoryPairs($executionID = 0, $productID = 0, $branch = 'all', $moduleIdList = 0, $type = 'full', $status = 'all')
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStoryPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStoryPairs();
+
         $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -428,7 +428,7 @@ class storyModel extends model
      */
     public function create(object $story, int $executionID = 0, int $bugID = 0, string $extra = ''): int|false
     {
-        if(defined('TUTORIAL')) return false;
+        if(commonModel::isTutorialMode()) return false;
 
         $storyID = $this->storyTao->doCreateStory($story);
         if(!$storyID) return false;
@@ -485,7 +485,7 @@ class storyModel extends model
         $mainStoryID = 0;
         foreach($storyData->branches as $key => $branchID)
         {
-            $storyData->branch = $branchID;
+            $storyData->branch = (int)$branchID;
             $storyData->module = $storyData->modules[$key];
             $storyData->plan   = $storyData->plans[$key];
 
@@ -559,7 +559,7 @@ class storyModel extends model
         foreach($stories as $i => $story)
         {
             $storyID = $this->storyTao->doCreateStory($story);
-            if(!$storyID) return false;
+            if(!$storyID) return array();
 
             $this->storyTao->doCreateSpec($storyID, $story);
 
@@ -805,7 +805,6 @@ class storyModel extends model
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,duplicateStory')
             ->cleanFloat('estimate')
-            ->setDefault('assignedDate', $oldStory->assignedDate)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('reviewedBy', $oldStory->reviewedBy)
             ->setDefault('mailto', '')
@@ -829,11 +828,12 @@ class storyModel extends model
             ->setIF(!isset($_POST['verify']), 'verify', $oldStory->verify)
             ->stripTags($this->config->story->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->join('linkStories', ',')
-            ->join('linkRequirements', ',')
             ->join('childStories', ',')
             ->remove('files,labels,comment,contactListMenu,reviewer,needNotReview')
             ->get();
+
+        if($this->post->linkStories)      $story->linkStories      = implode(',', array_unique($this->post->linkStories));
+        if($this->post->linkRequirements) $story->linkRequirements = implode(',', array_unique($this->post->linkRequirements));
 
         /* Relieve twins when change product. */
         if(!empty($oldStory->twins) and $story->product != $oldStory->product)
@@ -1289,157 +1289,68 @@ class storyModel extends model
     /**
      * Batch update stories.
      *
+     * @param  array  $stories
      * @access public
-     * @return array.
+     * @return array
      */
-    public function batchUpdate()
+    public function batchUpdate(array $stories): bool
     {
         /* Init vars. */
-        $stories     = array();
-        $allChanges  = array();
-        $now         = helper::now();
-        $data        = fixer::input('post')->get();
-        $storyIdList = $this->post->storyIdList ? $this->post->storyIdList : array();
+        $oldStories  = $this->getByList(array_keys($stories));
         $unlinkPlans = array();
         $link2Plans  = array();
 
-        /* Init $stories. */
-        if(!empty($storyIdList))
+        foreach($stories as $storyID => $story)
         {
-            $oldStories = $this->getByList($storyIdList);
-
-            /* Process the data if the value is 'ditto'. */
-            foreach($storyIdList as $storyID)
+            unset($story->status);
+            $oldStory = $oldStories[$storyID];
+            if($story->plan != $oldStory->plan)
             {
-                if($data->pris[$storyID]     == 'ditto') $data->pris[$storyID]     = isset($prev['pri'])    ? $prev['pri']    : 0;
-                if(isset($data->branches) and $data->branches[$storyID] == 'ditto') $data->branches[$storyID] = isset($prev['branch']) ? $prev['branch'] : 0;
-                if($data->modules[$storyID]  == 'ditto') $data->modules[$storyID]  = isset($prev['module']) ? $prev['module'] : 0;
-                if($data->plans[$storyID]    == 'ditto') $data->plans[$storyID]    = isset($prev['plan'])   ? $prev['plan']   : '';
-                if($data->sources[$storyID]  == 'ditto') $data->sources[$storyID]  = isset($prev['source']) ? $prev['source'] : '';
-                if(isset($data->stages[$storyID])        and ($data->stages[$storyID]        == 'ditto')) $data->stages[$storyID]        = isset($prev['stage'])        ? $prev['stage']        : '';
-                if(isset($data->closedBys[$storyID])     and ($data->closedBys[$storyID]     == 'ditto')) $data->closedBys[$storyID]     = isset($prev['closedBy'])     ? $prev['closedBy']     : '';
-                if(isset($data->closedReasons[$storyID]) and ($data->closedReasons[$storyID] == 'ditto')) $data->closedReasons[$storyID] = isset($prev['closedReason']) ? $prev['closedReason'] : '';
-
-                $prev['pri']    = $data->pris[$storyID];
-                $prev['branch'] = isset($data->branches[$storyID]) ? $data->branches[$storyID] : 0;
-                $prev['module'] = $data->modules[$storyID];
-                $prev['plan']   = $data->plans[$storyID];
-                $prev['source'] = $data->sources[$storyID];
-                if(isset($data->stages[$storyID]))        $prev['stage']        = $data->stages[$storyID];
-                if(isset($data->closedBys[$storyID]))     $prev['closedBy']     = $data->closedBys[$storyID];
-                if(isset($data->closedReasons[$storyID])) $prev['closedReason'] = $data->closedReasons[$storyID];
-            }
-
-            $extendFields = $this->getFlowExtendFields();
-            foreach($storyIdList as $storyID)
-            {
-                $oldStory = $oldStories[$storyID];
-
-                $story                 = new stdclass();
-                $story->id             = $storyID;
-                $story->lastEditedBy   = $this->app->user->account;
-                $story->lastEditedDate = $now;
-                $story->status         = $oldStory->status;
-                $story->color          = $data->colors[$storyID];
-                $story->title          = $data->titles[$storyID];
-                $story->estimate       = $data->estimates[$storyID];
-                $story->category       = $data->category[$storyID];
-                $story->pri            = $data->pris[$storyID];
-                $story->assignedTo     = $data->assignedTo[$storyID];
-                $story->assignedDate   = $oldStory == $data->assignedTo[$storyID] ? $oldStory->assignedDate : $now;
-                $story->branch         = isset($data->branches[$storyID]) ? $data->branches[$storyID] : 0;
-                $story->module         = $data->modules[$storyID];
-                $story->plan           = $oldStories[$storyID]->parent < 0 ? '' : $data->plans[$storyID];
-                $story->source         = $data->sources[$storyID];
-                $story->sourceNote     = $data->sourceNote[$storyID];
-                $story->keywords       = $data->keywords[$storyID];
-                $story->stage          = isset($data->stages[$storyID])             ? $data->stages[$storyID]             : $oldStory->stage;
-                $story->closedBy       = isset($data->closedBys[$storyID])          ? $data->closedBys[$storyID]          : $oldStory->closedBy;
-                $story->closedReason   = isset($data->closedReasons[$storyID])      ? $data->closedReasons[$storyID]      : $oldStory->closedReason;
-                $story->duplicateStory = isset($data->duplicateStories[$storyID])   ? $data->duplicateStories[$storyID]   : $oldStory->duplicateStory;
-                $story->childStories   = isset($data->childStoriesIDList[$storyID]) ? $data->childStoriesIDList[$storyID] : $oldStory->childStories;
-                $story->version        = $story->title == $oldStory->title ? $oldStory->version : (int)$oldStory->version + 1;
-                if($story->stage != $oldStory->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
-
-                if($story->title != $oldStory->title and $story->status != 'draft')  $story->status     = 'changing';
-                if($story->closedBy     and $oldStory->closedDate == '')   $story->closedDate = $now;
-                if($story->closedReason and $oldStory->closedDate == '')   $story->closedDate = $now;
-                if($story->closedBy     or  $story->closedReason != false) $story->status     = 'closed';
-                if($story->closedReason and $story->closedBy     == false) $story->closedBy   = $this->app->user->account;
-
-                if($story->plan != $oldStory->plan)
-                {
-                    if($story->plan != $oldStory->plan and !empty($oldStory->plan)) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},$storyID";
-                    if($story->plan != $oldStory->plan and !empty($story->plan))    $link2Plans[$story->plan]  = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
-                }
-
-
-                foreach($extendFields as $extendField)
-                {
-                    $story->{$extendField->field} = $this->post->{$extendField->field}[$storyID];
-                    if(is_array($story->{$extendField->field})) $story->{$extendField->field} = implode(',', $story->{$extendField->field});
-
-                    $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
-                }
-
-                $stories[$storyID] = $story;
-            }
-
-            foreach($stories as $storyID => $story)
-            {
-                $oldStory = $oldStories[$storyID];
-
-                $this->dao->update(TABLE_STORY)->data($story)
-                    ->autoCheck()
-                    ->checkIF($story->closedBy, 'closedReason', 'notempty')
-                    ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
-                    ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-                    ->checkFlow()
-                    ->where('id')->eq((int)$storyID)
-                    ->exec();
-                if($story->title != $oldStory->title)
-                {
-                    $data          = new stdclass();
-                    $data->story   = $storyID;
-                    $data->version = $story->version;
-                    $data->title   = $story->title;
-                    $data->spec    = $oldStory->spec;
-                    $data->verify  = $oldStory->verify;
-                    $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
-                }
-
-                if(!dao::isError())
-                {
-                    /* Update story sort of plan when story plan has changed. */
-                    if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
-
-                    $this->executeHooks($storyID);
-                    if($story->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
-                    if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
-                    $allChanges[$storyID] = common::createChanges($oldStory, $story);
-
-                    if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
-                    {
-                        $feedbacks[$oldStory->feedback] = $oldStory->feedback;
-                        $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
-                    }
-                }
-                else
-                {
-                    return print(js::error('story#' . $storyID . dao::getError(true)));
-                }
+                if(!empty($oldStory->plan)) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},{$storyID}";
+                if(!empty($story->plan))    $link2Plans[$story->plan]     = empty($link2Plans[$story->plan])     ? $storyID : "{$link2Plans[$story->plan]},{$storyID}";
             }
         }
-        if(!dao::isError())
+
+        $this->loadModel('action');
+        foreach($stories as $storyID => $story)
         {
-            $this->loadModel('score')->create('ajax', 'batchEdit');
+            $oldStory = $oldStories[$storyID];
+            $this->dao->update(TABLE_STORY)->data($story)
+                ->autoCheck()
+                ->checkIF($story->closedBy, 'closedReason', 'notempty')
+                ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
+                ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+                ->where('id')->eq((int)$storyID)
+                ->exec();
 
-            $this->loadModel('action');
-            foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', $planID, 'unlinkstory', '', $stories);
-            foreach($link2Plans as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+            if(dao::isError()) return false;
 
+            /* Update story sort of plan when story plan has changed. */
+            if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
+
+            $this->executeHooks($storyID);
+            if($oldStory->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
+            if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
+
+            $changes = common::createChanges($oldStory, $story);
+            if($changes)
+            {
+                $actionID = $this->action->create('story', $storyID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            if($this->config->edition != 'open' && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
+            {
+                $feedbacks[$oldStory->feedback] = $oldStory->feedback;
+                $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+            }
         }
-        return $allChanges;
+
+        $this->loadModel('score')->create('ajax', 'batchEdit');
+        foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', $planID, 'unlinkstory', '', $stories);
+        foreach($link2Plans as $planID => $stories)  $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+
+        return true;
     }
 
     /**
@@ -1499,24 +1410,25 @@ class storyModel extends model
      * @param  string  $result
      * @param  string  $reason
      * @access public
-     * @return array
+     * @return string|null
      */
-    public function batchReview($storyIdList, $result, $reason)
+    public function batchReview(array $storyIdList, string $result, string $reason): string|null
     {
-        $now     = helper::now();
-        $actions = array();
+        $now           = helper::now();
+        $reviewedTwins = array();
         $this->loadModel('action');
 
-        $reviewedTwins = array();
-        $oldStories       = $this->getByList($storyIdList);
-        $hasResult        = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($this->app->user->account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
-        $reviewerList     = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
+        $oldStories          = $this->getByList($storyIdList);
+        $hasResult           = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($this->app->user->account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
+        $reviewerList        = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
+        $isSuperReviewer     = $this->storyTao->isSuperReviewer();
+        $cannotReviewStories = array();
+        $cannotReviewTips    = $this->lang->product->reviewStory;
         foreach($storyIdList as $storyID)
         {
             if(!$storyID) continue;
 
-            $isSuperReviewer = $this->storyTao->isSuperReviewer();
-            $oldStory        = $oldStories[$storyID];
+            $oldStory = $oldStories[$storyID];
             if($oldStory->status != 'reviewing') continue;
 
             foreach($reviewerList[$storyID] as $reviewer => $reviewerInfo)
@@ -1524,7 +1436,11 @@ class storyModel extends model
                 if($reviewerInfo->version != $oldStory->version) unset($reviewerList[$storyID][$reviewer]);
             }
 
-            if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) and !$isSuperReviewer) continue;
+            if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) && !$isSuperReviewer)
+            {
+                $cannotReviewStories[$storyID] = "#{$storyID}";
+                continue;
+            }
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
             if($oldStory->version > 1 and $result == 'reject') continue;
 
@@ -1554,9 +1470,9 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story, 'finalResult')->autoCheck()->where('id')->eq($storyID)->exec();
             $this->setStage($storyID);
 
-            $story->id         = $storyID;
-            $story->version    = $oldStory->version;
-            $actions[$storyID] = $this->recordReviewAction($story, $result, $reason);
+            $story->id      = $storyID;
+            $story->version = $oldStory->version;
+            $this->recordReviewAction($story, $result, $reason);
 
             /* Sync twins. */
             $changes = common::createChanges($oldStory, $story);
@@ -1572,7 +1488,8 @@ class storyModel extends model
             }
         }
 
-        return $actions;
+        if($cannotReviewStories) return sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
+        return null;
     }
 
     /**
@@ -1807,76 +1724,51 @@ class storyModel extends model
     /**
      * Batch close story.
      *
+     * @param  array $stories
      * @access public
      * @return void
      */
-    public function batchClose()
+    public function batchClose(array $stories)
     {
-        /* Init vars. */
-        $stories     = array();
-        $allChanges  = array();
-        $now         = helper::now();
-        $data        = fixer::input('post')->get();
-        $storyIdList = $data->storyIdList ? $data->storyIdList : array();
-
-        $oldStories   = $this->getByList($storyIdList);
-        foreach($storyIdList as $storyID)
-        {
-            $oldStory = $oldStories[$storyID];
-            if($oldStory->parent == -1) continue;
-            if($oldStory->status == 'closed') continue;
-
-            $story = new stdclass();
-            $story->lastEditedBy   = $this->app->user->account;
-            $story->lastEditedDate = $now;
-            $story->closedBy       = $this->app->user->account;
-            $story->closedDate     = $now;
-            $story->assignedDate   = $now;
-            $story->status         = 'closed';
-            $story->stage          = 'closed';
-
-            $story->closedReason   = $data->closedReasons[$storyID];
-            $story->duplicateStory = $data->duplicateStoryIDList[$storyID] ? $data->duplicateStoryIDList[$storyID] : $oldStory->duplicateStory;
-            $story->childStories   = $data->childStoriesIDList[$storyID] ? $data->childStoriesIDList[$storyID] : $oldStory->childStories;
-
-            if($story->closedReason != 'done') $story->plan  = '';
-
-            $stories[$storyID] = $story;
-            unset($story);
-        }
-
+        $this->loadModel('action');
+        $oldStories = $this->getByList(array_keys($stories));
         foreach($stories as $storyID => $story)
         {
-            if(!$story->closedReason) continue;
+            if(empty($story->closedReason)) continue;
 
             $oldStory = $oldStories[$storyID];
 
-            $this->dao->update(TABLE_STORY)->data($story)
-                ->autoCheck()
+            $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()
                 ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
                 ->where('id')->eq($storyID)->exec();
 
-            if(!dao::isError())
-            {
-                /* Update parent story status. */
-                if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-                $this->setStage($storyID);
-                $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            if(dao::isError()) return dao::$errors[] = 'story#' . $storyID . dao::getError(true);
 
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
-                {
-                    $feedbacks[$oldStory->feedback] = $oldStory->feedback;
-                    $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
-                }
-            }
-            else
+            /* Update parent story status. */
+            if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+            $this->setStage($storyID);
+
+            $changes = common::createChanges($oldStory, $story);
+            if($changes)
             {
-                helper::end(js::error('story#' . $storyID . dao::getError(true)));
+                $preStatus = $oldStory->status;
+                $isChanged = $oldStory->changedBy ? true : false;
+                if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
+
+                $actionID = $this->action->create('story', $storyID, 'Closed', $story->comment, ucfirst($story->closedReason) . ($story->duplicateStory ? ':' . (int)$story->duplicateStory : '') . "|{$preStatus}");
+                $this->action->logHistory($actionID, $changes);
+
+                if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
             }
-            if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
+
+            if($this->config->edition != 'open' && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
+            {
+                $feedbacks[$oldStory->feedback] = $oldStory->feedback;
+                $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+            }
+
+            $this->loadModel('score')->create('story', 'close', $storyID);
         }
-
-        return $allChanges;
     }
 
     /**
@@ -2081,15 +1973,15 @@ class storyModel extends model
      * @param string $stage
      *
      * @access public
-     * @return array
+     * @return string|null
      */
-    public function batchChangeStage($storyIdList, $stage)
+    public function batchChangeStage(array $storyIdList, string $stage): string|null
     {
         $now           = helper::now();
-        $allChanges    = array();
         $account       = $this->app->user->account;
         $oldStories    = $this->getByList($storyIdList);
         $ignoreStories = '';
+        $this->loadModel('action');
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
@@ -2107,10 +1999,17 @@ class storyModel extends model
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
             $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->set('stagedBy')->eq($account)->where('story')->eq((int)$storyID)->exec();
-            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            if(!dao::isError())
+            {
+                $changes  = common::createChanges($oldStory, $story);
+                $action   = $stage == 'verified' ? 'Verified' : 'Edited';
+                $actionID = $this->action->create('story', $storyID, $action);
+                $this->action->logHistory($actionID, $changes);
+            }
         }
-        if($ignoreStories) echo js::alert(sprintf($this->lang->story->ignoreChangeStage, $ignoreStories));
-        return $allChanges;
+
+        if($ignoreStories) return sprintf($this->lang->story->ignoreChangeStage, $ignoreStories);
+        return null;
     }
 
     /**
@@ -2322,25 +2221,20 @@ class storyModel extends model
     /**
      * Batch assign to.
      *
+     * @param  string $assignedTo
      * @access public
      * @return array
      */
-    public function batchAssignTo()
+    public function batchAssignTo(array $storyIdList, string $assignedTo = '')
     {
-        $now         = helper::now();
-        $allChanges  = array();
-        $storyIdList = $this->post->storyIdList;
-        $assignedTo  = $this->post->assignedTo;
-        $oldStories  = $this->getByList($storyIdList);
-        $ignoreStories = '';
+        $now           = helper::now();
+        $allChanges    = array();
+        $oldStories    = $this->getByList($storyIdList);
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
-            if($oldStory->status == 'closed')
-            {
-                $ignoreStories .= "#{$storyID},";
-                continue;
-            }
+
+            if($oldStory->status == 'closed') continue;
             if($assignedTo == $oldStory->assignedTo) continue;
 
             $story = new stdclass();
@@ -2350,14 +2244,7 @@ class storyModel extends model
             $story->assignedDate   = $now;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-
             $allChanges[$storyID] = common::createChanges($oldStory, $story);
-        }
-
-        if($ignoreStories)
-        {
-            $ignoreStories = trim($ignoreStories, ',');
-            echo js::alert(sprintf($this->lang->story->ignoreClosedStory, $ignoreStories));
         }
 
         return $allChanges;
@@ -2525,7 +2412,7 @@ class storyModel extends model
      */
     public function getProductStories(string|int $productID = 0, array|string|int $branch = 0, array|string $moduleIdList = '', array|string $status = 'all', string $type = 'story', string $orderBy = 'id_desc', bool $hasParent = true, array|string $excludeStories = '', object|null $pager = null): array
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
 
         $productQuery = $this->storyTao->buildProductsCondition($productID, $branch);
         $stories      = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
@@ -2914,7 +2801,7 @@ class storyModel extends model
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->fetchPairs();
 
-        $review = $this->storyTao->getRevertStoryIdList($productID);
+        $review = $this->storyTao->getRevertStoryIdList((int)$productID);
         $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
         if(strpos($sql, 'result') !== false)
         {
@@ -3704,7 +3591,7 @@ class storyModel extends model
         $isSuperReviewer = str_contains(',' . zget($config->story, 'superReviewers', '') . ',', ",{$app->user->account},");
 
         if($action == 'change')       return (($isSuperReviewer or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
-        if($action == 'submitReview') return strpos('draft,changing', $story->status) !== false;
+        if($action == 'submitreview') return strpos('draft,changing', $story->status) !== false;
         if($action == 'review')       return (($isSuperReviewer or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
         if($action == 'recall')       return strpos('reviewing,changing', $story->status) !== false;
         if($action == 'close')        return $story->status != 'closed';
@@ -3732,300 +3619,59 @@ class storyModel extends model
      */
     public function buildOperateMenu($story, $type = 'view', $execution = '', $storyType = 'story')
     {
-        $menu   = '';
-        $params = "storyID=$story->id";
-
-        if($type == 'browse')
-        {
-            if(common::canBeChanged('story', $story))
-            {
-                $storyReviewer = isset($story->reviewer) ? $story->reviewer : array();
-                if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'ok', '', 'iframe', true, '', $this->lang->confirm);
-
-                $isClick = $this->isClickable($story, 'change');
-                $title   = $isClick ? '' : $this->lang->story->changeTip;
-                $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
-
-                if(strpos('draft,changing', $story->status) !== false)
-                {
-                    $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id&storyType=$story->type", $story, $type, 'confirm', '', 'iframe', true, "data-width='50%'");
-                }
-                else
-                {
-                    $isClick = $this->isClickable($story, 'review');
-                    $title   = $this->lang->story->review;
-                    if(!$isClick and $story->status != 'closed')
-                    {
-                        if($story->status == 'active')
-                        {
-                            $title = $this->lang->story->reviewTip['active'];
-                        }
-                        elseif($storyReviewer and in_array($this->app->user->account, $storyReviewer))
-                        {
-                            $title = $this->lang->story->reviewTip['reviewed'];
-                        }
-                        elseif($storyReviewer and !in_array($this->app->user->account, $storyReviewer))
-                        {
-                            $title = $this->lang->story->reviewTip['notReviewer'];
-                        }
-                    }
-                    $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
-                }
-
-                $isClick = $this->isClickable($story, 'recall');
-                $title   = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-                $title   = $isClick ? $title : $this->lang->story->recallTip['actived'];
-                $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
-                $menu   .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
-
-                $vars            = "storyType={$story->type}";
-                $canChange       = common::hasPriv('story', 'change', '', $vars);
-                $canRecall       = common::hasPriv('story', 'recall', '', $vars);
-                $canSubmitReview = (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview', '', $vars));
-                $canReview       = (strpos('draft,changing', $story->status) === false and common::hasPriv('story', 'review', '', $vars));
-                $canEdit         = common::hasPriv('story', 'edit', '', $vars);
-                $canBatchCreate  = ($this->app->tab == 'product' and (common::hasPriv('story', 'batchCreate', '', 'storyType=story')));
-                $canCreateCase   = ($story->type == 'story' and common::hasPriv('testcase', 'create'));
-                $canClose        = common::hasPriv('story', 'close', '', $vars);
-                $canUnlinkStory  = ($this->app->tab == 'project' and common::hasPriv('projectstory', 'unlinkStory'));
-
-                if(in_array($this->app->tab, array('product', 'project')))
-                {
-                    if(($canChange or $canRecall or $canSubmitReview or $canReview or $canEdit) and ($canCreateCase or $canBatchCreate or $canClose or $canUnlinkStory))
-                    {
-                        $menu .= "<div class='dividing-line'></div>";
-                    }
-                }
-
-                if($this->app->tab == 'product' and $storyType == 'requirement')
-                {
-                    $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                    if($canClose and ($canBatchCreate or $canCreateCase)) $menu .= "<div class='dividing-line'></div>";
-                }
-
-                if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'iframe showinonlybody', true, "data-app='{$this->app->tab}'");
-
-                $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
-                if($this->app->rawModule != 'projectstory' || $this->config->vision == 'lite' || $shadow)
-                {
-                    $isClick = $this->isClickable($story, 'batchcreate');
-                    $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
-                    if(!$isClick and $story->status != 'closed')
-                    {
-                        if($story->parent > 0)
-                        {
-                            $title = $this->lang->story->subDivideTip['subStory'];
-                        }
-                        elseif(!empty($story->twins))
-                        {
-                            $title = $this->lang->story->subDivideTip['twinsSplit'];
-                        }
-                        else
-                        {
-                            if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
-                            if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
-                        }
-                    }
-
-                    $executionID = empty($execution) ? 0 : $execution->id;
-                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
-                }
-
-                if(($this->app->rawModule == 'projectstory' or ($this->app->tab != 'product' and $storyType == 'requirement')) and $this->config->vision != 'lite')
-                {
-                    if($canCreateCase and ($canClose or $canUnlinkStory)) $menu .= "<div class='dividing-line'></div>";
-
-                    $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                    if(!empty($execution) and $execution->hasProduct) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
-                }
-
-                if($this->app->tab == 'product' and $storyType == 'story')
-                {
-                    if(($canBatchCreate or $canCreateCase) and $canClose) $menu .= "<div class='dividing-line'></div>";
-
-                    $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                }
-            }
-            else
-            {
-                return $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, 'list', '', '', 'iframe', true);
-            }
-        }
+        $menu       = '';
+        $mainMenu   = array();
+        $dropMenus  = array();
+        $suffixMenu = array();
+        $params     = "storyID=$story->id";
 
         if($type == 'view')
         {
-            $menu .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody');
-            if(strpos('draft,changing', $story->status) !== false) $menu .= $this->buildMenu('story', 'submitReview', $params . "&storyType=$story->type", $story, $type, 'confirm', '', 'showinonlybody iframe', true, "data-width='50%'");
+            $mainMenu[] = commonModel::buildActionItem('story', 'change', $params, $story, array('icon' => 'alter', 'text' => $this->lang->story->change));
+            if(str_contains('draft,changing', $story->status)) $mainMenu[] = commonModel::buildActionItem('story', 'submitReview', $params . "&storyType=$story->type", $story, array('icon' => 'confirm', 'text' => $this->lang->story->submitReview, 'data-toggle' => 'modal'));
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-            $menu .= $this->buildMenu('story', 'recall', $params . "&from=view&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
-
-            $menu .= $this->buildMenu('story', 'review', $params . "&from={$this->app->tab}&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody');
+            $mainMenu[] = commonModel::buildActionItem('story', 'recall', $params . "&from=view&confirm=no&storyType={$story->type}", $story, array('icon' => 'undo', 'text' => $title, 'className' => 'ajax-submit'));
+            $mainMenu[] = commonModel::buildActionItem('story', 'review', $params . "&from={$this->app->tab}&storyType={$story->type}", $story, array('icon' => 'search', 'text' => $this->lang->story->review));
 
             $executionID = empty($execution) ? 0 : $execution->id;
             if(!isonlybody())
             {
-                $subdivideTitle = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
-                $menu          .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $subdivideTitle);
-
+                $mainMenu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, array('icon' => 'search', 'text' => $this->lang->story->subdivide, 'data-toggle' => 'modal'));
             }
 
-            $menu .= $this->buildMenu('story', 'assignTo', $params . "&kanbanGroup=default&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
-            $menu .= $this->buildMenu('story', 'close',    $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
-            $menu .= $this->buildMenu('story', 'activate', $params . "&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
+            $mainMenu[] = commonModel::buildActionItem('story', 'assignTo', $params . "&kanbanGroup=default&from=&storyType=$story->type", $story, array('icon' => 'hand-right', 'text' => $this->lang->story->assignTo, 'data-toggle' => 'modal'));
+            $mainMenu[] = commonModel::buildActionItem('story', 'close',    $params . "&from=&storyType=$story->type", $story, array('icon' => 'off', 'text' => $this->lang->story->close, 'data-toggle' => 'modal'));
+            $mainMenu[] = commonModel::buildActionItem('story', 'activate', $params . "&storyType=$story->type", $story, array('icon' => 'magic', 'text' => $this->lang->story->activate, 'data-toggle' => 'modal'));
 
             $disabledFeatures = ",{$this->config->disabledFeatures},";
             if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib') and strpos($disabledFeatures, ',assetlibStorylib,') === false and strpos($disabledFeatures, ',assetlib,') === false)
             {
-                $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
+				$mainMenu[] = array('url' => '#importToLib', 'icon' => 'assets', 'text' => $this->lang->story->importToLib, 'data-toggle' => 'modal');
             }
 
             /* Print testcate actions. */
             if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
             {
                 $this->app->loadLang('testcase');
-                $menu .= "<div class='btn-group dropup'>";
-                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><i class='icon icon-sitemap'></i> " . $this->lang->testcase->common . " <span class='caret'></span></button>";
-                $menu .= "<ul class='dropdown-menu' id='createCaseActionMenu'>";
-
-                $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
-                if(isonlybody()) $misc = '';
-
-                if(common::hasPriv('testcase', 'create', $story))
-                {
-                    $link  = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", '', true);
-                    $menu .= "<li>" . html::a($link, $this->lang->testcase->create, '', $misc) . "</li>";
-                }
-
-                if(common::hasPriv('testcase', 'batchCreate'))
-                {
-                    $link  = helper::createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", '', true);
-                    $menu .= "<li>" . html::a($link, $this->lang->testcase->batchCreate, '', $misc) . "</li>";
-                }
-
-                $menu .= "</ul></div>";
+                $mainMenu[] = array('url' => '#caseActions', 'text' => $this->lang->testcase->common, 'data-toggle' => 'dropdown', 'data-placement' => 'top-end', 'caret' => 'up');
+                $dropMenus['caseActions'][] = commonModel::buildActionItem('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", $story, array('text' => $this->lang->testcase->create, 'data-toggle' => 'modal', 'data-size' => 'lg'));
+                $dropMenus['caseActions'][] = commonModel::buildActionItem('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", null, array('text' => $this->lang->testcase->batchCreate, 'data-toggle' => 'modal', 'data-size' => 'lg'));
             }
 
-            if(($this->app->tab == 'execution' or (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active' and $story->type == 'story') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
+            if(($this->app->tab == 'execution' or (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active' and $story->type == 'story')
+            $mainMenu[] = commonModel::buildActionItem('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, array('icon' => 'plus', 'text' => $this->lang->task->create));
 
-            $menu .= "<div class='divider'></div>";
-            $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
-            $menu .= "<div class='divider'></div>";
+            //$menu .= "<div class='divider'></div>";
+            //$menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
+            //$menu .= "<div class='divider'></div>";
 
-            $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type);
-            $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", $story, $type, 'copy', '', '', '', "data-width='1050'");
-            $menu .= $this->buildMenu('story', 'delete', $params . "&confirm=no&from=&storyType=$story->type", $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
+            $suffixMenu[] = commonModel::buildActionItem('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, array('icon' => 'edit'));
+            $suffixMenu[] = commonModel::buildActionItem('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", $story, array('icon' => 'copy', 'data-toggle' => 'modal'));
+            if(common::hasPriv('story', 'delete')) $suffixMenu[] = array('url' => helper::createLink('story', 'delete', $params), 'className' => 'ajax-submit', 'icon' => 'trash');
         }
 
-        if($type == 'execution')
-        {
-            $hasDBPriv    = common::hasDBPriv($execution, 'execution');
-            $canBeChanged = common::canModify('execution', $execution);
-            if($canBeChanged)
-            {
-                $executionID = empty($execution) ? $this->session->execution : $execution->id;
-                $param       = "executionID=$executionID&story={$story->id}&moduleID={$story->module}";
-
-                $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
-                $story->notReview = isset($story->notReview) ? $story->notReview : array();
-
-                $canSubmitReview    = (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview'));
-                $canReview          = (strpos('draft,changing', $story->status) === false and common::hasPriv('story', 'review'));
-                $canRecall          = common::hasPriv('story', 'recall');
-                $canCreateTask      = common::hasPriv('task', 'create');
-                $canBatchCreateTask = common::hasPriv('task', 'batchCreate');
-                $canCreateCase      = ($hasDBPriv and common::hasPriv('testcase', 'create'));
-                $canEstimate        = common::hasPriv('execution', 'storyEstimate', $execution);
-                $canUnlinkStory     = (common::hasPriv('execution', 'unlinkStory', $execution) and ($execution->hasProduct or $execution->multiple));
-
-                if(strpos('draft,changing', $story->status) !== false)
-                {
-                    if($canSubmitReview) $menu .= common::buildIconButton('story', 'submitReview', "storyID=$story->id&from=story", $story, 'list', 'confirm', '', 'iframe', true, "data-width='50%'");
-                }
-                else
-                {
-                    if($canReview)
-                    {
-                        $reviewDisabled = in_array($this->app->user->account, $story->notReview) and ($story->status == 'draft' or $story->status == 'changing') ? '' : 'disabled';
-                        $story->from = 'execution';
-                        $menu .= common::buildIconButton('story', 'review', "story={$story->id}&from=execution", $story, 'list', 'search', '', $reviewDisabled, false, "data-group=execution");
-                    }
-                }
-
-                if($canRecall)
-                {
-                    $recallDisabled = empty($story->reviewedBy) and strpos('draft,changing', $story->status) !== false and !empty($story->reviewer) ? '' : 'disabled';
-                    $title  = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-                    $menu  .= common::buildIconButton('story', 'recall', "story={$story->id}", $story, 'list', 'undo', 'hiddenwin', $recallDisabled, '', '', $title);
-                }
-
-                $this->lang->task->create = $this->lang->execution->wbs;
-                $toTaskDisabled = $story->status == 'active' ? '' : 'disabled';
-                if(commonModel::isTutorialMode())
-                {
-                    $wizardParams = helper::safe64Encode($param);
-                    $menu .=  html::a(helper::createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$this->lang->execution->wbs}' data-app='{$this->app->tab}'");
-                }
-                else
-                {
-                    if($hasDBPriv and $storyType == 'story') $menu .= common::buildIconButton('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create ' . $toTaskDisabled);
-                }
-
-                $this->lang->task->batchCreate = $this->lang->execution->batchWBS;
-                if($hasDBPriv and $storyType == 'story') $menu .= common::buildIconButton('task', 'batchCreate', "executionID=$executionID&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
-
-                if(($canSubmitReview or $canReview or $canRecall or $canCreateTask or $canBatchCreateTask) and ($canCreateCase or $canEstimate or $canUnlinkStory))
-                {
-                    $menu .= "<div class='dividing-line'></div>";
-                }
-
-                if($canEstimate and $storyType == 'story')
-                {
-                    $menu .= common::buildIconButton('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='470px'");
-                }
-
-                $this->lang->testcase->batchCreate = $this->lang->testcase->create;
-                if($canCreateCase and $storyType == 'story')
-                {
-                    $menu .= common::buildIconButton('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id", '', 'list', 'sitemap', '', 'iframe', true, "data-app='{$this->app->tab}'");
-                }
-
-                if(($canEstimate or $canCreateCase) and $canUnlinkStory) $menu .= "<div class='dividing-line'></div>";
-
-                $executionID = empty($execution) ? 0 : $execution->id;
-
-                /* Adjust code, hide split entry. */
-                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
-                {
-                    $isClick = $this->isClickable($story, 'batchcreate');
-                    $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
-                    if(!$isClick and $story->status != 'closed')
-                    {
-                        if($story->parent > 0)
-                        {
-                            $title = $this->lang->story->subDivideTip['subStory'];
-                        }
-                        else
-                        {
-                            if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
-                            if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
-                        }
-                    }
-
-                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, 'browse', 'split', '', 'showinonlybody', '', '', $title);
-                }
-
-                if(common::hasPriv('story', 'close', "storyType={$story->type}") and !$execution->multiple and !$execution->hasProduct) $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, 'browse', '', '', 'iframe', true);
-
-                if($canUnlinkStory)
-                {
-                    $menu .= common::buildIconButton('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
-                }
-
-            }
-        }
-
-        return $menu;
+        return array('mainMenu' => array_values(array_filter($mainMenu)), 'suffixMenu' => array_values(array_filter($suffixMenu)), 'dropMenus' => $dropMenus);
     }
 
     /**
@@ -4038,6 +3684,7 @@ class storyModel extends model
      */
     public function mergeReviewer($stories, $isObject = false)
     {
+        $rawQuery = $this->dao->get();
         if($isObject)
         {
             $story   = $stories;
@@ -4089,6 +3736,8 @@ class storyModel extends model
                 }
             }
         }
+
+        $this->dao->sqlobj->sql = $rawQuery;
 
         if($isObject) return $stories[$story->id];
         return $stories;
@@ -5207,11 +4856,11 @@ class storyModel extends model
         $this->loadModel('branch');
 
         $this->replaceURLang($storyType);
-        $storyLang   = $this->lang->story;
-        $storyConfig = $this->config->story;
+        $storyLang = $this->lang->story;
 
         /* Create field lists. */
-        $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $storyConfig->list->exportFields);
+        $fields = !empty($this->post->exportFields) ? $this->post->exportFields : explode(',', $this->config->story->exportFields);
+        if(empty($this->post->exportFields)) $this->post->exportFields = $this->config->story->exportFields;
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
@@ -5230,7 +4879,8 @@ class storyModel extends model
             }
             else
             {
-                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id');
+                $queryCondition = str_replace('story', 'id', $this->session->storyQueryCondition);
+                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
             }
         }
         else
@@ -5372,15 +5022,20 @@ class storyModel extends model
                 }
             }
 
-            $story->mailto = trim(trim($story->mailto), ',');
-            $mailtos = explode(',', $story->mailto);
-            $story->mailto = '';
-            foreach($mailtos as $mailto)
+            if(!empty($story->mailto))
             {
-                $mailto = trim($mailto);
-                if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
+                $story->mailto = trim(trim($story->mailto), ',');
+                $mailtos = explode(',', $story->mailto);
+                $story->mailto = '';
+                foreach($mailtos as $mailto)
+                {
+                    $mailto = trim($mailto);
+                    if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
+                }
+                $story->mailto = rtrim($story->mailto, ',');
             }
-            $story->mailto = rtrim($story->mailto, ',');
+            else
+                $story->mailto = '';
 
             $story->reviewedBy = trim(trim($story->reviewedBy), ',');
             $reviewedBys = explode(',', $story->reviewedBy);
@@ -5723,5 +5378,62 @@ class storyModel extends model
         }
 
         return $menu;
+    }
+
+    /**
+     * 格式化列表中需求数据。
+     * Format story for list.
+     *
+     * @param  object $story
+     * @param  array  $options
+     * @access public
+     * @return object
+     */
+    public function formatStoryForList(object $story, array $options = array()): object
+    {
+        $story->actions  = $this->buildActionButtonList($story, 'browse', zget($options, 'execution', null));
+        $story->estimate = $story->estimate . $this->config->hourUnit;
+
+        $story->taskCount = zget(zget($options, 'storyTasks', array()), $story->id, 0);
+        $story->bugCount  = zget(zget($options, 'storyBugs',  array()), $story->id, 0);
+        $story->caseCount = zget(zget($options, 'storyCases', array()), $story->id, 0);
+        $story->module    = zget(zget($options, 'modules',    array()), $story->module, '');
+        $story->branch    = zget(zget($options, 'branches',   array()), $story->branch, '');
+        $story->plan      = isset($story->planTitle) ? $story->planTitle : zget(zget($options, 'plans', array()), $story->plan, '');
+
+        $story->source       = zget($this->lang->story->sourceList,   $story->source, '');
+        $story->category     = zget($this->lang->story->categoryList, $story->category);
+        $story->closedReason = zget($this->lang->story->reasonList,   $story->closedReason);
+
+        if($story->parent < 0) $story->parent = 0;
+        if(empty($options['execution'])) $story->isParent = isset($story->children);
+        if($story->mailto)
+        {
+            $mailto = '';
+            foreach(explode(',', $story->mailto) as $account)
+            {
+                $account = trim($account);
+                if(empty($account)) continue;
+
+                $mailto .= zget(zget($options, 'users', array()), $account) . ' ';
+            }
+            $story->mailto = $mailto;
+        }
+
+        /* Rewrite actions by action menus in options. */
+        if(isset($options['actionMenus']))
+        {
+            $actions = array();
+            foreach($options['actionMenus'] as $actionName)
+            {
+                foreach($story->actions as $action)
+                {
+                    if($action['name'] == $actionName) $actions[] = $action;
+                }
+            }
+            $story->actions = $actions;
+        }
+
+        return $story;
     }
 }

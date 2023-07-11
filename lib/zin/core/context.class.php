@@ -31,9 +31,9 @@ class context extends \zin\utils\dataset
         return $this->addToList('css', func_get_args());
     }
 
-    public function getCssList()
+    public function getCSS()
     {
-        return $this->getList('css');
+        return trim(implode("\n", $this->getList('css')));
     }
 
     public function addJS()
@@ -77,9 +77,20 @@ class context extends \zin\utils\dataset
         return $codes;
     }
 
-    public function getJsList()
+    public function getJS()
     {
-        return array_merge($this->getList('jsVar'), $this->getList('js'), $this->getEventsBindings(), $this->getList('jsCall'));
+        $js = trim(implode("\n", array_merge($this->getList('jsVar'), $this->getList('js'), $this->getEventsBindings(), $this->getList('jsCall'))));
+        if(empty($js)) return '';
+
+        if(strpos($js, 'setTimeout') !== false) $js = 'function setTimeout(callback, time){return typeof window.registerTimer === "function" ? window.registerTimer(callback, time) : window.setTimeout(callback, time);}' . $js;
+        if(strpos($js, 'setInterval') !== false) $js = 'function setInterval(callback, time){return typeof window.registerTimer === "function" ? window.registerTimer(callback, time, "interval") : window.setInterval(callback, time);}' . $js;
+
+        $methods = array('onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender');
+        foreach($methods as $method)
+        {
+            if(strpos($js, $method) !== false) $js .= "if(typeof $method === 'function') window.$method = $method;";
+        }
+        return $js;
     }
 
     public static $map = array();

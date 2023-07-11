@@ -1,5 +1,7 @@
 <?php
 $config->task->custom->batchCreateFields .= ',lane,region';
+
+if(!isset($config->task->datatable)) $config->task->datatable = new stdclass();
 $config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'assignedTo', 'lane', 'finishedBy', 'estimate', 'consumed', 'left', 'progress', 'deadline', 'actions');
 
 $config->task->datatable->fieldList['lane']['title']    = 'lane';

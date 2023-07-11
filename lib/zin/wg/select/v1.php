@@ -25,7 +25,7 @@ class select extends wg
      * @var    array
      * @access protected
      */
-    static $defineProps = array
+    protected static array $defineProps = array
     (
         'name: string',
         'id?: string',
@@ -62,7 +62,7 @@ class select extends wg
      * @access public
      * @return wg
      */
-    public function onBuildItem($item): wg|array
+    public function onBuildItem(wg|array $item): wg
     {
         if($item instanceof item) $item = $item->props->toJsonData();
 
@@ -89,7 +89,7 @@ class select extends wg
     public function getValueList()
     {
         list($value, $multiple) = $this->prop(array('value', 'multiple'));
-        if($multiple) return is_array($value) ? $value : explode(',', $value);
+        if($multiple) return is_array($value) ? $value : explode(',', (string)$value);
         return array($value);
     }
 
@@ -99,7 +99,7 @@ class select extends wg
      * @access protected
      * @return wg
      */
-    protected function build()
+    protected function build(): wg
     {
         list($items, $multiple, $required) = $this->prop(array('items', 'multiple', 'required'));
 

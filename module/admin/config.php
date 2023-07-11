@@ -64,13 +64,15 @@ $config->admin->plugins[194]->viewLink = 'https://www.zentao.net/extension-viewE
 $config->admin->apiRoot        = 'https://www.zentao.net';
 $config->admin->cdnRoot        = 'https://cdn.easycorp.cn/web';
 $config->admin->classURL       = 'https://www.zentao.net/publicclass.html';
-$config->admin->dynamicURL     = 'https://www.zentao.net/download.html';
+$config->admin->dynamicURL     = 'https://www.zentao.net/dynamic.html';
+$config->admin->downloadURL    = 'https://www.zentao.net/download.html';
 $config->admin->extensionURL   = 'https://www.zentao.net/extension-browse.html';
 $config->admin->patchURL       = 'https://www.zentao.net/extension-browse-byModule-1218.html';
 $config->admin->apiSite        = 'https://api.zentao.net/';
 $config->admin->extAPIURL      = $config->admin->apiSite . 'extension-apiGetExtensions-';
 $config->admin->patchAPIURL    = $config->admin->apiSite . 'extension-apiGetExtensions-bymodule-MTIxOA==-0-100-1.json';
 $config->admin->downloadAPIURL = $config->admin->apiSite . 'download.json';
+$config->admin->dynamicAPIURL  = $config->admin->apiSite . 'dynamic-activities.json';
 $config->admin->videoAPIURL    = $config->admin->apiSite . 'publicclass.json';
 $config->admin->liteMenuList   = array('system', 'company', 'feature', 'message', 'extension', 'dev');
 

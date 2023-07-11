@@ -1604,7 +1604,7 @@ class InstanceModel extends model
             $space = $this->dao->select('id,k8space')->from(TABLE_SPACE)->where('k8space')->eq($k8App->namespace)->fetch();
             if(empty($space)) $space = $this->loadModel('space')->defaultSpace($instanceData->createdBy);
 
-            $instanceData->space = $space ? $space->id : $defaultSpace->id;
+            $instanceData->space = $space->id;
 
             $this->dao->insert(TABLE_INSTANCE)->data($instanceData)->exec();
         }
@@ -1715,7 +1715,7 @@ class InstanceModel extends model
     {
         $html = zget($this->lang->instance->htmlStatuses, $instance->status, $this->lang->instance->htmlStatuses['busy']);
         $statusText = zget($this->lang->instance->statusList, $instance->status, '');
-        printf($html, $statusText);
+        return $showText ? printf($html, $statusText) : sprintf($html, $statusText);
     }
 
     /**
@@ -1733,12 +1733,12 @@ class InstanceModel extends model
         $rate = $metrics->rate;
         $tip  = "{$rate}% = {$metrics->usage} / {$metrics->limit}";
 
-        if(strtolower($type) == 'pie') return commonModel::printProgressPie($rate, '', $tip);
+        if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
 
         $valueType = 'percent';
         if($instance->status == 'stopped') $valueType = '';
 
-        return commonModel::printProgressBar($rate, '', $tip, $valueType);
+        commonModel::printProgressBar($rate, '', $tip, $valueType);
     }
 
     /**
@@ -1756,12 +1756,12 @@ class InstanceModel extends model
         $rate = $metrics->rate;
         $tip  = "{$rate}% = " . helper::formatKB($metrics->usage / 1024) . ' / ' . helper::formatKB($metrics->limit / 1024);
 
-        if(strtolower($type) == 'pie') return commonModel::printProgressPie($rate, '', $tip);
+        if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
 
         $valueType = 'tip';
         if($instnace->status == 'stopped') $valueType = '';
 
-        return commonModel::printProgressBar($rate, '', $tip, $valueType);
+        commonModel::printProgressBar($rate, '', $tip, $valueType);
     }
 
     /*
@@ -2037,5 +2037,25 @@ class InstanceModel extends model
         $freeMemory      = intval($clusterResource->metrics->memory->allocatable * 0.9); // Remain 10% memory for system.
 
         return $freeMemory >= $cloudApp->memory;
+    }
+
+    /**
+     * 判断按钮是否可点击。
+     * Adjust the action clickable.
+     *
+     * @param  object $instance
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $instance, string $action): bool
+    {
+        if($action == 'start')     return $this->canDo('start', $instance);
+        if($action == 'stop')      return $this->canDo('stop', $instance);
+        if($action == 'uninstall') return empty($instance->solution) && $this->canDo('uninstall', $instance);
+        if($action == 'visit')     return $instance->domain && $this->canDo('visit', $instance);
+        if($action == 'upgrade')   return !empty($instance->latestVersion);
+
+        return true;
     }
 }

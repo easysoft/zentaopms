@@ -11,6 +11,9 @@
 
 namespace zin;
 
+use zin\utils\classlist;
+use zin\utils\style;
+
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'classlist.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'style.class.php';
@@ -26,7 +29,7 @@ class props extends \zin\utils\dataset
      * @access public
      * @var    style
      */
-    public $style;
+    public style $style;
 
     /**
      * Class property
@@ -34,7 +37,9 @@ class props extends \zin\utils\dataset
      * @access public
      * @var    classlist
      */
-    public $class;
+    public classlist $class;
+
+    public static array $booleanAttrs = array('allowfullscreen', 'async', 'autofocus', 'autoplay', 'checked', 'controls', 'default', 'defer', 'disabled', 'formnovalidate', 'inert', 'ismap', 'itemscope', 'loop', 'multiple', 'muted', 'nomodule', 'novalidate', 'open', 'playsinline', 'readonly', 'required', 'reversed', 'selected');
 
     /**
      * Create properties instance
@@ -42,7 +47,7 @@ class props extends \zin\utils\dataset
      * @access public
      * @param array $props - Properties list array
      */
-    public function __construct($props = null)
+    public function __construct(?array $props = null)
     {
         $this->style       = new \zin\utils\style();
         $this->class       = new \zin\utils\classlist();
@@ -54,10 +59,10 @@ class props extends \zin\utils\dataset
      * Method for sub class to modify value on setting it
      *
      * @access public
-     * @param array|string   $prop        - Property name or properties list
+     * @param string   $prop        - Property name or properties list
      * @param mixed          $value       - Property value
      */
-    protected function setVal($prop, $value)
+    protected function setVal(string $prop, mixed $value): props
     {
         if($prop === 'class' || $prop === '.')     $this->class->set($value);
         elseif($prop === 'style' || $prop === '~') $this->style->set($value);
@@ -73,7 +78,7 @@ class props extends \zin\utils\dataset
         return $this;
     }
 
-    protected function getVal($prop)
+    protected function getVal(string $prop): mixed
     {
         if($prop === 'class' || $prop === '.')
         {
@@ -88,7 +93,11 @@ class props extends \zin\utils\dataset
         return parent::getVal($prop);
     }
 
-    public function reset($name, $value = null)
+    /**
+     * @param string|string[] $name
+     * @param mixed $value
+     */
+    public function reset(array|string $name, mixed $value = null)
     {
         if(is_array($name))
         {
@@ -117,7 +126,7 @@ class props extends \zin\utils\dataset
         parent::setVal("@$name", $events);
     }
 
-    public function events()
+    public function events(): array
     {
         $events = array();
         foreach($this->data as $name => $value)
@@ -128,7 +137,7 @@ class props extends \zin\utils\dataset
         return $events;
     }
 
-    public function hasEvent()
+    public function hasEvent(): bool
     {
         foreach($this->data as $name => $value)
         {
@@ -138,7 +147,7 @@ class props extends \zin\utils\dataset
         return false;
     }
 
-    public function hx($name, $value = null)
+    public function hx(array|string $name, ?string $value = null)
     {
         if(is_array($name))
         {
@@ -165,7 +174,7 @@ class props extends \zin\utils\dataset
      *
      * @access public
      */
-    public function toStr($skipProps = array())
+    public function toStr(array|string $skipProps = array()): string
     {
         if(is_string($skipProps)) $skipProps = explode(',', $skipProps);
 
@@ -198,7 +207,7 @@ class props extends \zin\utils\dataset
         return implode(' ', $pairs);
     }
 
-    public function toJsonData()
+    public function toJsonData(): array
     {
         $data = $this->data;
         if(!empty($this->style->data)) $data['style'] = $this->style->data;
@@ -206,7 +215,7 @@ class props extends \zin\utils\dataset
         return $data;
     }
 
-    public function skip($skipProps = array(), $skipFalse = false)
+    public function skip(array|string $skipProps = array(), bool $skipFalse = false): array
     {
         if(is_string($skipProps)) $skipProps = explode(',', $skipProps);
 
@@ -220,7 +229,7 @@ class props extends \zin\utils\dataset
         return $data;
     }
 
-    public function pick($pickProps = array())
+    public function pick(array|string $pickProps = array()): array
     {
         if(is_string($pickProps)) $pickProps = explode(',', $pickProps);
 
@@ -237,15 +246,13 @@ class props extends \zin\utils\dataset
      * Clone a new instance
      *
      * @access public
-     * @return object
+     * @return props
      */
-    public function clone()
+    public function clone(): props
     {
         $props = new props($this->data);
         $props->style  = clone $this->style;
         $props->class  = clone $this->class;
         return $props;
     }
-
-    public static $booleanAttrs = ['allowfullscreen', 'async', 'autofocus', 'autoplay', 'checked', 'controls', 'default', 'defer', 'disabled', 'formnovalidate', 'inert', 'ismap', 'itemscope', 'loop', 'multiple', 'muted', 'nomodule', 'novalidate', 'open', 'playsinline', 'readonly', 'required', 'reversed', 'selected'];
 }

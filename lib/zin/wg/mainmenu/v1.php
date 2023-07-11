@@ -1,10 +1,10 @@
 <?php
-
+declare(strict_types=1);
 namespace zin;
 
 class mainMenu extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'statuses?:array',
         'btnGroup?:array',
         'others?:array'
@@ -27,7 +27,7 @@ class mainMenu extends wg
         return null;
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $others = $this->prop('others');
 
@@ -46,7 +46,7 @@ class mainMenu extends wg
         (
             setID('mainMenu'),
             setClass('flex justify-between'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             div
             (
                 setClass('flex'),

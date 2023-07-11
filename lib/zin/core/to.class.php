@@ -17,6 +17,6 @@ class to
 {
     public static function __callStatic($name, $args)
     {
-        return block($name, $args);
+        return to($name, $args);
     }
 }

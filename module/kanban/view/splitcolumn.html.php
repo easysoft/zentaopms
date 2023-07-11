@@ -114,7 +114,7 @@
           <?php echo html::input("WIPCount[$i]", '', "class='form-control' disabled id='WIPCount$i'");?>
         </div>
         <div class="table-col w-50px">
-          <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-widtd: 0px;">
+          <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
             <div class='checkbox-primary'>
               <input id="noLimit<?php echo $i;?>" name="noLimit[<?php echo $i;?>]" value='-1' type='checkbox' class='no-margin' checked/>
               <label for='needNotReview'><?php echo $lang->kanban->noLimit;?></label>

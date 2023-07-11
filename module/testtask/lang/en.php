@@ -140,7 +140,7 @@ $lang->testtask->browseBySuite = 'Browse by Suite';
 $lang->testtask->passAll       = 'Pass All';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Failed';
-$lang->testtask->showResult    = 'Run <span class="text-info">%s</span> times';
+$lang->testtask->showResult    = 'Run <span class="text-primary">%s</span> times';
 $lang->testtask->showFail      = 'Failed <span class="text-danger">%s</span> times';
 
 $lang->testtask->confirmDelete     = 'Do you want to delete this build?';
@@ -154,6 +154,7 @@ $lang->testtask->titleOfAuto       = "%s automated testing";
 $lang->testtask->cannotBeParsed    = 'The content of the imported XML file is in the wrong format and cannot be parsed.';
 $lang->testtask->finishedDateLess  = 'Actual Finished Date cannot be <= Begin Date %s';
 $lang->testtask->finishedDateMore  = 'Actual Finished Date cannot be > Today';
+$lang->testtask->emptyUnitTip      = 'No unit test results.';
 
 $lang->testtask->assignedToMe  = 'AssignedToMe';
 $lang->testtask->allCases      = 'All Cases';

@@ -48,7 +48,7 @@ class actionModel extends model
         $action->action     = $actionType;
         $action->date       = helper::now();
         $action->extra      = $extra;
-        if(!defined('IN_UPGRADE')) $action->vision = $this->config->vision;
+        if(!$this->app->upgrading) $action->vision = $this->config->vision;
 
         if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,synctwins,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
@@ -1505,11 +1505,11 @@ class actionModel extends model
             }
             else
             {
-                $todos = $this->dao->select("id, $field AS name, account, private, type, idvalue")->from($table)->where('id')->in($objectIdList)->fetchAll('id');
+                $todos = $this->dao->select("id, $field AS name, account, private, type, objectID")->from($table)->where('id')->in($objectIdList)->fetchAll('id');
                 foreach($todos as $id => $todo)
                 {
-                    if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
-                    if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
+                    if($todo->type == 'task') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TASK)->fetch('name');
+                    if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_BUG)->fetch('title');
 
                     $objectNames[$objectType][$id] = $todo->name;
                     if($todo->private == 1 and $todo->account != $this->app->user->account) $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;

@@ -82,6 +82,9 @@ $lang->user->submit           = 'Submit';
 $lang->user->resetPWD         = 'Reset Password';
 $lang->user->resetTitle       = 'Admin reset the password';
 
+$lang->user->abbr = new stdclass();
+$lang->user->abbr->id = 'ID';
+
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
 
@@ -233,14 +236,14 @@ $lang->user->placeholder->passwordStrengthCheck[1] = 'The password should be ≥
 $lang->user->placeholder->passwordStrengthCheck[2] = 'The password should be ≥ 10 letters, combination of uppercase, lowercase letters, numbers, and special symbols.';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account        = "ID %s，Konto muss Buchstaben, Unterstriche oder Ziffern enthalten. Mindestens 3 Zeichen.";
-$lang->user->error->accountDupl    = "ID %s，Konto wurde genutzt.";
-$lang->user->error->realname       = "ID %s，muss der Realname sein";
-$lang->user->error->visions        = "ID %s，must be version type";
-$lang->user->error->password       = "ID %s，passwort muss mindestens 6 Zeichen lang sein.";
-$lang->user->error->mail           = "ID %s，bitte geben Sie eine gültige Emailadresse an.";
-$lang->user->error->reserved       = "ID %s，Konto ist reserviert.";
-$lang->user->error->weakPassword   = "ID %s，the password strength is less than the system setting.";
+$lang->user->error->account        = 'ID %s，Konto muss Buchstaben, Unterstriche oder Ziffern enthalten. Mindestens 3 Zeichen.';
+$lang->user->error->accountDupl    = 'ID %s，Konto wurde genutzt.';
+$lang->user->error->realname       = 'ID %s，muss der Realname sein';
+$lang->user->error->visions        = 'ID %s，must be version type';
+$lang->user->error->password       = 'ID %s，passwort muss mindestens 6 Zeichen lang sein.';
+$lang->user->error->mail           = 'ID %s，bitte geben Sie eine gültige Emailadresse an.';
+$lang->user->error->reserved       = 'ID %s，Konto ist reserviert.';
+$lang->user->error->weakPassword   = 'ID %s，the password strength is less than the system setting.';
 $lang->user->error->dangerPassword = "ID %s，Passwords cannot be used with [%s] these commonly used if-passwords.";
 
 $lang->user->error->url              = "Invalid address. Please contact your ZenTao Admin.";
@@ -277,6 +280,7 @@ $lang->user->contacts->userList = 'Benutzerliste';
 
 $lang->usercontact = new stdclass;
 $lang->usercontact->listName = 'List Name';
+$lang->usercontact->userList = 'Benutzerliste';
 
 $lang->user->contacts->manage        = 'Verwalten';
 $lang->user->contacts->contactsList  = 'Kontakte';

@@ -4,6 +4,11 @@ global $lang, $app;
 $config->product = new stdclass();
 $config->product->showAllProjects = 0;
 
+$config->product->create = new stdclass();
+$config->product->edit   = new stdclass();
+$config->product->create->requiredFields = 'name,code';
+$config->product->edit->requiredFields   = 'name,code';
+
 $config->product->browse = new stdclass();
 $config->product->custom = new stdclass();
 $config->product->custom->batchEditFields = 'PO,QD,RD,status,type,acl';
@@ -49,3 +54,20 @@ $config->product->statisticFields['plans']        = array('plans');
 $config->product->statisticFields['releases']     = array('releases');
 
 $config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,ajaxgetplans,';
+
+$config->product->actionList['edit']['icon'] = 'edit';
+$config->product->actionList['edit']['text'] = $lang->edit;
+$config->product->actionList['edit']['hint'] = $lang->edit;
+$config->product->actionList['edit']['url']  = array('module' => 'product', 'method' => 'edit', 'params' => "productID={id}");
+
+$config->product->actionList['close']['icon']        = 'off';
+$config->product->actionList['close']['text']        = $lang->product->close;
+$config->product->actionList['close']['hint']        = $lang->product->close;
+$config->product->actionList['close']['url']         = helper::createLink('product', 'close', 'productID={id}');
+$config->product->actionList['close']['data-toggle'] = 'modal';
+
+$config->product->actionList['delete']['icon']         = 'trash';
+$config->product->actionList['delete']['hint']         = $lang->product->delete;
+$config->product->actionList['delete']['url']          = helper::createLink('product', 'delete', 'productID={id}');
+$config->product->actionList['delete']['class']        = 'ajax-submit';
+$config->product->actionList['delete']['data-confirm'] = $lang->product->confirmDelete;

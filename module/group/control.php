@@ -65,14 +65,13 @@ class group extends control
     {
         if(!empty($_POST))
         {
-            $groupID = $this->group->create();
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
+            $this->group->create();
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
+        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
         $this->display();
     }
 
@@ -83,14 +82,14 @@ class group extends control
      * @access public
      * @return void
      */
-    public function edit($groupID)
+    public function edit(int $groupID)
     {
        if(!empty($_POST))
         {
             $this->group->update($groupID);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
@@ -110,14 +109,14 @@ class group extends control
      * @access public
      * @return void
      */
-    public function copy($groupID)
+    public function copy(int $groupID)
     {
        if(!empty($_POST))
         {
             $this->group->copy($groupID);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
@@ -132,7 +131,7 @@ class group extends control
      * @access public
      * @return void
      */
-    public function manageView($groupID)
+    public function manageView(int $groupID)
     {
         if($_POST)
         {
@@ -210,7 +209,7 @@ class group extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($type == 'byGroup' or $type == 'byPackage') return $this->send(array('result' => 'success', 'message' => ($result ? $this->lang->group->dependPrivsSaveTip : $this->lang->saveSuccess), 'locate' => 'reload'));
-            if($type == 'byModule') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if($type == 'byModule') return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
         if($type == 'byGroup' or $type == 'byPackage')
@@ -371,7 +370,15 @@ class group extends control
             $this->view->packageGroup = $packageGroup;
             $this->view->indexPrivs   = $indexPrivs;
         }
-        $this->display();
+
+        if($type == 'byModule')
+        {
+            $this->display('group', 'privbymodule');
+        }
+        else
+        {
+            $this->display();
+        }
     }
 
     /**
@@ -387,9 +394,9 @@ class group extends control
         if(!empty($_POST))
         {
             $this->group->updateUser($groupID);
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
+
         $group        = $this->group->getById($groupID);
         $groupUsers   = $this->group->getUserPairs($groupID);
         $allUsers     = $this->loadModel('dept')->getDeptUserPairs($deptID);
@@ -406,6 +413,7 @@ class group extends control
         $this->view->position     = $position;
         $this->view->group        = $group;
         $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
+        $this->view->deptID       = $deptID;
         $this->view->groupUsers   = $groupUsers;
         $this->view->otherUsers   = $otherUsers;
         $this->display();
@@ -484,13 +492,12 @@ class group extends control
      * @param  string $browseType
      * @param  string $view
      * @param  int    $paramID
-     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function editManagePriv($browseType = '', $view = '', $paramID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function editManagePriv($browseType = '', $view = '', $paramID = 0, $recPerPage = 100, $pageID = 1)
     {
         if(empty($browseType) and $browseType != 'bysearch') $browseType = $this->cookie->managePrivEditType ? $this->cookie->managePrivEditType : 'bycard';
         if($browseType == 'bysearch' and $this->cookie->managePrivEditType == 'bycard') $browseType = 'bycard';
@@ -528,7 +535,7 @@ class group extends control
 
             /* Build the search form. */
             $queryID   = ($browseType == 'bysearch') ? (int)$paramID : 0;
-            $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$total&recPerPage=$recPerPage");
+            $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recPerPage=$recPerPage");
             $this->group->buildPrivSearchForm($queryID, $actionURL);
 
             $privRelations = $this->group->getPrivRelationsByIdList(array_keys($privList));

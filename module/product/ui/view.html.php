@@ -166,94 +166,72 @@ function generateOtherInfoItemList($product, $lang)
     );
 }
 
+$actionMenuList = !$product->deleted ? $this->product->buildOperateMenu($product, 'view') : array();
+
 /* Layout. */
-div
+dropmenu(set::text($product->name));
+
+detailBody
 (
-    setClass('flex w-full'),
-    /* Product information. */
-    cell
+    sectionList
     (
-        set::width('70%'),
-        panel
+        section
         (
-            /* Title. */
-            div
+            entityLabel
             (
-                setClass('detail'),
-                div
-                (
-                    setClass('detail-title'),
-                    span(setClass('label-id'), $product->id),
-                    $hiddenCode ? ' ' : span(setClass('item-label'), $product->code),
-                    $product->name
-                )
+                set::entityID($product->id),
+                set::level(1),
+                set::text($product->name)
             ),
-            /* Platform and branches list. */
-            generatePlatformDetail($product, $branches, $lang),
-            /* Manager list. */
-            div
-            (
-                setClass('detail'),
-                div
-                (
-                    setClass('detail-title'),
-                    $lang->product->manager
-                ),
-                generateManagerInfoItemList($product, $lang, $users, $reviewers)
-            ),
-            /* Base information. */
-            div
-            (
-                setClass('detail w-full'),
-                div(setClass('detail-title'), $lang->product->basicInfo),
-                generateBasicInfoItemList($product, $lang, $hiddenCode, $users, $groups)
-            ),
-            /* Other information. */
-            div
-            (
-                setClass('detail w-full'),
-                div(setClass('detail-title'), $lang->product->otherInfo),
-                generateOtherInfoItemList($product, $lang)
-            )
-            /* Extend Fields. */
         ),
+        /* Platform and branches list. */
+        generatePlatformDetail($product, $branches, $lang),
+        /* Manager list. */
+        div
+        (
+            setClass('detail'),
+            div
+            (
+                setClass('detail-title'),
+                $lang->product->manager
+            ),
+            generateManagerInfoItemList($product, $lang, $users, $reviewers)
+        ),
+        /* Base information. */
+        div
+        (
+            setClass('detail w-full'),
+            div(setClass('detail-title'), $lang->product->basicInfo),
+            generateBasicInfoItemList($product, $lang, $hiddenCode, $users, $groups)
+        ),
+        /* Other information. */
+        div
+        (
+            setClass('detail w-full'),
+            div(setClass('detail-title'), $lang->product->otherInfo),
+            generateOtherInfoItemList($product, $lang)
+        ),
+        /* Extend Fields. */
         /* Float action toolbar. */
         div
         (
-            setClass('flex justify-center'),
-            toolbar(
-                isonlybody() ? null : btn(
-                    set::icon('back'),
-                    set::url($goBackLink),
-                    $lang->goback
-                )
+            setClass('w-2/3 text-center fixed actions-menu'),
+            setClass($product->deleted ? 'no-divider' : ''),
+            floatToolbar
+            (
+                isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
+                !empty($actionMenuList['main']) ? set::main($actionMenuList['main']) : null,
+                !empty($actionMenuList['suffix']) ? set::suffix($actionMenuList['suffix']) : null,
+                set::object($product)
             )
         )
     ),
-    /* Action list. */
-    cell
+    detailSide
     (
-        setClass('px-4'),
-        set::width('30%'),
         history
         (
-            setClass('shadow canvas'),
-            set::actions($actions)
-        ),
-        modal
-        (
-            set::id('comment-dialog'),
-            set::title($lang->action->create),
-            form
-            (
-                set::url(createLink('action', 'comment', "objectType=product&objectID=$product->id&zin=1")),
-                formGroup
-                (
-                    set::width('full'),
-                    set::name('comment'),
-                    set::control('editor')
-                )
-            )
+            set::actions($actions),
+            set::commentUrl(createLink('action', 'comment', "objectType=product&objectID=$product->id&zin=1")),
         )
     )
 );

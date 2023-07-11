@@ -1,17 +1,18 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'formgroup' . DS . 'v1.php';
 
 class formRow extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'width?: string',
         'items?: array',
         'hidden?: boolean'
     );
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): wg
     {
         if(!($item instanceof item))
         {
@@ -22,7 +23,7 @@ class formRow extends wg
         return new formGroup(inherit($item));
     }
 
-    protected function build()
+    protected function build(): wg
     {
         list($width, $items, $hidden) = $this->prop(['width', 'items', 'hidden']);
 

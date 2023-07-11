@@ -20,19 +20,19 @@ $(function()
  * @access public
  * @return void
  */
-function showTeamBox()
+function toggleTeam()
 {
     if($('[name^=multiple]').prop('checked'))
     {
-        $('.team-group').removeClass('hidden');
-        $('.modeBox').removeClass('hidden');
-        $('#estimate').attr('readonly', true);
+        $('.add-team').removeClass('hidden');
+        $('#assignedTo').addClass('hidden');
+        $('.assignedToList').removeClass('hidden');
     }
     else
     {
-        $('.team-group').addClass('hidden');
-        $('.modeBox').addClass('hidden');
-        $('#estimate').removeAttr('readonly');
+        $('.add-team').addClass('hidden');
+        $('#assignedTo').removeClass('hidden');
+        $('.assignedToList').addClass('hidden');
     }
 }
 
@@ -82,11 +82,16 @@ function typeChange(e)
  * 根据选择研发需求是否勾选切换相关字段的展示与隐藏。
  * Dynamically control whether task fields are hidden based on selection status of selectTestStory.
  *
+ * @param  int    $execuitonID
  * @access public
  * @return void
  */
-function toggleSelectTestStory()
+function toggleSelectTestStory(executionID)
 {
+    executionID = parseInt(executionID);
+    if(!executionID) executionID = $('#execution').val();
+
+    $('#testStoryBox').load($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID));
     if(!$('#selectTestStoryBox').hasClass('hidden') && $('#selectTestStory').prop('checked'))
     {
         $('#module').closest('.form-group').addClass('hidden');
@@ -98,7 +103,7 @@ function toggleSelectTestStory()
         $('#testStoryBox').removeClass('hidden');
 
         $('[name^=multiple]').prop('checked', false);
-        showTeamBox();
+        toggleTeam();
     }
     else
     {
@@ -148,6 +153,9 @@ function loadAll()
     loadModules(executionID);
     loadExecutionStories();
     loadExecutionMembers(executionID);
+
+    $('#selectTestStory').prop('checked', false);
+    toggleSelectTestStory(executionID);
 }
 
 /**
@@ -345,3 +353,120 @@ function setAfter()
         $('input[value="toStoryList"]').removeAttr('disabled');
     }
 }
+
+/**
+ * Add a row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+window.addItem = function(obj)
+{
+    let $tr = $(obj).closest('tr');
+    $tr.after($tr.clone());
+}
+
+/**
+ * Remove a row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+window.removeItem = function(obj)
+{
+    if($('#testStoryBox').find('tbody tr').length == 1) return false;
+    $(obj).closest('tr').remove();
+}
+
+$('#teamTable .team-saveBtn').on('click.team', '.btn', function()
+{
+    $('div.assignedToList').html('');
+
+    let team            = [];
+    let totalEstimate   = 0;
+    let error           = false;
+    let mode            = $('[name="mode"]').val();
+    let assignedToList  = '';
+
+    $(this).closest('form').find('select[name^="team"]').each(function(index)
+    {
+        if($(this).val() == '') return;
+
+        let selectObj = $(this)[0];
+
+        let realname = selectObj.options[selectObj.selectedIndex].text;
+        let account  = selectObj.options[selectObj.selectedIndex].value;
+        if(!team.includes(realname)) team.push(realname);
+
+        let estimate = parseFloat($(this).closest('tr').find('[name^=teamEstimate]').val());
+        if(!isNaN(estimate) && estimate > 0) totalEstimate += estimate;
+
+        if(realname != '' && (isNaN(estimate) || estimate <= 0))
+        {
+            zui.Modal.alert(realname + ' ' + estimateNotEmpty);
+            error = true;
+            return false;
+        }
+
+        assignedToList += `<div class='picker-multi-selection' data-index=${index}><span class='text'>${realname}</span><div class="picker-deselect-btn btn size-xs ghost"><span class="close"></span></div></div>`;
+        assignedToList += '<i class="icon icon-arrow-right"></i>';
+    })
+
+    if(error) return false;
+
+    if(team.length < 2)
+    {
+        zui.Modal.alert(teamMemberError);
+        return false;
+    }
+    else
+    {
+        $('#estimate').val(totalEstimate);
+    }
+
+    /* 将选中的团队成员展示在指派给后面. */
+    const regex    = /<i class="icon icon-arrow-right"><\/i>(?!.*<i class="icon icon-arrow-right"><\/i>)/;
+    assignedToList = assignedToList.replace(regex, '');
+    $('div.assignedToList').prepend(assignedToList);
+
+    zui.Modal.hide();
+    return false;
+})
+
+$('#taskCreateForm').on('click', '.assignedToList .picker-multi-selection', function()
+{
+    /* 团队成员必须大于1人. */
+    if($(this).closest('.assignedToList').find('.picker-multi-selection').length == 2)
+    {
+        zui.Modal.alert(teamMemberError);
+        return false;
+    }
+
+    /* 删除人员前后的箭头. */
+    if($(this).next('.icon').length) 
+    {
+        $(this).next('.icon').remove();
+    }
+    else if($(this).prev('.icon').length)
+    {
+        $(this).prev('.icon').remove();
+    }
+
+    $(this).remove();
+
+    /* 删除团队中，已经选中的人. */
+    let index = $(this).data('index') + 1;
+    $('#teamTable').find('tr').eq(index).remove();
+
+    let totalEstimate   = 0;
+
+    $('#teamTable').find('select[name^="team"]').each(function(index)
+    {
+        let estimate = parseFloat($(this).closest('tr').find('[name^=teamEstimate]').val());
+        if(!isNaN(estimate) && estimate > 0) totalEstimate += estimate;
+    })
+
+    $('#estimate').val(totalEstimate);
+})

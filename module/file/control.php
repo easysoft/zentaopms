@@ -266,7 +266,8 @@ class file extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->file->confirmDelete, inlink('delete', "fileID=$fileID&confirm=yes")));
+            $formUrl = $this->createLink('file', 'delete', "fileID=$fileID&confirm=yes");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->file->confirmDelete}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});"));
         }
         else
         {
@@ -281,7 +282,7 @@ class file extends control
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
 
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
     }
 
@@ -495,13 +496,13 @@ class file extends control
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
         $mime = (isset($file->extension) and in_array($file->extension, $this->config->file->imageExtensions)) ? "image/{$file->extension}" : $this->config->file->mimes['default'];
-        header("Content-type: $mime");
+        helper::header('Content-type', $mime);
 
         $cacheMaxAge = 10 * 365 * 24 * 3600;
-        header("Cache-Control: private");
-        header("Pragma: cache");
-        header("Expires:" . gmdate("D, d M Y H:i:s", time() + $cacheMaxAge) . " GMT");
-        header("Cache-Control: max-age=$cacheMaxAge");
+        helper::header('Cache-Control', 'private');
+        helper::header('Pragma', 'cache');
+        helper::header('Expires', gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT');
+        helper::header('Cache-Control', "max-age=$cacheMaxAge");
 
         $handle = fopen($file->realPath, "r");
         if($handle)

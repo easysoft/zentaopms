@@ -21,7 +21,7 @@
     <div class="main-header">
       <h2><?php echo $lang->product->create;?></h2>
     </div>
-    <form class="load-indicator main-form form-ajax<?php if(defined('TUTORIAL')) echo ' not-watch';?>" id="createForm" method="post" target='hiddenwin'>
+    <form class="load-indicator main-form form-ajax<?php if(commonModel::isTutorialMode()) echo ' not-watch';?>" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
           <?php if($this->config->systemMode == 'ALM'):?>

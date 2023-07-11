@@ -33,6 +33,7 @@ class repoZen extends repo
             ->setIf($isPipelineServer, 'prefix', '')
             ->setIf($this->post->SCM == 'Git', 'account', '')
             ->setIf($this->post->SCM == 'Git', 'password', '')
+            ->setIf(in_array($this->post->SCM, array('Gitea', 'Gogs')), 'path', $_POST['path'])
             ->setIf($this->post->acl != '', 'acl', json_encode($this->post->acl))
             ->setIf($this->post->encrypt == 'base64', 'password', base64_encode($this->post->password))
             ->skipSpecial('path,client,account,password')
@@ -121,7 +122,7 @@ class repoZen extends repo
             exec($versionCommand, $versionOutput, $versionResult);
             if($versionResult)
             {
-                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, join("<br />", $versionOutput));
+                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, implode("<br />", $versionOutput));
                 dao::$errors['client'] = $this->lang->repo->error->cmd . "<br />" . nl2br($message);
                 return false;
             }
@@ -151,7 +152,7 @@ class repoZen extends repo
             exec($command, $output, $result);
             if($result)
             {
-                $message = sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
+                $message = sprintf($this->lang->repo->error->output, $command, $result, implode("<br />", $output));
                 if(stripos($message, 'Expected FS format between') !== false and strpos($message, 'found format') !== false)
                 {
                     dao::$errors['client'] = $this->lang->repo->error->clientVersion;
@@ -214,7 +215,7 @@ class repoZen extends repo
             exec($command, $output, $result);
             if($result)
             {
-                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br />" . sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
+                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br />" . sprintf($this->lang->repo->error->output, $command, $result, implode("<br />", $output));
                 return false;
             }
         }
@@ -308,6 +309,98 @@ class repoZen extends repo
             }
         }
         return $repoList;
+    }
+
+    /**
+     * 获取版本库文件列表信息。
+     * Get repo files info.
+     *
+     * @param  object    $repo
+     * @param  string    $path
+     * @param  string    $branchID
+     * @param  int       $refresh
+     * @param  string    $revision
+     * @param  object    $lastRevision
+     * @access protected
+     * @return array
+     */
+    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revision, object $lastRevision): array
+    {
+        $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
+        $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
+        $this->scm->setEngine($repo);
+        if($refresh or !$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
+        {
+            if($repo->SCM == 'Gitlab')
+            {
+                $infos = $this->repo->getFileList($repo, $branchID, $path);
+            }
+            else
+            {
+                $infos        = $this->scm->ls($path, $revision);
+                $revisionList = array_column($infos, 'revision', 'revision');
+                $comments     = $this->repo->getHistory($repo->id, $revisionList);
+                foreach($infos as $info)
+                {
+                    if(isset($comments[$info->revision]))
+                    {
+                        $comment = $comments[$info->revision];
+                        $info->comment = $comment->comment;
+                    }
+                }
+            }
+            if($cacheFile) file_put_contents($cacheFile, serialize($infos), LOCK_EX);
+        }
+        else
+        {
+            $infos = unserialize(file_get_contents($cacheFile));
+        }
+
+        foreach($infos as $info)
+        {
+            $info->originalComment = $info->comment;
+            $info->comment         = $this->repo->replaceCommentLink($info->comment);
+        }
+
+        return $infos;
+    }
+
+    /**
+     * 获取分支与tag下拉菜单组件配置。
+     * Get items of branch and tags menu.
+     *
+     * @param  object    $repo
+     * @param  string    $branchID
+     * @access protected
+     * @return array
+     */
+    protected function getBranchAndTagItems(object $repo, string $branchID): array
+    {
+        /* Set branch or tag for git. */
+        $branches = $tags = array();
+        if(!in_array($repo->SCM, $this->config->repo->gitTypeList)) return array();
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $branches = $scm->branch();
+        $initTags = $scm->tags('');
+        foreach($initTags as $tag) $tags[$tag] = $tag;
+
+        $selected    = '';
+        $branchMenus = array();
+        $tagMenus    = array();
+        foreach($branches as $branchName)
+        {
+            $selected = ($branchName == $branchID) ? $branchName : $selected;
+            $branchMenus[]  = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName)), $branchName, ''), 'url' => 'javascript:;');
+        }
+        foreach($tags as $tagName)
+        {
+            $selected = ($tagName == $branchID) ? $tagName : $selected;
+            $tagMenus[]  = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName)), $tagName, ''), 'url' => 'javascript:;');
+        }
+
+        return array('branchMenus' => $branchMenus, 'tagMenus' => $tagMenus, 'selected' => $selected);
     }
 }
 

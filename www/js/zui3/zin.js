@@ -28,7 +28,7 @@
 
 (function()
 {
-    const config      = window.config;
+    let config        = window.config;
     const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
     if(isIndexPage) return;
 
@@ -37,6 +37,7 @@
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
     const startTime   = performance.now();
+    const timers      = {timeout: [], interval: []};
     let currentAppUrl = isInAppTab ? '' : location.href;
     let zinbar        = null;
     let historyState  = parent.window.history.state;
@@ -70,11 +71,13 @@
         title:         (data) => document.title = data,
         main:          (data) => $('#main').html(data),
         featureBar:    (data) => $('#featureBar').html(data),
-        pageCSS:       (data) => $('#pageCSS').html(data),
-        configJS:      (data) => $('#configJS')[0].text = data,
-        pageJS:        (data) => $('#pageJS').replaceWith(data),
+        pageCSS:       (data) => $('style.zin-page-css').html(data),
+        pageJS:        updatePageJS,
+        configJS:      updateConfigJS,
         activeFeature: (data) => activeNav(data, '#featureBar'),
-        activeMenu:    activeNav,
+        activeMenu:    (data) => activeNav(data),
+        navbar:        updateNavbar,
+        heading:       updateHeading,
         table:         updateTable,
         fatal:         showFatalError,
         zinDebug:      (data, _info, options) => showZinDebugInfo(data, options),
@@ -88,7 +91,10 @@
 
     function showFatalError(data, _info, options)
     {
-        $('body').empty().append($(`<div class="panel danger shadow-xl mx-auto my-4 rounded-lg" style="max-width: 1000px"><div class="panel-heading"><div class="panel-title font-bold text-lg">Fatal error: ${options.url}</div></div></div>`).append($('<div class="panel-body font-mono"></div>').append(data)));
+        const zinDebug = window.zinDebug;
+        if(zinDebug && zinDebug.basePath) data = data.split(zinDebug.basePath).join('<i class="icon icon-file-text opacity-50"></i>/');
+        if(data.startsWith('<br />\n'))   data = data.replace('<br />\n', '');
+        zui.Modal.alert({message: {html: data}, title: `Fatal error: ${options.url}`, actions: [], size: 'lg', custom: {className: 'backdrop-blur border-2 border-canvas bg-opacity-80 rounded-xl', bodyClass: 'font-mono', headerClass: 'text-danger'}});
     }
 
     function initZinbar()
@@ -99,6 +105,37 @@
 
         $bar = $('<div id="zinbar"></div>').insertAfter('body');
         zinbar = new zui.Zinbar($bar[0]);
+    }
+
+    function registerTimer(callback, time, type)
+    {
+        type = type || 'timeout';
+        const id = type === 'interval' ? setInterval(callback, time) : setTimeout(callback, time);
+        timers[type].push(id);
+        return id;
+    }
+
+    function updateConfigJS(data)
+    {
+        $('#configJS').replaceWith(data);
+        config = window.config;
+    }
+
+    function updatePageJS(data)
+    {
+        if(window.onPageUnmount) window.onPageUnmount();
+
+        window.onPageUnmount = null;
+        window.beforePageUpdate = null;
+        window.afterPageUpdate = null;
+        window.onPageRender = null;
+
+        if(timers.interval.length) timers.interval.forEach(clearInterval);
+        if(timers.timeout.length) timers.timeout.forEach(clearTimeout);
+        timers.interval = [];
+        timers.timeout = [];
+
+        $('script.zin-page-js').replaceWith(data);
     }
 
     function updateZinbar(perf, errors, basePath)
@@ -150,6 +187,33 @@
         if(DEBUG) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
     }
 
+    function updateNavbar(data)
+    {
+        const $navbar = $('#navbar');
+        const $newNav = $(data);
+        if($newNav.text().trim() !== $navbar.text().trim()) return $navbar.empty().append($newNav);
+
+        activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
+    }
+
+    function updateHeading(data)
+    {
+        const $data = $(data);
+        const $heading = $('#heading');
+        const $dropmenu = $heading.find('#dropmenu');
+        const $nextDropmenu = $data.filter('#dropmenu');
+        if($dropmenu.dataset('fetcher') === $nextDropmenu.dataset('fetcher'))
+        {
+            const $toolbar = $heading.find('.toolbar');
+            const $nextToolbar = $data.filter('.toolbar');
+            if($nextToolbar.text().trim() !== $toolbar.text().trim()) $toolbar.replaceWith($nextToolbar);
+        }
+        else
+        {
+            $heading.html(data);
+        }
+    }
+
     function activeNav(activeID, nav)
     {
         const $nav    = $(nav || '#navbar');
@@ -162,25 +226,43 @@
     function updateTable(data)
     {
         const props = data.props;
-        const $table = $('#' + props.id).parent();
+        const $table = $('#' + props.id).closest('[data-zui-dtable]');
         if(!$table.length) return;
         const dtable = zui.DTable.get($table[0]);
         if(DEBUG) console.log('[APP] ', 'update table:', {data, props});
         dtable.render(props);
     }
 
+    function beforeUpdate($target, info, options)
+    {
+        if($target && $target.length) $target.find('[data-zin-events]').off('.on.zin');
+        if(window.beforePageUpdate) window.beforePageUpdate($target, info, options);
+    }
+
+    function afterUpdate($target, info, options)
+    {
+        if(window.afterPageUpdate) window.afterPageUpdate($target, info, options);
+    }
+
     function renderPartial(info, options)
     {
-        if(window.config.onRenderPage && window.config.onRenderPage(info)) return;
+        if(window.onPageRender && window.onPageRender(info)) return;
 
-        const render = renderMap[info.name];
-        if(render) return render(info.data, info, options);
+        const render   = renderMap[info.name];
+        const isHtml   = info.type === 'html';
+        const selector = parseSelector(info.selector);
+        const $target  = selector ? $(selector.select) : $target;
+        if(render)
+        {
+            if(isHtml) beforeUpdate($target, info, options);
+            render(info.data, info, options);
+            if(isHtml) afterUpdate($target, info, options);
+            return;
+        }
 
         /* Common render */
-        const selector = parseSelector(info.selector);
         if(!selector) return console.warn('[APP] ', 'cannot render partial content with data', info);
 
-        const $target = $(selector.select);
         if(!$target.length) return console.warn('[APP] ', 'cannot find target element with selector', selector);
         if(selector.first) $target = $target.first();
         if(selector.type === 'json')
@@ -207,15 +289,21 @@
             return;
         }
 
+        beforeUpdate($target, info, options);
         if(selector.inner) $target.html(info.data);
         else $target.replaceWith(info.data);
+        afterUpdate($target, info, options);
     }
 
     function renderPage(list, options)
     {
         if(DEBUG) console.log('[APP] ', 'render:', list);
         list.forEach(item => renderPartial(item, options));
-        historyState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
+        if(!options.partial)
+        {
+            const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
+            if (newState) historyState = newState;
+        }
     }
 
     function toggleLoading(target, isLoading)
@@ -268,12 +356,13 @@
             {
                 updatePerfInfo(options, 'requestBegin');
                 if(isDebugRequest) return;
-                toggleLoading();
+                toggleLoading(target);
             },
             success: (data) =>
             {
                 updatePerfInfo(options, 'requestEnd', {dataSize: data.length});
                 options.result = 'success';
+                let hasFatal = false;
                 try
                 {
                     if(data.includes('RAWJS<'))
@@ -289,16 +378,43 @@
                 catch(e)
                 {
                     if(!isInAppTab && config.zin) return;
-                    data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];
+                    hasFatal = data.includes('Fatal error');
+                    data = [{name: hasFatal ? 'fatal' : 'html', data: data}];
                 }
-                if(options.updateUrl !== false) currentAppUrl = url;
-                data.forEach((item, idx) => item.selector = selectors[idx]);
-                updatePerfInfo(options, 'renderBegin');
-                renderPage(data, options);
-                updatePerfInfo(options, 'renderEnd');
-                $(document).trigger('pagerender.app');
-                if(options.success) options.success(data);
-                if(onFinish) onFinish(null, data);
+                if(!options.partial && !hasFatal) currentAppUrl = url;
+                if(Array.isArray(data))
+                {
+                    data.forEach((item, idx) => item.selector = selectors[idx]);
+                    updatePerfInfo(options, 'renderBegin');
+                    renderPage(data, options);
+                    updatePerfInfo(options, 'renderEnd');
+                    $(document).trigger('pagerender.app');
+                    if(options.success) options.success(data);
+                    if(onFinish) onFinish(null, data);
+                }
+                else if(data.load)
+                {
+                    if(data.load === 'dtable') loadTable();
+                    else if(typeof data.load === 'string') loadPage(data.load);
+                    else if(data.load === true) loadCurrentPage();
+                    else if(typeof data.load === 'object')
+                    {
+                        if('back' in data.load)
+                        {
+                            openUrl(data.load);
+                        }
+                        else if('confirm' in data.load)
+                        {
+                            const confirmed = confirm(data.load.confirm);
+                            if(confirmed) loadPage(data.load.confirmed);
+                            else          loadPage(data.load.canceled);
+                        }
+                        else
+                        {
+                            loadPage(data.load);
+                        }
+                    }
+                }
             },
             error: (xhr, type, error) =>
             {
@@ -314,6 +430,12 @@
                 toggleLoading(target, false);
                 if(options.complete) options.complete();
                 $(document).trigger('pageload.app');
+                const frameElement = window.frameElement;
+                if(frameElement)
+                {
+                    frameElement.classList.remove('loading');
+                    frameElement.classList.add('in');
+                }
             }
         };
         return $.ajax(ajaxOptions);
@@ -356,6 +478,36 @@
         }, options.delayTime || 0);
     }
 
+    /** Load an old page. */
+    function loadOldPage(url)
+    {
+        let $page = $('#oldPage');
+        if(!$page.length)
+        {
+            $page = $('<div/>')
+                .append($('<iframe />').attr({name: `app-${currentCode}-old`, frameborder: 'no', scrolling: 'auto', style: 'width:100%;height:100%;'}))
+                .attr({id: 'oldPage', class: 'canvas fixed w-full h-full top-0 left-0 load-indicator', style: 'z-index:100;'})
+                .insertAfter('body')
+                .on('oldPageLoad.app', () =>
+                {
+                    $page.removeClass('loading').find('iframe').addClass('in');
+                    $(document).trigger('pageload.app');
+                });
+        }
+        if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
+        const $iframe = $page.find('iframe').removeClass('in');
+        if($iframe.attr('src') === url) $iframe[0].contentWindow.location.reload();
+        else $iframe.attr('src', url);
+    }
+
+    /** Hide old page content. */
+    function hideOldPage()
+    {
+        const $page = $('#oldPage');
+        if(!$page.length) return;
+        $page.addClass('in hidden');
+    }
+
     /**
      * Load page with zin way.
      *
@@ -376,18 +528,31 @@
     {
         if(typeof options === 'string') options = {url: options};
         else if(!options) options = {};
-        if(typeof selector === 'string') options.selector = selector;
 
-        if (!options.selector && options.url.includes(' '))
+        if ($.apps.isOldPage(options.url)) return loadOldPage(options.url);
+        else hideOldPage();
+
+        if(typeof selector === 'string')      options.selector = selector;
+        else if(typeof selector === 'object') options = $.extend({}, options, selector);
+        if (!options.selector && options.url && options.url.includes(' '))
         {
             const parts = url.split(' ', 2);
             options.url      = parts[0];
             options.selector = parts[1];
         }
 
-        options  = $.extend({url: currentAppUrl, id: options.selector || 'page'}, options);
-        if(!options.selector) options.selector = ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
-        if(!options.id) options.id = options.selector || 'page';
+        options  = $.extend({url: currentAppUrl, id: options.selector || options.target || 'page'}, options);
+        if(!options.selector)
+        {
+            if($('#main').length)
+            {
+                options.selector = '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS,title>*,#heading>*,#navbar>*';
+            }
+            else
+            {
+                options.selector = 'body>*,title>*,#configJS';
+            }
+        }
 
         if(DEBUG) console.log('[APP] ', 'load:', options.url);
         fetchContent(options.url, options.selector, options);
@@ -397,25 +562,123 @@
      * Load dtable content.
      *
      * @param {string} [url]
-     * @param {string} [id]
+     * @param {string} [target]
      * @param {Object} [options]
      * @returns
      */
-    function loadTable(url, id, options)
+    function loadTable(url, target, options)
     {
-        id  = id || $('.dtable').attr('id') || 'dtable';
+        if(!target)
+        {
+            const urlInfo = $.parseLink(url);
+            target = urlInfo.moduleName ? `table-${urlInfo.moduleName}-${urlInfo.methodName}` : ($('.dtable').attr('id') || 'dtable');
+        }
+        if(target[0] !== '#' || target[0] !== '.') target = `#${target}`;
+        if(!$(target).length) return loadPage({id: target, url: url});
+
         loadPage($.extend(
         {
             url: url,
-            id: '#' + id,
-            target: '#' + id,
-            selector: 'table/#' + id + ':type=json&data=props,#featureBar>*'
+            id: target,
+            target: target,
+            selector: `table/${target}:type=json&data=props,#featureBar>*`
         }, options));
+    }
+
+    /**
+     * Load modal content.
+     *
+     * @param {string} [url]
+     * @param {string} [target]
+     * @param {Object} [options]
+     * @returns
+     */
+    function loadModal(url, target, options)
+    {
+        options = $.extend({url}, options);
+        if(!target) return zui.Modal.open(options);
+
+        if(target[0] !== '#' || target[0] !== '.') target = `#${target}`;
+        const modal = zui.Modal.query(target);
+        if(!modal) return;
+        modal.render(options);
+    }
+
+    function loadTarget(url, target, options)
+    {
+        options = $.extend({}, options);
+        if(typeof target === 'string') options.target = target;
+        else if(typeof target === 'object') options = $.extend(options, target);
+        if(typeof url === 'string') options.url = url;
+        else if(typeof url === 'object') options = $.extend(options, url);
+        if(!options.target) return loadPage(options);
+
+        let remoteData;
+        let loadError;
+        const ajaxOptions =
+        {
+            url:         url,
+            header:      options.header,
+            type:        options.method || 'GET',
+            data:        options.data,
+            contentType: options.contentType,
+            beforeSend: () =>
+            {
+                toggleLoading(options.target);
+                if(options.beforeSend) return options.beforeSend();
+            },
+            success: (data) =>
+            {
+                remoteData = data;
+                if(options.beforeUpdate)
+                {
+                    const result = options.beforeUpdate(data, options);
+                    if(result === false) return;
+                    if(typeof result === 'string') data = result;
+                }
+                let target = options.target;
+                if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
+                const $target = $(target);
+                if($target.length)
+                {
+                    if(options.success) options.success(data, options);
+                    let $content = $(data);
+                    if(options.selector) $content = $('<div>').append($content).find(options.selector);
+                    if(options.replace) $target.replaceWith($content);
+                    else $target.empty().append($content);
+                }
+                else
+                {
+                    loadError = new Error(`ZIN: Target "${target}" not found.`);
+                    if(options.error) options.error(data, loadError);
+                }
+            },
+            error: (xhr, type, error) =>
+            {
+                loadError = error;
+                if(options.error) options.error(error, options);
+                if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {xhr, type, error});
+                zui.Messager.show('ZIN: Fetch data failed from ' + url);
+            },
+            complete: () =>
+            {
+                toggleLoading(target, false);
+                if(options.complete) options.complete(remoteData, loadError, options);
+            }
+        };
+        return $.ajax(ajaxOptions);
     }
 
     function postAndLoadPage(url, data, selector, options)
     {
-        loadPage($.extend({url: url, selector: selector, method: 'POST', data, contentType: false}, options));
+        if(typeof selector === 'object')
+        {
+            options = selector;
+            selector = null;
+        }
+        options = $.extend({url: url, selector: selector, method: 'POST', data, contentType: false}, options);
+        if(options.app) openPage(url, options.app, options);
+        else            loadPage(options);
     }
 
     function loadCurrentPage(options)
@@ -424,20 +687,29 @@
         return loadPage(options);
     }
 
-    function openPage(url, appCode)
+    function openPage(url, appCode, options)
     {
-        if(DEBUG) console.log('[APP] ', 'open:', url);
+        if(DEBUG) console.log('[APP] ', 'open:', url, appCode);
         if(!window.config.zin)
         {
             location.href = $.createLink('index', 'app', 'url=' + btoa(url));
             return;
         }
-        $.apps.reloadApp(appCode || currentCode, url);
+        $.apps.openApp(url, $.extend({code: appCode, forceReload: true}, options));
     }
 
-    function onRenderPage(callback)
+    /**
+     * Search history and go back to specified path.
+     *
+     * @param {string} target Back target, can be app name or module-method path.
+     * @param {string} url    Fallback url.
+     * @returns {void}
+     */
+    function goBack(target, url)
     {
-        window.config.onRenderPage = callback;
+        if(!target || target === 'APP' || target === true) target = currentCode;
+        else if(target === 'GLOBAL')    target = '';
+        $.apps.goBack(target, url, historyState);
     }
 
     /**
@@ -448,8 +720,9 @@
      * @param {string} options.app
      * @param {string} options.load
      * @param {string} options.back
+     * @param {Event}  event
      */
-    function openUrl(url, options)
+    function openUrl(url, options, event)
     {
         if(typeof url === 'object')
         {
@@ -464,26 +737,31 @@
 
         if(DEBUG) console.log('[APP] open url', url, options);
 
-        if(typeof options.load === 'string')
+        const load = options.load;
+        if(typeof load === 'string' || load)
         {
-            if(options.id)     delete options.id;
-            if(url)            options.url = url;
-            if(options.loadId) {options.id = options.loadId; delete options.loadId;}
-            if(options.load)
+            if(!options.target) options.target = options.loadId;
+            if(url) options.url = url;
+            if(load)
             {
-                if(options.load === 'table') return loadTable(options.url, options.id, options);
-                options.selector = options.load; delete options.load;
+                if(load === 'table')
+                {
+                    if(!options.target && event) options.target = $(event.target).closest('.dtable').attr('id');
+                    return loadTable(options.url, options.target, options);
+                }
+                if(load === 'modal')
+                {
+                    if(!options.target && event) options.target = $(event.target).closest('.modal').attr('id');
+                    return loadModal(options.url, options.target, options);
+                }
+                if(load === 'target') return loadTarget(options);
+                if(load !== 'APP' && typeof load === 'string') options.selector = load;
+                delete options.load;
             }
             return loadPage(options);
         }
 
-        let back = options.back;
-        if(typeof back === 'string')
-        {
-            if(back === 'APP')         back = currentCode;
-            else if(back === 'GLOBAL') back = '';
-            return $.apps.goBack(back, url, historyState);
-        }
+        if(typeof options.back === 'string') return goBack(options.back, url);
 
         openPage(url, options.app);
     }
@@ -589,7 +867,8 @@
         return result;
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading, openUrl: openUrl, goBack: $.apps.goBack});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget});
+    $.extend($.apps, {openUrl: openUrl});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
@@ -597,21 +876,47 @@
         if(isInAppTab) window.parent.$('body').trigger('click');
 
         const $link = $(e.target).closest('a,.open-url');
-        if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('target') === '_blank') return;
+        if(!$link.length || $link.hasClass('ajax-submit') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
 
         const options = $link.dataset();
-        if(options.toggle || $link.hasClass('not-in-app')) return e.preventDefault();
+        if(options.toggle) return;
 
         const url = options.url || $link.attr('href');
-        if(!url || url.startsWith('javascript:') || url.startsWith('#')) return;
+        const $modal = $link.closest('.modal');
+        if(options.loadId)
+        {
+            options.target = options.loadId;
+            delete options.loadId;
+        }
+        if($modal.length)
+        {
+            if(!options.load) options.load   = 'modal';
+            if(options.load === 'modal' && !options.target) options.target = $modal.attr('id');
+            if(options.load === 'table')
+            {
+                options.partial = true;
+                if(!options.url) options.url = $modal.data('zui.Modal').options.url;
+            }
+        }
+        else
+        {
+            if(options.load === 'modal' && !options.target) delete options.load;
+        }
+        if(url && (/^(https?|javascript):/.test(url) || url.startsWith('#'))) return;
+        if(!url && $link.is('a') && !options.back && !options.load) return;
 
-        openUrl(url, options);
+        openUrl(url, options, e);
         e.preventDefault();
     }).on('locate.zt', (_e, data) =>
     {
         if(!data) return;
         if(data === true) return loadCurrentPage();
-        if(typeof data === 'string') data = {url: data};
+        if(typeof data === 'string')
+        {
+            if(data === 'table') return loadTable();
+            if(data === 'modal') return loadModal();
+            data = {url: data};
+        }
 
         if(data.confirm)
         {
@@ -621,6 +926,7 @@
                 else $(document).trigger('locate.zt', data.cancelled);
             });
         }
+        if(data.load) return openUrl(data);
         if(data.app) return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
         loadPage(data.url, data.selector);
     });
@@ -639,11 +945,14 @@
     {
         initZinbar();
 
-        if(window.defaultAppUrl)
+        if(window.defaultAppUrl) loadPage(window.defaultAppUrl);
+        if(isInAppTab)
         {
-            loadPage(window.defaultAppUrl);
+            const frameElement = window.frameElement;
+            if(frameElement && parent.window.$) parent.window.$(frameElement).trigger('ready.app');
         }
-        else if(DEBUG)
+
+        if(DEBUG)
         {
             if(window.zinDebug)
             {
@@ -654,58 +963,6 @@
                 showZinDebugInfo(window.zinDebug, {id: 'page'});
             }
             if(!isInAppTab) loadCurrentPage();
-        }
-
-        /* Compatible with old version */
-        if(DEBUG && typeof window.zin !== 'object' && isInAppTab)
-        {
-            console.log('[ZUI3]', 'Compatible with old version');
-            window.jQuery = $;
-            const empty = () => {};
-            window.adjustMenuWidth = empty;
-            window.startCron = empty;
-            $.zui = $.extend(function(){console.warn('[ZUI3]', 'The $.zui() is not supported.');}, zui);
-            $.initSidebar = empty;
-            parent.window.$.apps.openedApps = $.apps.openedApps = $.apps.openedMap;
-            parent.window.$.apps.updateUrl = $.apps.updateUrl = empty;
-            const ajaxOld = $.ajax;
-            window.createLink = $.createLink;
-            window.parseLink = $.parseLink;
-            $.ajax = function(url, settings)
-            {
-                ajaxOld.call(this, url, settings);
-                const deffered = {};
-                const ajaxWarn = function(name)
-                {
-                    console.warn('[ZUI3]', 'The $.ajax().' + name + '() is not supported.');
-                    return deffered;
-                };
-                $.extend(deffered, {done: ajaxWarn.bind(deffered, 'done'), fail: ajaxWarn.bind(deffered, 'fail'), always: ajaxWarn.bind(deffered, 'always')});
-                return deffered;
-            };
-            $.extend($.fn,
-            {
-                sortable: function()
-                {
-                    console.warn('[ZUI3]', 'The $().sortable() is not supported.');
-                    return this;
-                },
-                scroll: function()
-                {
-                    console.warn('[ZUI3]', 'The $().scroll() is not supported.');
-                    return this;
-                },
-                resize: function()
-                {
-                    console.warn('[ZUI3]', 'The $().resize() is not supported.');
-                    return this;
-                },
-                table: function()
-                {
-                    console.warn('[ZUI3]', 'The $().table() is not supported.');
-                    return this;
-                },
-            });
         }
     });
 }());

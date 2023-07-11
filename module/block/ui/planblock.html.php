@@ -18,17 +18,24 @@ if(!$longBlock)
     unset($config->block->plan->dtable->fieldList['hour']);
     unset($config->block->plan->dtable->fieldList['bugs']);
 }
-
-foreach($plans as $plan) $plan->product = zget($products, $plan->product);
+else
+{
+    $config->block->plan->dtable->fieldList['product']['map'] = $products;
+    foreach($plans as $plan) $plan->hour .= $config->hourUnit;
+}
 
 panel
 (
-    set('class', 'plan-block'),
+    setClass('p-0 plan-block'),
+    set::title($block->title),
+    set::bodyClass('p-0 no-shadow border-t'),
     dtable
     (
+        set::height(318),
+        set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
         set::cols(array_values($config->block->plan->dtable->fieldList)),
         set::data(array_values($plans))
     )
 );
 
-render('|fragment');
+render();

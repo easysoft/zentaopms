@@ -100,7 +100,7 @@ $lang->testcase->suite            = 'Test Suite';
 $lang->testcase->executionStatus  = 'executionStatus';
 $lang->testcase->caseType         = 'Case Type';
 $lang->testcase->allType          = 'All Types';
-$lang->testcase->showAutoCase     = 'Automated';
+$lang->testcase->automated        = 'Automated';
 $lang->testcase->automation       = 'Automation Test';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
@@ -118,6 +118,7 @@ $lang->testcase->deleteAction            = "Supprimer CasTest";
 $lang->testcase->view                    = "Détail CasTest";
 $lang->testcase->review                  = "Doit être validé";
 $lang->testcase->reviewAB                = "Validation";
+$lang->testcase->reviewAction            = "Review Case";
 $lang->testcase->batchReview             = "Validation par Lot";
 $lang->testcase->edit                    = "Modifier CasTest";
 $lang->testcase->batchEdit               = "Modifier par Lot ";
@@ -130,6 +131,7 @@ $lang->testcase->batchDelete             = "Supprimer par Lot ";
 $lang->testcase->batchConfirmStoryChange = "Confirmer par Lot";
 $lang->testcase->batchCaseTypeChange     = "Changer Types par Lot";
 $lang->testcase->browse                  = "Liste CasTests";
+$lang->testcase->listView                = "View by List";
 $lang->testcase->groupCase               = "Vue par Groupe";
 $lang->testcase->groupView               = "Group View";
 $lang->testcase->zeroCase                = "Stories sans CasTests";
@@ -158,7 +160,8 @@ $lang->testcase->autoScript              = 'Script';
 
 $lang->testcase->new = 'Nouveau';
 
-$lang->testcase->num = 'Ligne CasTes:';
+$lang->testcase->num      = 'Ligne CasTes:';
+$lang->testcase->encoding = 'Encoding';
 
 $lang->testcase->deleteStep   = 'Supprimer';
 $lang->testcase->insertBefore = 'Insérer Avant';
@@ -178,11 +181,12 @@ $lang->testcase->lblTypeValue   = 'Valeur Type';
 $lang->testcase->lblStageValue  = 'Valeur Phase';
 $lang->testcase->lblStatusValue = 'Valeur Statut';
 
-$lang->testcase->legendBasicInfo       = 'Infos de Base';
-$lang->testcase->legendAttatch         = 'Fichiers';
-$lang->testcase->legendLinkBugs        = 'Bugs';
-$lang->testcase->legendOpenAndEdit     = 'Créer/Editer';
-$lang->testcase->legendComment         = 'Commentaire';
+$lang->testcase->legendBasicInfo   = 'Infos de Base';
+$lang->testcase->legendAttatch     = 'Fichiers';
+$lang->testcase->legendLinkBugs    = 'Bugs';
+$lang->testcase->legendOpenAndEdit = 'Créer/Editer';
+$lang->testcase->legendComment     = 'Commentaire';
+$lang->testcase->legendOther       = 'Other Related';
 
 $lang->testcase->confirmDelete         = 'Voulez-vous supprimer ce CasTest ?';
 $lang->testcase->confirmBatchDelete    = 'Voulez-vous supprimer des Castests par Lot ?';
@@ -201,13 +205,13 @@ $lang->testcase->priList[4] = 4;
 
 /* Define the types. */
 $lang->testcase->typeList['']            = '';
-$lang->testcase->typeList['feature']     = 'Fonctionnalité';
-$lang->testcase->typeList['performance'] = 'Performance';
-$lang->testcase->typeList['config']      = 'Configuration';
-$lang->testcase->typeList['install']     = 'Installation';
-$lang->testcase->typeList['security']    = 'Sécurité';
-$lang->testcase->typeList['interface']   = 'Interface';
 $lang->testcase->typeList['unit']        = 'Unit';
+$lang->testcase->typeList['interface']   = 'Interface';
+$lang->testcase->typeList['feature']     = 'Fonctionnalité';
+$lang->testcase->typeList['install']     = 'Installation';
+$lang->testcase->typeList['config']      = 'Configuration';
+$lang->testcase->typeList['performance'] = 'Performance';
+$lang->testcase->typeList['security']    = 'Sécurité';
 $lang->testcase->typeList['other']       = 'Autre';
 
 $lang->testcase->stageList['']           = '';
@@ -284,6 +288,7 @@ $lang->testcase->close = 'Close';
 
 $lang->testcase->xmindImportSetting = 'Import Characteristic Character Settings';
 $lang->testcase->xmindExportSetting = 'Export Characteristic Character Settings';
+$lang->testcase->xmindSettingTip    = 'After the feature characters are set, the XMind theme can correspond to the ZenTao test case structure.';
 
 $lang->testcase->settingModule = 'Module';
 $lang->testcase->settingScene  = 'Scene';
@@ -312,25 +317,28 @@ $lang->testcase->batchChangeScene = "Batch change scene";
 $lang->testcase->updateOrder      = "Drag Sort";
 $lang->testcase->differentProduct = "Different product";
 
-$lang->testcase->newScene                    = "Add Scene";
-$lang->testcase->sceneTitle                  = 'Scene Title';
-$lang->testcase->parentScene                 = "Parent Scene";
-$lang->testcase->scene                       = "Scene";
-$lang->testcase->summary                     = 'Total %d Top Scene，%d Independent test case.';
-$lang->testcase->summaryScene                = 'Total %d Top Scene.';
-$lang->testcase->checkedSummary              = '{checked} checked test cases, {run} run.';
-$lang->testcase->deleteScene                 = 'Delete Scene';
-$lang->testcase->editScene                   = 'Edit Scene';
-$lang->testcase->hasChildren                 = 'This scene has sub scene or test cases. Do you want to delete them all?';
-$lang->testcase->confirmDeleteScene          = 'Are you sure you want to delete the scene: \"%s\"?';
-$lang->testcase->sceneb                      = "Scene";
-$lang->testcase->onlyScene                   = 'Only Scene';
-$lang->testcase->iScene                      = 'Scene';
-$lang->testcase->generalTitle                = 'Title';
-$lang->testcase->noScene                     = 'No Scene';
-$lang->testcase->rowIndex                    = 'Row Index';
-$lang->testcase->nestTotal                   = 'nest total';
-$lang->testcase->normal                      = 'normal';
+$lang->testcase->newScene           = "Add Scene";
+$lang->testcase->sceneTitle         = 'Scene Name';
+$lang->testcase->parentScene        = "Parent Scene";
+$lang->testcase->scene              = "Scene";
+$lang->testcase->summary            = 'Total %d Top Scene，%d Independent test case.';
+$lang->testcase->summaryScene       = 'Total %d Top Scene.';
+$lang->testcase->failSummary        = 'Total %d Cases, which did not pass %d.';
+$lang->testcase->checkedSummary     = '{checked} checked test cases, {run} run.';
+$lang->testcase->failCheckedSummary = '%total% checked test cases，%fail% run fail。';
+$lang->testcase->deleteScene        = 'Delete Scene';
+$lang->testcase->editScene          = 'Edit Scene';
+$lang->testcase->hasChildren        = 'This scene has sub scene or test cases. Do you want to delete them all?';
+$lang->testcase->confirmDeleteScene = 'Are you sure you want to delete the scene: \"%s\"?';
+$lang->testcase->sceneb             = 'Scene';
+$lang->testcase->onlyAutomated      = 'Only Automated';
+$lang->testcase->onlyScene          = 'Only Scene';
+$lang->testcase->iScene             = 'Scene';
+$lang->testcase->generalTitle       = 'Title';
+$lang->testcase->noScene            = 'No Scene';
+$lang->testcase->rowIndex           = 'Row Index';
+$lang->testcase->nestTotal          = 'nest total';
+$lang->testcase->normal             = 'normal';
 
 /* Translation for drag modal message box. */
 $lang->testcase->dragModalTitle       = 'Drag and drop operation selection';
@@ -341,4 +349,5 @@ $lang->testcase->dragModalChangeOrder = 'Reorder';
 $lang->testcase->confirmBatchDeleteSceneCase = 'Are you sure you want to delete these scene or test cases in batch?';
 
 $lang->scene = new stdclass();
-$lang->scene->title = 'Scene Title';
+$lang->scene->title  = 'Scene Name';
+$lang->scene->noCase = 'No case';

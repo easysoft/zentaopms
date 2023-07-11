@@ -186,7 +186,7 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
+            $repo    = $this->loadModel('repo')->getByID($job->repo);
             $project = zget($repo, 'project');
             if(!empty($repo))
             {
@@ -312,7 +312,7 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->gitlabRepo);
+            $repo    = $this->loadModel('repo')->getByID($job->gitlabRepo);
             $project = zget($repo, 'project');
             if(!empty($repo))
             {
@@ -437,7 +437,7 @@ class jobModel extends model
 
         if($job->triggerType == 'tag')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
+            $repo    = $this->loadModel('repo')->getByID($job->repo);
             $lastTag = '';
             if($repoType == 'Subversion')
             {
@@ -475,7 +475,7 @@ class jobModel extends model
 
         if(!$job) return false;
 
-        $repo = $this->loadModel('repo')->getRepoById($job->repo);
+        $repo = $this->loadModel('repo')->getByID($job->repo);
         $now  = helper::now();
 
         /* Save compile data. */
@@ -671,5 +671,24 @@ class jobModel extends model
             ->beginIF(!$showDeleted)->andWhere('deleted')->eq('0')->fi()
             ->beginIF(!empty($projectKeys) or !$emptyShowAll)->andWhere('projectKey')->in($projectKeys)->fi()
             ->fetchPairs();
+    }
+
+    /**
+     * 判断按钮是否可点击。
+     * Adjust the action is clickable.
+     *
+     * @param  object $object
+     * @param  string $action
+     * @param  string $module
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($object, $action, $module = 'job')
+    {
+        $action = strtolower($action);
+
+        if($module == 'job' && $action == 'exec') return $object->canExec;
+
+        return true;
     }
 }

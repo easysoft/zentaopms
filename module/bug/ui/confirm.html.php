@@ -12,9 +12,10 @@ namespace zin;
 
 jsVar('page', 'confirm');
 
+modalHeader();
+
 formPanel
 (
-    set::title($bug->title),
     formGroup
     (
         set::width('1/3'),
@@ -56,9 +57,9 @@ formPanel
     formGroup
     (
         set::label($lang->bug->lblMailto),
-        set::control(array('type' => 'select', 'items' => $users)),
-        set::name('mailto'),
-        set::value($bug->mailto),
+        set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
+        set::name('mailto[]'),
+        set::value(str_replace(' ', '', $bug->mailto ?: '')),
     ),
     formGroup
     (
@@ -68,8 +69,9 @@ formPanel
             set::name('comment'),
             set::value(),
         )
-    ),
+    )
 );
+
 history();
 
-render('modalDialog');
+render();

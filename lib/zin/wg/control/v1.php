@@ -11,15 +11,21 @@ require_once dirname(__DIR__) . DS . 'radiolist' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'select' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'picker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'datepicker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'timepicker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'pripicker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'severitypicker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'colorpicker' . DS . 'v1.php';
 
 class control extends wg
 {
-    static $defineProps = array(
-        'type?: string',         // 表单输入元素类型，值可以为：static, text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
+    protected static array $defineProps = array(
+        'type?: string',         // 表单输入元素类型，值可以为：static, text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
         'name: string',          // HTML name 属性
         'id?: string',           // HTML id 属性
         'value?: string',        // HTML value 属性
         'placeholder?: string',  // HTML placeholder 属性
+        'readonly?: bool',       // HTML readonly 属性
         'required?: bool',       // 是否为必填项
         'disabled?: bool',       // 是否为禁用状态
         'items?: array'          // 表单输入元素子项数据
@@ -45,7 +51,7 @@ class control extends wg
         return div
         (
             set::class('form-control-static'),
-            set($this->props->skip(array('type', 'name', 'value', 'required', 'disabled', 'placeholder', 'items'))),
+            set($this->props->skip(array('type', 'name', 'value', 'required', 'disabled', 'placeholder', 'items', 'required'))),
             set('data-name', $this->prop('name')),
             $this->prop('value')
         );
@@ -118,6 +124,31 @@ class control extends wg
             set::inline(true),
             set($this->props->skip('type'))
         );
+    }
+
+    protected function buildDate(): wg
+    {
+        return new datePicker(set($this->props->skip('type')));
+    }
+
+    protected function buildTime(): wg
+    {
+        return new timePicker(set($this->props->skip('type')));
+    }
+
+    protected function buildPri(): wg
+    {
+        return new priPicker(set($this->props->skip('type')));
+    }
+
+    protected function buildSeverity(): wg
+    {
+        return new severityPicker(set($this->props->skip('type')));
+    }
+
+    protected function buildColor(): wg
+    {
+        return new colorPicker(set($this->props->skip('type')));
     }
 
     protected function build(): wg

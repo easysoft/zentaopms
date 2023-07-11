@@ -18,6 +18,7 @@ namespace zin;
 jsVar('toTaskList', !empty($task->id));
 jsVar('blockID', $blockID);
 jsVar('executionID', $execution->id);
+jsVar('taskID', $taskID);
 jsVar('ditto', $lang->task->ditto);
 jsVar('teamMemberError', $lang->task->error->teamMember);
 jsVar('vision', $config->vision);
@@ -29,6 +30,7 @@ jsVar('window.lifetimeList', $lifetimeList);
 jsVar('window.attributeList', $attributeList);
 jsVar('hasProduct', $execution->hasProduct);
 jsVar('hideStory', $hideStory);
+
 $requiredFields = array();
 foreach(explode(',', $config->task->create->requiredFields) as $field)
 {
@@ -56,7 +58,7 @@ $kanbanRow = '';
 /* The region and lane fields are only showed in kanban. */
 if($execution->type == 'kanban')
 {
-    $kanbanRow = formRow (
+    $kanbanRow = formRow(
         formGroup
         (
             set::width('1/2'),
@@ -122,9 +124,71 @@ $storyPreviewBtn = span
     ),
 );
 
+$teamForm = array();
+for($i = 1; $i <= 3; $i ++)
+{
+    $teamForm[] = h::tr
+    (
+        h::td
+        (
+            setClass('team-index'),
+            span
+            (
+                setClass("team-number"),
+                $i
+            ),
+            icon('angle-down')
+        ),
+        h::td
+        (
+            set::width('240px'),
+            select
+            (
+                set::name("team[]"),
+                set::items($members),
+            ),
+        ),
+        h::td
+        (
+            set::width('135px'),
+            inputControl
+            (
+                input
+                (
+                    set::name("teamEstimate[]"),
+                    set::placeholder($lang->task->estimateAB),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
+            ),
+        ),
+        h::td
+        (
+            set::width('100px'),
+            setClass('center'),
+            btnGroup
+            (
+                set::items(array(
+                    array('icon' => 'plus',  'class' => 'btn btn-link btn-add'),
+                    array('icon' => 'trash', 'class' => 'btn btn-link btn-delete'),
+                ))
+            )
+        )
+    );
+}
+
+$selectStoryRow = '';
+if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review')))
+{
+    $selectStoryRow = formRow(
+        set::id('testStoryBox'),
+        setClass('hidden'),
+    );
+}
+
 $afterCreateRow = '';
 /* Ct redirect within pop-ups. */
-if(!isonlybody())
+if(!isAjaxRequest('modal'))
 {
     $afterRow = formGroup
     (
@@ -179,6 +243,7 @@ formPanel
             checkbox(
                 set::id('selectTestStory'),
                 set::name('selectTestStory'),
+                set::value(1),
                 set::text($lang->task->selectTestStory),
                 set::rootClass('ml-4'),
                 on::change('toggleSelectTestStory'),
@@ -189,14 +254,32 @@ formPanel
     (
         formGroup
         (
-            set::width('1/4'),
             set::label($lang->task->assignTo),
+            setClass('assignedToBox'),
             select
             (
                 set::id('assignedTo'),
                 set::name('assignedTo[]'),
                 set::value($task->assignedTo),
                 set::items($members),
+            ),
+            btn
+            (
+                set
+                (
+                    array
+                    (
+                        'class' => 'btn primary-pale hidden add-team mr-3',
+                        'data-toggle' => 'modal',
+                        'url' => '#modalTeam',
+                        'icon' => 'plus',
+                    ),
+                ),
+                $lang->task->addMember,
+            ),
+            div
+            (
+                setClass('assignedToList'),
             ),
         ),
         formGroup
@@ -208,20 +291,17 @@ formPanel
                 set::name('multiple'),
                 set::text($lang->task->multiple),
                 set::rootClass('ml-4'),
-                on::change('showTeamBox'),
+                on::change('toggleTeam'),
             )
         ),
+    ),
+    formRow
+    (
+        setClass('hidden'),
         formGroup
         (
-            set::width('1/4'),
-            set::class('modeBox hidden'),
-            radioList(
-                set::name('mode'),
-                set::value(!empty($task->mode) ? $task->mode : 'linear'),
-                set::class('ml-4'),
-                set::items($config->task->modeOptions),
-                set::inline(true)
-            )
+            set::control('hidden'),
+            set::name('teamMember'),
         )
     ),
     formRow
@@ -238,7 +318,7 @@ formPanel
                     set::id('story'),
                     set::name('story'),
                     set::value($task->story),
-                    set::items($stories),
+                    set::items(array_filter($stories)),
                     on::change('setStoryRelated'),
                 ),
                 $storyPreviewBtn,
@@ -254,8 +334,8 @@ formPanel
                 $storyEmptyPreTip,
                 input(
                     set::name(''),
-                    prop('readonly'),
-                    prop('onfocus', 'this.blur()'),
+                    set('readonly'),
+                    set('onfocus', 'this.blur()'),
                 ),
                 span
                 (
@@ -270,15 +350,33 @@ formPanel
             ),
         ),
     ),
+    $selectStoryRow,
     formRow
     (
         formGroup
         (
             set::width('3/4'),
             set::label($lang->task->name),
-            set::name('name'),
-            set::value($task->name),
             set::strong(true),
+            inputControl
+            (
+                input
+                (
+                    set::name('name'),
+                    set::value($task->name),
+                ),
+                set::suffixWidth('icon'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::heading($lang->task->colorTag),
+                        set::name('color'),
+                        set::value($task->color),
+                        set::syncColor('#name')
+                    )
+                )
+            )
         ),
         formGroup
         (
@@ -290,7 +388,7 @@ formPanel
                 select
                 (
                     set::name('pri'),
-                    set::items($lang->task->priList),
+                    set::items(array_filter($lang->task->priList)),
                 ),
                 $lang->task->estimate,
                 inputControl
@@ -313,9 +411,8 @@ formPanel
     ),
     formGroup
     (
-        set::name('files[]'),
         set::label($lang->story->files),
-        set::control('file')
+        upload()
     ),
     formGroup
     (
@@ -325,7 +422,7 @@ formPanel
         (
             input
             (
-                set::type('date'),
+                set::control('date'),
                 set::name('estStarted'),
                 set::value($task->estStarted),
                 set::placeholder($lang->task->estStarted),
@@ -333,7 +430,7 @@ formPanel
             $lang->task->to,
             input
             (
-                set::type('date'),
+                set::control('date'),
                 set::name('deadline'),
                 set::value($task->deadline),
                 set::placeholder($lang->task->deadline),
@@ -343,14 +440,61 @@ formPanel
     formGroup
     (
         set::label($lang->product->mailto),
-        set::name('mailto[]'),
-        set::items($users),
+        picker
+        (
+            set::multiple(true),
+            set::name('mailto[]'),
+            set::items($users),
+        )
     ),
-    $afterRow
+    $afterRow,
+    modalTrigger
+    (
+        modal
+        (
+            set::id('modalTeam'),
+            set::title($lang->task->teamMember),
+            h::table
+            (
+                set::id('teamTable'),
+                h::tr
+                (
+                    h::td
+                    (
+                        width('90px'),
+                        $lang->task->mode
+                    ),
+                    h::td
+                    (
+                        select
+                        (
+                            set::name("mode"),
+                            set::value("linear"),
+                            set::items($lang->task->modeList),
+                            set::required(true),
+                        ),
+                    )
+                ),
+                setClass('table table-form'),
+                $teamForm,
+                h::tr
+                (
+                    h::td
+                    (
+                        setClass('team-saveBtn'),
+                        set(array('colspan' => 4)),
+                        btn
+                        (
+                            setClass('toolbar-item btn primary'),
+                            $lang->save
+                        )
+                    )
+                )
+            )
+        )
+    )
 );
 
 
 /* ====== Render page ====== */
-
-$pageType = isonlybody() ? 'modal' : 'page';
-render($pageType);
+render();

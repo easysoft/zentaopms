@@ -1,5 +1,15 @@
 div.no-background .input-group-addon {background: none;}
 .items-center {align-items: center !important;}
 .flex-center {justify-content: center;}
-.panel-form > .panel-heading.status-heading {justify-content: flex-start; padding-bottom: 0px;}
-.panel-form > .panel-heading.status-heading > .panel-title {font-weight: 400; justify-content:flex-end; width: 5rem;}
+
+#modalTeam .table tr {border:none}
+#modalTeam .team-saveBtn {text-align: center !important}
+#modalTeam .team-saveBtn .btn{min-width: 96px;}
+#modalTeam .team-index {text-align: right;}
+.team-number {display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 10px; text-align: center; background: #f4f5f7;}
+
+#teamTable tr td:first-child {width: 40px; position: relative;}
+#teamTable tr td:first-child .icon{position:absolute; top: 40px; right: 19px;display: block; font-size: 8px; color: #9ea3bd;}
+#teamTable tr:nth-last-child(2) td:first-child .icon {display: none;}
+
+:root {--modal-base: 45rem;}

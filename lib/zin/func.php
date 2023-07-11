@@ -16,6 +16,7 @@ require_once __DIR__ . DS . 'core' . DS . 'h.func.php';
 require_once __DIR__ . DS . 'core' . DS . 'render.func.php';
 require_once __DIR__ . DS . 'zui' . DS . 'zui.func.php';
 require_once __DIR__ . DS . 'zentao' . DS . 'zentao.func.php';
+require_once __DIR__ . DS . 'zentao' . DS . 'bind.class.php';
 
 /* Form */
 
@@ -222,6 +223,14 @@ function formBatchPanel(): formBatchPanel
 }
 
 /**
+ * Batch actions: add, delete.
+ */
+function batchActions(): batchActions
+{
+    return createWg('batchActions', func_get_args());
+}
+
+/**
  * Control widget.
  * Dynamically create html input.
  *
@@ -330,6 +339,14 @@ function inputGroup(): inputGroup
 }
 
 /**
+ * Input group addon widget.
+ */
+function inputGroupAddon(): inputGroupAddon
+{
+    return createWg('inputGroupAddon', func_get_args());
+}
+
+/**
  * Checkbox list widget.
  *
  * ?string           name
@@ -360,15 +377,13 @@ function radioList(): radioList
 /**
  * Color picker widget which extends input.
  *
- * string  name
- * ?string id
- * ?string class
- * ?string value
- * ?bool   required
- * ?string placeholder
- * ?bool   autofocus
- * ?bool   disabled
- * ?bool   autocomplete=false
+ * ?string heading
+ * ?string icon
+ * ?bool   closeBtn=true
+ * ?string syncText
+ * ?string syncColor
+ * ?string syncBackground
+ * ?string syncBorder
  */
 function colorPicker(): colorPicker
 {
@@ -698,7 +713,7 @@ function menu(): menu
  * ?string subMenuTrigger
  * ?string arrow
  * ?string trigger
- * ?array  menuProps
+ * ?array  menu
  * ?string target
  * ?string id
  * ?string menuClass
@@ -743,6 +758,20 @@ function heading(): heading
 function navbar(): navbar
 {
     return createWg('navbar', func_get_args());
+}
+
+/**
+ * Dropmenu widget.
+ *
+ * ?string   url      // 异步获取下拉菜单选项数据的 URL。
+ * ?string   text     // 选择按钮上显示的文本。
+ * ?string   objectID // 当前选中项的 ID。
+ * ?bool|int cache    // 是否启用缓存。
+ * ?array    data     // 手动指定数据。
+ */
+function dropmenu(): dropmenu
+{
+    return createWg('dropmenu', func_get_args());
 }
 
 /**
@@ -894,6 +923,18 @@ function modalTrigger(): modalTrigger
 }
 
 /**
+ * Modal header widget.
+ *
+ * ?string title
+ * ?string entityText
+ * ?int    entityID
+ */
+function modalHeader(): modalHeader
+{
+    return createWg('modalHeader', func_get_args());
+}
+
+/**
  * Modal dialog widget.
  *
  * ?string         title
@@ -959,6 +1000,11 @@ function tabPane(): tabPane
 function panel(): panel
 {
     return createWg('panel', func_get_args());
+}
+
+function pasteDialog(): pasteDialog
+{
+    return createWg('pasteDialog', func_get_args());
 }
 
 /**
@@ -1039,11 +1085,34 @@ function moduleMenu(): moduleMenu
 }
 
 /**
+ * Zentao tree widget.
+ *
+ * ?array items
+ */
+function tree(): Tree
+{
+    return createWg('tree', func_get_args());
+}
+
+/**
+ * Zentao file list widget.
+ *
+ * ?array  files
+ * ?int    objectID
+ * ?string objectType
+ */
+function fileList(): fileList
+{
+    return createWg('fileList', func_get_args());
+}
+
+/**
  * Zentao history records widget.
  *
  * ?array  actions
  * ?array  users
  * ?string methodName
+ * ?bool   commentBtn
  */
 function history(): history
 {
@@ -1085,14 +1154,15 @@ function formItemDropdown(): formItemDropdown
 /**
  * Zentao editor wg.
  *
- * string   name
- * ?string  id
- * ?string  class
- * ?string  value
- * ?bool    required
- * ?string  placeholder
- * ?int     rows
- * ?int     cols
+ * ?bool   createInput=false
+ * ?string uploadUrl=''
+ * ?string placeholder=''
+ * ?bool   fullscreenable=false
+ * ?bool   resizable=false
+ * ?bool   exposeEditor=true
+ * ?string size='sm'
+ * ?bool   hideMenubar=false
+ * ?bool   bubbleMenu=false
  */
 function editor(): editor
 {
@@ -1330,20 +1400,6 @@ function dragUl(): dragUl
 }
 
 /**
- * Zentao custom table columns widget.
- *
- * ?array  leftItems
- * ?array  flexItems
- * ?array  rightItems
- * string  url
- * ?string method
- */
-function editCols(): editCols
-{
-    return createWg('editCols', func_get_args());
-}
-
-/**
  * Back btn widget.
  *
  * ?string back
@@ -1351,4 +1407,203 @@ function editCols(): editCols
 function backBtn(): backBtn
 {
     return createWg('backBtn', func_get_args());
+}
+
+/**
+ * Collapse btn widget.
+ *
+ * string target
+ * string parent
+ */
+function collapseBtn(): collapseBtn
+{
+    return createWg('collapseBtn', func_get_args());
+}
+
+/**
+ * Main navbar widget.
+ *
+ * ?array items
+ */
+function mainNavbar(): mainNavbar
+{
+    return createWg('mainNavbar', func_get_args());
+}
+
+/**
+ * Zentao float Pre and Next Button widget.
+ *
+ * ?string  preLink  link of pre-button.
+ * ?string  nextLink link of next-button.
+ */
+function floatPreNextBtn(): floatPreNextBtn
+{
+    return createWg('floatPreNextBtn', func_get_args());
+}
+
+/**
+ * Upload widget.
+ *
+ * string            name
+ * ?string           icon
+ * ?bool             showIcon=true
+ * ?bool             showSize=true
+ * ?bool             multiple=true
+ * ?string           listPosition="bottom"
+ * ?string           uploadText
+ * ?string           uploadIcon
+ * ?bool             renameBtn=true
+ * ?string           renameIcon
+ * ?string           renameText
+ * ?string           renameClass
+ * ?bool             deleteBtn=true
+ * ?string           deleteText
+ * ?string           deleteIcon
+ * ?string           deleteClass
+ * ?string           confirmText
+ * ?string           cancelText
+ * ?bool             useIconBtn=true
+ * ?string           tip
+ * ?string           btnClass
+ * ?callable         onAdd
+ * ?callable         onDelete
+ * ?callable         onRename
+ * ?callable         onSizeChange
+ * ?bool             draggable
+ * ?int              limitCount
+ * ?string           accept
+ * ?object[]         defaultFileList
+ * false|string|null limitSize=false
+ * ?string           duplicatedHint
+ * ?string           exceededSizeHint
+ * ?string           exceededCountHint
+ */
+function upload(): upload
+{
+    return createWg('upload', func_get_args());
+}
+
+/**
+ * Upload images widget.
+ *
+ * string            name
+ * ?bool             showSize=true
+ * ?bool             multiple=true
+ * ?string           uploadText
+ * ?string           uploadIcon
+ * ?bool             renameBtn=true
+ * ?string           renameIcon
+ * ?string           renameText
+ * ?string           renameClass
+ * ?bool             deleteBtn=true
+ * ?string           deleteIcon
+ * ?string           deleteText
+ * ?string           deleteClass
+ * ?string           tip
+ * ?string           btnClass
+ * ?callable         onAdd
+ * ?callable         onDelete
+ * ?callable         onRename
+ * ?callable         onSizeChange
+ * ?int              limitCount
+ * ?string           accept
+ * ?object[]         defaultFileList
+ * false|string|null limitSize=false
+ * ?string           duplicatedHint
+ * ?string           exceededSizeHint
+ * ?string           exceededCountHint
+ * ?string           totalCountText
+ */
+function uploadImgs(): uploadImgs
+{
+    return createWg('uploadImgs', func_get_args());
+}
+
+/**
+ * Burn widget.
+ *
+ * ?string|array data
+ * ?bool         referenceLine
+ */
+function burn(): burn
+{
+    return createWg('burn', func_get_args());
+}
+
+/**
+ * Monaco widget.
+ *
+ * string  id
+ * ?string action
+ * ?string options
+ * ?string diffContent
+ * ?string onMouseDown
+ */
+function monaco(): monaco
+{
+    return createWg('monaco', func_get_args());
+}
+
+/**
+ * Dynamic widget.
+ *
+ * ?array  dynamics
+ * ?array  users
+ * ?string className
+ */
+function dynamic(): dynamic
+{
+    return createWg('dynamic', func_get_args());
+}
+
+/**
+ * Form setting button.
+ *
+ * ?array  customFields
+ * ?string urlParams
+ */
+function formSettingBtn(): formSettingBtn
+{
+    return createWg('formSettingBtn', func_get_args());
+}
+
+/**
+ * Overview block widget.
+ *
+ * string id
+ * string title
+ */
+function overviewBlock(): overviewBlock
+{
+    return createWg('overviewBlock', func_get_args());
+}
+
+/**
+ * Picker widget.
+ */
+function picker(): picker
+{
+    return createWg('picker', func_get_args());
+}
+
+/**
+ * Pri picker widget.
+ *
+ * ?string placeholder
+ * ?string[]|object[]|object|array items
+ */
+function priPicker(): priPicker
+{
+    return createWg('priPicker', func_get_args());
+}
+
+/**
+ * Severity picker widget.
+ *
+ * ?string placeholder
+ * ?string[]|object[]|object|array items
+ */
+function severityPicker(): severityPicker
+{
+    return createWg('severityPicker', func_get_args());
 }

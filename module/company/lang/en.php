@@ -51,3 +51,6 @@ $lang->company->featureBar['dynamic']['thisWeek']  = 'This Week';
 $lang->company->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->company->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->company->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->company->featureBar['browse']['inside']  = 'Internal';
+$lang->company->featureBar['browse']['outside'] = 'Outsiders';

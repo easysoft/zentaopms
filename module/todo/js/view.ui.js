@@ -42,7 +42,7 @@ function toBug()
         return;
     }
 
-    loadPage($.createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView));
+    $('#toBugButton').attr('href', $.createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID));
 }
 
 /**

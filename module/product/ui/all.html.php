@@ -12,63 +12,31 @@ declare(strict_types=1);
 
 namespace zin;
 
-/* Get column settings of the data table. */
-$cols = array_values($config->product->dtable->fieldList);
-/* Set the name link. */
-foreach($cols as &$col)
+/* Get field list for data table. */
+$fnGetTableFieldList = function() use ($config)
 {
-    if($col['name'] != 'name') continue;
+    $fieldList = $this->loadModel('datatable') ->getSetting('product');
 
-    $col['link'] = sprintf($col['link'], createLink('product', 'browse', array('productID' => '${row.id}')));
-    break;
-}
+    $extendFieldList = $this->product->getFlowExtendFields();
+    foreach($extendFieldList as $field => $name)
+    {
+        $extCol = $config->product->dtable->extendField;
+        $extCol['name']  = $field;
+        $extCol['title'] = $name;
 
-$extendFieldList = $this->product->getFlowExtendFields();
-foreach($extendFieldList as $field => $name)
-{
-    $extCol = $config->product->dtable->extendField;
-    $extCol['name']  = $field;
-    $extCol['title'] = $name;
+        $fieldList[$field] = $extCol;
+    }
 
-    $cols[] = $extCol;
-}
+    return $fieldList;
+};
+$cols = $fnGetTableFieldList();
 
 /* Closure function for generating table data. */
-$fnGenerateTableData = function($productList) use($users, $avatarList)
+$productStats = initTableData($productStats, $cols, $this->product);
+$fnGenerateTableData = function($productList) use($users)
 {
     $data = array();
-    foreach($productList as $product)
-    {
-        $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
-        $totalBugs    = $product->unResolved + $product->fixedBugs;
-
-        $item = new stdClass();
-
-        if(!empty($product->PO))
-        {
-            $item->PO        = zget($users, $product->PO);
-            $item->POAvatar  = $avatarList[$product->PO];
-            $item->POAccount = $product->PO;
-        }
-
-        $item->name              = $product->name;
-        $item->id                = $product->id;
-        $item->type              = 'product';
-        $item->draftStories      = $product->stories['draft'];
-        $item->activeStories     = $product->stories['active'];
-        $item->changingStories   = $product->stories['changing'];
-        $item->reviewingStories  = $product->stories['reviewing'];
-        $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
-        $item->unResolvedBugs    = $product->unResolved;
-        $item->bugFixedRate      = ($totalBugs == 0 ? 0 : round($product->fixedBugs / $totalBugs, 3) * 100);
-        $item->plans             = $product->plans;
-        $item->releases          = $product->releases;
-        $item->productLine       = $product->lineName;
-        $item->execution         = $product->executions;
-        $item->testCaseCoverage  = $product->coverage;
-
-        $data[] = $item;
-    }
+    foreach($productList as $product) $data[] = $this->product->formatDataForList($product, $users);
 
     return $data;
 };
@@ -86,16 +54,9 @@ $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseTy
             'recTotal'   => $recTotal,
             'recPerPage' => $recPerPage,
             'pageID'     => $pageID,
-            'programID'  => '%d'
+            'programID'  => '{id}'
         )
     );
-
-    /* Attach icon to each program. */
-    $programs = array_map(function($program)
-    {
-        $program->icon = 'icon-cards-view';
-        return $program;
-    }, $programList);
 
     return programMenu
     (
@@ -103,10 +64,9 @@ $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseTy
         set(array
         (
             'title'       => $lang->program->all,
-            'programs'    => $programs,
+            'programs'    => $programList,
             'activeKey'   => !empty($programList) ? $programID : null,
-            'closeLink'   => sprintf($programMenuLink, 0),
-            'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
+            'link'        => sprintf($programMenuLink, 0),
         ))
     );
 };
@@ -130,14 +90,7 @@ featureBar
             'programID'  => $programID
         )
     )),
-    hasPriv('product', 'batchEdit') ? item
-    (
-        set::type('checkbox'),
-        set::text($lang->product->edit),
-        set::checked($this->cookie->editProject)
-    ) : null,
-    li(searchToggle(set::open($browseType == 'bySearch'))),
-    li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
+    li(searchToggle(set::open($browseType == 'bySearch')))
 );
 
 toolbar
@@ -157,6 +110,7 @@ toolbar
         set::icon('edit'),
         set('data-toggle', 'modal'),
         set('data-url', createLink('product', 'manageLine', $browseType)),
+        set('data-id', 'manageLineModal'),
         $lang->product->editLine
     ) : null,
     item(set(array
@@ -172,27 +126,22 @@ dtable
 (
     set::cols($cols),
     set::data($fnGenerateTableData($productStats)),
-    set::checkable(true),
+    set::userMap($users),
+    set::customCols(true),
+    set::checkable(common::hasPriv('product', 'batchEdit')),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::footToolbar(array
     (
         'type'  => 'btn-group',
         'items' => array(array
         (
-            'text'    => $lang->edit,
-            'btnType' => 'primary',
-            'url'     => createLink('product', 'batchEdit'),
-            'onClick' => jsRaw('onClickBatchEdit')
+            'text'     => $lang->edit,
+            'btnType'  => 'secondary',
+            'data-url' => createLink('product', 'batchEdit'),
+            'onClick'  => jsRaw('onClickBatchEdit')
         ))
     )),
-    set::footPager
-    (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(createLink('product', 'all', "browseType={$browseType}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={page}"))
-    )
+    set::footPager(usePager())
 );
 
 jsVar('langSummary', $lang->product->pageSummary);

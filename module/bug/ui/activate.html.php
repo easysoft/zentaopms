@@ -10,9 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-set::title($bug->title);
+modalHeader();
 
-form
+formPanel
 (
     formGroup
     (
@@ -55,16 +55,10 @@ form
     formGroup
     (
         set::label($lang->bug->files),
-        fileinput
-        (
-            set::name('files[]')
-        )
-    ),
-    set::actions(array('submit'))
+        upload()
+    )
 );
-
-h::hr(set::class('mt-6'));
 
 history();
 
-render('modalDialog');
+render();

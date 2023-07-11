@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The zui component class file of zin lib.
  *
@@ -19,31 +20,52 @@ require_once __DIR__ . DS . 'toggle.class.php';
 
 class zui extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         '_name:string',
         '_to?:string',
         '_tag:string="div"',
-        '_toProps?: array',
-        '_size?: array'
+        '_map?:array',
+        '_props?: array',
+        '_size?: array',
+        '_id?: string',
+        '_class?: string'
     );
 
-    protected function build()
+    protected function build(): array
     {
-        list($name, $target, $tagName, $targetProps, $size) = $this->prop(array('_name', '_to', '_tag', '_toProps', '_size'));
+        list($name, $target, $tagName, $targetProps, $size, $id, $class, $map) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map'));
         list($width, $height) = $size;
-        $selector = empty($target) ? "[data-zin-id='$this->gid']" : $target;
-        $options = $this->props->skip(array_keys(static::getDefinedProps()));
+
+        $options  = $this->getRestProps();
+        $children = $this->children();
+        $selector = $target;
+        if(empty($selector))
+        {
+            if(empty($id)) $id = $this->gid;
+            $selector = "#$id";
+        }
+        if(is_array($map))
+        {
+            foreach($options as $key => $value)
+            {
+                if(!isset($map[$key])) continue;
+                $options[$map[$key]] = $value;
+                unset($options[$key]);
+            }
+        }
+
         return array
         (
             empty($target) ? h
             (
                 $tagName,
                 set($targetProps),
-                set('data-zin-id', $this->gid),
+                setClass($class),
+                setID($id),
                 setStyle('width', $width),
                 setStyle('height', $height),
-            ) : null,
-            $this->children(),
+                $children,
+            ) : $children,
             h::jsCall('~zui.create', $name, $selector, $options)
         );
     }

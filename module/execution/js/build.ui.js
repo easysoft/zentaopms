@@ -32,22 +32,6 @@ window.renderCell = function(result, {col, row})
 }
 
 /**
- * 提示并删除版本。
- * Delete release with tips.
- *
- * @param  int    buildID
- * @access public
- * @return void
- */
-window.confirmDelete = function(buildID)
-{
-    if(window.confirm(confirmDelete))
-    {
-        $.ajaxSubmit({url: $.createLink('build', 'delete', 'buildID=' + buildID)});
-    }
-}
-
-/**
  * Change product.
  *
  * @access public

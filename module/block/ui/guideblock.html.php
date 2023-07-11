@@ -18,7 +18,7 @@ namespace zin;
  * @param  string $blockNavCode
  * @return array
  */
-function getGuideTabs(string $blockNavCode): array
+$getGuideTabs = function(string $blockNavCode): array
 {
     global $lang, $config, $app;
 
@@ -35,28 +35,19 @@ function getGuideTabs(string $blockNavCode): array
 
         $navTabs[] = li
         (
-            set('class', 'nav-item w-full' . ($tab == $selected ? ' active' : '')),
+            set('class', 'nav-item w-full'),
             a
             (
-                set('class', 'ellipsis guide-tab text-dark'),
+                set('class', 'ellipsis guide-tab text-dark title ' . ($tab == $selected ? ' active' : '')),
                 set('data-tab', $tab),
                 set('data-toggle', 'tab'),
                 set('href', "#tab{$blockNavCode}Content{$tab}"),
                 $tabName
-            ),
-            span
-            (
-                set('class', 'link flex-1 text-right px-4 hidden'),
-                icon
-                (
-                    set('class', 'text-primary'),
-                    'arrow-right'
-                )
             )
         );
     }
     return $navTabs;
-}
+};
 
 /**
  * 获取区块右侧显示的帮助信息。
@@ -65,7 +56,7 @@ function getGuideTabs(string $blockNavCode): array
  * @param  string $blockNavCode
  * @return array
  */
-function getGuideInfo($blockNavID): array
+$getGuideInfo = function($blockNavID): array
 {
     global $lang;
 
@@ -82,8 +73,9 @@ function getGuideInfo($blockNavID): array
             $function()
         );
     }
+
     return $tabItems;
-}
+};
 
 
 $blockNavCode          = 'nav-' . uniqid();
@@ -98,29 +90,39 @@ $config->executionLink = $executionLink;
 
 $usedMode = zget($config->global, 'mode', 'light');
 jsVar('changeModeTips', sprintf($lang->custom->changeModeTips, $lang->custom->modeList[$usedMode == 'light' ? 'ALM' : 'light']));
-div
+panel
 (
-    set('class', 'guide-block of-hidden'),
+    set('class', 'guide-block'),
+    set('headingClass', 'border-b'),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title w-full justify-between'),
+            $block->title,
+            a(set('href', createLink('tutorial', 'start')), set('class', 'btn warning'), $lang->block->tutorial)
+        )
+    ),
     div
     (
-        set('class', 'flex h-full'),
+        set('class', 'flex h-full overflow-hidden'),
         cell
         (
-            set('width', '22%'),
-            set('class', 'bg-secondary-pale'),
+            set('width', '18%'),
+            set('class', 'border-r overflow-y-auto'),
             ul
             (
-                set('class', 'nav nav-tabs nav-stacked h-full of-y-auto of-x-hidden'),
-                getGuideTabs($blockNavCode)
+                set('class', 'nav nav-tabs nav-stacked'),
+                $getGuideTabs($blockNavCode)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
-            set('width', '78%'),
-            getGuideInfo($blockNavCode)
+            set('width', '82%'),
+            $getGuideInfo($blockNavCode)
         )
     )
 );
 
-render('|fragment');
+render();

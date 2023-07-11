@@ -11,58 +11,9 @@ declare(strict_types=1);
 
 namespace zin;
 
-panel
+overviewblock
 (
-    div
-    (
-        set('class', 'flex block-base'),
-        col
-        (
-            set('class', 'text-center w-1/3'),
-            set::justify('center'),
-            a
-            (
-                set('href', $this->createLink('product', 'all', 'browseType=all')),
-                set('class', 'text-2xl font-bold leading-relaxed'),
-                $totalProductCount
-            ),
-            span
-            (
-                set('class', 'text-light'),
-                $lang->block->productoverview->totalProductCount
-            )
-        ),
-        col
-        (
-            set('class', 'text-center w-1/3'),
-            set::justify('center'),
-            span
-            (
-                set('class', 'text-2xl font-bold leading-relaxed'),
-                $productReleasedThisYear
-            ),
-            span
-            (
-                set('class', 'text-light'),
-                $lang->block->productoverview->productReleasedThisYear
-            )
-        ),
-        col
-        (
-            set('class', 'text-center w-1/3'),
-            set::justify('center'),
-            span
-            (
-                set('class', 'text-2xl font-bold text-important leading-relaxed'),
-                $releaseCount
-            ),
-            span
-            (
-                set('class', 'text-light'),
-                $lang->block->productoverview->releaseCount
-            )
-        )
-    )
+    set(array('block' => $block, 'groups' => $groups))
 );
 
-render('|fragment');
+render();

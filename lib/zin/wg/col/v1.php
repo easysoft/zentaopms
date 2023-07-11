@@ -1,15 +1,15 @@
 <?php
-
+declare(strict_types=1);
 namespace zin;
 
 class col extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'justify?:string',
         'align?:string'
     );
 
-    protected function build()
+    protected function build(): wg
     {
         $classList = 'col';
         list($justify, $align) = $this->prop(array('justify', 'align'));
@@ -19,7 +19,7 @@ class col extends wg
         return div
         (
             setClass($classList),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->children()
         );
     }

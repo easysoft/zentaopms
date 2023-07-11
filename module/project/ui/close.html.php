@@ -1,31 +1,38 @@
 <?php
-
+declare(strict_types=1);
+/**
+ * The close view file of project module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Shujie Tian<tianshujie@easycorp.ltd>
+ * @package     project
+ * @link        https://www.zentao.net
+ */
 namespace zin;
 
-set::itemID($project->id);
-set::title($project->name);
-
-form
+modalHeader();
+formPanel
 (
-    set::url(createLink('project', 'close', ['projectID' => $project->id])),
     formGroup
     (
-        set::label($app->loadLang('program')->program->realEnd),
-        set::required(true),
+        set::width('1/2'),
+        set::label($lang->project->realEnd),
         set::name('realEnd'),
         set::control('date'),
+        set::value(!helper::isZeroDate($project->realEnd) ? $project->realEnd : helper::today()),
     ),
     formGroup
     (
         set::label($lang->comment),
-        set::name('comment'),
-        set::control(['type' => 'textarea', 'rows' => 5]),
+        editor
+        (
+            set::name('comment'),
+            set::rows('6'),
+        )
     ),
-    set::submitBtnText($lang->project->close)
 );
-
-h::hr(setClass('my-5'));
 
 history();
 
-render('modalDialog');
+/* ====== Render page ====== */
+render();

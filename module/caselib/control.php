@@ -40,8 +40,8 @@ class caselib extends control
             $libID = $this->caselib->create($lib, $this->post->uid);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $response = $this->caselibZen->responseAfterCreate($libID);
-            return $this->send($response);
+            if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('caselib', 'browse', "libID=$libID")));
         }
 
         $this->caselibZen->setCreateMenu();
@@ -57,18 +57,11 @@ class caselib extends control
      */
     public function edit($libID)
     {
-        $lib = $this->caselib->getById($libID);
         if(!empty($_POST))
         {
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
             $changes = $this->caselib->update($libID);
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('caselib', $libID, 'edited');
@@ -76,10 +69,10 @@ class caselib extends control
             }
 
             $message = $this->executeHooks($libID);
-            if($message) $response['message'] = $message;
+            if(!$message) $message = $this->lang->saveSuccess;
 
-            $response['locate']  = inlink('view', "libID=$libID");
-            return $this->send($response);
+            $link = inlink('view', "libID={$libID}");
+            return $this->sendSuccess(array('message' => $message, 'callback' => "loadModal(\"$link\", 'viewLibModal');"));
         }
 
         /* Set lib menu. */
@@ -87,9 +80,8 @@ class caselib extends control
         $libID     = $this->caselib->saveLibState($libID, $libraries);
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->caselib->edit;
-
-        $this->view->lib = $lib;
+        $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->caselib->edit;
+        $this->view->lib   = $this->caselib->getById($libID);
         $this->display();
     }
 
@@ -218,34 +210,41 @@ class caselib extends control
     }
 
     /**
+     * 创建用例库的测试用例。
      * Create case for library.
      *
      * @param  int    $libID
      * @param  int    $moduleID
+     * @param  int    $param
      * @access public
      * @return void
      */
-    public function createCase($libID, $moduleID = 0, $param = 0)
+    public function createCase(int $libID, int $moduleID = 0, int $param = 0)
     {
         if(!empty($_POST))
         {
             $this->loadModel('testcase');
             setcookie('lastLibCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $caseResult = $this->testcase->create($bugID = 0);
-            if(!$caseResult or dao::isError()) return print(js::error(dao::getError()));
 
-            $caseID = $caseResult['id'];
-            if($caseResult['status'] == 'exists')
+            $case = form::data($this->config->testcase->form->create)->add('lib', $libID)->get();
+
+            $steps   = $case->steps;
+            $expects = $case->expects;
+            foreach($expects as $key => $value)
             {
-                echo js::alert(sprintf($this->lang->duplicate, $this->lang->testcase->common));
-                return print(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
+                if(!empty($value) and empty($steps[$key])) dao::$errors['message']["steps$key"] = sprintf($this->lang->testcase->stepsEmpty, $key);
             }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('case', $caseID, 'Opened');
+            $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
+            if($result and $result['stop']) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->testcase->common), 'locate' => $this->createLink('testcase', 'view', "caseID={$result['duplicate']}")));
+
+            $caseID = $this->testcase->create($case);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* If link from no head then reload. */
-            if(isonlybody()) return print(js::reload('parent'));
-            return print(js::locate($this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$_POST['module']}"), 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$_POST['module']}")));
         }
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
@@ -317,9 +316,9 @@ class caselib extends control
         if(!empty($_POST))
         {
             $caseID = $this->caselib->batchCreateCase($libID);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('caselib', 'browse', "libID=$libID&browseType=byModule&param=$moduleID"), 'parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$moduleID}"), 'closeModal' => true));
         }
 
         $libraries = $this->caselib->getLibraries();

@@ -4,7 +4,12 @@ namespace zin;
 
 class detailHeader extends wg
 {
-    protected static $defineBlocks = array(
+    protected static array $defineProps = array(
+        'back?: string="APP"',
+        'backUrl?: string',
+    );
+
+    protected static array $defineBlocks = array(
         'prefix' => array(),
         'title'  => array(),
         'suffix' => array(),
@@ -13,12 +18,12 @@ class detailHeader extends wg
     private function backBtn(): wg
     {
         global $lang;
-
-        return btn
+        return backBtn
         (
             set::icon('back'),
             set::type('secondary'),
-            setClass('mr-4'),
+            set::back($this->prop('back')),
+            set::url($this->prop('backUrl')),
             $lang->goback
         );
     }
@@ -29,14 +34,14 @@ class detailHeader extends wg
         $title  = $this->block('title');
         $suffix = $this->block('suffix');
 
-        if(empty($prefix)) $prefix = $this->backBtn();
+        if(empty($prefix) && !isAjaxRequest('modal')) $prefix = $this->backBtn();
 
         return div
         (
             setClass('detail-header flex justify-between mb-3'),
             div
             (
-                setClass('flex', 'items-center'),
+                setClass('flex', 'items-center', 'gap-x-4'),
                 $prefix,
                 $title,
             ),

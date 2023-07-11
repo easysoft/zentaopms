@@ -23,7 +23,7 @@ class qaModel extends model
      */
     public function setMenu(array $products, int $productID, string|int $branch = '', string $extra = '')
     {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !commonModel::isTutorialMode())
         {
             $this->app->loadLang('product');
             return print(js::error($this->lang->product->accessDenied) . js::locate('back'));

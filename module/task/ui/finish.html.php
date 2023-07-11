@@ -5,7 +5,7 @@ declare(strict_types=1);
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      yourname<yourname@easycorp.ltd>
+ * @author      Sun Guangming<sunguangming@easycorp.ltd>
  * @package     task
  * @link        http://www.zentao.net
  */
@@ -14,6 +14,7 @@ namespace zin;
 
 if(!$canRecordEffort)
 {
+    modalHeader();
     if($task->assignedTo != $app->user->account && $task->mode == 'linear')
     {
         $deniedNotice = sprintf($lang->task->deniedNotice, $task->assignedToRealName, $lang->task->finish);
@@ -26,7 +27,7 @@ if(!$canRecordEffort)
     div
     (
         set::class('alert with-icon'),
-        icon('exclamation-sign'),
+        icon('exclamation-sign icon-3x'),
         div
         (
             set::class('content'),
@@ -40,6 +41,7 @@ if(!$canRecordEffort)
 }
 else
 {
+    jsVar('consumed', empty($task->team) ? $task->consumed : (float)$task->myConsumed);
     jsVar('task', $task);
     jsVar('consumedEmpty', $lang->task->error->consumedEmptyAB);
 
@@ -51,14 +53,22 @@ else
         $consumedControl = formGroup
             (
                 set::width('1/3'),
-                set::label($lang->task->currentConsumed),
+                set::label($lang->task->my . $lang->task->hasConsumed),
                 div(
                     set::class('consumed'),
                     $task->myConsumed . $lang->task->suffixHour
                 )
             );
 
-        $assignedToControl = formHidden('assignedTo', $assignedTo);
+        $assignedToControl = formGroup
+            (
+                set::width('1/3'),
+                set::label($lang->story->assignTo),
+                set::control('input'),
+                set::disabled(true),
+                set::value(zget($members, $task->nextBy)),
+                formHidden('assignedTo', $task->nextBy)
+            );
     }
     else
     {
@@ -66,7 +76,7 @@ else
 
         $assignedToControl = formGroup
             (
-                set::width('1/4'),
+                set::width('1/3'),
                 set::name('assignedTo'),
                 set::label($lang->story->assignTo),
                 set::control('picker'),
@@ -75,48 +85,56 @@ else
             );
     }
 
+    modalHeader
+    (
+        to::suffix
+        (
+            span
+            (
+                setClass('flex gap-x-2 mr-3'),
+                !empty($task->team) ? $lang->task->common . $lang->task->consumed : $lang->task->hasConsumed,
+                span
+                (
+                    setClass('label secondary-pale'),
+                    $task->consumed . $lang->task->suffixHour,
+                ),
+            ),
+            span
+            (
+                setClass('flex gap-x-2'),
+                $lang->task->consumed,
+                span
+                (
+                    setClass('label warning-pale'),
+                    span
+                    (
+                        setID('totalConsumed'),
+                        $task->consumed
+                    ),
+                    $lang->task->suffixHour,
+                )
+            )
+        )
+    );
+
     formPanel
     (
-        set::title($lang->task->finishAction),
-        set::headingClass('status-heading'),
-        set::titleClass('form-label .form-grid'),
-        set::shadow(!isonlybody()),
-        to::headingActions
-        (
-            entityLabel
-            (
-                setClass('my-3 gap-x-3'),
-                set::level(1),
-                set::text($task->name),
-                set::entityID($task->id),
-                set::reverse(true),
-            )
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::label(empty($task->team) ? $lang->task->hasConsumed : $lang->task->common . $lang->task->consumed),
-            div(
-                set::class('consumed'),
-                $task->consumed . $lang->task->suffixHour
-            )
-        ),
         $consumedControl,
         formGroup
         (
-            set::width('1/4'),
+            set::width('1/3'),
             set::label($lang->task->currentConsumed),
-            inputGroup
+            inputControl
             (
-                control(set(array
+                input
                 (
-                    'name'  => 'currentConsumed',
-                    'id'    => 'currentConsumed',
-                    'value' => 0,
-                    'type'  => 'text'
-                ))),
-                $lang->task->suffixHour
-            )
+                    set::name('currentConsumed'),
+                    set::value(0),
+                    set::type('text'),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
+            ),
         ),
         $assignedToControl,
         formGroup
@@ -139,22 +157,17 @@ else
         formGroup
         (
             set::width('2/3'),
-            set::name('files[]'),
             set::label($lang->story->files),
-            set::control('file')
+            upload()
         ),
         formGroup
         (
-            set::width('2/3'),
             set::name('comment'),
             set::label($lang->comment),
             set::control("editor")
         ),
     );
+    history();
 }
 
-h::hr(set::class('mt-6'));
-
-history();
-
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

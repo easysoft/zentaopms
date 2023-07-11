@@ -104,7 +104,11 @@ if(!function_exists('str_ends_with'))
      */
     function str_ends_with($haystack, $needle)
     {
-        return strpos($haystack, $needle) === strlen($haystack) - 1;
+        $length = strlen($needle);
+        if ($length === 0) return true;
+
+        $position = strpos($haystack, $needle);
+        return $position !== false && $position === strlen($haystack) - $length;
     }
 }
 else
@@ -113,4 +117,14 @@ else
     {
         return \str_ends_with($haystack, $needle);
     }
+}
+
+function uncamelize(string $camelCaps, string $separator = '-'): string
+{
+    return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $camelCaps));
+}
+
+function isHTML(string $string): bool
+{
+    return $string !== strip_tags($string) ? true : false;
 }

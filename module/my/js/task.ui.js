@@ -1,4 +1,4 @@
-$(document).on('click', '.batch-btn', function()
+$(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);
     const checkedList = dtable.$.getChecks();
@@ -36,6 +36,7 @@ window.setStatistics = function(element, checks)
     let left       = 0;
     checks.forEach((checkID) => {
         const task = element.getRowInfo(checkID).data;
+        if(task.hasChild) return false;
         if(task.status == 'wait')  waitCount ++;
         if(task.status == 'doing') doingCount ++;
         estimate += task.estimate;
@@ -47,8 +48,8 @@ window.setStatistics = function(element, checks)
 }
 
 /**
- * 对截至日期列进行重定义。
- * Redefine the deadline column.
+ * 对部分列进行重定义。
+ * Redefine the partial column.
  *
  * @param  array  result
  * @param  array  info
@@ -57,6 +58,20 @@ window.setStatistics = function(element, checks)
  */
 window.renderCell = function(result, info)
 {
+    if(info.col.name == 'name' && result)
+    {
+        const task = info.row.data;
+        let html = '';
+        if(task.team)
+        {
+            html += "<span class='label gray-pale rounded-xl'>" + multipleAB + "</span>";
+        }
+        if(task.parent)
+        {
+            html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        }
+        if(html) result.unshift({html});
+    }
     if(info.col.name == 'deadline' && result[0])
     {
         const today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');

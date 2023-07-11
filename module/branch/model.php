@@ -230,7 +230,7 @@ class branchModel extends model
         $oldBranch = $this->getById($branchID, 0, '');
 
         $newBranch = fixer::input('post')->get();
-        $newBranch->closedDate = $newBranch->status == 'closed' ? helper::today() : '';
+        $newBranch->closedDate = $newBranch->status == 'closed' ? helper::today() : null;
 
         $this->app->loadLang('product');
         $productType = $this->getProductType($branchID);
@@ -247,52 +247,56 @@ class branchModel extends model
     }
 
     /**
+     * 批量更新分支。
      * Batch update branch.
      *
+     * @param  int         $productID
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function batchUpdate($productID)
+    public function batchUpdate(int $productID): array|false
     {
-        $data = fixer::input('post')->get();
+        $branches = form::batchData($this->config->branch->form->batchedit)->get();
         $oldBranchList = $this->getList($productID, 0, 'all');
-        $branchIDList  = array_keys($this->post->IDList);
 
         $this->app->loadLang('product');
         $productType = $this->dao->select('`type`')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('type');
         $this->lang->error->unique = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
 
-        foreach($branchIDList as $branchID)
+        foreach($branches as $index => $branch)
         {
-            if($branchID == BRANCH_MAIN)
+            $branchID = $branch->branchID;
+            if($branch->branchID == BRANCH_MAIN)
             {
                 $newMainBranch = new stdClass();
-                $newMainBranch->default = (isset($data->default) and $data->default == BRANCH_MAIN) ? 1 : 0;
+                $newMainBranch->default = (isset($branch->default) and $branch->default == BRANCH_MAIN) ? 1 : 0;
 
                 $changes[$branchID] = common::createChanges($oldBranchList[BRANCH_MAIN], $newMainBranch);
             }
             else
             {
-                $branch = new stdclass();
-                $branch->name       = $data->name[$branchID];
-                $branch->desc       = $data->desc[$branchID];
-                $branch->status     = $data->status[$branchID];
-                $branch->default    = (isset($data->default) and $branchID == $data->default) ? 1 : 0;
-                $branch->closedDate = $branch->status == 'closed' ? helper::today() : '';
+                $newBranch = new stdclass();
+                $newBranch->name       = $branch->name;
+                $newBranch->desc       = $branch->desc;
+                $newBranch->status     = $branch->status;
+                $newBranch->default    = (isset($branch->default) and $branchID == $branch->default) ? 1 : 0;
+                $newBranch->closedDate = $branch->status == 'closed' ? helper::today() : null;
 
-                $this->dao->update(TABLE_BRANCH)->data($branch)
+                $this->dao->update(TABLE_BRANCH)->data($newBranch)
                     ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
                     ->checkIF(!empty($branch->name) and $branch->name != $oldBranchList[$branchID]->name, 'name', 'unique', "product = $productID")
                     ->where('id')->eq($branchID)
                     ->exec();
 
-                if(dao::isError()) return print(js::error('branch#' . $branchID . dao::getError(true)));
+                if(dao::isError()) dao::$errors[] = 'branch#' . ($index + 1) . dao::getError(true);
 
                 $changes[$branchID] = common::createChanges($oldBranchList[$branchID], $branch);
             }
         }
 
-        if(isset($data->default)) $this->setDefault($productID, $data->default);
+        if(dao::isError()) return false;
+
+        if(isset($branch->default)) $this->setDefault($productID, $branch->default);
 
         return $changes;
     }
@@ -725,9 +729,23 @@ class branchModel extends model
     public function mergeBranch($productID, $mergedBranches)
     {
         $data = fixer::input('post')->get();
+        if(empty($data->targetBranch) && empty($data->name))
+        {
+            $this->changeBranchLanguage($productID);
+            if($this->post->createBranch)
+            {
+                dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->branch->name);
+            }
+            else
+            {
+                dao::$errors['targetBranch'] = sprintf($this->lang->error->notempty, $this->lang->branch->mergeBranch);
+            }
+            return false;
+        }
 
         /* Get the target branch. */
         $targetBranch = $data->createBranch ? $this->create($productID, true) : $data->targetBranch;
+
         if($data->createBranch) $this->loadModel('action')->create('branch', $targetBranch, 'Opened');
 
         /* Branch. */

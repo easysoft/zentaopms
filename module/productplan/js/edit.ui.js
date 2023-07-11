@@ -1,54 +1,40 @@
-function toggleDateVisibility()
+$(document).on('change', '#branch', function()
 {
-    if($('#future_').prop('checked'))
+    let newBranch = $('#branch').val() ? $('#branch').val().toString() : '';
+    $.get($.createLink('productplan', 'ajaxGetConflict', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
     {
-        $('#begin').attr('disabled', 'disabled');
-        $('#end').attr('disabled', 'disabled').closest('.form-row').hide();
-    }
-    else
-    {
-        $('#begin').removeAttr('disabled');
-        $('#end').removeAttr('disabled').closest('.form-row').show();
-    }
-}
+        if(conflictStories != '')
+        {
+            zui.Modal.confirm(conflictStories).then((res) => {
+                if(!res) $('#branch').val(oldBranch[planID].split(','));
+            });
+        }
+    });
+});
 
-/**
- * Convert a date string like 2011-11-11 to date object in js.
- *
- * @param  string $date
- * @access public
- * @return date
- */
-function convertStringToDate(dateString)
+$(document).on('change', '#begin, #end', function()
 {
-    dateString = dateString.split('-');
-    dateString = dateString[1] + '/' + dateString[2] + '/' + dateString[0];
+    $("input[name='delta']").prop('checked', false);
+});
 
-    return Date.parse(dateString);
-}
-
-/**
- * Compute the end date for productplan.
- *
- * @param  int    $delta
- * @access public
- * @return void
- */
-function computeEndDate(delta)
+$(document).on('click', 'button[type=submit]', function()
 {
-    var beginDate = $('#begin').val();
-    if(!beginDate) return;
-
-    var delta = parseInt(delta);
-    beginDate = convertStringToDate(beginDate);
-    if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
+    const parentPlan = $('#parent').val();
+    let branches     = $('#branch').val();
+    if(parentPlan > 0 && branches)
     {
-        delta = (weekend == 2) ? (delta - 2) : (delta - 1);
+        const link = $.createLink('productplan', 'ajaxGetDiffBranchesTip', "produtID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
+        $.get(link, function(diffBranchesTip)
+        {
+            const formUrl  = $('#editForm').attr('action');
+            const formData = new FormData($("#editForm")[0]);
+            if(diffBranchesTip != '')
+            {
+                zui.Modal.confirm(diffBranchesTip).then((res) => {
+                    if(res) $.ajaxSubmit({url: formUrl, data: formData})
+                });
+            }
+        });
+        return false;
     }
-
-    var currentBeginDate = window.zui.formatDate(beginDate, 'yyyy-MM-dd');
-    var endDate = window.zui.formatDate(beginDate.addDays(delta - 1), 'yyyy-MM-dd');
-
-    $('#begin').val(currentBeginDate);
-    $('#end').val(endDate).datetimepicker('update');
-}
+});

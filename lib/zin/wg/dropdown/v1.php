@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'menu' . DS . 'v1.php';
@@ -6,7 +7,7 @@ require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 class dropdown extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'items?:array',
         'placement?:string',
         'strategy?:string',
@@ -15,7 +16,7 @@ class dropdown extends wg
         'subMenuTrigger?: string',
         'arrow?: string',
         'trigger?: string',
-        'menuProps?: array',
+        'menu?: array',
         'target?: string',
         'id?: string',
         'menuClass?: string',
@@ -23,23 +24,24 @@ class dropdown extends wg
         'staticMenu?: bool'
     );
 
-    static $defineBlocks = array
+    protected static array $defineBlocks = array
     (
         'trigger' => array('map' => 'btn,a'),
         'menu'    => array('map' => 'menu'),
         'items'   => array('map' => 'item')
     );
 
-    protected function build()
+    protected function build(): array
     {
-        list($items, $placement, $strategy, $offset, $flip, $subMenuTrigger, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'subMenuTrigger', 'arrow', 'trigger', 'menuProps', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu'));
+        list($items, $placement, $strategy, $offset, $flip, $subMenuTrigger, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'subMenuTrigger', 'arrow', 'trigger', 'menu', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu'));
 
         $triggerBlock = $this->block('trigger');
         $menu         = $this->block('menu');
         $itemsList    = $this->block('items');
 
-        if(empty($id))     $id = $this->gid;
-        if(empty($target)) $target = "#$id";
+        if(empty($id))        $id        = $this->gid;
+        if(empty($target))    $target    = "#$id";
+        if(empty($menuProps)) $menuProps = array();
 
         if(empty($triggerBlock))        $triggerBlock = h::a($this->children());
         elseif(is_array($triggerBlock)) $triggerBlock = $triggerBlock[0];
@@ -47,7 +49,7 @@ class dropdown extends wg
         if($triggerBlock instanceof wg)
         {
             if($triggerBlock instanceof btn) $triggerBlock->setDefaultProps(array('caret' => true));
-            $triggerBlock->setProp($this->props->skip(array_keys(static::getDefinedProps())));
+            $triggerBlock->setProp($this->getRestProps());
 
             $triggerProps = array
             (

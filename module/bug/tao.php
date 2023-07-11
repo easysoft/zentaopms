@@ -295,8 +295,8 @@ class bugTao extends bugModel
         /* Append product condition in bug query. */
         if(strpos($bugQuery, '`product`') !== false)
         {
-            $productParis  = $this->loadModel('product')->getPairs('', 0, '', 'all');
-            $productIdList = array_keys($productParis);
+            $productPairs  = $this->loadModel('product')->getPairs('', 0, '', 'all');
+            $productIdList = array_keys($productPairs);
         }
         $productIdList = implode(',', $productIdList);
         $bugQuery .= ' AND `product` IN (' . $productIdList . ')';

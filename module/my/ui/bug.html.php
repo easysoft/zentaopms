@@ -16,13 +16,13 @@ $testcaseLink = createLink('testcase', 'view', "caseID={case}&version={caseVersi
 jsVar('testcaseTitle', $testcaseTitle);
 jsVar('testcaseLink', $testcaseLink);
 
-$linkParam = 'type={key}';
+$linkParam = 'mode=bug&type={key}';
 if($app->rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
 featurebar
 (
     set::current($type),
     set::linkParams($linkParam),
-    li(searchToggle()),
+    li(searchToggle(set::module('bug')))
 );
 
 $canBatchEdit     = common::hasPriv('bug', 'batchEdit')    && $type == 'assignedTo';
@@ -31,35 +31,32 @@ $canBatchClose    = common::hasPriv('bug', 'batchClose')   && strtolower($type) 
 $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 $canBatchAction   = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchAssignTo;
 
-if($type == 'openedBy')       unset($config->my->bug->dtable->fieldList['openedBy']);
-if($type == 'assignedTo')     unset($config->my->bug->dtable->fieldList['assignedTo']);
-if($type == 'resolvedBy')     unset($config->my->bug->dtable->fieldList['resolvedBy']);
-if($app->rawMethod != 'work') unset($config->my->bug->dtable->fieldList['deadline']);
-if(!$canBatchAction) $config->my->bug->dtable->fieldList['id']['type'] = 'id';
+if($type == 'openedBy')       unset($config->bug->dtable->fieldList['openedBy']);
+if($type == 'assignedTo')     unset($config->bug->dtable->fieldList['assignedTo']);
+if($type == 'resolvedBy')     unset($config->bug->dtable->fieldList['resolvedBy']);
+if($app->rawMethod != 'work') unset($config->bug->dtable->fieldList['deadline']);
+if(!$canBatchAction) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
 $projectBrowseLink = createLink('project', 'browse');
 $productLink       = explode('-', $config->productLink);
 $param             = $config->productLink == 'product-all' ? '' : "productID={product}";
 $productBrowseLink = createLink('product', $productLink[1], $param);
-$config->my->bug->dtable->fieldList['product']['link'] = 'RAWJS<function(info){ if(info.row.data.shadow) return \'' . $projectBrowseLink . '\'; else return \'' . $productBrowseLink . '\'; }>RAWJS';
+$config->bug->dtable->fieldList['product']['link'] = 'RAWJS<function(info){ if(info.row.data.shadow) return \'' . $projectBrowseLink . '\'; else return \'' . $productBrowseLink . '\'; }>RAWJS';
 
 foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
 
-$bugs = initTableData($bugs, $config->my->bug->dtable->fieldList, $this->bug);
-$bugs = array_values($bugs);
-
-$footToolbar = array('items' => array
+$footToolbar = $canBatchAction ? array('items' => array
 (
-    array('text' => $lang->edit, 'className' => 'batch-btn ' . ($canBatchEdit ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchEdit')),
-    array('text' => $lang->confirm, 'className' => 'batch-btn ajax-btn ' . ($canBatchConfirm ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchConfirm')),
-    array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . ($canBatchClose ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchClose')),
+    array('text' => $lang->edit, 'className' => 'batch-btn ' . ($canBatchEdit ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchEdit')),
+    array('text' => $lang->confirm, 'className' => 'batch-btn ajax-btn ' . ($canBatchConfirm ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchConfirm')),
+    array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . ($canBatchClose ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchClose')),
     array('text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'caret' => 'up', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
-    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
+    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&productID=0&type=my"));
 }
 
 menu
@@ -69,15 +66,24 @@ menu
     set::items($assignedToItems)
 );
 
+$cols = $this->loadModel('datatable')->getSetting('my');
+$cols['actions']['list']['edit']['data-toggle'] = 'modal';
+$cols['actions']['list']['edit']['data-size']   = 'lg';
+$cols['actions']['list']['copy']['data-toggle'] = 'modal';
+$cols['actions']['list']['copy']['data-size']   = 'lg';
+
+$bugs = initTableData($bugs, $cols, $this->bug);
+
 dtable
 (
-    set::cols($config->my->bug->dtable->fieldList),
-    set::data($bugs),
+    set::cols($cols),
+    set::data(array_values($bugs)),
+    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module=my&method=bug"), 'hint' => $app->lang->datatable->custom)),
     set::userMap($users),
     set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
-    set::checkable($canBatchAction ? true : false),
+    set::checkable($canBatchAction),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
-    $canBatchAction ? set::footToolbar($footToolbar) : null,
+    set::footToolbar($footToolbar),
     set::footPager(usePager()),
 );
 

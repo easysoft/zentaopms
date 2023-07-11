@@ -94,7 +94,7 @@ $(function()
     {
         var link = createLink(objectType, 'view', objectType + 'ID=' + objectID);
         var app = objectType == 'bug' ? 'qa' : (objectType == 'task' ? 'execution' : 'product');
-        parent.parent.$.apps.open(link, app);
+        parent.parent.openUrl(link, {'app': app});
     });
 });
 </script>

@@ -1,0 +1,2 @@
+#privByModuleForm .form-row select {height: 250px !important; background-image: none;}
+#privByModuleForm .form-row select option:hover {background: #2e7fff;}

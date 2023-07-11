@@ -184,6 +184,7 @@ $lang->story->reviewed       = 'Reviewed';
 $lang->story->toBeReviewed   = 'To Be Reviewed';
 $lang->story->linkMR         = 'Related MRs';
 $lang->story->linkCommit     = 'Related Commits';
+$lang->story->URS            = 'User requirements';
 
 $lang->story->ditto       = 'Như trên';
 $lang->story->dittoNotice = 'Câu chuyện này chưa liên kết tới cùng sản phẩm bởi bởi vì nó là cuối cùng!';

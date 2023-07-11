@@ -38,7 +38,7 @@ class control extends baseControl
         if($this->config->edition == 'open') return false;
 
         /* Code for task #9224. Set requiredFields for workflow. */
-        if($this->dbh and (defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')))
+        if($this->dbh && ($this->app->isServing() || (defined('RUN_MODE') and RUN_MODE == 'api')))
         {
             $this->extendExportFields();
             $this->extendEditorFields();

@@ -118,7 +118,7 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function create($projectID)
+    public function create(int $projectID)
     {
         /* Load module and config. */
         $this->loadModel('build');
@@ -150,12 +150,12 @@ class projectrelease extends control
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
 
-        $this->view->title          = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
-        $this->view->projectID      = $projectID;
-        $this->view->builds         = $builds;
-        $this->view->lastRelease    = $this->projectrelease->getLast($projectID);
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
-        $this->display();
+        $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->projectID   = $projectID;
+        $this->view->builds      = $builds;
+        $this->view->lastRelease = $this->projectrelease->getLast($projectID);
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
+        $this->display('release', 'create');
     }
 
     /**
@@ -165,7 +165,7 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function edit($releaseID)
+    public function edit(int $releaseID)
     {
         /* Load module and config. */
         $this->loadModel('story');
@@ -223,7 +223,7 @@ class projectrelease extends control
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
-        $this->display();
+        $this->display('release', 'edit');
     }
 
     /**
@@ -254,36 +254,7 @@ class projectrelease extends control
      */
     public function notify($releaseID)
     {
-        if($_POST)
-        {
-            if(isset($_POST['notify']))
-            {
-                $notify = implode(',', $this->post->notify);
-                $this->dao->update(TABLE_RELEASE)->set('notify')->eq($notify)->where('id')->eq($releaseID)->exec();
-
-                $this->release->sendmail($releaseID);
-            }
-
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }
-
-        $release = $this->release->getByID($releaseID);
-        $project = $this->loadModel('project')->getByID($this->session->project);
-
-        if(!$project->hasProduct)
-        {
-            unset($this->lang->release->notifyList['FB']);
-            unset($this->lang->release->notifyList['PO']);
-            unset($this->lang->release->notifyList['QD']);
-        }
-
-        if(!$project->multiple) unset($this->lang->release->notifyList['ET']);
-
-        $this->view->release    = $release;
-        $this->view->actions    = $this->loadModel('action')->getList('release', $releaseID);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->notifyList = $this->lang->release->notifyList;
-        $this->display();
+        echo $this->fetch('release', 'notify', "releaseID={$releaseID}&projectID={$this->session->project}");
     }
 
     /**

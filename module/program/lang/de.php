@@ -12,8 +12,8 @@ $lang->program->budgetUnit     = 'Budget Unit';
 $lang->program->invested       = 'Invested';
 $lang->program->begin          = 'Begin';
 $lang->program->end            = 'End';
-$lang->program->realBegin      = 'Actual Begin';
-$lang->program->realEnd        = 'Actual End';
+$lang->program->realBeganAB    = 'Actual Begin';
+$lang->program->realEndAB      = 'Actual End';
 $lang->program->stage          = 'Stage';
 $lang->program->type           = 'Type';
 $lang->program->pri            = 'Priority';
@@ -126,12 +126,12 @@ $lang->program->createProduct    = 'Create Product';
 $lang->program->createProject    = 'Create Project';
 
 /* DTable columns of product view page. */
-$lang->program->unclosedReqCount  = 'Unclosed';
-$lang->program->closedReqRate     = 'Closed Rate';
-$lang->program->testCaseCoverage  = 'Coverage';
-$lang->program->bugActivatedCount = 'Activated';
-$lang->program->fixedRate         = 'Fixed';
-$lang->program->feedback          = 'Feedback';
+$lang->program->totalUnclosedStories = 'Unclosed';
+$lang->program->closedStoryRate      = 'Closed Rate';
+$lang->program->testCaseCoverage     = 'Coverage';
+$lang->program->totalActivatedBugs   = 'Activated';
+$lang->program->fixedRate            = 'Fixed';
+$lang->program->feedback             = 'Feedback';
 
 $lang->program->tip = new stdclass();
 $lang->program->tip->closed     = 'The program has been closed. Re-close is not available.';
@@ -146,16 +146,16 @@ $lang->program->endList[186] = 'Half year';
 $lang->program->endList[365] = 'One year';
 $lang->program->endList[999] = 'Longtime';
 
-$lang->program->aclList['private'] = "Private (accessible to {$lang->projectCommon} portfolio holders and stakeholders, stakeholders can follow up maintenance)";
 $lang->program->aclList['open']    = "Default(user who can visit the program can access it)";
+$lang->program->aclList['private'] = "Private (accessible to {$lang->projectCommon} portfolio holders and stakeholders, stakeholders can follow up maintenance)";
 
-$lang->program->subAclList['private'] = "Private (accessible to this program set leader and stakeholders, stakeholders can follow up maintenance)";
 $lang->program->subAclList['open']    = "Default (user who can visit the program can access it)";
 $lang->program->subAclList['program'] = "Open within the program (accessible to all higher-level program directors and affiliates, as well as to this program director and affiliates)";
+$lang->program->subAclList['private'] = "Private (accessible to this program set leader and stakeholders, stakeholders can follow up maintenance)";
 
-$lang->program->subAcls['private'] = 'Private';
 $lang->program->subAcls['open']    = 'Default';
 $lang->program->subAcls['program'] = 'Open within the program';
+$lang->program->subAcls['private'] = 'Private';
 
 $lang->program->authList['extend'] = 'Inherit (program privileges and company privileges)';
 $lang->program->authList['reset']  = 'Reset (program privileges only)';
@@ -172,15 +172,6 @@ $lang->program->featureBar['browse']['doing']     = 'Doing';
 $lang->program->featureBar['browse']['suspended'] = 'Suspended';
 $lang->program->featureBar['browse']['closed']    = 'Closed';
 
-$lang->program->featureBar['productview']['all']      = 'All';
-$lang->program->featureBar['productview']['unclosed'] = 'Unclosed';
-$lang->program->featureBar['productview']['end']      = 'End';
-
-$lang->program->featureBar['projectview']['all']      = 'All';
-$lang->program->featureBar['projectview']['unclosed'] = 'Unclosed';
-$lang->program->featureBar['projectview']['wait']     = 'Waiting';
-$lang->program->featureBar['projectview']['doing']    = 'Doing';
-$lang->program->featureBar['projectview']['more']     = 'More';
 $lang->program->featureBar['product']['all']      = 'Alle ' . $lang->productCommon;
 $lang->program->featureBar['product']['noclosed'] = 'Offen';
 $lang->program->featureBar['product']['closed']   = 'Geschlossen';
@@ -191,6 +182,22 @@ $lang->program->featureBar['project']['wait']      = 'Waiting';
 $lang->program->featureBar['project']['doing']     = 'Doing';
 $lang->program->featureBar['project']['suspended'] = 'Suspended';
 $lang->program->featureBar['project']['closed']    = 'Closed';
+
+$lang->program->featureBar['productview']['all']      = 'All';
+$lang->program->featureBar['productview']['unclosed'] = 'Unclosed';
+$lang->program->featureBar['productview']['end']      = 'End';
+$lang->program->featureBar['productview']['wait']     = 'Waiting';
+$lang->program->featureBar['productview']['doing']    = 'Doing';
+$lang->program->featureBar['productview']['more']     = $lang->more;
+
+$lang->program->featureBar['projectview']['all']      = 'All';
+$lang->program->featureBar['projectview']['unclosed'] = 'Unclosed';
+$lang->program->featureBar['projectview']['wait']     = 'Waiting';
+$lang->program->featureBar['projectview']['doing']    = 'Doing';
+$lang->program->featureBar['projectview']['more']     = $lang->more;
+
+$lang->program->moreSelects['suspended'] = 'Suspended';
+$lang->program->moreSelects['closed']    = 'Closed';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';
@@ -206,7 +213,15 @@ $lang->program->kanban->normalReleases  = 'Normal Releases';
 
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
-$lang->program->defaultProgram = 'Default Program';
-$lang->program->projectView    = 'Project View';
-$lang->program->productView    = 'Product View';
-$lang->program->manDay         = 'Man Day';
+$lang->program->defaultProgram    = 'Default Program';
+$lang->program->projectView       = 'Project View';
+$lang->program->productView       = 'Product View';
+$lang->program->manDay            = 'Man Day';
+$lang->program->createdDate       = 'Created Date';
+$lang->program->totalStories      = 'Total Stories';
+$lang->program->project           = 'Projects';
+$lang->program->totalBugs         = 'Total Bugs';
+$lang->program->latestReleaseDate = 'Latest Release Date';
+$lang->program->latestRelease     = 'Latest Release';
+$lang->program->manageLine        = 'Verwalte Produktlinie';
+$lang->program->checkedProducts   = '<strong>%total%</strong>&nbsp; products selected.';

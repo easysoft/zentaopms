@@ -1,5 +1,7 @@
 <?php
 $config->execution->dtable = new stdclass();
+$config->execution->team = new stdclass();
+$config->execution->team->dtable = new stdclass();
 
 $config->execution->dtable->fieldList['rawID']['title']    = $lang->idAB;
 $config->execution->dtable->fieldList['rawID']['name']     = 'rawID';
@@ -7,15 +9,17 @@ $config->execution->dtable->fieldList['rawID']['type']     = 'checkID';
 $config->execution->dtable->fieldList['rawID']['sortType'] = 'desc';
 $config->execution->dtable->fieldList['rawID']['checkbox'] = true;
 $config->execution->dtable->fieldList['rawID']['width']    = '80';
+$config->execution->dtable->fieldList['rawID']['required'] = true;
 
 $config->execution->dtable->fieldList['name']['title']        = $lang->execution->name;
-$config->execution->dtable->fieldList['name']['name']         = 'name';
+$config->execution->dtable->fieldList['name']['name']         = 'nameCol';
 $config->execution->dtable->fieldList['name']['fixed']        = 'left';
 $config->execution->dtable->fieldList['name']['flex']         = 1;
-$config->execution->dtable->fieldList['name']['type']         = 'html';
-$config->execution->dtable->fieldList['name']['nestedToggle'] = true;
+$config->execution->dtable->fieldList['name']['type']         = 'nestedTitle';
 $config->execution->dtable->fieldList['name']['sortType']     = true;
 $config->execution->dtable->fieldList['name']['minWidth']     = '356';
+$config->execution->dtable->fieldList['name']['nestedToggle'] = true;
+$config->execution->dtable->fieldList['name']['required']     = true;
 
 if(isset($config->setCode) and $config->setCode == 1)
 {
@@ -25,6 +29,7 @@ if(isset($config->setCode) and $config->setCode == 1)
     $config->execution->dtable->fieldList['code']['type']     = 'text';
     $config->execution->dtable->fieldList['code']['sortType'] = true;
     $config->execution->dtable->fieldList['code']['width']    = '136';
+    $config->execution->dtable->fieldList['code']['show']     = 'true';
 }
 
 $config->execution->dtable->fieldList['project']['title']    = $lang->execution->project;
@@ -33,6 +38,7 @@ $config->execution->dtable->fieldList['project']['type']     = 'desc';
 $config->execution->dtable->fieldList['project']['sortType'] = true;
 $config->execution->dtable->fieldList['project']['width']    = '160';
 $config->execution->dtable->fieldList['project']['group']    = '1';
+$config->execution->dtable->fieldList['project']['show']     = true;
 
 $config->execution->dtable->fieldList['status']['title']     = $lang->execution->status;
 $config->execution->dtable->fieldList['status']['name']      = 'status';
@@ -41,6 +47,7 @@ $config->execution->dtable->fieldList['status']['statusMap'] = $lang->execution-
 $config->execution->dtable->fieldList['status']['sortType']  = true;
 $config->execution->dtable->fieldList['status']['width']     = '80';
 $config->execution->dtable->fieldList['status']['group']     = '1';
+$config->execution->dtable->fieldList['status']['show']      = true;
 
 $config->execution->dtable->fieldList['PM']['title']    = $lang->execution->PM;
 $config->execution->dtable->fieldList['PM']['name']     = 'PM';
@@ -48,6 +55,7 @@ $config->execution->dtable->fieldList['PM']['type']     = 'avatarBtn';
 $config->execution->dtable->fieldList['PM']['sortType'] = true;
 $config->execution->dtable->fieldList['PM']['width']    = '100';
 $config->execution->dtable->fieldList['PM']['group']    = '2';
+$config->execution->dtable->fieldList['PM']['show']     = true;
 
 $config->execution->dtable->fieldList['openedDate']['title']    = $lang->execution->openedDate;
 $config->execution->dtable->fieldList['openedDate']['name']     = 'openedDate';
@@ -62,6 +70,7 @@ $config->execution->dtable->fieldList['begin']['type']     = 'date';
 $config->execution->dtable->fieldList['begin']['sortType'] = true;
 $config->execution->dtable->fieldList['begin']['width']    = '96';
 $config->execution->dtable->fieldList['begin']['group']    = '3';
+$config->execution->dtable->fieldList['begin']['show']     = true;
 
 $config->execution->dtable->fieldList['end']['title']    = $lang->execution->end;
 $config->execution->dtable->fieldList['end']['name']     = 'end';
@@ -69,6 +78,7 @@ $config->execution->dtable->fieldList['end']['type']     = 'date';
 $config->execution->dtable->fieldList['end']['sortType'] = true;
 $config->execution->dtable->fieldList['end']['width']    = '96';
 $config->execution->dtable->fieldList['end']['group']    = '3';
+$config->execution->dtable->fieldList['end']['show']     = true;
 
 $config->execution->dtable->fieldList['realBegan']['title']    = $lang->execution->realBeganAB;
 $config->execution->dtable->fieldList['realBegan']['name']     = 'realBegan';
@@ -90,6 +100,7 @@ $config->execution->dtable->fieldList['totalEstimate']['type']     = 'number';
 $config->execution->dtable->fieldList['totalEstimate']['sortType'] = false;
 $config->execution->dtable->fieldList['totalEstimate']['width']    = '64';
 $config->execution->dtable->fieldList['totalEstimate']['group']    = '4';
+$config->execution->dtable->fieldList['totalEstimate']['show']     = true;
 
 $config->execution->dtable->fieldList['totalConsumed']['title']    = $lang->execution->totalConsumed;
 $config->execution->dtable->fieldList['totalConsumed']['name']     = 'totalConsumed';
@@ -97,6 +108,7 @@ $config->execution->dtable->fieldList['totalConsumed']['type']     = 'number';
 $config->execution->dtable->fieldList['totalConsumed']['sortType'] = false;
 $config->execution->dtable->fieldList['totalConsumed']['width']    = '64';
 $config->execution->dtable->fieldList['totalConsumed']['group']    = '4';
+$config->execution->dtable->fieldList['totalConsumed']['show']     = true;
 
 $config->execution->dtable->fieldList['totalLeft']['title']    = $lang->execution->totalLeft;
 $config->execution->dtable->fieldList['totalLeft']['name']     = 'totalLeft';
@@ -104,6 +116,7 @@ $config->execution->dtable->fieldList['totalLeft']['type']     = 'number';
 $config->execution->dtable->fieldList['totalLeft']['sortType'] = false;
 $config->execution->dtable->fieldList['totalLeft']['width']    = '64';
 $config->execution->dtable->fieldList['totalLeft']['group']    = '4';
+$config->execution->dtable->fieldList['totalLeft']['show']     = true;
 
 $config->execution->dtable->fieldList['progress']['title']    = $lang->execution->progress;
 $config->execution->dtable->fieldList['progress']['name']     = 'progress';
@@ -111,6 +124,7 @@ $config->execution->dtable->fieldList['progress']['type']     = 'progress';
 $config->execution->dtable->fieldList['progress']['sortType'] = false;
 $config->execution->dtable->fieldList['progress']['width']    = '64';
 $config->execution->dtable->fieldList['progress']['group']    = '4';
+$config->execution->dtable->fieldList['progress']['show']     = true;
 
 $config->execution->dtable->fieldList['burn']['title']    = $lang->execution->burn;
 $config->execution->dtable->fieldList['burn']['name']     = 'burn';
@@ -118,3 +132,142 @@ $config->execution->dtable->fieldList['burn']['type']     = 'burn';
 $config->execution->dtable->fieldList['burn']['sortType'] = false;
 $config->execution->dtable->fieldList['burn']['width']    = '88';
 $config->execution->dtable->fieldList['burn']['group']    = '4';
+$config->execution->dtable->fieldList['burn']['show']     = true;
+
+$config->execution->team->actionList['unlink']['icon'] = 'unlink';
+$config->execution->team->actionList['unlink']['hint'] = $lang->execution->unlinkMember;
+$config->execution->team->actionList['unlink']['url']  = 'javascript:deleteMember("{root}", "{userID}")';
+
+$config->execution->team->dtable->fieldList['account']['title']    = $lang->team->account;
+$config->execution->team->dtable->fieldList['account']['name']     = 'realname';
+$config->execution->team->dtable->fieldList['account']['type']     = 'user';
+$config->execution->team->dtable->fieldList['account']['link']     = array('module' => 'user', 'method' => 'view', 'params' => 'userID={userID}');
+$config->execution->team->dtable->fieldList['account']['sortType'] = false;
+
+$config->execution->team->dtable->fieldList['role']['title']    = $lang->team->role;
+$config->execution->team->dtable->fieldList['role']['type']     = 'user';
+$config->execution->team->dtable->fieldList['role']['sortType'] = false;
+
+$config->execution->team->dtable->fieldList['join']['title'] = $lang->team->join;
+$config->execution->team->dtable->fieldList['join']['type']  = 'date';
+
+$config->execution->team->dtable->fieldList['days']['title'] = $lang->team->days;
+$config->execution->team->dtable->fieldList['days']['type']  = 'number';
+
+$config->execution->team->dtable->fieldList['hours']['title'] = $lang->team->hours;
+$config->execution->team->dtable->fieldList['hours']['type']  = 'number';
+
+$config->execution->team->dtable->fieldList['total']['title'] = $lang->team->totalHours;
+$config->execution->team->dtable->fieldList['total']['type']  = 'number';
+
+$config->execution->team->dtable->fieldList['limited']['title']    = $lang->team->limited;
+$config->execution->team->dtable->fieldList['limited']['type']     = 'user';
+$config->execution->team->dtable->fieldList['limited']['map']      = $lang->team->limitedList;
+$config->execution->team->dtable->fieldList['limited']['sortType'] = false;
+
+$config->execution->team->dtable->fieldList['actions']['type']       = 'actions';
+$config->execution->team->dtable->fieldList['actions']['minWidth']   = 60;
+$config->execution->team->dtable->fieldList['actions']['actionsMap'] = $config->execution->team->actionList;
+
+global $app;
+$app->loadLang('bug');
+$app->loadLang('task');
+$config->execution->importBug = new stdclass();
+$config->execution->importBug->dtable = new stdclass();
+$config->execution->importBug->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->execution->importBug->dtable->fieldList['id']['type']     = 'checkID';
+$config->execution->importBug->dtable->fieldList['id']['sortType'] = false;
+
+$config->execution->importBug->dtable->fieldList['severity']['title']    = $lang->bug->abbr->severity;
+$config->execution->importBug->dtable->fieldList['severity']['type']     = 'severity';
+$config->execution->importBug->dtable->fieldList['severity']['sortType'] = false;
+$config->execution->importBug->dtable->fieldList['severity']['fixed']    = 'left';
+
+$config->execution->importBug->dtable->fieldList['pri']['title']    = $lang->execution->pri;
+$config->execution->importBug->dtable->fieldList['pri']['type']     = 'pri';
+$config->execution->importBug->dtable->fieldList['pri']['sortType'] = false;
+$config->execution->importBug->dtable->fieldList['pri']['fixed']    = 'left';
+
+$config->execution->importBug->dtable->fieldList['title']['title']       = $lang->bug->title;
+$config->execution->importBug->dtable->fieldList['title']['type']        = 'shortNestedTitle';
+$config->execution->importBug->dtable->fieldList['title']['sortType']    = false;
+$config->execution->importBug->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->execution->importBug->dtable->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
+
+$config->execution->importBug->dtable->fieldList['status']['title']     = $lang->bug->status;
+$config->execution->importBug->dtable->fieldList['status']['type']      = 'status';
+$config->execution->importBug->dtable->fieldList['status']['sortType']  = false;
+$config->execution->importBug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
+
+$config->execution->importBug->dtable->fieldList['taskPri']['title']    = $lang->bug->pri;
+$config->execution->importBug->dtable->fieldList['taskPri']['name']     = 'pri';
+$config->execution->importBug->dtable->fieldList['taskPri']['type']     = 'html';
+$config->execution->importBug->dtable->fieldList['taskPri']['width']    = 68;
+$config->execution->importBug->dtable->fieldList['taskPri']['sortType'] = false;
+
+$config->execution->importBug->dtable->fieldList['assignedTo']['title']    = $lang->bug->assignedTo;
+$config->execution->importBug->dtable->fieldList['assignedTo']['type']     = 'html';
+$config->execution->importBug->dtable->fieldList['assignedTo']['width']    = 108;
+$config->execution->importBug->dtable->fieldList['assignedTo']['sortType'] = false;
+
+$config->execution->importBug->dtable->fieldList['estimate']['title']    = $lang->task->estimate;
+$config->execution->importBug->dtable->fieldList['estimate']['type']     = 'number';
+$config->execution->importBug->dtable->fieldList['estimate']['sortType'] = false;
+
+$config->execution->importBug->dtable->fieldList['estStarted']['title']    = $lang->task->estStarted;
+$config->execution->importBug->dtable->fieldList['estStarted']['type']     = 'datetime';
+$config->execution->importBug->dtable->fieldList['estStarted']['sortType'] = false;
+
+$config->execution->importBug->dtable->fieldList['deadline']['title']    = $lang->task->deadline;
+$config->execution->importBug->dtable->fieldList['deadline']['type']     = 'datetime';
+$config->execution->importBug->dtable->fieldList['deadline']['sortType'] = false;
+
+$app->loadLang('story');
+$config->execution->linkStory = new stdclass();
+$config->execution->linkStory->dtable = new stdclass();
+$config->execution->linkStory->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->execution->linkStory->dtable->fieldList['id']['type']     = 'checkID';
+$config->execution->linkStory->dtable->fieldList['id']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['id']['fixed']    = 'left';
+
+$config->execution->linkStory->dtable->fieldList['pri']['title']    = $lang->story->pri;
+$config->execution->linkStory->dtable->fieldList['pri']['type']     = 'pri';
+$config->execution->linkStory->dtable->fieldList['pri']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['pri']['fixed']    = 'left';
+
+$config->execution->linkStory->dtable->fieldList['title']['title']    = $lang->story->title;
+$config->execution->linkStory->dtable->fieldList['title']['type']     = 'text';
+$config->execution->linkStory->dtable->fieldList['title']['link']     = helper::createLink('story', 'view', 'storyID={id}');
+$config->execution->linkStory->dtable->fieldList['title']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['title']['fixed']    = 'left';
+
+$config->execution->linkStory->dtable->fieldList['product']['title']    = $lang->story->product;
+$config->execution->linkStory->dtable->fieldList['product']['type']     = 'text';
+$config->execution->linkStory->dtable->fieldList['product']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['product']['group']    = 1;
+
+$config->execution->linkStory->dtable->fieldList['module']['title']    = $lang->story->module;
+$config->execution->linkStory->dtable->fieldList['module']['type']     = 'text';
+$config->execution->linkStory->dtable->fieldList['module']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['module']['group']    = 2;
+
+$config->execution->linkStory->dtable->fieldList['planTitle']['title']    = $lang->story->plan;
+$config->execution->linkStory->dtable->fieldList['planTitle']['type']     = 'text';
+$config->execution->linkStory->dtable->fieldList['planTitle']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['planTitle']['group']    = 3;
+
+$config->execution->linkStory->dtable->fieldList['stage']['title']     = $lang->story->stageAB;
+$config->execution->linkStory->dtable->fieldList['stage']['type']      = 'status';
+$config->execution->linkStory->dtable->fieldList['stage']['statusMap'] = $lang->story->stageList;
+$config->execution->linkStory->dtable->fieldList['stage']['sortType']  = true;
+$config->execution->linkStory->dtable->fieldList['stage']['group']     = 4;
+
+$config->execution->linkStory->dtable->fieldList['openedBy']['title']    = $lang->story->openedBy;
+$config->execution->linkStory->dtable->fieldList['openedBy']['type']     = 'user';
+$config->execution->linkStory->dtable->fieldList['openedBy']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['openedBy']['group']    = 4;
+
+$config->execution->linkStory->dtable->fieldList['estimate']['title']    = $lang->story->estimateAB;
+$config->execution->linkStory->dtable->fieldList['estimate']['type']     = 'number';
+$config->execution->linkStory->dtable->fieldList['estimate']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['estimate']['group']    = 4;

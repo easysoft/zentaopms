@@ -1,0 +1,69 @@
+<?php
+declare(strict_types=1);
+/**
+ * The linkStory view file of productplan module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Wang Yidong <yidong@easycorp.ltd>
+ * @package     productplan
+ * @link        https://www.zentao.net
+ */
+namespace zin;
+
+$cols = array();
+foreach($config->build->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->story->dtable->fieldList, $field, array());
+$cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
+$cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}&version=0&param={objectID}");
+$cols['title']['nestedToggle'] = false;
+$cols['assignedTo']['type']    = 'user';
+
+foreach($allStories as $story)
+{
+    $story->objectID = $this->app->tab == 'execution' ? $build->execution : $build->project;
+    $story->estimate = $story->estimate . $config->hourUnit;
+}
+
+div(setID('searchFormPanel'), set('data-module', 'story'), searchToggle(set::open(true), set::module('story')));
+dtable
+(
+    set::id('unlinkStoryList'),
+    set::userMap($users),
+    set::cols($cols),
+    set::data(array_values($allStories)),
+    set::onRenderCell(jsRaw('window.renderStoryCell')),
+    set::footToolbar(array('items' => array(array
+    (
+        'text'      => $lang->productplan->linkStory,
+        'btnType'   => 'primary',
+        'className' => 'size-sm linkObjectBtn',
+        'data-type' => 'story',
+        'data-url'  => inlink('linkStory', "buildID={$build->id}&browseType=$browseType&param=$param"),
+    )))),
+    set::footer(array('checkbox', 'toolbar', array('html' => html::a(helper::createLink(($this->app->tab == 'project' ? 'projectbuild' : 'build'), 'view', "buildID=$build->id&type=story"). "#app={$app->tab}", $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
+    set::footPager(usePager(array
+    (
+        'recPerPage'  => $pager->recPerPage,
+        'recTotal'    => $pager->recTotal,
+        'linkCreator' => helper::createLink('buuild', 'view', "buildID={$build->id}&type=story&link=true&param=" . helper::safe64Encode("&browseType={$browseType}&param={$param}") . "&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
+    ))),
+);
+
+h::js
+(
+<<<EOD
+const childrenAB = "{$lang->story->childrenAB}";
+window.renderStoryCell = function(result, info)
+{
+    const story = info.row.data;
+    if(info.col.name == 'title' && result)
+    {
+        let html = '';
+        if(story.parent) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        if(html) result.unshift({html});
+    }
+    return result;
+};
+EOD
+);
+
+render();

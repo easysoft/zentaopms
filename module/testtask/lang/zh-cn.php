@@ -77,7 +77,8 @@ $lang->testtask->owner             = '负责人';
 $lang->testtask->executor          = '执行人';
 $lang->testtask->execTime          = '执行时间';
 $lang->testtask->pri               = '优先级';
-$lang->testtask->name              = '名称';
+$lang->testtask->name              = '测试单名称';
+$lang->testtask->unitName          = '单侧名称';
 $lang->testtask->begin             = '开始日期';
 $lang->testtask->end               = '结束日期';
 $lang->testtask->realFinishedDate  = '实际完成日期';
@@ -107,6 +108,7 @@ $lang->testtask->passCount         = '成功';
 $lang->testtask->failCount         = '失败';
 $lang->testtask->summary           = '有%s个用例，失败%s个，耗时%s。';
 $lang->testtask->stepSummary       = '共有%s个步骤，%s个通过，%s个失败。';
+$lang->testtask->unitSummary       = '本页共 <strong>%s</strong> 个单元测试结果。';
 $lang->testtask->pageSummary       = '本页共 <strong>%s</strong> 个测试单。';
 $lang->testtask->mySummary         = '本页共 <strong>%s</strong> 个测试单，待测试 <strong>%s</strong>，测试中 <strong>%s</strong>，被阻塞 <strong>%s</strong>。';
 $lang->testtask->allSummary        = '本页共 <strong>%s</strong> 个测试单，待测试 <strong>%s</strong>，测试中 <strong>%s</strong>，被阻塞 <strong>%s</strong>，已测试 <strong>%s</strong>。';
@@ -138,7 +140,7 @@ $lang->testtask->browseBySuite = '按套件查看';
 $lang->testtask->passAll       = '全部通过';
 $lang->testtask->pass          = '通过';
 $lang->testtask->fail          = '失败';
-$lang->testtask->showResult    = '共执行<span class="text-info">%s</span>次';
+$lang->testtask->showResult    = '共执行<span class="text-primary">%s</span>次';
 $lang->testtask->showFail      = '失败<span class="text-danger">%s</span>次';
 
 $lang->testtask->confirmDelete     = '您确认要删除该测试单吗？';
@@ -152,6 +154,7 @@ $lang->testtask->titleOfAuto       = "%s 自动化测试";
 $lang->testtask->cannotBeParsed    = '导入的XML文件内容格式错误，无法解析。';
 $lang->testtask->finishedDateLess  = '实际完成日期不能小于开始日期%s';
 $lang->testtask->finishedDateMore  = '实际完成日期不能大于今天';
+$lang->testtask->emptyUnitTip      = '暂时没有单元测试结果。';
 
 $lang->testtask->assignedToMe  = '指派给我';
 $lang->testtask->allCases      = '全部用例';
@@ -159,7 +162,7 @@ $lang->testtask->allCases      = '全部用例';
 $lang->testtask->lblCases      = '用例列表';
 $lang->testtask->lblUnlinkCase = '移除用例';
 $lang->testtask->lblRunCase    = '执行用例';
-$lang->testtask->lblResults    = '执行结果';
+$lang->testtask->lblResults    = '用例执行结果';
 
 $lang->testtask->placeholder = new stdclass();
 $lang->testtask->placeholder->begin = '开始日期';
@@ -208,7 +211,13 @@ $lang->testtask->featureBar['browse']['done']        = $lang->testtask->done;
 $lang->testtask->featureBar['cases']['all']          = $lang->testtask->allCases;
 $lang->testtask->featureBar['cases']['assignedtome'] = $lang->testtask->assignedToMe;
 
-$lang->testtask->unitTag['all']       = '所有';
+$lang->testtask->featureBar['linkcase']['all']     = $lang->all;
+$lang->testtask->featureBar['linkcase']['bystory'] = $lang->testtask->linkByStory;
+$lang->testtask->featureBar['linkcase']['bysuite'] = $lang->testtask->linkBySuite;
+$lang->testtask->featureBar['linkcase']['bybuild'] = $lang->testtask->linkByBuild;
+$lang->testtask->featureBar['linkcase']['bybug']   = $lang->testtask->linkByBug;
+
+$lang->testtask->unitTag['all']       = '全部';
 $lang->testtask->unitTag['newest']    = '最近';
 $lang->testtask->unitTag['thisWeek']  = '本周';
 $lang->testtask->unitTag['lastWeek']  = '上周';

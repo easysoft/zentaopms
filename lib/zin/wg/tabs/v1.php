@@ -13,7 +13,7 @@ class tabs extends wg
      */
     private $tabPanes = array();
 
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         /* Tabs direction: h - horizontal, v - vertical */
         'direction?:string="h"',
         'collapse?: bool=false',
@@ -34,11 +34,11 @@ class tabs extends wg
 
         return li
         (
-            setClass('nav-item', $active ? 'active' : null),
+            setClass('nav-item'),
             a
             (
                 set('data-toggle', 'tab'),
-                setClass('font-medium'),
+                setClass('font-medium', $active ? 'active' : null),
                 set::href("#$key"),
                 $prefix,
                 span($title),
@@ -54,11 +54,14 @@ class tabs extends wg
     protected function buildTabHeader(array $titleViews): wg
     {
         $isVertical = $this->prop('direction') === 'v';
+        $collapse   = $this->prop('collapse');
+
         return ul
         (
-            setClass('nav nav-tabs gap-x-5'),
+            setClass('nav nav-tabs gap-x-5', $collapse ? 'relative' : null),
             $isVertical ? setClass('nav-stacked') : null,
-            $titleViews
+            $titleViews,
+            $this->buildCollapseBtn(),
         );
     }
 
@@ -89,39 +92,22 @@ class tabs extends wg
         }
     }
 
-    private function buildCollapseBtn()
+    private function buildCollapseBtn(): ?wg
     {
         $collapse = $this->prop('collapse');
         if(!$collapse) return null;
 
-        return btn
+        return collapseBtn
         (
-            setClass('btn-link'),
-            setStyle(array(
-                'position' => 'absolute',
-                'right' => '24px',
-                'top' => '16px'
-            )),
-            set::icon('angle-down'),
-            on::click
-            (
-                <<<FUNC
-                    const btn = event.target;
-                    const icon = btn.querySelector('.icon');
-                    const tabs = btn.closest('.tabs');
-                    const tabContent = tabs.querySelector('.tab-content');
-                    if(tabContent) tabContent.classList.toggle('hidden');
-                    icon.classList.toggle('icon-angle-down');
-                    icon.classList.toggle('icon-angle-top');
-                FUNC
-            )
+            setClass('tabs-collapse-btn'),
+            set::target('.tab-content'),
+            set::parent('.tabs')
         );
     }
 
     protected function build(): wg
     {
         $isVertical = $this->prop('direction') === 'v';
-        $collapse   = $this->prop('collapse');
 
         $this->filterChildren();
 
@@ -129,18 +115,21 @@ class tabs extends wg
         $contentViews = array();
         foreach($this->tabPanes as $tabPane)
         {
-            $titleViews[]   = $this->buildTitleView($tabPane);
+            $titleViews[] = $this->buildTitleView($tabPane);
+
+            $divider = $tabPane->block('divider');
+            if($divider) $titleViews[] = div(set::class('divider'));
+
             $contentViews[] = $tabPane;
         }
 
         return div
         (
-            setClass('tabs', $isVertical ? 'flex' : null, $collapse ? 'relative' : null),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            setClass('tabs', $isVertical ? 'flex' : null),
+            set($this->getRestProps()),
 
             $this->buildTabHeader($titleViews),
             $this->buildTabBody($contentViews),
-            $this->buildCollapseBtn(),
             $this->children
         );
     }

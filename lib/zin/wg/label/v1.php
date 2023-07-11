@@ -1,9 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class label extends wg
 {
-    static $defineProps = 'text?:string';
+    protected static array $defineProps = array(
+        'text?:string'
+    );
 
     public function onAddChild($child)
     {
@@ -14,12 +17,12 @@ class label extends wg
         }
     }
 
-    public function build()
+    public function build(): wg
     {
         return span
         (
             setClass('label'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->prop('text'),
             $this->children()
         );

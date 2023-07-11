@@ -267,10 +267,19 @@ class blockModel extends model
 
         foreach($blocks as $block)
         {
+            $defaultSize = array('1' => '3');
+            if(!empty($this->config->block->size[$block['module']][$block['code']]))                  $defaultSize     = $this->config->block->size[$block['module']][$block['code']];
+            if(!empty($this->config->block->size[$block['module']][$block['code']][$block['width']])) $block['height'] = $this->config->block->size[$block['module']][$block['code']][$block['width']];
+
+            if(empty($block['width']))  $block['width']  = reset(array_keys($defaultSize));
+            if(empty($block['height'])) $block['height'] = reset($defaultSize);
+
             $block['account']   = $account;
             $block['dashboard'] = $dashboard;
             $block['params']    = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
             $block['vision']    = $this->config->vision;
+            $block['left']      = $block['width'] == 1 ? 2 : 0;
+            $block['top']       = $this->computeBlockTop((object)$block);
 
             $this->blockTao->insert((object)$block);
         }
@@ -391,5 +400,28 @@ class blockModel extends model
         $this->dao->update(TABLE_BLOCK)->set('order')->eq($order)->where('id')->eq($blockID)->exec();
 
         return !dao::isError();
+    }
+
+    /**
+     * 计算区块距离顶部的高度。
+     * compute block top height.
+     *
+     * @param  object $block
+     * @access public
+     * @return int
+     */
+    public function computeBlockTop(object $block): int
+    {
+        $top = $this->dao->select('max(`top` + `height`) AS top')->from(TABLE_BLOCK)
+            ->where('dashboard')->eq($block->dashboard)
+            ->andWhere('width', true)->eq($block->width)
+            ->orWhere('width')->eq(3)
+            ->markRight(1)
+            ->andWhere('vision')->eq($block->vision)
+            ->andWhere('hidden')->eq('0')
+            ->fetch('top');
+
+        if(!$top) $top = 0;
+        return $top;
     }
 }

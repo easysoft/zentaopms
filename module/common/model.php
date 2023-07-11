@@ -14,27 +14,20 @@ class commonModel extends model
     public static $requestErrors = array();
 
     /**
-     * The construc method, to do some auto things.
+     * Set config of user.
      *
      * @access public
      * @return void
      */
-    public function __construct()
+    public function setUserConfig()
     {
-        parent::__construct();
-        if(!defined('FIRST_RUN'))
-        {
-            define('FIRST_RUN', true);
-            $this->sendHeader();
-            $this->setCompany();
-            $this->setUser();
-            $this->setApproval();
-            $this->loadConfigFromDB();
-            $this->app->setTimezone();
-            $this->loadCustomFromDB();
-            if(!$this->checkIP()) return print($this->lang->ipLimited);
-            $this->app->loadLang('company');
-        }
+        $this->sendHeader();
+        $this->setCompany();
+        $this->setUser();
+        $this->setApproval();
+        $this->loadConfigFromDB();
+        $this->loadCustomFromDB();
+        if(!$this->checkIP()) return print($this->lang->ipLimited);
     }
 
     /**
@@ -198,21 +191,21 @@ class commonModel extends model
      */
     public function sendHeader()
     {
-        header("Content-Type: text/html; Language={$this->config->charset}");
-        header("Cache-control: private");
+        helper::header('Content-Type', "text/html; Language={$this->config->charset}");
+        helper::header('Cache-Control', 'private');
 
         /* Send HTTP header. */
-        if($this->config->framework->sendXCTO)  header("X-Content-Type-Options: nosniff");
-        if($this->config->framework->sendXXP)   header("X-XSS-Protection: 1; mode=block");
-        if($this->config->framework->sendHSTS)  header("Strict-Transport-Security: max-age=3600; includeSubDomains");
-        if($this->config->framework->sendRP)    header("Referrer-Policy: no-referrer-when-downgrade");
-        if($this->config->framework->sendXPCDP) header("X-Permitted-Cross-Domain-Policies: master-only");
-        if($this->config->framework->sendXDO)   header("X-Download-Options: noopen");
+        if($this->config->framework->sendXCTO)  helper::header('X-Content-Type-Options', 'nosniff');
+        if($this->config->framework->sendXXP)   helper::header('X-XSS-Protection', '1; mode=block');
+        if($this->config->framework->sendHSTS)  helper::header('Strict-Transport-Security', 'max-age=3600; includeSubDomains');
+        if($this->config->framework->sendRP)    helper::header('Referrer-Policy', 'no-referrer-when-downgrade');
+        if($this->config->framework->sendXPCDP) helper::header('X-Permitted-Cross-Domain-Policies', 'master-only');
+        if($this->config->framework->sendXDO)   helper::header('X-Download-Options', 'noopen');
 
         /* Set Content-Security-Policy header. */
         if($this->config->CSPs)
         {
-            foreach($this->config->CSPs as $CSP) header("Content-Security-Policy: $CSP;");
+            foreach($this->config->CSPs as $CSP) helper::header('Content-Security-Policy', "$CSP;");
         }
 
         if($this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon'))
@@ -220,12 +213,12 @@ class commonModel extends model
             if(isset($_SERVER["HTTPS"]) and $_SERVER["HTTPS"] == 'on')
             {
                 $session = $this->config->sessionVar . '=' . session_id();
-                header("Set-Cookie: $session; SameSite=None; Secure=true", false);
+                helper::header('Set-Cookie', "$session; SameSite=None; Secure=true", false);
             }
         }
         else
         {
-            if(!empty($this->config->xFrameOptions)) header("X-Frame-Options: {$this->config->xFrameOptions}");
+            if(!empty($this->config->xFrameOptions)) helper::header('X-Frame-Options', $this->config->xFrameOptions);
         }
     }
 
@@ -264,23 +257,23 @@ class commonModel extends model
     {
         if($this->session->user)
         {
-            if(!defined('IN_UPGRADE')) $this->session->user->view = $this->loadModel('user')->grantUserView();
+            if(!$this->app->upgrading) $this->session->user->view = $this->loadModel('user')->grantUserView();
             $this->app->user = $this->session->user;
         }
-        elseif($this->app->company->guest or PHP_SAPI == 'cli')
+        elseif($this->app->company->guest || (PHP_SAPI == 'cli' && (!isset($_SERVER['RR_MODE']) || $_SERVER['RR_MODE'] == 'jobs')))
         {
-            $user             = new stdClass();
-            $user->id         = 0;
-            $user->account    = 'guest';
-            $user->realname   = 'guest';
-            $user->dept       = 0;
-            $user->avatar     = '';
-            $user->role       = 'guest';
-            $user->admin      = false;
-            $user->rights     = $this->loadModel('user')->authorize('guest');
-            $user->groups     = array('group');
-            $user->visions    = $this->config->vision;
-            if(!defined('IN_UPGRADE')) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
+            $user           = new stdClass();
+            $user->id       = 0;
+            $user->account  = 'guest';
+            $user->realname = 'guest';
+            $user->dept     = 0;
+            $user->avatar   = '';
+            $user->role     = 'guest';
+            $user->admin    = false;
+            $user->rights   = $this->loadModel('user')->authorize('guest');
+            $user->groups   = array('group');
+            $user->visions  = $this->config->vision;
+            if(!$this->app->upgrading) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
         }
@@ -361,7 +354,7 @@ class commonModel extends model
     {
         $this->loadModel('custom');
 
-        if(defined('IN_UPGRADE')) return;
+        if($this->app->upgrading) return;
         if(!$this->config->db->name) return;
 
         $records = $this->custom->getAllLang();
@@ -664,7 +657,7 @@ class commonModel extends model
                     {
                         $params = "model=kanban";
                     }
-                    elseif(!defined('TUTORIAL'))
+                    elseif(!commonModel::isTutorialMode())
                     {
                         $params       = "programID=0&from=global";
                         $createMethod = 'createGuide';
@@ -1131,11 +1124,12 @@ class commonModel extends model
     /**
      * Print the main menu.
      *
+     * @param  bool   $printHtml
      * @static
      * @access public
      * @return string
      */
-    public static function printMainMenu()
+    public static function printMainMenu(bool $printHtml = true): string
     {
         global $app, $lang, $config;
 
@@ -1151,18 +1145,18 @@ class commonModel extends model
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;
 
-        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
-        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
+        if($isTutorialMode && isset($_SESSION['wizardModule'])) $currentModule = $_SESSION['wizardModule'];
+        if($isTutorialMode && isset($_SESSION['wizardMethod'])) $currentMethod = $_SESSION['wizardMethod'];
 
         /* Print all main menus. */
         $menu = customModel::getMainMenu();
 
-        echo "<ul class='nav nav-default'>\n";
+        $menuHtml = "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
             if(empty($menuItem->link)) continue;
-            if($menuItem->divider) echo "<li class='divider'></li>";
+            if($menuItem->divider) $menuHtml .= "<li class='divider'></li>";
 
             /* Init the these vars. */
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
@@ -1185,11 +1179,11 @@ class commonModel extends model
             if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')
             {
                 $executionID = $menuItem->link['vars'];
-                commonModel::buildMoreButton($executionID);
+                commonModel::buildMoreButton((int)$executionID, $printHtml);
             }
             elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
             {
-                commonModel::buildAppButton();
+                commonModel::buildAppButton($printHtml);
             }
             else
             {
@@ -1262,22 +1256,23 @@ class commonModel extends model
                         $label    .= "<span class='caret'></span>";
                         $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
 
-                        echo "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
+                        $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
                     }
                     else
                     {
-                        echo "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . "</li>\n";
+                        $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . "</li>\n";
                     }
                 }
                 else
                 {
-                    echo "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
+                    $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
                 }
             }
         }
 
-        echo "</ul>\n";
+        $menuHtml .= "</ul>\n";
 
+        if($printHtml) echo $menuHtml;
         return $activeMenu;
     }
 
@@ -1350,8 +1345,8 @@ class commonModel extends model
             $currentMethod = $app->rawMethod;
         }
 
-        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule = WIZARD_MODULE;
-        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod = WIZARD_METHOD;
+        if($isTutorialMode and isset($_SESSION['wizardModule'])) $currentModule = $_SESSION['wizardModule'];
+        if($isTutorialMode and isset($_SESSION['wizardMethod'])) $currentMethod = $_SESSION['wizardMethod'];
 
         /* The beginning of the menu. */
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
@@ -1798,18 +1793,19 @@ EOF;
      * Build more executions button.
      *
      * @param  int    $executionID
+     * @param  bool   $printHtml
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function buildMoreButton($executionID)
+    public static function buildMoreButton(int $executionID, bool $printHtml = true): bool
     {
-        if(defined('TUTORIAL')) return;
-
         global $lang, $app;
 
+        if(commonModel::isTutorialMode()) return false;
+
         $object = $app->dbh->query('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
-        if(empty($object)) return;
+        if(empty($object)) return false;
 
         $executionPairs = array();
         $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
@@ -1827,7 +1823,7 @@ EOF;
             $executionPairs[$execution->id] = $execution->name;
         }
 
-        if(empty($executionPairs)) return;
+        if(empty($executionPairs)) return false;
 
         $html  = "<li class='divider'></li><li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->more}<span class='caret'></span></a>";
         $html .= "<ul class='dropdown-menu'>";
@@ -1845,20 +1841,23 @@ EOF;
 
         $html .= "</ul></li>\n";
 
-        echo $html;
+        if($printHtml) echo $html;
+        return true;
     }
 
     /**
      * Build devops app button.
      *
+     * @param  bool   $printHtml
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function buildAppButton()
+    public static function buildAppButton(bool $printHtml = true): bool
     {
-        if(defined('TUTORIAL')) return;
         global $app, $config, $lang;
+
+        if(commonModel::isTutorialMode()) return false;
 
         $condition     = '';
         if(!$app->user->admin)
@@ -1868,11 +1867,11 @@ EOF;
             {
                 if(commonModel::hasPriv($pipelineType, 'browse')) $types .= "'$pipelineType',";
             }
-            if(empty($types)) return;
+            if(empty($types)) return false;
             $condition .= ' AND `type` in (' . trim($types, ',') . ')';
         }
         $pipelineList = $app->dbh->query("SELECT `type`,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
-        if(empty($pipelineList)) return;
+        if(empty($pipelineList)) return false;
 
         $appCommon = isset($lang->db->custom['devopsMenu']['menu']['app']) ? $lang->db->custom['devopsMenu']['menu']['app'] : $lang->app->common;
         $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$appCommon}<span class='caret'></span></a>";
@@ -1884,7 +1883,8 @@ EOF;
         }
         $html .= "</ul></li>\n";
 
-        echo $html;
+        if($printHtml) echo $html;
+        return true;
     }
 
     /**
@@ -2072,7 +2072,7 @@ EOF;
         $changes = array();
         foreach($new as $key => $value)
         {
-            if(is_object($value) or is_array($value)) continue;
+            if(is_object($value) || is_array($value) || is_null($value)) continue;
             if(strtolower($key) == 'lastediteddate')  continue;
             if(strtolower($key) == 'lasteditedby')    continue;
             if(strtolower($key) == 'assigneddate')    continue;
@@ -2207,7 +2207,7 @@ EOF;
             $queryObjects = $this->dao->query($sql);
             $objectList   = array();
             $key          = 'id';
-            while($object = $queryObjects->fetch())
+            while($queryObjects && $object = $queryObjects->fetch())
             {
                 if(!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) $key = 'case';
                 $id  = $object->$key;
@@ -2470,6 +2470,7 @@ EOF;
                 'my'      => array('changepassword'),
                 'message' => array('ajaxgetmessage'),
             );
+
             if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return print(js::locate(helper::createLink('my', 'changepassword')));
             if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
             if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
@@ -2508,7 +2509,8 @@ EOF;
         }
         catch(EndResponseException $endResponseException)
         {
-            helper::end($endResponseException->getContent());
+            echo $endResponseException->getContent();
+            helper::end();
         }
     }
 
@@ -2544,12 +2546,18 @@ EOF;
         }
 
         /**
+         * 忽略所有方法名以 ajax 开头的请求。
+         * Ignore all requests which it's method name starts with 'ajax'.
+         */
+        $method = $this->app->getMethodName();
+        if(strpos($method, 'ajax') === 0) return true;
+
+        /**
          * 以下页面可以允许在非 iframe 中打开，所以要忽略这些页面。
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module    = $this->app->getModuleName();
-        $method    = $this->app->getMethodName();
-        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|';
+        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban||traincourse-playvideo|';
         if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return true;
 
         /**
@@ -2559,7 +2567,7 @@ EOF;
         $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
         $redirectUrl  = helper::createLink('index', 'index');
         $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
-        header("location: $redirectUrl");
+        helper::header('location', $redirectUrl);
         return false;
     }
 
@@ -2581,6 +2589,7 @@ EOF;
         $method = strtolower($method);
         parse_str($vars, $params);
 
+        if(empty($app->user)) return false;
         if(empty($params['storyType']) and $module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
         if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
         if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
@@ -2588,7 +2597,7 @@ EOF;
         if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
 
         /* If the user is doing a tutorial, have all tutorial privs. */
-        if(defined('TUTORIAL'))
+        if(commonModel::isTutorialMode())
         {
             $app->loadLang('tutorial');
             foreach($lang->tutorial->tasks as $task)
@@ -3529,9 +3538,9 @@ EOF;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('parsedownextraplugin');
+        $app->loadClass('parsedown');
 
-        $parsedown = new parsedownextraplugin;
+        $parsedown = new parsedown;
 
         $parsedown->voidElementSuffix = '>'; // HTML5
 
@@ -3905,6 +3914,38 @@ EOT;
         $dao->driver = 'sqlite';
 
         return $dao;
+    }
+
+    /**
+     * 构建详情操作链接配置。
+     * Build action item.
+     *
+     * @param  string    $module
+     * @param  string    $method
+     * @param  string    $params
+     * @param  object    $object
+     * @param  array  $attrs
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function buildActionItem(string $module, string $method, string $params, object|null $object = null, array $attrs = array()): array
+    {
+        if(!commonModel::hasPriv($module, $method, $object)) return array();
+
+        global $app;
+        $clickable = true;
+        if(is_object($object))
+        {
+            if($app->getModuleName() != $module) $app->control->loadModel($module);
+            $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
+            if(class_exists($modelClass) and method_exists($modelClass, 'isClickable')) $clickable = call_user_func_array(array($modelClass, 'isClickable'), array($object, $method));
+        }
+        if(!$clickable) return array();
+
+        $item['url'] = helper::createLink($module, $method, $params);
+        foreach($attrs as $attr => $value) $item[$attr] = $value;
+        return $item;
     }
 }
 

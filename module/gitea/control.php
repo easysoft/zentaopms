@@ -131,24 +131,32 @@ class gitea extends control
     }
 
     /**
+     * 删除一条gitea记录
      * Delete a gitea.
      *
      * @param  int    $giteaID
      * @access public
      * @return void
      */
-    public function delete($giteaID, $confirm = 'no')
+    public function delete($giteaID)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gitea->confirmDelete, inlink('delete', "id=$giteaID&confirm=yes")));
-
         $oldGitea = $this->loadModel('pipeline')->getByID($giteaID);
         $actionID = $this->pipeline->delete($giteaID, 'gitea');
-        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+            return $this->send($response);
+        }
 
         $gitea   = $this->pipeline->getByID($giteaID);
         $changes = common::createChanges($oldGitea, $gitea);
         $this->loadModel('action')->logHistory($actionID, $changes);
-        return print(js::reload('parent'));
+
+        $response['load']   = true;
+        $response['result'] = 'success';
+
+        return $this->send($response);
     }
 
     /**

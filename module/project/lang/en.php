@@ -53,6 +53,7 @@ $lang->project->errorSamePlans      = "{$lang->projectCommon} cannot be associat
 $lang->project->errorNoProducts     = "At least one {$lang->productCommon} is associated";
 $lang->project->copyNoProject       = 'There are no items available to copy.';
 $lang->project->searchByName        = "Enter the {$lang->projectCommon} name to search";
+$lang->project->emptyProgram        = "Independent Programs";
 $lang->project->deleted             = 'Deleted';
 $lang->project->linkedProducts      = "Linked {$lang->productCommon}s";
 $lang->project->unlinkedProducts    = "Unlinked {$lang->productCommon}s";
@@ -187,7 +188,6 @@ $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
 $lang->project->kanban             = 'Kanban';
 $lang->project->moreActions        = 'More Actions';
-$lang->project->other              = 'Other Actions';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
@@ -322,6 +322,8 @@ $lang->project->featureBar['bug']['unresolved'] = 'Unresolved';
 
 $app->loadLang('testcase');
 $lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
+
+$lang->project->featureBar['testtask']['all'] = 'All';
 
 $lang->project->featureBar['build']['all'] = 'Build List';
 
@@ -464,3 +466,7 @@ $lang->project->executionList['waterfall']     = $lang->projectCommon . ' Stage'
 $lang->project->executionList['kanban']        = $lang->projectCommon . ' Kanban';
 $lang->project->executionList['agileplus']     = $lang->projectCommon . ' Sprint';
 $lang->project->executionList['waterfallplus'] = $lang->projectCommon . ' Stage';
+
+$lang->project->featureBar['team']['all'] = 'Members';
+
+$lang->project->featureBar['managemembers']['all'] = 'Manage Team';

@@ -12,7 +12,6 @@ namespace zin;
 
 $canCreateCase = hasPriv('testcase', 'create');
 
-
 $stepID = $childID = 0;
 $steps = array();
 foreach($case->steps as $step)
@@ -23,15 +22,15 @@ foreach($case->steps as $step)
         $childID = 0;
     }
     $stepClass  = $step->type == 'step' ? 'step-group' : "step-{$step->type}";
-    $stepItemID = $step->type == 'item' ? span(setClass('input-group'), "{$stepID}.{$childID}") : '';
+    $stepItemID = $step->type == 'item' ? span(setClass('input-group pr-1'), "{$stepID}.{$childID}") : '';
 
     $steps[] = h::tr
     (
         setClass("step {$stepClass}"),
-        h::th
+        h::td
         (
-            setClass('step-id'),
-            div
+            setClass('step-id text-center'),
+            span
             (
                 setClass($step->type == 'item' ? 'hidden' : ''),
                 $stepID,
@@ -59,77 +58,6 @@ foreach($case->steps as $step)
 
 $files = '';
 foreach($case->files as $file) $files .= $file->title . ',';
-
-$linkBugs = array();
-$app->loadLang('bug');
-if($case->fromBug)
-{
-    $linkBugs[] = h::tr
-    (
-        h::td
-        (
-            span
-            (
-                setClass('label justify-center rounded-full px-1.5 h-3.5 mr-1.5'),
-                $case->fromBug,
-            ),
-            severityLabel
-            (
-                setClass('mr-1.5'),
-                set::level(zget($lang->bug->severityList, $case->fromBugData->severity)),
-                set::isIcon(true)
-            ),
-            a
-            (
-                set::href(hasPriv('bug', 'view') ? $this->createLink('bug', 'view', "bugID=$case->fromBug") : ''),
-                set('data-toggle', 'modal'),
-                $case->fromBugData->title,
-            ),
-        ),
-        h::td
-        (
-            span
-            (
-                $lang->testcase->openedDate . ':',
-            ),
-            $case->fromBugData->openedDate,
-        ),
-    );
-}
-foreach($case->toBugs as $bugID => $bug)
-{
-    $linkBugs[] = h::tr
-    (
-        h::td
-        (
-            span
-            (
-                setClass('label justify-center rounded-full px-1.5 h-3.5 mr-1.5'),
-                $bugID,
-            ),
-            severityLabel
-            (
-                setClass('mr-1.5'),
-                set::level(zget($lang->bug->severityList, $bug->severity)),
-                set::isIcon(true)
-            ),
-            a
-            (
-                set::href(hasPriv('bug', 'view') ? $this->createLink('bug', 'view', "bugID=$bugID") : ''),
-                set('data-toggle', 'modal'),
-                $bug->title,
-            ),
-        ),
-        h::td
-        (
-            span
-            (
-                $lang->testcase->openedDate . ':',
-            ),
-            $bug->openedDate,
-        ),
-    );
-}
 
 /* Get data in legend of basic information. */
 $app->loadLang('product');
@@ -213,7 +141,7 @@ else
                     $moduleItems[] = $canBrowseTestCase ? a(set::href($this->createLink('testcase', 'browse', "productID={$case->product}&branch={$module->branch}&browseType=byModule&param={$module->id}")), $module->name) : $module->name;
                 }
             }
-            else if($tab == project)
+            else if($tab == 'project')
             {
                 $moduleItems[] = $canBrowseProjectTestCase ? a(set::href($this->createLink('project', 'testcase', "projectID={$this->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id")), $module->name) : $module->name;
             }
@@ -221,7 +149,7 @@ else
             {
                 $moduleItems[] = $module->name;
             }
-            if(isset($modulePath[$key + 1])) $moduleItems[] = $lang->arrow;
+            if(isset($modulePath[$key + 1])) $moduleItems[] = ' / ';
         }
 
     }
@@ -246,6 +174,7 @@ else
     (
         set::name($lang->testcase->story),
         isset($case->storyTitle) && hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "storyID={$case->story}{$param}")), set('data-toggle', 'modal'), "#{$case->story}:{$case->storyTitle}") : (isset($case->storyTitle) ? "#{$case->story}:{$case->storyTitle}" : ''),
+        set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
         $confirmStatusChange,
     );
 
@@ -258,9 +187,45 @@ else
 
     $lastRunResultItem = item
     (
-        setClass("result-testcase {$case->lastRunResult}"),
+        set::tdClass("result-testcase status-{$case->lastRunResult}"),
         set::name($lang->testtask->lastRunResult),
         $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted,
+    );
+
+    $linkBugs = array();
+    if($case->fromBug)
+    {
+        $linkBugs[] = entityLabel
+        (
+            set::href($this->createLink('bug', 'view', "bugID={$case->fromBug}")),
+            set::level(4),
+            set::entityID($case->fromBug),
+            set::text($case->fromBugData->title),
+            set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
+            set('title', $case->fromBugData->title),
+        );
+    }
+    if($case->toBugs)
+    {
+        foreach($case->toBugs as $bugID => $bug)
+        {
+            $linkBugs[] = entityLabel
+            (
+                set::href($this->createLink('bug', 'view', "bugID={$bugID}")),
+                set::level(4),
+                set::entityID($bugID),
+                set::text($bug->title),
+                set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
+                set('title', $bug->title),
+            );
+        }
+    }
+    $linkBugItem = item
+    (
+        set::tdClass('linkBugTitles'),
+        !empty($linkBugs) ? set::collapse(true) : '',
+        set::name($lang->testcase->legendLinkBugs),
+        $linkBugs,
     );
 
     $linkCases = array();
@@ -268,19 +233,22 @@ else
     {
         foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
         {
-            $linkCases[] = a
+            $linkCases[] = entityLabel
             (
                 set::href($this->createLink('testcase', 'view', "caseID={$linkCaseID}")),
-                set('data-toggle', 'modal'),
+                set::level(4),
+                set::entityID($linkCaseID),
+                set::text($case->fromBugData->linkCaseTitle),
+                set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
                 set('title', $linkCaseTitle),
-                "#{$linkCaseID} {$linkCaseTitle} <br />",
             );
         }
     }
     $linkCaseItem = item
     (
-        setClass('linkCaseTitles'),
+        set::tdClass('linkCaseTitles'),
         set::name($lang->testcase->linkCase),
+        !empty($linkCases) ? set::collapse(true) : '',
         $linkCases,
     );
 }
@@ -290,7 +258,7 @@ if($case->stage)
     foreach(explode(',', $case->stage) as $stage)
     {
         if(empty($stage)) continue;
-        $caseStage[] = zget($lang->testcase->stageList, $stage) . '<br />';
+        $caseStage[] = div(zget($lang->testcase->stageList, $stage));
     }
 
 }
@@ -325,6 +293,7 @@ foreach(explode(',', $case->reviewedBy) as $account)
 }
 $reviewedBy = trim($reviewedBy);
 
+$isInModal = isAjaxRequest('modal');
 detailHeader
 (
     to::title
@@ -336,7 +305,8 @@ detailHeader
             set::text($case->title)
         )
     ),
-    to::suffix
+    $isInModal ? to::prefix('') : null,
+    !$isInModal ? to::suffix
     (
         btn
         (
@@ -345,7 +315,7 @@ detailHeader
             set::text($lang->case->create),
             $canCreateCase ? set::url($this->createLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}")) : null
         )
-    )
+    ) : null
 );
 
 detailBody
@@ -364,7 +334,7 @@ detailBody
             set::title($lang->testcase->steps),
             h::table
             (
-                setClass('table table-condensed table-hover table-striped table-bordered'),
+                setClass('table condensed bordered'),
                 set::id('steps'),
                 h::thead
                 (
@@ -373,7 +343,7 @@ detailBody
                         h::th
                         (
                             $lang->testcase->stepID,
-                            set::width('50px'),
+                            set::width('60px'),
                         ),
                         h::th
                         (
@@ -398,27 +368,12 @@ detailBody
             set::content(trim($files, ',')),
             set::useHtml(true),
         ),
-        section
-        (
-            setClass(empty($linkBugs) ? 'hidden' : ''),
-            set::title($lang->testcase->linkBug),
-            h::table
-            (
-                setClass('table table-condensed table-hover table-striped table-bordered'),
-                set::id('linkBugs'),
-                h::tbody($linkBugs)
-            ),
-            set::useHtml(true),
-        ),
         history(),
         center
         (
             floatToolbar
             (
-                set::prefix
-                (
-                    array(array('icon' => 'back', 'text' => $lang->goback))
-                ),
+                $isInModal ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
                 set::main($this->testcase->buildOperateMenu($case, 'view')),
                 set::suffix
                 (
@@ -436,6 +391,7 @@ detailBody
     (
         tabs
         (
+            set::collapse(true),
             tabPane
             (
                 set::key('legendBasicInfo'),
@@ -477,7 +433,6 @@ detailBody
                         set::name($lang->testcase->keywords),
                         $case->keywords,
                     ),
-                    $linkCaseItem,
                 ),
             ),
             tabPane
@@ -509,8 +464,23 @@ detailBody
                 )
             )
         ),
+        tabs
+        (
+            set::collapse(true),
+            tabPane
+            (
+                set::key('otherReleted'),
+                set::title($lang->testcase->legendOther),
+                set::active(true),
+                tableData
+                (
+                    set::useTable(false),
+                    $linkBugItem,
+                    $linkCaseItem,
+                ),
+            ),
+        ),
     ),
 );
 
 render();
-

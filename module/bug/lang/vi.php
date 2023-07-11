@@ -89,6 +89,7 @@ $lang->bug->abbr->resolvedByMe   = 'Giải quyêt bởi bạn';
 $lang->bug->index              = 'Trang Bug';
 $lang->bug->create             = 'Báo cáo Bug';
 $lang->bug->batchCreate        = 'Batch báo cáo';
+$lang->bug->createCase         = 'Create Case';
 $lang->bug->confirm            = 'Xác nhận';
 $lang->bug->confirmAction      = 'Xác nhận Bug';
 $lang->bug->batchConfirm       = 'Xác nhận hàng loạt';
@@ -156,8 +157,7 @@ $lang->bug->lblAssignedTo = 'Giao cho';
 $lang->bug->lblMailto     = 'Mail tới';
 $lang->bug->lblLastEdited = 'Sửa cuối';
 $lang->bug->lblResolved   = 'Người giải quyết';
-$lang->bug->allUsers      = 'Nạp tất cả người dùng';
-$lang->bug->allBuilds     = 'Tất cả bản dựng';
+$lang->bug->loadAll       = 'Load All';
 $lang->bug->createBuild   = 'Mới';
 
 /* Legend list。*/

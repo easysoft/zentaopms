@@ -36,7 +36,8 @@ const apps =
     defaultCode: '',
     lastCode: '',
     zIndex: 10,
-    frameContent: null
+    frameContent: null,
+    oldPages: new Set(oldPages)
 };
 
 const debug = config.debug;
@@ -53,15 +54,32 @@ function triggerAppEvent(code, event, args)
     if(app.iframe && app.iframe.contentWindow.$) return app.iframe.contentWindow.$(app.iframe.contentWindow.document).trigger(event, args);
 }
 
+function isOldPage(url)
+{
+    if(typeof url !== 'object') url = $.parseLink(url);
+    return apps.oldPages.has(`${url.moduleName}-${url.methodName}`.toLowerCase());
+}
+
 /**
  * Open app
  * @param {string} url
- * @param {string} [code]
- * @param {boolean} [forceReload]
+ * @param {string|object} [code]
+ * @param {boolean|object} [options]
  * @returns {ZentaoOpenedApp|undefined}
  */
-function openApp(url, code, forceReload)
+function openApp(url, code, options)
 {
+    const loadOptions = {};
+    if(typeof code === 'object') $.extend(loadOptions, code);
+    else if(code) loadOptions.code = code;
+    if(typeof options === 'boolean') loadOptions.forceReload = options;
+    else if(typeof options === 'object') $.extend(loadOptions, options);
+    options = loadOptions;
+    code = options.code;
+    let forceReload = options.forceReload !== false;
+    delete options.forceReload;
+    delete options.code;
+
     if(!code)
     {
         if(apps.map[url])
@@ -71,22 +89,18 @@ function openApp(url, code, forceReload)
         }
         else if(url)
         {
-            code = getAppCodeFromUrl(url);
+            code = getAppCode(url);
         }
         if(!code) return openApp('my');
     }
     const app = apps.map[code];
-    if(!app)
-    {
-        zui.Messager.show('App not found', {type: 'danger', time: 2000});
-        return;
-    }
-    if(!url) url = app.url;
+    if(!app) return zui.Messager.show('App not found', {type: 'danger', time: 2000});
 
     /* Create iframe for app */
     let openedApp = apps.openedMap[code];
     if(!openedApp)
     {
+        if(!url) url = app.url;
         openedApp = $.extend({opened: true, url: url, zIndex: 0, currentUrl: url}, app);
         forceReload = false;
         apps.openedMap[code] = openedApp;
@@ -98,7 +112,7 @@ function openApp(url, code, forceReload)
                 'name="app-' + code + '"',
                 'class="fade"',
                 'allowfullscreen="true"',
-                'src="' + $.createLink('index', 'app', 'url=' + btoa(url)) + '"',
+                'src="' + $.createLink('index', 'app') + '"',
                 'frameborder="no"',
                 'allowtransparency="true"',
                 'scrolling="auto"',
@@ -110,6 +124,10 @@ function openApp(url, code, forceReload)
             .append($iframe)
             .appendTo('#apps');
 
+        $iframe.on('ready.app', () =>
+        {
+            openApp(url, code, options);
+        });
         iframe.onload = iframe.onreadystatechange = function(e)
         {
             const finishLoad = () => $iframe.removeClass('loading').addClass('in');
@@ -117,7 +135,9 @@ function openApp(url, code, forceReload)
             setTimeout(finishLoad, 10000);
             triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
+        return;
     }
+    if(!url) url = openedApp.currentUrl;
 
     /* Set tab cookie */
     $.cookie.set('tab', code, {expires: config.cookieLife, path: config.webRoot});
@@ -136,7 +156,7 @@ function openApp(url, code, forceReload)
     const needLoad = !isSameUrl || forceReload !== false;
     if(needLoad)
     {
-        reloadApp(code, url);
+        reloadApp(code, url, options);
         openedApp.$app.toggleClass('open-from-hidden', openedApp.zIndex < apps.zIndex)
     }
     else
@@ -169,7 +189,7 @@ function openApp(url, code, forceReload)
         $tabs.find('li[data-app="' + code + '"]>a').addClass('active');
     }
 
-    if(debug) console.log('[APPS]', 'open:', code);
+    if(debug) console.log('[APPS]', 'open:', code, {url, options, forceReload});
     triggerAppEvent(code, 'openapp', [openedApp, {load: needLoad}]);
 
     return openedApp;
@@ -188,8 +208,9 @@ function showApp(code)
  * Reload app
  * @param {string} code
  * @param {string} url
+ * @param {object} options
  */
-function reloadApp(code, url)
+function reloadApp(code, url, options)
 {
     const app = apps.openedMap[code];
     if(!app) return;
@@ -201,7 +222,7 @@ function reloadApp(code, url)
     try
     {
         if(app.external) iframe.src = url;
-        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url);
+        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, options);
         else console.error('[APPS]', 'reload: Cannot load page when iframe is not ready.');
     }
     catch(error)
@@ -322,7 +343,7 @@ function hideApp(code)
  * @param {String} urlOrModuleName Url string
  * @return {String}
  */
-function getAppCodeFromUrl(urlOrModuleName)
+function getAppCode(urlOrModuleName)
 {
     var code = navGroup[urlOrModuleName];
     if(code) return code;
@@ -429,9 +450,10 @@ function goBack(target, url, startState)
 {
     const currentState = window.history.state;
     const preState = currentState && currentState.prev;
+    if(debug) console.log('[APPS] go back', {target, url, startState, currentState, preState});
     if(target && currentState && preState)
     {
-        startState = startState || (currentState && currentState.prev);
+        startState = startState.prev || (currentState && currentState.prev);
         if($.apps.openedMap[target])
         {
             let state = startState;
@@ -456,6 +478,15 @@ function goBack(target, url, startState)
     }
 
     if(url) return openApp(url);
+    if(target)
+    {
+        if($.apps.openedMap[target]) return openApp(target);
+        if(target.includes('-'))
+        {
+            const parts = target.split('-');
+            return openApp($.createLink(parts[0], parts[1]));
+        }
+    }
 
     window.history.back();
 }
@@ -631,10 +662,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     if($link.is('[data-modal],[data-toggle],.iframe,.not-in-app')) return;
     const url = $link.attr('href') || $link.data('url');
     if(url && url.includes('onlybody=yes')) return;
-    if(openApp(url, $link.data('app'), !$link.hasClass('show-in-app')))
-    {
-        e.preventDefault();
-    }
+    if(openApp(url, $link.data('app'), !$link.hasClass('show-in-app'))) e.preventDefault();
 }).on('contextmenu', '.open-in-app,.show-in-app', function(event)
 {
     const $btn  = $(this);
@@ -682,5 +710,7 @@ $.apps = $.extend(apps,
     showApp:    showApp,
     updateApp:  updateApp,
     getLastApp: getLastApp,
-    goBack:     goBack
+    goBack:     goBack,
+    isOldPage:  isOldPage,
+    getAppCode: getAppCode
 });

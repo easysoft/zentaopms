@@ -18,7 +18,11 @@ featurebar
     set::linkParams("status={key}"),
 );
 
-$projects = initTableData($projects, $config->my->project->dtable->fieldList, $this->my);
+$this->loadModel('project');
+$config->project->dtable->fieldList['id']['type']     = 'id';
+$config->project->dtable->fieldList['id']['checkbox'] = false;
+
+$projects = initTableData($projects, $config->project->dtable->fieldList, $this->project);
 
 $waitCount      = 0;
 $doingCount     = 0;
@@ -38,20 +42,20 @@ foreach($projects as $project)
         $project->PM        = \zget($users, $project->PM);
     }
 
-    if(!$project->budget) $project->budget = $lang->project->future;
     if($project->budget)
     {
         $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $lang->project->tenThousand : round((float)$project->budget, 2);
 
         $project->budget = zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget;
     }
+    else
+    {
+        $project->budget = $lang->project->future;
+    }
 
     $project->end = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
-
-    $project->actions = $this->loadModel('project')->buildActionList($project);
 }
 
-$cols     = array_values($config->my->project->dtable->fieldList);
 $projects = array_values($projects);
 
 $footerHtml = sprintf($lang->project->summary, count($projects));
@@ -59,18 +63,11 @@ if($status == 'openedbyme') $footerHtml = sprintf($lang->project->allSummary, co
 
 dtable
 (
-    set::cols($cols),
+    set::cols($config->project->dtable->fieldList),
     set::data($projects),
     set::onRenderCell(jsRaw('window.onRenderProjectNameCell')),
     set::footer(array(array('html' => $footerHtml), 'flex', 'pager')),
-    set::footPager
-    (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('my', 'project', "status={$status}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}&orderBy=$orderBy"))
-    ),
+    set::footPager(usePager()),
 );
 
 render();

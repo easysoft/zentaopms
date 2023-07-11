@@ -20,13 +20,13 @@ class zfileContentEntry extends entry
      */
     public function get($fileID)
     {
-        ob_end_clean();    
+        ob_end_clean();
 
-        header("Content-type: application/octet-stream");
-        header("Content-Transfer-Encoding: binary");
-        header("Accept-Ranges: bytes");
-        // header("Content-Length: " . filesize($filePath));
-        header("Content-Disposition: attachment; filename=\"hello.txt\"");
+        helper::header('Content-type', 'application/octet-stream');
+        helper::header('Content-Transfer-Encoding', 'binary');
+        helper::header('Accept-Ranges', 'bytes');
+        // helper::header('Content-Length', filesize($filePath));
+        helper::header('Content-Disposition', 'attachment; filename="hello.txt"');
 
         echo 'hello';
     }

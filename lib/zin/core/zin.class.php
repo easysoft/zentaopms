@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The zin class file of zin of ZenTaoPMS.
  *
@@ -15,18 +16,22 @@ require_once dirname(__DIR__) . DS . 'utils' . DS . 'deep.func.php';
 
 class zin
 {
-    public static $globalRenderList = array();
+    public static array $globalRenderList = array();
 
-    public static $enabledGlobalRender = true;
+    public static bool $enabledGlobalRender = true;
 
-    public static $data = array();
+    public static array $data = array();
 
-    public static function getData($namePath, $defaultValue = null)
+    public static bool $rendered = false;
+
+    public static bool $rawContentCalled = false;
+
+    public static function getData(string $namePath, mixed $defaultValue = null): mixed
     {
         return \zin\utils\deepGet(static::$data, $namePath, $defaultValue);
     }
 
-    public static function setData($namePath, $value)
+    public static function setData(string $namePath, mixed $value)
     {
         \zin\utils\deepSet(static::$data, $namePath, $value);
     }
@@ -41,11 +46,12 @@ class zin
         static::$enabledGlobalRender = false;
     }
 
-    public static function renderInGlobal()
+    public static function renderInGlobal(): bool
     {
         if(!static::$enabledGlobalRender) return false;
 
         static::$globalRenderList = array_merge(static::$globalRenderList, func_get_args());
+        return true;
     }
 
     public static function getGlobalRenderList(bool $clear = true): array

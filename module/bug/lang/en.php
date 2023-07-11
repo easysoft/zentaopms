@@ -108,6 +108,7 @@ $lang->bug->index              = 'Bug Home';
 $lang->bug->browse             = 'Bug List';
 $lang->bug->create             = 'Report Bug';
 $lang->bug->batchCreate        = 'Batch Report';
+$lang->bug->createCase         = 'Create Case';
 $lang->bug->copy               = 'Copy';
 $lang->bug->edit               = 'Edit Bug';
 $lang->bug->batchEdit          = 'Batch Edit';
@@ -177,8 +178,7 @@ $lang->bug->lblAssignedTo = 'AssignTo';
 $lang->bug->lblMailto     = 'Mailto';
 $lang->bug->lblLastEdited = 'EditedBy';
 $lang->bug->lblResolved   = 'ResolvedBy';
-$lang->bug->allUsers      = 'Load All Users';
-$lang->bug->allBuilds     = 'All Builds';
+$lang->bug->loadAll       = 'Load All';
 $lang->bug->createBuild   = 'New';
 
 global $config;

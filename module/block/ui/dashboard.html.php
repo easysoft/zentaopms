@@ -19,18 +19,19 @@ foreach($blocks as $block)
     $block->size   = array($block->width, $block->height);
     unset($block->title);
 }
+
 $blocks = json_decode(json_encode($blocks), true);
 
 $blockMenuItems = array();
 $blockMenuItems[] = array('text' => $lang->block->refresh, 'attrs' => array('data-type' => 'refresh'));
-$blockMenuItems[] = array('text' => $lang->edit, 'data-url' => createLink('block', 'edit', "blockID={id}"));
+$blockMenuItems[] = array('text' => $lang->edit, 'data-url' => createLink('block', 'edit', "blockID={id}"), 'data-toggle' => 'modal', 'data-size' => 'sm');
 $blockMenuItems[] = array('text' => $lang->block->hidden, 'data-url' => createLink('block', 'delete', "blockID={id}&type=hidden"));
-$blockMenuItems[] = array('text' => $lang->block->createBlock, 'data-url' => createLink('block', 'create', "dashboard=$dashboard"));
+$blockMenuItems[] = array('text' => $lang->block->createBlock, 'data-url' => createLink('block', 'create', "dashboard=$dashboard"), 'data-toggle' => 'modal', 'data-size' => 'sm');
 $blockMenuItems[] = array('text' => $lang->block->reset, 'data-url' => createLink('block', 'reset', "dashboard=$dashboard"));
 
 dashboard
 (
-    set::blocks($blocks),
+    set::blocks(array_values($blocks)),
     set::blockMenu(array('items' => $blockMenuItems))
 );
 

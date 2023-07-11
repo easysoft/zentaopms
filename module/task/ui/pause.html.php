@@ -14,24 +14,10 @@ namespace zin;
 
 /* ====== Define the page structure with zin widgets ====== */
 
+modalHeader();
 formPanel
 (
     set::id('taskPauseForm'),
-    set::title($lang->task->pauseAction),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
-    set::shadow(!isonlybody()),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($task->name),
-            set::entityID($task->id),
-            set::reverse(true),
-        )
-    ),
     formGroup
     (
         set::label($lang->comment),
@@ -43,8 +29,6 @@ formPanel
     ),
 );
 
-h::hr(set::class('mt-6'));
-
 history();
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

@@ -19,7 +19,7 @@ formPanel
     set::title($lang->task->editEffort),
     set::headingClass('status-heading'),
     set::titleClass('form-label .form-grid'),
-    set::shadow(!isonlybody()),
+    set::shadow(!isAjaxRequest('modal')),
     to::headingActions
     (
         entityLabel
@@ -33,42 +33,45 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/3'),
+        set::width('1/4'),
         set::label($lang->task->date),
         set::name('date'),
         set::control('date'),
         set::value($effort->date)
     ),
-    formGroup
+    formRow
     (
-        set::width('1/3'),
-        set::label($lang->task->consumed),
-        inputControl
+        formGroup
         (
-            input
+            set::width('1/4'),
+            set::label($lang->task->currentConsumed),
+            inputControl
             (
-                set::name('consumed'),
-                set::value($effort->consumed),
+                input
+                (
+                    set::name('consumed'),
+                    set::value($effort->consumed),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
             ),
-            to::suffix($lang->task->suffixHour),
-            set::suffixWidth(20),
         ),
-    ),
-    formGroup
-    (
-        set::width('1/3'),
-        set::label($lang->task->left),
-        inputControl
+        formGroup
         (
-            input
+            set::width('1/4'),
+            set::label($lang->task->left),
+            inputControl
             (
-                set::name('left'),
-                set::value($effort->left),
-                set::readonly($readonly),
+                input
+                (
+                    set::name('left'),
+                    set::value($effort->left),
+                    set::readonly($readonly),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
             ),
-            to::suffix($lang->task->suffixHour),
-            set::suffixWidth(20),
-        ),
+        )
     ),
     formGroup
     (
@@ -79,4 +82,4 @@ formPanel
     ),
 );
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

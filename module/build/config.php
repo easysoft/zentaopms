@@ -9,7 +9,7 @@ $config->build->editor = new stdclass();
 $config->build->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->build->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 
-global $lang;
+global $lang, $app;
 $config->build->search['module']             = 'build';
 $config->build->search['fields']['name']     = $lang->build->nameAB;
 $config->build->search['fields']['id']       = $lang->build->id;
@@ -57,10 +57,20 @@ $config->build->actionList['buildEdit']['url']  = helper::createLink('build', 'e
 $config->build->actionList['projectbuildEdit'] = $config->build->actionList['buildEdit'];
 $config->build->actionList['projectbuildEdit']['url'] = helper::createLink('projectbuild', 'edit', 'buildID={id}');
 
-$config->build->actionList['delete']['icon'] = 'trash';
-$config->build->actionList['delete']['hint'] = $lang->build->delete;
-$config->build->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+$config->build->actionList['delete']['icon']         = 'trash';
+$config->build->actionList['delete']['hint']         = $lang->build->delete;
+$config->build->actionList['delete']['url']          = helper::createLink($app->tab == 'project' ? 'projectbuild' : 'build', 'delete', 'buildID={id}');
+$config->build->actionList['delete']['className']    = 'ajax-submit';
+$config->build->actionList['delete']['data-confirm'] = $lang->build->confirmDelete;
 
-$config->build->actionList['unlinkBug']['icon'] = 'unlink';
-$config->build->actionList['unlinkBug']['hint'] = $lang->build->unlinkBug;
-$config->build->actionList['unlinkBug']['url']  = 'javascript: unlinkObject("bug", "{id}")';
+$config->build->actionList['unlinkBug']['icon']         = 'unlink';
+$config->build->actionList['unlinkBug']['hint']         = $lang->build->unlinkBug;
+$config->build->actionList['unlinkBug']['url']          = '';
+$config->build->actionList['unlinkBug']['className']    = 'ajax-submit';
+$config->build->actionList['unlinkBug']['data-confirm'] = $lang->build->confirmUnlinkBug;
+
+$config->build->actionList['unlinkStory']['icon']         = 'unlink';
+$config->build->actionList['unlinkStory']['hint']         = $lang->build->unlinkStory;
+$config->build->actionList['unlinkStory']['url']          = '';
+$config->build->actionList['unlinkStory']['className']    = 'ajax-submit';
+$config->build->actionList['unlinkStory']['data-confirm'] = $lang->build->confirmUnlinkStory;

@@ -12,8 +12,9 @@ $config->bug->edit->requiredFields    = 'title';
 $config->bug->resolve->requiredFields = 'resolution';
 
 $config->bug->actions = new stdclass();
-$config->bug->actions->browse = 'confirm,resolve,close,edit,copy';
-$config->bug->actions->view   = 'confirm,assignTo,resolve,close,activate';
+$config->bug->actions->view = array();
+$config->bug->actions->view['mainActions']   = array('confirm', 'assignTo', 'resolve', 'close', 'activate', 'toStory', 'toTask', 'createCase');
+$config->bug->actions->view['suffixActions'] = array('edit', 'copy', 'delete');
 
 $config->bug->browseTypeList = array('all', 'bymodule', 'assigntome', 'openedbyme', 'resolvedbyme', 'assigntonull', 'unconfirmed', 'unresolved', 'unclosed', 'toclosed', 'longlifebugs', 'postponedbugs', 'overduebugs', 'assignedbyme', 'review', 'needconfirm', 'bysearch');
 
@@ -51,7 +52,7 @@ $config->bug->list->customBatchCreateFields = 'project,execution,steps,type,pri,
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
-$config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,severity,os,browser,%s';
+$config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,pri,severity,os,browser,%s';
 $config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,deadline,status,resolvedBy,resolution';
 
 $config->bug->excludeCheckFileds = ',severities,oses,browsers,lanes,regions,executions,projects,branches,';
@@ -90,37 +91,63 @@ $config->bug->actionList = array();
 $config->bug->actionList['confirm']['icon']        = 'ok';
 $config->bug->actionList['confirm']['text']        = $lang->bug->abbr->confirmed;
 $config->bug->actionList['confirm']['hint']        = $lang->bug->abbr->confirmed;
-$config->bug->actionList['confirm']['url']         = helper::createLink('bug', 'confirm',"bugID={id}");
+$config->bug->actionList['confirm']['url']         = array('module' => 'bug', 'method' => 'confirm', 'params' => 'bugID={id}');
 $config->bug->actionList['confirm']['data-toggle'] = 'modal';
+
+$config->bug->actionList['assignTo']['icon']        = 'hand-right';
+$config->bug->actionList['assignTo']['text']        = $lang->bug->assignTo;
+$config->bug->actionList['assignTo']['hint']        = $lang->bug->assignTo;
+$config->bug->actionList['assignTo']['url']         = array('module' => 'bug', 'method' => 'assignTo', 'params' => 'bugID={id}');
+$config->bug->actionList['assignTo']['data-toggle'] = 'modal';
 
 $config->bug->actionList['resolve']['icon']        = 'checked';
 $config->bug->actionList['resolve']['text']        = $lang->bug->resolve;
 $config->bug->actionList['resolve']['hint']        = $lang->bug->resolve;
-$config->bug->actionList['resolve']['url']         = helper::createLink('bug', 'resolve',"bugID={id}");
+$config->bug->actionList['resolve']['url']         = array('module' => 'bug', 'method' => 'resolve', 'params' => 'bugID={id}');
 $config->bug->actionList['resolve']['data-toggle'] = 'modal';
 
 $config->bug->actionList['close']['icon']        = 'off';
 $config->bug->actionList['close']['text']        = $lang->bug->close;
 $config->bug->actionList['close']['hint']        = $lang->bug->close;
-$config->bug->actionList['close']['url']         = helper::createLink('bug', 'close',"bugID={id}");
+$config->bug->actionList['close']['url']         = array('module' => 'bug', 'method' => 'close', 'params' => 'bugID={id}');
 $config->bug->actionList['close']['data-toggle'] = 'modal';
 
 $config->bug->actionList['activate']['icon']        = 'magic';
 $config->bug->actionList['activate']['text']        = $lang->bug->activate;
 $config->bug->actionList['activate']['hint']        = $lang->bug->activate;
-$config->bug->actionList['activate']['url']         = helper::createLink('bug', 'activate',"bugID={id}");
+$config->bug->actionList['activate']['url']         = array('module' => 'bug', 'method' => 'activate', 'params' => 'bugID={id}');
 $config->bug->actionList['activate']['data-toggle'] = 'modal';
+
+$config->bug->actionList['toStory']['icon']         = 'lightbulb';
+$config->bug->actionList['toStory']['id']           = 'toStory';
+$config->bug->actionList['toStory']['text']         = $lang->bug->toStory;
+$config->bug->actionList['toStory']['hint']         = $lang->bug->toStory;
+$config->bug->actionList['toStory']['data-confirm'] = array('html' => "<i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$lang->bug->notice->confirmToStory}</strong>");
+$config->bug->actionList['toStory']['data-url']     = array('module' => 'story', 'method' => 'create', 'params' => 'product={product}&branch={branch}&module=0&story=0&execution=0&bugID={id}');
+
+$config->bug->actionList['toTask']['icon']        = 'check';
+$config->bug->actionList['toTask']['text']        = $lang->bug->toTask;
+$config->bug->actionList['toTask']['hint']        = $lang->bug->toTask;
+$config->bug->actionList['toTask']['data-target'] = '#toTask';
+$config->bug->actionList['toTask']['data-toggle'] = 'modal';
+$config->bug->actionList['toTask']['data-size']   = 'sm';
+
+$config->bug->actionList['createCase']['icon'] = 'sitemap';
+$config->bug->actionList['createCase']['text'] = $lang->bug->createCase;
+$config->bug->actionList['createCase']['hint'] = $lang->bug->createCase;
+$config->bug->actionList['createCase']['url']  = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID=0&from=bug&bugID={id}');
 
 $config->bug->actionList['edit']['icon'] = 'edit';
 $config->bug->actionList['edit']['text'] = $lang->bug->edit;
 $config->bug->actionList['edit']['hint'] = $lang->bug->edit;
-$config->bug->actionList['edit']['url']  = helper::createLink('bug', 'edit',"bugID={id}");
+$config->bug->actionList['edit']['url']  = array('module' => 'bug', 'method' => 'edit', 'params' => 'bugID={id}');
 
 $config->bug->actionList['copy']['icon'] = 'copy';
 $config->bug->actionList['copy']['text'] = $lang->bug->copy;
 $config->bug->actionList['copy']['hint'] = $lang->bug->copy;
-$config->bug->actionList['copy']['url']  = helper::createLink('bug', 'create',"productID={product}&branch={branch}&extra=bugID={id}");
+$config->bug->actionList['copy']['url']  = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id}');
 
-include 'config/form.php';
-include 'config/table.php';
-include 'config/search.php';
+$config->bug->actionList['delete']['icon'] = 'trash';
+$config->bug->actionList['delete']['text'] = $lang->bug->delete;
+$config->bug->actionList['delete']['hint'] = $lang->bug->delete;
+$config->bug->actionList['delete']['url']  = array('module' => 'bug', 'method' => 'delete', 'params' => 'bugID={id}');

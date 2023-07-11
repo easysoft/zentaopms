@@ -17,45 +17,59 @@ class datatableModel extends model
      * Get field list.
      *
      * @param  string $module
+     * @param  string $method
      * @access public
      * @return array
      */
-    public function getFieldList($module)
+    public function getFieldList($module, $method = '')
     {
+        /* Load corresponding module. */
         if(!isset($this->config->$module)) $this->loadModel($module);
-        if($this->session->hasProduct == 0 and (strpos($this->config->datatable->noProductModule, ",$module,") !== false))
+
+        $config = $this->config->$module;
+        if(!empty($method) && isset($config->$method) && isset($config->$method->dtable)) $config = $config->$method;
+        $fieldList = $config->dtable->fieldList;
+
+        /* If doesn't need product, remove 'product' field. */
+        if($this->session->hasProduct == 0 && (strpos($this->config->datatable->noProductModule, ",$module,") !== false))
         {
-            $productIndex = array_search('product', $this->config->$module->dtable->defaultField);
-            if($productIndex) unset($this->config->$module->dtable->defaultField[$productIndex]);
-            if(isset($this->config->$module->dtable->fieldList['product'])) unset($this->config->$module->dtable->fieldList['product']);
-        }
-        if($this->session->currentProductType === 'normal') unset($this->config->$module->dtable->fieldList['branch']);
-        foreach($this->config->$module->dtable->fieldList as $field => $items)
-        {
-            if($field === 'branch')
-            {
-                if($this->session->currentProductType === 'branch')   $this->config->$module->dtable->fieldList[$field]['title'] = $this->lang->datatable->branch;
-                if($this->session->currentProductType === 'platform') $this->config->$module->dtable->fieldList[$field]['title'] = $this->lang->datatable->platform;
-                continue;
-            }
-            $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));
-            $this->config->$module->dtable->fieldList[$field]['title'] = $title;
+            $productIndex = array_search('product', $config->dtable->defaultField);
+            if($productIndex) unset($config->dtable->defaultField[$productIndex]);
+            if(isset($fieldList['product'])) unset($fieldList['product']);
         }
 
+        /* Nomal product without 'branch' field. */
+        if($this->session->currentProductType === 'normal') unset($config->fieldList['branch']);
+
+        foreach($fieldList as $fieldName => $items)
+        {
+            /* Translate field title. */
+            if(!isset($items['title'])) $items['title'] = $fieldName;
+            $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));
+            $fieldList[$fieldName]['title'] = $title;
+
+            /* Set col config default value. */
+            if(!empty($items['type']) && isset($this->config->datatable->defaultColConfig[$items['type']]))
+            {
+                $fieldList[$fieldName] = array_merge($this->config->datatable->defaultColConfig[$items['type']], $fieldList[$fieldName]);
+            }
+        }
+
+        /* Logic except open source version .*/
         if($this->config->edition != 'open')
         {
             $fields = $this->loadModel('workflowfield')->getList($module);
             foreach($fields as $field)
             {
                 if($field->buildin) continue;
-                $this->config->$module->dtable->fieldList[$field->field]['title']    = $field->name;
-                $this->config->$module->dtable->fieldList[$field->field]['width']    = '120';
-                $this->config->$module->dtable->fieldList[$field->field]['fixed']    = 'no';
-                $this->config->$module->dtable->fieldList[$field->field]['required'] = 'no';
+                $fieldList[$field->field]['title']    = $field->name;
+                $fieldList[$field->field]['width']    = '120';
+                $fieldList[$field->field]['fixed']    = 'no';
+                $fieldList[$field->field]['required'] = 'no';
             }
         }
 
-        return $this->config->$module->dtable->fieldList;
+        return $fieldList;
     }
 
     /**
@@ -70,78 +84,74 @@ class datatableModel extends model
         $method      = $this->app->getMethodName();
         $datatableId = $module . ucfirst($method);
 
-        $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';
-        $key  = $mode == 'datatable' ? 'cols' : 'tablecols';
-
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
-        if(!isset($this->config->$module)) $this->loadModel($module);
-        if(isset($this->config->datatable->$datatableId->$key))
-        {
-            if($datatableId == 'testcaseBrowse' && $key == 'tablecols' && $this->cookie->onlyScene)
-            {
-                $setting = json_decode('[{"id":"id","order":1,"show":true,"width":"70px","fixed":"left"},{"id":"title","order":2,"show":true,"width":"auto","fixed":"left"},{"id":"openedBy","order":8,"show":true,"width":"80px","fixed":"no"},{"id":"openedDate","order":9,"show":true,"width":"90px","fixed":"no"},{"id":"lastEditedBy","order":16,"show":true,"width":"80px","fixed":"no"},{"id":"lastEditedDate","order":17,"show":true,"width":"90px","fixed":"no"},{"id":"actions","order":23,"show":true,"width":"150px","fixed":"right"}]');
-            }
-            else
-            {
-                $setting = json_decode($this->config->datatable->$datatableId->$key);
-            }
-        }
 
-        $fieldList = $this->getFieldList($module);
+        if(!isset($this->config->$module)) $this->loadModel($module);
+        if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols, true);
+
+        $fieldList = $this->getFieldList($module, $method);
         if(empty($setting))
         {
-            $setting = $this->config->$module->dtable->defaultField;
-            $order   = 1;
-            foreach($setting as $key => $value)
-            {
-                $id  = $value;
-                $set = new stdclass();;
-                $set->order = $order++;
-                $set->id    = $id;
-                $set->show  = true;
-                $set->width = $fieldList[$id]['width'];
-                $set->fixed = $fieldList[$id]['fixed'];
-                $set->title = $fieldList[$id]['title'];
-                $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
-                $set->name  = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
-                $set->group = isset($fieldList[$id]['group']) ? $fieldList[$id]['group'] : '';
-                $set->link  = isset($fieldList[$id]['link']) ? $fieldList[$id]['link'] : '';
-
-                if(isset($fieldList[$id]['minWidth']))     $set->minWidth      = $fieldList[$id]['minWidth'];
-                if(isset($fieldList[$id]['maxWidth']))     $set->maxWidth      = $fieldList[$id]['maxWidth'];
-                if(isset($fieldList[$id]['pri']))          $set->pri           = $fieldList[$id]['pri'];
-                if(isset($fieldList[$id]['statusMap']))    $set->statusMap     = $fieldList[$id]['statusMap'];
-                if(isset($fieldList[$id]['type']))         $set->type          = $fieldList[$id]['type'];
-                if(isset($fieldList[$id]['actionsMap']))   $set->actionsMap    = $fieldList[$id]['actionsMap'];
-                if(isset($fieldList[$id]['nestedToggle'])) $set->nestedToggle  = $fieldList[$id]['nestedToggle'];
-                if(isset($fieldList[$id]['checkbox']))     $set->checkbox      = $fieldList[$id]['checkbox'];
-                if(isset($fieldList[$id]['sortType']))     $set->sortType      = $fieldList[$id]['sortType'];
-
-                $setting[$key] = $set;
-            }
+            $setting = $this->formatFields($module, $fieldList);
         }
         else
         {
             foreach($setting as $key => $set)
             {
-                if(!isset($fieldList[$set->id]))
-                {
-                    unset($setting[$key]);
-                    continue;
-                }
-                if($this->session->currentProductType === 'normal' and $set->id === 'branch')
+                if(empty($set['required']) && empty($set['show']))
                 {
                     unset($setting[$key]);
                     continue;
                 }
 
-                if($set->id == 'actions') $set->width = $fieldList[$set->id]['width'];
-                $set->title = $fieldList[$set->id]['title'];
-                $set->sort  = isset($fieldList[$set->id]['sort']) ? $fieldList[$set->id]['sort'] : 'yes';
+                if($this->session->currentProductType === 'normal' and $set['id'] === 'branch')
+                {
+                    unset($setting[$key]);
+                    continue;
+                }
+
+                if($set['name'] == 'actions') $set['width'] = $fieldList['actions']['width'];
             }
         }
 
-        usort($setting, array('datatableModel', 'sortCols'));
+        uasort($setting, array('datatableModel', 'sortCols'));
+
+        return $setting;
+    }
+
+    /**
+     * Format fields by config.
+     *
+     * @param  string $module
+     * @param  array  $fieldList
+     * @param  bool   $onlyshow
+     * @access public
+     * @return array
+     */
+    public function formatFields($module, $fieldList, $onlyshow = true): array
+    {
+        $this->app->loadLang('module');
+
+        $setting = array();
+        $order   = 1;
+        foreach($fieldList as $field => $config)
+        {
+            if(empty($config['required']) && empty($config['show']) && $onlyshow) continue;
+
+            $config['order']    = $order++;
+            $config['id']       = $field;
+            $config['show']     = !empty($config['show']);
+            $config['sortType'] = !empty($config['sortType']);
+            $config['title']    = zget($config, 'title', zget($this->lang->$module, $field, zget($this->lang, $field)));
+            $config['name']     = zget($config, 'name',  $field);
+            $config['type']     = zget($config, 'type',  'text');
+            $config['width']    = zget($config, 'width', '');
+            $config['fixed']    = zget($config, 'fixed', '');
+            $config['link']     = zget($config, 'link',  '');
+            $config['group']    = zget($config, 'group', '');
+
+            $setting[$field] = $config;
+        }
 
         return $setting;
     }
@@ -149,16 +159,16 @@ class datatableModel extends model
     /**
      * Sort cols.
      *
-     * @param  int    $a
-     * @param  int    $b
+     * @param  object $a
+     * @param  object $b
      * @static
      * @access public
      * @return int
      */
     public static function sortCols($a, $b)
     {
-        if(!isset($a->order)) return 0;
-        return $a->order - $b->order;
+        if(!isset($a['order']) or !isset($b['order'])) return 0;
+        return $a['order'] - $b['order'];
     }
 
     /**

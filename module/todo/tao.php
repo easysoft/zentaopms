@@ -82,12 +82,26 @@ class todoTao extends todoModel
      */
     protected function insert(object $todo): int
     {
+        $isModuleType = isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList);
+
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->check($this->config->todo->create->requiredFields, 'notempty')
-            ->checkIF(isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList), 'objectID', 'notempty')
+            ->checkIF($isModuleType, 'objectID', 'notempty')
             ->exec();
 
+        if(dao::isError() && $isModuleType)
+        {
+            $errors = dao::getError();
+            if(isset($errors['name']) && isset($errors['objectID']))
+            {
+                dao::$errors[$todo->type] = $errors['name'];
+            }
+            else
+            {
+                dao::$errors = $errors;
+            }
+        }
         return (int)$this->dao->lastInsertID();
     }
 
@@ -234,15 +248,13 @@ class todoTao extends todoModel
         $todo = new stdclass();
         $todo->account = $this->app->user->account;
 
-        $todo->date = $todos->date;
-        if($todos->switchDate == 'on' || !$todos->date) $todo->date = '2030-01-01';
-
-        $todo->type         = $todos->types[$loop];
-        $todo->pri          = $todos->pris[$loop];
-        $todo->name         = isset($todos->names[$loop]) ? $todos->names[$loop] : '';
-        $todo->desc         = $todos->descs[$loop];
-        $todo->begin        = isset($todos->begins[$loop]) ? $todos->begins[$loop] : 2400;
-        $todo->end          = isset($todos->ends[$loop]) ? $todos->ends[$loop] : 2400;
+        $todo->date         = $todos->date[$loop];
+        $todo->type         = $todos->type[$loop];
+        $todo->pri          = $todos->pri[$loop];
+        $todo->name         = isset($todos->name[$loop]) ? $todos->name[$loop] : '';
+        $todo->desc         = $todos->desc[$loop];
+        $todo->begin        = !empty($todos->begin[$loop]) ? $todos->begin[$loop] : 2400;
+        $todo->end          = !empty($todos->end[$loop]) ? $todos->end[$loop] : 2400;
         $todo->status       = 'wait';
         $todo->private      = 0;
         $todo->objectID     = 0;
@@ -264,7 +276,7 @@ class todoTao extends todoModel
             if(isset($object->title)) $todo->name = $object->title;
         }
 
-        if($todo->end < $todo->begin) dao::$errors['message'][] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+        if($todo->end < $todo->begin) dao::$errors["end[$loop]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
 
         return $todo;
     }
@@ -375,9 +387,30 @@ class todoTao extends todoModel
     {
         $savedTodoName = $todo->name;
 
+        if($todo->type == 'story')
+        {
+            $story        = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch();
+            $todo->object = $story;
+            $todo->name   = zget($story, 'title', '');
+        }
+        if($todo->type == 'task')
+        {
+            $task        = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch();
+            $todo->object = $task;
+            $todo->name   = zget($task, 'name', '');
+        }
+        if($todo->type == 'bug')
+        {
+            $bug        = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch();
+            $todo->object = $bug;
+            $todo->name   = zget($bug, 'title', '');
+        }
+        /*
         if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
         if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
+         */
+
         if($todo->type == 'testtask') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
 
         if($this->config->edition == 'max')

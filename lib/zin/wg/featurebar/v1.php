@@ -1,21 +1,24 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 
 class featureBar extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'items?:array',
         'current?:string',
         'link?:string',
         'current?:string',
-        'linkParams?:string',
+        'linkParams?:string=""',
         'module?:string',
-        'method?:string'
+        'method?:string',
+        'load?: string="table"',
+        'loadID?: string'
     );
 
-    static $defineBlocks = array
+    protected static array $defineBlocks = array
     (
         'nav'      => array('map' => 'nav'),
         'leading'  => array(),
@@ -36,20 +39,17 @@ class featureBar extends wg
         $rawItems = \customModel::getFeatureMenu($currentModule, $currentMethod);
         if(!is_array($rawItems)) return null;
 
-        $current      = $this->prop('current', data('browseType'));
-        $pager        = data('pager');
-        $recTotal     = $pager ? $pager->recTotal : '';
-        $items        = array();
-        $link         = $this->prop('link');
+        $current  = $this->prop('current', data('browseType'));
+        $pager    = data('pager');
+        $recTotal = $pager ? $pager->recTotal : data('recTotal');
+        $items    = array();
+        $link     = $this->prop('link');
+        $loadID   = $this->prop('loadID');
+        $load     = $this->prop('load');
 
         data('activeFeature', $current);
 
-        if(empty($link))
-        {
-            $linkParams = $this->prop('linkParams');
-            if(empty($linkParams)) $linkParams = 'browseType={key}&orderBy=' . data('orderBy') ?? '';
-            $link = createLink($currentModule, $currentMethod, $linkParams);
-        }
+        if(empty($link)) $link = createLink($app->rawModule, $app->rawMethod, $this->prop('linkParams'));
 
         foreach($rawItems as $item)
         {
@@ -71,13 +71,23 @@ class featureBar extends wg
 
                 foreach($moreSelects as $key => $text)
                 {
-                    $subItems[] = array
-                    (
-                        'text'   => $text,
-                        'active' => $key == $current,
-                        'url'    => ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', $key, $link),
-                        'attrs'  => ['data-id' => $key, 'data-load' => 'table']
-                    );
+                    $subItem = array();
+                    $subItem['text']   = $text;
+                    $subItem['active'] = $key == $current;
+                    $subItem['url']    = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', $key, $link);
+                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID];
+
+                    if($item->name == 'QUERY')
+                    {
+                        $closeLink = createLink('search', 'ajaxRemoveMenu', "queryID={$key}");
+                        $loadUrl   = $subItem['url'] . '#featureBar';
+
+                        $subItem['className']    = 'flex-auto';
+                        $subItem['rootClass']    = 'row gap-0';
+                        $subItem['rootChildren'] = array(jsRaw("zui.h('a', {className: 'ajax-submit', 'data-url': '{$closeLink}', 'data-load': '{$loadUrl}'}, zui.h('span', {className: 'close'}))"));
+                    }
+
+                    $subItems[] = $subItem;
 
                     if($key === $current)
                     {
@@ -106,7 +116,7 @@ class featureBar extends wg
                 'active' => $isActive,
                 'url'    => str_replace('{key}', $item->name, $link),
                 'badge'  => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : null,
-                'props'  => ['data-id' => $item->name, 'data-load' => 'table']
+                'props'  => array('data-id' => $item->name, 'data-load' => $load, 'data-target' => $loadID)
             );
         }
 
@@ -125,7 +135,7 @@ class featureBar extends wg
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         return div
         (

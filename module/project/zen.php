@@ -42,9 +42,9 @@ class projectZen extends project
         /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
 
-        if(!$this->checkProductAndBranch($project, $this->post))  return false;
-        if(!$this->checkDaysAndBudget($project, $this->post))     return false;
-        if(!$this->checkProductNameUnqiue($project, $this->post)) return false;
+        if(!$this->checkProductAndBranch($project, (object)$_POST))  return false;
+        if(!$this->checkDaysAndBudget($project, (object)$_POST))     return false;
+        if(!$this->checkProductNameUnqiue($project, (object)$_POST)) return false;
 
         return $project;
     }
@@ -125,13 +125,13 @@ class projectZen extends project
 
         if($rawdata->products)
         {
-            $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
+            $topProgramID     = (int)$this->loadModel('program')->getTopByID($project->parent);
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
             foreach($rawdata->products as $index => $productID)
             {
                 if(isset($multipleProducts[$productID]) && empty($rawdata->branch[$index]))
                 {
-                    dao::$errors[] = $this->lang->project->error->emptyBranch;
+                    dao::$errors['branch[0]'] = $this->lang->project->error->emptyBranch;
                     return false;
                 }
             }
@@ -140,7 +140,7 @@ class projectZen extends project
         /* Judge products not empty. */
         if($project->parent && $project->hasProduct && empty($linkedProductsCount) && !isset($rawdata->newProduct))
         {
-            dao::$errors['products0'] = $this->lang->project->error->productNotEmpty;
+            dao::$errors['products[0]'] = $this->lang->project->error->productNotEmpty;
             return false;
         }
 
@@ -244,7 +244,7 @@ class projectZen extends project
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
         if($copyProjectID) $copyProject = $this->getCopyProject((int)$copyProjectID);
-        $shadow = empty($copyProject->hasProduct) ? 1 : 0;
+        $shadow = $copyProjectID && empty($copyProject->hasProduct) ? 1 : 0;
 
         if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
         $topProgramID = $this->program->getTopByID($programID);
@@ -268,8 +268,9 @@ class projectZen extends project
         $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
         $this->view->branchID            = isset($output['branchID']) ? $output['branchID'] : 0;
         $this->view->allProducts         = $allProducts;
-        $this->view->multiBranchProducts = $this->product->getMultiBranchPairs($topProgramID);
+        $this->view->multiBranchProducts = $this->product->getMultiBranchPairs((int)$topProgramID);
         $this->view->copyProjects        = $this->project->getPairsByModel($model);
+        $this->view->copyPinyinList      = common::convert2Pinyin($this->view->copyProjects);
         $this->view->copyProjectID       = $copyProjectID;
         $this->view->parentProgram       = $parentProgram;
         $this->view->programList         = $this->program->getParentPairs();
@@ -692,7 +693,7 @@ class projectZen extends project
      */
     protected function removeAssociatedExecutions(array $executionIdList): void
     {
-        $this->project->deleteByTableName('zt_execution', array_keys($executionIdList));
+        $this->project->deleteByTableName(TABLE_EXECUTION, array_keys($executionIdList));
         foreach($executionIdList as $executionID => $execution) $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
         $this->loadModel('user')->updateUserView($executionIdList, 'sprint');
     }
@@ -849,6 +850,7 @@ class projectZen extends project
         /* Build the product from other linked products. */
         if($this->config->systemMode == 'ALM') $this->buildProductForm($project, $allProducts, $linkedBranchIdList, $linkedBranches, $linkedProducts);
 
+        $this->view->linkedProducts           = $linkedProducts;
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
@@ -910,6 +912,7 @@ class projectZen extends project
      */
     protected function getOtherProducts(array $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
     {
+        $otherProducts = array();
         foreach($programProducts as $productID => $productName)
         {
             if(!empty($branchGroups[$productID]))
@@ -963,31 +966,19 @@ class projectZen extends project
     {
         $userList = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->fetchAll('account');
 
-        $this->app->loadConfig('execution');
+        $this->loadModel('story');
+        $this->loadModel('execution');
         foreach($projectList as $project)
         {
-            $project->from       = 'project';
-            $project->end        = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
-            $project->hasProduct = zget($this->lang->project->projectTypeList, $project->hasProduct);
-            $project->estimate   = $project->hours->totalEstimate . $this->lang->project->workHourUnit;
-            $project->consume    = $project->hours->totalConsumed . $this->lang->project->workHourUnit;
-            $project->surplus    = $project->hours->totalLeft     . $this->lang->project->workHourUnit;
-            $project->progress   = $project->hours->progress;
-            $project->invested   = !empty($this->config->execution->defaultWorkhours) ? round($project->hours->totalConsumed / $this->config->execution->defaultWorkhours, 2) : 0;
+            $project = $this->project->formatDataForList($project, $userList);
 
-            $projectBudget   = $this->project->getBudgetWithUnit($project->budget);
-            $project->budget = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
+            $projectStories = $this->story->getExecutionStoryPairs($project->id);
+            $project->storyCount = count($projectStories);
 
-            if($project->PM)
-            {
-                $user = zget($userList, $project->PM);
-                if(empty($user)) continue;
+            $executions = $this->execution->getStatData($project->id, 'all');
+            $project->executionCount = count($executions);
 
-                $project->PM        = $user->realname;
-                $project->PMAvatar  = $user->avatar;
-                $project->PMAccount = $project->PM;
-            }
-
+            $project->from    = 'project';
             $project->actions = $this->project->buildActionList($project);
         }
 
@@ -1041,5 +1032,65 @@ class projectZen extends project
         $this->config->build->dtable->fieldList['execution']['title'] = zget($this->lang->project->executionList, $project->model);
 
         return array_values($builds);
+    }
+
+    /**
+     * 构建项目团队成员信息。
+     * Build project team member information.
+     *
+     * @param  array  $currentMembers
+     * @param  array  $members2Import
+     * @param  array  $deptUsers
+     * @param  int    $days
+     * @access public
+     * @return array
+     */
+    public function buildMembers(array $currentMembers, array $members2Import, array $deptUsers, int $days): array
+    {
+        $teamMembers = array();
+        foreach($currentMembers as $account => $member)
+        {
+            $member->memberType = 'default';
+            $teamMembers[$account] = $member;
+        }
+
+        $roles = $this->loadModel('user')->getUserRoles(array_keys($deptUsers));
+        foreach($deptUsers as $deptAccount => $userName)
+        {
+            if(isset($currentMembers[$deptAccount]) || isset($members2Import[$deptAccount])) continue;
+
+            $deptMember = new stdclass();
+            $deptMember->memberType = 'dept';
+            $deptMember->account    = $deptAccount;
+            $deptMember->role       = zget($roles, $deptAccount, '');
+            $deptMember->days       = $days;
+            $deptMember->hours      = $this->config->execution->defaultWorkhours;
+            $deptMember->limited    = 'no';
+
+            $teamMembers[$deptAccount] = $deptMember;
+        }
+
+        foreach($members2Import as $account => $member2Import)
+        {
+            $member2Import->memberType = 'import';
+            $member2Import->days       = $days;
+            $member2Import->limited    = 'no';
+            $teamMembers[$account] = $member2Import;
+        }
+
+        for($j = 0; $j < 5; $j ++)
+        {
+            $newMember = new stdclass();
+            $newMember->memberType = 'add';
+            $newMember->account    = '';
+            $newMember->role       = '';
+            $newMember->days       = $days;
+            $newMember->hours      = $this->config->execution->defaultWorkhours;
+            $newMember->limited    = 'no';
+
+            $teamMembers[] = $newMember;
+        }
+
+        return $teamMembers;
     }
 }

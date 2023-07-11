@@ -21,8 +21,8 @@ $app->loadLang('productplan');
 $config->productplan->search['module'] = 'productplan';
 $config->productplan->browse = new stdclass();
 
-$config->productplan->search['fields']['id']     = $lang->productplan->id;
 $config->productplan->search['fields']['title']  = $lang->productplan->title;
+$config->productplan->search['fields']['id']     = $lang->productplan->id;
 $config->productplan->search['fields']['branch'] = $lang->productplan->branch;
 $config->productplan->search['fields']['status'] = $lang->productplan->status;
 $config->productplan->search['fields']['begin']  = $lang->productplan->begin;
@@ -60,3 +60,16 @@ $config->productplan->actionList['edit']['icon']  = 'edit';
 $config->productplan->actionList['edit']['hint']  = $lang->productplan->edit;
 $config->productplan->actionList['edit']['text']  = $lang->productplan->edit;
 $config->productplan->actionList['edit']['url']   = helper::createLink('productplan', 'edit', 'productplanID={id}');
+
+$config->productplan->actionList['unlinkBug']['icon'] = 'unlink';
+$config->productplan->actionList['unlinkBug']['hint'] = $lang->productplan->unlinkBug;
+$config->productplan->actionList['unlinkBug']['url']  = 'javascript:unlinkObject("bug", "{id}")';
+
+$config->productplan->actionList['unlinkStory']['icon'] = 'unlink';
+$config->productplan->actionList['unlinkStory']['hint'] = $lang->productplan->unlinkStory;
+$config->productplan->actionList['unlinkStory']['url']  = 'javascript:unlinkObject("story", "{id}")';
+
+$config->productplan->defaultFields['story']     = array('id', 'title', 'module', 'pri', 'status', 'openedBy', 'assignedTo', 'estimate', 'stage', 'actions');
+$config->productplan->defaultFields['bug']       = array('id', 'title', 'pri', 'status', 'openedBy', 'assignedTo', 'actions');
+$config->productplan->defaultFields['linkStory'] = array('id', 'pri', 'plan', 'module', 'title', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage');
+$config->productplan->defaultFields['linkBug']   = array('id', 'pri', 'title', 'openedBy', 'assignedTo', 'status');

@@ -49,7 +49,6 @@ jsVar('sortLink', helper::createLink($app->rawModule, $app->rawMethod, "projectI
 jsVar('changeProductLink', helper::createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type=product&param={productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
-jsVar('confirmDelete', $lang->build->confirmDelete);
 jsVar('integratedTip', $lang->build->integrated);
 jsVar('deletedTip', $lang->build->deleted);
 dtable

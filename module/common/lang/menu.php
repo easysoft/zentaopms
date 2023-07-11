@@ -13,13 +13,27 @@ $lang->navIcons['bi']        = "<i class='icon icon-statistic'></i>";
 $lang->navIcons['system']    = "<i class='icon icon-group'></i>";
 $lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
 
+$lang->navIconNames              = array();
+$lang->navIconNames['my']        = 'menu-my';
+$lang->navIconNames['program']   = 'program';
+$lang->navIconNames['product']   = 'product';
+$lang->navIconNames['project']   = 'project';
+$lang->navIconNames['execution'] = 'run';
+$lang->navIconNames['qa']        = 'test';
+$lang->navIconNames['devops']    = 'devops';
+$lang->navIconNames['kanban']    = 'kanban';
+$lang->navIconNames['doc']       = 'doc';
+$lang->navIconNames['bi']        = 'statistic';
+$lang->navIconNames['system']    = 'group';
+$lang->navIconNames['admin']     = 'cog-outline';
+
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
 list($productModule, $productMethod)     = explode('-', $config->productLink);
 list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
 list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 
-if(defined('TUTORIAL'))
+if(isset($_SESSION['tutorialMode']) && $_SESSION['tutorialMode'])
 {
     $programModule   = 'program';
     $programMethod   = 'browse';
@@ -39,7 +53,7 @@ $lang->mainNav->product   = "{$lang->navIcons['product']} {$lang->productCommon}
 $lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->projectCommon}|$projectModule|$projectMethod|";
 $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
 $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
-$lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|browse|";
+$lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|maintain|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
 $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
@@ -91,12 +105,12 @@ $lang->my->menuOrder[50] = 'contacts';
 if(!$config->systemScore) unset($lang->my->menu->score, $lang->my->menuOrder[45]);
 
 $lang->my->menu->work['subMenu']              = new stdclass();
-$lang->my->menu->work['subMenu']->task        = array('link' => "{$lang->task->common}|my|work|mode=task", 'subModule' => 'task');
-$lang->my->menu->work['subMenu']->story       = "$lang->SRCommon|my|work|mode=story";
-$lang->my->menu->work['subMenu']->requirement = "$lang->URCommon|my|work|mode=requirement";
-$lang->my->menu->work['subMenu']->bug         = "{$lang->bug->common}|my|work|mode=bug";
-$lang->my->menu->work['subMenu']->testcase    = array('link' => "{$lang->testcase->common}|my|work|mode=testcase&type=assigntome", 'subModule' => 'testtask');
-$lang->my->menu->work['subMenu']->testtask    = "{$lang->testtask->common}|my|work|mode=testtask&type=wait";
+$lang->my->menu->work['subMenu']->task        = array('link' => "{$lang->task->common}|my|work|mode=task", 'subModule' => 'task', 'alias' => 'task');
+$lang->my->menu->work['subMenu']->story       = array('link' => "$lang->SRCommon|my|work|mode=story", 'alias' => 'story');
+$lang->my->menu->work['subMenu']->requirement = array('link' => "$lang->URCommon|my|work|mode=requirement", 'alias' => 'requirement');
+$lang->my->menu->work['subMenu']->bug         = array('link' => "{$lang->bug->common}|my|work|mode=bug", 'alias' => 'bug');
+$lang->my->menu->work['subMenu']->testcase    = array('link' => "{$lang->testcase->common}|my|work|mode=testcase", 'subModule' => 'testtask', 'alias' => 'testcase');
+$lang->my->menu->work['subMenu']->testtask    = array('link' => "{$lang->testtask->common}|my|work|mode=testtask", 'alias' => 'testtask');
 
 $lang->my->menu->work['menuOrder'][5]  = 'task';
 $lang->my->menu->work['menuOrder'][10] = 'story';
@@ -109,14 +123,14 @@ $lang->my->menu->work['menuOrder'][35] = 'audit';
 if(!$config->URAndSR) unset($lang->my->menu->work['subMenu']->requirement, $lang->my->menu->work['menuOrder'][10]);
 
 $lang->my->menu->contribute['subMenu']              = new stdclass();
-$lang->my->menu->contribute['subMenu']->task        = "{$lang->task->common}|my|contribute|mode=task";
-$lang->my->menu->contribute['subMenu']->story       = "$lang->SRCommon|my|contribute|mode=story";
-$lang->my->menu->contribute['subMenu']->requirement = "$lang->URCommon|my|contribute|mode=requirement";
-$lang->my->menu->contribute['subMenu']->bug         = "{$lang->bug->common}|my|contribute|mode=bug";
-$lang->my->menu->contribute['subMenu']->testcase    = "{$lang->testcase->shortCommon}|my|contribute|mode=testcase&type=openedbyme";
-$lang->my->menu->contribute['subMenu']->testtask    = "{$lang->testtask->common}|my|contribute|mode=testtask&type=done";
-$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&type=reviewedbyme", 'subModule' => 'review');
-$lang->my->menu->contribute['subMenu']->doc         = "{$lang->doc->common}|my|contribute|mode=doc&type=openedbyme";
+$lang->my->menu->contribute['subMenu']->task        = array('link' => "{$lang->task->common}|my|contribute|mode=task", 'alias' => 'task');
+$lang->my->menu->contribute['subMenu']->story       = array('link' => "$lang->SRCommon|my|contribute|mode=story", 'alias' => 'story');
+$lang->my->menu->contribute['subMenu']->requirement = array('link' => "$lang->URCommon|my|contribute|mode=requirement", 'alias' => 'requirement');
+$lang->my->menu->contribute['subMenu']->bug         = array('link' => "{$lang->bug->common}|my|contribute|mode=bug", 'alias' => 'bug');
+$lang->my->menu->contribute['subMenu']->testcase    = array('link' => "{$lang->testcase->shortCommon}|my|contribute|mode=testcase", 'alias' => 'testcase');
+$lang->my->menu->contribute['subMenu']->testtask    = array('link' => "{$lang->testtask->common}|my|contribute|mode=testtask", 'alias' => 'testtask');
+$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit", 'subModule' => 'review', 'alias' => 'audit');
+$lang->my->menu->contribute['subMenu']->doc         = array('link' => "{$lang->doc->common}|my|contribute|mode=doc", 'alias' => 'doc');
 
 $lang->my->menu->contribute['menuOrder'][5]  = 'task';
 $lang->my->menu->contribute['menuOrder'][10] = 'story';
@@ -133,8 +147,7 @@ $lang->my->dividerMenu = ',work,dynamic,';
 
 /* Program menu. */
 $lang->program->homeMenu = new stdclass();
-$lang->program->homeMenu->browse      = array('link' => "{$lang->program->list}|program|browse|", 'alias' => 'create,edit', 'subModule' => 'project');
-$lang->program->homeMenu->projectView = array('link' => "{$lang->program->projectView}|program|projectview|", 'alias' => 'create,edit', 'subModule' => 'project');
+$lang->program->homeMenu->browse      = array('link' => "{$lang->program->projectView}|program|browse|", 'alias' => 'create,edit', 'subModule' => 'project');
 $lang->program->homeMenu->productView = array('link' => "{$lang->program->productView}|program|productview|", 'alias' => 'create,edit', 'subModule' => 'project');
 $lang->program->homeMenu->kanban      = array('link' => "{$lang->program->kanban}|program|kanban|");
 
@@ -296,12 +309,11 @@ $lang->waterfall->menu->qa['subMenu']->testtask   = array('link' => "{$lang->tes
 $lang->waterfall->menu->qa['subMenu']->testreport = array('link' => "{$lang->testreport->common}|project|testreport|projectID=%s", 'subModule' => 'testreport');
 
 $lang->waterfall->menu->design['subMenu'] = new stdclass();
-$lang->waterfall->menu->design['subMenu']->all      = array('link' => "$lang->all|design|browse|projectID=%s&productID=0&browseType=all");
-$lang->waterfall->menu->design['subMenu']->hlds     = array('link' => "{$lang->design->HLDS}|design|browse|projectID=%s&productID=0&browseType=HLDS");
-$lang->waterfall->menu->design['subMenu']->dds      = array('link' => "{$lang->design->DDS}|design|browse|projectID=%s&productID=0&browseType=DDS");
-$lang->waterfall->menu->design['subMenu']->dbds     = array('link' => "{$lang->design->DBDS}|design|browse|projectID=%s&productID=0&browseType=DBDS");
-$lang->waterfall->menu->design['subMenu']->ads      = array('link' => "{$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
-$lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
+$lang->waterfall->menu->design['subMenu']->all  = array('link' => "$lang->all|design|browse|projectID=%s&productID=0&browseType=all");
+$lang->waterfall->menu->design['subMenu']->hlds = array('link' => "{$lang->design->HLDS}|design|browse|projectID=%s&productID=0&browseType=HLDS");
+$lang->waterfall->menu->design['subMenu']->dds  = array('link' => "{$lang->design->DDS}|design|browse|projectID=%s&productID=0&browseType=DDS");
+$lang->waterfall->menu->design['subMenu']->dbds = array('link' => "{$lang->design->DBDS}|design|browse|projectID=%s&productID=0&browseType=DBDS");
+$lang->waterfall->menu->design['subMenu']->ads  = array('link' => "{$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
 
 /* Kanban project menu. */
 $lang->kanbanProject = new stdclass();
@@ -470,31 +482,37 @@ $lang->qa->menuOrder[45] = 'automation';
 $lang->qa->dividerMenu = ',bug,testtask,caselib,automation,';
 
 /* DevOps menu. */
+$lang->devops->homeMenu = new stdclass();
+$lang->devops->homeMenu->dashboard   = array('link' => "{$lang->dashboard}|system|dashboard");
+$lang->devops->homeMenu->repos       = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import');
+$lang->devops->homeMenu->compile     = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
+$lang->devops->homeMenu->WIPs        = array('link' => "{$lang->devops->WIPs}|space|browse", 'subModule' => 'instance,store');
+$lang->devops->homeMenu->environment = array('link' => "{$lang->devops->environment}|gitlab|browse", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit,import');
+$lang->devops->homeMenu->app         = array('link' => "{$lang->app->common}|app|serverlink|%s");
+
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
-$lang->devops->menu->mr       = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
-$lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
-$lang->devops->menu->app      = array('link' => "{$lang->app->common}|app|serverlink|%s");
-$lang->devops->menu->platform = array('link' => "{$lang->devops->platform}|space|browse", 'subModule' => 'instance,store');
-$lang->devops->menu->set      = array('link' => "{$lang->devops->set}|repo|maintain", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit');
+$lang->devops->menu->code    = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
+$lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
+$lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 
-$lang->devops->menuOrder[5]  = 'code';
-$lang->devops->menuOrder[10] = 'mr';
-$lang->devops->menuOrder[15] = 'compile';
-$lang->devops->menuOrder[20] = 'app';
-$lang->devops->menuOrder[25] = 'platform';
-$lang->devops->menuOrder[30] = 'set';
+$lang->devops->menuOrder[5]  = 'dashboard';
+$lang->devops->menuOrder[10] = 'repos';
+$lang->devops->menuOrder[15] = 'code';
+$lang->devops->menuOrder[20] = 'mr';
+$lang->devops->menuOrder[25] = 'compile';
+$lang->devops->menuOrder[30] = 'WIPs';
+$lang->devops->menuOrder[35] = 'environment';
+$lang->devops->menuOrder[40] = 'app';
 
-$lang->devops->dividerMenu = ',platform,';
+$lang->devops->dividerMenu = ',repos,app,';
 
-$lang->devops->menu->set['subMenu'] = new stdclass();
-$lang->devops->menu->set['subMenu']->repo      = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
-$lang->devops->menu->set['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
-$lang->devops->menu->set['subMenu']->gogs      = array('link' => 'Gogs|gogs|browse', 'subModule' => 'gogs');
-$lang->devops->menu->set['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
-$lang->devops->menu->set['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
-$lang->devops->menu->set['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
-$lang->devops->menu->set['subMenu']->setrules  = array('link' => "{$lang->devops->rules}|repo|setrules");
+$lang->devops->homeMenu->environment['subMenu'] = new stdclass();
+$lang->devops->homeMenu->environment['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
+$lang->devops->homeMenu->environment['subMenu']->gogs      = array('link' => 'Gogs|gogs|browse', 'subModule' => 'gogs');
+$lang->devops->homeMenu->environment['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
+$lang->devops->homeMenu->environment['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
+$lang->devops->homeMenu->environment['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
+$lang->devops->homeMenu->environment['subMenu']->setrules  = array('link' => "{$lang->devops->rules}|repo|setrules");
 
 /* Kanban menu. */
 $lang->kanban->menu = new stdclass();

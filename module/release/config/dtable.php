@@ -9,13 +9,16 @@ $config->release->dtable->story   = new stdclass();
 $config->release->dtable->bug     = new stdclass();
 $config->release->dtable->leftBug = new stdclass();
 
+$config->release->dtable->defaultFields['linkStory'] = array('id', 'title', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage');
+$config->release->dtable->defaultFields['linkBug']   = array('id', 'title', 'openedBy', 'resolvedBy', 'status');
+
 $config->release->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->release->dtable->fieldList['id']['name']  = 'id';
 $config->release->dtable->fieldList['id']['type']  = 'id';
 
 $config->release->dtable->fieldList['name']['title'] = $lang->release->name;
 $config->release->dtable->fieldList['name']['name']  = 'name';
-$config->release->dtable->fieldList['name']['link']  = helper::createLink('release', 'view', 'releaseID={id}');
+$config->release->dtable->fieldList['name']['link']  = array('module' => 'release', 'method' => 'view', 'params' => 'releaseID={id}');
 $config->release->dtable->fieldList['name']['type']  = 'title';
 
 $config->release->dtable->fieldList['branch']['title']    = $lang->release->branch;
@@ -56,7 +59,7 @@ $config->release->dtable->story->fieldList['id']['checkbox'] = true;
 $config->release->dtable->story->fieldList['title']['title']       = $lang->story->title;
 $config->release->dtable->story->fieldList['title']['name']        = 'title';
 $config->release->dtable->story->fieldList['title']['type']        = 'title';
-$config->release->dtable->story->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}', '', true);
+$config->release->dtable->story->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}');
 $config->release->dtable->story->fieldList['title']['data-toggle'] = 'modal';
 
 $config->release->dtable->story->fieldList['pri']['title'] = $lang->priAB;
@@ -85,11 +88,12 @@ $config->release->dtable->story->fieldList['stage']['name']  = 'stage';
 $config->release->dtable->story->fieldList['stage']['type']  = 'category';
 $config->release->dtable->story->fieldList['stage']['map']   = $lang->story->stageList;
 
-$config->release->dtable->story->fieldList['actions']['title'] = $lang->actions;
-$config->release->dtable->story->fieldList['actions']['name']  = 'actions';
-$config->release->dtable->story->fieldList['actions']['type']  = 'actions';
-$config->release->dtable->story->fieldList['actions']['menu']  = array('unlinkStory');
-$config->release->dtable->story->fieldList['actions']['list']  = $config->release->actionList;
+$config->release->dtable->story->fieldList['actions']['title']    = $lang->actions;
+$config->release->dtable->story->fieldList['actions']['name']     = 'actions';
+$config->release->dtable->story->fieldList['actions']['type']     = 'actions';
+$config->release->dtable->story->fieldList['actions']['minWidth'] = 60;
+$config->release->dtable->story->fieldList['actions']['menu']     = array('unlinkStory');
+$config->release->dtable->story->fieldList['actions']['list']     = $config->release->actionList;
 
 $config->release->dtable->bug->fieldList['id']['title']    = $lang->idAB;
 $config->release->dtable->bug->fieldList['id']['name']     = 'id';
@@ -99,7 +103,7 @@ $config->release->dtable->bug->fieldList['id']['sortType'] = 'desc';
 $config->release->dtable->bug->fieldList['title']['title']       = $lang->bug->title;
 $config->release->dtable->bug->fieldList['title']['name']        = 'title';
 $config->release->dtable->bug->fieldList['title']['type']        = 'title';
-$config->release->dtable->bug->fieldList['title']['link']        = helper::createLink('bug', 'view', 'bugID={id}', '', true);
+$config->release->dtable->bug->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
 $config->release->dtable->bug->fieldList['title']['data-toggle'] = 'modal';
 
 $config->release->dtable->bug->fieldList['severity']['title'] = $lang->bug->severity;
@@ -135,11 +139,12 @@ $config->release->dtable->bug->fieldList['resolvedDate']['title'] = $lang->bug->
 $config->release->dtable->bug->fieldList['resolvedDate']['name']  = 'resolvedDate';
 $config->release->dtable->bug->fieldList['resolvedDate']['type']  = 'date';
 
-$config->release->dtable->bug->fieldList['actions']['title'] = $lang->actions;
-$config->release->dtable->bug->fieldList['actions']['name']  = 'actions';
-$config->release->dtable->bug->fieldList['actions']['type']  = 'actions';
-$config->release->dtable->bug->fieldList['actions']['menu']  = array('unlinkBug');
-$config->release->dtable->bug->fieldList['actions']['list']  = $config->release->actionList;
+$config->release->dtable->bug->fieldList['actions']['title']    = $lang->actions;
+$config->release->dtable->bug->fieldList['actions']['name']     = 'actions';
+$config->release->dtable->bug->fieldList['actions']['type']     = 'actions';
+$config->release->dtable->bug->fieldList['actions']['minWidth'] = 60;
+$config->release->dtable->bug->fieldList['actions']['menu']     = array('unlinkBug');
+$config->release->dtable->bug->fieldList['actions']['list']     = $config->release->actionList;
 
 $config->release->dtable->leftBug = $config->release->dtable->bug;
 $config->release->dtable->leftBug->fieldList['severity']['name'] = 'severityOrder';

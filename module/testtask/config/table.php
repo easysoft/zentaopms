@@ -3,74 +3,21 @@ global $lang, $app;
 $app->loadLang('testcase');
 $app->loadModuleConfig('testcase');
 
-$config->testtask->actionList = array();
-$config->testtask->actionList['start']['icon'] = 'play';
-$config->testtask->actionList['start']['text'] = $lang->testtask->start;
-$config->testtask->actionList['start']['hint'] = $lang->testtask->start;
-$config->testtask->actionList['start']['url']  = helper::createLink('testtask', 'start', 'taskID={id}');
-
-$config->testtask->actionList['close']['icon'] = 'off';
-$config->testtask->actionList['close']['text'] = $lang->testtask->close;
-$config->testtask->actionList['close']['hint'] = $lang->testtask->close;
-$config->testtask->actionList['close']['url']  = helper::createLink('testtask', 'close', 'taskID={id}');
-
-$config->testtask->actionList['block']['icon'] = 'pause';
-$config->testtask->actionList['block']['text'] = $lang->testtask->block;
-$config->testtask->actionList['block']['hint'] = $lang->testtask->block;
-$config->testtask->actionList['block']['url']  = helper::createLink('testtask', 'block', 'taskID={id}');
-
-$config->testtask->actionList['activate']['icon']        = 'magic';
-$config->testtask->actionList['activate']['text']        = $lang->testtask->activate;
-$config->testtask->actionList['activate']['hint']        = $lang->testtask->activate;
-$config->testtask->actionList['activate']['url']         = helper::createLink('testtask', 'activate', 'taskID={id}');
-$config->testtask->actionList['activate']['data-toggle'] = 'modal';
-
-$config->testtask->actionList['cases']['icon'] = 'sitemap';
-$config->testtask->actionList['cases']['text'] = $lang->testtask->cases;
-$config->testtask->actionList['cases']['hint'] = $lang->testtask->cases;
-$config->testtask->actionList['cases']['url']  = helper::createLink('testtask', 'cases', 'taskID={id}');
-
-$config->testtask->actionList['linkCase']['icon'] = 'link';
-$config->testtask->actionList['linkCase']['text'] = $lang->testtask->linkCase;
-$config->testtask->actionList['linkCase']['hint'] = $lang->testtask->linkCase;
-$config->testtask->actionList['linkCase']['url']  = helper::createLink('testtask', 'linkCase', 'taskID={id}&type=all&param=myQueryID');
-
-$config->testtask->actionList['report']['icon'] = 'summary';
-$config->testtask->actionList['report']['text'] = $lang->testtask->testreport;
-$config->testtask->actionList['report']['hint'] = $lang->testtask->testreport;
-$config->testtask->actionList['report']['url']  = helper::createLink('testreport', 'browse', 'objectID={product}&objectType=product&extra={id}');
-
-$config->testtask->actionList['view']['icon']        = 'list-alt';
-$config->testtask->actionList['view']['text']        = $lang->testtask->view;
-$config->testtask->actionList['view']['hint']        = $lang->testtask->view;
-$config->testtask->actionList['view']['url']         = helper::createLink('testtask', 'view', 'taskID={id}');
-$config->testtask->actionList['view']['data-toggle'] = 'modal';
-
-$config->testtask->actionList['edit']['icon'] = 'edit';
-$config->testtask->actionList['edit']['text'] = $lang->testtask->edit;
-$config->testtask->actionList['edit']['hint'] = $lang->testtask->edit;
-$config->testtask->actionList['edit']['url']  = helper::createLink('testtask', 'edit', 'taskID={id}');
-
-$config->testtask->actionList['delete']['icon'] = 'trash';
-$config->testtask->actionList['delete']['text'] = $lang->testtask->delete;
-$config->testtask->actionList['delete']['hint'] = $lang->testtask->delete;
-$config->testtask->actionList['delete']['url']  = helper::createLink('testtask', 'delete', 'taskID={id}');
-
 $config->testtask->dtable = new stdclass();
 $config->testtask->dtable->fieldList['id']['name']  = 'id';
 $config->testtask->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->testtask->dtable->fieldList['id']['fixed'] = 'left';
+$config->testtask->dtable->fieldList['id']['type']  = 'id';
 
 $config->testtask->dtable->fieldList['title']['name']  = 'name';
 $config->testtask->dtable->fieldList['title']['title'] = $lang->testtask->name;
 $config->testtask->dtable->fieldList['title']['type']  = 'title';
-$config->testtask->dtable->fieldList['title']['link']  = helper::createLink('testcase', 'view', "taskID={id}");
+$config->testtask->dtable->fieldList['title']['link']  = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
 $config->testtask->dtable->fieldList['title']['fixed'] = 'left';
 
 $config->testtask->dtable->fieldList['build']['name']  = 'buildName';
 $config->testtask->dtable->fieldList['build']['title'] = $lang->testtask->build;
 $config->testtask->dtable->fieldList['build']['type']  = 'text';
-$config->testtask->dtable->fieldList['build']['link']  = helper::createLink('build', 'view', "buildID={build}");
+$config->testtask->dtable->fieldList['build']['link']  = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={build}');
 $config->testtask->dtable->fieldList['build']['group'] = 'text';
 
 $config->testtask->dtable->fieldList['product']['name']  = 'productName';
@@ -87,7 +34,6 @@ $config->testtask->dtable->fieldList['owner']['name']    = 'owner';
 $config->testtask->dtable->fieldList['owner']['title']   = $lang->testtask->owner;
 $config->testtask->dtable->fieldList['owner']['type']    = 'user';
 $config->testtask->dtable->fieldList['owner']['group']   = 'user';
-$config->testtask->dtable->fieldList['owner']['userMap'] = array();
 
 $config->testtask->dtable->fieldList['begin']['name']  = 'begin';
 $config->testtask->dtable->fieldList['begin']['title'] = $lang->testtask->begin;
@@ -111,30 +57,85 @@ $config->testtask->dtable->fieldList['actions']['sortType'] = false;
 $config->testtask->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
 $config->testtask->dtable->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'view', 'edit', 'delete');
 
-$config->testtask->testcase = new stdclass();
-$config->testtask->testcase->dtable = new stdclass();
-$config->testtask->testcase->dtable->fieldList['id']['name']  = 'id';
-$config->testtask->testcase->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->testtask->testcase->dtable->fieldList['id']['type'] = 'checkID';
-$config->testtask->testcase->dtable->fieldList['id']['fixed'] = 'left';
+$config->testtask->cases->dtable = new stdclass();
 
-$config->testtask->testcase->dtable->fieldList['title']['name']  = 'title';
-$config->testtask->testcase->dtable->fieldList['title']['title'] = $lang->testcase->title;
-$config->testtask->testcase->dtable->fieldList['title']['type']  = 'title';
-$config->testtask->testcase->dtable->fieldList['title']['link']  = helper::createLink('testcase', 'view', 'caseID={id}&version={version}&from=testtask&taskID={task}');
-$config->testtask->testcase->dtable->fieldList['title']['fixed'] = 'left';
-
-foreach($config->testcase->dtable->fieldList as $key => $fieldList)
+foreach($config->testcase->dtable->fieldList as $field => $setting)
 {
-    if($key == 'id' || $key == 'title') continue;
-    $config->testtask->testcase->dtable->fieldList[$key] = $fieldList;
+    if($field == 'actions') continue;
 
-    if($key == 'keywords')
+    $config->testtask->cases->dtable->fieldList[$field] = $setting;
+
+    if($field == 'title') $config->testtask->cases->dtable->fieldList[$field]['nestedToggle'] = false;
+    if($field == 'story') $config->testtask->cases->dtable->fieldList[$field]['name']         = 'storyTitle';
+
+    if($field == 'keywords')
     {
-        $config->testtask->testcase->dtable->fieldList['assignedTo']['name']  = 'assignedTo';
-        $config->testtask->testcase->dtable->fieldList['assignedTo']['title'] = $lang->testcase->assignedTo;
-        $config->testtask->testcase->dtable->fieldList['assignedTo']['type']  = 'user';
+        $config->testtask->cases->dtable->fieldList['assignedTo']['title'] = $lang->testcase->assignedTo;
+        $config->testtask->cases->dtable->fieldList['assignedTo']['type']  = 'user';
+        $config->testtask->cases->dtable->fieldList['assignedTo']['show']  = true;
+        $config->testtask->cases->dtable->fieldList['assignedTo']['group'] = 99; // Set a different group between testcase.
     }
 }
 
-$config->testtask->testcase->dtable->fieldList['actions']['menu'] = array('runCase', 'runResult', 'createBug', 'unlinkCase');
+$config->testtask->cases->dtable->fieldList['actions']['name']  = 'actions';
+$config->testtask->cases->dtable->fieldList['actions']['title'] = $lang->actions;
+$config->testtask->cases->dtable->fieldList['actions']['type']  = 'actions';
+$config->testtask->cases->dtable->fieldList['actions']['list']  = $config->testtask->cases->actionList;
+$config->testtask->cases->dtable->fieldList['actions']['menu']  = array(array('confirmChange'), array('createBug', 'runCase', 'results', 'unlinkCase'));
+
+$config->testtask->linkcase = new stdclass();
+$config->testtask->linkcase->dtable = new stdclass();
+$config->testtask->linkcase->dtable->fieldList['id']     = $config->testcase->dtable->fieldList['id'];
+$config->testtask->linkcase->dtable->fieldList['title']  = $config->testcase->dtable->fieldList['title'];
+$config->testtask->linkcase->dtable->fieldList['pri']    = $config->testcase->dtable->fieldList['pri'];
+$config->testtask->linkcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
+$config->testtask->linkcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
+
+$config->testtask->linkcase->dtable->fieldList['version']['name']  = 'version';
+$config->testtask->linkcase->dtable->fieldList['version']['title'] = $lang->testtask->linkVersion;
+$config->testtask->linkcase->dtable->fieldList['version']['type']  = 'text';
+$config->testtask->linkcase->dtable->fieldList['version']['group'] = 'version';
+
+$config->testtask->linkcase->dtable->fieldList['openedBy']      = $config->testcase->dtable->fieldList['openedBy'];
+$config->testtask->linkcase->dtable->fieldList['lastRunner']    = $config->testcase->dtable->fieldList['lastRunner'];
+$config->testtask->linkcase->dtable->fieldList['lastRunDate']   = $config->testcase->dtable->fieldList['lastRunDate'];
+$config->testtask->linkcase->dtable->fieldList['lastRunResult'] = $config->testcase->dtable->fieldList['lastRunResult'];
+unset($config->testtask->linkcase->dtable->fieldList['title']['nestedToggle']);
+
+$config->testtask->browseUnits = new stdclass();
+$config->testtask->browseUnits->dtable = new stdclass();
+$config->testtask->browseUnits->dtable->fieldList['id']    = $config->testtask->dtable->fieldList['id'];
+
+$config->testtask->browseUnits->dtable->fieldList['title'] = $config->testtask->dtable->fieldList['title'];
+$config->testtask->browseUnits->dtable->fieldList['title']['title'] = $lang->testtask->unitName;
+
+$config->testtask->browseUnits->dtable->fieldList['execution'] = $config->testtask->dtable->fieldList['execution'];
+$config->testtask->browseUnits->dtable->fieldList['build']     = $config->testtask->dtable->fieldList['build'];
+
+$config->testtask->browseUnits->dtable->fieldList['owner'] = $config->testtask->dtable->fieldList['owner'];
+$config->testtask->browseUnits->dtable->fieldList['execTime']['name']  = 'execTime';
+$config->testtask->browseUnits->dtable->fieldList['execTime']['title'] = $lang->testtask->execTime;
+$config->testtask->browseUnits->dtable->fieldList['execTime']['type']  = 'datetime';
+$config->testtask->browseUnits->dtable->fieldList['execTime']['group'] = 'user';
+
+$config->testtask->browseUnits->dtable->fieldList['caseCount']['name']  = 'caseCount';
+$config->testtask->browseUnits->dtable->fieldList['caseCount']['title'] = $lang->testtask->caseCount;
+$config->testtask->browseUnits->dtable->fieldList['caseCount']['type']  = 'number';
+$config->testtask->browseUnits->dtable->fieldList['caseCount']['group'] = 'number';
+
+$config->testtask->browseUnits->dtable->fieldList['passCount']['name']  = 'passCount';
+$config->testtask->browseUnits->dtable->fieldList['passCount']['title'] = $lang->testtask->passCount;
+$config->testtask->browseUnits->dtable->fieldList['passCount']['type']  = 'number';
+$config->testtask->browseUnits->dtable->fieldList['passCount']['group'] = 'number';
+
+$config->testtask->browseUnits->dtable->fieldList['failCount']['name']  = 'failCount';
+$config->testtask->browseUnits->dtable->fieldList['failCount']['title'] = $lang->testtask->failCount;
+$config->testtask->browseUnits->dtable->fieldList['failCount']['type']  = 'number';
+$config->testtask->browseUnits->dtable->fieldList['failCount']['group'] = 'number';
+
+$config->testtask->browseUnits->dtable->fieldList['actions']['name']     = 'actions';
+$config->testtask->browseUnits->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->testtask->browseUnits->dtable->fieldList['actions']['type']     = 'actions';
+$config->testtask->browseUnits->dtable->fieldList['actions']['sortType'] = false;
+$config->testtask->browseUnits->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
+$config->testtask->browseUnits->dtable->fieldList['actions']['menu']     = array('unitCases', 'edit', 'delete');

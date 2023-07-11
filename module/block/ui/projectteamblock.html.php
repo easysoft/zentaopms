@@ -13,12 +13,12 @@ namespace zin;
 
 panel
 (
-    set('class', 'projectteam-block'),
+    set('headingClass', 'border-b'),
+    set::title($block->title),
     div
     (
-        '项目人力投入',
         '正在开发中...'
     )
 );
 
-render('|fragment');
+render();

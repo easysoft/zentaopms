@@ -26,23 +26,10 @@ if(!$this->story->checkForceReview())
     );
 }
 
+modalHeader(set::title($lang->story->submitReview));
 formPanel
 (
-    set::title($lang->story->submitReview),
-    set::actions(array('submit')),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::entityID($story->id),
-            set::text($story->title),
-            set::level(1),
-            set::reverse(true),
-        )
-    ),
+    set::submitBtnText($lang->story->submitReview),
     formGroup
     (
         set::label($lang->story->reviewedBy),
@@ -53,8 +40,9 @@ formPanel
         (
             select
             (
-                set::name('reviewer'),
+                set::name('reviewer[]'),
                 set::value($story->reviewer),
+                set::multiple(true),
                 set::items($reviewers),
             ),
             $needNotReviewBox,
@@ -62,7 +50,6 @@ formPanel
     ),
 );
 
-h::hr(set::class('mt-6'));
 history();
 
-render('modalDialog');
+render();

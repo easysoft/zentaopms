@@ -12,22 +12,15 @@ namespace zin;
 
 jsVar('page', 'assignedto');
 
+modalHeader
+(
+    set::title($lang->bug->assignTo)
+);
+
 /* zin: Define the form in main content. */
 formPanel
 (
-    set::title($lang->bug->assignTo),
-    set::headingClass('status-heading'),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($bug->title),
-            set::entityID($bug->id),
-            set::reverse(true),
-        )
-    ),
+    set::submitBtnText($lang->bug->assignTo),
     formGroup
     (
         set::width('1/3'),
@@ -39,10 +32,9 @@ formPanel
     formGroup
     (
         set::label($lang->bug->mailto),
+        set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
         set::name('mailto[]'),
         set::value(str_replace(' ', '', $bug->mailto ?: '')),
-        set::multiple(true),
-        set::items($users),
     ),
     formGroup
     (
@@ -53,4 +45,6 @@ formPanel
     ),
 );
 
-render('modalDialog');
+history();
+
+render();

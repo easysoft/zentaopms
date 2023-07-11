@@ -119,7 +119,7 @@ class story extends control
      * @param  string $branch
      * @param  int    $moduleID
      * @param  int    $storyID
-     * @param  int    $executionID
+     * @param  int    $executionID projectID|executionID
      * @param  int    $plan
      * @param  string $storyType requirement|story
      * @param  string $extra for example feedbackID=0
@@ -133,12 +133,13 @@ class story extends control
         if(!empty($_POST))
         {
             $result = $this->loadModel('common')->removeDuplicate('story', (object)$_POST, "product={$productID}");
-            $_POST['title'] = $result['data'];
+            $_POST  = (array)$result['data'];
 
-            $stories = $this->storyZen->buildStoriesForBatchCreate();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $stories = $this->storyZen->buildStoriesForBatchCreate($productID, $storyType);
+            if(empty($stories)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->noData));
+            if(dao::isError())  return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $storyIdList = $this->story->batchCreate($productID, $branch, $storyType, $storyID);
+            $storyIdList = $this->story->batchCreate($stories, $productID, $branch, $storyType, $storyID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Project or execution linked stories. */
@@ -152,8 +153,8 @@ class story extends control
                     $products[$newStoryID] = $productID;
                 }
 
-                if($this->session->project && $executionID != $this->session->project) $this->execution->linkStory($this->session->project, $storieIdList, $products);
-                $this->execution->linkStory($executionID, $storieIdList, $products, $extra, $lanes);
+                if($this->session->project && $executionID != $this->session->project) $this->execution->linkStory($this->session->project, $storieIdList);
+                $this->execution->linkStory($executionID, $storieIdList, $extra, $lanes);
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
@@ -175,18 +176,26 @@ class story extends control
             if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
         }
 
-        $fields = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID);
-        $fields = $this->storyZen->removeFormFieldsForBatchCreate($productID, $fields, $product->type, $storyType);
+        /* The 'batchCreateFields' of global variable $config will be changed and used by the following business logic. */
+        $customFields = $this->storyZen->getCustomFields($this->config, $storyType, $this->view->hiddenPlan, $product);
+        $showFields   = $this->storyZen->getShowFields($this->config->story->custom->batchCreateFields, $storyType, $product);
 
-        $this->view->title            = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
-        $this->view->product          = $product;
-        $this->view->productID        = $productID;
-        $this->view->storyID          = $storyID;
-        $this->view->moduleID         = $moduleID;
-        $this->view->executionID      = $executionID;
-        $this->view->type             = $storyType;
-        $this->view->fields           = $fields;
-        $this->view->stories          = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
+        $fields = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID, $storyType);
+        $fields = $this->storyZen->removeFormFieldsForBatchCreate($fields, $this->view->hiddenPlan, isset($this->view->execution) ? $this->view->execution->type : '');
+
+        $this->view->title        = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $showFields;
+        $this->view->product      = $product;
+        $this->view->productID    = $productID;
+        $this->view->storyID      = $storyID;
+        $this->view->moduleID     = $moduleID;
+        $this->view->executionID  = $executionID;
+        $this->view->type         = $storyType;
+        $this->view->fields       = $fields;
+        $this->view->stories      = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
+        $this->view->storyTitle   = isset($story->title) ? $story->title : '';
+        $this->view->forceReview  = $this->story->checkForceReview();
 
         $this->display();
     }
@@ -195,35 +204,43 @@ class story extends control
      * The common action when edit or change a story.
      *
      * @param  int    $storyID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function commonAction(int $storyID)
+    public function commonAction(int $storyID, int $projectID = 0)
     {
         /* Get datas. */
         $story = $this->story->getByID($storyID);
+        $this->story->replaceURLang($story->type);
 
         /* Set menu. */
         if($this->app->tab == 'project')
         {
-            $this->loadModel('project')->setMenu($this->session->project);
+            if(empty($projectID)) $projectID = $this->session->project;
+            $this->loadModel('project')->setMenu($projectID);
         }
         elseif($this->app->tab == 'execution')
         {
-            $this->loadModel('execution')->setMenu($this->session->execution);
+            if(empty($projectID)) $projectID = $this->session->execution;
+            $this->loadModel('execution')->setMenu($projectID);
+        }
+        elseif($this->app->tab == 'qa')
+        {
+            $products = $this->product->getProductPairsByProject(0, 'noclosed');
+            $this->loadModel('qa')->setMenu($products, $story->product);
         }
         else
         {
             $this->product->setMenu($story->product, $story->branch);
         }
 
-        $this->story->replaceURLang($story->type);
-
         /* Assign. */
         $this->view->product          = $this->product->getByID($story->product);
+        $this->view->productID        = $this->view->product->id;
         $this->view->products         = $this->product->getPairs();
         $this->view->story            = $story;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
         $this->view->plans            = $this->loadModel('productplan')->getPairs($story->product, 0, '', true);
         $this->view->actions          = $this->action->getList('story', $storyID);
     }
@@ -264,7 +281,7 @@ class story extends control
                         $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                         $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
                         $kanbanData    = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                        return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
                     }
                     else
                     {
@@ -273,17 +290,17 @@ class story extends control
                         $kanbanType      = $executionLaneType == 'all' ? 'story' : key($kanbanData);
                         $kanbanData      = $kanbanData[$kanbanType];
                         $kanbanData      = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
+                        return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
                     }
                 }
                 else
                 {
-                    return print(js::reload('parent.parent'));
+                    return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
                 }
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
             $params = $this->app->rawModule == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
-            return print(js::locate($this->createLink($this->app->rawModule, 'view', $params), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => $this->createLink($this->app->rawModule, 'view', $params), 'closeModal' => true, 'message' => $this->lang->saveSuccess));
         }
 
         /* Sort products. */
@@ -396,70 +413,31 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchEdit($productID = 0, $executionID = 0, $branch = 0, $storyType = 'story', $from = '')
+    public function batchEdit(int $productID = 0, int $executionID = 0, string $branch = '', string $storyType = 'story', string $from = '')
     {
         $this->story->replaceURLang($storyType);
-
-        $this->view->hiddenPlan = false;
-        if($this->app->tab == 'product')
-        {
-            $this->product->setMenu($productID);
-        }
-        elseif($this->app->tab == 'project')
-        {
-            $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
-            if($project->type == 'project')
-            {
-                if(!($project->model == 'scrum' and !$project->hasProduct and $project->multiple)) $this->view->hiddenPlan = true;
-                $this->project->setMenu($executionID);
-            }
-            else
-            {
-                if(!$project->hasProduct and !$project->multiple) $this->view->hiddenPlan = true;
-                $this->execution->setMenu($executionID);
-            }
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->execution->setMenu($executionID);
-        }
-        elseif($this->app->tab == 'qa')
-        {
-            $this->loadModel('qa')->setMenu('', $productID);
-        }
-        elseif($this->app->tab == 'my')
-        {
-            $this->loadModel('my');
-            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
-            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
-        }
+        $this->storyZen->setMenuForBatchEdit($productID, $branch, $executionID, $from);
 
         /* Load model. */
         $this->loadModel('productplan');
-
-        if($this->post->titles)
+        if($this->post->title)
         {
-            $allChanges = $this->story->batchUpdate();
+            $stories = $this->storyZen->buildStoriesForBatchEdit();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($allChanges)
-            {
-                foreach($allChanges as $storyID => $changes)
-                {
-                    if(empty($changes)) continue;
+            $this->story->batchUpdate($stories);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                    $actionID = $this->action->create('story', $storyID, 'Edited');
-                    $this->action->logHistory($actionID, $changes);
-                }
-            }
-            return print(js::locate($this->session->storyList, 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList));
         }
 
-        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+        if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
+        if(empty($stories)) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
 
         /* Filter twins. */
         $twins = '';
@@ -469,8 +447,7 @@ class story extends control
             $twins .= "#$id ";
             unset($stories[$id]);
         }
-        if(!empty($twins)) echo js::alert(sprintf($this->lang->story->batchEditTip, $twins));
-        if(empty($stories)) return print(js::locate($this->session->storyList));
+        if(!empty($twins)) $this->view->twinsTip = sprintf($this->lang->story->batchEditTip, $twins);
 
         $this->loadModel('branch');
         if($productID and !$executionID)
@@ -532,7 +509,6 @@ class story extends control
 
         /* Set ditto option for users. */
         $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $users = array('' => '', 'ditto' => $this->lang->story->ditto) + $users;
 
         /* Set Custom*/
         foreach(explode(',', $this->config->story->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->story->$field;
@@ -546,11 +522,6 @@ class story extends control
         }
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
-
-        /* Judge whether the editedStories is too large and set session. */
-        $countInputVars  = count($stories) * (count(explode(',', $this->config->story->custom->batchEditFields)) + 3);
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Append module when change product type. */
         $moduleList       = array(0 => '/');
@@ -583,10 +554,6 @@ class story extends control
 
         $this->view->title             = $this->lang->story->batchEdit;
         $this->view->users             = $users;
-        $this->view->priList           = array('0' => '', 'ditto' => $this->lang->story->ditto) + $this->lang->story->priList;
-        $this->view->sourceList        = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->sourceList;
-        $this->view->reasonList        = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->reasonList;
-        $this->view->stageList         = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->stageList;
         $this->view->productID         = $productID;
         $this->view->products          = $products;
         $this->view->branchProduct     = $branchProduct;
@@ -674,7 +641,7 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->activate($storyID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
             {
@@ -695,14 +662,14 @@ class story extends control
                     $kanbanData        = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $executionGroupBy, $taskSearchValue);
                     $kanbanData        = json_encode($kanbanData);
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "updateKanban($kanbanData)", 'closeModal' => true));
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent', 'this'));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
                 }
             }
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->commonAction($storyID);
@@ -718,44 +685,31 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  int    $version
-     * @param  int    $param
+     * @param  int    $param     executionID|projectID
      * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
+    public function view(int $storyID, int $version = 0, int $param = 0, string $storyType = 'story')
     {
         $uri     = $this->app->getURI(true);
         $tab     = $this->app->tab;
-        $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
         $product = $this->product->getByID($story->product);
-        if($tab == 'product' and !empty($product->shadow))
-        {
-            $backLink = $this->session->productList ? $this->session->productList : inlink('product', 'all');
-            $js       = js::start();
-            $js      .= "setTimeout(\"parent.$.apps.open('$uri#app=project')\", 100)";
-            $js      .= js::end();
-            return print(js::refresh($backLink . '#app=product', 'self', '10') . $js);
-        }
 
-        $buildApp   = $tab == 'product' ?   'project' : $tab;
+        if($tab == 'product' and !empty($product->shadow)) return $this->send(array('result' => 'success', 'load' => "{$uri}##app=project"));
+        if(!$story) return $this->send(array('result' => 'success', 'message' => $this->lang->notFound, 'load' => $this->createLink($this->config->vision == 'lite' ? 'project' : 'product', 'index')));
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return $this->send(array('result' => 'success', 'message' => $this->lang->product->accessDenied, 'load' => array('back' => true)));
+
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
-        if(!isonlybody()) $this->session->set('buildList', $uri, $buildApp);
-        $this->app->loadLang('bug');
-
-        $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
-        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
-
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
         if(!empty($story->fromBug)) $this->session->set('bugList', $uri, 'qa');
 
         $version = empty($version) ? $story->version : $version;
         $story   = $this->story->mergeReviewer($story, true);
 
-        $this->story->replaceURLang($story->type);
+        $this->app->loadLang('bug');
+        $this->commonAction($storyID, $param);
 
-        $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch();
         $cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
@@ -765,28 +719,6 @@ class story extends control
         $storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);
         $linkedStories = isset($story->linkStoryTitles) ? array_keys($story->linkStoryTitles) : array();
         $storyProducts = $this->dao->select('id,product')->from(TABLE_STORY)->where('id')->in($linkedStories)->fetchPairs();
-
-        /* Set the menu. */
-        $from = $this->app->tab;
-        if($from == 'execution')
-        {
-            $result = $this->execution->setMenu($param);
-            if($result) return;
-        }
-        elseif($from == 'project')
-        {
-            $projectID = $param ? $param : $this->session->project;
-            $this->loadModel('project')->setMenu($projectID);
-        }
-        elseif($from == 'qa')
-        {
-            $products = $this->product->getProductPairsByProject(0, 'noclosed');
-            $this->loadModel('qa')->setMenu($products, $story->product);
-        }
-        else
-        {
-            $this->product->setMenu($story->product, $story->branch);
-        }
 
         $this->view->hiddenPlan = false;
         $this->view->hiddenURS  = false;
@@ -798,60 +730,41 @@ class story extends control
                 ->andWhere('t2.type')->eq('project')
                 ->fetch();
 
-            if($projectInfo->model == 'waterfall')
-            {
-                $this->view->hiddenPlan = true;
-            }
-            elseif($projectInfo->model == 'kanban')
+            if($projectInfo->model == 'waterfall') $this->view->hiddenPlan = true;
+            if($projectInfo->model == 'kanban')
             {
                 $this->view->hiddenPlan = true;
                 $this->view->hiddenURS  = true;
             }
-
             if(!$projectInfo->multiple) $this->view->hiddenPlan = true;
         }
 
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-        $reviewers  = $this->story->getReviewerPairs($storyID, $story->version);
-
-        $this->executeHooks($storyID);
-
-        $title      = "STORY #$story->id $story->title - $product->name";
-        $position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
-        $position[] = $this->lang->story->common;
-        $position[] = $this->lang->story->view;
-
+        $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $execution = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
         $project   = $param ? $this->dao->findById($param)->from(TABLE_PROJECT)->fetch() : array();
 
-        $this->view->title         = $title;
-        $this->view->position      = $position;
-        $this->view->product       = $product;
+        $this->view->title         = "STORY #$story->id $story->title - $product->name";
         $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->twins         = !empty($story->twins) ? $this->story->getByList($story->twins) : array();
-        $this->view->plan          = $plan;
         $this->view->bugs          = $bugs;
         $this->view->fromBug       = $fromBug;
         $this->view->cases         = $cases;
         $this->view->story         = $story;
         $this->view->linkedMRs     = $linkedMRs;
         $this->view->linkedCommits = $linkedCommits;
-        $this->view->track         = $this->story->getTrackByID($story->id);
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->reviewers     = $reviewers;
         $this->view->relations     = $this->story->getStoryRelation($story->id, $story->type);
         $this->view->executions    = $this->execution->getPairs(0, 'all', 'nocode');
         $this->view->execution     = $execution;
         $this->view->project       = $project;
-        $this->view->actions       = $this->action->getList('story', $storyID);
         $this->view->storyModule   = $storyModule;
         $this->view->modulePath    = $modulePath;
         $this->view->storyProducts = $storyProducts;
         $this->view->version       = $version;
         $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
-        $this->view->from          = $from;
-        $this->view->param         = $param;
         $this->view->builds        = $this->loadModel('build')->getStoryBuilds($storyID);
         $this->view->releases      = $this->loadModel('release')->getStoryReleases($storyID);
 
@@ -875,8 +788,9 @@ class story extends control
 
         if($confirm == 'no')
         {
-            if($storyType == 'requirement') $this->lang->story->confirmDelete = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->confirmDelete);
-            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType"), ''));
+            if($story->type == 'requirement') $this->lang->story->confirmDelete = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->confirmDelete);
+            $confirmURL = $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->story->confirmDelete}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
         else
         {
@@ -902,13 +816,11 @@ class story extends control
                 $kanbanType        = $executionLaneType == 'all' ? 'story' : key($kanbanData);
                 $kanbanData        = $kanbanData[$kanbanType];
                 $kanbanData        = json_encode($kanbanData);
-                return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
+                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
             }
 
-            if(isonlybody()) return print(js::reload('parent.parent'));
-
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-            return print(js::locate($locateLink, 'parent'));
+            return $this->send(array('result' => 'success', 'load' => array('back' => $locateLink), 'closeModal' => true));
         }
     }
 
@@ -969,16 +881,22 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchReview($result, $reason = '', $storyType = 'story')
+    public function batchReview(string $result, string $reason = '', string $storyType = 'story')
     {
-        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+        if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
+
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
-        $this->story->batchReview($storyIdList, $result, $reason);
+        $message = $this->story->batchReview($storyIdList, $result, $reason);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $this->loadModel('score')->create('ajax', 'batchOther');
 
-        if(dao::isError()) return print(js::error(dao::getError()));
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::reload('parent');
+        $response = array();
+        $response['result'] = 'success';
+        $response['load']   = false;
+        if($message) $response['callback'] = "zui.Modal.alert('{$message}').then((res) => {loadCurrentPage()});";
+        if(empty($message)) $response['load'] = true;
+        return $this->send($response);
     }
 
     /**
@@ -998,7 +916,8 @@ class story extends control
         if($confirm == 'no')
         {
             $confirmTips = $story->status == 'changing' ? $this->lang->story->confirmRecallChange : $this->lang->story->confirmRecallReview;
-            return print(js::confirm($confirmTips, $this->createLink('story', 'recall', "storyID=$storyID&from=$from&confirm=yes&storyType=$storyType")));
+            $confirmURL  = $this->createLink('story', 'recall', "storyID=$storyID&from=$from&confirm=yes&storyType=$storyType");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'{$confirmTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
         else
         {
@@ -1028,11 +947,11 @@ class story extends control
                     $method = 'view';
                     $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
                 }
-                return print(js::locate($this->createLink($module, $method, $params), 'parent'));
+                return $this->send(array('result' => 'success', 'load' => $this->createLink($module, $method, $params)));
             }
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-            return print(js::locate($locateLink, 'parent'));
+            return $this->send(array('result' => 'success', 'load' => $locateLink));
         }
     }
 
@@ -1057,8 +976,8 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType")));
         }
 
         /* Get story and product. */
@@ -1194,17 +1113,31 @@ class story extends control
      */
     public function batchClose($productID = 0, $executionID = 0, $storyType = 'story', $from = '')
     {
-        $this->app->loadLang('bug');
-        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+        if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
+        $this->app->loadLang('bug');
         $this->story->replaceURLang($storyType);
 
+        if($this->post->comment)
+        {
+            $stories = $this->storyZen->buildStoriesForBatchClose();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->story->batchClose($stories);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('score')->create('ajax', 'batchOther');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList));
+        }
+
+        $this->storyZen->setMenuForBatchClose($productID, $executionID, $from);
+
         /* Get edited stories. */
-        $stories = $this->story->getByList($storyIdList);
-        $ignoreTwins      = array();
-        $twinsCount       = array();
+        $stories     = $this->story->getByList($storyIdList);
+        $ignoreTwins = array();
+        $twinsCount  = array();
         foreach($stories as $story)
         {
             if(!empty($ignoreTwins) and isset($ignoreTwins[$story->id]))
@@ -1213,16 +1146,9 @@ class story extends control
                 continue;
             }
 
-            if($story->parent == -1)
-            {
-                $skipStory[] = $story->id;
-                unset($stories[$story->id]);
-            }
-            if($story->status == 'closed')
-            {
-                $closedStory[] = $story->id;
-                unset($stories[$story->id]);
-            }
+            if($story->parent == -1)       $skipStory[]   = $story->id;
+            if($story->status == 'closed') $closedStory[] = $story->id;
+            if($story->parent == -1 || $story->status == 'closed') unset($stories[$story->id]);
 
             if(!empty($story->twins))
             {
@@ -1235,86 +1161,15 @@ class story extends control
             }
         }
 
-        if($this->post->comments)
-        {
-            $allChanges = $this->story->batchClose();
-
-            if($allChanges)
-            {
-                foreach($allChanges as $storyID => $changes)
-                {
-                    $preStatus = $stories[$storyID]->status;
-                    $isChanged = $stories[$storyID]->changedBy ? true : false;
-                    if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
-
-                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : '') . "|$preStatus");
-                    $this->action->logHistory($actionID, $changes);
-
-                    if(!empty($stories[$storyID]->twins)) $this->story->syncTwins($storyID, $stories[$storyID]->twins, $changes, 'Closed');
-                }
-
-                $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->in(array_keys($allChanges))->exec();
-            }
-
-            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-            return print(js::locate($this->session->storyList, 'parent'));
-        }
-
         $errorTips = '';
         if(isset($closedStory)) $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
         if(isset($skipStory))   $errorTips .= sprintf($this->lang->story->skipStory, implode(',', $skipStory));
-        if(isset($skipStory) || isset($closedStory)) echo js::alert($errorTips);
 
-        /* The stories of a product. */
-        if($this->app->tab == 'product')
-        {
-            $this->product->setMenu($productID);
-            $product = $this->product->getByID($productID);
-            $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchClose;
-        }
-        /* The stories of a execution. */
-        elseif($executionID)
-        {
-            $this->lang->story->menu      = $this->lang->execution->menu;
-            $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
-            $this->execution->setMenu($executionID);
-            $execution = $this->execution->getByID($executionID);
-            $this->view->title      = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
-        }
-        else
-        {
-            if($this->app->tab == 'project')
-            {
-                $this->project->setMenu($this->session->project);
-                $this->view->title = $this->lang->story->batchEdit;
-            }
-            else
-            {
-                $this->lang->story->menu      = $this->lang->my->menu;
-                $this->lang->story->menuOrder = $this->lang->my->menuOrder;
-
-                if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
-                if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
-
-                $this->view->title      = $this->lang->story->batchEdit;
-            }
-        }
-
-        /* Judge whether the editedStories is too large and set session. */
-        $countInputVars  = count($stories) * $this->config->story->batchClose->columns;
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-
-        unset($this->lang->story->reasonList['subdivided']);
-
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'story');
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
-        $this->view->storyIdList      = $storyIdList;
         $this->view->storyType        = $storyType;
-        $this->view->reasonList       = $this->lang->story->reasonList;
         $this->view->twinsCount       = $twinsCount;
+        $this->view->errorTips        = $errorTips;
 
         $this->display();
     }
@@ -1329,18 +1184,19 @@ class story extends control
      */
     public function batchChangeModule($moduleID, $storyType = 'story')
     {
-        if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
-        $storyIdList = $this->post->storyIdList;
-        $storyIdList = array_unique($storyIdList);
+        if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
+
+        $storyIdList = array_unique($this->post->storyIdList);
         $allChanges  = $this->story->batchChangeModule($storyIdList, $moduleID);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
         foreach($allChanges as $storyID => $changes)
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::locate($this->session->storyList, 'parent');
+        $this->loadModel('score')->create('ajax', 'batchOther');
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -1409,18 +1265,19 @@ class story extends control
      */
     public function batchChangePlan($planID, $oldPlanID = 0)
     {
-        if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
-        $storyIdList = $this->post->storyIdList;
-        $storyIdList = array_unique($storyIdList);
+        if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
+
+        $storyIdList = array_unique($this->post->storyIdList);
         $allChanges  = $this->story->batchChangePlan($storyIdList, $planID, $oldPlanID);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
         foreach($allChanges as $storyID => $changes)
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::locate($this->session->storyList, 'parent');
+        $this->loadModel('score')->create('ajax', 'batchOther');
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -1496,21 +1353,20 @@ class story extends control
      */
     public function batchChangeStage($stage)
     {
-        $storyIdList = $this->post->storyIdList;
-        if(empty($storyIdList)) return print(js::locate($this->session->storyList, 'parent'));
+        if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
-        $storyIdList = array_unique($storyIdList);
-        $allChanges  = $this->story->batchChangeStage($storyIdList, $stage);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        $storyIdList = array_unique($this->post->storyIdList);
+        $message     = $this->story->batchChangeStage($storyIdList, $stage);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $this->loadModel('score')->create('ajax', 'batchOther');
 
-        $action = $stage == 'verified' ? 'Verified' : 'Edited';
-        foreach($allChanges as $storyID => $changes)
-        {
-            $actionID = $this->action->create('story', $storyID, $action);
-            $this->action->logHistory($actionID, $changes);
-        }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::locate($this->session->storyList, 'parent');
+        $response = array();
+        $response['result'] = 'success';
+        $response['load']   = false;
+        if($message) $response['callback'] = "zui.Modal.alert('{$message}').then((res) => {loadCurrentPage()});";
+        if(empty($message)) $response['load'] = true;
+        return $this->send($response);
+
     }
 
     /**
@@ -1528,7 +1384,7 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->assign($storyID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('story', $storyID, 'Assigned', $this->post->comment, $this->post->assignedTo);
@@ -1547,7 +1403,7 @@ class story extends control
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
                     $kanbanData    = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "updateKanban($kanbanData)", 'closeModal' => true));
                 }
                 elseif($from == 'taskkanban')
                 {
@@ -1556,14 +1412,14 @@ class story extends control
                     $kanbanType      = $executionLaneType == 'all' ? 'story' : key($kanbanData);
                     $kanbanData      = $kanbanData[$kanbanType];
                     $kanbanData      = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban('$executionLaneType', $kanbanData)"));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "updateKanban('$executionLaneType', $kanbanData)", 'closeModal' => true));
                 }
                 else
                 {
-                    return print(js::reload('parent.parent'));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
                 }
             }
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         /* Get story and product. */
@@ -1586,35 +1442,44 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchAssignTo($storyType = 'story')
+    public function batchAssignTo(string $storyType = 'story', string $assignedTo = '')
     {
-        if(!empty($_POST) && isset($_POST['storyIdList']))
+        if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
+
+        if(!$assignedTo) $assignedTo = $this->post->assignedTo;
+        $storyIdList = array_unique($this->post->storyIdList);
+        $oldStories  = $this->story->getByList($storyIdList);
+
+        $allChanges = $this->story->batchAssignTo($storyIdList, $assignedTo);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $ignoreStories = array();
+        $assignedTwins = array();
+        foreach($allChanges as $storyID => $changes)
         {
-            $allChanges = $this->story->batchAssignTo();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $actionID = $this->action->create('story', $storyID, 'Assigned', '', $assignedTo);
+            $this->action->logHistory($actionID, $changes);
 
-            $assignedTwins = array();
-            $oldStories       = $this->story->getByList($this->post->storyIdList);
-            foreach($allChanges as $storyID => $changes)
+            $oldStory = $oldStories[$storyID];
+            if($oldStory->status == 'closed') $ignoreStories[] = "#{$storyID}";
+
+            /* Sync twins. */
+            if(!empty($oldStory->twins))
             {
-                $actionID = $this->action->create('story', $storyID, 'Assigned', '', $this->post->assignedTo);
-                $this->action->logHistory($actionID, $changes);
-
-                /* Sync twins. */
-                if(!empty($oldStories[$storyID]->twins))
+                $twins = $oldStory->twins;
+                foreach(explode(',', $twins) as $twinID)
                 {
-                    $twins = $oldStories[$storyID]->twins;
-                    foreach(explode(',', $twins) as $twinID)
-                    {
-                        if(in_array($twinID, $this->post->storyIdList) or isset($assignedTwins[$twinID])) $twins = str_replace(",$twinID,", ',', $twins);
-                    }
-                    $this->story->syncTwins($storyID, trim($twins, ','), $changes, 'Assigned');
-                    foreach(explode(',', trim($twins, ',')) as $assignedID) $assignedTwins[$assignedID] = $assignedID;
+                    if(in_array($twinID, $storyIdList) || isset($assignedTwins[$twinID])) $twins = str_replace(",$twinID,", ',', $twins);
                 }
+                $this->story->syncTwins($storyID, trim($twins, ','), $changes, 'Assigned');
+                foreach(explode(',', trim($twins, ',')) as $assignedID) $assignedTwins[$assignedID] = $assignedID;
             }
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::locate($this->session->storyList, 'parent');
+        $this->loadModel('score')->create('ajax', 'batchOther');
+
+        $response = array('result' => 'success', 'load' => true);
+        if($ignoreStories) $response['ignoreMessage'] = sprintf($this->lang->story->ignoreClosedStory, implode(',', $ignoreStories));
+        return $this->send($response);
     }
 
     /**
@@ -1629,9 +1494,11 @@ class story extends control
     {
         $this->loadModel('task');
         $tasks = $this->task->getListByStory($storyID, $executionID);
+
         $this->view->tasks   = $tasks;
         $this->view->users   = $this->user->getPairs('noletter');
         $this->view->summary = $this->execution->summary($tasks);
+        $this->view->story   = $this->story->getById($storyID);
         $this->display();
     }
 
@@ -1646,8 +1513,10 @@ class story extends control
     public function bugs($storyID, $executionID = 0)
     {
         $this->loadModel('bug');
+
         $this->view->bugs  = $this->bug->getStoryBugs($storyID, $executionID);
         $this->view->users = $this->user->getPairs('noletter');
+        $this->view->story = $this->story->getById($storyID);
         $this->display();
     }
 
@@ -1661,9 +1530,30 @@ class story extends control
     public function cases($storyID)
     {
         $this->loadModel('testcase');
+
         $this->view->cases      = $this->testcase->getStoryCases($storyID);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->resultList = array('' => '') + $this->lang->testcase->resultList;
+        $this->view->story      = $this->story->getById($storyID);
+        $this->display();
+    }
+
+    /**
+     * URS of a story.
+     *
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @access public
+     * @return void
+     */
+    public function relation($storyID, $storyType = '')
+    {
+        $selectFields = array('id', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status');
+
+        $this->view->relation  = $this->story->getStoryRelation($storyID, $storyType, $selectFields);
+        $this->view->users     = $this->user->getPairs('noletter');
+        $this->view->storyType = $storyType;
+        $this->view->story     = $this->story->getById($storyID);
         $this->display();
     }
 
@@ -1692,8 +1582,8 @@ class story extends control
         {
             $this->story->linkStories($storyID);
 
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::closeModal('parent.parent', 'this'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'callback' => 'loadCurrentPage()', 'closeModal' => true));
         }
 
         /* Get story, product, products, and queryID. */
@@ -1754,7 +1644,7 @@ class story extends control
     public function linkStories($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get story, product, products, and queryID. */
@@ -1887,11 +1777,11 @@ class story extends control
      * @param  string $type
      * @param  bool   $hasParent
      * @param  int    $executionID
-     * @param  int    $number
+     * @param  int    $isHTML
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $executionID = 0, $number = '')
+    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $executionID = 0, $isHTML = 1)
     {
         if($moduleID)
         {
@@ -1920,8 +1810,15 @@ class story extends control
 
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
 
+        if($isHTML == 0)
+        {
+            $storyList = array();
+            foreach($stories as $storyID => $storyName) $storyList[] = array('value' => $storyID, 'text' => $storyName);
+            return $this->send($storyList);
+        }
+
         $storyID = isset($stories[$storyID]) ? $storyID : 0;
-        $select  = html::select('story' . $number, empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
+        $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
         if($onlyOption == 'true') return print(substr($select, strpos($select, '>') + 1, -10));
@@ -2366,6 +2263,6 @@ class story extends control
         $story   = $this->story->getByID($storyID);
         $stories = $this->story->getProductStoryPairs($story->product, $story->branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
-        return print html::select("duplicateStoryIDList[$storyID]", $stories, '', "class='form-control' placeholder='{$this->lang->bug->placeholder->duplicate}'");
+        return print html::select("duplicateStory[$storyID]", $stories, '', "class='form-control' placeholder='{$this->lang->bug->placeholder->duplicate}'");
     }
 }

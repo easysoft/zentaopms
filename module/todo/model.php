@@ -40,10 +40,10 @@ class todoModel extends model
         $validTodos = array();
         $assignedTo = $this->app->user->account;
 
-        for($loop = 0; $loop < $this->config->todo->batchCreateNumber; $loop++)
+        foreach($this->post->name as $loop => $name)
         {
             $isExist    = false;
-            $assignedTo = $todos->assignedTos[$loop] == 'ditto' ? $assignedTo : $todos->assignedTos[$loop];
+            $assignedTo = $todos->assignedTo[$loop];
             foreach($this->config->todo->objectList as $objects)
             {
                 if(isset($todos->{$objects}[$loop + 1]))
@@ -53,7 +53,7 @@ class todoModel extends model
                 }
             }
 
-            if($todos->names[$loop] != '' || $isExist)
+            if($name != '' || $isExist)
             {
                 $todo = $this->todoTao->getValidsOfBatchCreate($todos, $loop, $assignedTo);
                 if(dao::isError()) return false;
@@ -62,7 +62,7 @@ class todoModel extends model
             }
             else
             {
-                unset($todos->types[$loop], $todos->pris[$loop], $todos->names[$loop], $todos->descs[$loop], $todos->begins[$loop], $todos->ends[$loop]);
+                unset($todos->type[$loop], $todos->pri[$loop], $name, $todos->desc[$loop], $todos->begin[$loop], $todos->end[$loop]);
             }
         }
 
@@ -139,7 +139,7 @@ class todoModel extends model
             }
             else
             {
-                return print(js::error('todo#' . $todoID . dao::getError(true)));
+                dao::$errors[] = 'todo#' . $todoID . dao::getError(true);
             }
         }
 
@@ -327,8 +327,10 @@ class todoModel extends model
      */
     public static function isClickable(object $todo, string $action): bool
     {
+        global $app;
         $action = strtolower($action);
 
+        if($todo->private and $app->user->account != $todo->account) return false;
         if($action == 'start')    return $todo->status == 'wait' && !$todo->cycle;
         if($action == 'activate') return $todo->status == 'done' or $todo->status == 'closed';
         if($action == 'close')    return $todo->status == 'done';

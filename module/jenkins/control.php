@@ -93,21 +93,30 @@ class jenkins extends control
     }
 
     /**
+     * 删除一条jenkins数据。
      * Delete a jenkins.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function delete($id, $confim = 'no')
+    public function delete($id)
     {
-        if($confim != 'yes') return print(js::confirm($this->lang->jenkins->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
-
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('server')->eq($id)->andWhere('engine')->eq('jenkins')->andWhere('deleted')->eq('0')->fetchAll();
-        if($jobs) return print(js::alert($this->lang->jenkins->error->linkedJob));
+        if($jobs)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->jenkins->error->linkedJob);
+
+            return $this->send($response);
+        }
 
         $this->jenkins->delete(TABLE_PIPELINE, $id);
-        echo js::reload('parent');
+
+        $response['load']   = true;
+        $response['result'] = 'success';
+
+        return $this->send($response);
     }
 
     /**

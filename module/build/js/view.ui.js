@@ -1,20 +1,3 @@
-window.appendLinkBtn = function()
-{
-    $('.right-menu').find('.btn').eq(0).remove();
-
-    const tabID = $('.tab-pane.active').attr('id');
-    if(tabID == 'story')
-    {   
-        $('.right-menu').append($('.link-story')[0].outerHTML);
-    }   
-    else if(tabID == 'bug')
-    {   
-        $('.right-menu').append($('.link-bug')[0].outerHTML);
-    }   
-}
-
-window.appendLinkBtn();
-
 $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer .batch-btn', function(e)
 {
     const dtable = zui.DTable.query(e.target);
@@ -37,18 +20,54 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
 });
 
 /**
- * 移除关联的对象。
- * Remove linked object.
+ * 生成列表的排序链接。
+ * Create sort link for table.
  *
- * @param  sting objectType
- * @param  int   objectID
+ * @param  object col
  * @access public
- * @return void
+ * @return string
  */
-window.unlinkObject = function(objectType, objectID)
+window.createSortLink = function(col)
 {
-    if(window.confirm(eval(`confirmUnlink${objectType}`)))
+    let tabType = $('.tab-pane.active').attr('id');
+    let sort    = `${col.name}_asc`;
+
+    if(sort == orderBy) sort = col.name + '_desc';
+    return sortLink.replace('{type}', tabType).replace('{orderBy}', sort);
+}
+
+window.showLink = function(obj)
+{
+    var $this  = $(obj);
+    var idName = $this.data('type') == 'story' ? '#story' : '#bug';
+    $(idName).load($this.data('linkurl'));
+};
+
+$(document).on('click', '.linkObjectBtn', function()
+{
+    const $this  = $(this);
+    const type   = $this.data('type');
+    const dtable = zui.DTable.query($this);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    const postKey  = type == 'story' ? 'stories' : 'bugs';
+    const postData = new FormData();
+    checkedList.forEach(function(id)
     {
-        $.ajaxSubmit({url: eval(`unlink${objectType}URL`).replace('%s', objectID)});
-    }
+        postData.append(postKey + '[]', id)
+        if(type == 'bug')
+        {
+            var resolvedBy = $(dtable.$.base).find('.dtable-row.is-checked[data-id="' + id + '"]').find('select[name^="resolvedBy"]');
+            if(resolvedBy.length > 0) postData.append('resolvedBy[' + id + ']', resolvedBy.val());
+        }
+    });
+
+    $.ajaxSubmit({"url": $(this).data('url'), "data": postData});
+});
+
+if(initLink == 'true')
+{
+    var idName = type == 'story' ? '#story' : '#bug';
+    window.showLink($(idName).find('.link'));
 }

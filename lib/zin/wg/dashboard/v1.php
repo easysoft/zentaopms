@@ -26,8 +26,7 @@ class dashboard extends wg
      * @var    array
      * @access protected
      */
-    static $defineProps = array
-    (
+    protected static array $defineProps = array(
         'id?: string',                        // ID。
         'responsive?: bool',                  // 是否启用响应式。
         'blocks: array',                      // 区块列表。
@@ -46,7 +45,7 @@ class dashboard extends wg
 
     protected function created()
     {
-        $this->setDefaultProps(['id' => static::$dashboardID ? static::$dashboardID : 'dashboard']);
+        $this->setDefaultProps(array('id' => static::$dashboardID ? static::$dashboardID : 'dashboard'));
         static::$dashboardID++;
     }
 
@@ -55,6 +54,6 @@ class dashboard extends wg
      */
     protected function build(): wg
     {
-        return zui::dashboard(inherit($this));
+        return zui::dashboard(set($this->props->skip(array('id'))), set('_id', $this->prop('id')));
     }
 }

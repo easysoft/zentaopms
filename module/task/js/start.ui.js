@@ -5,16 +5,20 @@ $('button[type="submit"]').on('click', function()
     var consumed = parseFloat($("#consumed").val());
     if(!left)
     {
-        var result;
         if(!consumed)
         {
-            alert(noticeTaskStart);
-            result = false;
+            zui.Modal.alert(noticeTaskStart);
+            return false;
         }
         else
         {
-            result = confirm(confirmFinish);
+            const formUrl  = $('#startForm').attr('action');
+            const formData = new FormData($("#startForm")[0]);
+            zui.Modal.confirm(confirmFinish).then((res) => {
+                if(res) $.ajaxSubmit({url: formUrl, data: formData})
+            });
+
+            return false;
         }
-        if(!result) return false;
     }
 })

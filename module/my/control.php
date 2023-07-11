@@ -33,7 +33,7 @@ class my extends control
     public function index()
     {
         $this->view->title = $this->lang->my->common;
-        echo $this->fetch('block', 'dashboard', 'module=my');
+        echo $this->fetch('block', 'dashboard', 'dashboard=my');
     }
 
     /**
@@ -306,6 +306,7 @@ EOF;
             if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
             if($todo->status == 'wait')  $waitCount ++;
             if($todo->status == 'doing') $doingCount ++;
+            if($todo->date == '2030-01-01') $todo->date = $this->lang->todo->future;
         }
 
         /* Assign. */
@@ -490,7 +491,6 @@ EOF;
             $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort, $queryID);
         }
 
-        $parents = array();
         $summary = $this->loadModel('execution')->summary($tasks);
         foreach($tasks as $task)
         {
@@ -498,22 +498,16 @@ EOF;
             $task->estimateLabel = $task->estimate . $this->lang->execution->workHourUnit;
             $task->consumedLabel = $task->consumed . $this->lang->execution->workHourUnit;
             $task->leftLabel     = $task->left     . $this->lang->execution->workHourUnit;
-        }
-        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
-
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0)
+            $task->status        = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? $this->lang->my->storyChanged : $task->status;
+            if($task->parent)
             {
                 if(isset($tasks[$task->parent]))
                 {
-                    $tasks[$task->parent]->children[$task->id] = $task;
-                    unset($tasks[$task->id]);
+                    $tasks[$task->parent]->hasChild = true;
                 }
                 else
                 {
-                    $parent = $parents[$task->parent];
-                    $task->parentName = $parent->name;
+                    $task->parent = 0;
                 }
             }
         }
@@ -573,7 +567,7 @@ EOF;
         }
         else
         {
-            $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, 0, $queryID);
+            $bugs = $this->bug->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, 0, $queryID);
         }
 
         $bugs = $this->bug->batchAppendDelayedDays($bugs);
@@ -701,14 +695,29 @@ EOF;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTestCaseSearchForm($queryID, $actionURL, $currentMethod);
 
+        $failCount = 0;
+        foreach($cases as $case)
+        {
+            if($case->lastRunResult && $case->lastRunResult != 'pass') $failCount ++;
+            if($case->needconfirm)
+            {
+                $case->status = $this->lang->story->changed;
+            }
+            else if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
+            {
+                $case->status = $this->lang->testcase->changed;
+            }
+            if(!$case->lastRunResult) $case->lastRunResult = $this->lang->testcase->unexecuted;
+        }
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;
         $this->view->cases      = $cases;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';
         $this->view->type       = $type;
+        $this->view->failCount  = $failCount;
         $this->view->param      = $param;
-        $this->view->summary    = $this->testcase->summary($cases);
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
@@ -1362,93 +1371,38 @@ EOF;
      * Manage contacts.
      *
      * @param  int    $listID
-     * @param  string $mode
      * @access public
      * @return void
      */
-    public function manageContacts($listID = 0, $mode = 'new')
+    public function manageContacts(int $listID = 0)
     {
         if($_POST)
         {
-            $data = fixer::input('post')->setDefault('users', array())->get();
-            if($data->mode == 'new')
-            {
-                if(empty($data->newList))
-                {
-                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
+            if($listID)  $this->user->updateContactList($listID);
+            if(!$listID) $this->user->createContactList();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                    return $this->send($response);
-                }
-                $listID = $this->user->createContactList($data->newList, $data->users);
-                if(dao::isError())
-                {
-                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                }
-                $this->user->setGlobalContacts($listID, isset($data->share));
-                if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID&mode=edit")));
-            }
-            elseif($data->mode == 'edit')
-            {
-                $response['result']  = 'success';
-                $response['message'] = $this->lang->saveSuccess;
-
-                $this->user->updateContactList($data->listID, $data->listName, $data->users);
-                $this->user->setGlobalContacts($data->listID, isset($data->share));
-
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                    return $this->send($response);
-                }
-
-                $response['locate'] = inlink('manageContacts', "listID=$listID&mode=edit");
-                return $this->send($response);
-            }
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
         }
 
-        $mode  = empty($mode) ? 'edit' : $mode;
-        $lists = $this->user->getContactLists($this->app->user->account);
+        $list     = $listID ? $this->user->getContactListByID($listID) : null;
+        $userList = !empty($list->userList) ? $list->userList : '';
 
-        $globalContacts = isset($this->config->my->global->globalContacts) ? $this->config->my->global->globalContacts : '';
-        $globalContacts = !empty($globalContacts) ? explode(',', $globalContacts) : array();
-
-        $myContacts = $this->user->getListByAccount($this->app->user->account);
-        $disabled   = $globalContacts;
-
-        if(!empty($myContacts) && !empty($globalContacts))
+        $mode  = 'create';
+        $label = $this->lang->my->createContacts;
+        if($list)
         {
-            foreach($globalContacts as $id)
-            {
-                if(in_array($id, array_keys($myContacts))) unset($disabled[array_search($id, $disabled)]);
-            }
+            $mode  = $list->account == $this->app->user->account ? 'edit' : 'view';
+            $label = $list->account == $this->app->user->account ? $this->lang->my->manageContacts : $this->lang->my->viewContacts;
         }
 
-        $listID = $listID ? $listID : key($lists);
-
-        /* Create or manage list according to mode. */
-        if($mode == 'new')
-        {
-            $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->user->contacts->createList;
-        }
-        else
-        {
-            $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->user->contacts->manage;
-            $this->view->list       = $this->user->getContactListByID($listID);
-        }
-
-        $users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);
-        if(isset($this->config->user->moreLink)) $this->config->moreLinks['users[]'] = $this->config->user->moreLink;
-
-        $this->view->mode           = $mode;
-        $this->view->lists          = $lists;
-        $this->view->listID         = $listID;
-        $this->view->users          = $users;
-        $this->view->disabled       = $disabled;
-        $this->view->globalContacts = $globalContacts;
+        $this->view->title = $this->lang->my->common . $this->lang->colon . $label;
+        $this->view->users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $userList, $this->config->maxCount);
+        $this->view->lists = $this->user->getContactLists($this->app->user->account, '', 'list');
+        $this->view->mode  = $mode;
+        $this->view->label = $label;
+        $this->view->list  = $list;
         $this->display();
     }
 

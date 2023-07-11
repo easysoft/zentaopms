@@ -21,15 +21,16 @@ function printSystemMode()
     {
         $modes[] = cell
         (
-            set('class', 'flex-1 block mr-4 ' . ($usedMode == $mode ? 'active' : '')),
+            set('width', '50%'),
+            set('class', 'flex-1 block mr-4 ' . ($usedMode == $mode ? 'active' : 'state')),
             $usedMode != $mode && $mode == 'light' && !empty($config->programs) ? modalTrigger
             (
-                to::trigger(div
+                div
                 (
-                    set('class', 'w-full state'),
+                    set('class', 'w-full'),
                     img
                     (
-                        set('class', 'p-4'),
+                        set('class', 'p-2'),
                         set('src', $config->webRoot . "theme/default/images/guide/{$mode}_" . (common::checkNotCN() ? 'en' : 'cn') . ".png")
                     ),
                     div
@@ -38,7 +39,7 @@ function printSystemMode()
                         div(set('class', 'pb-2'), span(set('class', 'font-bold'), $modeName)),
                         span(set('class', 'text-sm text-gray'), $lang->block->customModeTip->{$mode})
                     )
-                )),
+                ),
                 set('size', '550'),
                 modal
                 (
@@ -59,10 +60,10 @@ function printSystemMode()
                         (
                             set::value($config->programID),
                             set::label($lang->custom->defaultProgram),
-                            set::name('defaultProgram'),
+                            set::name('program'),
                             set::control(array
                             (
-                                'type'  => 'select',
+                                'type'  => 'picker',
                                 'items' => $config->programs
                             ))
                         )
@@ -71,11 +72,10 @@ function printSystemMode()
             ) : div
             (
                 set('class', 'w-full mode-block'),
-                set('class', $usedMode != $mode ? 'state' : ''),
                 set('data-mode', $mode),
                 img
                 (
-                    set('class', 'p-4'),
+                    set('class', 'p-2'),
                     set('src', $config->webRoot . "theme/default/images/guide/{$mode}_" . (common::checkNotCN() ? 'en' : 'cn') . ".png")
                 ),
                 div

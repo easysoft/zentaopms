@@ -40,7 +40,7 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function set($module = 'story', $field = 'priList', $lang = '')
+    public function set(string $module = 'story', string $field = 'priList', string $lang = '')
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
         if($module == 'user' and $field == 'priList') $field = 'statusList';
@@ -206,6 +206,7 @@ class custom extends control
             }
             else
             {
+                if(!$this->post->keys) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->custom->key));
                 $lang = $_POST['lang'];
                 $oldCustoms = $this->custom->getItems("lang=$lang&module=$module&section=$field");
                 foreach($_POST['keys'] as $index => $key)
@@ -261,7 +262,7 @@ class custom extends control
                 }
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
+            return $this->sendSuccess(array('load' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
         }
 
         /* Check whether the current language has been customized. */
@@ -298,14 +299,11 @@ class custom extends control
      *
      * @param  string $module
      * @param  string $field
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function restore($module, $field, $confirm = 'no')
+    public function restore(string $module, string $field)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->custom->confirmRestore, inlink('restore', "module=$module&field=$field&confirm=yes")));
-
         if($module == 'user' and $field == 'contactField')
         {
             $this->loadModel('setting')->deleteItems("module=$module&key=$field");
@@ -314,7 +312,8 @@ class custom extends control
         {
             $this->custom->deleteItems("module=$module&section=$field");
         }
-        return print(js::reload('parent'));
+
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
@@ -342,14 +341,14 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function required($moduleName = '')
+    public function required(string $moduleName = '')
     {
         if(empty($moduleName)) $moduleName = current($this->config->custom->requiredModules);
 
         if($this->server->request_method == 'POST')
         {
             $this->custom->saveRequiredFields($moduleName);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('required', "moduleName=$moduleName")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('required', "moduleName=$moduleName")));
         }
 
         foreach($this->config->custom->requiredModules as $requiredModule) $this->app->loadLang($requiredModule);
@@ -365,8 +364,7 @@ class custom extends control
             unset($requiredFields['editlib']);
         }
 
-        $this->view->title      = $this->lang->custom->required;
-
+        $this->view->title          = $this->lang->custom->required;
         $this->view->requiredFields = $requiredFields;
         $this->view->module         = $moduleName;
         $this->display();
@@ -440,11 +438,11 @@ class custom extends control
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title      = $this->lang->custom->setStoryConcept;
-
+        if(!common::hasPriv('custom', 'setDefaultConcept')) unset($this->config->custom->browseStoryConcept->dtable->fieldList['default']);
+        $this->view->title = $this->lang->custom->setStoryConcept;
         $this->display();
     }
 
@@ -463,7 +461,7 @@ class custom extends control
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $lang = $this->app->getClientLang();
@@ -488,38 +486,30 @@ class custom extends control
     public function setDefaultConcept($key = 0)
     {
         $this->loadModel('setting')->setItem('system.custom.URSR', $key);
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => inlink('browsestoryconcept')));
     }
 
     /**
      * Delete story concept.
      *
      * @param  int    $key
-     * @param  string $confirm yse|no
      * @access public
      * @return void
      */
-    public function deleteStoryConcept($key = 0, $confirm = 'no')
+    public function deleteStoryConcept($key = 0)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('custom', 'deleteStoryConcept', "key=$key&confirm=yes"), ''));
-        }
-        else
-        {
-            $lang = $this->app->getClientLang();
-            $this->custom->deleteItems("lang=$lang&section=URSRList&key=$key");
+        $lang = $this->app->getClientLang();
+        $this->custom->deleteItems("lang=$lang&section=URSRList&key=$key");
 
-            $defaultConcept = $this->loadModel('setting')->getItem('owner=system&module=custom&key=URSR');
-            $this->dao->update(TABLE_CONFIG)
-                ->set('`value`')->eq($defaultConcept)
-                ->where('module')->eq('common')
-                ->andWhere('`key`')->eq('URSR')
-                ->andWhere('`value`')->eq($key)
-                ->exec();
+        $defaultConcept = $this->loadModel('setting')->getItem('owner=system&module=custom&key=URSR');
+        $this->dao->update(TABLE_CONFIG)
+                  ->set('`value`')->eq($defaultConcept)
+                  ->where('module')->eq('common')
+                  ->andWhere('`key`')->eq('URSR')
+                  ->andWhere('`value`')->eq($key)
+                  ->exec();
 
-            return print(js::locate(inlink('browseStoryConcept'), 'parent'));
-        }
+        return $this->send(array('result' => 'success', 'load' => inlink('browseStoryConcept')));
     }
 
     /**
@@ -533,7 +523,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem("system.common.CRExecution@{$this->config->vision}", $this->post->execution);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->title  = $this->lang->custom->executionCommon;
@@ -553,7 +543,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.CRProduct', $this->post->product);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->title      = $this->lang->custom->productName;
@@ -627,7 +617,7 @@ class custom extends control
 
             if($mode == 'light') $this->custom->processProjectAcl();
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModel' => true));
         }
 
         list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->custom->computeFeatures();
@@ -661,7 +651,7 @@ class custom extends control
             $fields = $this->post->fields;
             if(is_array($fields)) $fields = implode(',', $fields);
             $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
-            if(in_array($module, array('task', 'testcase', 'story')) and $section == 'custom' and in_array($key, array('createFields', 'batchCreateFields'))) return;
+            if(in_array($module, array('story', 'task', 'testcase')) and $section == 'custom' and in_array($key, array('createFields', 'batchCreateFields'))) return;
             if($module == 'bug' and $section == 'custom' and $key == 'batchCreateFields') return;
         }
         else
@@ -669,7 +659,7 @@ class custom extends control
             $this->loadModel('setting')->deleteItems("owner=$account&module=$module&section=$section&key=$key");
         }
 
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'callback' => 'loadCurrentPage'));
     }
 
     /**
@@ -814,16 +804,13 @@ class custom extends control
      * Reset required.
      *
      * @param  string $module
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function resetRequired($module, $confirm = 'no')
+    public function resetRequired(string $module)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->custom->confirmRestore, inlink('resetRequired', "module=$module&confirm=yes")));
-
         $this->loadModel('setting')->deleteItems("owner=system&module={$module}&key=requiredFields");
-        return print(js::reload('parent.parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -837,7 +824,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.setCode', $this->post->code);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->title = $this->lang->custom->code;
@@ -856,7 +843,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.setPercent', $this->post->percent);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->title = $this->lang->stage->percent;
@@ -909,7 +896,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.limitTaskDate', $this->post->limitTaskDate);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->title      = $this->lang->custom->beginAndEndDate;

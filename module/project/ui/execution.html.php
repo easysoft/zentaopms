@@ -16,6 +16,8 @@ jsVar('status',    $status);
 jsVar('projectID', $projectID);
 jsVar('orderBy',   $orderBy);
 jsVar('productID', $productID);
+jsVar('typeList', $lang->execution->typeList);
+jsVar('delayed', $lang->execution->delayed);
 
 $footToolbar = array();
 $canBatchEdit         = common::hasPriv('execution', 'batchEdit');
@@ -52,8 +54,8 @@ if($canBatchAction)
 /* Waterfall project use another actions. */
 $config->projectExecution->dtable->fieldList['actions']['menu'] = $config->projectExecution->dtable->fieldList['actions'][$project->model];
 
-$executions = initTableData($executionStats, $config->projectExecution->dtable->fieldList, $this->project);
-$executions = $this->execution->generateRow($executions, $users, $avatarList);
+$executions = $this->execution->generateRow($executionStats, $users, $avatarList);
+$executions = initTableData($executions, $config->projectExecution->dtable->fieldList, $this->project);
 
 /* zin: Define the feature bar on main menu. */
 $checked = $this->cookie->showTask ? 'checked' : '';
@@ -67,6 +69,7 @@ featureBar
         'closeLink' => '#'
     ]))),
     set::current($status),
+    set::linkParams("status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li(searchToggle()),
     li
     (
@@ -109,14 +112,13 @@ dtable
     set::data($executions),
     set::checkable($canBatchAction),
     set::fixedLeftWidth('44%'),
-    //set::onRenderCell(jsRaw('onRenderSparkline')),
-    //set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.isExecution == 1;}')),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::footToolbar($footToolbar),
     set::footPager(
-        usePager(),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}"))
+        usePager
+        (
+            array('linkCreator' => helper::createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}"))
+        ),
     ),
 );
 

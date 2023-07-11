@@ -581,9 +581,9 @@ class taskModel extends model
             $member->task     = $task->id;
             $member->order    = $index;
             $member->account  = $account;
-            $member->estimate = zget($teamData->teamEstimateList, $index, 0);
-            $member->consumed = isset($teamData->teamConsumedList) ? zget($teamData->teamConsumedList, $index, 0) : 0;
-            $member->left     = isset($teamData->teamLeftList) ? zget($teamData->teamLeftList, $index, 0) : 0;
+            $member->estimate = zget($teamData->teamEstimate, $index, 0);
+            $member->consumed = isset($teamData->teamConsumed) ? zget($teamData->teamConsumed, $index, 0) : 0;
+            $member->left     = isset($teamData->teamLeft) ? zget($teamData->teamLeft, $index, 0) : 0;
             $member->status   = 'wait';
             if($task->status == 'wait' && $member->estimate > 0 && $member->left == 0) $member->left = $member->estimate;
             if($task->status == 'done') $member->left = 0;
@@ -595,7 +595,7 @@ class taskModel extends model
             }
             elseif($task->status == 'doing')
             {
-                $teamSource = zget($teamData->teamSourceList, $index);
+                $teamSource = zget($teamData->teamSource, $index);
                 if(!empty($teamSource) && $teamSource != $account && isset($undoneUsers[$teamSource])) $member->transfer = $teamSource;
                 if(isset($undoneUsers[$account]) && ($mode == 'multi' || ($mode == 'linear' && $minStatus != 'wait'))) $member->status = 'doing';
             }
@@ -692,10 +692,11 @@ class taskModel extends model
      * Update a task.
      *
      * @param  object             $task
+     * @param  object             $teamData
      * @access public
      * @return array|string|false
      */
-    public function update(object $task): array|string|false
+    public function update(object $task, object $teamData): array|string|false
     {
         $taskID  = $task->id;
         $oldTask = $this->getByID($taskID);
@@ -709,7 +710,7 @@ class taskModel extends model
         /* Compute hours and manage team for multi-task. */
         if($this->post->team and count(array_filter($this->post->team)) > 1)
         {
-            $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
+            $teams = $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task, array(), false);
         }
 
@@ -789,7 +790,7 @@ class taskModel extends model
             $oldTask = zget($oldTasks, $taskID);
             $this->dao->update(TABLE_TASK)->data($task)
                 ->autoCheck()
-                ->batchCheck($this->config->task->edit->requiredFields, 'notempty')
+                ->batchCheck($this->config->task->batchedit->requiredFields, 'notempty')
                 ->checkFlow()
                 ->where('id')->eq($taskID)
                 ->exec();
@@ -821,7 +822,7 @@ class taskModel extends model
 
             $allChanges[$taskID] = $changes;
         }
-        if(!dao::isError()) $this->score->create('ajax', 'batchEdit');
+        $this->score->create('ajax', 'batchEdit');
         return $allChanges;
     }
 
@@ -1074,7 +1075,7 @@ class taskModel extends model
             $this->addTaskEffort($record);
             $effortID = $this->dao->lastInsertID();
 
-            $isFinishTask = (empty($currentTeam) && !in_array($task->status, $this->config->task->unfinishedStatus)) || (!empty($currentTeam) && $currentTeam->status != 'done');
+            $isFinishTask = (empty($currentTeam) && in_array($task->status, $this->config->task->unfinishedStatus)) || (!empty($currentTeam) && $currentTeam->status != 'done');
             /* Change the workhour and status of tasks through effort. */
             list($newTask, $actionID) = $this->taskTao->buildTaskForEffort($record, $task, (string)$lastDate, $isFinishTask);
             if($lastDate <= $record->date) $lastDate = $record->date;
@@ -1126,6 +1127,8 @@ class taskModel extends model
             ->exec();
 
         if(dao::isError()) return false;
+
+        if($currentTeam) $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
 
         if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $oldTask->id);
         return common::createChanges($oldTask, $task);
@@ -1331,7 +1334,7 @@ class taskModel extends model
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         $task->files = $this->file->getByObject('task', $taskID);
-        if($setImgSize) $task->desc = $this->file->setImgSize($task->desc);
+        if($setImgSize && $task->desc) $task->desc = $this->file->setImgSize($task->desc);
 
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
 
@@ -1805,7 +1808,7 @@ class taskModel extends model
      */
     public function deleteWorkhour($estimateID)
     {
-        $estimate = $this->getEstimateByID($estimateID);
+        $estimate = $this->getEffortByID($estimateID);
         $task     = $this->getById($estimate->objectID);
         $now      = helper::now();
 

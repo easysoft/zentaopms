@@ -286,6 +286,8 @@ class programplanTao extends programplanModel
      */
     protected function setPlan(array $plans, array &$datas, array &$stageIndex, array &$planIdList): void
     {
+        $this->app->loadLang('stage');
+
         $today       = helper::today();
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
 

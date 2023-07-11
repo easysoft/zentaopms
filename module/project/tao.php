@@ -304,7 +304,6 @@ class projectTao extends projectModel
 
         $this->app->loadConfig('product');
         $this->dao->insert(TABLE_PRODUCT)->data($product)
-            ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} and `deleted` = '0'")
             ->exec();
         if(dao::isError()) return false;

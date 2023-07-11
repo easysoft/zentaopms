@@ -27,7 +27,7 @@ class programModel extends model
      * @access public
      * @return int
      */
-    public function saveState($programID = 0, $programs = array())
+    public function saveState(int $programID = 0, array $programs = array()): int
     {
         if($programID > 0) $this->session->set('program', (int)$programID);
         if($programID == 0 and $this->cookie->lastProgram) $this->session->set('program', (int)$this->cookie->lastProgram);
@@ -38,7 +38,7 @@ class programModel extends model
             if($programID && strpos(",{$this->app->user->view->programs},", ",{$this->session->program},") === false) $this->accessDenied();
         }
 
-        return $this->session->program;
+        return (int)$this->session->program;
     }
 
     /**
@@ -954,6 +954,104 @@ class programModel extends model
         }
     }
 
+    /**
+     * Close program.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function close(int $programID) :array
+    {
+        $oldProgram = $this->getById($programID);
+        $now        = helper::now();
+
+        $program = fixer::input('post')
+            ->setDefault('status', 'closed')
+            ->setDefault('closedBy', $this->app->user->account)
+            ->setDefault('closedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->stripTags($this->config->program->editor->close['id'], $this->config->allowedTags)
+            ->remove('comment')
+            ->get();
+
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->close['id'], $this->post->uid);
+
+        $this->dao->update(TABLE_PROJECT)->data($program)
+            ->autoCheck()
+            ->checkIF($program->realEnd != '', 'realEnd', 'le', helper::today())
+            ->checkIF($program->realEnd != '', 'realEnd', 'ge', $oldProgram->realBegan)
+            ->checkFlow()
+            ->where('id')->eq((int)$programID)
+            ->exec();
+
+        return common::createChanges($oldProgram, $program);
+    }
+
+    /**
+     * Activate a program.
+     *
+     * @param  int $programID
+     * @access public
+     * @return array|false
+     */
+    public function activate(int $programID) :array|false
+    {
+        $oldProgram = $this->getByID($programID);
+        $now        = helper::now();
+
+        $program = fixer::input('post')
+            ->setDefault('realEnd','')
+            ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setIF(!helper::isZeroDate($oldProgram->realBegan), 'realBegan', helper::today())
+            ->stripTags($this->config->program->editor->activate['id'], $this->config->allowedTags)
+            ->remove('comment')
+            ->get();
+
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->activate['id'], $this->post->uid);
+        $this->dao->update(TABLE_PROJECT)->data($program)
+            ->autoCheck()
+            ->checkFlow()
+            ->where('id')->eq((int)$programID)
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        return common::createChanges($oldProgram, $program);
+    }
+
+    /**
+     * Suspend a program.
+     *
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function suspend(int $programID) :array
+    {
+        $oldProgram = $this->getByID($programID);
+        $program    = fixer::input('post')
+            ->add('id', $programID)
+            ->setDefault('status', 'suspended')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('suspendedDate', helper::today())
+            ->stripTags($this->config->program->editor->suspend['id'], $this->config->allowedTags)
+            ->remove('comment')->get();
+
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->suspend['id'], $this->post->uid);
+        $this->dao->update(TABLE_PROJECT)->data($program)
+            ->autoCheck()
+            ->checkFlow()
+            ->where('id')->eq((int)$programID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldProgram, $program);
+    }
+
     /*
      * Get program swapper.
      *
@@ -1060,7 +1158,7 @@ class programModel extends model
      */
     public function getLink($moduleName, $methodName, $programID, $vars = '', $from = 'program')
     {
-        if($from != 'program') return helper::createLink('product', 'all', "programID=$programID" . $vars);
+        if($from != 'program') return helper::createLink('product', 'all', "programID={$programID}" . $vars);
 
         if($moduleName == 'project')
         {
@@ -1073,7 +1171,7 @@ class programModel extends model
             $methodName = 'product';
         }
 
-        return helper::createLink($moduleName, $methodName, "programID=$programID");
+        return helper::createLink($moduleName, $methodName, "programID={$programID}");
     }
 
     /**
@@ -1236,8 +1334,9 @@ class programModel extends model
         if(!isset($program->type)) return true;
 
         if($action == 'close')    return $program->status != 'closed';
-        if($action == 'activate') return $program->status == 'done' or $program->status == 'closed';
-        if($action == 'suspend')  return $program->status == 'wait' or $program->status == 'doing';
+        if($action == 'activate') return $program->status == 'done' || $program->status == 'closed';
+        if($action == 'suspend')  return $program->status == 'wait' || $program->status == 'doing';
+        if($action == 'start')    return $program->status == 'wait' || $program->status == 'suspended';
 
         return true;
     }
@@ -1446,7 +1545,7 @@ class programModel extends model
      */
     public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false)
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStats($browseType);
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
         /* Init vars. */
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
@@ -1616,7 +1715,7 @@ class programModel extends model
                 $menu .= "<div class='btn-group'>";
                 $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program", $program, $type, 'link', '', 'btn-action', '', "data-app='project'" . ($program->hasProduct ? '' : " disabled='disabled'"));
+                $menu .= $this->buildMenu('project', 'manageProducts', $params, $program, $type, 'link', '', 'btn-action', '', "data-app='project'" . ($program->hasProduct ? '' : " disabled='disabled'"));
 
                 $disabledWhitelist = $program->acl == 'open' ? " disabled='disabled' style='pointer-events: none;'" : '';
                 $menu             .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=browse", $program, $type, 'shield-check', '', 'btn-action', '', "data-app='project'" . $disabledWhitelist);
@@ -1732,157 +1831,40 @@ class programModel extends model
      */
     public function buildActions($program)
     {
-        $this->loadModel('project');
+        if($program->type == 'program') return $this->programTao->buildProgramActionsMap($program);
+        if($program->type == 'project') return $this->programTao->buildProjectActionsMap($program);
+        return array();
+    }
 
-        $actionsMap         = array();
-        $canStartProgram    = common::hasPriv('program', 'start');
-        $canSuspendProgram  = common::hasPriv('program', 'suspend');
-        $canCloseProgram    = common::hasPriv('program', 'close');
-        $canActivateProgram = common::hasPriv('program', 'activate');
-        $canStartProject    = common::hasPriv('project', 'start');
-        $canSuspendProject  = common::hasPriv('project', 'suspend');
-        $canCloseProject    = common::hasPriv('project', 'close');
-        $canActivateProject = common::hasPriv('project', 'activate');
-
-        if($program->type == 'program' && strpos(",{$this->app->user->view->programs},", ",$program->id,") !== false)
+    /**
+     * Build tree for dropmenu.
+     *
+     * @param  array  $programs
+     * @param  int    $parentID
+     * @access public
+     * @return void
+     */
+    public function buildTree($programs, $parentID = 0)
+    {
+        $result = array();
+        foreach($programs as $program)
         {
-            $normalActions = array('start', 'close', 'activate');
-            foreach($normalActions as $action)
+            if($program->type != 'program') continue;
+
+            if($program->parent == $parentID)
             {
-                if($action == 'start' and (!$canStartProgram or ($program->status != 'wait' and $program->status != 'suspended'))) continue;
-                if($action == 'close' and (!$canCloseProgram or $program->status != 'doing')) continue;
-                if($action == 'activate' and (!$canActivateProgram or $program->status != 'closed')) continue;
-                $item = new stdclass();
-                $item->name = $action;
-                $item->hint = $this->lang->program->$action;
+                $itemArray = array
+                    (
+                        'id'    => $program->id,
+                        'text'  => $program->name,
+                        'keys'  => zget(common::convert2Pinyin(array($program->name)), $program->name, ''),
+                        'items' => $this->buildTree($programs, $program->id)
+                    );
 
-                $actionsMap[] = $item;
-            }
-
-            $canCloseCurrentProgram    = $canCloseProgram && $program->status != 'doing';
-            $canActivateCurrentProgram = $canActivateProgram && $program->status != 'closed';
-            if($canSuspendProgram or $canCloseCurrentProgram or $canActivateCurrentProgram)
-            {
-                $other = new stdclass();
-                $other->name  = 'other';
-                $other->items = array();
-
-                $otherActions = array('suspend', 'close', 'activate');
-                foreach($otherActions as $action)
-                {
-                    if($action == 'close' and $program->status == 'doing') continue;
-                    if(!common::hasPriv('program', $action)) continue;
-
-                    $item = new stdclass();
-                    $item->name = $action;
-                    $item->text = $this->lang->program->$action;
-                    if(!$this->isClickable($program, $action)) $item->disabled = true;
-                    if($action == 'close' and $program->status == 'closed')      $item->hint = $this->lang->program->tip->closed;
-                    if($action == 'suspend' and $program->status == 'closed')    $item->hint = $this->lang->program->tip->notSuspend;
-                    if($action == 'suspend' and $program->status == 'suspended') $item->hint = $this->lang->program->tip->suspended;
-                    if($action == 'activate' and $program->status == 'doing')    $item->hint = $this->lang->program->tip->actived;
-
-                    $other->items[] = $item;
-                }
-
-                $actionsMap[] = $other;
-            }
-
-            $normalActions = array('edit', 'create', 'delete');
-            foreach($normalActions as $action)
-            {
-                if(!common::hasPriv('program', $action)) continue;
-                $item = new stdclass();
-                $item->name = $action;
-                $item->hint = $this->lang->program->$action;
-                if($action == 'create' and $program->status == 'closed')
-                {
-                    $item->disabled = true;
-                    $item->hint     = $this->lang->program->tip->notCreate;
-                }
-
-                $actionsMap[] = $item;
+                if(empty($itemArray['items'])) unset($itemArray['items']);
+                $result[] = $itemArray;
             }
         }
-        elseif($program->type == 'project')
-        {
-            $normalActions = array('start', 'close', 'activate');
-            foreach($normalActions as $action)
-            {
-                if($action == 'start' and (!$canStartProject or ($program->status != 'wait' and $program->status != 'suspended'))) continue;
-                if($action == 'close' and (!$canCloseProject or $program->status != 'doing')) continue;
-                if($action == 'activate' and (!$canActivateProgram or $program->status != 'closed')) continue;
-                $item = new stdclass();
-                $item->name = $action;
-                $item->hint = $this->lang->project->$action;
-
-                $actionsMap[] = $item;
-            }
-            if($canSuspendProject or ($canCloseProject and $program->status != 'doing') or ($canActivateProject and $program->status != 'closed'))
-            {
-                $other = new stdclass();
-                $other->name  = 'other';
-                $other->items = array();
-
-                $otherActions = array('suspend', 'close', 'activate');
-                foreach($otherActions as $action)
-                {
-                    if($action == 'close' and $program->status == 'doing') continue;
-                    if(!common::hasPriv('project', $action)) continue;
-
-                    $item = new stdclass();
-                    $item->name = $action;
-                    $item->text = $this->lang->project->$action;
-                    if(!$this->project->isClickable($program, $action)) $item->disabled = true;
-                    if($action == 'close' and $program->status == 'closed')      $item->hint = $this->lang->project->tip->closed;
-                    if($action == 'suspend' and $program->status == 'closed')    $item->hint = $this->lang->project->tip->notSuspend;
-                    if($action == 'suspend' and $program->status == 'suspended') $item->hint = $this->lang->project->tip->suspended;
-                    if($action == 'activate' and $program->status == 'doing')    $item->hint = $this->lang->project->tip->actived;
-
-                    $other->items[] = $item;
-                }
-
-                $actionsMap[] = $other;
-            }
-            if(common::hasPriv('project', 'edit')) $actionsMap[] = 'edit';
-            if(common::hasPriv('project', 'team')) $actionsMap[] = 'team';
-            if(common::hasPriv('project', 'group'))
-            {
-                $item = new stdclass();
-                $item->name = 'group';
-                if($program->model == 'kanban')
-                {
-                    $item->disabled = true;
-                    $item->hint     = $this->lang->project->tip->group;
-                }
-                $actionsMap[] = $item;
-            }
-
-            if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
-            {
-                $more = new stdclass();
-                $more->name  = 'more';
-                $more->items = array();
-                $moreActions = array('manageProducts', 'whitelist', 'delete');
-                foreach($moreActions as $action)
-                {
-                    if(!common::hasPriv('project', $action)) continue;
-
-                    $item = new stdclass();
-                    $item->name = $action == 'manageProducts' ? 'link' : $action;
-                    $item->text = $this->lang->project->$action;
-                    if($action == 'whitelist' and $program->acl == 'open')
-                    {
-                        $item->disabled = true;
-                        $item->hint     = $this->lang->project->tip->whitelist;
-                    }
-
-                    $more->items[] = $item;
-                }
-
-                $actionsMap[] = $more;
-            }
-        }
-        return $actionsMap;
+        return $result;
     }
 }

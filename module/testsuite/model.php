@@ -51,24 +51,15 @@ class testsuiteModel extends model
     }
 
     /**
+     * 创建一个测试套件。
      * Create a test suite.
      *
-     * @param  int   $productID
+     * @param  object   $suite
      * @access public
      * @return bool|int
      */
-    public function create($productID)
+    public function create(object $suite): int|false
     {
-        $suite = fixer::input('post')
-            ->trim('name')
-            ->stripTags($this->config->testsuite->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->lang->navGroup->testsuite != 'qa', 'project', $this->session->project)
-            ->add('product', (int)$productID)
-            ->add('addedBy', $this->app->user->account)
-            ->add('addedDate', helper::now())
-            ->remove('uid')
-            ->get();
-        $suite = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTSUITE)->data($suite)
             ->batchcheck($this->config->testsuite->create->requiredFields, 'notempty')
             ->checkFlow()
@@ -76,7 +67,7 @@ class testsuiteModel extends model
         if(!dao::isError())
         {
             $suiteID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $suiteID, 'testsuite');
+            $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
             return $suiteID;
         }
         return false;

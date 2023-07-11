@@ -26,6 +26,7 @@ jsVar('defaultType', '');
 jsVar('userAccount', $app->user->account);
 jsVar('defaultDate', date('Y-m-d'));
 
+$isInModal = isInModal();
 $cycleTypeOptions = array(
     array('text' => $lang->todo->cycleDay,   'value' => 'day'),
     array('text' => $lang->todo->cycleWeek,  'value' => 'week'),
@@ -53,62 +54,45 @@ formPanel
                 array(
                     'label' => $lang->todo->date,
                     'class' => 'items-center',
-                    'width' => '1/3'
+                    'width' => $isInModal ? '3/5' : '1/3'
                 )
             ),
             inputGroup
             (
-                setClass('input-control has-suffix'),
+                set::seg(true),
                 control
                 (
-                    set
-                    (
-                        array(
-                            'name'  => 'date',
-                            'class' => 'date',
-                            'value' => date('Y-m-d'),
-                            'type'  => 'date',
-                            'width' => '1/4'
-                        )
-                    ),
-                    on::change('changeCreateDate(this)')
+                    set::id('date'),
+                    set::name('date'),
+                    set::class('date'),
+                    set::value('today'),
+                    set::type('date'),
+                    on::change('changeCreateDate')
                 ),
-                div
-                (
-                    setClass('input-control-suffix opacity-100 bg-white z-10'),
+                div(
+                    setClass('input-group-addon'),
                     checkbox
                     (
-                        set
-                        (
-                            array(
-                                'id'    => 'switchDate',
-                                'name'  => 'switchDate',
-                                'text'  => $lang->todo->periods['future'],
-                                'width' => '100px'
-                            )
-                        ),
-                        on::change('togglePending(this)')
+                        set::id('switchDate'),
+                        set::name('switchDate'),
+                        set::text($lang->todo->periods['future']),
+                        set::class($lang->todo->periods['future']),
+                        on::change("zui.DatePicker.query('#date').render({disabled: e.target.checked})")
+                    )
+                ),
+                div(
+                    setClass('input-group-addon'),
+                    checkbox
+                    (
+                        set::id('cycle'),
+                        set::id('cycle'),
+                        set::value('1'),
+                        set::text($lang->todo->cycle),
+                        on::change('toggleCycle')
                     )
                 )
             )
         ),
-        formGroup
-        (
-            setClass('items-center ml-4'),
-            checkbox
-            (
-                set
-                (
-                    array(
-                        'id'    => 'cycle',
-                        'name'  => 'cycle',
-                        'value' => 1,
-                        'text'  => $lang->todo->cycle
-                    )
-                ),
-                on::change('toggleCycle(this)')
-            )
-        )
     ),
     formRow
     (
@@ -138,34 +122,25 @@ formPanel
         setClass('cycle-config cycle-type-detail type-day hidden'),
         formGroup
         (
-            set
-            (
-                array(
-                    'label'    => $lang->todo->cycleConfig,
-                    'required' => true,
-                    'width'    => '1/3'
-                )
-            ),
+            set::label($lang->todo->cycleConfig),
+            set::required(true),
+            set::width('9/24'),
             inputGroup
             (
                 setClass('have-fix'),
-                span
+                inputGroupAddon
                 (
-                    setClass('input-group-addon justify-center'),
+                    setClass('justify-center'),
                     $lang->todo->from
                 ),
-                input
+                control
                 (
-                    set
-                    (
-                        array(
-                            'class' => 'cycle-date',
-                            'name'  => 'config[date]',
-                            'type'  => 'date'
-                        )
-                    ),
-                    on::blur('verifyCycleDate(this)')
-                )
+                    set::type('date'),
+                    set::id('configDate'),
+                    set::name('config[date]'),
+                    set::class('cycle-date'),
+                    on::change("e.target.closest('.input-group').classList.toggle('has-error', !e.target.value)")
+                ),
             )
         ),
         formGroup
@@ -196,7 +171,7 @@ formPanel
                 array(
                     'label'    => $lang->todo->cycleConfig,
                     'required' => true,
-                    'width'    => '1/2'
+                    'width'    => $isInModal ? '3/5' : '1/3'
                 )
             ),
             inputGroup
@@ -234,7 +209,7 @@ formPanel
                     'label'    => $lang->todo->cycleConfig,
                     'required' => true,
                     'class'    => 'have-fix',
-                    'width'    => '1/2'
+                    'width'    => $isInModal ? '3/5' : '1/3'
                 )
             ),
             inputGroup
@@ -271,7 +246,7 @@ formPanel
                     'label'    => $lang->todo->cycleConfig,
                     'required' => true,
                     'class'    => 'have-fix',
-                    'width'    => '1/2'
+                    'width'    => $isInModal ? '3/5' : '1/3'
                 )
             ),
             inputGroup
@@ -294,7 +269,7 @@ formPanel
                             'value'    => 0
                         )
                     ),
-                    on::change('setDays(this.value)')
+                    on::change('setDays')
                 ),
                 select
                 (
@@ -323,7 +298,7 @@ formPanel
                 array(
                     'label' => $lang->todo->generate,
                     'class' => 'have-fix highlight-suffix',
-                    'width' => '1/3'
+                    'width' => $isInModal ? '3/5' : '1/3'
                 )
             ),
             inputControl
@@ -350,102 +325,51 @@ formPanel
         setClass('cycle-config hidden'),
         formGroup
         (
-            set
-            (
-                array(
-                    'label'  => $lang->todo->deadline,
-                    'width'  => '1/3'
-                )
-            ),
-            input
-            (
-                set
-                (
-                    array(
-                        'type' => 'date',
-                        'name' => 'config[end]'
-                    )
-                )
-            )
+            set::label($lang->todo->deadline),
+            set::width($isInModal ? '3/5' : '1/3'),
+            set::type('date'),
+            set::name('config[end]'),
         )
     ),
     formGroup
     (
-        set
-        (
-            array(
-                'label' => $lang->todo->type,
-                'width' => '1/3',
-            )
-        ),
-        select
-        (
-            set
-            (
-                array(
-                    'name'     => 'type',
-                    'items'    => $lang->todo->typeList,
-                    'required' => true
-                )
-            )
-        ),
-        on::change('changeType(this)'),
+        set::label($lang->todo->type),
+        set::width($isInModal ? '3/5' : '1/3'),
+        set::items($lang->todo->typeList),
+        set::name('type'),
+        set::required(true),
+        on::change("loadList(e.target.value, '');"),
     ),
     formRow
     (
         formGroup
         (
-            set
-            (
-                array(
-                    'width' => '1/3',
-                    'label' => $lang->todo->assignTo
-                )
-            ),
-            select
-            (
-                set
-                (
-                    array(
-                        'required' => true,
-                        'items'    => $users,
-                        'value'    => $app->user->account,
-                        'id'       => 'assignedTo',
-                        'name'     => 'assignedTo'
-                    )
-                ),
-                on::change('changeAssignedTo()')
-            )
+            set::width('1/3'),
+            set::label($lang->todo->assignTo),
+            set::required(true),
+            set::items($users),
+            set::value($app->user->account),
+            set::name('assignedTo'),
+            on::change("$('#private').prop('disabled', e.target.value !== '{$app->user->account}');"),
         ),
         formGroup
         (
             setClass('items-center ml-4'),
             checkbox
             (
-                set
-                (
-                    array(
-                        'id'    => 'private',
-                        'name'  => 'private',
-                        'text'  => $lang->todo->private,
-                        'value' => 1
-                    )
-                ),
-                on::change('togglePrivate(this)')
+                set::name('private'),
+                set::id('private'),
+                set::text($lang->todo->private),
+                set::value(1),
+                on::change("zui.Picker.query('#assignedTo').render({disabled: e.target.checked})")
             ),
             btn
             (
-                set
-                (
-                    array(
-                        'icon'           => 'help',
-                        'data-toggle'    => 'tooltip',
-                        'data-placement' => 'top-start',
-                        'href'           => 'privateTip',
-                        'square'         => true,
-                        'class'          => 'ghost h-6 mt-0.5 tooltip-btn'
-                    )
-                )
+                set::icon('help'),
+                toggle::tooltip(array('placement' => 'top-start')),
+                set::href('privateTip'),
+                set::square(true),
+                set::class('ghost h-6 mt-0.5 tooltip-btn'),
             ),
             div
             (
@@ -459,82 +383,42 @@ formPanel
     (
         formGroup
         (
-            set
-            (
-                array(
-                    'id'       => 'nameBox',
-                    'class'    => 'name-box',
-                    'required' => true,
-                    'label'    => $lang->todo->name
-                )
-            ),
-            inputGroup
-            (
-                setClass('title-group'),
-                div
-                (
-                    setID('nameInputBox'),
-                    input
-                    (
-                        setID('name'),
-                        set::name('name')
-                    )
-                ),
-                div
-                (
-                    setClass('input-group-addon pl-4 bg-white fix-border br-0'),
-                    $lang->todo->pri
-                ),
-                select
-                (
-                    set
-                    (
-                        array(
-                            'class'    => 'w-20',
-                            'id'       => 'pri',
-                            'name'     => 'pri',
-                            'items'    => $lang->todo->priList,
-                            'required' => true,
-                            'value'    => 3
-                        )
-                    )
-                )
-            )
-        )
-    ),
-    formGroup
-    (
-        set
-        (
-            array(
-                'name'  => 'desc',
-                'type'  => 'editor',
-                'label' => $lang->todo->desc,
-                'value' => isset($desc) ? $desc : ''
-            )
-        )
-    ),
-    formGroup
-    (
-        set
-        (
-            array(
-                'width' => '1/3',
-                'label' => $lang->todo->status,
-            )
+            set::id('nameBox'),
+            set::class('name-box'),
+            set::required(true),
+            set::label($lang->todo->name),
+            set::name('name')
         ),
-        select
+        formGroup
         (
-            set
-            (
-                array(
-                    'id'       => 'status',
-                    'name'     => 'status',
-                    'items'    => $lang->todo->statusList,
-                    'required' => true
-                )
-            )
+            set::label($lang->todo->pri),
+            set::labelWidth('80px'),
+            set::name('pri'),
+            set::width(40),
+            set::required(true),
+            set::value(3),
+            set::control('pri')
         )
+    ),
+    formGroup
+    (
+        set::label($lang->todo->desc),
+        control
+        (
+            set::name('desc'),
+            set::type('editor'),
+            set::value(isset($desc) ? $desc : ''),
+            set::rows('5')
+        )
+    ),
+    formGroup
+    (
+        set::width('1/3'),
+        set::label($lang->todo->status),
+        set::id('status'),
+        set::name('status'),
+        set::items($lang->todo->statusList),
+        set::required(true)
     ),
     formRow
     (
@@ -542,7 +426,7 @@ formPanel
         formGroup
         (
             set::label($lang->todo->beginAndEnd),
-            set::width('1/3'),
+            set::width('1/2'),
             inputGroup
             (
                 select

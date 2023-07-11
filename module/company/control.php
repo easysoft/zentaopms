@@ -82,8 +82,8 @@ class company extends control
         /* Assign. */
         $this->view->title       = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
         $this->view->users       = $users;
-        $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
-        $this->view->deptTree    = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink'));
+        // $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
+        $this->view->deptTree    = $this->dept->getTreeMenu(0, array('deptModel', 'createMemberLink'));
         $this->view->parentDepts = $this->dept->getParents($deptID);
         $this->view->dept        = $this->dept->getById($deptID);
         $this->view->orderBy     = $orderBy;
@@ -113,6 +113,7 @@ class company extends control
     }
 
     /**
+     * 编辑公司信息。
      * Edit a company.
      *
      * @access public
@@ -122,23 +123,30 @@ class company extends control
     {
         if(!empty($_POST))
         {
-            $this->company->update();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            /* Init company data. */
+            $company = form::data($this->config->company->form->edit)
+                ->stripTags('name')
+                ->setIF($this->post->website == 'http://', 'website', '')
+                ->setIF($this->post->backyard == 'http://', 'backyard', '')
+                ->get();
 
-            /* reset company in session. */
+            /* Update company. */
+            $this->company->update($company);
+
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            /* Reset company in session. */
             $company = $this->loadModel('company')->getFirst();
             $this->session->set('company', $company);
 
-            return print(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
+        /* Set menu. */
         $this->company->setMenu();
-        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
-        $position[] = $this->lang->company->edit;
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->company  = $this->company->getById($this->app->company->id);
 
+        $this->view->title    = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
+        $this->view->company  = $this->company->getById($this->app->company->id);
         $this->display();
     }
 

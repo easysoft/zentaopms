@@ -27,7 +27,7 @@ class productZen extends product
         /* Set activated menu for mobile view. */
         if($this->app->viewType == 'mhtml')
         {
-            $productID = $this->saveVisitState(0, $this->products);
+            $productID = $this->saveState(0, $this->products);
             $this->product->setMenu($productID);
         }
     }
@@ -110,7 +110,7 @@ class productZen extends product
 
         if($projectID) return $this->loadModel('project')->setMenu($projectID);
 
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
         $this->product->setMenu($productID, $branch);
     }
 
@@ -500,23 +500,6 @@ class productZen extends product
     }
 
     /**
-     * Get project PM List
-     *
-     * @param  array     $projectStats
-     * @access protected
-     * @return string[]
-     */
-    protected function getPMList(array $projectStats): array
-    {
-        $accounts = array();
-        foreach($projectStats as $project) $accounts[] = $project->PM;
-        $accounts = array_filter(array_unique($accounts));
-
-        if(empty($accounts)) return array();
-        return $this->user->getListByAccounts($accounts, 'account');
-    }
-
-    /**
      * 创建完成后，做页面跳转。
      * Locate after create product.
      *
@@ -668,7 +651,7 @@ class productZen extends product
             if(empty($name)) continue;
             if($this->config->systemMode == 'ALM' and empty($data->programs[$id]))
             {
-                dao::$errors[] = $this->lang->product->programEmpty;
+                dao::$errors["programs[{$id}]"] = $this->lang->product->programEmpty;
                 return false;
             }
 
@@ -676,7 +659,7 @@ class productZen extends product
             if(!isset($lines[$programID])) $lines[$programID] = array();
             if(in_array($name, $lines[$programID]))
             {
-                dao::$errors[] = sprintf($this->lang->product->nameIsDuplicate, $name);
+                dao::$errors["modules[$id]"] = sprintf($this->lang->product->nameIsDuplicate, $name);
                 return false;
             }
             $lines[$programID][$id] = $name;
@@ -855,7 +838,7 @@ class productZen extends product
         if($browseType == 'bymodule') return $param;
 
         $cookieModule = $this->app->tab == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
-        if($browseType != 'bysearch' && $browseType != 'bybranch' && $cookieModule) return $cookieModule;
+        if($browseType != 'bysearch' && $browseType != 'bybranch' && $cookieModule) return (int)$cookieModule;
 
         return 0;
     }
@@ -888,7 +871,7 @@ class productZen extends product
 
         /* If invoked by projectstory module and not choose product, then get the modules of project story. */
         if(!isset($this->tree)) $this->loadModel('tree');
-        if(empty($productID) && $this->app->rawModule == 'projectstory')
+        if(!empty($projectID) && $this->app->rawModule == 'projectstory')
         {
             return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
         }
@@ -897,8 +880,7 @@ class productZen extends product
         $userFunc = array('treeModel', $createModuleLink);
         $extra    = array('projectID' => $projectID, 'productID' => $productID);
 
-        /* return $this->tree->getTreeMenu($productID, 'story', 0, $userFunc, $extra, $branch, "&param=$param&storyType=$storyType"); */
-        return $this->product->getModuleTree($productID, $branch, $userFunc, $extra);
+        return $this->tree->getTreeMenu($productID, 'story', 0, $userFunc, $extra, $branch, "&param=$param&storyType=$storyType");
     }
 
     /**
@@ -982,7 +964,7 @@ class productZen extends product
         /* Get stories. */
         if($isProjectStory and $storyType == 'story')
         {
-            $this->products  = $this->product->getProducts($projectID, 'all', '', false);
+            $this->products = $this->product->getProducts($projectID, 'all', '', false);
 
             if($browseType == 'bybranch') $param = $branchID;
             $stories = $this->story->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, $storyType, '', $pager);
@@ -1057,14 +1039,14 @@ class productZen extends product
      * 保存需求页面session变量。
      * Save session variables for browse page.
      *
-     * @param  object  $product
-     * @param  string  $storyType
-     * @param  string  $browseType
-     * @param  bool    $isProjectStory
+     * @param  object|null $product
+     * @param  string      $storyType
+     * @param  string      $browseType
+     * @param  bool        $isProjectStory
      * @access protected
      * @return void
      */
-    protected function saveSession4Browse(object $product, string $storyType, string $browseType, bool $isProjectStory): void
+    protected function saveSession4Browse(object|null $product, string $storyType, string $browseType, bool $isProjectStory): void
     {
         $uri = $this->app->getURI(true);
 

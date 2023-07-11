@@ -17,9 +17,9 @@ class groupModel extends model
      * Create a group.
      *
      * @access public
-     * @return bool
+     * @return int|false
      */
-    public function create()
+    public function create(): int|false
     {
         $group = fixer::input('post')->get();
         if(isset($group->limited))
@@ -28,7 +28,12 @@ class groupModel extends model
             $group->role = 'limited';
         }
         $this->lang->error->unique = $this->lang->group->repeat;
-        $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->check('name', 'unique')->exec();
+        $this->dao->insert(TABLE_GROUP)->data($group)
+            ->batchCheck($this->config->group->create->requiredFields, 'notempty')
+            ->check('name', 'unique')
+            ->exec();
+        if(dao::isError()) return false;
+
         $groupID = $this->dao->lastInsertId();
 
         $data         = new stdclass();
@@ -45,13 +50,19 @@ class groupModel extends model
      *
      * @param  int    $groupID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($groupID)
+    public function update(int $groupID): bool
     {
         $group = fixer::input('post')->get();
         $this->lang->error->unique = $this->lang->group->repeat;
-        return $this->dao->update(TABLE_GROUP)->data($group)->batchCheck($this->config->group->edit->requiredFields, 'notempty')->check('name', 'unique', "id != {$groupID}")->where('id')->eq($groupID)->exec();
+        $this->dao->update(TABLE_GROUP)->data($group)
+            ->batchCheck($this->config->group->edit->requiredFields, 'notempty')
+            ->check('name', 'unique', "id != {$groupID}")
+            ->where('id')->eq($groupID)
+            ->exec();
+
+        return !dao::isError();
     }
 
     /**
@@ -59,21 +70,21 @@ class groupModel extends model
      *
      * @param  int    $groupID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function copy($groupID)
+    public function copy(int $groupID): bool
     {
         $group = fixer::input('post')->remove('options')->get();
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)->check('name', 'unique')->check('name', 'notempty')->exec();
-        if($this->post->options == false) return;
-        if(!dao::isError())
-        {
-            $newGroupID = $this->dao->lastInsertID();
-            $options    = join(',', $this->post->options);
-            if(strpos($options, 'copyPriv') !== false) $this->copyPriv($groupID, $newGroupID);
-            if(strpos($options, 'copyUser') !== false) $this->copyUser($groupID, $newGroupID);
-        }
+        if(dao::isError()) return false;
+
+        if(!$this->post->options) return true;
+
+        $newGroupID = $this->dao->lastInsertID();
+        if(in_array('copyPriv', $this->post->options)) $this->copyPriv($groupID, $newGroupID);
+        if(in_array('copyUser', $this->post->options)) $this->copyUser($groupID, $newGroupID);
+        return true;
     }
 
     /**

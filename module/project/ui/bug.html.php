@@ -10,10 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type={key}" . ($type == 'bysearch' ? '' : "&param=$param");
 featureBar
 (
     set::current($type),
-    set::linkParams("project={$project->id}&product={$productID}&branch={$branchID}&orderBy=status,id_desc&build={$buildID}&type={key}&param={$param}"),
+    set::linkParams($linkParams),
     li(searchToggle())
 );
 
@@ -47,36 +48,25 @@ sidebar
     )))
 );
 
-$this->bug->buildOperateMenu(null, 'browse');
+$canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 
-foreach($bugs as $bug)
+$config->bug->dtable->fieldList['module']['map']    = $modulePairs;
+$config->bug->dtable->fieldList['product']['map']   = $products;
+$config->bug->dtable->fieldList['story']['map']     = $stories;
+$config->bug->dtable->fieldList['task']['map']      = $tasks;
+$config->bug->dtable->fieldList['toTask']['map']    = $tasks;
+$config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
+$config->bug->dtable->fieldList['project']['map']   = $projectPairs;
+$config->bug->dtable->fieldList['execution']['map'] = $executions;
+
+foreach($config->bug->dtable->fieldList as $fieldCode => $fieldInfo)
 {
-    $bug->productName = zget($products, $bug->product);
-    $bug->storyName   = zget($stories, $bug->story);
-    $bug->taskName    = zget($tasks, $bug->task);
-    $bug->toTaskName  = zget($tasks, $bug->toTask);
-    $bug->module      = zget($modulePairs, $bug->module);
-    $bug->branch      = zget($branchTagOption, $bug->branch);
-    $bug->project     = zget($projectPairs, $bug->project);
-    $bug->execution   = zget($executions, $bug->execution);
-    $bug->type        = zget($lang->bug->typeList, $bug->type);
-    $bug->confirmed   = zget($lang->bug->confirmedList, $bug->confirmed);
-    $bug->resolution  = zget($lang->bug->resolutionList, $bug->resolution);
-    $bug->os          = zget($lang->bug->osList, $bug->os);
-    $bug->browser     = zget($lang->bug->browserList, $bug->browser);
-
-    $actions = array();
-    foreach($this->config->bug->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
-    {
-        $isClickable = $this->bug->isClickable($bug, $actionCode);
-
-        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
-    }
-    $bug->actions = $actions;
+    if(!$project->hasProduct && (($project->model != 'scrum' && $fieldCode == 'plan') || $fieldCode == 'branch')) unset($config->bug->dtable->fieldList[$fieldCode]);
 }
 
-$cols = array_values($config->bug->dtable->fieldList);
-$data = array_values($bugs);
+if(!$canBatchAssignTo) $config->bug->dtable->fieldList['id']['type'] = 'id';
+
+foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
 
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value) $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
@@ -88,26 +78,25 @@ menu
     set::items($assignedToItems)
 );
 
-$footToolbar = array('items' => array
+$footToolbar = $canBatchAssignTo ? array('items' => array
 (
     array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'btnType' => 'secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top'),
-));
+)) : null;
+
+$cols = $this->loadModel('datatable')->getSetting('project');
+$bugs = initTableData($bugs, $cols, $this->bug);
 
 dtable
 (
-    set::userMap($users),
     set::cols($cols),
-    set::data($data),
-    set::checkable(true),
+    set::data(array_values($bugs)),
+    set::userMap($users),
+    set::customCols(true),
     set::footToolbar($footToolbar),
-    set::footPager
-    (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('project', 'bug', "projectID={$project->id}&product={$productID}&branch={$branchID}&orderBy=$orderBy&build={$buildID}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
-    ),
+    set::checkable($canBatchAssignTo),
+    set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
+    set::footToolbar($footToolbar),
+    set::footPager(usePager()),
 );
 
 render();

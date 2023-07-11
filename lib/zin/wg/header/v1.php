@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'heading' . DS . 'v1.php';
@@ -8,17 +9,21 @@ require_once dirname(__DIR__) . DS . 'useravatar' . DS . 'v1.php';
 
 class header extends wg
 {
-    static $defineBlocks = array(
-        'heading' => array('map' => 'toolbar'),
-        'navbar'  => array('map' => 'nav'),
-        'toolbar' => array('map' => 'btn')
+    protected static array $defineBlocks = array
+    (
+        'heading'         => array('map' => 'heading'),
+        'headingToolbar'  => array('map' => 'toolbar'),
+        'dropmenu'        => array('map' => 'dropmenu'),
+        'navbar'          => array('map' => 'nav'),
+        'toolbar'         => array('map' => 'btn')
     );
 
     protected function buildHeading()
     {
-        $heading = $this->block('heading');
-        if(empty($heading)) $heading = new heading();
-        return $heading;
+        if($this->hasBlock('heading')) return $this->block('heading');
+        $headingToolbar = $this->block('headingToolbar');
+        $dropmenu       = $this->block('dropmenu');
+        return new heading($headingToolbar, $dropmenu);
     }
 
     protected function buildNavbar()
@@ -52,9 +57,8 @@ class header extends wg
      * Build.
      *
      * @access protected
-     * @return object
      */
-    protected function build()
+    protected function build(): wg
     {
         return h::header
         (
@@ -109,7 +113,7 @@ class header extends wg
             set::id('versionMenu'),
             set::trigger('hover'),
             set::placement('bottom'),
-            set::menuProps(array('style' => array('color' => 'var(--color-fore)'))),
+            set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::arrow(true),
             set::items($items)
         );
@@ -259,7 +263,7 @@ class header extends wg
             set::id('userMenu'),
             set::trigger('hover'),
             set::placement('bottom'),
-            set::menuProps(array('style' => array('color' => 'var(--color-fore)'))),
+            set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::strategy('fixed'),
             set::arrow(true),
             set::items($items)
@@ -424,7 +428,7 @@ class header extends wg
             ),
 
             set::id('quickAddMenu'),
-            set::menuProps(array('style' => array('color' => 'var(--color-fore)'))),
+            set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::trigger('hover'),
             set::placement('bottom'),
             set::strategy('fixed'),

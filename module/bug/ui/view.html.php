@@ -10,177 +10,152 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+jsVar('bugID',     $bug->id);
+jsVar('productID', $bug->product);
+jsVar('branchID',  $bug->branch);
+jsVar('errorNoExecution', $lang->bug->noExecution);
+jsVar('errorNoProject',   $lang->bug->noProject);
 
-$canViewMr          = hasPriv('mr', 'view');
-$canViewProduct     = hasPriv('product', 'view');
-$canViewPlan        = hasPriv('productplan', 'view');
-$canViewProduct     = hasPriv('project', 'view');
-$canViewStory       = hasPriv('story', 'view');
-$canViewTask        = hasPriv('task', 'view');
-$canViewCase        = hasPriv('testcase', 'view');
-$canViewRepo        = hasPriv('repo', 'revision');
-$canBrowseBug       = hasPriv('bug', 'browse');
-$canBrowseExecution = hasPriv('execution', 'browse');
-$canCreateBug       = hasPriv('bug', 'create');
+$canCreateBug = hasPriv('bug', 'create');
+$canViewRepo  = hasPriv('repo', 'revision');
+$canViewMR    = hasPriv('mr', 'view');
+$canViewBug   = hasPriv('bug', 'view');
 
-$moduleTitle = '';
-if(empty($modulePath))
-{
-    $moduleTitle .= '/';
-}
-else
-{
-    if($bugModule->branch and isset($branches[$bugModule->branch])) $moduleTitle .= $branches[$bugModule->branch] . '/';
-
-    foreach($modulePath as $key => $module)
-    {
-        $moduleTitle .= $module->name;
-
-        if(isset($modulePath[$key + 1])) $moduleTitle .= '/';
-    }
-}
-
-$openedBuilds = array();
-foreach(explode(',', $bug->openedBuild) as $openedBuild)
+$buildsHTML   = array();
+$openedBuilds = explode(',', $legendLife['openedBuild']['text']);
+foreach($openedBuilds as $openedBuild)
 {
     if(!$openedBuild) continue;
-    $openedBuilds[] = div(zget($builds, $openedBuild));
+    $buildsHTML[] = div(zget($builds, $openedBuild));
 }
 
-$osList = array();
-foreach(explode(',', $bug->os) as $os)
+$osHTML = array();
+$osList = explode(',', $legendBasic['os']['text']);
+foreach($osList as $os)
 {
-    $osList[] = span(zget($lang->bug->osList, $os));
+    $osHTML[] = span(zget($lang->bug->osList, $os));
 }
 
-$browserList = array();
+$browserHTML = array();
+$browserList = explode(',', $legendBasic['browser']['text']);
 foreach($browserList as $browser)
 {
-    $browserList[] = span(zget($lang->bug->browserList, $browser));
+    $browserHTML[] = span(zget($lang->bug->browserList, $browser));
 }
 
-$mailtoList = '';
-if(!empty($bug->mailto))
+$mailtoHTML = array();
+if(!empty($legendBasic['mailto']['text']))
 {
-    foreach(explode(',', str_replace(' ', '', $bug->mailto)) as $account)
+    $mailtoList = explode(',', str_replace(' ', '', $legendBasic['mailto']['text']));
+    foreach($mailtoList as $account)
     {
-        $mailtoList .= ' ' . zget($users, $account);
+        $mailtoHTML[] = span(zget($users, $account));
     }
 }
+
+$duplicateLink = $bug->duplicateBug && $canViewBug ? a
+(
+    set('href', $this->createLink('bug', 'view', "bugID={$bug->duplicateBug}")),
+    set('data-toggle', 'modal'),
+    set('data-size', 'lg'),
+    $bug->duplicateBugTitle
+) : '';
+$duplicateBug = $bug->duplicateBug ? "#{$bug->duplicateBug}:{$duplicateLink}" : '';
 
 $relatedBugs = array();
-if(!empty($bug->relatedBugTitles))
+foreach($legendMisc['relatedBug']['text'] as $relatedBugID => $relatedBugTitle)
 {
-    foreach($bug->relatedBugTitles as $relatedBugID => $relatedBugTitle)
-    {
-        $relatedBugs[] = a
-        (
-            set('href', $this->createLink('bug', 'view', "bugID=$relatedBugID")),
-            set('data-toggle', 'modal'),
-            "#$relatedBugID $relatedBugTitle"
-        );
-    }
+    $relatedBugs[] = div(a
+    (
+        set('href', $this->createLink('bug', 'view', "bugID={$relatedBugID}")),
+        set('data-toggle', 'modal'),
+        set('data-size', 'lg'),
+        span(label(set::class('dark-outline rounded-full mr-2'), $relatedBugID), $relatedBugTitle)
+    ));
 }
 
 $linkMR = array();
-foreach($bug->linkMRTitles as $MRID => $linkMRTitle)
+foreach($legendMisc['linkMR']['text'] as $MRID => $linkMRTitle)
 {
-    $linkMR[] = a
+    $linkMR[] = div(a
     (
-        $canViewMr ? set('href', $this->createLink('mr', 'view', "MRID=$MRID")) : null,
-        "#$MRID $linkMRTitle"
-    );
+        $canViewMR ? set('href', $this->createLink('mr', 'view', "MRID={$MRID}")) : null,
+        span(label(set::class('dark-outline rounded-full mr-2'), $MRID), $linkMRTitle)
+    ));
 }
 
 $linkCommits = array();
-foreach($linkCommits as $commit)
+foreach($legendMisc['linkCommit']['text'] as $commit)
 {
-    $linkCommits[] = a
+    $linkCommits[] = div(a
     (
         $canViewRepo ? set('href', $this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")) : null,
-        " $commit->comment"
-    );
+        "{$commit->comment}"
+    ));
 }
 
+$legendBasic['os']['text']            = $osHTML;
+$legendBasic['browser']['text']       = $browserHTML;
+$legendBasic['mailto']['text']        = $mailtoHTML;
+$legendBasic['severity']['text']      = severityLabel(set::level(zget($lang->bug->severityList, $legendBasic['severity']['text'])), set::isIcon(true));
+$legendBasic['pri']['text']           = priLabel(zget($lang->bug->priList, $legendBasic['pri']['text']));
+$legendLife['openedBuild']['text']    = $buildsHTML;
+$legendLife['resolution']['text']     = div(zget($lang->bug->resolutionList, $bug->resolution) . $duplicateBug);
+$legendMain['story']['text']          = $bug->story ? div(label(set('class', 'dark-outline rounded-full size-sm mr-2'), $bug->story), span($bug->storyTitle)) : '';
+$legendMain['task']['text']           = $bug->task  ? div(label(set('class', 'dark-outline rounded-full size-sm mr-2'), $bug->task),  span($bug->taskName))   : '';;
+$legendMisc['relatedBug']['text']     = $relatedBugs;
+$legendMisc['linkCommit']['text']     = $linkCommits;
+$legendMisc['linkMR']['text']         = $linkMR;
+
+/* Handling special tags in bug descriptions. */
+$tplStep   = strip_tags(trim($lang->bug->tplStep));
+$steps     = str_replace('<p>' . $tplStep, '<p class="article-h4 my-1">' . $tplStep . '</p><p>', $bug->steps);
+$tplResult = strip_tags(trim($lang->bug->tplResult));
+$steps     = str_replace('<p>' . $tplResult, '<p class="article-h4 my-1">' . $tplResult . '</p><p>', $steps);
+$tplExpect = strip_tags(trim($lang->bug->tplExpect));
+$steps     = str_replace('<p>' . $tplExpect, '<p class="article-h4 my-1">' . $tplExpect . '</p><p>', $steps);
+$steps     = str_replace('<p></p>', '', $steps);
+
 $files = '';
-foreach($bug->files as $file) $files .= $file->title . ',';
+foreach($bug->files as $file) $files .= "{$file->title},";
 
-/* Prepare variables for legendBasic block.  */
-$app->loadLang('product');
-$branchTitle = sprintf($lang->product->branch, $lang->product->branchName[$product->type]);
-$productLink = $bug->product && $canViewProduct ? $this->createLink('product',     'view',   "productID=$bug->product") : '';
-$branchLink  = $bug->branch  && $canBrowseBug   ? $this->createLink('bug',         'browse', "productID=$bug->product&branch=$bug->branch") : '';
-$planLink    = $bug->plan    && $canViewPlan    ? $this->createLink('productplan', 'view',   "planID=$bug->plan&type=bug") : '';
+/* build operate menu. */
+$moduleName = $app->moduleName;
+$methodName = $app->methodName;
+foreach($config->{$moduleName}->actions->{$methodName} as $menu => $actionList)
+{
+    $$menu = array();
+    foreach($actionList as $action)
+    {
+        $actionData = $config->{$moduleName}->actionList[$action];
 
-$legendBasic = array();
-$legendBasic['product']        = array('name' => $lang->bug->product,        'text' => $product->name, 'href' => $productLink, 'attr' => array('data-app' => 'product'));
-$legendBasic['branch']         = array('name' => $branchTitle,               'text' => $branchName,    'href' => $branchLink);
-$legendBasic['module']         = array('name' => $lang->bug->module,         'text' => $moduleTitle);
-$legendBasic['productplan']    = array('name' => $lang->bug->plan,           'text' => $bug->planName, 'href' => $planLink);
-$legendBasic['type']           = array('name' => $lang->bug->type,           'text' => zget($lang->bug->typeList, $bug->type));
-$legendBasic['status']         = array('name' => $lang->bug->status,         'text' => $this->processStatus('bug', $bug), 'attr' => array('class' => 'status-' . $bug->status));
-$legendBasic['severity']       = array('name' => $lang->bug->severity,       'text' => severityLabel(set::level(zget($lang->bug->severityList, $bug->severity)), set::isIcon(true)));
-$legendBasic['pri']            = array('name' => $lang->bug->pri,            'text' => priLabel(zget($lang->bug->priList, $bug->pri)));
-$legendBasic['activatedCount'] = array('name' => $lang->bug->activatedCount, 'text' => $bug->activatedCount);
-$legendBasic['activatedDate']  = array('name' => $lang->bug->activatedDate,  'text' => $bug->activatedDate);
-$legendBasic['confirmed']      = array('name' => $lang->bug->confirmed,      'text' => $lang->bug->confirmedList[$bug->confirmed]);
-$legendBasic['assignedTo']     = array('name' => $lang->bug->lblAssignedTo,  'text' => zget($users, $bug->assignedTo) . $lang->at . $bug->assignedDate);
-$legendBasic['deadline']       = array('name' => $lang->bug->deadline,       'text' => $bug->deadline . (isset($bug->delay) ? sprintf($lang->bug->notice->delayWarning, $bug->delay) : ''));
-$legendBasic['feedbackBy']     = array('name' => $lang->bug->feedbackBy,     'text' => $bug->feedbackBy);
-$legendBasic['notifyEmail']    = array('name' => $lang->bug->notifyEmail,    'text' => $bug->notifyEmail);
-$legendBasic['os']             = array('name' => $lang->bug->os,             'text' => $osList);
-$legendBasic['browser']        = array('name' => $lang->bug->browser,        'text' => $browserList);
-$legendBasic['keywords']       = array('name' => $lang->bug->keywords,       'text' => $bug->keywords);
-$legendBasic['mailto']         = array('name' => $lang->bug->mailto,         'text' => $mailtoList);
+        if(!empty($actionData['url']) && is_array($actionData['url']))
+        {
+            $module = $actionData['url']['module'];
+            $method = $actionData['url']['method'];
+            $params = $actionData['url']['params'];
+            if(!common::hasPriv($module, $method)) continue;
+            $actionData['url'] = helper::createLink($module, $method, $params);
+        }
+        else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
+        {
+            $module = $actionData['data-url']['module'];
+            $method = $actionData['data-url']['method'];
+            $params = $actionData['data-url']['params'];
+            if(!common::hasPriv($module, $method)) continue;
+            $actionData['data-url'] = helper::createLink($module, $method, $params);
+        }
+        else
+        {
+            if(!common::hasPriv($moduleName, $action)) continue;
+        }
+        if(!$this->{$moduleName}->isClickable($$moduleName, $action)) continue;
 
-/* Prepare variables for legendLife block. */
-$duplicateLink = $bug->duplicateBug && $canViewBug ? a
-    (
-        set('href', $this->createLink('bug', 'view', "bugID=$bug->duplicateBug")),
-        set('data-toggle', 'modal'),
-        $bug->duplicateBugTitle
-    ) : '';
-$duplicateBug = $bug->duplicateBug ? "#$bug->duplicateBug:" . $duplicateLink : '';
+        if($menu == 'suffixActions' && !empty($actionData['text'])) $actionData['text'] = '';
 
-$legendLife  = array();
-$legendLife['openedBy']      = array('name' => $lang->bug->openedBy,      'text' => zget($users, $bug->openedBy) . ($bug->openedDate ? $lang->at . $bug->openedDate : ''));
-$legendLife['openedBuild']   = array('name' => $lang->bug->openedBuild,   'text' => $openedBuilds);
-$legendLife['resolvedBy']    = array('name' => $lang->bug->lblResolved,   'text' => zget($users, $bug->resolvedBy) . ($bug->resolvedDate ? $lang->at . $bug->resolvedDate : ''));
-$legendLife['resolvedBuild'] = array('name' => $lang->bug->resolvedBuild, 'text' => zget($builds, $bug->resolvedBuild));
-$legendLife['resolution']    = array('name' => $lang->bug->resolution,    'text' => div(zget($lang->bug->resolutionList, $bug->resolution) . $duplicateBug));
-$legendLife['closedBy']      = array('name' => $lang->bug->closedBy,      'text' => zget($users, $bug->closedBy) . ($bug->closedDate ? $lang->at . $bug->closedDate : ''));
-$legendLife['lastEditedBy']  = array('name' => $lang->bug->lblLastEdited, 'text' => zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . ($bug->lastEditedDate ? $lang->at . $bug->lastEditedDate : ''));
-
-/* Prepare variables for legendExecStoryTask block. */
-$executionTitle = (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;
-$storyName      = $bug->story ? "#$bug->story $bug->storyTitle" : '';
-$projectLink    = $bug->project   && $canViewProduct     ? $this->createLink('project',   'view',   "projectID=$bug->project")      : '';
-$executionLink  = $bug->execution && $canBrowseExecution ? $this->createLink('execution', 'browse', "executionID=>$bug->execution") : '';
-$storyLink      = $bug->story     && $canViewStory       ? $this->createLink('story',     'view',   "storyID=>$bug->story")         : '';
-$taskLink       = $bug->task      && $canViewTask        ? $this->createLink('task',      'view',   "taskID=>$bug->task")           : '';
-
-$legendExecStoryTask = array();
-$legendExecStoryTask['project']   = array('name' => $lang->bug->project, 'text' => zget($bug, 'projectName', ''), 'href' => $projectLink);
-$legendExecStoryTask['execution'] = array('name' => $executionTitle,     'text' => $bug->executionName,           'href' => $executionLink);
-$legendExecStoryTask['story']     = array('name' => $lang->bug->story,   'text' => $storyName,                    'href' => $storyLink, 'attr' => array('data-toggle' => 'modal'));
-$legendExecStoryTask['task']      = array('name' => $lang->bug->task,    'text' => $bug->taskName,                'href' => $taskLink,  'attr' => array('data-toggle' => 'modal'));
-
-/* Prepare variables for legendMisc block. */
-$fromCaseName = $bug->case    ? "#$bug->case $bug->caseTitle"       : '';
-$toStoryName  = $bug->toStory ? "#$bug->toStory $bug->toStoryTitle" : '';
-$toTaskName   = $bug->toTask  ? "#$bug->toTask $bug->toTaskTitle"   : '';
-$fromCaseLink = $bug->case    && $canViewCase  ? $this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=$bug->caseVersion") : '';
-$toStoryLink  = $bug->toStory && $canViewStory ? $this->createLink('story',    'view', "storyID=$bug->toStory")                           : '';
-$toTaskLink   = $bug->toTask  && $canViewTask  ? $this->createLink('task',     'view', "taskID=$bug->toTask")                             : '';
-
-$legendMisc = array();
-$legendMisc['relatedBug'] = array('name' => $lang->bug->relatedBug, 'text' => $relatedBugs);
-$legendMisc['fromCase']   = array('name' => $lang->bug->fromCase,   'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal'));
-$legendMisc['toCase']     = array('name' => $lang->bug->toCase,     'text' => $bug->toCases);
-$legendMisc['toStory']    = array('name' => $lang->bug->toStory,    'text' => $toStoryName,  'href' => $toStoryLink,  'attr' => array('data-toggle' => 'modal'));
-$legendMisc['toTask']     = array('name' => $lang->bug->toTask,     'text' => $toTaskName,   'href' => $toTaskLink,   'attr' => array('data-toggle' => 'modal'));
-$legendMisc['linkMR']     = array('name' => $lang->bug->linkMR,     'text' => $linkMR);
-$legendMisc['linkCommit'] = array('name' => $lang->bug->linkCommit, 'text' => $linkCommits);
+        $$menu[] = $actionData;
+    }
+}
 
 detailHeader
 (
@@ -188,126 +163,31 @@ detailHeader
     (
         entityLabel
         (
-            set::entityID(17),
+            set::entityID($bug->id),
             set::level(1),
             set::text($bug->title)
         )
     ),
     to::suffix
     (
-        btn
+        !isAjaxRequest('modal') && $canCreateBug ?  btn
         (
             set::icon('plus'),
             set::type('primary'),
             set::text($lang->bug->create),
-            $canCreateBug ? set::url($this->createLink('bug', 'create', "productID=$product->id")) : null
-        )
+            set::url($this->createLink('bug', 'create', "productID={$product->id}"))
+        ) : null
     )
 );
-
-detailBody
-(
-    sectionList
-    (
-        section
-        (
-            set::title($lang->bug->legendSteps),
-            set::content($bug->steps),
-            set::useHtml(true)
-        ),
-        section
-        (
-            set::title($lang->files),
-            set::content($files),
-            set::useHtml(true)
-        ),
-        section
-        (
-            set::title($lang->bug->fromCase),
-            set::content($bug->case ? "#$bug->case $bug->caseTitle" : ''),
-            set::useHtml(true)
-        ),
-        history(),
-        center
-        (
-            floatToolbar
-            (
-                set::prefix
-                (
-                    array(array('icon' => 'back', 'text' => $lang->goback))
-                ),
-                set::main($actionList),
-                set::suffix
-                (
-                    array
-                    (
-                        array('icon' => 'edit',  'url' => $this->createLink('bug', 'edit',   "bugID={$bug->id}")),
-                        array('icon' => 'copy',  'url' => $this->createLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extras=bugID={$bug->id}")),
-                        array('icon' => 'trash', 'url' => $this->createLink('bug', 'delete', "bugID={$bug->id}")),
-                    )
-                )
-            )
-        )
-    ),
-    detailSide
-    (
-        tabs
-        (
-            tabPane
-            (
-                set::key('legendBasicInfo'),
-                set::title($lang->bug->legendBasicInfo),
-                set::active(true),
-                tableData
-                (
-                    buildItems($legendBasic)
-                )
-            ),
-            tabPane
-            (
-                set::key('legendLife'),
-                set::title($lang->bug->legendLife),
-                tableData
-                (
-                    buildItems($legendLife)
-                )
-            )
-        ),
-        tabs
-        (
-            tabPane
-            (
-                set::key('legendExecStoryTask'),
-                set::title(!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask),
-                set::active(true),
-                tableData
-                (
-                    buildItems($legendExecStoryTask)
-                )
-            ),
-            tabPane
-            (
-                set::key('legendMisc'),
-                set::title($lang->bug->legendMisc),
-                tableData
-                (
-                    buildItems($legendMisc)
-                )
-            )
-        )
-    )
-);
-
-render();
 
 /**
  * Build content of table data.
  *
  * @param  array  $items
  * @access public
- * @return string
+ * @return array
  */
-function buildItems($items)
+$buildItems = function($items): array
 {
     $itemList = array();
     foreach($items as $item)
@@ -320,9 +200,137 @@ function buildItems($items)
                 set::href($item['href']),
                 !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
                 $item['text']
-            ) : $item['text']
+            ) : $item['text'],
+            set::collapse(!empty($item['text'])),
         );
     }
 
     return $itemList;
-}
+};
+
+detailBody
+(
+    sectionList
+    (
+        section
+        (
+            set::title($lang->bug->legendSteps),
+            set::content($steps),
+            set::useHtml(true)
+        ),
+        section
+        (
+            set::title($lang->files),
+            set::content($files),
+            set::useHtml(true)
+        ),
+    ),
+    history(),
+    floatToolbar
+    (
+        set::object($bug),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
+        set::main($mainActions),
+        set::suffix($suffixActions)
+    ),
+    detailSide
+    (
+        tabs
+        (
+            set::collapse(true),
+            tabPane
+            (
+                set::key('legendBasicInfo'),
+                set::title($lang->bug->legendBasicInfo),
+                set::active(true),
+                tableData
+                (
+                    $buildItems($legendBasic)
+                )
+            ),
+            tabPane
+            (
+                set::key('legendLife'),
+                set::title($lang->bug->legendLife),
+                tableData
+                (
+                    $buildItems($legendLife)
+                )
+            )
+        ),
+        tabs
+        (
+            set::collapse(true),
+            tabPane
+            (
+                set::key('legendMain'),
+                set::title(!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask),
+                set::active(true),
+                tableData
+                (
+                    $buildItems($legendMain)
+                )
+            ),
+            tabPane
+            (
+                set::key('legendMisc'),
+                set::title($lang->bug->legendMisc),
+                tableData
+                (
+                    set::useTable(false),
+                    $buildItems($legendMisc)
+                )
+            )
+        )
+    )
+);
+
+modal
+(
+    set::id('toTask'),
+    set::modalProps(array('title' => $lang->bug->selectProjects)),
+    to::footer
+    (
+        div
+        (
+            set::class('toolbar gap-4 w-full justify-center'),
+            btn($lang->bug->nextStep, set::id('toTaskButton'), setClass('primary')),
+            btn($lang->cancel, set::id('cancelButton'), set('data-dismiss', 'modal'))
+        )
+    ),
+    form
+    (
+        on::change('#taskProjects', 'changeTaskProjects'),
+        set::actions(''),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->bug->selectProjects),
+                set::required(true),
+                set::control('select'),
+                set::name('taskProjects'),
+                set::items($projects),
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->bug->execution),
+                set::required(true),
+                inputGroup
+                (
+                    set('id', 'executionBox'),
+                    select
+                    (
+                        set::name('execution'),
+                        set::items(),
+                    )
+                )
+            )
+        )
+    )
+);
+
+render();

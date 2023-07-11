@@ -176,6 +176,23 @@ class blockZen extends block
             /* 生成更多链接。 */
             $this->createMoreLink($block, $projectID);
         }
+
+        $blocks = array_values($blocks);
+        $height = array(1 => 0, 2 => 0);
+        foreach($blocks as $block)
+        {
+            if($block->width == 3)
+            {
+                $block->top = max($height[1], $height[2]);
+                $height[1] += $block->height;
+                $height[2] += $block->height;
+            }
+            else
+            {
+                $block->top = $height[$block->width];
+                $height[$block->width] += $block->height;
+            }
+        }
         return $blocks;
     }
 
@@ -202,10 +219,10 @@ class blockZen extends block
             $block->moreLink = $this->createLink($moduleName, $method, $vars);
             if($moduleName == 'my' && strpos($this->config->block->workMethods, $method) !== false)
             {
-                /* 处理研发需求列表区块点击更多后的跳转连接。 */
-                if($moduleName == 'my' && $method == 'story' && $block->params->type != 'assignedTo' && $block->params->type != 'reviewBy')
+                /* 处理研发需求或任务列表区块点击更多后的跳转连接。 */
+                if($moduleName == 'my' && $method == 'task' && $block->params->type != 'assignedTo' || $moduleName == 'my' && $method == 'story' && $block->params->type != 'assignedTo' && $block->params->type != 'reviewBy')
                 {
-                    $block->moreLink = $this->createLink('my', 'contribute', 'module=story&type=' . $block->params->type); // 当指派给我时跳转到贡献中由我创建。
+                    $block->moreLink = $this->createLink('my', 'contribute', "module={$method}&type={$block->params->type}");
                 }
                 else
                 {
@@ -293,6 +310,48 @@ class blockZen extends block
     }
 
     /**
+     * Latest dynamic by zentao official.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function printZentaoDynamicBlock(): void
+    {
+        $this->app->loadModuleConfig('admin');
+
+        $dynamics = array();
+        $result = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($this->config->admin->dynamicAPIURL)));
+        if(!empty($result->data))
+        {
+            $data = $result->data;
+            if(!empty($data->zentaosalon) && time() < strtotime($data->zentaosalon->time))
+            {
+                $data->zentaosalon->title     = $this->lang->block->zentaodynamic->zentaosalon;
+                $data->zentaosalon->label     = formatTime($data->zentaosalon->time, DT_DATE4) . ' ' . $data->zentaosalon->name;
+                $data->zentaosalon->linklabel = $this->lang->block->zentaodynamic->registration;
+                $dynamics[] = $data->zentaosalon;
+            }
+            if(!empty($data->publicclass) && time() < strtotime($data->zentaosalon->time))
+            {
+                $data->publicclass->title     = $this->lang->block->zentaodynamic->publicclass;
+                $data->publicclass->label     = formatTime($data->publicclass->time, DT_DATE4) . $this->lang->datepicker->dayNames[date('w', strtotime($data->publicclass->time))] . ' ' . formatTime($data->publicclass->time, 'H:i');
+                $data->publicclass->linklabel = $this->lang->block->zentaodynamic->reservation;
+                $dynamics[] = $data->publicclass;
+            }
+            if(!empty($data->release))
+            {
+                foreach($data->release as $release)
+                {
+                    $release->title = $this->lang->block->zentaodynamic->release;
+                    $release->label = formatTime($data->publicclass->time, DT_DATE4) . $this->lang->datepicker->dayNames[date('w', strtotime($data->publicclass->time))];
+                    $dynamics[] = $release;
+                }
+            }
+        }
+        $this->view->dynamics = $dynamics;
+    }
+
+    /**
      * Welcome block.
      *
      * @access protected
@@ -319,7 +378,39 @@ class blockZen extends block
         {
             if($time >= $type) $welcomeType = $type;
         }
-        $this->view->welcomeType = $welcomeType;
+
+        $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
+            ->where('date')->gt('1970-01-01')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->orderBy('date_asc')
+            ->limit('1')
+            ->fetch('date');
+
+        $usageDays = 1;
+        if($firstUseDate) $usageDays = ceil((time() - strtotime($firstUseDate)) / 3600 / 24);
+
+        $assignToMe = array();
+        foreach($this->lang->block->welcome->assignList as $field => $label)
+        {
+            $type = 'assignedTo';
+            if($field == 'testcase') $type = 'assigntome';
+
+            $number = rand(1, 100);
+            $assignToMe[$field] = array('number' => $number, 'delay' => rand(1, 100) >= 90 ? rand(1, $number) : 0, 'href' => helper::createLink('my', 'work', "mode=$field&type=$type"));
+        }
+
+        $reviewByMe = array();
+        foreach($this->lang->block->welcome->reviewList as $field => $label)
+        {
+            $number = rand(1, 100);
+            $reviewByMe[$field] = array('number' => $number, 'delay' => rand(1, 100) >= 90 ? rand(1, $number) : 0);
+        }
+
+        $this->view->usageDays    = $usageDays;
+        $this->view->welcomeType  = $welcomeType;
+        $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())];
+        $this->view->assignToMe   = $assignToMe;
+        $this->view->reviewByMe   = $reviewByMe;
     }
 
     /**
@@ -455,7 +546,7 @@ class blockZen extends block
         if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         $this->view->projects  = $this->loadModel('project')->getPairsByProgram();
-        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->testtasks = $this->dao->select("t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName, CONCAT(t4.name, '/', t3.name) as executionBuild")->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
@@ -580,7 +671,21 @@ class blockZen extends block
         $type    = isset($block->params->type)    ? $block->params->type    : 'all';
         $orderBy = isset($block->params->orderBy) ? $block->params->orderBy : 'id_desc';
 
-        $this->view->projects = $this->loadModel('project')->getOverviewList($type, 0, $orderBy, $count);
+        $projects = $this->loadModel('project')->getOverviewList($type, 0, $orderBy, $count);
+
+        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
+            ->from(TABLE_TASK)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('project', 'id');
+        $hours = $this->loadModel('program')->computeProjectHours($tasks);
+
+        $projects = $this->program->appendStatToProjects($projects, 'hours', array('hours' => $hours));
+        foreach($projects as $project) $project->progress = $project->hours->progress;
+
+        $this->view->projects = $projects;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
@@ -602,8 +707,67 @@ class blockZen extends block
         $productStats = $this->product->getStats(array_keys($products), 'order_desc', $this->viewType != 'json' ? $pager : '');
         $this->view->productStats = $productStats;
 
-        $this->view->users        = $this->loadModel('user')->getPairs();
-        $this->view->userAvatars  = $this->user->getAvatarPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->avatarList = $this->user->getAvatarPairs();
+    }
+
+    /**
+     * Get data of the project overview block.
+     *
+     * @param  object $block
+     * @access protected
+     * @return void
+     */
+    protected function printProjectOverviewBlock(object $block): void
+    {
+        $projects = $this->dao->select('id, Year(closedDate) AS year')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->fetchPairs();
+        $projects = array_map(function($year){return $year == null ? 0 : $year;}, $projects);
+        $stats    = array_count_values($projects);
+
+        $thisYear    = date('Y');
+        $lastYear    = date('Y', strtotime('-1 year'));
+        $lastTwoYear = date('Y', strtotime('-2 years'));
+
+        $thisYearCount    = zget($stats, $thisYear, 0);
+        $lastYearCount    = zget($stats, $lastYear, 0);
+        $lastTwoYearCount = zget($stats, $lastTwoYear, 0);
+
+        $maxCount = $thisYearCount;
+        if($lastYearCount > $maxCount)    $maxCount = $lastYearCount;
+        if($lastTwoYearCount > $maxCount) $maxCount = $lastTwoYearCount;
+
+        $cards = array();
+        $cards[0] = new stdclass();
+        $cards[0]->value = array_sum($stats);
+        $cards[0]->class = 'text-primary';
+        $cards[0]->label = $this->lang->block->projectoverview->totalProject;
+        $cards[0]->url   = common::hasPriv('project', 'browse') ? helper::createLink('project', 'browse', 'programID=0&browseType=all') : null;
+
+        $cards[1] = new stdclass();
+        $cards[1]->value = $thisYearCount;
+        $cards[1]->label = $this->lang->block->projectoverview->thisYear;
+
+        $cardGroup = new stdclass();
+        $cardGroup->type  = 'cards';
+        $cardGroup->cards = $cards;
+
+        $bars = array();
+        foreach(array('lastTwoYear', 'lastYear', 'thisYear') as $year)
+        {
+            $bar = new stdclass();
+            $bar->label = $$year;
+            $bar->value = ${$year . 'Count'};
+            $bar->rate  = $maxCount ? round(${$year . 'Count'} / $maxCount * 100) . '%' : '0%';
+
+            $bars[] = $bar;
+        }
+
+        $barGroup = new stdclass();
+        $barGroup->type  = 'barChart';
+        $barGroup->title = $this->lang->block->projectoverview->lastThreeYear;
+        $barGroup->bars  = $bars;
+
+        $this->view->groups = array($cardGroup, $barGroup);
     }
 
     /**
@@ -682,6 +846,7 @@ class blockZen extends block
                 $project->current  = $current;
                 $project->progress = $progress;
             }
+            if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, $today);
         }
 
         $this->view->projects = $projects;
@@ -734,7 +899,7 @@ class blockZen extends block
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
             ->andWhere('type')->eq('story')
-            ->andWhere('openedDate')->ge(date('Y-m', strtotime('-5 month')))
+            ->andWhere('openedDate')->ge(date('Y-m-01', strtotime('-5 month')))
             ->groupBy('date, product')
             ->fetchGroup('date', 'product');
 
@@ -754,7 +919,7 @@ class blockZen extends block
         $newPlan = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
-            ->andWhere('begin')->gt(date('Y-m'))
+            ->andWhere('begin')->ge(date('Y-m-01'))
             ->andWhere('status')->eq('wait')
             ->orderBy('begin_desc')
             ->fetchGroup('product', 'product');
@@ -775,7 +940,7 @@ class blockZen extends block
         $newRelease = $this->dao->select('*')->from(TABLE_RELEASE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
-            ->andWhere('date')->lt(date('Y-m'))
+            ->andWhere('date')->lt(date('Y-m-01'))
             ->orderBy('date_asc')
             ->fetchGroup('product', 'product');
 
@@ -1083,12 +1248,18 @@ class blockZen extends block
     protected function printScrumOverviewBlock(): void
     {
         $projectID = $this->session->project;
-        $this->app->loadLang('execution');
         $this->app->loadLang('bug');
         $totalData = $this->loadModel('project')->getOverviewList('', $projectID, 'id_desc', 1);
 
+        $project = zget($totalData, $projectID, new stdclass());
+        $this->app->loadClass('pager', true);
+        $pager = pager::init(0, 3, 1);
+        $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
+        $project->executions = $this->loadModel('execution')->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
+
         $this->view->totalData = $totalData;
         $this->view->projectID = $projectID;
+        $this->view->project   = $project;
     }
 
     /**
@@ -1107,7 +1278,7 @@ class blockZen extends block
         $this->app->loadClass('pager', true);
         $pager = pager::init(0, $count, 1);
         $this->loadModel('execution');
-        $this->view->executionStats = !defined('TUTORIAL') ? $this->execution->getStatData($this->session->project, $type, 0, 0, false, '', 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
+        $this->view->executionStats = !commonModel::isTutorialMode() ? $this->execution->getStatData($this->session->project, $type, 0, 0, false, '', 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
     }
 
     /**
@@ -1196,31 +1367,13 @@ class blockZen extends block
     /**
      * Print sprint block.
      *
+     * @param  object $block
      * @access protected
      * @return void
      */
-    protected function printSprintBlock(): void
+    protected function printSprintBlock(object $block): void
     {
-        $sprints = $this->dao->select('status, count(*) as sprints')->from(TABLE_EXECUTION)
-            ->where('deleted')->eq(0)
-            ->beginIF($this->config->vision == 'lite')->andWhere('type')->eq('kanban')->fi()
-            ->beginIF($this->config->vision == 'rnd')->andWhere('type')->in('sprint,kanban')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('project')->eq($this->session->project)
-            ->groupBy('status')
-            ->fetchPairs();
-
-        $summary = new stdclass();
-        $summary->total  = array_sum($sprints);
-        $summary->doing  = zget($sprints, 'doing', 0);
-        $summary->closed = zget($sprints, 'closed', 0);
-
-        $progress = new stdclass();
-        $progress->doing  = $summary->total == 0 ? 0 : round($summary->doing  / $summary->total, 3);
-        $progress->closed = $summary->total == 0 ? 0 : round($summary->closed / $summary->total, 3);
-
-        $this->view->summary  = $summary;
-        $this->view->progress = $progress;
+        $this->printExecutionOverviewBlock($block, 'sprint', (int)$this->session->project, true);
     }
 
     /**
@@ -1293,7 +1446,7 @@ class blockZen extends block
         $status = isset($block->params->type)  ? $block->params->type : 'wait';
 
         $this->view->project   = $this->loadModel('project')->getByID($this->session->project);
-        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
+        $this->view->testtasks = $this->dao->select("t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName, CONCAT(t4.name, '/', t3.name) as executionBuild")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
@@ -1332,11 +1485,27 @@ class blockZen extends block
             return;
         }
 
-        $productIdList = array_keys($products);
-        $today         = date(DT_DATE1);
-        $yesterday     = date(DT_DATE1, strtotime('yesterday'));
-        $testtasks     = $this->dao->select('*')->from(TABLE_TESTTASK)->where('product')->in($productIdList)->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->orderBy('id')->fetchAll('product');
-        $bugs          = $this->dao->select("product, count(id) as total,
+        $productIdList  = array_keys($products);
+        $today          = date(DT_DATE1);
+        $yesterday      = date(DT_DATE1, strtotime('yesterday'));
+        $doingTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
+            ->where('product')->in($productIdList)
+            ->andWhere('project')->ne(0)
+            ->andWhere('status')->eq('doing')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('realBegan_asc')
+            ->fetchGroup('product');
+
+        $waitTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
+            ->where('product')->in($productIdList)
+            ->andWhere('project')->ne(0)
+            ->andWhere('status')->eq('wait')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('begin')->ge(date('Y-m-d'))
+            ->orderBy('begin_desc')
+            ->fetchGroup('product');
+
+        $bugs = $this->dao->select("product, count(id) as total,
             count(IF(assignedTo = '{$this->app->user->account}', 1, null)) as assignedToMe,
             count(IF(status != 'closed', 1, null)) as unclosed,
             count(IF(status != 'closed' and status != 'resolved', 1, null)) as unresolved,
@@ -1379,7 +1548,8 @@ class blockZen extends block
             $product->unresolvedRate  = $product->total ? round($product->unresolved    / $product->total * 100, 2) : 0;
             $product->unconfirmedRate = $product->total ? round($product->unconfirmed   / $product->total * 100, 2) : 0;
             $product->unclosedRate    = $product->total ? round($product->unclosed      / $product->total * 100, 2) : 0;
-            $product->testtask        = isset($testtasks[$productID]) ? $testtasks[$productID] : '';
+            $product->waitTesttasks   = isset($waitTesttasks[$productID])  ? $waitTesttasks[$productID]  : '';
+            $product->doingTesttasks  = isset($doingTesttasks[$productID]) ? $doingTesttasks[$productID] : '';
         }
 
         $this->view->products = $products;
@@ -1394,43 +1564,117 @@ class blockZen extends block
      */
     protected function printProductOverviewBlock(): void
     {
-        $this->view->totalProductCount       = 1;
-        $this->view->productReleasedThisYear = 1;
-        $this->view->releaseCount            = $this->loadModel('release')->getReleaseCount('milestone');
+        $productCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('shadow')->eq('0')->fetch('count');
+        $lineCount    = $this->dao->select('COUNT(1) AS count')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('type')->eq('line')->fetch('count');
+        $releaseList  = $this->dao->select('id, marker')->from(TABLE_RELEASE)->where('deleted')->eq('0')->andWhere('createdDate')->like(date('Y') . '-%')->fetchPairs();
+
+        $cards1 = array();
+        $cards1[0] = new stdclass();
+        $cards1[0]->value = $productCount;
+        $cards1[0]->class = 'text-primary';
+        $cards1[0]->label = $this->lang->block->productoverview->totalProductCount;
+        $cards1[0]->url   = common::hasPriv('product', 'all') ? helper::createLink('product', 'all', 'browseType=all') : null;
+
+        $cards1[1] = new stdclass();
+        $cards1[1]->value = $lineCount;
+        $cards1[1]->label = $this->lang->block->productoverview->productLineCount;
+
+        $group1 = new stdclass();
+        $group1->type  = 'cards';
+        $group1->cards = $cards1;
+
+        $cards2 = array();
+        $cards2[0] = new stdclass();
+        $cards2[0]->value = count($releaseList);
+        $cards2[0]->class = 'text-primary';
+        $cards2[0]->label = $this->lang->block->productoverview->productReleasedThisYear;
+
+        $cards2[1] = new stdclass();
+        $cards2[1]->class = 'text-important';
+        $cards2[1]->value = count(array_filter($releaseList));
+        $cards2[1]->label = $this->lang->block->productoverview->releaseCount;
+
+        $group2 = new stdclass();
+        $group2->type  = 'cards';
+        $group2->cards = $cards2;
+
+        $this->view->groups = array($group1, $group2);
     }
 
     /**
      * Print execution overview block.
      *
      * @param  object    $block
+     * @param  string    $code          executionoverview|sprint
+     * @param  int       $project
+     * @param  bool      $showClosed    true|false
      * @access protected
      * @return void
      */
-    protected function printExecutionOverviewBlock(object $block): void
+    protected function printExecutionOverviewBlock(object $block, string $code = 'executionoverview', int $project = 0, bool $showClosed = false): void
     {
-        $projectID  = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
-        $executions = $this->loadModel('execution')->getList($projectID);
+        $query = $this->dao->select('id, status, Year(closedDate) AS year')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->in('sprint, stage, kanban')
+            ->andWhere('multiple')->eq('1')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($project)->andWhere('project')->eq($project)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi();
 
-        $total = 0;
-        foreach($executions as $execution)
+        $statusPairs = $query->fetchPairs('id', 'status');
+        $yearPairs   = $query->fetchPairs('id', 'year');
+        $yearPairs   = array_map(function($year){return $year == null ? 0 : $year;}, $yearPairs);
+        $statusStats = array_count_values($statusPairs);
+        $yearStats   = array_count_values($yearPairs);
+
+        $cards = array();
+        $cards[0] = new stdclass();
+        $cards[0]->value = array_sum($statusStats);
+        $cards[0]->class = 'text-primary';
+        $cards[0]->label = $this->lang->block->{$code}->totalExecution;
+
+        $url = common::hasPriv('execution', 'all') ? helper::createLink('execution', 'all', 'status=all') : null;
+        if($project) $url = common::hasPriv('project', 'execution') ? helper::createLink('project', 'execution', "status=all&projectID=$project") : null;
+        $cards[0]->url = $url;
+
+        $cards[1] = new stdclass();
+        $cards[1]->value = zget($yearStats, date('Y'), 0);
+        $cards[1]->label = $this->lang->block->{$code}->thisYear;
+
+        $cardGroup = new stdclass();
+        $cardGroup->type  = 'cards';
+        $cardGroup->cards = $cards;
+
+        $this->app->loadLang('execution');
+
+        $max = 0;
+        foreach($this->lang->execution->statusList as $status => $label)
         {
-            if(empty($execution->multiple)) continue;
-            if(!isset($overview[$execution->status])) $overview[$execution->status] = 0;
-            $overview[$execution->status]++;
-            $total++;
+            if(!$showClosed && $status == 'closed') continue;
+
+            $$status = zget($statusStats, $status, 0);
+            if($max < $$status) $max = $$status;
         }
 
-        $overviewPercent = array();
-        $this->app->loadLang('project');
-        foreach($this->lang->project->statusList as $statusKey => $statusName)
+        $bars = array();
+        foreach($this->lang->execution->statusList as $status => $label)
         {
-            if(!isset($overview[$statusKey])) $overview[$statusKey] = 0;
-            $overviewPercent[$statusKey] = $total ? round($overview[$statusKey] / $total, 2) * 100 . '%' : '0%';
+            if(!$showClosed && $status == 'closed') continue;
+
+            $bar = new stdclass();
+            $bar->label = $label;
+            $bar->value = $$status;
+            $bar->rate  = $max ? round($$status / $max, 4) * 100 . '%' : '0%';
+
+            $bars[] = $bar;
         }
 
-        $this->view->total           = $total;
-        $this->view->overview        = $overview;
-        $this->view->overviewPercent = $overviewPercent;
+        $barGroup = new stdclass();
+        $barGroup->type  = 'barChart';
+        $barGroup->title = $this->lang->block->{$code}->statusCount;
+        $barGroup->bars  = $bars;
+
+        $this->view->groups = array($cardGroup, $barGroup);
     }
 
     /**
@@ -1559,7 +1803,7 @@ class blockZen extends block
                 ->beginIF($objectType == 'ticket')->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
-                ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->fi()
+                ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType == 'requirement')->andWhere('t1.type')->eq('requirement')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'bug')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'story' || $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
@@ -1616,7 +1860,6 @@ class blockZen extends block
             {
                 $this->app->loadLang('feedback');
                 $this->app->loadLang('ticket');
-                $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
                 $this->view->products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
             }
 
@@ -1649,7 +1892,6 @@ class blockZen extends block
             $count['meeting'] = count($meetings);
             $this->view->meetings = $meetings;
             $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
-            $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
         }
 
         $limitCount = !empty($params->reviewCount) ? $params->reviewCount : 20;
@@ -1668,6 +1910,7 @@ class blockZen extends block
             }
         }
 
+        $this->view->users          = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->isExternalCall = $this->isExternalCall();
         $this->view->hasViewPriv    = $hasViewPriv;
         $this->view->count          = $count;
@@ -1832,7 +2075,7 @@ class blockZen extends block
         $involveds     = $this->product->getOrderedProducts('involved');
         $productIdList = array_merge(array_keys($products), array_keys($involveds));
 
-        $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,status,acl,groups,users,deleted')->from(TABLE_DOC)->alias('t1')
+        $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,status,acl,`groups`,users,deleted')->from(TABLE_DOC)->alias('t1')
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
             ->orderBy('product,status,editedDate_desc')

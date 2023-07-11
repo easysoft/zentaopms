@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The portal class file of zin lib.
  *
@@ -15,7 +16,9 @@ require_once __DIR__ . DS . 'wg.class.php';
 
 class portal extends wg
 {
-    static $defineProps = 'target:string';
+    protected static array $defineProps = array(
+        'target:string'
+    );
 
     public static function __callStatic($name, $args)
     {

@@ -79,6 +79,7 @@ $lang->execution->release             = '发布';
 $lang->execution->acl                 = '访问控制';
 $lang->execution->auth                = '权限控制';
 $lang->execution->teamname            = '团队名称';
+$lang->execution->teamSetting         = '团队设置';
 $lang->execution->updateOrder         = '排序';
 $lang->execution->order               = $lang->executionCommon . '排序';
 $lang->execution->orderAB             = '排序';
@@ -141,6 +142,7 @@ $lang->execution->list                = '列表';
 $lang->execution->allProject          = '全部' . $lang->projectCommon;
 $lang->execution->method              = '管理方法';
 $lang->execution->sameAsParent        = "同父阶段";
+$lang->execution->selectStoryPlan     = '选择计划';
 
 /* Fields of zt_team. */
 $lang->execution->root     = '源ID';
@@ -182,7 +184,7 @@ $lang->execution->cfdTypeList['bug']   = "按Bug查看";
 $lang->team->account    = '用户';
 $lang->team->role       = '角色';
 $lang->team->roleAB     = '我的角色';
-$lang->team->join       = '加盟日';
+$lang->team->join       = '加盟日期';
 $lang->team->hours      = '可用工时/天';
 $lang->team->days       = '可用工日';
 $lang->team->totalHours = '总计';
@@ -351,7 +353,7 @@ $lang->execution->timeSummary          = '<div class="table-col"><div class="cle
 $lang->execution->groupSummaryAB       = "<div>总任务 <strong>%s : </strong><span class='text-muted'>未开始</span> %s &nbsp; <span class='text-muted'>进行中</span> %s</div><div>总预计 <strong>%s : </strong><span class='text-muted'>已消耗</span> %s &nbsp; <span class='text-muted'>剩余</span> %s</div>";
 $lang->execution->wbs                  = "分解任务";
 $lang->execution->batchWBS             = "批量分解";
-$lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-link'>帮助 <i class='icon icon-help'></i></a>";
+$lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？'>帮助 <i class='icon icon-help text-gray'></i></a>";
 $lang->execution->whyNoStories         = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->executionCommon}关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->execution->projectNoStories     = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->projectCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->execution->productStories       = "{$lang->executionCommon}关联的{$lang->SRCommon}是{$lang->productCommon}{$lang->SRCommon}的子集，并且只有评审通过的{$lang->SRCommon}才能关联。请<a href='%s'>关联{$lang->SRCommon}</a>。";
@@ -554,6 +556,8 @@ $lang->execution->featureBar['testcase']['all'] = '全部';
 
 $lang->execution->featureBar['importtask']['all'] = $lang->execution->importTask;
 
+$lang->execution->featureBar['importbug']['all'] = $lang->execution->importBug;
+
 $lang->execution->myExecutions = '我参与的';
 $lang->execution->doingProject = "进行中的{$lang->projectCommon}";
 
@@ -665,3 +669,7 @@ $lang->execution->featureBar['dynamic']['thisWeek']  = '本周';
 $lang->execution->featureBar['dynamic']['lastWeek']  = '上周';
 $lang->execution->featureBar['dynamic']['thisMonth'] = '本月';
 $lang->execution->featureBar['dynamic']['lastMonth'] = '上月';
+
+$lang->execution->featureBar['team']['all'] = '团队成员';
+
+$lang->execution->featureBar['managemembers']['all'] = '团队管理';

@@ -1,11 +1,13 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class modalDialog extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'title?: string',
         'titleClass?: string',
+        'size?: string|number',
         'itemID?: int',
         'headerClass?: string',
         'headerProps?: array',
@@ -14,10 +16,11 @@ class modalDialog extends wg
         'footerActions?: array',
         'footerClass?: string',
         'footerProps?: array',
+        'rawContent?: bool'
     );
 
-    static $defineBlocks = array(
-        'header' => array(),
+    protected static array $defineBlocks = array(
+        'header' => array('map' => 'modalHeader'),
         'actions' => array(),
         'footer' => array('map' => 'toolbar')
     );
@@ -81,19 +84,28 @@ class modalDialog extends wg
 
     protected function buildBody()
     {
+        $rawContent = $this->prop('rawContent', !zin::$rawContentCalled);
         return div
         (
             setClass('modal-body'),
-            $this->children()
+            $this->children(),
+            $rawContent ? rawContent() : null,
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
+        $size = $this->prop('size');
+        if($size)
+        {
+            if(is_string($size)) $size = set('data-size', $size);
+            else                 $size = setStyle('width', "{$size}px");
+        }
         return div
         (
             setClass('modal-dialog'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
+            $size,
             div
             (
                 setClass('modal-content'),

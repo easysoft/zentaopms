@@ -14,24 +14,24 @@ class companyTest
     }
 
     /**
-     * function update test by execution
+     * 测试更新公司信息的方法。
+     * Test update a compnay.
      *
      * @param  string $objectID
-     * @param  array $param
+     * @param  array  $param
      * @access public
-     * @return array
+     * @return object|array
      */
-    public function updateObject($objectID, $param = array())
+    public function updateObject($objectID, $param = array()): object|array
     {
         global $tester;
 
         $object = $tester->dbh->query("SELECT `name`,`phone`,`fax`,`address`,`zipcode`,`website`,`backyard`,`guest`
              FROM zt_company WHERE id = $objectID")->fetch();
 
-        foreach($object as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        foreach($param as $key => $value) $object->{$key} = $value;
 
-        $this->objectModel->update();
+        $this->objectModel->update($object);
 
         $change = $tester->dbh->query("select * from zt_company WHERE id = $objectID")->fetch();
 

@@ -1,15 +1,16 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class btnGroup extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'items?:array',
         'disabled?:bool',
         'size?:string',
     );
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): btn
     {
         if(!($item instanceof item)) $item = item(set($item));
         return btn(inherit($item));
@@ -27,7 +28,7 @@ class btnGroup extends wg
         return $className;
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $items     = $this->prop('items');
         $className = $this->getclassName();
@@ -35,7 +36,7 @@ class btnGroup extends wg
         return div
         (
             setClass($className),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
             $this->children()
         );

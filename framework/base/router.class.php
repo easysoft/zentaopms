@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * 此文件包括ZenTaoPHP框架的三个类：baseRouter, config, lang。
  * The router, config and lang class file of ZenTaoPHP framework.
@@ -267,6 +268,26 @@ class baseRouter
     public $config;
 
     /**
+     * 已加载的配置文件.
+     * Configs loaded.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $loadedConfigs = array();
+
+    /**
+     * 已加载的语言文件.
+     * Languages loaded.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $loadedLangs = array();
+
+    /**
      * 全局$lang对象。
      * The global $lang object.
      *
@@ -414,21 +435,36 @@ class baseRouter
         $this->loadClass('mobile', $static = true);
 
         $this->setCookieSecure();
-        $this->setOpenApp();
-        $this->setSuperVars();
         $this->setDebug();
         $this->setErrorHandler();
         $this->setTimezone();
-        $this->startSession();
 
-        if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
-        if($this->config->framework->multiLanguage) $this->setClientLang();
 
         $this->setupProfiling();
         $this->setupXhprof();
 
         $this->setEdition();
+
+        $this->setClient();
+    }
+
+    /**
+     * 设置客户端信息
+     * Set info of client: session, lang, device, theme...
+     *
+     * @access public
+     * @return void
+     */
+    public function setClient(): void
+    {
+        $this->setOpenApp();
+        $this->setSuperVars();
+
+        $this->startSession();
+
+        if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
+        if($this->config->framework->multiLanguage) $this->setClientLang();
         $this->setVision();
 
         $needDetectDevice   = zget($this->config->framework->detectDevice, $this->clientLang, false);
@@ -781,7 +817,7 @@ class baseRouter
         $xhprofRuns = new \XHProfRuns_Default($outputDir);
         $type       = "{$this->moduleName}_{$this->methodName}";
         $runID      = $xhprofRuns->save_run($log, $type);
-        if(!headers_sent()) header("Xhprof-RunID: {$runID}");
+        if(!headers_sent()) helper::header('Xhprof-RunID', $runID);
 
         return true;
     }
@@ -1143,7 +1179,7 @@ class baseRouter
 
         $module    = $this->rawModule;
         $this->tab = 'my';
-        if(isset($this->lang->navGroup)) $this->tab = zget($this->lang->navGroup, $module, 'my');
+        if(isset($this->lang->navGroup) && $module) $this->tab = zget($this->lang->navGroup, $module, 'my');
         if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', (string) $_COOKIE['tab'])) $this->tab = $_COOKIE['tab'];
     }
 
@@ -1322,7 +1358,8 @@ class baseRouter
     {
         if(str_starts_with($_SERVER['REQUEST_URI'], '/data/upload') && !is_file($this->wwwRoot . $_SERVER['REQUEST_URI']))
         {
-            header("HTTP/1.1 404 Not Found", true, 404);
+            helper::setStatus(404);
+            helper::end();
         }
 
         if($this->config->requestType == 'PATH_INFO' or $this->config->requestType == 'PATH_INFO2')
@@ -1495,11 +1532,27 @@ class baseRouter
 
         helper::import($commonModelFile);
 
-        if($this->config->framework->extensionLevel == 0 and class_exists('commonModel'))    return new commonModel();
-        if($this->config->framework->extensionLevel > 0  and class_exists('extCommonModel')) return new extCommonModel();
+        if($this->config->framework->extensionLevel == 0 and class_exists('commonModel'))
+        {
+            $common = new commonModel();
+        }
+        elseif($this->config->framework->extensionLevel > 0  and class_exists('extCommonModel'))
+        {
+            $common = new extCommonModel();
+        }
+        elseif(class_exists('commonModel'))
+        {
+            $common = new commonModel();
+        }
+        else
+        {
+            return false;
+        }
 
-        if(class_exists('commonModel')) return new commonModel();
-        return false;
+        $this->loadLang('company');
+        $common->setUserConfig();
+
+        return $common;
     }
 
     /**
@@ -1546,13 +1599,13 @@ class baseRouter
     }
 
     /**
-     * 设置要被调用方法的参数。
-     * Set the params of method calling.
+     * 获取要被调用的方法的参数和类型。
+     * Get the default valve and param type of the method calling.
      *
      * @access public
      * @return void
      */
-    public function setParams()
+    public function getDefaultParams()
     {
         try
         {
@@ -1651,6 +1704,26 @@ class baseRouter
 
                 $defaultParams[$name] = array('default' => $default, 'type' => $type);
             }
+            return $defaultParams;
+        }
+        catch(EndResponseException $endResponseException)
+        {
+            return array();
+        }
+    }
+
+    /**
+     * 设置要被调用方法的参数。
+     * Set the params of method calling.
+     *
+     * @access public
+     * @return void
+     */
+    public function setParams()
+    {
+        try
+        {
+            $defaultParams = $this->getDefaultParams();
 
             /**
              * 根据PATH_INFO或者GET方式设置请求的参数。
@@ -1684,6 +1757,7 @@ class baseRouter
                     $_COOKIE = validater::filterParam($_COOKIE, 'cookie');
                 }
             }
+            $this->rawParams = $this->params;
             return true;
         }
         catch(EndResponseException $endResponseException)
@@ -2202,7 +2276,7 @@ class baseRouter
         $url .= (str_contains($url, '?') ? '&' : '?') . $this->config->sessionVar . '=' . session_id() . '&account=' . $_SESSION['user']->account;
         if($extension == '302')
         {
-            header("location: $url");
+            helper::header('location', $url);
             helper::end();
         }
 
@@ -2646,15 +2720,15 @@ class baseRouter
 
         /* 将主配置文件和扩展配置文件合并在一起。Put the main config file and extension config files together. */
         $configFiles = $this->getMainAndExtFiles($moduleName, $appName, 'config');
+
         if(empty($configFiles)) return false;
 
         /* 加载每一个配置文件。Load every config file. */
-        static $loadedConfigs = array();
         foreach($configFiles as $configFile)
         {
-            if(in_array($configFile, $loadedConfigs)) continue;
+            if(in_array($configFile, self::$loadedConfigs)) continue;
             if(is_string($configFile) && file_exists($configFile)) include $configFile;
-            $loadedConfigs[] = $configFile;
+            self::$loadedConfigs[] = $configFile;
         }
 
         /* 加载数据库中与本模块相关的配置项。Merge from the db configs. */
@@ -2797,12 +2871,11 @@ class baseRouter
         if(!is_object($lang)) $lang = new language();
         if(!isset($lang->$moduleName)) $lang->$moduleName = new stdclass();
 
-        static $loadedLangs = array();
         foreach($langFilesToLoad as $langFile)
         {
-            if(in_array($langFile, $loadedLangs)) continue;
+            if(in_array($langFile, self::$loadedLangs)) continue;
             include $langFile;
-            $loadedLangs[] = $langFile;
+            self::$loadedLangs[] = $langFile;
         }
 
         $this->lang = $lang;
@@ -2865,7 +2938,7 @@ class baseRouter
             if(empty($message))
             {
                 /* Try to repair table. */
-                header("location: {$this->config->webRoot}checktable.php");
+                helper::header('location', "{$this->config->webRoot}checktable.php");
                 helper::end();
             }
             static::triggerError($message, __FILE__, __LINE__, true);
@@ -3011,7 +3084,7 @@ class baseRouter
         if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?" . ">\n");
 
         $fh = fopen($errorFile, 'a');
-        if($fh) fwrite($fh, strip_tags($errorLog)) and fclose($fh);
+        if($fh) fwrite($fh, strip_tags(htmlspecialchars_decode($errorLog))) and fclose($fh);
 
         /*
          * 如果debug > 1，直接在页面显示非严重错误。
@@ -3056,6 +3129,7 @@ class baseRouter
                 $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
                 $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
                 echo $htmlError;
+                helper::end();
             }
         }
     }

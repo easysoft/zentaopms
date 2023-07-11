@@ -16,6 +16,7 @@ set::title($lang->todo->assignedTo);
 formPanel
 (
     setClass('bg-white', 'p-6'),
+    set::submitBtnText($lang->save),
     formGroup
     (
         set::name('assignedTo'),
@@ -47,7 +48,7 @@ formPanel
                 setID('switchDate'),
                 set::name('future'),
                 set::text($lang->todo->periods['future']),
-                on::change('togglePending(this)')
+                on::change('togglePending')
             )
         )
     ),
@@ -85,10 +86,10 @@ formPanel
             (
                 set::name('lblDisableDate'),
                 set::text($lang->todo->periods['future']),
-                on::change('switchDateFeature(this)')
+                on::change('switchDateFeature')
             )
         )
     )
 );
 
-render();
+history();

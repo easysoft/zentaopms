@@ -1,0 +1,147 @@
+<?php
+declare(strict_types=1);
+/**
+ * The overview block widget class file of zin module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Gang Liu <liugang@easycorp.ltd>
+ * @package     zin
+ * @link        https://www.zentao.net
+ */
+
+namespace zin;
+
+class overviewBlock extends wg
+{
+    protected static array $defineProps = array(
+        'id?: string',
+        'title?: string',
+        'block?: object',
+        'groups?: array'
+    );
+
+    public static function getPageCSS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
+    protected function buildCard($card): wg
+    {
+        $class = 'text-2xl text-center font-bold leading-relaxed ' . (!empty($card->class) ? $card->class : '');
+
+        return col
+        (
+            setClass('card justify-center w-1/2'),
+            empty($card->url) ? span
+            (
+                setClass($class),
+                $card->value
+            ) : a
+            (
+                setClass($class),
+                set::href($card->url),
+                $card->value
+            ),
+            span
+            (
+                setClass('text-center'),
+                $card->label
+            )
+        );
+    }
+
+    protected function buildCards($group): wg
+    {
+        $cards = array();
+        foreach($group->cards as $card) $cards[] = $this->buildCard($card);
+
+        return div
+        (
+            setClass('cards flex w-1/2'),
+            $cards
+        );
+    }
+
+    protected function buildBarChart($group): wg
+    {
+        $bars   = array();
+        $labels = array();
+        foreach($group->bars as $bar)
+        {
+            $bars[] = h::li
+            (
+                setStyle(array('display' => 'contents')),
+                span
+                (
+                    set::title($bar->value),
+                    setClass('block primary w-2'),
+                    setStyle(array('height' => $bar->rate))
+                )
+            );
+
+            $labels[] = span
+            (
+                setClass('text-center'),
+                $bar->label
+            );
+        }
+
+        return div
+        (
+            setClass('bar-chart flex justify-center w-1/2'),
+            col
+            (
+                setClass('basis-48'),
+                span
+                (
+                    setClass('mb-2'),
+                    $group->title
+                ),
+                div
+                (
+                    setClass('border-b'),
+                    h::ul
+                    (
+                        setClass('flex justify-around items-end w-full'),
+                        $bars
+                    )
+                ),
+                div
+                (
+                    setClass('flex justify-around mt-1.5'),
+                    $labels
+                )
+            )
+        );
+    }
+
+    protected function buildBody($groups): array
+    {
+        $body = array();
+        foreach($groups as $group)
+        {
+            if($group->type == 'cards')    $body[] = $this->buildCards($group);
+            if($group->type == 'barChart') $body[] = $this->buildBarChart($group);
+        }
+
+        return $body;
+    }
+
+    protected function build(): wg
+    {
+        list($id, $title, $block, $groups) = $this->prop(array('id', 'title', 'block', 'groups'));
+
+        if(!$id)    $id    = $block->module . '-' . $block->code . '-' . $block->id;
+        if(!$title) $title = $block->title;
+
+        return panel
+        (
+            setID($id),
+            setClass('overview-block'),
+            set::title($title),
+            set::bodyClass('flex block-base p-0'),
+            $this->buildBody($groups)
+        );
+    }
+}

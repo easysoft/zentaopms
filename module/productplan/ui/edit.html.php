@@ -2,104 +2,130 @@
 declare(strict_types=1);
 /**
  * The edit view file of productplan module of ZenTaoPMS.
- *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      zhouxin <zhouxin@easycorp.ltd>
+ * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     productplan
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
-
 namespace zin;
+
+jsVar('today', helper::today());
+jsVar('weekend', $config->execution->weekend);
+jsVar('productID', $productID);
+jsVar('oldBranch', $oldBranch);
+jsVar('planID', $plan->id);
+
+$deltaValue = $plan->end == $config->productplan->future ? 0 : (strtotime($plan->end) - strtotime($plan->begin)) / 3600 / 24 + 1;
 
 formPanel
 (
+    setID('editForm'),
     set::title($lang->productplan->edit),
-    on::change('.radio-primary > input', 'computeEndDate'),
-    on::change('#future_', 'toggleDateVisibility'),
-    formGroup
+    !$product->shadow ? formGroup
     (
-        set::width("1/2"),
-        set::name("parent"),
+        set::class('items-center'),
+        set::label($lang->productplan->product),
+        $product->name
+    ) : null,
+    $plan->parent == '-1' ? formHidden('parent', $plan->parent) : formGroup
+    (
+        set::width('1/2'),
         set::label($lang->productplan->parent),
-        set::control('picker'),
-        set::value("0"),
-        set::items($parentPlanPairs)
+        set::name('parent'),
+        set::items($parentPlanPairs),
+        set::value($plan->parent),
+        $product->type != 'normal' ? on::change('loadBranches') : '',
     ),
-    formGroup
+    !$product->shadow && $product->type != 'normal' ? formGroup
     (
-        set::width("1/2"),
-        set::name("branch[]"),
-        set::label($lang->product->branch),
+        set::width('1/2'),
+        set::label($lang->productplan->branch),
         set::required(true),
-        set::control('picker'),
-        set::multiple(true),
-        set::id("branch"),
-        set::items($branches)
-    ),
+        select
+        (
+            set::name('branch[]'),
+            set::items($branchTagOption),
+            set::value($plan->branch),
+            set::multiple(true),
+        )
+    ) : null,
     formGroup
     (
-        set::width("1/2"),
-        set::name("title"),
+        set::width('1/2'),
         set::label($lang->productplan->title),
-        set::required(true),
-        set::control("text")
+        set::name('title'),
+        set::value($plan->title),
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->productplan->status),
+        set::name('status'),
+        set::items(array_slice($lang->productplan->statusList, ($plan->status == 'wait' ? 0 : 1))),
+        set::value($plan->status),
+        set::disabled($plan->parent == -1)
     ),
     formRow
     (
         formGroup
         (
-            set::width("1/4"),
-            set::name("begin"),
-            set::label($lang->execution->charts->cfd->begin),
-            set::value("2023-06-08"),
-            set::control("date")
+            set::width('1/4'),
+            set::label($lang->productplan->begin),
+            set::control('date'),
+            set::name('begin'),
+            set::value($plan->begin != $config->productplan->future ? formatTime($plan->begin) : ''),
+            set::disabled($plan->begin  == $config->productplan->future && $plan->end == $config->productplan->future),
         ),
         formGroup
         (
-            set::width("1/4"),
-            set::class("ml-4"),
+            setClass('items-center'),
             checkbox
             (
-                set::name("future"),
-                set::text($lang->productplan->future)
+                set::name('future'),
+                set::text($lang->productplan->future),
+                set::value(1),
+                set::rootClass('ml-4'),
+                set::checked($plan->begin  == $config->productplan->future && $plan->end == $config->productplan->future),
+                on::change('toggleDateBox')
             )
         )
     ),
     formRow
     (
+        setClass($plan->begin  == $config->productplan->future && $plan->end == $config->productplan->future ? 'hidden' : ''),
         formGroup
         (
-            set::width("1/4"),
-            set::name("end"),
-            set::label($lang->execution->charts->cfd->end),
-            set::control("date")
+            set::width('1/4'),
+            set::label($lang->productplan->end),
+            set::control('date'),
+            set::name('end'),
+            set::value($plan->end != $config->productplan->future ? formatTime($plan->end) : ''),
         ),
         formGroup
         (
-            set::width("3/4"),
             radioList
             (
-                set::name("delta"),
-                set::control("radioList"),
+                set::name('delta'),
+                set::inline(true),
                 set::items($lang->productplan->endList),
-                set::inline(true)
+                set::value($deltaValue),
+                on::change('computeEndDate'),
             )
+        ),
+        formHidden('product', $product->id),
+    ),
+    formGroup
+    (
+        set::label($lang->productplan->desc),
+        editor
+        (
+            set::name('desc'),
+            set::rows(10),
+            set::value(htmlSpecialString((string)$plan->desc)),
         )
-    ),
-    formGroup
-    (
-        set::width("full"),
-        set::name("desc"),
-        set::label($lang->story->spec),
-        set::control("editor")
-    ),
-    formGroup
-    (
-        set::name("product"),
-        set::control('hidden'),
-        set::value($product->id),
     ),
 );
 
+/* ====== Render page ====== */
 render();

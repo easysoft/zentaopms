@@ -84,7 +84,13 @@ class designModel extends model
             $design->createdBy   = $this->app->user->account;
             $design->createdDate = helper::now();
 
-            $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->create->requiredFields, 'notempty')->exec();
+            $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->batchcreate->requiredFields, 'notempty')->exec();
+
+            if(dao::isError())
+            {
+                foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$i}]"] = $error;
+                return false;
+            }
 
             $designID = $this->dao->lastInsertID();
             $this->action->create('design', $designID, 'Opened');
@@ -201,7 +207,7 @@ class designModel extends model
         }
 
         $oldCommit = $this->dao->findByID($designID)->from(TABLE_DESIGN)->fetch('commit');
-        $revisions = join(',', $revisions);
+        $revisions = implode(',', $revisions);
         $commit    = $oldCommit ? $oldCommit . ',' . $revisions : $revisions;
 
         $design = new stdclass();
@@ -345,6 +351,45 @@ class designModel extends model
     }
 
     /**
+     * Get commits
+     *
+     * @param  object $repo
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return array
+     */
+    public function getCommits(object $repo, string $begin, string $end): array
+    {
+        $revisionTime = $this->dao->select('time')->from(TABLE_REPOHISTORY)->alias('t1')
+            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+            ->where('t1.repo')->eq($repo->id)
+            ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->orderBy('time desc')
+            ->limit(1)
+            ->fetch('time');
+
+        $comments = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
+            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+            ->where('t1.repo')->eq($repo->id)
+            ->beginIF($revisionTime)->andWhere('t1.`time`')->le($revisionTime)->fi()
+            ->andWhere('left(t1.comment, 12)')->ne('Merge branch')
+            ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
+            ->beginIF($end)->andWhere('t1.time')->le($end)->fi()
+            ->orderBy('time desc')
+            ->fetchAll('id');
+
+        $this->loadModel('repo');
+        foreach($comments as $repoComment)
+        {
+            $repoComment->originalComment = $repoComment->comment;
+            $repoComment->comment         = $this->repo->replaceCommentLink($repoComment->comment);
+        }
+        return $comments;
+    }
+
+    /**
      * Get designs by search.
      *
      * @param  int    $projectID
@@ -372,12 +417,12 @@ class designModel extends model
         }
         else
         {
-            if($this->session->designQuery == false) $this->session->set('designQuery', ' 1 = 1');
+            if($this->session->designQuery === false) $this->session->set('designQuery', ' 1 = 1');
         }
 
         $designQuery = $this->session->designQuery;
 
-        $designs = $this->dao->select('*')->from(TABLE_DESIGN)
+        return $this->dao->select('*')->from(TABLE_DESIGN)
             ->where($designQuery)
             ->andWhere('deleted')->eq('0')
             ->andWhere('project')->eq($projectID)
@@ -385,8 +430,6 @@ class designModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        return $designs;
     }
 
     /**
@@ -404,15 +447,11 @@ class designModel extends model
      */
     public function setMenu($projectID, $products, $productID = 0)
     {
-        $project = $this->loadModel('project')->getByID($projectID);
-        if(!empty($project) and $project->model == 'waterfall') $typeList = 'typeList';
-        if(!empty($project) and $project->model == 'waterfallplus') $typeList = 'plusTypeList';
-
         /* Show custom design types. */
         $this->lang->waterfall->menu->design['subMenu'] = new stdclass();
         $this->lang->waterfall->menu->design['subMenu']->all = array('link' => "{$this->lang->all}|design|browse|projectID=%s&productID=0&browseType=all");
         $count = 1;
-        foreach(array_filter($this->lang->design->{$typeList}) as $key => $value)
+        foreach(array_filter($this->lang->design->typeList) as $key => $value)
         {
             $key = strtolower($key);
 
@@ -427,8 +466,6 @@ class designModel extends model
             $count ++;
         }
 
-        if($this->app->rawMethod == 'browse') $this->lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $this->lang->searchAB . '</a>');
-
         if(empty($products) || !$productID) return '';
 
         if($productID)
@@ -442,7 +479,6 @@ class designModel extends model
             $currentProduct->name = $this->lang->product->all;
         }
 
-        $currentProduct = $this->loadModel('product')->getById($productID);
         if(!empty($currentProduct->shadow)) return '';
 
         $output = '';

@@ -118,7 +118,7 @@ formPanel
                     checkbox
                     (
                         set::name('auto'),
-                        set::text($lang->testcase->showAutoCase),
+                        set::text($lang->testcase->automated),
                     )
                 )
             )
@@ -233,8 +233,7 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->files),
-            set::name('files[]'),
-            set::control('file')
+            upload()
         )
     )
 );
@@ -270,7 +269,7 @@ function printStepsTable()
                         checkbox
                         (
                             set::name("stepType[$i]"),
-                            set::text($lang->testcase->showAutoCase),
+                            set::text($lang->testcase->automated),
                         )
                     )
                 )

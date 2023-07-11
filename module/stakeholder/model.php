@@ -10,7 +10,6 @@ class stakeholderModel extends model
      */
     public function create($objectID = 0)
     {
-        $stakeholder = new stdclass();
         $data = fixer::input('post')
             ->setDefault('objectType', $this->app->tab)
             ->setDefault('objectID', $objectID)
@@ -18,10 +17,10 @@ class stakeholderModel extends model
             ->setDefault('createdDate', helper::today())
             ->stripTags($this->config->stakeholder->editor->create['id'], $this->config->allowedTags)
             ->remove('uid')
+            ->remove('companySelect')
             ->get();
 
         $account = isset($data->user) ? $data->user : '';
-        $stakeholder->user = $account;
         if($data->from != 'outside')
         {
             if(!$account)
@@ -59,7 +58,8 @@ class stakeholderModel extends model
 
                 if(!$companyID)
                 {
-                    dao::$errors[] = $this->lang->stakeholder->companyEmpty;
+                    $elementName = $data->new ? 'company' : 'companySelect';
+                    dao::$errors[$elementName] = $this->lang->stakeholder->companyEmpty;
                     return false;
                 }
 
@@ -80,10 +80,11 @@ class stakeholderModel extends model
                 $userID  = $this->dao->lastInsertID();
                 $account = 'u' . $userID;
                 $this->dao->update(TABLE_USER)->set('account')->eq($account)->where('id')->eq($userID)->exec();
-                $stakeholder->user = $account;
             }
         }
 
+        $stakeholder = new stdclass();
+        $stakeholder->user        = $account;
         $stakeholder->objectType  = $data->objectType;
         $stakeholder->objectID    = $data->objectID;
         $stakeholder->key         = $data->key;
@@ -100,12 +101,14 @@ class stakeholderModel extends model
 
         if(!dao::isError())
         {
-            $this->loadModel('user')->updateUserView($stakeholder->objectID, $stakeholder->objectType, $stakeholder->user);
+            $userList = empty($stakeholder->user) ? array() : array($stakeholder->user);
+
+            $this->loadModel('user')->updateUserView($stakeholder->objectID, $stakeholder->objectType, $userList);
 
             /* Update linked products view. */
             if($stakeholder->objectType == 'project' and $stakeholder->objectID)
             {
-                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
+                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $userList);
             }
 
             if($stakeholder->objectType == 'program' and $stakeholder->objectID)
@@ -672,5 +675,26 @@ class stakeholderModel extends model
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchAll();
+    }
+
+    /**
+     * Judge the action is clickable.
+     *
+     * @param  object $object stakeholder
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $object, string $action): bool
+    {
+        /* Judge the object whether can be changed. */
+        $canChange = common::canBeChanged('stakeholder', $object);
+        if(!$canChange) return false;
+
+        /* Special action can be set its own condition. */
+        if($action == 'notExists') return false;
+
+        /* The action is clickable by default. */
+        return true;
     }
 }

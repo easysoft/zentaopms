@@ -30,7 +30,7 @@ class testreportModel extends model
             ->join('bugs', ',')
             ->join('cases', ',')
             ->join('members', ',')
-            ->remove('files,labels,uid')
+            ->remove('files,labels,uid,selectTask')
             ->get();
         $data->members = trim($data->members, ',');
 

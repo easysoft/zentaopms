@@ -1,10 +1,10 @@
 <?php
-
+declare(strict_types=1);
 namespace zin;
 
 class cell extends wg
 {
-    static $defineProps = array(
+    protected static array $defineProps = array(
         'order:int',
         'grow:int',
         'shrink:int',
@@ -13,7 +13,7 @@ class cell extends wg
         'flex:string'
     );
 
-    protected function build()
+    protected function build(): wg
     {
         $basis = empty($this->prop('width')) ? 'auto' : $this->prop('width');
         if(is_numeric($basis)) $basis .= 'px';
@@ -30,7 +30,7 @@ class cell extends wg
         return div
         (
             setStyle($style),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->children()
         );
     }

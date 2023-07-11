@@ -34,9 +34,31 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     });
 }).on('click', '.nav-tabs .nav-item a', function()
 {
-    if($(this).hasClass('active')) return;
-
     window.appendLinkBtn();
+}).off('click', '.linkObjectBtn').on('click', '.linkObjectBtn', function()
+{
+    const type   = $(this).data('type');
+    const dtable = zui.DTable.query($(this));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    const postKey  = type == 'story' ? 'stories' : 'bugs';
+    const postData = new FormData();
+    checkedList.forEach((id) => postData.append(postKey + '[]', id));
+
+    $.ajaxSubmit({"url": $(this).data('url'), "data": postData, "callback": loadPage($.createLink('release', 'view', `releaseID=${releaseID}&type=${type}`))});
+}).off('click','.link-story').on('click', '.link-story', function()
+{
+    $(this).hide();
+    $('#finishedStory').load($(this).data('url'));
+}).off('click','.link-bug').on('click', '.link-bug', function()
+{
+    $(this).hide();
+    $('#resolvedBug').load($(this).data('url'));
+}).off('click','.link-left-bug').on('click', '.link-left-bug', function()
+{
+    $(this).hide();
+    $('#leftBug').load($(this).data('url'));
 });
 
 /**

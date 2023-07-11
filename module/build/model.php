@@ -92,7 +92,7 @@ class buildModel extends model
         }
         $executions = $this->loadModel('execution')->getByIdList($executionIdList, 'all');
 
-        foreach($builds as $buildID => $build)
+        foreach($builds as $build)
         {
             $build->executionDeleted = $build->execution ? $executions[$build->execution]->deleted : 0;
             $build->executionName    = $build->execution ? $executions[$build->execution]->name : '';
@@ -661,7 +661,7 @@ class buildModel extends model
      * @access public
      * @return void
      */
-    public function unlinkStory($buildID, $storyID)
+    public function unlinkStory(int $buildID, int $storyID): void
     {
         $build = $this->getByID($buildID);
         $build->stories = trim(str_replace(",$storyID,", ',', ",$build->stories,"), ',');
@@ -674,13 +674,13 @@ class buildModel extends model
     /**
      * Batch unlink story.
      *
-     * @param  int    $buildID
+     * @param  int       $buildID
      * @access public
-     * @return void
+     * @return true|void
      */
-    public function batchUnlinkStory($buildID)
+    public function batchUnlinkStory(int $buildID)
     {
-        $storyList = $this->post->unlinkStories;
+        $storyList = $this->post->storyIdList;
         if(empty($storyList)) return true;
 
         $build = $this->getByID($buildID);
@@ -690,7 +690,7 @@ class buildModel extends model
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->unlinkStories as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfrombuild', '', $buildID);
+        foreach($storyList as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfrombuild', '', $buildID);
     }
 
     /**
@@ -725,7 +725,7 @@ class buildModel extends model
      * @access public
      * @return void
      */
-    public function unlinkBug($buildID, $bugID)
+    public function unlinkBug(int $buildID, int $bugID): void
     {
         $build = $this->getByID($buildID);
         $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
@@ -740,11 +740,11 @@ class buildModel extends model
      *
      * @param  int    $buildID
      * @access public
-     * @return void
+     * @return true|void
      */
-    public function batchUnlinkBug($buildID)
+    public function batchUnlinkBug(int $buildID)
     {
-        $bugList = $this->post->unlinkBugs;
+        $bugList = $this->post->bugIdList;
         if(empty($bugList)) return true;
 
         $build = $this->getByID($buildID);
@@ -754,7 +754,7 @@ class buildModel extends model
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->unlinkBugs as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
+        foreach($bugList as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
     }
 
     /**
@@ -806,35 +806,36 @@ class buildModel extends model
      * Build action menu.
      *
      * @param  object $build
-     * @param  string $type
      * @access public
-     * @return array 
+     * @return array
      */
-    public function buildOperateMenu(object $build, string $type = 'view'): array
+    public function buildOperateMenu(object $build): array
     {
-        $menu   = array();
-        $params = "buildID=$build->id";
-
+        $menu         = array();
+        $params       = "buildID={$build->id}";
         $canBeChanged = common::canBeChanged('build', $build);
         if($build->deleted || !$canBeChanged) return $menu;
 
-        if(common::hasPriv('build', 'edit', $build))
+        $moduleName = $this->app->tab == 'project' ? 'projectbuild' : 'build';
+
+        if(common::hasPriv($moduleName, 'edit', $build))
         {
             $menu[] = array(
                 'text'  => $this->lang->build->edit,
                 'icon'  => 'edit',
-                'url'   => helper::createLink('build', 'edit', $params),
+                'url'   => helper::createLink($moduleName, 'edit', $params),
                 'class' => 'btn ghost'
             );
         }
 
-        if(common::hasPriv('build', 'delete', $build))
+        if(common::hasPriv($moduleName, 'delete', $build))
         {
             $menu[] = array(
                 'text'  => $this->lang->build->delete,
                 'icon'  => 'trash',
-                'url'   => "javascript:confirmDelete('{$build->id}')",
-                'class' => 'btn ghost'
+                'url'   => helper::createLink($moduleName, 'delete', $params),
+                'class' => 'btn ghost ajax-submit',
+                'data-confirm' => $this->lang->build->confirmDelete
             );
         }
 

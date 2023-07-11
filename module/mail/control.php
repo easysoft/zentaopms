@@ -65,13 +65,13 @@ class mail extends control
 
             if($error) return print(js::alert($error));
 
-            echo "<script>setTimeout(function(){parent.location.href='" . inlink('edit') . "'}, 10000)</script>";
             $mailConfig = $this->mail->autoDetect($this->post->fromAddress);
             $mailConfig->fromAddress = $this->post->fromAddress;
             $mailConfig->domain      = common::getSysURL();
             $this->session->set('mailConfig',  $mailConfig);
 
-            return print(js::locate(inlink('edit'), 'parent'));
+            $response['load'] = inlink('edit');
+            return $this->send($response);
         }
 
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->detect;
@@ -346,8 +346,7 @@ class mail extends control
         $queue = $this->mail->getQueueById($queueID);
         if($queue and $queue->status == 'sended')
         {
-            echo js::alert($this->lang->mail->noticeResend);
-            return print(js::reload('parent'));
+            return $this->send(array('callback' => "resendAlert('success','" . $this->lang->mail->noticeResend . "')"));
         }
 
         if(isset($this->config->mail->async)) $this->config->mail->async = 0;
@@ -364,9 +363,12 @@ class mail extends control
         }
         $this->dao->update(TABLE_NOTIFY)->data($data)->where('id')->in($queue->id)->exec();
 
-        if($data->status == 'fail') return print(js::alert($data->failReason));
-        echo js::alert($this->lang->mail->noticeResend);
-        echo js::reload('parent');
+        if($data->status == 'fail')
+        {
+            return $this->send(array('callback' => "resendAlert('danger','" . $data->failReason . "')"));
+        }
+
+        return $this->send(array('callback' => "resendAlert('success','".$this->lang->mail->noticeResend."')"));
     }
 
     /**
@@ -403,10 +405,11 @@ class mail extends control
      */
     public function delete($id, $confirm = 'no')
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->mail->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confirm == 'no') return $this->send(array('callback' => "confirmDelete('" . inlink('delete', "id=$id&confirm=yes") . "')"));
 
         $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->eq($id)->exec();
-        echo js::reload('parent');
+
+        return $this->send(array('callback' => 'loadCurrentPage()'));
     }
 
     /**
@@ -426,13 +429,17 @@ class mail extends control
             $confirmLink  = inlink('batchDelete', "confirm=yes");
             $confirmLink .= strpos($confirmLink, '?') === false ? '?' : '&';
             $confirmLink .= "idList=$idList";
-            return print(js::confirm($this->lang->mail->confirmDelete, $confirmLink));
+
+            return $this->send(array('callback' => "confirmDelete('$confirmLink')"));
         }
+
+        /* Get deleted ID list from query string. */
         $idList = array();
         if(isset($_GET['idList'])) $idList = explode('|', $_GET['idList']);
 
         if($idList) $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($idList)->exec();
-        echo js::reload('parent');
+
+        return $this->send(array('callback' => 'loadCurrentPage()'));
     }
 
     /**

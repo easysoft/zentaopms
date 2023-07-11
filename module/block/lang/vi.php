@@ -100,6 +100,9 @@ $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
+$lang->block->summary = new stdclass();
+$lang->block->summary->welcome = 'Zentao has been with you for %s days. <strong>Yesterday</strong>, you has finished <a href="' . helper::createLink('my', 'contribute', 'mode=audit') .'" class="text-success">%s</a> reviews, <a href="' . helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a> tasks , <a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>  bugs were resolved.';
+
 $lang->block->dashboard['default'] = 'Dashboard';
 $lang->block->dashboard['my']      = 'My';
 
@@ -322,53 +325,58 @@ $lang->block->moduleList['qa']        = 'QA';
 $lang->block->moduleList['todo']      = 'Việc làm';
 
 $lang->block->modules['project'] = new stdclass();
-$lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->project       = 'Project List';
-$lang->block->modules['project']->availableBlocks->recentproject = 'Recent Projects';
-$lang->block->modules['project']->availableBlocks->statistic     = 'Project Statistic';
-$lang->block->modules['project']->availableBlocks->projectteam   = 'ProjectHuman Input';
+$lang->block->modules['project']->availableBlocks['overview']      = "{$lang->projectCommon} Overview";
+$lang->block->modules['project']->availableBlocks['recentproject'] = "Recent {$lang->projectCommon}";
+$lang->block->modules['project']->availableBlocks['statistic']     = "{$lang->projectCommon} Statistic";
+$lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon} List";
 
-$lang->block->modules['scrum']['index'] = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = 'Project Overview';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->executionCommon . ' List';
-$lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->executionCommon . ' Overview';
-$lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = 'Test Version';
-$lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = 'Dynamics';
+$lang->block->modules['scrumproject'] = new stdclass();
+$lang->block->modules['scrumproject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon} Overview";
+$lang->block->modules['scrumproject']->availableBlocks['scrumlist']      = $lang->executionCommon . ' List';
+$lang->block->modules['scrumproject']->availableBlocks['sprint']         = $lang->executionCommon . ' Overview';
+$lang->block->modules['scrumproject']->availableBlocks['scrumtest']      = 'Test Version';
+$lang->block->modules['scrumproject']->availableBlocks['projectdynamic'] = 'Dynamics';
 
-$lang->block->modules['waterfall']['index'] = new stdclass();
-$lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt = 'Plan Gantt Chart';
-$lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic = 'Dynamics';
+$lang->block->modules['waterfallproject'] = new stdclass();
+$lang->block->modules['waterfallproject']->availableBlocks['waterfallgantt'] = "{$lang->projectCommon} Plan";
+$lang->block->modules['waterfallproject']->availableBlocks['projectdynamic'] = 'Dynamics';
+
+$lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
+$lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
-$lang->block->modules['product']->availableBlocks = new stdclass();
-$lang->block->modules['product']->availableBlocks->statistic = 'Báo cáo '.$lang->productCommon;
-$lang->block->modules['product']->availableBlocks->overview  = 'Tổng quan '.$lang->productCommon;
-$lang->block->modules['product']->availableBlocks->list      = 'Danh sách '.$lang->productCommon;
-$lang->block->modules['product']->availableBlocks->story     = 'Câu chuyện';
-$lang->block->modules['product']->availableBlocks->plan      = 'Kế hoạch';
-$lang->block->modules['product']->availableBlocks->release   = 'Phát hành';
+$lang->block->modules['product']->availableBlocks['statistic'] = $lang->productCommon . ' Report';
+$lang->block->modules['product']->availableBlocks['overview']  = $lang->productCommon . ' Overview';
+$lang->block->modules['product']->availableBlocks['list']      = $lang->productCommon . ' List';
+$lang->block->modules['product']->availableBlocks['story']     = 'Story';
+$lang->block->modules['product']->availableBlocks['plan']      = 'Plan';
+$lang->block->modules['product']->availableBlocks['release']   = 'Release';
 
 $lang->block->modules['execution'] = new stdclass();
-$lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = $lang->execution->common . ' thống';
-$lang->block->modules['execution']->availableBlocks->overview  = $lang->execution->common . ' xem';
-$lang->block->modules['execution']->availableBlocks->list      = $lang->execution->common . ' danh sách';
-$lang->block->modules['execution']->availableBlocks->task      = 'Nhiệm vụ';
-$lang->block->modules['execution']->availableBlocks->build     = 'Bản dựng';
+$lang->block->modules['execution']->availableBlocks['statistic'] = $lang->execution->common . ' Statistics';
+$lang->block->modules['execution']->availableBlocks['overview']  = $lang->execution->common . ' Overview';
+$lang->block->modules['execution']->availableBlocks['list']      = $lang->execution->common . ' List';
+$lang->block->modules['execution']->availableBlocks['task']      = 'Task';
+$lang->block->modules['execution']->availableBlocks['build']     = 'Build';
 
 $lang->block->modules['qa'] = new stdclass();
-$lang->block->modules['qa']->availableBlocks = new stdclass();
-$lang->block->modules['qa']->availableBlocks->statistic = 'Báo cáo Test';
-//$lang->block->modules['qa']->availableBlocks->overview  = 'Testcase Overview';
-$lang->block->modules['qa']->availableBlocks->bug       = 'Bug';
-$lang->block->modules['qa']->availableBlocks->case      = 'Tình huống';
-$lang->block->modules['qa']->availableBlocks->testtask  = 'Bản dựng';
+$lang->block->modules['qa']->availableBlocks['statistic'] = 'Test Report';
+$lang->block->modules['qa']->availableBlocks['bug']       = 'Bug';
+$lang->block->modules['qa']->availableBlocks['case']      = 'Case';
+$lang->block->modules['qa']->availableBlocks['testtask']  = 'Build';
 
 $lang->block->modules['todo'] = new stdclass();
-$lang->block->modules['todo']->availableBlocks = new stdclass();
-$lang->block->modules['todo']->availableBlocks->list = 'Việc làm';
+$lang->block->modules['todo']->availableBlocks['list'] = 'Todo';
+
+$lang->block->modules['doc'] = new stdclass();
+$lang->block->modules['doc']->availableBlocks['docstatistic']    = 'Statistic';
+$lang->block->modules['doc']->availableBlocks['docdynamic']      = 'Dynamic';
+$lang->block->modules['doc']->availableBlocks['docmycollection'] = 'My Collection';
+$lang->block->modules['doc']->availableBlocks['docrecentupdate'] = 'Recently Update';
+$lang->block->modules['doc']->availableBlocks['docviewlist']     = 'Browse Leaderboard';
+if($config->vision == 'rnd') $lang->block->modules['doc']->availaableBlocks['productdoc'] = $lang->productCommon . 'Document';
+$lang->block->modules['doc']->availableBlocks['doccollectlist']  = 'Favorite Leaderboard';
+$lang->block->modules['doc']->availableBlocks['projectdoc']      = $lang->projectCommon . 'Document';
 
 $lang->block->orderByList = new stdclass();
 
@@ -566,6 +574,12 @@ $lang->block->productstatistic->news            = 'Latest product advancements';
 $lang->block->productstatistic->newPlan         = 'Latest Plan';
 $lang->block->productstatistic->newExecution    = 'Latest Execution';
 $lang->block->productstatistic->newRelease      = 'Latest Release';
+$lang->block->productstatistic->deliveryRate    = 'Delivery Rate';
+
+$lang->block->projectoverview = new stdclass();
+$lang->block->projectoverview->totalProject  = 'Total';
+$lang->block->projectoverview->thisYear      = 'This Year';
+$lang->block->projectoverview->lastThreeYear = 'Done in last three years';
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = 'Total Product Count';

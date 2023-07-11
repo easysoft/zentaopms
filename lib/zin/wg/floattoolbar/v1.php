@@ -1,20 +1,20 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class floatToolbar extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'prefix?:array',
         'main?:array',
         'suffix?:array',
         'object?:object'
     );
 
-    protected static $defineBlocks = array(
+    protected static array $defineBlocks = array(
         'prefix' => array(),
         'main'   => array(),
         'suffix' => array(),
-        'object' => null
     );
 
     public static function getPageCSS(): string|false
@@ -22,7 +22,7 @@ class floatToolbar extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function buildDivider(wg|array|null|bool $wg): wg|null
+    private function buildDivider(wg|array|null $wg): wg|null
     {
         if(empty($wg)) return null;
 
@@ -33,34 +33,40 @@ class floatToolbar extends wg
     {
         if(empty($items)) return null;
 
-        $object = $this->prop('object');
-        if($object)
-        {
-            /* Set url template string replacement rules. */
-            $urlReplaceName  = array();
-            $urlReplaceValue = array();
-            foreach($object as $key => $value)
-            {
-                $urlReplaceName[]  = "{{$key}}";
-                $urlReplaceValue[] = $value;
-            }
-        }
-
         $btns = array();
-        foreach ($items as $item)
+        foreach ($items as &$item)
         {
-            if($object && isset($item['url'])) $item['url'] = str_replace($urlReplaceName, $urlReplaceValue, $item['url']);
+            if(!$item) continue;
+
+            if(!empty($item['url']))      $item['url']      = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['url']);
+            if(!empty($item['data-url'])) $item['data-url'] = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['data-url']);
 
             $btns[] = btn(set($item), setClass('ghost text-white'));
         }
         return $btns;
     }
 
+    public function getObjectValue($matches)
+    {
+        if(!isset($this->object)) $this->object = $this->prop('object');
+
+        return zget($this->object, $matches[1]);
+    }
+
     private function mergeBtns(array|null $btns, array|wg|null $block): array|wg|null
     {
         if(empty($btns) && empty($block)) return null;
-        if(empty($btns)) return $block;
         if(empty($block)) return $btns;
+
+        if($block[0] instanceof btn)
+        {
+            $block[0]->add(setClass('ghost', 'text-white'));
+        }
+        else
+        {
+            foreach($block[0]->children() as $blockBtn) $blockBtn->add(setClass('ghost', 'text-white'));
+        }
+        if(empty($btns)) return $block;
 
         if(!is_array($block)) $block = array($block);
         return array_merge($btns, $block);
@@ -86,7 +92,7 @@ class floatToolbar extends wg
             $prefixBtns,
             $this->buildDivider($prefixBtns),
             $mainBtns,
-            $this->buildDivider($mainBtns && $suffixBtns),
+            empty($mainBtns) ? null : $this->buildDivider($suffixBtns),
             $suffixBtns,
         );
     }

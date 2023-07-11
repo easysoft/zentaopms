@@ -103,6 +103,7 @@ $lang->product->programEmpty         = 'Program should not be empty!';
 $lang->product->nameIsDuplicate      = "『%s』 product line already exists, please reset!";
 $lang->product->nameIsDuplicated     = "Product Line『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 $lang->product->reviewStory          = 'You are not a reviewer for needs "%s" , and cannot review. This operation has been filtered';
+$lang->product->confirmDeleteLine    = "Do you want to delete this product line?";
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
@@ -253,8 +254,12 @@ $lang->product->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->product->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->product->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
-$lang->product->belongingLine    = 'Product Line';
-$lang->product->testCaseCoverage = 'Case Coverage';
-$lang->product->activatedBug     = 'Activated Bugs';
-$lang->product->completeRate     = 'Completion Rate';
-$lang->product->editLine         = 'Edit Product Line';
+$lang->product->belongingLine     = 'Product Line';
+$lang->product->testCaseCoverage  = 'Case Coverage';
+$lang->product->activatedBug      = 'Activated Bugs';
+$lang->product->completeRate      = 'Completion Rate';
+$lang->product->editLine          = 'Edit Product Line';
+$lang->program->totalBugs         = 'Total Bugs';
+$lang->program->totalStories      = 'Total Stories';
+$lang->program->latestReleaseDate = 'Latest Release Date';
+$lang->program->latestRelease     = 'Latest Release';

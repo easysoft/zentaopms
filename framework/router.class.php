@@ -21,6 +21,24 @@ include __DIR__ . '/base/router.class.php';
 class router extends baseRouter
 {
     /**
+     * 系统是否正在安装中。
+     * Whether is installing.
+     *
+     * @var array
+     * @access public
+     */
+    public $installing = false;
+
+    /**
+     * 系统是否正在升级中。
+     * Whether is upgrading.
+     *
+     * @var array
+     * @access public
+     */
+    public $upgrading = false;
+
+    /**
      * 请求的原始参数。
      * The requested params parsed from a URL.
      *
@@ -54,6 +72,16 @@ class router extends baseRouter
      * @access public
      */
     public $fetchModule;
+
+    /**
+     * Check whether app is serving.
+     * @access public
+     * @return bool
+     */
+    public function isServing()
+    {
+        return !$this->installing && !$this->upgrading;
+    }
 
     /**
      * Get the $moduleRoot var.
@@ -296,7 +324,7 @@ class router extends baseRouter
                 list($productCommon, $projectCommon) = explode('_', $productProject);
                 $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][0];
             }
-            if(!defined('IN_UPGRADE'))
+            if(!$this->upgrading)
             {
                 /* Get story concept in project and product. */
                 $clientLang = $this->clientLang == 'zh-tw' ? 'zh-cn' : $this->clientLang;
@@ -396,12 +424,11 @@ class router extends baseRouter
         $configFiles = array_merge(array($mainConfigFile), $configDirFiles, $extConfigFiles);
 
         /* 加载每一个配置文件。Load every config file. */
-        static $loadedConfigs = array();
         foreach($configFiles as $configFile)
         {
-            if(in_array($configFile, $loadedConfigs)) continue;
+            if(in_array($configFile, self::$loadedConfigs)) continue;
             if(file_exists($configFile)) include $configFile;
-            $loadedConfigs[] = $configFile;
+            self::$loadedConfigs[] = $configFile;
         }
 
         /* 加载数据库中与本模块相关的配置项。Merge from the db configs. */
@@ -422,7 +449,7 @@ class router extends baseRouter
      */
     public function loadConfig($moduleName, $appName = '')
     {
-        return parent::loadModuleConfig($moduleName);
+        return $this->loadModuleConfig($moduleName);
     }
 
     /**
@@ -477,7 +504,7 @@ class router extends baseRouter
         if(empty($this->rawMethod)) $this->rawMethod = $this->methodName;
 
         /* If is not a biz version or is in install mode or in in upgrade mode, call parent method. */
-        if($this->config->edition == 'open' or defined('IN_INSTALL') or defined('IN_UPGRADE')) return parent::setControlFile($exitIfNone);
+        if($this->config->edition == 'open' or $this->installing or $this->upgrading) return parent::setControlFile($exitIfNone);
 
         /* Check if the requested module is defined in workflow. */
         $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
@@ -687,7 +714,6 @@ class router extends baseRouter
         /* The display parameter is used to mark whether the request comes from the card display page of the ZenTao client. It should be deleted here to avoid affecting the method call. */
         unset($passedParams['display']);
 
-        $this->rawParams = parent::mergeParams($defaultParams, $passedParams);
-        return $this->rawParams;
+        return parent::mergeParams($defaultParams, $passedParams);
     }
 }

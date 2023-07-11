@@ -48,7 +48,8 @@ if(common::canModify('execution', $execution))
     }
 }
 
-$tableData = initTableData($tasks, $config->task->dtable->fieldList, $this->task);
+$cols = $this->loadModel('datatable')->getSetting('execution');
+$tableData = initTableData($tasks, $cols, $this->task);
 
 toolbar
 (
@@ -61,7 +62,7 @@ toolbar
     hasPriv('task', 'export') ? item(set(array
     (
         'icon'        => 'export',
-        'class'       => 'ghost',
+        'class'       => 'ghost export',
         'url'         => createLink('task', 'export', "execution={$execution->id}&orderBy={$orderBy}&type={$browseType}"),
         'data-toggle' => 'modal'
     ))) : null,
@@ -70,7 +71,6 @@ toolbar
             setClass('ghost btn square btn-default'),
             set::icon('import')
         ),
-        set::arrow(false),
         set::items(array_filter(array($importTaskItem, $importBugItem))),
         set::placement('bottom-end'),
     ) : null,
@@ -85,8 +85,8 @@ toolbar
             set::placement('bottom-end'),
         )
     ) : null,
-    $canCreate && !$canBatchCreate ? item(set($createItem)) : null,
-    $canBatchCreate && !$canCreate ? item(set($batchCreateItem)) : null,
+    $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
 );
 
 /* zin: Define the sidebar in main content. */
@@ -96,7 +96,7 @@ sidebar
         'modules'     => $moduleTree,
         'activeKey'   => $moduleID,
         'settingLink' => $this->createLink('tree', 'browsetask', "rootID=$execution->id&productID=0"),
-        'closeLink'   => $this->createLink('execution', 'task')
+        'closeLink'   => $this->createLink('execution', 'task'),
     )))
 );
 
@@ -119,12 +119,12 @@ if($canBatchAction)
             set::class('dropdown-menu'),
             $canBatchClose ? item(set(array(
                 'text'     => $lang->close,
-                'class'    => 'batch-btn',
+                'class'    => 'batch-btn ajax-btn',
                 'data-url' => createLink('task', 'batchClose')
             ))) : null,
             $canBatchCancel ? item(set(array(
                 'text'     => $lang->task->cancel,
-                'class'    => 'batch-btn',
+                'class'    => 'batch-btn ajax-btn',
                 'data-url' => createLink('task', 'batchCancel')
             ))) : null,
         );
@@ -135,7 +135,7 @@ if($canBatchAction)
         $moduleItems = array();
         foreach($modules as $moduleID => $module)
         {
-            $moduleItems[] = array('text' => $module, 'class' => 'batch-btn', 'data-url' => createLink('task', 'batchChangeModule', "moduleID=$moduleID"));
+            $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchChangeModule', "moduleID=$moduleID"));
         }
 
         menu
@@ -151,7 +151,7 @@ if($canBatchAction)
         $assignedToItems = array();
         foreach ($memberPairs as $account => $name)
         {
-            $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn', 'data-url' => createLink('task', 'batchAssignTo', "executionID={$execution->id}&assignedTo={$account}"));
+            $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchAssignTo', "executionID={$execution->id}&assignedTo={$account}"));
         }
 
         menu
@@ -182,14 +182,20 @@ jsVar('orderBy',        $orderBy);
 jsVar('sortLink',       helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}"));
 jsVar('pageSummary',    $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
+jsVar('multipleAB',     $lang->task->multipleAB);
+jsVar('childrenAB',     $lang->task->childrenAB);
+jsVar('todayLabel',     $lang->today);
+jsVar('yesterdayLabel', $lang->yesterday);
 
 dtable
 (
+    set::groupDivider(true),
     set::userMap($memberPairs),
-    set::cols(array_values($config->task->dtable->fieldList)),
+    set::cols($cols),
     set::data($tableData),
     set::checkable($canBatchAction),
     set::sortLink(jsRaw('createSortLink')),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::footToolbar($footToolbar),
     set::footPager(
         usePager(),

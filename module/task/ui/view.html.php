@@ -13,8 +13,22 @@ global $lang;
 
 detailHeader
 (
-    to::title(entityLabel(set(array('entityID' => $task->id, 'level' => 1, 'text' => $task->name)))),
-    common::hasPriv('task', 'create') ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
+    to::title
+    (
+        $task->team ? span
+        (
+            setClass('label primary-pale'),
+            $lang->task->modeList[$task->mode]
+        ) : null,
+        entityLabel
+        (
+            set
+            (
+                array('entityID' => $task->id, 'level' => 1, 'text' => $task->name)
+            )
+        )
+    ),
+    !isAjaxRequest('modal') && common::hasPriv('task', 'create') ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
 );
 
 /* Construct suitable actions for the current task. */
@@ -40,6 +54,39 @@ foreach($config->task->view->operateList['common'] as $operate)
     $commonActions[] = $settings;
 }
 
+if($task->children) $children = initTableData($task->children, $config->task->dtable->children->fieldList, $this->task);
+if($task->team)
+{
+    $teams = array();
+    foreach($task->team as $team)
+    {
+        $teams[] = h::tr
+        (
+            h::td
+            (
+                zget($users, $team->account)
+            ),
+            h::td
+            (
+                (float)$team->estimate
+            ),
+            h::td
+            (
+                (float)$team->consumed
+            ),
+            h::td
+            (
+                (float)$team->left
+            ),
+            h::td
+            (
+                setClass("status-{$team->status}"),
+                zget($lang->task->statusList, $team->status)
+            ),
+        );
+    }
+}
+
 detailBody
 (
     sectionList
@@ -50,6 +97,7 @@ detailBody
             set::content(empty($task->desc) ? $lang->noData : $task->desc),
             set::useHtml(true)
         ),
+        $task->story ?
         section
         (
             set::title($lang->task->story),
@@ -71,15 +119,27 @@ detailBody
                     empty($task->storyVerify) ? $lang->noData : html($task->storyVerify)
                 ),
             )
-        ),
+        ) : null,
+        $task->children ?
+        section
+        (
+            set::title($lang->task->children),
+            dtable
+            (
+                set::cols(array_values($config->task->dtable->children->fieldList)),
+                set::data($children),
+                set::checkable(false),
+            )
+        ) : null,
     ),
-    history(),
+    $task->files ? fileList
+    (
+        set::files($task->files),
+    ) : null,
+    history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'task', 'objectID' => $task->id))),),
     floatToolbar
     (
-        set::prefix
-        (
-            array(array('icon' => 'back', 'text' => $lang->goback))
-        ),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
         set::main($operateMenus),
         set::suffix($commonActions),
         set::object($task)
@@ -109,7 +169,7 @@ detailBody
                     item
                     (
                         set::name($lang->task->assignedTo),
-                        $task->assignedTo ? $task->assignedToRealName : $lang->noData
+                        $task->assignedToRealName
                     ),
                     item
                     (
@@ -142,35 +202,77 @@ detailBody
                     item
                     (
                         set::name($lang->task->openedBy),
-                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData
+                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : ''
                     ),
                     item
                     (
                         set::name($lang->task->finishedBy),
-                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : $lang->noData
+                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : ''
                     ),
                     item
                     (
                         set::name($lang->task->canceledBy),
-                        $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : $lang->noData,
+                        $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : '',
                     ),
                     item
                     (
                         set::name($lang->task->closedBy),
-                        $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : $lang->noData,
+                        $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : '',
                     ),
                     item
                     (
                         set::name($lang->task->closedReason),
-                        $task->closedReason ? $lang->task->reasonList[$task->closedReason] : $lang->noData
+                        $task->closedReason ? $lang->task->reasonList[$task->closedReason] : ''
                     ),
                     item
                     (
                         set::name($lang->task->lastEdited),
-                        $task->lastEditedBy ? zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate : $lang->noData
+                        $task->lastEditedBy ? zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate : ''
                     ),
                 )
             ),
+            $task->team ? tabPane
+            (
+                set::key('legend-team'),
+                set::title($lang->task->team),
+                h::table
+                (
+                    setClass('table table-data'),
+                    set::id('team'),
+                    h::thead
+                    (
+                        h::tr
+                        (
+                            h::th
+                            (
+                                $lang->task->team,
+                                set::width('80px'),
+                            ),
+                            h::th
+                            (
+                                $lang->task->estimateAB,
+                                set::width('60px'),
+                            ),
+                            h::th
+                            (
+                                $lang->task->consumedAB,
+                                set::width('60px'),
+                            ),
+                            h::th
+                            (
+                                $lang->task->leftAB,
+                                set::width('60px'),
+                            ),
+                            h::th
+                            (
+                                $lang->task->statusAB,
+                                set::width('80px'),
+                            ),
+                        ),
+                    ),
+                    h::tbody($teams)
+                )
+            ) : null,
         ),
         tabs
         (
@@ -223,12 +325,12 @@ detailBody
                     item
                     (
                         set::name($lang->task->linkMR),
-                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData
+                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : ''
                     ),
                     item
                     (
                         set::name($lang->task->linkCommit),
-                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : $lang->noData
+                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : ''
                     )
                 )
             )

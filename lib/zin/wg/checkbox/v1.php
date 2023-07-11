@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class checkbox extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'text?: string',
         'checked?: bool',
         'name?: string',
@@ -52,7 +53,7 @@ class checkbox extends wg
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         if($this->prop('primary')) return $this->buildPrimary();
         list($text, $type, $typeClass) = $this->prop(array('text', 'type', 'typeClass'));

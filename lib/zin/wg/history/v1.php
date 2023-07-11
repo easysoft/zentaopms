@@ -6,10 +6,12 @@ require_once dirname(__DIR__) . DS . 'section' . DS . 'v1.php';
 
 class history extends wg
 {
-    protected static $defineProps = array(
-        'actions?:array',
-        'users?:array',
-        'methodName?:string'
+    protected static array $defineProps = array(
+        'actions?: array',
+        'users?: array',
+        'methodName?: string',
+        'commentUrl?: string',
+        'commentBtn?: bool'
     );
 
     public static function getPageCSS(): string|false
@@ -34,8 +36,8 @@ class history extends wg
     private function checkEditCommentPriv(object $action): bool
     {
         global $app;
-        $methodName = $this->prop('methodName') === null ? $this->prop('methodName') : data('methodName');
-        $actions = $this->prop('actions');
+        $methodName = $this->prop('methodName') !== null ? $this->prop('methodName') : $app->rawMethod;
+        $actions    = $this->prop('actions') !== null ? $this->prop('actions') : data('actions');
 
         return (!isset($canBeChanged) || !empty($canBeChanged))
             && !empty($actions) && end($actions) == $action
@@ -45,7 +47,7 @@ class history extends wg
             && common::hasPriv('action', 'editComment');
     }
 
-    private function expandBtn(int $i): wg
+    private function expandBtn(): wg
     {
         global $lang;
         return btn
@@ -53,17 +55,7 @@ class history extends wg
             setClass('btn-expand btn-mini px-0'),
             set::title($lang->switchDisplay),
             h::i(setClass('change-show icon icon-plus icon-sm')),
-            on::click
-            (
-                <<<EXPAND
-                const changeBox = document.querySelector("#changeBox$i");
-                const icon = e.target.querySelector('.icon');
-                icon.classList.toggle('icon-plus');
-                icon.classList.toggle('icon-minus');
-                if (icon.classList.contains('icon-plus')) changeBox.classList.remove('show');
-                else                                      changeBox.classList.add('show');
-                EXPAND
-            ),
+            on::click('expand'),
         );
     }
 
@@ -79,13 +71,12 @@ class history extends wg
         );
     }
 
-    private function historyChanges(object $action, int $i): wg
+    private function historyChanges(object $action): wg
     {
         global $app;
         return div
         (
             setClass('history-changes ml-7 mt-2'),
-            setID("changeBox$i"),
             html($app->loadTarget('action')->renderChanges($action->objectType, $action->history)),
         );
     }
@@ -128,7 +119,7 @@ class history extends wg
             div
             (
                 setClass('comment-content mt-2 ml-6 p-2.5'),
-                $comment,
+                isHTML($comment) ? html($comment) : $comment,
             ),
         );
     }
@@ -139,16 +130,13 @@ class history extends wg
 
         return form
         (
-            setClass('comment-edit-form hidden'),
+            setClass('comment-edit-form hidden mt-2 ml-6'),
             set::method('post'),
             set::action(createLink('action', 'editComment', "actionID=$action->id")),
-            textarea
+            editor
             (
-                setClass('mt-2 ml-6'),
                 set::name('lastComment'),
-                set::rows('8'),
-                set::autofocus('autofocus'),
-                htmlSpecialString($action->comment)
+                isHTML($action->comment) ? html($action->comment) : $action->comment
             ),
             set::actions(array(
                 'submit',
@@ -175,8 +163,8 @@ class history extends wg
 
             if(!empty($action->history))
             {
-                $actionItemView->add($this->expandBtn($i));
-                $actionItemView->add($this->historyChanges($action, $i));
+                $actionItemView->add($this->expandBtn());
+                $actionItemView->add($this->historyChanges($action));
             }
             if(strlen(trim(($action->comment))) !== 0)
             {
@@ -215,9 +203,12 @@ class history extends wg
         );
     }
 
-    private function commentBtn(): wg
+    private function commentBtn(): ?wg
     {
-        global $lang;
+        global $app, $lang;
+        $methodName = $this->prop('methodName') !== null ? $this->prop('methodName') : $app->rawMethod;
+        $showCommentBtn = $this->prop('commentBtn', false);
+        if(!$showCommentBtn && !str_contains(',view,objectlibs,viewcard,', ",$methodName,")) return null;
         return commentBtn
         (
             set::dataTarget('#comment-dialog'),
@@ -232,9 +223,14 @@ class history extends wg
     {
         global $lang;
 
+        $commentUrl = $this->prop('commentUrl');
+        $isInModal  = isAjaxRequest('modal');
+        $px = $isInModal ? 'px-3' : 'px-6';
+        $pb = $isInModal ? 'pb-3' : 'pb-6';
+
         return new section
         (
-            setClass('history', 'pt-4', 'px-6', 'pb-6', 'canvas'),
+            setClass('history', 'pt-4', $px, $pb, 'canvas'),
             set::title($lang->history),
             to::actions
             (
@@ -247,7 +243,11 @@ class history extends wg
                 )
             ),
             div(setClass('mt-3'), $this->historyList()),
-            commentDialog(set::name('comment'))
+            commentDialog
+            (
+                set::name('comment'),
+                set::url($commentUrl),
+            )
         );
     }
 }

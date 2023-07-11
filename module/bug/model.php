@@ -356,9 +356,9 @@ class bugModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldBug, $bug);
-        if($changes || $bug->comment)
+        if($changes || !empty($bug->comment))
         {
-            $actionID = $this->loadModel('action')->create('bug', $bug->id, $changes ? $action : 'Commented', $bug->comment);
+            $actionID = $this->loadModel('action')->create('bug', $bug->id, $changes ? $action : 'Commented', zget($bug, 'comment', ''));
             if($changes) $this->action->logHistory($actionID, $changes);
         }
 
@@ -1124,7 +1124,7 @@ class bugModel extends model
      */
     public function getProductMemberPairs(int $productID, string $branchID = ''): array
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branchID);
 
@@ -1741,6 +1741,7 @@ class bugModel extends model
         $action = strtolower($action);
 
         if($module == 'bug' && $action == 'confirm')  return $object->status == 'active' && $object->confirmed == 0;
+        if($module == 'bug' && $action == 'assignTo') return $object->status != 'closed';
         if($module == 'bug' && $action == 'resolve')  return $object->status == 'active';
         if($module == 'bug' && $action == 'close')    return $object->status == 'resolved';
         if($module == 'bug' && $action == 'activate') return $object->status != 'active';
@@ -2210,47 +2211,6 @@ class bugModel extends model
         }
 
         return sprintf($this->lang->bug->notice->summary, count($bugs), $unresolved);
-    }
-
-    /**
-     * 构造详情页或列表页需要的操作菜单。
-     * Build action menu.
-     *
-     * @param  object $bug
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenu(object $bug = null, string $type = 'view'): array
-    {
-        $defaultParams = $bug ? "bugID={$bug->id}" : 'bugID={id}';
-        $copyParams    = $bug ? "productID={$bug->product}&branch={$bug->branch}&extra=bugID={$bug->id}" : 'productID={product}&branch={branch}&extra=bugID={id}';
-        if($this->app->tab == 'project')   $copyParams .= ',projectID={project}';
-        if($this->app->tab == 'execution') $copyParams .= ',executionID={execution}';
-
-        $actions = array();
-        $actions['confirm']  = array('icon' => 'ok',         'text' => $this->lang->bug->abbr->confirmed, 'url' => helper::createLink('bug', 'confirm',  $defaultParams), 'data-toggle' => 'modal');
-        $actions['assignTo'] = array('icon' => 'hand-right', 'text' => $this->lang->bug->assignTo,        'url' => helper::createLink('bug', 'assignTo', $defaultParams), 'data-toggle' => 'modal');
-        $actions['resolve']  = array('icon' => 'checked',    'text' => $this->lang->bug->resolve,         'url' => helper::createLink('bug', 'resolve',  $defaultParams), 'data-toggle' => 'modal');
-        $actions['close']    = array('icon' => 'off',        'text' => $this->lang->bug->close,           'url' => helper::createLink('bug', 'close',    $defaultParams), 'data-toggle' => 'modal');
-        $actions['activate'] = array('icon' => 'magic',      'text' => $this->lang->bug->activate,        'url' => helper::createLink('bug', 'activate', $defaultParams), 'data-toggle' => 'modal');
-        $actions['edit']     = array('icon' => 'edit',       'text' => $this->lang->bug->edit,            'url' => helper::createLink('bug', 'edit',     $defaultParams));
-        $actions['copy']     = array('icon' => 'copy',       'text' => $this->lang->bug->copy,            'url' => helper::createLink('bug', 'create',   $copyParams));
-
-        foreach($actions as $action => $actionData)
-        {
-            $actionsConfig = $this->config->bug->actions->{$type};
-            if(strpos(",{$actionsConfig},", ",{$action},") === false)
-            {
-                unset($actions[$action]);
-                continue;
-            }
-            $actions[$action]['hint'] = $actions[$action]['text'];
-            if($type == 'browse') unset($actions[$action]['text']);
-        }
-
-        if($type == 'browse') $this->config->bug->dtable->fieldList['actions']['actionsMap'] = $actions;
-        return $actions;
     }
 
     /**

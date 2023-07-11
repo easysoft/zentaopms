@@ -1,13 +1,16 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'actionitem' . DS . 'v1.php';
 
 class nav extends wg
 {
-    static $defineProps = 'items?:array';
+    protected static array $defineProps = array(
+        'items?:array' // 使用数组指定导航中的每一项。
+    );
 
-    public function onBuildItem($item)
+    public function onBuildItem($item): wg
     {
         return new actionItem
         (
@@ -16,16 +19,13 @@ class nav extends wg
         );
     }
 
-    /**
-     * @return builder
-     */
-    protected function build()
+    protected function build(): wg
     {
         $items = $this->prop('items');
         return h::menu
         (
             setClass('nav'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
             $this->children()
         );

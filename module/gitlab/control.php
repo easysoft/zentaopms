@@ -38,7 +38,7 @@ class gitlab extends control
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Admin user don't need bind. */
@@ -138,14 +138,18 @@ class gitlab extends control
 
         $gitlab = $this->gitlab->getByID($gitlabID);
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
-        if(!isset($user->is_admin) or !$user->is_admin) return print(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
+        if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->tokenLimit, 'locate' => $this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
+
+        $gitlabNames = array();
+        $gitlabUsers = $this->gitlab->apiGetUsers($gitlabID);
+        foreach($gitlabUsers as $user) $gitlabNames[$user->id] = $user->realname . '@' . $user->account;
 
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
 
         if($_POST)
         {
-            $users       = $this->post->zentaoUsers;
-            $gitlabNames = $this->post->gitlabUserNames;
+            $users = array();
+            foreach($_POST as $k => $v) if(substr($k, 0, 6) === 'users-') $users[substr($k, 6)] = $v;
             $accountList = array();
             $repeatUsers = array();
             foreach($users as $openID => $user)
@@ -185,10 +189,9 @@ class gitlab extends control
                     $this->loadModel('action')->create('gitlabuser', $openID, 'bind', '', sprintf($this->lang->gitlab->bindDynamic, $gitlabNames[$openID], $zentaoUsers[$account]->realname));
                 }
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('gitlab', 'browse')));
         }
 
-        $gitlabUsers   = $this->gitlab->apiGetUsers($gitlabID);
         $bindedUsers   = $this->gitlab->getUserAccountIdPairs($gitlabID);
         $matchedResult = $this->gitlab->getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers);
         $matchedResult = array_column(json_decode(json_encode($matchedResult), true), null, "email");
@@ -205,6 +208,38 @@ class gitlab extends control
             return $type == 'binded' ? false : true;
         });
 
+        $bindedGitlabUsers = $unBindGitlabUsers = array();
+
+        foreach($gitlabUsers as $user)
+        {
+            $user->zentaoEmail = !empty($matchedResult[$user->email]) ? $matchedResult[$user->email]['email'] : '';
+            $user->status      = 'notBind';
+            $user->realname    = $user->realname . '@' . $user->account;
+
+            $user->zentaoAccount = isset($user->zentaoAccount) ? $user->zentaoAccount : '';
+            $user->zentaoAccount = zget($userPairs, $user->zentaoAccount, '');
+            if(in_array($user->id, $bindedUsers))
+            {
+                $user->status = 'bindedError';
+                if(!empty($user->zentaoAccount)) $user->status = 'binded';
+            }
+
+            if(!empty($user->zentaoAccount))
+            {
+                $bindedGitlabUsers[] = $user;
+            }
+            else
+            {
+                $unBindGitlabUsers[] = $user;
+            }
+        }
+
+        $gitlabUsers = array_merge($unBindGitlabUsers, $bindedGitlabUsers);
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager(count($gitlabUsers), 10000, 1);
+        
+        $this->view->pager         = $pager;
         $this->view->title         = $this->lang->gitlab->bindUser;
         $this->view->zentaoUsers   = $zentaoUsers;
         $this->view->userPairs     = $userPairs;
@@ -218,24 +253,32 @@ class gitlab extends control
     }
 
     /**
+     * 删除一条gitlab记录。
      * Delete a gitlab.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function delete($id, $confirm = 'no')
+    public function delete($id)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
-
         $oldGitLab = $this->loadModel('pipeline')->getByID($id);
         $actionID  = $this->pipeline->delete($id, 'gitlab');
-        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+
+            return $this->send($response);
+        }
 
         $gitLab   = $this->gitlab->getByID($id);
         $changes  = common::createChanges($oldGitLab, $gitLab);
         $this->loadModel('action')->logHistory($actionID, $changes);
-        echo js::reload('parent');
+
+        $response['load']   = true;
+        $response['result'] = 'success';
+        return $this->send($response);
     }
 
     /**
@@ -699,7 +742,7 @@ class gitlab extends control
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword'); // Fix bug#16741.
 
@@ -860,7 +903,7 @@ class gitlab extends control
         array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $branchList);
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $recTotal   = count($branchList);
         $pager      = new pager($recTotal, $recPerPage, $pageID);
         $branchList = array_chunk($branchList, $pager->recPerPage);
@@ -934,7 +977,7 @@ class gitlab extends control
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $tagList = array();
@@ -1077,7 +1120,7 @@ class gitlab extends control
         }
         else
         {
-            $repo = $this->loadModel('repo')->getRepoByID($repoID);
+            $repo = $this->loadModel('repo')->getByID($repoID);
             $res  = $this->gitlab->addPushWebhook($repo);
 
             if($res or is_array($res))
@@ -1107,7 +1150,7 @@ class gitlab extends control
             $accounts = array_filter($data->accounts);
             if(count($accounts) != count(array_unique($accounts))) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->repeatError));
 
-            $repo        = $this->loadModel('repo')->getRepoByID($repoID);
+            $repo        = $this->loadModel('repo')->getByID($repoID);
             $users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
             $bindedUsers = $this->dao->select('account,openID')
                 ->from(TABLE_OAUTH)
@@ -1209,7 +1252,7 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('repo', 'maintain')));
         }
 
-        $repo           = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo           = $this->loadModel('repo')->getByID($repoID);
         $users          = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $projectMembers = $this->gitlab->apiGetProjectMembers($repo->gitService, $repo->project);
         if(!is_array($projectMembers)) $projectMembers = array();

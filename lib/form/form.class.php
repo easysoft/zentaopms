@@ -177,14 +177,14 @@ class form extends fixer
 
                 $rowData->$field = isset($this->rawdata->$field) ? zget($this->rawdata->$field, $rowIndex, $defaultValue) : $defaultValue;
                 $rowData->$field = helper::convertType($rowData->$field, $config['type']);
+                if(isset($config['filter'])) $rowData->$field = $this->filter($rowData->$field, $config['filter']);
 
                 /* 检查必填字段。Check required fields. */
                 if(isset($config['required']) && $config['required'] && empty($rowData->$field))
                 {
                     $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
-                    if(empty($this->errors)) $this->errors[$rowIndex] = array();
-                    if(!isset($this->errors[$rowIndex][$field])) $this->errors[$rowIndex][$field] = array();
-                    $this->errors[$rowIndex][$field][] = sprintf($app->lang->error->notempty, $fieldName);
+                    if(!isset($this->errors["{$field}[{$rowIndex}]"])) $this->errors["{$field}[{$rowIndex}]"] = array();
+                    $this->errors["{$field}[{$rowIndex}]"] = sprintf($app->lang->error->notempty, $fieldName);
                 }
             }
 

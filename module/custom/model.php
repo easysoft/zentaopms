@@ -103,7 +103,7 @@ class customModel extends model
         $item->value   = $value;
         $item->system  = $system;
 
-        if(!defined('IN_UPGRADE')) $item->vision = $this->config->vision;
+        if(!$this->app->upgrading) $item->vision = $this->config->vision;
 
         $this->dao->replace(TABLE_LANG)->data($item)->exec();
     }
@@ -675,9 +675,11 @@ class customModel extends model
         foreach($langData as $content)
         {
             $value = json_decode($content->value);
-            $URSRList[$content->key]['SRName'] = $value->SRName;
-            $URSRList[$content->key]['URName'] = $value->URName;
-            $URSRList[$content->key]['system'] = $content->system;
+            $URSRList[$content->key] = new stdclass();
+            $URSRList[$content->key]->key    = $content->key;
+            $URSRList[$content->key]->SRName = $value->SRName;
+            $URSRList[$content->key]->URName = $value->URName;
+            $URSRList[$content->key]->system = $content->system;
         }
 
         return $URSRList;

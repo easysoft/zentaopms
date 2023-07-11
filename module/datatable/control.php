@@ -35,6 +35,9 @@ class datatable extends control
      */
     public function ajaxDisplay(string $datatableId, string $moduleName, string $methodName, string $currentModule, string $currentMethod)
     {
+        $this->app->loadLang($currentModule);
+        $this->app->loadConfig($currentModule);
+
         $this->view->datatableId   = $datatableId;
         $this->view->moduleName    = $moduleName;
         $this->view->methodName    = $methodName;
@@ -59,8 +62,45 @@ class datatable extends control
             $name = 'datatable.' . $this->post->target . '.' . $this->post->name;
             $this->loadModel('setting')->setItem($account . '.' . $name, $this->post->value);
             if($this->post->allModule !== false) $this->setting->setItem("$account.execution.task.allModule", $this->post->allModule);
-            if($this->post->showBranch !== false) $this->setting->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showBranch', $this->post->showBranch);
-            if($this->post->global) $this->setting->setItem('system.' . $name, $this->post->value);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => 'dao error.'));
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+        }
+    }
+
+    /**
+     * Ajax save fields.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveFields(string $module, string $method)
+    {
+        if(!empty($_POST))
+        {
+            $account = $this->app->user->account;
+            if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
+
+            $rawModule = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
+            $fieldList = $this->datatable->getFieldList($rawModule, $method);
+            $fieldList = $this->datatable->formatFields($module, $fieldList, false);
+            $fields    = json_decode($this->post->fields);
+            foreach($fields as $index => $field)
+            {
+                $id = $field->id;
+                if(!isset($fieldList[$id])) continue;
+
+                $fieldList[$id]['order'] = $field->order;
+                $fieldList[$id]['width'] = $field->width;
+                $fieldList[$id]['show']  = $field->show ? true : false;
+            }
+
+            $name  = 'datatable.' . $module . ucfirst($method) . '.cols';
+            $value = json_encode($fieldList);
+            $this->loadModel('setting')->setItem($account . '.' . $name, $value);
+            if($this->post->global) $this->setting->setItem('system.' . $name, $value);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => 'dao error.'));
             return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
@@ -80,37 +120,38 @@ class datatable extends control
     {
         $moduleName = $module;
         $target     = $module . ucfirst($method);
-        $mode       = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
-        $key        = $mode == 'datatable' ? 'cols' : 'tablecols';
+
+        $this->view->module = $module;
 
         if($module == 'testtask')
         {
             $this->loadModel('testcase');
             $this->app->loadConfig('testtask');
-            $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
-            $this->config->testcase->datatable->fieldList['actions']['width'] = '100';
-            $this->config->testcase->datatable->fieldList['status']['width']  = '90';
+            $this->config->testcase->dtable->defaultField = $this->config->testtask->dtable->defaultField;
+            $this->config->testcase->dtable->fieldList['actions']['width'] = '100';
+            $this->config->testcase->dtable->fieldList['status']['width']  = '90';
         }
         if($module == 'testcase')
         {
             $this->loadModel('testcase');
-            unset($this->config->testcase->datatable->fieldList['assignedTo']);
+            unset($this->config->testcase->dtable->fieldList['assignedTo']);
         }
-
-        $this->view->module = $module;
-        $this->view->method = $method;
-        $this->view->mode   = $mode;
 
         $module  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         $setting = '';
-        if(isset($this->config->datatable->$target->$key)) $setting = $this->config->datatable->$target->$key;
+        if(isset($this->config->datatable->$target->cols)) $setting = $this->config->datatable->$target->cols;
+
         if(empty($setting))
         {
-            $this->loadModel($module);
-            if(isset($this->config->$module->dtable->defaultField)) $setting = json_encode($this->config->$module->dtable->defaultField);
+            $cols = $this->datatable->getFieldList($module, $method);
+            $cols = $this->datatable->formatFields($module, $cols, false);
+        }
+        else
+        {
+            $cols = json_decode($setting, true);
         }
 
-        $cols = $this->datatable->getFieldList($module);
+        usort($cols, array('datatableModel', 'sortCols'));
 
         if($module == 'story' && $extra != 'requirement') unset($cols['SRS']);
 
@@ -151,8 +192,8 @@ class datatable extends control
         }
         if($extra == 'unsetStory' and isset($cols['story'])) unset($cols['story']);
 
-        $this->view->cols    = $cols;
-        $this->view->setting = $setting;
+        $this->view->method = $method;
+        $this->view->cols   = $cols;
         $this->display();
     }
 

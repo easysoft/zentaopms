@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('viewLink',   createLink('{module}', 'view',   'id={id}'));
+jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
+
 $rawMethod = $this->app->rawMethod;
 if($rawMethod != 'audit') $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];
 
@@ -30,6 +33,8 @@ foreach($reviewList as $review)
 {
     $type       = $review->type == 'prejectreview' ? 'review' : $review->type;
     $isOAObject =  strpos(",{$config->my->oaObjectType},", ",$type,") !== false ? true : false;
+
+    $review->module = $review->type;
 
     if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
     if($type == 'story')                      $typeName = $review->storyType == 'story' ? $lang->SRCommon : $lang->URCommon;
@@ -86,14 +91,8 @@ dtable
 (
     set::cols($cols),
     set::data($data),
-    set::footPager
-    (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('my', 'audit', "browseType={$browseType}&param=&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
-    ),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::footPager(usePager()),
 );
 
 render();

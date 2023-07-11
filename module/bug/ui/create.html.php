@@ -11,9 +11,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('bug',      $bug);
-jsVar('moduleID', $bug->moduleID);
-jsVar('tab', $this->app->tab);
+jsVar('bug',           $bug);
+jsVar('moduleID',      $bug->moduleID);
+jsVar('tab',           $this->app->tab);
+jsVar('createRelease', $lang->release->create);
+jsVar('refresh',       $lang->refreshIcon);
 
 foreach(explode(',', $config->bug->create->requiredFields) as $field)
 {
@@ -34,14 +36,20 @@ $showKeywords         = strpos(",$showFields,", ',keywords,')         !== false;
 
 formPanel
 (
-    on::change('#product',   'changeProduct'),
-    on::change('#branch',    'changeBranch'),
-    on::change('#project',   'changeProject'),
-    on::change('#execution', 'changeExecution'),
-    on::change('#module',    'changeModule'),
-    on::click('#refresh',    'clickRefresh'),
-    on::click('#allBuilds',  'loadAllBuilds'),
-    on::click('#allUsers',   'loadAllUsers'),
+    on::change('#product',              'changeProduct'),
+    on::change('#branch',               'changeBranch'),
+    on::change('#project',              'changeProject'),
+    on::change('#execution',            'changeExecution'),
+    on::change('#module',               'changeModule'),
+    on::change('#region',               'changeRegion'),
+    on::change('#contactListMenu',      'changeContact'),
+    on::click('#allBuilds',             'loadAllBuilds'),
+    on::click('#allUsers',              'loadAllUsers'),
+    on::click('#refreshModule',         'refreshModule'),
+    on::click('#refreshMailto',         'refreshContact'),
+    on::click('#refreshExecutionBuild', 'refreshExecutionBuild'),
+    on::click('#refreshProductBuild',   'refreshProductBuild'),
+    set::title($lang->bug->create),
     to::headingActions(icon('cog-outline')),
     formRow
     (
@@ -147,8 +155,15 @@ formPanel
                 (
                     set::multiple(true),
                     set::name('openedBuild[]'),
+                    set('data-items', count($builds)),
                     set::items($builds),
                     set::value(empty($bug->buildID) ? '' : $bug->buildID)
+                ),
+                span
+                (
+                    set('id', 'buildBoxActions'),
+                    set('class', 'input-group-addon'),
+                    setStyle(array('display' => 'none'))
                 ),
                 span
                 (
@@ -157,7 +172,7 @@ formPanel
                     (
                         set('id', 'allBuilds'),
                         set('href', 'javascript:;'),
-                        $lang->bug->allBuilds
+                        $lang->bug->loadAll
                     )
                 )
             )
@@ -181,44 +196,62 @@ formPanel
                     (
                         set('id', 'allUsers'),
                         set('href', 'javascript:;'),
-                        $lang->bug->allUsers
+                        $lang->bug->loadAll
                     )
                 )
             )
         )
     ),
-    formRow
+    (!empty($executionType) && $executionType == 'kanban') ? formRow
     (
         formGroup
         (
             set::width('1/2'),
-            set::class($showDeadline ? '' : 'hidden'),
+            set::label($lang->kanbancard->region),
+            set::control('select'),
+            set::name('region'),
+            set::items($regionPairs),
+            set::value($regionID)
+        ),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->kanbancard->lane),
+            set::control('select'),
+            set::name('lane'),
+            set::items($lanePairs),
+            set::value($laneID)
+        ),
+    ) : null,
+    ($showDeadline || $showNoticefeedbackBy) ? formRow
+    (
+        $showDeadline ? formGroup
+        (
+            set::width('1/2'),
             set::label($lang->bug->deadline),
             datePicker
             (
                 set::name('deadline'),
                 set::value($bug->deadline)
             )
-        ),
-        formGroup
+        ) : null,
+        $showNoticefeedbackBy ? formGroup
         (
             set::width('1/2'),
-            set::class($showNoticefeedbackBy ? '' : 'hidden'),
             set::label($lang->bug->feedbackBy),
             set::name('feedbackBy'),
             set::value(isset($bug->feedbackBy) ? $bug->feedbackBy : '')
-        )
-    ),
+        ) : null,
+    ) : null,
     formRow
     (
-        formGroup
+        $showNoticefeedbackBy ? formGroup
         (
             set::width('1/2'),
-            set::class($showNoticefeedbackBy ? '' : 'hidden'),
             set::label($lang->bug->notifyEmail),
             set::name('notifyEmail'),
             set::value($bug->notifyEmail)
-        ),
+        ) : null,
         formGroup
         (
             set::width('1/2'),
@@ -230,24 +263,22 @@ formPanel
     ),
     formRow
     (
-        formGroup
+        $showOS ? formGroup
         (
             set::width('1/2'),
-            set::class($showOS ? '' : 'hidden'),
             set::label($lang->bug->os),
             set::control(array('type' => 'select', 'items' => $lang->bug->osList, 'multiple' => true)),
             set::name('os[]'),
             set::value($bug->os)
-        ),
-        formGroup
+        ) : null,
+        $showBrowser ? formGroup
         (
             set::width('1/2'),
-            set::class($showOS ? '' : 'hidden'),
             set::label($lang->bug->browser),
             set::control(array('type' => 'select', 'items' => $lang->bug->browserList)),
             set::name('browser'),
             set::value($bug->browser)
-        )
+        ) : null
     ),
     formRow
     (
@@ -260,21 +291,19 @@ formPanel
         formGroup
         (
             set::width('180px'),
-            set::class($showSeverity ? '' : 'hidden'),
             set::label($lang->bug->severity),
             set::control(array('type' => 'select', 'items' => $lang->bug->severityList)),
             set::name('severity'),
             set::value($bug->severity)
         ),
-        formGroup
+        $showPri ? formGroup
         (
             set::width('180px'),
-            set::class($showPri ? '' : 'hidden'),
             set::label($lang->bug->pri),
             set::control(array('type' => 'select', 'items' => $lang->bug->priList)),
             set::name('pri'),
             set::value($bug->pri)
-        )
+        ) : null
     ),
     formRow
     (
@@ -284,16 +313,15 @@ formPanel
             editor
             (
                 set::name('steps'),
-                set::value($bug->steps ? htmlSpecialString($bug->steps) : '')
+                html($bug->steps)
             )
         ),
     ),
-    formRow
+    ($showStory || $showTask) ? formRow
     (
-        formGroup
+        $showStory ? formGroup
         (
             set::width('1/2'),
-            set::class($showStory ? '' : 'hidden'),
             set::label($lang->bug->story),
             inputGroup
             (
@@ -305,45 +333,77 @@ formPanel
                     set::value($bug->storyID)
                 )
             )
-        ),
-        formGroup
+        ) : null,
+        $showTask ? formGroup
         (
             set::width('1/2'),
-            set::class($showTask ? '' : 'hidden'),
             set::label($lang->bug->task),
             set::control(array('type' => 'select', 'items' => '')),
             set::name('task'),
             set::value($bug->taskID)
-        )
-    ),
-    formRow
+        ) : null
+    ) : null,
+    ($showMailto || $showKeywords) ? formRow
     (
-        formGroup
+        $showMailto ? formGroup
         (
             set::width('1/2'),
-            set::class($showMailto ? '' : 'hidden'),
             set::label($lang->bug->lblMailto),
-            set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
-            set::name('mailto[]'),
-            set::value($bug->mailto ? str_replace(' ', '', $bug->mailto) : '')
-        ),
-        formGroup
+            inputGroup
+            (
+                select
+                (
+                    set::multiple(true),
+                    set::name('mailto[]'),
+                    set::items($users),
+                    set::value($bug->mailto ? str_replace(' ', '', $bug->mailto) : '')
+                ),
+                span
+                (
+                    set('id', 'contactBox'),
+                    set('class', 'input-group-addon'),
+                    $contactList ? select
+                    (
+                        set::class('width', 'w-20'),
+                        set::name('contactListMenu'),
+                        set::items($contactList),
+                        set::value()
+                    ) : a
+                    (
+                        set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
+                        set('title', $lang->user->contacts->manage),
+                        set('data-toggle', 'modal'),
+                        icon('cog'),
+                    )
+                ),
+                span
+                (
+                    set('class', 'input-group-addon'),
+                    a
+                    (
+                        set('id', 'refreshMailto'),
+                        set('class', 'text-black'),
+                        set('href', 'javascript:void(0)'),
+                        icon('refresh')
+                    )
+                )
+            )
+        ) : null,
+        $showKeywords ? formGroup
         (
             set::width('1/2'),
-            set::class($showKeywords ? '' : 'hidden'),
             set::label($lang->bug->keywords),
             set::name('keywords'),
             set::value($bug->keywords)
-        )
-    ),
+        ) : null
+    ) : null,
     formRow
     (
         formGroup
         (
             set::label($lang->bug->files),
-            set::name('files[]'),
-            set::control('file')
-        ),
+            upload()
+        )
     )
 );
 

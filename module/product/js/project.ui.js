@@ -32,10 +32,14 @@ $(function()
             products.push(currentProductID);
             branches.push(currentBranchID);
 
-            $.post($.createLink('project', 'manageProducts', 'projectID=' + selectProjectID), {'products' : products, 'branch' : branches}, function()
-            {
-                $('#link2Project').modal('hide');
-                loadCurrentPage();
+            const formData = new FormData();
+            formData.append('products', products);
+            formData.append('branch', branches);
+
+            $.ajaxSubmit({
+                url:  $.createLink('project', 'manageProducts', 'projectID=' + selectProjectID), 
+                data: formData,
+                load: true
             });
         });
     });

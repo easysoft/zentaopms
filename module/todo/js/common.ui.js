@@ -67,19 +67,15 @@ function changeAssignedTo()
  * @param  object switcher
  * @return void
  */
-function togglePending(switcher)
+function togglePending(e)
 {
-    if(switcher.checked)
+    if($(e.target).prop('checked'))
     {
-        $('.date').removeAttr('disabled');
-        $('.date').prop('value','');
-        $('.cycle-date').prop('value', '');
-        $('#type').closest('.form-row').removeClass('hidden');
-        if($('#cycle').length)
-        {
-            $('#cycle').prop('checked', false);
-            $('.cycle-config').addClass('hidden');
-        }
+        $("[name='date']").attr('disabled','disabled');
+    }
+    else
+    {
+        $("[name='date']").removeAttr('disabled');
     }
 }
 
@@ -120,12 +116,12 @@ function loadList(type, id, todoDefaultType, todoID)
             if(data.length != 0)
             {
                 if($(nameBoxClass).find('#nameInputBox').html(data).find('select').chosen) $(nameBoxClass).find('#nameInputBox').html(data).find('select').chosen();
-                if(config.currentMethod == 'edit' || type == 'feedback') $(nameBoxClass).find('select').val(todoID).trigger('chosen:updated');
-                if($(nameBoxClass + ' select').val() == null) $(nameBoxClass + ' select').attr('data-placeholder', noOptions.replace('%s', chosenType[type])).trigger('chosen:updated');
+                if(config.currentMethod == 'edit' || type == 'feedback') $(nameBoxClass).find('select').val(todoID);
+                if($(nameBoxClass + ' select').val() == null) $(nameBoxClass + ' select').attr('data-placeholder', noOptions);
             }
             else
             {
-                if($(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen) $(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
+                if($(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen) $(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select');
             }
         });
     }
@@ -160,15 +156,15 @@ function selectNext()
  * @param  object switcher
  * @return void
  */
-function switchDateFeature(switcher)
+function switchDateFeature(e)
 {
-    if(switcher.checked)
+    if($(e.target).prop('checked'))
     {
-        $('#begin, #end').attr('disabled','disabled').trigger('chosen:updated');
+        $("[name='begin'], [name='end']").attr('disabled','disabled').trigger('chosen:updated');
     }
     else
     {
-        $('#begin, #end').removeAttr('disabled').trigger('chosen:updated');
+        $("[name='begin'], [name='end']").removeAttr('disabled').trigger('chosen:updated');
     }
 }
 
@@ -198,8 +194,10 @@ function showEvery(switcher)
  * @param  int specifiedMonth
  * @return void
  */
-function setDays(specifiedMonth)
+function setDays(e)
 {
+    var specifiedMonth = $(e.target).val()
+
     /* Get last day in specified month. */
     var date = new Date();
     date.setMonth(specifiedMonth);

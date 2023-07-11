@@ -9,9 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-/* ====== Preparing and processing page data ====== */
 
 /* zin: Set variables to define control for form. */
+$assignedToControl = '';
 if($task->mode == 'linear')
 {
     $assignedToControl = inputGroup(
@@ -25,7 +25,7 @@ if($task->mode == 'linear')
         )
     );
 }
-else
+elseif($canRecordEffort)
 {
     $assignedToControl = select(
         set::name('assignedTo'),
@@ -35,7 +35,7 @@ else
 }
 
 /* ====== Define the page structure with zin widgets ====== */
-
+modalHeader();
 if(!$canRecordEffort)
 {
     if($task->assignedTo != $app->user->account && $task->mode == 'linear')
@@ -50,7 +50,7 @@ if(!$canRecordEffort)
     div
     (
         set::class('alert with-icon'),
-        icon('exclamation-sign'),
+        icon('exclamation-sign icon-3x'),
         div
         (
             set::class('content'),
@@ -66,21 +66,6 @@ else
 {
     formPanel
     (
-        set::title($lang->task->restartAction),
-        set::headingClass('status-heading'),
-        set::titleClass('form-label .form-grid'),
-        set::shadow(!isonlybody()),
-        to::headingActions
-        (
-            entityLabel
-            (
-                setClass('my-3 gap-x-3'),
-                set::level(1),
-                set::text($task->name),
-                set::entityID($task->id),
-                set::reverse(true),
-            )
-        ),
         formGroup
         (
             set::class($task->mode == 'multi' ? 'hidden' : ''),
@@ -140,11 +125,8 @@ else
             )
         ),
     );
+    history();
 }
 
-h::hr(set::class('mt-6'));
-
-history();
-
 /* ====== Render page ====== */
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

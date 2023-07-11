@@ -82,6 +82,9 @@ $lang->user->submit           = '提交';
 $lang->user->resetPWD         = '重置密码';
 $lang->user->resetTitle       = '系统管理员重置密码';
 
+$lang->user->abbr = new stdclass();
+$lang->user->abbr->id = '序号';
+
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';
 
@@ -233,15 +236,15 @@ $lang->user->placeholder->passwordStrengthCheck[1] = '密码必须6位及以上�
 $lang->user->placeholder->passwordStrengthCheck[2] = '密码必须10位及以上，且包含大小写字母、数字、特殊符号。';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account        = "【ID %s】的用户名应该为：三位以上的英文、数字或下划线的组合";
-$lang->user->error->accountDupl    = "【ID %s】的用户名已经存在";
-$lang->user->error->realname       = "【ID %s】的真实姓名必须填写";
-$lang->user->error->visions        = "【ID %s】的界面类型必须填写";
-$lang->user->error->password       = "【ID %s】的密码必须为六位及以上";
-$lang->user->error->mail           = "【ID %s】的邮箱地址不正确";
-$lang->user->error->reserved       = "【ID %s】的用户名已被系统预留";
-$lang->user->error->weakPassword   = "【ID %s】的密码强度小于系统设定。";
-$lang->user->error->dangerPassword = "【ID %s】的密码不能使用【%s】这些常用若口令。";
+$lang->user->error->account        = '用户名应该为：三位以上的英文、数字或下划线的组合';
+$lang->user->error->accountDupl    = '用户名已经存在';
+$lang->user->error->realname       = '真实姓名必须填写';
+$lang->user->error->visions        = '界面类型必须填写';
+$lang->user->error->password       = '密码必须为六位及以上';
+$lang->user->error->mail           = '地址不正确';
+$lang->user->error->reserved       = '用户名已被系统预留';
+$lang->user->error->weakPassword   = '密码强度小于系统设定。';
+$lang->user->error->dangerPassword = "密码不能使用【%s】这些常用若口令。";
 
 $lang->user->error->url              = "网址不正确，请联系管理员";
 $lang->user->error->verify           = "用户名或密码错误";
@@ -277,12 +280,13 @@ $lang->user->contacts->userList = '用户列表';
 
 $lang->usercontact = new stdclass;
 $lang->usercontact->listName = '列表名称';
+$lang->usercontact->userList = '用户列表';
 
 $lang->user->contacts->manage        = '维护列表';
 $lang->user->contacts->contactsList  = '已有列表';
 $lang->user->contacts->selectedUsers = '选择用户';
 $lang->user->contacts->selectList    = '选择列表';
-$lang->user->contacts->createList    = '创建新列表';
+$lang->user->contacts->createList    = '创建联系人';
 $lang->user->contacts->noListYet     = '还没有创建任何列表，请先创建联系人列表。';
 $lang->user->contacts->confirmDelete = '您确定要删除这个列表吗？';
 $lang->user->contacts->or            = ' 或者 ';

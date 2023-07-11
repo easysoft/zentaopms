@@ -79,6 +79,7 @@ $lang->execution->release             = 'Release';
 $lang->execution->acl                 = "Contrôle d'accès";
 $lang->execution->auth                = 'Privileges';
 $lang->execution->teamname            = "Nom de l'équipe";
+$lang->execution->teamSetting         = 'Team Setting';
 $lang->execution->updateOrder         = 'Rank';
 $lang->execution->order               = "Rang du {$lang->executionCommon}";
 $lang->execution->orderAB             = "Rang";
@@ -141,6 +142,7 @@ $lang->execution->list                = "{$lang->executionCommon} List";
 $lang->execution->allProject          = 'Tous';
 $lang->execution->method              = 'Management Method';
 $lang->execution->sameAsParent        = "Same as parent";
+$lang->execution->selectStoryPlan     = 'Select Plan';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
@@ -351,7 +353,7 @@ $lang->execution->timeSummary          = '<div class="table-col"><div class="cle
 $lang->execution->groupSummaryAB       = "<div>Tâches <strong>%s ：</strong><span class='text-muted'>A Faire</span> %s &nbsp; <span class='text-muted'>En Cours</span> %s</div><div>Estimé <strong>%s ：</strong><span class='text-muted'>Coût</span> %s &nbsp; <span class='text-muted'>Reste</span> %s</div>";
 $lang->execution->wbs                  = "Créer Tâche";
 $lang->execution->batchWBS             = "Créer Tâche en lot";
-$lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Comment mettre à jour le Graphe d´atterrissage ?' class='btn btn-link'>Mise à jour <i class='icon icon-help'></i></a>";
+$lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Comment mettre à jour le Graphe d´atterrissage ?'>Mise à jour <i class='icon icon-help text-gray'></i></a>";
 $lang->execution->whyNoStories         = "Aucune story ne peut être associée. Vérifiez s'il existe des stories dans {$lang->executionCommon} qui sont associées à {$lang->productCommon} et vérifiez qu'elles ont bien été validées.";
 $lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in {$lang->projectCommon} and make sure it has been reviewed.";
 $lang->execution->productStories       = "Les stories associées au {$lang->executionCommon} sont une portion des stories associées au {$lang->productCommon}. Les stories ne peuvent être associées à un {$lang->executionCommon} qu'après avoir été validées. <a href='%s'> Associer Stories</a> maintenant.";
@@ -554,6 +556,8 @@ $lang->execution->featureBar['testcase']['all'] = 'All';
 
 $lang->execution->featureBar['importtask']['all'] = $lang->execution->importTask;
 
+$lang->execution->featureBar['importbug']['all'] = $lang->execution->importBug;
+
 $lang->execution->myExecutions = "J'étais impliqué";
 $lang->execution->doingProject = "Ongoing {$lang->projectCommon}s";
 
@@ -665,3 +669,7 @@ $lang->execution->featureBar['dynamic']['thisWeek']  = 'This Week';
 $lang->execution->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->execution->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->execution->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->execution->featureBar['team']['all'] = 'Members';
+
+$lang->execution->featureBar['managemembers']['all'] = 'Manage Team';

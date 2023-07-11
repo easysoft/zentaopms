@@ -49,13 +49,12 @@ class testtaskModel extends model
             ->checkFlow()
             ->exec();
 
-        if(!dao::isError())
-        {
-            $taskID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
-            $this->file->saveUpload('testtask', $taskID);
-            return $taskID;
-        }
+        if(dao::isError()) return false;
+
+        $taskID = $this->dao->lastInsertID();
+        $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
+        $this->file->saveUpload('testtask', $taskID);
+        return $taskID;
     }
 
     /**
@@ -332,7 +331,7 @@ class testtaskModel extends model
      */
     public function getByUser($account, $pager = null, $orderBy = 'id_desc', $type = '')
     {
-        return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple as executionMultiple, t5.name as projectName, t3.name AS buildName")
+        return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple AS executionMultiple, t5.name AS projectName, t3.name AS buildName, t4.name AS productName")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
@@ -790,6 +789,7 @@ class testtaskModel extends model
         $oldTask = $this->getById($taskID);
         $task = fixer::input('post')
             ->add('id', $taskID)
+            ->add('product', $oldTask->product)
             ->setDefault('type', '')
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
@@ -808,11 +808,10 @@ class testtaskModel extends model
             ->where('id')->eq($taskID)
             ->exec();
 
-        if(!dao::isError())
-        {
-            $this->file->processFile4Object('testtask', $oldTask, $task);
-            return common::createChanges($oldTask, $task);
-        }
+        if(dao::isError()) return false;
+
+        $this->file->processFile4Object('testtask', $oldTask, $task);
+        return common::createChanges($oldTask, $task);
     }
 
     /**
@@ -827,7 +826,8 @@ class testtaskModel extends model
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
             ->add('id', $taskID)
-            ->setDefault('status', 'doing')
+            ->add('status', 'doing')
+            ->add('realBegan', date('Y-m-d'))
             ->stripTags($this->config->testtask->editor->start['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
@@ -852,7 +852,7 @@ class testtaskModel extends model
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
             ->add('id', $taskID)
-            ->setDefault('status', 'done')
+            ->add('status', 'done')
             ->stripTags($this->config->testtask->editor->close['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('comment,uid')
@@ -895,7 +895,7 @@ class testtaskModel extends model
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
             ->add('id', $taskID)
-            ->setDefault('status', 'blocked')
+            ->add('status', 'blocked')
             ->stripTags($this->config->testtask->editor->block['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
@@ -920,7 +920,7 @@ class testtaskModel extends model
     {
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
-            ->setDefault('status', 'doing')
+            ->add('status', 'doing')
             ->stripTags($this->config->testtask->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
@@ -1357,7 +1357,7 @@ class testtaskModel extends model
             $postReals   = $postData->reals[$caseID];
 
             $caseResult  = $result ? $result : 'pass';
-            if($postData->node) $caseResult = '';
+            if(!empty($postData->node)) $caseResult = '';
             $stepResults = array();
             if($dbSteps)
             {
@@ -1594,10 +1594,10 @@ class testtaskModel extends model
         if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
-        if($action == 'runcase' and isset($testtask->auto) and $testtask->auto == 'unit')  return false;
 
         if($action == 'runcase')
         {
+            if(isset($testtask->auto) && $testtask->auto == 'unit')  return false;
             if(isset($testtask->caseStatus)) return $testtask->version < $testtask->caseVersion ? $testtask->caseStatus == 'wait' : $testtask->caseStatus != 'wait';
             return $testtask->status != 'wait';
         }
@@ -2399,7 +2399,7 @@ class testtaskModel extends model
     public function setMenu($products, $productID, $branch = '', $taskID = 0)
     {
         if($this->session->branch) $branch = $this->session->branch;
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !commonModel::isTutorialMode())
         {
             $this->app->loadLang('product');
             return print(js::error($this->lang->product->accessDenied) . js::locate('back'));

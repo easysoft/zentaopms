@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class avatar extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'className?:string',
         'style?:array',
         'size?:int=32',
@@ -38,7 +39,7 @@ class avatar extends wg
         return $child;
     }
 
-    protected function build()
+    protected function build(): wg
     {
         /* Attach classes. */
         $this->finalClass[]           = $this->prop('className');
@@ -61,7 +62,7 @@ class avatar extends wg
         (
             setClass($this->finalClass),
             setStyle($finalStyle),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $content,
             $this->children()
         );
@@ -221,8 +222,14 @@ class avatar extends wg
         if(!$background)
         {
             $val = 0;
-            if(is_numeric($avatarCode)) $val = intval($avatarCode);
-            else for($i = 0; $i < strlen($avatarCode); $i++) $val += ord($avatarCode[$i]);
+            if(is_numeric($avatarCode))
+            {
+                $val = intval($avatarCode);
+            }
+            else
+            {
+                for($i = 0; $i < strlen($avatarCode); $i++) $val += ord($avatarCode[$i]);
+            }
 
             $hue         = $val * $hueDistance % 360;
             $actualSat   = $saturation * 100;
@@ -235,9 +242,12 @@ class avatar extends wg
                 $this->finalStyle->color = $this->contrastColor($rgb);
             }
         }
-        elseif (!$foreColor and $background) $this->finalStyle->color = $this->contrastColor($background);
+        elseif (!$foreColor && $background)
+        {
+            $this->finalStyle->color = $this->contrastColor($background);
+        }
 
-        $textStyle = null;
+        $textStyle = array();
         if($this->actualSize and $this->actualSize < (14 * $this->displayTextLen))
         {
             $textStyle = array(
@@ -280,7 +290,7 @@ class avatar extends wg
         (
             setClass('avatar-text'),
             set('data-actualSize', $this->actualSize),
-            set('style', $textStyle),
+            $textStyle ? setStyle($textStyle) : null,
             $displayText
         );
     }

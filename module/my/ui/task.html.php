@@ -11,18 +11,22 @@ declare(strict_types=1);
 namespace zin;
 jsVar('todayLabel', $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
+jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('multipleAB', $lang->task->multipleAB);
 
 featureBar
 (
     set::current($type),
     set::linkParams("mode={$mode}&type={key}"),
-    li(searchToggle())
+    li(searchToggle(set::module('task')))
 );
 
+$canBatchEdit  = common::hasPriv('task', 'batchEdit');
+$canBatchClose = common::hasPriv('task', 'batchClose') && $type != 'closedBy';
 $footToolbar = array('items' => array
 (
-    array('text' => $lang->edit,  'className' => 'batch-btn ' . (common::hasPriv('task', 'batchEdit') ? '' : 'hidden'),           'data-url' => helper::createLink('task', 'batchEdit')),
-    array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('task', 'batchClose') && $type != 'closedBy' ? '' : 'hidden'), 'data-url' => helper::createLink('task', 'batchClose')),
+    $canBatchEdit  ? array('text' => $lang->edit,  'className' => 'batch-btn',          'data-url' => helper::createLink('task', 'batchEdit'))  : null,
+    $canBatchClose ? array('text' => $lang->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('task', 'batchClose')) : null,
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 if($type == 'assignedTo') unset($config->my->task->dtable->fieldList['assignedTo']);

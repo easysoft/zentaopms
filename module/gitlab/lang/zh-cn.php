@@ -235,3 +235,7 @@ $lang->gitlab->tag->accessLevel        = '允许创建';
 $lang->gitlab->tag->protectConfirmDel  = '确认删除该GitLab标签保护吗？';
 $lang->gitlab->tag->emptyPrivNameError = "标签不能为空";
 $lang->gitlab->tag->issetPrivNameError = "已存在该保护标签";
+
+$lang->gitlab->featureBar['binduser']['all']     = $lang->gitlab->all;
+$lang->gitlab->featureBar['binduser']['notBind'] = $lang->gitlab->notBind;
+$lang->gitlab->featureBar['binduser']['binded']  = $lang->gitlab->binded;

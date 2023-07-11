@@ -97,7 +97,7 @@ class entry extends control
         $this->entry->delete(TABLE_ENTRY, $id);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        return $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**

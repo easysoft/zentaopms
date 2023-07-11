@@ -53,6 +53,7 @@ $lang->project->errorSamePlans      = "{$lang->projectCommon}不能关联多个�
 $lang->project->errorNoProducts     = "最少关联一个{$lang->productCommon}";
 $lang->project->copyNoProject       = "没有可用的{$lang->projectCommon}来复制";
 $lang->project->searchByName        = "输入{$lang->projectCommon}名称进行检索";
+$lang->project->emptyProgram        = "无项目集归属项目";
 $lang->project->deleted             = '已删除';
 $lang->project->linkedProducts      = "已关联{$lang->productCommon}";
 $lang->project->unlinkedProducts    = '未关联';
@@ -187,7 +188,6 @@ $lang->project->plan               = '所属计划';
 $lang->project->createKanban       = '添加看板';
 $lang->project->kanban             = '项目看板';
 $lang->project->moreActions        = '更多操作';
-$lang->project->other              = '其他操作';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
@@ -323,7 +323,7 @@ $lang->project->featureBar['bug']['unresolved'] = '未解决';
 $app->loadLang('testcase');
 $lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
 
-$lang->project->featureBar['testtask']['all'] = '测试单列表';
+$lang->project->featureBar['testtask']['all'] = '全部';
 
 $lang->project->featureBar['build']['all'] = '全部版本';
 
@@ -459,10 +459,14 @@ $lang->project->associatePlan     = '关联计划';
 $lang->project->editorPlaceholder = '可以在编辑器直接贴图。快捷键：Command C+V';
 $lang->project->tenThousandYuan   = '万元';
 $lang->project->planDate          = '计划日期';
-$lang->project->delayInfo         = '延期%s天';
+$lang->project->delayInfo         = '延期 %s 天';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . '迭代';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . '阶段';
 $lang->project->executionList['kanban']        = $lang->projectCommon . '看板';
 $lang->project->executionList['agileplus']     = $lang->projectCommon . '迭代';
 $lang->project->executionList['waterfallplus'] = $lang->projectCommon . '阶段';
+
+$lang->project->featureBar['team']['all'] = '团队成员';
+
+$lang->project->featureBar['managemembers']['all'] = '团队管理';

@@ -149,7 +149,7 @@ $items[] = array
     'label'    => $lang->bug->deadline,
     'hidden'   => zget($visibleFields, 'deadline', true, false),
     'control'  => 'date',
-    'width'    => '128px',
+    'width'    => '136px',
     'required' => isset($requiredFields['deadline']),
     'ditto'    => true,
 );
@@ -189,6 +189,7 @@ $items[] = array
     'value'    => '',
     'width'    => '80px',
     'required' => isset($requiredFields['pri']),
+    'ditto'   => true,
 );
 
 /* Field of severity. */
@@ -238,9 +239,11 @@ $items[] = array
     'required' => isset($requiredFields['keywords']),
 );
 
-
 formBatchPanel
 (
+    set::title($lang->bug->batchCreate),
+    set::uploadParams('module=bug&params=' . helper::safe64Encode("productID=$product->id&branch=$branch&executionID=$executionID&moduleID=$moduleID")),
+    set::pasteField('title'),
     set::items($items),
     on::change('[data-name="branch"]', 'setBranchRelated'),
     on::change('[data-name="project"]', 'loadProductExecutionsByProject'),

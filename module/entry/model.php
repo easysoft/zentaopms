@@ -90,6 +90,7 @@ class entryModel extends model
         $entry = fixer::input('post')
             ->setDefault('ip', '*')
             ->setIF($this->post->allIP, 'ip', '*')
+            ->setIF($this->post->freePasswd == '1', 'account', '')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->remove('allIP')
@@ -174,5 +175,20 @@ class entryModel extends model
 
         $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();
+    }
+
+
+    /**
+     * 判断操作是否可以点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $report
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $entry, string $action): bool
+    {
+        return true;
     }
 }

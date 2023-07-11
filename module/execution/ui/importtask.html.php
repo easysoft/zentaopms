@@ -36,7 +36,7 @@ $config->task->dtable->importTask->fieldList['execution']['map'] = $executions;
 if($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))) unset($config->task->dtable->importTask->fieldList['story']);
 
 jsVar('orderBy',  $orderBy);
-jsVar('sortLink', helper::createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+jsVar('sortLink', helper::createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy={orderBy}&recPerPage={$pager->recPerPage}"));
 dtable
 (
     set::userMap($memberPairs),
@@ -59,10 +59,10 @@ dtable
         )
     )),
     set::footPager(
-        usePager(),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
+        usePager
+        (
+            array('linkCreator' => helper::createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy=$orderBy&recPerPage={recPerPage}&page={page}"))
+        ),
     )
 );
 

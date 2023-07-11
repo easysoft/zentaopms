@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+dropmenu();
+
 /* zin: Define the set::module('release') feature bar on main menu. */
 featureBar
 (
@@ -27,7 +30,6 @@ toolbar
 
 jsVar('markerTitle', $lang->release->marker);
 jsVar('showBranch', $showBranch);
-jsVar('confirmDelete', $lang->release->confirmDelete);
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('pageAllSummary', $lang->release->pageAllSummary);
@@ -41,13 +43,13 @@ dtable
     set::data(array_values($releases)),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::sortLink(jsRaw('createSortLink')),
+    set::footer([jsRaw('function(){return window.setStatistics.call(this);}'), 'flex', 'pager']),
     set::footPager(
         usePager(),
         set::recPerPage($pager->recPerPage),
         set::recTotal($pager->recTotal),
         set::linkCreator(helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}")),
     ),
-    set::footer(jsRaw('function(){return window.setStatistics.call(this);}'))
 );
 
 /* ====== Render page ====== */

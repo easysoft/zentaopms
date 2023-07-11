@@ -64,14 +64,13 @@ toolbar
     ) : null
 );
 
-$footerHTML = $status == 'totalstatus' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount) : sprintf($lang->testtask->pageSummary, count($tasks));
+$footerHTML = strtolower($status) == 'totalstatus' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount) : sprintf($lang->testtask->pageSummary, count($tasks));
 dtable
 (
-    set::customCols(true),
     set::cols($cols),
     set::data($data),
     set::userMap($users),
-    set::fixedLeftWidth('44%'),
+    set::fixedLeftWidth('20%'),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),
 );

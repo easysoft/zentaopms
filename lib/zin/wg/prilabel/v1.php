@@ -4,7 +4,7 @@ namespace zin;
 
 class priLabel extends wg
 {
-    protected static $defineProps = array(
+    protected static array $defineProps = array(
         'pri: int|string'
     );
 
@@ -23,7 +23,7 @@ class priLabel extends wg
 
         return span
         (
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             setClass("pri-$pri"),
             $pri
         );

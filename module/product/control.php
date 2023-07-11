@@ -47,7 +47,7 @@ class product extends control
     public function index(int $productID = 0)
     {
         /* Check product id and get product branch. */
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
 
         /* Set Menu. */
@@ -78,7 +78,7 @@ class product extends control
     public function project(string $status = 'all', int $productID = 0, string $branch = '', string $involved = '0', string $orderBy = 'order_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if(!$involved) $involved = $this->cookie->involved;
-        $this->productZen->setProjectMenu($productID, $branch, $this->cookie->preBranch);
+        $this->productZen->setProjectMenu($productID, $branch, (string)$this->cookie->preBranch);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -94,7 +94,7 @@ class product extends control
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
         $this->view->projectStats = $projectStats;
-        $this->view->PMList       = $this->productZen->getPMList($projectStats);
+        $this->view->PMList       = $this->product->getPMList($projectStats);
         $this->view->product      = $product;
         $this->view->projects     = $projects;
         $this->view->status       = $status;
@@ -140,7 +140,7 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Generate data. */
-        $productID = $this->app->tab != 'project' ? $this->product->saveVisitState($productID, $this->products) : $productID;
+        $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $product   = $this->productZen->getBrowseProduct($productID);
         $project   = $this->loadModel('project')->getByID($projectID);
         $branchID  = $this->productZen->getBranchID($product, $branch);
@@ -286,7 +286,7 @@ class product extends control
         $this->productZen->setEditMenu($productID, $programID);
 
         $product   = $this->product->getByID($productID);
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
 
         $this->view->title   = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->product = $product;
@@ -348,7 +348,7 @@ class product extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->executeHooks($productID);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $this->product->setMenu($productID);
@@ -400,15 +400,11 @@ class product extends control
      * Delete a product.
      *
      * @param  int    $productID
-     * @param  string $confirm   yes|no
      * @access public
      * @return void
      */
-    public function delete(int $productID, string $confirm = 'no')
+    public function delete(int $productID)
     {
-        /* Not confirm. */
-        if($confirm == 'no') return print(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
-
         /* Delete product. */
         $this->product->deleteByID($productID);
 
@@ -420,7 +416,7 @@ class product extends control
         if($message) $this->lang->saveSuccess = $message;
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
-        print(js::locate($this->createLink('product', 'all'), 'parent'));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('product', 'all')));
     }
 
     /**
@@ -519,7 +515,7 @@ class product extends control
     public function dashboard(int $productID = 0)
     {
         /* Check and get product ID. */
-        $productID = $this->product->saveVisitState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
 
         /* Get product. */
         $product   = $this->product->getStatByID($productID);
@@ -882,8 +878,8 @@ class product extends control
         $status   = empty($this->config->CRProduct) ? 'noclosed' : 'all';
         $products = $this->product->getProductPairsByProject($executionID, $status);
 
-        if(empty($products)) return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
-        return print(html::select('product', $products, '', "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+        if(empty($products)) return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID", '', 'true'), 'project');
+        return print(html::select('product', $products, '', "onchange='loadBranches();' class='form-control chosen' required"));
     }
 
     /**
@@ -974,9 +970,8 @@ class product extends control
         }
         else
         {
-            $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
             $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple $event"));
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple"));
         }
     }
 
@@ -1130,5 +1125,21 @@ class product extends control
     {
         $this->session->set('product', $productID, $this->app->tab);
         return $this->send(array('result' => 'success', 'productID' => $this->session->product));
+    }
+
+    /**
+     * Delete a prodcut line.
+     *
+     * @param  int    $lineID
+     * @access public
+     * @return void
+     */
+    public function ajaxDeleteLine(int $lineID)
+    {
+        $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->eq($lineID)->exec();
+        $this->dao->update(TABLE_PRODUCT)->set('line')->eq('0')->where('line')->eq($lineID)->exec();
+
+        $link = inlink('manageLine');
+        return $this->send(array('result' => 'success', 'callback' => "loadModal(\"$link\", 'manageLineModal');"));
     }
 }

@@ -10,15 +10,75 @@ declare(strict_types=1);
 */
 
 namespace zin;
+$blockNavCode = 'nav-' . uniqid();
+
+$menus = array();
+foreach($hasViewPriv as $type => $bool)
+{
+    $selected = key($hasViewPriv);
+    $menus[]  = li
+    (
+        set('class', 'nav-item nav-switch'),
+        a
+        (
+            set('class', $type == $selected ? 'active' : ''),
+            set('data-toggle', 'tab'),
+            set('href', "#assigntome{$type}Tab{$blockNavCode}"),
+            $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type)
+        )
+    );
+}
+
+$contents = array();
+foreach($hasViewPriv as $type => $bool)
+{
+    $data       = ${"{$type}s"};
+    $configType = $type;
+    if($type == 'story')       $data       = $stories;
+    if($type == 'requirement') $configType = 'story';
+
+    if(empty($config->block->{$configType}->dtable->fieldList)) continue;
+    if(empty($data)) $data = array();
+
+    $selected  = key($hasViewPriv);
+    $contents[] = div
+    (
+        set('class', 'tab-pane ' . ($type == $selected ? 'active' : '')),
+        set('id', "assigntome{$type}Tab{$blockNavCode}"),
+        dtable
+        (
+            set::height(318),
+            set::bordered(false),
+            set::horzScrollbarPos('inside'),
+            set::cols(array_values($config->block->{$configType}->dtable->fieldList)),
+            set::data(array_values($data)),
+            set::userMap($users),
+        )
+    );
+}
 
 panel
 (
     set('class', 'assigntome-block'),
-    div
+    set('headingClass', 'border-b'),
+    set('bodyClass', 'p-0'),
+    to::heading
     (
-        '我的待处理',
-        '正在开发中...'
-    )
+        div
+        (
+            set('class', 'panel-title flex justify-between w-full'),
+            $block->title,
+            div
+            (
+                ul
+                (
+                    set('class', 'nav nav-tabs'),
+                    $menus
+                )
+            )
+        )
+    ),
+    div($contents)
 );
 
-render('|fragment');
+render();

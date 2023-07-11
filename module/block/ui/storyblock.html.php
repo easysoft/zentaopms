@@ -11,21 +11,46 @@ declare(strict_types=1);
 
 namespace zin;
 
-foreach($stories as $story)
+if(!$longBlock)
 {
-    $story->status   = zget($this->lang->story->statusList, $story->status);
-    $story->stage    = zget($this->lang->story->stageList, $story->stage);
-    $story->category = zget($this->lang->story->categoryList, $story->category);
+    unset($config->block->story->dtable->fieldList['status']);
+    unset($config->block->story->dtable->fieldList['category']);
+    unset($config->block->story->dtable->fieldList['estimate']);
+    unset($config->block->story->dtable->fieldList['stage']);
 }
+else
+{
+    foreach($stories as $story) $story->estimate .= $config->hourUnit;
+}
+
+$method = $block->params->type == 'assignedTo' ? 'work' : 'contribute';
 
 panel
 (
+    setClass('p-0'),
+    set::title($block->title),
+    set::bodyClass('p-0 no-shadow border-t'),
+    to::headingActions
+    (
+        hasPriv('my', $method) && $block->params->type != 'reviewBy' ? h::nav
+        (
+            setClass('toolbar'),
+            btn
+            (
+                setClass('ghost toolbar-item size-sm z-10'),
+                set::url(createLink('my', $method, "mode=story&browseType={$block->params->type}")),
+                $lang->more,
+                span(setClass('caret-right')),
+            )
+        ) : '',
+    ),
     dtable
     (
-        set::width('100%'),
+        set::height(318),
+        set::fixedLeftWidth('0.5'),
         set::cols(array_values($config->block->story->dtable->fieldList)),
         set::data(array_values($stories))
     )
 );
 
-render('|fragment');
+render();

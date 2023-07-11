@@ -1,6 +1,6 @@
 function setDuplicate()
 {
-    var resolution = $(this).val();
+    var resolution = $(event.target).val();
     if(resolution == 'duplicate')
     {
         $.ajaxSettings.async = false;

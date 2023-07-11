@@ -28,14 +28,13 @@ class formBatchItem extends wg
      * @var    array
      * @access protected
      */
-    protected static $defineProps = array
-    (
+    protected static array $defineProps = array(
         'name: string',                 // 表单项名称，无需包含 `[]`。
         'label: string|bool',           // 列标题。
         'labelClass?: string',          // 列标题类名。
         'labelProps?: string',          // 列标题属性，例如 `array('data-toggle' => 'tooltip', 'data-title' 。=> 'This is a tip')`
         'required?:bool|string="auto"', // 是否必填，如果设置为 `"auto"`，则自动从当前模块 config 中查询。
-        'control?: array|string',       // 控件类型或控件配置。
+        'control?: array|string|false', // 控件类型或控件配置。
         'width?: number|string',        // 列宽度，如果设置为 `"auto"` 则自动填充剩余宽度。
         'minWidth?: number|string',     // 列最小宽度。
         'value?: string|array',         // 默认值。
@@ -48,37 +47,41 @@ class formBatchItem extends wg
         'tipProps?: string',            // 列标题上的提示触发按钮其他属性。
         'ditto?: bool',                 // 是否显示同上按钮。
         'defaultDitto?:string="on"',    // 同上按钮的默认值。
-        'hidden?: bool=false'           // 是否隐藏
+        'hidden?: bool=false',          // 是否隐藏
+        'readonly?: bool=false',        // 是否只读
     );
 
     /**
      * Define default properties.
      *
-     * @var    array
      * @access protected
      */
-    protected function build()
+    protected function build(): array
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $defaultDitto, $hidden) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'defaultDitto', 'hidden'));
+        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $defaultDitto, $hidden, $readonly, $multiple) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'defaultDitto', 'hidden', 'readonly', 'multiple'));
 
         if($required === 'auto') $required = isFieldRequired($name);
 
-        if(is_string($control)) $control = array('type' => $control, 'name' => $name);
-        if(empty($control))     $control = array();
+        if($control !== false)
+        {
+            if(is_string($control)) $control = array('type' => $control, 'name' => $name);
+            if(empty($control))     $control = array();
 
-        if(!isset($control['type'])) $control['type']        = 'text';
-        if($required !== null)       $control['required']    = $required;
-        if($name !== null)           $control['name']        = $name;
-        if($value !== null)          $control['value']       = $value;
-        if($disabled !== null)       $control['disabled']    = $disabled;
-        if($items !== null)          $control['items']       = $items;
-        if($placeholder !== null)    $control['placeholder'] = $placeholder;
+            if(!isset($control['type'])) $control['type']        = 'text';
+            if($required !== null)       $control['required']    = $required;
+            if($name !== null)           $control['name']        = $name;
+            if($value !== null)          $control['value']       = $value;
+            if($disabled !== null)       $control['disabled']    = $disabled;
+            if($multiple !== null)       $control['multiple']    = $multiple;
+            if($items !== null)          $control['items']       = $items;
+            if($placeholder !== null)    $control['placeholder'] = $placeholder;
+            if($readonly !== null)       $control['readonly']    = $readonly;
+        }
 
         $asIndex = $control['type'] === 'index';
         if($asIndex) $control['type'] = 'static';
 
-        return array
-        (
+        return array(
             h::th
             (
                 setClass('form-batch-head'),
@@ -92,10 +95,9 @@ class formBatchItem extends wg
                 set($this->getRestProps()),
                 span
                 (
-                    set::class('form-label form-batch-label', $labelClass, $strong ? 'font-bold' : null),
-                    set::required($required),
+                    set::class('form-label form-batch-label', $labelClass, $strong ? 'font-bold' : null, $required ? 'required' : null),
                     set($labelProps),
-                    empty($label) ? $name : $label
+                    $label
                 ),
                 empty($tip) ? null : new btn
                 (

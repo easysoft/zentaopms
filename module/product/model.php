@@ -122,7 +122,7 @@ class productModel extends model
      */
     public function getByID(int $productID): object|false
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProduct();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProduct();
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(!$product) return false;
 
@@ -180,7 +180,7 @@ class productModel extends model
      */
     public function getPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductPairs();
         return $this->productTao->fetchPairs($mode, $programID, $append, $shadow);
     }
 
@@ -237,7 +237,7 @@ class productModel extends model
     public function getProducts(int $projectID = 0, string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true): array
     {
         /* 如果是新手教程模式，直接返回测试数据。*/
-        if(defined('TUTORIAL'))
+        if(commonModel::isTutorialMode())
         {
             $this->loadModel('tutorial');
             if(!$withBranch) return $this->tutorial->getProductPairs();
@@ -472,6 +472,7 @@ class productModel extends model
      */
     public function create(object $product, string $lineName = ''): int|false
     {
+        /* Insert product and get the product ID. */
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} and `deleted` = '0'")
@@ -493,7 +494,8 @@ class productModel extends model
 
         /* Update and create linked data. */
         $this->loadModel('action')->create('product', $productID, 'opened');
-        $this->loadModel('file')->updateObjectID($this->post->uid, $productID, 'product');
+        $uid = empty($this->post->uid) ? '' : $this->post->uid;
+        $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
         $this->productTao->createMainLib($productID);
         if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
@@ -732,7 +734,7 @@ class productModel extends model
         }
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true);
     }
 
     /**
@@ -752,7 +754,7 @@ class productModel extends model
      */
     public function getStories(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $type = 'story', string $sort = 'id_desc', object|null$pager = null): array
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
 
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : '0';
@@ -1169,8 +1171,10 @@ class productModel extends model
         $unclosedStory        = $this->story->getUnClosedTotal();
         $plans                = $this->productTao->getPlansTODO($productIdList);
         $releases             = $this->productTao->getReleasesTODO($productIdList);
+        $latestReleases       = $this->productTao->getLatestReleasesTODO($productIdList);
         $bugs                 = $this->productTao->getBugsTODO($productIdList);
         $unResolved           = $this->productTao->getUnResolvedTODO($productIdList);
+        $activeBugs           = $this->productTao->getActiveBugsTODO($productIdList);
         $fixedBugs            = $this->productTao->getFixedBugsTODO($productIdList);
         $closedBugs           = $this->productTao->getClosedBugsTODO($productIdList);
         $thisWeekBugs         = $this->productTao->getThisWeekBugsTODO($productIdList);
@@ -1178,6 +1182,7 @@ class productModel extends model
         list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productIdList, $storyType);
         $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
         $coveragePairs        = $this->productTao->getCaseCoveragePairs($productIdList);
+        $projectsPairs        = $this->productTao->getProjectCountPairs($productIdList);
 
         /* Render statistic result to each product. */
         $stats = array();
@@ -1186,18 +1191,25 @@ class productModel extends model
             $product->stories                 = $stories[$product->id];
             $product->stories['finishClosed'] = isset($finishClosedStory[$product->id]) ? $finishClosedStory[$product->id] : 0;
             $product->stories['unclosed']     = isset($unclosedStory[$product->id])     ? $unclosedStory[$product->id]     : 0;
+            $product->activeStories           = isset($stories[$product->id])           ? $stories[$product->id]['active'] : 0;
 
             $product->requirements = $reqs[$product->id];
             $product->plans        = isset($plans[$product->id])               ? $plans[$product->id]               : 0;
             $product->releases     = isset($releases[$product->id])            ? $releases[$product->id]            : 0;
             $product->bugs         = isset($bugs[$product->id])                ? $bugs[$product->id]                : 0;
             $product->unResolved   = isset($unResolved[$product->id])          ? $unResolved[$product->id]          : 0;
+            $product->activeBugs   = isset($activeBugs[$product->id])          ? $activeBugs[$product->id]          : 0;
             $product->closedBugs   = isset($closedBugs[$product->id])          ? $closedBugs[$product->id]          : 0;
             $product->fixedBugs    = isset($fixedBugs[$product->id])           ? $fixedBugs[$product->id]           : 0;
             $product->thisWeekBugs = isset($thisWeekBugs[$product->id])        ? $thisWeekBugs[$product->id]        : 0;
             $product->assignToNull = isset($assignToNull[$product->id])        ? $assignToNull[$product->id]        : 0;
             $product->executions   = isset($executionCountPairs[$product->id]) ? $executionCountPairs[$product->id] : 0;
             $product->coverage     = isset($coveragePairs[$product->id])       ? $coveragePairs[$product->id]       : 0;
+            $product->projects     = isset($projectsPairs[$product->id])       ? $projectsPairs[$product->id]       : 0;
+
+            $latestRelease = isset($latestReleases[$product->id]) ? $latestReleases[$product->id][0] : null;
+            $product->latestRelease     = $latestRelease ? $latestRelease->name : '';
+            $product->latestReleaseDate = $latestRelease ? $latestRelease->date : '';
 
             /* Calculate product progress. */
             $closedTotal       = $product->stories['closed'] + $product->requirements['closed'];
@@ -1384,27 +1396,26 @@ class productModel extends model
      * @param  object $product
      * @param  string $type
      * @access public
-     * @return string
+     * @return array
      */
-    public function buildOperateMenu(object $product, $type = 'view'): string
+    public function buildOperateMenu(object $product, string $type = 'view'): array
     {
-        $menu    = '';
-        $params  = "product=$product->id";
-        $divider = "<div class='divider'></div>";
+        /* Declare menu list. */
+        $menuList = array
+        (
+            'main'   => array(),
+            'suffix' => array()
+        );
 
-        if($type == 'view')
-        {
-            $menu .= $divider . $this->buildFlowMenu('product', $product, $type, 'direct') . $divider;
+        $params = "product=$product->id";
 
-            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
-            $menu .= $divider;
-        }
+        if($type == 'view') $menuList['main'][] = $this->config->product->actionList['close'];
 
-        $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
+        $menuList['suffix'][] = $this->buildMenu('product', 'edit', $params, $product, $type);
 
-        if($type == 'view') $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
+        if($type == 'view') $menuList['suffix'][] = $this->config->product->actionList['delete'];
 
-        return $menu;
+        return $menuList;
     }
 
     /**
@@ -1527,9 +1538,9 @@ class productModel extends model
      * @access public
      * @return int
      */
-    public function saveVisitState(int $productID, array $products): int
+    public function saveState(int $productID, array $products): int
     {
-        if(defined('TUTORIAL')) return $productID;
+        if(commonModel::isTutorialMode()) return $productID;
 
         $productID = $this->getAccessableProductID($productID, $products);
 
@@ -1592,7 +1603,7 @@ class productModel extends model
      */
     public function accessDenied(string $tips)
     {
-        if(defined('TUTORIAL')) return true;
+        if(commonModel::isTutorialMode()) return true;
 
         echo js::alert($tips);
 
@@ -1616,7 +1627,7 @@ class productModel extends model
      */
     public function setMenu(int $productID = 0, string|int $branch = '', string $extra = ''): void
     {
-        if(!defined('TUTORIAL') and $productID != 0 and !$this->checkPriv($productID))
+        if(!commonModel::isTutorialMode() and $productID != 0 and !$this->checkPriv($productID))
         {
             $this->accessDenied($this->lang->product->accessDenied);
             return;
@@ -1659,5 +1670,137 @@ class productModel extends model
     {
         $this->delete(TABLE_PRODUCT, $productID);
         $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
+    }
+
+    /**
+     * 格式化数据表格输出数据。
+     * Format data for list.
+     *
+     * @param  object $product
+     * @param  array  $users
+     * @access public
+     * @return object
+     */
+    public function formatDataForList(object $product, array $users): object
+    {
+        $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
+        $totalBugs    = $product->unResolved + $product->fixedBugs;
+
+        $item = new stdClass();
+        $item->type              = 'product';
+        $item->id                = $product->id;
+        $item->name              = $product->name;
+        $item->productLine       = $product->lineName;
+        $item->PO                = !empty($product->PO) ? zget($users, $product->PO) : '';
+        $item->createdDate       = $product->createdDate;
+        $item->createdBy         = $product->createdBy;
+        $item->draftStories      = $product->stories['draft'];
+        $item->activeStories     = $product->stories['active'];
+        $item->changingStories   = $product->stories['changing'];
+        $item->reviewingStories  = $product->stories['reviewing'];
+        $item->totalStories      = $totalStories;
+        $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
+        $item->plans             = $product->plans;
+        $item->execution         = $product->executions;
+        $item->testCaseCoverage  = $product->coverage;
+        $item->totalActivatedBugs= $product->activeBugs;
+        $item->totalBugs         = $product->bugs;
+        $item->bugFixedRate      = ($totalBugs == 0 ? 0 : round($product->fixedBugs / $totalBugs, 3) * 100);
+        $item->releases          = $product->releases;
+        $item->latestReleaseDate = $product->latestReleaseDate;
+        $item->latestRelease     = $product->latestRelease;
+        if(isset($product->actions)) $item->actions = $product->actions;
+
+        return $item;
+    }
+
+    /**
+     * Build menu of a module.
+     *
+     * Copy of model class within framework/mode.class.php
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $params
+     * @param  object $data
+     * @param  string $type
+     * @param  string $icon
+     * @param  string $target
+     * @param  string $class
+     * @param  bool   $onlyBody
+     * @param  string $misc
+     * @param  string $title
+     * @param  bool   $returnHtml
+     * @access public
+     * @return string
+     */
+    public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '', $returnHtml = true)
+    {
+        if(str_contains($moduleName, '.')) [$appName, $moduleName] = explode('.', $moduleName);
+
+        if(str_contains($methodName, '_') && strpos($methodName, '_') > 0) [$module, $method] = explode('_', $methodName);
+
+        if(empty($module)) $module = $moduleName;
+        if(empty($method)) $method = $methodName;
+
+        static $actions = array();
+        if($this->config->edition != 'open')
+        {
+            if(empty($actions[$moduleName]))
+            {
+                $actions[$moduleName] = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
+                    ->where('module')->eq($moduleName)
+                    ->andWhere('buildin')->eq('1')
+                    ->andWhere('status')->eq('enable')
+                    ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                    ->fetchAll('action');
+            }
+        }
+
+        $enabled = true;
+        if(!empty($actions) and isset($actions[$moduleName][$methodName]))
+        {
+            $action = $actions[$moduleName][$methodName];
+
+            if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+
+            $conditions = json_decode((string) $action->conditions);
+            if($conditions and $action->extensionType == 'extend')
+            {
+                if($icon != 'copy' and $methodName != 'create') $title = $action->name;
+                if($conditions) $enabled = $this->loadModel('flow')->checkConditions($conditions, $data);
+            }
+            else
+            {
+                if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
+            }
+        }
+        else
+        {
+            if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
+        }
+
+        if(!$returnHtml) return $enabled;
+
+        global $lang, $app;
+        if(!$icon) $icon = isset($lang->icons[$method]) ? $lang->icons[$method] : $method;
+        if(empty($title))
+        {
+            $title = $method;
+            if($method == 'create' && $icon == 'copy') $method = 'copy';
+            if(isset($lang->$method) && is_string($lang->$method)) $title = $lang->$method;
+            if((isset($lang->$module->$method) || $app->loadLang($module)) && isset($lang->$module->$method))
+            {
+                $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
+            }
+        }
+
+        return array
+        (
+            'icon' => $icon,
+            'text' => in_array($method, array('edit', 'delete')) ? '' : $title,
+            'hint' => $title,
+            'url'  => helper::createLink($module, $method, $params, '', $onlyBody)
+        );
     }
 }

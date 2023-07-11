@@ -30,7 +30,7 @@ $lang->testcase->order            = '排序';
 $lang->testcase->title            = '用例名称';
 $lang->testcase->precondition     = '前置条件';
 $lang->testcase->pri              = '优先级';
-$lang->testcase->type             = '用例类型';
+$lang->testcase->type             = '类型';
 $lang->testcase->status           = '用例状态';
 $lang->testcase->statusAB         = '状态';
 $lang->testcase->subStatus        = '子状态';
@@ -100,7 +100,7 @@ $lang->testcase->suite            = '套件';
 $lang->testcase->executionStatus  = '执行状态';
 $lang->testcase->caseType         = '用例类型';
 $lang->testcase->allType          = '所有类型';
-$lang->testcase->showAutoCase     = '自动化';
+$lang->testcase->automated        = '自动化';
 $lang->testcase->automation       = '自动化设置';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
@@ -118,6 +118,7 @@ $lang->testcase->deleteAction            = "删除用例";
 $lang->testcase->view                    = "用例详情";
 $lang->testcase->review                  = "评审";
 $lang->testcase->reviewAB                = "评审";
+$lang->testcase->reviewAction            = "评审用例";
 $lang->testcase->batchReview             = "批量评审";
 $lang->testcase->edit                    = "编辑用例";
 $lang->testcase->batchEdit               = "批量编辑 ";
@@ -130,13 +131,15 @@ $lang->testcase->batchDelete             = "批量删除 ";
 $lang->testcase->batchConfirmStoryChange = "批量确认变更";
 $lang->testcase->batchCaseTypeChange     = "批量修改类型";
 $lang->testcase->browse                  = "用例列表";
+$lang->testcase->listView                = "列表视图";
 $lang->testcase->groupCase               = "分组浏览用例";
-$lang->testcase->groupView               = "分组查看";
+$lang->testcase->groupView               = "分组视图";
 $lang->testcase->zeroCase                = "零用例{$lang->common->story}";
 $lang->testcase->import                  = "导入";
 $lang->testcase->importAction            = "导入用例";
 $lang->testcase->importCaseAction        = "导入用例";
 $lang->testcase->fileImport              = "导入CSV";
+$lang->testcase->importFile              = "导入文件";
 $lang->testcase->importFromLib           = "从用例库中导入";
 $lang->testcase->showImport              = "显示导入内容";
 $lang->testcase->exportTemplate          = "导出模板";
@@ -158,7 +161,8 @@ $lang->testcase->autoScript              = '自动化脚本';
 
 $lang->testcase->new = '新增';
 
-$lang->testcase->num = '用例记录数：';
+$lang->testcase->num      = '用例条数';
+$lang->testcase->encoding = '编码';
 
 $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';
@@ -183,6 +187,7 @@ $lang->testcase->legendAttatch     = '附件';
 $lang->testcase->legendLinkBugs    = '相关Bug';
 $lang->testcase->legendOpenAndEdit = '创建编辑';
 $lang->testcase->legendComment     = '备注';
+$lang->testcase->legendOther       = '其他相关';
 
 $lang->testcase->confirmDelete         = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete    = '您确认要批量删除这些测试用例吗？';
@@ -201,13 +206,13 @@ $lang->testcase->priList[4] = 4;
 
 /* Define the types. */
 $lang->testcase->typeList['']            = '';
-$lang->testcase->typeList['feature']     = '功能测试';
-$lang->testcase->typeList['performance'] = '性能测试';
-$lang->testcase->typeList['config']      = '配置相关';
-$lang->testcase->typeList['install']     = '安装部署';
-$lang->testcase->typeList['security']    = '安全相关';
-$lang->testcase->typeList['interface']   = '接口测试';
 $lang->testcase->typeList['unit']        = '单元测试';
+$lang->testcase->typeList['interface']   = '接口测试';
+$lang->testcase->typeList['feature']     = '功能测试';
+$lang->testcase->typeList['install']     = '安装部署';
+$lang->testcase->typeList['config']      = '配置相关';
+$lang->testcase->typeList['performance'] = '性能测试';
+$lang->testcase->typeList['security']    = '安全相关';
 $lang->testcase->typeList['other']       = '其他';
 
 $lang->testcase->stageList['']           = '';
@@ -284,11 +289,12 @@ $lang->testcase->close = '关闭';
 
 $lang->testcase->xmindImportSetting = '导入特征字符设置';
 $lang->testcase->xmindExportSetting = '导出特征字符设置';
+$lang->testcase->xmindSettingTip    = '特征字符设置后，XMind主题可与禅道测试用例结构相对应。';
 
-$lang->testcase->settingModule = '模&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;块';
-$lang->testcase->settingScene  = '场&nbsp;&nbsp;&nbsp;&nbsp;景';
+$lang->testcase->settingModule = '模块';
+$lang->testcase->settingScene  = '场景';
 $lang->testcase->settingCase   = '测试用例';
-$lang->testcase->settingPri    = '优先级&nbsp;';
+$lang->testcase->settingPri    = '优先级';
 $lang->testcase->settingGroup  = '步骤分组';
 
 $lang->testcase->caseNotExist =  '未识别导入数据中的用例，导入失败';
@@ -313,17 +319,20 @@ $lang->testcase->updateOrder      = "拖动排序";
 $lang->testcase->differentProduct = "所属产品不同";
 
 $lang->testcase->newScene           = "建场景";
-$lang->testcase->sceneTitle         = '场景标题';
+$lang->testcase->sceneTitle         = '场景名称';
 $lang->testcase->parentScene        = "父场景";
 $lang->testcase->scene              = "所属场景";
 $lang->testcase->summary            = '本页共 %d 个顶级场景，%d 个独立用例。';
 $lang->testcase->summaryScene       = '本页共 %d 个顶级场景。';
+$lang->testcase->failSummary        = '本页共 %d 个用例，未通过 %d。';
 $lang->testcase->checkedSummary     = '已选中 {checked} 个用例，已执行 {run} 个。';
+$lang->testcase->failCheckedSummary = '已选中 %total% 个用例，未通过 %fail%。';
 $lang->testcase->deleteScene        = '删除场景';
 $lang->testcase->editScene          = '编辑场景';
 $lang->testcase->hasChildren        = '该场景有子场景或测试用例存在，要全部删除吗？';
 $lang->testcase->confirmDeleteScene = '您确定要删除场景：“%s”吗？';
 $lang->testcase->sceneb             = "场景";
+$lang->testcase->onlyAutomated      = '仅自动化';
 $lang->testcase->onlyScene          = '仅场景';
 $lang->testcase->iScene             = '所属场景';
 $lang->testcase->generalTitle       = '标题';
@@ -341,4 +350,5 @@ $lang->testcase->dragModalChangeOrder = '调整排序';
 $lang->testcase->confirmBatchDeleteSceneCase = '您确认要批量删除这些场景或测试用例吗？';
 
 $lang->scene = new stdclass();
-$lang->scene->title = '场景标题';
+$lang->scene->title  = '场景名称';
+$lang->scene->noCase = '暂无用例';

@@ -1,0 +1,71 @@
+version: "3"
+
+    #service:
+    #  cron_schedule:
+    #    command: php cron.php
+    #    process_num: 1
+    #    exec_timeout: 0
+    #    restart_sec: 1
+    #    relay: pipes
+
+server:
+  command: php worker.php
+  relay: pipes
+
+http:
+  address: 0.0.0.0:8088
+  middleware: [ "static" ]
+  static:
+    dir: "."
+    forbid: [""]
+    calculate_etag: false
+    weak: false
+    allow: [".js", ".css", ".png", ".jpg", ".jpeg", ".cjs", ".woff", ".ttf", ".svg", ".ico"]
+    request:
+      input: "custom-header"
+    response:
+      output: "output-header"
+  pool:
+    num_workers: 10
+    supervisor:
+      exec_ttl: 10s
+
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+boltdb:
+  permissions: 0777
+
+jobs:
+  consume: [ "crons" ]
+  pool:
+    num_workers: 5
+    allocate_timeout: 60s
+    destroy_timeout: 60s
+  pipelines:
+    crons: #name
+      driver: boltdb
+
+      config:
+        file: "../tmp/zand/crons.db"
+        priority: 10
+        prefetch: 1000
+
+kv:
+  session:
+    driver: boltdb
+
+    config:
+      file: "../tmp/zand/session.db"
+      permissions: 0777
+      interval: 60
+
+          #logs:
+          #  mode: development
+          #  level: debug
+          #  file_logger_options:
+          #    log_output: "./debug.log"
+          #    max_size: 100
+          #    max_age: 1
+          #    max_backups : 5
+          #    compress: false

@@ -43,7 +43,7 @@ class reportModel extends model
      */
     public function createSingleJSON($sets, $dateList)
     {
-        $data = '[';
+        $data = array();
         $now  = date('Y-m-d');
         $preValue = 0;
         $setsDate = array_keys($sets);
@@ -67,10 +67,9 @@ class reportModel extends model
                 }
             }
 
-            $data .= isset($sets[$date]) ? "{$sets[$date]->value}," : "{$preValue},";
+            $data[] = isset($sets[$date]) ? "{$sets[$date]->value}" : "{$preValue}";
         }
-        $data = rtrim($data, ',');
-        $data .= ']';
+
         return $data;
     }
 

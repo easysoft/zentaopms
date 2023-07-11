@@ -10,12 +10,15 @@ declare(strict_types=1);
  */
 namespace zin;
 jsVar('account', $app->user->account);
+jsVar('draftLabel', $lang->doc->draft);
+jsVar('canCollect', common::hasPriv('doc', 'collect'));
+jsVar('objectIconList', $config->doc->objectIconList);
 
 featureBar
 (
     set::current($type),
     set::linkParams("mode=doc&type={key}&param={$param}"),
-    li(searchToggle())
+    li(searchToggle(set::module('doc')))
 );
 
 if($type == 'openedbyme') unset($config->my->doc->dtable->fieldList['addedBy']);

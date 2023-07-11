@@ -1,0 +1,3 @@
+.group-user-row {align-items: stretch;}
+.group-user-row .form-label {top: unset;}
+.group-user-box > .checkbox-primary {flex: 0 1 10%; flex-wrap: nowrap; text-overflow: clip; overflow: hidden;}

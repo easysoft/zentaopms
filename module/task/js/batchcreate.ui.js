@@ -1,3 +1,6 @@
+$('#zeroTaskStory').closest('.panel-actions').addClass('row-reverse justify-between w-11/12');
+$('#zeroTaskStory').closest('.checkbox-primary').addClass('items-center');
+
 /**
  * Get select of stories.
  *

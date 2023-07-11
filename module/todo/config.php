@@ -46,6 +46,7 @@ $config->todo->objectList['testtask'] = 'testtasks';
 
 $config->todo->sessionUri = array();
 $config->todo->sessionUri['bugList']      = 'qa';
+$config->todo->sessionUri['todoList']     = 'my';
 $config->todo->sessionUri['taskList']     = 'execution';
 $config->todo->sessionUri['storyList']    = 'product';
 $config->todo->sessionUri['testtaskList'] = 'qa';
@@ -63,3 +64,11 @@ if($this->config->edition == 'max')
 }
 helper::import(dirname(__FILE__) . 'config/form.php');
 helper::import(dirname(__FILE__) . 'config/toolbar.php');
+
+$config->todo->related = array();
+$config->todo->related['story']['title']   = array('legendSpec', 'legendVerify');
+$config->todo->related['story']['content'] = array('spec', 'verify');
+$config->todo->related['task']['title']    = array('legendDesc');
+$config->todo->related['task']['content']  = array('desc');
+$config->todo->related['bug']['title']     = array('legendSteps');
+$config->todo->related['bug']['content']   = array('steps');

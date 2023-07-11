@@ -11,17 +11,82 @@ declare(strict_types=1);
 
 namespace zin;
 
+$getMeasureItem = function($data)
+{
+    global $lang;
+
+    $welcomeLabel = array_merge($lang->block->welcome->assignList, $lang->block->welcome->reviewList);
+
+    $items = array();
+    foreach($data as $key => $info)
+    {
+        if(count($items) >= 5) break;
+        $items[] = cell
+        (
+            div
+            (
+                set('class', 'text-3xl text-primary font-bold h-40px'),
+                a(set('href', $info['href']), $info['number'])
+            ),
+            div(zget($welcomeLabel, $key, '')),
+            !empty($info['delay']) ? div
+            (
+                set('class', 'label danger-pale circle size-sm'),
+                $lang->block->delay . ' ' . $info['delay']
+            ) : null
+        );
+    }
+    return $items;
+};
+
+$doneReview = rand(0, 100);
+$finishTask = rand(0, 100);
+$fixBug     = rand(0, 100);
+
+if($doneReview > $finishTask && $doneReview > $fixBug)
+{
+    $honorary = 'review';
+}
+else if($finishTask > $doneReview && $finishTask > $fixBug)
+{
+    $honorary = 'task';
+}
+else
+{
+    $honorary = 'bug';
+}
+
+$blockNavCode = 'nav-' . uniqid();
 panel
 (
     set('class', 'welcome-block'),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title flex w-full'),
+            cell
+            (
+                set('width', '22%'),
+                set('class', 'center'),
+                span($todaySummary),
+
+            ),
+            cell
+            (
+                set::class('pr-8'),
+                span(set('class', 'text-sm font-normal'), html(sprintf($lang->block->summary->welcome, $usageDays, $doneReview, $finishTask, $fixBug)))
+            )
+        )
+    ),
     div
     (
-        setClass('flex'),
-        col
+        set('class', 'flex h-32'),
+        cell
         (
-            setStyle(['width' => '20%']),
+            set('width', '22%'),
             set('align', 'center'),
-            set('class', 'border-right p-3'),
+            set::class('gradient border-right py-2'),
             center
             (
                 set('class', 'font-bold'),
@@ -29,103 +94,53 @@ panel
             ),
             center
             (
-                set('class', 'rounded-full avatar-border-one m-5'),
+                set::class('my-1'),
                 center
                 (
-                    set('class', 'rounded-full avatar-border-two'),
-                    userAvatar
+                    set::class('rounded-full avatar-border-one'),
+                    center
                     (
-                        set('size', 'lg'),
-                        set('class', 'welcome-avatar'),
-                        set('user', $this->app->user)
+                        set::class('rounded-full avatar-border-two'),
+                        userAvatar
+                        (
+                            set::class('welcome-avatar ellipsis'),
+                            set('user', $this->app->user)
+                        )
                     )
                 )
-            )
+            ),
+            center(span(set('class', 'label circle honorary text-xs'), $lang->block->honorary[$honorary]))
         ),
         cell
         (
-            set('width', '45%'),
-            set('class', 'border-right p-3'),
-            div
+            set('width', '78%'),
+            set::class('px-8'),
+            tabs
             (
-                set('class', 'font-bold'),
-                '待我评审：'
-            ),
-            div
-            (
-                setClass('flex justify-around pt-6'),
-                col
+                tabPane
                 (
-                    set('class', 'text-center'),
-                    span
+                    set::key("reviewByMe_$blockNavCode"),
+                    set::title($lang->block->welcome->reviewByMe),
+                    div
                     (
-                        set('class', 'tile-amount text-primary'),
-                        58
-                    ),
-                    span('研发需求数')
-                ),
-                col
-                (
-                    set('class', 'text-center'),
-                    span
-                    (
-                        set('class', 'tile-amount text-primary'),
-                        39
-                    ),
-                    span('反馈数')
-                ),
-                col
-                (
-                    set('class', 'text-center'),
-                    span
-                    (
-                        set('class', 'tile-amount text-primary'),
-                        17
-                    ),
-                    span('研发需求数')
-                )
-            )
-        ),
-        cell
-        (
-            set('width', '35%'),
-            set('class', 'border-right p-3'),
-            div
-            (
-                set('class', 'font-bold'),
-                '待我评审：'
-            ),
-            div
-            (
-                setClass('flex justify-around pt-6'),
-                col
-                (
-                    set('class', 'text-center'),
-                    span
-                    (
-                        set('class', 'tile-amount text-primary'),
-                        16
-                    ),
-                    span('任务数'),
-                    span
-                    (
-                        set('class', 'rounded-full welcome-label-delay px-1 text-sm'),
-                        '延期 3'
+                        set::class('flex justify-around text-center'),
+                        $getMeasureItem($reviewByMe)
                     )
                 ),
-                col
+                tabPane
                 (
-                    set('class', 'text-center'),
-                    span
+                    set::key("assignToMe_$blockNavCode"),
+                    set::title($lang->block->welcome->assignToMe),
+                    set::active(true),
+                    div
                     (
-                        set('class', 'tile-amount text-primary'),
-                        30
-                    ),
-                    span('BUG数')
+                        set::class('flex justify-around text-center'),
+                        $getMeasureItem($assignToMe)
+                    )
                 )
             )
         )
     )
 );
 
-render('|fragment');
+render();

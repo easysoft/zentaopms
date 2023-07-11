@@ -13,8 +13,8 @@ class detailSide extends wg
     {
         return div
         (
-            setClass('detail-side flex-none canvas'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            setClass('detail-side flex-none px-6'),
+            set($this->getRestProps()),
             $this->children()
         );
     }

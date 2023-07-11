@@ -39,6 +39,8 @@ $config->testcase->custom->batchEditFields   = 'branch,module,stage,status,pri,s
 
 $config->testcase->excludeCheckFileds = ',pri,type,stage,needReview,story,branch,';
 
+$config->testcase->scriptAcceptFileTypes = '.php,.py,.js,.go,.sh,.bat,.lua,.rb,.tcl,.pl';
+
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
 $config->testcase->search['fields']['title']          = $lang->testcase->title;
@@ -275,3 +277,33 @@ $config->testcase->customBatchCreateFields   = 'module,scene,stage,story,pri,pre
 $config->testcase->customBatchEditFields     = 'module,scene,story,stage,precondition,status,pri,keywords';
 $config->testcase->custom->batchCreateFields = 'module,scene,story,%s';
 $config->testcase->custom->batchEditFields   = 'branch,module,scene,stage,status,pri,story';
+
+$app->loadLang('story');
+$config->testcase->zerocase = new stdclass();
+$config->testcase->zerocase->actionList['change']['icon']        = 'change';
+$config->testcase->zerocase->actionList['change']['text']        = $lang->story->change;
+$config->testcase->zerocase->actionList['change']['hint']        = $lang->story->change;
+$config->testcase->zerocase->actionList['change']['url']         = array('module' => 'story', 'method' => 'change', 'params' => 'bugID={id}');
+$config->testcase->zerocase->actionList['change']['data-toggle'] = 'modal';
+
+$config->testcase->zerocase->actionList['review']['icon']        = 'review';
+$config->testcase->zerocase->actionList['review']['text']        = $lang->story->review;
+$config->testcase->zerocase->actionList['review']['hint']        = $lang->story->review;
+$config->testcase->zerocase->actionList['review']['url']         = array('module' => 'story', 'method' => 'review', 'params' => 'bugID={id}');
+$config->testcase->zerocase->actionList['review']['data-toggle'] = 'modal';
+
+$config->testcase->zerocase->actionList['close']['icon']        = 'off';
+$config->testcase->zerocase->actionList['close']['text']        = $lang->story->close;
+$config->testcase->zerocase->actionList['close']['hint']        = $lang->story->close;
+$config->testcase->zerocase->actionList['close']['url']         = array('module' => 'story', 'method' => 'close', 'params' => 'bugID={id}');
+$config->testcase->zerocase->actionList['close']['data-toggle'] = 'modal';
+
+$config->testcase->zerocase->actionList['edit']['icon'] = 'edit';
+$config->testcase->zerocase->actionList['edit']['text'] = $lang->story->edit;
+$config->testcase->zerocase->actionList['edit']['hint'] = $lang->story->edit;
+$config->testcase->zerocase->actionList['edit']['url']  = array('module' => 'story', 'method' => 'edit', 'params' => 'bugID={id}');
+
+$config->testcase->zerocase->actionList['createcase']['icon'] = 'sitemap';
+$config->testcase->zerocase->actionList['createcase']['text'] = $lang->testcase->create;
+$config->testcase->zerocase->actionList['createcase']['hint'] = $lang->testcase->create;
+$config->testcase->zerocase->actionList['createcase']['url']  = array('module' => 'story', 'method' => 'createCase', 'params' => 'productID={product}&branch=0&module=0&from=0&storyID={id}');

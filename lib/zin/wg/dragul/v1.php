@@ -100,12 +100,12 @@ class dragUl extends wg
         $this->ul->add(on::drop($func));
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $ul = ul
         (
             setClass('drag-ul'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             $this->children(),
         );
 

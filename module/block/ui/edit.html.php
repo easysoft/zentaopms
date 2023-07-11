@@ -21,83 +21,136 @@ $showCodes   = (($showModules && $module && $codes) || $dashboard != 'my');
 
 foreach($params as $key => $row)
 {
-    $paramsRows[] = formGroup
+    $paramsRows[] = formRow
     (
-        set::label($row['name']),
-        set::name("params[$key]"),
-        set::class('form-row'),
-        set::value($block->params->{$key}),
-        set::control(array
+        formGroup
         (
-            'id'    => "params$key",
-            'type'  => $row['control'],
-            'items' => isset($row['options']) ? $row['options'] : null
-        ))
+            set::label($row['name']),
+            set::name("params[$key]"),
+            set::value(zget($row, 'default', '')),
+            set::control(array
+            (
+                'id'       => "params$key",
+                'type'     => $row['control'],
+                'items'    => isset($row['options']) ? $row['options'] : null,
+            )),
+            $row['control'] == 'picker' ? set::required(true) : '',
+        ),
     );
 }
 
-form
-(
-    on::change('#module', 'getForm'),
-    on::change('#code', 'getForm'),
-    on::change('#paramstype', 'onParamsTypeChange'),
-    formGroup
+$moduleTabs = array();
+foreach($modules as $moduleKey => $moduleName)
+{
+    if(!$moduleKey || !$moduleName) continue;
+    if($moduleKey == 'welcome') $moduleTabs[] = li(width('calc(100% - 2rem)'), setClass('nav-divider'));
+    $moduleTabs[] = li
     (
-        set::class($showModules ? '' : 'hidden'),
-        set::value($showModules ? $block->module : $dashboard),
-        set::label($lang->block->lblModule),
-        set::name('module'),
-        set::control($showModules ? array
+        setClass('nav-item w-full'),
+        a
         (
-            'type'  => 'select',
-            'items' => $modules
-        ) : 'input')
-    ),
-    div
-    (
-        set::id('codesRow'),
-        formGroup
+            setClass('ellipsis text-dark title' . ($moduleKey == $module ? ' active' : '')),
+            on::click('getForm'),
+            set('data-tab', $moduleKey),
+            set('data-toggle', 'tab'),
+            $moduleName
+        ),
+        span
         (
-            set::label($lang->block->lblBlock),
-            set::name('code'),
-            set::class($showCodes ? '' : 'hidden'),
-            set::value($showCodes ? $code : $module),
-            set::control($showCodes ? array
+            setClass('link flex-1 text-right pr-2 hidden'),
+            icon
             (
-                'type'  => 'select',
-                'items' => array('') + $codes
-            ) : 'input')
+                setClass('text-primary'),
+                'arrow-right'
+            )
         )
-    ),
-    div
+    );
+}
+
+div
+(
+    set::id('blockEditForm'),
+    setClass('flex h-full overflow-hidden'),
+    $showModules ? cell
     (
-        set::id('paramsRow'),
-        div
+        width('128px'),
+        setClass('bg-secondary-pale overflow-y-auto'),
+        ul
         (
-            set::class('form-grid'),
-            formGroup
+            setClass('nav nav-tabs nav-stacked my-2'),
+            $moduleTabs
+        ),
+    ) : '',
+    cell
+    (
+        width('calc(100% - ' . ($showModules ? '130' : '2') .  'px)'),
+        form
+        (
+            setClass('border-b-0'),
+            on::change('#code', 'getForm'),
+            on::change('#paramstype', 'onParamsTypeChange'),
+            formRow
             (
-                set::label($lang->block->name),
-                set::name('title'),
-                set::class('form-row'),
-                set::value($block->title),
-                set::control('input')
-            ),
-            $paramsRows,
-            formGroup
-            (
-                set::label($lang->block->grid),
-                set::name('grid'),
-                set::class('form-row'),
-                set::value($block->grid),
-                set::control(array
+                setClass('hidden'),
+                formGroup
                 (
-                    'type'  => 'select',
-                    'items' => $lang->block->gridOptions
-                ))
+                    set::name('module'),
+                    set::value($showModules ? $module : $dashboard),
+                )
+            ),
+            formRow
+            (
+                set::id('codesRow'),
+                setClass($showCodes ? '' : 'hidden'),
+                formGroup
+                (
+                    set::label($lang->block->lblBlock),
+                    set::name('code'),
+                    set::value($showCodes ? $code : $module),
+                    set::control
+                    (
+                        $showCodes ? array
+                        (
+                            'type'         => 'picker',
+                            'defaultValue' => $code,
+                            'items'        => array('') + $codes
+                        ) : 'input'
+                    )
+                )
+            ),
+            div
+            (
+                set::id('paramsRow'),
+                formRow
+                (
+                    formGroup
+                    (
+                        set::label($lang->block->name),
+                        set::name('title'),
+                        set::value($blockTitle),
+                        set::control('input')
+                    ),
+                ),
+                $paramsRows,
+                formRow
+                (
+                    setClass(empty($code) ? 'hidden' : ''),
+                    formGroup
+                    (
+                        set::label($lang->block->width),
+                        picker
+                        (
+                            set::name('width'),
+                            set::items($widthOptions),
+                            set::value($code == $block->code ? $block->width : ''),
+                            set::defaultValue($code == $block->code ? $block->width : ''),
+                            set::required(true),
+                        ),
+                    )
+                )
             )
         )
     )
 );
 
-render('modalDialog');
+render();

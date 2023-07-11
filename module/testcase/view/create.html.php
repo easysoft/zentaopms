@@ -73,7 +73,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
             <td>
               <?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?>
               <div class="input-group-addon">
-              <?php echo html::checkbox('auto', array('auto' => $lang->testcase->showAutoCase), $auto, "id='autocase' title='{$lang->testcase->showAutoCase}'");?>
+              <?php echo html::checkbox('auto', array('auto' => $lang->testcase->automated), $auto, "id='autocase' title='{$lang->testcase->automated}'");?>
               </div>
             </td>
             <?php if(strpos(",$showFields,", 'stage') !== false):?>

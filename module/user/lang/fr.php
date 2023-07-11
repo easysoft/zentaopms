@@ -82,6 +82,9 @@ $lang->user->submit           = 'Submit';
 $lang->user->resetPWD         = 'Reset Password';
 $lang->user->resetTitle       = 'Admin reset the password';
 
+$lang->user->abbr = new stdclass();
+$lang->user->abbr->id = 'ID';
+
 $lang->user->legendBasic        = 'Informations de Base';
 $lang->user->legendContribution = 'Contribution';
 
@@ -233,15 +236,15 @@ $lang->user->placeholder->passwordStrengthCheck[1] = 'Le mot de passe doit ≥ 6
 $lang->user->placeholder->passwordStrengthCheck[2] = 'Le mot de passe doit ≥ 10 caractères, combinaison de lettres majuscules, minuscules, de chiffres et de symboles spéciaux.';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account        = "ID %s，compte doit être >= 3 lettres, souligné ou chiffres";
-$lang->user->error->accountDupl    = "ID %s，compte déjà utilisé par quelqu'un d'autre.";
-$lang->user->error->realname       = "ID %s，doit être votre véritable nom";
-$lang->user->error->visions        = "ID %s，must be version type";
-$lang->user->error->password       = "ID %s，Mot de passe doit être >= 6 caractères.";
-$lang->user->error->mail           = "ID %s，entrez une adresse mail valide";
-$lang->user->error->reserved       = "ID %s，compte réservé. Vous ne pouvez pas l'utiliser.";
-$lang->user->error->weakPassword   = "ID %s，la force du mot de passe est inférieure au paramètrage système.";
-$lang->user->error->dangerPassword = "ID %s，Les mots de passe ne peuvent pas utiliser ces [%s] mots de passe faibles couramment utilisés.";
+$lang->user->error->account        = 'compte doit être >= 3 lettres, souligné ou chiffres';
+$lang->user->error->accountDupl    = 'compte déjà utilisé par quelqu\'un d\'autre.';
+$lang->user->error->realname       = 'doit être votre véritable nom';
+$lang->user->error->visions        = 'must be version type';
+$lang->user->error->password       = 'Mot de passe doit être >= 6 caractères.';
+$lang->user->error->mail           = 'entrez une adresse mail valide';
+$lang->user->error->reserved       = 'compte réservé. Vous ne pouvez pas l\'utiliser.';
+$lang->user->error->weakPassword   = 'la force du mot de passe est inférieure au paramètrage système.';
+$lang->user->error->dangerPassword = "Les mots de passe ne peuvent pas utiliser ces [%s] mots de passe faibles couramment utilisés.";
 
 $lang->user->error->url              = "Invalid address. Please contact your ZenTao Admin.";
 $lang->user->error->verify           = "Wrong account or password.";
@@ -277,6 +280,7 @@ $lang->user->contacts->userList = 'Liste Utilisateurs';
 
 $lang->usercontact = new stdclass;
 $lang->usercontact->listName = 'List Name';
+$lang->usercontact->userList = 'Liste Utilisateurs';
 
 $lang->user->contacts->manage        = 'Gérer la Liste';
 $lang->user->contacts->contactsList  = 'Liste de Contacts';

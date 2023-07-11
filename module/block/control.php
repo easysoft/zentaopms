@@ -44,18 +44,51 @@ class block extends control
             $formData->vision    = $this->config->vision;
             $formData->params    = json_encode($formData->params);
 
+            $defaultSize = array('1' => '3');
+            if(!empty($this->config->block->size[$formData->module][$formData->code]))                   $defaultSize      = $this->config->block->size[$formData->module][$formData->code];
+            if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
+
+            if(empty($formData->width))  $formData->width  = reset(array_keys($defaultSize));
+            if(empty($formData->height)) $formData->height = reset($defaultSize);
+            $formData->left = $formData->width == 1 ? 2 : 0;
+            $formData->top  = $this->block->computeBlockTop($formData);
+
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($this->app->tab, 'index'), 'closeModal' => true));
         }
 
-        $this->view->title     = $this->lang->block->createBlock;
-        $this->view->dashboard = $dashboard;
-        $this->view->module    = $module;
-        $this->view->code      = $code;
-        $this->view->modules   = $this->blockZen->getAvailableModules($dashboard);
-        $this->view->codes     = $this->blockZen->getAvailableCodes($dashboard, $module);
-        $this->view->params    = $this->blockZen->getAvailableParams($module, $code);
+        $modules = $this->blockZen->getAvailableModules($dashboard);
+        unset($modules['']);
+        if(empty($module) && !empty($modules)) $module = current(array_keys($modules));
+
+        $codes = $this->blockZen->getAvailableCodes($dashboard, $module);
+        $params = $this->blockZen->getAvailableParams($module, $code);
+        if($module == 'scrumtest' && $code != 'all')
+        {
+            $blockTitle = zget($codes, $code);
+        }
+        else
+        {
+            $typeOptions = isset($params['type']['options']) ? $params['type']['options'] : array();
+            $blockTitle  = zget($codes, $code);
+            if(!empty($typeOptions))
+            {
+                $typeName   = empty($typeOptions) ? '' : $typeOptions[array_keys($typeOptions)[0]];
+                $blockTitle = vsprintf($this->lang->block->blockTitle, array($typeName, $blockTitle));
+            }
+
+            if(empty($blockTitle) && !in_array($module, array('product', 'project', 'execution', 'qa'))) $blockTitle = zget($modules, $module);
+        }
+
+        $this->view->title        = $this->lang->block->createBlock;
+        $this->view->dashboard    = $dashboard;
+        $this->view->module       = $module;
+        $this->view->code         = $code;
+        $this->view->modules      = $modules;
+        $this->view->codes        = $codes;
+        $this->view->params       = $params;
+        $this->view->blockTitle   = $blockTitle ? $blockTitle : '';
         $this->display();
     }
 
@@ -77,10 +110,11 @@ class block extends control
             $formData = form::data($this->config->block->form->edit)->get();
             $formData->id     = $blockID;
             $formData->params = helper::jsonEncode($formData->params);
+            if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
 
             $this->block->update($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($this->app->tab, 'index'), 'closeModal' => true));
         }
 
         /* 如果没传 $code 说明是首次进入页面，直接使用待编辑 $block 的 $code。 */
@@ -88,7 +122,31 @@ class block extends control
         $block  = $this->block->getByID($blockID);
         $module = $module ? $module : $block->module;
         $code   = $code ? $code : $block->code;
-        $codes  = $this->blockZen->getAvailableCodes($block->dashboard, $module);
+
+        $codes      = $this->blockZen->getAvailableCodes($block->dashboard, $module);
+        $params     = $this->blockZen->getAvailableParams($module, $code);
+        $blockTitle = $block->title;
+        if($module != $block->module || $code != $block->code)
+        {
+            if($module == 'scrumtest' && $code != 'all')
+            {
+                $blockTitle = zget($codes, $code);
+            }
+            else
+            {
+                $typeOptions = isset($params['type']['options']) ? $params['type']['options'] : array();
+                $blockTitle  = zget($codes, $code);
+                if(!empty($typeOptions))
+                {
+                    $typeName   = empty($typeOptions) ? '' : $typeOptions[array_keys($typeOptions)[0]];
+                    $blockTitle = vsprintf($this->lang->block->blockTitle, array($typeName, $blockTitle));
+                }
+            }
+        }
+
+        $widths       = !empty($this->config->block->size[$module][$code]) ? array_keys($this->config->block->size[$module][$code]) : array('1', '2');
+        $widthOptions = array();
+        foreach($widths as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
 
         $this->view->title     = $this->lang->block->editBlock;
         $this->view->block     = $block;
@@ -98,8 +156,10 @@ class block extends control
         $this->view->codes     = $codes;
         /* $codes 包含 $code 时，页面才选中对应的 $code，否则为空。 */
         /* Only when $codes have a value and contain $code, the corresponding $code is selected on the page, otherwise it is $blank. */
-        $this->view->code      = in_array($code, array_keys($codes)) ? $code : '';
-        $this->view->params    = $this->blockZen->getAvailableParams($this->view->module, $this->view->code);
+        $this->view->code         = in_array($code, array_keys($codes)) ? $code : '';
+        $this->view->params       = $params;
+        $this->view->widthOptions = $widthOptions;
+        $this->view->blockTitle   = $blockTitle;
         $this->display();
     }
 
@@ -195,7 +255,7 @@ class block extends control
         $isInitiated = $this->block->getBlockInitStatus($dashboard);
 
         /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式。 */
-        if(empty($blocks) && !$isInitiated && !defined('TUTORIAL'))
+        if(empty($blocks) && !$isInitiated && !commonModel::isTutorialMode())
         {
             $this->block->initBlock($dashboard); // 初始化该 app 下区块数据。
             $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表。
@@ -206,6 +266,9 @@ class block extends control
 
         /* 如果页面渲染方式为 json 的话，直接返回 json 格式数据 ，主要是为了给应用提供数据。 */
         if($this->app->getViewType() == 'json') return print(json_encode($blocks));
+
+        /* 为项目仪表盘页面，设置1.5级导航的项目ID. */
+        if($this->app->rawModule == 'project' && $this->app->rawMethod == 'index') $this->view->projectID = $this->session->project;
 
         /* 组织渲染页面需要数据。 */
         $this->view->title     = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
@@ -251,6 +314,7 @@ class block extends control
         $this->view->moreLink       = $block->moreLink;
         $this->view->title          = $block->title;
         $this->view->block          = $block;
+        $this->view->longBlock      = $block->width >= 2;
         $this->view->isExternalCall = $this->blockZen->isExternalCall();
 
         /* 根据 viewType 值 ，判断是否需要返回 json 数据。 */

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'formlabel' . DS . 'v1.php';
@@ -6,12 +7,12 @@ require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
 
 class formGroup extends wg
 {
-    protected static $defineProps = array
-    (
+    protected static array $defineProps = array(
         'name?: string',
         'label?: string|bool',
         'labelClass?: string',
         'labelProps?: string',
+        'labelWidth?: int|string',
         'required?:bool|string="auto"',
         'tip?: string',
         'tipClass?: string|array',
@@ -21,13 +22,14 @@ class formGroup extends wg
         'strong?: bool',
         'value?: string|array',
         'disabled?: bool',
+        'readonly?: bool',
         'items?: array',
         'placeholder?: string'
     );
 
-    protected function build()
+    protected function build(): wg
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder']);
+        list($name, $label, $labelClass, $labelProps, $labelWidth, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'labelWidth', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly']);
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -42,6 +44,7 @@ class formGroup extends wg
             if($disabled !== null)    $control['disabled']    = $disabled;
             if($items !== null)       $control['items']       = $items;
             if($placeholder !== null) $control['placeholder'] = $placeholder;
+            if($readonly !== null)    $control['readonly']    = $readonly;
         }
 
         return div
@@ -49,6 +52,7 @@ class formGroup extends wg
             set::class('form-group', $required ? 'required' : null, ($label === false || $label === null) ? 'no-label' : null, empty($width) ? null : 'grow-0'),
             zui::width($width),
             set($this->getRestProps()),
+            setCssVar('form-grid-label-width', $labelWidth),
             empty($label) ? null : new formLabel
             (
                 set::class($labelClass, $strong ? 'font-bold' : null),

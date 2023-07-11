@@ -1,4 +1,6 @@
 <?php
+global $lang;
+
 $config->program = new stdclass();
 $config->program->suffix['c']    = "cpp";
 $config->program->suffix['cpp']  = "cpp";
@@ -53,8 +55,9 @@ $config->repo->gitlab->apiPath = "%s/api/v4/projects/%s/repository/";
 $config->repo->gitea = new stdclass;
 $config->repo->gitea->apiPath = "%s/api/v1/repos/%s/";
 
-$config->repo->gitServiceList = array('gitlab', 'gitea', 'gogs');
-$config->repo->gitTypeList    = array('Gitlab', 'Gitea', 'Gogs', 'Git');
+$config->repo->gitServiceList     = array('gitlab', 'gitea', 'gogs');
+$config->repo->gitServiceTypeList = array('Gitlab', 'Gitea', 'Gogs');
+$config->repo->gitTypeList        = array('Gitlab', 'Gitea', 'Gogs', 'Git');
 
 $config->repo->rules['module']['task']     = 'Task';
 $config->repo->rules['module']['bug']      = 'Bug';
@@ -138,3 +141,14 @@ $config->repo->fileExt["vb"]               = array('.vb');
 $config->repo->fileExt["verilog"]          = array('.v', '.vh');
 $config->repo->fileExt["xml"]              = array('.xml', '.dtd', '.ascx', '.csproj', '.config', '.wxi', '.wxl', '.wxs', '.xaml', '.svg', '.svgz', '.opf', '.xsl');
 $config->repo->fileExt["yaml"]             = array('.yaml', '.yml');
+
+$config->repo->search['module'] = 'repo';
+$config->repo->search['fields']['name']     = $lang->repo->name;
+$config->repo->search['fields']['product']  = $lang->repo->product;
+$config->repo->search['fields']['projects'] = $lang->repo->projects;
+$config->repo->search['fields']['SCM']      = $lang->repo->SCM;
+
+$config->repo->search['params']['name']     = array('operator' => 'include', 'control' => 'input', 'values' => '');
+$config->repo->search['params']['product']  = array('operator' => 'include', 'control' => 'select', 'values' => '');
+$config->repo->search['params']['projects'] = array('operator' => 'include', 'control' => 'select', 'values' => '');
+$config->repo->search['params']['SCM']      = array('operator' => '=', 'control' => 'select', 'values' => $lang->repo->scmList);

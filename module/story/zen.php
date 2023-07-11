@@ -130,6 +130,110 @@ class storyZen extends story
     }
 
     /**
+     * 为批量编辑页面设置导航。
+     * Set menu for batch edit page.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $executionID
+     * @param  string    $from
+     * @access protected
+     * @return void
+     */
+    protected function setMenuForBatchEdit(int $productID, string $branch = '', int $executionID = 0, string $from = ''): void
+    {
+        $this->view->hiddenPlan = false;
+        if($this->app->tab == 'product')
+        {
+            $this->product->setMenu($productID);
+            return;
+        }
+
+        if($this->app->tab == 'execution')
+        {
+            $this->execution->setMenu($executionID);
+            return;
+        }
+
+        if($this->app->tab == 'qa')
+        {
+            $this->loadModel('qa')->setMenu('', $productID);
+            return;
+        }
+
+        if($this->app->tab == 'my')
+        {
+            $this->loadModel('my');
+            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
+            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
+            return;
+        }
+
+        if($this->app->tab == 'project')
+        {
+            $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
+            if($project->type == 'project')
+            {
+                if(!($project->model == 'scrum' and !$project->hasProduct and $project->multiple)) $this->view->hiddenPlan = true;
+                $this->project->setMenu($executionID);
+            }
+            else
+            {
+                if(!$project->hasProduct and !$project->multiple) $this->view->hiddenPlan = true;
+                $this->execution->setMenu($executionID);
+            }
+        }
+    }
+
+    /**
+     * 设置批量关闭需求页面的导航。
+     * Set menu for batch close.
+     *
+     * @param  int       $productID
+     * @param  int       $executionID
+     * @param  string    $from
+     * @access protected
+     * @return void
+     */
+    protected function setMenuForBatchClose(int $productID, int $executionID = 0, string $from = ''): void
+    {
+        /* The stories of a product. */
+        if($this->app->tab == 'product')
+        {
+            $this->product->setMenu($productID);
+            $product = $this->product->getByID($productID);
+            $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
+        }
+        /* The stories of a execution. */
+        elseif($executionID)
+        {
+            $this->lang->story->menu      = $this->lang->execution->menu;
+            $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
+            $this->execution->setMenu($executionID);
+            $execution = $this->execution->getByID($executionID);
+            $this->view->title = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
+        }
+        else
+        {
+            if($this->app->tab == 'project')
+            {
+                $this->project->setMenu($this->session->project);
+                $this->view->title = $this->lang->story->batchClose;
+            }
+            else
+            {
+                $this->lang->story->menu      = $this->lang->my->menu;
+                $this->lang->story->menuOrder = $this->lang->my->menuOrder;
+
+                if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
+                if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
+
+                $this->view->title = $this->lang->story->batchClose;
+            }
+        }
+    }
+
+    /**
      * 如果是看板执行，设置界面中要用到关于看板的视图变量。
      * Set view vars for kanban.
      *
@@ -361,7 +465,7 @@ class storyZen extends story
         $fields['plan']['options']     = $plans;
         $fields['plans']['options']    = $plans;
         $fields['reviewer']['options'] = $reviewers;
-        $fields['parent']['options']   = $stories;
+        $fields['parent']['options']   = array_filter($stories);
 
         /* 设置默认值。 */
         foreach($initStory as $field => $defaultValue)
@@ -400,7 +504,7 @@ class storyZen extends story
      * @access protected
      * @return array
      */
-    protected function getFormFieldsForBatchCreate(int $productID, string $branch, int $executionID = 0): array
+    protected function getFormFieldsForBatchCreate(int $productID, string $branch, int $executionID = 0, string $storyType = ''): array
     {
         $product = $this->loadModel('product')->getByID($productID);
         $fields  = $this->config->story->form->batchCreate;
@@ -409,7 +513,15 @@ class storyZen extends story
         {
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            $branch          = key($branches);
+            $branch          = empty($branches) ? '' : key($branches);
+
+            if($this->view->execution->type == 'kanban')
+            {
+                $fields['region']['options'] = zget($this->view, 'regionPairs', array());
+                $fields['lane']['options']   = zget($this->view, 'lanePairs', array());
+                $fields['region']['default'] = zget($this->view, 'regionID', 0);
+                $fields['lane']['default']   = zget($this->view, 'laneID', 0);
+            }
         }
         else
         {
@@ -418,14 +530,31 @@ class storyZen extends story
         $branch    = current(explode(',', $branch));
         $modules   = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
         $plans     = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'skipParent|unexpired|noclosed');
-        $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $reviewers = $this->story->getProductReviewers($productID);
+        $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
+        $stories   = $this->story->getParentStoryPairs($productID);
+        $URS       = $storyType != 'story' ? array() : $this->story->getProductStoryPairs($productID, $branch, 0, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
 
         /* 设置下拉菜单内容。 */
-        $fields['branch']['options']   = $branches;
-        $fields['module']['options']   = $modules;
-        $fields['plan']['options']     = $plans;
-        $fields['reviewer']['options'] = $reviewers;
+        $fields['branch']['options'] = $branches;
+        switch ($product->type)
+        {
+            case 'normal':
+                unset($fields['branch']);
+                break;
+            case 'platform':
+                $fieldPlatform = array('platform' => $fields['branch']);
+                unset($fields['branch']);
+                $fields = array_merge($fieldPlatform, $fields);
+                break;
+        }
+        $fields['module']['options']     = $modules;
+        $fields['plan']['options']       = $plans;
+        $fields['reviewer']['options']   = $reviewers;
+        $fields['assignedTo']['options'] = $users;
+        $fields['mailto']['options']     = $users;
+        $fields['parent']['options']     = array_filter($stories);
+        $fields['URS']['options']        = $URS;
 
         if($this->story->checkForceReview()) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
@@ -448,7 +577,7 @@ class storyZen extends story
         $story  = $this->view->story;
         $fields = $this->config->story->form->change;
 
-        foreach($fields as $field => $attr)
+        foreach(array_keys($fields) as $field)
         {
             if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
             if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->story, $field);
@@ -554,9 +683,9 @@ class storyZen extends story
      */
     protected function removeFormFieldsForCreate(array $fields, string $storyType = 'story'): array
     {
-       $productID = $this->view->productID;
-       $branch    = $this->view->branch;
-       $objectID  = $this->view->objectID;
+        $productID = $this->view->productID;
+        $branch    = $this->view->branch;
+        $objectID  = $this->view->objectID;
 
         /* Hidden some fields of projects without products. */
         $hiddenProduct = $hiddenParent = $hiddenPlan = $hiddenURS = false;
@@ -584,10 +713,6 @@ class storyZen extends story
                 if($project->model === 'kanban') $hiddenURS  = true;
             }
         }
-        if($hiddenParent)         unset($fields['parent']);
-        if($hiddenPlan)           unset($fields['plan']);
-        if(!$showFeedback)        unset($fields['feedbackBy'], $fields['notifyEmail']);
-        if($storyType == 'story') unset($fields['branch']);
         if($storyType != 'story') unset($fields['region'], $fields['lane'], $fields['branches'], $fields['modules'], $fields['plans']);
         if($storyType != 'story' || !$this->config->URSR || $hiddenURS) unset($fields['URS']);
         if($hiddenProduct)
@@ -597,14 +722,7 @@ class storyZen extends story
             $fields['assignedTo']['options'] = $teamUsers;
         }
 
-        /* Set Custom. */
-        $customFields = explode(',', $this->config->story->list->customCreateFields);
-        $showFields   = trim($this->config->story->custom->createFields, ',');
-        foreach($customFields as $field)
-        {
-            if(!str_contains($showFields, $field)) unset($fields[$field]);
-        }
-
+        $this->view->hiddenParent = $hiddenParent;
         return $fields;
     }
 
@@ -619,30 +737,16 @@ class storyZen extends story
      * @access protected
      * @return array
      */
-    protected function removeFormFieldsForBatchCreate(int $productID, array $fields, string $productType, string $storyType = 'story'): array
+    protected function removeFormFieldsForBatchCreate(array $fields, bool $hiddenPlan, string $executionType): array
     {
-        $product = $this->product->getByID($productID);
+        if($hiddenPlan) unset($fields['plan']);
 
-        /* Set Custom*/
-        foreach(explode(',', $this->config->story->list->customBatchCreateFields) as $field)
+        if($executionType != 'kanban')
         {
-            if($productType != 'normal') $customFields[$productType] = $this->lang->product->branchName[$productType];
-            $customFields[$field] = $this->lang->story->$field;
+            unset($fields['region']);
+            unset($fields['lane']);
         }
 
-        $showFields = $this->config->story->custom->batchCreateFields;
-        if($storyType == 'requirement')
-        {
-            unset($customFields['plan']);
-            $showFields = str_replace(',plan,', ',', ",$showFields,");
-        }
-
-        foreach($customFields as $field => $fieldName)
-        {
-            if(!str_contains(",$showFields,", ",$field,")) unset($fields[$field]);
-        }
-
-        $this->view->customFields = $customFields;
         return $fields;
     }
 
@@ -696,7 +800,7 @@ class storyZen extends story
             return false;
         }
 
-        if($storyData->status != 'draft' and $this->product->checkForceReview()) $storyData->status = 'reviewing';
+        if($storyData->status != 'draft' and $this->story->checkForceReview()) $storyData->status = 'reviewing';
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
@@ -772,14 +876,100 @@ class storyZen extends story
         {
             $story->type       = $storyType;
             $story->status     = (empty($story->reviewer) && !$forceReview) ? 'active' : 'reviewing';
+            $story->status     = $saveDraft ? 'draft' : $story->status;
             $story->stage      = ($this->app->tab == 'project' || $this->app->tab == 'execution') ? 'projected' : 'wait';
             $story->product    = $productID;
             $story->openedBy   = $account;
             $story->vision     = $this->config->vision;
             $story->openedDate = $now;
             $story->version    = 1;
-            if($this->post->status == 'draft') $story->status      = 'draft';
-            if($this->post->uploadImage[$i])   $story->uploadImage = $this->post->uploadImage[$i];
+            $story->mailto     = is_array($story->mailto) ? implode(',', $story->mailto) : '';
+
+            !empty($story->assignedTo) && $story->assignedDate = $now;
+            if($this->post->uploadImage && $this->post->uploadImage[$i]) $story->uploadImage = $this->post->uploadImage[$i];
+        }
+
+        return $stories;
+    }
+
+    /**
+     * 构建批量编辑需求数据。
+     * Build stories for batch edit page.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildStoriesForBatchEdit(): array
+    {
+        $fields  = $this->config->story->form->batchEdit;
+        $account = $this->app->user->account;
+        $now     = helper::now();
+
+        $fields['duplicateStory'] = array('type' => 'int', 'required' => false, 'default' => 0);
+        $fields['childStories']   = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
+
+        $stories    = form::batchData($fields)->get();
+        $oldStories = $this->story->getByList(array_keys($stories));
+        foreach($stories as $storyID => $story)
+        {
+            $oldStory = $oldStories[$storyID];
+            $story->lastEditedBy   = $this->app->user->account;
+            $story->lastEditedDate = $now;
+
+            if($oldStory->assignedTo != $story->assignedTo) $story->assignedDate = $now;
+            if($oldStory->parent < 0) $story->plan = '';
+            if($story->stage != $oldStory->stage) $story->stagedBy = (str_contains('|tested|verified|released|closed|', "|{$story->stage}|")) ? $account : '';
+
+            if($story->closedBy     && helper::isZeroDate($oldStory->closedDate)) $story->closedDate = $now;
+            if($story->closedReason && helper::isZeroDate($oldStory->closedDate)) $story->closedDate = $now;
+            if($story->closedBy     || $story->closedReason)    $story->status   = 'closed';
+            if($story->closedReason && empty($story->closedBy)) $story->closedBy = $account;
+
+            if($story->closedBy && empty($story->closedReason)) dao::$errors['closedReason'] = sprintf($this->lang->error->notempty, $this->lang->story->closedReason);
+            if($story->closedReason == 'done' && empty($story->stage)) dao::$errors['stage'] = sprintf($this->lang->error->notempty, $this->lang->story->stage);
+            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors['duplicateStory'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+        }
+
+        return $stories;
+    }
+
+    /**
+     * 构建批量关闭需求数据。
+     * Build stories for batch close.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildStoriesForBatchClose(): array
+    {
+        $fields  = $this->config->story->form->batchClose;
+        $account = $this->app->user->account;
+        $now     = helper::now();
+
+        $fields['duplicateStory'] = array('type' => 'int', 'required' => false, 'default' => 0);
+
+        $data       = form::batchData($fields)->get();
+        $oldStories = $this->story->getByList(array_keys($data));
+        $stories    = array();
+        foreach($data as $storyID => $story)
+        {
+            $oldStory = $oldStories[$storyID];
+            if($oldStory->parent == -1) continue;
+            if($oldStory->status == 'closed') continue;
+
+            $story->lastEditedBy   = $account;
+            $story->lastEditedDate = $now;
+            $story->closedBy       = $account;
+            $story->closedDate     = $now;
+            $story->assignedTo     = 'closed';
+            $story->assignedDate   = $now;
+            $story->status         = 'closed';
+            $story->stage          = 'closed';
+
+            if($story->closedReason != 'done') $story->plan  = '';
+            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors['duplicateStory'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+
+            $stories[$storyID] = $story;
         }
 
         return $stories;
@@ -1000,5 +1190,73 @@ class storyZen extends story
             $stories[] = $initStory;
         }
         return $stories;
+    }
+
+    /**
+     * Get custom fields list.
+     *
+     * @param  object    $config
+     * @param  string    $storyType
+     * @param  bool      $hiddenPlan
+     * @param  object    $product
+     * @access protected
+     * @return array
+     */
+    protected function getCustomFields(object &$config, string $storyType, bool $hiddenPlan, object $product): array
+    {
+        $customFields = array();
+
+        /* Attach multi-branch or multi-platform field. */
+        if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+
+        foreach(explode(',', $config->story->list->customBatchCreateFields) as $field)
+        {
+            $customFields[$field] = $this->lang->story->$field;
+        }
+
+        if($hiddenPlan) unset($customFields['plan']);
+
+        if($product->type != 'normal')
+        {
+            $config->story->custom->batchCreateFields = sprintf($config->story->custom->batchCreateFields, $product->type);
+        }
+        else
+        {
+            $config->story->custom->batchCreateFields = trim(sprintf($config->story->custom->batchCreateFields, ''), ',');
+        }
+
+        /* User requirement without plan field. */
+        if($storyType == 'requirement')
+        {
+            unset($customFields['plan']);
+        }
+
+        return $customFields;
+    }
+
+    /**
+     * Get show fields list.
+     *
+     * @param  string    $fieldListStr
+     * @param  bool      $hiddenPlan
+     * @param  object    $product
+     * @access protected
+     * @return array
+     */
+    protected function getShowFields(string $fieldListStr, string $storyType, object $product): string
+    {
+        $showFields = $fieldListStr;
+
+        if($product->type == 'normal')
+        {
+            $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
+        if($storyType == 'requirement')
+        {
+            $showFields = str_replace('plan', '', $showFields);
+        }
+
+        return $showFields;
     }
 }

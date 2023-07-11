@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('module', $module);
+$config->personnel->whitelist->actionList['unbindWhitelist']['url']  = array('module' => $module, 'method' => 'unbindWhitelist', 'params' => 'userID={id}');
 
 $config->personnel->whitelist->dtable->fieldList['dept']['map'] = $depts;
 
@@ -19,14 +19,16 @@ $whitelist = initTableData($whitelist, $config->personnel->whitelist->dtable->fi
 $cols = array_values($config->personnel->whitelist->dtable->fieldList);
 $data = array_values($whitelist);
 
+dropmenu();
+
 featureBar
 (
     set::current('all'),
-    set::linkParams("objectID={$objectID}&module=whitelist&objectType={$objectType}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&programID={$programID}&from={$from}"),
+    set::linkParams("objectID={$objectID}&module=whitelist&objectType={$objectType}"),
 );
 
-$whitelistVars    = $module == 'program' ? "objectID={$objectID}&programID={$programID}&module={$module}&from={$from}" : "objectID={$objectID}";
-$addWhitelistVars = $module == 'program' ? "objectID={$objectID}&deptID=0&copyID=0&programID={$programID}&from={$from}" : "objectID={$objectID}";
+$whitelistVars    = $module == 'program' ? "objectID={$objectID}&programID={$projectProgramID}&module={$module}&from={$from}" : "objectID={$objectID}";
+$addWhitelistVars = $module == 'program' ? "objectID={$objectID}&deptID=0&copyID=0&programID={$projectProgramID}&from={$from}" : "objectID={$objectID}";
 toolbar
 (
     btngroup
@@ -46,7 +48,6 @@ dtable
     set::cols($cols),
     set::data($data),
     set::fixedLeftWidth('0.33'),
-    set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
 );
 

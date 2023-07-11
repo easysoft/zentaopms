@@ -1,16 +1,19 @@
 <?php
+declare(strict_types=1);
 namespace zin;
+
+require_once dirname(__DIR__) . DS . 'dropmenu' . DS . 'v1.php';
 
 class programMenu extends wg
 {
     private $programs = array();
 
-    protected static $defineProps = array(
-        'programs?:array',
-        'activeClass?:string',
-        'activeIcon?:string',
-        'activeKey?:string',
-        'closeLink?:string'
+    protected static array $defineProps = array(
+        'programs?: array',
+        'activeClass?: string="active"',
+        'activeIcon?: string="check"',
+        'activeKey?: string',
+        'link?: string',
     );
 
     public static function getPageCSS(): string|false
@@ -25,12 +28,19 @@ class programMenu extends wg
 
         foreach($children as $child)
         {
-            $item = array('key' => $child->id, 'text' => $child->name, 'items' => array());
+            $item = array('id' => $child->id, 'icon' => 'icon-cards-view', 'text' => $child->name, 'items' => array());
             if(isset($child->icon)) $item['icon'] = $child->icon;
 
             $items = $this->buildMenuTree($item['items'], $child->id);
-            if(count($items) !== 0) $item['items'] = $items;
-            else                    unset($item['items']);
+
+            if(count($items) !== 0)
+            {
+                $item['items'] = $items;
+            }
+            else
+            {
+                unset($item['items']);
+            }
 
             $parent[] = $item;
         }
@@ -40,13 +50,13 @@ class programMenu extends wg
     private function getTitle($activeKey)
     {
         global $lang;
-
         if(empty($activeKey)) return $lang->program->all;
 
         foreach($this->programs as $program)
         {
             if($program->id == $activeKey) return $program->name;
         }
+
         return $lang->program->all;
     }
 
@@ -55,65 +65,23 @@ class programMenu extends wg
         return array_filter($this->programs, function($program) use($id) {return $program->parent == $id;});
     }
 
-    private function setMenuTreeProps()
+    protected function build(): zui
     {
-        if(!empty($this->prop('programs'))) $this->programs = $this->prop('programs');
-        $this->setProp('programs', null);
-        $items = $this->buildMenuTree(array(), 0);
-        array_unshift($items, array('type' => 'heading', 'text' => '筛选项目集'));
-        $this->setProp('items', $items);
-        $this->setProp('commonItemProps', array('item' => array('className' => 'not-hide-menu')));
-        $this->setProp('isDropdownMenu', true);
-        $this->setProp('_to', "[data-zin-id='$this->gid']");
-        $this->setDefaultProps(array('activeClass' => 'active', 'activeIcon' => 'check'));
-    }
-
-    protected function build()
-    {
-        $this->setMenuTreeProps();
-
-        $activeKey = $this->prop('activeKey');
-        $title     = $this->getTitle($activeKey);
-        $closeBtn  = null;
-
-        if(!empty($activeKey))
-        {
-            $closeBtn = a
-            (
-                set('href', $this->prop('closeLink')),
-                h::i
-                (
-                    setClass('icon icon-close'),
-                    setStyle('color', '#313C52'),
-                )
-            );
-        }
-
-        return div
+        $this->programs = (array)$this->prop('programs');
+        $activeKey      = $this->prop('activeKey');
+        $link           = $this->prop('link');
+        $closeLink      = str_replace('{id}', '0', $link);
+        return zui::dropmenu
         (
-            setClass('program-menu'),
-            set('data-zin-id', $this->gid),
-            h::header
-            (
-                set('data-toggle', 'dropdown'),
-                div
-                (
-                    setClass('title-container'),
-                    div
-                    (
-                        setClass('icon-container down'),
-                        h::i(setClass('gg-chevron-down')),
-                    ),
-                    div
-                    (
-                        setClass('icon-container up'),
-                        h::i(setClass('gg-chevron-up')),
-                    ),
-                    span($title)
-                ),
-                $closeBtn
-            ),
-            zui::menutree(inherit($this))
+            set('_id', 'programMenu'),
+            set::className('program-menu btn'),
+            set::defaultValue($activeKey),
+            set::text($this->getTitle($activeKey)),
+            set::caret(true),
+            set::popWidth(200),
+            set::popClass('popup text-md'),
+            set::onClick(jsRaw("(event) => {if(!event.target.closest('.is-caret')) return; openUrl('$closeLink'); return false}")),
+            set::data(array('search' => false, 'checkIcon' => true, 'title' => data('lang.product.selectProgram'), 'link' => $link, 'data' => $this->buildMenuTree(array(), 0))),
         );
     }
 }

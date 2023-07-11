@@ -53,6 +53,7 @@ $lang->design->linkCommit   = 'Link Commit';
 $lang->design->unlinkCommit = 'Unlink Commit';
 $lang->design->submit       = 'Submit Review';
 $lang->design->assignTo     = 'Assign';
+$lang->design->assignAction = 'Assign Design';
 $lang->design->revision     = 'Linked Code';
 
 $lang->design->browseAction = 'Design List';
@@ -70,9 +71,6 @@ $lang->design->plusTypeList = $lang->design->typeList;
 $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = 'All';
 $lang->design->rangeList['assign'] = 'Selected';
-
-$lang->design->featureBar['all'] = 'All';
-$lang->design->featureBar += $lang->design->typeList;
 
 /* 提示信息. */
 $lang->design->errorSelection = 'No record selected!';

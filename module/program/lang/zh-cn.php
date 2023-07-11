@@ -12,15 +12,15 @@ $lang->program->budgetUnit     = '预算单位';
 $lang->program->invested       = '已投入';
 $lang->program->begin          = '计划开始';
 $lang->program->end            = '计划完成';
-$lang->program->realBegin      = '实际开始';
-$lang->program->realEnd        = '实际完成';
+$lang->program->realBeganAB    = '实际开始';
+$lang->program->realEndAB      = '实际完成';
 $lang->program->stage          = '阶段';
 $lang->program->type           = '类型';
 $lang->program->pri            = '优先级';
 $lang->program->parent         = '父项目集';
 $lang->program->exchangeRate   = '汇率';
-$lang->program->openedBy       = '由谁创建';
-$lang->program->openedDate     = '创建日期';
+$lang->program->openedBy       = '创建者';
+$lang->program->openedDate     = '创建时间';
 $lang->program->closedBy       = '由谁关闭';
 $lang->program->closedDate     = '关闭日期';
 $lang->program->canceledBy     = '由谁取消';
@@ -39,8 +39,8 @@ $lang->program->output         = '输出';
 $lang->program->auth           = '权限控制';
 $lang->program->path           = '路径';
 $lang->program->grade          = '层级';
-$lang->program->realBegan      = '实际开始日期';
-$lang->program->realEnd        = '实际完成日期';
+$lang->program->realBegan      = '实际开始';
+$lang->program->realEnd        = '实际完成';
 $lang->program->version        = '版本';
 $lang->program->parentVersion  = '父版本';
 $lang->program->planDuration   = '计划周期天数';
@@ -86,9 +86,6 @@ $lang->program->changePRJUnit           = "更新{$lang->projectCommon}预算单
 $lang->program->showNotCurrentProjects  = "显示非当前项目集的{$lang->projectCommon}信息";
 
 $lang->program->progress         = "{$lang->projectCommon}进度";
-$lang->program->other                   = '其他';
-
-$lang->program->progress         = '项目进度';
 $lang->program->progressAB       = '进度';
 $lang->program->children         = '添加子项目集';
 $lang->program->allInvest        = '项目集总投入';
@@ -116,7 +113,7 @@ $lang->program->dateExceedChild    = "项目集的起止日期已不包含子项
 $lang->program->closeErrorMessage  = "存在子项目集或{$lang->projectCommon}为未关闭状态";
 $lang->program->hasChildren        = "该项目集有子项目集或{$lang->projectCommon}存在，不能删除。";
 $lang->program->hasProduct         = "该项目集有{$lang->productCommon}存在，不能删除。";
-$lang->program->confirmDelete      = '您确定要删除\“%s\”项目集吗？';
+$lang->program->confirmDelete      = '您确定要删除“%s”项目集吗？';
 $lang->program->confirmUnlink      = '您确定要移除干系人吗？';
 $lang->program->readjustTime       = '重新调整项目集起止时间';
 $lang->program->accessDenied       = '你无权访问该项目集';
@@ -129,12 +126,12 @@ $lang->program->createProduct    = '添加产品';
 $lang->program->createProject    = '添加项目';
 
 /* DTable columns of product view page. */
-$lang->program->unclosedReqCount  = '需求未关闭';
-$lang->program->closedReqRate     = '需求完成率';
-$lang->program->testCaseCoverage  = '用例覆盖率';
-$lang->program->bugActivatedCount = 'Bug激活';
-$lang->program->fixedRate         = '修复率';
-$lang->program->feedback          = '反馈';
+$lang->program->totalUnclosedStories = '需求未关闭';
+$lang->program->closedStoryRate      = '需求完成率';
+$lang->program->testCaseCoverage     = '用例覆盖率';
+$lang->program->totalActivatedBugs   = 'Bug激活';
+$lang->program->fixedRate            = '修复率';
+$lang->program->feedback             = '反馈';
 
 $lang->program->tip = new stdclass();
 $lang->program->tip->closed     = '该项目集已是关闭状态，无须关闭。';
@@ -149,16 +146,16 @@ $lang->program->endList[186] = '半年';
 $lang->program->endList[365] = '一年';
 $lang->program->endList[999] = '长期';
 
-$lang->program->aclList['private'] = "私有（项目集负责人和干系人可访问，干系人可后续维护）";
 $lang->program->aclList['open']    = "公开（有项目集视图权限，即可访问）";
+$lang->program->aclList['private'] = "私有（项目集负责人和干系人可访问，干系人可后续维护）";
 
-$lang->program->subAclList['private'] = "私有（本项目集负责人和干系人可访问，干系人可后续维护）";
 $lang->program->subAclList['open']    = "全部公开（有项目集视图权限，即可访问）";
 $lang->program->subAclList['program'] = "项目集内公开（所有上级项目集负责人和干系人、本项目集负责人和干系人可访问）";
+$lang->program->subAclList['private'] = "私有（本项目集负责人和干系人可访问，干系人可后续维护）";
 
-$lang->program->subAcls['private'] = '私有';
 $lang->program->subAcls['open']    = '全部公开';
 $lang->program->subAcls['program'] = '项目集内公开';
+$lang->program->subAcls['private'] = '私有';
 
 $lang->program->authList['extend'] = "继承 (取{$lang->projectCommon}权限与组织权限的并集)";
 $lang->program->authList['reset']  = "重新定义 (只取{$lang->projectCommon}权限)";
@@ -188,13 +185,18 @@ $lang->program->featureBar['project']['closed']    = '已关闭';
 
 $lang->program->featureBar['productview']['all']      = '全部';
 $lang->program->featureBar['productview']['unclosed'] = '未关闭';
-$lang->program->featureBar['productview']['end']      = '结束';
+$lang->program->featureBar['productview']['wait']     = '未开始';
+$lang->program->featureBar['productview']['doing']    = '进行中';
+$lang->program->featureBar['productview']['more']     = $lang->more;
 
 $lang->program->featureBar['projectview']['all']      = '全部';
 $lang->program->featureBar['projectview']['unclosed'] = '未关闭';
 $lang->program->featureBar['projectview']['wait']     = '未开始';
 $lang->program->featureBar['projectview']['doing']    = '进行中';
-$lang->program->featureBar['projectview']['more']     = '更多';
+$lang->program->featureBar['projectview']['more']     = $lang->more;
+
+$lang->program->moreSelects['suspended'] = '已挂起';
+$lang->program->moreSelects['closed']    = '已关闭';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = '项目集看板';
@@ -210,7 +212,15 @@ $lang->program->kanban->normalReleases  = '正常的发布';
 
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
-$lang->program->defaultProgram = '默认项目集';
-$lang->program->projectView    = '项目视角';
-$lang->program->productView    = '产品视角';
-$lang->program->manDay         = '人天';
+$lang->program->defaultProgram    = '默认项目集';
+$lang->program->projectView       = '项目视角';
+$lang->program->productView       = '产品视角';
+$lang->program->manDay            = '人天';
+$lang->program->createdDate       = '创建时间';
+$lang->program->totalStories      = '需求总数';
+$lang->program->project           = '项目';
+$lang->program->totalBugs         = 'Bug总数';
+$lang->program->latestReleaseDate = '最新发布时间';
+$lang->program->latestRelease     = '最新发布';
+$lang->program->manageLine        = '维护产品线';
+$lang->program->checkedProducts   = '共选中&nbsp;<strong>%total%</strong>&nbsp;个产品。';

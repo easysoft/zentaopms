@@ -14,8 +14,7 @@ namespace zin;
 
 global $lang, $app;
 $app->loadLang('datatable');
-$formGID = null;
-jsVar('ajaxSaveUrl', $this->createLink('datatable', 'ajaxSave', "module={$module}&method={$method}"));
+jsVar('ajaxSaveUrl', $this->createLink('datatable', 'ajaxSaveFields', "module={$module}&method={$method}"));
 
 function buildItem(array $item): wg
 {
@@ -24,7 +23,7 @@ function buildItem(array $item): wg
     $isRequired = $item['required'];
     return li
     (
-        setClass('row', 'items-center', 'border', 'px-5', 'h-9'),
+        setClass('row', 'items-center', 'border', 'px-5', 'h-9', 'cursor-move'),
         set('data-key', $item['name']),
         $isRequired ? setClass('required-col') : null,
         checkbox
@@ -35,7 +34,7 @@ function buildItem(array $item): wg
         ),
         h::label
         (
-            setClass('flex-auto'),
+            setClass('flex-auto cursor-move'),
             set::for($item['name'] . '_'),
             $item['title']
         ),
@@ -53,7 +52,6 @@ function buildItem(array $item): wg
     );
 }
 
-
 function getDefaultConfig(string $name): array
 {
     global $config;
@@ -65,7 +63,6 @@ function getDefaultConfig(string $name): array
 
 function buildBody(array $cols): form
 {
-    global $formGID;
     $itemsList = array(
         'left' => array(),
         'no' => array(),
@@ -74,7 +71,9 @@ function buildBody(array $cols): form
 
     foreach($cols as $col)
     {
+        if($_SESSION['currentProductType'] == 'normal' && $col['name'] == 'branch') continue;
         if($col['type']) $col = array_merge(getDefaultConfig($col['type']), $col);
+        if(!isset($col['fixed']) || empty($col['fixed'])) $col['fixed'] = 'no';
         $itemsList[$col['fixed']][] = array(
             'required' => isset($col['required']) && $col['required'] === true,
             'title' => $col['title'],
@@ -88,7 +87,7 @@ function buildBody(array $cols): form
     (
         setClass('col', 'gap-0.5'),
         set::grid(false),
-        set::actions(null),
+        set::actions(array()),
     );
 
     foreach($itemsList as $key => $items)
@@ -96,51 +95,13 @@ function buildBody(array $cols): form
         if(empty($items)) continue;
 
         $ul = dragUl(setClass("{$key}-cols"));
-        foreach ($items as $item) $ul->add(buildItem($item));
+        foreach($items as $item) $ul->add(buildItem($item));
         $body->add($ul);
     }
 
     $body->setProp('data-zin-gid', $body->gid);
-    $formGID = $body->gid;
+    jsVar('formGID', $body->gid);
     return $body;
-}
-
-function submitFunc(): string
-{
-    global $formGID;
-
-    return <<<FUNC
-        const formData = [];
-        let index = 0;
-        const types = ['left', 'no', 'right'];
-        const getSelector = (value) => '[data-zin-gid="{$formGID}"] .drag-ul.' + value + '-cols';
-        const colsList = types.map(x => document.querySelector(getSelector(x)));
-
-        for(let i = 0; i < colsList.length; i++)
-        {
-            const cols = colsList[i];
-            if(!cols) continue;
-
-            const children = Array.from(cols.children);
-            for(let j = 0; j < children.length; j++)
-            {
-                const li = children[j];
-                const checkbox = li.querySelector('input[type="checkbox"]');
-                const input = li.querySelector('input[type="text"]');
-                formData.push({
-                    id: li.dataset.key,
-                    order: ++index,
-                    show: checkbox.checked,
-                    width: input.value + 'px',
-                    fixed: types[i],
-                });
-            }
-        }
-
-        fetch(ajaxSaveUrl, {method: 'post', body: JSON.stringify(formData)})
-            .then(res => res.json())
-            .then((json) => {if(json.result === 'success') loadTable();});
-    FUNC;
 }
 
 setClass('edit-cols');
@@ -152,12 +113,15 @@ to::footer
 (
     toolbar
     (
-        item
+        btn
         (
-            set(array('text' => $lang->save, 'type' => 'primary', 'class' => 'w-28', 'data-dismiss' => 'modal')),
-            on::click($this->submitFunc())
+            setClass('toolbar-item w-28'),
+            setID('ajax-save'),
+            set::type('primary'),
+            on::click('handleEditColsSubmit'),
+            $lang->save
         )
     )
 );
 
-render('modalDialog');
+render();

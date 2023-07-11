@@ -1,10 +1,10 @@
 function getForm(event)
 {
     const field  = $(event.target).attr('id');
-    const module = $('#module').val();
-    const code   = field == 'module' ? '' : $('#code').val();
+    const module = field == 'code' ? $('#blockCreateForm #module').val() : $(event.target).attr('data-tab');
+    const code   = field == 'code' ? $('#blockCreateForm #code').val() : '';
     const url    = $.createLink('block', 'create', 'dashboard=' + dashboard + '&module=' + module + '&code=' + (code ? code : ''));
-    loadPage(url, '#codesRow, #paramsRow');
+    loadPage(url, '#blockCreateForm #codesRow, #blockCreateForm #paramsRow, #blockCreateForm #module');
 }
 
 /**

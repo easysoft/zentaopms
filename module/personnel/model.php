@@ -462,10 +462,6 @@ class personnelModel extends model
                 ->orderBy('openedDate_desc')
                 ->limit('10')
                 ->fetchPairs();
-            foreach($objects as $id => &$object)
-            {
-                if($id != $parentID) $object = '&nbsp;&nbsp;&nbsp;' . $object;
-            }
         }
         elseif($objectType == 'project')
         {
@@ -664,7 +660,7 @@ class personnelModel extends model
      */
     public function addWhitelist($objectType = '', $objectID = 0)
     {
-        $users = $this->post->accounts;
+        $users = $this->post->account;
         $this->updateWhitelist($users, $objectType, $objectID);
     }
 
@@ -857,7 +853,7 @@ class personnelModel extends model
      */
     public function createMemberLink($dept = 0, $programID = 0)
     {
-        return html::a(helper::createLink('personnel', 'accessible', "program={$programID}&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
+        return helper::createLink('personnel', 'accessible', "program={$programID}&deptID={$dept->id}");
     }
 
     /**

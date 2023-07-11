@@ -9,26 +9,28 @@
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->release->create           = "Créer Release";
-$lang->release->edit             = "Editer Release";
-$lang->release->linkStory        = "Intégrer Story";
-$lang->release->linkBug          = "Intégrer Bug";
-$lang->release->delete           = "Supprimer Release";
+$lang->release->create           = 'Créer Release';
+$lang->release->edit             = 'Editer Release';
+$lang->release->linkStory        = 'Intégrer Story';
+$lang->release->linkBug          = 'Intégrer Bug';
+$lang->release->delete           = 'Supprimer Release';
 $lang->release->deleted          = 'Supprimée';
-$lang->release->view             = "Détail Release";
-$lang->release->browse           = "Liste Release";
-$lang->release->changeStatus     = "Change Statut";
-$lang->release->batchUnlink      = "Retirer par Lot";
-$lang->release->batchUnlinkStory = "Retirer Stories par Lot";
-$lang->release->batchUnlinkBug   = "Retirer Bugs par Lot";
+$lang->release->view             = 'Détail Release';
+$lang->release->browse           = 'Liste Release';
+$lang->release->changeStatus     = 'Change Statut';
+$lang->release->batchUnlink      = 'Retirer par Lot';
+$lang->release->batchUnlinkStory = 'Retirer Stories par Lot';
+$lang->release->batchUnlinkBug   = 'Retirer Bugs par Lot';
 
-$lang->release->confirmDelete      = "Voulez-vous réellement supprimer cette release ?";
-$lang->release->syncFromBuilds     = "Link the stories completed in the version and the bugs solved to the release";
-$lang->release->confirmUnlinkStory = "Voulez-vous retirer cette story de la release ?";
-$lang->release->confirmUnlinkBug   = "Voulez-vous retirer ce bug de la release ?";
+$lang->release->confirmDelete      = 'Voulez-vous réellement supprimer cette release ?';
+$lang->release->syncFromBuilds     = 'Link the stories completed in the version and the bugs solved to the release';
+$lang->release->confirmUnlinkStory = 'Voulez-vous retirer cette story de la release ?';
+$lang->release->confirmUnlinkBug   = 'Voulez-vous retirer ce bug de la release ?';
 $lang->release->existBuild         = '『Build』『%s』existant. Vous pouvez changer『name』ou choisir un『build』.';
 $lang->release->noRelease          = 'Pas de release à ce jour.';
 $lang->release->errorDate          = "La date de release ne doit pas être supérieure à aujourd'hui.";
+$lang->release->confirmActivate    = 'Do you want to activate this release?';
+$lang->release->confirmTerminate   = 'Do you want to pause this release?';
 
 $lang->release->basicInfo = 'Infos de Base';
 
@@ -68,6 +70,8 @@ $lang->release->storyList      = '<p style="margin-left: 30px;">Story List：%s�
 $lang->release->bugList        = '<p style="margin-left: 30px;">Bug List：%s。</p>';
 $lang->release->pageAllSummary = 'Total releases: <strong>%total%</strong>, Normal: <strong>%normal%</strong>, Terminate: <strong>%terminate%</strong>.';
 $lang->release->pageSummary    = "Total releases: <strong>%s</strong>.";
+$lang->release->fileName       = 'File name';
+$lang->release->exportRange    = 'Data to export';
 
 $lang->release->storyTitle = 'Story Name';
 $lang->release->bugTitle   = 'Bug Name';

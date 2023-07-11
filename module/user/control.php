@@ -563,6 +563,15 @@ class user extends control
      */
     public function batchCreate($deptID = 0)
     {
+        if(!empty($_POST))
+        {
+            $userIdList = $this->user->batchCreate();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIdList));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('company', 'browse')));
+        }
+
         $groups = $this->dao->select('id, name, role')
             ->from(TABLE_GROUP)
             ->where('vision')->eq($this->config->vision)
@@ -578,14 +587,6 @@ class user extends control
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
-        if(!empty($_POST))
-        {
-            $userIDList = $this->user->batchCreate();
-
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIDList));
-            return print(js::locate($this->createLink('company', 'browse'), 'parent'));
-        }
-
         /* Set custom. */
         foreach(explode(',', $this->config->user->availableBatchCreateFields) as $field)
         {
@@ -598,17 +599,14 @@ class user extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = join(',', $showFields);
 
-        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
-        $position[] = $this->lang->user->batchCreate;
-        $this->view->title      = $title;
-        $this->view->position   = $position;
+        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->deptID     = $deptID;
         $this->view->groupList  = $groupList;
         $this->view->roleGroup  = $roleGroup;
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->visionList = $this->user->getVisionList();
-        $this->view->companies  = $this->loadModel('company')->getOutsideCompanies() + array('ditto' => $this->lang->user->ditto);
+        $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
 
         $this->display();
     }

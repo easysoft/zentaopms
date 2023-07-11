@@ -637,6 +637,10 @@ class releaseModel extends model
         $suffix  = empty($release->product) ? '' : ' - ' . $this->loadModel('product')->getById($release->product)->name;
         $subject = 'Release #' . $release->id . ' ' . $release->name . $suffix;
 
+        $stories  = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $bugs     = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->andWhere('deleted')->eq(0)->fetchAll();
+        $leftBugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)->fetchAll();
+
         /* Get mail content. */
         $modulePath = $this->app->getModulePath('', 'release');
         $oldcwd     = getcwd();
@@ -808,10 +812,11 @@ class releaseModel extends model
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
 
             $menu[] = array(
-                'text'     => $this->lang->release->changeStatusList[$changedStatus],
-                'icon'     => $release->status == 'normal' ? 'pause' : 'play',
-                'url'      => "javascript:changeStatus('{$release->id}', '{$changedStatus}')",
-                'class'    => 'btn ghost'
+                'text'         => $this->lang->release->changeStatusList[$changedStatus],
+                'icon'         => $release->status == 'normal' ? 'pause' : 'play',
+                'url'          => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', "releaseID={$release->id}&status={$changedStatus}"),
+                'class'        => 'btn ghost ajax-submit',
+                'data-confirm' => $release->status == 'normal' ? $this->lang->release->confirmTerminate : $this->lang->release->confirmActivate
             );
         }
 
@@ -830,10 +835,11 @@ class releaseModel extends model
         if(common::hasPriv('release', 'delete'))
         {
             $menu[] = array(
-                'text'  => $this->lang->delete,
-                'icon'  => 'trash',
-                'url'   => "javascript:confirmDelete('{$release->id}')",
-                'class' => 'btn ghost'
+                'text'         => $this->lang->delete,
+                'icon'         => 'trash',
+                'url'          => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'delete', "releaseID={$release->id}"),
+                'class'        => 'btn ghost ajax-submit',
+                'data-confirm' => $this->lang->release->confirmDelete
             );
         }
 

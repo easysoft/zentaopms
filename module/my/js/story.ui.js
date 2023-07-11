@@ -1,4 +1,4 @@
-$(document).on('click', '.batch-btn', function()
+$(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);
     const checkedList = dtable.$.getChecks();
@@ -17,3 +17,26 @@ $(document).on('click', '.batch-btn', function()
         postAndLoadPage(url, form);
     }
 });
+
+/**
+ * 对标题列进行重定义。
+ * Redefine the title column.
+ *
+ * @param  array  result
+ * @param  array  info
+ * @access public
+ * @return string|array
+ */
+window.renderCell = function(result, info)
+{
+    if(info.col.name == 'title' && result[0])
+    {
+        const story = info.row.data;
+        if(story.parent)
+        {
+            let html = "<span class='label gray-pale rounded-xl' title='" + children + "'>" + childrenAB + "</span>";
+            result[0] = {html};
+        }
+    }
+    return result;
+}

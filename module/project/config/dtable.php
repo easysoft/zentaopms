@@ -1,5 +1,7 @@
 <?php
+global $lang,$app;
 $config->project->dtable = new stdclass();
+$config->project->dtable->team = new stdclass();
 $config->project->dtable->defaultField = array('id', 'name', 'status', 'PM', 'budget', 'begin', 'end', 'progress', 'actions');
 
 $config->project->dtable->fieldList['id']['title']    = $lang->idAB;
@@ -7,20 +9,23 @@ $config->project->dtable->fieldList['id']['name']     = 'id';
 $config->project->dtable->fieldList['id']['type']     = 'checkID';
 $config->project->dtable->fieldList['id']['checkbox'] = true;
 $config->project->dtable->fieldList['id']['group']    = 1;
+$config->project->dtable->fieldList['id']['required'] = true;
 
 $config->project->dtable->fieldList['name']['title']      = $lang->project->name;
 $config->project->dtable->fieldList['name']['name']       = 'name';
 $config->project->dtable->fieldList['name']['type']       = 'title';
-$config->project->dtable->fieldList['name']['link']       = helper::createLink('project', 'index', 'projectID={id}');
+$config->project->dtable->fieldList['name']['link']       = array('module' => 'project', 'method' => 'index', 'params' => 'projectID={id}');
 $config->project->dtable->fieldList['name']['iconRender'] = 'RAWJS<function(val,row){ if(row.data.model == \'scrum\') return \'icon-sprint text-gray\'; if([\'waterfall\', \'kanban\', \'agileplus\', \'waterfallplus\'].indexOf(row.data.model) !== -1) return \'icon-\' + row.data.model + \' text-gray\'; return \'\';}>RAWJS';
 $config->project->dtable->fieldList['name']['group']      = 1;
+$config->project->dtable->fieldList['name']['required']   = true;
 
 if(!empty($config->setCode))
 {
-    $config->project->dtable->fieldList['code']['title'] = $lang->project->code;
-    $config->project->dtable->fieldList['code']['name']  = 'code';
-    $config->project->dtable->fieldList['code']['type']  = 'text';
-    $config->project->dtable->fieldList['code']['group'] = 1;
+    $config->project->dtable->fieldList['code']['title']    = $lang->project->code;
+    $config->project->dtable->fieldList['code']['name']     = 'code';
+    $config->project->dtable->fieldList['code']['type']     = 'text';
+    $config->project->dtable->fieldList['code']['group']    = 1;
+    $config->project->dtable->fieldList['code']['required'] = true;
 }
 
 $config->project->dtable->fieldList['status']['title']     = $lang->project->status;
@@ -28,100 +33,88 @@ $config->project->dtable->fieldList['status']['name']      = 'status';
 $config->project->dtable->fieldList['status']['type']      = 'status';
 $config->project->dtable->fieldList['status']['statusMap'] = $lang->project->statusList;
 $config->project->dtable->fieldList['status']['group']     = 2;
+$config->project->dtable->fieldList['status']['show']      = true;
 
 $config->project->dtable->fieldList['hasProduct']['title'] = $lang->project->type;
 $config->project->dtable->fieldList['hasProduct']['name']  = 'hasProduct';
 $config->project->dtable->fieldList['hasProduct']['type']  = 'category';
 $config->project->dtable->fieldList['hasProduct']['group'] = 2;
 
-$config->project->dtable->fieldList['PM']['title'] = $lang->project->PM;
-$config->project->dtable->fieldList['PM']['name']  = 'PM';
-$config->project->dtable->fieldList['PM']['type']  = 'avatarBtn';
-$config->project->dtable->fieldList['PM']['group'] = 3;
+$config->project->dtable->fieldList['PM']['title']    = $lang->project->PM;
+$config->project->dtable->fieldList['PM']['name']     = 'PM';
+$config->project->dtable->fieldList['PM']['type']     = 'avatarBtn';
+$config->project->dtable->fieldList['PM']['group']    = 3;
+$config->project->dtable->fieldList['PM']['required'] = true;
+
+$config->project->dtable->fieldList['storyCount']['title']  = $lang->project->storyCount;
+$config->project->dtable->fieldList['storyCount']['type']   = 'number';
+$config->project->dtable->fieldList['storyCount']['group']  = 4;
+$config->project->dtable->fieldList['storyCount']['show']   = true;
+
+$config->project->dtable->fieldList['executionCount']['title']  = $lang->project->executionCount;
+$config->project->dtable->fieldList['executionCount']['type']   = 'count';
+$config->project->dtable->fieldList['executionCount']['group']  = 4;
+$config->project->dtable->fieldList['executionCount']['show']   = 4;
 
 $config->project->dtable->fieldList['budget']['title'] = $lang->project->budget;
 $config->project->dtable->fieldList['budget']['name']  = 'budget';
 $config->project->dtable->fieldList['budget']['type']  = 'money';
-$config->project->dtable->fieldList['budget']['group'] = 4;
+$config->project->dtable->fieldList['budget']['group'] = 5;
+$config->project->dtable->fieldList['budget']['show']  = true;
 
 $config->project->dtable->fieldList['teamCount']['title'] = $lang->project->teamCount;
 $config->project->dtable->fieldList['teamCount']['name']  = 'teamCount';
 $config->project->dtable->fieldList['teamCount']['type']  = 'number';
-$config->project->dtable->fieldList['teamCount']['group'] = 4;
+$config->project->dtable->fieldList['teamCount']['group'] = 5;
 
 $config->project->dtable->fieldList['invested']['title'] = $lang->project->invested;
 $config->project->dtable->fieldList['invested']['name']  = 'invested';
 $config->project->dtable->fieldList['invested']['type']  = 'count';
-$config->project->dtable->fieldList['invested']['group'] = 4;
+$config->project->dtable->fieldList['invested']['group'] = 5;
+$config->project->dtable->fieldList['invested']['show']  = true;
 
 $config->project->dtable->fieldList['begin']['title'] = $lang->project->begin;
 $config->project->dtable->fieldList['begin']['name']  = 'begin';
 $config->project->dtable->fieldList['begin']['type']  = 'date';
-$config->project->dtable->fieldList['begin']['group'] = 5;
+$config->project->dtable->fieldList['begin']['group'] = 6;
+$config->project->dtable->fieldList['begin']['show']  = true;
 
 $config->project->dtable->fieldList['end']['title'] = $lang->project->end;
 $config->project->dtable->fieldList['end']['name']  = 'end';
 $config->project->dtable->fieldList['end']['type']  = 'date';
-$config->project->dtable->fieldList['end']['group'] = 5;
+$config->project->dtable->fieldList['end']['group'] = 6;
+$config->project->dtable->fieldList['end']['show']  = true;
+
+$config->project->dtable->fieldList['realBegan']['title'] = $lang->project->realBeganAB;
+$config->project->dtable->fieldList['realBegan']['type']  = 'date';
+$config->project->dtable->fieldList['realBegan']['group'] = 6;
+
+$config->project->dtable->fieldList['realEnd']['title'] = $lang->project->realEndAB;
+$config->project->dtable->fieldList['realEnd']['type']  = 'date';
+$config->project->dtable->fieldList['realEnd']['group'] = 6;
 
 $config->project->dtable->fieldList['estimate']['title'] = $lang->project->estimate;
 $config->project->dtable->fieldList['estimate']['name']  = 'estimate';
 $config->project->dtable->fieldList['estimate']['type']  = 'number';
-$config->project->dtable->fieldList['estimate']['group'] = 6;
+$config->project->dtable->fieldList['estimate']['group'] = 7;
 
 $config->project->dtable->fieldList['consume']['title'] = $lang->project->consume;
 $config->project->dtable->fieldList['consume']['name']  = 'consume';
 $config->project->dtable->fieldList['consume']['type']  = 'number';
-$config->project->dtable->fieldList['consume']['group'] = 6;
+$config->project->dtable->fieldList['consume']['group'] = 7;
 
 $config->project->dtable->fieldList['progress']['title'] = $lang->project->progress;
 $config->project->dtable->fieldList['progress']['name']  = 'progress';
 $config->project->dtable->fieldList['progress']['type']  = 'progress';
-$config->project->dtable->fieldList['progress']['group'] = 6;
+$config->project->dtable->fieldList['progress']['group'] = 7;
+$config->project->dtable->fieldList['progress']['show']  = true;
 
-$config->project->dtable->fieldList['actions']['title'] = $lang->actions;
-$config->project->dtable->fieldList['actions']['name']  = 'actions';
-$config->project->dtable->fieldList['actions']['type']  = 'actions';
-
-$config->project->dtable->fieldList['actions']['actionsMap']['start']['icon'] = 'play';
-$config->project->dtable->fieldList['actions']['actionsMap']['start']['hint'] = $lang->project->start;
-$config->project->dtable->fieldList['actions']['actionsMap']['start']['url']  = helper::createLink('project', 'start', 'projectID={id}', '', true);
-
-$config->project->dtable->fieldList['actions']['actionsMap']['close']['icon'] = 'off';
-$config->project->dtable->fieldList['actions']['actionsMap']['close']['hint'] = $lang->project->close;
-$config->project->dtable->fieldList['actions']['actionsMap']['close']['url']  = helper::createLink('project', 'close', 'projectID={id}', '', true);
-
-$config->project->dtable->fieldList['actions']['actionsMap']['active']['icon'] = 'magic';
-$config->project->dtable->fieldList['actions']['actionsMap']['active']['hint'] = $lang->project->activate;
-$config->project->dtable->fieldList['actions']['actionsMap']['active']['url']  = helper::createLink('project', 'activate', 'projectID={id}', '', true);
-
-$config->project->dtable->fieldList['actions']['actionsMap']['edit']['icon'] = 'edit';
-$config->project->dtable->fieldList['actions']['actionsMap']['edit']['hint'] = $lang->project->edit;
-$config->project->dtable->fieldList['actions']['actionsMap']['edit']['url']  = helper::createLink('project', 'edit', 'projectID={id}');
-
-$config->project->dtable->fieldList['actions']['actionsMap']['pause']['icon'] = 'pause';
-$config->project->dtable->fieldList['actions']['actionsMap']['pause']['hint'] = $lang->project->suspend;
-$config->project->dtable->fieldList['actions']['actionsMap']['pause']['url']  = helper::createLink('project', 'suspend', 'projectID={id}', '', true);
-
-$config->project->dtable->fieldList['actions']['actionsMap']['group']['icon'] = 'group';
-$config->project->dtable->fieldList['actions']['actionsMap']['group']['hint'] = $lang->project->team;
-$config->project->dtable->fieldList['actions']['actionsMap']['group']['url']  = helper::createLink('project', 'team', 'projectID={id}');
-
-$config->project->dtable->fieldList['actions']['actionsMap']['perm']['icon'] = 'lock';
-$config->project->dtable->fieldList['actions']['actionsMap']['perm']['hint'] = $lang->project->group;
-$config->project->dtable->fieldList['actions']['actionsMap']['perm']['url']  = helper::createLink('project', 'group', 'projectID={id}');
-
-$config->project->dtable->fieldList['actions']['actionsMap']['link']['icon'] = 'link';
-$config->project->dtable->fieldList['actions']['actionsMap']['link']['hint'] = $lang->project->manageProducts;
-$config->project->dtable->fieldList['actions']['actionsMap']['link']['url']  = helper::createLink('project', 'manageProducts', 'projectID={id}');
-
-$config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['icon'] = 'shield-check';
-$config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['hint'] = $lang->project->whitelist;
-$config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['url']  = helper::createLink('project', 'whitelist', 'projectID={id}');
-
-$config->project->dtable->fieldList['actions']['actionsMap']['delete']['icon'] = 'trash';
-$config->project->dtable->fieldList['actions']['actionsMap']['delete']['hint'] = $lang->project->delete;
-$config->project->dtable->fieldList['actions']['actionsMap']['delete']['url']  = helper::createLink('project', 'delete', 'projectID={id}');
+$config->project->dtable->fieldList['actions']['name']     = 'actions';
+$config->project->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->project->dtable->fieldList['actions']['type']     = 'actions';
+$config->project->dtable->fieldList['actions']['sortType'] = false;
+$config->project->dtable->fieldList['actions']['list']     = $config->project->actionList;
+$config->project->dtable->fieldList['actions']['menu']     = array(array('start|activate|close', 'other' => array('suspend', 'activate|close')), 'edit', 'group', 'perm', 'more' => array('link', 'whitelist', 'delete'));
 
 global $app;
 $app->loadLang('execution');
@@ -138,10 +131,10 @@ $config->projectExecution->dtable->fieldList['rawID']['checkbox'] = true;
 $config->projectExecution->dtable->fieldList['rawID']['width']    = '80';
 
 $config->projectExecution->dtable->fieldList['name']['title']        = $lang->execution->name;
-$config->projectExecution->dtable->fieldList['name']['name']         = 'name';
+$config->projectExecution->dtable->fieldList['name']['name']         = 'nameCol';
 $config->projectExecution->dtable->fieldList['name']['fixed']        = 'left';
 $config->projectExecution->dtable->fieldList['name']['flex']         = 1;
-$config->projectExecution->dtable->fieldList['name']['type']         = 'html';
+$config->projectExecution->dtable->fieldList['name']['type']         = 'nestedTitle';
 $config->projectExecution->dtable->fieldList['name']['nestedToggle'] = true;
 $config->projectExecution->dtable->fieldList['name']['sortType']     = true;
 
@@ -229,22 +222,22 @@ $config->projectExecution->dtable->fieldList['actions']['task']       = array('s
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['icon']        = 'play';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['hint']        = $lang->task->start;
-$config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['url']         = helper::createLink('task', 'start', 'taskID={rawID}', '', true);
+$config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['url']         = helper::createLink('task', 'start', 'taskID={rawID}');
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['data-toggle'] = 'modal';
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['finishTask']['icon']        = 'checked';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['finishTask']['hint']        = $lang->task->finish;
-$config->projectExecution->dtable->fieldList['actions']['actionsMap']['finishTask']['url']         = helper::createLink('task', 'finish', 'taskID={rawID}', '', true);
+$config->projectExecution->dtable->fieldList['actions']['actionsMap']['finishTask']['url']         = helper::createLink('task', 'finish', 'taskID={rawID}');
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['finishTask']['data-toggle'] = 'modal';
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['closeTask']['icon']        = 'off';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['closeTask']['hint']        = $lang->task->close;
-$config->projectExecution->dtable->fieldList['actions']['actionsMap']['closeTask']['url']         = helper::createLink('task', 'close', 'taskID={rawID}', '', true);
+$config->projectExecution->dtable->fieldList['actions']['actionsMap']['closeTask']['url']         = helper::createLink('task', 'close', 'taskID={rawID}');
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['closeTask']['data-toggle'] = 'modal';
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['icon'] = 'time';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['hint'] = $lang->task->record;
-$config->projectExecution->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['url']  = helper::createLink('task', 'recordWorkhour', 'taskID={rawID}', '', true);
+$config->projectExecution->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['url']  = helper::createLink('task', 'recordWorkhour', 'taskID={rawID}');
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['data-toggle'] = 'modal';
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['editTask']['icon']  = 'edit';
@@ -298,8 +291,8 @@ $config->projectGroup->dtable->fieldList['actions']['sortType'] = false;
 $config->projectGroup->dtable->fieldList['actions']['fixed']    = 'right';
 
 $config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['icon'] = 'lock';
-$config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['text'] = $lang->group->managePriv;;
-$config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['hint'] = $lang->group->managePriv;;
+$config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['text'] = $lang->group->managePriv;
+$config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['hint'] = $lang->group->managePriv;
 $config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['url']  = helper::createLink('project', 'managePriv', "projectID={project}&type=bygroup&groupID={id}");
 
 $config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['icon'] = 'persons';
@@ -321,3 +314,35 @@ $config->projectGroup->dtable->fieldList['actions']['list']['delete']['icon'] = 
 $config->projectGroup->dtable->fieldList['actions']['list']['delete']['text'] = $lang->group->delete;
 $config->projectGroup->dtable->fieldList['actions']['list']['delete']['hint'] = $lang->group->delete;
 $config->projectGroup->dtable->fieldList['actions']['list']['delete']['url']  = helper::createLink('group', 'delete', "groupID={id}");
+
+$app->loadLang('execution');
+$config->project->dtable->team->fieldList['account']['title']    = $lang->team->account;
+$config->project->dtable->team->fieldList['account']['name']     = 'realname';
+$config->project->dtable->team->fieldList['account']['type']     = 'user';
+$config->project->dtable->team->fieldList['account']['link']     = array('module' => 'user', 'method' => 'view', 'params' => 'userID={userID}');
+$config->project->dtable->team->fieldList['account']['sortType'] = false;
+
+$config->project->dtable->team->fieldList['role']['title']    = $lang->team->role;
+$config->project->dtable->team->fieldList['role']['type']     = 'user';
+$config->project->dtable->team->fieldList['role']['sortType'] = false;
+
+$config->project->dtable->team->fieldList['join']['title'] = $lang->team->join;
+$config->project->dtable->team->fieldList['join']['type']  = 'date';
+
+$config->project->dtable->team->fieldList['days']['title'] = $lang->team->days;
+$config->project->dtable->team->fieldList['days']['type']  = 'number';
+
+$config->project->dtable->team->fieldList['hours']['title'] = $lang->team->hours;
+$config->project->dtable->team->fieldList['hours']['type']  = 'number';
+
+$config->project->dtable->team->fieldList['total']['title'] = $lang->team->totalHours;
+$config->project->dtable->team->fieldList['total']['type']  = 'number';
+
+$config->project->dtable->team->fieldList['limited']['title']    = $lang->team->limited;
+$config->project->dtable->team->fieldList['limited']['type']     = 'user';
+$config->project->dtable->team->fieldList['limited']['map']      = $lang->team->limitedList;
+$config->project->dtable->team->fieldList['limited']['sortType'] = false;
+
+$config->project->dtable->team->fieldList['actions']['type']       = 'actions';
+$config->project->dtable->team->fieldList['actions']['minWidth']   = 60;
+$config->project->dtable->team->fieldList['actions']['actionsMap'] = $config->project->team->actionList;

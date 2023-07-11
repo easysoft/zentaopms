@@ -32,14 +32,14 @@ class formPanel extends panel
      * @var    array
      * @access protected
      */
-    protected static $defineProps = array
-    (
+    protected static array $defineProps = array(
         'class?: string="panel-form rounded-md ring-0 canvas px-4 pb-4 mb-4 mx-auto"', // 类名。
         'size?: string="lg"',                          // 额外尺寸。
         'id?: string="$GID"',                          // ID，如果不指定则自动生成（使用 zin 部件 GID）。
+        'formClass?: string',                          // 表单样式。
         'method?: "get"|"post"="post"',                // 表单提交方式。
         'url?: string',                                // 表单提交地址。
-        'actions?: array=["submit","cancel"]',         // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
+        'actions?: array',                             // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
         'actionsClass?: string="form-group no-label"', // 表单操作按钮栏类名。
         'target?: string="ajax"',                      // 表单提交目标，如果是 `'ajax'` 提交则为 ajax，在禅道中除非特殊目的，都使用 ajax 进行提交。
         'submitBtnText?: string',                      // 表单提交按钮文本，如果不指定则使用 `$lang->save` 的值。
@@ -48,42 +48,87 @@ class formPanel extends panel
         'grid?: bool=true',                            // 是否启用网格部件，禅道中所有表单都是网格布局，除非有特殊目的，无需设置此项。
         'labelWidth?: int',                            // 标签宽度，单位为像素。
         'batch?: bool',                                // 是否为批量操作表单。
-        'shadow?: bool=true',                          // 是否显示阴影层。
+        'shadow?: bool=false',                         // 是否显示阴影层。
+        'width?: string'                               // 最大宽度。
     );
 
     /**
-     * The lifecycle method of created.
+     * Define default properties.
      *
-     * Set default title to panel.
+     * @var    array
      * @access protected
-     * @return void
      */
-    protected function created()
+    protected static array $defaultProps = array(
+        'customFields' => array(),
+    );
+
+    public static function getPageJS(): string|false
     {
-        $this->setDefaultProps(['title' => data('title')]);
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
+    /**
+     * Build heading actions.
+     *
+     * @access protected
+     * @return ?wg
+     */
+    protected function buildHeadingActions(): ?wg
+    {
+        $headingActions = $this->prop('headingActions');
+        if(!$headingActions) $headingActions = array();
+
+        $customFields = $this->prop('customFields');
+
+        /* Custom fields. */
+        if($customFields)
+        {
+            global $app;
+            $urlParams = isset($customFields['urlParams']) ? $customFields['urlParams'] : "module={$app->rawModule}&section=custom&key=batchCreateFields";
+
+            $headingActions[] = formSettingBtn(set::customFields($customFields['items']), set::urlParams($urlParams));
+        }
+
+        $this->setProp('headingActions', $headingActions);
+
+        return parent::buildHeadingActions();
     }
 
     /**
      * Build form widget by mode.
      *
      * @access protected
-     * @return void
+     * @return wg
      */
-    protected function buildForm()
+    protected function buildForm(): wg
     {
+        $customFields = $this->prop('customFields');
+        $hiddenFields = array();
+        if(!empty($customFields['items']))
+        {
+            $hiddenFields = array_values(array_filter(array_map(function($item)
+            {
+                return $item['show'] ? false : $item['name'];
+            }, $customFields['items'])));
+        }
+
         if($this->prop('batch'))
         {
             return new formBatch
             (
                 set($this->props->pick(array_keys(formBatch::getDefinedProps()))),
-                $this->children()
+                $this->children(),
+                jsVar('formBatch', true),
+                $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null,
             );
         }
 
         return new form
         (
+            set::class($this->prop('formClass')),
             set($this->props->pick(array_keys(form::getDefinedProps()))),
-            $this->children()
+            $this->children(),
+            $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null,
         );
     }
 
@@ -95,9 +140,13 @@ class formPanel extends panel
      */
     protected function buildProps(): array
     {
+        list($width, $batch, $shadow) = $this->prop(array('width', 'batch', 'shadow'));
         $props = parent::buildProps();
-        if($this->prop('batch'))  $props[] = setCssVar('--zt-page-form-max-width', 'auto');
-        if($this->prop('shadow')) $props[] = setClass('shadow');
+
+        if($width)     $props[] = setCssVar('--zt-page-form-max-width', $width);
+        elseif($batch) $props[] = setCssVar('--zt-page-form-max-width', 'auto');
+        if($shadow)    $props[] = setClass('shadow');
+
         return $props;
     }
 
@@ -105,9 +154,9 @@ class formPanel extends panel
      * Build panel body.
      *
      * @access protected
-     * @return void
+     * @return wg
      */
-    protected function buildBody()
+    protected function buildBody(): wg
     {
         return div
         (
