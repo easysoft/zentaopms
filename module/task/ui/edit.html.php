@@ -138,7 +138,7 @@ detailBody
             item
             (
                 set::name($lang->task->execution),
-                select
+                picker 
                 (
                     set::name('execution'),
                     set::required(true),
@@ -173,7 +173,7 @@ detailBody
                 ? item
                 (
                     set::name($lang->task->parent),
-                    select
+                    picker
                     (
                         set::name('parent'),
                         set::value($task->parent),
@@ -185,7 +185,7 @@ detailBody
                 ? item
                 (
                     set::name($lang->task->mode),
-                    select
+                    picker
                     (
                         set::name('mode'),
                         set::value($task->mode),
@@ -229,7 +229,7 @@ detailBody
             item
             (
                 set::name($lang->task->type),
-                select
+                picker
                 (
                     set::name('type'),
                     set::required(true),
@@ -241,7 +241,7 @@ detailBody
                 ? item
                 (
                     set::name($lang->task->status),
-                    select
+                    picker
                     (
                         set::name('status'),
                         set::value($task->status),
@@ -252,7 +252,7 @@ detailBody
             item
             (
                 set::name($lang->task->pri),
-                select
+                picker
                 (
                     set::name('pri'),
                     set::value($task->pri),
