@@ -590,7 +590,7 @@ class custom extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $this->view->title      = $this->lang->custom->flow;
+        $this->view->title = $this->lang->custom->flow;
         $this->display();
     }
 

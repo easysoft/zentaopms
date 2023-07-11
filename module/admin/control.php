@@ -515,4 +515,35 @@ class admin extends control
 
         return print(json_encode($response));
     }
+
+    /**
+     * AJAX: Get drop menu.
+     *
+     * @param  string $currentMenuKey
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu($currentMenuKey = '')
+    {
+        $this->admin->checkPrivMenu();
+        $data = array();
+        foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
+        {
+            if($this->config->vision == 'lite' and !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
+            $data[] = array(
+                'id'   => $menuKey,
+                'name' => $menuKey,
+                'text' => $menuGroup['name'],
+                'content' => "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/> " . $menuGroup['name'],
+                'title' => $menuGroup['name'],
+                'type' => 'item',
+                'url' => $menuGroup['disabled'] ? '###' : $menuGroup['link'],
+                'active' => $currentMenuKey == $menuKey,
+                'rootClass' => 'admin-menu-item'
+            );
+        }
+
+        $this->view->data = $data;
+        $this->display();
+    }
 }

@@ -51,6 +51,7 @@ class dropmenu extends wg
         list($url, $text, $objectID, $cache, $tab, $module, $method, $extra, $id, $data) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'extra', 'id', 'data'));
 
         $app = data('app');
+        $lang = data('lang');
 
         if(empty($tab))      $tab    = $app->tab;
         if(empty($module))   $module = $app->rawModule;
@@ -61,6 +62,13 @@ class dropmenu extends wg
         {
             $object = data($tab);
             if(isset($object->id)) $objectID = $object->id;
+        }
+
+        if($tab == 'admin')
+        {
+            $currentMenuKey = $app->control->loadModel('admin')->getMenuKey();
+            $text           = $lang->admin->menuList->{$currentMenuKey}['name'];
+            $url            = createLink('admin', 'ajaxGetDropMenu', "currentMenuKey={$currentMenuKey}");
         }
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
