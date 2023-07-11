@@ -19,13 +19,31 @@ $(document).on('click', '.batch-btn', function()
     }
 });
 
-/* Put the checked stories to cookie for exporting. */
-$(document).on('click', '.has-checkbox', function()
+$(document).on('click', '#batchUnlinkStory', function(e)
 {
-    const $this  = $(this);
-    const dtable = zui.DTable.query($this);
+    const $this       = $(this);
+    const dtable      = zui.DTable.query($('#stories'));
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    $.cookie.set('checkedItem', checkedList);
-})
+    let batchUnlinkStoryURL = $.createLink('projectstory', 'batchUnlinkStory', 'projectID=' + projectID + '&stories=' + encodeURIComponent(checkedList.join(',')));
+    $.get(batchUnlinkStoryURL, function(data)
+    {
+        var jsonData = {};
+        if(typeof data == 'string' && data.indexOf('{') == 0) jsonData = JSON.parse(data);
+
+        setTimeout(function()
+        {
+            if(typeof jsonData.result != 'undefined')
+            {
+                zui.Modal.hide('#' + $('.modal.show.in').attr('id'));
+                return loadCurrentPage();
+            }
+
+            $('.modal.show.in .modal-dialog').html(data);
+            $('.modal.show.in .modal-dialog .modal-dialog .modal-header .modal-header').unwrap();
+            $('.modal.show.in .modal-dialog .modal-dialog').unwrap();
+            $('.modal.show.in .modal-dialog .modal-header').attr('class', '').attr('class', 'modal-header');
+        }, 100);
+    });
+});

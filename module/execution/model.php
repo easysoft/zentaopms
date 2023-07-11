@@ -3369,7 +3369,7 @@ class executionModel extends model
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');
             $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
-            if(!empty($executionStories)) return print(js::alert($this->lang->execution->notAllowedUnlinkStory));
+            if(!empty($executionStories)) return dao::$errors[] = $this->lang->execution->notAllowedUnlinkStory;
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
 
@@ -3389,7 +3389,7 @@ class executionModel extends model
                 ->andWhere('`column`')->eq($columnID)
                 ->andWhere('lane')->eq($laneID)
                 ->exec();
-    }
+        }
 
         $order   = 1;
         $stories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order')->fetchAll();

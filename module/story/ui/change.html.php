@@ -131,7 +131,7 @@ $formItems['file'] = formGroup
         set::name('files[]'),
     )
 );
-$formItems['affected'] = getAffectedTabs($story, $users);
+$formItems['affected'] = $getAffectedTabs($story, $users);
 
 $formActions = formRow
 (

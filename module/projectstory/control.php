@@ -140,35 +140,28 @@ class projectStory extends control
      * @param  int    $projectID
      * @param  string $storyIdList
      * @access public
-     * @return string
+     * @return void
      */
-    public function batchUnlinkStory($projectID, $storyIdList = '')
+    public function batchUnlinkStory(int $projectID, string $storyIdList = '')
     {
-        $storyIdList      = empty($storyIdList) ? array() : array_filter(explode(',', $storyIdList));
-        $executionStories = $this->projectstory->getExecutionStories($projectID, $storyIdList);
-        $html             = '';
-
-        foreach($executionStories as $story)
-        {
-            $storyLink     = $this->createLink('story', 'view', "storyID={$story->id}");
-            $executionLink = $this->createLink('execution', 'story', "executionID={$story->executionID}");
-            $html         .=<<<ETO
-<tr>
-  <td class='c-name w-500px'><a href="$storyLink" title={$story->title} style='color:#5988e2'>{$story->title}</a></td>
-  <td class='c-name w-200px'><a href="$executionLink" title={$story->execution} style='color:#32579c'>{$story->execution}</a></td>
-</tr>
-ETO;
-        }
+        $storyIdList = empty($storyIdList) ? array() : array_filter(explode(',', $storyIdList));
+        if(empty($storyIdList)) $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
 
         $this->loadModel('execution');
+        $executionStories = $this->projectstory->getExecutionStories($projectID, $storyIdList);
+        $errors           = array();
         foreach($storyIdList as $storyID)
         {
             if(isset($executionStories[$storyID])) continue;
-            $this->execution->unlinkStory($projectID, $storyID);
-        }
 
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo $html;
+            $this->execution->unlinkStory($projectID, $storyID);
+            if(dao::isError()) $errors[$storyID] = dao::getError();
+        }
+        if(empty($errors)) $this->loadModel('score')->create('ajax', 'batchOther');
+        if(empty($executionStories)) $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+
+        $this->view->executionStories = $executionStories;
+        $this->display();
     }
 
     /**
@@ -180,7 +173,7 @@ ETO;
      * @access public
      * @return void
      */
-    public function importPlanStories($projectID, $planID, $productID = 0)
+    public function importPlanStories($projectID = 0, $planID = 0, $productID = 0)
     {
         echo $this->fetch('execution', 'importPlanStories', "projectID=$projectID&planID=$planID&productID=$productID");
     }

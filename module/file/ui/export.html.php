@@ -289,7 +289,11 @@ if($('.dtable .dtable-header .has-checkbox').length > 0)
 {
     const dtable = zui.DTable.query($('.dtable .dtable-header .has-checkbox').closest('.dtable')[0]);
     const checkedList = dtable.$.getChecks();
-    if(checkedList.length) $('#exportType').val('selected');
+    if(checkedList.length)
+    {
+        $('#exportType').val('selected');
+        $.cookie.set('checkedItem', checkedList.join(','));
+    }
 }
 
 JAVASCRIPT

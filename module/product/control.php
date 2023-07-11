@@ -142,7 +142,7 @@ class product extends control
         /* Generate data. */
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $product   = $this->productZen->getBrowseProduct($productID);
-        $project   = $this->loadModel('project')->getByID($projectID);
+        $project   = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         $branchID  = $this->productZen->getBranchID($product, $branch);
         $orderBy   = $orderBy ? $orderBy : $cookieOrderBy;
         $branch    = $branchID ? $branchID : $branch;

@@ -1570,11 +1570,32 @@ class storyTao extends storyModel
 
             if($execution->hasProduct)
             {
-                $unlinkModule    = $execution->type == 'project' ? 'projectstory' : 'execution';
+                $unlinkModule    = 'execution';
                 $canUnlinkStory  = common::hasPriv($unlinkModule, 'unlinkStory');
                 $unlinkStoryLink = helper::createLink($unlinkModule, 'unlinkStory', "projectID={$execution->id}&$params&confirm=yes");
-                $unlinkStoryTip  = $unlinkModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
-                $actions[]       = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => !$canUnlinkStory);
+                $unlinkStoryTip  = $this->lang->execution->confirmUnlinkStory;
+                $unlinkTitle     = '';
+                $disabled        = !$canUnlinkStory;
+
+                if($execution->type == 'project')
+                {
+                    $unlinkModule   = 'projectstory';
+                    $unlinkStoryTip = $this->lang->execution->confirmUnlinkExecutionStory;
+
+                    static $executionStories = array();
+                    if(!isset($executionStories[$execution->id]))
+                    {
+                        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($execution->id)->andWhere('type')->ne('project')->fetchAll('id');
+                        $executionStories[$execution->id] = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs('story', 'story');
+                    }
+                    if(isset($executionStories[$execution->id][$story->id]))
+                    {
+                        $disabled    = true;
+                        $unlinkTitle = $this->lang->execution->notAllowedUnlinkStory;
+                    }
+                }
+
+                $actions[] = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => $disabled, 'title' => $unlinkTitle);
             }
         }
 

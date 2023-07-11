@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
-function getAffectedTabs($story, $users)
+$getAffectedTabs = function($story, $users)
 {
     global $lang, $config;
     $affectedProjects  = array();

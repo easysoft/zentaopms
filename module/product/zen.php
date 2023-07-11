@@ -1081,7 +1081,7 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function buildSearchFormForBrowse(object|bool $project, int $projectID, int &$productID, string $branch, int $param, string $storyType, string $browseType, bool $isProjectStory): void
+    protected function buildSearchFormForBrowse(object|null $project, int $projectID, int &$productID, string $branch, int $param, string $storyType, string $browseType, bool $isProjectStory): void
     {
         /* Change for requirement story title. */
         if($storyType == 'requirement')

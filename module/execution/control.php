@@ -3402,28 +3402,14 @@ class execution extends control
         {
             $execution = $this->execution->getByID($executionID);
             $this->execution->unlinkStory($executionID, $storyID, $laneID, $columnID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if($execution->type == 'kanban')
             {
                 /* Fix bug #29171. */
                 $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($execution->parent)->fetchAll('id');
                 $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
                 if(empty($executionStories)) $this->execution->unlinkStory($execution->parent, $storyID, $laneID, $columnID);
-            }
-
-            /* if kanban then reload and if ajax request then send result. */
-            if(helper::isAjaxRequest())
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
             }
 
             $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
@@ -3433,7 +3419,7 @@ class execution extends control
                 $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                 $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
                 $kanbanData    = json_encode($kanbanData);
-                return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
             }
             elseif($from == 'taskkanban')
             {
@@ -3442,10 +3428,10 @@ class execution extends control
                 $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
                 $kanbanData      = $kanbanData[$kanbanType];
                 $kanbanData      = json_encode($kanbanData);
-                return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
+                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
             }
 
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
     }
 
@@ -3474,7 +3460,7 @@ class execution extends control
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        return print(js::locate($this->createLink('execution', 'story', "executionID=$executionID")));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('execution', 'story', "executionID=$executionID")));
     }
 
     /**

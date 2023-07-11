@@ -1111,7 +1111,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchClose($productID = 0, $executionID = 0, $storyType = 'story', $from = '')
+    public function batchClose(int $productID = 0, int $executionID = 0, string $storyType = 'story', string $from = '')
     {
         if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
         $storyIdList = $this->post->storyIdList;

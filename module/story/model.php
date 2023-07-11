@@ -5194,7 +5194,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function buildActionButtonList(object $story, $type = 'view', object $execution = null, $storyType = 'story'): array
+    public function buildActionButtonList(object $story, $type = 'view', object|null $execution = null, $storyType = 'story'): array
     {
         $menu   = '';
         $params = "storyID=$story->id";
