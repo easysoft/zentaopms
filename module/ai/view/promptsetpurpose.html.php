@@ -16,7 +16,7 @@
   .center-content {width: 100%; height: 100%; display: flex; flex-direction: column;}
   #purpose-setter {display: flex; flex-direction: row; max-height: calc(100% - 32px);}
   #purpose-setter > div {flex-grow: 1; flex-basis: 0; padding: 0px 12px;}
-  .content-wrapper {height: calc(100% - 48px); padding: 0 12px; overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable;}
+  .content-wrapper {padding: 0 12px; overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable;}
   .content-row {display: flex; flex-direction: row; padding: 8px 0px;}
   .input-label {width: 120px; padding: 6px 12px; text-align: right;}
   .input {flex-grow: 1;}
