@@ -42,7 +42,7 @@ foreach($programs as $program)
 
     /* Set invested hours. */
     if(!isset($program->invested)) $program->invested = 0;
-    if(str_contains($program->end, LONG_TIME)) $program->end = $lang->program->longTime;
+    if(!is_null($program->end) && str_contains($program->end, LONG_TIME)) $program->end = $lang->program->longTime;
 
     /* Actions. */
     $program->actions = array();
