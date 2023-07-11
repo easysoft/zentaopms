@@ -95,6 +95,7 @@ else
         set::title($lang->task->addEffort),
         set::shadow(!isAjaxRequest('modal')),
         set::actions(array('submit')),
+        set::maxRows(3),
         formBatchItem
         (
             set::name('id'),
