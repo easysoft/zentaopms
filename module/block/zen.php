@@ -2235,7 +2235,6 @@ class blockZen extends block
      * 打印产品月度推进分析区块。
      * Print product monthly progress block.
      *
-     * @param  object    $block
      * @access protected
      * @return void
      */
@@ -2276,6 +2275,39 @@ class blockZen extends block
         $this->view->createStoryCount  = $createStoryCount;
         $this->view->fixedBugCount     = $fixedBugCount;
         $this->view->createBugCount    = $createBugCount;
+    }
+
+    /**
+     * 打印产品年度工作量统计区块。
+     * Print product annual workload statisitc block.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function printAnnualWorkloadBlock()
+    {
+        $doneStoryEstimate = array();
+        $doneStoryCount    = array();
+        $resolvedBugCount  = array();
+
+        $projectPairs = $this->loadModel('project')->getPairs();
+        foreach($projectPairs as $projectID => $projectName)
+        {
+            $doneStoryEstimate[$projectID] = rand(0, 100000);
+            $doneStoryCount[$projectID]    = rand(0, 50000);
+            $resolvedBugCount[$projectID]  = rand(0, 50000);
+        }
+        arsort($doneStoryEstimate);
+        arsort($doneStoryCount);
+        arsort($resolvedBugCount);
+
+        $this->view->projectPairs      = $projectPairs;
+        $this->view->doneStoryEstimate = $doneStoryEstimate;
+        $this->view->doneStoryCount    = $doneStoryCount;
+        $this->view->resolvedBugCount  = $resolvedBugCount;
+        $this->view->maxStoryEstimate  = max($doneStoryEstimate);
+        $this->view->maxStoryCount     = max($doneStoryCount);
+        $this->view->maxBugCount       = max($resolvedBugCount);
     }
 
     /**

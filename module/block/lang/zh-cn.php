@@ -644,6 +644,11 @@ $lang->block->monthlyprogress->doneStoryEstimateTrendChart = '完成需求规模
 $lang->block->monthlyprogress->storyTrendChart             = '需求新增和完成趋势图';
 $lang->block->monthlyprogress->bugTrendChart               = 'Bug新增和解决趋势图';
 
+$lang->block->annualworkload = new stdclass();
+$lang->block->annualworkload->doneStoryEstimate = '完成需求规模';
+$lang->block->annualworkload->doneStoryCount    = '完成需求数';
+$lang->block->annualworkload->resolvedBugCount  = '修复Bug数';
+
 $lang->block->releasestatistic = new stdclass();
 $lang->block->releasestatistic->monthly = '月度发布次数趋势图';
 $lang->block->releasestatistic->annual  = "年度发布榜（%s年）";

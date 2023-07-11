@@ -9,3 +9,5 @@
 .nav-tabs.nav-stacked .nav-item:hover > span.link {display: flex!important;}
 .nav-tabs.nav-stacked .nav-item.nav-prev {display: none}
 .nav-tabs.nav-stacked .nav-item.nav-next {display: none}
+
+.hidden-nowrap {overflow: hidden; white-space: nowrap;}

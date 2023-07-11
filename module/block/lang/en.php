@@ -623,6 +623,11 @@ $lang->block->monthlyprogress->doneStoryEstimateTrendChart = "The Finished {$lan
 $lang->block->monthlyprogress->storyTrendChart             = "The New and Finished {$lang->SRCommon} Trend Chart";
 $lang->block->monthlyprogress->bugTrendChart               = 'The New and Resolved Bugs Trend Chart';
 
+$lang->block->annualworkload = new stdclass();
+$lang->block->annualworkload->doneStoryEstimate = "Finished {$lang->SRCommon} Scale";
+$lang->block->annualworkload->doneStoryCount    = "Finished {$lang->SRCommon} Count";
+$lang->block->annualworkload->resolvedBugCount  = 'Resolved Bugs';
+
 $lang->block->releasestatistic = new stdclass();
 $lang->block->releasestatistic->monthly = 'Monthly releases trend chart';
 $lang->block->releasestatistic->annual  = "Annual release list (%s year)";
