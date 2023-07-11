@@ -40,7 +40,8 @@ featureBar
 
 div
 (
-    setid('searchFormPanel'),
+    setID('searchFormPanel'),
+    set('data-module', 'testsuite'),
     searchToggle
     (
         set::open(true),
