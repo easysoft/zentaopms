@@ -35,7 +35,7 @@ class picker extends wg
         'afterRender?: function',           // 渲染完成后的回调函数。
         'beforeDestroy?: function',         // 销毁前的回调函数。
         'name?: string',                    // 作为表单项的名称。
-        'defaultValue?: string|string[]',   // 默认值。
+        'value?: string|string[]',         // 默认值。
         'onChange?: function',              // 值变更回调函数。
         'disabled?: boolean',               // 是否禁用。
         'multiple?: boolean|number=false',  // 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
@@ -107,6 +107,7 @@ class picker extends wg
         return zui::picker
         (
             set::_class('form-group-wrapper'),
+            set::_map(array('value' => 'defaultValue')),
             set($this->getPickerProps())
         );
     }
