@@ -1026,7 +1026,9 @@ class baseControl
         ob_start();
         include $viewFile;
         if(!\zin\zin::$rendered) \zin\render();
-        ob_end_flush();
+        $content = ob_get_clean();
+        ob_start();
+        echo $content;
 
         /**
          * 渲染完毕后，再切换回之前的路径。
