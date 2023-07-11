@@ -21,7 +21,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_release_in_product extends baseMetric
+class count_of_release_in_product extends baseCalc
 {
     public $dataset = '';
 
