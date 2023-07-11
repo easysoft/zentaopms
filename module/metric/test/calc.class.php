@@ -25,15 +25,16 @@ class metricTest
      * 计算度量项，并返回计算后的度量项对象。
      * Calculate metric.
      *
-     * @param  string    $scope
-     * @param  string    $purpose
-     * @param  string    $code
-     * @param  array    $rows
+     * @param  string $file
      * @access public
      * @return object
      */
-    public function calcMetric($scope, $purpose, $code)
+    public function calcMetric($file)
     {
+        $code    = pathinfo($file, PATHINFO_FILENAME);
+        $purpose = basename(dirname($file));
+        $scope   = basename(dirname($file, 2));
+
         include_once $this->getBaseCalcPath();
         include_once $this->objectModel->getCalcRoot() . $scope . DS . $purpose . DS . $code . '.php';
 

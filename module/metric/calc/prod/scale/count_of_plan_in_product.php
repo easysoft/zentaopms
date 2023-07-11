@@ -35,7 +35,6 @@ class count_of_plan_in_product extends baseCalc
 
     public function getResult($options = null)
     {
-
         if(!empty($options) && isset($options['product']))
         {
             $productID = $options['product'];
