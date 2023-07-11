@@ -135,8 +135,8 @@ class story extends control
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-            $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
-            if(!$storyResult or dao::isError())
+            $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
+            if(dao::isError())
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
