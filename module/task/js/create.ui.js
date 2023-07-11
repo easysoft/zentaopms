@@ -397,6 +397,7 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
         let selectObj = $(this)[0];
 
         let realname = selectObj.options[selectObj.selectedIndex].text;
+        let account  = selectObj.options[selectObj.selectedIndex].value;
         if(!team.includes(realname)) team.push(realname);
 
         let estimate = parseFloat($(this).closest('tr').find('[name^=teamEstimate]').val());
@@ -409,7 +410,7 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
             return false;
         }
 
-        assignedToList += "<span class='label secondary-outline circle'>" + realname + '</span>';
+        assignedToList += `<div class='picker-multi-selection' data-index=${index}><span class='text'>${realname}</span><div class="picker-deselect-btn btn size-xs ghost"><span class="close"></span></div></div>`;
         assignedToList += '<i class="icon icon-arrow-right"></i>';
     })
 
@@ -432,4 +433,40 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
 
     zui.Modal.hide();
     return false;
+})
+
+$('#taskCreateForm').on('click', '.assignedToList .picker-multi-selection', function()
+{
+    /* 团队成员必须大于1人. */
+    if($(this).closest('.assignedToList').find('.picker-multi-selection').length == 2)
+    {
+        zui.Modal.alert(teamMemberError);
+        return false;
+    }
+
+    /* 删除人员前后的箭头. */
+    if($(this).next('.icon').length) 
+    {
+        $(this).next('.icon').remove();
+    }
+    else if($(this).prev('.icon').length)
+    {
+        $(this).prev('.icon').remove();
+    }
+
+    $(this).remove();
+
+    /* 删除团队中，已经选中的人. */
+    let index = $(this).data('index') + 1;
+    $('#teamTable').find('tr').eq(index).remove();
+
+    let totalEstimate   = 0;
+
+    $('#teamTable').find('select[name^="team"]').each(function(index)
+    {
+        let estimate = parseFloat($(this).closest('tr').find('[name^=teamEstimate]').val());
+        if(!isNaN(estimate) && estimate > 0) totalEstimate += estimate;
+    })
+
+    $('#estimate').val(totalEstimate);
 })

@@ -440,8 +440,12 @@ formPanel
     formGroup
     (
         set::label($lang->product->mailto),
-        set::name('mailto[]'),
-        set::items($users),
+        picker
+        (
+            set::multiple(true),
+            set::name('mailto[]'),
+            set::items($users),
+        )
     ),
     $afterRow,
     modalTrigger

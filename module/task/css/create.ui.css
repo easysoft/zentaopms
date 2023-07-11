@@ -10,5 +10,5 @@
 
 .assignedToBox {align-items: center !important}
 .assignedToBox .add-team {margin-bottom: 5px}
-.assignedToList {display: flex; align-items: center; flex-wrap: wrap}
-.assignedToList .label, .assignedToList .icon{margin-right: 5px; margin-bottom: 5px}
+.assignedToList {display: flex; align-items: center; flex-wrap: wrap;}
+.assignedToList .picker-multi-selection, .assignedToList .icon{margin-right: 5px; margin-bottom: 5px}
