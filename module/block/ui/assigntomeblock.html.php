@@ -77,6 +77,7 @@ foreach($hasViewPriv as $type => $bool)
 
     if($type == 'review')
     {
+        $statusList = array();
         foreach($data as $review)
         {
             $reviewType = $review->type;
@@ -86,14 +87,13 @@ foreach($hasViewPriv as $type => $bool)
             if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
             if($reviewType == 'story')                $typeName = $lang->SRCommon;
 
-            $statusList = array();
-            if(isset($lang->$reviewType->statusList)) $statusList = $lang->$reviewType->statusList;
-            if($reviewType == 'attend') $statusList = $lang->attend->reviewStatusList;
-            if(!in_array($reviewType, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$reviewType,") === false) $statusList = $lang->approval->nodeList;
+            if(isset($lang->$reviewType->statusList)) $statusList = array_merge($statusList, $lang->$reviewType->statusList);
+            if($reviewType == 'attend')               $statusList = array_merge($statusList, $lang->attend->reviewStatusList);
+            if(!in_array($reviewType, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$reviewType,") === false) $statusList = array_merge($statusList, $lang->approval->nodeList);
 
-            $review->type   = $typeName;
-            $review->status = zget($statusList, $review->status, '');
+            $review->type = $typeName;
         }
+        $config->block->review->dtable->fieldList['status']['statusMap'] = $statusList;
     }
 
     $selected  = key($hasViewPriv);
