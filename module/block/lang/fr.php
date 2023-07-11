@@ -229,12 +229,17 @@ $lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
 $lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
-$lang->block->modules['product']->availableBlocks['statistic'] = $lang->productCommon . ' Report';
-$lang->block->modules['product']->availableBlocks['overview']  = $lang->productCommon . ' Overview';
-$lang->block->modules['product']->availableBlocks['list']      = $lang->productCommon . ' List';
-$lang->block->modules['product']->availableBlocks['story']     = 'Story';
-$lang->block->modules['product']->availableBlocks['plan']      = 'Plan';
-$lang->block->modules['product']->availableBlocks['release']   = 'Release';
+$lang->block->modules['product']->availableBlocks['overview']         = $lang->productCommon . ' Overview';
+$lang->block->modules['product']->availableBlocks['statistic']        = $lang->productCommon . ' Statistic';
+$lang->block->modules['product']->availableBlocks['releasestatistic'] = "{$lang->productCommon} Release Statistic";
+$lang->block->modules['product']->availableBlocks['bugstatistic']     = "{$lang->productCommon} Bug Statistic";
+$lang->block->modules['product']->availableBlocks['annualworkload']   = "{$lang->productCommon} Annual Workload Statistic";
+$lang->block->modules['product']->availableBlocks['monthlyprogress']  = "{$lang->productCommon} Monthly Advancing Analysis";
+$lang->block->modules['product']->availableBlocks['list']             = $lang->productCommon . ' List';
+$lang->block->modules['product']->availableBlocks['plan']             = 'Plan';
+$lang->block->modules['product']->availableBlocks['release']          = 'Release';
+$lang->block->modules['product']->availableBlocks['bug']              = 'Bug';
+$lang->block->modules['product']->availableBlocks['story']            = 'Story';
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks['statistic'] = $lang->execution->common . ' Statistiques';

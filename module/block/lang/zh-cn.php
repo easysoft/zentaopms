@@ -241,17 +241,17 @@ $lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject
 
 $lang->block->modules['product'] = new stdclass();
 
-$lang->block->modules['product']->availableBlocks['statistic']        = $lang->productCommon . '统计';
 $lang->block->modules['product']->availableBlocks['overview']         = $lang->productCommon . '总览';
-$lang->block->modules['product']->availableBlocks['list']             = $lang->productCommon . '列表';
-$lang->block->modules['product']->availableBlocks['bugstatistic']     = "{$lang->productCommon}的Bug数据";
+$lang->block->modules['product']->availableBlocks['statistic']        = $lang->productCommon . '统计';
 $lang->block->modules['product']->availableBlocks['releasestatistic'] = "{$lang->productCommon}发布统计";
-$lang->block->modules['product']->availableBlocks['monthlyprogress']  = "{$lang->productCommon}月度推进分析";
+$lang->block->modules['product']->availableBlocks['bugstatistic']     = "{$lang->productCommon}Bug统计";
 $lang->block->modules['product']->availableBlocks['annualworkload']   = "{$lang->productCommon}年度工作量统计";
-$lang->block->modules['product']->availableBlocks['bug']              = "测试列表";
-$lang->block->modules['product']->availableBlocks['story']            = "{$lang->SRCommon}列表";
+$lang->block->modules['product']->availableBlocks['monthlyprogress']  = "{$lang->productCommon}月度推进分析";
+$lang->block->modules['product']->availableBlocks['list']             = $lang->productCommon . '列表';
 $lang->block->modules['product']->availableBlocks['plan']             = "计划列表";
 $lang->block->modules['product']->availableBlocks['release']          = '发布列表';
+$lang->block->modules['product']->availableBlocks['bug']              = "测试列表";
+$lang->block->modules['product']->availableBlocks['story']            = "{$lang->SRCommon}列表";
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks['statistic'] = $lang->execution->common . '统计';
