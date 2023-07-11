@@ -617,13 +617,20 @@ class zanode extends control
         if($_POST)
         {
             $caseIDList = $_POST['caseIDList'];
+            $runIDList  = $_POST['runIDList'];
             $script     = $this->zanode->getAutomationByID($scriptID);
             $cases = $this->loadModel('testcase')->getByList($caseIDList);
+
+            $caseIDListArray = explode(',', $caseIDList);
+            $runIDListArray  = explode(',', $runIDList);
+            $case2RunMap     = array();
+
+            foreach($caseIDListArray as $index => $caseID) $case2RunMap[$caseID] = $runIDListArray[$index];
 
             foreach($cases as $id => $case)
             {
                 if($case->auto != 'auto') continue;
-                $resultID = $this->loadModel('testtask')->initResult(0, $id, $case->version, $script->node);
+                $resultID = $this->loadModel('testtask')->initResult($case2RunMap[$id], $id, $case->version, $script->node);
                 if(!dao::isError()) $this->zanode->runZTFScript($script->id, $id, $resultID);
             }
 
