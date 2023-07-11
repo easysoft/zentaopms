@@ -57,7 +57,27 @@
     }
     ?>
   </div>
-  <button type="submit" class="btn btn-primary" form="mainForm"><i class="icon icon-save icon-sm"></i> <?php echo $lang->save ?></button>
+  <button id="saveButton" type="submit" class="btn btn-primary" form="mainForm"><i class="icon icon-save icon-sm"></i> <?php echo $lang->save ?></button>
+  <div class="modal fade" id="returnConfirmModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p><?php echo sprintf($lang->ai->validate->dirtyForm, $lang->ai->designStepNav[$step])?></p>
+        </div>
+        <div class="modal-footer">
+          <div class="footer">
+            <div>
+              <?php echo  html::a(inlink("prompts"), html::commonButton("<i class='icon icon-back icon-sm'></i> $lang->goback", '', 'btn btn-info'));?>
+            </div>
+            <div>
+              <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $lang->cancel?></button>
+              <button type="button" class="btn btn-primary"><?php echo $lang->save?></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <script>
     (function()
     {
@@ -101,12 +121,35 @@
               e.preventDefault();
               return;
             }
-            const submitButton = document.getElementById('submit');
+            const submitButton = document.getElementById('saveButton');
             if(!submitButton) return;
             submitButton.click();
           })
         }
       }
+    })();
+
+    let isPromptDesignDirty = false;
+    (function()
+    {
+      const backButton = document.querySelector('.design-steps button:first-child');
+      if(!backButton) return;
+      backButton.addEventListener('click', function(e)
+      {
+        if(!isPromptDesignDirty) return;
+        $('#returnConfirmModal').modal('show', 'fit');
+        e.preventDefault();
+      });
+
+      const modalSaveButton = document.querySelector('#returnConfirmModal .btn-primary');
+      if(!modalSaveButton) return;
+      modalSaveButton.addEventListener('click', function()
+      {
+        const submitButton = document.getElementById('saveButton');
+        if(!submitButton) return;
+        submitButton.click();
+        location.href = createLink('ai', 'prompts');
+      });
     })();
   </script>
 </header>

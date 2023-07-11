@@ -178,3 +178,9 @@
     border-width: 16px 0 16px 10px;
     border-color: transparent transparent transparent #2e7eff;
 }
+
+#returnConfirmModal .footer
+{
+    display: flex;
+    justify-content: space-between;
+}

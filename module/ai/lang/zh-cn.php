@@ -21,7 +21,8 @@ $lang->ai->nextStep  = '下一步';
 $lang->ai->goTesting = '去调试';
 
 $lang->ai->validate = new stdclass();
-$lang->ai->validate->noEmpty = '%s不能为空。';
+$lang->ai->validate->noEmpty   = '%s不能为空。';
+$lang->ai->validate->dirtyForm = '%s的参数配置已变动，是否保存并返回？';
 
 $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = '提词';
