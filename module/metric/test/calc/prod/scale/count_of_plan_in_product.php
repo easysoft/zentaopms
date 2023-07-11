@@ -7,7 +7,7 @@ zdTable('productplan')->gen(55);
 
 $metric = new metricTest();
 
-$calc = $metric->calcMetric('product', 'scale', 'count_of_plan_in_product');
+$calc = $metric->calcMetric('prod', 'scale', 'count_of_plan_in_product');
 
 /**
 
