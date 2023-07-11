@@ -282,12 +282,13 @@ class block extends control
      * Print a block.
      *
      * @param  int    $blockID
+     * @param  string $params
      * @access public
      * @return string
      */
-    public function printBlock(int $blockID)
+    public function printBlock(int $blockID, string $params = '')
     {
-        $block   = $this->block->getByID($blockID);
+        $block = $this->block->getByID($blockID);
 
         /* 如果是外部调用，判断密码并组织外部需要的返回信息。  */
         if($this->blockZen->isExternalCall())
@@ -298,6 +299,12 @@ class block extends control
 
         if(empty($block)) return '';
 
+        if($params)
+        {
+            $params = helper::safe64Decode($params);
+            parse_str($params, $params);
+        }
+
         /* 根据 block 的 code 值，选择性调用 zen 中 print + $code + Block 方法获取区块数据。 */
         if(isset($block->params->num) && !isset($block->params->count)) $block->params->count = $block->params->num;
 
@@ -305,7 +312,7 @@ class block extends control
         if($code == 'statistic' || $code == 'list' || $code == 'overview') $code = $block->module . ucfirst($code);
 
         $function = 'print' . ucfirst($code) . 'Block';
-        if(method_exists('blockZen', $function)) $this->blockZen->$function($block);
+        if(method_exists('blockZen', $function)) $this->blockZen->$function($block, $params);
 
         /* 补全 moreLink 信息。 */
         $this->blockZen->createMoreLink($block, 0);
