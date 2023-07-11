@@ -123,7 +123,7 @@ function validateForm()
   }
   if(!pass)
   {
-    alert('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->selectTargetForm);?>');
+    $.zui.messager.danger('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->selectTargetForm);?>');
   }
   return pass;
 }

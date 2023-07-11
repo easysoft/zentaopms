@@ -432,7 +432,7 @@ function validateForm()
   const dataSource = document.querySelector('input[name="datasource"]')?.value;
   if(!dataGroup || !dataSource)
   {
-    alert('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->selectDataSource);?>');
+    $.zui.messager.danger('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->selectDataSource);?>');
     pass = false;
   }
   if(pass)

@@ -143,7 +143,7 @@ function validateForm()
   if(!purpose)
   {
     pass = false;
-    alert('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->purpose);?>');
+    $.zui.messager.danger('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->purpose);?>');
   }
   return pass;
 }

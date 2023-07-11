@@ -56,8 +56,8 @@ function validateForm()
   const name = document.getElementById('name')?.value;
   if(!name)
   {
+    $.zui.messager.danger('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->name);?>');
     pass = false;
-    alert('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->name);?>');
   }
   return pass;
 }
