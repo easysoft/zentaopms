@@ -1,1 +1,2 @@
-.right-menu {position: absolute; right: 20px; z-index: 1; padding: 0 2rem;}
+.tab-pane .tabnActions {float: right; margin-top: -48px;}
+#mainContent .detail-body .section-list .tabs ul {border-bottom-width: 1px; border-bottom-style: solid;}
