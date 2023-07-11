@@ -87,7 +87,7 @@ customElements.define('prompt-previewer', PromptPreviewer, {extends: 'div'});
 
 <?php include 'promptdesignprogressbar.html.php';?>
 <div id='mainContent' class='main-content' style='height: calc(100vh - 120px);'>
-  <form id="mainForm" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
+  <form id="mainForm" onsubmit="return validateForm();" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
     <div class='center-wrapper'>
       <div class='center-content'>
         <div id='purpose-setter'>
@@ -136,6 +136,17 @@ customElements.define('prompt-previewer', PromptPreviewer, {extends: 'div'});
 </div>
 
 <script>
+function validateForm()
+{
+  let pass = true;
+  const purpose = document.getElementById('purpose')?.value;
+  if(!purpose)
+  {
+    pass = false;
+    alert('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->purpose);?>');
+  }
+  return pass;
+}
 $(function()
 {
   $('#purpose').on('input', function()
