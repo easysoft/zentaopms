@@ -13,23 +13,37 @@ declare(strict_types=1);
 class metricTao extends metricModel
 {
     /**
+     * 获取度量项计算文件的根目录。
      * Get root of metric calculator.
      *
-     * @access public
+     * @access protected
      * @return string
      */
-    public function getCalcRoot()
+    protected function getCalcRoot()
     {
         return $this->app->getModuleRoot() . 'metric' . DS . 'calc' . DS;
     }
 
     /**
+     * 获取度量项基类文件的路径。
+     * Get path of base calc class file.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function getBaseCalcPath()
+    {
+        return $this->app->getModuleRoot() . DS . 'metric' . DS . 'calc.class.php';
+    }
+
+    /**
+     * 获取数据集文件的路径
      * Get path of calculator data set.
      *
-     * @access public
+     * @access protected
      * @return string
      */
-    public function getDatasetPath()
+    protected function getDatasetPath()
     {
         return $this->app->getModuleRoot() . 'metric' . DS . 'dataset.php';
     }
@@ -40,10 +54,10 @@ class metricTao extends metricModel
      *
      * @param  array|int $rows
      * @param  array     $options
-     * @access public
+     * @access protected
      * @return array
      */
-    public function filterByOptions($rows, $options)
+    protected function filterByOptions($rows, $options)
     {
         $rows = (array)$rows;
         $options = $this->expandOptions($options);
@@ -66,10 +80,10 @@ class metricTao extends metricModel
      * Expand options.
      *
      * @param  array  $options
-     * @access public
+     * @access protected
      * @return array
      */
-    public function expandOptions($options)
+    protected function expandOptions($options)
     {
         foreach($options as $scope => $option) $options[$scope] = explode(',', $option);
         return $options;

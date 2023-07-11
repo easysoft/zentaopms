@@ -59,6 +59,7 @@ class metricModel extends model
     }
 
     /**
+     * 获取可计算的度量项列表。
      * Get executable metric list.
      *
      * @access public
@@ -87,6 +88,7 @@ class metricModel extends model
     }
 
     /**
+     * 获取可计算的度量项对象。
      * Get executable calculator list.
      *
      * @access public
@@ -125,6 +127,7 @@ class metricModel extends model
     }
 
     /**
+     * 获取度量项计算实例列表。
      * Get calculator instance list.
      *
      * @access public
@@ -134,7 +137,7 @@ class metricModel extends model
     {
         $calcList = $this->getExecutableCalcList();
 
-        include $this->app->getModuleRoot() . DS . 'metric' . DS . 'calc.class.php';
+        include $this->metricTao->getBaseCalcPath();
         $calcInstances = array();
         foreach($calcList as $id => $calc)
         {
@@ -152,6 +155,7 @@ class metricModel extends model
     }
 
     /**
+     * 获取通用数据集对象。
      * Get instance of data set object.
      *
      * @access public
@@ -165,6 +169,7 @@ class metricModel extends model
     }
 
     /**
+     * 对度量项按照通用数据集进行归类，没有数据集不做归类。
      * Classify calculator instance list by its data set.
      *
      * @param  array  $calcInstanceList
@@ -202,6 +207,7 @@ class metricModel extends model
     }
 
     /**
+     * 对度量项的字段列表取并集。
      * Unite field list of each calc.
      *
      * @param  array  $calcList

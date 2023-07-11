@@ -33,8 +33,16 @@ class count_of_plan_in_product extends baseCalc
         $this->result[$data->product] += 1;
     }
 
-    public function getResult()
+    public function getResult($options = null)
     {
+
+        if(!empty($options) && isset($options['product']))
+        {
+            $productID = $options['product'];
+            if(isset($this->result[$productID])) return $this->result[$productID];
+            return 0;
+        }
+
         $records = array();
         foreach($this->result as $product => $value)
         {

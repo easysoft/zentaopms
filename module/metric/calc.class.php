@@ -118,7 +118,7 @@ class baseCalc
      * @access public
      * @return void
      */
-    public function getResult()
+    public function getResult($options = null)
     {
         if(empty($this->result)) return null;
         return array((object)array('value' => $this->result));

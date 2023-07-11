@@ -23,6 +23,7 @@ class metric extends control
     }
 
     /**
+     * 计算度量项。
      * Excute metric.
      *
      * @access public

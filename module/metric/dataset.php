@@ -22,6 +22,7 @@ class dataset
     }
 
     /**
+     * 获取执行数据。
      * Get all executions.
      *
      * @param  string $fieldList
@@ -37,6 +38,7 @@ class dataset
     }
 
     /**
+     * 获取发布数据。
      * Get release list.
      *
      * @param  int    $fieldList
@@ -55,6 +57,14 @@ class dataset
             ->query();
     }
 
+    /**
+     * 获取产品计划数。
+     * Get plan list.
+     *
+     * @param  array    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
     public function getPlans($fieldList)
     {
         return $this->dao->select($fieldList)

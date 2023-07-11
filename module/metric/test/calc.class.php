@@ -34,6 +34,13 @@ class metricTest
         return $calc;
     }
 
+    /**
+     * Prepare dataset object for calc.
+     *
+     * @param  object    $calc
+     * @access public
+     * @return void
+     */
     public function prepareDataset($calc)
     {
         global $tester;

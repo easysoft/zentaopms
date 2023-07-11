@@ -70,6 +70,15 @@ class metricZen extends metric
         return $records;
     }
 
+    /**
+     * 遍历数据，对每个度量项计算每一行数据。
+     * Calculate metric for every row.
+     *
+     * @param  array    $rows
+     * @param  array    $calcList
+     * @access protected
+     * @return void
+     */
     protected function calcMetric($rows, $calcList)
     {
         foreach($rows as $row)
