@@ -68,7 +68,7 @@ panel
         setClass('flex flex-wrap h-full w-full' . (!$longBlock ? ' flex-wrap' : '')),
         div
         (
-            setClass('flex w-full bg-white leading-6 px-2 py-1 mt-1 mx-3 shadow items-center gap-x-2 justify-between' . ($longBlock ? ' h-10 mb-6 flex-nowrap' : 'h-20 mb-4 flex-wrap')),
+            setClass('flex w-full bg-white leading-6 px-2 py-1 mt-1 mx-3 shadow-sm items-center gap-x-2 justify-between' . ($longBlock ? ' h-10 mb-2 flex-nowrap' : 'h-20 mb-4 flex-wrap')),
             cell
             (
                 setClass('text-left'),
