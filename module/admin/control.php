@@ -54,9 +54,6 @@ class admin extends control
             $this->view->ignore  = false;
         }
 
-        $usedMode = zget($this->config->global, 'mode', 'light');
-        if($usedMode == 'light') unset($this->lang->admin->menuList->template);
-
         $this->loadModel('misc');
 
         $langNotCN  = common::checkNotCN();
