@@ -18,7 +18,7 @@ class productMenu extends wg
 
     private function buildMenu(): array
     {
-        $link      = $this->prop('link');
+        $link      = $this->prop('link', '');
         $items     = $this->prop('items');
         $activeKey = $this->prop('activeKey');
 
