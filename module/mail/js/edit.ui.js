@@ -12,13 +12,16 @@ window.mailTips = function(mailExist)
         zui.Modal.confirm({
             actions: [
                 {
-                    url:     $.createLink('mail', 'test'),
-                    text:    testBtn,
-                    btnType: 'primary btn-wide',
+                    text: testBtn,
+                    key:  'confirm',
                 },
                 'cancel'
             ],
-            message: {html: $('#hasMail').html()}
+            message: {html: $('#hasMail').html()},
+            onResult: (result) =>
+            {
+                if(result) loadPage($.createLink('mail', 'test'));
+            }
         })
     }
 }
