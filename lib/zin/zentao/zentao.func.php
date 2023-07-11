@@ -39,41 +39,42 @@ class stdClass extends \stdClass
 {
 }
 
-function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '', $onlybody = false)
+function createLink(string $moduleName, string $methodName = 'index', string|array $vars = array(), string $viewType = '', bool $onlybody = false): string
 {
     if(empty($moduleName)) return '';
     return \helper::createLink($moduleName, $methodName, $vars, $viewType, $onlybody);
 }
 
-function inLink($methodName = 'index', $vars = '', $viewType = '', $onlybody = false)
+function inLink(string $methodName = 'index', string|array $vars = '', string $viewType = '', bool $onlybody = false): string
 {
     return \inlink($methodName, $vars, $viewType, $onlybody);
 }
 
-function zget($var, $key, $valueWhenNone = false, $valueWhenExists = false)
+function zget(array|object $var, string|int $key, mixed $valueWhenNone = false, mixed $valueWhenExists = false): mixed
 {
     return \zget($var, $key, $valueWhenNone, $valueWhenExists);
 }
 
-function getWebRoot($full = false)
+function getWebRoot(bool $full = false): string
 {
     return \getWebRoot($full);
 }
 
-function hasPriv($module, $method, $object = null, $vars = '')
+function hasPriv(string $module, string $method, ?object $object = null, string $vars = ''): bool
 {
     return \common::hasPriv($module, $method, $object, $vars);
 }
 
-function isFieldRequired($name)
+function isFieldRequired(?string $name): bool
 {
+    if(empty($name)) return false;
+
     global $config, $app;
     $moduleName = $app->moduleName;
     $methodName = $app->methodName;
-    $required   = false;
-    if (isset($config->$moduleName->$methodName->requiredFields)) $required = in_array($name, explode(',', $config->$moduleName->$methodName->requiredFields));
+    if(isset($config->$moduleName->$methodName->requiredFields)) return in_array($name, explode(',', $config->$moduleName->$methodName->requiredFields));
 
-    return $required;
+    return false;
 }
 
 /**
@@ -91,15 +92,15 @@ function isAjaxRequest(?string $type = null): bool
  *
  * @param string       $name
  * @param string|array $callback
- * @param array|null   $options
+ * @param array   $options
  * @return directive
  */
-function bind(string $name, string|array $callback, array $options = null): directive
+function bind(string $name, string|array $callback, array $options = array()): directive
 {
     $data = array('on' => $name);
-    if(is_string($callback)) $data['call'] = $callback;
-    if(is_array($callback))  $data = array_merge($data, $callback);
-    if($options)             $data = array_merge($data, $options);
+    if(is_string($callback))     $data['call'] = $callback;
+    else if(is_array($callback)) $data = array_merge($data, $callback);
+    if(!empty($options))         $data = array_merge($data, $options);
 
     return setData($data);
 }

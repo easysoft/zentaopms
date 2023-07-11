@@ -10,7 +10,7 @@ namespace zin;
  * @param  string $extra
  * @return array
  */
-function usePager(array $userSetting = null, string $pagerName = 'pager', string $extra = ''): array|null
+function usePager(array $userSetting = array(), string $pagerName = 'pager', string $extra = ''): array
 {
     $pager = data($pagerName);
     if(empty($pager)) return null;
@@ -19,8 +19,8 @@ function usePager(array $userSetting = null, string $pagerName = 'pager', string
     $params = $pager->params;
     foreach($params as $key => $value)
     {
-        if(strtolower($key) == 'recperpage') $params[$key] = '{recPerPage}';
-        if(strtolower($key) == 'pageid')     $params[$key] = '{page}';
+        if(strtolower($key) === 'recperpage') $params[$key] = '{recPerPage}';
+        if(strtolower($key) === 'pageid')     $params[$key] = '{page}';
     }
 
     $setting = array();
@@ -52,7 +52,7 @@ function usePager(array $userSetting = null, string $pagerName = 'pager', string
         $setting['items'][] = array('type' => 'link', 'page' => 'last', 'hint' => $pager->lang->pager->lastPage, 'icon' => 'icon-last-page');
     }
 
-    if(is_array($userSetting)) $setting = array_merge($setting, $userSetting);
+    if(!empty($userSetting)) $setting = array_merge($setting, $userSetting);
 
     return $setting;
 }
