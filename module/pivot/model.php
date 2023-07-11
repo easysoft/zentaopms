@@ -1539,13 +1539,13 @@ class pivotModel extends model
                 }
                 else
                 {
-                    if($fields[$field]['type'] == 'number')
+                    if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
                     {
-                        $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                        $columnSQL = "$stat(0) as `$uuName`";
                     }
                     else
                     {
-                        $columnSQL = "$stat(0) as `$uuName`";
+                        $columnSQL = "$stat(tt.`$field`) as `$uuName`";
                     }
                 }
 
