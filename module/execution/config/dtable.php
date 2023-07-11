@@ -229,32 +229,20 @@ $config->execution->linkStory->dtable->fieldList['id']['title']    = $lang->idAB
 $config->execution->linkStory->dtable->fieldList['id']['type']     = 'checkID';
 $config->execution->linkStory->dtable->fieldList['id']['sortType'] = true;
 $config->execution->linkStory->dtable->fieldList['id']['fixed']    = 'left';
+$config->execution->linkStory->dtable->fieldList['id']['group']    = 1;
+
+$config->execution->linkStory->dtable->fieldList['title']['title']    = $lang->story->title;
+$config->execution->linkStory->dtable->fieldList['title']['type']     = 'title';
+$config->execution->linkStory->dtable->fieldList['title']['link']     = helper::createLink('story', 'view', 'storyID={id}');
+$config->execution->linkStory->dtable->fieldList['title']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['title']['fixed']    = 'left';
+$config->execution->linkStory->dtable->fieldList['title']['group']    = 2;
 
 $config->execution->linkStory->dtable->fieldList['pri']['title']    = $lang->story->pri;
 $config->execution->linkStory->dtable->fieldList['pri']['type']     = 'pri';
 $config->execution->linkStory->dtable->fieldList['pri']['sortType'] = true;
 $config->execution->linkStory->dtable->fieldList['pri']['fixed']    = 'left';
-
-$config->execution->linkStory->dtable->fieldList['title']['title']    = $lang->story->title;
-$config->execution->linkStory->dtable->fieldList['title']['type']     = 'text';
-$config->execution->linkStory->dtable->fieldList['title']['link']     = helper::createLink('story', 'view', 'storyID={id}');
-$config->execution->linkStory->dtable->fieldList['title']['sortType'] = true;
-$config->execution->linkStory->dtable->fieldList['title']['fixed']    = 'left';
-
-$config->execution->linkStory->dtable->fieldList['product']['title']    = $lang->story->product;
-$config->execution->linkStory->dtable->fieldList['product']['type']     = 'text';
-$config->execution->linkStory->dtable->fieldList['product']['sortType'] = true;
-$config->execution->linkStory->dtable->fieldList['product']['group']    = 1;
-
-$config->execution->linkStory->dtable->fieldList['module']['title']    = $lang->story->module;
-$config->execution->linkStory->dtable->fieldList['module']['type']     = 'text';
-$config->execution->linkStory->dtable->fieldList['module']['sortType'] = true;
-$config->execution->linkStory->dtable->fieldList['module']['group']    = 2;
-
-$config->execution->linkStory->dtable->fieldList['planTitle']['title']    = $lang->story->plan;
-$config->execution->linkStory->dtable->fieldList['planTitle']['type']     = 'text';
-$config->execution->linkStory->dtable->fieldList['planTitle']['sortType'] = true;
-$config->execution->linkStory->dtable->fieldList['planTitle']['group']    = 3;
+$config->execution->linkStory->dtable->fieldList['pri']['group']    = 3;
 
 $config->execution->linkStory->dtable->fieldList['stage']['title']     = $lang->story->stageAB;
 $config->execution->linkStory->dtable->fieldList['stage']['type']      = 'status';
@@ -262,12 +250,33 @@ $config->execution->linkStory->dtable->fieldList['stage']['statusMap'] = $lang->
 $config->execution->linkStory->dtable->fieldList['stage']['sortType']  = true;
 $config->execution->linkStory->dtable->fieldList['stage']['group']     = 4;
 
+$config->execution->linkStory->dtable->fieldList['product']['title']    = $lang->story->product;
+$config->execution->linkStory->dtable->fieldList['product']['type']     = 'text';
+$config->execution->linkStory->dtable->fieldList['product']['link']     = helper::createLink('product', 'browse', 'productID={product}&branch={branch}');
+$config->execution->linkStory->dtable->fieldList['product']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['product']['group']    = 5;
+
+$config->execution->linkStory->dtable->fieldList['module']['title']    = $lang->story->module;
+$config->execution->linkStory->dtable->fieldList['module']['type']     = 'text';
+$config->execution->linkStory->dtable->fieldList['module']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['module']['group']    = 6;
+
+$config->execution->linkStory->dtable->fieldList['planTitle']['title']    = $lang->story->plan;
+$config->execution->linkStory->dtable->fieldList['planTitle']['type']     = 'text';
+$config->execution->linkStory->dtable->fieldList['planTitle']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['planTitle']['group']    = 7;
+
+$config->execution->linkStory->dtable->fieldList['branch']['title']    = '';
+$config->execution->linkStory->dtable->fieldList['branch']['type']     = 'text';
+$config->execution->linkStory->dtable->fieldList['branch']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['branch']['group']    = 8;
+
 $config->execution->linkStory->dtable->fieldList['openedBy']['title']    = $lang->story->openedBy;
 $config->execution->linkStory->dtable->fieldList['openedBy']['type']     = 'user';
 $config->execution->linkStory->dtable->fieldList['openedBy']['sortType'] = true;
-$config->execution->linkStory->dtable->fieldList['openedBy']['group']    = 4;
+$config->execution->linkStory->dtable->fieldList['openedBy']['group']    = 9;
 
 $config->execution->linkStory->dtable->fieldList['estimate']['title']    = $lang->story->estimateAB;
 $config->execution->linkStory->dtable->fieldList['estimate']['type']     = 'number';
 $config->execution->linkStory->dtable->fieldList['estimate']['sortType'] = true;
-$config->execution->linkStory->dtable->fieldList['estimate']['group']    = 4;
+$config->execution->linkStory->dtable->fieldList['estimate']['group']    = 10;

@@ -12,18 +12,15 @@ declare(strict_types=1);
 
 namespace zin;
 
-featureBar
+featureBar(li
 (
-    li
+    setClass('nav-item'),
+    a
     (
-        setClass('nav-item'),
-        a 
-        (
-            setClass('active'),
-            $lang->execution->linkStory
-        )
-    ),
-);
+        setClass('active'),
+        $lang->execution->linkStory
+    )
+));
 
 toolbar
 (
@@ -43,6 +40,16 @@ $footToolbar['items'][] = array
 $cols = $config->execution->linkStory->dtable->fieldList;
 $cols['module']['map']  = $modules;
 $cols['product']['map'] = $productPairs;
+if($productType != 'normal')
+{
+    $cols['branch']['title'] = $lang->product->branchName[$productType];
+}
+else
+{
+    unset($cols['branch']);
+}
+
+jsVar('branchGroups', $branchGroups);
 
 dtable
 (
@@ -51,8 +58,8 @@ dtable
     set::cols($cols),
     set::data($allStories),
     set::checkable(true),
-    set::fixedLeftWidth('44%'),
     set::footToolbar($footToolbar),
+    set::onRenderCell(jsRaw('window.onRenderLinkStoryCell')),
     set::footPager(
         usePager(),
         set::recPerPage($recPerPage),
@@ -60,3 +67,5 @@ dtable
         set::linkCreator(helper::createLink($object->type, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&recPerPage={recPerPage}&page={page}&extra=$extra"))
     )
 );
+
+render();
