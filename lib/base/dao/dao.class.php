@@ -1740,15 +1740,10 @@ class baseSQL
     public function data($data, $skipFields = '')
     {
         $data = (object) $data;
+        if($skipFields) $this->skipFields = ',' . str_replace(' ', '', $skipFields) . ',';
 
         if($this->method != 'insert')
         {
-            if($this->method == 'replace')
-            {
-                $fields = array_keys((array) $data);
-                $this->sql .= '(`' . implode('`,`', $fields) . '`) VALUES (';
-            }
-
             foreach($data as $field => $value)
             {
                 if(!preg_match('|^\w+$|', $field))
@@ -1756,25 +1751,15 @@ class baseSQL
                     unset($data->$field);
                     continue;
                 }
-
                 if(strpos($this->skipFields, ",$field,") !== false) continue;
                 if($field == 'id' and $this->method == 'update') continue;     // primary key not allowed in dmdb.
 
-                if($this->method == 'replace')
-                {
-                    $this->sql .= empty($this->quote($value)) ? "''" : $this->quote($value) . ',';
-                }
-                else
-                {
-                    $this->sql .= "`$field` = " . $this->quote($value) . ',';
-                }
+                $this->sql .= "`$field` = " . $this->quote($value) . ',';
             }
         }
 
         $this->data = $data;
         $this->sql  = rtrim($this->sql, ',');    // Remove the last ','.
-        if($this->method == 'replace') $this->sql .= ')';
-
         return $this;
     }
 
