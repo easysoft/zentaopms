@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('initLink', $link);
+jsVar('type', $type);
 $canBeChanged = common::canBeChanged('release', $release);
 $menus        = $this->release->buildOperateViewMenu($release);
 detailHeader
@@ -74,65 +76,59 @@ if($product->type != 'normal')
 }
 
 /* Right menus, export and link. */
-$rightMenus = array();
+$exportBtn = null;
 if(common::hasPriv('release', 'export') && ($summary || count($bugs) || count($leftBugs)))
 {
-    $rightMenus[] = array(
+    $exportBtn = btn(set(array(
         'text'        => $lang->release->export,
         'icon'        => 'export',
         'url'         => inlink('export', "releaseID={$release->id}"),
-        'class'       => 'btn ghost',
+        'class'       => 'ghost',
         'data-size'   => 'sm',
         'data-toggle' => 'modal',
-    );
+    )));
 }
 
+$linkStoryBtn = $linkBugBtn = $linkLeftBtn = null;
 if($canBeChanged)
 {
-    $linkBtnList = array();
     if(common::hasPriv('release', 'linkStory'))
     {
-        $linkBtnList[] = array(
+        $linkStoryBtn = btn(set(array(
             'text'     => $lang->release->linkStory,
             'icon'     => 'link',
             'data-url' => inlink('linkStory', "releaseID={$release->id}&browseType=story"),
-            'class'    => 'btn link-story',
-            'type'     => 'primary'
-        );
+            'class'    => 'link',
+            'type'     => 'primary',
+            'onclick'  => 'showLink(this)',
+        )));
     }
 
     if(common::hasPriv('release', 'linkBug'))
     {
-        $linkBtnList[] = array(
+        $linkBugBtn = btn(set(array(
             'text'     => $lang->release->linkBug,
             'icon'     => 'bug',
             'data-url' => inlink('linkBug', "releaseID={$release->id}&browseType=bug"),
-            'class'    => 'btn link-bug',
+            'class'    => 'link',
             'type'     => 'primary',
-        );
+            'onclick'  => 'showLink(this)',
+        )));
 
-        $linkBtnList[] = array(
+        $linkLeftBtn = btn(set(array(
             'text'     => $lang->release->linkBug,
             'icon'     => 'bug',
             'data-url' => inlink('linkBug', "releaseID={$release->id}&browseType=leftBug&param=0&type=leftBug"),
-            'class'    => 'btn link-left-bug',
+            'class'    => 'link',
             'type'     => 'primary',
-        );
+            'onclick'  => 'showLink(this)',
+        )));
     }
-
-    btnGroup(
-        set::items($linkBtnList),
-        setClass('link-btns hidden')
-    );
 }
 
 detailBody
 (
     sectionList(
-        btnGroup(
-            set::items(common::hasPriv('release', 'export') ? $rightMenus : null),
-            setClass('right-menu px-6')
-        ),
         tabs
         (
             set::class('w-full'),
@@ -144,6 +140,12 @@ detailBody
                 set::key('finishedStory'),
                 set::title($lang->release->stories),
                 set::active($type == 'story'),
+                div
+                (
+                    setClass('tabnActions'),
+                    $exportBtn,
+                    $linkStoryBtn,
+                ),
                 dtable
                 (
                     set::userMap($users),
@@ -169,6 +171,12 @@ detailBody
                 set::key('resolvedBug'),
                 set::title($lang->release->bugs),
                 set::active($type == 'bug'),
+                div
+                (
+                    setClass('tabnActions'),
+                    $exportBtn,
+                    $linkBugBtn,
+                ),
                 dtable
                 (
                     set::userMap($users),
@@ -193,6 +201,12 @@ detailBody
                 set::key('leftBug'),
                 set::title($lang->release->generatedBugs),
                 set::active($type == 'leftBug'),
+                div
+                (
+                    setClass('tabnActions'),
+                    $exportBtn,
+                    $linkLeftBtn,
+                ),
                 dtable
                 (
                     set::userMap($users),
@@ -216,6 +230,11 @@ detailBody
                 to::prefix(icon('flag')),
                 set::key('releaseInfo'),
                 set::title($lang->release->basicInfo),
+                div
+                (
+                    setClass('tabnActions'),
+                    $exportBtn,
+                ),
                 div(
                     section(
                         set::title($lang->release->basicInfo),
