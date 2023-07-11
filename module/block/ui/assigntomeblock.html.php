@@ -10,21 +10,55 @@ declare(strict_types=1);
 */
 
 namespace zin;
+jsVar('moreLabel', $lang->more);
+
 $blockNavCode = 'nav-' . uniqid();
 
+$index = 0;
+$count = count($hasViewPriv);
 $menus = array();
+$moreMenus = array();
 foreach($hasViewPriv as $type => $bool)
 {
     $selected = key($hasViewPriv);
+    if(($longBlock && $count > 9 && $index >= 8) || (!$longBlock && $count > 4 && $index >= 3))
+    {
+        $moreMenus[] = array('text' => $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type), 'data-toggle' => 'tab', 'href' => "#assigntome{$type}Tab{$blockNavCode}");
+    }
+    else
+    {
+        $menus[]  = li
+        (
+            set('class', 'nav-item nav-switch'),
+            a
+            (
+                set('class', $type == $selected ? 'active' : ''),
+                set('data-toggle', 'tab'),
+                set('href', "#assigntome{$type}Tab{$blockNavCode}"),
+                $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type)
+            )
+        );
+    }
+    $index ++;
+}
+
+if(($longBlock && $count > 9) || (!$longBlock && $count > 4))
+{
     $menus[]  = li
     (
         set('class', 'nav-item nav-switch'),
         a
         (
-            set('class', $type == $selected ? 'active' : ''),
-            set('data-toggle', 'tab'),
-            set('href', "#assigntome{$type}Tab{$blockNavCode}"),
-            $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type)
+            set('data-toggle', 'dropdown'),
+            set('href', "#assigntomeMenuMore{$blockNavCode}"),
+            span($lang->more),
+            icon('caret-down')
+        ),
+        menu
+        (
+            set::id("#assigntomeMenuMore{$blockNavCode}"),
+            set::class('dropdown-menu'),
+            set::items($moreMenus)
         )
     );
 }

@@ -476,7 +476,7 @@ $config->my->testtask->dtable->fieldList['id']['type']  = 'id';
 $config->my->testtask->dtable->fieldList['title']['name']  = 'name';
 $config->my->testtask->dtable->fieldList['title']['title'] = $lang->testtask->name;
 $config->my->testtask->dtable->fieldList['title']['type']  = 'title';
-$config->my->testtask->dtable->fieldList['title']['link']  = array('module' => 'testcase', 'method' => 'view', 'params' => 'taskID={id}');
+$config->my->testtask->dtable->fieldList['title']['link']  = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
 $config->my->testtask->dtable->fieldList['title']['fixed'] = 'left';
 
 $config->my->testtask->dtable->fieldList['build']['name']  = 'buildName';

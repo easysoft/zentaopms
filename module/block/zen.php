@@ -1748,11 +1748,30 @@ class blockZen extends block
         $hasMeeting = helper::hasFeature('meeting');
 
         $hasViewPriv = array();
-        if(common::hasPriv('todo',  'view'))                                                                                        $hasViewPriv['todo']        = true;
+        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo'] = true;
+
+        $limitCount = !empty($params->reviewCount) ? $params->reviewCount : 20;
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, $limitCount, 1);
+        $reviews = $this->loadModel('my')->getReviewingList('all', 'time_desc', $pager);
+        if($reviews)
+        {
+            $hasViewPriv['review'] = true;
+            $count['review']       = count($reviews);
+            $this->view->reviews   = $reviews;
+            if($this->config->edition == 'max')
+            {
+                $this->app->loadLang('approval');
+                $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
+            }
+        }
+
         if(common::hasPriv('task',  'view'))                                                                                        $hasViewPriv['task']        = true;
-        if(common::hasPriv('bug',   'view') && $this->config->vision != 'lite')                                                     $hasViewPriv['bug']         = true;
         if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                                     $hasViewPriv['story']       = true;
         if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')                           $hasViewPriv['requirement'] = true;
+        if(common::hasPriv('bug',   'view') && $this->config->vision != 'lite')                                                     $hasViewPriv['bug']         = true;
+        if(common::hasPriv('testcase', 'view') && $this->config->vision != 'lite')                                                  $hasViewPriv['testcase']    = true;
+        if(common::hasPriv('testtask', 'cases') && $this->config->vision != 'lite')                                                 $hasViewPriv['testtask']    = true;
         if(common::hasPriv('risk',  'view') && $this->config->edition == 'max' && $this->config->vision != 'lite' && $hasRisk)      $hasViewPriv['risk']        = true;
         if(common::hasPriv('issue', 'view') && $this->config->edition == 'max' && $this->config->vision != 'lite' && $hasIssue)     $hasViewPriv['issue']       = true;
         if(common::hasPriv('meeting', 'view') && $this->config->edition == 'max' && $this->config->vision != 'lite' && $hasMeeting) $hasViewPriv['meeting']     = true;
@@ -1894,21 +1913,7 @@ class blockZen extends block
             $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         }
 
-        $limitCount = !empty($params->reviewCount) ? $params->reviewCount : 20;
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, $limitCount, 1);
-        $reviews = $this->loadModel('my')->getReviewingList('all', 'time_desc', $pager);
-        if($reviews)
-        {
-            $hasViewPriv['review'] = true;
-            $count['review']       = count($reviews);
-            $this->view->reviews   = $reviews;
-            if($this->config->edition == 'max')
-            {
-                $this->app->loadLang('approval');
-                $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
-            }
-        }
+
 
         $this->view->users          = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->isExternalCall = $this->isExternalCall();

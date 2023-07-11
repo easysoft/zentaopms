@@ -346,7 +346,7 @@ $config->block->size['qa']['case']      = array('2' => '6', '1' => '6');
 
 $config->block->size['welcome']['welcome']                 = array('2' => '3');
 $config->block->size['guide']['guide']                     = array('2' => '6');
-$config->block->size['assigntome']['assigntome']           = array('2' => '6');
+$config->block->size['assigntome']['assigntome']           = array('2' => '6', '1' => '6');
 $config->block->size['dynamic']['dynamic']                 = array('1' => '8');
 $config->block->size['zentaodynamic']['zentaodynamic']     = array('1' => '4');
 $config->block->size['teamachievement']['teamachievement'] = array('1' => '6');
