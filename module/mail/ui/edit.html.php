@@ -64,7 +64,7 @@ formPanel
         ),
         span
         (
-            setClass('ml-4 pt-2 flex items-center'),
+            setClass('ml-4 pt-2 flex items-center text-gray'),
             icon('info text-warning mr-1'),
             $lang->mail->addressWhiteList
         )
@@ -106,7 +106,7 @@ formPanel
         ),
         !$openssl ? span
         (
-            setClass('ml-4 pt-2 flex items-center'),
+            setClass('ml-4 pt-2 flex items-center text-gray'),
             icon('info text-warning mr-1'),
             $lang->mail->disableSecure
         ) : null
