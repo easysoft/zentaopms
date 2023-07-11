@@ -20,6 +20,9 @@ $lang->prompt->module = 'Module';
 $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';
 
+$lang->ai->validate = new stdclass();
+$lang->ai->validate->noEmpty = '%s不能为空。';
+
 $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = 'Prompt';
 $lang->ai->prompts->emptyList   = 'No prompts yet.';

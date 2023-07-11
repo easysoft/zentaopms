@@ -20,6 +20,9 @@ $lang->prompt->module = '所属分组';
 $lang->ai->nextStep  = '下一步';
 $lang->ai->goTesting = '去调试';
 
+$lang->ai->validate = new stdclass();
+$lang->ai->validate->noEmpty = '%s cannot be empty.';
+
 $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = '提词';
 $lang->ai->prompts->emptyList   = '暂时没有提词。';

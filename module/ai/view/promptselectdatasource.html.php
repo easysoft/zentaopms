@@ -375,7 +375,7 @@ customElements.define('selected-data-sorter', SelectedDataSorter, {extends: 'div
 
 <?php include 'promptdesignprogressbar.html.php';?>
 <div id='mainContent' class='main-content' style='height: calc(100vh - 120px);'>
-  <form id="mainForm" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
+  <form id="mainForm" onsubmit="return validateForm();" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
     <div class='center-wrapper'>
       <div class='center-content'>
         <div id='data-selector'>
@@ -425,6 +425,24 @@ customElements.define('selected-data-sorter', SelectedDataSorter, {extends: 'div
   </form>
 </div>
 <script>
+function validateForm()
+{
+  let pass = true;
+  const dataGroup = document.querySelector('input[name="datagroup"]')?.value;
+  const dataSource = document.querySelector('input[name="datasource"]')?.value;
+  if(!dataGroup || !dataSource)
+  {
+    alert('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->selectDataSource);?>');
+    pass = false;
+  }
+  if(pass)
+  {
+    /* Disable checkboxes to prevent them getting posted as form data. */
+    $('#data-property-selector input[type="checkbox"]').each(function() {$(this).attr('disabled', 'disabled');});
+  }
+
+  return pass;
+}
 $(function()
 {
   /* Handle category switching. */
@@ -448,12 +466,6 @@ $(function()
 
     /* Update hidden form fields. */
     $('input[name="datagroup"]').val(currentGroup);
-  });
-
-  /* Disable checkboxes to prevent them getting posted as form data. */
-  $('form').submit(function()
-  {
-    $('#data-property-selector input[type="checkbox"]').each(function() {$(this).attr('disabled', 'disabled');});
   });
 
   /* Toggle disabled submit button. */
