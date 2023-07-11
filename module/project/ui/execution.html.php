@@ -66,14 +66,13 @@ $productMenuLink = createLink(
         'status'     => $status,
         'projectID'  => $projectID,
         'orderBy'    => $orderBy,
-        'productID'  => '%s'
+        'productID'  => '{key}'
     )
 );
 featureBar
 (
     to::before(productMenu(set
     ([
-        'title' => $lang->product->allProduct,
         'items' => $productList,
         'activeKey' => $productID,
         'closeLink' => '#',

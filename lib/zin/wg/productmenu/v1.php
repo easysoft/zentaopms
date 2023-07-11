@@ -30,7 +30,7 @@ class productMenu extends wg
                 continue;
             }
 
-            $menus[] = array('text' => $item, 'url' => sprintf($link, $itemKey));
+            $menus[] = array('text' => $item, 'key' => $itemKey);
         }
         return $menus;
     }
@@ -57,14 +57,15 @@ class productMenu extends wg
 
         $activeKey = $this->prop('activeKey');
         $link      = $this->prop('link');
-        $closeLink = str_replace('{id}', '0', $link);
+        $title     = $this->prop('title') ? $this->prop('title') : $this->getTitle();
+        $closeLink = str_replace('{key}', '', $link);
 
         return zui::dropmenu
         (
             set('_id', 'productMenu'),
             set::className('product-menu btn'),
             set::defaultValue($activeKey),
-            set::text($this->getTitle()),
+            set::text($title),
             set::caret(true),
             set::popWidth(200),
             set::popClass('popup text-md'),
