@@ -70,7 +70,8 @@ foreach($hasViewPriv as $type => $bool)
 {
     $data       = ${"{$type}s"};
     $configType = $type;
-    if($type == 'story')       $data       = $stories;
+    if($type == 'story')       $data = $stories;
+    if($type == 'testcase')    $configType = 'case';
     if($type == 'requirement') $configType = 'story';
 
     if(empty($config->block->{$configType}->dtable->fieldList)) continue;

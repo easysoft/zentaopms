@@ -38,3 +38,8 @@ $config->block->task->dtable->fieldList['estimate']['type']  = 'number';
 $config->block->task->dtable->fieldList['progress']['name']  = 'progress';
 $config->block->task->dtable->fieldList['progress']['title'] = $lang->task->progressAB;
 $config->block->task->dtable->fieldList['progress']['type']  = 'progress';
+
+$config->block->task->dtable->short = new stdclass();
+$config->block->task->dtable->short->fieldList['id']     = $config->block->task->dtable->fieldList['id'];
+$config->block->task->dtable->short->fieldList['name']   = $config->block->task->dtable->fieldList['name'];
+$config->block->task->dtable->short->fieldList['status'] = $config->block->task->dtable->fieldList['status'];

@@ -25,3 +25,8 @@ unset($config->block->case->dtable->fieldList['pri']['group']);
 unset($config->block->case->dtable->fieldList['status']['group']);
 unset($config->block->case->dtable->fieldList['lastRunDate']['group']);
 unset($config->block->case->dtable->fieldList['lastRunResult']['group']);
+
+$config->block->case->dtable->short = new stdclass();
+$config->block->case->dtable->short->fieldList['id']            = $config->block->case->dtable->fieldList['id'];
+$config->block->case->dtable->short->fieldList['title']         = $config->block->case->dtable->fieldList['title'];
+$config->block->case->dtable->short->fieldList['lastRunResult'] = $config->block->case->dtable->fieldList['lastRunDate'];
