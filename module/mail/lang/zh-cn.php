@@ -76,7 +76,7 @@ $lang->mail->secureList['ssl'] = 'ssl';
 $lang->mail->secureList['tls'] = 'tls';
 
 $lang->mail->more           = '更多...';
-$lang->mail->noticeResend   = '已经重新发信！';
+$lang->mail->noticeResend   = '邮件发送成功';
 $lang->mail->inputFromEmail = '请输入发信邮箱：';
 $lang->mail->nextStep       = '下一步';
 $lang->mail->successSaved   = '邮件及配置信息已经成功保存。';
