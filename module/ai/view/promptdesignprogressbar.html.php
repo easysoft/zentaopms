@@ -97,9 +97,13 @@
           step.addEventListener('click', function(e)
           {
             const result = validateForm();
-            if(result) return;
-
-            e.preventDefault();
+            if(!result) {
+              e.preventDefault();
+              return;
+            }
+            const submitButton = document.getElementById('submit');
+            if(!submitButton) return;
+            submitButton.click();
           })
         }
       }
