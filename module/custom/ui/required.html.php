@@ -26,7 +26,7 @@ foreach($requiredFields as $method => $requiredField)
             set::width('1/2'),
             set::label($actionTitle . $lang->custom->page),
             set::labelClass('font-bold'),
-            select
+            picker
             (
                 set::name("requiredFields[{$method}][]"),
                 set::items($fields),
