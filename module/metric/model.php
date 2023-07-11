@@ -28,14 +28,27 @@ class metricModel extends model
         $calcPath = $this->metricTao->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
         if(!is_file($calcPath)) return false;
 
-        include $this->metricTao->getBaseCalcPath();
-        include $calcPath;
+        include_once $this->metricTao->getBaseCalcPath();
+        include_once $calcPath;
         $calculator = new $metric->code;
 
-        $rows = $calculator->getStatement($this->dao)->fetchAll();
-        foreach($rows as $row) $calculator->calculate($row);
+        if(!empty($calculator->dataset))
+        {
+            include_once $this->metricTao->getDatasetPath();
 
-        return $this->metricTao->filterByOptions($calculator->getResult(), $options);
+            $dataset    = new dataset($this->dao);
+            $dataSource = $calculator->dataset;
+            $fieldList  = implode(',', $calculator->fieldList);
+
+            $rows = $dataset->$dataSource($fieldList)->fetchAll();
+        }
+        else
+        {
+            $rows = $calculator->getStatement($this->dao)->fetchAll();
+        }
+
+        foreach($rows as $row) $calculator->calculate($row);
+        return $calculator->getResult($options);
     }
 
     /**
@@ -195,15 +208,9 @@ class metricModel extends model
         }
 
         $classifiedCalcGroup = array();
-        foreach($datasetCalcGroup as $dataset => $calcList)
-        {
-            $classifiedCalcGroup[] = (object)array('dataset' => $dataset, 'calcList' => $calcList);
-        }
+        foreach($datasetCalcGroup as $dataset => $calcList) $classifiedCalcGroup[] = (object)array('dataset' => $dataset, 'calcList' => $calcList);
 
-        foreach($otherCalcList as $calc)
-        {
-            $classifiedCalcGroup[] = (object)array('dataset' => '', 'calcList' => $calcList);
-        }
+        foreach($otherCalcList as $calc) $classifiedCalcGroup[] = (object)array('dataset' => '', 'calcList' => $calcList);
         return $classifiedCalcGroup;
     }
 

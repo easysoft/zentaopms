@@ -118,9 +118,53 @@ class baseCalc
      * @access public
      * @return void
      */
-    public function getResult($options = null)
+    public function getResult($options = array())
     {
         if(empty($this->result)) return null;
         return array((object)array('value' => $this->result));
+    }
+
+    /**
+     * 根据选项过滤数据。
+     * Filter rows by options.
+     *
+     * @param  array|int $rows
+     * @param  array     $options array('product' => '1,2,3,4')
+     * @access protected
+     * @return array
+     */
+    protected function filterByOptions($rows, $options)
+    {
+        if(empty($options)) return $rows;
+
+        $rows = (array)$rows;
+        $options = $this->expandOptions($options);
+
+        $filteredRows = array();
+        foreach($options as $scope => $option)
+        {
+            foreach($rows as $row)
+            {
+                $row = (object)$row;
+                if(!isset($row->$scope)) continue;
+                if(in_array($row->$scope, $option)) $filteredRows[] = $row;
+            }
+        }
+
+        return $filteredRows;
+    }
+
+    /**
+     * 扩展选项。
+     * Expand options.
+     *
+     * @param  array  $options
+     * @access protected
+     * @return array
+     */
+    protected function expandOptions($options)
+    {
+        foreach($options as $scope => $option) $options[$scope] = explode(',', $option);
+        return $options;
     }
 }
