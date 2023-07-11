@@ -623,6 +623,10 @@ $lang->block->monthlyprogress->doneStoryEstimateTrendChart = "The Finished {$lan
 $lang->block->monthlyprogress->storyTrendChart             = "The New and Finished {$lang->SRCommon} Trend Chart";
 $lang->block->monthlyprogress->bugTrendChart               = 'The New and Resolved Bugs Trend Chart';
 
+$lang->block->releasestatistic = new stdclass();
+$lang->block->releasestatistic->monthly = 'Monthly releases trend chart';
+$lang->block->releasestatistic->annual  = "Annual release list (%s year)";
+
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
 $lang->block->moduleList['execution']       = $lang->execution->common;

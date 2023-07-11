@@ -163,7 +163,7 @@ $lang->block->default['product'][] = array('title' => "未关闭{$lang->productC
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon}月度推进分析",     'module' => 'product', 'code' => 'monthlyprogress',  'width' => '2');
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon}年度工作量统计",   'module' => 'product', 'code' => 'annualworkload',   'width' => '2');
 $lang->block->default['product'][] = array('title' => "未关闭{$lang->productCommon}的计划列表", 'module' => 'product', 'code' => 'plan',             'width' => '2', 'params' => array('count' => '20'));
-$lang->block->default['product'][] = array('title' => "{$lang->productCommon}发布统计",         'module' => 'product', 'code' => 'releasestatistic', 'width' => '1');
+$lang->block->default['product'][] = array('title' => "{$lang->productCommon}发布统计",         'module' => 'product', 'code' => 'releasestatistic', 'width' => '2');
 $lang->block->default['product'][] = array('title' => "指派给我的{$lang->SRCommon}",            'module' => 'product', 'code' => 'story',            'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
 $lang->block->default['qa'][] = array('title' => "未关闭{$lang->productCommon}的测试统计", 'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'params' => array('type' => 'noclosed',   'count' => '20'));
@@ -643,6 +643,10 @@ $lang->block->monthlyprogress = new stdclass();
 $lang->block->monthlyprogress->doneStoryEstimateTrendChart = '完成需求规模趋势图';
 $lang->block->monthlyprogress->storyTrendChart             = '需求新增和完成趋势图';
 $lang->block->monthlyprogress->bugTrendChart               = 'Bug新增和解决趋势图';
+
+$lang->block->releasestatistic = new stdclass();
+$lang->block->releasestatistic->monthly = '月度发布次数趋势图';
+$lang->block->releasestatistic->annual  = "年度发布榜（%s年）";
 
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
