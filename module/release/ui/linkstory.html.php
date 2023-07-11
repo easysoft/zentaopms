@@ -11,11 +11,12 @@ declare(strict_types=1);
 namespace zin;
 
 $cols = array();
-foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->story->dtable->fieldList, $field, array());
+foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->release->dtable->story->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
 $cols['title']['nestedToggle'] = false;
 
+div(setID('searchFormPanel'), set('data-module', 'story'), searchToggle(set::open(true), set::module('story')));
 dtable
 (
     set::id('unlinkStoryList'),
