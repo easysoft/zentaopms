@@ -138,7 +138,7 @@ formPanel
             ),
             set::trigger('click'),
             set::placement('bottom'),
-            set::menuProps(array('style' => array('color' => 'var(--color-fore)'))),
+            set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::items($projectModelItems)
         )
     )),
