@@ -12,6 +12,53 @@
 class metricModel extends model
 {
     /**
+     * 根据代号获取计算实时度量项的结果。
+     * Get result of calculate metric by code.
+     *
+     * @param  string $code
+     * @param  array  $options
+     * @access public
+     * @return array
+     */
+    public function getResultByCode($code, $options = array())
+    {
+        $metric = $this->dao->select('id,code,scope,purpose')->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
+        if(!$metric) return false;
+
+        $calcPath = $this->metricTao->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
+        if(!is_file($calcPath)) return false;
+
+        include $calcPath;
+        $calculator = new $metric->code;
+
+        $rows = $calculator->getStatement($dao)->fetchAll();
+        foreach($rows as $row) $calculator->calculate($row);
+
+        return $this->metricTao->filterByOptions($calculator->getResult(), $options);
+    }
+
+    /**
+     * 根据代号列表批量获取度量项的结果。
+     * Get result of calculate metric by code list.
+     *
+     * @param  array $codes
+     * @param  array $options
+     * @access public
+     * @return array
+     */
+    public function getResultByCodes($codes, $options = array())
+    {
+        $results = array();
+        foreach($codes as $code)
+        {
+            $result = $this->getResultByCode($code, $options);
+            if($result) $results[$code] = $result;
+        }
+
+        return $results;
+    }
+
+    /**
      * Get executable metric list.
      *
      * @access public

@@ -21,6 +21,15 @@ class baseCalc
     public $dataset;
 
     /**
+     * 数据库连接。
+     * Database connection.
+     *
+     * @var int
+     * @access public
+     */
+    public $dao = null;
+
+    /**
      * 参数列表。
      * fieldList
      *
@@ -64,6 +73,19 @@ class baseCalc
      * @access public
      */
     public $result;
+
+    /**
+     * 设置DAO 。
+     * Set DAO.
+     *
+     * @param  object $dao
+     * @access public
+     * @return void
+     */
+    public function setDAO($dao)
+    {
+        $this->dao = $dao;
+    }
 
     /**
      * 获取数据查询句柄。
