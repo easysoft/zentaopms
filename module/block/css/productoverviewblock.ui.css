@@ -1,1 +1,2 @@
-.block-base {height: calc(128px - 1.5rem);}
+.product-overview-block .text-3xl {line-height: 1;}
+.product-overview-block .gradient {background-image: linear-gradient( 90deg, #ECF7FE 0%, #FFF 22%);}
