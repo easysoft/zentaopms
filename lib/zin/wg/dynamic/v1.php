@@ -23,11 +23,11 @@ class dynamic extends wg
             div
             (
                 span(
-                    setClass('timeline-tag'),
+                    setClass('dynamic-tag'),
                     $dynamic->date
                 ),
                 div(
-                    setClass('timeline-text clip'),
+                    setClass('dynamic-text clip'),
                     zget($users, $dynamic->actor),
                     span
                     (
@@ -50,7 +50,7 @@ class dynamic extends wg
     {
         $dynamicListView = h::ul
         (
-            setClass('timeline timeline-tag-left pt-0 overflow-x-hidden'),
+            setClass('dynamic dynamic-tag-left pt-0 overflow-x-hidden'),
             setClass($this->prop('className')),
         );
 
