@@ -533,8 +533,8 @@ class admin extends control
             $data[] = array(
                 'id'   => $menuKey,
                 'name' => $menuKey,
-                'text' => $menuGroup['name'],
-                'content' => "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/> " . $menuGroup['name'],
+                'content' => array('html' => "<div class='flex items-center my-2'><img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/> {$menuGroup['name']}</div>"),
+                'text' => '',
                 'title' => $menuGroup['name'],
                 'type' => 'item',
                 'url' => $menuGroup['disabled'] ? '###' : $menuGroup['link'],
