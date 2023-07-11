@@ -2264,7 +2264,7 @@ class projectModel extends model
         $ongoingExecutions = $this->projectTao->getOngoingExecutions();
         $projectsStats     = $this->projectTao->getProjectsStats();
 
-        return array('kanbanGroup' => $projectsStats, 'ongoingExecutions' => $ongoingExecutions);
+        return array('kanbanGroup' => $projectsStats, 'latestExecutions' => $ongoingExecutions);
     }
 
     /**
