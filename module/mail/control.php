@@ -230,40 +230,27 @@ class mail extends control
      */
     public function test()
     {
-        if(!$this->config->mail->turnon)
-        {
-            return print(js::alert($this->lang->mail->needConfigure) . js::locate('back'));
-        }
+        if(!$this->config->mail->turnon) return $this->sendError($this->lang->mail->needConfigure);
 
         if($_POST)
         {
             /* The mail need openssl and curl extension when secure is tls. */
-            if(isset($this->config->mail->async))$this->config->mail->async = 0;
+            if(isset($this->config->mail->async)) $this->config->mail->async = 0;
             if($this->config->mail->smtp->secure == 'tls')
             {
-                if(!extension_loaded('openssl'))
-                {
-                    $this->view->error = array($this->lang->mail->noOpenssl);
-                    return print($this->display());
-                }
-                if(!extension_loaded('curl'))
-                {
-                    $this->view->error = array($this->lang->mail->noCurl);
-                    return print($this->display());
-                }
+                if(!extension_loaded('openssl')) return $this->sendError($this->lang->mail->noOpenssl);
+
+                if(!extension_loaded('curl')) return $this->sendError($this->lang->mail->noCurl);
             }
 
-            $this->mail->send($this->post->to, $this->lang->mail->testSubject, $this->lang->mail->testContent, "", true);
-            if($this->mail->isError())
-            {
-                $this->view->error = $this->mail->getError();
-                return print($this->display());
-            }
-            return print(js::alert($this->lang->mail->successSended) . js::locate(inlink('test'), 'parent'));
+            $this->mail->send($this->post->to, $this->lang->mail->testSubject, $this->lang->mail->testContent, '', true);
+            if($this->mail->isError()) return $this->sendError($this->mail->getError());
+
+            return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
-        $this->view->users      = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchPairs();
+        $this->view->title = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
+        $this->view->users = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchPairs();
         $this->display();
     }
 
