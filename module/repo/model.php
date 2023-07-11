@@ -3026,4 +3026,22 @@ class repoModel extends model
         }
         return true;
     }
+
+    /**
+     * Check str in array.
+     *
+     * @param  string $str
+     * @param  array  $checkAry
+     * @access public
+     * @return bool
+     */
+    public function strposAry($str, $checkAry)
+    {
+        foreach($checkAry as $check)
+        {
+            if(mb_strpos($str, $check) !== false) return true;
+        }
+
+        return false;
+    }
 }
