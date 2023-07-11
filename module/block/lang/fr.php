@@ -238,7 +238,6 @@ $lang->block->modules['product']->availableBlocks['monthlyprogress']  = "{$lang-
 $lang->block->modules['product']->availableBlocks['list']             = $lang->productCommon . ' List';
 $lang->block->modules['product']->availableBlocks['plan']             = 'Plan';
 $lang->block->modules['product']->availableBlocks['release']          = 'Release';
-$lang->block->modules['product']->availableBlocks['bug']              = 'Bug';
 $lang->block->modules['product']->availableBlocks['story']            = 'Story';
 
 $lang->block->modules['execution'] = new stdclass();

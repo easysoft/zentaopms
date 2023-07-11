@@ -250,7 +250,6 @@ $lang->block->modules['product']->availableBlocks['monthlyprogress']  = "{$lang-
 $lang->block->modules['product']->availableBlocks['list']             = $lang->productCommon . '列表';
 $lang->block->modules['product']->availableBlocks['plan']             = "计划列表";
 $lang->block->modules['product']->availableBlocks['release']          = '发布列表';
-$lang->block->modules['product']->availableBlocks['bug']              = "测试列表";
 $lang->block->modules['product']->availableBlocks['story']            = "{$lang->SRCommon}列表";
 
 $lang->block->modules['execution'] = new stdclass();
