@@ -25,20 +25,32 @@ $getProductTabs = function(array $products, string $blockNavCode, bool $longBloc
 {
     $navTabs  = array();
     $selected = key($products);
+    $navTabs[] = li
+    (
+        set('class', 'nav-item overflow-hidden nav-prev rounded-full bg-white shadow-md h-6 w-6'),
+        a(icon(set('size', '24'), 'angle-left'))
+    );
     foreach($products as $product)
     {
         $navTabs[] = li
         (
-            set('class', 'nav-item'),
+            set('class', 'nav-item nav-switch w-full'),
             a
             (
-                set('class', 'ellipsis title ' . ($product->id == $selected ? 'active' : '')),
-                set('data-toggle', 'tab'),
+                set('class', 'ellipsis text-dark title ' . ($longBlock && $product->id == $selected ? ' active' : '')),
+                $longBlock ? set('data-toggle', 'tab') : null,
                 set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
-                set('href', "#tab3{$blockNavCode}Content{$product->id}"),
+                set('href', $longBlock ? "#tab3{$blockNavCode}Content{$product->id}" : helper::createLink('product', 'browse', "productID=$product->id")),
                 $product->name
 
             ),
+            !$longBlock ? a
+            (
+                set('class', 'hidden' . ($product->id == $selected ? ' active' : '')),
+                set('data-toggle', 'tab'),
+                set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
+                set('href', "#tab3{$blockNavCode}Content{$product->id}"),
+            ) : null,
             a
             (
                 set('class', 'link flex-1 text-right hidden'),
@@ -52,6 +64,11 @@ $getProductTabs = function(array $products, string $blockNavCode, bool $longBloc
             )
         );
     }
+    $navTabs[] = li
+    (
+        set('class', 'nav-item overflow-hidden nav-next rounded-full bg-white shadow-md h-6 w-6'),
+        a(icon(set('size', '24'), 'angle-right'))
+    );
     return $navTabs;
 };
 
@@ -73,12 +90,16 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
     $tabItems = array();
     foreach($products as $product)
     {
-        $product->addYesterday      = 12;
-        $product->addToday          = 6;
-        $product->resolvedYesterday = 36;
-        $product->resolvedToday     = 12;
-        $product->closedYesterday   = 24;
-        $product->closedToday       = 12;
+        $product->addYesterday      = rand(0, 100);
+        $product->addToday          = rand(0, 100);
+        $product->resolvedYesterday = rand(0, 100);
+        $product->resolvedToday     = rand(0, 100);
+        $product->closedYesterday   = rand(0, 100);
+        $product->closedToday       = rand(0, 100);
+        $product->closedBugRate     = rand(0, 100);
+        $product->totalBug          = rand(0, 100);
+        $product->closedBug         = rand(0, 100);
+        $product->activatedBug      = rand(0, 100);
         $progressMax = max($product->addYesterday, $product->addToday, $product->resolvedYesterday, $product->resolvedToday, $product->closedYesterday, $product->closedToday);
         $progressBlcok = array();
         foreach(array(array('addYesterday', 'addToday'), array('resolvedYesterday', 'resolvedToday'), array('closedYesterday', 'closedToday')) as $group)
@@ -169,7 +190,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                                 'radius'    => array('80%', '90%'),
                                                 'itemStyle' => array('borderRadius' => '40'),
                                                 'label'     => array('show' => false),
-                                                'data'      => array(55.7, 100-55.7)
+                                                'data'      => array($product->closedBugRate, 100 - $product->closedBugRate)
                                             )
                                         )
                                     )
@@ -177,7 +198,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                 div
                                 (
                                     set::class('pie-chart-title text-center'),
-                                    div(span(set::class('text-2xl font-bold'), '69.9%')),
+                                    div(span(set::class('text-2xl font-bold'), $product->closedBugRate)),
                                     div(span(set::class('text-sm text-gray'), $lang->block->qastatistic->closedBugRate, icon('help', set('data-toggle', 'tooltip'), set('id', 'storyTip'), set('class', 'text-light'))))
                                 )
                             ),
@@ -189,7 +210,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                     set('class', 'flex-1 text-center'),
                                     div
                                     (
-                                        span(!empty($product->total) ? $product->total : 0)
+                                        span(!empty($product->totalBug) ? $product->totalBug : 0)
                                     ),
                                     div
                                     (
@@ -205,7 +226,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                     set('class', 'flex-1 text-center'),
                                     div
                                     (
-                                        span(!empty($product->closed) ? $product->closed : 0)
+                                        span(!empty($product->closedBug) ? $product->closedBug : 0)
                                     ),
                                     div
                                     (
@@ -221,7 +242,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                     set('class', 'flex-1 text-center'),
                                     div
                                     (
-                                        span(!empty($product->activated) ? $product->activated : 0)
+                                        span(!empty($product->activatedBug) ? $product->activatedBug : 0)
                                     ),
                                     div
                                     (

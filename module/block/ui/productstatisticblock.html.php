@@ -58,7 +58,8 @@ $getProductTabs = function(array $products, string $blockNavCode, bool $longBloc
                 icon
                 (
                     set('class', 'rotate-90 text-primary'),
-                    'export'
+                    setStyle(array('--tw-rotate' => '270deg')),
+                    'import'
                 )
             )
         );
@@ -88,9 +89,31 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
     $tabItems = array();
     foreach($products as $product)
     {
+        $product->storyDeliveryRate = rand(0, 100);
+        $product->monthStories = array();
+        $product->monthStories[date('Y-m')] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+        $product->monthStories[date('Y-m', strtotime('first day of -1 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+        $product->monthStories[date('Y-m', strtotime('first day of -2 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+        $product->monthStories[date('Y-m', strtotime('first day of -3 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+        $product->monthStories[date('Y-m', strtotime('first day of -4 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+        $product->monthStories[date('Y-m', strtotime('first day of -5 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
+
+        $doneData   = array();
+        $openedData = array();
+        foreach($product->monthStories as $date => $monthStories)
+        {
+            if($date == date('Y-m'))
+            {
+                $product->monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH] = $monthStories;
+                unset($product->monthStories[$date]);
+            }
+            $doneData[]   = $monthStories['done'];
+            $openedData[] = $monthStories['opened'];
+        }
+
         $stories      = $product->stories;
         $monthStories = $product->monthStories;
-        $tabItems[] = div
+        $tabItems[]   = div
         (
             set('class', 'tab-pane h-full' . ($product->id == $selected ? ' active' : '')),
             set('id', "tab3{$blockNavID}Content{$product->id}"),
@@ -124,7 +147,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                                 'radius' => array('80%', '90%'),
                                                 'itemStyle' => array('borderRadius' => '40'),
                                                 'label'  => array('show' => false),
-                                                'data'   => array(69.9, 100-69.9)
+                                                'data'   => array($product->storyDeliveryRate, 100 - $product->storyDeliveryRate)
                                             )
                                         )
                                     )
@@ -132,7 +155,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                 div
                                 (
                                     set::class('pie-chart-title text-center'),
-                                    div(span(set::class('text-2xl font-bold'), '69.9%')),
+                                    div(span(set::class('text-2xl font-bold'), $product->storyDeliveryRate)),
                                     div(span(set::class('text-sm text-gray'), $lang->block->productstatistic->deliveryRate, icon('help', set('data-toggle', 'tooltip'), set('id', 'storyTip'), set('class', 'text-light'))))
                                 )
                             ),
@@ -234,12 +257,12 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                     span
                                     (
                                         set('class', 'border-r pr-2 text-sm text-gray'),
-                                        html(sprintf($lang->block->productstatistic->monthDone, !empty($monthStories[date('Y-m')]) ? $monthStories[date('Y-m')]->done : 0))
+                                        html(sprintf($lang->block->productstatistic->monthDone, !empty($monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['done']) ? $monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['done'] : 0))
                                     ),
                                     span
                                     (
                                         set('class', 'pl-2 text-sm text-gray'),
-                                        html(sprintf($lang->block->productstatistic->monthOpened, !empty($monthStories[date('Y-m')]) ? $monthStories[date('Y-m')]->opened : 0))
+                                        html(sprintf($lang->block->productstatistic->monthOpened, !empty($monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['opened']) ? $monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['opened'] : 0))
                                     )
                                 ),
                                 div
@@ -250,7 +273,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                         set::color(array('#2B80FF', '#17CE97')),
                                         set::grid(array('left' => '10px', 'top' => '30px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
                                         set::legend(array('show' => true, 'right' => '0')),
-                                        set::xAxis(array('type' => 'category', 'data' => array('1月', '2月', '3月', '4月', '5月', '本月'), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
+                                        set::xAxis(array('type' => 'category', 'data' => array_keys($monthStories), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
                                         set::yAxis(array('type' => 'value', 'name' => '个', 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
                                         set::series
                                         (
@@ -260,13 +283,13 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                                 (
                                                     'type' => 'line',
                                                     'name' => $lang->block->productstatistic->opened,
-                                                    'data' => array(23, 25, 27, 22, 24, 30)
+                                                    'data' => $openedData
                                                 ),
                                                 array
                                                 (
                                                     'type' => 'line',
                                                     'name' => $lang->block->productstatistic->done,
-                                                    'data' => array(20, 21, 24, 20, 21, 22)
+                                                    'data' => $doneData
                                                 )
                                             )
                                         )
