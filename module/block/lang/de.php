@@ -247,7 +247,7 @@ $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks['statistic'] = "{$lang->productCommon} Test Berichte";
 $lang->block->modules['qa']->availableBlocks['bug']       = 'Bug';
 $lang->block->modules['qa']->availableBlocks['case']      = 'Case';
-$lang->block->modules['qa']->availableBlocks['testtask']  = 'Build';
+$lang->block->modules['qa']->availableBlocks['testtask']  = 'Test Request';
 
 $lang->block->modules['todo'] = new stdclass();
 $lang->block->modules['todo']->availableBlocks['list'] = 'Todo';

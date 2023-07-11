@@ -11,13 +11,25 @@ declare(strict_types=1);
 
 namespace zin;
 
+if(!$longBlock)
+{
+    unset($config->block->testtask->dtable->fieldList['id']);
+    unset($config->block->testtask->dtable->fieldList['product']);
+    unset($config->block->testtask->dtable->fieldList['build']);
+}
+
 panel
 (
-    set('headingClass', 'border-b'),
+    setClass('p-0 scrumlist-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::title($block->title),
-    div
+    set::headingClass('border-b'),
+    dtable
     (
-        '正在开发中...'
+        set::height(318),
+        set::horzScrollbarPos('inside'),
+        set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
+        set::cols(array_values($config->block->testtask->dtable->fieldList)),
+        set::data(array_values($testtasks)),
     )
 );
 

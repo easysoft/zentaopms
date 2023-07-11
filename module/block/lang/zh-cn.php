@@ -264,7 +264,7 @@ $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks['statistic'] = "{$lang->productCommon}的测试统计";
 $lang->block->modules['qa']->availableBlocks['bug']       = 'Bug列表';
 $lang->block->modules['qa']->availableBlocks['case']      = '用例列表';
-$lang->block->modules['qa']->availableBlocks['testtask']  = '版本列表';
+$lang->block->modules['qa']->availableBlocks['testtask']  = '测试单列表';
 
 $lang->block->modules['todo'] = new stdclass();
 $lang->block->modules['todo']->availableBlocks['list'] = '待办列表';
