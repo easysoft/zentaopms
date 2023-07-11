@@ -133,17 +133,17 @@ $lang->block->titleList['dynamic']        = '最新动态';
 $lang->block->titleList['list']           = '我的待办';
 $lang->block->titleList['contribute']     = '我的贡献';
 $lang->block->titleList['scrumoverview']  = "{$lang->projectCommon}总览";
-$lang->block->titleList['scrumtest']      = '待测版本';
+$lang->block->titleList['scrumtest']      = '待测测试单';
 $lang->block->titleList['scrumlist']      = '迭代列表';
 $lang->block->titleList['sprint']         = '迭代总览';
 $lang->block->titleList['projectdynamic'] = '最新动态';
 $lang->block->titleList['bug']            = '指派给我的Bug';
 $lang->block->titleList['case']           = '指派给我的用例';
-$lang->block->titleList['testtask']       = '待测版本列表';
+$lang->block->titleList['testtask']       = '待测测试单列表';
 
 $lang->block->default['scrumproject'][] = array('title' => "{$lang->projectCommon}概况",   'module' => 'scrumproject', 'code' => 'scrumoverview',  'width' => '2');
 $lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon}列表", 'module' => 'scrumproject', 'code' => 'scrumlist',      'width' => '2', 'params' => array('type' => 'undone', 'count' => '20', 'orderBy' => 'id_desc'));
-$lang->block->default['scrumproject'][] = array('title' => '待测版本',                     'module' => 'scrumproject', 'code' => 'scrumtest',      'width' => '2', 'params' => array('type' => 'wait', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['scrumproject'][] = array('title' => '待测测试单',                   'module' => 'scrumproject', 'code' => 'scrumtest',      'width' => '2', 'params' => array('type' => 'wait', 'count' => '15', 'orderBy' => 'id_desc'));
 $lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon}总览", 'module' => 'scrumproject', 'code' => 'sprint',         'width' => '1');
 $lang->block->default['scrumproject'][] = array('title' => '最新动态',                     'module' => 'scrumproject', 'code' => 'projectdynamic', 'width' => '1');
 
@@ -167,7 +167,7 @@ $lang->block->default['product'][] = array('title' => "{$lang->productCommon}发
 $lang->block->default['product'][] = array('title' => "指派给我的{$lang->SRCommon}",            'module' => 'product', 'code' => 'story',            'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
 $lang->block->default['qa'][] = array('title' => "未关闭{$lang->productCommon}的测试统计", 'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'params' => array('type' => 'noclosed',   'count' => '20'));
-$lang->block->default['qa'][] = array('title' => '待测版本列表',                           'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => '待测测试单列表',                         'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
 $lang->block->default['qa'][] = array('title' => '指派给我的Bug',                          'module' => 'qa', 'code' => 'bug',       'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '15', 'orderBy' => 'id_desc'));
 $lang->block->default['qa'][] = array('title' => '指派给我的用例',                         'module' => 'qa', 'code' => 'case',      'width' => '1', 'params' => array('type' => 'assigntome', 'count' => '15', 'orderBy' => 'id_desc'));
 
@@ -229,7 +229,7 @@ $lang->block->modules['scrumproject'] = new stdclass();
 $lang->block->modules['scrumproject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon}总览";
 $lang->block->modules['scrumproject']->availableBlocks['scrumlist']      = $lang->executionCommon . '列表';
 $lang->block->modules['scrumproject']->availableBlocks['sprint']         = $lang->executionCommon . '总览';
-$lang->block->modules['scrumproject']->availableBlocks['scrumtest']      = '待测版本';
+$lang->block->modules['scrumproject']->availableBlocks['scrumtest']      = '待测测试单';
 $lang->block->modules['scrumproject']->availableBlocks['projectdynamic'] = '最新动态';
 
 $lang->block->modules['waterfallproject'] = new stdclass();
@@ -393,10 +393,10 @@ $lang->block->typeList->scrum['doing']    = '进行中';
 $lang->block->typeList->scrum['all']      = '全部';
 $lang->block->typeList->scrum['involved'] = '我参与';
 
-$lang->block->typeList->testtask['wait']    = '待测版本';
-$lang->block->typeList->testtask['doing']   = '测试中版本';
-$lang->block->typeList->testtask['blocked'] = '阻塞版本';
-$lang->block->typeList->testtask['done']    = '已测版本';
+$lang->block->typeList->testtask['wait']    = '待测测试单';
+$lang->block->typeList->testtask['doing']   = '测试中测试单';
+$lang->block->typeList->testtask['blocked'] = '阻塞测试单';
+$lang->block->typeList->testtask['done']    = '已测测试单';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->typeList->risk['all']      = '全部';

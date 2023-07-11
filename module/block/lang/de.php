@@ -132,19 +132,19 @@ $lang->block->titleList['dynamic']        = 'Dynamic';
 $lang->block->titleList['list']           = 'Todo List';
 $lang->block->titleList['contribute']     = 'Contribute';
 $lang->block->titleList['scrumoverview']  = "{$lang->projectCommon} Overview";
-$lang->block->titleList['scrumtest']      = 'Scrum Test';
+$lang->block->titleList['scrumtest']      = 'Scrum Test Request';
 $lang->block->titleList['scrumlist']      = 'Scrum List';
 $lang->block->titleList['sprint']         = 'Sprint';
 $lang->block->titleList['projectdynamic'] = "{$lang->projectCommon} Dynamic";
 $lang->block->titleList['bug']            = 'Bug';
 $lang->block->titleList['case']           = 'Case';
-$lang->block->titleList['testtask']       = 'Test Task';
+$lang->block->titleList['testtask']       = 'Test Request';
 
 $lang->block->default['scrumproject'][] = array('title' => "{$lang->projectCommon} Overview",   'module' => 'scrumproject', 'code' => 'scrumoverview',  'width' => '2', 'height' => '3', 'left' => '0', 'top' => '0');
-$lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon} List", 'module' => 'scrumproject', 'code' => 'scrumlist',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '3', 'params' => array('type' => 'undone', 'count' => '20', 'orderBy' => 'id_desc'));
-$lang->block->default['scrumproject'][] = array('title' => 'Test Version',                     'module' => 'scrumproject', 'code' => 'scrumtest',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '9', 'params' => array('type' => 'wait', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon} List",     'module' => 'scrumproject', 'code' => 'scrumlist',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '3', 'params' => array('type' => 'undone', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['scrumproject'][] = array('title' => 'Test Request',                      'module' => 'scrumproject', 'code' => 'scrumtest',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '9', 'params' => array('type' => 'wait', 'count' => '15', 'orderBy' => 'id_desc'));
 $lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon} Overview", 'module' => 'scrumproject', 'code' => 'sprint',         'width' => '1', 'height' => '3', 'left' => '2', 'top' => '0');
-$lang->block->default['scrumproject'][] = array('title' => 'Dynamic',                     'module' => 'scrumproject', 'code' => 'projectdynamic', 'width' => '1', 'height' => '8', 'left' => '2', 'top' => '3');
+$lang->block->default['scrumproject'][] = array('title' => 'Dynamic',                           'module' => 'scrumproject', 'code' => 'projectdynamic', 'width' => '1', 'height' => '8', 'left' => '2', 'top' => '3');
 
 $lang->block->default['kanbanproject']    = $lang->block->default['scrumproject'];
 $lang->block->default['agileplusproject'] = $lang->block->default['scrumproject'];
@@ -160,7 +160,7 @@ $lang->block->default['product'][] = array('title' => "{$lang->productCommon} Ov
 $lang->block->default['product'][] = array('title' => "Meine {$lang->SRCommon}",          'module' => 'product', 'code' => 'story',     'width' => '1', 'height' => '6', 'left' => '2', 'top' => '3', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
 $lang->block->default['qa'][] = array('title' => "Unclosed {$lang->productCommon} Test Report", 'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'height' => '5', 'left' => '0', 'top' => '0', 'params' => array('type' => 'noclosed',   'count' => '20'));
-$lang->block->default['qa'][] = array('title' => 'Ausstehende Builds',                          'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'height' => '6', 'left' => '0', 'top' => '5', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => 'Test Request',                                'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'height' => '6', 'left' => '0', 'top' => '5', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
 $lang->block->default['qa'][] = array('title' => 'My Bugs',                                     'module' => 'qa', 'code' => 'bug',       'width' => '1', 'height' => '6', 'left' => '2', 'top' => '0', 'params' => array('type' => 'assignedTo', 'count' => '15', 'orderBy' => 'id_desc'));
 $lang->block->default['qa'][] = array('title' => 'My Cases',                                    'module' => 'qa', 'code' => 'case',      'width' => '1', 'height' => '6', 'left' => '2', 'top' => '6', 'params' => array('type' => 'assigntome', 'count' => '15', 'orderBy' => 'id_desc'));
 
@@ -218,7 +218,7 @@ $lang->block->modules['scrumproject'] = new stdclass();
 $lang->block->modules['scrumproject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon} Overview";
 $lang->block->modules['scrumproject']->availableBlocks['scrumlist']      = $lang->executionCommon . ' List';
 $lang->block->modules['scrumproject']->availableBlocks['sprint']         = $lang->executionCommon . ' Overview';
-$lang->block->modules['scrumproject']->availableBlocks['scrumtest']      = 'Test Version';
+$lang->block->modules['scrumproject']->availableBlocks['scrumtest']      = 'Test Requests';
 $lang->block->modules['scrumproject']->availableBlocks['projectdynamic'] = 'Dynamics';
 
 $lang->block->modules['waterfallproject'] = new stdclass();
