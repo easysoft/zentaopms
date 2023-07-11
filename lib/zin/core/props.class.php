@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The props class file of zin of ZenTaoPMS.
  *

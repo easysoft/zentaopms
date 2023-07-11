@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 /**
  * The helper functions and classes for ZentaoPHP file of zin of ZenTaoPMS.
  *

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The block setter class file of zin lib.
  *

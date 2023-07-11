@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The common item element class file of zin of ZenTaoPMS.
  *

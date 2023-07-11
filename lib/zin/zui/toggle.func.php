@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The zui toggle function file of zin lib.
  *

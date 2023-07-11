@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The directive class file of zin lib.
  *

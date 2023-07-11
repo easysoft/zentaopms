@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The classlist file of zin of ZenTaoPMS.
  *

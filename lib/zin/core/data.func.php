@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The data function file of zin of ZenTaoPMS.
  *

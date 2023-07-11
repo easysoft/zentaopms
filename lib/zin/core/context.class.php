@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The context class file of zin of ZenTaoPMS.
  *
