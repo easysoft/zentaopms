@@ -50,13 +50,13 @@ class dropmenu extends wg
     {
         list($url, $text, $objectID, $cache, $tab, $module, $method, $extra, $id, $data) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'extra', 'id', 'data'));
 
-        $app = data('app');
+        $app  = data('app');
         $lang = data('lang');
 
-        if(empty($tab))      $tab    = $app->tab;
-        if(empty($module))   $module = $app->rawModule;
-        if(empty($method))   $method = $app->rawMethod;
-        if(empty($extra))    $extra  = '';
+        if(empty($tab))      $tab      = $app->tab;
+        if(empty($module))   $module   = $app->rawModule;
+        if(empty($method))   $method   = $app->rawMethod;
+        if(empty($extra))    $extra    = '';
         if(empty($objectID)) $objectID = data($tab . 'ID');
         if(empty($objectID))
         {
