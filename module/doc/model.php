@@ -1865,7 +1865,7 @@ class docModel extends model
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
 
-        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $testtaskIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
 
         $userView = $this->app->user->view->products;
         if($type == 'project') $userView = $this->app->user->view->projects;
@@ -1917,6 +1917,9 @@ class docModel extends model
             $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
 
+            $testtaskPairs = $this->dao->select('id')->from(TABLE_TESTTASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
+            if(!empty($testtaskPairs)) $testtaskIdList = implode(',', $testtaskPairs);
+
             $executionIdList = $executionIdList ? join(',', $executionIdList) : 0;
             $storyIDList     = $storyIDList ? join(',', $storyIDList) : 0;
         }
@@ -1932,6 +1935,9 @@ class docModel extends model
 
             $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($userView)->fetchPairs('id');
             if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
+
+            $testtaskPairs = $this->dao->select('id')->from(TABLE_TESTTASK)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($userView)->fetchPairs('id');
+            if(!empty($testtaskPairs)) $testtaskIdList = implode(',', $testtaskPairs);
         }
 
         $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
@@ -1956,6 +1962,7 @@ class docModel extends model
             ->beginIF($type == 'project' or $type == 'execution')
             ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
             ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
+            ->orWhere("(objectType = 'testtask' and objectID in ($testtaskIdList))")
             ->beginIF($storyIDList)->orWhere("((objectType = 'story' OR objectType = 'requirement') and objectID in ($storyIDList))")->fi()
             ->fi()
             ->markRight(1)
