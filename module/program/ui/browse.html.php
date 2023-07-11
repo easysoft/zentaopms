@@ -73,14 +73,6 @@ toolbar
 (
     item(set
     ([
-        'text'  => $lang->export,
-        'icon'  => 'export',
-        'class' => 'ghost',
-        'url'   => helper::createLink('program', 'export', "status={$status}&orderBy={$orderBy}"),
-        'data-toggle' => 'modal'
-    ])),
-    item(set
-    ([
         'text'  => $lang->program->createProject,
         'icon'  => 'plus',
         'class' => 'btn secondary',
