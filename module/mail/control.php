@@ -63,7 +63,7 @@ class mail extends control
             if($this->post->fromAddress == false) $error = sprintf($this->lang->error->notempty, $this->lang->mail->fromAddress);
             if(!validater::checkEmail($this->post->fromAddress)) $error .= '\n' . sprintf($this->lang->error->email, $this->lang->mail->fromAddress);
 
-            if($error) return print(js::alert($error));
+            if($error) return $this->sendError($error);
 
             $mailConfig = $this->mail->autoDetect($this->post->fromAddress);
             $mailConfig->fromAddress = $this->post->fromAddress;
@@ -143,29 +143,26 @@ class mail extends control
             $mailConfig->smtp->debug    = $this->post->debug;
             $mailConfig->smtp->charset  = $this->post->charset;
 
-            if(empty($mailConfig->fromName))
-            {
-                echo js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->fromName));
-                return print(js::locate($this->server->http_referer));
-            }
+            if(empty($mailConfig->fromName)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->mail->fromName));
 
             /* The mail need openssl and curl extension when secure is tls. */
             if($mailConfig->smtp->secure == 'tls')
             {
                 if(!extension_loaded('openssl'))
                 {
-                    echo js::alert($this->lang->mail->noOpenssl);
-                    return print(js::locate($this->server->http_referer));
+                    return $this->sendError($this->lang->mail->noOpenssl);
                 }
                 if(!extension_loaded('curl'))
                 {
-                    echo js::alert($this->lang->mail->noCurl);
-                    return print(js::locate($this->server->http_referer));
+                    return $this->sendError($this->lang->mail->noCurl);
                 }
             }
 
             $this->loadModel('setting')->setItems('system.mail', $mailConfig);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $mailExist = (int)$this->mail->mailExist();
+            return $this->send(array('result' => 'success', 'callback' => "window.mailTips({$mailExist});"));
 
             $this->session->set('mailConfig', '');
 
