@@ -367,16 +367,17 @@ else
                 ),
                 span
                 (
-                    setClass('pl-4 pt-2'),
-                    icon
+                    btn
                     (
-                        setClass('add-item'),
-                        'plus',
+                        setClass('add-item btn ghost'),
+                        on::click('addRow'),
+                        icon('plus'),
                     ),
-                    icon
+                    btn
                     (
-                        setClass('del-item ml-2'),
-                        'trash',
+                        setClass('del-item btn ghost'),
+                        on::click('removeRow'),
+                        icon('trash'),
                     ),
                 )
             )
@@ -409,18 +410,17 @@ else
                     set::readonly(empty($key))
                 ),
                 $canAdd ? span(
-                    setClass('pl-4 pt-2'),
-                    icon
+                    btn
                     (
-                        setClass('add-item'),
+                        setClass('add-item btn ghost'),
                         on::click('addRow'),
-                        'plus',
+                        icon('plus'),
                     ),
-                    icon
+                    btn
                     (
-                        setClass('del-item ml-2'),
+                        setClass('del-item btn ghost'),
                         on::click('removeRow'),
-                        'trash',
+                        icon ('trash'),
                     ),
                 ) : null,
             );

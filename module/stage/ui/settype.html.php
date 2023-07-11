@@ -42,13 +42,13 @@ div
             setClass('pl-2 flex self-center'),
             btn
             (
-                setClass('btn btn-link add-item'),
+                setClass('btn ghost add-item'),
                 on::click('addRow'),
                 icon('plus')
             ),
             btn
             (
-                setClass('btn btn-link del-item'),
+                setClass('btn ghost del-item'),
                 on::click('removeRow'),
                 icon('trash')
             ),
@@ -81,13 +81,13 @@ foreach($fieldList as $key => $value)
             setClass('pl-2 flex self-center'),
             btn
             (
-                setClass('btn btn-link add-item'),
+                setClass('btn ghost add-item'),
                 on::click('addRow'),
                 icon('plus')
             ),
             btn
             (
-                setClass('btn btn-link del-item'),
+                setClass('btn ghost del-item'),
                 on::click('removeRow'),
                 icon('trash')
             ),
