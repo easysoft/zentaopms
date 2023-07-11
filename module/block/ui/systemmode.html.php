@@ -63,7 +63,7 @@ function printSystemMode()
                             set::name('program'),
                             set::control(array
                             (
-                                'type'  => 'select',
+                                'type'  => 'picker',
                                 'items' => $config->programs
                             ))
                         )

@@ -50,47 +50,47 @@ $config->block->params['default']->count['control'] = 'input';
 $config->block->params['task'] = new stdclass();
 $config->block->params['task']->type['name']       = $lang->block->type;
 $config->block->params['task']->type['options']    = $lang->block->typeList->task;
-$config->block->params['task']->type['control']    = 'select';
+$config->block->params['task']->type['control']    = 'picker';
 $config->block->params['task']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['task']->orderBy['default'] = 'id_desc';
 $config->block->params['task']->orderBy['options'] = $lang->block->orderByList->task;
-$config->block->params['task']->orderBy['control'] = 'select';
+$config->block->params['task']->orderBy['control'] = 'picker';
 $config->block->params['task']->count = $config->block->params['default']->count;
 
 $config->block->params['bug'] = new stdclass();
 $config->block->params['bug']->type['name']       = $lang->block->type;
 $config->block->params['bug']->type['options']    = $lang->block->typeList->bug;
-$config->block->params['bug']->type['control']    = 'select';
+$config->block->params['bug']->type['control']    = 'picker';
 $config->block->params['bug']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['bug']->orderBy['default'] = 'id_desc';
 $config->block->params['bug']->orderBy['options'] = $lang->block->orderByList->bug;
-$config->block->params['bug']->orderBy['control'] = 'select';
+$config->block->params['bug']->orderBy['control'] = 'picker';
 $config->block->params['bug']->count = $config->block->params['default']->count;
 
 $config->block->params['case'] = new stdclass();
 $config->block->params['case']->type['name']       = $lang->block->type;
 $config->block->params['case']->type['options']    = $lang->block->typeList->case;
-$config->block->params['case']->type['control']    = 'select';
+$config->block->params['case']->type['control']    = 'picker';
 $config->block->params['case']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['case']->orderBy['default'] = 'id_desc';
 $config->block->params['case']->orderBy['options'] = $lang->block->orderByList->case;
-$config->block->params['case']->orderBy['control'] = 'select';
+$config->block->params['case']->orderBy['control'] = 'picker';
 $config->block->params['case']->count = $config->block->params['default']->count;
 
 $config->block->params['testtask'] = new stdclass();
 $config->block->params['testtask']->type['name']    = $lang->block->type;
 $config->block->params['testtask']->type['options'] = $lang->block->typeList->testtask;
-$config->block->params['testtask']->type['control'] = 'select';
+$config->block->params['testtask']->type['control'] = 'picker';
 $config->block->params['testtask']->count = $config->block->params['default']->count;
 
 $config->block->params['story'] = new stdclass();
 $config->block->params['story']->type['name']       = $lang->block->type;
 $config->block->params['story']->type['options']    = $lang->block->typeList->story;
-$config->block->params['story']->type['control']    = 'select';
+$config->block->params['story']->type['control']    = 'picker';
 $config->block->params['story']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['story']->orderBy['default'] = 'id_desc';
 $config->block->params['story']->orderBy['options'] = $lang->block->orderByList->story;
-$config->block->params['story']->orderBy['control'] = 'select';
+$config->block->params['story']->orderBy['control'] = 'picker';
 $config->block->params['story']->count = $config->block->params['default']->count;
 
 $config->block->params['plan'] = $config->block->params['default'];
@@ -100,19 +100,19 @@ $config->block->params['release'] = $config->block->params['default'];
 $config->block->params['project'] = new stdclass();
 $config->block->params['project']->type['name']       = $lang->block->type;
 $config->block->params['project']->type['options']    = $lang->block->typeList->projectAll;
-$config->block->params['project']->type['control']    = 'select';
+$config->block->params['project']->type['control']    = 'picker';
 $config->block->params['project']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['project']->orderBy['options'] = $lang->block->orderByList->product;
-$config->block->params['project']->orderBy['control'] = 'select';
+$config->block->params['project']->orderBy['control'] = 'picker';
 $config->block->params['project']->count = $config->block->params['default']->count;
 
 $config->block->params['projectteam'] = new stdclass();
 $config->block->params['projectteam']->type['name']       = $lang->block->type;
 $config->block->params['projectteam']->type['options']    = $lang->block->typeList->projectAll;
-$config->block->params['projectteam']->type['control']    = 'select';
+$config->block->params['projectteam']->type['control']    = 'picker';
 $config->block->params['projectteam']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['projectteam']->orderBy['options'] = $lang->block->orderByList->project;
-$config->block->params['projectteam']->orderBy['control'] = 'select';
+$config->block->params['projectteam']->orderBy['control'] = 'picker';
 $config->block->params['projectteam']->count = $config->block->params['default']->count;
 
 $config->block->params['build'] = $config->block->params['default'];
@@ -120,85 +120,85 @@ $config->block->params['build'] = $config->block->params['default'];
 $config->block->params['product'] = new stdclass();
 $config->block->params['product']->type['name']    = $lang->block->type;
 $config->block->params['product']->type['options'] = $lang->block->typeList->product;
-$config->block->params['product']->type['control'] = 'select';
+$config->block->params['product']->type['control'] = 'picker';
 $config->block->params['product']->count = $config->block->params['default']->count;
 
 $config->block->params['productstatistic'] = new stdclass();
 $config->block->params['productstatistic']->type['name']    = $lang->block->type;
 $config->block->params['productstatistic']->type['options'] = $lang->block->typeList->product;
-$config->block->params['productstatistic']->type['control'] = 'select';
+$config->block->params['productstatistic']->type['control'] = 'picker';
 $config->block->params['productstatistic']->count = $config->block->params['default']->count;
 
 $config->block->params['projectstatistic'] = new stdclass();
 $config->block->params['projectstatistic']->type['name']    = $lang->block->type;
 $config->block->params['projectstatistic']->type['options'] = $lang->block->typeList->project;
-$config->block->params['projectstatistic']->type['control'] = 'select';
+$config->block->params['projectstatistic']->type['control'] = 'picker';
 $config->block->params['projectstatistic']->count = $config->block->params['default']->count;
 
 $config->block->params['bugstatistic'] = new stdclass();
 $config->block->params['bugstatistic']->type['name']    = $lang->block->type;
 $config->block->params['bugstatistic']->type['options'] = $lang->block->typeList->project;
-$config->block->params['bugstatistic']->type['control'] = 'select';
+$config->block->params['bugstatistic']->type['control'] = 'picker';
 $config->block->params['bugstatistic']->count = $config->block->params['default']->count;
 
 $config->block->params['releasestatistic'] = new stdclass();
 $config->block->params['releasestatistic']->type['name']    = $lang->block->type;
 $config->block->params['releasestatistic']->type['options'] = $lang->block->typeList->project;
-$config->block->params['releasestatistic']->type['control'] = 'select';
+$config->block->params['releasestatistic']->type['control'] = 'picker';
 $config->block->params['releasestatistic']->count = $config->block->params['default']->count;
 
 $config->block->params['executionstatistic'] = new stdclass();
 $config->block->params['executionstatistic']->type['name']    = $lang->block->type;
 $config->block->params['executionstatistic']->type['options'] = $lang->block->typeList->execution;
-$config->block->params['executionstatistic']->type['control'] = 'select';
+$config->block->params['executionstatistic']->type['control'] = 'picker';
 $config->block->params['executionstatistic']->count = $config->block->params['default']->count;
 
 $config->block->params['qastatistic'] = new stdclass();
 $config->block->params['qastatistic']->type['name']    = $lang->block->type;
 $config->block->params['qastatistic']->type['options'] = $lang->block->typeList->product;
-$config->block->params['qastatistic']->type['control'] = 'select';
+$config->block->params['qastatistic']->type['control'] = 'picker';
 $config->block->params['qastatistic']->count = $config->block->params['default']->count;
 
 $config->block->params['waterfallissue'] = new stdclass();
 $config->block->params['waterfallissue']->type['name']       = $lang->block->type;
 $config->block->params['waterfallissue']->type['options']    = $lang->block->typeList->issue;
-$config->block->params['waterfallissue']->type['control']    = 'select';
+$config->block->params['waterfallissue']->type['control']    = 'picker';
 $config->block->params['waterfallissue']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['waterfallissue']->orderBy['options'] = $lang->block->orderByList->product;
-$config->block->params['waterfallissue']->orderBy['control'] = 'select';
+$config->block->params['waterfallissue']->orderBy['control'] = 'picker';
 $config->block->params['waterfallissue']->count = $config->block->params['default']->count;
 
 $config->block->params['waterfallrisk'] = new stdclass();
 $config->block->params['waterfallrisk']->type['name']       = $lang->block->type;
 $config->block->params['waterfallrisk']->type['options']    = $lang->block->typeList->risk;
-$config->block->params['waterfallrisk']->type['control']    = 'select';
+$config->block->params['waterfallrisk']->type['control']    = 'picker';
 $config->block->params['waterfallrisk']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['waterfallrisk']->orderBy['options'] = $lang->block->orderByList->product;
-$config->block->params['waterfallrisk']->orderBy['control'] = 'select';
+$config->block->params['waterfallrisk']->orderBy['control'] = 'picker';
 $config->block->params['waterfallrisk']->count = $config->block->params['default']->count;
 
 $config->block->params['scrumissue'] = new stdclass();
 $config->block->params['scrumissue']->type['name']       = $lang->block->type;
 $config->block->params['scrumissue']->type['options']    = $lang->block->typeList->issue;
-$config->block->params['scrumissue']->type['control']    = 'select';
+$config->block->params['scrumissue']->type['control']    = 'picker';
 $config->block->params['scrumissue']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['scrumissue']->orderBy['options'] = $lang->block->orderByList->product;
-$config->block->params['scrumissue']->orderBy['control'] = 'select';
+$config->block->params['scrumissue']->orderBy['control'] = 'picker';
 $config->block->params['scrumissue']->count = $config->block->params['default']->count;
 
 $config->block->params['scrumrisk'] = new stdclass();
 $config->block->params['scrumrisk']->type['name']       = $lang->block->type;
 $config->block->params['scrumrisk']->type['options']    = $lang->block->typeList->risk;
-$config->block->params['scrumrisk']->type['control']    = 'select';
+$config->block->params['scrumrisk']->type['control']    = 'picker';
 $config->block->params['scrumrisk']->orderBy['name']    = $lang->block->orderBy;
 $config->block->params['scrumrisk']->orderBy['options'] = $lang->block->orderByList->product;
-$config->block->params['scrumrisk']->orderBy['control'] = 'select';
+$config->block->params['scrumrisk']->orderBy['control'] = 'picker';
 $config->block->params['scrumrisk']->count = $config->block->params['default']->count;
 
 $config->block->params['execution'] = new stdclass();
 $config->block->params['execution']->type['name']    = $lang->block->type;
 $config->block->params['execution']->type['options'] = $lang->block->typeList->execution;
-$config->block->params['execution']->type['control'] = 'select';
+$config->block->params['execution']->type['control'] = 'picker';
 $config->block->params['execution']->count = $config->block->params['default']->count;
 
 $config->block->params['assigntome'] = new stdclass();
@@ -250,13 +250,13 @@ $config->block->params['assigntome']->count = $config->block->params['default']-
 $config->block->params['scrumtest'] = new stdclass();
 $config->block->params['scrumtest']->type['name']    = $lang->block->type;
 $config->block->params['scrumtest']->type['options'] = $lang->block->typeList->testtask;
-$config->block->params['scrumtest']->type['control'] = 'select';
+$config->block->params['scrumtest']->type['control'] = 'picker';
 $config->block->params['scrumtest']->count = $config->block->params['default']->count;
 
 $config->block->params['scrumlist'] = new stdclass();
 $config->block->params['scrumlist']->type['name']    = $lang->block->type;
 $config->block->params['scrumlist']->type['options'] = $lang->block->typeList->scrum;
-$config->block->params['scrumlist']->type['control'] = 'select';
+$config->block->params['scrumlist']->type['control'] = 'picker';
 $config->block->params['scrumlist']->count = $config->block->params['default']->count;
 
 $config->block->params['scrumProduct'] = $config->block->params['default']->count;

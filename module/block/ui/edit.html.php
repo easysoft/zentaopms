@@ -34,7 +34,7 @@ foreach($params as $key => $row)
                 'type'     => $row['control'],
                 'items'    => isset($row['options']) ? $row['options'] : null,
             )),
-            $row['control'] == 'select' ? set::required(true) : '',
+            $row['control'] == 'picker' ? set::required(true) : '',
         ),
     );
 }
@@ -111,7 +111,7 @@ div
                     (
                         $showCodes ? array
                         (
-                            'type'  => 'select',
+                            'type'  => 'picker',
                             'items' => array('') + $codes
                         ) : 'input'
                     )
@@ -137,7 +137,7 @@ div
                     formGroup
                     (
                         set::label($lang->block->width),
-                        select
+                        picker
                         (
                             set::name('width'),
                             set::items($widthOptions),
