@@ -30,7 +30,7 @@ class count_of_annual_created_release_in_product extends baseMetric
 
     public $result = array();
 
-    //public funtion getStatement($dao)
+    //public function getStatement($dao)
     //{
     //}
 

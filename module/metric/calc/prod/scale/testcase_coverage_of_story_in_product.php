@@ -32,7 +32,7 @@ class testcase_coverage_of_story_in_product extends baseMetric
 
     public $result = array();
 
-    //public funtion getStatement($dao)
+    //public function getStatement($dao)
     //{
     //}
 

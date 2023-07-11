@@ -29,7 +29,7 @@ class count_of_released_bug_in_product extends baseMetric
 
     public $result = array();
 
-    //public funtion getStatement($dao)
+    //public function getStatement($dao)
     //{
     //}
 

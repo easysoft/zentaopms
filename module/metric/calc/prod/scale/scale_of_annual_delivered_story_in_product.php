@@ -29,7 +29,7 @@ class scale_of_annual_delivered_story_in_product extends baseMetric
 
     public $result = array();
 
-    //public funtion getStatement($dao)
+    //public function getStatement($dao)
     //{
     //}
 

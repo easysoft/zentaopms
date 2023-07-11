@@ -31,7 +31,7 @@ class bug_concentration_of_developed_story_in_product extends baseMetric
 
     public $result = array();
 
-    //public funtion getStatement($dao)
+    //public function getStatement($dao)
     //{
     //}
 
