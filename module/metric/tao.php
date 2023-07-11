@@ -49,6 +49,17 @@ class metricTao extends metricModel
     }
 
     /**
+     * Get path of base calculator class.
+     *
+     * @access public
+     * @return string
+     */
+    public function getBaseCalcPath()
+    {
+        return $this->app->getModuleRoot() . 'metric' . DS . 'calc.class.php';
+    }
+
+    /**
      * 根据选项过滤数据。
      * Filter rows by options.
      *
@@ -59,6 +70,8 @@ class metricTao extends metricModel
      */
     protected function filterByOptions($rows, $options)
     {
+        if(empty($options)) return $rows;
+
         $rows = (array)$rows;
         $options = $this->expandOptions($options);
 

@@ -18,7 +18,7 @@ class baseCalc
      * @var int
      * @access public
      */
-    public $dataset;
+    public $dataset = null;
 
     /**
      * 数据库连接。
@@ -36,7 +36,7 @@ class baseCalc
      * @var int
      * @access public
      */
-    public $fieldList;
+    public $fieldList = array();
 
     /**
      * 数据主表。
@@ -72,7 +72,7 @@ class baseCalc
      * @var array|float
      * @access public
      */
-    public $result;
+    public $result = array();
 
     /**
      * 设置DAO 。
