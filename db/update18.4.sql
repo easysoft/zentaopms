@@ -49,3 +49,4 @@ UPDATE `zt_im_userdevice`         SET `lastLogout`     = NULL WHERE `lastLogout`
 CREATE INDEX `project` ON `zt_project` (`project`);
 
 UPDATE `zt_privlang` SET `value`='删除风险' WHERE `objectID`=197 AND `objectType`='manager';
+UPDATE `zt_auditcl` SET `deleted` = '0' WHERE `deleted` = '';
