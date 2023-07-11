@@ -23,7 +23,7 @@
 
 <?php include 'promptdesignprogressbar.html.php';?>
 <div id='mainContent' class='main-content' style='height: calc(100vh - 120px);'>
-  <form id="mainForm" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
+  <form id="mainForm" onsubmit="return validateForm();" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
     <div class='center-wrapper'>
       <div class='center-content'>
         <div id='info-form'>
@@ -50,16 +50,27 @@
 </div>
 
 <script>
+function validateForm()
+{
+  let pass = true;
+  const name = document.getElementById('name')?.value;
+  if(!name)
+  {
+    pass = false;
+    alert('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->name);?>');
+  }
+  return pass;
+}
 $(function() {
     $('input[name="name"]').on('input', function()
     {
         if($(this).val().length > 0)
         {
-            $('button[type="submit"]').removeAttr('disabled');
+          $('#submit').removeAttr('disabled');
         }
         else
         {
-            $('button[type="submit"]').attr('disabled', 'disabled');
+          $('#submit').attr('disabled', 'disabled');
         }
     });
     $('input[name="name"]').trigger('input');

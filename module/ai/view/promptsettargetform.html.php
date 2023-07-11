@@ -44,7 +44,7 @@
 
 <?php include 'promptdesignprogressbar.html.php';?>
 <div id='mainContent' class='main-content' style='height: calc(100vh - 120px);'>
-  <form id="mainForm" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
+  <form id="mainForm" onsubmit="return validateForm();" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
     <div class='center-wrapper'>
       <div class='center-content'>
         <div id='select-form'>
@@ -109,6 +109,24 @@
 </div>
 
 <script>
+function validateForm()
+{
+  let pass = false;
+  const radios = document.getElementsByName('targetForm');
+  for(let radio of radios)
+  {
+    if(radio.checked)
+    {
+      pass = true;
+      break;
+    }
+  }
+  if(!pass)
+  {
+    alert('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->selectTargetForm);?>');
+  }
+  return pass;
+}
 $(function()
 {
   $('.target-form-group .option label').click(function()
