@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的Bug总数。
- * .
+ * Count of bug in product.
  *
  * 范围：prod
  * 对象：bug
@@ -9,8 +9,8 @@
  * 度量名称：按产品统计的Bug总数
  * 单位：个
  * 描述：产品中Bug的个数求和
-过滤已删除的Bug
-过滤已删除的产品
+ *       过滤已删除的Bug
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +23,35 @@
  */
 class count_of_bug_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getBugs';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product');
 
     public $result = array();
 
-    //public function getStatement($dao)
-    //{
-    //}
+    public function calculate($data)
+    {
+        $product = $data->product;
+        if(!isset($this->result[$product])) $this->result[$product] = 0;
 
-    //public function calculate($data)
-    //{
-    //}
+        $this->result[$product] += 1;
+    }
 
-    //public function getResult()
-    //{
-    //}
+    public function getResult($options = null)
+    {
+        if(!empty($options) && isset($options['product']))
+        {
+            $productID = $options['product'];
+            if(isset($this->result[$productID])) return $this->result[$productID];
+            return false;
+        }
+
+        $records = array();
+        foreach($this->result as $product => $value)
+        {
+            $records[] = array('product' => $product, 'value' => $value);
+        }
+
+        return $records;
+    }
 }
