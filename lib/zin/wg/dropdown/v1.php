@@ -16,7 +16,7 @@ class dropdown extends wg
         'subMenuTrigger?: string',
         'arrow?: string',
         'trigger?: string',
-        'menuProps?: array',
+        'menu?: array',
         'target?: string',
         'id?: string',
         'menuClass?: string',
@@ -33,7 +33,7 @@ class dropdown extends wg
 
     protected function build(): array
     {
-        list($items, $placement, $strategy, $offset, $flip, $subMenuTrigger, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'subMenuTrigger', 'arrow', 'trigger', 'menuProps', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu'));
+        list($items, $placement, $strategy, $offset, $flip, $subMenuTrigger, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'subMenuTrigger', 'arrow', 'trigger', 'menu', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu'));
 
         $triggerBlock = $this->block('trigger');
         $menu         = $this->block('menu');

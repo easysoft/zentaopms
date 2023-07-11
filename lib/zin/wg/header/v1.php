@@ -113,7 +113,7 @@ class header extends wg
             set::id('versionMenu'),
             set::trigger('hover'),
             set::placement('bottom'),
-            set::menuProps(array('style' => array('color' => 'var(--color-fore)'))),
+            set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::arrow(true),
             set::items($items)
         );
@@ -263,7 +263,7 @@ class header extends wg
             set::id('userMenu'),
             set::trigger('hover'),
             set::placement('bottom'),
-            set::menuProps(array('style' => array('color' => 'var(--color-fore)'))),
+            set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::strategy('fixed'),
             set::arrow(true),
             set::items($items)
@@ -428,7 +428,7 @@ class header extends wg
             ),
 
             set::id('quickAddMenu'),
-            set::menuProps(array('style' => array('color' => 'var(--color-fore)'))),
+            set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::trigger('hover'),
             set::placement('bottom'),
             set::strategy('fixed'),

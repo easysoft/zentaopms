@@ -713,7 +713,7 @@ function menu(): menu
  * ?string subMenuTrigger
  * ?string arrow
  * ?string trigger
- * ?array  menuProps
+ * ?array  menu
  * ?string target
  * ?string id
  * ?string menuClass

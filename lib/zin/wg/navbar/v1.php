@@ -60,7 +60,7 @@ class navbar extends wg
             'items' => $dropItems,
             'text' => $lang->more,
             'trigger' => 'hover',
-            'menuProps' => array('style' => array('max-width' => '300px'))
+            'menu' => array('style' => array('max-width' => '300px'))
         );
     }
 
@@ -100,7 +100,7 @@ class navbar extends wg
             'items' => $dropItems,
             'text' => $lang->app->common,
             'trigger' => 'hover',
-            'menuProps' => array('style' => array('max-width' => '300px'))
+            'menu' => array('style' => array('max-width' => '300px'))
         );
     }
 
