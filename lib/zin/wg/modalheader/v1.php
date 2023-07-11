@@ -5,6 +5,7 @@ namespace zin;
 class modalHeader extends wg
 {
     protected static array $defineProps = array(
+        'inModal?: bool',
         'title?: string',
         'titleClass?: string',
         'entityText?: string',
@@ -35,7 +36,8 @@ class modalHeader extends wg
 
     protected function build(): wg|array
     {
-        list($title, $entityText, $entityID) = $this->prop(array('title', 'entityText', 'entityID'));
+        list($title, $entityText, $entityID, $inModal) = $this->prop(array('title', 'entityText', 'entityID', 'inModal'));
+        if(empty($inModal)) $inModal = false;
 
         $header = h::div
         (
@@ -57,7 +59,7 @@ class modalHeader extends wg
             $this->block('suffix')
         );
 
-        if(isAjaxRequest('modal')) return $header;
+        if(isAjaxRequest('modal') || $inModal) return $header;
 
         return h::div
         (

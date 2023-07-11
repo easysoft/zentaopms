@@ -29,21 +29,14 @@ $(document).on('click', '#batchUnlinkStory', function(e)
     let batchUnlinkStoryURL = $.createLink('projectstory', 'batchUnlinkStory', 'projectID=' + projectID + '&stories=' + encodeURIComponent(checkedList.join(',')));
     $.get(batchUnlinkStoryURL, function(data)
     {
-        var jsonData = {};
-        if(typeof data == 'string' && data.indexOf('{') == 0) jsonData = JSON.parse(data);
+         try
+         {
+             data = JSON.parse(data);
+             if(typeof data.result != 'undefined') return loadCurrentPage();
+         }
+         catch(error){}
 
-        setTimeout(function()
-        {
-            if(typeof jsonData.result != 'undefined')
-            {
-                zui.Modal.hide('#' + $('.modal.show.in').attr('id'));
-                return loadCurrentPage();
-            }
-
-            $('.modal.show.in .modal-dialog').html(data);
-            $('.modal.show.in .modal-dialog .modal-dialog .modal-header .modal-header').unwrap();
-            $('.modal.show.in .modal-dialog .modal-dialog').unwrap();
-            $('.modal.show.in .modal-dialog .modal-header').attr('class', '').attr('class', 'modal-header');
-        }, 100);
+         zui.Modal.open({id: 'batchUnlinkStoryBox'});
+         $('#batchUnlinkStoryBox').html(data);
     });
 });

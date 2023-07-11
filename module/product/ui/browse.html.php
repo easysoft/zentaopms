@@ -199,7 +199,7 @@ $footToolbar = $canBatchAction ? array('items' => array
         array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-page' => 'batch', 'data-formaction' => $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType")),
         array('caret' => 'up', 'className' => 'size-sm secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     )),
-    !$canBatchUnlink ? null : array('text' => $lang->story->unlink, 'className' => 'secondary', 'id' => 'batchUnlinkStory', 'data-toggle' => 'modal'),
+    !$canBatchUnlink ? null : array('text' => $lang->story->unlink, 'className' => 'secondary', 'id' => 'batchUnlinkStory'),
     array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? '' : 'hidden', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? '' : 'hidden', 'url' => '#navPlan', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
@@ -291,5 +291,7 @@ dtable
     set::footToolbar($footToolbar),
     set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
 );
+
+modal(set::id('#batchUnlinkStoryBox'));
 
 render();

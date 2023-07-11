@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader(set::titleClass('text-danger font-bold'), set::title($lang->projectstory->batchUnlinkTip));
+modalHeader(set::titleClass('text-danger font-bold'), set::inModal(true), set::title($lang->projectstory->batchUnlinkTip));
 
 $tableTR = array();
 foreach($executionStories as $story)
