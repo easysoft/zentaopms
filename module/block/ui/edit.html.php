@@ -111,8 +111,9 @@ div
                     (
                         $showCodes ? array
                         (
-                            'type'  => 'picker',
-                            'items' => array('') + $codes
+                            'type'         => 'picker',
+                            'defaultValue' => $code,
+                            'items'        => array('') + $codes
                         ) : 'input'
                     )
                 )
@@ -142,6 +143,7 @@ div
                             set::name('width'),
                             set::items($widthOptions),
                             set::value($code == $block->code ? $block->width : ''),
+                            set::defaultValue($code == $block->code ? $block->width : ''),
                             set::required(true),
                         ),
                     )
