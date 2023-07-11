@@ -1539,7 +1539,14 @@ class pivotModel extends model
                 }
                 else
                 {
-                    $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                    if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
+                    {
+                        $columnSQL = "$stat(0) as `$uuName`";
+                    }
+                    else
+                    {
+                        $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                    }
                 }
 
                 if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";

@@ -214,7 +214,7 @@ class storyModel extends model
      * @param  string $from
      * @param  string $extra
      * @access public
-     * @return int|bool the id of the created story or false when error.
+     * @return bool|array
      */
     public function create($executionID = 0, $bugID = 0, $from = '', $extra = '')
     {
@@ -252,7 +252,11 @@ class storyModel extends model
 
         /* Check repeat story. */
         $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
-        if(isset($result['stop']) and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        if(isset($result['stop']) and $result['stop'])
+        {
+            dao::$errors[] = $this->lang->story->title . $this->lang->story->reasonList['duplicate'] . ',' . $this->lang->story->id . $result['duplicate'];
+            return false;
+        }
         if($story->status != 'draft' and $this->checkForceReview()) $story->status = 'reviewing';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
 
