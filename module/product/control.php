@@ -700,7 +700,7 @@ class product extends control
             return $this->send($response);
         }
 
-        $this->view->title    = $this->lang->product->line;
+        $this->view->title    = $this->lang->product->manageLine;
         $this->view->programs = $this->loadModel('program')->getTopPairs('', 'withDeleted');
         $this->view->lines    = $this->product->getLines();
         $this->view->fields   = $this->config->product->form->manageLine;
