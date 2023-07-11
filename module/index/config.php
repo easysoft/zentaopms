@@ -62,7 +62,6 @@ $config->index->oldPages[] = 'dev-api';
 $config->index->oldPages[] = 'dev-db';
 $config->index->oldPages[] = 'dev-langitem';
 $config->index->oldPages[] = 'dev-editor';
-$config->index->oldPages[] = 'stage-settype';
 $config->index->oldPages[] = 'action-trash';
 $config->index->oldPages[] = 'dept-browse';
 $config->index->oldPages[] = 'story-report';
