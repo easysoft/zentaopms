@@ -25,18 +25,6 @@ class metricTao extends metricModel
     }
 
     /**
-     * 获取度量项基类文件的路径。
-     * Get path of base calc class file.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function getBaseCalcPath()
-    {
-        return $this->app->getModuleRoot() . DS . 'metric' . DS . 'calc.class.php';
-    }
-
-    /**
      * 获取数据集文件的路径
      * Get path of calculator data set.
      *
@@ -49,12 +37,13 @@ class metricTao extends metricModel
     }
 
     /**
+     * 获取度量项基类文件的路径。
      * Get path of base calculator class.
      *
-     * @access public
+     * @access protected
      * @return string
      */
-    public function getBaseCalcPath()
+    protected function getBaseCalcPath()
     {
         return $this->app->getModuleRoot() . 'metric' . DS . 'calc.class.php';
     }
