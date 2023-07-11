@@ -24,7 +24,7 @@ formPanel
             )
         )
     ),
-    set::url(inlink('save')),
+    set::url(inlink('test')),
     formGroup(
         set::width('1/2'),
         set::label(''),
