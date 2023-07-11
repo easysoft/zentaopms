@@ -21,7 +21,7 @@ $lang->ai->nextStep  = '下一步';
 $lang->ai->goTesting = '去调试';
 
 $lang->ai->validate = new stdclass();
-$lang->ai->validate->noEmpty = '%s cannot be empty.';
+$lang->ai->validate->noEmpty = '%s不能为空。';
 
 $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = '提词';

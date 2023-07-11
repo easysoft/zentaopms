@@ -21,7 +21,7 @@ $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';
 
 $lang->ai->validate = new stdclass();
-$lang->ai->validate->noEmpty = '%s不能为空。';
+$lang->ai->validate->noEmpty = '%s cannot be empty.';
 
 $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = 'Prompt';
