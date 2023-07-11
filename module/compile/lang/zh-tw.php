@@ -16,6 +16,7 @@ $lang->compile->atTime      = '執行時間';
 $lang->compile->testtask    = '測試單';
 $lang->compile->tag         = '標籤';
 $lang->compile->times       = '次數';
+$lang->compile->repo        = 'Repo';
 $lang->compile->createdBy   = '由誰創建';
 $lang->compile->createdDate = '創建日期';
 $lang->compile->updateDate  = '編輯日期';

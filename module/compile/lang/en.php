@@ -17,6 +17,7 @@ $lang->compile->atTime      = 'Execution Time';
 $lang->compile->testtask    = 'Testtask';
 $lang->compile->tag         = 'Tag';
 $lang->compile->times       = 'Times';
+$lang->compile->repo        = 'Repo';
 $lang->compile->createdBy   = 'Created By';
 $lang->compile->createdDate = 'Created Date';
 $lang->compile->updateDate  = 'Update Date';
