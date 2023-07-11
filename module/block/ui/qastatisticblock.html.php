@@ -100,6 +100,27 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
         $product->totalBug          = rand(0, 100);
         $product->closedBug         = rand(0, 100);
         $product->activatedBug      = rand(0, 100);
+
+        $waitTesttasks = array();
+        if(!empty($product->waitTesttasks))
+        {
+            foreach($product->waitTesttasks as $waitTesttask)
+            {
+                $waitTesttasks[] = div(set('class', 'py-1'), common::hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$waitTesttask->id}")), $waitTesttask->name) : span($waitTesttask->name));
+                if(count($waitTesttasks) >= 2) break;
+            }
+        }
+
+        $doingTesttasks = array();
+        if(!empty($product->doingTesttasks))
+        {
+            foreach($product->doingTesttasks as $doingTesttask)
+            {
+                $doingTesttasks[] = div(set('class', 'py-1'), common::hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$doingTesttask->id}")), $doingTesttask->name) : span($doingTesttask->name));
+                if(count($doingTesttasks) >= 2) break;
+            }
+        }
+
         $progressMax = max($product->addYesterday, $product->addToday, $product->resolvedYesterday, $product->resolvedToday, $product->closedYesterday, $product->closedToday);
         $progressBlcok = array();
         foreach(array(array('addYesterday', 'addToday'), array('resolvedYesterday', 'resolvedToday'), array('closedYesterday', 'closedToday')) as $group)
@@ -126,7 +147,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
             }
             $progressBlcok[] = div
             (
-                set('class', 'flex border-r py-1 pr-4'),
+                set('class', 'flex py-1 pr-4 ' . ($waitTesttasks || $doingTesttasks ? 'border-r' : '')),
                 cell($progressLabel),
                 cell
                 (
@@ -134,26 +155,6 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                     $progress
                 )
             );
-        }
-
-        $waitTesttasks = array();
-        if(!empty($product->waitTesttasks))
-        {
-            foreach($product->waitTesttasks as $waitTesttask)
-            {
-                $waitTesttasks[] = div(set('class', 'py-1'), common::hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$waitTesttask->id}")), $waitTesttask->name) : span($waitTesttask->name));
-                if(count($waitTesttasks) >= 2) break;
-            }
-        }
-
-        $doingTesttasks = array();
-        if(!empty($product->doingTesttasks))
-        {
-            foreach($product->doingTesttasks as $doingTesttask)
-            {
-                $doingTesttasks[] = div(set('class', 'py-1'), common::hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$doingTesttask->id}")), $doingTesttask->name) : span($doingTesttask->name));
-                if(count($doingTesttasks) >= 2) break;
-            }
         }
 
         $tabItems[] = div
@@ -258,20 +259,39 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                         cell
                         (
                             $longBlock ? set('width', '60%') : null,
-                            set('class', 'py-4'),
-                            div
+                            set('class', 'py-4 ' . (!$longBlock ? 'px-4 flex' : '')),
+                            cell
                             (
+                                set('class', 'flex-1'),
                                 div
                                 (
-                                    set('class', 'pb-2'),
+                                    $longBlock ? set('class', 'pb-2') : null,
                                     $lang->block->qastatistic->bugStatistics
                                 ),
                                 $progressBlcok
-                            )
+                            ),
+                            !$longBlock && ($doingTesttasks || $waitTesttasks) ? cell
+                            (
+                                set('width', '50%'),
+                                set('class', 'px-4'),
+                                div(span($lang->block->qastatistic->latestTesttask)),
+                                $doingTesttasks ? div
+                                (
+                                    set('class', 'py-2'),
+                                    div(set('class', 'text-sm pb-2'), $lang->testtask->statusList['doing']),
+                                    $doingTesttasks
+                                ) : null,
+                                $waitTesttasks ? div
+                                (
+                                    set('class', 'py-2'),
+                                    div(set('class', 'text-sm pb-2'), $lang->testtask->statusList['wait']),
+                                    $waitTesttasks
+                                ) : null
+                            ) : null
                         )
                     )
                 ),
-                $doingTesttasks || $waitTesttasks ? cell
+                $longBlock && ($doingTesttasks || $waitTesttasks) ? cell
                 (
                     set('width', '30%'),
                     set('class', 'py-2 px-6'),
