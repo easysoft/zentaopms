@@ -427,14 +427,18 @@ else
         }
 
         $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
-        $formItems[] = formGroup
+        $formItems[] = formRow
         (
-            set::width('1/2'),
-            set::label(''),
-            set::name('lang'),
-            set::items($appliedTo),
-            set::value($lang2Set),
-            set::control('radioListInline'),
+            setClass('lang-row'),
+            formGroup
+            (
+                set::width('1/2'),
+                set::label(''),
+                set::name('lang'),
+                set::items($appliedTo),
+                set::value($lang2Set),
+                set::control('radioListInline'),
+            )
         );
 
         if(common::hasPriv('custom', 'restore'))
