@@ -36,6 +36,8 @@ $lang->ai->prompts->createdDate = 'Created Date';
 $lang->ai->prompts->targetForm  = 'Target Form';
 $lang->ai->prompts->funcDesc    = 'Function Description';
 
+$lang->ai->prompts->summary = 'There are %s prompts on this page.';
+
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';
 $lang->ai->prompts->selectDataSource = 'Select Data Source';

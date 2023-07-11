@@ -36,6 +36,8 @@ $lang->ai->prompts->createdDate = '创建时间';
 $lang->ai->prompts->targetForm  = '表单';
 $lang->ai->prompts->funcDesc    = '功能描述';
 
+$lang->ai->prompts->summary = '本页共 %s 个提词。';
+
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = '指定角色';
 $lang->ai->prompts->selectDataSource = '选择对象';

@@ -96,6 +96,7 @@
           </tbody>
         </table>
         <div class='table-footer'>
+          <div class="table-statistic"><?php echo sprintf($lang->ai->prompts->summary, count($prompts));?></div>
           <?php $pager->show('right', 'pagerjs');?>
         </div>
       </div>
