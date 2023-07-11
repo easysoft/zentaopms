@@ -1,23 +1,3 @@
-window.appendLinkBtn = function()
-{
-    $('.right-menu').find('.btn').eq(1).remove();
-
-    const tabID   = $('.tab-pane.active').attr('id');
-    if(tabID == 'finishedStory')
-    {
-        $('.right-menu').append($('.link-story')[0].outerHTML);
-    }
-    else if(tabID == 'resolvedBug')
-    {
-        $('.right-menu').append($('.link-bug')[0].outerHTML);
-    }
-    else if(tabID == 'leftBug')
-    {
-        $('.right-menu').append($('.link-left-bug')[0].outerHTML);
-    }
-}
-window.appendLinkBtn();
-
 $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer .batch-btn', function(e)
 {
     const dtable = zui.DTable.query(e.target);
@@ -32,9 +12,6 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
         url:  $(this).data('url'),
         data: postData
     });
-}).on('click', '.nav-tabs .nav-item a', function()
-{
-    window.appendLinkBtn();
 }).off('click', '.linkObjectBtn').on('click', '.linkObjectBtn', function()
 {
     const type   = $(this).data('type');
@@ -47,18 +24,6 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     checkedList.forEach((id) => postData.append(postKey + '[]', id));
 
     $.ajaxSubmit({"url": $(this).data('url'), "data": postData, "callback": loadPage($.createLink('release', 'view', `releaseID=${releaseID}&type=${type}`))});
-}).off('click','.link-story').on('click', '.link-story', function()
-{
-    $(this).hide();
-    $('#finishedStory').load($(this).data('url'));
-}).off('click','.link-bug').on('click', '.link-bug', function()
-{
-    $(this).hide();
-    $('#resolvedBug').load($(this).data('url'));
-}).off('click','.link-left-bug').on('click', '.link-left-bug', function()
-{
-    $(this).hide();
-    $('#leftBug').load($(this).data('url'));
 });
 
 /**
@@ -154,4 +119,34 @@ window.unlinkObject = function(objectType, objectID)
     {
         $.ajaxSubmit({url: eval(`unlink${objectType}url`).replace('%s', objectID)});
     }
+}
+
+window.showLink = function(obj)
+{
+    let link        = $(obj).data('url');
+    let $tabContent = $(obj);
+
+    if($(obj).hasClass('link'))
+    {
+        $tabContent = $(obj).closest('.tab-pane');
+    }
+    else
+    {
+        link = $(obj).find('.link').data('url');
+    }
+    $tabContent.load(link);
+};
+
+if(initLink == 'true')
+{
+    let idName = '#finishedStory';
+    if(type == 'bug')
+    {
+        idName = '#resolvedBug';
+    }
+    else if(type == 'leftBug')
+    {
+        idName = '#leftBug';
+    }
+    window.showLink($(idName));
 }
