@@ -290,3 +290,6 @@ $lang->ai->formSchema['story']['change']->properties->spec->description   = 'Des
 $lang->ai->formSchema['story']['change']->properties->verify->type        = 'string';
 $lang->ai->formSchema['story']['change']->properties->verify->description = 'Acceptance criteria of the story';
 $lang->ai->formSchema['story']['change']->required = array('title', 'spec', 'verify');
+
+$lang->ai->promptMenu = new stdclass();
+$lang->ai->promptMenu->dropdownTitle = 'AI';
