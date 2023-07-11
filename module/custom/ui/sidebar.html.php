@@ -37,6 +37,24 @@ if(!empty($lang->custom->{$module}->fields))
             }
         }
 
+        if($module == 'setDate')
+        {
+            if($key == 'holiday')
+            {
+                $currentModule = 'holiday';
+                $method        = 'browse';
+                $params        = '';
+                $active        = isset($type) ? '' : 'active';
+            }
+            else
+            {
+                $method = 'hours';
+                $params = "type={$key}";
+                $active = (isset($type) and $type == $key) ? 'active' : '';
+            }
+        }
+
+
         if(common::hasPriv($currentModule, $method))
         {
             $menuItems[] = li
@@ -45,7 +63,7 @@ if(!empty($lang->custom->{$module}->fields))
                     a
                     (
                         setClass($active),
-                        set::href(inlink($method, $params)),
+                        set::href(createLink($currentModule, $method, $params)),
                         $value,
                     )
                 );

@@ -330,3 +330,8 @@ $lang->custom->reviewRules['halfpass'] = '半数以上通过通过';
 
 $lang->custom->limitTaskDate['0'] = '不限制';
 $lang->custom->limitTaskDate['1'] = '限定在所属执行起止日期范围内';
+
+$lang->custom->setDate = new stdClass();
+$lang->custom->setDate->fields['hours']   = $lang->custom->setHours;
+$lang->custom->setDate->fields['weekend'] = $lang->custom->setWeekend;
+$lang->custom->setDate->fields['holiday'] = $lang->custom->setHoliday;

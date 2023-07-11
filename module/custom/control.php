@@ -854,7 +854,7 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function hours($type = 'hours')
+    public function hours(string $type = 'hours')
     {
         if($_POST)
         {
@@ -868,7 +868,7 @@ class custom extends control
 
             $response = new stdclass();
             $response->result  = 'success';
-            $response->locate  = inLink('hours', "type=$type");
+            $response->load    = inLink('hours', "type=$type");
             $response->message = $this->lang->saveSuccess;
             return $this->send($response);
         }
@@ -879,6 +879,7 @@ class custom extends control
         $this->view->weekend   = $this->config->execution->weekend;
         $this->view->workhours = $this->config->execution->defaultWorkhours;
         $this->view->restDay   = zget($this->config->execution, 'restDay', 0);
+        $this->view->module    = 'setDate';
         $this->display();
     }
 
