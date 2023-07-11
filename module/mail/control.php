@@ -161,7 +161,7 @@ class mail extends control
             $this->loadModel('setting')->setItems('system.mail', $mailConfig);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $mailExist = (int)$this->mail->mailExist();
+            $mailExist = !empty($this->mail->mailExist());
             return $this->send(array('result' => 'success', 'callback' => "window.mailTips({$mailExist});"));
 
             $this->session->set('mailConfig', '');
@@ -244,7 +244,7 @@ class mail extends control
             }
 
             $this->mail->send($this->post->to, $this->lang->mail->testSubject, $this->lang->mail->testContent, '', true);
-            if($this->mail->isError()) return $this->sendError($this->mail->getError());
+            if($this->mail->isError()) return $this->sendError(implode('\n', $this->mail->getError()));
 
             return $this->sendSuccess(array('load' => true));
         }
@@ -330,7 +330,7 @@ class mail extends control
         $queue = $this->mail->getQueueById($queueID);
         if($queue and $queue->status == 'sended')
         {
-            return $this->send(array('callback' => "resendAlert('success','" . $this->lang->mail->noticeResend . "')"));
+            return $this->sendSuccess(array('message' => $this->lang->mail->noticeResend, 'load' => true));
         }
 
         if(isset($this->config->mail->async)) $this->config->mail->async = 0;
@@ -349,10 +349,10 @@ class mail extends control
 
         if($data->status == 'fail')
         {
-            return $this->send(array('callback' => "resendAlert('danger','" . $data->failReason . "')"));
+            return $this->send(array('callback' => "zui.Modal.confirm('{$data->failReason}')"));
         }
 
-        return $this->send(array('callback' => "resendAlert('success','".$this->lang->mail->noticeResend."')"));
+        return $this->sendSuccess(array('message' => $this->lang->mail->noticeResend, 'load' => true));
     }
 
     /**
