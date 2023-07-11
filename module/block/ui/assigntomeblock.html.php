@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace zin;
 jsVar('moreLabel', $lang->more);
+jsVar('todayLabel', $lang->today);
+jsVar('yesterdayLabel', $lang->yesterday);
 
 $blockNavCode = 'nav-' . uniqid();
 
@@ -106,6 +108,7 @@ foreach($hasViewPriv as $type => $bool)
             set::height(318),
             set::bordered(false),
             set::horzScrollbarPos('inside'),
+            set::onRenderCell(jsRaw('window.renderCell')),
             set::cols(array_values($config->block->{$configType}->dtable->fieldList)),
             set::data(array_values($data)),
             set::userMap($users),

@@ -39,3 +39,8 @@ $config->block->bug->dtable->fieldList['confirmed']['map']   = $lang->bug->confi
 $config->block->bug->dtable->fieldList['deadline']['name']  = 'deadline';
 $config->block->bug->dtable->fieldList['deadline']['title'] = $lang->bug->deadline;
 $config->block->bug->dtable->fieldList['deadline']['type']  = 'date';
+
+$config->block->bug->dtable->short = new stdclass();
+$config->block->bug->dtable->short->fieldList['id']     = $config->block->bug->dtable->fieldList['id'];
+$config->block->bug->dtable->short->fieldList['title']  = $config->block->bug->dtable->fieldList['title'];
+$config->block->bug->dtable->short->fieldList['status'] = $config->block->bug->dtable->fieldList['status'];
