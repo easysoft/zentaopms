@@ -41,7 +41,7 @@ if(!empty($lang->custom->{$module}->fields))
         {
             $menuItems[] = li
                 (
-                    setClass('menu-item py-1 px-4'),
+                    setClass('menu-item'),
                     a
                     (
                         setClass($active),
