@@ -101,15 +101,6 @@ if($canDisplaySuite)
 $linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType={$caseType}";
 $browseLink = createLink('testcase', 'browse', $linkParams);
 if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browseUnits', "productID=$productID&browseType={key}");
-$productMenuLink = createLink(
-    $this->app->rawModule,
-    $this->app->rawMethod,
-    array(
-        'productID'  => $projectID,
-        'branch'     => $branch,
-        'browseType' => '{key}',
-    )
-);
 featureBar
 (
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
@@ -121,8 +112,8 @@ featureBar
         (
             set::title($currentTypeName),
             set::items($caseTypeItems),
-            set::activeKey($browseType),
-            set::link($productMenuLink),
+            set::activeKey($caseType),
+            set::link($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param")),
             set::closeLink('#'),
         )
     ) : null,
