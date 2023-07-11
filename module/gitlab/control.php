@@ -140,16 +140,12 @@ class gitlab extends control
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
         if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->tokenLimit, 'locate' => $this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
-        $gitlabNames = array();
-        $gitlabUsers = $this->gitlab->apiGetUsers($gitlabID);
-        foreach($gitlabUsers as $user) $gitlabNames[$user->id] = $user->realname . '@' . $user->account;
-
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
 
         if($_POST)
         {
-            $users = array();
-            foreach($_POST as $k => $v) if(substr($k, 0, 6) === 'users-') $users[substr($k, 6)] = $v;
+            $users       = $this->post->zentaoUsers;
+            $gitlabNames = $this->post->gitlabUserNames;
             $accountList = array();
             $repeatUsers = array();
             foreach($users as $openID => $user)
@@ -192,6 +188,7 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('gitlab', 'browse')));
         }
 
+        $gitlabUsers   = $this->gitlab->apiGetUsers($gitlabID);
         $bindedUsers   = $this->gitlab->getUserAccountIdPairs($gitlabID);
         $matchedResult = $this->gitlab->getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers);
         $matchedResult = array_column(json_decode(json_encode($matchedResult), true), null, "email");
@@ -202,7 +199,7 @@ class gitlab extends control
 
             if(in_array($item->id, $bindedUsers))
             {
-                $zentaoAccount = isset($item->zentaoAccount) ? zget($userPairs, $item->zentaoAccount, '') : '';
+                $zentaoAccount = isset($item->zentaoAccount) ? $item->zentaoAccount : '';
                 return $type == 'binded' ? !empty($zentaoAccount) : empty($zentaoAccount);
             }
             return $type == 'binded' ? false : true;
@@ -217,7 +214,6 @@ class gitlab extends control
             $user->realname    = $user->realname . '@' . $user->account;
 
             $user->zentaoAccount = isset($user->zentaoAccount) ? $user->zentaoAccount : '';
-            $user->zentaoAccount = zget($userPairs, $user->zentaoAccount, '');
             if(in_array($user->id, $bindedUsers))
             {
                 $user->status = 'bindedError';

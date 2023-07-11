@@ -42,7 +42,8 @@ foreach($gitlabUsers as $index => $user)
         h::td
         (
             avatar($user->avatar, set::size(20), setClass('mr-2')),
-            $user->realname
+            $user->realname,
+            input(set::value($user->realname), set::name("gitlabUserNames[$user->id]"), set::type('hidden'))
         ),
         h::td
         (
@@ -55,12 +56,12 @@ foreach($gitlabUsers as $index => $user)
         ),
         h::td
         (
-            formGroup
+            picker
             (
-                setID('bindUser' . $user->id),
-                set::name("users-" . $user->id),
+                setID('users-' . $user->id),
+                set::required(false),
+                set::name("zentaoUsers[$user->id]"),
                 set::value($user->zentaoAccount),
-                set::control("picker"),
                 set::items($userPairs)
             ),
         ),
@@ -74,11 +75,13 @@ foreach($gitlabUsers as $index => $user)
         ),
     );
 }
-formPanel
+
+form
 (
+    setClass('mb-4'),
     h::table
     (
-        setClass('table table-fixed'),
+        setClass('table table-fixed canvas'),
         h::tr
         (
             h::th
@@ -106,5 +109,5 @@ formPanel
             ),
         ),
         $tbody
-    )
+)
 );
