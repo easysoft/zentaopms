@@ -9,7 +9,7 @@ $config->release->dtable->story   = new stdclass();
 $config->release->dtable->bug     = new stdclass();
 $config->release->dtable->leftBug = new stdclass();
 
-$config->release->dtable->defaultFields['linkStory'] = array('id', 'title', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage');
+$config->release->dtable->defaultFields['linkStory'] = array('id', 'title', 'pri', 'status', 'linkedBuild', 'estimate', 'stage');
 $config->release->dtable->defaultFields['linkBug']   = array('id', 'title', 'openedBy', 'resolvedBy', 'status');
 
 $config->release->dtable->fieldList['id']['title'] = $lang->idAB;
