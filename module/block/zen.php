@@ -1446,7 +1446,7 @@ class blockZen extends block
         $status = isset($block->params->type)  ? $block->params->type : 'wait';
 
         $this->view->project   = $this->loadModel('project')->getByID($this->session->project);
-        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
+        $this->view->testtasks = $this->dao->select("t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName, CONCAT(t4.name, '/', t3.name) as executionBuild")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
