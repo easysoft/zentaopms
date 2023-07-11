@@ -17,5 +17,10 @@ $config->block->todo->dtable->fieldList['date']        = $config->my->todo->dtab
 $config->block->todo->dtable->fieldList['begin']       = $config->my->todo->dtable->fieldList['begin'];
 $config->block->todo->dtable->fieldList['end']         = $config->my->todo->dtable->fieldList['end'];
 $config->block->todo->dtable->fieldList['status']      = $config->my->todo->dtable->fieldList['status'];
-//$config->block->todo->dtable->fieldList['type']        = $config->my->todo->dtable->fieldList['type'];
-//$config->block->todo->dtable->fieldList['assignedBy']  = $config->my->todo->dtable->fieldList['assignedBy'];
+$config->block->todo->dtable->fieldList['type']        = $config->my->todo->dtable->fieldList['type'];
+$config->block->todo->dtable->fieldList['assignedBy']  = $config->my->todo->dtable->fieldList['assignedBy'];
+
+$config->block->todo->dtable->short = new stdclass();
+$config->block->todo->dtable->short->fieldList['id']     = $config->block->todo->dtable->fieldList['id'];
+$config->block->todo->dtable->short->fieldList['name']   = $config->block->todo->dtable->fieldList['name'];
+$config->block->todo->dtable->short->fieldList['status'] = $config->block->todo->dtable->fieldList['status'];

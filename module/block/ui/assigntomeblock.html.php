@@ -72,7 +72,29 @@ foreach($hasViewPriv as $type => $bool)
     if($type == 'requirement') $configType = 'story';
 
     if(empty($config->block->{$configType}->dtable->fieldList)) continue;
+    if(!$longBlock && !empty($config->block->{$configType}->dtable->short->fieldList)) $config->block->{$configType}->dtable->fieldList = $config->block->{$configType}->dtable->short->fieldList;
     if(empty($data)) $data = array();
+
+    if($type == 'review')
+    {
+        foreach($data as $review)
+        {
+            $reviewType = $review->type;
+            if($reviewType == 'projectreview') $reviewType = 'review';
+
+            $typeName = '';
+            if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
+            if($reviewType == 'story')                $typeName = $lang->SRCommon;
+
+            $statusList = array();
+            if(isset($lang->$reviewType->statusList)) $statusList = $lang->$reviewType->statusList;
+            if($reviewType == 'attend') $statusList = $lang->attend->reviewStatusList;
+            if(!in_array($reviewType, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$reviewType,") === false) $statusList = $lang->approval->nodeList;
+
+            $review->type   = $typeName;
+            $review->status = zget($statusList, $review->status, '');
+        }
+    }
 
     $selected  = key($hasViewPriv);
     $contents[] = div
