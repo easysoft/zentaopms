@@ -1020,7 +1020,7 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->close($storyID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->story->closeParentRequirement($storyID);
 
             if($changes)
@@ -1049,7 +1049,7 @@ class story extends control
 
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $executionGroupBy, $rdSearchValue);
                     $kanbanData = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
                 }
                 elseif($from == 'taskkanban')
                 {
@@ -1058,22 +1058,16 @@ class story extends control
                     $kanbanType      = $executionLaneType == 'all' ? 'story' : key($kanbanData);
                     $kanbanData      = $kanbanData[$kanbanType];
                     $kanbanData      = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
                 }
             }
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
-            {
-                return $this->send(array('status' => 'success', 'data' => $storyID));
-            }
-            else
-            {
-                return print(js::locate(inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
-            }
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'closeModal' => true));
         }
 
         /* Get story and product. */

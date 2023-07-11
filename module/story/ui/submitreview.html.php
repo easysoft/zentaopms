@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('lastReviewer', $reviewers);
+
 $needNotReviewBox = '';
 if(!$this->story->checkForceReview())
 {
@@ -20,6 +22,7 @@ if(!$this->story->checkForceReview())
         set('class', 'input-group-addon'),
         checkbox
         (
+            set::id('needNotReview'),
             set::name('needNotReview'),
             set::text($lang->story->needNotReview),
         ),
@@ -30,16 +33,18 @@ modalHeader(set::title($lang->story->submitReview));
 formPanel
 (
     set::submitBtnText($lang->story->submitReview),
+    on::change('#needNotReview', 'toggleReviewer(e.target)'),
     formGroup
     (
+        setID('reviewerBox'),
         set::label($lang->story->reviewedBy),
         set::width('full'),
-        set::strong(false),
         set::required(true),
         inputGroup
         (
-            select
+            picker
             (
+                setID('reviewer'),
                 set::name('reviewer[]'),
                 set::value($story->reviewer),
                 set::multiple(true),
