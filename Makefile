@@ -98,6 +98,7 @@ zentaoxx:
 	cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
 	mv zentaoxx/db/ zentaoxx/db_bak
 	mkdir zentaoxx/db/
+	sed -i "s/datetime NOT NULL DEFAULT '0000-00-00 00:00:00'/datetime NULL/" zentaoxx/db_bak/*.sql
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
 	rm -rf zentaoxx/db_bak/
 	sed -i "s/\$$accountAdmin = \$$this->dao->select('account, admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch();/\$$accountAdmin = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch();\n\$$sysAdmins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$sysAdminArray = explode(',', \$$sysAdmins);\n\$$accountAdmin->admin = in_array(\$$accountAdmin->account, \$$sysAdminArray) ? 'super' : '';\n/" zentaoxx/extension/xuan/im/model/chat.php
