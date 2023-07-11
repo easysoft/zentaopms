@@ -401,8 +401,6 @@ class aiModel extends model
     /**
      * Create a prompt.
      *
-     * TODO: fully implement this.
-     *
      * @param  object    $prompt
      * @access public
      * @return int|false returns prompt id on success, false on fail

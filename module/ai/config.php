@@ -27,7 +27,7 @@ $config->ai->openai->model->function   = 'gpt-3.5-turbo-0613';
 $config->ai->openai->model->completion = 'text-davinci-003';
 $config->ai->openai->model->edit       = 'text-davinci-edit-001';
 
-$config->ai->openai->contentTypeMapping = array('Content-Type: application/json' => array('', 'chat', 'completion', 'edit'), 'Content-Type: multipart/form-data' => array());
+$config->ai->openai->contentTypeMapping = array('Content-Type: application/json' => array('', 'function', 'chat', 'completion', 'edit'), 'Content-Type: multipart/form-data' => array());
 $config->ai->openai->contentType = array();
 foreach($config->ai->openai->contentTypeMapping as $contentType => $apis)
 {
