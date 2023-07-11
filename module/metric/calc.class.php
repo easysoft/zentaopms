@@ -131,7 +131,7 @@ class baseCalc
      * @param  array|int $rows
      * @param  array     $options array('product' => '1,2,3,4')
      * @access protected
-     * @return array
+     * @return array|false
      */
     protected function filterByOptions($rows, $options)
     {
@@ -151,7 +151,7 @@ class baseCalc
             }
         }
 
-        return $filteredRows;
+        return !empty($filteredRows) ? $filteredRows : false;
     }
 
     /**
