@@ -121,7 +121,7 @@ $config->block->params['product'] = new stdclass();
 $config->block->params['product']->type['name']    = $lang->block->type;
 $config->block->params['product']->type['options'] = $lang->block->typeList->product;
 $config->block->params['product']->type['control'] = 'picker';
-$config->block->params['product']->count = $config->block->params['default']->count;
+$config->block->params['product']->count           = $config->block->params['default']->count;
 
 $config->block->params['productstatistic'] = new stdclass();
 $config->block->params['productstatistic']->type['name']    = $lang->block->type;
@@ -137,13 +137,13 @@ $config->block->params['projectstatistic']->count = $config->block->params['defa
 
 $config->block->params['bugstatistic'] = new stdclass();
 $config->block->params['bugstatistic']->type['name']    = $lang->block->type;
-$config->block->params['bugstatistic']->type['options'] = $lang->block->typeList->project;
+$config->block->params['bugstatistic']->type['options'] = $lang->block->typeList->product;
 $config->block->params['bugstatistic']->type['control'] = 'picker';
 $config->block->params['bugstatistic']->count = $config->block->params['default']->count;
 
 $config->block->params['releasestatistic'] = new stdclass();
 $config->block->params['releasestatistic']->type['name']    = $lang->block->type;
-$config->block->params['releasestatistic']->type['options'] = $lang->block->typeList->project;
+$config->block->params['releasestatistic']->type['options'] = $lang->block->typeList->product;
 $config->block->params['releasestatistic']->type['control'] = 'picker';
 $config->block->params['releasestatistic']->count = $config->block->params['default']->count;
 
