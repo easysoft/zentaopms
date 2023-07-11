@@ -329,6 +329,7 @@ class storyModel extends model
 
                 $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
                 $files = $this->file->saveUpload($story->type, $storyID, 1);
+                if(empty($files) && defined('RUN_MODE') && RUN_MODE == 'api' && !empty($_SESSION['album']['used'][$this->post->uid])) $files = $_SESSION['album']['used'][$this->post->uid];
                 /* Multi branch sync files */
                 !empty($files) ? $storyFile = $files : $files = $storyFile;
 
