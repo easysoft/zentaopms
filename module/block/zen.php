@@ -1373,7 +1373,7 @@ class blockZen extends block
      */
     protected function printSprintBlock(object $block): void
     {
-        $this->printExecutionOverviewBlock($block, 'sprint', (int)$this->session->project, true);
+        $this->printExecutionOverviewBlock($block, array(), 'sprint', (int)$this->session->project, true);
     }
 
     /**
@@ -1559,46 +1559,67 @@ class blockZen extends block
      * 传递产品总览区块页面数据。
      * Transfer product overview block page data.
      *
+     * @param  object $block
+     * @param  array  $params
      * @access protected
      * @return bool
      */
-    protected function printProductOverviewBlock(): void
+    protected function printProductOverviewBlock(object $block, array $params = array()): void
+    {
+        if($block->width == 1) $this->printShortProductOverview();
+        if($block->width == 3) $this->printLongProductOverview($params);
+    }
+
+    /**
+     * 传递产品总览短区块页面数据。
+     * Transfer short product overview block page data.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function printShortProductOverview(): void
     {
         $productCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('shadow')->eq('0')->fetch('count');
         $lineCount    = $this->dao->select('COUNT(1) AS count')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('type')->eq('line')->fetch('count');
         $releaseList  = $this->dao->select('id, marker')->from(TABLE_RELEASE)->where('deleted')->eq('0')->andWhere('createdDate')->like(date('Y') . '-%')->fetchPairs();
 
-        $cards1 = array();
-        $cards1[0] = new stdclass();
-        $cards1[0]->value = $productCount;
-        $cards1[0]->class = 'text-primary';
-        $cards1[0]->label = $this->lang->block->productoverview->totalProductCount;
-        $cards1[0]->url   = common::hasPriv('product', 'all') ? helper::createLink('product', 'all', 'browseType=all') : null;
+        $data = new stdclass();
+        $data->productCount   = $productCount;
+        $data->releaseCount   = count($releaseList);
+        $data->milestoneCount = count(array_filter($releaseList));
 
-        $cards1[1] = new stdclass();
-        $cards1[1]->value = $lineCount;
-        $cards1[1]->label = $this->lang->block->productoverview->productLineCount;
+        $this->view->data = $data;
+    }
 
-        $group1 = new stdclass();
-        $group1->type  = 'cards';
-        $group1->cards = $cards1;
+    /**
+     * 传递产品总览长区块页面数据。
+     * Transfer long product overview block page data.
+     *
+     * @param  array $params
+     * @access protected
+     * @return void
+     */
+    protected function printLongProductOverview(array $params = array()): void
+    {
+        $year  = isset($params['year']) ? (int)$params['year'] : date('Y');
+        $years = array(2023, 2022, 2021, 2020, 2019);
 
-        $cards2 = array();
-        $cards2[0] = new stdclass();
-        $cards2[0]->value = count($releaseList);
-        $cards2[0]->class = 'text-primary';
-        $cards2[0]->label = $this->lang->block->productoverview->productReleasedThisYear;
+        $data = new stdclass();
+        $data->productLineCount             = number_format(rand(1, 10000));
+        $data->productCount                 = number_format(rand(1, 10000));
+        $data->unfinishedPlanCount          = number_format(rand(1, 10000));
+        $data->unclosedStoryCount           = number_format(rand(1, 10000));
+        $data->activeBugCount               = number_format(rand(1, 10000));
+        $data->finishedReleaseCount['year'] = number_format(rand(1, 10000));
+        $data->finishedReleaseCount['week'] = number_format(rand(1, 10000));
+        $data->finishedStoryCount['year']   = number_format(rand(1, 10000));
+        $data->finishedStoryCount['week']   = number_format(rand(1, 10000));
+        $data->finishedStoryPoint['year']   = number_format(rand(1, 10000));
+        $data->finishedStoryPoint['week']   = number_format(rand(1, 10000));
 
-        $cards2[1] = new stdclass();
-        $cards2[1]->class = 'text-important';
-        $cards2[1]->value = count(array_filter($releaseList));
-        $cards2[1]->label = $this->lang->block->productoverview->releaseCount;
-
-        $group2 = new stdclass();
-        $group2->type  = 'cards';
-        $group2->cards = $cards2;
-
-        $this->view->groups = array($group1, $group2);
+        $this->view->years       = $years;
+        $this->view->currentYear = $year;
+        $this->view->data        = $data;
     }
 
     /**
@@ -1606,12 +1627,13 @@ class blockZen extends block
      *
      * @param  object    $block
      * @param  string    $code          executionoverview|sprint
+     * @param  array     $params
      * @param  int       $project
      * @param  bool      $showClosed    true|false
      * @access protected
      * @return void
      */
-    protected function printExecutionOverviewBlock(object $block, string $code = 'executionoverview', int $project = 0, bool $showClosed = false): void
+    protected function printExecutionOverviewBlock(object $block, array $params = array(), string $code = 'executionoverview', int $project = 0, bool $showClosed = false): void
     {
         $query = $this->dao->select('id, status, Year(closedDate) AS year')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
