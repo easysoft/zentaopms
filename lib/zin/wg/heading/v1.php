@@ -60,8 +60,8 @@ class heading extends wg
         global $app, $config;
         if($this->hasBlock('dropmenu')) return $this->block('dropmenu');
 
-        $moduleName = $app->moduleName;
-        $methodName = $app->methodName;
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
         if(in_array("$moduleName-$methodName", is_array($config->excludeDropmenuList) ? $config->excludeDropmenuList : array())) return null;
 
         if(in_array($app->tab, is_array($config->hasDropmenuApps) ? $config->hasDropmenuApps : array()))
