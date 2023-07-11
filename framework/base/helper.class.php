@@ -804,6 +804,38 @@ class baseHelper
     }
 
     /**
+     * Send a cookie.
+     *
+     * @param string      $name
+     * @param string      $value
+     * @param int|null    $expire
+     * @param string|null $path
+     * @param string      $domain
+     * @param bool|null   $secure
+     * @param bool        $httponly
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function setcookie(string $name, string $value = '', int $expire = null, string $path = null, string $domain = '', bool $secure = null, bool $httponly = true)
+    {
+        global $config, $app;
+
+        if($expire === null) $expire = $config->cookieLife;
+        if($path   === null) $path   = $config->webRoot;
+        if($secure === null) $secure = $config->cookieSecure;
+
+        if(isset($app->worker))
+        {
+            $app->worker->response->setCookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+        }
+        else
+        {
+            return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+        }
+    }
+
+    /**
      * 设置状态码。
      * Set status code.
      *

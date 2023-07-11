@@ -1530,7 +1530,7 @@ class mrModel extends model
         {
             $bugID = $this->dao->lastInsertID();
             $this->loadModel('file')->updateObjectID($this->post->uid, $bugID, 'bug');
-            setcookie("repoPairs[$repoID]", $data->product);
+            helper::setcookie("repoPairs[$repoID]", $data->product);
 
             $bugInfo = array();
             $bugInfo['result']     = 'success';

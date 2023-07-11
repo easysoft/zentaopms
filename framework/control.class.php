@@ -635,7 +635,7 @@ class control extends baseControl
     }
 
     /**
-     * Call the functions declared in the tao files.
+     * Call the functions declared in the zen files.
      *
      * @param  string $method
      * @param  array  $arguments
@@ -653,7 +653,7 @@ class control extends baseControl
     }
 
     /**
-     * Call the static functions declared in the tao files.
+     * Call the static functions declared in the zen files.
      *
      * @param  string $method
      * @param  array  $arguments

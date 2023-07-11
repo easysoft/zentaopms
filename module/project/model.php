@@ -117,7 +117,7 @@ class projectModel extends model
             }
         }
 
-        setcookie('lastProject', (string)$this->session->project, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('lastProject', (string)$this->session->project, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         return $this->session->project;
     }

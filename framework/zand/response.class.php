@@ -259,13 +259,13 @@ class zandResponse implements ResponseInterface
         $this->stream = Stream::create($body);
     }
 
-    public function setCookie(string $name, string $value, $expire, ?string $path = null, ?string $domain = null, ?bool $secure = null, ?bool $httpOnly = null, ?string $sameSite = null): static
+    public function setCookie(string $name, string $value, ?int $expire, ?string $path = null, ?string $domain = null, ?bool $secure = null, ?bool $httpOnly = null, ?string $sameSite = null): static
     {
         $headerValue = sprintf('%s=%s; path=%s; SameSite=%s', $name, urlencode($value), $path ?? ($domain ? '/' : $this->cookiePath), $sameSite ?? 'Lax');
 
         if($expire)
         {
-            $headerValue .= '; Expires='.(date('D, d M Y H:i:s T', strtotime($expire)));
+            $headerValue .= '; Expires='.(date('D, d M Y H:i:s T', $expire));
         }
 
         $cookieDomain = $domain ?? $this->cookieDomain;

@@ -448,7 +448,7 @@ class mr extends control
             if($this->post->arrange)
             {
                 $arrange = $this->post->arrange;
-                setcookie('arrange', $arrange);
+                helper::setcookie('arrange', $arrange);
             }
             if($this->post->encoding) $encoding = $this->post->encoding;
         }

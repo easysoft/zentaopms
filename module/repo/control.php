@@ -633,7 +633,7 @@ class repo extends control
             }
         }
 
-        if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        if($this->cookie->repoRefresh) helper::setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Synchronous commit only in root path. */
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
@@ -860,7 +860,7 @@ class repo extends control
             if($this->post->arrange)
             {
                 $arrange = $this->post->arrange;
-                setcookie('arrange', $arrange);
+                helper::setcookie('arrange', $arrange);
             }
             if($this->post->encoding)      $encoding      = $this->post->encoding;
             if($this->post->isBranchOrTag) $isBranchOrTag = $this->post->isBranchOrTag;
@@ -1449,7 +1449,7 @@ class repo extends control
                 }
 
                 $this->repo->setRepoBranch($branchID);
-                setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+                helper::setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             }
         }
 
@@ -1483,7 +1483,7 @@ class repo extends control
                 if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
 
                 $branchID = reset($branches);
-                setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+                helper::setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
                 if($branchID) $this->repo->fixCommit($repoID);
             }
@@ -1518,7 +1518,7 @@ class repo extends control
         $this->scm->setEngine($repo);
 
         $this->repo->setRepoBranch($branch);
-        setcookie("syncBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie("syncBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
@@ -1539,7 +1539,7 @@ class repo extends control
         {
             if($branch) $this->repo->saveExistCommits4Branch($repo->id, $branch);
 
-            setcookie("syncBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie("syncBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $this->repo->markSynced($repoID);
             return print('finish');
         }

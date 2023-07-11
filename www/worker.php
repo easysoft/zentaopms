@@ -27,6 +27,8 @@ if($_SERVER['RR_MODE'] === 'jobs')
 
             if($type == 'zentao')
             {
+                ob_start();
+
                 parse_str($cmd, $params);
                 if(!isset($params['moduleName']) || !isset($params['methodName'])) continue;
 
@@ -35,9 +37,11 @@ if($_SERVER['RR_MODE'] === 'jobs')
 
                 $app->moduleName = $params['moduleName'];
                 $app->methodName = $params['methodName'];
+                $app->rawModule  = $params['moduleName'];
+                $app->rawMethod  = $params['methodName'];
                 $app->setControlFile();
                 $app->loadModule();
-                $output = ob_get_contents();
+                $output = ob_get_clean();
 
                 $app->closeRequest();
             }
@@ -46,6 +50,9 @@ if($_SERVER['RR_MODE'] === 'jobs')
                 exec($cmd, $output, $return);
                 if($output) $output = implode("\n", $output);
             }
+
+            $log = date('H:m:s') . "task " . $id . " executed,\ncommand: $cmd.\nreturn : $return.\noutput : $output\n";
+            logCron($app->getLogRoot(), $log);
         }
 
         $task->complete();
@@ -124,4 +131,23 @@ else
 
         $app->closeRequest();
     }
+}
+
+/**
+ * Log cron.
+ *
+ * @param  string    $log
+ * @access public
+ * @return void
+ */
+function logCron($root, $log)
+{
+    if(!is_writable($root)) return false;
+
+    $file = $root . 'cron.' . date('Ymd') . '.log.php';
+    if(!is_file($file)) $log = "<?php\n die();\n" . $log;
+
+    $fp = fopen($file, "a");
+    fwrite($fp, $log);
+    fclose($fp);
 }

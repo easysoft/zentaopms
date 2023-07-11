@@ -2,7 +2,7 @@
     "require": {
         "spiral/roadrunner": "v2.0",
         "nyholm/psr7": "^1.8",
-        "spiral/roadrunner-jobs": "^2.0",
+        "spiral/roadrunner-jobs": "^3.0",
         "spiral/goridge": "^3.2",
         "spiral/roadrunner-kv": "^3.0"
     }

@@ -100,6 +100,8 @@ class zandRouter extends router
         $this->methodName = NULL;
         $this->rawModule  = NULL;
         $this->rawMethod  = NULL;
+        $this->params     = NULL;
+        $this->user       = NULL;
 
         self::$loadedConfigs = array();
         self::$loadedLangs   = array();
@@ -423,7 +425,7 @@ class zandSession
      */
     public function gc($maxlifetime)
     {
-        $this->dao->delete(TABLE_SESSION)->where('timestamp')->lt(time() - intval($maxlifetime))->exec();
+        $this->dao->delete()->from(TABLE_SESSION)->where('timestamp')->lt(time() - intval($maxlifetime))->exec();
         return true;
     }
 }

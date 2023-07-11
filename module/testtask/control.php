@@ -508,7 +508,7 @@ class testtask extends control
         {
             $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         }
-        setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canBeChanged('testtask', $task);
@@ -516,10 +516,10 @@ class testtask extends control
         if($this->cookie->preTaskID != $taskID)
         {
             $_COOKIE['taskCaseModule'] = 0;
-            setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
 
-        if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        if($browseType == 'bymodule') helper::setcookie('taskCaseModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
         if($browseType == 'bysuite')  $suiteName = $this->loadModel('testsuite')->getById($param)->name;
 
@@ -678,7 +678,7 @@ class testtask extends control
         $this->app->loadLang('execution');
         $this->app->loadLang('task');
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
-        setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Get task and product info, set menu. */
         $groupBy = empty($groupBy) ? 'story' : $groupBy;
@@ -1252,7 +1252,7 @@ class testtask extends control
             else
             {
                 /* set cookie for ajax load caselist when close colorbox. */
-                setcookie('selfClose', 1, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+                helper::setcookie('selfClose', 1, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
                 if($preAndNext->next and $this->app->tab != 'my')
                 {

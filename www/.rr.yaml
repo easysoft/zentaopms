@@ -1,12 +1,12 @@
 version: "3"
 
-    #service:
-    #  cron_schedule:
-    #    command: php cron.php
-    #    process_num: 1
-    #    exec_timeout: 0
-    #    restart_sec: 1
-    #    relay: pipes
+service:
+  cron_schedule:
+    command: php cron.php
+    process_num: 1
+    exec_timeout: 0
+    restart_sec: 1
+    relay: pipes
 
 server:
   command: php worker.php

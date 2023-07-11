@@ -156,8 +156,8 @@ class sso extends control
         if($this->get->status == 'success')
         {
             session_destroy();
-            setcookie('za', false);
-            setcookie('zp', false);
+            helper::setcookie('za', false);
+            helper::setcookie('zp', false);
             $this->locate($this->createLink('user', 'login'));
         }
         $this->locate($this->createLink('user', 'logout'));

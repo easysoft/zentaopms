@@ -1210,7 +1210,7 @@ class baseRouter
             $this->clientLang = $this->config->default->lang;
         }
 
-        setcookie('lang', (string) $this->clientLang, array('expires' => $this->config->cookieLife, 'path' => (string) $this->config->webRoot, 'domain' => '', 'secure' => $this->config->cookieSecure, 'httponly' => false));
+        helper::setcookie('lang', (string) $this->clientLang, $this->config->cookieLife, (string) $this->config->webRoot, '', $this->config->cookieSecure, false);
         if(!isset($_COOKIE['lang'])) $_COOKIE['lang'] = $this->clientLang;
 
         return true;
@@ -1264,7 +1264,7 @@ class baseRouter
             $this->clientTheme = $this->config->default->theme;
         }
 
-        setcookie('theme', (string) $this->clientTheme, array('expires' => $this->config->cookieLife, 'path' => (string) $this->config->webRoot, 'domain' => '', 'secure' => $this->config->cookieSecure, 'httponly' => false));
+        helper::setcookie('theme', (string) $this->clientTheme, $this->config->cookieLife, (string) $this->config->webRoot, '', $this->config->cookieSecure, false);
         if(!isset($_COOKIE['theme'])) $_COOKIE['theme'] = $this->clientTheme;
 
         return true;
@@ -1290,7 +1290,7 @@ class baseRouter
             $this->clientDevice = ($mobile->isMobile() and !$mobile->isTablet()) ? 'mobile' : 'desktop';
         }
 
-        setcookie('device', $this->clientDevice, array('expires' => $this->config->cookieLife, 'path' => (string) $this->config->webRoot, 'domain' => '', 'secure' => $this->config->cookieSecure, 'httponly' => true));
+        helper::setcookie('device', $this->clientDevice, $this->config->cookieLife, (string) $this->config->webRoot, '', $this->config->cookieSecure, true);
         if(!isset($_COOKIE['device'])) $_COOKIE['device'] = $this->clientDevice;
 
         return $this->clientDevice;
