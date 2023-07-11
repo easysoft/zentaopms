@@ -584,10 +584,7 @@ class custom extends control
             $this->custom->setConcept();
             if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
-            $this->app->loadLang('common');
-            $locate = inlink('flow');
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->title = $this->lang->custom->flow;

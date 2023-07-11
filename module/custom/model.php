@@ -761,7 +761,7 @@ class customModel extends model
 
         foreach($this->config->executionCommonList as $executionCommonList)
         {
-            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$executionCommonList[$oldConfig]}', '{$executionCommonList[$newConfig]}')")->where('source')->eq('execution')->exec();
+            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$executionCommonList[$oldConfig]}', '{$executionCommonList[$newConfig]}')")->where('dashboard')->eq('execution')->exec();
         }
     }
 
