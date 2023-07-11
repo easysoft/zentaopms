@@ -28,10 +28,11 @@ class metricModel extends model
         $calcPath = $this->metricTao->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
         if(!is_file($calcPath)) return false;
 
+        include $this->metricTao->getBaseCalcPath();
         include $calcPath;
         $calculator = new $metric->code;
 
-        $rows = $calculator->getStatement($dao)->fetchAll();
+        $rows = $calculator->getStatement($this->dao)->fetchAll();
         foreach($rows as $row) $calculator->calculate($row);
 
         return $this->metricTao->filterByOptions($calculator->getResult(), $options);
