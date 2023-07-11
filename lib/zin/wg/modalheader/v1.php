@@ -37,9 +37,10 @@ class modalHeader extends wg
     {
         list($title, $entityText, $entityID) = $this->prop(array('title', 'entityText', 'entityID'));
 
-        $header = array
+        $header = h::div
         (
-            $title ? span
+            setClass('flex items-center'),
+            $title ? div
             (
                 $title,
                 set::class('pl-3'),
@@ -48,6 +49,7 @@ class modalHeader extends wg
             ($entityText || $entityID) ? entityLabel
             (
                 set::level(1),
+                setClass('pl-2'),
                 $entityText ? set::text($entityText) : null,
                 $entityID ? set::entityID($entityID) : null,
                 set::reverse(true),
@@ -57,7 +59,7 @@ class modalHeader extends wg
 
         if(isAjaxRequest('modal')) return $header;
 
-        return div
+        return h::div
         (
             set::class('modal-header panel-form rounded-md canvas mx-auto'),
             $header
