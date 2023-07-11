@@ -70,7 +70,6 @@ formPanel
             set::label($lang->story->assignedTo),
             set::width('1/2'),
             set::name('assignedTo'),
-            set::control('select'),
             set::items($fields['assignedTo']['options']),
         ) : null,
         isset($fields['branch']) && $type == 'story' ? null : formGroup
@@ -81,7 +80,7 @@ formPanel
                 span
                 (
                     set::id('moduleIdBox'),
-                    select(set::name('module'), set::items($fields['module']['options']), set::value($fields['module']['default']), set::required(true)),
+                    picker(set::name('module'), set::items($fields['module']['options']), set::value($fields['module']['default']), set::required(true)),
                 ),
                 empty($fields['module']['options']) ? btn(set::url($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch")), setClass('primary'), set('data-toggle', 'modal'), $lang->tree->manage) : null,
                 empty($fields['module']['options']) ? btn(set('data-on', 'click'), set('data-call', 'loadProductModules'), set('data-params', $productID), setClass('refresh'), icon('refresh')) : null,
@@ -98,7 +97,7 @@ formPanel
             inputGroup
             (
                 set::id('branchBox'),
-                select
+                picker
                 (
                     set::name('branches[0]'),
                     set::items($fields['branches']['options']),
@@ -117,7 +116,7 @@ formPanel
             inputGroup
             (
                 set::id('moduleIdBox'),
-                select(set::name('modules[0]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']), set::required(true))
+                picker(set::name('modules[0]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']), set::required(true))
             ),
         ),
         formGroup
@@ -126,7 +125,7 @@ formPanel
             inputGroup
             (
                 set::id('planIdBox'),
-                select(set::name('plans[0]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
+                picker(set::name('plans[0]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
             ),
         ),
         count($branches) > 1 ? formGroup
@@ -157,7 +156,7 @@ formPanel
                 span
                 (
                     set::id('planIdBox'),
-                    select(set::name('plan'), set::items($fields['plan']['options']), set::value($fields['plan']['default'])),
+                    picker(set::name('plan'), set::items($fields['plan']['options']), set::value($fields['plan']['default'])),
                 ),
                 empty($fields['plan']['options']) ? btn(set::url($this->createLink('productplan', 'create', "productID=$productID&branch=$branch")), set('data-toggle', 'modal'), set::title($lang->productplan->create), icon('plus')) : null,
                 empty($fields['plan']['options']) ? btn(setClass('refresh'), set('data-toggle', 'modal'), set::title($lang->refresh), set('data-on', 'click'), set('data-call', 'loadProductPlans'), set('data-params', $productID), icon('refresh')) : null,
@@ -168,7 +167,6 @@ formPanel
             set::width('1/2'),
             set::id('assignedToBox'),
             set::name('assignedTo'),
-            set::control('select'),
             set::label($lang->story->assignedTo),
             set::items($fields['assignedTo']['options']),
             set::value($fields['assignedTo']['default']),
@@ -181,7 +179,6 @@ formPanel
             set::width('1/2'),
             set::label($lang->story->source),
             set::name('source'),
-            set::control('select'),
             set::items($fields['source']['options']),
             set::value($fields['source']['default']),
             on::change('toggleFeedback(e.target)'),
@@ -224,14 +221,14 @@ formPanel
             inputGroup
             (
                 set::id('assignedToBox'),
-                select(set::name('assignedTo'), set::items($fields['assignedTo']['options']), set::value($fields['assignedTo']['value']))
+                picker(set::name('assignedTo'), set::items($fields['assignedTo']['options']), set::value($fields['assignedTo']['value']))
             )
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->story->source),
-            select(set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['value']))
+            picker(set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['value']))
         ),
         formGroup
         (
@@ -248,7 +245,7 @@ formPanel
         inputGroup
         (
             set::id('reviewerBox'),
-            select
+            picker
             (
                 set::name('reviewer[]'),
                 set::multiple(true),
@@ -266,7 +263,7 @@ formPanel
             set::label($lang->story->requirement),
             inputGroup
             (
-                span(setClass('URSBox'), select(set::name('URS[]'), set::items($fields['URS']['options']), set::value($fields['URS']['value']))),
+                span(setClass('URSBox'), picker(set::name('URS[]'), set::items($fields['URS']['options']), set::value($fields['URS']['value']))),
                 btn(set('data-on', 'click'), set('data-call', 'loadURS'), set('data-params', 'allURS'), $lang->story->loadAllStories),
             )
         ),
@@ -275,7 +272,6 @@ formPanel
             set::width('1/2'),
             setClass($hiddenParent ? 'hidden' : ''),
             set::label($lang->story->parent),
-            set::control('select'),
             set::name('parent'),
             set::items($fields['parent']['options']),
             set::value($fields['parent']['value']),
@@ -287,7 +283,6 @@ formPanel
         formGroup
         (
             set::label($lang->story->parent),
-            set::control('select'),
             set::name('parent'),
             set::items($fields['parent']['options']),
             set::value($fields['parent']['value']),
@@ -300,7 +295,6 @@ formPanel
             set::width('1/2'),
             set::label($fields['region']['title']),
             set::name('region'),
-            set::control('select'),
             set::items($fields['region']['options']),
             set::value($fields['region']['default']),
             set('data-on', 'change'),
@@ -311,7 +305,6 @@ formPanel
             set::width('1/2'),
             set::label($fields['lane']['title']),
             set::name('lane'),
-            set::control('select'),
             set::items($fields['lane']['options']),
             set::value($fields['lane']['default']),
         )
@@ -331,7 +324,7 @@ formPanel
             inputGroup
             (
                 $lang->story->category,
-                select(set::name('category'), set::items($fields['category']['options']), set::value($fields['category']['default'])),
+                picker(set::name('category'), set::items($fields['category']['options']), set::value($fields['category']['default'])),
                 $lang->story->pri,
                 priPicker(set::name('pri'), set::items($fields['pri']['options']), set::value($fields['pri']['default'])),
                 $lang->story->estimateAB,
@@ -365,7 +358,7 @@ formPanel
     (
         set::label($lang->story->mailto),
         set::name('mailto[]'),
-        set::control(array('type' => 'select', 'multiple' => true)),
+        set::control(array('type' => 'picker', 'multiple' => true)),
         set::items($fields['mailto']['options']),
         set::value($fields['mailto']['default']),
     ),
@@ -390,7 +383,7 @@ isset($fields['branches']) && $type == 'story' ? formRow
         inputGroup
         (
             set::id('branchBox'),
-            select
+            picker
             (
                 set::name('branches[%i%]'),
                 set::items($fields['branches']['options']),
@@ -405,7 +398,7 @@ isset($fields['branches']) && $type == 'story' ? formRow
         inputGroup
         (
             set::id('moduleIdBox'),
-            select(set::name('modules[%i%]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']))
+            picker(set::name('modules[%i%]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']))
         ),
     ),
     formGroup
@@ -414,7 +407,7 @@ isset($fields['branches']) && $type == 'story' ? formRow
         inputGroup
         (
             set::id('planIdBox'),
-            select(set::name('plans[%i%]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
+            picker(set::name('plans[%i%]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
         ),
     ),
     formGroup
