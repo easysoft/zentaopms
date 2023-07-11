@@ -115,6 +115,26 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
             );
         }
 
+        $waitTesttasks = array();
+        if(!empty($product->waitTesttasks))
+        {
+            foreach($product->waitTesttasks as $waitTesttask)
+            {
+                $waitTesttasks[] = div(set('class', 'py-1'), common::hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$waitTesttask->id}")), $waitTesttask->name) : span($waitTesttask->name));
+                if(count($waitTesttasks) >= 2) break;
+            }
+        }
+
+        $doingTesttasks = array();
+        if(!empty($product->doingTesttasks))
+        {
+            foreach($product->doingTesttasks as $doingTesttask)
+            {
+                $doingTesttasks[] = div(set('class', 'py-1'), common::hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$doingTesttask->id}")), $doingTesttask->name) : span($doingTesttask->name));
+                if(count($doingTesttasks) >= 2) break;
+            }
+        }
+
         $tabItems[] = div
         (
             set('class', 'tab-pane h-full' . ($product->id == $selected ? ' active' : '')),
@@ -230,7 +250,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                         )
                     )
                 ),
-                cell
+                $doingTesttasks || $waitTesttasks ? cell
                 (
                     set('width', '30%'),
                     set('class', 'py-2 px-6'),
@@ -239,21 +259,19 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                         set('class', 'py-2'),
                         span($lang->block->qastatistic->latestTesttask)
                     ),
-                    div
+                    $doingTesttasks ? div
                     (
                         set('class', 'py-2'),
                         div(set('class', 'text-sm pb-2'), $lang->testtask->statusList['doing']),
-                        div(set('class', 'py-1'), a('aaaa')),
-                        div(set('class', 'py-1'), a('bbbb')),
-                    ),
-                    div
+                        $doingTesttasks
+                    ) : null,
+                    $waitTesttasks ? div
                     (
                         set('class', 'py-2'),
                         div(set('class', 'text-sm pb-2'), $lang->testtask->statusList['wait']),
-                        div(set('class', 'py-1'), a('aaaa')),
-                        div(set('class', 'py-1'), a('bbbb')),
-                    )
-                )
+                        $waitTesttasks
+                    ) : null
+                ) : null
             )
         );
     }

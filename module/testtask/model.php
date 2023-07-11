@@ -827,6 +827,7 @@ class testtaskModel extends model
         $testtask = fixer::input('post')
             ->add('id', $taskID)
             ->add('status', 'doing')
+            ->add('realBegan', date('Y-m-d'))
             ->stripTags($this->config->testtask->editor->start['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 

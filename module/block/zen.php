@@ -1485,11 +1485,27 @@ class blockZen extends block
             return;
         }
 
-        $productIdList = array_keys($products);
-        $today         = date(DT_DATE1);
-        $yesterday     = date(DT_DATE1, strtotime('yesterday'));
-        $testtasks     = $this->dao->select('*')->from(TABLE_TESTTASK)->where('product')->in($productIdList)->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->orderBy('id')->fetchAll('product');
-        $bugs          = $this->dao->select("product, count(id) as total,
+        $productIdList  = array_keys($products);
+        $today          = date(DT_DATE1);
+        $yesterday      = date(DT_DATE1, strtotime('yesterday'));
+        $doingTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
+            ->where('product')->in($productIdList)
+            ->andWhere('project')->ne(0)
+            ->andWhere('status')->eq('doing')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('realBegan_asc')
+            ->fetchGroup('product');
+
+        $waitTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
+            ->where('product')->in($productIdList)
+            ->andWhere('project')->ne(0)
+            ->andWhere('status')->eq('wait')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('begin')->ge(date('Y-m-d'))
+            ->orderBy('begin_desc')
+            ->fetchGroup('product');
+
+        $bugs = $this->dao->select("product, count(id) as total,
             count(IF(assignedTo = '{$this->app->user->account}', 1, null)) as assignedToMe,
             count(IF(status != 'closed', 1, null)) as unclosed,
             count(IF(status != 'closed' and status != 'resolved', 1, null)) as unresolved,
@@ -1532,7 +1548,8 @@ class blockZen extends block
             $product->unresolvedRate  = $product->total ? round($product->unresolved    / $product->total * 100, 2) : 0;
             $product->unconfirmedRate = $product->total ? round($product->unconfirmed   / $product->total * 100, 2) : 0;
             $product->unclosedRate    = $product->total ? round($product->unclosed      / $product->total * 100, 2) : 0;
-            $product->testtask        = isset($testtasks[$productID]) ? $testtasks[$productID] : '';
+            $product->waitTesttasks   = isset($waitTesttasks[$productID])  ? $waitTesttasks[$productID]  : '';
+            $product->doingTesttasks  = isset($doingTesttasks[$productID]) ? $doingTesttasks[$productID] : '';
         }
 
         $this->view->products = $products;
