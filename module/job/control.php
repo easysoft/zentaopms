@@ -48,6 +48,8 @@ class job extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $products = $this->loadModel('product')->getPairs();
+
         $this->app->loadLang('compile');
         $jobList = $this->job->getList($repoID, $orderBy, $pager);
         $this->loadModel('gitlab');
@@ -75,6 +77,7 @@ class job extends control
             $job->buildSpec   = urldecode($job->pipeline) . '@' . $job->jenkinsName;
             $job->engine      = zget($this->lang->job->engineList, $job->engine);
             $job->frame       = zget($this->lang->job->frameList, $job->frame);
+            $job->productName = $products[$job->product];
         }
 
         $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;

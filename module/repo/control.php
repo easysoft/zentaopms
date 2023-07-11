@@ -1052,7 +1052,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function linkStory($repoID, $revision, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkStory($repoID, $revision, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
@@ -1139,7 +1139,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function linkBug($repoID, $revision = '', $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkBug($repoID, $revision = '', $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(!empty($_POST['bugs']))
         {
@@ -1226,7 +1226,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function linkTask($repoID, $revision = '', $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkTask($repoID, $revision = '', $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(!empty($_POST['tasks']))
         {

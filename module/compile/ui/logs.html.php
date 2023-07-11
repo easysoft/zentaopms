@@ -13,7 +13,7 @@ global $lang;
 
 detailHeader(
     to::prefix(''),
-    to::title($lang->compile->logs),
+    to::title(span(setClass('font-semibold'), $lang->compile->logs)),
     to::suffix
     (
         div
