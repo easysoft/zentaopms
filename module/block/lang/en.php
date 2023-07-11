@@ -593,10 +593,19 @@ $lang->block->executionoverview->thisYear       = 'This Year';
 $lang->block->executionoverview->statusCount    = "Status of unclosed {$lang->executionCommon}";
 
 $lang->block->productoverview = new stdclass();
-$lang->block->productoverview->totalProductCount       = 'Total Product Count';
+$lang->block->productoverview->overview                = 'Total Overview';
+$lang->block->productoverview->yearFinished            = 'Year Overview';
 $lang->block->productoverview->productLineCount        = 'Product Line Count';
-$lang->block->productoverview->productReleasedThisYear = 'Number Of Releases This Year';
-$lang->block->productoverview->releaseCount            = 'Total Release Count';
+$lang->block->productoverview->productCount            = 'Total Product Count';
+$lang->block->productoverview->releaseCount            = 'Number Of Releases This Year';
+$lang->block->productoverview->milestoneCount          = 'Number of Milestones This Year';
+$lang->block->productoverview->unfinishedPlanCount     = 'Unfinished Plans';
+$lang->block->productoverview->unclosedStoryCount      = 'Unclosed Stories';
+$lang->block->productoverview->activeBugCount          = 'Active Bugs';
+$lang->block->productoverview->finishedReleaseCount    = 'Finished Releases';
+$lang->block->productoverview->finishedStoryCount      = 'Finished Stories';
+$lang->block->productoverview->finishedStoryPoint      = 'Finished Story Points';
+$lang->block->productoverview->thisWeek                = 'This Week';
 
 $lang->block->productlist = new stdclass();
 $lang->block->productlist->unclosedFeedback  = 'Number Of Feedback Not Closed';

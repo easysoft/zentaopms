@@ -607,10 +607,19 @@ $lang->block->executionoverview->thisYear       = '今年完成';
 $lang->block->executionoverview->statusCount    = "未关闭{$lang->executionCommon}状态分布";
 
 $lang->block->productoverview = new stdclass();
-$lang->block->productoverview->totalProductCount       = '产品总量';
-$lang->block->productoverview->productLineCount        = '产品线';
-$lang->block->productoverview->productReleasedThisYear = '今年发布';
-$lang->block->productoverview->releaseCount            = '发布里程碑';
+$lang->block->productoverview->overview                = '总览数据';
+$lang->block->productoverview->yearFinished            = '产品年度推进统计';
+$lang->block->productoverview->productLineCount        = '产品线总量';
+$lang->block->productoverview->productCount            = '产品总量';
+$lang->block->productoverview->releaseCount            = '今年发布';
+$lang->block->productoverview->milestoneCount          = '发布里程碑';
+$lang->block->productoverview->unfinishedPlanCount     = '未完成计划数';
+$lang->block->productoverview->unclosedStoryCount      = '未关闭需求数';
+$lang->block->productoverview->activeBugCount          = '激活 Bug 数';
+$lang->block->productoverview->finishedReleaseCount    = '已完成发布数';
+$lang->block->productoverview->finishedStoryCount      = '已完成需求数';
+$lang->block->productoverview->finishedStoryPoint      = '已完成需求规模';
+$lang->block->productoverview->thisWeek                = '本周';
 
 $lang->block->productlist = new stdclass();
 $lang->block->productlist->unclosedFeedback  = '未关闭反馈';
