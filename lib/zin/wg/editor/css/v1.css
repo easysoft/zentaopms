@@ -1,0 +1,3 @@
+tiptap-editor {display: block;}
+tiptap-editor[size="sm"] {min-height: 142px;}
+tiptap-editor[size="lg"] {min-height: 250px;}

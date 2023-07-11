@@ -25,11 +25,16 @@ class editor extends wg
         // 'userColor?: string="#ffcc00"'
     );
 
+    public static function getPageCSS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function build(): wg
     {
-        $editor = new h(set::tagName('tiptap-editor'));
+        $editor = new h(setTag('tiptap-editor'), setClass('form-control', 'p-0', 'h-auto'));
         $props  = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
-        foreach ($props as $key => $value)
+        foreach($props as $key => $value)
         {
             if($value === true || (is_string($value) && !empty($value))) $editor->add(set(uncamelize($key), $value));
         }
