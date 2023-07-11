@@ -19,7 +19,7 @@
 </style>
 <?php include 'promptdesignprogressbar.html.php';?>
 <div id='mainContent' class='main-content' style='height: calc(100vh - 120px);'>
-  <form id="mainForm" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
+  <form id="mainForm" onsubmit="return validateForm();" class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
     <div class='center-wrapper'>
       <div class='center-content'>
         <div>
@@ -51,6 +51,17 @@
   </form>
 </div>
 <script>
+function validateForm()
+{
+  let pass = true;
+  const model = document.getElementById('model')?.value;
+  if(!model)
+  {
+    alert('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->model)?>');
+    pass = false;
+  }
+  return pass;
+}
 $(function()
 {
     $('select[name="model"]').change(function()
