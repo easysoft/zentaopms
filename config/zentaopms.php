@@ -384,9 +384,14 @@ if(!defined('TABLE_MEASRECORDS'))        define('TABLE_MEASRECORDS', '`' . $conf
 if(!defined('TABLE_MEASQUEUE'))          define('TABLE_MEASQUEUE', '`' . $config->db->prefix . 'measqueue`');
 if(!defined('TABLE_MEASTEMPLATE'))       define('TABLE_MEASTEMPLATE', '`' . $config->db->prefix . 'meastemplate`');
 
+if(!defined('TABLE_METRIC'))        define('TABLE_METRIC', '`' . $config->db->prefix . 'metric`');
+if(!defined('TABLE_METRICRECORDS')) define('TABLE_METRICRECORDS', '`' . $config->db->prefix . 'metricrecords`');
+
 define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
 define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
 define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
+
+define('TABLE_SQLITE_QUEUE', '`' . $config->db->prefix . 'sqlite_queue`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
@@ -486,5 +491,6 @@ $config->featureGroup->other         = array('devops', 'kanban');
 $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;
 
-$config->hasDropmenuApps     = array('program', 'project', 'product', 'execution', 'qa', 'admin');
+$config->db->sqliteBlacklist = array('sqlite_queue', 'cron');
+$config->hasDropmenuApps     = array('program', 'project', 'product', 'execution', 'qa');
 $config->excludeDropmenuList = array('program-browse', 'product-all', 'product-index', 'execution-all', 'project-browse', 'product-batchedit');

@@ -45,6 +45,15 @@ class baseDAO
     public $config;
 
     /**
+     * 数据库类型。
+     * The database type.
+     *
+     * @var bool
+     * @access public
+     */
+    public $driver = 'mysql';
+
+    /**
      * 全局对象$lang
      * The global lang object.
      *
@@ -173,11 +182,11 @@ class baseDAO
     public function __construct()
     {
         global $app, $config, $lang, $dbh, $slaveDBH;
-        $this->app      = $app;
-        $this->config   = $config;
-        $this->lang     = $lang;
-        $this->dbh      = $dbh;
-        $this->slaveDBH = $slaveDBH ? $slaveDBH : false;
+        $this->app       = $app;
+        $this->config    = $config;
+        $this->lang      = $lang;
+        $this->dbh       = $dbh;
+        $this->slaveDBH  = $slaveDBH ? $slaveDBH : false;
 
         $this->reset();
     }
@@ -757,7 +766,7 @@ class baseDAO
             }
             else
             {
-                return $this->dbh->rawQuery($sql);
+                return $this->driver == 'sqlite' ? $this->dbh->query($sql) : $this->dbh->rawQuery($sql);
             }
         }
         catch (PDOException $e)
@@ -1515,7 +1524,7 @@ class baseSQL
      * @var object
      * @access public
      */
-    public $dbh;
+     public $dbh;
 
     /**
      * 更新或插入的数据。
@@ -1700,7 +1709,7 @@ class baseSQL
     {
         $sqlobj = self::factory();
         $sqlobj->setMethod('replace');
-        $sqlobj->sql = "REPLACE $table SET ";
+        $sqlobj->sql = "REPLACE INTO $table ";
         return $sqlobj;
     }
 

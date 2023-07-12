@@ -547,4 +547,33 @@ class admin extends control
         $this->view->data = $data;
         $this->display();
     }
+
+    /**
+     * 将队列中的SQL语句同步到SQLite中。
+     * Execute sql from SQLite queue.
+     *
+     * @access public
+     * @return void
+     */
+    public function execSqliteQueue()
+    {
+        $now = helper::now();
+        $sqlite = $this->app->connectSqlite();
+
+        $querys = $this->dao->select('*')->from(TABLE_SQLITE_QUEUE)->where('status')->eq('wait')->fetchAll();
+
+        $sqlite->beginTransaction();
+        foreach($querys as $query)
+        {
+            $sqlite->exec($query->sql);
+            $this->dao->update(TABLE_SQLITE_QUEUE)
+                ->set('status')->eq('done')
+                ->set('execDate')->eq($now)
+                ->where('id')->eq($query->id)
+                ->exec();
+        }
+        $sqlite->commit();
+
+        echo 'success';
+    }
 }

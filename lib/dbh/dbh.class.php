@@ -78,6 +78,7 @@ class dbh
         $sql = $this->formatSQL($sql);
         if(!$sql) return true;
 
+        $this->pushSqliteQueue($sql);
         return $this->pdo->exec($sql);
     }
 
@@ -492,5 +493,56 @@ class dbh
     public function commit()
     {
         return $this->pdo->commit();
+    }
+
+    /**
+     * 将SQL语句保存到队列中。
+     * Save sql to SQLite queue.
+     *
+     * @param  string $sql
+     * @access public
+     * @return int|null
+     */
+    public function pushSqliteQueue(string $sql): int|null
+    {
+        $allowedActions = array('insert', 'update', 'delete', 'replace');
+
+        $sql       = str_replace(array('\r', '\n'), ' ', trim($sql));
+        $actionPos = strpos($sql, ' ');
+        $action    = strtolower(substr($sql, 0, $actionPos));
+
+        if(!in_array($action, $allowedActions)) return null;
+
+        foreach($this->config->sqliteBlacklist as $table)
+        {
+            $tableName = $this->config->prefix . $table;
+            if(stripos($sql, $tableName) !== false) return null;
+        }
+
+        $table  = TABLE_SQLITE_QUEUE;
+        $sql    = $this->quote($sql);
+        $now    = "now()";
+        $action = $this->getLastActionID() + 1;
+
+        $queue = "INSERT INTO $table SET `sql` = $sql, `addDate` = $now, `status` = 'wait', `action` = $action";
+
+        $this->pdo->exec($queue);
+        return $this->pdo->lastInsertId();
+    }
+
+    /**
+     * 获取最后一条动态的id。
+     * Get last action id.
+     *
+     * @access public
+     * @return int|false
+     */
+    public function getLastActionID(): int|false
+    {
+        $table = TABLE_ACTION;
+        $sql = "SELECT id FROM $table ORDER BY id desc limit 1";
+
+        $lastAction = $this->pdo->query($sql)->fetch();
+        return $lastAction ? (int)$lastAction->id : false;
     }
 }

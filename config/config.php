@@ -24,7 +24,7 @@ $config->timezone      = 'Asia/Shanghai';      // 时区设置。        The tim
 $config->webRoot       = '';                   // URL根目录。       The root path of the url.
 $config->customSession = false;                // 是否开启自定义session的存储路径。Whether custom the session save path.
 $config->edition       = 'open';               // 设置系统的edition，可选值：open|biz|max。Set edition, optional: open|biz|max.
-$config->tabSession    = false;                 // 是否开启浏览器新标签独立session.
+$config->tabSession    = false;                // 是否开启浏览器新标签独立session.
 
 /* 框架路由相关设置。Routing settings. */
 $config->requestType = 'PATH_INFO';               // 请求类型：PATH_INFO|PATHINFO2|GET。    The request type: PATH_INFO|PATH_INFO2|GET.
@@ -66,6 +66,7 @@ $config->db->driver          = 'mysql';   // 目前只支持MySQL数据库。Mus
 $config->db->encoding        = 'UTF8';    // 数据库编码。           Encoding of database.
 $config->db->strictMode      = true;      // 默认开启MySQL的严格模式。  Turn on the strict mode of MySQL.
 $config->db->prefix          = 'zt_';     // 数据库表名前缀。       The prefix of the table name.
+$config->db->enableSqlite    = true;      // 是否启用SQLite         Enable SQLite or not.
 $config->slaveDB->persistant = false;
 $config->slaveDB->driver     = 'mysql';
 $config->slaveDB->encoding   = 'UTF8';
