@@ -59,7 +59,6 @@ foreach($fields as $field => $attr)
                     (
                         set::name('newLine'),
                         set::checked(empty($attr['options'])),
-                        on::click('toggleLine(e.target)'),
                         set::text($lang->product->newLine)
                     )
                 )
@@ -136,6 +135,7 @@ formPanel
     set::title($title),
     on::change('#program', 'setParentProgram'),
     on::change('#acl', 'setWhite(e.target)'),
+    on::click('[name=newLine]', 'toggleLine(e.target)'),
     $formItems
 );
 

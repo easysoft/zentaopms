@@ -30,23 +30,47 @@ foreach($fields as $field => $attr)
         $fieldName          .= '[]';
     }
 
-    $formGroup = formGroup
-    (
-        set::width($attr['width']),
-        set::name($fieldName),
-        set::label($attr['title']),
-        set::control($control),
-        set::value($attr['default']),
-        set::required($attr['required'])
-    );
+    if($control['type'] == 'picker')
+    {
+        $formGroup = formGroup
+        (
+            set::width($attr['width']),
+            set::label($attr['title']),
+            set::required($attr['required']),
+            picker
+            (
+                set::id(zget($attr, 'name', $field)),
+                set::items($control['items']),
+                set::name($fieldName),
+                set::value($attr['default']),
+                !empty($control['multiple']) ? set::multiple(true) : null,
+            ),
+        );
+    }
+    else
+    {
+        $formGroup = formGroup
+        (
+            set::id(zget($attr, 'name', $field)),
+            set::width($attr['width']),
+            set::name($fieldName),
+            set::label($attr['title']),
+            set::control($control),
+            set::value($attr['default']),
+            set::required($attr['required'])
+        );
+    }
 
     if($attr['control'] == 'hidden') $formGroup = formRow(set::hidden(true), $formGroup);
     $formItems[$field] = $formGroup;
 }
 
-if(isset($formItems['program'])) $formItems['program']->add(on::change('toggleLineByProgram();'));
-$formItems['acl']->add(on::change('setWhite(e.target);'));
-$formItems['line'] = formRow(set::id('lineBox'), $formItems['line']);
+$formItems['line'] = formRow
+(
+    set::id('lineBox'),
+    (isset($fields['program']) && $fields['program']['default'] == 0) ? set::hidden(true) : null,
+    $formItems['line']
+);
 
 /* Set whitelist box. */
 $formItems['whitelist'] = formRow
@@ -66,6 +90,7 @@ $formItems['whitelist'] = formRow
                     $lang->product->groups,
                     picker
                     (
+                        set::id($groupsField['name']),
                         set::name($groupsField['name'] . '[]'),
                         set::multiple(true),
                         set::items($groupsField['options']),
@@ -80,6 +105,7 @@ $formItems['whitelist'] = formRow
                     $lang->product->users,
                     picker
                     (
+                        set::id($usersField['name']),
                         set::name($usersField['name'] . '[]'),
                         set::multiple(true),
                         set::items($usersField['options']),
@@ -91,7 +117,12 @@ $formItems['whitelist'] = formRow
     )
 );
 
-formPanel($formItems);
+formPanel
+(
+    on::change('#program', 'toggleLineByProgram(e.target)'),
+    on::change('#acl', 'setWhite(e.target)'),
+    $formItems,
+);
 
 /* ====== Render page ====== */
 render();

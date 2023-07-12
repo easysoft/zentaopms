@@ -1053,8 +1053,11 @@ class product extends control
         $lines = array();
         if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
 
-        if($productID)  return print(html::select("lines[$productID]", $lines, '', "class='form-control picker-select'"));
-        if(!$productID) return print(html::select('line', $lines, '', "class='form-control picker-select'"));
+        $items = array();
+        foreach($lines as $lineID => $lineName) $items[] = array('text' => $lineName, 'value' => $lineID);
+
+        if($productID)  return print(json_encode(array('multiple' => false, 'defaultValue' => '', 'name' => "lines[$productID]", 'items' => $items)));
+        if(!$productID) return print(json_encode(array('multiple' => false, 'defaultValue' => '', 'name' => "line", 'items' => $items)));
     }
 
     /**
