@@ -19,7 +19,8 @@
         || (currentModule === 'my' && currentMethod === 'changepassword')
         || $('body').hasClass('allow-self-open');
 
-    if (parent === window && !isAllowSelfOpen) {
+    if (parent === window && !isAllowSelfOpen)
+    {
         const shortUrl = location.pathname + location.search + location.hash;
         location.href = $.createLink('index', 'index', `open=${btoa(shortUrl)}`);
         return;
@@ -192,7 +193,7 @@
     {
         const $navbar = $('#navbar');
         const $newNav = $(data);
-        if($newNav.text().trim() !== $navbar.text().trim()) return $navbar.empty().append($newNav);
+        if($newNav.text().trim() !== $navbar.text().trim() || $newNav.find('.nav-item>a').map((_, element) => element.href).get().join(' ') !== $navbar.find('.nav-item>a').map((_, element) => element.href).get().join(' ')) return $navbar.empty().append($newNav);
 
         activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
     }
