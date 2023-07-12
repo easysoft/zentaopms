@@ -12,6 +12,34 @@
 class metricModel extends model
 {
     /**
+     * 获取度量项数据源句柄。
+     * Get data source statement of calculator.
+     *
+     * @param  object $calculator
+     * @access public
+     * @return PDOStatement
+     */
+    public function getSourceStatement($calculator)
+    {
+        if(!empty($calculator->dataset))
+        {
+            include_once $this->metricTao->getDatasetPath();
+
+            $dataset    = new dataset($this->dao);
+            $dataSource = $calculator->dataset;
+            $fieldList  = implode(',', $calculator->fieldList);
+
+            $statement = $dataset->$dataSource($fieldList);
+        }
+        else
+        {
+            $statement = $calculator->getStatement($this->dao);
+        }
+
+        return $statement;
+    }
+
+    /**
      * 根据代号获取计算实时度量项的结果。
      * Get result of calculate metric by code.
      *
@@ -32,20 +60,8 @@ class metricModel extends model
         include_once $calcPath;
         $calculator = new $metric->code;
 
-        if(!empty($calculator->dataset))
-        {
-            include_once $this->metricTao->getDatasetPath();
-
-            $dataset    = new dataset($this->dao);
-            $dataSource = $calculator->dataset;
-            $fieldList  = implode(',', $calculator->fieldList);
-
-            $rows = $dataset->$dataSource($fieldList)->fetchAll();
-        }
-        else
-        {
-            $rows = $calculator->getStatement($this->dao)->fetchAll();
-        }
+        $statement = $this->getSourceStatement($calculator);
+        $rows = $statement->fetchAll();
 
         foreach($rows as $row) $calculator->calculate($row);
         return $calculator->getResult($options);

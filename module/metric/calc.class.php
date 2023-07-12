@@ -115,8 +115,9 @@ class baseCalc
     /**
      * 获取度量项结果。
      *
+     * @param  array  $options
      * @access public
-     * @return void
+     * @return mixed
      */
     public function getResult($options = array())
     {
