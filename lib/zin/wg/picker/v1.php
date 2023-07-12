@@ -90,9 +90,9 @@ class picker extends wg
                 if(!is_array($item))           $item = array('text' => $item, 'value' => $key);
                 if(!is_string($item['value'])) $item['value'] = strval($item['value']);
 
-                if(empty($item['value']))  $hasEmptyItem  = true;
-                else                       $pickerItems[] = $item;
+                if(empty($item['value']) && $item['value'] !== '') $hasEmptyItem  = true;
                 if($item['value'] === '0') $hasZeroValue  = true;
+                $pickerItems[] = $item;
             }
         }
 
