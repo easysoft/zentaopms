@@ -493,9 +493,9 @@ class productTao extends productModel
 
         /* 检测是否要显示分支。 */
         $showBranch = false;
+        if($currentModule == 'product') $showBranch = true;
         if($currentModule == 'testcase' and $currentMethod == 'showimport') $showBranch = false;
         if($currentModule == 'tree'     and $currentMethod == 'browse')     $showBranch = true;
-        if($currentModule == 'product'  and strpos($this->config->product->showBranchMethod, ",{$currentMethod},") !== false) $showBranch = true;
         if($currentModule == 'release'  and strpos(',browse,create,', ",{$currentMethod},") !== false) $showBranch = true;
         if($this->app->tab == 'qa'      and strpos(',testsuite,testreport,testtask,', ",$currentModule,") === false) $showBranch = true;
         if($this->app->tab == 'qa'      and $currentModule == 'testtask' and strpos(',create,edit,browseunits,importunitresult,unitcases,', ",$currentMethod,") === false) $showBranch = true;

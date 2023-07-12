@@ -2177,18 +2177,9 @@ class testcaseModel extends model
                 }
                 break;
             case 'title':
-                if($isCase == 1){
-                    if($this->app->tab == 'project')
-                    {
-                        $showBranch = isset($this->config->project->testcase->showBranch) ? $this->config->project->testcase->showBranch : 1;
-                    }
-                    else
-                    {
-                        $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
-                    }
-
+                if($isCase == 1)
+                {
                     $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-draft-edit'></i>" : '';
-                    if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                     if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                     echo $canView ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")
                         : "<span style='color: $case->color'>$case->title</span>";
