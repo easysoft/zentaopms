@@ -763,11 +763,17 @@ function navbar(): navbar
 /**
  * Dropmenu widget.
  *
+ * ?string   id       // ID，当页面有多个 dropmenu 时确保有唯一的 ID。
+ * ?string   tab      // 应用名。
+ * ?string   module   // 模块名。
+ * ?string   method   // 方法名。
+ * ?string   objectID // 当前选中项的 ID。
+ * ?string   extra    // 额外参数。
  * ?string   url      // 异步获取下拉菜单选项数据的 URL。
  * ?string   text     // 选择按钮上显示的文本。
- * ?string   objectID // 当前选中项的 ID。
  * ?bool|int cache    // 是否启用缓存。
  * ?array    data     // 手动指定数据。
+ * ?string   menuID   // 指定下拉菜单的ID。
  */
 function dropmenu(): dropmenu
 {

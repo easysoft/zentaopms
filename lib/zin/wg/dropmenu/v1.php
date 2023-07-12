@@ -38,7 +38,19 @@ class dropmenu extends wg
         'text?:     string',            // 选择按钮上显示的文本。
         'cache?:    bool|int=true',     // 是否启用缓存。
         'data?:     array',             // 手动指定数据。
+        'menuID?:   string="$GID"',     // 指定下拉菜单的ID。
     );
+
+    /**
+     * Load the css file.
+     *
+     * @access public
+     * @return string|false
+     */
+    public static function getPageCSS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
 
     /**
      * Override the build method.
@@ -48,10 +60,10 @@ class dropmenu extends wg
      */
     protected function build(): zui
     {
-        list($url, $text, $objectID, $cache, $tab, $module, $method, $extra, $id, $data) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'extra', 'id', 'data'));
+        list($url, $text, $objectID, $cache, $tab, $module, $method, $extra, $id, $data, $menuID) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'extra', 'id', 'data', 'menuID'));
 
-        $app  = data('app');
-        $lang = data('lang');
+        $app    = data('app');
+        $lang   = data('lang');
 
         if(empty($tab))      $tab      = $app->tab;
         if(empty($module))   $module   = $app->rawModule;
@@ -69,6 +81,7 @@ class dropmenu extends wg
             $currentMenuKey = $app->control->loadModel('admin')->getMenuKey();
             $text           = $lang->admin->menuList->{$currentMenuKey}['name'];
             $url            = createLink('admin', 'ajaxGetDropMenu', "currentMenuKey={$currentMenuKey}");
+            $menuID         = 'admin-menu';
         }
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
@@ -80,6 +93,7 @@ class dropmenu extends wg
 
         return zui::dropmenu
         (
+            setID($menuID),
             set('_id', $id),
             set('_props', array('data-fetcher' => $url)),
             set('data', $data),
