@@ -141,14 +141,16 @@ class baseCalc
         $options = $this->expandOptions($options);
 
         $filteredRows = array();
-        foreach($options as $scope => $option)
+        foreach($rows as $row)
         {
-            foreach($rows as $row)
+            $satisify = true;
+            foreach($options as $scope => $option)
             {
                 $row = (object)$row;
                 if(!isset($row->$scope)) continue;
-                if(in_array($row->$scope, $option)) $filteredRows[] = $row;
+                $satisify = ($satisify && in_array($row->$scope, $option));
             }
+            if($satisify) $filteredRows[] = $row;
         }
 
         return !empty($filteredRows) ? $filteredRows : false;
