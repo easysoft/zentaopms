@@ -33,7 +33,7 @@ foreach($lang->project->modelList as $model => $modelName)
         setClass('model-block'),
         div
         (
-            setClass('model-item modal-content items-center cursor-pointer'),
+            setClass('model-item col items-center cursor-pointer'),
             set('data-url', sprintf($createLink, $model)),
             img
             (
