@@ -340,7 +340,7 @@ detailBody
                     item
                     (
                         set::name($lang->story->reviewers),
-                        array_values(array_map(function($reviewer, $result) use($user)
+                        array_values(array_map(function($reviewer, $result) use($users)
                         {
                             global $lang;
                             return !empty($result) ? span(set::title($lang->story->reviewed), set::style(array('color' => '#cbd0db')), zget($users, $reviewer)) : span(set::title($lang->story->toBeReviewed), zget($users, $reviewer));
