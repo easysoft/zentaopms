@@ -31,6 +31,7 @@ $config->story->dtable->fieldList['title']['required']     = 'yes';
 $config->story->dtable->fieldList['title']['nestedToggle'] = true;
 $config->story->dtable->fieldList['title']['show']         = true;
 $config->story->dtable->fieldList['title']['group']        = 1;
+$config->story->dtable->fieldList['title']['data-app']     = $app->tab;
 
 $config->story->dtable->fieldList['pri']['name']     = 'pri';
 $config->story->dtable->fieldList['pri']['title']    = $lang->priAB;
