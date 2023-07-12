@@ -41,7 +41,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->release->includedBuild),
-            select
+            picker
             (
                 set::name('build[]'),
                 set::placeholder($lang->build->placeholder->multipleSelect),
@@ -79,14 +79,14 @@ formPanel
         editor
         (
             set::name('desc'),
-            set::value($release->desc),
+            html($release->desc),
             set::rows('10'),
         )
     ),
     formGroup
     (
         set::label($lang->release->mailto),
-        select
+        picker
         (
             set::name('mailto[]'),
             set::value($release->mailto),

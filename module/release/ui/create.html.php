@@ -61,7 +61,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->release->includedBuild),
-            select
+            picker
             (
                 set::name('build[]'),
                 set::placeholder($lang->build->placeholder->multipleSelect),
@@ -105,7 +105,7 @@ formPanel
     formGroup
     (
         set::label($lang->release->mailto),
-        select
+        picker
         (
             set::name('mailto[]'),
             set::items($users),
