@@ -2,23 +2,6 @@
 class blockZen extends block
 {
     /**
-     * 加载度量模块。
-     * Load the metric model.
-     *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @param  string $appName
-     * @access public
-     * @return void
-     */
-    public function __construct(string $moduleName = '', string $methodName = '', string $appName = '')
-    {
-        parent::__construct($moduleName, $methodName, $appName);
-
-        $this->loadModel('metric');
-    }
-
-    /**
      * 添加或编辑区块时获取可使用的模块选项。
      * Get module options when adding or editing blocks.
      *
@@ -1604,9 +1587,9 @@ class blockZen extends block
         $releaseList  = $this->dao->select('id, marker')->from(TABLE_RELEASE)->where('deleted')->eq('0')->andWhere('createdDate')->like(date('Y') . '-%')->fetchPairs();
 
         $data = new stdclass();
-        $data->productCount   = number_format($productCount);
-        $data->releaseCount   = number_format(count($releaseList));
-        $data->milestoneCount = number_format(count(array_filter($releaseList)));
+        $data->productCount   = $productCount;
+        $data->releaseCount   = count($releaseList);
+        $data->milestoneCount = count(array_filter($releaseList));
 
         $this->view->data = $data;
     }
@@ -1626,7 +1609,7 @@ class blockZen extends block
 
         $data = new stdclass();
         $data->productLineCount             = number_format(rand(1, 10000));
-        $data->productCount                 = number_format($this->metric->getResultByCode('count_of_product'));
+        $data->productCount                 = number_format(rand(1, 10000));
         $data->unfinishedPlanCount          = number_format(rand(1, 10000));
         $data->unclosedStoryCount           = number_format(rand(1, 10000));
         $data->activeBugCount               = number_format(rand(1, 10000));
