@@ -9,6 +9,20 @@ class metricTest
     }
 
     /**
+     * 测试根据code获取度量项数据方法。
+     * Test get metric by code.
+     *
+     * @param  string     $code
+     * @param  array|null $options
+     * @access public
+     * @return void
+     */
+    public function getMetricByCode($code, $options = null)
+    {
+        return $this->objectModel->getResultByCode($code, $options);
+    }
+
+    /**
      * 获取度量项基类文件的路径。
      * Get path of base calculator class.
      *
