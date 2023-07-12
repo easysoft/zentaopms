@@ -20,7 +20,8 @@ formPanel
         set::name('execution'),
         set::value($task->execution),
         set::class(((!empty($project) && !$project->multiple) || ($app->tab == 'execution' && $task->execution)) ? 'hidden' : ''),
-        set::control(array('type' => 'select', 'items' => $executions))
+        set::control('picker'),
+        set::items($executions),
     ),
     formGroup
     (
@@ -29,7 +30,8 @@ formPanel
         set::required(true),
         set::name('build'),
         set::value($task->build),
-        set::control(array('type' => 'select', 'items' => $builds))
+        set::control('picker'),
+        set::items($builds),
     ),
     formGroup
     (
@@ -37,7 +39,9 @@ formPanel
         set::label($lang->testtask->type),
         set::name('type[]'),
         set::value($task->type),
-        set::control(array('type' => 'select', 'items' => $lang->testtask->typeList, 'multiple' => true))
+        set::control('picker'),
+        set::items($lang->testtask->typeList),
+        set::multiple(true),
     ),
     formGroup
     (
@@ -45,7 +49,8 @@ formPanel
         set::label($lang->testtask->owner),
         set::name('owner'),
         set::value($task->owner),
-        set::control(array('type' => 'select', 'items' => $users))
+        set::control('picker'),
+        set::items($users),
     ),
     formGroup
     (
@@ -79,7 +84,8 @@ formPanel
         set::name('status'),
         set::required(true),
         set::value($task->status),
-        set::control(array('type' => 'select', 'items' => $lang->testtask->statusList)),
+        set::control('picker'),
+        set::items($lang->testtask->statusList),
     ),
     formGroup
     (
@@ -87,7 +93,8 @@ formPanel
         set::label($lang->testtask->testreport),
         set::name('testreport'),
         set::value($task->testreport),
-        set::control(array('type' => 'select', 'items' => $testreports))
+        set::control('picker'),
+        set::items($testreports),
     ),
     formGroup
     (
@@ -102,7 +109,7 @@ formPanel
                 set::value($task->name),
             ),
             $lang->testtask->pri,
-            select
+            picker
             (
                 zui::width('80px'),
                 set::name('pri'),
@@ -138,9 +145,11 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->mailto),
-        set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
         set::name('mailto[]'),
         set::value(str_replace(' ', '', $task->mailto)),
+        set::control('picker'),
+        set::items($users),
+        set::multiple(true)
     )
 );
 

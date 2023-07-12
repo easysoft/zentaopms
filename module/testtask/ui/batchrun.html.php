@@ -58,7 +58,7 @@ foreach($cases as $caseID => $case)
                 (
                     set::width('90px'),
                     set::class("hidden steps"),
-                    select
+                    picker
                     (
                         set::name("steps[$caseID][$stepID]"),
                         set::items($lang->testcase->resultList),

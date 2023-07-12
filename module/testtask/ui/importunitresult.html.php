@@ -22,7 +22,7 @@ formPanel
         (
             set::label($lang->testtask->execution),
             set::width('1/2'),
-            select
+            picker
             (
                 set::name('execution'),
                 set::items($executions),
@@ -35,7 +35,7 @@ formPanel
             set::required(true),
             inputGroup
             (
-                select
+                picker
                 (
                     set::name('build'),
                     set::items($builds)
@@ -57,7 +57,7 @@ formPanel
     (
         set::label($lang->job->frame),
         set::width('1/2'),
-        select
+        picker
         (
             set::name('frame'),
             set::items($lang->job->frameList),
@@ -117,7 +117,7 @@ formPanel
         (
             set::label($lang->testtask->owner),
             set::width('1/3'),
-            select
+            picker
             (
                 set::name('owner'),
                 set::items($users),
@@ -128,7 +128,7 @@ formPanel
         (
             set::label($lang->testtask->pri),
             set::width('160px'),
-            select
+            picker
             (
                 zui::width('80px'),
                 set::name('pri'),
@@ -151,7 +151,7 @@ formPanel
         set::label($lang->testtask->mailto),
         inputGroup
         (
-            select
+            picker
             (
                 set::name('mailto[]'),
                 set::items($users),

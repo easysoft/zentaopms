@@ -34,14 +34,14 @@ form
         set::label($lang->testtask->mailto),
         inputGroup
         (
-            select
+            picker
             (
                 set::name('mailto'),
                 set::items($users),
                 set::value($testtask->mailto ? tr_replace(' ', '', $testtask->mailto) : ''),
                 set::multiple(true),
             ),
-            $contactList ? select
+            $contactList ? picker
             (
                 set::name('contact'),
                 set::items($contactList),

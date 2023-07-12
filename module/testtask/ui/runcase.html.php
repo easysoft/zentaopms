@@ -58,7 +58,7 @@ if($confirm != 'yes')
             $itemTds[] = h::td
             (
                 setClass("text-center"),
-                select
+                picker
                 (
                     on::change('checkStepValue'),
                     set::name("steps[{$step->id}]"),
