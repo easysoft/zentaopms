@@ -229,7 +229,7 @@ class cronModel extends model
         $result = $this->checkRule($cron);
         if(!empty($result))
         {
-            dao::$errors[] = $result;
+            dao::$errors = $result;
             return false;
         }
 
