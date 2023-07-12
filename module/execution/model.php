@@ -5401,6 +5401,7 @@ class executionModel extends model
             $execution->rawID         = $execution->id;
             $execution->isExecution   = 1;
             $execution->id            = 'pid' . (string)$execution->id;
+            $execution->projectID     = $execution->project;
             $execution->project       = $execution->projectName;
             $execution->parent        = ($execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->isParent      = !empty($execution->isParent) or !empty($execution->tasks);
