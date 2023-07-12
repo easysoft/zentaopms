@@ -821,4 +821,22 @@ class aiModel extends model
             ->andWhere('status', true)->eq('active')->orWhere('createdBy')->eq($this->app->user->account)->markRight(1)
             ->fetchAll();
     }
+
+    /**
+     * Set inject data for a form. For how injection works, see view/inputinject.html.php file.
+     *
+     * @param  string|array  $form  'module.method' or array('module', 'method').
+     * @param  string|object $data  data to inject, object will be json encoded.
+     * @access public
+     * @return void
+     */
+    public function setInjectData($form, $data)
+    {
+        if(is_string($form)) $form = explode('.', $form);
+
+        $module = $form[0];
+        $method = $form[1];
+
+        $_SESSION['aiInjectData'][$module][$method] = is_string($data) ? $data : json_encode($data);
+    }
 }

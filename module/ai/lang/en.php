@@ -305,3 +305,7 @@ $lang->ai->formSchema['story']['change']->required = array('title', 'spec', 'ver
 
 $lang->ai->promptMenu = new stdclass();
 $lang->ai->promptMenu->dropdownTitle = 'AI';
+
+$lang->ai->dataInject = new stdclass();
+$lang->ai->dataInject->success = 'Prompt execution results are filled in.';
+$lang->ai->dataInject->fail    = 'Failed to fill in prompt execution results.';

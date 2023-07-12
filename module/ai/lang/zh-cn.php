@@ -305,3 +305,7 @@ $lang->ai->formSchema['story']['change']->required = array('title', 'spec', 'ver
 
 $lang->ai->promptMenu = new stdclass();
 $lang->ai->promptMenu->dropdownTitle = 'AI';
+
+$lang->ai->dataInject = new stdclass();
+$lang->ai->dataInject->success = '已将提词执行结果填写到表单中';
+$lang->ai->dataInject->fail    = '提词执行结果填写失败';
