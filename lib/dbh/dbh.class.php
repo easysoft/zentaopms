@@ -78,7 +78,7 @@ class dbh
         $sql = $this->formatSQL($sql);
         if(!$sql) return true;
 
-        $this->pushSqliteQueue($sql);
+        if(!empty($this->config->enableSqlite)) $this->pushSqliteQueue($sql);
         return $this->pdo->exec($sql);
     }
 
