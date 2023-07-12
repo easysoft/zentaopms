@@ -286,22 +286,19 @@ formPanel
             set::required(true),
             inputGroup
             (
-                input
+                datepicker
                 (
                     set::name('begin'),
-                    set::type('date'),
                     set('id', 'begin'),
                     set::value(date('Y-m-d')),
-                    set::placeholder($lang->project->begin),
                     set::required(true),
                     on::change('computeWorkDays')
                 ),
                 $lang->project->to,
-                input
+                datepicker
                 (
                     set::name('end'),
                     set('id', 'end'),
-                    set::type('date'),
                     set::placeholder($lang->project->end),
                     set::required(true),
                     on::change('computeWorkDays')
