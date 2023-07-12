@@ -7,7 +7,7 @@ require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 class navbar extends wg
 {
     protected static array $defineProps = array(
-        'items: array'
+        'items?: array'
     );
 
     protected function getExecutionMoreItem($executionID)
