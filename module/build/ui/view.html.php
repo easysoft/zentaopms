@@ -129,12 +129,11 @@ detailBody
                     set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
                     set::sortLink(jsRaw('window.createSortLink')),
                     set::footToolbar($storyFootToolbar),
-                    set::footPager(usePager(array
-                    (
+                    set::footPager(usePager('storyPager', '', array(
                         'recPerPage'  => $storyPager->recPerPage,
                         'recTotal'    => $storyPager->recTotal,
                         'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                    ), 'storyPager')),
+                    ))),
                 )
             ),
 
@@ -159,12 +158,11 @@ detailBody
                     set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
                     set::sortLink(jsRaw('window.createSortLink')),
                     set::footToolbar($bugFootToolbar),
-                    set::footPager(usePager(array
-                    (
+                    set::footPager(usePager('bugPager', '', array(
                         'recPerPage'  => $bugPager->recPerPage,
                         'recTotal'    => $bugPager->recTotal,
                         'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                    ), 'bugPager')),
+                    ))),
                 )
             ),
 
@@ -181,13 +179,11 @@ detailBody
                     set::cols(array_values($config->build->generatedBug->dtable->fieldList)),
                     set::data(array_values($generatedBugs)),
                     set::sortLink(jsRaw('window.createSortLink')),
-                    set::footPager(
-                        usePager(array(
-                            'recPerPage'  => $generatedBugPager->recPerPage,
-                            'recTotal'    => $generatedBugPager->recTotal,
-                            'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=generatedBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$generatedBugPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                        ), 'generatedBugPager'),
-                    ),
+                    set::footPager(usePager('generatedBugPager', '', array(
+                        'recPerPage'  => $generatedBugPager->recPerPage,
+                        'recTotal'    => $generatedBugPager->recTotal,
+                        'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=generatedBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$generatedBugPager->recTotal}&recPerPage={recPerPage}&page={page}")
+                    ))),
                 )
             ),
 
