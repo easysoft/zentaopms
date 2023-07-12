@@ -88,7 +88,7 @@ class dept extends control
         {
             $this->dept->update($deptID);
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return print(js::alert($this->lang->dept->successSave) . js::reload('parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->dept->successSave, 'closeModal' => true, 'load' => true));
         }
 
         $dept  = $this->dept->getById($deptID);

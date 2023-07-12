@@ -8,6 +8,7 @@ window.operateDept = function(event, item, index)
     if($target.hasClass('icon-edit') || $target.children('.icon-edit').length > 0)
     {
         $button.attr('data-toggle', 'modal');
+        $button.attr('data-size', 'sm');
         $button.attr('data-url', editLinkTemp.replace('{id}', deptID));
     }
     else if($target.hasClass('icon-trash') || $target.children('.icon-trash').length > 0)
