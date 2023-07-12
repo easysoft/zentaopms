@@ -27,12 +27,12 @@ foreach($crons as $cron)
 panel
 (
     set::title($lang->cron->list),
-    set::headingActions(array
+    !empty($config->global->cron) ? set::headingActions(array
     (
         array('class' => 'mr-3 ajaxRefresh', 'url' => inlink('openProcess'), 'text' => $lang->cron->openProcess),
-        array('class' => 'mr-3 ajaxTurnon',  'url' => '###', 'text' => $lang->cron->turnonList[0], 'onclick' => 'window.confirmTurnon()'),
+        array('class' => 'mr-3 ajaxTurnon ajax-submit', 'url' => inlink('turnon'), 'text' => $lang->cron->turnonList[0], 'data-confirm' => $this->lang->cron->confirmTurnon),
         array('class' => 'mr-3 primary',     'url' => inlink('create'), 'text' => $lang->cron->create),
-    )),
+    )) : null,
     !empty($config->global->cron) ? div
     (
         dtable
