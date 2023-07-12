@@ -16,14 +16,15 @@ $pageParams = http_build_query($app->getParams());
 
 $cols = array();
 $cols['id']     = $config->story->dtable->fieldList['id'];
-$cols['pri']    = $config->story->dtable->fieldList['pri'];
 $cols['title']  = $config->story->dtable->fieldList['title'];
+$cols['pri']    = $config->story->dtable->fieldList['pri'];
 $cols['status'] = $config->story->dtable->fieldList['status'];
 if($story->type == 'story') $cols['stage'] = $config->story->dtable->fieldList['stage'];
 $cols['openedBy'] = $config->story->dtable->fieldList['openedBy'];
 $cols['estimate'] = $config->story->dtable->fieldList['estimate'];
 $cols['title']['nestedToggle'] = false;
-unset($cols['title']['minWidth']);
+$cols['title']['flex']         = 1;
+$cols = array_map(function($col){unset($col['sortType']); return $col;}, $cols);
 
 $stories2Link[] = $story;
 $data = array();
@@ -39,7 +40,6 @@ dtable
     set::data($data),
     set::footToolbar(array('items' => array(array('text' => $lang->save, 'btnType' => 'primary', 'className' => 'size-sm', 'data-on' => 'click', 'data-call' => 'fnLinkStories', 'data-params' => 'event')))),
     set::footer(array('checkbox', 'toolbar')),
-
 );
 
 h::js

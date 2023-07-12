@@ -1562,7 +1562,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function linkStory($storyID, $type = 'linkStories', $linkedStoryID = 0, $browseType = '', $queryID = 0, $storyType = 'story')
+    public function linkStory(int $storyID, string $type = 'linkStories', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0, string $storyType = 'story')
     {
         $this->commonAction($storyID);
 

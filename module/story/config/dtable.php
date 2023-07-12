@@ -23,7 +23,7 @@ if($app->tab == 'execution')
 
 $config->story->dtable->fieldList['title']['name']         = 'title';
 $config->story->dtable->fieldList['title']['title']        = $lang->story->title;
-$config->story->dtable->fieldList['title']['type']         = 'text';
+$config->story->dtable->fieldList['title']['type']         = 'title';
 $config->story->dtable->fieldList['title']['link']         = helper::createLink('story', 'view', 'storyID={id}');
 $config->story->dtable->fieldList['title']['fixed']        = 'left';
 $config->story->dtable->fieldList['title']['minWidth']     = '342';
