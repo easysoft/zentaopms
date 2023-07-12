@@ -1613,3 +1613,8 @@ function severityPicker(): severityPicker
 {
     return createWg('severityPicker', func_get_args());
 }
+
+function hr(): hr
+{
+    return createWg('hr', func_get_args());
+}

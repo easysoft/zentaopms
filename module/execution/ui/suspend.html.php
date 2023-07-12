@@ -29,7 +29,7 @@ formPanel
         )
     ),
 );
-
+hr();
 history();
 
 /* ====== Render page ====== */

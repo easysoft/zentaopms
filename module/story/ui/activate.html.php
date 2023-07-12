@@ -39,7 +39,7 @@ formPanel
         set::rows(6),
     ),
 );
-
+hr();
 history();
 
 render();

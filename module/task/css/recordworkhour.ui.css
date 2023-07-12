@@ -1,6 +1,6 @@
 .modal-body > .table-title {font-weight: 700; margin-bottom: 2px}
-.panel-form{padding: 0px !important}
-.panel-form .panel-heading {padding: 1.5rem 0 !important}
+.panel-form {padding: 0px}
+.panel-form .panel-heading {padding: 1.5rem 0}
 .panel-form .panel-heading .panel-title {font-size: 14px}
-.panel-form .panel-body {padding: 0 0 1rem 0 !important}
+.panel-form .panel-body {padding: 0 0 1rem 0}
 div.alert {margin: 10px 0}

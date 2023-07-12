@@ -75,7 +75,7 @@ formPanel
         )
     )
 );
-
+hr();
 history();
 
 render();

@@ -129,6 +129,7 @@ else
             )
         ),
     );
+    hr();
     history();
 }
 

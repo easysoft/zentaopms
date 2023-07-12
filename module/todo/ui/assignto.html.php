@@ -91,5 +91,5 @@ formPanel
         )
     )
 );
-
+hr();
 history();

@@ -23,5 +23,5 @@ formPanel
         )
     ),
 );
-
+hr();
 history();

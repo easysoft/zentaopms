@@ -25,7 +25,7 @@ form
     ),
     set::actions(array('submit'))
 );
-
+hr();
 history();
 
 render();

@@ -21,7 +21,7 @@ formPanel
         set::control('editor')
     )
 );
-
+hr();
 history();
 
 render();

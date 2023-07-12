@@ -54,7 +54,7 @@ formPanel
         )
     ),
 );
-
+hr();
 history();
 
 render();

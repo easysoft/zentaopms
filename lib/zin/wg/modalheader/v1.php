@@ -45,7 +45,6 @@ class modalHeader extends wg
             $title ? div
             (
                 $title,
-                set::class('pl-3'),
                 set::class($this->prop('titleClass')),
             ) : null,
             ($entityText || $entityID) ? entityLabel

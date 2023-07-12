@@ -24,7 +24,7 @@ class modal extends modalDialog
         return div
         (
             setClass('modal'),
-            set::id($id),
+            setID($id),
             set($this->props->skip(array_merge(array_keys($modalProps), array_keys(static::definedPropsList())))),
             parent::build()
         );

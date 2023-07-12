@@ -58,7 +58,7 @@ formPanel
         upload()
     )
 );
-
+hr();
 history();
 
 render();

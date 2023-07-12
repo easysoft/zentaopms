@@ -167,6 +167,7 @@ else
             set::control("editor")
         ),
     );
+    hr();
     history();
 }
 

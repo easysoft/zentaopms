@@ -125,6 +125,7 @@ else
             )
         ),
     );
+    hr();
     history();
 }
 

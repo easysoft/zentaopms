@@ -25,6 +25,11 @@ class modalDialog extends wg
         'footer' => array('map' => 'toolbar')
     );
 
+    public static function getPageCSS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function buildHeader()
     {
         $title       = $this->prop('title');
@@ -93,19 +98,21 @@ class modalDialog extends wg
         );
     }
 
-    protected function build(): wg
+    protected function setSize(): ?directive
     {
         $size = $this->prop('size');
-        if($size)
-        {
-            if(is_string($size)) $size = set('data-size', $size);
-            else                 $size = setStyle('width', "{$size}px");
-        }
+        if(!$size) return null;
+        if(is_string($size)) return set('data-size', $size);
+        return setStyle('width', "{$size}px");
+    }
+
+    protected function build(): wg
+    {
         return div
         (
             setClass('modal-dialog'),
             set($this->getRestProps()),
-            $size,
+            $this->setSize(),
             div
             (
                 setClass('modal-content'),
