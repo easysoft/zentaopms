@@ -171,7 +171,7 @@ class cronModel extends model
      */
     public function checkChange()
     {
-        $updatedCron = $this->dao->select('*')->from(TABLE_CRON)->where('lastTime')->eq('0000-00-00 00:00:00')->andWhere('status')->ne('stop')->fetch();
+        $updatedCron = $this->dao->select('*')->from(TABLE_CRON)->where('lastTime')->notZeroDatetime()->andWhere('status')->ne('stop')->fetch();
         return $updatedCron ? true : false;
     }
 
