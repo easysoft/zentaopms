@@ -10,7 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$cols = array();
+$buildModule = $app->tab == 'project' ? 'projectbuild' : 'build';
+$cols        = array();
 foreach($config->build->defaultFields['linkBug'] as $field) $cols[$field] = zget($config->bug->dtable->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['resolvedBy']['type'] = 'html';
@@ -40,7 +41,7 @@ dtable
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('build', 'view', "buildID={$build->id}&type=bug&link=true&param=" . helper::safe64Encode("&browseType={$browseType}&param={$param}") . "&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link=true&param=" . helper::safe64Encode("&browseType={$browseType}&param={$param}") . "&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
 );
 

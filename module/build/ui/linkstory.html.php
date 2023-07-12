@@ -10,7 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$cols = array();
+$buildModule = $app->tab == 'project' ? 'projectbuild' : 'build';
+$cols        = array();
 foreach($config->build->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->story->dtable->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}&version=0&param={objectID}");
@@ -39,12 +40,12 @@ dtable
         'data-type' => 'story',
         'data-url'  => inlink('linkStory', "buildID={$build->id}&browseType=$browseType&param=$param"),
     )))),
-    set::footer(array('checkbox', 'toolbar', array('html' => html::a(helper::createLink(($this->app->tab == 'project' ? 'projectbuild' : 'build'), 'view', "buildID=$build->id&type=story"). "#app={$app->tab}", $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
+    set::footer(array('checkbox', 'toolbar', array('html' => html::a(helper::createLink($buildModule, 'view', "buildID=$build->id&type=story"). "#app={$app->tab}", $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('buuild', 'view', "buildID={$build->id}&type=story&link=true&param=" . helper::safe64Encode("&browseType={$browseType}&param={$param}") . "&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=story&link=true&param=" . helper::safe64Encode("&browseType={$browseType}&param={$param}") . "&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
 );
 
