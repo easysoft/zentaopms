@@ -97,6 +97,7 @@ class moduleMenu extends wg
                     setClass('btn'),
                     setStyle('background', '#EEF5FF'),
                     setStyle('box-shadow', 'none'),
+                    set('data-app', $app->tab),
                     set::href($settingLink),
                     $lang->moduleSetting
                 )
@@ -129,7 +130,6 @@ class moduleMenu extends wg
     {
         $this->setMenuTreeProps();
         $title = $this->getTitle();
-
 
         return div
         (
