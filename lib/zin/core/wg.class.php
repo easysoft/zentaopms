@@ -263,7 +263,6 @@ class wg
         if($prop === 'id' && $value === '$GID') $value = $this->gid;
         if($prop[0] === '@')
         {
-            $this->setDefaultProps(['id' => '$GID']);
             context::current()->addWgWithEvents($this);
         }
         $this->props->set($prop, $value);

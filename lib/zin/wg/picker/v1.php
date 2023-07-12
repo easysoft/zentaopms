@@ -26,7 +26,8 @@ class picker extends wg
      * @access protected
      */
     protected static array $defineProps = array(
-        'id?: string',                      // 组件根元素的 ID。
+        'id?: string="$GID"',                      // 组件根元素的 ID。
+        'formID?: string',                  // 组件隐藏的表单元素 ID。
         'className?: string|array',         // 类名。
         'style?: array',                    // 样式。
         'tagName?: string',                 // 组件根元素的标签名。
@@ -76,8 +77,8 @@ class picker extends wg
      */
     protected function getPickerProps(): array
     {
-        $props = $this->props->toJsonData();
-        $items = $props['items'];
+        list($pickerProps, $restProps) = $this->props->split(array_keys(static::definedPropsList()));
+        $items = $pickerProps['items'];
         $pickerItems  = array();
         $hasEmptyItem = false;
         if(!empty($items))
@@ -92,9 +93,20 @@ class picker extends wg
             }
         }
 
-        $props['items'] = $pickerItems;
-        if(!isset($props['required'])) $props['required'] = !$hasEmptyItem;
-        return $props;
+        $pickerProps['_props'] = $restProps;
+        $pickerProps['items']  = $pickerItems;
+        if(!isset($pickerProps['required'])) $pickerProps['required'] = !$hasEmptyItem;
+
+        if(isset($pickerProps['id']))
+        {
+            $pickerProps['_id'] = $pickerProps['id'];
+            unset($pickerProps['id']);
+        }
+        else
+        {
+            $pickerProps['_id'] = $this->gid;
+        }
+        return $pickerProps;
     }
 
     /**
@@ -108,7 +120,7 @@ class picker extends wg
         return zui::picker
         (
             set::_class('form-group-wrapper'),
-            set::_map(array('value' => 'defaultValue')),
+            set::_map(array('value' => 'defaultValue', 'formID' => 'id')),
             set($this->getPickerProps())
         );
     }

@@ -208,11 +208,19 @@ class props extends \zin\utils\dataset
         return implode(' ', $pairs);
     }
 
-    public function toJsonData(): array
+    public function toJsonData(bool $skipEvents = false): array
     {
         $data = $this->data;
         if(!empty($this->style->data)) $data['style'] = $this->style->data;
         if(!empty($this->class->list)) $data['class'] = $this->class->toStr();
+
+        if($skipEvents)
+        {
+            foreach($data as $name => $value)
+            {
+                if(str_starts_with($name, '@')) unset($data[$name]);
+            }
+        }
         return $data;
     }
 
@@ -228,6 +236,23 @@ class props extends \zin\utils\dataset
         }
 
         return $data;
+    }
+
+    public function split(array|string $firstListProps = array()): array
+    {
+        if(is_string($firstListProps)) $firstListProps = explode(',', $firstListProps);
+
+        $data       = $this->toJsonData();
+        $firstList  = array();
+        $restList   = array();
+        foreach($data as $name => $value)
+        {
+            if($value === null ||  $name[0] === '@') continue;
+            if(in_array($name, $firstListProps)) $firstList[$name] = $value;
+            else                                 $restList[$name]  = $value;
+        }
+
+        return array($firstList, $restList);
     }
 
     public function pick(array|string $pickProps = array()): array
