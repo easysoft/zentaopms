@@ -254,9 +254,7 @@ class h extends wg
         {
             if(empty($var)) continue;
 
-            $rawVal = $val;
-            $val    = h::encodeJsonWithRawJs($val);
-            if(empty($val) && (is_array($rawVal) || is_object($rawVal))) $val = '[]';
+            $val = h::encodeJsonWithRawJs($val);
 
             if(str_starts_with($var, 'window.')) $jsCode .= "$var=" . $val . ';';
             elseif(str_starts_with($var, '+')) $jsCode .= 'let ' . substr($var, 1) . '=' . $val . ';';
@@ -279,7 +277,7 @@ class h extends wg
     protected static function encodeJsonWithRawJs($data)
     {
         $json = json_encode($data, JSON_UNESCAPED_UNICODE);
-        if(empty($json)) return '[]';
+        if(empty($json) && (is_array($data) || is_object($data))) return '[]';
 
         $json = str_replace('"RAWJS<', '', str_replace('>RAWJS"', '', $json));
         return $json;
