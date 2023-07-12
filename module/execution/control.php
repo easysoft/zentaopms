@@ -1806,8 +1806,8 @@ class execution extends control
         $this->view->name                = $name;
         $this->view->code                = $code;
         $this->view->team                = $team;
-        $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
-        $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed,multiple');
+        $this->view->teams               = $this->execution->getCanCopyObjects((int)$projectID);
+        $this->view->allProjects         = $this->project->getPairsByModel('all', 0, 'noclosed,multiple');
         $this->view->copyProjects        = $copyProjects;
         $this->view->copyProjectID       = $copyProjectID;
         $this->view->copyExecutions      = $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
@@ -1816,8 +1816,8 @@ class execution extends control
         $this->view->projectID           = $projectID;
         $this->view->products            = $products;
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs();
-        $this->view->productPlan         = array(0 => '') + $productPlan;
-        $this->view->productPlans        = array(0 => '') + $productPlans;
+        $this->view->productPlan         = $productPlan;
+        $this->view->productPlans        = $productPlans;
         $this->view->whitelist           = $whitelist;
         $this->view->copyExecutionID     = $copyExecutionID;
         $this->view->branchGroups        = isset($branchGroups) ? $branchGroups : $this->execution->getBranchByProduct(array_keys($products), $projectID);

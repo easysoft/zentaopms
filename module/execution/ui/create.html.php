@@ -61,12 +61,11 @@ if((empty($project) || $project->model != 'kanban') && $type != 'kanban')
         (
             set::width('1/2'),
             set::label($showExecutionExec ? $lang->execution->execType : $lang->execution->type),
-            select
+            picker
             (
                 set::id($isStage ? 'attribute' : 'lifetime'),
                 set::name($isStage ? 'attribute' : 'lifetime'),
                 set::items($isStage ? $lang->stage->typeList : $lang->execution->lifeTimeList),
-                set::required(true),
                 !$isStage ? on::change('showLifeTimeTips') : null
             )
         ),
@@ -115,7 +114,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                     div
                     (
                         setClass('grow'),
-                        select
+                        picker
                         (
                             set::id("products{$i}"),
                             set::name("products[$i]"),
@@ -123,7 +122,6 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                             set::items($allProducts),
                             set::last($product->id),
                             set::disabled($isStage && $project->stageBy == 'project'),
-                            set::required(true),
                             on::change('loadBranches'),
                             $isStage && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null,
                         )
@@ -138,7 +136,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                 inputGroup
                 (
                     $lang->product->branchName['branch'],
-                    select
+                    picker
                     (
                         set::id("branch{$i}"),
                         set::name("branch[$i][]"),
@@ -158,7 +156,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                 inputGroup
                 (
                     set::id("plan{$i}"),
-                    select
+                    picker
                     (
                         set::name("plans[$product->id][]"),
                         set::items($plans),
@@ -199,7 +197,7 @@ elseif(!empty($project) && empty($project->hasProduct) && !in_array($project->mo
             set::label($lang->execution->linkPlan),
             set('id', 'plansBox'),
             set::class('planBox'),
-            select
+            picker
             (
                 set::name("plans[{$planProductID}][]"),
                 set::items(isset($productPlan) ? $productPlan : array()),
@@ -221,12 +219,11 @@ else
             setClass('linkProduct'),
             set::required(true),
             set::label($lang->project->manageProducts),
-            select
+            picker
             (
                 set::id('products0'),
                 set::name('products[0]'),
                 set::items($allProducts),
-                set::required(true),
                 on::change('loadBranches')
             )
         ),
@@ -237,7 +234,7 @@ else
             inputGroup
             (
                 $lang->product->branchName['branch'],
-                select
+                picker
                 (
                     set::id('branch0'),
                     set::name('branch[0][]'),
@@ -254,7 +251,7 @@ else
             inputGroup
             (
                 set::id("plan0"),
-                select
+                picker
                 (
                     set::name('plans[0][]'),
                     set::items($productPlan),
@@ -306,7 +303,6 @@ formPanel
     (
         set::width('1/2'),
         set::name('project'),
-        set::required(true),
         set::label($lang->execution->projectName),
         set::items($allProjects),
         set::value($projectID),
@@ -336,25 +332,21 @@ formPanel
             set::required(true),
             inputGroup
             (
-                input
+                datePicker
                 (
                     set::name('begin'),
-                    set::type('date'),
                     set('id', 'begin'),
                     set::value((isset($plan) && !empty($plan->begin) ? $plan->begin : date('Y-m-d'))),
                     set::placeholder($lang->execution->begin),
-                    set::required(true),
                     on::change('computeWorkDays')
                 ),
                 $lang->project->to,
-                input
+                datePicker
                 (
                     set::name('end'),
-                    set::type('date'),
                     set('id', 'end'),
                     set::value((isset($plan) && !empty($plan->end) ? $plan->end : ''),
                     set::placeholder($lang->execution->end),
-                    set::required(true),
                     on::change('computeWorkDays')
                     ),
                 )
@@ -419,13 +411,12 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->execution->copyTeam),
-        select
+        picker
         (
             set::id('teams'),
             set::name('teams'),
             set::items($teams),
             set::value(empty($copyExecution) ? $projectID : $copyExecutionID),
-            set::required(true),
             set('data-placeholder', $lang->execution->copyTeamTip),
             on::change('loadMembers'),
         )
@@ -436,55 +427,51 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->execution->PM),
-            select
+            picker
             (
                 set::name('PM'),
                 set::items($pmUsers),
                 set::value(empty($copyExecution) ? '' : $copyExecution->PM),
-                set::required(true),
             )
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->execution->PO),
-            select
+            picker
             (
                 set::name('PO'),
                 set::items($poUsers),
                 set::value(empty($copyExecution) ? '' : $copyExecution->PO),
-                set::required(true),
             )
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->execution->QD),
-            select
+            picker
             (
                 set::name('QD'),
                 set::items($qdUsers),
                 set::value(empty($copyExecution) ? '' : $copyExecution->QD),
-                set::required(true),
             )
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->execution->RD),
-            select
+            picker
             (
                 set::name('RD'),
                 set::items($rdUsers),
                 set::value(empty($copyExecution) ? '' : $copyExecution->RD),
-                set::required(true),
             )
         ),
     ),
     formGroup
     (
         set::label($lang->execution->team),
-        select
+        picker
         (
             set::name('teamMembers[]'),
             set::items($users),
@@ -516,7 +503,7 @@ formPanel
     (
         set::label($lang->whitelist),
         set::id('whitelistBox'),
-        select
+        picker
         (
             set::name('whitelist[]'),
             set::items($users),
@@ -541,13 +528,12 @@ modalTrigger
                     $lang->execution->copyTitle
                 )
             ),
-            select
+            picker
             (
-                set::class('selectProject'),
+                set::class('pickerProject'),
                 set::name('project'),
                 set::items($copyProjects),
                 set::value($projectID),
-                set::required(true),
                 on::change('loadProjectExecutions'),
             ),
         ),
