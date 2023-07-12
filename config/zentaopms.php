@@ -383,7 +383,6 @@ if(!defined('TABLE_DERIVEMEAS'))         define('TABLE_DERIVEMEAS', '`' . $confi
 if(!defined('TABLE_MEASRECORDS'))        define('TABLE_MEASRECORDS', '`' . $config->db->prefix . 'measrecords`');
 if(!defined('TABLE_MEASQUEUE'))          define('TABLE_MEASQUEUE', '`' . $config->db->prefix . 'measqueue`');
 if(!defined('TABLE_MEASTEMPLATE'))       define('TABLE_MEASTEMPLATE', '`' . $config->db->prefix . 'meastemplate`');
-if(!defined('TABLE_METRIC'))             define('TABLE_METRIC', '`' . $config->db->prefix . 'metric`');
 
 if(!defined('TABLE_METRIC'))        define('TABLE_METRIC', '`' . $config->db->prefix . 'metric`');
 if(!defined('TABLE_METRICRECORDS')) define('TABLE_METRICRECORDS', '`' . $config->db->prefix . 'metricrecords`');
