@@ -56,6 +56,6 @@ class count_of_annual_created_plan_in_product extends baseCalc
             }
         }
 
-        return $records;
+        return $this->filterByOptions($records, $options);
     }
 }
