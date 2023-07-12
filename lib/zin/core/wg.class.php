@@ -469,7 +469,11 @@ class wg
 
     public function getRestProps(): array
     {
-        return $this->props->skip(array_keys(static::getDefinedProps()));
+        return $this->props->skip(array_keys(static::definedPropsList()));
+    }
+
+    public function getDefinedProps(): array {
+        return $this->props->pick(array_keys(static::definedPropsList()));
     }
 
     public function type(): string
@@ -541,7 +545,7 @@ class wg
         global $config;
         if(!isset($config->debug) || !$config->debug) return;
 
-        $definedProps = static::getDefinedProps();
+        $definedProps = static::definedPropsList();
         foreach($definedProps as $name => $definition)
         {
             if($this->hasProp($name)) continue;
@@ -625,7 +629,7 @@ class wg
         return isset($wgBlockMap[$wgType]) ? $wgBlockMap[$wgType] : null;
     }
 
-    protected static function getDefinedProps(?string $wgName = null): array
+    protected static function definedPropsList(?string $wgName = null): array
     {
         if($wgName === null) $wgName = get_called_class();
 
@@ -639,7 +643,7 @@ class wg
     protected static function getDefaultProps(?string $wgName = null): array
     {
         $defaultProps = array();
-        foreach(static::getDefinedProps($wgName) as $name => $definition)
+        foreach(static::definedPropsList($wgName) as $name => $definition)
         {
             if(!isset($definition['default'])) continue;
             $defaultProps[$name] = $definition['default'];
@@ -661,7 +665,7 @@ class wg
         /**
          * @var array
          */
-        $props = $parentClass ? call_user_func("$parentClass::getDefinedProps") : array();
+        $props = $parentClass ? call_user_func("$parentClass::definedPropsList") : array();
 
         if($parentClass !== false && $definition === $parentClass::$defineProps)
         {

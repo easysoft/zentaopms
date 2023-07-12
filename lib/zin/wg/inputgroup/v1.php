@@ -26,7 +26,7 @@ class inputGroup extends wg
 
         if($type)
         {
-            $propNames = array_keys(inputControl::getDefinedProps());
+            $propNames = array_keys(inputControl::definedPropsList());
             return new inputControl
             (
                 set($item->props->pick($propNames)),

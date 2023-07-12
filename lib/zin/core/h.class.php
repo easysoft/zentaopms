@@ -67,7 +67,7 @@ class h extends wg
 
     protected function getPropsStr(): string
     {
-        $propStr = $this->props->toStr(array_keys(static::getDefinedProps()));
+        $propStr = $this->props->toStr(array_keys(static::definedPropsList()));
         if($this->props->hasEvent() && empty($this->id()) && $this->getTagName() !== 'html') $propStr = "$propStr id='$this->gid'";
         return empty($propStr) ? '' : " $propStr";
     }

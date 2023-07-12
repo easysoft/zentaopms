@@ -116,7 +116,7 @@ class formPanel extends panel
         {
             return new formBatch
             (
-                set($this->props->pick(array_keys(formBatch::getDefinedProps()))),
+                set($this->props->pick(array_keys(formBatch::definedPropsList()))),
                 $this->children(),
                 jsVar('formBatch', true),
                 $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null,
@@ -126,7 +126,7 @@ class formPanel extends panel
         return new form
         (
             set::class($this->prop('formClass')),
-            set($this->props->pick(array_keys(form::getDefinedProps()))),
+            set($this->props->pick(array_keys(form::definedPropsList()))),
             $this->children(),
             $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null,
         );

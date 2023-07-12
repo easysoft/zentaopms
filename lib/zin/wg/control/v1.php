@@ -66,7 +66,7 @@ class control extends wg
     {
         $controlProps = array();
         $allProps     = $this->props->skip('type');
-        $propsNames   = array_keys(inputControl::getDefinedProps());
+        $propsNames   = array_keys(inputControl::definedPropsList());
 
         foreach($propsNames as $propName)
         {

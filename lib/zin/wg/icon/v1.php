@@ -29,7 +29,7 @@ class icon extends wg
                 : (is_string($size)
                     ? setClass("icon-$size")
                     : null),
-            set($this->props->skip(array_keys(icon::getDefinedProps()))),
+            set($this->props->skip(array_keys(icon::definedPropsList()))),
             $this->children()
         );
     }

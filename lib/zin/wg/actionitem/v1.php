@@ -41,7 +41,7 @@ class actionItem extends wg
 
         return h::div
         (
-            set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
+            set($this->props->skip(array_keys(actionItem::definedPropsList()))),
             set($this->prop('props')),
             $icon ? icon($icon) : null,
             empty($text) ? null : span($text, setClass('text')),
