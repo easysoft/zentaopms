@@ -308,10 +308,10 @@ function hidePlanBox(attribute)
     else
     {
         $('.productsBox .planBox').removeClass('hide');
-        $('.productsBox .planBox select').attr('disabled', '');
+        $('.productsBox .planBox select').removeAttr('disabled');
         $('#productTitle').text(manageProductPlanLang);
 
         $('#plansBox').closest('tr').removeClass('hide');
-        $('#plansBox').attr('disabled', '');
+        $('#plansBox').removeAttr('disabled');
     }
 }
