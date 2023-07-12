@@ -26,14 +26,14 @@ formPanel
     ),
     set::url(inlink('test')),
     formGroup(
-        set::width('1/2'),
-        set::label(''),
+        set::width('1/3'),
+        setClass('mx-8'),
         set::control('picker'),
         set::name('to'),
         set::value($app->user->account),
         set::items($users),
     ),
-    set::actionsClass('w-1/2'),
+    set::actionsClass('w-1/3'),
     set::submitBtnText($lang->mail->test),
     set::actions(array(
         'submit',
