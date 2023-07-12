@@ -38,6 +38,11 @@ $lang->ai->prompts->funcDesc    = 'Function Description';
 
 $lang->ai->prompts->summary = 'There are %s prompts on this page.';
 
+$lang->ai->prompts->action = new stdclass();
+$lang->ai->prompts->action->goDesignConfirm = 'The current prompt is not completed, do you want to continue with the design?';
+$lang->ai->prompts->action->goDesign = 'Go to design';
+$lang->ai->prompts->action->draftConfirm = 'Once unpublished, the prompt cannot be used any further. Are you sure you want to unpublish?';
+
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';
 $lang->ai->prompts->selectDataSource = 'Select Data Source';
@@ -131,8 +136,9 @@ $lang->ai->targetForm['execution']['createrisk']       = 'Create Risk';
 $lang->ai->targetForm['execution']['createissue']      = 'Create Issue';
 
 $lang->ai->prompts->statuses = array();
-$lang->ai->prompts->statuses[''] = 'All';
-$lang->ai->prompts->statuses['draft'] = 'Draft';
+$lang->ai->prompts->statuses['']       = 'All';
+$lang->ai->prompts->statuses['draft']  = 'Draft';
+$lang->ai->prompts->statuses['active'] = 'Active';
 
 $lang->ai->prompts->modules = array();
 $lang->ai->prompts->modules['']            = 'All';

@@ -37,6 +37,9 @@ foreach($config->ai->openai->contentTypeMapping as $contentType => $apis)
 $config->ai->createprompt = new stdclass();
 $config->ai->createprompt->requiredFields = 'name';
 
+$config->ai->testPrompt = new stdclass();
+$config->ai->testPrompt->requiredFields = 'name,module,source,purpose,targetForm';
+
 $config->ai->dataSource = array();
 $config->ai->dataSource['story']['story']         = array('title', 'spec', 'verify', 'product', 'module', 'pri', 'category', 'estimate');
 $config->ai->dataSource['execution']['execution'] = array('name', 'desc', 'estimate');

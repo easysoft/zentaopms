@@ -98,6 +98,17 @@ class ai extends control
      */
     public function prompts($module = '', $status = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+            if(isset($data->togglePromptStatus) && isset($data->promptId))
+            {
+                $this->ai->togglePromptStatus($data->promptId);
+
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return $this->send(array('result' => 'success'));
+            }
+        }
         /* Set pager and order. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);

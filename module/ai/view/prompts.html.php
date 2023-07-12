@@ -82,13 +82,36 @@
                   ?>
                 </td>
                 <td class='c-description' title='<?php echo $prompt->desc;?>'><?php echo $prompt->desc;?></td>
-                <td class='text-center c-actions'>
+                <td class='text-center c-actions' data-prompt-id='<?php echo $prompt->id?>'>
                   <?php
-                    echo html::a('#', '<i class="icon-bars text-primary"></i>', '', "class='btn'");
-                    echo html::a(inlink('promptassignrole', "prompt=$prompt->id"), '<i class="icon-design text-primary"></i>', '', "class='btn'");
-                    echo html::a('#', '<i class="icon-edit text-primary"></i>', '', "class='btn'");
-                    echo html::a('#', '<i class="icon-lock text-primary"></i>', '', "class='btn'");
-                    echo html::a('#', '<i class="icon-trash text-primary"></i>', '', "class='btn'");
+                    $canTest = $this->ai->canPromptTesting($prompt);
+                    echo common::printIcon('ai', 'promptassignrole', "prompt=$prompt->id", '', 'button', 'design', '', 'text-primary');
+                    if($canTest)
+                    {
+                      echo common::printIcon('ai', '', '', '', 'button', 'bug', '', 'text-primary');
+                    }
+                    else
+                    {
+                      echo html::a('javascript:void(0)', '<i class="icon-bug text-primary"></i>', '', "data-toggle='modal' data-target='#designConfirmModal' class='btn'");
+                    }
+                    echo common::printIcon('ai', '', '', '', 'button', 'edit', '', 'text-primary');
+                    if($prompt->status == 'draft')
+                    {
+                      if($canTest)
+                      {
+                        echo html::a("javascript:togglePromptStatus($prompt->id)", '<i class="icon-publish text-primary"></i>', '', "class='btn'");
+                      }
+                      else
+                      {
+                        echo html::a('#', '<i class="icon-publish text-primary"></i>', '', "data-toggle='modal' data-target='#designConfirmModal' class='btn'");
+                      }
+                      echo html::a('#', '<i class="icon-ban text-primary"></i>', '', "class='disabled btn'");
+                    }
+                    else
+                    {
+                      echo html::a('javascript:void(0)', '<i class="icon-publish text-primary"></i>', '', "class='disabled btn'");
+                      echo html::a('javascript:void(0)', '<i class="icon-ban text-primary"></i>', '', "data-toggle='modal' data-target='#draftConfirmModal' class='btn'");
+                    }
                   ?>
                 </td>
               </tr>
@@ -101,6 +124,33 @@
         </div>
       </div>
     <?php endif;?>
+  </div>
+</div>
+<div class="modal fade" id="designConfirmModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p><?php echo $lang->ai->prompts->action->goDesignConfirm?></p>
+      </div>
+      <div class="modal-footer">
+        <button id="goDesignButton" type="button" class="btn btn-primary"><?php echo $lang->ai->prompts->action->goDesign?></button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $lang->cancel?></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="draftConfirmModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p><?php echo $lang->ai->prompts->action->draftConfirm?></p>
+      </div>
+      <div class="modal-footer">
+        <button id="draftPromptButton" type="button" class="btn btn-primary"><?php echo $lang->confirm?></button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $lang->cancel?></button>
+      </div>
+    </div>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

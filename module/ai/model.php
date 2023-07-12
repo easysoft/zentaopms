@@ -444,6 +444,22 @@ class aiModel extends model
     }
 
     /**
+     * toggle prompt status.
+     *
+     * @param  int     $id
+     * @access public
+     * @return bool
+     */
+    public function togglePromptStatus($id)
+    {
+        $prompt = $this->getPromptById($id);
+        if(!$prompt) return false;
+
+        $prompt->status = $prompt->status == 'draft' ? 'active' : 'draft';
+        return $this->updatePrompt($prompt);
+    }
+
+    /**
      * Serialize data to prompt.
      *
      * @param  string        $module
@@ -714,6 +730,31 @@ class aiModel extends model
         if(empty($response)) return false;
 
         return $response;
+    }
+
+    /**
+     * Check if prompt can be tested.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return bool
+     */
+    public function canPromptTesting($prompt)
+    {
+        $canTest = true;
+        if(empty($prompt)) return false;
+        $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
+
+        foreach($requiredFields as $field)
+        {
+            if(empty($prompt->$field))
+            {
+                $canTest = false;
+                break;
+            }
+        }
+
+        return $canTest;
     }
 
     /**

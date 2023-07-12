@@ -38,6 +38,11 @@ $lang->ai->prompts->funcDesc    = '功能描述';
 
 $lang->ai->prompts->summary = '本页共 %s 个提词。';
 
+$lang->ai->prompts->action = new stdclass();
+$lang->ai->prompts->action->goDesignConfirm = '当前提词未完成，是否继续设计？';
+$lang->ai->prompts->action->goDesign        = '去设计';
+$lang->ai->prompts->action->draftConfirm    = '下架后，提词将不能继续使用，您确定要下架吗？';
+
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = '指定角色';
 $lang->ai->prompts->selectDataSource = '选择对象';
@@ -131,8 +136,9 @@ $lang->ai->targetForm['execution']['createrisk']       = '创建风险';
 $lang->ai->targetForm['execution']['createissue']      = '创建问题';
 
 $lang->ai->prompts->statuses = array();
-$lang->ai->prompts->statuses[''] = '全部';
-$lang->ai->prompts->statuses['draft'] = '草稿';
+$lang->ai->prompts->statuses['']       = '全部';
+$lang->ai->prompts->statuses['draft']  = '未发布';
+$lang->ai->prompts->statuses['active'] = '已发布';
 
 $lang->ai->prompts->modules = array();
 $lang->ai->prompts->modules['']            = '所有分组';
