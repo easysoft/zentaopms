@@ -734,6 +734,7 @@ $lang->navGroup->notifysetting = 'admin';
 $lang->navGroup->holidayseason = 'admin';
 $lang->navGroup->measurement   = 'admin';
 $lang->navGroup->system        = 'admin';
+$lang->navGroup->holiday       = 'admin';
 
 $lang->navGroup->index   = 'index';
 $lang->navGroup->misc    = 'misc';
