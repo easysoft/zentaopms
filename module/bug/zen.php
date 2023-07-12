@@ -1082,7 +1082,7 @@ class bugZen extends bug
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
         }
 
-        $showModule = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
+        $showModule = !empty($this->config->bug->browse->showModule) ? $this->config->bug->browse->showModule : '';
 
         /* Set view. */
         $this->view->title           = $product->name . $this->lang->colon . $this->lang->bug->common;

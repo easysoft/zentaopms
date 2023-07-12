@@ -936,10 +936,9 @@ class project extends control
             if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
         }
-        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
-        $taskList  = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList)   : array();
-
-        $showModule  = !empty($this->config->datatable->projectBug->showModule) ? $this->config->datatable->projectBug->showModule : '';
+        $storyList  = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
+        $taskList   = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList)   : array();
+        $showModule = !empty($this->config->project->bug->showModule) ? $this->config->project->bug->showModule : '';
 
         /* Assign. */
         $this->view->title           = $title;

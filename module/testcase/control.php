@@ -217,7 +217,7 @@ class testcase extends control
         $searchProducts = $this->product->getPairs('', 0, '', 'all');
         $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
 
-        $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
+        $showModule = !empty($this->config->testcase->browse->showModule) ? $this->config->testcase->browse->showModule : '';
 
         /* Get module tree.*/
         if($projectID and empty($productID))

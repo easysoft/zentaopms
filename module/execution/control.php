@@ -874,7 +874,7 @@ class execution extends control
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
 
         if(empty($productID)) $productID = (int)key($productPairs);
-        $showModule  = !empty($this->config->datatable->executionStory->showModule) ? $this->config->datatable->executionStory->showModule : '';
+        $showModule  = !empty($this->config->execution->story->showModule) ? $this->config->execution->story->showModule : '';
         $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
 
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
@@ -1061,7 +1061,7 @@ class execution extends control
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
-        $showModule = !empty($this->config->datatable->executionBug->showModule) ? $this->config->datatable->executionBug->showModule : '';
+        $showModule = !empty($this->config->execution->bug->showModule) ? $this->config->execution->bug->showModule : '';
 
         /* Assign. */
         $this->view->title           = $execution->name . $this->lang->colon . $this->lang->execution->bug;
