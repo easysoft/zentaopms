@@ -71,6 +71,7 @@ class pageBase extends wg
         {
             $js[] = h::createJsVarCode('window.zin', array());
         }
+        if($zui) array_unshift($js, 'zui.defineFn()');
 
         $currentLang = $this->props->get('lang');
         if(empty($currentLang)) $currentLang = $app->getClientLang();
