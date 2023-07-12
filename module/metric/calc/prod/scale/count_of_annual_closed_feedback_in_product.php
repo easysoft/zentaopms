@@ -51,7 +51,7 @@ class count_of_annual_closed_feedback_in_product extends baseCalc
         {
             foreach($years as $year => $value)
             {
-                $records[] = array('product' => $product, 'year' => $year, 'value' => $value);
+                $records[] = array('prod' => $product, 'year' => $year, 'value' => $value);
             }
         }
 

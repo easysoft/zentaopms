@@ -16,7 +16,7 @@ pid=1
 
 */
 
-r(count($calc->getResult()))                    &&  p('') && e('41');       // 测试有效bug按产品分组数。
-r($calc->getResult(array('product' => '90')))   &&  p('0:value') && e('9'); // 测试产品90有效的bug数。
-r($calc->getResult(array('product' => '94')))   &&  p('0:value') && e('6'); // 测试产品94有效的bug数。
-r($calc->getResult(array('product' => '999')))  &&  p('') && e('0');        // 测试不存在的产品有效的bug数。
+r(count($calc->getResult()))                && p('')        && e('41'); // 测试有效bug按产品分组数。
+r($calc->getResult(array('prod' => '90')))  && p('0:value') && e('9');  // 测试产品90有效的bug数。
+r($calc->getResult(array('prod' => '94')))  && p('0:value') && e('6');  // 测试产品94有效的bug数。
+r($calc->getResult(array('prod' => '999'))) && p('')        && e('0');  // 测试不存在的产品有效的bug数。

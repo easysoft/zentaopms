@@ -42,7 +42,7 @@ class count_of_bug_in_product extends baseCalc
         $records = array();
         foreach($this->result as $product => $value)
         {
-            $records[] = array('product' => $product, 'value' => $value);
+            $records[] = array('prod' => $product, 'value' => $value);
         }
 
         return $this->filterByOptions($records, $options);
