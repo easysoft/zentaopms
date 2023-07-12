@@ -60,13 +60,13 @@ formPanel
             set::label($lang->bug->product),
             inputGroup
             (
-                select
+                picker
                 (
                     set::name('product'),
                     set::items($products),
                     set::value($bug->productID)
                 ),
-                $product->type != 'normal' && isset($products[$bug->productID]) ? select
+                $product->type != 'normal' && isset($products[$bug->productID]) ? picker
                 (
                     set::width('100px'),
                     set::name('branch'),
@@ -82,7 +82,7 @@ formPanel
             inputGroup
             (
                 set('id', 'projectBox'),
-                select
+                picker
                 (
                     set::name('project'),
                     set::items($projects),
@@ -100,7 +100,7 @@ formPanel
             inputGroup
             (
                 set('id', 'moduleBox'),
-                select
+                picker
                 (
                     set::name('module'),
                     set::items($moduleOptionMenu),
@@ -134,11 +134,11 @@ formPanel
             inputGroup
             (
                 set('id', 'executionBox'),
-                select
+                picker
                 (
                     set::name('execution'),
                     set::items($executions),
-                    set::value(zget($bug->execution, 'id', ''))
+                    set::value(isset($bug->execution) ? $bug->execution->id : '')
                 )
             )
         )
@@ -151,7 +151,7 @@ formPanel
             set::label($lang->bug->openedBuild),
             inputGroup
             (
-                select
+                picker
                 (
                     set::multiple(true),
                     set::name('openedBuild[]'),
@@ -183,7 +183,7 @@ formPanel
             set::label($lang->bug->lblAssignedTo),
             inputGroup
             (
-                select
+                picker
                 (
                     set::name('assignedTo'),
                     set::items($productMembers),
@@ -208,7 +208,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->kanbancard->region),
-            set::control('select'),
+            set::control('picker'),
             set::name('region'),
             set::items($regionPairs),
             set::value($regionID)
@@ -217,7 +217,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->kanbancard->lane),
-            set::control('select'),
+            set::control('picker'),
             set::name('lane'),
             set::items($lanePairs),
             set::value($laneID)
@@ -231,6 +231,7 @@ formPanel
             set::label($lang->bug->deadline),
             datePicker
             (
+                set::id('deadline'),
                 set::name('deadline'),
                 set::value($bug->deadline)
             )
@@ -256,8 +257,9 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->bug->type),
-            set::control(array('type' => 'select', 'items' => $lang->bug->typeList)),
+            set::control('picker'),
             set::name('type'),
+            set::items($lang->bug->typeList),
             set::value($bug->type)
         )
     ),
@@ -267,15 +269,18 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->bug->os),
-            set::control(array('type' => 'select', 'items' => $lang->bug->osList, 'multiple' => true)),
+            set::control('picker'),
+            set::items($lang->bug->osList),
             set::name('os[]'),
-            set::value($bug->os)
+            set::value($bug->os),
+            set::multiple(true)
         ) : null,
         $showBrowser ? formGroup
         (
             set::width('1/2'),
             set::label($lang->bug->browser),
-            set::control(array('type' => 'select', 'items' => $lang->bug->browserList)),
+            set::control('picker'),
+            set::items($lang->bug->browserList),
             set::name('browser'),
             set::value($bug->browser)
         ) : null
@@ -292,7 +297,8 @@ formPanel
         (
             set::width('180px'),
             set::label($lang->bug->severity),
-            set::control(array('type' => 'select', 'items' => $lang->bug->severityList)),
+            set::control('picker'),
+            set::items($lang->bug->severityList),
             set::name('severity'),
             set::value($bug->severity)
         ),
@@ -300,7 +306,8 @@ formPanel
         (
             set::width('180px'),
             set::label($lang->bug->pri),
-            set::control(array('type' => 'select', 'items' => $lang->bug->priList)),
+            set::control('picker'),
+            set::items($lang->bug->priList),
             set::name('pri'),
             set::value($bug->pri)
         ) : null
@@ -326,7 +333,7 @@ formPanel
             inputGroup
             (
                 set('id', 'storyBox'),
-                select
+                picker
                 (
                     set::name('story'),
                     set::items((empty($bug->stories) ? '' : $bug->stories)),
@@ -338,7 +345,8 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->bug->task),
-            set::control(array('type' => 'select', 'items' => '')),
+            set::control('picker'),
+            set::items(''),
             set::name('task'),
             set::value($bug->taskID)
         ) : null
@@ -351,7 +359,7 @@ formPanel
             set::label($lang->bug->lblMailto),
             inputGroup
             (
-                select
+                picker
                 (
                     set::multiple(true),
                     set::name('mailto[]'),
@@ -362,7 +370,7 @@ formPanel
                 (
                     set('id', 'contactBox'),
                     set('class', 'input-group-addon'),
-                    $contactList ? select
+                    $contactList ? picker
                     (
                         set::class('width', 'w-20'),
                         set::name('contactListMenu'),
