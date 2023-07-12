@@ -332,8 +332,8 @@ class searchModel extends model
             $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
             $users['$@me'] = $this->lang->search->me;
         }
-        if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->project);
-        if($hasExecution) $executions = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project);
+        if($hasProduct) $products = $this->loadModel('product')->getPairs('', $this->session->project);
+        if($hasExecution) $executions = $this->loadModel('execution')->getPairs($this->session->project);
 
         foreach($fields as $fieldName)
         {
@@ -596,7 +596,7 @@ class searchModel extends model
     {
         /* Get title field. */
         $title = ($module == 'story') ? 'title' : 'name';
-        $resultPairs = array('' => '');
+        $resultPairs = array();
         foreach($results as $result) $resultPairs[$result->id] = $result->id . ':' . $result->$title;
         return $resultPairs;
     }

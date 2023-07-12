@@ -142,7 +142,7 @@ class chart extends control
                 $filterHtml['item'] .= "<input type='text' name='default[end]' id='default[end]' value='{$default['end']}' class='form-control $class default-end' autocomplete='off' placeholder='{$this->lang->chart->unlimited}' onchange='changeDefault(this, this.value)'>";
                 $filterHtml['item'] .= '</div>';
             }
-            if($type == 'select') $filterHtml['item'] .= html::select('default', array('' => '') + $options, $default, "class='form-control picker-select' multiple");
+            if($type == 'select') $filterHtml['item'] .= html::select('default', $options, $default, "class='form-control picker-select' multiple");
             if($type == 'condition')
             {
                 $operator = isset($filter['operator']) ? $filter['operator'] : '';

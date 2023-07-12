@@ -651,8 +651,8 @@ class upgrade extends control
         $this->view->title       = $this->lang->upgrade->mergeProgram;
         $this->view->programs    = $programs;
         $this->view->programID   = $programID;
-        $this->view->projects    = array('' => '') + $this->upgrade->getProjectPairsByProgram($currentProgramID);
-        $this->view->lines       = $currentProgramID ? array('' => '') + $this->loadModel('product')->getLinePairs($currentProgramID) : array('' => '');
+        $this->view->projects    = $this->upgrade->getProjectPairsByProgram($currentProgramID);
+        $this->view->lines       = $currentProgramID ? $this->loadModel('product')->getLinePairs($currentProgramID) : array('' => '');
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->systemMode  = $systemMode;
@@ -779,7 +779,7 @@ class upgrade extends control
      */
     public function ajaxGetProjectPairsByProgram($programID = 0)
     {
-        $projects = array('' => '') + $this->upgrade->getProjectPairsByProgram($programID);
+        $projects = $this->upgrade->getProjectPairsByProgram($programID);
         echo html::select('projects', $projects, '', 'class="form-control prj-exist" onchange="getProgramStatus(\'project\', this.value)"');
     }
 

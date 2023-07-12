@@ -154,7 +154,7 @@ class dept extends control
      */
     public function ajaxGetUsers($dept, $user = '', $key = 'account')
     {
-        $users = array('' => '') + $this->dept->getDeptUserPairs($dept, $key);
+        $users = $this->dept->getDeptUserPairs($dept, $key);
         return print(html::select('user', $users, $user, "class='form-control chosen'"));
     }
 }

@@ -2669,14 +2669,14 @@ class executionModel extends model
 
         $this->loadModel('productplan');
         $plans     = array();
-        $planPairs = array('' => '');
+        $planPairs = array();
         foreach($products as $productID => $product)
         {
             $plans = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, 'unexpired', true);
             foreach($plans as $plan) $planPairs += $plan;
         }
         $this->config->product->search['params']['plan']['values']   = $planPairs;
-        $this->config->product->search['params']['module']['values'] = array('' => '') + $modules;
+        $this->config->product->search['params']['module']['values'] = $modules;
         if($productType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
@@ -2685,7 +2685,7 @@ class executionModel extends model
         else
         {
             $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
-            $this->config->product->search['params']['branch']['values'] = array('' => '') + $branchPairs;
+            $this->config->product->search['params']['branch']['values'] = $branchPairs;
         }
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
@@ -4479,7 +4479,7 @@ class executionModel extends model
         else
         {
             $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
-            $this->config->bug->search['params']['branch']['values'] = array('' => '') + $branchPairs;
+            $this->config->bug->search['params']['branch']['values'] = $branchPairs;
         }
         $this->config->bug->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->bug->statusList);
 

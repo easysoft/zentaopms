@@ -618,7 +618,7 @@ class execution extends control
         $this->config->bug->search['params']['execution']['values'] = array(''=>'') + $executions + array('all'=>$this->lang->execution->aboveAllExecution);
         $this->config->bug->search['params']['plan']['values']      = $this->loadModel('productplan')->getPairs(array_keys($products));
         $this->config->bug->search['module'] = 'importBug';
-        $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
+        $this->config->bug->search['params']['confirmed']['values'] = $this->lang->bug->confirmedList;
 
         $this->loadModel('tree');
         $bugModules = array();
@@ -852,7 +852,7 @@ class execution extends control
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
         $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan|unexpired|noclosed|sortedByDate', $executionID);
-        $allPlans = array('' => '');
+        $allPlans = array();
         if(!empty($plans))
         {
             foreach($plans as $plan) $allPlans += $plan;
@@ -1232,7 +1232,6 @@ class execution extends control
 
         /* Get products' list. */
         $products = $this->product->getProducts($executionID, 'all', '', false);
-        $products = array('' => '') + $products;
 
         /* Build the search form. */
         $type      = strtolower($type);
@@ -1953,7 +1952,7 @@ class execution extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "executionID=$executionID")));
         }
 
-        $executions = array('' => '') + $this->executions;
+        $executions = $this->executions;
 
         /* Remove current execution from the executions. */
         unset($executions[$executionID]);
@@ -2533,7 +2532,7 @@ class execution extends control
         foreach($products as $product) $productNames[$product->id] = $product->name;
 
         $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
-        $allPlans = array('' => '');
+        $allPlans = array();
         if(!empty($plans))
         {
             foreach($plans as $plan) $allPlans += $plan;
@@ -2629,7 +2628,7 @@ class execution extends control
         foreach($products as $product) $productNames[$product->id] = $product->name;
 
         $plans    = $this->execution->getPlans($products);
-        $allPlans = array('' => '');
+        $allPlans = array();
         if(!empty($plans))
         {
             foreach($plans as $plan) $allPlans += $plan;
@@ -3143,7 +3142,6 @@ class execution extends control
         $currentMembers = $this->execution->getTeamMembers($executionID);
         $members2Import = $this->execution->getMembers2Import($team2Import, array_keys($currentMembers));
         $teams2Import   = $this->loadModel('personnel')->getCopiedObjects($executionID, 'sprint', true);
-        $teams2Import   = array('' => '') + $teams2Import;
 
         /* Append users for get users. */
         $appendUsers = array();
@@ -3162,7 +3160,7 @@ class execution extends control
         $this->view->users          = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
         $this->view->roles          = $this->user->getUserRoles(array_keys($this->view->users));
         $this->view->dept           = $dept;
-        $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
+        $this->view->depts          = $this->loadModel('dept')->getOptionMenu();
         $this->view->teams2Import   = $teams2Import;
         $this->view->team2Import    = $team2Import;
         $this->view->teamMembers    = $this->executionZen->buildMembers($currentMembers, $members2Import, $deptUsers, $execution->days);

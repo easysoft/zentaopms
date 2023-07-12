@@ -62,7 +62,7 @@ sidebar
 );
 
 $config->testcase->dtable->fieldList['story']['map'] = $stories;
-$config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = str_replace('%executionID%', $executionID, $config->testcase->dtable->fieldList['actions']['list']['edit']['url']);
+$config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = str_replace('%executionID%', (string)$executionID, $config->testcase->dtable->fieldList['actions']['list']['edit']['url']);
 $config->testcase->dtable->fieldList['actions']['menu'] =  array(array('confirmStoryChange'), array('runCase', 'runResult', 'edit', 'createBug', 'create'));
 foreach($cases as $case)
 {

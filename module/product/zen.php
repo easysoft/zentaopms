@@ -573,7 +573,7 @@ class productZen extends product
         $this->view->products       = $products;
         $this->view->fields         = $this->getFormFields4BatchEdit();
         $this->view->programID      = $programID;
-        $this->view->authPrograms   = array('' => '') + $authPrograms;
+        $this->view->authPrograms   = $authPrograms;
         $this->view->unauthPrograms = $unauthPrograms;
 
         unset($this->lang->product->typeList['']);

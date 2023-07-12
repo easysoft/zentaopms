@@ -274,7 +274,7 @@ class productplanModel extends model
             if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             if($plan->productType != 'normal') $planPairs[$plan->id] = $planPairs[$plan->id] . ' / ' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main);
         }
-        return array('' => '') + $planPairs;
+        return $planPairs;
     }
 
     /**
@@ -330,7 +330,7 @@ class productplanModel extends model
             if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
         }
 
-        return array('' => '') + $planPairs;
+        return $planPairs;
     }
 
     /**
@@ -357,7 +357,7 @@ class productplanModel extends model
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title;
         }
-        return array('' => '') + $planPairs;
+        return $planPairs;
     }
 
     /**
@@ -391,7 +391,7 @@ class productplanModel extends model
         {
             foreach(explode(',', $plan->branch) as $branch)
             {
-                if(!isset($planGroup[$plan->product][$branch])) $planGroup[$plan->product][$branch] = array('' => '');
+                if(!isset($planGroup[$plan->product][$branch])) $planGroup[$plan->product][$branch] = array();
 
                 if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue 2;
 

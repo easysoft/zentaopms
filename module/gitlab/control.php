@@ -234,7 +234,7 @@ class gitlab extends control
 
         $this->app->loadClass('pager', true);
         $pager = new pager(count($gitlabUsers), 10000, 1);
-        
+
         $this->view->pager         = $pager;
         $this->view->title         = $this->lang->gitlab->bindUser;
         $this->view->zentaoUsers   = $zentaoUsers;
@@ -634,7 +634,7 @@ class gitlab extends control
 
         $users       = $this->loadModel('user')->getList();
         $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
-        $userPairs   = array('' => '');
+        $userPairs   = array();
         $userInfos   = array();
         foreach($users as $key => $user)
         {
@@ -675,7 +675,7 @@ class gitlab extends control
 
         $users       = $this->loadModel('user')->getList();
         $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
-        $userPairs   = array('' => '');
+        $userPairs   = array();
         foreach($users as $user)
         {
             if(!isset($bindedUsers[$user->account]) or $user->account == $zentaoBindAccount) $userPairs[$user->account] = $user->realname;
@@ -1091,7 +1091,7 @@ class gitlab extends control
 
         $this->view->title           = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->importIssue;
         $this->view->importable      = empty($gitlabIssues) ? false : true;
-        $this->view->products        = array('' => '') + $products;
+        $this->view->products        = $products;
         $this->view->gitlabID        = $gitlabID;
         $this->view->gitlabProjectID = $projectID;
         $this->view->objectTypes     = $this->config->gitlab->objectTypes;

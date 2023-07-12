@@ -1346,10 +1346,10 @@ class bugZen extends bug
         if(!$project) $project = new stdclass();
         $this->assignVarsForBatchCreate($product, $project, $bugImagesFile);
 
-        $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($product->id, $branch ? "0,{$branch}" : '0');
+        $this->view->projects         = $this->product->getProjectPairsByProduct($product->id, $branch ? "0,{$branch}" : '0');
         $this->view->project          = $project;
         $this->view->projectID        = $projectID;
-        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', (string)$projectID, 'multiple,stagefilter');
+        $this->view->executions       = $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', (string)$projectID, 'multiple,stagefilter');
         $this->view->executionID      = $executionID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;

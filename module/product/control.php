@@ -909,8 +909,7 @@ class product extends control
      */
     public function ajaxGetProjects(int $productID, string $branch = '', int $projectID = 0)
     {
-        $projects  = array('' => '');
-        $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+        $projects = $this->product->getProjectPairsByProduct($productID, $branch);
         if($this->app->getViewType() == 'json') return print(json_encode($projects));
 
         return print(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
@@ -926,8 +925,7 @@ class product extends control
      */
     public function ajaxGetProjectsByBranch(int $productID, string $branch = '')
     {
-        $projects  = array('' => '');
-        $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+        $projects = $this->product->getProjectPairsByProduct($productID, $branch);
 
         $projectList = array();
         foreach($projects as $projectID => $projectName) $projectList[] = array('value' => $projectID, 'text' => $projectName);
@@ -963,7 +961,7 @@ class product extends control
 
         if($pageType == 'batch')
         {
-            $executions    = array('' => '') + $executions;
+            $executions    = $executions;
             $executionList = array();
             foreach($executions as $executionID => $executionName) $executionList[] = array('value' => $executionID, 'text' => $executionName);
             return $this->send($executionList);
@@ -971,7 +969,7 @@ class product extends control
         else
         {
             $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple"));
+            return print(html::select('execution', $executions, $executionID, "class='form-control' $datamultiple"));
         }
     }
 
@@ -987,7 +985,7 @@ class product extends control
     public function ajaxGetExecutionsByProject(int $productID, int $projectID = 0, string $branch = '')
     {
         $noMultipleExecutionID = $projectID ? $this->loadModel('execution')->getNoMultipleID($projectID) : '';
-        $executions            = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, 'multiple,stagefilter');
+        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, 'multiple,stagefilter');
 
         $executionList = array();
         foreach($executions as $executionID => $executionName) $executionList[] = array('value' => $executionID, 'text' => $executionName);
@@ -1055,8 +1053,8 @@ class product extends control
         $lines = array();
         if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
 
-        if($productID)  return print(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
-        if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control picker-select'"));
+        if($productID)  return print(html::select("lines[$productID]", $lines, '', "class='form-control picker-select'"));
+        if(!$productID) return print(html::select('line', $lines, '', "class='form-control picker-select'"));
     }
 
     /**

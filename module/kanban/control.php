@@ -246,7 +246,7 @@ class kanban extends control
         $this->view->spacePairs    = $spacePairs;
         $this->view->type          = $type;
         $this->view->typeList      = $this->lang->kanban->featureBar['space'];
-        $this->view->kanbans       = array('' => '') + $this->kanban->getPairs();
+        $this->view->kanbans       = $this->kanban->getPairs();
         $this->view->copyKanbanID  = $copyKanbanID;
         $this->view->copyKanban    = $copyKanbanID ? $copyKanban : '';
         $this->view->enableImport  = $enableImport;

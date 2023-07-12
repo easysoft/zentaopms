@@ -51,6 +51,6 @@ $config->api->search['params']['addedDate']  = array('operator' => '=', 'control
 $config->api->search['params']['editedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->api->search['params']['editedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->api->search['params']['path']       = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->api->search['params']['method']     = array('operator' => '=',       'control' => 'select', 'values' => array('' => '') + $lang->api->methodOptions);
-$config->api->search['params']['status']     = array('operator' => '=',       'control' => 'select', 'values' => array('' => '') + $lang->api->statusOptions);
+$config->api->search['params']['method']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->api->methodOptions);
+$config->api->search['params']['status']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->api->statusOptions);
 $config->api->search['params']['version']    = array('operator' => '>=',      'control' => 'input',  'values' => '');

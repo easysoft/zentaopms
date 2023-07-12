@@ -340,7 +340,7 @@ class testsuite extends control
         $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&param=myQueryID");
 
         $scene = $this->testcase->getSceneMenu($productID, 0, '', 0,  0,0);
-        $this->config->testcase->search['params']['scene']['values'] = array('' => '') + $scene;
+        $this->config->testcase->search['params']['scene']['values'] = $scene;
 
         unset($this->config->testcase->search['fields']['product']);
         unset($this->config->testcase->search['params']['product']);

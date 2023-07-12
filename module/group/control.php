@@ -446,7 +446,7 @@ class group extends control
 
         $this->view->title         = $title;
         $this->view->position      = $position;
-        $this->view->allUsers      = array('' => '') + $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
+        $this->view->allUsers      = $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
         $this->view->groupID       = $groupID;
         $this->view->deptID        = $deptID;
         $this->view->deptName      = $deptID ? $this->dao->findById($deptID)->from(TABLE_DEPT)->fetch('name') : '';
@@ -853,9 +853,9 @@ class group extends control
         }
 
         $this->view->title              = $this->lang->group->createPriv;
-        $this->view->views              = array('' => '') + $this->group->getPrivManagerPairs('view');
-        $this->view->modules            = array('' => '') + $this->group->getPrivManagerPairs('module');
-        $this->view->packages           = array('' => '') + $this->group->getPrivPackagePairs();
+        $this->view->views              = $this->group->getPrivManagerPairs('view');
+        $this->view->modules            = $this->group->getPrivManagerPairs('module');
+        $this->view->packages           = $this->group->getPrivPackagePairs();
         $this->view->moduleViewPairs    = $this->group->getPrivModuleViewPairs();
         $this->view->packageModulePairs = $this->group->getPrivPackagePairs('', '', 't3.code');
         $this->display();
@@ -898,9 +898,9 @@ class group extends control
         $priv->package       = isset($packageModulePairs[$priv->parent]) ? $priv->parent : 0;
 
         $this->view->title              = $this->lang->group->editPriv;
-        $this->view->views              = array('' => '') + $this->group->getPrivManagerPairs('view');
-        $this->view->modules            = array('' => '') + $this->group->getPrivManagerPairs('module');
-        $this->view->packages           = array('' => '') + $this->group->getPrivPackagePairs();
+        $this->view->views              = $this->group->getPrivManagerPairs('view');
+        $this->view->modules            = $this->group->getPrivManagerPairs('module');
+        $this->view->packages           = $this->group->getPrivPackagePairs();
         $this->view->moduleViewPairs    = $moduleViewPairs;
         $this->view->packageModulePairs = $packageModulePairs;
         $this->view->priv               = $priv;
@@ -942,7 +942,7 @@ class group extends control
     public function ajaxGetPrivModules($viewName = '')
     {
         $modules = $this->group->getPrivModules($viewName, 'noViewName');
-        echo html::select('module', array('' => '') + $modules, '', "class='form-control picker-select' onchange='loadPackages(this.value, \"module\")'");
+        echo html::select('module', $modules, '', "class='form-control picker-select' onchange='loadPackages(this.value, \"module\")'");
     }
 
     /**
@@ -958,7 +958,7 @@ class group extends control
         $packages = array();
         if($type == 'view') $packages = $this->group->getPrivPackagePairs($object);
         if($type == 'module') $packages = $this->group->getPrivPackagePairs('', $object);
-        echo html::select('package', array('' => '') + $packages, '', "class='form-control picker-select' onchange='changeViewAndModule(this.value)'");
+        echo html::select('package', $packages, '', "class='form-control picker-select' onchange='changeViewAndModule(this.value)'");
     }
 
     /**

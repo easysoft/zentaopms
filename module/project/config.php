@@ -82,7 +82,7 @@ $config->project->search['params']['name']           = array('operator' => 'incl
 $config->project->search['params']['code']           = array('operator' => '='      , 'control' => 'input' , 'values' => '');
 $config->project->search['params']['id']             = array('operator' => '='      , 'control' => 'input' , 'values' => '');
 $config->project->search['params']['model']          = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->modelList);
-$config->project->search['params']['hasProduct']     = array('operator' => '='      , 'control' => 'select', 'values' => array('' => '') + $lang->project->projectTypeList);
+$config->project->search['params']['hasProduct']     = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->projectTypeList);
 $config->project->search['params']['parent']         = array('operator' => '='      , 'control' => 'select', 'values' => '');
 $config->project->search['params']['status']         = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->statusList);
 $config->project->search['params']['desc']           = array('operator' => 'include', 'control' => 'input' , 'values' => '');

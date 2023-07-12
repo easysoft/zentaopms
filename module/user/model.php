@@ -141,7 +141,6 @@ class userModel extends model
         $users = $this->processAccountSort($users);
 
         /* Append empty, closed, and guest users. */
-        if(strpos($params, 'noempty')   === false) $users = array('' => '') + $users;
         if(strpos($params, 'noclosed')  === false) $users = $users + array('closed' => 'Closed');
         if(strpos($params, 'withguest') !== false) $users = $users + array('guest' => 'Guest');
 
@@ -1456,7 +1455,7 @@ class userModel extends model
         $contacts = $mode == 'pairs' ? $this->dao->fetchPairs('id', 'listName') : $this->dao->fetchAll();
         if(empty($contacts)) return array();
 
-        if(strpos($params, 'withempty') !== false) $contacts = array('' => '') + $contacts;
+        if(strpos($params, 'withempty') !== false) $contacts = $contacts;
         if(strpos($params, 'withnote')  !== false) $contacts = array('' => $this->lang->user->contacts->common) + $contacts;
 
         return $contacts;
@@ -2760,7 +2759,7 @@ class userModel extends model
 
         if($usersToAppended) $users += $this->dao->select("id, account, realname")->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
 
-        if(!$users) return array('' => '');
+        if(!$users) return array();
 
         foreach($users as $account => $user)
         {
@@ -2770,9 +2769,7 @@ class userModel extends model
         }
 
         /* Put the current user first. */
-        $users = $this->processAccountSort($users);
-
-        return array('' => '') + $users;
+        return $this->processAccountSort($users);
     }
 
     /**

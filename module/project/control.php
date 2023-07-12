@@ -1385,8 +1385,8 @@ class project extends control
         $this->view->userInfoList   = $userInfoList;
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
-        $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->teams2Import   = array('' => '') + $this->loadModel('personnel')->getCopiedObjects($projectID, 'project', true);
+        $this->view->depts          = $this->dept->getOptionMenu();
+        $this->view->teams2Import   = $this->loadModel('personnel')->getCopiedObjects($projectID, 'project', true);
         $this->view->currentMembers = $currentMembers;
         $this->view->copyProjectID  = $copyProjectID;
         $this->view->teamMembers    = $this->projectZen->buildMembers($currentMembers, $members2Import, $deptUsers, $project->days);
@@ -1796,7 +1796,7 @@ class project extends control
     public function ajaxGetExecutions(string $projectID, string $executionID = '0', string $mode = '', string $type = 'all'): string
     {
         $disabled   = '';
-        $executions = array('' => '');
+        $executions = array();
         $projectID  = (int)$projectID;
 
         if($projectID)

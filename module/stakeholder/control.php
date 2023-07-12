@@ -137,7 +137,7 @@ class stakeholder extends control
         $this->view->deptUsers          = $deptUsers;
         $this->view->dept               = $dept;
         $this->view->projectID          = $projectID;
-        $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
+        $this->view->depts              = $this->dept->getOptionMenu();
         $this->view->stakeholders       = $this->stakeholder->getStakeholders($projectID, 'all', 'id_desc');
         $this->view->parentStakeholders = $this->loadModel('program')->getStakeholders($parentID, 't1.id_desc');
 
@@ -176,13 +176,13 @@ class stakeholder extends control
             return $this->send($response);
         }
 
-        $users = array('' => '');
+        $users = array();
         if($stakeholder->from == 'team') $users = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
         elseif($stakeholder->from == 'company')
         {
             $members = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
             $users   = $this->user->getPairs('noclosed');
-            $users   = array('' => '') + array_diff($users, $members);
+            $users   = array_diff($users, $members);
         }
 
         $this->view->title       = $this->lang->stakeholder->edit;
@@ -242,7 +242,7 @@ class stakeholder extends control
         }
 
         $users        = $this->loadModel('user')->getPairs('noclosed');
-        $companyUsers = array('' => '') + array_diff($users, $members);
+        $companyUsers = array_diff($users, $members);
         $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($programID ? $programID : $projectID);
         foreach($companyUsers as $account => $realname)
         {

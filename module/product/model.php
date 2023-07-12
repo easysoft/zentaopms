@@ -843,7 +843,7 @@ class productModel extends model
 
         /* Get module data. */
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
-        $searchConfig['params']['module']['values'] = array('' => '') + $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
+        $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
 
         /* Get branch data. */
         if($productID)
@@ -881,8 +881,8 @@ class productModel extends model
 
         if($this->config->systemMode == 'ALM')
         {
-            $this->config->product->all->search['params']['program']['values'] = array('' => '') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-            $this->config->product->all->search['params']['line']['values']    = array('' => '') + $this->getLinePairs();
+            $this->config->product->all->search['params']['program']['values'] = $this->loadModel('program')->getTopPairs('', 'noclosed');
+            $this->config->product->all->search['params']['line']['values']    = $this->getLinePairs();
         }
 
         $this->loadModel('search')->setSearchParams($this->config->product->all->search);

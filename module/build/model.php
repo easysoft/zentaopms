@@ -273,7 +273,6 @@ class buildModel extends model
     {
         $sysBuilds      = array();
         $selectedBuilds = array();
-        if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
         $productIdList = is_array($products) ? array_keys($products) : $products;
         if($buildIdList)

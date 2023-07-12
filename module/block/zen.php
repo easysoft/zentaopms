@@ -51,7 +51,7 @@ class blockZen extends block
             if(strpos(",$closedBlock,", ",$moduleKey|$moduleKey,") !== false) unset($modules[$moduleKey]);
         }
 
-        return array('' => '') + $modules;
+        return $modules;
     }
 
     /**

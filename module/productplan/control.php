@@ -580,7 +580,7 @@ class productplan extends control
     {
         $plans    = $this->productplan->getPairs($productID, empty($branch) ? '' : $branch, $expired, true);
         $planName = $number === '' ? 'plan' : "plan[$number]";
-        $plans    = empty($plans) ? array('' => '') : $plans;
+        $plans    = empty($plans) ? array() : $plans;
         echo html::select($planName, $plans, '', "class='form-control'");
     }
 

@@ -24,17 +24,17 @@ class productIssuesEntry extends entry
         if(!is_numeric($productID)) $this->sendError(400, 'The product_id is not supported');
 
         $taskFields = 'id,status';
-        $taskStatus = array('' => '');
+        $taskStatus = array();
         $taskStatus['opened'] = 'wait,doing,done,pause';
         $taskStatus['closed'] = 'closed';
 
         $storyFields = 'id,status';
-        $storyStatus = array('' => '');
+        $storyStatus = array();
         $storyStatus['opened'] = 'draft,reviewing,active,changing';
         $storyStatus['closed'] = 'closed';
 
         $bugFields = 'id,status';
-        $bugStatus = array('' => '');
+        $bugStatus = array();
         $bugStatus['opened'] = 'active,resolved';
         $bugStatus['closed'] = 'closed';
 

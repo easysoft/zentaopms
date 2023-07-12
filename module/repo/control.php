@@ -222,7 +222,7 @@ class repo extends control
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
         $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
-        $this->view->serviceHosts    = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
+        $this->view->serviceHosts    = $this->loadModel('pipeline')->getPairs($repo->SCM);
 
 
         $this->display();
@@ -1095,7 +1095,7 @@ class repo extends control
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->product->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($product->id, 'noempty');
+            $this->config->product->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
         }
 
         session_start();
@@ -1181,7 +1181,7 @@ class repo extends control
         else
         {
             $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
-            $this->config->bug->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($product->id, 'noempty');
+            $this->config->bug->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
         }
         session_start();
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
@@ -1892,7 +1892,7 @@ class repo extends control
     public function ajaxGetExecutions($productID, $branch = 0)
     {
         $executions = $this->repo->getExecutionPairs($productID, $branch);
-        echo html::select('execution', array('' => '') + $executions, '', 'class="form-control chosen"');
+        echo html::select('execution', $executions, '', 'class="form-control chosen"');
     }
 
     /**

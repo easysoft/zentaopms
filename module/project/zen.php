@@ -256,7 +256,7 @@ class projectZen extends project
         }
 
         $withProgram   = $this->config->systemMode == 'ALM';
-        $allProducts   = array('0' => '') + $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
+        $allProducts   = $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
         $parentProgram = $this->loadModel('program')->getByID($programID);
 
         $this->view->title               = $this->lang->project->create;
@@ -343,7 +343,7 @@ class projectZen extends project
         $this->view->programList              = $this->program->getParentPairs();
         $this->view->program                  = $this->program->getByID($project->parent);
         $this->view->projectID                = $projectID;
-        $this->view->allProducts              = array('0' => '') + $allProducts;
+        $this->view->allProducts              = $allProducts;
         $this->view->multiBranchProducts      = $this->product->getMultiBranchPairs();
         $this->view->productPlans             = array_filter($productPlansOrder);
         $this->view->linkedProducts           = $linkedProducts;

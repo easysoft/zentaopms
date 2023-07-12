@@ -40,7 +40,7 @@ class zanode extends control
         $this->config->zanode->search['actionURL'] = $actionURL;
         $this->config->zanode->search['queryID']   = $queryID;
         $this->config->zanode->search['onMenuBar'] = 'no';
-        $this->config->zanode->search['params']['host']['values'] = array('' => '') + $hosts;
+        $this->config->zanode->search['params']['host']['values'] = $hosts;
         $this->loadModel('search')->setSearchParams($this->config->zanode->search);
 
         $showFeature = false;
@@ -107,7 +107,7 @@ class zanode extends control
         }
 
         $this->view->title     = $this->lang->zanode->create;
-        $this->view->hostPairs = array('' => '') + $this->loadModel('zahost')->getPairs('host');
+        $this->view->hostPairs = $this->loadModel('zahost')->getPairs('host');
         $this->view->hostID    = $hostID;
 
         return $this->display();

@@ -1128,7 +1128,7 @@ EOF;
         $this->view->mode       = 'myMeeting';
         $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram('', 'all', true);
         $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
-        $this->view->rooms      = array('' => '') + $this->loadModel('meetingroom')->getPairs();
+        $this->view->rooms      = $this->loadModel('meetingroom')->getPairs();
 
         $this->display();
     }
@@ -1192,9 +1192,9 @@ EOF;
         $this->config->feedback->search['actionURL'] = inlink('work', "mode=feedback&browseType=bysearch&param=myQueryID&orderBy=$orderBy");
         $this->config->feedback->search['queryID']   = $queryID;
         $this->config->feedback->search['onMenuBar'] = 'no';
-        $this->config->feedback->search['params']['product']['values']     = array('' => '') + $products;
-        $this->config->feedback->search['params']['module']['values']      = array('' => '') + $this->loadModel('tree')->getOptionMenu(0, $viewType = 'feedback', $startModuleID = 0);
-        $this->config->feedback->search['params']['processedBy']['values'] = array('' => '') + $this->feedback->getFeedbackPairs('admin');
+        $this->config->feedback->search['params']['product']['values']     = $products;
+        $this->config->feedback->search['params']['module']['values']      = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'feedback', $startModuleID = 0);
+        $this->config->feedback->search['params']['processedBy']['values'] = $this->feedback->getFeedbackPairs('admin');
 
         unset($this->config->feedback->search['fields']['assignedTo']);
         unset($this->config->feedback->search['fields']['closedBy']);

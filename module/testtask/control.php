@@ -550,7 +550,7 @@ class testtask extends control
         $this->config->testcase->search['module']                      = 'testtask';
         $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
-        $this->config->testcase->search['params']['status']['values']  = array('' => '') + $this->lang->testcase->statusList;
+        $this->config->testcase->search['params']['status']['values']  = $this->lang->testcase->statusList;
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
         $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0,  0);
 

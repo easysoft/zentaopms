@@ -156,7 +156,7 @@ class job extends control
         $this->view->repoTypes   = $repoTypes;
         $this->view->products    = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
-        $this->view->jenkinsServerList   = array('' => '') + $this->loadModel('jenkins')->getPairs();
+        $this->view->jenkinsServerList   = $this->loadModel('jenkins')->getPairs();
         $this->view->sonarqubeServerList = array('') + $this->loadModel('pipeline')->getPairs('sonarqube');
 
         $this->display();

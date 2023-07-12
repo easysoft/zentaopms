@@ -423,9 +423,9 @@ class myModel extends model
         $this->config->testcase->search['module']                      = $queryName;
         $this->config->testcase->search['queryID']                     = $queryID;
         $this->config->testcase->search['actionURL']                   = $actionURL;
-        $this->config->testcase->search['params']['product']['values'] = array('' => '') + $products;
-        $this->config->testcase->search['params']['scene']['values']   = array('' => '') + $scene;
-        $this->config->testcase->search['params']['lib']['values']     = array('' => '') + $this->loadModel('caselib')->getLibraries();
+        $this->config->testcase->search['params']['product']['values'] = $products;
+        $this->config->testcase->search['params']['scene']['values']   = $scene;
+        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
         unset($this->config->testcase->search['fields']['module']);
 
@@ -653,9 +653,9 @@ class myModel extends model
             unset($this->config->bug->search['fields']['closedBy']);
         }
 
-        $this->config->bug->search['params']['project']['values']       = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject) + array('' => '');
+        $this->config->bug->search['params']['project']['values']       = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject);
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
-        $this->config->bug->search['params']['product']['values']       = $products + array('' => '');
+        $this->config->bug->search['params']['product']['values']       = $products;
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs();
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getAllModulePairs();
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList;
@@ -783,8 +783,8 @@ class myModel extends model
         $this->config->product->search['module']                      = $queryName;
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['actionURL']                   = $actionURL;
-        $this->config->product->search['params']['product']['values'] = array('' => '') + $products;
-        $this->config->product->search['params']['plan']['values']    = array('' => '') + $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
+        $this->config->product->search['params']['product']['values'] = $products;
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
         $this->config->product->search['fields']['title']             = $this->lang->story->title;
         unset($this->config->product->search['fields']['module']);
 
@@ -897,8 +897,8 @@ class myModel extends model
         $this->config->product->search['module']                      = $queryName;
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['actionURL']                   = $actionURL;
-        $this->config->product->search['params']['product']['values'] = array('' => '') + $products;
-        $this->config->product->search['params']['plan']['values']    = array('' => '') + $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
+        $this->config->product->search['params']['product']['values'] = $products;
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
 
         $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
         $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
@@ -927,8 +927,8 @@ class myModel extends model
         $this->config->ticket->search['module'] = 'workTicket';
         $this->config->ticket->search['queryID']   = $queryID;
         $this->config->ticket->search['actionURL'] = $actionURL;
-        $this->config->ticket->search['params']['product']['values'] = array('' => '') + $this->loadModel('feedback')->getGrantProducts();
-        $this->config->ticket->search['params']['module']['values']  = array('' => '') + $this->loadModel('tree')->getAllModulePairs();
+        $this->config->ticket->search['params']['product']['values'] = $this->loadModel('feedback')->getGrantProducts();
+        $this->config->ticket->search['params']['module']['values']  = $this->loadModel('tree')->getAllModulePairs();
         $grantProducts = $this->loadModel('feedback')->getGrantProducts();
         $productIDlist = array_keys($grantProducts);
         $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productIDlist, 'all', 'releasetag');

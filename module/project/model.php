@@ -2210,7 +2210,7 @@ class projectModel extends model
             ->beginIF($this->config->vision)->andWhere("CONCAT(',', t2.visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->fetchPairs('account', 'realname');
 
-        return array('' => '') + $members;
+        return $members;
     }
 
     /**

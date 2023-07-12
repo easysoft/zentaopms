@@ -1527,7 +1527,7 @@ class story extends control
 
         $this->view->cases      = $this->testcase->getStoryCases($storyID);
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->resultList = array('' => '') + $this->lang->testcase->resultList;
+        $this->view->resultList = $this->lang->testcase->resultList;
         $this->view->story      = $this->story->getById($storyID);
         $this->display();
     }
@@ -1744,7 +1744,7 @@ class story extends control
         }
         elseif($this->app->getViewType() == 'mhtml')
         {
-            return print(html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, 'onchange=setStoryRelated()'));
+            return print(html::select('story', empty($stories) ? array() : $stories, $storyID, 'onchange=setStoryRelated()'));
         }
         elseif($pageType == 'batch')
         {
@@ -1754,7 +1754,7 @@ class story extends control
         }
         else
         {
-            return print(html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, 'class=form-control'));
+            return print(html::select('story', empty($stories) ? array() : $stories, $storyID, 'class=form-control'));
         }
     }
 
@@ -1812,7 +1812,7 @@ class story extends control
         }
 
         $storyID = isset($stories[$storyID]) ? $storyID : 0;
-        $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
+        $select  = html::select('story', empty($stories) ? array() : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
         if($onlyOption == 'true') return print(substr($select, strpos($select, '>') + 1, -10));

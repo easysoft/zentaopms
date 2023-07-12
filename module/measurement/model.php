@@ -92,8 +92,7 @@ class measurementModel extends model
      */
     public function getPairs(): array
     {
-        $pairs = $this->dao->select('id, name')->from(TABLE_BASICMEAS)->where('deleted')->eq(0)->orderBy('purpose, `order` desc')->fetchPairs();
-        return array('' => '') + $pairs;
+        return $this->dao->select('id, name')->from(TABLE_BASICMEAS)->where('deleted')->eq(0)->orderBy('purpose, `order` desc')->fetchPairs();
     }
 
     /**
@@ -144,7 +143,7 @@ class measurementModel extends model
             if($type == 'pairs') $pairs[$report->id] = $reportName;
         }
 
-        if($type == 'pairs') return array('' => '') + $pairs;
+        if($type == 'pairs') return $pairs;
 
         return $reports;
     }
@@ -211,7 +210,7 @@ class measurementModel extends model
             }
         }
 
-        return array('' => '') + $pairs;
+        return $pairs;
     }
 
     /**
@@ -774,15 +773,15 @@ class measurementModel extends model
         {
             if($optionType == 'project')
             {
-                $options = array('' => '') + $this->loadModel('project')->getPairsByProgram();
+                $options = $this->loadModel('project')->getPairsByProgram();
             }
             elseif($optionType == 'product')
             {
-                $options = array('' => '') + $this->loadModel('product')->getPairs('nocode');
+                $options = $this->loadModel('product')->getPairs('nocode');
             }
             elseif($optionType == 'sprint')
             {
-                $options = array('' => '') + $this->loadModel('execution')->getPairs();
+                $options = $this->loadModel('execution')->getPairs();
             }
             elseif($optionType == 'user')
             {
@@ -796,11 +795,6 @@ class measurementModel extends model
                 $options = $this->lang->$moduleName->$varListName;
                 unset($options[0]);
                 unset($options['']);
-                $options = array('' => '') + $options;
-            }
-            else
-            {
-                $options = array('' => '');
             }
 
             $optionList[$optionType] = $options;

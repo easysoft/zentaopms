@@ -1104,10 +1104,10 @@ class docModel extends model
             $this->config->doc->search['module'] = 'contributeDoc';
             $products = $this->product->getPairs();
 
-            $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '') + array('all' => $this->lang->doc->allProjects);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
-            $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
-            $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
+            $this->config->doc->search['params']['project']['values']   = $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '') + array('all' => $this->lang->doc->allProjects);
+            $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['lib']['values']       = $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
+            $this->config->doc->search['params']['product']['values']   = $products + array('all' => $this->lang->doc->allProduct);
 
             unset($this->config->doc->search['fields']['module']);
         }
@@ -1115,7 +1115,7 @@ class docModel extends model
         {
             if(!isset($libs[$libID])) $libs[$libID] = $this->getLibById($libID);
 
-            $libPairs  = array('' => '');
+            $libPairs  = array();
             $queryName = $type . 'libDoc';
             foreach($libs as $lib)
             {
@@ -1126,7 +1126,7 @@ class docModel extends model
 
             if($type == 'project')
             {
-                $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+                $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
             }
             else
             {
@@ -1138,7 +1138,7 @@ class docModel extends model
                 unset($this->config->doc->search['fields']['execution']);
             }
 
-            if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $libPairs = array('' => '') + $this->getLibs('all', 'withObject');
+            if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $libPairs = $this->getLibs('all', 'withObject');
 
             $this->config->doc->search['module'] = $queryName;
             $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);

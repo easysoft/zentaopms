@@ -226,7 +226,7 @@ class webhook extends control
 
         $oauthUsers  = $response['data'];
         $bindedPairs = $this->webhook->getBoundUsers($id);
-        $useridPairs = array('' => '');
+        $useridPairs = array();
         foreach($oauthUsers as $name => $userid) $useridPairs[$userid] = $name;
 
         $this->app->loadClass('pager', $static = true);

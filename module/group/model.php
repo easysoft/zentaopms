@@ -2106,11 +2106,11 @@ class groupModel extends model
             $privs[$privID] = (isset($packages[$priv->parent]) ? $packages[$priv->parent] : $modules[$priv->parentCode]) . '/' . $priv->name;
         }
 
-        $this->config->group->priv->search['params']['view']['values']           = array('' => '') + $this->getPrivManagerPairs('view');
-        $this->config->group->priv->search['params']['module']['values']         = array('' => '') + $modules;
-        $this->config->group->priv->search['params']['package']['values']        = array('' => '') + $packages;
-        $this->config->group->priv->search['params']['recommendPrivs']['values'] = array('' => '') + $privs;
-        $this->config->group->priv->search['params']['dependPrivs']['values']    = array('' => '') + $privs;
+        $this->config->group->priv->search['params']['view']['values']           = $this->getPrivManagerPairs('view');
+        $this->config->group->priv->search['params']['module']['values']         = $modules;
+        $this->config->group->priv->search['params']['package']['values']        = $packages;
+        $this->config->group->priv->search['params']['recommendPrivs']['values'] = $privs;
+        $this->config->group->priv->search['params']['dependPrivs']['values']    = $privs;
 
         $this->loadModel('search')->setSearchParams($this->config->group->priv->search);
     }

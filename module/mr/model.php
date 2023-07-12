@@ -92,7 +92,7 @@ class mrModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('repoID')->eq($repoID)
             ->orderBy('id')->fetchPairs('id', 'title');
-        return array('' => '') + $MR;
+        return $MR;
     }
 
     /**

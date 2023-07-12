@@ -106,7 +106,7 @@ class sonarqube extends control
 
         $projectList = $this->sonarqube->apiGetProjects($sonarqubeID);
 
-        $projectPairs = array('' => '');
+        $projectPairs = array();
         foreach($projectList as $project)
         {
             if(!empty($project) and !in_array($project->key, $existsProject)) $projectPairs[$project->key] = $project->name;

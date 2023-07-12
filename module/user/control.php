@@ -532,7 +532,7 @@ class user extends control
         $groups = $this->dao->select('id, name, role')
             ->from(TABLE_GROUP)
             ->fetchAll();
-        $groupList = array('' => '');
+        $groupList = array();
         $roleGroup = array();
         foreach($groups as $group)
         {
@@ -576,7 +576,7 @@ class user extends control
             ->from(TABLE_GROUP)
             ->where('vision')->eq($this->config->vision)
             ->fetchAll();
-        $groupList = array('' => '');
+        $groupList = array();
         $roleGroup = array();
         foreach($groups as $group)
         {

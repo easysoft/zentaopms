@@ -154,8 +154,8 @@ class pivot extends control
         $this->view->end        = $end;
         $this->view->bugs       = $this->pivot->getBugs($begin, $end, $product, $execution);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->executions = array('' => '') + $this->pivot->getProjectExecutions();
-        $this->view->products   = array('' => '') + $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->executions = $this->pivot->getProjectExecutions();
+        $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->execution  = $execution;
         $this->view->product    = $product;
         $this->view->submenu    = 'test';
@@ -261,7 +261,7 @@ class pivot extends control
 
         $sql     = $this->loadModel('chart')->parseSqlVars($sql, $filters);
         $options = $this->pivot->getSysOptions($type, $object, $field, $sql);
-        return print(html::select('default[]', array('' => '') + $options, '', "class='form-control form-select picker-select' multiple"));
+        return print(html::select('default[]', $options, '', "class='form-control form-select picker-select' multiple"));
     }
 
     /**

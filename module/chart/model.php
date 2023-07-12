@@ -599,7 +599,7 @@ class chartModel extends model
      */
     public function getSysOptions($type, $object = '', $field = '', $sql = '')
     {
-        $options = array('' => '');
+        $options = array();
         switch($type)
         {
             case 'user':

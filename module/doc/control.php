@@ -945,7 +945,7 @@ class doc extends control
             ->orderBy('`order` asc')
             ->fetchPairs();
 
-        return print(html::select('doc', array('' => '') + $docs, '', "class='form-control chosen'"));
+        return print(html::select('doc', $docs, '', "class='form-control chosen'"));
     }
 
     /**
