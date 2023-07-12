@@ -26,7 +26,8 @@ class priPicker extends wg
      */
     protected static array $defineProps = array
     (
-        'id?: string',                      // 组件根元素的 ID。
+        'id?: string="$GID"',               // 组件根元素的 ID。
+        'formID?: string',                  // 组件隐藏的表单元素 ID。
         'className?: string|array',         // 类名。
         'style?: array',                    // 样式。
         'tagName?: string',                 // 组件根元素的标签名。
@@ -51,20 +52,26 @@ class priPicker extends wg
      */
     protected function build(): zui
     {
-        $items = $this->prop('items');
-        if($items === null)
+        list($props, $restProps) = $this->props->split(array_keys(static::definedPropsList()));
+        if(isset($props['id']))
+        {
+            $props['_id'] = $props['id'];
+            unset($props['id']);
+        }
+
+        if(!isset($props['items']))
         {
             global $app, $lang;
             $moduleName = $app->getModuleName();
-            if(isset($lang->$moduleName->priList)) $items = $lang->$moduleName->priList;
+            if(isset($lang->$moduleName->priList)) $props['items'] = $lang->$moduleName->priList;
         }
         return zui::priPicker
         (
             set::_class('form-group-wrapper'),
-            set::_map(array('value' => 'defaultValue')),
+            set::_map(array('value' => 'defaultValue', 'formID' => 'id')),
+            set::_props($restProps),
             set::popWidth('100%'),
-            set($this->props),
-            set::items($items),
+            set($props),
             $this->children(),
         );
     }

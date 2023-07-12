@@ -25,7 +25,8 @@ class colorPicker extends wg
      * @access protected
      */
     protected static array $defineProps = array(
-        'id?: string',                      // 组件根元素的 ID。
+        'id?: string="$GID"',               // 组件根元素的 ID。
+        'formID?: string',                  // 组件隐藏的表单元素 ID。
         'className?: string|array',         // 类名。
         'style?: array',                    // 样式。
         'tagName?: string',                 // 组件根元素的标签名。
@@ -57,19 +58,25 @@ class colorPicker extends wg
      */
     protected function build(): wg
     {
-        $items = $this->prop('items');
-        if($items === null)
+        list($props, $restProps) = $this->props->split(array_keys(static::definedPropsList()));
+        if(isset($props['id']))
+        {
+            $props['_id'] = $props['id'];
+            unset($props['id']);
+        }
+
+        if(!isset($props['items']))
         {
             global $app, $lang;
             $moduleName = $app->getModuleName();
-            if(isset($lang->$moduleName->colorList)) $items = $lang->$moduleName->colorList;
+            if(isset($lang->$moduleName->colorList)) $props['items'] = $lang->$moduleName->colorList;
         }
         return zui::colorPicker
         (
             set::_class('form-group-wrapper'),
-            set::_map(array('value' => 'defaultValue', 'items' => 'colors')),
-            set($this->props),
-            set::items($items),
+            set::_map(array('value' => 'defaultValue', 'items' => 'colors', 'formID' => 'id')),
+            set::_props($restProps),
+            set($props),
             $this->children(),
         );
     }
