@@ -80,7 +80,6 @@ class picker extends wg
         list($pickerProps, $restProps) = $this->props->split(array_keys(static::definedPropsList()));
         $items = $pickerProps['items'];
         $pickerItems  = array();
-        $hasEmptyItem = false;
         $hasZeroValue = false;
         $defaultValue = isset($pickerProps['value']) ? $pickerProps['value'] : (isset($pickerProps['defaultValue']) ? $pickerProps['defaultValue'] : '');
         if(!empty($items))
@@ -90,7 +89,6 @@ class picker extends wg
                 if(!is_array($item))           $item = array('text' => $item, 'value' => $key);
                 if(!is_string($item['value'])) $item['value'] = strval($item['value']);
 
-                if(empty($item['value']) && $item['value'] !== '') $hasEmptyItem  = true;
                 if($item['value'] === '0') $hasZeroValue  = true;
                 $pickerItems[] = $item;
             }
@@ -100,7 +98,6 @@ class picker extends wg
         $pickerProps['items']         = $pickerItems;
         $pickerProps['defaultValue']  = $defaultValue;
 
-        if(!isset($pickerProps['required']))   $pickerProps['required'] = !$hasEmptyItem;
         if(!isset($pickerProps['emptyValue'])) $pickerProps['emptyValue'] = ($hasZeroValue || "$defaultValue" !== 0) ? '' : '0,';
 
         if(isset($pickerProps['id']))
