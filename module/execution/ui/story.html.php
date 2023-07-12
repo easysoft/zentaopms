@@ -20,6 +20,7 @@ featureBar
 );
 
 jsVar('executionID', $executionID);
+jsVar('childrenAB', $lang->story->childrenAB);
 $linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
 $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
 modal
@@ -333,7 +334,7 @@ if($canBatchAction)
         $footToolbar['items'][] = array(
             'text'  => $lang->execution->unlinkStoryAB,
             'class' => 'btn batch-btn ajax-btn size-sm secondary',
-            'url'   => $this->createLink('execution', 'batchUnlinkStory', "executionID={$execution->id}")
+            'data-url' => $this->createLink('execution', 'batchUnlinkStory', "executionID={$execution->id}")
         );
     }
 }
@@ -360,11 +361,13 @@ $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'drop
 $options     = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules, 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus);
 foreach($stories as $story)
 {
-    $data[] = $this->story->formatStoryForList($story, $options);
-    if(!isset($story->children)) continue;
-
-    /* Children. */
-    foreach($story->children as $key => $child) $data[] = $this->story->formatStoryForList($child, $options);
+    $story = $this->story->formatStoryForList($story, $options);
+    if($story->parent > 0)
+    {
+        $story->parent  = 0;
+        $story->isChild = true;
+    }
+    $data[] = $story;
 }
 
 jsVar('cases', $storyCases);
@@ -379,12 +382,13 @@ dtable
     set::data($data),
     set::className('shadow rounded'),
     set::footToolbar($footToolbar),
-    set::footPager(
-        usePager(),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}"))
-    ),
+    set::onRenderCell(jsRaw('window.renderStoryCell')),
+    set::footPager(usePager(array
+    (
+        'recPerPage'  => $pager->recPerPage,
+        'recTotal'    => $pager->recTotal,
+        'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}")
+    ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
 );
 
