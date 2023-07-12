@@ -51,7 +51,7 @@ class count_of_annual_created_plan_in_product extends baseCalc
                 $records[] = (object)array(
                     'year'    => $year,
                     'product' => $product,
-                    'count'   => $count,
+                    'value'   => $count,
                 );
             }
         }
