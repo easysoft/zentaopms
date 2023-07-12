@@ -48,7 +48,7 @@ if($module == 'project' && $field == 'unitList')
         set::value($defaultCurrency),
         set::required(true),
     );
-    $actionWidth = 'w-3/4';
+    $actionWidth = 'w-full';
 }
 elseif($module == 'story' && $field == 'reviewRules')
 {
