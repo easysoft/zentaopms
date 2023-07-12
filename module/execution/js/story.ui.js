@@ -57,7 +57,7 @@ window.setStatistics = function(element, checkedIdList)
         const task = dtable.$.getRowInfo(rowID);
         if(task)
         {
-            checkedEstimate += task.data.estimate;
+            checkedEstimate += parseFloat(task.data.estimate);
             if(cases[rowID]) checkedCase += 1;
         }
     })

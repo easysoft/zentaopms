@@ -279,6 +279,8 @@ class h extends wg
     protected static function encodeJsonWithRawJs($data)
     {
         $json = json_encode($data, JSON_UNESCAPED_UNICODE);
+        if(empty($json)) return '[]';
+
         $json = str_replace('"RAWJS<', '', str_replace('>RAWJS"', '', $json));
         return $json;
     }
