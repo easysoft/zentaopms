@@ -122,7 +122,7 @@ class picker extends wg
     {
         return zui::picker
         (
-            set::_class('form-group-wrapper'),
+            set::_class('form-group-wrapper picker-box'),
             set::_map(array('value' => 'defaultValue', 'formID' => 'id')),
             set($this->getPickerProps())
         );

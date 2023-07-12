@@ -359,7 +359,7 @@ function outOfDateTip(currentID)
     if(end == longTime) end = LONG_TIME;
     if(end.length > 0 && begin.length > 0)
     {
-        var selectedProgramID = currentID ? $("select[name='parents\[" + currentID + "\]']").val() : $('#parent').val();
+        var selectedProgramID = currentID ? $("[name='parents\[" + currentID + "\]']").val() : $('#parent').val();
 
         if(selectedProgramID == 0 || selectedProgramID == undefined) return;
 
@@ -434,10 +434,10 @@ window.addNewLine = function(e)
 
     newLine.find('.addLine').on('click', addNewLine);
     newLine.find('.removeLine').on('click', removeLine);
-    newLine.find("select[name^='products']").on('change', productChange);
-    newLine.find("select[name^='branch']").on('change', branchChange);
+    newLine.find("[name^='products']").on('change', productChange);
+    newLine.find("[name^='branch']").on('change', branchChange);
 
-    $("select[name^='products']").each(function()
+    $("[name^='products']").each(function()
     {
         let id = $(this).attr('name').replace(/[^\d]/g, '');
 
@@ -452,17 +452,17 @@ window.addNewLine = function(e)
     newLine.find('.removeLine').removeClass('disabled');
     newLine.find('[name="newProduct"]').closest('div.items-center').remove();
     newLine.find('.chosen-container').remove();
-    newLine.find("select[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).val('');
-    newLine.find("select[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]').val('');
-    newLine.find("select[name^='branch']").val('');
-    newLine.find("select[name^='plans']").empty();
+    newLine.find("[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).val('');
+    newLine.find("[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]').val('');
+    newLine.find("[name^='branch']").val('');
+    newLine.find("[name^='plans']").empty();
     newLine.find('.form-group').eq(0).addClass('w-1/2').removeClass('w-1/4');
     newLine.find('.form-group').eq(1).addClass('hidden');
     newLine.find("div[id^='plan']").attr('id', 'plan' + index);
 
     $(obj).closest('.form-row').after(newLine);
-    let product = newLine.find("select[name^='products']");
-    let branch  = newLine.find("select[name^='branch']");
+    let product = newLine.find("[name^='products']");
+    let branch  = newLine.find("[name^='branch']");
 }
 
 /**
@@ -482,7 +482,7 @@ window.removeLine = function(e)
     $(obj).closest('.form-row').remove();
 
     let chosenProducts = 0;
-    $("select[name^='products']").each(function()
+    $("[name^='products']").each(function()
     {
         if($(this).val() > 0) chosenProducts ++;
     });
@@ -503,7 +503,7 @@ window.loadBranches = function(product)
     $("#planDefault").remove();
 
     let chosenProducts = [];
-    $("select[name^='products']").each(function()
+    $("[name^='products']").each(function()
     {
         let $product  = $(product);
         let productID = $(this).val();
@@ -520,12 +520,12 @@ window.loadBranches = function(product)
     (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hidden') : $('.stageBy').addClass('hidden');
 
     let $formRow  = $(product).closest('.form-row');
-    let index     = $formRow.find('select').first().attr('name').match(/\d+/)[0];
+    let index     = $formRow.find("[name^='products']").first().attr('name').match(/\d+/)[0];
     let oldBranch = $(product).attr('data-branch') !== undefined ? $(product).attr('data-branch') : 0;
 
     if(!multiBranchProducts[$(product).val()])
     {
-        $formRow.find('.form-group').last().find('select').val('').trigger('chosen:updated');
+        $formRow.find('.form-group').last().find('select').val('');
         $formRow.find('.form-group').eq(0).addClass('w-1/2').removeClass('w-1/4');
         $formRow.find('.form-group').eq(1).addClass('hidden').find('select').val('');
     }
@@ -534,10 +534,10 @@ window.loadBranches = function(product)
     {
         if(data)
         {
-            $formRow.find("select[name^='branch']").replaceWith(data);
+            $formRow.find("[name^='branch']").replaceWith(data);
             $formRow.find('.form-group').eq(0).addClass('w-1/4').removeClass('w-1/2');
             $formRow.find('.form-group').eq(1).removeClass('hidden');
-            $formRow.find("select[name^='branch']").attr('multiple', '').attr('name', 'branch[' + index + '][]').attr('id', 'branch' + index).on('change', branchChange);
+            $formRow.find("[name^='branch']").attr('multiple', '').attr('name', 'branch[' + index + '][]').attr('id', 'branch' + index).on('change', branchChange);
         }
 
         let branch = $('#branch' + index);
@@ -564,9 +564,17 @@ window.loadPlans = function(product, branch)
     {
         if(data)
         {
-            $("div#plan" + index).find("select[name^='plans']").replaceWith(data);
-            $("div#plan" + index).find('.chosen-container').remove();
-            $("div#plan" + index).find('select').attr('name', 'plans[' + productID + ']' + '[]').attr('id', 'plans' + productID);
+            data = JSON.parse(data);
+
+            console.log(data);
+
+            $("div#plan" + index).find('.picker-box').empty();
+            $("div#plan" + index).find('.picker-box').append(`<div name='plans[${productID}]' id='plans${productID}'></div>`);
+
+            new zui.Picker(`#plans${productID}`, {
+                items: data,
+                multiple: true,
+            });
         }
     });
 }

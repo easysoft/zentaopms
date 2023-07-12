@@ -1010,7 +1010,7 @@ class product extends control
      */
     public function ajaxGetPlans(int $productID, string $branch = '', int $planID = 0, string $fieldID = '', int $needCreate = 0, string $expired = '', string $param = '')
     {
-        $param    = strtolower($param);
+        $param = strtolower($param);
         if(strpos($param, 'forstory') === false)
         {
             $plans = $this->loadModel('productplan')->getPairs($productID, empty($branch) ? 'all' : $branch, $expired, strpos($param, 'skipparent') !== false);
@@ -1019,9 +1019,13 @@ class product extends control
         {
             $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch == '0' ? 'all' : $branch, $param);
         }
-        $field    = $fieldID !== '' ? "plans[$fieldID]" : 'plan';
-        $multiple = strpos($param, 'multiple') === false ? '' : 'multiple';
-        $output   = html::select($field, $plans, $planID, "class='form-control chosen' $multiple");
+
+        $items = array();
+        foreach($plans as $id => $name)
+        {
+            if(!$id) continue;
+            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+        }
 
         if($branch == 0 and strpos($param, 'edit') and (strpos($param, 'forstory') === false)) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
 
@@ -1034,7 +1038,8 @@ class product extends control
             $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
             $output .= '</div>';
         }
-        echo $output;
+
+        return print(json_encode($items));
     }
 
     /**
