@@ -635,14 +635,6 @@ class upgradeModel extends model
                 $this->setURSwitchStatus($fromVersion);
                 break;
             case '18_4_beta1':
-                if(!$executedXuanxuan)
-                {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan7.1.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan7.2.beta.sql';
-                    $this->execSQL($xuanxuanSql);
-                }
-
                 if($this->config->edition != 'open')
                 {
                     $this->processDeployStepAction();
@@ -650,7 +642,15 @@ class upgradeModel extends model
                     $this->checkPivotSQL();
                 }
                 break;
-
+            case '18_4':
+                if(!$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan7.1.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan7.2.beta.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+                break;
         }
 
         $this->deletePatch();
