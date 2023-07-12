@@ -169,7 +169,7 @@ class product extends control
 
         /* Generate data. */
         list($branchOpt, $branchTagOpt) = $this->productZen->getBranchAndTagOption($projectID, $product, $isProjectStory);
-        $branchOptions                  = (empty($product) && $isProjectStory) ? $this->productZen->getBranchOptions($projectProducts, $projectID) : array();
+        $branchOptions                  = (empty($product) && $isProjectStory) ? $this->productZen->getBranchOptions($projectProducts, $projectID) : array($productID => $branchOpt);
         $storyTasks                     = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
         $storyBugs                      = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $storyCases                     = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
