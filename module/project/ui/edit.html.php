@@ -118,13 +118,13 @@ if($linkedProducts)
                     setClass('pl-2 flex self-center'),
                     btn
                     (
-                        setClass('btn btn-link addLine'),
+                        setClass('btn ghost addLine'),
                         on::click('addNewLine'),
                         icon('plus')
                     ),
                     btn
                     (
-                        setClass('btn btn-link removeLine'),
+                        setClass('btn ghost removeLine'),
                         icon('close'),
                         on::click('removeLine'),
                         $i == 0 ? set::disabled(true) : null

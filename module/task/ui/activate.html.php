@@ -209,8 +209,8 @@ foreach($task->team as $member)
             btnGroup
             (
                 set::items(array(
-                    array('icon' => 'plus',  'class' => 'btn btn-link btn-add text-gray', 'disabled' => $memberDisabled ? 'disabled' : ''),
-                    array('icon' => 'trash', 'class' => 'btn btn-link btn-delete text-gray', 'disabled' => $memberDisabled ? 'disabled' : ''),
+                    array('icon' => 'plus',  'class' => 'btn ghost btn-add text-gray', 'disabled' => $memberDisabled ? 'disabled' : ''),
+                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete text-gray', 'disabled' => $memberDisabled ? 'disabled' : ''),
                 ))
             )
         )
@@ -295,8 +295,8 @@ for($i; $i <= $rowCount; $i ++)
             btnGroup
             (
                 set::items(array(
-                    array('icon' => 'plus',  'class' => 'btn btn-link btn-add text-gray'),
-                    array('icon' => 'trash', 'class' => 'btn btn-link btn-delete text-gray'),
+                    array('icon' => 'plus',  'class' => 'btn ghost btn-add text-gray'),
+                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete text-gray'),
                 ))
             )
         )

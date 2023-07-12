@@ -169,8 +169,8 @@ for($i = 1; $i <= 3; $i ++)
             btnGroup
             (
                 set::items(array(
-                    array('icon' => 'plus',  'class' => 'btn btn-link btn-add'),
-                    array('icon' => 'trash', 'class' => 'btn btn-link btn-delete'),
+                    array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
+                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete'),
                 ))
             )
         )
@@ -385,7 +385,7 @@ formPanel
             inputGroup
             (
                 $lang->task->pri,
-                select
+                priPicker
                 (
                     set::name('pri'),
                     set::items(array_filter($lang->task->priList)),

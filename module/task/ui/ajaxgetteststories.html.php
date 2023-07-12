@@ -92,8 +92,8 @@ foreach($testStories as $storyID => $storyTitle)
                 btnGroup
                 (
                     set::items(array(
-                        array('class' => 'btn btn-link text-gray', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
-                        array('class' => 'btn btn-link text-gray', 'icon' => 'trash', 'onclick' => 'removeItem(this)'),
+                        array('class' => 'btn ghost text-gray', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
+                        array('class' => 'btn ghost text-gray', 'icon' => 'trash', 'onclick' => 'removeItem(this)'),
                     ))
                 )
             )

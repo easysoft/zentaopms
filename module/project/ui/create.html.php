@@ -101,13 +101,13 @@ if(!empty($products))
                     setClass('pl-2 flex self-center line-btn'),
                     btn
                     (
-                        setClass('btn btn-link addLine'),
+                        setClass('btn ghost addLine'),
                         on::click('addNewLine'),
                         icon('plus')
                     ),
                     btn
                     (
-                        setClass('btn btn-link removeLine'),
+                        setClass('btn ghost removeLine'),
                         icon('trash'),
                         on::click('removeLine'),
                         $i == 0 ? set::disabled(true) : null
@@ -406,13 +406,13 @@ formPanel
                 setClass('pl-2 flex self-center line-btn'),
                 btn
                 (
-                    setClass('btn btn-link addLine'),
+                    setClass('btn ghost addLine'),
                     on::click('addNewLine'),
                     icon('plus')
                 ),
                 btn
                 (
-                    setClass('btn btn-link removeLine'),
+                    setClass('btn ghost removeLine'),
                     icon('trash'),
                     on::click('removeLine'),
                     $i == 0 ? set::disabled(true) : null

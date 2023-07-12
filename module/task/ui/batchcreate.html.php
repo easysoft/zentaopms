@@ -41,7 +41,7 @@ if(!$hideStory)
         (
             set('type', 'btn'),
             set('icon', 'eye'),
-            set('class', 'btn-link'),
+            set('class', 'ghost'),
             set('hint', $lang->preview),
             set('tagName', 'a'),
             set('url', '#'),
@@ -59,7 +59,7 @@ if(!$hideStory)
         (
             set('type', 'btn'),
             set('icon', 'arrow-right'),
-            set('class', 'btn-link'),
+            set('class', 'ghost'),
             set('hint', $lang->task->copyStoryTitle),
         )
     );

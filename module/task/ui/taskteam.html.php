@@ -123,8 +123,8 @@ if(!empty($task->team))
                 btnGroup
                 (
                     set::items(array(
-                        array('icon' => 'plus',  'class' => 'btn btn-link btn-add'),
-                        array('icon' => 'trash', 'class' => 'btn btn-link btn-delete'),
+                        array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
+                        array('icon' => 'trash', 'class' => 'btn ghost btn-delete'),
                     ))
                 )
             )
@@ -209,8 +209,8 @@ for($i; $i < $count; $i ++)
             btnGroup
             (
                 set::items(array(
-                    array('icon' => 'plus',  'class' => 'btn btn-link btn-add'),
-                    array('icon' => 'trash', 'class' => 'btn btn-link btn-delete'),
+                    array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
+                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete'),
                 ))
             )
         )
