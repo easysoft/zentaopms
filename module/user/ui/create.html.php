@@ -112,6 +112,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->password),
+            set::required(true),
             inputGroup
             (
                 input
@@ -255,6 +256,13 @@ formPanel
     (
         set::class('hidden'),
         set::name('verifyRand'),
+        set::value($rand)
+    ),
+    input
+    (
+        set::class('hidden'),
+        set::id('passwordLength'),
+        set::name('passwordLength'),
         set::value($rand)
     )
 );
