@@ -92,4 +92,22 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->query();
     }
+
+    /**
+     * 获取反馈数据。
+     * Get feedback list.
+     *
+     * @param  array    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getFeedbacks($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_FEEDBACK)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->query();
+    }
 }
