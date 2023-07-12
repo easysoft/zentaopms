@@ -24,7 +24,7 @@ class count_of_annual_created_plan_in_product extends baseCalc
 {
     public function getStatement()
     {
-        return $this->this->dao->select('t1.product,year(t1.createdDate) as year,count(t1.id) as count')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        return $this->dao->select('t1.id,t1.product,year(t1.createdDate) as year')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
@@ -33,9 +33,29 @@ class count_of_annual_created_plan_in_product extends baseCalc
 
     public function calculate($row)
     {
+        if(!empty($row->year))
+        {
+            if(!isset($this->result[$row->year])) $this->result[$row->year] = array();
+            if(!isset($this->result[$row->year][$row->product])) $this->result[$row->year][$row->product] = 0;
+            $this->result[$row->year][$row->product] ++;
+        }
     }
 
     public function getResult($options = array())
     {
+        $records = array();
+        foreach($this->result as $year => $products)
+        {
+            foreach($products as $product => $count)
+            {
+                $records[] = (object)array(
+                    'year'    => $year,
+                    'product' => $product,
+                    'count'   => $count,
+                );
+            }
+        }
+
+        return $records;
     }
 }
