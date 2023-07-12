@@ -94,14 +94,14 @@ class cron extends control
      * Toggle run cron.
      *
      * @param  int    $cronID
-     * @param  int    $status
+     * @param  string $status
      * @access public
      * @return void
      */
-    public function toggle($cronID, $status)
+    public function toggle(int $cronID, string $status)
     {
         $this->cron->changeStatus($cronID, $status);
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
