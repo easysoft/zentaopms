@@ -22,6 +22,7 @@ formPanel
     on::change('#story',   'changeStory'),
     on::click('#refresh',  'clickRefresh'),
     to::headingActions(icon('cog-outline')),
+    set::title($lang->testcase->create),
     formRow
     (
         formGroup
@@ -33,6 +34,7 @@ formPanel
             (
                 picker
                 (
+                    set::id('product'),
                     set::name('product'),
                     set::items($products),
                     set::value($productID)
@@ -40,6 +42,7 @@ formPanel
                 isset($product->type) && $product->type != 'normal' ? picker
                 (
                     set::width('100px'),
+                    set::id('branch'),
                     set::name('branch'),
                     set::items($branches),
                     set::value($branch)
@@ -55,6 +58,7 @@ formPanel
                 set('id', 'moduleBox'),
                 picker
                 (
+                    set::id('module'),
                     set::name('module'),
                     set::items($moduleOptionMenu),
                     set::value($currentModuleID)
@@ -91,6 +95,7 @@ formPanel
                 set('id', 'sceneBox'),
                 picker
                 (
+                    set::id('scene'),
                     set::name('scene'),
                     set::items($sceneOptionMenu),
                     set::value($currentSceneID)
@@ -108,6 +113,7 @@ formPanel
             (
                 picker
                 (
+                    set::id('type'),
                     set::name('type'),
                     set::items($lang->testcase->typeList),
                     set::value($type)
@@ -135,6 +141,7 @@ formPanel
                 set('id', 'stageBox'),
                 picker
                 (
+                    set::id('stage'),
                     set::name('stage'),
                     set::multiple(true),
                     set::items($lang->testcase->stageList),
@@ -154,6 +161,7 @@ formPanel
                 set('id', 'storyBox'),
                 picker
                 (
+                    set::id('story'),
                     set::name('story'),
                     set::items($stories),
                     set::value($storyID)
@@ -183,21 +191,16 @@ formPanel
         ),
         formGroup
         (
-            set::width('180px'),
-            set::class(),
+            set::width('150px'),
             set::label($lang->testcase->pri),
-            set::control('picker'),
-            set::items($lang->testcase->priList),
-            set::name('pri'),
-            set::value()
+            priPicker(set::name('pri'), set::items($lang->testcase->priList), set::value('')),
         ),
         formGroup
         (
-            set::width('150px'),
-            set::class(),
+            set::width('180px'),
             set::label($lang->testcase->isReviewed),
-            set::control('picker'),
             set::items($lang->testcase->reviewList),
+            set::id('forceNotReview'),
             set::name('forceNotReview'),
             set::value('1')
         )
