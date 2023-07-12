@@ -19,6 +19,7 @@ if(file_exists($extViewFile))
             <?php endif;?>
             <tr>
               <td style='padding: 10px; background-color: #FFF0D5'>
+                <?php if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');?>
                 <?php $action->actor = zget($users, $action->actor);?>
                 <?php $action->extra = zget($users, $action->extra);?>
                 <span style='font-size: 16px; color: #F1A325'>●</span> &nbsp;<span><?php $this->action->printAction($action);?></span>
