@@ -322,6 +322,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
 $blockNavCode = 'nav-' . uniqid();
 panel
 (
+    set('id', "qastatistic-block-{$block->id}"),
     on::click('.nav-prev,.nav-next', 'switchNav'),
     set('class', 'qastatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),

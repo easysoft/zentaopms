@@ -384,6 +384,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
 $blockNavCode = 'nav-' . uniqid();
 panel
 (
+    set('id', "productstatistic-block-{$block->id}"),
     on::click('.nav-prev,.nav-next', 'switchNav'),
     set('class', 'productstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),

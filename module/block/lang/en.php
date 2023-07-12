@@ -587,6 +587,12 @@ $lang->block->qastatistic->closedYesterday   = 'Closed Yesterday';
 $lang->block->qastatistic->closedToday       = 'Closed Today';
 $lang->block->qastatistic->latestTesttask    = 'Latest Testtask';
 
+$lang->block->executionstatistic = new stdclass();
+$lang->block->executionstatistic->progress      = 'Progress';
+$lang->block->executionstatistic->totalEstimate = 'Estimate';
+$lang->block->executionstatistic->totalConsumed = 'Consumed';
+$lang->block->executionstatistic->totalLeft     = 'Left';
+
 $lang->block->executionoverview = new stdclass();
 $lang->block->executionoverview->totalExecution = 'Total';
 $lang->block->executionoverview->thisYear       = 'This Year';

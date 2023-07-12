@@ -601,6 +601,13 @@ $lang->block->qastatistic->closedYesterday   = '昨日关闭';
 $lang->block->qastatistic->closedToday       = '今日关闭';
 $lang->block->qastatistic->latestTesttask    = '近期测试单';
 
+$lang->block->executionstatistic = new stdclass();
+$lang->block->executionstatistic->allProject = '全部项目';
+$lang->block->executionstatistic->progress      = '执行进度';
+$lang->block->executionstatistic->totalEstimate = '预计工时';
+$lang->block->executionstatistic->totalConsumed = '消耗工时';
+$lang->block->executionstatistic->totalLeft     = '剩余工时';
+
 $lang->block->executionoverview = new stdclass();
 $lang->block->executionoverview->totalExecution = "{$lang->executionCommon}总量";
 $lang->block->executionoverview->thisYear       = '今年完成';
@@ -652,9 +659,6 @@ $lang->block->annualworkload->resolvedBugCount  = '修复Bug数';
 $lang->block->releasestatistic = new stdclass();
 $lang->block->releasestatistic->monthly = '月度发布次数趋势图';
 $lang->block->releasestatistic->annual  = "年度发布榜（%s年）";
-
-$lang->block->executionstatistic = new stdclass();
-$lang->block->executionstatistic->allProject = '全部项目';
 
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
