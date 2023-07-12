@@ -16,7 +16,7 @@ pid=1
 
 */
 
-r(count($calc->getResult()))                                      &&  p('') && e('179'); // 测试bug按产品分组数。
-r($calc->getResult(array('product' => '78', 'year' => '2021')))   &&  p('0:value') && e('20');  // 测试产品78的bug数。
-r($calc->getResult(array('product' => '84', 'year' => '2022')))   &&  p('') && e('0');  // 测试产品84的bug数。
-r($calc->getResult(array('product' => '999', 'year' => '2021')))  &&  p('') && e('0');  // 测试不存在的产品的bug数。
+r(count($calc->getResult()))                                      &&  p('') && e('179'); // 测试按产品的年度关闭反馈分组数。
+r($calc->getResult(array('product' => '78', 'year' => '2021')))   &&  p('0:value') && e('20');  // 测试2021年产品78关闭的反馈数。
+r($calc->getResult(array('product' => '84', 'year' => '2022')))   &&  p('') && e('0');  // 测试2022年产品84关闭的反馈数。
+r($calc->getResult(array('product' => '999', 'year' => '2021')))  &&  p('') && e('0');  // 测试不存在的产品的反馈数。
