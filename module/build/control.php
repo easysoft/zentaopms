@@ -447,8 +447,15 @@ class build extends control
 
             $params = ($type == 'all') ? 'noempty,withbranch,noreleased' : 'noempty,noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $projectID, 'project', $build);
-            if($isJsonView)  return print(json_encode($builds));
-            return print(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
+            if($isJsonView) return print(json_encode($builds));
+
+            $items = array();
+            foreach($builds as $id => $name)
+            {
+                if(empty($id)) continue;
+                $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+            }
+            return print(json_encode($builds));
         }
         if($varName == 'resolvedBuild')
         {
@@ -456,15 +463,28 @@ class build extends control
 
             $params = ($type == 'all') ? 'withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $projectID, 'project', $build);
-            if($isJsonView)  return print(json_encode($builds));
-            return print(html::select($varName, $builds, $build, "class='form-control'"));
+            return print(json_encode($builds));
+
+            $items = array();
+            foreach($builds as $id => $name)
+            {
+                if(empty($id)) continue;
+                $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+            }
+            if($isJsonView) return print(json_encode($builds));
         }
 
         if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type, $extra);
         $builds = $this->build->getBuildPairs($productID, $branch, $type, $projectID, 'project', $build, false);
-        if(strpos($extra, 'multiple') !== false) $varName .= '[]';
         if($isJsonView) return print(json_encode($builds));
-        return print(html::select($varName, $builds, $build, "class='form-control' $extra"));
+
+        $items = array();
+        foreach($builds as $id => $name)
+        {
+            if(empty($id)) continue;
+            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+        }
+        if($isJsonView) return print(json_encode($builds));
     }
 
     /**

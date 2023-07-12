@@ -113,10 +113,14 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name('builds[]'),
             set::label($lang->build->builds),
-            set::items(array()),
-            set::multiple(true),
+            picker
+            (
+                set::id('builds'),
+                set::name('builds[]'),
+                set::items(array()),
+                set::multiple(true),
+            )
         ),
         formGroup
         (

@@ -13,8 +13,16 @@ $().ready(function()
         var productID = $('#product').val();
         $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
         {
-            $('#builds').replaceWith(data);
-            $('#builds').attr('data-placeholder', multipleSelect);
+            if(data)
+            {
+                data = JSON.parse(data);
+                new zui.Picker('#builds', {
+                    items: data,
+                    multiple: true,
+                    name: 'builds[]'
+                });
+                $('#builds').attr('data-placeholder', multipleSelect);
+            }
         });
 
         $.get($.createLink('product', 'ajaxGetProductById', 'produtID=' + productID), function(data)
@@ -43,8 +51,16 @@ $().ready(function()
             var productID = $('#product').val();
             $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
             {
-                $('#builds').replaceWith(data);
-                $('#builds').attr('data-placeholder', multipleSelect);
+                if(data)
+                {
+                    data = JSON.parse(data);
+                    new zui.Picker('#builds', {
+                        items: data,
+                        multiple: true,
+                        name: 'builds[]'
+                    });
+                    $('#builds').attr('data-placeholder', multipleSelect);
+                }
             });
         }
     });
