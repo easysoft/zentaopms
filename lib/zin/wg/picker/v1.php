@@ -37,7 +37,7 @@ class picker extends wg
         'beforeDestroy?: function',         // 销毁前的回调函数。
         'name?: string',                    // 作为表单项的名称。
         'value?: string|string[]',          // 默认值。
-        'emptyValue?: string=",0"',         // 默认值。
+        'emptyValue?: string=',             // 默认值。
         'onChange?: function',              // 值变更回调函数。
         'disabled?: boolean',               // 是否禁用。
         'multiple?: boolean|number=false',  // 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
@@ -81,6 +81,8 @@ class picker extends wg
         $items = $pickerProps['items'];
         $pickerItems  = array();
         $hasEmptyItem = false;
+        $hasZeroValue = false;
+        $defaultValue = isset($pickerProps['value']) ? $pickerProps['value'] : (isset($pickerProps['defaultValue']) ? $pickerProps['defaultValue'] : '');
         if(!empty($items))
         {
             foreach($items as $key => $item)
@@ -88,14 +90,18 @@ class picker extends wg
                 if(!is_array($item))           $item = array('text' => $item, 'value' => $key);
                 if(!is_string($item['value'])) $item['value'] = strval($item['value']);
 
-                if(empty($item['value'])) $hasEmptyItem = true;
-                else                      $pickerItems[] = $item;
+                if(empty($item['value']))  $hasEmptyItem  = true;
+                else                       $pickerItems[] = $item;
+                if($item['value'] === '0') $hasZeroValue  = true;
             }
         }
 
-        $pickerProps['_props'] = $restProps;
-        $pickerProps['items']  = $pickerItems;
-        if(!isset($pickerProps['required'])) $pickerProps['required'] = !$hasEmptyItem;
+        $pickerProps['_props']        = $restProps;
+        $pickerProps['items']         = $pickerItems;
+        $pickerProps['defaultValue']  = $defaultValue;
+
+        if(!isset($pickerProps['required']))   $pickerProps['required'] = !$hasEmptyItem;
+        if(!isset($pickerProps['emptyValue'])) $pickerProps['emptyValue'] = ($hasZeroValue || "$defaultValue" !== 0) ? '' : '0,';
 
         if(isset($pickerProps['id']))
         {
