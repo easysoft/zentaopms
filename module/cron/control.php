@@ -61,8 +61,8 @@ class cron extends control
         if($_POST)
         {
             $this->cron->create();
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::locate(inlink('index'), 'parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->sendSuccess(array('load' => inlink('index')));
         }
         $this->view->title      = $this->lang->cron->create . $this->lang->cron->common;
 
