@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-$blockID = $block->module . '-' . $block->code . '-' . $block->id;
-
 /**
  * 获取区块左侧的执行列表.
  * Get execution tabs on the left side.
@@ -321,13 +319,11 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
     return $tabItems;
 };
 
-$url = createLink('block', 'printBlock', "blockID={$block->id}");
 $projectItems = array();
-$projectItems[] = array('text' => $lang->block->executionstatistic->allProject, 'data-on' => 'click', 'data-call' => "loadPage('{$url}', '#executionstatistic-block-{$block->id}')");
+$projectItems[] = array('text' => $lang->block->executionstatistic->allProject, 'data-block' => $block->id, 'data-param' => helper::safe64Encode("project=0"), 'data-on' => 'click', 'data-call' => 'switchProject', 'data-params' => 'event');
 foreach($projects as $projectID => $projectName)
 {
-    $url = createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("project={$projectID}"));
-    $projectItems[] = array('text' => $projectName, 'data-on' => 'click', 'data-call' => "loadPage('{$url}', '#executionstatistic-block-{$block->id}')");
+    $projectItems[] = array('text' => $projectName, 'data-block' => $block->id, 'data-param' => helper::safe64Encode("project={$projectID}"), 'data-on' => 'click', 'data-call' => 'switchProject', 'data-params' => 'event');
 }
 
 $blockNavCode = 'nav-' . uniqid();

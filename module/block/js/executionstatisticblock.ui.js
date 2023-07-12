@@ -1,11 +1,24 @@
 $(function()
 {
+    initNavTabs();
+});
+
+function initNavTabs()
+{
     $('.executionstatistic-block.block-sm .nav.nav-tabs').find('.nav-item.nav-switch').removeClass('active');
     $('.executionstatistic-block.block-sm .nav.nav-tabs').find('.nav-item.nav-switch').each(function()
     {
         if($(this).find('a[data-toggle=tab]').hasClass('active')) $(this).addClass('active');
     })
-});
+}
+
+window.switchProject = function(event)
+{
+    const block  = $(event.target).parent().data('block');
+    const params = $(event.target).parent().data('param');
+    const url    = $.createLink('block', 'printBlock', 'blockID=' + block + '&params=' + params);
+    loadPage({url, selector: '#executionstatistic-block-' + block, success: initNavTabs});
+}
 
 function switchNav(event)
 {
