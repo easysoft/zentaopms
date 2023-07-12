@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的反馈总数。
- * .
+ * Count of feedback in product.
  *
  * 范围：prod
  * 对象：feedback
@@ -9,8 +9,8 @@
  * 度量名称：按产品统计的反馈总数
  * 单位：个
  * 描述：产品中反馈的个数求和
-过滤已删除的反馈
-过滤已删除的产品
+ *       过滤已删除的反馈
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +23,28 @@
  */
 class count_of_feedback_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getFeedbacks';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product');
 
     public $result = array();
 
-    //public function getStatement($dao)
-    //{
-    //}
+    public function calculate($data)
+    {
+        $product = $data->product;
 
-    //public function calculate($data)
-    //{
-    //}
+        if(!isset($this->result[$product])) $this->result[$product] = 0;
+        $this->result[$product] += 1;
+    }
 
-    //public function getResult()
-    //{
-    //}
+    public function getResult($options = null)
+    {
+        $records = array();
+        foreach($this->result as $product => $value)
+        {
+            $records[] = array('product' => $product, 'value' => $value);
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
