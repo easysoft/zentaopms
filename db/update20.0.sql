@@ -35,6 +35,16 @@ DELETE FROM `zt_config` WHERE `module` = 'my' AND `section` = 'global' AND `key`
 
 ALTER TABLE `zt_testtask` ADD `realBegan` date NULL;
 
+UPDATE `zt_config` SET `module` = 'bug', `section` = 'browse' WHERE `module` = 'datatable' AND `section` = 'bugBrowse' AND `key` = 'showModule';
+UPDATE `zt_config` SET `module` = 'caselib', `section` = 'browse' WHERE `module` = 'datatable' AND `section` = 'caselibBrowse' AND `key` = 'showModule';
+UPDATE `zt_config` SET `module` = 'execution', `section` = 'bug' WHERE `module` = 'datatable' AND `section` = 'executionBug' AND `key` = 'showModule';
+UPDATE `zt_config` SET `module` = 'execution', `section` = 'story' WHERE `module` = 'datatable' AND `section` = 'executionStory' AND `key` = 'showModule';
+UPDATE `zt_config` SET `module` = 'execution', `section` = 'task' WHERE `module` = 'datatable' AND `section` = 'executionTask' AND `key` = 'showModule';
+UPDATE `zt_config` SET `module` = 'feedback', `section` = 'admin' WHERE `module` = 'datatable' AND `section` = 'feedbackAdmin' AND `key` = 'showModule';
+UPDATE `zt_config` SET `module` = 'product', `section` = 'browse' WHERE `module` = 'datatable' AND `section` = 'productBrowse' AND `key` = 'showModule';
+UPDATE `zt_config` SET `module` = 'project', `section` = 'bug' WHERE `module` = 'datatable' AND `section` = 'projectBug' AND `key` = 'showModule';
+UPDATE `zt_config` SET `module` = 'testcase', `section` = 'browse' WHERE `module` = 'datatable' AND `section` = 'testcaseBrowse' AND `key` = 'showModule';
+
 -- DROP TABLE IF EXISTS `zt_space`;
 CREATE TABLE `zt_space` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
