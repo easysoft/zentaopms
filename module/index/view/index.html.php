@@ -16,7 +16,7 @@ if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect
 
 js::set('vision',        $config->vision);
 js::set('navGroup',      $lang->navGroup);
-js::set('appsLang',      $lang->index->app);
+js::set('appsLang',      $lang->index->dock);
 js::set('appsMenuItems', commonModel::getMainNavList($app->rawModule));
 js::set('defaultOpen',   (isset($open) and !empty($open)) ? $open : '');
 js::set('manualText',    $lang->manual);
