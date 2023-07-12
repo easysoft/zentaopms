@@ -21,6 +21,8 @@ include '../framework/helper.class.php';
 $app = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 $app->installing = true;
 
+$app->loadCommon();
+
 /* Check installed or not. */
 if(!isset($_SESSION['installing']) and isset($config->installed) and $config->installed) die(header('location: index.php'));
 
