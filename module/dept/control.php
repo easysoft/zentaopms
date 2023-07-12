@@ -111,11 +111,10 @@ class dept extends control
      * Delete a department.
      *
      * @param  int    $deptID
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function delete($deptID, $confirm = 'no')
+    public function delete($deptID)
     {
         /* Check this dept when delete. */
         $sons  = $this->dept->getSons($deptID);
@@ -123,24 +122,17 @@ class dept extends control
         if($sons)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasSons));
-            return print(js::alert($this->lang->dept->error->hasSons));
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->dept->error->hasSons}');"));
         }
         if($users)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasUsers));
-            return print(js::alert($this->lang->dept->error->hasUsers));
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->dept->error->hasUsers}');"));
         }
 
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->dept->confirmDelete, $this->createLink('dept', 'delete', "deptID=$deptID&confirm=yes")));
-        }
-        else
-        {
-            $this->dept->delete($deptID);
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return print(js::reload('parent'));
-        }
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+        $this->dept->delete($deptID);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**

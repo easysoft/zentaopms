@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('editLinkTemp', createLink('dept', 'edit', "deptID={id}"));
-jsVar('deleteLinkTemp', createLink('dept', 'edit', "deptID={id}"));
+jsVar('deleteLinkTemp', createLink('dept', 'delete', "deptID={id}"));
 jsVar('deleteTip', $lang->dept->confirmDelete);
 
 $deptActions = array();
