@@ -338,21 +338,26 @@ panel
     on::click('.nav-prev,.nav-next', 'switchNav'),
     set('class', 'executionstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
-    set::title($block->title),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title'),
+            span(span($block->title)),
+            dropdown
+            (
+                a
+                (
+                    setClass('text-gray ml-4'),
+                    isset($projects[$currentProjectID]) ? $projects[$currentProjectID] : $lang->block->executionstatistic->allProject,
+                    span(setClass('caret align-middle ml-1'))
+                ),
+                set::items($projectItems)
+            ),
+        )
+    ),
     to::headingActions
     (
-        dropdown
-        (
-            a
-            (
-                setClass('text-gray ml-4'),
-                isset($projects[$currentProjectID]) ? $projects[$currentProjectID] : $lang->block->executionstatistic->allProject,
-                span(setClass('caret align-middle ml-1'))
-            ),
-            set::placement('bottom-end'),
-            set::menu(array('style' => array('minWidth' => 70, 'width' => 70))),
-            set::items($projectItems)
-        ),
         a
         (
             set('class', 'text-gray'),
