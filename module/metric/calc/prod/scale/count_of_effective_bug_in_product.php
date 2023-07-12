@@ -42,19 +42,12 @@ class count_of_effective_bug_in_product extends baseCalc
 
     public function getResult($options = null)
     {
-        if(!empty($options) && isset($options['product']))
-        {
-            $productID = $options['product'];
-            if(isset($this->result[$productID])) return $this->result[$productID];
-            return 0;
-        }
-
         $records = array();
         foreach($this->result as $product => $value)
         {
             $records[] = array('product' => $product, 'value' => $value);
         }
 
-        return $records;
+        return $this->filterByOptions($records, $options);
     }
 }
