@@ -57,17 +57,19 @@ class mainNavbar extends nav
                     unset($items[$key]);
                     continue;
                 }
+                if(empty($item['alias']))   $item['alias'] = '';
+                if(empty($item['exclude'])) $item['exclude'] = '';
 
                 $link = $item['link'];
-                $items[$key]['url'] = commonModel::createMenuLink((object)$item, $tab);
+                $items[$key]['url']     = commonModel::createMenuLink((object)$item, $app->tab);
                 $items[$key]['data-id'] = $item['name'];
 
                 $active    = '';
                 $subModule = isset($item['subModule']) ? explode(',', $item['subModule']) : array();
-                if($subModule and in_array($currentModule, $subModule)) $active = 'active';
-                if($link['module'] == $currentModule and $link['method'] == $currentMethod) $active = 'active';
-                if($link['module'] == $currentModule and strpos(",{$item['alias']},", ",{$currentMethod},") !== false) $active = 'active';
-                if(strpos(",{$item['exclude']},", ",{$currentModule}-{$currentMethod},") !== false or strpos(",{$item['exclude']},", ",{$currentModule},") !== false) $active = '';
+                if($subModule && in_array($currentModule, $subModule)) $active = 'active';
+                if($link['module'] == $currentModule && $link['method'] == $currentMethod) $active = 'active';
+                if($link['module'] == $currentModule && strpos(",{$item['alias']},", ",{$currentMethod},") !== false) $active = 'active';
+                if(strpos(",{$item['exclude']},", ",{$currentModule}-{$currentMethod},") !== false || strpos(",{$item['exclude']},", ",{$currentModule},") !== false) $active = '';
                 $items[$key]['class'] = $active;
 
                 unset($items[$key]['name']);
