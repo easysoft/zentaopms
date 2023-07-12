@@ -44,7 +44,7 @@ foreach($fields as $field => $attr)
     $formItems[$field] = $formGroup;
 }
 
-$formItems['program']->add(on::change('toggleLineByProgram();'));
+if(isset($formItems['program'])) $formItems['program']->add(on::change('toggleLineByProgram();'));
 $formItems['acl']->add(on::change('setWhite(e.target);'));
 $formItems['line'] = formRow(set::id('lineBox'), $formItems['line']);
 
@@ -64,10 +64,9 @@ $formItems['whitelist'] = formRow
                 inputGroup
                 (
                     $lang->product->groups,
-                    select
+                    picker
                     (
                         set::name($groupsField['name'] . '[]'),
-                        set::control(array('type' => 'picker')),
                         set::multiple(true),
                         set::items($groupsField['options']),
                         set::value($groupsField['default'])
@@ -79,10 +78,9 @@ $formItems['whitelist'] = formRow
                 inputGroup
                 (
                     $lang->product->users,
-                    select
+                    picker
                     (
                         set::name($usersField['name'] . '[]'),
-                        set::control(array('type' => 'picker')),
                         set::multiple(true),
                         set::items($usersField['options']),
                         set::value($usersField['default'])

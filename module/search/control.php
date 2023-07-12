@@ -94,7 +94,7 @@ class search extends control
             if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
         }
 
-        echo js::locate($actionURL, 'parent');
+        echo js::locate($actionURL);
     }
 
     /**
