@@ -67,11 +67,19 @@ if(file_exists('install.php') or file_exists('upgrade.php'))
 if($app->clientDevice == 'mobile' and (strpos($config->version, 'pro') === 0 or strpos($config->version, 'biz') === 0 or strpos($config->version, 'max') === 0) and $config->default->view == 'html') $config->default->view = 'mhtml';
 if(!empty($_GET['display']) && $_GET['display'] == 'card') $config->default->view = 'xhtml';
 
-$app->parseRequest();
-if(!$app->setParams()) return;
-$common->checkPriv();
-if(!$common->checkIframe()) return;
-$app->loadModule();
+try
+{
+    $app->parseRequest();
+    if(!$app->setParams()) helper::end();
+    $common->checkPriv();
+    if(!$common->checkIframe()) helper::end();
+
+    $app->loadModule();
+}
+catch (EndResponseException $endResponseException)
+{
+    echo $endResponseException->getContent();
+}
 
 /* Flush the buffer. */
 echo helper::removeUTF8Bom(ob_get_clean());
