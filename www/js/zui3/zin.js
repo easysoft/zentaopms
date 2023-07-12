@@ -58,6 +58,7 @@
             if(DEBUG) console.log('[APP]', 'update:', {code, url, title});
             return state;
         },
+        isOldPage: () => false,
         reloadApp: function(_code, url)
         {
             loadPage(url);
@@ -311,12 +312,7 @@
         const $target = $(target);
         const position = $target.css('position');
         if(!['relative', 'absolute', 'fixed'].includes(position)) $target.css('position', 'relative');
-        if(!$target.hasClass('load-indicator'))
-        {
-            $target.addClass('load-indicator');
-            setTimeout(toggleLoading.bind(null, target, isLoading), 100);
-            return;
-        }
+        if(!$target.hasClass('load-indicator')) $target.addClass('load-indicator');
         if(isLoading === undefined) isLoading = !$target.hasClass('loading');
         $target.toggleClass('loading', isLoading);
     }
@@ -356,7 +352,7 @@
             {
                 updatePerfInfo(options, 'requestBegin');
                 if(isDebugRequest) return;
-                toggleLoading(target);
+                toggleLoading(target, true);
             },
             success: (data) =>
             {
@@ -624,7 +620,7 @@
             contentType: options.contentType,
             beforeSend: () =>
             {
-                toggleLoading(options.target);
+                toggleLoading(options.target, true);
                 if(options.beforeSend) return options.beforeSend();
             },
             success: (data) =>
