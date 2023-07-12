@@ -48,8 +48,7 @@ foreach($releases as $productName => $releaseCount)
         ),
         cell
         (
-            set::width('65%'),
-            set::class('border-l'),
+            set::width('70%'),
             div
             (
                 set::class('progress'),
@@ -71,15 +70,15 @@ panel
     set('headingClass', 'border-b'),
     div
     (
-        set::class('flex'),
+        set::class('flex flex-wrap justify-between'),
         cell
         (
-            set::width('50%'),
-            set::class('px-2'),
+            set::width($longBlock ? '49%' : '100%'),
+            set::class($longBlock ? '' : 'pb-2'),
 
             div
             (
-                set::class('pl-2 pb-2'),
+                set::class('px-2 pb-2'),
                 $lang->block->releasestatistic->monthly,
             ),
             echarts
@@ -101,21 +100,21 @@ panel
                         )
                     )
                 )
-            )->size('100%', 200),
+            )->size('100%', $longBlock ? 200 : 175),
         ),
         cell
         (
-            set::width('50%'),
-            set::class('px-2 justify-between'),
+            set::width($longBlock ? '49%' : '100%'),
             div
             (
-                set::class('pl-2 pb-2'),
+                set::class('px-2 pb-2'),
                 icon('chart-bar pr-1'),
                 sprintf($lang->block->releasestatistic->annual, date('Y'))
             ),
             div
             (
-                set::class('p-2'),
+                set::class('p-2 overflow-y-auto'),
+                setStyle('height', $longBlock ? '200px' : '175px'),
                 $releaseProgressData,
             )
         ),
