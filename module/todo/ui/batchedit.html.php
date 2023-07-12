@@ -152,7 +152,7 @@ formBatchPanel
         set::name('assignedTo'),
         set::label($lang->todo->assignedTo),
         set::width('120px'),
-        set::control('select'),
+        set::control('picker'),
         set::items($users),
     ),
     formBatchItem

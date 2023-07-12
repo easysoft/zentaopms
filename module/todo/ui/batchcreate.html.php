@@ -92,11 +92,10 @@ formBatchPanel
                 setClass('input-group-addon'),
                 $lang->todo->date
             ),
-            input
+            datePicker
             (
                 setID('todoDate'),
                 set::name('date'),
-                set::type('date'),
                 set::value($date),
                 on::change('window.changFuture')
             ),
@@ -166,7 +165,7 @@ formBatchPanel
         set::value($app->user->account),
         set::ditto(true),
         set::width('140px'),
-        set::control('select'),
+        set::control('picker'),
         set::items($users),
     ),
     formBatchItem
