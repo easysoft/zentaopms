@@ -26,7 +26,7 @@ formBatchPanel
     (
         set::name('story'),
         set::label($lang->design->story),
-        set::control('select'),
+        set::control('picker'),
         set::items($stories),
         set::width('200px'),
         set::ditto(true),
@@ -50,7 +50,7 @@ formBatchPanel
     (
         set::name('desc'),
         set::label($lang->design->desc),
-        set::control('editor'),
+        set::control('textarea'),
         set::width('240px'),
     ),
 );
