@@ -69,7 +69,7 @@ formPanel
             set::id('newBuildExecutionBox'),
             setClass('hidden'),
             set::label(!empty($execution) && $execution->type == 'kanban' ? $lang->bug->kanban : $lang->build->execution),
-            select
+            picker
             (
                 set::name('buildExecution'),
                 set::items($executions),
@@ -83,7 +83,7 @@ formPanel
             set::label($lang->bug->resolvedBuild),
             inputGroup
             (
-                select
+                picker
                 (
                     set::name('resolvedBuild'),
                     set::value(''),

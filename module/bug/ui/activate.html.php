@@ -18,7 +18,7 @@ formPanel
     (
         set::width('1/3'),
         set::label($lang->bug->assignedTo),
-        select
+        picker
         (
             set::name('assignedTo'),
             set::value($bug->resolvedBy),
@@ -29,7 +29,7 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->bug->openedBuild),
-        select
+        picker
         (
             set::name('openedBuild[]'),
             set::value($bug->openedBuild),

@@ -20,7 +20,7 @@ formPanel
     (
         set::width('1/3'),
         set::label($lang->bug->assignedTo),
-        select
+        picker
         (
             set::name('assignedTo'),
             set::items($users),
@@ -32,7 +32,8 @@ formPanel
         set::width('1/3'),
         set::name('type'),
         set::label($lang->bug->type),
-        set::control(array('type' => 'select', 'items' => $lang->bug->typeList)),
+        set::control('picker'),
+        set::items($lang->bug->typeList),
         set::value($bug->type)
     ),
     formGroup
@@ -40,7 +41,8 @@ formPanel
         set::width('1/3'),
         set::name('pri'),
         set::label($lang->bug->pri),
-        set::control(array('type' => 'select', 'items' => $lang->bug->priList)),
+        set::control('picker')
+        set::items($lang->bug->priList)
         set::value($bug->pri)
     ),
     formRow
@@ -57,7 +59,9 @@ formPanel
     formGroup
     (
         set::label($lang->bug->lblMailto),
-        set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
+        set::control('picker'),
+        set::items($users),
+        set::multiple(true),
         set::name('mailto[]'),
         set::value(str_replace(' ', '', $bug->mailto ?: '')),
     ),

@@ -95,13 +95,13 @@ detailBody
                 set::name($lang->bug->product),
                 inputGroup
                 (
-                    select
+                    picker
                     (
                         set::name('product'),
                         set::items($products),
                         set::value($product->id)
                     ),
-                    $product->type != 'normal' ? select
+                    $product->type != 'normal' ? picker
                     (
                         set::width('100px'),
                         set::name('branch'),
@@ -116,7 +116,7 @@ detailBody
                     inputGroup
                     (
                         set('id', 'moduleBox'),
-                        select
+                        picker
                         (
                             set::name('module'),
                             set::items($moduleOptionMenu),
@@ -149,7 +149,7 @@ detailBody
                 inputGroup
                 (
                     set('id', 'planBox'),
-                    select
+                    picker
                     (
                         set::name('plan'),
                         set::items($plans),
@@ -163,7 +163,7 @@ detailBody
                 inputGroup
                 (
                     set('id', 'caseBox'),
-                    select
+                    picker
                     (
                         set::name('case'),
                         set::items($cases),
@@ -174,7 +174,7 @@ detailBody
             item
             (
                 set::name($lang->bug->type),
-                select
+                picker
                 (
                     set::items($lang->bug->typeList),
                     set::name('type'),
@@ -184,7 +184,7 @@ detailBody
             item
             (
                 set::name($lang->bug->severity),
-                select
+                picker
                 (
                     set::items($lang->bug->severityList),
                     set::name('severity'),
@@ -194,7 +194,7 @@ detailBody
             item
             (
                 set::name($lang->bug->pri),
-                select
+                picker
                 (
                     set::items($lang->bug->priList),
                     set::name('pri'),
@@ -204,7 +204,7 @@ detailBody
             item
             (
                 set::name($lang->bug->status),
-                select
+                picker
                 (
                     set::disabled(true),
                     set::items($lang->bug->statusList),
@@ -214,7 +214,7 @@ detailBody
             item
             (
                 set::name($lang->bug->confirmed),
-                select
+                picker
                 (
                     set::disabled(true),
                     set::items($lang->bug->confirmedList),
@@ -226,7 +226,7 @@ detailBody
                 set::name($lang->bug->assignedTo),
                 inputGroup
                 (
-                    select
+                    picker
                     (
                         set::disabled($bug->status == 'closed' ? true : false),
                         set::name('assignedTo'),
@@ -275,7 +275,7 @@ detailBody
             item
             (
                 set::name($lang->bug->os),
-                select
+                picker
                 (
                     set::items($lang->bug->osList),
                     set::multiple(true),
@@ -286,7 +286,7 @@ detailBody
             item
             (
                 set::name($lang->bug->browser),
-                select
+                picker
                 (
                     set::items($lang->bug->browserList),
                     set::name('browser'),
@@ -307,7 +307,7 @@ detailBody
                 set::name($lang->bug->mailto),
                 inputGroup
                 (
-                    select
+                    picker
                     (
                         set::items($users),
                         set::multiple(true),
@@ -318,7 +318,7 @@ detailBody
                     (
                         set('id', 'contactBox'),
                         set('class', 'input-group-addon'),
-                        $contactList ? select
+                        $contactList ? picker
                         (
                             set::class('width', 'w-20'),
                             set::name('contactListMenu'),
@@ -356,7 +356,7 @@ detailBody
                 inputGroup
                 (
                     set('id', 'projectBox'),
-                    select
+                    picker
                     (
                         set::name('project'),
                         set::items($projects),
@@ -371,7 +371,7 @@ detailBody
                 inputGroup
                 (
                     set('id', 'executionBox'),
-                    select
+                    picker
                     (
                         set::name('execution'),
                         set::items($executions),
@@ -385,7 +385,7 @@ detailBody
                 inputGroup
                 (
                     set('id', 'storyBox'),
-                    select
+                    picker
                     (
                         set::name('story'),
                         set::items($stories),
@@ -399,7 +399,7 @@ detailBody
                 inputGroup
                 (
                     set('id', 'taskBox'),
-                    select
+                    picker
                     (
                         set::name('task'),
                         set::items($tasks),
@@ -415,7 +415,7 @@ detailBody
             item
             (
                 set::name($lang->bug->openedBy),
-                select
+                picker
                 (
                     set::disabled(true),
                     set::items($users),
@@ -428,7 +428,7 @@ detailBody
                 inputGroup
                 (
                     set('id', 'openedBuildBox'),
-                    select
+                    picker
                     (
                         set::name('openedBuild[]'),
                         set::items($openedBuilds),
@@ -450,7 +450,7 @@ detailBody
             item
             (
                 set::name($lang->bug->resolvedBy),
-                select
+                picker
                 (
                     set::items($users),
                     set::name('resolvedBy'),
@@ -472,7 +472,7 @@ detailBody
                 inputGroup
                 (
                     set('id', 'resolvedBuildBox'),
-                    select
+                    picker
                     (
                         set::name('resolvedBuild'),
                         set::items($resolvedBuilds),
@@ -493,7 +493,7 @@ detailBody
             item
             (
                 set::name($lang->bug->resolution),
-                select
+                picker
                 (
                     set::items($lang->bug->resolutionList),
                     set::name('resolution'),
@@ -505,7 +505,7 @@ detailBody
                 set::id('duplicateBugBox'),
                 $bug->resolution != 'duplicate' ? setStyle(array('display' => 'none')) : null,
                 set::name($lang->bug->duplicateBug),
-                select
+                picker
                 (
                     set::items($productBugs),
                     set::name('duplicateBug'),
@@ -515,7 +515,7 @@ detailBody
             item
             (
                 set::name($lang->bug->closedBy),
-                select
+                picker
                 (
                     set::items($users),
                     set::name('closedBy'),
@@ -542,7 +542,7 @@ detailBody
                 inputGroup
                 (
                     set('id', 'linkBugsBox'),
-                    select
+                    picker
                     (
                         set::multiple(true),
                         set::name('relatedBug[]'),
@@ -566,7 +566,7 @@ detailBody
                 inputGroup
                 (
                     set('id', 'testtaskBox'),
-                    select
+                    picker
                     (
                         set::name('testtask'),
                         set::items($testtasks),

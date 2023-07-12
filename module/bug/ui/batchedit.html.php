@@ -63,7 +63,7 @@ formBatchPanel
         set::name('type'),
         set::label($lang->typeAB),
         set::hidden(zget($visibleFields, 'type', true, false)),
-        set::control('select'),
+        set::control('picker'),
         set::items($lang->bug->typeList),
         set::width('160px'),
         set::required(isset($requiredFields['type'])),
@@ -76,7 +76,7 @@ formBatchPanel
         set::name('severity'),
         set::label($lang->bug->severity),
         set::hidden(zget($visibleFields, 'severity', true, false)),
-        set::control('select'),
+        set::control('picker'),
         set::items($lang->bug->severityList),
         set::width('80px'),
         set::required(isset($requiredFields['severity'])),
@@ -87,7 +87,7 @@ formBatchPanel
         set::name('pri'),
         set::label($lang->bug->pri),
         set::hidden(zget($visibleFields, 'pri', true, false)),
-        set::control('select'),
+        set::control('picker'),
         set::items($lang->bug->priList),
         set::width('80px'),
         set::required(isset($requiredFields['pri'])),
@@ -105,7 +105,7 @@ formBatchPanel
     (
         set::name('branch'),
         set::label($lang->bug->branch),
-        set::control('select'),
+        set::control('picker'),
         set::items(array()),
         set::width('200px'),
         set::required(isset($requiredFields['branch'])),
@@ -116,7 +116,7 @@ formBatchPanel
     (
         set::name('module'),
         set::label($lang->bug->module),
-        set::control('select'),
+        set::control('picker'),
         set::items(array()),
         set::width('200px'),
         set::required(isset($requiredFields['module'])),
@@ -128,7 +128,7 @@ formBatchPanel
     (
         set::name('assignedTo'),
         set::label($lang->bug->assignedTo),
-        set::control('select'),
+        set::control('picker'),
         set::items($users),
         set::width('200px'),
         set::required(isset($requiredFields['assignedTo'])),
@@ -151,7 +151,9 @@ formBatchPanel
         set::name('os'),
         set::label($lang->bug->os),
         set::hidden(zget($visibleFields, 'os', true, false)),
-        set::control(array('type' => 'select', 'items' => $lang->bug->osList, 'multiple' => true)),
+        set::control('picker'),
+        set::items($lang->bug->osList),
+        set::multiple(true),
         set::width('200px'),
         set::required(isset($requiredFields['os'])),
     ),
@@ -161,7 +163,9 @@ formBatchPanel
         set::name('browser'),
         set::label($lang->bug->browser),
         set::hidden(zget($visibleFields, 'browser', true, false)),
-        set::control(array('type' => 'select', 'items' => $lang->bug->browserList, 'multiple' => true)),
+        set::control('picker'),
+        set::items($lang->bug->browserList),
+        set::multiple(true),
         set::width('200px'),
         set::required(isset($requiredFields['browser'])),
     ),
@@ -179,7 +183,7 @@ formBatchPanel
     (
         set::name('resolvedBy'),
         set::label($lang->bug->resolvedBy),
-        set::control('select'),
+        set::control('picker'),
         set::items($users),
         set::width('200px'),
         set::required(isset($requiredFields['resolvedBy'])),
@@ -195,13 +199,13 @@ formBatchPanel
         set::control('inputGroup'),
         inputGroup
         (
-            select
+            picker
             (
                 set::name('resolution'),
                 set::items($resolutionList),
                 set::required(isset($requiredFields['resolution'])),
             ),
-            select
+            picker
             (
                 setClass('hidden'),
                 set::name('duplicate'),

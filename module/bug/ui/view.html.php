@@ -308,7 +308,7 @@ modal
             (
                 set::label($lang->bug->selectProjects),
                 set::required(true),
-                set::control('select'),
+                set::control('picker'),
                 set::name('taskProjects'),
                 set::items($projects),
             )
@@ -322,7 +322,7 @@ modal
                 inputGroup
                 (
                     set('id', 'executionBox'),
-                    select
+                    picker
                     (
                         set::name('execution'),
                         set::items(),
