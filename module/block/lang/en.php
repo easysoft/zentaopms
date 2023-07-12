@@ -126,7 +126,6 @@ $lang->block->titleList['guide']          = 'Guides';
 $lang->block->titleList['statistic']      = 'Statistic';
 $lang->block->titleList['recentproject']  = "Recent {$lang->projectCommon}";
 $lang->block->titleList['assigntome']     = 'Assign to me';
-$lang->block->titleList['projectteam']    = "{$lang->projectCommon} manpower input";
 $lang->block->titleList['project']        = "{$lang->projectCommon} List";
 $lang->block->titleList['dynamic']        = 'Dynamic';
 $lang->block->titleList['list']           = 'Todo List';

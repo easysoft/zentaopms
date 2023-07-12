@@ -285,7 +285,6 @@ $lang->block->default['full']['my']['7']['params']['storyCount']   = '20';
 $lang->block->default['full']['my']['7']['params']['meetingCount'] = '20';
 
 $lang->block->default['full']['my']['8']['title']  = 'Human Input';
-$lang->block->default['full']['my']['8']['block']  = 'projectteam';
 $lang->block->default['full']['my']['8']['source'] = 'project';
 $lang->block->default['full']['my']['8']['grid']   = 8;
 

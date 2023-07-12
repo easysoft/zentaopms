@@ -127,7 +127,6 @@ $lang->block->titleList['guide']          = '使用帮助';
 $lang->block->titleList['statistic']      = "{$lang->projectCommon}统计";
 $lang->block->titleList['recentproject']  = "我近期参与的{$lang->projectCommon}";
 $lang->block->titleList['assigntome']     = '待处理';
-$lang->block->titleList['projectteam']    = "{$lang->projectCommon}人力投入";
 $lang->block->titleList['project']        = "{$lang->projectCommon}列表";
 $lang->block->titleList['dynamic']        = '最新动态';
 $lang->block->titleList['list']           = '我的待办';
