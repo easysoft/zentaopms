@@ -486,6 +486,9 @@
                 .insertAfter('body')
                 .on('oldPageLoad.app', () =>
                 {
+                    const frame = window.frameElement;
+                    frame.classList.remove('loading');
+                    frame.classList.add('in');
                     $page.removeClass('loading').find('iframe').addClass('in');
                     $(document).trigger('pageload.app');
                 });
