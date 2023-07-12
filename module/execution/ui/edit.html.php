@@ -39,7 +39,6 @@ if(isset($project))
                 set::label($lang->execution->projectName),
                 set::items($allProjects),
                 set::value($execution->project),
-                set::required(true),
                 on::change('changeProject'),
             );
     }
@@ -79,7 +78,7 @@ if($project->model == 'waterfall' || $project->model == 'waterfallplus')
                 set::width($enableOptionalAttr ? '1/2' : '1/8'),
                 set::label($lang->stage->type),
                 set::class('items-center'),
-                $enableOptionalAttr ? select
+                $enableOptionalAttr ? picker
                 (
                     set::name('attribute'),
                     set::items($lang->stage->typeList),
@@ -110,13 +109,12 @@ elseif($execution->type != 'kanban')
             (
                 set::width('1/2'),
                 set::label($lang->execution->type),
-                select
+                picker
                 (
                     set::id('lifetime'),
                     set::name('lifetime'),
                     set::items($lang->execution->lifeTimeList),
                     set::value($execution->lifetime),
-                    set::required(true),
                     on::change('showLifeTimeTips')
                 )
             ),
@@ -156,7 +154,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                             div
                             (
                                 setClass('grow'),
-                                select
+                                picker
                                 (
                                     set::id("products{$i}"),
                                     set::name("products[$i]"),
@@ -165,7 +163,6 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                                     set::last($product->id),
                                     $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null,
                                     set::disabled($execution->type == 'stage' && $project->stageBy == 'project'),
-                                    set::required(true),
                                     on::change('productChange'),
                                     $execution->type == 'stage' && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null,
                                 )
@@ -180,7 +177,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                         inputGroup
                         (
                             $lang->product->branchName['branch'],
-                            select
+                            picker
                             (
                                 set::id("branch{$i}"),
                                 set::name("branch[$i][]"),
@@ -199,11 +196,11 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                         inputGroup
                         (
                             set::id("plan{$i}"),
-                            select
+                            picker
                             (
                                 set::name("plans[$product->id][]"),
                                 set::items($plans),
-                                set::value($product->plans),
+                                set::value(implode(',', $product->plans)),
                                 set::multiple(true)
                             )
                         ),
@@ -240,7 +237,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                 set::label($lang->execution->linkPlan),
                 set('id', 'plansBox'),
                 set::class('planBox'),
-                select
+                picker
                 (
                     set::name("plans[{$planProductID}][]"),
                     set::items(isset($productPlans[$planProductID]) ? $productPlans[$planProductID] : array()),
@@ -262,12 +259,11 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                     setClass('linkProduct'),
                     set::required(true),
                     set::label($lang->project->manageProducts),
-                    select
+                    picker
                     (
                         set::id('products0'),
                         set::name('products[0]'),
                         set::items($allProducts),
-                        set::required(true),
                         on::change('productChange')
                     )
                 ),
@@ -278,11 +274,11 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                     inputGroup
                     (
                         $lang->product->branchName['branch'],
-                        select
+                        picker
                         (
                             set::id('branch0'),
                             set::name('branch[0][]'),
-                            set::control('select'),
+                            set::control('picker'),
                             set::multiple(true),
                             on::change('branchChange')
                         )
@@ -296,7 +292,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                     inputGroup
                     (
                         set::id("plan0"),
-                        select
+                        picker
                         (
                             set::name('plans[0][]'),
                             set::items(array()),
@@ -345,7 +341,7 @@ else
                         div
                         (
                             setClass('grow'),
-                            select
+                            picker
                             (
                                 set::id("products{$i}"),
                                 set::name("products[$i]"),
@@ -354,7 +350,6 @@ else
                                 set::last($product->id),
                                 $hasBranch && $product->branches ? set::lastBranch(implode(',', $product->branches)) : null,
                                 set::disabled($project->model == 'waterfall' || $project->model == 'waterfallplus'),
-                                set::required(true),
                                 on::change('productChange'),
                                 $project->model == 'waterfall' || $project->model == 'waterfallplus' ? formHidden("products[$i]", $product->id) : null,
                             )
@@ -369,7 +364,7 @@ else
                     inputGroup
                     (
                         $lang->product->branchName['branch'],
-                        select
+                        picker
                         (
                             set::id("branch{$i}"),
                             set::name("branch[$i][]"),
@@ -389,7 +384,7 @@ else
                     inputGroup
                     (
                         set::id("plan{$i}"),
-                        select
+                        picker
                         (
                             set::name("plans[$product->id][]"),
                             set::items($plans),
@@ -435,25 +430,23 @@ formPanel
             set::required(true),
             inputGroup
             (
-                input
+                datePicker
                 (
                     set::name('begin'),
                     set::type('date'),
                     set('id', 'begin'),
                     set::value($execution->begin),
                     set::placeholder($lang->execution->begin),
-                    set::required(true),
                     on::change('computeWorkDays')
                 ),
                 $lang->project->to,
-                input
+                datePicker
                 (
                     set::name('end'),
                     set::type('date'),
                     set('id', 'end'),
                     set::value(($execution->end),
                     set::placeholder($lang->execution->end),
-                    set::required(true),
                     on::change('computeWorkDays')
                     ),
                 )
@@ -530,55 +523,51 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->execution->PM),
-            select
+            picker
             (
                 set::name('PM'),
                 set::items($pmUsers),
                 set::value($execution->PM),
-                set::required(true),
             )
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->execution->PO),
-            select
+            picker
             (
                 set::name('PO'),
                 set::items($poUsers),
                 set::value($execution->PO),
-                set::required(true),
             )
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->execution->QD),
-            select
+            picker
             (
                 set::name('QD'),
                 set::items($qdUsers),
                 set::value($execution->QD),
-                set::required(true),
             )
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->execution->RD),
-            select
+            picker
             (
                 set::name('RD'),
                 set::items($rdUsers),
                 set::value($execution->RD),
-                set::required(true),
             )
         ),
     ),
     formGroup
     (
         set::label($lang->execution->team),
-        select
+        picker
         (
             set::name('teamMembers[]'),
             set::items($users),
@@ -589,10 +578,12 @@ formPanel
     h::hr(),
     formGroup
     (
-        set::name('desc'),
         set::label($lang->execution->desc),
-        set::value(htmlSpecialString($execution->desc)),
-        set::control('editor'),
+        editor
+        (
+            set::name('desc'),
+            html($execution->desc),
+        )
     ),
     formRow
     (
@@ -614,9 +605,9 @@ formPanel
         set::label($lang->whitelist),
         set::id('whitelistBox'),
         set::class($execution->acl == 'open' ? 'hidden' : ''),
-        select
+        picker
         (
-            set::name('whitelist[]'),
+            set::name('whitelist'),
             set::items($users),
             set::multiple(true),
         )

@@ -600,7 +600,6 @@ class executionModel extends model
             ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
             ->setDefault('days', '0')
             ->setDefault('team', $this->post->name)
-            ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
             ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType, delta')
             ->get();

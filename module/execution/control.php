@@ -1958,10 +1958,9 @@ class execution extends control
         unset($executions[$executionID]);
 
         $allProducts = $this->product->getProducts($execution->project, 'noclosed', '', false, $linkedProductIdList);
-        $allProducts = array(0 => '') + $allProducts;
 
         $this->loadModel('productplan');
-        $productPlans     = array(0 => '');
+        $productPlans     = array();
         $linkedBranches   = array();
         $linkedBranchList = array();
         $linkedProducts   = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList, false);

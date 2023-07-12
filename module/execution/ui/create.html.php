@@ -92,7 +92,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
         if(empty($productID) || (!empty($productID) || $productID != $product->id))
         {
             $plans  = isset($productPlans[$product->id]) ? $productPlans[$product->id] : array();
-            $planID = isset($product->plans) ? $product->plans : '';
+            $planID = isset($product->plans) ? implode(',', $product->plans) : '';
         }
         else
         {
