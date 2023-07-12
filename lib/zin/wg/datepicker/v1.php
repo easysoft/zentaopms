@@ -27,7 +27,8 @@ class datePicker extends wg
      */
     protected static array $defineProps = array
     (
-        'id?: string',                      // 组件根元素的 ID。
+        'id?: string="$GID"',               // 组件根元素的 ID。
+        'formID?: string',                  // 组件隐藏的表单元素 ID。
         'className?: string|array',         // 类名。
         'style?: array',                    // 样式。
         'tagName?: string',                 // 组件根元素的标签名。
@@ -65,14 +66,20 @@ class datePicker extends wg
      */
     protected function build(): wg
     {
-        list($name, $id, $defaultValue) = $this->prop(array('name', 'id', 'defaultValue'));
+        list($props, $restProps) = $this->props->split(array_keys(static::definedPropsList()));
+        if(isset($props['id']))
+        {
+            $props['_id'] = $props['id'];
+            unset($props['id']);
+        }
+
         return zui::datePicker
         (
             set::_class('form-group-wrapper'),
-            set::_map(array('value' => 'defaultValue')),
-            set($this->props),
+            set::_map(array('value' => 'defaultValue', 'formID' => 'id')),
+            set($props),
+            set::_props($restProps),
             $this->children(),
-            $name ? h::formHidden($name, $defaultValue, setID($id)) : null
         );
     }
 }
