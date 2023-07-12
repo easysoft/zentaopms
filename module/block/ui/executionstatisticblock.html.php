@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+$blockID = $block->module . '-' . $block->code . '-' . $block->id;
+
 /**
  * 获取区块左侧的执行列表.
  * Get execution tabs on the left side.
@@ -79,9 +81,20 @@ $getExecutionInfo = function($executions, $blockNavID): array
     return $tabItems;
 };
 
+$url = createLink('block', 'printBlock', "blockID={$block->id}");
+$projectItems = array();
+$projectItems[] = array('text' => $lang->block->executionstatistic->allProject, 'data-on' => 'click', 'data-call' => "loadPage('{$url}', '#{$blockID}')");
+foreach($projects as $projectID => $projectName)
+{
+    $url = createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("project={$projectID}"));
+    $projectItems[] = array('text' => $projectName, 'data-on' => 'click', 'data-call' => "loadPage('{$url}', '#{$blockID}')");
+}
+
 $blockNavCode = 'nav-' . uniqid();
+
 panel
 (
+    setID($blockID),
     set('class', 'executionstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
     to::heading
@@ -90,6 +103,19 @@ panel
         (
             set('class', 'panel-title'),
             span($block->title),
+
+            dropdown
+            (
+                a
+                (
+                    setClass('text-gray ml-4'),
+                    isset($projects[$currentProjectID]) ? $projects[$currentProjectID] : $lang->block->executionstatistic->allProject,
+                    span(setClass('caret align-middle ml-1'))
+                ),
+                set::placement('bottom-end'),
+                set::menu(array('style' => array('minWidth' => 70, 'width' => 70))),
+                set::items($projectItems)
+            )
         )
     ),
     div

@@ -632,6 +632,9 @@ $lang->block->releasestatistic = new stdclass();
 $lang->block->releasestatistic->monthly = 'Monthly releases trend chart';
 $lang->block->releasestatistic->annual  = "Annual release list (%s year)";
 
+$lang->block->executionstatistic = new stdclass();
+$lang->block->executionstatistic->allProject = 'All Project';
+
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
 $lang->block->moduleList['execution']       = $lang->execution->common;

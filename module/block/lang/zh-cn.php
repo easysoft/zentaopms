@@ -653,6 +653,9 @@ $lang->block->releasestatistic = new stdclass();
 $lang->block->releasestatistic->monthly = '月度发布次数趋势图';
 $lang->block->releasestatistic->annual  = "年度发布榜（%s年）";
 
+$lang->block->executionstatistic = new stdclass();
+$lang->block->executionstatistic->allProject = '全部项目';
+
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
 $lang->block->moduleList['execution']       = $lang->execution->common;

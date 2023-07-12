@@ -313,7 +313,7 @@ class block extends control
         if($code == 'statistic' || $code == 'list' || $code == 'overview') $code = $block->module . ucfirst($code);
 
         $function = 'print' . ucfirst($code) . 'Block';
-        if(method_exists('blockZen', $function)) $this->blockZen->$function($block, $params);
+        if(method_exists('blockZen', $function)) $this->blockZen->$function($block, (array)$params);
 
         /* 补全 moreLink 信息。 */
         $this->blockZen->createMoreLink($block, 0);

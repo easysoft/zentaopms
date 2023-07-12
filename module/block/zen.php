@@ -965,7 +965,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printExecutionStatisticBlock(object $block): void
+    protected function printExecutionStatisticBlock(object $block, array $params = array()): void
     {
         if(!empty($block->params->type) && preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
@@ -977,7 +977,8 @@ class blockZen extends block
         $count   = isset($block->params->count) ? (int)$block->params->count : 0;
 
         /* Get projects. */
-        $projectID  = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
+        $projectID = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
+        if(isset($params['project'])) $projectID = (int)$params['project'];
         $executions = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
         if(empty($executions))
         {
@@ -1085,7 +1086,9 @@ class blockZen extends block
             $executions[$execution->id]->bugProgress   = $execution->totalBugs ? round(($execution->totalBugs - $execution->activeBugs) / $execution->totalBugs, 2) * 100 : 0;
         }
 
-        $this->view->executions = $executions;
+        $this->view->executions       = $executions;
+        $this->view->projects         = $this->loadModel('project')->getPairs();
+        $this->view->currentProjectID = $projectID;
     }
 
     /**
