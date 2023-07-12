@@ -472,7 +472,8 @@ class wg
         return $this->props->skip(array_keys(static::definedPropsList()));
     }
 
-    public function getDefinedProps(): array {
+    public function getDefinedProps(): array
+    {
         return $this->props->pick(array_keys(static::definedPropsList()));
     }
 

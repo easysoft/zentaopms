@@ -141,7 +141,7 @@ panel
                 set::cols($storyCols),
                 set::data($stories),
                 set::sortLink(jsRaw('createStorySortLink')),
-                set::footPager(usePager(null, 'storyPager')),
+                set::footPager(usePager('storyPager')),
             ),
         ),
         tabPane
@@ -164,7 +164,7 @@ panel
                 set::cols($bugCols),
                 set::data($bugs),
                 set::sortLink(jsRaw('createBugSortLink')),
-                set::footPager(usePager(null, 'bugPager')),
+                set::footPager(usePager('bugPager')),
             ),
         ),
         tabPane
@@ -187,7 +187,7 @@ panel
                 set::cols($taskCols),
                 set::data($tasks),
                 set::sortLink(jsRaw('createTaskSortLink')),
-                set::footPager(usePager(null, 'taskPager')),
+                set::footPager(usePager('taskPager')),
             ),
         ),
     ),

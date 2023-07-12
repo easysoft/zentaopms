@@ -5,13 +5,19 @@ namespace zin;
 /**
  * Create settings for using pager widget.
  *
- * @param  array  $userSetting
- * @param  string $pagerName
- * @param  string $extra
+ * @param string|array $pagerName
+ * @param string $extra
+ * @param ?array $userSetting
  * @return array
  */
-function usePager(array $userSetting = array(), string $pagerName = 'pager', string $extra = ''): array
+function usePager(string|array $pagerName = 'pager', string $extra = '', ?array $userSetting = null): array
 {
+    if(is_array($pagerName))
+    {
+        $userSetting = $pagerName;
+        $pagerName = 'pager';
+    }
+
     $pager = data($pagerName);
     if(empty($pager)) return null;
 

@@ -283,10 +283,7 @@ dtable
     )),
     set::footPager
     (
-        usePager
-        (
-            array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"))
-        ),
+        usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"))),
     ),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}"))
 );
