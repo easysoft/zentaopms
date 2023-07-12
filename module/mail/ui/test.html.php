@@ -34,9 +34,12 @@ formPanel
         set::items($users),
     ),
     set::actionsClass('w-1/3'),
-    set::submitBtnText($lang->mail->test),
     set::actions(array(
-        'submit',
+        array(
+            'text'    => $lang->mail->test,
+            'type'    => 'primary',
+            'onclick' => 'window.sendTest()'
+        ),
         array(
             'url'   => inlink(($mta == 'sendcloud' || $mta == 'ztcloud') ? $mta : 'edit'),
             'text'  => $lang->mail->edit,
