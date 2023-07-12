@@ -1,13 +1,14 @@
 <?php
 $lang->index->common      = 'Home';
 $lang->index->index       = 'Home';
+$lang->index->app         = 'Home';
 $lang->index->pleaseInput = 'Enter';
 $lang->index->search      = 'Search';
 
-$lang->index->app = new stdClass();
-$lang->index->app->open   = 'Open';
-$lang->index->app->reload = 'Reload';
-$lang->index->app->close  = 'Close';
+$lang->index->dock = new stdClass();
+$lang->index->dock->open   = 'Open';
+$lang->index->dock->reload = 'Reload';
+$lang->index->dock->close  = 'Close';
 
 $lang->index->upgradeVersion = 'Upgradable version';
 $lang->index->upgradeNow     = 'Upgrade now';
