@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度新增用户需求数。
- * .
+ * Count of annual created requirement in product.
  *
  * 范围：prod
  * 对象：requirement
@@ -9,8 +9,8 @@
  * 度量名称：按产品统计的年度新增用户需求数
  * 单位：个
  * 描述：产品中创建时间为某年的用户需求的个数求和
-过滤已删除的用户需求
-过滤已删除的产品
+ *       过滤已删除的用户需求
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +23,38 @@
  */
 class count_of_annual_created_requirement_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.type', 't1.openedDate');
 
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function calculate($data)
+    {
+        $product = $data->product;
+        $type    = $data->type;
+        $openedDate = $data->openedDate;
 
-    //public function calculate($data)
-    //{
-    //}
+        $year = substr($openedDate, 0, 4);
+        if($year == '0000') return;
 
-    //public function getResult()
-    //{
-    //}
+        if(!isset($this->result[$product])) $this->result[$product] = array();
+        if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;
+
+        $this->result[$product][$year] += 1;
+    }
+
+    public function getResult($options = null)
+    {
+        $records = array();
+        foreach($this->result as $product => $years)
+        {
+            foreach($years as $year => $value)
+            {
+                $records[] = array('product' => $product, 'year' => $year, 'value' => $value);
+            }
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
