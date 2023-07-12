@@ -127,7 +127,7 @@ panel
     set::bodyClass('px-0'),
     div
     (
-        setClass('flex h-full w-full gap-x-1' . ($longBlock ? ' flex-nowrap' : ' flex-wrap')),
+        setClass('flex h-full w-full' . ($longBlock ? ' flex-nowrap' : ' flex-wrap')),
         cell
         (
             setClass('flex flex-wrap px-4 ' . ($longBlock ? 'py-2' : 'py-1 w-full mb-2')),
