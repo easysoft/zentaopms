@@ -399,7 +399,7 @@ class custom extends control
         if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
         {
             $this->loadModel('setting')->setItems('system.common', fixer::input('post')->get());
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         unset($this->lang->admin->menu->custom['subModule']);
