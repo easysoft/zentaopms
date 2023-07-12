@@ -88,7 +88,8 @@
                     echo common::printIcon('ai', 'promptassignrole', "prompt=$prompt->id", '', 'button', 'design', '', 'text-primary');
                     if($canTest)
                     {
-                      echo common::printIcon('ai', '', '', '', 'button', 'bug', '', 'text-primary');
+                      $location = $this->ai->getTestingLocation($prompt);
+                      echo html::a($location, '<i class="icon-bug text-primary"></i>', '', "class='btn'");
                     }
                     else
                     {
