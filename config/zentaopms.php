@@ -492,5 +492,5 @@ $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;
 
 $config->db->sqliteBlacklist = array('sqlite_queue', 'cron');
-$config->hasDropmenuApps     = array('program', 'project', 'product', 'execution', 'qa');
+$config->hasDropmenuApps     = array('program', 'project', 'product', 'execution', 'qa', 'admin');
 $config->excludeDropmenuList = array('program-browse', 'product-all', 'product-index', 'execution-all', 'project-browse', 'product-batchedit');
