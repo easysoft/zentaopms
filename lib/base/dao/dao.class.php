@@ -1709,7 +1709,7 @@ class baseSQL
     {
         $sqlobj = self::factory();
         $sqlobj->setMethod('replace');
-        $sqlobj->sql = "REPLACE INTO $table ";
+        $sqlobj->sql = "REPLACE INTO $table SET ";
         return $sqlobj;
     }
 
