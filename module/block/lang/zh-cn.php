@@ -601,11 +601,14 @@ $lang->block->qastatistic->closedToday       = '今日关闭';
 $lang->block->qastatistic->latestTesttask    = '近期测试单';
 
 $lang->block->executionstatistic = new stdclass();
-$lang->block->executionstatistic->allProject = '全部项目';
+$lang->block->executionstatistic->allProject    = '全部项目';
 $lang->block->executionstatistic->progress      = '执行进度';
 $lang->block->executionstatistic->totalEstimate = '预计工时';
 $lang->block->executionstatistic->totalConsumed = '消耗工时';
 $lang->block->executionstatistic->totalLeft     = '剩余工时';
+$lang->block->executionstatistic->burn          = '执行燃尽图';
+$lang->block->executionstatistic->story         = '需求';
+$lang->block->executionstatistic->task          = '任务';
 
 $lang->block->executionoverview = new stdclass();
 $lang->block->executionoverview->totalExecution = "{$lang->executionCommon}总量";

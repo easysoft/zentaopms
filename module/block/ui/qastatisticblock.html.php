@@ -123,39 +123,39 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
 
         $progressMax = max($product->addYesterday, $product->addToday, $product->resolvedYesterday, $product->resolvedToday, $product->closedYesterday, $product->closedToday);
         $progressBlcok = array();
-        foreach(array(array('addYesterday', 'addToday'), array('resolvedYesterday', 'resolvedToday'), array('closedYesterday', 'closedToday')) as $group)
+        foreach(array('addYesterday', 'addToday', 'resolvedYesterday', 'resolvedToday', 'closedYesterday', 'closedToday') as $key => $field)
         {
-            $progress = array();
-            $progressLabel = array();
-            foreach($group as $key => $field)
-            {
-                $progressLabel[] = div(set('class', 'py-1 ' . ($key === 0 ? '' : 'text-gray')), span($lang->block->qastatistic->{$field}), span(set('class', 'ml-1'), $product->{$field}));
-                $progress[] = div
+            $progressLabel[] = div(set('class', ($key % 2 === 0 ? 'py-1' : 'text-gray pt-1 pb-3')), span($lang->block->qastatistic->{$field}), span(set('class', 'ml-1'), $product->{$field}));
+            $progress[]      = div
+            (
+                set('class', $key % 2 === 0 ? 'pt-2' : 'py-5'),
+                div
                 (
-                    set('class', $key === 0 ? 'pt-2' : 'pt-5'),
+                    set('class', 'progress h-2'),
                     div
                     (
-                        set('class', 'progress h-2'),
-                        div
-                        (
-                            set('class', 'progress-bar'),
-                            set('role', 'progressbar'),
-                            setStyle(array('width' => ($product->{$field} / $progressMax * 100) . '%', 'background' => $key === 0 ? 'var(--color-secondary-200)' : 'var(--color-primary-300)')),
-                        )
+                        set('class', 'progress-bar'),
+                        set('role', 'progressbar'),
+                        setStyle(array('width' => ($product->{$field} / $progressMax * 100) . '%', 'background' => $key % 2 === 0 ? 'var(--color-secondary-200)' : 'var(--color-primary-300)')),
                     )
-                );
-            }
-            $progressBlcok[] = div
-            (
-                set('class', 'flex py-1 pr-4 ' . ($waitTesttasks || $doingTesttasks ? 'border-r' : '')),
-                cell($progressLabel),
-                cell
-                (
-                    set('class', 'flex-1 px-3'),
-                    $progress
                 )
             );
         }
+
+        $progressBlcok = array();
+        $progressBlcok[] = div
+        (
+            set('class', 'flex py-1 pr-4 ' . ($waitTesttasks || $doingTesttasks ? 'border-r' : '')),
+            cell
+            (
+                $progressLabel
+            ),
+            cell
+            (
+                set('class', 'flex-1 px-3'),
+                $progress
+            )
+        );
 
         $tabItems[] = div
         (

@@ -90,72 +90,10 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
     $tabItems = array();
     foreach($executions as $execution)
     {
-        $execution->addYesterday      = rand(0, 100);
-        $execution->addToday          = rand(0, 100);
-        $execution->resolvedYesterday = rand(0, 100);
-        $execution->resolvedToday     = rand(0, 100);
-        $execution->closedYesterday   = rand(0, 100);
-        $execution->closedToday       = rand(0, 100);
-        $execution->progress          = rand(0, 100);
-        $execution->totalEstimate     = rand(0, 100);
-        $execution->totalConsumed     = rand(0, 100);
-        $execution->totalLeft         = rand(0, 100);
-
-        $waitTesttasks = array();
-        if(!empty($execution->waitTesttasks))
-        {
-            foreach($execution->waitTesttasks as $waitTesttask)
-            {
-                $waitTesttasks[] = div(set('class', 'py-1'), common::hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$waitTesttask->id}")), $waitTesttask->name) : span($waitTesttask->name));
-                if(count($waitTesttasks) >= 2) break;
-            }
-        }
-
-        $doingTesttasks = array();
-        if(!empty($execution->doingTesttasks))
-        {
-            foreach($execution->doingTesttasks as $doingTesttask)
-            {
-                $doingTesttasks[] = div(set('class', 'py-1'), common::hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$doingTesttask->id}")), $doingTesttask->name) : span($doingTesttask->name));
-                if(count($doingTesttasks) >= 2) break;
-            }
-        }
-
-        $progressMax = max($execution->addYesterday, $execution->addToday, $execution->resolvedYesterday, $execution->resolvedToday, $execution->closedYesterday, $execution->closedToday);
-        $progressBlcok = array();
-        foreach(array(array('addYesterday', 'addToday'), array('resolvedYesterday', 'resolvedToday'), array('closedYesterday', 'closedToday')) as $group)
-        {
-            $progress = array();
-            $progressLabel = array();
-            foreach($group as $key => $field)
-            {
-                $progressLabel[] = div(set('class', 'py-1 ' . ($key === 0 ? '' : 'text-gray')), span($lang->block->qastatistic->{$field}), span(set('class', 'ml-1'), $execution->{$field}));
-                $progress[] = div
-                (
-                    set('class', $key === 0 ? 'pt-2' : 'pt-5'),
-                    div
-                    (
-                        set('class', 'progress h-2'),
-                        div
-                        (
-                            set('class', 'progress-bar'),
-                            set('role', 'progressbar'),
-                            setStyle(array('width' => ($execution->{$field} / $progressMax * 100) . '%', 'background' => $key === 0 ? 'var(--color-secondary-200)' : 'var(--color-primary-300)')),
-                        )
-                    )
-                );
-            }
-            $progressBlcok[] = div
-            (
-                set('class', 'flex py-1 pr-4 ' . ($waitTesttasks || $doingTesttasks ? 'border-r' : '')),
-                cell($progressLabel),
-                cell
-                (
-                    set('class', 'flex-1 px-3'),
-                    $progress
-                )
-            );
-        }
+        $execution->progress          = rand(0, 1000);
+        $execution->totalEstimate     = rand(0, 1000);
+        $execution->totalConsumed     = rand(0, 1000);
+        $execution->totalLeft         = rand(0, 1000);
 
         $tabItems[] = div
         (
@@ -205,19 +143,20 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                             ),
                             div
                             (
-                                set('class', 'flex h-full story-num w-44'),
+                                set('class', 'flex justify-evenly px-4'),
                                 cell
                                 (
                                     set('class', 'flex-1 text-center'),
                                     div
                                     (
-                                        span(!empty($execution->totalEstimate) ? $execution->totalEstimate : 0, 'h')
+                                        span(set('class', 'text-lg'), !empty($execution->totalEstimate) ? $execution->totalEstimate : 0),
+                                        span(' h')
                                     ),
                                     div
                                     (
                                         span
                                         (
-                                            set('class', 'text-sm text-gray'),
+                                            set('class', 'text-sm'),
                                             $lang->block->executionstatistic->totalEstimate
                                         )
                                     )
@@ -227,13 +166,14 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                                     set('class', 'flex-1 text-center'),
                                     div
                                     (
-                                        span(!empty($execution->totalConsumed) ? $execution->totalConsumed : 0, 'h')
+                                        span(set('class', 'text-lg'), !empty($execution->totalConsumed) ? $execution->totalConsumed : 0),
+                                        span(' h')
                                     ),
                                     div
                                     (
                                         span
                                         (
-                                            set('class', 'text-sm text-gray'),
+                                            set('class', 'text-sm'),
                                             $lang->block->executionstatistic->totalConsumed
                                         )
                                     )
@@ -243,13 +183,14 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                                     set('class', 'flex-1 text-center'),
                                     div
                                     (
-                                        span(!empty($execution->totalLeft) ? $execution->totalLeft : 0, 'h')
+                                        span(set('class', 'text-lg'), !empty($execution->totalLeft) ? $execution->totalLeft : 0),
+                                        span(' h')
                                     ),
                                     div
                                     (
                                         span
                                         (
-                                            set('class', 'text-sm text-gray'),
+                                            set('class', 'text-sm'),
                                             $lang->block->executionstatistic->totalLeft
                                         )
                                     )
@@ -259,60 +200,150 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                         cell
                         (
                             $longBlock ? set('width', '60%') : null,
-                            set('class', 'py-4 ' . (!$longBlock ? 'px-4 flex' : '')),
+                            set('class', 'py-4'),
                             cell
                             (
                                 set('class', 'flex-1'),
                                 div
                                 (
                                     $longBlock ? set('class', 'pb-2') : null,
-                                    $lang->block->qastatistic->bugStatistics
+                                    span(set('class', 'font-bold'), $lang->block->executionstatistic->burn),
                                 ),
-                                $progressBlcok
+                                div
+                                (
+                                    set('class', 'py-2 chart'),
+                                    echarts
+                                    (
+                                        set::color(array('#2B80FF', '#17CE97')),
+                                        set::grid(array('left' => 0, 'bottom' => 0, 'top' => 0, 'right' => 0)),
+                                        set::legend(array('show' => false)),
+                                        set::xAxis
+                                        (
+                                            array
+                                            (
+                                                'show' => false,
+                                                'type' => 'category',
+                                                'data' => array(1,2,3,4,5,6),
+                                                'boundaryGap' => false,
+                                            )
+                                        ),
+                                        set::yAxis(array('show' => false)),
+                                        set::series
+                                        (
+                                            array
+                                            (
+                                                array
+                                                (
+                                                    'type' => 'line',
+                                                    'data' => array(80,60,40,20,0),
+                                                    'symbolSize' => 0,
+                                                    'itemStyle' => array
+                                                    (
+                                                        'normal' => array
+                                                        (
+                                                            'color' => '#D8D8D8',
+                                                            'lineStyle' => array
+                                                            (
+                                                                'width' => 2,
+                                                                'color' => '#F1F1F1',
+                                                            )
+                                                        ),
+
+                                                    ),
+
+                                                ),
+                                                array
+                                                (
+                                                    'data' => array(74,55,75,55),
+                                                    'type' => 'line',
+                                                    'symbolSize' => 0,
+                                                    'areaStyle' => array
+                                                    (
+                                                        'color' => array
+                                                        (
+                                                            'type' => 'linear',
+                                                            'x' => '0',
+                                                            'y' => '0',
+                                                            'x2' => '0',
+                                                            'y2' => '1',
+                                                            'colorStops' => array(array('offset' => 0, 'color' => '#DDECFE'), array('offset' => 1, 'color' => '#FFF')),
+                                                            'global' => false
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )->size('100%', 64),
+                                )
                             ),
-                            !$longBlock && ($doingTesttasks || $waitTesttasks) ? cell
+                            cell
                             (
-                                set('width', '50%'),
-                                set('class', 'px-4'),
-                                div(span($lang->block->qastatistic->latestTesttask)),
-                                $doingTesttasks ? div
+                                set('class', 'flex py-2'),
+                                cell
                                 (
-                                    set('class', 'py-2'),
-                                    div(set('class', 'text-sm pb-2'), $lang->testtask->statusList['doing']),
-                                    $doingTesttasks
-                                ) : null,
-                                $waitTesttasks ? div
+                                    set('width', '50%'),
+                                    set('class', 'border-r pr-4'),
+                                    div
+                                    (
+                                        div(set('class', 'pb-4'), span(set('class', 'font-bold'), $lang->block->executionstatistic->story)),
+                                        div
+                                        (
+                                            set('class', 'progress h-2'),
+                                            div
+                                            (
+                                                set('class', 'progress-bar'),
+                                                set('role', 'progressbar'),
+                                                setStyle(array('width' => '50%', 'background' => 'var(--color-primary-300)')),
+                                            )
+                                        ),
+                                        div
+                                        (
+                                            set('class', 'flex pt-4'),
+                                            cell
+                                            (
+                                                set('width', '50%'),
+                                                set('class', 'text-center'),
+                                                div(span(60)),
+                                                div(set('class', 'text-sm text-gray'), span('已完成')),
+                                            ),
+                                            cell
+                                            (
+                                                set('width', '50%'),
+                                                set('class', 'text-center'),
+                                                div(span(120)),
+                                                div(set('class', 'text-sm text-gray'), span('总数量')),
+                                            )
+                                        ),
+                                    )
+                                ),
+                                cell
                                 (
-                                    set('class', 'py-2'),
-                                    div(set('class', 'text-sm pb-2'), $lang->testtask->statusList['wait']),
-                                    $waitTesttasks
-                                ) : null
-                            ) : null
+                                    set('width', '50%'),
+                                    set('class', 'px-4 flex'),
+                                    cell
+                                    (
+                                        set('class', 'flex-1'),
+                                        span(set('class', 'font-bold'), $lang->block->executionstatistic->task),
+                                    ),
+                                    cell
+                                    (
+                                        set('class', 'text-right pr-2 h-24 flex col'),
+                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-sm text-gray'), '任务总数')),
+                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-sm text-gray'), '未完成任务')),
+                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-sm text-gray'), '昨日完成'))
+                                    ),
+                                    cell
+                                    (
+                                        set('class', 'text-left pl-2 h-24 flex col'),
+                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-lg'), '32')),
+                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-lg'), '130')),
+                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-lg'), '2100'))
+                                    )
+                                )
+                            )
                         )
                     )
-                ),
-                $longBlock && ($doingTesttasks || $waitTesttasks) ? cell
-                (
-                    set('width', '30%'),
-                    set('class', 'py-2 px-6'),
-                    div
-                    (
-                        set('class', 'py-2'),
-                        span($lang->block->qastatistic->latestTesttask)
-                    ),
-                    $doingTesttasks ? div
-                    (
-                        set('class', 'py-2'),
-                        div(set('class', 'text-sm pb-2'), $lang->testtask->statusList['doing']),
-                        $doingTesttasks
-                    ) : null,
-                    $waitTesttasks ? div
-                    (
-                        set('class', 'py-2'),
-                        div(set('class', 'text-sm pb-2'), $lang->testtask->statusList['wait']),
-                        $waitTesttasks
-                    ) : null
-                ) : null
+                )
             )
         );
     }
