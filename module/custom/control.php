@@ -486,7 +486,7 @@ class custom extends control
     public function setDefaultConcept($key = 0)
     {
         $this->loadModel('setting')->setItem('system.custom.URSR', $key);
-        return $this->send(array('result' => 'success', 'load' => inlink('browsestoryconcept')));
+        return $this->sendSuccess(array('load' => inlink('browsestoryconcept')));
     }
 
     /**
