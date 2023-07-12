@@ -3,7 +3,7 @@
  * 按产品统计的已修复Bug数。
  * Count of fixed bug in product.
  *
- * 范围：prod
+ * 范围：product
  * 对象：bug
  * 目的：scale
  * 度量名称：按产品统计的已修复Bug数
@@ -44,7 +44,7 @@ class count_of_restored_bug_in_product extends baseCalc
         $records = array();
         foreach($this->result as $product => $value)
         {
-            $records[] = array('prod' => $product, 'value' => $value);
+            $records[] = array('product' => $product, 'value' => $value);
         }
 
         return $this->filterByOptions($records, $options);

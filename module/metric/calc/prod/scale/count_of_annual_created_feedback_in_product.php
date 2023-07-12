@@ -3,7 +3,7 @@
  * 按产品统计的年度新增反馈数。
  * Count of annual created feedback in product.
  *
- * 范围：prod
+ * 范围：product
  * 对象：feedback
  * 目的：scale
  * 度量名称：按产品统计的年度新增反馈数
@@ -51,7 +51,7 @@ class count_of_annual_created_feedback_in_product extends baseCalc
         {
             foreach($years as $year => $value)
             {
-                $records[] = array('prod' => $product, 'year' => $year, 'value' => $value);
+                $records[] = array('product' => $product, 'year' => $year, 'value' => $value);
             }
         }
 

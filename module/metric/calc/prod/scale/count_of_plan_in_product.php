@@ -36,7 +36,7 @@ class count_of_plan_in_product extends baseCalc
     public function getResult($options = array())
     {
         $records = array();
-        foreach($this->result as $product => $value) $records[] = array('prod' => $product, 'value' => $value);
+        foreach($this->result as $product => $value) $records[] = array('product' => $product, 'value' => $value);
         return $this->filterByOptions($records, $options);
     }
 }

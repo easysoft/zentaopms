@@ -3,7 +3,7 @@
  * 按产品统计的年度新增用户需求数。
  * Count of annual created requirement in product.
  *
- * 范围：prod
+ * 范围：product
  * 对象：requirement
  * 目的：scale
  * 度量名称：按产品统计的年度新增用户需求数

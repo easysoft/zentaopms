@@ -17,6 +17,6 @@ pid=1
 */
 
 r(count($calc->getResult()))                && p('')        && e('41'); // 测试bug按产品分组数。
-r($calc->getResult(array('prod' => '78')))  && p('0:value') && e('9');  // 测试产品78的bug数。
-r($calc->getResult(array('prod' => '84')))  && p('0:value') && e('6');  // 测试产品84的bug数。
-r($calc->getResult(array('prod' => '999'))) && p('')        && e('0');  // 测试不存在的产品的bug数。
+r($calc->getResult(array('product' => '78')))  && p('0:value') && e('9');  // 测试产品78的bug数。
+r($calc->getResult(array('product' => '84')))  && p('0:value') && e('6');  // 测试产品84的bug数。
+r($calc->getResult(array('product' => '999'))) && p('')        && e('0');  // 测试不存在的产品的bug数。

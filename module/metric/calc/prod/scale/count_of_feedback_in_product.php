@@ -3,7 +3,7 @@
  * 按产品统计的反馈总数。
  * Count of feedback in product.
  *
- * 范围：prod
+ * 范围：product
  * 对象：feedback
  * 目的：scale
  * 度量名称：按产品统计的反馈总数
@@ -42,7 +42,7 @@ class count_of_feedback_in_product extends baseCalc
         $records = array();
         foreach($this->result as $product => $value)
         {
-            $records[] = array('prod' => $product, 'value' => $value);
+            $records[] = array('product' => $product, 'value' => $value);
         }
 
         return $this->filterByOptions($records, $options);
