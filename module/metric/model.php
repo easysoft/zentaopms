@@ -19,7 +19,7 @@ class metricModel extends model
      * @access public
      * @return PDOStatement
      */
-    public function getSourceStatement($calculator)
+    public function getSourceStatement($calculator, $returnType = 'statement')
     {
         if(!empty($calculator->dataset))
         {
@@ -30,13 +30,16 @@ class metricModel extends model
             $fieldList  = implode(',', $calculator->fieldList);
 
             $statement = $dataset->$dataSource($fieldList);
+            $sql       = $dataset->dao->get();
         }
         else
         {
-            $statement = $calculator->getStatement($this->dao);
+            $calculator->setDAO($this->dao);
+            $statement = $calculator->getStatement();
+            $sql       = $calculator->dao->get();
         }
 
-        return $statement;
+        return $returnType == 'sql' ? $sql : $statement;
     }
 
     /**

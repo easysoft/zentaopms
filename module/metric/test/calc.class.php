@@ -64,7 +64,8 @@ class metricTest
 
         if(!isset($calc->dataset))
         {
-            return $calc->getStatement($tester->dao);
+            $calc->setDAO($tester->dao);
+            return $calc->getStatement();
         }
 
         $dataset   = $this->objectModel->getDataset($tester->dao);

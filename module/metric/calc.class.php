@@ -95,7 +95,7 @@ class baseCalc
      * @access public
      * @return PDOStatement
      */
-    public function getStatement($dao)
+    public function getStatement()
     {
     }
 

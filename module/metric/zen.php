@@ -28,10 +28,12 @@ class metricZen extends metric
         if(empty($dataSource))
         {
             $calc = current($calcList);
-            return $calc->getStatement($this->dao);
+            $calc->setDAO($this->dao);
+
+            return $calc->getStatement();
         }
 
-        $dataset   = $this->metric->getDataset($this->dao);
+        $dataset   = $this->metric->getDataset();
         $fieldList = $this->metric->uniteFieldList($calcList);
 
         return $dataset->$dataSource($fieldList);
