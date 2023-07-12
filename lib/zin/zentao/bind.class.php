@@ -32,7 +32,7 @@ class bind
      */
     public static function __callStatic(string $name, array $args): directive
     {
-        list($callback, $others) = array_merge($args, array(null));
+        list($callback, $others) = array_merge($args, array(array()));
         return bind($name, $callback, $others);
     }
 }
