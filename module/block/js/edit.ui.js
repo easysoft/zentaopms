@@ -1,8 +1,8 @@
 function getForm(event)
 {
-    const field  = $(event.target).attr('id');
+    const field  = $(event.target).attr('name');
     const module = field == 'code' ? $('#blockEditForm #module').val() : $(event.target).attr('data-tab');
-    const code   = field == 'code' ? $('#blockEditForm #code').val() : '';
+    const code   = field == 'code' ? $(event.target).val() : '';
     const url    = $.createLink('block', 'edit', 'blockID=' + blockID + '&module=' + module + '&code=' + (code ? code : ''));
     loadPage(url, '#blockEditForm #codesRow, #blockEditForm #paramsRow, #blockEditForm #module');
 }

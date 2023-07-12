@@ -118,9 +118,8 @@ div
                     (
                         $showCodes ? array
                         (
-                            'type'         => 'picker',
-                            'defaultValue' => $code,
-                            'items'        => array('') + $codes
+                            'type'  => 'picker',
+                            'items' => array('') + $codes
                         ) : 'input'
                     )
                 )
