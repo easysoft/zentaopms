@@ -26,13 +26,16 @@ if($module == 'project' && $field == 'unitList')
 
     $formItems[] = formGroup
     (
-        set::width('3/4'),
         set::label($lang->custom->project->currencySetting),
-        set::name('unitList[]'),
-        set::value($unitList),
-        set::control('checkListInline'),
-        set::items($lang->project->unitList),
-        on::change('changeUnit')
+        checkList
+        (
+            setClass('flex flex-wrap unit-box'),
+            set::name('unitList[]'),
+            set::value($unitList),
+            set::inline(true),
+            set::items($lang->project->unitList),
+            on::change('changeUnit')
+        )
     );
 
     $formItems[] = formGroup
