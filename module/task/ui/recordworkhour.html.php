@@ -21,6 +21,7 @@ to::header
         set::text($task->name),
         set::entityID($task->id),
         set::reverse(true),
+        setClass('clip w-1/2'),
     ),
     span
     (
