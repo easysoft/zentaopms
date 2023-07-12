@@ -31,7 +31,7 @@ class bug_concentration_of_developed_story_in_product extends baseCalc
 
     public $result = array();
 
-    //public function getStatement($dao)
+    //public function getStatement()
     //{
     //}
 

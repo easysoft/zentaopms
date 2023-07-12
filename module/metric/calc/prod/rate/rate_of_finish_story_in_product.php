@@ -32,7 +32,7 @@ class rate_of_finish_story_in_product extends baseMetric
 
     public $result = array();
 
-    //public function getStatement($dao)
+    //public function getStatement()
     //{
     //}
 

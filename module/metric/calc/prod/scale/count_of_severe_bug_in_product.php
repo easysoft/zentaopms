@@ -31,7 +31,7 @@ class count_of_severe_bug_in_product extends baseCalc
 
     public $result = array();
 
-    //public function getStatement($dao)
+    //public function getStatement()
     //{
     //}
 

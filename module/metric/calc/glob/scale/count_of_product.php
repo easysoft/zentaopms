@@ -15,9 +15,9 @@ class count_of_product extends baseCalc
     public $dao = null;
     public $result = 0;
 
-    public function getStatement($dao)
+    public function getStatement()
     {
-        return $dao->select('count(id) as count')->from(TABLE_PRODUCT)
+        return $this->dao->select('count(id) as count')->from(TABLE_PRODUCT)
             ->where('deleted')->eq('0')
             ->andWhere('shadow')->eq(0)
             ->query();

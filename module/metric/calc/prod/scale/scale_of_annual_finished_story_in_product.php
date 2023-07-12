@@ -29,7 +29,7 @@ class scale_of_annual_finished_story_in_product extends baseCalc
 
     public $result = array();
 
-    //public function getStatement($dao)
+    //public function getStatement()
     //{
     //}
 

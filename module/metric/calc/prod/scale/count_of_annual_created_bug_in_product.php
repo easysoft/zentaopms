@@ -29,7 +29,7 @@ class count_of_annual_created_bug_in_product extends baseCalc
 
     public $result = array();
 
-    //public function getStatement($dao)
+    //public function getStatement()
     //{
     //}
 
