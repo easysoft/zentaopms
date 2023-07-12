@@ -90,19 +90,33 @@ function isAjaxRequest(?string $type = null): bool
 /**
  * Bind global event listener to widget element.
  *
- * @param string       $name
- * @param string|array $callback
- * @param array   $options
- * @return directive
+ * @param  string            $name
+ * @param  bool|string|array $callback
+ * @param  array             $options
  */
-function bind(string $name, string|array $callback, array $options = array()): directive
+function bind(string $name, bool|string|array $callback, array|string $options = null): directive
 {
-    $data = array('on' => $name);
-    if(is_string($callback))     $data['call'] = $callback;
-    else if(is_array($callback)) $data = array_merge($data, $callback);
-    if(!empty($options))         $data = array_merge($data, $options);
-
-    return setData($data);
+    if(is_string($options) && is_string($callback))
+    {
+        $options  = array('selector' => $callback, 'call' => $options);
+    }
+    elseif(is_array($options))
+    {
+        $options['call'] = $callback;
+    }
+    else
+    {
+        $options = array('callback' => $callback);
+    }
+    if(str_contains($name, '__'))
+    {
+        list($name, $flags) = explode('__', $name);
+        if(str_contains($flags, 'stop'))    $options['stop']    = true;
+        if(str_contains($flags, 'prevent')) $options['prevent'] = true;
+        if(str_contains($flags, 'self'))    $options['self']    = true;
+        if(str_contains($flags, 'once'))    $options['once']    = true;
+    }
+    return setData($options);
 }
 
 /**
