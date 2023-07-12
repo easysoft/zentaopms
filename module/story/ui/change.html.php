@@ -21,6 +21,20 @@ jsVar('storyType', $story->type);
 jsVar('rawModule', $this->app->rawModule);
 jsVar('page', $this->app->rawMethod);
 
+$formTitle = div
+(
+    setClass('flex items-center pb-3'),
+    div($lang->story->changed),
+    entityLabel
+    (
+        set::level(1),
+        setClass('pl-2'),
+        set::text($story->title),
+        set::entityID($story->id),
+        set::reverse(true),
+    )
+);
+
 $formItems = array();
 $formItems['reviewer'] = formGroup
 (
@@ -28,7 +42,7 @@ $formItems['reviewer'] = formGroup
     set::label($fields['reviewer']['title']),
     inputGroup
     (
-        select
+        picker
         (
             set::name('reviewer[]'),
             set::multiple(true),
@@ -63,7 +77,7 @@ $formItems['title'] = formGroup
         span
         (
             setClass('input-group-addon'),
-            input
+            colorPicker
             (
                 set::name('color'),
                 set::type('color'),
@@ -77,7 +91,8 @@ $formItems['title'] = formGroup
             (
                 set::id('relievedTwins'),
                 set::name('relievedTwins'),
-                set::title($lang->story->changeRelievedTwinsTips),
+                set::value(1),
+                $lang->story->relievedTwinsRelation,
             )
         )
     ),
@@ -141,7 +156,6 @@ $formActions = formRow
     backBtn($lang->goback),
 );
 
-modalHeader();
 formPanel
 (
     on::click('#saveButton', 'customSubmit'),
