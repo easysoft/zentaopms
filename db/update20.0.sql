@@ -114,3 +114,27 @@ CREATE TABLE IF NOT EXISTS `zt_session` (
     PRIMARY KEY (`id`),
     KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `zt_metric` (
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `purpose` varchar(50) NOT NULL DEFAULT '',
+  `scope` char(30) NOT NULL DEFAULT '',
+  `object` char(30) NOT NULL DEFAULT '',
+  `name` varchar(90) NOT NULL DEFAULT '',
+  `code` varchar(90) NOT NULL DEFAULT '',
+  `unit` varchar(10) NOT NULL DEFAULT '',
+  `desc` text,
+  `definition` text,
+  `when` varchar(30) NOT NULL DEFAULT '',
+  `event` varchar(30) NOT NULL DEFAULT '',
+  `cronCFG` varchar(30) NOT NULL DEFAULT '',
+  `time` varchar(30) NOT NULL DEFAULT '',
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
+  `createdDate` datetime DEFAULT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime DEFAULT NULL,
+  `order` mediumint unsigned NOT NULL DEFAULT '0',
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
