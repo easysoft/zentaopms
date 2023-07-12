@@ -420,7 +420,7 @@ formPanel
         set::label($lang->task->datePlan),
         inputGroup
         (
-            input
+            datepicker
             (
                 set::control('date'),
                 set::name('estStarted'),
@@ -428,7 +428,7 @@ formPanel
                 set::placeholder($lang->task->estStarted),
             ),
             $lang->task->to,
-            input
+            datepicker
             (
                 set::control('date'),
                 set::name('deadline'),

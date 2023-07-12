@@ -46,7 +46,7 @@ window.productChange = function(e)
     }
 
     let chosenProducts = 0;
-    $(".productsBox select[name^='products']").each(function()
+    $(".productsBox [name^='products']").each(function()
     {
         if($(e.target).val() > 0) chosenProducts ++;
     });
