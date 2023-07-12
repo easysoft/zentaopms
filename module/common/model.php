@@ -365,7 +365,7 @@ class commonModel extends model
     }
 
     /**
-     * Juage a method of one module is open or not?
+     * Judge a method of one module is open or not.
      *
      * @param  string $module
      * @param  string $method
@@ -382,6 +382,7 @@ class commonModel extends model
         {
             if(stripos($method, 'ajax') !== false) return true;
             if($module == 'block') return true;
+            if($module == 'index' and $method == 'app') return true;
             if($module == 'my' and $method == 'guidechangetheme') return true;
             if($module == 'misc' and $method == 'downloadclient') return true;
             if($module == 'misc' and $method == 'changelog')  return true;
