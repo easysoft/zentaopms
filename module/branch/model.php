@@ -659,7 +659,7 @@ class branchModel extends model
      * @access public
      * @return bool
      */
-    public function showBranch($productID, $moduleID = 0, $executionID = 0)
+    public function showBranch(int $productID, int $moduleID = 0, int $executionID = 0): bool
     {
         $this->loadModel('product');
         if(empty($productID) and empty($moduleID))

@@ -967,7 +967,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function bug($executionID = 0, $productID = 0, $branch = 'all', $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug(int $executionID = 0, int $productID = 0, string $branch = 'all', string $orderBy = 'status,id_desc', int $build = 0, string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
