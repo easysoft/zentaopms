@@ -91,38 +91,41 @@ if(!empty($story->mailto))
 $mailtoList = implode($lang->comma, $mailtoList);
 
 $taskItems = array();
-foreach($story->tasks as $executionTasks)
+if($story->type == 'story')
 {
-    foreach($executionTasks as $task)
+    foreach($story->tasks as $executionTasks)
     {
-        if(!isset($executions[$task->execution])) continue;
-        $execution     = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
-        $executionLink = !empty($execution->multiple) ? $this->createLink('execution', 'view', "executionID=$task->execution") : $this->createLink('project', 'view', "projectID=$task->project");
-        $executionName = $executions[$task->execution];
-        $taskItems[] = h::li
-        (
-            set::title($task->name),
-            (isset($execution->type) && $execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executionName) : a(set::href($executionLink), setClass('muted title'), $executionName),
-            label(setClass('circle size-sm'), $task->id),
-            common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), set('data-toggle', 'modal'), $task->name) : span(setClass('title'), $task->name),
-            label(setClass("status-{$task->status} size-sm"), $this->lang->task->statusList[$task->status]),
-        );
+        foreach($executionTasks as $task)
+        {
+            if(!isset($executions[$task->execution])) continue;
+            $execution     = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
+            $executionLink = !empty($execution->multiple) ? $this->createLink('execution', 'view', "executionID=$task->execution") : $this->createLink('project', 'view', "projectID=$task->project");
+            $executionName = $executions[$task->execution];
+            $taskItems[] = h::li
+            (
+                set::title($task->name),
+                (isset($execution->type) && $execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executionName) : a(set::href($executionLink), setClass('muted title'), $executionName),
+                label(setClass('circle size-sm'), $task->id),
+                common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), set('data-toggle', 'modal'), $task->name) : span(setClass('title'), $task->name),
+                label(setClass("status-{$task->status} size-sm"), $this->lang->task->statusList[$task->status]),
+            );
+        }
     }
-}
 
-if(empty($story->tasks))
-{
-    foreach($story->executions as $executionID => $execution)
+    if(empty($story->tasks))
     {
-        if(!$execution->multiple) continue;
-        if(!isset($executions[$executionID])) continue;
-        if(isset($story->tasks[$executionID])) continue;
+        foreach($story->executions as $executionID => $execution)
+        {
+            if(!$execution->multiple) continue;
+            if(!isset($executions[$executionID])) continue;
+            if(isset($story->tasks[$executionID])) continue;
 
-        $taskItems[] = h::li
-        (
-            set::title($execution->name),
-            ($execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executions[$executionID]) : a(set::href($this->createLink('execution', 'view', "executionID=$executionID")), setClass('muted title'), $executions[$executionID]),
-        );
+            $taskItems[] = h::li
+            (
+                set::title($execution->name),
+                ($execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executions[$executionID]) : a(set::href($this->createLink('execution', 'view', "executionID=$executionID")), setClass('muted title'), $executions[$executionID]),
+            );
+        }
     }
 }
 
