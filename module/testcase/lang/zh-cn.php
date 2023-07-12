@@ -61,6 +61,7 @@ $lang->testcase->reviewedByAB     = '评审人';
 $lang->testcase->reviewedDateAB   = '日期';
 $lang->testcase->reviewResultAB   = '结果';
 $lang->testcase->forceNotReview   = '不需要评审';
+$lang->testcase->isReviewed       = '是否评审';
 $lang->testcase->lastEditedByAB   = '修改者';
 $lang->testcase->lastEditedDateAB = '修改日期';
 $lang->testcase->lastEditedDate   = '修改日期';

@@ -35,7 +35,7 @@ form
     (
         set::label($lang->testcase->product),
         set::required(true),
-        select
+        picker
         (
             set::name('product'),
             set::items($products),
@@ -48,7 +48,7 @@ form
         set::required(true),
         inputGroup
         (
-            select
+            picker
             (
                 set::name('node'),
                 set::items($nodeList),

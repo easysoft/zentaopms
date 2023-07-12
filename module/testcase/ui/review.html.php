@@ -30,7 +30,7 @@ form
         set::width('1/3'),
         set::label($lang->testcase->reviewResultAB),
         set::required(true),
-        select
+        picker
         (
             set::name('result'),
             set::items($lang->testcase->reviewResultList),
@@ -39,7 +39,7 @@ form
     formGroup
     (
         set::label($lang->testcase->reviewedByAB),
-        select
+        picker
         (
             set::name('reviewedBy[]'),
             set::value($app->user->account),

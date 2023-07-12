@@ -22,7 +22,7 @@ form
     formGroup
     (
         set::label($lang->testcase->encoding),
-        select
+        picker
         (
             set::name('encoding'),
             set::items($config->charsets[$this->cookie->lang]),

@@ -26,7 +26,7 @@ featureBar
             set::url($this->session->caseList),
             set::class('secondary')
         ),
-        select
+        picker
         (
             zui::width('200px'),
             set::name('fromlib'),
@@ -97,7 +97,7 @@ div
 (
     setID('branchSelect'),
     setClass('hidden'),
-    select
+    picker
     (
         zui::width('176px'),
         set::name('branch[]'),
@@ -108,7 +108,7 @@ div
 (
     setID('moduleSelect'),
     setClass('hidden'),
-    select
+    picker
     (
         zui::width('176px'),
         set::name('module[]'),

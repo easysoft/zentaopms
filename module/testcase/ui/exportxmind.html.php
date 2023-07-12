@@ -32,7 +32,8 @@ form
         set::width('1/2'),
         set::label($lang->testcase->module),
         set::name('imodule'),
-        set::control(array('type' => 'select', 'items' => $moduleOptionMenu)),
+        set::control('picker'),
+        set::items($moduleOptionMenu),
     ),
     formRow
     (

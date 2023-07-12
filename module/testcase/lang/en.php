@@ -61,6 +61,7 @@ $lang->testcase->reviewedByAB     = 'ReviewedBy';
 $lang->testcase->reviewedDateAB   = 'ReviewedDate';
 $lang->testcase->reviewResultAB   = 'Result';
 $lang->testcase->forceNotReview   = 'No Review Required';
+$lang->testcase->isReviewed       = 'is it reviewed';
 $lang->testcase->lastEditedByAB   = 'EditedBy';
 $lang->testcase->lastEditedDateAB = 'Edited';
 $lang->testcase->lastEditedDate   = 'EditedDate';

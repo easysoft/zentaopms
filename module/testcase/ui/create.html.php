@@ -31,13 +31,13 @@ formPanel
             set::label($lang->testcase->product),
             inputGroup
             (
-                select
+                picker
                 (
                     set::name('product'),
                     set::items($products),
                     set::value($productID)
                 ),
-                isset($product->type) && $product->type != 'normal' ? select
+                isset($product->type) && $product->type != 'normal' ? picker
                 (
                     set::width('100px'),
                     set::name('branch'),
@@ -53,7 +53,7 @@ formPanel
             inputGroup
             (
                 set('id', 'moduleBox'),
-                select
+                picker
                 (
                     set::name('module'),
                     set::items($moduleOptionMenu),
@@ -89,7 +89,7 @@ formPanel
             inputGroup
             (
                 set('id', 'sceneBox'),
-                select
+                picker
                 (
                     set::name('scene'),
                     set::items($sceneOptionMenu),
@@ -106,7 +106,7 @@ formPanel
             set::label($lang->testcase->type),
             inputGroup
             (
-                select
+                picker
                 (
                     set::name('type'),
                     set::items($lang->testcase->typeList),
@@ -133,7 +133,7 @@ formPanel
             inputGroup
             (
                 set('id', 'stageBox'),
-                select
+                picker
                 (
                     set::name('stage'),
                     set::multiple(true),
@@ -152,7 +152,7 @@ formPanel
             inputGroup
             (
                 set('id', 'storyBox'),
-                select
+                picker
                 (
                     set::name('story'),
                     set::items($stories),
@@ -186,7 +186,8 @@ formPanel
             set::width('180px'),
             set::class(),
             set::label($lang->testcase->pri),
-            set::control(array('type' => 'select', 'items' => $lang->testcase->priList)),
+            set::control('picker'),
+            set::items($lang->testcase->priList),
             set::name('pri'),
             set::value()
         ),
@@ -194,8 +195,9 @@ formPanel
         (
             set::width('150px'),
             set::class(),
-            set::label('是否评审'),
-            set::control(array('type' => 'select', 'items' => $lang->testcase->reviewList)),
+            set::label($lang->testcase->isReviewed),
+            set::control('picker'),
+            set::items($lang->testcase->reviewList),
             set::name('forceNotReview'),
             set::value('1')
         )

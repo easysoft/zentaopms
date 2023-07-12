@@ -61,6 +61,7 @@ $lang->testcase->reviewedByAB     = 'Validé par';
 $lang->testcase->reviewedDateAB   = 'Validé le';
 $lang->testcase->reviewResultAB   = 'Résultat validation';
 $lang->testcase->forceNotReview   = 'Aucune Validation Requise';
+$lang->testcase->isReviewed       = 'is it reviewed';
 $lang->testcase->lastEditedByAB   = 'Modifié par';
 $lang->testcase->lastEditedDateAB = 'Modifié le';
 $lang->testcase->lastEditedDate   = 'Modifié le';

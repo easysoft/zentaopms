@@ -29,13 +29,13 @@ formPanel
             set::width('1/2'),
             inputGroup
             (
-                select
+                picker
                 (
                     set::name('product'),
                     set::items($products),
                     set::value($productID),
                 ),
-                isset($product->type) && $product->type != 'normal' ? select
+                isset($product->type) && $product->type != 'normal' ? picker
                 (
                     zui::width('120px'),
                     set::name('branch'),
@@ -50,7 +50,7 @@ formPanel
             (
                 $lang->testcase->module,
                 set::id('moduleIdBox'),
-                select
+                picker
                 (
                     set::name('module'),
                     set::items($moduleOptionMenu),
@@ -80,7 +80,7 @@ formPanel
     (
         set::label($lang->testcase->parentScene),
         set::id('sceneIdBox'),
-        select
+        picker
         (
             set::name('parent'),
             set::items($sceneOptionMenu),

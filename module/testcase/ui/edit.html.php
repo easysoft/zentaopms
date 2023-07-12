@@ -85,7 +85,7 @@ detailBody
             formGroup
             (
                 set::id('sceneIdBox'),
-                select
+                picker
                 (
                     set::name('scene'),
                     set::items($sceneOptionMenu),
@@ -143,7 +143,7 @@ detailBody
             $isLibCase ? item
             (
                 set::name($lang->testcase->lib),
-                select
+                picker
                 (
                     set::name('lib'),
                     set::items($libraries),
@@ -155,13 +155,13 @@ detailBody
                 set::trClass($product->shadow ? 'hidden' : ''),
                 inputGroup
                 (
-                    select
+                    picker
                     (
                         set::name('product'),
                         set::items($products),
                         set::value($productID),
                     ),
-                    isset($product->type) && $product->type != 'normal' ? select
+                    isset($product->type) && $product->type != 'normal' ? picker
                     (
                         set::name('branch'),
                         set::items($branchTagOption),
@@ -175,7 +175,7 @@ detailBody
                 inputGroup
                 (
                     set::id('moduleIdBox'),
-                    select
+                    picker
                     (
                         set::name('module'),
                         set::items($moduleOptionMenu),
@@ -205,7 +205,7 @@ detailBody
                 div
                 (
                     set::id('storyIdBox'),
-                    select
+                    picker
                     (
                         set::name('story'),
                         set::items($stories),
@@ -218,7 +218,7 @@ detailBody
                 set::name($lang->testcase->type),
                 inputGroup
                 (
-                    select
+                    picker
                     (
                         set::name('type'),
                         set::items($lang->testcase->typeList),
@@ -257,7 +257,7 @@ detailBody
             item
             (
                 set::name($lang->testcase->stage),
-                select
+                picker
                 (
                     set::name('stage[]'),
                     set::items($lang->testcase->stageList),
@@ -268,7 +268,7 @@ detailBody
             item
             (
                 set::name($lang->testcase->pri),
-                select
+                picker
                 (
                     set::name('pri'),
                     set::items($lang->testcase->priList),
@@ -278,7 +278,7 @@ detailBody
             item
             (
                 set::name($lang->testcase->status),
-                !$forceNotReview && $case->status == 'wait' ? $lang->testcase->statusList[$case->status] : select
+                !$forceNotReview && $case->status == 'wait' ? $lang->testcase->statusList[$case->status] : picker
                 (
                     set::name('status'),
                     set::items($lang->testcase->statusList),

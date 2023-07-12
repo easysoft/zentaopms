@@ -61,6 +61,7 @@ $lang->testcase->reviewedByAB     = 'Von';
 $lang->testcase->reviewedDateAB   = 'Datum';
 $lang->testcase->reviewResultAB   = 'Ergebnis';
 $lang->testcase->forceNotReview   = 'Keine Überprüfung';
+$lang->testcase->isReviewed       = 'is it reviewed';
 $lang->testcase->lastEditedByAB   = 'Bearbeiter';
 $lang->testcase->lastEditedDateAB = 'Bearbeitet am';
 $lang->testcase->lastEditedDate   = 'Bearbeitet am';
