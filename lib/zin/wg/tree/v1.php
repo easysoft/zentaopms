@@ -13,7 +13,7 @@ class tree extends wg
     protected function build(): zui
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
-        return zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'id'))));
+        return zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'id', 'itemActions', 'hover', 'onClick'))));
     }
 
     private function buildTree(array $items): array
