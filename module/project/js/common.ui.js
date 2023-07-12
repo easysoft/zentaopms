@@ -503,9 +503,9 @@ window.loadBranches = function(product)
     $("#planDefault").remove();
 
     let chosenProducts = [];
+    let $product       = $(product);
     $("[name^='products']").each(function()
     {
-        let $product  = $(product);
         let productID = $(this).val();
         if(productID > 0 && chosenProducts.indexOf(productID) == -1) chosenProducts.push(productID);
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
@@ -534,10 +534,18 @@ window.loadBranches = function(product)
     {
         if(data)
         {
-            $formRow.find("[name^='branch']").replaceWith(data);
+            $formRow.find('.form-group').eq(1).find('.picker-box').empty();
+            $formRow.find('.form-group').eq(1).find('.picker-box').append(`<div id='branch${index}'></div>`);
+
             $formRow.find('.form-group').eq(0).addClass('w-1/4').removeClass('w-1/2');
             $formRow.find('.form-group').eq(1).removeClass('hidden');
-            $formRow.find("[name^='branch']").attr('multiple', '').attr('name', 'branch[' + index + '][]').attr('id', 'branch' + index).on('change', branchChange);
+
+            data = JSON.parse(data);
+            new zui.Picker(`#branch${index}`, {
+                items: data,
+                multiple: true,
+                name: `branch[${index}]`,
+            });
         }
 
         let branch = $('#branch' + index);
@@ -566,14 +574,13 @@ window.loadPlans = function(product, branch)
         {
             data = JSON.parse(data);
 
-            console.log(data);
-
             $("div#plan" + index).find('.picker-box').empty();
-            $("div#plan" + index).find('.picker-box').append(`<div name='plans[${productID}]' id='plans${productID}'></div>`);
+            $("div#plan" + index).find('.picker-box').append(`<div id='plans${productID}'></div>`);
 
             new zui.Picker(`#plans${productID}`, {
                 items: data,
                 multiple: true,
+                name: `plans[${productID}]`,
             });
         }
     });

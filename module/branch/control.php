@@ -278,10 +278,15 @@ class branch extends control
             $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
         }
 
-        $name = $multiple == 'multiple' ? 'branch[]' : 'branch';
+        $items = array();
+        foreach($branchTagOption as $id => $name)
+        {
+            if($id == '') continue;
+            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+        }
 
         if($isTwins == 'yes') return print(html::select("branches[$fieldID]", $branchTagOption, $oldBranch, "onchange='loadBranchRelation(this.value, $fieldID);' class='form-control chosen control-branch'"));
-        return print(html::select($name, $branchTagOption, $oldBranch, "class='form-control' $multiple' data-last='{$oldBranch}'"));
+        return print(json_encode($items));
     }
 
     /**
