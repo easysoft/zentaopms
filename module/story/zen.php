@@ -291,7 +291,7 @@ class storyZen extends story
         $initStory->color      = '';
         $initStory->plan       = $planID;
 
-        if($storyID > 0) $initStory = $this->getInitStoryByStory($copyStoryID, $initStory);
+        if($storyID > 0) $initStory = $this->getInitStoryByStory($storyID, $initStory);
         if($bugID   > 0) $initStory = $this->getInitStoryByBug($bugID, $initStory);
         if($todoID  > 0) $initStory = $this->getInitStoryByTodo($todoID, $initStory);
         return $initStory;

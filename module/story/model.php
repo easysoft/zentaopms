@@ -3667,7 +3667,7 @@ class storyModel extends model
             //$menu .= "<div class='divider'></div>";
 
             $suffixMenu[] = commonModel::buildActionItem('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, array('icon' => 'edit'));
-            $suffixMenu[] = commonModel::buildActionItem('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", $story, array('icon' => 'copy', 'data-toggle' => 'modal'));
+            $suffixMenu[] = commonModel::buildActionItem('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", $story, array('icon' => 'copy'));
             if(common::hasPriv('story', 'delete')) $suffixMenu[] = array('url' => helper::createLink('story', 'delete', $params), 'class' => 'ajax-submit', 'icon' => 'trash');
         }
 
