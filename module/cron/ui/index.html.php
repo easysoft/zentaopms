@@ -10,15 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('confirmTurnonMessage', $this->lang->cron->confirmTurnon);
-jsVar('confirmDelete', $this->lang->cron->confirmDelete);
-
 foreach($crons as $cron)
 {
     $actionsHtml = '';
-    if(common::hasPriv('cron', 'toggle') and !empty($cron->command)) $actionsHtml .= html::a(inlink('toggle', "id=$cron->id&status=" . ($cron->status == 'stop' ? 'normal' :  'stop')), $cron->status == 'stop' ? $lang->cron->toggleList['start'] : $lang->cron->toggleList['stop'], '', "class='primary-500 ajaxRefresh'");
-    if(!empty($cron->command) and common::hasPriv('cron', 'edit'))   $actionsHtml .= html::a(inlink('edit', "id=$cron->id"), $lang->edit, '', "class='primary-500'");
-    if($cron->buildin == 0 and common::hasPriv('cron', 'delete'))    $actionsHtml .= html::a('###', $lang->delete, '', "class='primary-500 ajaxDelete' data-id={$cron->id}");
+    if(common::hasPriv('cron', 'toggle') and !empty($cron->command)) $actionsHtml .= html::a(inlink('toggle', "id={$cron->id}&status=" . ($cron->status == 'stop' ? 'normal' :  'stop')), $cron->status == 'stop' ? $lang->cron->toggleList['start'] : $lang->cron->toggleList['stop'], '', "class='primary-500 ajaxRefresh'");
+    if(!empty($cron->command) and common::hasPriv('cron', 'edit'))   $actionsHtml .= html::a(inlink('edit', "id={$cron->id}"), $lang->edit, '', "class='primary-500'");
+    if($cron->buildin == 0 and common::hasPriv('cron', 'delete'))    $actionsHtml .= html::a(inlink('delete', "id={$cron->id}"), $lang->delete, '', "class='primary-500 ajax-submit' data-confirm={$lang->cron->confirmDelete}");
 
     $cron->actions = $actionsHtml;
     if($cron->lastTime) $cron->lastTime = substr($cron->lastTime, 2, 17);
@@ -50,4 +47,3 @@ panel
 );
 
 render();
-

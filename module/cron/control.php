@@ -107,16 +107,13 @@ class cron extends control
      * Delete cron.
      *
      * @param  int    $cronID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($cronID, $confirm = 'no')
+    public function delete($cronID)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->cron->confirmDelete, inlink('delete', "cronID=$cronID&confirm=yes")));
-
         $this->dao->delete()->from(TABLE_CRON)->where('id')->eq($cronID)->exec();
-        return print(js::reload('parent'));
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
