@@ -216,11 +216,11 @@ detailBody
                     set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
                     set::footPager
                     (
-                        usePager(array(
+                        usePager('storyPager', '', array(
                             'recPerPage' => $storyPager->recPerPage,
                             'recTotal' => $storyPager->recTotal,
                             'linkCreator' => helper::createLink('productplan', 'view', "planID={$plan->id}&type=story&orderBy={$orderBy}&link=false&param={$param}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                        ), 'storyPager'),
+                        )),
                     ),
                 )
             ),
@@ -247,11 +247,11 @@ detailBody
                     set::footer(array('checkbox', 'toolbar', array('html' => sprintf($lang->productplan->bugSummary, count($planBugs)), 'className' => "text-dark"), 'flex', 'pager')),
                     set::footPager
                     (
-                        usePager(array(
+                        usePager('bugPager', '', array(
                             'recPerPage' => $bugPager->recPerPage,
                             'recTotal' => $bugPager->recTotal,
                             'linkCreator' => helper::createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={$orderBy}&link=false&param={$param}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                        ), 'bugPager'),
+                        )),
                     ),
                 )
             ),

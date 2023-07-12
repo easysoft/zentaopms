@@ -44,7 +44,7 @@ class backBtn extends btn
 
         $backs = array(
             'task'           => 'execution-task,my-work,my-contribute,',
-            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,',
+            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view',
             'bug'            => 'bug-browse,project-bug,my-work,my-contribute,',
             'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,',
             'testsuite'      => 'testsuite-browse,testsuite-view,',
