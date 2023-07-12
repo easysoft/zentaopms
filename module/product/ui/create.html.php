@@ -38,8 +38,9 @@ foreach($fields as $field => $attr)
             set::label($attr['title']),
             inputGroup
             (
-                select
+                picker
                 (
+                    set::id($fieldName),
                     set::name($fieldName),
                     set::items($attr['options']),
                     set::value($attr['default']),
@@ -69,6 +70,7 @@ foreach($fields as $field => $attr)
     {
         $formGroup = formGroup
         (
+            set::id($fieldName),
             set::width($attr['width']),
             set::name($fieldName),
             set::label($attr['title']),
@@ -100,10 +102,10 @@ $formItems['whitelist'] = formRow
                 inputGroup
                 (
                     $lang->product->groups,
-                    select
+                    picker
                     (
+                        set::id($groupsField['name']),
                         set::name($groupsField['name'] . '[]'),
-                        set::control(array('type' => 'picker')),
                         set::multiple(true),
                         set::items($groupsField['options']),
                         set::value($groupsField['default'])
@@ -115,10 +117,10 @@ $formItems['whitelist'] = formRow
                 inputGroup
                 (
                     $lang->product->users,
-                    select
+                    picker
                     (
+                        set::id($usersField['name']),
                         set::name($usersField['name'] . '[]'),
-                        set::control(array('type' => 'picker')),
                         set::multiple(true),
                         set::items($usersField['options']),
                         set::value($usersField['default'])
