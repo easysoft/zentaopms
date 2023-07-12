@@ -26,7 +26,7 @@ formPanel
             set::width('1/2'),
             set::label($lang->testtask->common),
             set::required(true),
-            set::control('select'),
+            set::control('picker'),
             set::name('selectTask'),
             set::items($taskPairs),
             set::value($objectID),
@@ -89,7 +89,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->testreport->owner),
-            set::control('select'),
+            set::control('picker'),
             set::name('owner'),
             set::items($users),
             set::value($owner)
@@ -100,7 +100,8 @@ formPanel
         formGroup
         (
             set::label($lang->testreport->members),
-            set::control(array('type' => 'select', 'multiple' => true)),
+            set::control('picker'),
+            set::multiple(true),
             set::name('members[]'),
             set::items($users),
             set::value($members)

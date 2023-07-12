@@ -63,7 +63,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->testreport->owner),
-            set::control('select'),
+            set::control('picker'),
             set::name('owner'),
             set::items($users),
             set::value($report->owner)
@@ -74,7 +74,8 @@ formPanel
         formGroup
         (
             set::label($lang->testreport->members),
-            set::control(array('type' => 'select', 'multiple' => true)),
+            set::control('picker'),
+            set::multiple(true),
             set::name('members[]'),
             set::items($users),
             set::value($report->members)
