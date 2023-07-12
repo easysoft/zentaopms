@@ -2256,10 +2256,10 @@ class blockZen extends block
         {
             $month = date('Y-m', $date);
             $doneStoryEstimate[$month] = rand(100, 400);
-            $doneStoryCount[$month]     = rand(100, 400);
-            $createStoryCount[$month]   = rand(100, 400);
+            $doneStoryCount[$month]    = rand(100, 400);
+            $createStoryCount[$month]  = rand(100, 400);
             $fixedBugCount[$month]     = rand(100, 400);
-            $createBugCount[$month]     = rand(100, 400);
+            $createBugCount[$month]    = rand(100, 400);
 
             $month = (int)ltrim(date('m', $date), '0');
 
@@ -2293,9 +2293,9 @@ class blockZen extends block
         $projectPairs = $this->loadModel('project')->getPairs();
         foreach($projectPairs as $projectID => $projectName)
         {
-            $doneStoryEstimate[$projectID] = rand(0, 100000);
-            $doneStoryCount[$projectID]    = rand(0, 50000);
-            $resolvedBugCount[$projectID]  = rand(0, 50000);
+            $doneStoryEstimate[$projectID] = rand(0, 1000);
+            $doneStoryCount[$projectID]    = rand(0, 500);
+            $resolvedBugCount[$projectID]  = rand(0, 500);
         }
         arsort($doneStoryEstimate);
         arsort($doneStoryCount);

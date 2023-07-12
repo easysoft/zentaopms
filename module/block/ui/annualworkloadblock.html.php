@@ -24,6 +24,7 @@ foreach($doneStoryEstimate as $projectID => $storyEstimate)
             set::width('50%'),
             span
             (
+                set::title(zget($projectPairs, $projectID)),
                 zget($projectPairs, $projectID),
             ),
         ),
