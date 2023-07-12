@@ -481,8 +481,9 @@ class deptModel extends model
                 $node->managerName = zget($users, $node->manager);
                 if(isset($tree[$deptID]))
                 {
-                    $node->children = $tree[$deptID];
+                    $node->items   = $tree[$deptID];
                     $node->actions = array('delete' => false);
+                    $node->url     = helper::createLink('dept', 'browse', "deptID={$deptID}");
                     unset($tree[$deptID]);
                 }
                 $tree[$node->parent][] = $node;
