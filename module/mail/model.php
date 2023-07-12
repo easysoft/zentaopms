@@ -696,6 +696,7 @@ class mailModel extends model
         $nameFields = $this->config->action->objectNameFields[$objectType];
         $title      = zget($object, $nameFields, '');
         $subject    = $this->getSubject($objectType, $object, $title, $action->action);
+        $domain     = zget($this->config->mail, 'domain', common::getSysURL());
 
         if($objectType == 'review' and empty($object->auditedBy)) return;
 
@@ -715,7 +716,7 @@ class mailModel extends model
             $action->extra    = $extra;
             if($title)
             {
-                $action->appendLink = html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink($action->objectType, 'view', "id=$id", 'html'), "#$id " . $title);
+                $action->appendLink = html::a($domain . helper::createLink($action->objectType, 'view', "id=$id", 'html'), "#$id " . $title);
             }
         }
 
