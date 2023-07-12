@@ -10,7 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$canBeChanged = common::canBeChanged('build', $build);
+$buildModule  = $app->tab == 'project' ? 'projectbuild' : 'build';
+$canBeChanged = common::canBeChanged($buildModule, $build);
 $menus        = $this->build->buildOperateMenu($build);
 $decodeParam  = helper::safe64Decode($param);
 
@@ -18,7 +19,7 @@ $buildItems = array();
 foreach($buildPairs as $id => $name)
 {
     $buildItem['text']   = $name;
-    $buildItem['url']    = helper::createLink($builds[$id]->execution ? 'build' : 'projectbuild', 'view', "buildID=$id");
+    $buildItem['url']    = helper::createLink($buildModule, 'view', "buildID=$id");
     $buildItem['active'] = $id == $build->id;
 
     $buildItems[] = $buildItem;
@@ -59,11 +60,11 @@ jsVar('initLink',      $link);
 jsVar('type',          $type);
 jsVar('orderBy',       $orderBy);
 jsVar('buildID',       $build->id);
-jsVar('sortLink',      helper::createLink('build', 'view', "buildID={$build->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
+jsVar('sortLink',      helper::createLink($buildModule, 'view', "buildID={$build->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 jsVar('confirmDelete', $lang->build->confirmDelete);
 
 /* Story's batch btn. */
-$canBatchUnlinkStory = $canBeChanged && common::hasPriv('build', 'batchUnlinkStory');
+$canBatchUnlinkStory = $canBeChanged && common::hasPriv($buildModule, 'batchUnlinkStory');
 $canBatchCloseStory  = $canBeChanged && common::hasPriv('story', 'batchClose');
 
 $storyFootToolbar = array();
@@ -71,7 +72,7 @@ if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('class' => 'btn pr
 if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->story->batchClose,    'btnType' => 'primary', 'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$build->product}"));
 
 /* Bug's batch btn. */
-$canBatchUnlinkBug = $canBeChanged && common::hasPriv('build', 'batchUnlinkBug');
+$canBatchUnlinkBug = $canBeChanged && common::hasPriv($buildModule, 'batchUnlinkBug');
 $canBatchCloseBug  = $canBeChanged && common::hasPriv('bug', 'batchClose');
 
 $bugFootToolbar = array();
@@ -89,12 +90,11 @@ else
     $builds = '';
     foreach(explode(',', $build->builds) as $buildID)
     {
-        if($buildID) $builds .= html::a($this->createLink('build', 'view', "buildID=$buildID") . "#app={$app->tab}", zget($buildPairs, $buildID)) . $lang->comma;
+        if($buildID) $builds .= html::a($this->createLink($buildModule, 'view', "buildID=$buildID") . "#app={$app->tab}", zget($buildPairs, $buildID)) . $lang->comma;
     }
 }
 
 /* Init table data for dtable. */
-$buildModule = $app->tab == 'project' ? 'projectbuild' : 'build';
 $config->build->bug->dtable->fieldList['actions']['list']['unlinkBug']['url']     = helper::createLink($buildModule, 'unlinkBug', "buildID={$build->id}&bugID={id}");
 $config->build->story->dtable->fieldList['actions']['list']['unlinkStory']['url'] = helper::createLink($buildModule, 'unlinkStory', "buildID={$build->id}&storyID={id}");
 
@@ -118,7 +118,7 @@ detailBody
                 div
                 (
                     setClass('tabnActions'),
-                    !common::hasPriv('build', 'linkStory') ? null : btn(set::text($lang->build->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "buildID={$build->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param=")))),
+                    !common::hasPriv($buildModule, 'linkStory') ? null : btn(set::text($lang->build->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "buildID={$build->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param=")))),
                 ),
                 dtable
                 (
@@ -131,9 +131,9 @@ detailBody
                     set::footToolbar($storyFootToolbar),
                     set::footPager(usePager(array
                     (
-                        'recPerPage' => $storyPager->recPerPage,
-                        'recTotal' => $storyPager->recTotal,
-                        'linkCreator' => helper::createLink('build', 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")
+                        'recPerPage'  => $storyPager->recPerPage,
+                        'recTotal'    => $storyPager->recTotal,
+                        'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")
                     ), 'storyPager')),
                 )
             ),
@@ -148,7 +148,7 @@ detailBody
                 div
                 (
                     setClass('tabnActions'),
-                    !common::hasPriv('build', 'linkBug') ? null : btn(set::text($lang->build->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "buildID={$build->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param=")))),
+                    !common::hasPriv($buildModule, 'linkBug') ? null : btn(set::text($lang->build->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "buildID={$build->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param=")))),
                 ),
                 dtable
                 (
@@ -163,7 +163,7 @@ detailBody
                     (
                         'recPerPage'  => $bugPager->recPerPage,
                         'recTotal'    => $bugPager->recTotal,
-                        'linkCreator' => helper::createLink('build', 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
+                        'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
                     ), 'bugPager')),
                 )
             ),
@@ -182,10 +182,11 @@ detailBody
                     set::data(array_values($generatedBugs)),
                     set::sortLink(jsRaw('window.createSortLink')),
                     set::footPager(
-                        usePager(null, 'generatedBugPager'),
-                        set::recPerPage($generatedBugPager->recPerPage),
-                        set::recTotal($generatedBugPager->recTotal),
-                        set::linkCreator(helper::createLink('build', 'view', "buildID={$build->id}&type=generatedBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$generatedBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                        usePager(array(
+                            'recPerPage'  => $generatedBugPager->recPerPage,
+                            'recTotal'    => $generatedBugPager->recTotal,
+                            'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=generatedBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$generatedBugPager->recTotal}&recPerPage={recPerPage}&page={page}")
+                        ), 'generatedBugPager'),
                     ),
                 )
             ),
