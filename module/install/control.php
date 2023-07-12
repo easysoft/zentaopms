@@ -19,9 +19,10 @@ class install extends control
      */
     public function __construct()
     {
+        parent::__construct();
+
         if(!$this->app->installing) helper::end();
 
-        parent::__construct();
         $this->app->loadLang('user');
         $this->app->loadLang('admin');
         $this->config->webRoot = getWebRoot();
