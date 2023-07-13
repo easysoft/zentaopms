@@ -80,13 +80,13 @@ window.renderCell = function(result, info)
         {
             result[0] = {html: '<span class="label warning-pale rounded-full size-sm">' + todayLabel + '</span>'};
         }
-        else if(result == yesterday)
+        else if(result[0] == yesterday)
         {
             result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + yesterdayLabel + '</span>'};
         }
-        else if(result < yesterday)
+        else if(result[0] < yesterday)
         {
-            result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result + '</span>'};
+            result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result[0] + '</span>'};
         }
     }
     return result;
