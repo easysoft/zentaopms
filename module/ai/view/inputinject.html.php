@@ -49,7 +49,7 @@
                 {
                   var editorInstance = KindEditor.instances.find(function(e)
                   {
-                    return e.srcElement.attr('name') == 'spec';
+                    return e.srcElement.attr('name') == inputName;
                   });
                   if(editorInstance)
                   {
