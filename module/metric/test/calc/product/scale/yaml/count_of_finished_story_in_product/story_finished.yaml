@@ -1,0 +1,14 @@
+---
+title: zt_story
+author: zhouxin
+version: "1.0"
+fields:
+- field: id
+  range: 1-100
+- field: product
+  range: 1{10},2{10},3{10},4{10},5{10},6{50}
+- field: stage
+  range: wait{20},developing{20},closed{60}
+- field: closedReason
+  range: "[]{40},done{60}"
+...
