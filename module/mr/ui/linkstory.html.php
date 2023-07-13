@@ -13,15 +13,6 @@ namespace zin;
 jsVar('orderBy',  $orderBy);
 jsVar('sortLink', createLink('mr', 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
-detailHeader
-(
-    to::prefix(''),
-    to::title
-    (
-        $lang->mr->linkStory,
-    )
-);
-
 $footToolbar = array('items' => array
 (
     array('text' => $lang->mr->linkStory, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('mr', 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy"))
@@ -39,18 +30,22 @@ div
         $lang->productplan->unlinkedStories . "({$pager->recTotal})"
     )
 );
-$config->repo->storyDtable->fieldList['module']['map'] = $modules;
-$config->repo->storyDtable->fieldList['title']['width'] = '100';
-$allStories = initTableData($allStories, $config->repo->storyDtable->fieldList);
+$cols = array();
+foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->release->dtable->story->fieldList, $field, array());
+$cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
+$cols['title']['link']         = $this->createLink('mr', 'link', "MRID={id}");
+$cols['title']['nestedToggle'] = false;
+
 $data = array_values($allStories);
 dtable
 (
     set::userMap($users),
     set::data($data),
-    set::cols($config->repo->storyDtable->fieldList),
+    set::cols($cols),
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
+    set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('link', "MRID={$MRID}&type=story"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager()),
 );
 

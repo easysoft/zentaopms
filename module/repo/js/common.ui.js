@@ -133,15 +133,17 @@ function getIframeHeight()
     var windowHeight   = $(window).height();
     var headerHeight   = parseInt($('#header').height());
     var mainNavbar     = parseInt($('#mainNavbar').height());
+    var featureBar     = parseInt($('#featureBar').height());
     var tabsbar        = parseInt($('.nav-tabs').height());
     var mainMenuHeight = parseInt($('#mainMenu').css('padding-top')) + parseInt($('#mainMenu').css('padding-bottom'));
     var appTabsHeight  = parseInt($('#appTabs').height());
     var appsBarHeight  = parseInt($('#appsBar').height());
+    featureBar         = featureBar ? featureBar : 0;
     appsBarHeight      = appsBarHeight ? appsBarHeight : 0;
     appTabsHeight      = appTabsHeight ? appTabsHeight : 0;
     mainMenuHeight     = mainMenuHeight ? mainMenuHeight : 0;
     mainNavbar         = mainNavbar ? mainNavbar : 0;
-    iframeHeight       = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - tabsbar - 8;
+    iframeHeight       = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - tabsbar - 20 - featureBar;
 
     return iframeHeight;
 }
@@ -160,14 +162,18 @@ function getSidebarHeight()
     var windowHeight   = $(window).height();
     var headerHeight   = parseInt($('#header').height());
     var mainNavbar     = parseInt($('#mainNavbar').height());
+    var featureBar     = parseInt($('#featureBar').height());
+    var repoMenu       = parseInt($('#repoBranchDropMenu').height());
     var mainMenuHeight = parseInt($('#mainMenu').css('padding-top')) + parseInt($('#mainMenu').css('padding-bottom'));
     var appTabsHeight  = parseInt($('#appTabs').height());
     var appsBarHeight  = parseInt($('#appsBar').height());
+    repoMenu           = repoMenu ? repoMenu : 0;
+    featureBar         = featureBar ? featureBar : 0;
     appsBarHeight      = appsBarHeight ? appsBarHeight : 0;
     appTabsHeight      = appTabsHeight ? appTabsHeight : 0;
     mainMenuHeight     = mainMenuHeight ? mainMenuHeight : 0;
     mainNavbar         = mainNavbar ? mainNavbar : 0;
-    sidebarHeight  = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar;
+    sidebarHeight  = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - repoMenu - featureBar;
 
     return sidebarHeight;
 }

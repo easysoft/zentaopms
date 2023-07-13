@@ -56,6 +56,42 @@ foreach($taskCols as $col => $colConfig)
 }
 $tasks = initTableData($tasks, $taskCols);
 
+if(common::hasPriv('mr', 'linkStory'))
+{
+    $linkStoryBtn = btn(set(array(
+        'text'     => $lang->productplan->linkStory,
+        'icon'     => 'link',
+        'data-url' => inlink('linkStory', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}"),
+        'class'    => 'link mr-actions',
+        'type'     => 'primary',
+        'onclick'  => 'showLink(this)',
+    )));
+}
+
+if(common::hasPriv('mr', 'linkBug'))
+{
+    $linkBugBtn = btn(set(array(
+        'text'     => $lang->productplan->linkBug,
+        'icon'     => 'link',
+        'data-url' => inlink('linkBug', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}"),
+        'class'    => 'link mr-actions',
+        'type'     => 'primary',
+        'onclick'  => 'showLink(this)',
+    )));
+}
+
+if(common::hasPriv('mr', 'linkTask'))
+{
+    $linkTaskBtn = btn(set(array(
+        'text'     => $lang->mr->linkTask,
+        'icon'     => 'link',
+        'data-url' => inlink('linkTask', "MRID={$MR->id}&productID={$product->id}{$param}&browseType=unclosed&orderBy={$orderBy}"),
+        'class'    => 'link mr-actions',
+        'type'     => 'primary',
+        'onclick'  => 'showLink(this)',
+    )));
+}
+
 detailHeader
 (
     to::title
@@ -114,17 +150,7 @@ panel
         tabPane
         (
             set::key('mr-story'),
-            btn(setClass('mr-actions primary'), setData('type', 'story'), set::icon('link'), $this->lang->productplan->linkStory),
-            btn
-            (
-                setClass('mr-actions primary'),
-                setData('linkType', 'bug'),
-                setData('size', 'lg'),
-                setData('toggle', 'modal'),
-                set::url($this->createLink('mr', 'linkStory', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}")),
-                set::icon('link'),
-                $this->lang->productplan->linkStory
-            ),
+            $linkStoryBtn,
             dtable
             (
                 set::id('storyTable'),
@@ -138,16 +164,7 @@ panel
         tabPane
         (
             set::key('mr-bug'),
-            btn
-            (
-                setClass('mr-actions primary'),
-                setData('linkType', 'bug'),
-                setData('size', '900px'),
-                setData('toggle', 'modal'),
-                set::url($this->createLink('mr', 'linkBug', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}")),
-                set::icon('bug'),
-                $this->lang->productplan->linkBug
-            ),
+            $linkBugBtn,
             dtable
             (
                 set::id('bugTable'),
@@ -161,16 +178,7 @@ panel
         tabPane
         (
             set::key('mr-task'),
-            btn
-            (
-                setClass('mr-actions primary'),
-                setData('linkType', 'task'),
-                setData('size', '900px'),
-                setData('toggle', 'modal'),
-                set::url($this->createLink('mr', 'linkTask', "MRID={$MR->id}&productID={$product->id}{$param}&browseType=unclosed&orderBy={$orderBy}")),
-                set::icon('todo'),
-                $this->lang->mr->linkTask
-            ),
+            $linkTaskBtn,
             dtable
             (
                 set::id('taskTable'),

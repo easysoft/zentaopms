@@ -13,15 +13,6 @@ namespace zin;
 jsVar('orderBy',  $orderBy);
 jsVar('sortLink', createLink('mr', 'linkBug', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
-detailHeader
-(
-    to::prefix(''),
-    to::title
-    (
-        $lang->productplan->linkBug,
-    )
-);
-
 $footToolbar = array('items' => array
 (
     array('text' => $lang->productplan->linkBug, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('mr', 'linkBug', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy"))
@@ -39,7 +30,9 @@ div
         $lang->productplan->unlinkedBugs . "({$pager->recTotal})"
     )
 );
-$allBugs = initTableData($allBugs, $config->repo->bugDtable->fieldList);
+$cols = array();
+foreach($config->release->dtable->defaultFields['linkBug'] as $field) $cols[$field] = zget($config->bug->dtable->fieldList, $field, array());
+$cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $data = array_values($allBugs);
 dtable
 (
@@ -49,6 +42,7 @@ dtable
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
+    set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('link', "MRID=$MRID&type=bug"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager()),
 );
 

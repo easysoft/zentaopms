@@ -32,3 +32,20 @@ window.createTaskSortLink = function(col)
 
     return sortLink.replace('{orderBy}', sort).replace('{type}', 'task');
 }
+
+window.showLink = function(obj)
+{
+    let link        = $(obj).data('url');
+    let $tabContent = $(obj);
+
+    console.log(1111, link, $tabContent, $(obj));
+    if($(obj).hasClass('link'))
+    {
+        $tabContent = $(obj).closest('.tab-pane');
+    }
+    else
+    {
+        link = $(obj).find('.link').data('url');
+    }
+    $tabContent.load(link);
+};

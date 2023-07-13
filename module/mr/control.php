@@ -605,6 +605,8 @@ class mr extends control
         }
 
         $this->loadModel('story');
+        $this->app->loadLang('release');
+        $this->app->loadConfig('release');
         $this->app->loadLang('productplan');
 
         $product = $this->loadModel('product')->getById($productID);
