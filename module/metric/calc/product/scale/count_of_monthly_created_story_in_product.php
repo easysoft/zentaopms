@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的月度新增研发需求数。
- * .
+ * Count of monthly created story in product.
  *
  * 范围：product
  * 对象：story
@@ -9,8 +9,8 @@
  * 度量名称：按产品统计的月度新增研发需求数
  * 单位：个
  * 描述：产品中创建时间在某年某月的研发需求的个数求和
-过滤已删除的研发需求
-过滤已删除的产品
+ *       过滤已删除的研发需求
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +23,43 @@
  */
 class count_of_monthly_created_story_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.openedDate');
 
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function calculate($data)
+    {
+        $product    = $data->product;
+        $openedDate = $data->openedDate;
 
-    //public function calculate($data)
-    //{
-    //}
+        $year  = substr($openedDate, 0, 4);
+        $month = substr($openedDate, 5, 2);
 
-    //public function getResult()
-    //{
-    //}
+        if($year == '0000') return;
+
+        if(!isset($this->result[$product])) $this->result[$product] = array();
+        if(!isset($this->result[$product][$year])) $this->result[$product][$year] = array();
+        if(!isset($this->result[$product][$year][$month])) $this->result[$product][$year][$month] = 0;
+
+        $this->result[$product][$year][$month] += 1;
+    }
+
+    public function getResult($options = null)
+    {
+        $records = array();
+        foreach($this->result as $product => $years)
+        {
+            foreach($years as $year => $months)
+            {
+                foreach($months as $month => $value)
+                {
+                    $records[] = array('product' => $product, 'year' => $year, 'month' => $month, 'value' => $value);
+                }
+            }
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
