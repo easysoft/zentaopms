@@ -1574,7 +1574,7 @@ class storyTao extends storyModel
                 $canUnlinkStory  = common::hasPriv($unlinkModule, 'unlinkStory');
                 $unlinkStoryLink = helper::createLink($unlinkModule, 'unlinkStory', "projectID={$execution->id}&$params&confirm=yes");
                 $unlinkStoryTip  = $this->lang->execution->confirmUnlinkStory;
-                $unlinkTitle     = '';
+                $unlinkTitle     = $this->lang->story->unlink;
                 $disabled        = !$canUnlinkStory;
 
                 if($execution->type == 'project')
