@@ -147,6 +147,12 @@ $(document).on('click', '#end', function()
     $('#endLabelInfo').remove();
 });
 
+$(document).on('change', '#end', function()
+{
+    $('#end').removeClass('has-error');
+    $('#endTip').remove();
+});
+
 $(document).on('click', '#days', function()
 {
     $('#days').removeClass('has-info');
