@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的研发需求规模数。
- * .
+ * Scale of story in product.
  *
  * 范围：product
  * 对象：story
@@ -9,8 +9,8 @@
  * 度量名称：按产品统计的研发需求规模数
  * 单位：sp/工时/功能点
  * 描述：产品中研发需求的规模数求和
-过滤已删除的研发需求
-过滤已删除的产品
+ *       过滤已删除的研发需求
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +23,30 @@
  */
 class scale_of_story_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.estimate');
 
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function calculate($data)
+    {
+        $product    = $data->product;
+        $estimate   = $data->estimate;
 
-    //public function calculate($data)
-    //{
-    //}
+        if(!isset($this->result[$product])) $this->result[$product] = 0;
 
-    //public function getResult()
-    //{
-    //}
+        $this->result[$product] += $estimate;
+    }
+
+    public function getResult($options = null)
+    {
+        $records = array();
+        foreach($this->result as $product => $value)
+        {
+            $records[] = array('product' => $product, 'value' => $value);
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
