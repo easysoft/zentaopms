@@ -191,9 +191,7 @@ panel
                         item
                         (
                             set::name($lang->mr->mergeStatus),
-                            ($MR->synced && empty($rawMR->changes_count)) ? $lang->mr->cantMerge . h::code
-                            (
-                                $lang->mr->noChanges
+                            ($MR->synced && empty($rawMR->changes_count)) ? span($lang->mr->cantMerge, h::code($lang->mr->noChanges)
                             ) : zget($lang->mr->mergeStatusList, !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus),
                         ),
                         item
