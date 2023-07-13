@@ -16,10 +16,12 @@ $cases = initTableData(array_values($cases), $config->testcase->group->dtable->f
 
 dtable
 (
+    set::id('groupCaseTable'),
     set::userMap($users),
     set::cols($config->testcase->group->dtable->fieldList),
     set::data($cases),
     set::plugins(array('cellspan')),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
 );
 
