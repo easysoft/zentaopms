@@ -209,7 +209,8 @@ class blockZen extends block
     {
         $module = empty($block->module) ? 'common' : $block->module;
 
-        $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
+        $params = helper::safe64Encode("module={$block->module}&projectID={$projectID}");
+        $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&params=$params");
         $block->moreLink  = '';
         if(isset($this->config->block->modules[$module]->moreLinkList->{$block->code}))
         {

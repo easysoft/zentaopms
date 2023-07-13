@@ -310,7 +310,7 @@ class project extends control
         }
         else
         {
-            echo $this->fetch('block', 'dashboard', "dashboard={$project->model}project");
+            echo $this->fetch('block', 'dashboard', "dashboard={$project->model}project&projectID={$projectID}");
         }
     }
 

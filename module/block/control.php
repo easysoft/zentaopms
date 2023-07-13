@@ -316,7 +316,8 @@ class block extends control
         if(method_exists('blockZen', $function)) $this->blockZen->$function($block, (array)$params);
 
         /* 补全 moreLink 信息。 */
-        $this->blockZen->createMoreLink($block, 0);
+        $projectID = isset($params['projectID']) ? $params['projectID'] : 0;
+        $this->blockZen->createMoreLink($block, (int)$projectID);
 
         /* 组织渲染页面需要的数据。*/
         $this->view->moreLink       = $block->moreLink;

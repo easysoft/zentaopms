@@ -35,6 +35,16 @@ panel
     setClass('p-0 scrumlist-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::title($block->title),
     set::headingClass('border-b'),
+    to::headingActions
+    (
+        a
+        (
+            set('class', 'text-gray'),
+            set('href', $block->moreLink),
+            $lang->more,
+            icon('caret-right')
+        )
+    ),
     dtable
     (
         set::height(318),

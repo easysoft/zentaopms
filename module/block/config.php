@@ -282,6 +282,12 @@ $config->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|
 $config->block->modules['project']->moreLinkList->sprint         = 'project|execution|';
 $config->block->modules['project']->moreLinkList->projectdynamic = 'project|dynamic|';
 
+$config->block->modules['scrumproject'] = new stdclass();
+$config->block->modules['scrumproject']->moreLinkList = new stdclass();
+$config->block->modules['scrumproject']->moreLinkList->sprint    = 'project|execution|';
+$config->block->modules['scrumproject']->moreLinkList->scrumlist = 'project|execution|';
+$config->block->modules['scrumproject']->moreLinkList->scrumtest = 'project|testtask|';
+
 $config->block->modules['product'] = new stdclass();
 $config->block->modules['product']->moreLinkList = new stdclass();
 $config->block->modules['product']->moreLinkList->list  = 'product|all|';

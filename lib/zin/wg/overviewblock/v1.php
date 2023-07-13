@@ -135,11 +135,22 @@ class overviewBlock extends wg
         if(!$id)    $id    = $block->module . '-' . $block->code . '-' . $block->id;
         if(!$title) $title = $block->title;
 
+        global $lang;
         return panel
         (
             setID($id),
             setClass('overview-block'),
             set::title($title),
+            to::headingActions
+            (
+                $block->moreLink ? a
+                (
+                    set('class', 'text-gray'),
+                    set('href', $block->moreLink),
+                    $lang->more,
+                    icon('caret-right')
+                ) : null
+            ),
             set::bodyClass('flex block-base p-0'),
             $this->buildBody($groups)
         );
