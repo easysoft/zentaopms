@@ -65,13 +65,13 @@ class pageBase extends wg
         if($config->debug)
         {
             $js[] = h::createJsVarCode('window.zin', ['page' => $this->toJsonData(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap, 'config' => jsRaw('window.config')]);
-            $js[] = 'console.log("[ZIN] ", window.zin)';
+            $js[] = 'console.log("[ZIN] ", window.zin);';
         }
         else
         {
             $js[] = h::createJsVarCode('window.zin', array());
         }
-        if($zui) array_unshift($js, 'zui.defineFn()');
+        if($zui) array_unshift($js, 'zui.defineFn();');
 
         $currentLang = $this->props->get('lang');
         if(empty($currentLang)) $currentLang = $app->getClientLang();
