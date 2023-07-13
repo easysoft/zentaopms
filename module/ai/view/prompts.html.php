@@ -84,7 +84,7 @@
                 <td class='c-description' title='<?php echo $prompt->desc;?>'><?php echo $prompt->desc;?></td>
                 <td class='text-center c-actions' data-prompt-id='<?php echo $prompt->id?>'>
                   <?php
-                    $canTest = $this->ai->canPromptTesting($prompt);
+                    $canTest = $this->ai->isExecutable($prompt);
                     echo common::printIcon('ai', 'promptassignrole', "prompt=$prompt->id", '', 'button', 'design', '', 'text-primary');
                     if($canTest)
                     {

@@ -49,6 +49,11 @@ $config->ai->targetForm = array();
 $config->ai->targetForm['story']     = array('create', 'batchcreate', 'change', 'totask', 'testcasecreate', 'subdivide');
 $config->ai->targetForm['execution'] = array('batchcreatetask', 'createtestreport', 'createqa', 'createrisk', 'createissue');
 
+/* Used to format form redirection links. */
+$config->ai->targetFormVars = array();
+$config->ai->targetFormVars['story']     = array('change' => 'storyID=%d');
+$config->ai->targetFormVars['execution'] = array();
+
 /* Menu printing configurations. */
 $config->ai->menuPrint = new stdclass();
 $config->ai->menuPrint->locations = array(); // Menu location definations, defines acceptable module-methods and on page menu locations.

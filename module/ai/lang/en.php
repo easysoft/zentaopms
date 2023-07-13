@@ -309,3 +309,7 @@ $lang->ai->promptMenu->dropdownTitle = 'AI';
 $lang->ai->dataInject = new stdclass();
 $lang->ai->dataInject->success = 'Prompt execution results are filled in.';
 $lang->ai->dataInject->fail    = 'Failed to fill in prompt execution results.';
+
+$lang->ai->execute = new stdclass();
+$lang->ai->execute->success = 'Prompt executed.';
+$lang->ai->execute->fail    = 'Prompt execution failed.';

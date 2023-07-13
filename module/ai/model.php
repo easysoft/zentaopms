@@ -710,14 +710,14 @@ class aiModel extends model
     /**
      * Execute prompt on object.
      *
-     * @param  int           $promptID
-     * @param  int           $objectID  object to execute prompt on.
+     * @param  int|object    $prompt    prompt (or id) to execute.
+     * @param  int           $objectId  object to execute prompt on.
      * @access public
      * @return string|false  returns either JSON string or false.
      */
-    public function executePrompt($promptId, $objectId)
+    public function executePrompt($prompt, $objectId)
     {
-        $prompt = $this->getPromptById($promptId);
+        if(is_int($prompt)) $prompt = $this->getPromptById($prompt);
         if(empty($prompt)) return false;
 
         $objectData = $this->getObjectForPromptById($prompt, $objectId);
@@ -729,32 +729,34 @@ class aiModel extends model
         $response = $this->converseForJSON(array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
         if(empty($response)) return false;
 
-        return $response;
+        return current($response);
     }
 
     /**
      * Check if prompt can be tested.
      *
-     * @param  object $prompt
+     * @param  object|int  $prompt  prompt object or prompt id
      * @access public
      * @return bool
      */
-    public function canPromptTesting($prompt)
+    public function isExecutable($prompt)
     {
-        $canTest = true;
+        if(is_int($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return false;
+
+        $executable = true;
         $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
 
         foreach($requiredFields as $field)
         {
             if(empty($prompt->$field))
             {
-                $canTest = false;
+                $executable = false;
                 break;
             }
         }
 
-        return $canTest;
+        return $executable;
     }
 
     /**
@@ -783,6 +785,28 @@ class aiModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * Get target form location of object for prompt.
+     *
+     * @param  object|int   $prompt    prompt object or prompt id
+     * @param  int          $objectId
+     * @access public
+     * @return string|false returns either link or false.
+     */
+    public function getTargetFormLocation($prompt, $objectId)
+    {
+        if(is_int($prompt)) $prompt = $this->getByID($prompt);
+        if(empty($prompt)) return false;
+
+        $targetForm = $prompt->targetForm;
+        if(empty($targetForm)) return false;
+
+        list($module, $method) = explode('.', $targetForm);
+
+        $vars = sprintf($this->config->ai->targetFormVars[$module][$method], $objectId);
+        return helper::createLink($module, $method, $vars);
     }
 
     /**

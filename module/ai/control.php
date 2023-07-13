@@ -359,4 +359,27 @@ class ai extends control
         $this->view->position[]     = $this->lang->ai->prompts->common;
         $this->display();
     }
+
+    /**
+     * Execute prompt on obejct, and redirect to target form page.
+     *
+     * @param  int    $promptId
+     * @param  int    $objectId
+     * @access public
+     * @return void
+     */
+    public function execute($promptId, $objectId)
+    {
+        $prompt = $this->ai->getPromptByID($promptId);
+        if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
+
+        $response = $this->ai->executePrompt($prompt, $objectId);
+        if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
+
+        $this->ai->setInjectData($prompt->targetForm, $response);
+        $location = $this->ai->getTargetFormLocation($prompt, $objectId);
+        if(empty($location)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->execute->success, 'locate' => $location));
+    }
 }

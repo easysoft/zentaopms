@@ -309,3 +309,7 @@ $lang->ai->promptMenu->dropdownTitle = 'AI';
 $lang->ai->dataInject = new stdclass();
 $lang->ai->dataInject->success = '已将提词执行结果填写到表单中';
 $lang->ai->dataInject->fail    = '提词执行结果填写失败';
+
+$lang->ai->execute = new stdclass();
+$lang->ai->execute->success = '提词执行成功';
+$lang->ai->execute->fail    = '提词执行失败';
