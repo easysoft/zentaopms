@@ -314,7 +314,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->testtask;?></th>
-                  <td id='testtaskBox'><?php echo html::select('testtask', array(), $bug->testtask, 'class="form-control picker-select"');?></td>
+                  <td id='testtaskBox'><?php echo html::select('testtask', array('' => ''), $bug->testtask, 'class="form-control picker-select"');?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->fromCase;?></th>

@@ -1432,7 +1432,11 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->pause($taskID, $extra);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return print(js::error(dao::getError()));
+            }
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1469,6 +1473,7 @@ class task extends control
                 }
                 return print(js::closeModal('parent.parent', 'this'));
             }
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
 
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -1498,7 +1503,11 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->start($taskID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return print(js::error(dao::getError()));
+            }
 
             $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
             $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
@@ -1532,6 +1541,8 @@ class task extends control
                 }
                 return print(js::closeModal('parent.parent', 'this'));
             }
+
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 

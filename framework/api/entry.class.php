@@ -450,12 +450,6 @@ class baseEntry
 
             $this->setPost($field, $value);
         }
-
-        /* Use htmlspecialcharts for rich text fields. */
-        foreach($fields as $field)
-        {
-            if(in_array($field, array('desc', 'spec', 'verify', 'steps')) and isset($_POST[$field])) $_POST[$field] = htmlspecialchars($_POST[$field]);
-        }
     }
 
     /**
@@ -480,6 +474,19 @@ class baseEntry
             }
         }
     }
+
+    /**
+     * 检查是否在后台启用了代号.
+     * Check whether config->setCode are used in product,project,execution.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkCodeUsed()
+    {
+        return isset($this->config->setCode) ? $this->config->setCode : 0;
+    }
+
 
     /**
      * 格式化数据的字段类型.

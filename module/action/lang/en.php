@@ -383,6 +383,7 @@ $lang->action->label->estimated             = 'estimated';
 $lang->action->label->reviewpassed          = 'Pass';
 $lang->action->label->reviewrejected        = 'Reject';
 $lang->action->label->reviewclarified       = 'Clarify';
+$lang->action->label->reviewreverted        = 'Revert';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
 $lang->action->label->setdefaultbranch      = 'Set default branch';

@@ -30,16 +30,16 @@ $config->repo->synced    = '';
 
 $config->repo->repoSyncLog = new stdclass();
 $config->repo->repoSyncLog->one            = 1;
-$config->repo->repoSyncLog->done           = 'done';
-$config->repo->repoSyncLog->total          = 'Total';
-$config->repo->repoSyncLog->fatal          = 'fatal';
-$config->repo->repoSyncLog->error          = 'error';
-$config->repo->repoSyncLog->failed         = 'failed';
+$config->repo->repoSyncLog->done           = array('done', '完成');
+$config->repo->repoSyncLog->total          = array('Total', '总数');
+$config->repo->repoSyncLog->fatal          = array('fatal', '致命');
+$config->repo->repoSyncLog->error          = array('error', '错误');
+$config->repo->repoSyncLog->failed         = array('failed', '失败');
 $config->repo->repoSyncLog->finish         = 'finish';
-$config->repo->repoSyncLog->emptyRepo      = 'empty repository';
-$config->repo->repoSyncLog->finishCount    = 'Counting objects: 100%';
+$config->repo->repoSyncLog->emptyRepo      = array('empty repository', '空仓库');
+$config->repo->repoSyncLog->finishCount    = array('Counting objects: 100%');
 $config->repo->repoSyncLog->logFilePrefix  = '/log/clone.progress.';
-$config->repo->repoSyncLog->finishCompress = 'Compressing objects: 100%';
+$config->repo->repoSyncLog->finishCompress = array('Compressing objects: 100%');
 
 $config->repo->editor = new stdclass();
 $config->repo->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');

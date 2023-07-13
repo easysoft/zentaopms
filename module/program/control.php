@@ -75,7 +75,7 @@ class program extends control
         }
 
         /* Get PM id list. */
-        $accounts   = array_unique(array_column($programs, 'PM'));
+        $accounts   = array_unique(array_column(json_decode(json_encode($programs), true), 'PM'));
         $hasProject = false;
         foreach($programs as $program)
         {

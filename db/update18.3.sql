@@ -214,9 +214,10 @@ CREATE TABLE IF NOT EXISTS `zt_privrelation` (
   UNIQUE KEY `privrelation`(`priv`, `type`, `relationPriv`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 'CREATE TABLE `zt_chart_back` SELECT * FROM `zt_chart`;' will raise MySQL GTID consistency violation error.
-CREATE TABLE `zt_chart_back` LIKE `zt_chart`;
-INSERT INTO `zt_chart_back` SELECT * FROM `zt_chart`;
+-- 'CREATE TABLE `zt_chart_back` SELECT * FROM `zt_chart`;' maybe raise MySQL GTID consistency violation error.
+-- 'CREATE TABLE `zt_chart_back` LIKE `zt_chart`;INSERT INTO `zt_chart_back` SELECT * FROM `zt_chart`' maybe raise MYSQL Insert value list does not match column list ;
+
+CREATE TABLE `zt_chart_back` SELECT * FROM `zt_chart`;
 
 ALTER TABLE `zt_chart` MODIFY `fields` mediumtext NULL;
 ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;

@@ -380,11 +380,13 @@ class doc extends control
             $doclib   = $this->loadModel('doc')->getLibById($libID);
             $canVisit = true;
 
+            if(!empty($doclib->groups)) $groupAccounts = $this->loadModel('group')->getGroupAccounts(explode(',', $doclib->groups));
+
             switch($objectType)
             {
                 case 'custom':
                     $account = (string)$this->app->user->account;
-                    if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account) $canVisit = false;
+                    if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account and !(isset($groupAccounts) and in_array($account, $groupAccounts, true))) $canVisit = false;
                     break;
                 case 'product':
                     $canVisit = $this->loadModel('product')->checkPriv($doclib->product);

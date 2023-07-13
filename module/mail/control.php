@@ -174,14 +174,14 @@ class mail extends control
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->session->set('mailConfig', '');
-
-            $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->save;
-            $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
-            $this->view->position[] = $this->lang->mail->save;
-
-            $this->view->mailExist  = $this->mail->mailExist();
-            $this->display();
         }
+
+        $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->save;
+        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
+        $this->view->position[] = $this->lang->mail->save;
+
+        $this->view->mailExist  = $this->mail->mailExist();
+        $this->display();
     }
 
     /**

@@ -215,7 +215,7 @@ class storyModel extends model
      * @param  string $from
      * @param  string $extra
      * @access public
-     * @return int|bool the id of the created story or false when error.
+     * @return bool|array
      */
     public function create($executionID = 0, $bugID = 0, $from = '', $extra = '')
     {
@@ -253,7 +253,11 @@ class storyModel extends model
 
         /* Check repeat story. */
         $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
-        if(isset($result['stop']) and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        if(isset($result['stop']) and $result['stop'])
+        {
+            dao::$errors[] = $this->lang->story->title . $this->lang->story->reasonList['duplicate'] . ',' . $this->lang->story->id . $result['duplicate'];
+            return false;
+        }
         if($story->status != 'draft' and $this->checkForceReview()) $story->status = 'reviewing';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
 
@@ -330,6 +334,7 @@ class storyModel extends model
 
                 $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
                 $files = $this->file->saveUpload($story->type, $storyID, 1);
+                if(empty($files) && defined('RUN_MODE') && RUN_MODE == 'api' && !empty($_SESSION['album']['used'][$this->post->uid])) $files = $_SESSION['album']['used'][$this->post->uid];
                 /* Multi branch sync files */
                 !empty($files) ? $storyFile = $files : $files = $storyFile;
 
@@ -970,6 +975,7 @@ class storyModel extends model
             ->setIF(!isset($_POST['title']), 'title', $oldStory->title)
             ->setIF(!isset($_POST['spec']), 'spec', $oldStory->spec)
             ->setIF(!isset($_POST['verify']), 'verify', $oldStory->verify)
+            ->setIF(isset($_POST['status']) && $_POST['status'] == 'reviewing', 'reviewedBy', '')
             ->stripTags($this->config->story->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('linkStories', ',')

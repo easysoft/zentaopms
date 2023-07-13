@@ -2328,6 +2328,7 @@ EOF;
             ->andWhere($titleField)->in($titles)
             ->andWhere($dateField)->ge($date)->fi()
             ->beginIF($condition)->andWhere($condition)->fi()
+            ->beginIF($type == 'story')->andWhere('type')->eq($data->type)
             ->fetchPairs();
 
         if($duplicate and is_string($titles)) return array('stop' => true, 'duplicate' => key($duplicate));
@@ -3040,6 +3041,8 @@ EOF;
      */
     public static function canBeChanged($module, $object = null)
     {
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
+
         global $app, $config;
         static $productsStatus   = array();
         static $executionsStatus = array();

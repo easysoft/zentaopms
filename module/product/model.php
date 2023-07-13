@@ -1964,7 +1964,9 @@ class productModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('closed')
             ->andWhere('closedReason')->eq('done')
+            ->groupBy('product')
             ->fetchPairs('product', 'finish');
+
         $launchedStory = $this->dao->select('product, count(1) as launched')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('launched')

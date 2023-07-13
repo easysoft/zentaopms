@@ -196,6 +196,7 @@ class programModel extends model
             ->beginIF($this->app->rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->fi()
             ->beginIF($this->app->rawMethod == 'browse' and ($type === 'child' or !$this->app->user->admin))->andWhere('id')->in($objectIdList)->fi()
             ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
+            ->beginIF(defined('RUN_MODE') && RUN_MODE == 'api' && !$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -1388,7 +1389,35 @@ class programModel extends model
                 ->exec();
         }
 
-        /* 5. Update projectStatsTime in config. */
+        /* 5. Update programStatsTime. */
+        $projectList = $this->dao->select('id,progress,path')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('parent')->ne(0)
+            ->fetchAll('id');
+        $programProgress = array();
+        foreach($projectList as $projectID => $project)
+        {
+            $path = explode(',', trim($project->path, ','));
+
+            foreach($path as $programID)
+            {
+                if($programID == $projectID) continue;
+                $programProgress[$programID][] = $project->progress;
+            }
+        }
+
+        foreach($programProgress as $programID => $progress)
+        {
+            $count = count($progress);
+            $sum = array_sum($progress);
+            $average = round($sum / $count, 2);
+            $this->dao->update(TABLE_PROJECT)
+                ->set('progress')->eq($average)
+                ->where('id')->eq($programID)
+                ->exec();
+        }
+
+        /* 6. Update projectStatsTime in config. */
         $this->loadModel('setting')->setItem('system.common.global.projectStatsTime', $now);
         $this->app->config->global->projectStatsTime = $now;
     }
@@ -1416,6 +1445,14 @@ class programModel extends model
 
         $leftTasks = ($this->cookie->projectType and $this->cookie->projectType == 'bycard') ? $this->loadModel('project')->getProjectLeftTasks(array_keys($projects)) : array();
 
+        /* Get the members of project teams. */
+        $teamMembers = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in(array_keys($projects))
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchGroup('root', 'account');
+
         /* Process projects. */
         foreach($projects as $projectID => $project)
         {
@@ -1428,6 +1465,7 @@ class programModel extends model
                 if($delay > 0) $project->delay = $delay;
             }
 
+            $project->teamMembers = isset($teamMembers[$projectID]) ? array_keys($teamMembers[$projectID]) : array();
             $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID]->tasks : '—';
 
             /* Convert predefined HTML entities to characters. */

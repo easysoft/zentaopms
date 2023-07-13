@@ -517,7 +517,7 @@ class project extends control
                     {
                         foreach($planStory as $id => $story)
                         {
-                            if($story->status == 'draft' or $story->status == 'reviewing')
+                            if($story->status != 'active')
                             {
                                 unset($planStory[$id]);
                                 continue;

@@ -246,6 +246,7 @@ function addNewLine(obj)
     newLine.find("select[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).val('').chosen();
     newLine.find("select[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]').chosen();
     newLine.find("div[id^='plan']").attr('id', 'plan' + index);
+    newLine.find('[name*=products]').removeAttr('data-last');
 
     $(obj).closest('tr').after(newLine);
     var product = newLine.find("select[name^='products']");
@@ -307,10 +308,10 @@ function hidePlanBox(attribute)
     else
     {
         $('.productsBox .planBox').removeClass('hide');
-        $('.productsBox .planBox select').attr('disabled', '');
+        $('.productsBox .planBox select').removeAttr('disabled');
         $('#productTitle').text(manageProductPlanLang);
 
         $('#plansBox').closest('tr').removeClass('hide');
-        $('#plansBox').attr('disabled', '');
+        $('#plansBox').removeAttr('disabled');
     }
 }

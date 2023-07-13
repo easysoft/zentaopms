@@ -1450,20 +1450,20 @@ class repo extends control
                 $content  = file($logFile);
                 foreach($content as $line)
                 {
-                    if(strpos($line, $this->config->repo->repoSyncLog->fatal) !== false or strpos($line, $this->config->repo->repoSyncLog->failed) !== false) return print($this->config->repo->repoSyncLog->error);
+                    if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->fatal) !== false or $this->repo->strposAry($line, $this->config->repo->repoSyncLog->failed) !== false) return print($this->config->repo->repoSyncLog->error);
                 }
 
                 $lastLine = $content[count($content) - 1];
-                if(strpos($lastLine, $this->config->repo->repoSyncLog->done) === false)
+                if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->done) === false)
                 {
-                    if(strpos($lastLine, $this->config->repo->repoSyncLog->emptyRepo) !== false)
+                    if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->emptyRepo) !== false)
                     {
                         @unlink($logFile);
                     }
-                    elseif(strpos($lastLine, $this->config->repo->repoSyncLog->total) !== false)
+                    elseif($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->total) !== false)
                     {
                         $logContent = file_get_contents($logFile);
-                        if(strpos($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and strpos($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
+                        if($this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
                         {
                             @unlink($logFile);
                         }

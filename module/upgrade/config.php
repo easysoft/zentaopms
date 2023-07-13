@@ -37,7 +37,8 @@ $config->upgrade->maxVersion['max4_2']        = '18_2';
 $config->upgrade->maxVersion['max4_3']        = '18_3';
 $config->upgrade->maxVersion['max4_4_alpha1'] = '18_4_alpha1';
 $config->upgrade->maxVersion['max4_4_beta1']  = '18_4_beta1';
-$config->upgrade->maxVersion['max4_4']        = '18_4'; // max insert position.
+$config->upgrade->maxVersion['max4_4']        = '18_4';
+$config->upgrade->maxVersion['max4_5']        = '18_5'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']        = '9_5_1';
@@ -113,7 +114,8 @@ $config->upgrade->bizVersion['biz8_2']        = '18_2';
 $config->upgrade->bizVersion['biz8_3']        = '18_3';
 $config->upgrade->bizVersion['biz8_4_alpha1'] = '18_4_alpha1';
 $config->upgrade->bizVersion['biz8_4_beta1']  = '18_4_beta1';
-$config->upgrade->bizVersion['biz8_4']        = '18_4'; // biz insert position.
+$config->upgrade->bizVersion['biz8_4']        = '18_4';
+$config->upgrade->bizVersion['biz8_5']        = '18_5'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -757,3 +759,5 @@ $config->upgrade->recoveryActions->testcase->review['name']     = $lang->upgrade
 $config->upgrade->recoveryActions->testcase->review['method']   = 'operate';
 $config->upgrade->recoveryActions->testcase->review['open']     = 'normal';
 $config->upgrade->recoveryActions->testcase->review['position'] = 'browseandview';
+
+$config->upgrade->missedFlowFieldVersions = array('max4_4_alpha1', 'max4_4_beta1', 'max4_4', 'max4_5', 'biz8_4_alpha1', 'biz8_4_beta1', 'biz8_4', 'biz8_5');

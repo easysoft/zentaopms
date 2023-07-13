@@ -135,8 +135,8 @@ class story extends control
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-            $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
-            if(!$storyResult or dao::isError())
+            $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
+            if(dao::isError())
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
@@ -855,7 +855,11 @@ class story extends control
         if(!empty($_POST))
         {
             $this->story->update($storyID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return print(js::error(dao::getError()));
+            }
 
             $this->executeHooks($storyID);
 
@@ -1019,7 +1023,7 @@ class story extends control
             $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
             {
-                if(!($project->model == 'scrum' and !$project->hasProduct and $project->multiple)) $this->view->hiddenPlan = true;
+                if((in_array($project->model, array('waterfallplus', 'waterfall')) and !$project->hasProduct) or !$project->multiple) $this->view->hiddenPlan = true;
                 $this->project->setMenu($executionID);
             }
             else
@@ -1154,6 +1158,7 @@ class story extends control
             $showFields = str_replace('stage', '', $showFields);
         }
         if(!$branchProduct) unset($customFields['branch']);
+        if($this->view->hiddenPlan) unset($customFields['plan']);
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
@@ -1454,6 +1459,7 @@ class story extends control
         elseif($from == 'project')
         {
             $projectID = $param ? $param : $this->session->project;
+            if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->fetch('project');
             $this->loadModel('project')->setMenu($projectID);
         }
         elseif($from == 'qa')

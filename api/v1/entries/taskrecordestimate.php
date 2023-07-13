@@ -52,7 +52,7 @@ class taskRecordEstimateEntry extends entry
     {
         if($this->loadModel('effort'))
         {
-            $fields = 'id,dates,consumed,left,objectType,objectID,work';
+            $fields = 'id,dates,consumed,left,objectType,objectID,work,date';
             $this->batchSetPost($fields);
             $control = $this->loadController('effort', 'createForObject');
             $control->createForObject('task', $taskID);
