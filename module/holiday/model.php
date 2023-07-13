@@ -167,25 +167,23 @@ class holidayModel extends model
      * @access public
      * @return array
      */
-    public function getWorkingDays($begin = '', $end = '')
-    {
-        $records = $this->dao->select('*')->from(TABLE_HOLIDAY)
-            ->where('type')->eq('working')
-            ->andWhere('begin')->le($end)
-            ->andWhere('end')->ge($begin)
-            ->fetchAll('id');
+     public function getWorkingDays($begin = '', $end = '')
+     {
+         $records = $this->dao->select('*')->from(TABLE_HOLIDAY)
+             ->where('type')->eq('working')
+             ->andWhere('begin')->le($end)
+             ->andWhere('end')->ge($begin)
+             ->fetchAll('id');
 
-        $naturalDays = $this->getDaysBetween($begin, $end);
+         $workingDays = array();
+         foreach($records as $record)
+         {
+             $dates = $this->getDaysBetween($record->begin, $record->end);
+             $workingDays = array_merge($workingDays, $dates);
+         }
 
-        $workingDays = array();
-        foreach($records as $record)
-        {
-            $dates       = $this->getDaysBetween($record->begin, $record->end);
-            $workingDays = array_merge($workingDays, $dates);
-        }
-
-        return array_intersect($naturalDays, $workingDays);
-    }
+         return $workingDays;
+     }
 
     /**
      * Get actual working days.
@@ -195,59 +193,62 @@ class holidayModel extends model
      * @access public
      * @return array
      */
-    public function getActualWorkingDays($begin, $end)
-    {
-        if(empty($begin) or empty($end) or $begin == '0000-00-00' or $end == '0000-00-00') return array();
+     public function getActualWorkingDays($begin, $end)
+     {
+         if(empty($begin) or empty($end) or $begin == '0000-00-00' or $end == '0000-00-00') return array();
 
-        $this->app->loadConfig('execution');
+         $actualDays = array();
+         $currentDay = $begin;
 
-        $actualDays = array();
-        $currentDay = $begin;
+         $holidays    = $this->getHolidays($begin, $end);
+         $workingDays = $this->getWorkingDays($begin, $end);
+         $weekend     = isset($this->config->project->weekend) ? $this->config->project->weekend : 2;
 
-        $holidays    = $this->getHolidays($begin, $end);
-        $workingDays = $this->getWorkingDays($begin, $end);
-        $weekend     = isset($this->config->execution->weekend) ? $this->config->execution->weekend : 2;
+         /* When the start date and end date are the same. */
+         if($begin == $end)
+         {
+             if(in_array($begin, $workingDays)) return $actualDays[] = $begin;
+             if(in_array($begin, $holidays))    return $actualDays;
 
-        $holidaysFlip    = array_flip($holidays);
-        $workingDaysFlip = array_flip($workingDays);
+             $w = date('w', strtotime($begin));
+             if($weekend == 2)
+             {
+                 if($w == 0 or $w == 6) return $actualDays;
+             }
+             else
+             {
+                 if($w == 0) return $actualDays;
+             }
 
-        /* When the start date and end date are the same. */
-        $beginTimestamp = strtotime($begin);
-        if($begin == $end)
-        {
-            if(isset($workingDaysFlip[$begin])) return $actualDays[] = $begin;
-            if(isset($holidaysFlip[$begin]))    return $actualDays;
+             $actualDays[] = $begin;
+             return $actualDays;
+         }
 
-            $w = date('w', $beginTimestamp);
-            if($weekend == 2 and ($w == 0 or $w == 6)) return $actualDays;
-            if($weekend != 2 and $w == 0) return $actualDays;
+         for($i = 0; $currentDay < $end; $i ++)
+         {
+             $currentDay = date('Y-m-d', strtotime("$begin + $i days"));
+             $w          = date('w', strtotime($currentDay));
 
-            $actualDays[] = $begin;
-            return $actualDays;
-        }
+             if(in_array($currentDay, $workingDays))
+             {
+                 $actualDays[] = $currentDay;
+                 continue;
+             }
 
-        for($i = 0; $currentDay < $end; $i ++)
-        {
-            $currentTimestamp = $beginTimestamp + ($i * 24 * 3600);
-            $currentDay = date('Y-m-d', $currentTimestamp);
+             if(in_array($currentDay, $holidays)) continue;
+             if($weekend == 2)
+             {
+                 if($w == 0 or $w == 6) continue;
+             }
+             else
+             {
+                 if($w == 0) continue;
+             }
+             $actualDays[] = $currentDay;
+         }
 
-            if(isset($workingDaysFlip[$currentDay]))
-            {
-                $actualDays[] = $currentDay;
-                continue;
-            }
-
-            if(isset($holidaysFlip[$currentDay])) continue;
-
-            $w = date('w', $currentTimestamp);
-            if($weekend == 2 and ($w == 0 or $w == 6)) continue;
-            if($weekend != 2 and $w == 0) continue;
-
-            $actualDays[] = $currentDay;
-        }
-
-        return $actualDays;
-    }
+         return $actualDays;
+     }
 
     /**
      * Get diff days.
@@ -257,17 +258,17 @@ class holidayModel extends model
      * @access public
      * @return bool
      */
-    public function getDaysBetween($begin, $end)
-    {
-        $beginTime = strtotime($begin);
-        $endTime   = strtotime($end);
-        $days      = ($endTime - $beginTime) / 86400;
+     public function getDaysBetween($begin, $end)
+     {
+         $beginTime = strtotime($begin);
+         $endTime   = strtotime($end);
+         $days      = ($endTime - $beginTime) / 86400;
 
-        $dateList  = array();
-        for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', $beginTime + ($i * 24 * 3600));
+         $dateList  = array();
+         for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', strtotime("+$i days", $beginTime));
 
-        return $dateList;
-    }
+         return $dateList;
+     }
 
     /**
      * Judge if is holiday.
