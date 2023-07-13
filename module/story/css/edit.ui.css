@@ -5,4 +5,9 @@
 .reviewerRow .checkbox-primary{width:110px; padding-left:8px;}
 .detail-side .table-data{width:100%;}
 
-#linkedStories .label, #linkStoriesBox .label{margin-right:8px;}
+#linkedStories .label, #linkStoriesBox .label, .twins .label{margin-right:8px;}
+.twins .title{margin-right:8px;}
+.twins .unlink{display:none; cursor: pointer;}
+.twins:hover .unlink{display:unset;}
+
+.picker-box{width:100%;}

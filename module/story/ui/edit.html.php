@@ -46,6 +46,7 @@ jsVar('relievedTwinsTip', $lang->story->relievedTwinsTip);
 jsVar('parentStory', !empty($story->children));
 jsVar('moveChildrenTips', $lang->story->moveChildrenTips);
 jsVar('executionID', isset($objectID) ? $objectID : 0);
+jsVar('langTreeManage', $lang->tree->manage);
 
 detailHeader
 (
@@ -95,7 +96,7 @@ detailBody
                     span
                     (
                         setClass('reviewerBox'),
-                        select
+                        picker
                         (
                             set::id('reviewer'),
                             set::name('reviewer[]'),
@@ -129,17 +130,6 @@ detailBody
             $canEditContent ? formGroup(editor(set::name('verify'), htmlSpecialString($story->verify))) : set::content($story->verify),
             $canEditContent ? null : set::useHtml(true)
         ),
-        $canEditContent || $story->files ? section
-        (
-            set::title($lang->story->legendAttatch),
-            $canEditContent ? upload() : null,
-            $story->files ? fileList
-            (
-                set::files($story->files),
-                set::fieldset(false),
-                set::object($story),
-            ) : null,
-        ) : null,
         empty($twins) ? null : section
         (
             set::title($lang->story->changeSyncTip),
@@ -160,11 +150,22 @@ detailBody
                         label(setClass('circle size-sm'), $twin->id),
                         common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), set('data-toggle', 'modal'), $twin->title) : span(setClass('title'), $twin->title),
                         label(setClass('size-sm'), set::title($stage), $stage),
-                        common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null,
+                        common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null,
                     );
                 }, $twins))
             ),
         ),
+        $canEditContent || $story->files ? section
+        (
+            set::title($lang->story->legendAttatch),
+            $canEditContent ? upload() : null,
+            $story->files ? fileList
+            (
+                set::files($story->files),
+                set::fieldset(false),
+                set::object($story),
+            ) : null,
+        ) : null,
         section
         (
             set::title($lang->story->comment),
@@ -186,7 +187,7 @@ detailBody
                 set::name($lang->story->product),
                 row
                 (
-                    select
+                    picker
                     (
                         set::id('product'),
                         set::name('product'),
@@ -198,7 +199,7 @@ detailBody
                     (
                         setClass('branchIdBox'),
                         setClass($product->type == 'normal' ? 'hidden' : ''),
-                        $product->type != 'normal' ? select
+                        $product->type != 'normal' ? picker
                         (
                             set::id('branch'),
                             set::name('branch'),
@@ -212,7 +213,7 @@ detailBody
             $story->parent > 0 && $product->type != 'normal' ? item
             (
                 set::name(sprintf($lang->product->branch, $lang->product->branchName[$product->type])),
-                select(set::name('branch'), set::items($branchTagOption), set::value($story->branch))
+                picker(setID('branch'), set::name('branch'), set::items($branchTagOption), set::value($story->branch))
             ) : null,
             item
             (
@@ -222,7 +223,7 @@ detailBody
                     span
                     (
                         set('id', 'moduleIdBox'),
-                        select
+                        picker
                         (
                             set::name('module'),
                             set::items($moduleOptionMenu),
@@ -237,7 +238,7 @@ detailBody
             (
                 set::trClass($hiddenParent ? 'hidden' : null),
                 set::name($lang->story->parent),
-                select(set::name('parent'), set::items($stories), set::value($story->parent)),
+                picker(setID('parent'), set::name('parent'), set::items(array_filter($stories)), set::value($story->parent)),
             ) : null,
             item
             (
@@ -248,16 +249,16 @@ detailBody
                     span
                     (
                         set::id('planIdBox'),
-                        select(set::name($multiplePlan ? 'plan[]' : 'plan'), set::items($plans), set::value($story->plan), set::multiple($multiplePlan)),
+                        picker(setID('plan'), set::name($multiplePlan ? 'plan[]' : 'plan'), set::items($plans), set::value($story->plan), set::multiple($multiplePlan)),
                     ),
-                    empty($plans) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), set('data-toggle', 'modal'), $lang->productplan->manage) : null,
+                    empty($plans) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), set('data-toggle', 'modal'), icon('cog')) : null,
                     empty($plans) ? btn(set('data-on', 'click'), set('data-call', 'loadProductPlans'), set('data-params', $story->product), setClass('refresh'), icon('refresh')) : null,
                 )
             ),
             item
             (
                 set::name($lang->story->source),
-                select(set::name('source'), set::items($lang->story->sourceList), set::value($story->source), on::change('toggleFeedback(e.target)'))
+                picker(setID('source'), set::name('source'), set::items($lang->story->sourceList), set::value($story->source), on::change('toggleFeedback(e.target)'))
             ),
             item
             (
@@ -273,17 +274,17 @@ detailBody
             $story->type == 'story' ? item
             (
                 set::name($lang->story->stage),
-                select(set::name('stage'), set::items($lang->story->stageList), set::value($minStage))
+                picker(setID('stage'), set::name('stage'), set::items($lang->story->stageList), set::value($minStage))
             ) : null,
             item
             (
                 set::name($lang->story->category),
-                select(set::name('category'), set::items($lang->story->categoryList), set::value($story->category))
+                picker(setID('category'), set::name('category'), set::items($lang->story->categoryList), set::value($story->category))
             ),
             item
             (
                 set::name($lang->story->pri),
-                select(set::name('pri'), set::items($lang->story->priList), set::value($story->pri))
+                priPicker(set::name('pri'), set::items($lang->story->priList), set::value($story->pri))
             ),
             item
             (
@@ -314,9 +315,10 @@ detailBody
                 set::name($lang->story->mailto),
                 inputGroup
                 (
-                    select(set::name('mailto[]'), set::items($users), set::value(empty($story->mailto) ? '' : $story->mailto), set::multiple(true)),
-                    $contactList ? select
+                    picker(setID('mailto'), set::name('mailto[]'), set::items($users), set::value(empty($story->mailto) ? '' : $story->mailto), set::multiple(true)),
+                    $contactList ? picker
                     (
+                        setID('contactListMenu'),
                         set::name('contactListMenu'),
                         set::items($contactList),
                         set::value()
@@ -347,8 +349,9 @@ detailBody
             item
             (
                 set::name($lang->story->assignedTo),
-                select
+                picker
                 (
+                    setID('assignedTo'),
                     set::name('assignedTo'),
                     set::items($hiddenProduct ? $teamUsers : $assignedToList),
                     set::value($story->assignedTo)
@@ -357,7 +360,7 @@ detailBody
             $story->status == 'reviewing' ? item
             (
                 set::name($lang->story->reviewers),
-                select
+                picker
                 (
                     set::id('reviewer'),
                     set::name('reviewer[]'),
@@ -370,12 +373,12 @@ detailBody
             $story->status == 'closed' ? item
             (
                 set::name($lang->story->closedBy),
-                select(set::name('closedBy'), set::items($users), set::value($story->closedBy))
+                picker(setID('closedBy'), set::name('closedBy'), set::items($users), set::value($story->closedBy))
             ) : null,
             $story->status == 'closed' ? item
             (
                 set::name($lang->story->closedReason),
-                select(set::name('closedReason'), set::items($lang->story->reasonList), set::value($story->closedReason), on::change('setStory'))
+                picker(setID('closedReason'), set::name('closedReason'), set::items($lang->story->reasonList), set::value($story->closedReason), on::change('setStory'))
             ) : null,
         ),
         tableData
@@ -385,7 +388,7 @@ detailBody
             (
                 set::trClass('duplicateStoryBox'),
                 set::name($lang->story->duplicateStory),
-                select(set::name('duplicateStory'), set::items($productStories), set::value($story->duplicateStory), set::placeholder($lang->bug->placeholder->duplicate))
+                picker(setID('duplicateStory'), set::name('duplicateStory'), set::items($productStories), set::value($story->duplicateStory), set::placeholder($lang->bug->placeholder->duplicate))
             ) : null,
             item
             (

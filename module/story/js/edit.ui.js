@@ -1,12 +1,14 @@
 window.loadProduct = function()
 {
-    const productID = $('#product').val();
+    const $product  = $('#product').zui('picker');
+    const productID = $product.$.value;
+
     if(twins && productID != oldProductID)
     {
         confirmRelievedTwins = confirm(relievedTwinsTip);
         if(!confirmRelievedTwins)
         {
-            $('#product').val(oldProductID);
+            $product.$.setValue(oldProductID.toString());
             return false;
         }
     }
@@ -16,7 +18,7 @@ window.loadProduct = function()
         confirmLoadProduct = confirm(moveChildrenTips);
         if(!confirmLoadProduct)
         {
-            $('#product').val(oldProductID);
+            $product.$.setValue(oldProductID.toString());
             return false;
         }
     }
@@ -28,9 +30,10 @@ window.loadProduct = function()
     if(storyType == 'story')
     {
         var storyLink = $.createLink('story', 'ajaxGetParentStory', 'productID=' + productID + '&labelName=parent');
+        var $parent   = $('#parent').zui('picker');
         $.get(storyLink, function(data)
         {
-            $('#parent').replaceWith(data);
+            $parent.render(JSON.parse(data));
         });
     }
 }
@@ -86,6 +89,7 @@ function loadProductBranches(productID)
 {
     var param   = 'all';
     var isTwins = 'no';
+    var branch  = 0;
 
     var $product   = $('#product');
     var $branchBox = $product.closest('.row').find('.branchIdBox');
@@ -94,13 +98,13 @@ function loadProductBranches(productID)
     {
         if(data)
         {
-            $branchBox.html(data).removeClass('hidden');
-            $branchBox.find('#branch').attr('onchange', 'loadBranch()');
+            $branchBox.html("<div class='picker-box' id='branch'></div>").removeClass('hidden');
+            $branch = new zui.Picker('.branchIdBox #branch', {items: JSON.parse(data), name: 'branch', onChange: "loadBranch()"});
+            branch  = $branch.$.value;
         }
 
-        var branch = $('#branch').val();
-        loadProductModules(productID, $branch);
-        loadProductPlans(productID, $branch);
+        loadProductModules(productID, branch);
+        loadProductPlans(productID, branch);
     });
 }
 

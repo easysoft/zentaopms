@@ -568,10 +568,11 @@ class tree extends control
             if($viewType == 'line')
             {
                 $lineID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('id_desc')->limit(1)->fetch('id');
-                $output = html::select("line", $optionMenu, $lineID, "class='form-control'");
-                $output .= "<span class='input-group-addon' style='border-radius: 0px 2px 2px 0px; border-right-width: 1px;'>";
-                $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $viewType == 'line' ? $this->lang->tree->manageLine : $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                $output .= '</span>';
+
+                $items = array();
+                foreach($optionMenu as $moduleID => $moduleName) $items[] = array('text' => $moduleName, 'value' => $moduleID);
+
+                $output = array('name' => 'line', 'defaultValue' => $lineID, 'items' => $items);
             }
             else
             {
@@ -580,18 +581,13 @@ class tree extends control
                 $currentModule   = $this->tree->getById($currentModuleID);
                 $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
 
-                $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control'");
-                if(count($optionMenu) == 1 and $needManage !== 'false' and $viewType != 'task')
-                {
-                    $output .= "<span class='input-group-addon'>";
-                    $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                    $output .= '&nbsp; ';
-                    $output .= html::a("javascript:void(0)", $this->lang->refreshIcon, '', "id='refreshModule' class='refresh'");
-                    $output .= '</span>';
-                }
+                $items = array();
+                foreach($optionMenu as $moduleID => $moduleName) $items[] = array('text' => $moduleName, 'value' => $moduleID);
+
+                $output = array('name' => $field, 'defaultValue' => $currentModuleID, 'items' => $items);
             }
 
-            die($output);
+            return print(json_encode($output));
         }
         if($returnType == 'mhtml')
         {

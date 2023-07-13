@@ -1921,7 +1921,15 @@ class story extends control
     public function ajaxGetParentStory($productID, $labelName = '')
     {
         $stories = $this->story->getParentStoryPairs($productID);
-        return print(html::select($labelName, $stories, 0, 'class="form-control"'));
+
+        $items = array();
+        foreach($stories as $storyID => $storyTitle)
+        {
+            if(empty($storyID)) continue;
+            $items[] = array('text' => $storyTitle, 'value' => $storyID);
+        }
+
+        return print(json_encode(array('items' => $items, 'name' => $labelName)));
     }
 
     /**
@@ -2216,7 +2224,14 @@ class story extends control
 
         $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
 
-        return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
+        $items = array();
+        foreach($URS as $URID => $URTitle)
+        {
+            if(empty($URID)) continue;
+            $items[] = array('text' => $URTitle, 'value' => $URID);
+        }
+
+        return print(json_encode(array('name' => 'URS[]', 'multiple' => true, 'defaultValue' => $requirementList, 'items' => $items)));
     }
 
     /**
