@@ -10,6 +10,12 @@
 declare(strict_types=1);
 namespace zin;
 
+jsvar('backup', $lang->backup->common);
+jsvar('rmPHPHeader', $lang->backup->rmPHPHeader);
+jsvar('confirmRestore', $lang->backup->confirmRestore);
+jsvar('restore', $lang->backup->restore);
+jsvar('backupTimeout', $lang->backup->error->timeout);
+
 featureBar
 (
     li
@@ -46,7 +52,8 @@ if(common::hasPriv('backup', 'setting') and common::hasPriv('backup', 'backup'))
                 'text'      => $lang->backup->backup,
                 'icon'      => 'copy',
                 'class'     => 'btn primary backup',
-                'data-link' => $backupLink
+                'data-link' => $backupLink,
+                'onClick'   => 'backup(this);'
             ])),
         );
 }
@@ -84,6 +91,22 @@ dtable
     set::customCols(false),
     set::cols($cols),
     set::data($data),
+);
+
+modalTrigger
+(
+    set(array('data-size' => 'sm', 'backdrop' => false)),
+    modal
+    (
+        setID('waitting'),
+        html($lang->backup->waitting),
+        set::closeBtn(false),
+        div
+        (
+            setID('message'),
+            html(sprintf($lang->backup->progressSQL, 0))
+        )
+    )
 );
 
 render();
