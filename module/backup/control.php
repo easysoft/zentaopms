@@ -170,14 +170,11 @@ class backup extends control
      * Restore.
      *
      * @param  string $fileName
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function restore($fileName, $confirm = 'no')
+    public function restore($fileName)
     {
-        if($confirm == 'no') return $this->send(array('result' => 'fail', 'message' => $this->lang->backup->confirmRestore));
-
         set_time_limit(0);
 
         /* Restore database. */
@@ -215,7 +212,7 @@ class backup extends control
             if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->backup->success->restore));
+        return $this->send(array('result' => 'success', 'callback' => "zui.Modal.alert('{$this->lang->backup->success->restore}')"));
     }
 
     /**

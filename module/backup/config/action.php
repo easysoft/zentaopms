@@ -11,11 +11,12 @@ $config->backup->actionList['rmPHPHeader']['hint']        = $lang->backup->rmPHP
 $config->backup->actionList['rmPHPHeader']['url']         = helper::createLink('backup', 'rmPHPHeader', 'file={name}');
 $config->backup->actionList['rmPHPHeader']['data-toggle'] = 'modal';
 
-$config->backup->actionList['restore']['icon']        = 'restart';
-$config->backup->actionList['restore']['text']        = $lang->backup->restore;
-$config->backup->actionList['restore']['hint']        = $lang->backup->restore;
-$config->backup->actionList['restore']['url']         = array('module' => 'backup', 'method' => 'restore', 'params' => 'file={name}');
-$config->backup->actionList['restore']['data-toggle'] = 'modal';
+$config->backup->actionList['restore']['icon']         = 'restart';
+$config->backup->actionList['restore']['text']         = $lang->backup->restore;
+$config->backup->actionList['restore']['hint']         = $lang->backup->restore;
+$config->backup->actionList['restore']['url']          = array('module' => 'backup', 'method' => 'restore', 'params' => 'file={name}');
+$config->backup->actionList['restore']['className']    = 'ajax-submit';
+$config->backup->actionList['restore']['data-confirm'] = $lang->backup->confirmRestore;
 
 $config->backup->actionList['delete']['icon']         = 'trash';
 $config->backup->actionList['delete']['text']         = $lang->delete;

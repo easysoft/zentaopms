@@ -12,9 +12,7 @@ namespace zin;
 
 jsvar('backup', $lang->backup->common);
 jsvar('rmPHPHeader', $lang->backup->rmPHPHeader);
-jsvar('confirmRestore', $lang->backup->confirmRestore);
 jsvar('restore', $lang->backup->restore);
-jsvar('backupTimeout', $lang->backup->error->timeout);
 
 featureBar
 (
