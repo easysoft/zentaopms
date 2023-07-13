@@ -31,7 +31,7 @@ class zui extends wg
         '_class?: string'
     );
 
-    protected function build(): array
+    protected function build(): wg
     {
         list($name, $target, $tagName, $targetProps, $size, $id, $class, $map) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map'));
         list($width, $height) = $size;
@@ -54,9 +54,9 @@ class zui extends wg
             }
         }
 
-        return array
-        (
-            empty($target) ? h
+        if(empty($target))
+        {
+            return h
             (
                 $tagName,
                 set($targetProps),
@@ -65,9 +65,11 @@ class zui extends wg
                 setStyle('width', $width),
                 setStyle('height', $height),
                 $children,
-            ) : $children,
-            h::jsCall('~zui.create', $name, $selector, $options)
-        );
+                h::jsCall('~zui.create', $name, $selector, $options)
+            );
+        }
+
+        return  h::jsCall('~zui.create', $name, $selector, $options);
     }
 
     public static function __callStatic($name, $args)
