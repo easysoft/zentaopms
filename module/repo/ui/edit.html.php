@@ -24,6 +24,7 @@ formPanel
     on::change('#serviceHost', 'onHostChange'),
     on::change('#serviceProject', 'onProjectChange'),
     set::title($lang->repo->edit),
+    set::back('repo-maintain'),
     formGroup
     (
         set::name("product[]"),
@@ -64,6 +65,7 @@ formPanel
         setClass('service hide'),
         formGroup
         (
+            set::width('1/2'),
             set::name("serviceHost"),
             set::label($lang->repo->serviceHost),
             set::required(true),
@@ -77,6 +79,7 @@ formPanel
         setClass('service hide'),
         formGroup
         (
+            set::width('1/2'),
             set::name("serviceProject"),
             set::label($lang->repo->serviceProject),
             set::required(true),
@@ -87,6 +90,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('1/2'),
         set::name("name"),
         set::label($lang->user->name),
         set::required(true),
@@ -108,6 +112,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('1/2'),
         set::name("encoding"),
         set::label($lang->repo->encoding),
         set::required(true),

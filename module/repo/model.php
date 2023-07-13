@@ -3004,4 +3004,42 @@ class repoModel extends model
 
         return true;
     }
+
+    /**
+     * 获取gitlab项目列表。
+     * Get gitlab projects.
+     *
+     * @param  int    $gitlabID
+     * @param  string $projectIdList
+     * @param  string $filter
+     * @access public
+     * @return array
+     */
+    public function getGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = ''): array
+    {
+        $showAll = ($filter == 'ALL' and common::hasPriv('repo', 'create')) ? true : false;
+        if($this->app->user->admin or $showAll)
+        {
+            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, true, 0, 0, false);
+        }
+        else
+        {
+            $gitlabUser = $this->loadModel('gitlab')->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$gitlabUser) $this->send(array('message' => array()));
+
+            $projects    = $this->gitlab->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
+            $groupIDList = array(0 => 0);
+            $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'developer');
+            foreach($groups as $group) $groupIDList[] = $group->id;
+            if($filter == 'IS_DEVELOPER')
+            {
+                foreach($projects as $key => $project)
+                {
+                    if(!$this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer')) unset($projects[$key]);
+                }
+            }
+        }
+
+        return $projects;
+    }
 }

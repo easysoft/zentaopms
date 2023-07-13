@@ -18,9 +18,12 @@ $hostName = $this->loadModel('pipeline')->getByID($MR->hostID)->name;
 $sourceProject = $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->sourceProject)->name_with_namespace : $MR->sourceProject;
 $targetProject = $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace : $MR->targetProject;
 
+dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
+
 formPanel
 (
     set::labelWidth('11em'),
+    set::title($lang->mr->edit),
     formGroup
     (
         set::label($lang->mr->server),

@@ -138,42 +138,18 @@ class mr extends control
         $repoID = $this->loadModel('repo')->saveState(0);
         $repo   = $this->repo->getByID($repoID);
 
-        $this->loadModel('gitlab');
-        $this->loadModel('gitea');
-        $this->loadModel('gogs');
-        if($repo->SCM == 'Gitea')
-        {
-            $project = $this->gitea->apiGetSingleProject($repo->gitService, $repo->project);
-            if(empty($project) or !$project->allow_merge_commits) $repo = array();
-        }
+        $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject);
 
-        $hosts = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab', 'gogs'));
-        if(!$this->app->user->admin)
-        {
-            $gitlabUsers = $this->gitlab->getGitLabListByAccount();
-            $giteaUsers  = $this->gitea->getGiteaListByAccount();
-            $gogsUsers   = $this->gogs->getGogsListByAccount();
-            foreach($hosts as $hostID => $host)
-            {
-                if($host->type == 'gitlab' and isset($gitlabUsers[$hostID])) continue;
-                if($host->type == 'gitea'  and isset($giteaUsers[$hostID]))  continue;
-                if($host->type == 'gogs'   and isset($gogsUsers[$hostID]))   continue;
+        $jobPairs = array();
+        $jobs     = $this->loadModel('job')->getListByRepoID($repoID);
+        foreach($jobs as $job) $jobPairs[$job->id] = "[{$job->id}]{$job->name}";
 
-                unset($hosts[$hostID]);
-            }
-        }
-
-        $hostPairs = array();
-        foreach($hosts as $host) $hostPairs[$host->id] = '[' . ucfirst($host->type) . "] {$host->name}";
-
-        $this->app->loadLang('repo'); /* Import lang in repo module. */
         $this->app->loadLang('compile');
         $this->view->title     = $this->lang->mr->create;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->jobList   = $this->loadModel('job')->getList();
-        $this->view->hostPairs = $hostPairs;
-        $this->view->hosts     = $hosts;
         $this->view->repo      = $repo;
+        $this->view->project   = $project;
+        $this->view->jobPairs  = $jobPairs;
         $this->display();
     }
 
@@ -241,6 +217,8 @@ class mr extends control
         {
             $rawJobList = $this->job->getListByRepoID($MR->repoID);
             foreach($rawJobList as $rawJob) $jobList[$rawJob->id] = "[$rawJob->id] $rawJob->name";
+
+            $this->view->repo = $this->repo->getByID($MR->repoID);
         }
 
         $this->view->repoList = $repoList;
@@ -560,13 +538,13 @@ class mr extends control
      */
     public function link($MRID, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->loadModel('story');
-        $this->loadModel('bug');
-        $this->loadModel('task');
-
         $this->app->loadLang('productplan');
         $this->app->loadLang('bug');
         $this->app->loadLang('task');
+        $this->app->loadLang('release');
+
+        $this->app->loadModuleConfig('release');
+        $this->app->loadModuleConfig('task');
 
         $MR       = $this->mr->getByID($MRID);
         $product  = $this->mr->getMRProduct($MR);

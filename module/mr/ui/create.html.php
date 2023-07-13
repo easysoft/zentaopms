@@ -11,64 +11,60 @@ declare(strict_types=1);
 namespace zin;
 
 h::importJs('js/misc/base64.js');
-jsVar('hosts', $hosts);
+jsVar('hostType', strtolower($repo->SCM));
+jsVar('hostID', $repo->gitService);
 jsVar('repo', $repo);
 jsVar('mrLang', $lang->mr);
 jsVar('branchPrivs', array());
 
+dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
+
 formPanel
 (
-    set::labelWidth('11em'),
-    formGroup
-    (
-        set::name('hostID'),
-        set::label($lang->mr->create),
-        set::value('gitService'),
-        set::items($hostPairs),
-        set::required(true),
-        on::change('onHostChange'),
-    ),
+    set::title($lang->mr->create),
     formRow
     (
         formGroup
         (
+            set::width('1/2'),
             set::required(true),
             set::label($lang->mr->sourceProject),
-            inputGroup
-            (
-                select
-                (
-                    set::name('sourceProject'),
-                    set::id('sourceProject'),
-                    on::change('onProjectChange'),
-                    on::change('onSourceProjectChange'),
-                ),
-                $lang->mr->sourceBranch,
-                select
-                (
-                    set::name('sourceBranch'),
-                ),
-            )
+            set::name('sourceProject'),
+            set::id('sourceProject'),
+            set::items(array($project->id => $project->name_with_namespace)),
+            set::disabled(true),
+            on::change('onProjectChange'),
+            on::change('onSourceProjectChange'),
+        ),
+        formGroup
+        (
+            set::labelWidth('5em'),
+            set::required(true),
+            set::label($lang->mr->sourceBranch),
+            set::name('sourceBranch'),
+            set::items(array()),
         ),
     ),
     formRow
     (
         formGroup
         (
+            set::width('1/2'),
             set::required(true),
             set::label($lang->mr->targetProject),
-            inputGroup
-            (
-                select
-                (
-                    set::name('targetProject'),
-                ),
-                $lang->mr->targetBranch,
-                select
-                (
-                    set::name('targetBranch'),
-                ),
-            )
+            set::id('targetProject'),
+            set::name('targetProject'),
+            set::items(array($project->id => $project->name_with_namespace)),
+            set::disabled(true),
+            on::change('onProjectChange'),
+        ),
+        formGroup
+        (
+            set::labelWidth('6em'),
+            set::required(true),
+            set::label($lang->mr->targetBranch),
+            set::name('targetBranch'),
+            set::items(array()),
         ),
     ),
     formGroup
@@ -79,55 +75,52 @@ formPanel
     ),
     formGroup
     (
-        set::name('description'),
-        set::label($lang->mr->description),
-        set::control('textarea'),
-    ),
-    formGroup
-    (
+        set::width('1/2'),
         set::required(true),
-        set::name('repoID'),
-        set::label($lang->devops->repo),
-        set::control('select'),
-        on::change('onRepoChange'),
+        set::name('assignee'),
+        set::label($lang->mr->reviewer),
+        set::control('picker'),
+        set::items($users),
     ),
-    formGroup
+    formRow
     (
-        set::name('removeSourceBranch'),
-        set::label($lang->mr->removeSourceBranch),
-        set::control('checkbox'),
-    ),
-    formGroup
-    (
-        set::name('needCI'),
-        set::label($lang->mr->needCI),
-        set::control('checkbox'),
-        on::change('onNeedCiChange'),
+        formGroup
+        (
+            set::label($lang->mr->submitType),
+            set::name('needCI'),
+            set::width('270px'),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->needCI, 'value' => '1')),
+            on::change('onNeedCiChange'),
+        ),
+        formGroup
+        (
+            set::name('removeSourceBranch'),
+            set::width('150px'),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->removeSourceBranch)),
+        ),
+        formGroup
+        (
+            set::name('squash'),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->squash)),
+        ),
     ),
     formRow
     (
         setClass('hidden'),
         formGroup
         (
+            set::width('1/2'),
             set::required(true),
             set::name('jobID'),
             set::label($lang->job->common),
-            set::control('picker'),
+            set::items($jobPairs),
         ),
     ),
     formGroup
     (
-        set::name('squash'),
-        set::label($lang->mr->squash),
-        set::control('checkbox'),
-    ),
-    formGroup
-    (
-        set::required(true),
-        set::name('assignee'),
-        set::label($lang->mr->assignee),
-        set::control('picker'),
-        set::items($users),
+        set::name('description'),
+        set::label($lang->mr->description),
+        set::control('editor'),
     ),
 );
 

@@ -79,7 +79,7 @@ featureBar(
 
 panel
 (
-    set::title($entry),
+    set::title($fileName),
     to::headingActions(
         btnGroup
         (

@@ -24,10 +24,11 @@ function checkItem()
  * @access public
  * @return void
  */
-function selectServer()
+function selectServer(event)
 {
-    var server = $('#servers').val();
-    if(server) window.location.href = $.createLink('repo', 'import', 'server=' + server);
+    var server = $(event.target).val();
+  console.log(server);
+    if(server) loadPage($.createLink('repo', 'import', 'server=' + server));
 }
 
 function loadProductProjects(event)

@@ -22,6 +22,7 @@ formPanel
     on::change('#serviceHost', 'onHostChange'),
     on::change('#serviceProject', 'onProjectChange'),
     set::title($lang->repo->createAction),
+    set::back('repo-maintain'),
     formGroup
     (
         set::name("product[]"),
@@ -44,11 +45,12 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name("SCM"),
+            set::id('SCM'),
+            set::name('SCM'),
             set::label($lang->product->typeAB),
             set::required(true),
-            set::value("Gitlab"),
-            set::control("picker"),
+            set::value('Gitlab'),
+            set::control('picker'),
             set::items($lang->repo->scmList)
         ),
         h::span
@@ -62,6 +64,7 @@ formPanel
         setClass('service hide'),
         formGroup
         (
+            set::width('1/2'),
             set::name("serviceHost"),
             set::label($lang->repo->serviceHost),
             set::required(true),
@@ -75,6 +78,7 @@ formPanel
         setClass('service hide'),
         formGroup
         (
+            set::width('1/2'),
             set::name("serviceProject"),
             set::label($lang->repo->serviceProject),
             set::required(true),
@@ -83,6 +87,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('1/2'),
         set::name("name"),
         set::label($lang->user->name),
         set::required(true),
@@ -102,6 +107,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('1/2'),
         set::name("encoding"),
         set::label($lang->repo->encoding),
         set::required(true),

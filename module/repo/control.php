@@ -1775,28 +1775,7 @@ class repo extends control
      */
     public function ajaxGetGitlabProjects($gitlabID, $projectIdList = '', $filter = '')
     {
-        $showAll = ($filter == 'ALL' and common::hasPriv('repo', 'create')) ? true : false;
-        if($this->app->user->admin or $showAll)
-        {
-            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, true, 0, 0, false);
-        }
-        else
-        {
-            $gitlabUser = $this->loadModel('gitlab')->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$gitlabUser) $this->send(array('message' => array()));
-
-            $projects    = $this->gitlab->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
-            $groupIDList = array(0 => 0);
-            $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'developer');
-            foreach($groups as $group) $groupIDList[] = $group->id;
-            if($filter == 'IS_DEVELOPER')
-            {
-                foreach($projects as $key => $project)
-                {
-                    if(!$this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer')) unset($projects[$key]);
-                }
-            }
-        }
+        $projects = $this->repo->getGitlabProjeccts($gitlabID, $projectIdList, $filter);
 
         if(!$projects) $this->send(array('message' => array()));
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;

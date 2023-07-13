@@ -147,8 +147,7 @@ panel
     ),
     div
         (
-            setClass('flex items-center'),
-
+            setClass('flex items-center mt-4'),
             cell
             (
                 setClass('mr-4'),

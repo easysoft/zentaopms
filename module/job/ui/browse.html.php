@@ -12,8 +12,11 @@ declare(strict_types=1);
 
 namespace zin;
 
-$repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch('name');
-dropmenu(set::objectID($repoID), set::text($repoName), set::tab('repo'));
+if($repoID)
+{
+    $repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch('name');
+    dropmenu(set::objectID($repoID), set::text($repoName), set::tab('repo'));
+}
 
 /* zin: Define the set::module('job') feature bar on main menu. */
 featureBar

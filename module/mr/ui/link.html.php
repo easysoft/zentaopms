@@ -22,31 +22,15 @@ $actionMenu['list']['unlink']['icon']      = 'unlink';
 $actionMenu['list']['unlink']['hint']      = $lang->productplan->unlinkStory;
 $actionMenu['list']['unlink']['className'] = 'ajax-submit';
 
-$storyCols = array();
-$storyCols['id']         = $config->story->dtable->fieldList['id'];
-$storyCols['pri']        = $config->story->dtable->fieldList['pri'];
-$storyCols['title']      = $config->story->dtable->fieldList['title'];
-$storyCols['module']     = $config->story->dtable->fieldList['module'];
-$storyCols['openedBy']   = $config->story->dtable->fieldList['openedBy'];
-$storyCols['assignedTo'] = $config->story->dtable->fieldList['assignedTo'];
-$storyCols['estimate']   = $config->story->dtable->fieldList['estimate'];
-$storyCols['status']     = $config->story->dtable->fieldList['status'];
-$storyCols['stage']      = $config->story->dtable->fieldList['stage'];
+$storyCols = $config->release->dtable->story->fieldList;
 $storyCols['actions']    = $actionMenu;
 $storyCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkStory;
 $storyCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=story&linkID={id}&confirm=yes");
 $storyCols['id']['checkbox'] = false;
-$storyCols['module']['map']  = $modulePairs;
 $stories = initTableData($stories, $storyCols);
 
-$bugCols = array();
-$bugCols['id']         = $config->bug->dtable->fieldList['id'];
-$bugCols['pri']        = $config->bug->dtable->fieldList['pri'];
-$bugCols['title']      = $config->bug->dtable->fieldList['title'];
-$bugCols['openedBy']   = $config->bug->dtable->fieldList['openedBy'];
-$bugCols['assignedTo'] = $config->bug->dtable->fieldList['assignedTo'];
-$bugCols['status']     = $config->bug->dtable->fieldList['status'];
-$bugCols['actions']    = $actionMenu;
+$bugCols = $config->release->dtable->bug->fieldList;
+$bugCols['actions'] = $actionMenu;
 $bugCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkBug;
 $bugCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=bug&linkID={id}&confirm=yes");
 $bugCols['id']['checkbox'] = false;
@@ -54,8 +38,8 @@ $bugs = initTableData($bugs, $bugCols);
 
 $taskCols = array();
 $taskCols['id']         = $config->task->dtable->fieldList['id'];
-$taskCols['pri']        = $config->task->dtable->fieldList['pri'];
 $taskCols['name']       = $config->task->dtable->fieldList['name'];
+$taskCols['pri']        = $config->task->dtable->fieldList['pri'];
 $taskCols['finishedBy'] = $config->task->dtable->fieldList['finishedBy'];
 $taskCols['assignedTo'] = $config->task->dtable->fieldList['assignedTo'];
 $taskCols['status']     = $config->task->dtable->fieldList['status'];
@@ -63,6 +47,13 @@ $taskCols['actions']    = $actionMenu;
 $taskCols['actions']['list']['unlink']['data-confirm'] = $lang->mr->confirmUnlinkTask;
 $taskCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=task&linkID={id}&confirm=yes");
 $taskCols['id']['checkbox'] = false;
+$taskCols['name']['title']  = $lang->task->name;
+$taskCols['name']['fixed']   = '';
+$taskCols['assignedTo']['title']  = $lang->task->assignedTo;
+foreach($taskCols as $col => $colConfig)
+{
+    if(isset($colConfig['group'])) unset($taskCols[$col]['group']);
+}
 $tasks = initTableData($tasks, $taskCols);
 
 detailHeader

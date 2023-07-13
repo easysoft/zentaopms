@@ -130,7 +130,9 @@ class jenkins extends control
     {
         if(empty($id)) return print('');
 
-        $this->view->tasks = $this->jenkins->getTasks($id, 3);
+        $this->app->loadLang('job');
+        $tasks = $this->jenkins->getTasks($id, 3);
+        $this->view->tasks = $this->jenkinsZen->buildTree($tasks);
         $this->display();
     }
 }

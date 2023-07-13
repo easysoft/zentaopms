@@ -31,6 +31,7 @@ $config->repo->dtable->fieldList['path']['name']  = 'codePath';
 $config->repo->dtable->fieldList['path']['title'] = $lang->repo->path;
 $config->repo->dtable->fieldList['path']['type']  = 'text';
 $config->repo->dtable->fieldList['path']['width'] = '260';
+$config->repo->dtable->fieldList['path']['group'] = 1;
 
 $config->repo->dtable->fieldList['lastSubmit']['name']  = 'lastSubmitTime';
 $config->repo->dtable->fieldList['lastSubmit']['title'] = $lang->repo->lastSubmitTime;
@@ -129,15 +130,12 @@ $config->repo->commentDtable->fieldList['committer']['name'] = 'committer';
 
 $config->repo->logDtable = new stdclass();
 
-$config->repo->logDtable->fieldList['id']['title']    = '';
-$config->repo->logDtable->fieldList['id']['name']     = '';
-$config->repo->logDtable->fieldList['id']['type']     = 'checkID';
-$config->repo->logDtable->fieldList['id']['sortType'] = false;
-$config->repo->logDtable->fieldList['id']['checkbox'] = true;
-$config->repo->logDtable->fieldList['id']['width']    = '40';
+$config->repo->logDtable->fieldList['id']['hidden'] = true;
 
 $config->repo->logDtable->fieldList['revision']['type']  = 'revision';
 $config->repo->logDtable->fieldList['revision']['width'] = '100';
+$config->repo->logDtable->fieldList['revision']['checkbox'] = true;
+$config->repo->logDtable->fieldList['revision']['nestedToggle'] = false;
 
 $config->repo->logDtable->fieldList['commit']['type']     = 'number';
 $config->repo->logDtable->fieldList['commit']['width']    = '50';
@@ -155,18 +153,22 @@ $config->repo->logDtable->fieldList['comment']['width'] = '600';
 $config->repo->blameDtable = new stdclass();
 
 $config->repo->blameDtable->fieldList['revision']['type'] = 'revision';
+$config->repo->blameDtable->fieldList['revision']['width'] = '120';
 
 $config->repo->blameDtable->fieldList['commit']['type']     = 'number';
 $config->repo->blameDtable->fieldList['commit']['sortType'] = false;
+$config->repo->blameDtable->fieldList['commit']['width'] = '80';
 
 $config->repo->blameDtable->fieldList['committer']['name'] = 'committer';
+$config->repo->blameDtable->fieldList['committer']['width'] = '150';
 
 $config->repo->blameDtable->fieldList['line']['type']     = 'number';
 $config->repo->blameDtable->fieldList['line']['sortType'] = false;
+$config->repo->blameDtable->fieldList['line']['width'] = '80';
 
 $config->repo->blameDtable->fieldList['content']['title'] = $lang->repo->code;
 $config->repo->blameDtable->fieldList['content']['type']  = 'html';
-$config->repo->blameDtable->fieldList['content']['width'] = '600';
+$config->repo->blameDtable->fieldList['content']['width'] = '700';
 
 $app->loadLang('story');
 $app->loadModuleConfig('story');

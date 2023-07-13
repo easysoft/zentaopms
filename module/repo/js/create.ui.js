@@ -1,9 +1,12 @@
 $(function()
 {
-    onScmChange();
-    onHostChange();
 });
 
+window.onload = function()
+{
+    onScmChange();
+    onHostChange();
+}
 function onProductChange(event)
 {
     var projects = $('#projects').val();

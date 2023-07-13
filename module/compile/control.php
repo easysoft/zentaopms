@@ -22,7 +22,7 @@ class compile extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if($methodName != 'browse') $this->loadModel('ci')->setMenu();
+        if($this->app->rawMethod != 'browse') $this->loadModel('ci')->setMenu();
     }
 
     /**
@@ -50,7 +50,7 @@ class compile extends control
         $this->compile->syncCompile($repoID, $jobID);
 
         $this->app->loadLang('job');
-        $this->loadModel('ci')->setMenu($repoID);
+        if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);

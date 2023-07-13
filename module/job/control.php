@@ -38,12 +38,17 @@ class job extends control
      */
     public function browse($repoID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $repos = $this->loadModel('repo')->getRepoPairs('devops');
-        if(empty($repos)) $this->locate($this->repo->createLink('create'));
-        $repoID = $this->repo->saveState($repoID);
+        $this->loadModel('ci');
 
-        /* Set session. */
-        $this->loadModel('ci')->setMenu($repoID);
+        if($repoID)
+        {
+            $repos = $this->loadModel('repo')->getRepoPairs('devops');
+            if(empty($repos)) $this->locate($this->repo->createLink('create'));
+            $repoID = $this->repo->saveState($repoID);
+
+            /* Set session. */
+            $this->ci->setMenu($repoID);
+        }
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -135,19 +140,14 @@ class job extends control
         $repoPairs   = array(0 => '');
         $gitlabRepos = array(0 => '');
         $repoTypes   = array();
+        $gitlabs     = array();
 
         foreach($repoList as $repo)
         {
             if(empty($repo->synced)) continue;
             $repoPairs[$repo->id] = $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab')
-            {
-                if(isset($repo->gitService)) $gitlab = $this->loadModel('gitlab')->getByID($repo->gitService);
-                if(!empty($gitlab)) $tokenUser = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
-                if(!isset($tokenUser->is_admin) or !$tokenUser->is_admin) continue;
-                $gitlabRepos[$repo->id] = $repo->name;
-            }
+            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = $repo->name;
         }
 
         $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;

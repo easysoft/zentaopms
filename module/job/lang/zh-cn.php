@@ -60,6 +60,7 @@ $lang->job->repoExists     = '此版本库已关联构建任务『%s』';
 $lang->job->projectExists  = '此SonarQube项目已关联构建任务『%s』';
 $lang->job->mustUseJenkins = 'SonarQube工具/框架仅在构建引擎为JenKins的情况下使用';
 $lang->job->jobIsDeleted   = '此版本库已关联构建任务,请从回收站查看数据';
+$lang->job->selectPipeline = '请选择流水线';
 
 $lang->job->buildTypeList['build']          = '仅构建';
 $lang->job->buildTypeList['buildAndDeploy'] = '构建部署';

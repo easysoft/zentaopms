@@ -47,7 +47,7 @@ foreach($logs as $log)
 }
 
 /* Disbale check all checkbox of table header */
-$config->repo->logDtable->fieldList['id']['checkbox'] = jsRaw('(rowID) => rowID !== \'HEADER\'');
+$config->repo->logDtable->fieldList['revision']['checkbox'] = jsRaw('(rowID) => rowID !== \'HEADER\'');
 
 $config->repo->logDtable->fieldList['revision']['link'] = array('module' => 'repo', 'method' => 'revision', 'params' => "repoID={$repoID}&objectID={$objectID}&revision={revision}");
 
