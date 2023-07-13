@@ -355,7 +355,7 @@ formPanel
     (
         formGroup
         (
-            set::width('3/4'),
+            set::width('4/5'),
             set::label($lang->task->name),
             set::strong(true),
             inputControl
@@ -380,7 +380,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/4'),
+            set::width('1/5'),
             setClass('no-background'),
             inputGroup
             (
@@ -388,9 +388,10 @@ formPanel
                 priPicker
                 (
                     set::name('pri'),
+                    set::value('3'),
                     set::items(array_filter($lang->task->priList)),
                 ),
-                $lang->task->estimate,
+                $lang->task->estimateAB,
                 inputControl
                 (
                     input(set::name('estimate')),
