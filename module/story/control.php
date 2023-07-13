@@ -452,6 +452,9 @@ class story extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->story->custom->createFields;
 
+        $requirementStatus = strpos($product->vision, 'or') !== false ? 'launched' : 'changing,active,reviewing';
+
+        $this->view->URS              = $storyType == 'story' ? $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, $requirementStatus, 'id_desc', 0, '', 'requirement') : '';
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
@@ -481,7 +484,6 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->blockID          = $blockID;
-        $this->view->URS              = $storyType == 'story' ? $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement') : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
         $this->view->type             = $storyType;
         $this->view->category         = !empty($category) ? $category : 'feature';
