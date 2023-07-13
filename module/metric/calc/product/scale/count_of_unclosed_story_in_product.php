@@ -16,7 +16,7 @@
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -24,21 +24,25 @@
  */
 class count_of_unclosed_story_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.stage');
 
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function calculate($row)
+    {
+        if($row->stage != 'closed')
+        {
+            if(!isset($this->result[$row->product])) $this->result[$row->product] = 0;
+            $this->result[$row->product] ++;
+        }
+    }
 
-    //public function calculate($data)
-    //{
-    //}
-
-    //public function getResult()
-    //{
-    //}
+    public function getResult($options = array())
+    {
+        $records = array();
+        foreach($this->result as $product => $value) $records[] = array('product' => $product, 'value' => $value);
+        return $this->filterByOptions($records, $options);
+    }
 }
