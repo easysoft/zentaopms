@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form form-ajax" method='post'>
+  <form id='mainForm' class='load-indicator main-form form-ajax' method='post'>
     <table class='table table-form mw-800px'>
       <tr>
         <th><?php echo $lang->ai->models->type;?></th>
@@ -49,7 +49,7 @@
       <tr>
         <td colspan='2' class='text-center'>
           <?php echo html::submitButton();?>
-          <?php echo html::commonButton($lang->ai->models->testConnection, 'id="testConn"', 'btn btn-secondary btn-wide load-indicator');?>
+          <?php echo html::commonButton($lang->ai->models->testConnection, 'id="testConn"', 'btn btn-secondary btn-wide');?>
         </td>
       </tr>
     </table>
@@ -62,8 +62,26 @@ $(function() {
         var proxyType = $(this).val();
         $('#proxyAddrContainer').toggle(proxyType != '');
     });
-    $('#testConn').click(function() {
-        $(this).attr('disabled', true).addClass('loading');
+    $('#mainForm').on('submit', function()
+    {
+        $('#testConn').attr('disabled', 'disabled');
+    });
+    $('#mainForm').on('ajaxComplete', function()
+    {
+        var timesTried = 0;
+        var buttonStateSyncInterval = setInterval(function()
+        {
+            if(!$('#submit').attr('disabled'))
+            {
+                $('#testConn').removeAttr('disabled');
+                clearInterval(buttonStateSyncInterval);
+            }
+            if(timesTried++ > 20) clearInterval(buttonStateSyncInterval);
+        }, 100);
+    });
+    $('#testConn').click(function()
+    {
+        $.disableForm('#mainForm');
         $.ajax(
         {
             type: 'POST',
@@ -81,7 +99,7 @@ $(function() {
                     $.zui.messager.danger(data.message);
                 }
             },
-            complete: function() {$('#testConn').attr('disabled', false).removeClass('loading');}
+            complete: function() {$.enableForm('#mainForm');}
         });
     });
 });
