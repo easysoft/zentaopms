@@ -34,17 +34,19 @@ if(common::hasPriv('backup', 'setting') and common::hasPriv('backup', 'backup'))
         (
             item(set
             ([
-                'text' => $lang->backup->setting,
-                'icon' => 'cog',
-                'class'=> 'iframe btn primary',
-                'url'  => $settingLink
+                'text'        => $lang->backup->setting,
+                'icon'        => 'cog',
+                'class'       => 'btn primary',
+                'url'         => $settingLink,
+                'data-toggle' => 'modal',
+                'data-size' => 'sm'
             ])),
             item(set
             ([
-                'text' => $lang->backup->backup,
-                'icon' => 'copy',
-                'class'=> 'btn primary',
-                'url'  => $backupLink
+                'text'      => $lang->backup->backup,
+                'icon'      => 'copy',
+                'class'     => 'btn primary backup',
+                'data-link' => $backupLink
             ])),
         );
 }
@@ -82,8 +84,6 @@ dtable
     set::customCols(false),
     set::cols($cols),
     set::data($data),
-    set::footPager(usePager())
 );
 
 render();
-

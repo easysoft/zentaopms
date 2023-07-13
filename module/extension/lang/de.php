@@ -92,14 +92,14 @@ $lang->extension->viewInstalled            = 'Installiert';
 $lang->extension->viewAvailable            = 'Verfügbar';
 $lang->extension->viewDeactivated          = 'Deactiviert';
 $lang->extension->backDBFile               = 'Erweiterungsdaten wurden gesichert nach %s!';
-$lang->extension->noticeOkFile             = "<h5>For security reasons, your Admin account has to be confirmed.</h5>
-    <h5>Plese login your ZenTao server and create %s.</h5>
+$lang->extension->noticeOkFile             = "<h5><strong>For security reasons, your Admin account has to be confirmed.</strong></h5>
+    <h5><strong>Plese login your ZenTao server and create %s.</strong></h5>
     <p>Execute command: echo '' > %s</p>
     <p>Note</p>
     <ol>
     <li>The file you will create is empty.</li>
     <li>If such file exists, delete it first, and then create one.</li>
-    </ol>"; 
+    </ol>";
 
 $lang->extension->upgradeExt     = 'Upgrade';
 $lang->extension->installExt     = 'Installieren';

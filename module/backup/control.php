@@ -69,8 +69,8 @@ class backup extends control
         }
         krsort($backups);
 
-        $this->view->title      = $this->lang->backup->common;
-        $this->view->backups    = $backups;
+        $this->view->title   = $this->lang->backup->common;
+        $this->view->backups = $backups;
         $this->display();
     }
 
@@ -366,7 +366,7 @@ class backup extends control
 
             $this->setting->setItem('system.backup.settingDir', $settingDir);
 
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
         $this->display();
     }
