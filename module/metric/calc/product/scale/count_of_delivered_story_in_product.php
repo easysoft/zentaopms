@@ -8,9 +8,7 @@
  * 目的：scale
  * 度量名称：按产品统计的已交付研发需求数
  * 单位：个
- * 描述：产品中所处阶段为已发布或关闭原因为已完成的研发需求个数求和
-过滤已删除的研发需求
-过滤已删除的产品
+ * 描述：产品中所处阶段为已发布或关闭原因为已完成的研发需求个数求和 过滤已删除的研发需求 过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +21,28 @@
  */
 class count_of_delivered_story_in_product extends baseCalc
 {
-    public $dataset = '';
-
-    public $fieldList = array();
-
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function getStatement()
+    {
+        return $this->dao->select('t1.product,count(t1.id) as value')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.stage', true)->eq('released')
+            ->orWhere('t1.closedReason')->eq('done')
+            ->markRight(1)
+            ->groupBy('t1.product')
+            ->query();
+    }
 
-    //public function calculate($data)
-    //{
-    //}
+    public function calculate($row)
+    {
+        $this->result[] = $row;
+    }
 
-    //public function getResult()
-    //{
-    //}
+    public function getResult($options = array())
+    {
+        return $this->filterByOptions($this->result, $options);
+    }
 }
