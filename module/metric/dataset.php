@@ -165,4 +165,25 @@ class dataset
             ->andWhere('t1.type')->eq('story')
             ->query();
     }
+
+    /**
+     * 获取已交付的需求数据。
+     * Get delivered story list.
+     *
+     * @param  int    $fieldList
+     * @access public
+     * @return mixed
+     */
+    public function getDeliveredStories($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.stage', true)->eq('released')
+            ->orWhere('t1.closedReason')->eq('done')
+            ->markRight(1)
+            ->groupBy('t1.product')
+            ->query();
+    }
 }
