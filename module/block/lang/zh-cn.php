@@ -599,6 +599,7 @@ $lang->block->qastatistic->resolvedToday     = '今日解决';
 $lang->block->qastatistic->closedYesterday   = '昨日关闭';
 $lang->block->qastatistic->closedToday       = '今日关闭';
 $lang->block->qastatistic->latestTesttask    = '近期测试单';
+$lang->block->qastatistic->bugStatusStat     = 'Bug状态分布';
 
 $lang->block->executionstatistic = new stdclass();
 $lang->block->executionstatistic->allProject    = '全部项目';

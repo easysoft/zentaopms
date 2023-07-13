@@ -2314,6 +2314,71 @@ class blockZen extends block
     }
 
     /**
+     * Print bug statistic block.
+     *
+     * @param  object    $block
+     * @access protected
+     * @return void
+     */
+    protected function printBugStatisticBlock(object $block)
+    {
+        $this->app->loadClass('pager', true);
+        $count = isset($block->params->count) ? (int)$block->params->count : 0;
+        $type  = isset($block->params->type) ? $block->params->type : '';
+        $pager = pager::init(0, $count , 1);
+
+        $today = strtotime(helper::today());
+        $begin = strtotime(date('Y-m', strtotime('+2 month', $today)));
+        $end   = strtotime(date('Y-m', $today));
+        $begin = strtotime('2023-09');
+        $end   = strtotime('2024-02');
+
+        $months         = array();
+        $products       = $this->loadModel('product')->getList(0, $block->params->type);
+        $totalBugs      = array();
+        $closedBugs     = array();
+        $unresovledBugs = array();
+        $resolvedRate   = array();
+        $activateBugs   = array();
+        $resolveBugs    = array();
+        $closeBugs      = array();
+        $products       = $this->loadModel('product')->getList(0, $type);
+        foreach($products as $productID => $product)
+        {
+            $closedBugs[$productID]     = rand(10, 10000);
+            $unresovledBugs[$productID] = rand(10, 1000);
+            $totalBugs[$productID]      = rand(100, 10000);
+            $resolvedRate[$productID]   = rand(1, 100);
+            for($date = $begin; $date <= $end; $date = strtotime('+1 month', $date))
+            {
+                $month = date('Y-m', $date);
+                $activateBugs[$productID][$month] = rand(100, 400);
+                $resolveBugs[$productID][$month]  = rand(100, 400);
+                $closeBugs[$productID][$month]    = rand(100, 400);
+
+                $month = (int)ltrim(date('m', $date), '0');
+
+                $monthName = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? "{$month}{$this->lang->block->month}" : zget($this->lang->datepicker->monthNames, $month - 1, '');
+                if($month == 1) $monthName .= "\n" . date('Y', $date) . (in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $this->lang->year : '');
+
+                if(count($closedBugs) == 1) $months[] = $monthName;
+            }
+        }
+
+        $this->app->loadLang('bug');
+
+        $this->view->months         = $months;
+        $this->view->products       = $products;
+        $this->view->totalBugs      = $totalBugs;
+        $this->view->closedBugs     = $closedBugs;
+        $this->view->unresovledBugs = $unresovledBugs;
+        $this->view->resolvedRate   = $resolvedRate;
+        $this->view->activateBugs   = $activateBugs;
+        $this->view->resolveBugs    = $resolveBugs;
+        $this->view->closeBugs      = $closeBugs;
+    }
+
+    /**
      * 判断是否为内部调用。
      * Check request client is chandao or not.
      *
