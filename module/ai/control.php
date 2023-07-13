@@ -165,7 +165,7 @@ class ai extends control
             $isJumpToNext = $role->jumpToNext == '1';
             unset($role->jumpToNext);
 
-            $prompt->model            = $role->model;
+            $prompt->model            = 0; // TODO: use actual $role->model;
             $prompt->role             = $role->role;
             $prompt->characterization = $role->characterization;
 
