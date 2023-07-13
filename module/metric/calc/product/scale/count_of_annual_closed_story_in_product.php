@@ -9,8 +9,8 @@
  * 度量名称：按产品统计的年度关闭研发需求数
  * 单位：个
  * 描述：产品中关闭时间在某年的研发需求的个数求和
-过滤已删除的研发需求
-过滤已删除的产品
+ *       过滤已删除的研发需求
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +23,38 @@
  */
 class count_of_annual_closed_story_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.closedDate');
 
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function calculate($data)
+    {
+        $product    = $data->product;
+        $closedDate = $data->closedDate;
 
-    //public function calculate($data)
-    //{
-    //}
+        $year  = substr($closedDate, 0, 4);
 
-    //public function getResult()
-    //{
-    //}
+        if($year == '0000') return;
+
+        if(!isset($this->result[$product])) $this->result[$product] = array();
+        if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;
+
+        $this->result[$product][$year] += 1;
+    }
+
+    public function getResult($options = null)
+    {
+        $records = array();
+        foreach($this->result as $product => $years)
+        {
+            foreach($years as $year => $value)
+            {
+                $records[] = array('product' => $product, 'year' => $year, 'value' => $value);
+            }
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
