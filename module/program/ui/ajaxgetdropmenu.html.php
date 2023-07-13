@@ -11,6 +11,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$topItem = array();
+$topItem['id']   = 0;
+$topItem['type'] = 'program';
+$topItem['text'] = $lang->program->common;
+
+$data[0] = $topItem;
+
 $data[0]['items'] = $this->program->buildTree($programs);
 
 /**
