@@ -150,22 +150,30 @@ detailBody
             item
             (
                 set::name($lang->task->module),
-                row
+                inputGroup
                 (
-                    control(set(array
+                    div
                     (
-                        'name' => 'module',
-                        'value' => $task->module,
-                        'type' => 'picker',
-                        'items' => $moduleOptions
-                    ))),
-                    checkList
+                        setClass('flex grow'),
+                        control(set(array
+                        (
+                            'name'  => 'module',
+                            'value' => $task->module,
+                            'type'  => 'picker',
+                            'class' => 'w-full',
+                            'items' => $moduleOptions
+                        )))
+                    ),
+                    div
                     (
-                        setClass('shrink-0 ml-3'),
-                        set::name('showAllModule'),
-                        set::items(array('1' => $lang->all)),
-                        set::value($showAllModule ? '1' : ''),
-                        set::inline(true),
+                        checkList
+                        (
+                            setClass('shrink-0 ml-3'),
+                            set::name('showAllModule'),
+                            set::items(array('1' => $lang->all)),
+                            set::value($showAllModule ? '1' : ''),
+                            set::inline(true),
+                        )
                     ),
                 )
             ),
@@ -205,25 +213,32 @@ detailBody
             item
             (
                 set::name($lang->task->assignedTo),
-                row
+                inputGroup
                 (
-                    control(set(array
+                    div
                     (
-                        'name' => 'assignedTo',
-                        'id' => 'assignedTo',
-                        'value' => $task->assignedTo,
-                        'disabled' => !empty($task->team) && $task->mode == 'linear',
-                        'type' => 'picker',
-                        'items' => $assignedToOptions
-                    ))),
-                    btn(set(array
+                        setClass('flex grow'),
+                        picker
+                        (
+                            set::name('assignedTo'),
+                            set::id('assignedTo'),
+                            set::value($task->assignedTo),
+                            set::items($assignedToOptions),
+                            setClass('w-full'),
+                            !empty($task->team) && $task->mode == 'linear' ? set::disabled(true) : null,
+                        )
+                    ),
+                    div
                     (
-                        'type' => 'btn',
-                        'text' => $lang->task->team,
-                        'class' => "input-group-btn team-group $hiddenTeam",
-                        'url' => '#modalTeam',
-                        'data-toggle' => 'modal',
-                    )))
+                        btn(set(array
+                        (
+                            'type' => 'btn',
+                            'text' => $lang->task->team,
+                            'class' => "input-group-btn team-group $hiddenTeam",
+                            'url' => '#modalTeam',
+                            'data-toggle' => 'modal',
+                        )))
+                    )
                 )
             ),
             item
@@ -324,21 +339,19 @@ detailBody
             item
             (
                 set::name($lang->task->estStarted),
-                control
+                datePicker
                 (
                     set::name('estStarted'),
-                    set::value($task->estStarted),
-                    set::type('date')
+                    helper::isZeroDate($task->estStarted) ? null : set::value($task->estStarted),
                 )
             ),
             item
             (
                 set::name($lang->task->deadline),
-                control
+                datePicker
                 (
                     set::name('deadline'),
-                    set::value($task->deadline),
-                    set::type('date')
+                    helper::isZeroDate($task->deadline) ? null : set::value($task->deadline),
                 )
             ),
             item
