@@ -588,10 +588,19 @@ $lang->block->qastatistic->latestTesttask    = 'Latest Testtask';
 $lang->block->qastatistic->bugStatusStat     = 'Bug Status Distribution';
 
 $lang->block->executionstatistic = new stdclass();
-$lang->block->executionstatistic->progress      = 'Progress';
-$lang->block->executionstatistic->totalEstimate = 'Estimate';
-$lang->block->executionstatistic->totalConsumed = 'Consumed';
-$lang->block->executionstatistic->totalLeft     = 'Left';
+$lang->block->executionstatistic->allProject        = 'All Project';
+$lang->block->executionstatistic->progress          = 'Progress';
+$lang->block->executionstatistic->totalEstimate     = 'Estimate';
+$lang->block->executionstatistic->totalConsumed     = 'Consumed';
+$lang->block->executionstatistic->totalLeft         = 'Left';
+$lang->block->executionstatistic->burn              = 'Execution Burn';
+$lang->block->executionstatistic->story             = 'Story';
+$lang->block->executionstatistic->doneStory         = 'Done';
+$lang->block->executionstatistic->totalStory        = 'Total';
+$lang->block->executionstatistic->task              = 'Task';
+$lang->block->executionstatistic->totalTask         = 'Total';
+$lang->block->executionstatistic->undoneTask        = 'Undone';
+$lang->block->executionstatistic->yesterdayDoneTask = 'Complated Yesterday';
 
 $lang->block->executionoverview = new stdclass();
 $lang->block->executionoverview->totalExecution = 'Total';
@@ -637,9 +646,6 @@ $lang->block->annualworkload->resolvedBugCount  = 'Resolved Bugs';
 $lang->block->releasestatistic = new stdclass();
 $lang->block->releasestatistic->monthly = 'Monthly releases trend chart';
 $lang->block->releasestatistic->annual  = "Annual release list (%s year)";
-
-$lang->block->executionstatistic = new stdclass();
-$lang->block->executionstatistic->allProject = 'All Project';
 
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;

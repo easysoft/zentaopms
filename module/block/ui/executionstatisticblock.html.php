@@ -90,10 +90,92 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
     $tabItems = array();
     foreach($executions as $execution)
     {
-        $execution->progress          = rand(0, 1000);
         $execution->totalEstimate     = rand(0, 1000);
         $execution->totalConsumed     = rand(0, 1000);
-        $execution->totalLeft         = rand(0, 1000);
+        $execution->totalLeft         = rand(0, $execution->totalEstimate);
+        $execution->progress          = round($execution->totalLeft / $execution->totalEstimate * 100);
+        $execution->doneStory         = rand(0, 1000);
+        $execution->totalStory        = rand(0, 1000);
+        $execution->totalTask         = rand(0, 1000);
+        $execution->undoneTask        = rand(0, 1000);
+        $execution->yesterdayDoneTask = rand(0, 1000);
+
+        $burn = cell
+        (
+            set('class', 'flex-1'),
+            div
+            (
+                $longBlock ? set('class', 'pb-2') : null,
+                span(set('class', 'font-bold'), $lang->block->executionstatistic->burn),
+            ),
+            div
+            (
+                set('class', 'py-2 chart line-chart'),
+                echarts
+                (
+                    set::color(array('#2B80FF', '#17CE97')),
+                    set::grid(array('left' => 0, 'bottom' => 0, 'top' => 0, 'right' => 0)),
+                    set::legend(array('show' => false)),
+                    set::xAxis
+                    (
+                        array
+                        (
+                            'show' => false,
+                            'type' => 'category',
+                            'data' => array(1,2,3,4,5,6),
+                            'boundaryGap' => false,
+                        )
+                    ),
+                    set::yAxis(array('show' => false)),
+                    set::series
+                    (
+                        array
+                        (
+                            array
+                            (
+                                'type' => 'line',
+                                'data' => array(80,60,40,20,0),
+                                'symbolSize' => 0,
+                                'itemStyle' => array
+                                (
+                                    'normal' => array
+                                    (
+                                        'color' => '#D8D8D8',
+                                        'lineStyle' => array
+                                        (
+                                            'width' => 2,
+                                            'color' => '#F1F1F1',
+                                        )
+                                    ),
+
+                                ),
+
+                            ),
+                            array
+                            (
+                                'data' => array(74,55,75,55),
+                                'type' => 'line',
+                                'symbolSize' => 0,
+                                'areaStyle' => array
+                                (
+                                    'color' => array
+                                    (
+                                        'type' => 'linear',
+                                        'x' => '0',
+                                        'y' => '0',
+                                        'x2' => '0',
+                                        'y2' => '1',
+                                        'colorStops' => array(array('offset' => 0, 'color' => '#DDECFE'), array('offset' => 1, 'color' => '#FFF')),
+                                        'global' => false
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )->size('100%', $longBlock ? 64 : 80),
+            )
+        );
+
 
         $tabItems[] = div
         (
@@ -112,34 +194,45 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                         cell
                         (
                             $longBlock ? set('width', '40%') : null,
-                            set('class', $longBlock ? 'p-4' : 'px-4'),
+                            set('class', 'p-4'),
                             div
                             (
-                                set('class', 'chart pie-chart ' . ($longBlock ? 'py-6' : 'py-1')),
-                                echarts
+                                set('class', 'flex'),
+                                cell
                                 (
-                                    set::color(array('#2B80FF', '#E3E4E9')),
-                                    set::series
+                                    !$longBlock ? set('width', '50%') : null,
+                                    set('class', 'chart pie-chart py-6'),
+                                    echarts
                                     (
-                                        array
+                                        set::color(array('#2B80FF', '#E3E4E9')),
+                                        set::series
                                         (
                                             array
                                             (
-                                                'type'      => 'pie',
-                                                'radius'    => array('80%', '90%'),
-                                                'itemStyle' => array('borderRadius' => '40'),
-                                                'label'     => array('show' => false),
-                                                'data'      => array($execution->progress, 100 - $execution->progress)
+                                                array
+                                                (
+                                                    'type'      => 'pie',
+                                                    'radius'    => array('80%', '90%'),
+                                                    'itemStyle' => array('borderRadius' => '40'),
+                                                    'label'     => array('show' => false),
+                                                    'data'      => array($execution->progress, 100 - $execution->progress)
+                                                )
                                             )
                                         )
+                                    )->size('100%', 120),
+                                    div
+                                    (
+                                        set::class('pie-chart-title text-center'),
+                                        div(span(set::class('text-2xl font-bold'), $execution->progress . '%')),
+                                        div(span(set::class('text-sm text-gray'), $lang->block->executionstatistic->progress, icon('help', set('data-toggle', 'tooltip'), set('id', 'storyTip'), set('class', 'text-light'))))
                                     )
-                                )->size('100%', 120),
-                                div
+                                ),
+                                !$longBlock ? cell
                                 (
-                                    set::class('pie-chart-title text-center'),
-                                    div(span(set::class('text-2xl font-bold'), $execution->progress . '%')),
-                                    div(span(set::class('text-sm text-gray'), $lang->block->executionstatistic->progress, icon('help', set('data-toggle', 'tooltip'), set('id', 'storyTip'), set('class', 'text-light'))))
-                                )
+                                    set('width', '50%'),
+                                    set('class', 'py-6'),
+                                    $burn
+                                ) : null
                             ),
                             div
                             (
@@ -200,82 +293,8 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                         cell
                         (
                             $longBlock ? set('width', '60%') : null,
-                            set('class', 'py-4'),
-                            cell
-                            (
-                                set('class', 'flex-1'),
-                                div
-                                (
-                                    $longBlock ? set('class', 'pb-2') : null,
-                                    span(set('class', 'font-bold'), $lang->block->executionstatistic->burn),
-                                ),
-                                div
-                                (
-                                    set('class', 'py-2 chart'),
-                                    echarts
-                                    (
-                                        set::color(array('#2B80FF', '#17CE97')),
-                                        set::grid(array('left' => 0, 'bottom' => 0, 'top' => 0, 'right' => 0)),
-                                        set::legend(array('show' => false)),
-                                        set::xAxis
-                                        (
-                                            array
-                                            (
-                                                'show' => false,
-                                                'type' => 'category',
-                                                'data' => array(1,2,3,4,5,6),
-                                                'boundaryGap' => false,
-                                            )
-                                        ),
-                                        set::yAxis(array('show' => false)),
-                                        set::series
-                                        (
-                                            array
-                                            (
-                                                array
-                                                (
-                                                    'type' => 'line',
-                                                    'data' => array(80,60,40,20,0),
-                                                    'symbolSize' => 0,
-                                                    'itemStyle' => array
-                                                    (
-                                                        'normal' => array
-                                                        (
-                                                            'color' => '#D8D8D8',
-                                                            'lineStyle' => array
-                                                            (
-                                                                'width' => 2,
-                                                                'color' => '#F1F1F1',
-                                                            )
-                                                        ),
-
-                                                    ),
-
-                                                ),
-                                                array
-                                                (
-                                                    'data' => array(74,55,75,55),
-                                                    'type' => 'line',
-                                                    'symbolSize' => 0,
-                                                    'areaStyle' => array
-                                                    (
-                                                        'color' => array
-                                                        (
-                                                            'type' => 'linear',
-                                                            'x' => '0',
-                                                            'y' => '0',
-                                                            'x2' => '0',
-                                                            'y2' => '1',
-                                                            'colorStops' => array(array('offset' => 0, 'color' => '#DDECFE'), array('offset' => 1, 'color' => '#FFF')),
-                                                            'global' => false
-                                                        )
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    )->size('100%', 64),
-                                )
-                            ),
+                            set('class', $longBlock ? 'py-4' : 'p-4'),
+                            $longBlock ? $burn : null,
                             cell
                             (
                                 set('class', 'flex py-2'),
@@ -303,15 +322,15 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                                             (
                                                 set('width', '50%'),
                                                 set('class', 'text-center'),
-                                                div(span(60)),
-                                                div(set('class', 'text-sm text-gray'), span('已完成')),
+                                                div(span($execution->doneStory)),
+                                                div(set('class', 'text-sm text-gray'), span($lang->block->executionstatistic->doneStory)),
                                             ),
                                             cell
                                             (
                                                 set('width', '50%'),
                                                 set('class', 'text-center'),
-                                                div(span(120)),
-                                                div(set('class', 'text-sm text-gray'), span('总数量')),
+                                                div(span($execution->totalStory)),
+                                                div(set('class', 'text-sm text-gray'), span($lang->block->executionstatistic->totalStory)),
                                             )
                                         ),
                                     )
@@ -319,7 +338,7 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                                 cell
                                 (
                                     set('width', '50%'),
-                                    set('class', 'px-4 flex'),
+                                    set('class', 'px-4 flex h-28'),
                                     cell
                                     (
                                         set('class', 'flex-1'),
@@ -327,17 +346,17 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                                     ),
                                     cell
                                     (
-                                        set('class', 'text-right pr-2 h-24 flex col'),
-                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-sm text-gray'), '任务总数')),
-                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-sm text-gray'), '未完成任务')),
-                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-sm text-gray'), '昨日完成'))
+                                        set('class', 'pr-2 flex col py-2'),
+                                        cell(set('class', 'flex flex-1 items-center justify-end'), span(set('class', 'text-sm text-gray'), $lang->block->executionstatistic->totalTask)),
+                                        cell(set('class', 'flex flex-1 items-center justify-end'), span(set('class', 'text-sm text-gray'), $lang->block->executionstatistic->undoneTask)),
+                                        cell(set('class', 'flex flex-1 items-center justify-end'), span(set('class', 'text-sm text-gray'), $lang->block->executionstatistic->yesterdayDoneTask))
                                     ),
                                     cell
                                     (
-                                        set('class', 'text-left pl-2 h-24 flex col'),
-                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-lg'), '32')),
-                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-lg'), '130')),
-                                        cell(set('class', 'flex-1 center'), span(set('class', 'text-lg'), '2100'))
+                                        set('class', 'pl-2 flex col py-2'),
+                                        cell(set('class', 'flex flex-1 items-center'), span(set('class', 'text-lg'), $execution->totalTask)),
+                                        cell(set('class', 'flex flex-1 items-center'), span(set('class', 'text-lg'), $execution->undoneTask)),
+                                        cell(set('class', 'flex flex-1 items-center'), span(set('class', 'text-lg'), $execution->yesterdayDoneTask))
                                     )
                                 )
                             )
@@ -383,7 +402,7 @@ panel
             ),
         )
     ),
-    to::headingActions
+    $block->params->type != 'involved' ? to::headingActions
     (
         a
         (
@@ -392,7 +411,7 @@ panel
             $lang->more,
             icon('caret-right')
         )
-    ),
+    ) : null,
     div
     (
         set('class', "flex h-full overflow-hidden " . ($longBlock ? '' : 'col')),
