@@ -501,7 +501,7 @@ class task extends control
             $actionID = $this->loadModel('action')->create('task', $effort->objectID, 'EditEffort', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('recordWorkhour', "taskID={$effort->objectID}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title  = $this->lang->task->editEffort;

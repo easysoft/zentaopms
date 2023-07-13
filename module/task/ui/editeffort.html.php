@@ -33,7 +33,7 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/4'),
+        set::width('1/3'),
         set::label($lang->task->date),
         set::name('date'),
         set::control('date'),
