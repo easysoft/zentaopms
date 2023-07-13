@@ -31,13 +31,13 @@
       if(count($prompts) > 1)
       {
         $html .= '<div class="dropdown' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->dropdownClass) ? ' ' . $menuOptions->dropdownClass : '')) . '"><button class="btn btn-link' . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '') . '" type="button" data-toggle="dropdown">' . $lang->ai->promptMenu->dropdownTitle . ' <i class="icon-caret-down"></i></button><ul class="dropdown-menu">';
-        foreach($prompts as $prompt) $html .= '<li>' . html::linkButton($prompt->name . ($prompt->status != 'active' ? '<span class="label label-info label-badge">' . $lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''), helper::createLink('ai', 'execute', "promptId=$prompt->id&objectId=$currentObjectId"), 'self', "title='{$prompt->desc}' style='width: 100%;'", 'btn btn-link text-left') . '</li>';
+        foreach($prompts as $prompt) $html .= '<li>' . html::linkButton($prompt->name . ($prompt->status != 'active' ? '<span class="label label-info label-badge">' . $lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''), helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId"), 'self', "title='{$prompt->desc}' style='width: 100%;'", 'btn btn-link text-left') . '</li>';
         $html .= '</ul></div>';
       }
       else
       {
         $prompt = current($prompts);
-        $html .= html::linkButton($prompt->name . ($prompt->status != 'active' ? '<span class="label label-info label-badge">' . $lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''), helper::createLink('ai', 'execute', "promptId=$prompt->id&objectId=$currentObjectId"), 'self', "title='{$prompt->desc}'", 'btn btn-link' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '')));
+        $html .= html::linkButton($prompt->name . ($prompt->status != 'active' ? '<span class="label label-info label-badge">' . $lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''), helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId"), 'self', "title='{$prompt->desc}'", 'btn btn-link' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '')));
       }
     ?>
 

@@ -368,7 +368,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function execute($promptId, $objectId)
+    public function promptExecute($promptId, $objectId)
     {
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
