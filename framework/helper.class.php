@@ -243,6 +243,7 @@ class helper extends baseHelper
      */
     public static function formatKB($traffic, $precision = 2)
     {
+        if(!$traffic) return 0;
         $base     = log($traffic, 1024);
         $suffixes = array('', 'KB', 'MB', 'GB', 'TB');
 

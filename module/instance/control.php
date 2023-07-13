@@ -328,32 +328,6 @@ class instance extends control
         // Disable custom installation in version 1.0.
         $storeUrl = $this->createLink('store', 'appview', "id=$id");
         return js::execute("window.parent.location.href='{$storeUrl}';");
-
-        $cloudApp = $this->sotre->getAppInfo($id);
-        if(empty($cloudApp)) return print(js::locate('back', 'parent'));
-
-        $components = $this->store->getAppSettings($id);
-
-        if(!empty($_POST))
-        {
-            $postSettings = fixer::input('post')->get();
-            foreach($postSettings as $key => $value) if(strpos($key, 'replicas') !== false && $value < 1) $this->send(array('result' => 'fail', 'message' => $this->lang->instance->caplicasTooSmall));
-
-            if(!$this->instance->install($cloudApp, $postSettings)) return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'installFail')));
-
-            return $this->send(array('result'=>'success', 'message' => '', 'locate' => $this->createLink('space', 'browse')));
-        }
-
-        $this->lang->switcherMenu = $this->instance->getCustomInstallSwitcher($cloudApp);
-
-        $this->view->position[] = $this->lang->instance->customInstall;
-
-        $this->view->title      = $this->lang->instance->customInstall;
-        $this->view->activeTab  = isset($components[0]) ? $components[0]->name : '';
-        $this->view->components = $components;
-        $this->view->appID      = $id;
-
-        $this->display();
     }
 
     /**
@@ -386,7 +360,6 @@ class instance extends control
         $versionList = $this->store->appVersionList($cloudApp->id);
         $mysqlList   = $this->cne->sharedDBList('mysql');
         $pgList      = $this->cne->sharedDBList('postgresql');
-        $customData  = new stdclass;
         if(!empty($_POST))
         {
             $customData = fixer::input('post')

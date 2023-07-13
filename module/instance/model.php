@@ -90,7 +90,7 @@ class InstanceModel extends model
 
         if($instance) return $this->getByID($instance->id);
 
-        return;
+        return array();
     }
 
     /**
@@ -511,7 +511,7 @@ class InstanceModel extends model
         $thirdDomain = strtolower(helper::randStr($length));
         if(!$this->domainExists($thirdDomain)) return $thirdDomain;
 
-        return $this->randThirdDomain($length, $triedTimes++);
+        return $this->randThirdDomain($length, $triedTimes + 1);
     }
 
     /**
@@ -625,7 +625,7 @@ class InstanceModel extends model
         if(!$validatedResult->user)     $dbSettings->user = $defaultUser . '_' . help::randStr(4);
         if(!$validatedResult->database) $dbSettings->database = $defaultDBName  . '_' . help::randStr(4);
 
-        return $this->getValidDBSettings($dbSettings, $defaultUser, $defaultDBName, $times++);
+        return $this->getValidDBSettings($dbSettings, $defaultUser, $defaultDBName, $times + 1);
     }
 
     /**
@@ -934,8 +934,7 @@ class InstanceModel extends model
         $this->dao->insert(TABLE_INSTANCE)->data($instanceData)->autoCheck()->exec();
         if(dao::isError()) return false;
 
-        $instance = $this->getByID($this->dao->lastInsertID());
-        return $instance;
+        return $this->getByID($this->dao->lastInsertID());
     }
 
     /**
@@ -1139,18 +1138,15 @@ class InstanceModel extends model
         foreach($instances as $instance)
         {
             $statusData = zget($statusList, $instance->k8name, '');
-            if($statusData)
+            if($statusData && ($instance->status != $statusData->status || $instance->version != $statusData->version))
             {
-                if($instance->status != $statusData->status || $instance->version != $statusData->version)
-                {
-                    $this->dao->update(TABLE_INSTANCE)
-                        ->set('status')->eq($statusData->status)
-                        ->beginIF($statusData->version)->set('version')->eq($statusData->version)->fi()
-                        ->where('id')->eq($instance->id)
-                        ->autoCheck()
-                        ->exec();
-                    $instance->status = $statusData->status;
-                }
+                $this->dao->update(TABLE_INSTANCE)
+                    ->set('status')->eq($statusData->status)
+                    ->beginIF($statusData->version)->set('version')->eq($statusData->version)->fi()
+                    ->where('id')->eq($instance->id)
+                    ->autoCheck()
+                    ->exec();
+                $instance->status = $statusData->status;
             }
 
             $status = new stdclass;
@@ -1399,11 +1395,11 @@ class InstanceModel extends model
             }
 
             /* 3. delete expired backup. Get backup list of instance, then check every backup is expired or not.*/
-            foreach($backupList as $backup)
-            {
-                if($backup->creator != 'auto') continue; // Only delete data madde by auto backup.
-                if($latestBackup && $latestBackup->name == $backup->name) continue; // Keep latest successful backup.
-            }
+            // foreach($backupList as $backup)
+            // {
+            //     if($backup->creator != 'auto') continue; // Only delete data madde by auto backup.
+            //     if($latestBackup && $latestBackup->name == $backup->name) continue; // Keep latest successful backup.
+            // }
         }
     }
 
@@ -1887,9 +1883,9 @@ class InstanceModel extends model
      */
     public function printLog($instance, $log)
     {
-        $action = zget($this->lang->instance->actionList, $log->action, $this->lang->actions);
-
-        $logText = $log->actorName . ' ' . sprintf($action, $instance->name, $log->comment);
+        if(empty($this->userPairs)) $this->userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $action  = zget($this->lang->instance->actionList, $log->action, $this->lang->actions);
+        $logText = zget($this->userPairs, $log->actor) . ' ' . sprintf($action, $instance->name, $log->comment);
 
         $extra = json_decode($log->extra);
         if(empty($extra) or !isset($extra->data))
@@ -1919,6 +1915,7 @@ class InstanceModel extends model
                 $enableAutoBackup = zget($extra->data, 'autoBackup', 0);
                 $logText         .= ': ' . ($enableAutoBackup ? $this->lang->instance->enableAutoBackup : $this->lang->instance->disableAutoBackup);
                 break;
+            default:
         }
 
         echo $logText;

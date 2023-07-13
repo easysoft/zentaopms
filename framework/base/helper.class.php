@@ -897,6 +897,19 @@ class baseHelper
             header($key . ': ' . $value, $replace, $response_code);
         }
     }
+
+    /**
+     * Generate rand string.
+     *
+     * @param  int    $length
+     * @access public
+     * @return string
+     */
+    static public function randStr($length = 4)
+    {
+        $seeds = str_shuffle('abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ123456789');
+        return substr($seeds, 0, $length);
+    }
 }
 
 //------------------------------- 常用函数。Some tool functions.-------------------------------//

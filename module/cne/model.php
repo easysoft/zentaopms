@@ -270,10 +270,10 @@ class cneModel extends model
         $apiParams['private_key_pem'] = $cert->private_key_pem;
 
         $apiUrl = "/api/cne/system/tls/upload";
-        $result = $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+        // $result = $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
         //if($result && $result->code == 200) return $result->data;
 
-        return $result;
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
 
     /**
@@ -1094,8 +1094,9 @@ class cneModel extends model
         $requestUri  = ($host ? $host : $this->config->CNE->api->host) . $url;
         $requestUri .= (strpos($url, '?') !== false ? '&' : '?') . http_build_query($data, '', '&', PHP_QUERY_RFC3986);
         $result      = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'GET'), $header, 'json', 20));
+
         if($result && $result->code == 200) return $result;
-        if($result && $result->code != 200) return $this->translateError($result);;
+        if($result) return $this->translateError($result);
 
         return $this->cneServerError();
     }
@@ -1115,7 +1116,7 @@ class cneModel extends model
         $requestUri = ($host ? $host : $this->config->CNE->api->host) . $url;
         $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header, 'json', 20));
         if($result && $result->code == 200) return $result;
-        if($result && $result->code != 200) return $this->translateError($result);;
+        if($result) return $this->translateError($result);
 
         return $this->cneServerError();
     }
@@ -1135,7 +1136,7 @@ class cneModel extends model
         $requestUri = ($host ? $host : $this->config->CNE->api->host) . $url;
         $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $header, 'json', 20));
         if($result && $result->code == 200) return $result;
-        if($result && $result->code != 200) return $this->translateError($result);;
+        if($result) return $this->translateError($result);
 
         return $this->cneServerError();
     }
@@ -1155,7 +1156,7 @@ class cneModel extends model
         $requestUri = ($host ? $host : $this->config->CNE->api->host) . $url;
         $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $header, 'json', 20));
         if($result && $result->code == 200) return $result;
-        if($result && $result->code != 200) return $this->translateError($result);;
+        if($result) return $this->translateError($result);
 
         return $this->cneServerError();
     }
