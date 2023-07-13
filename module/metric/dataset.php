@@ -146,4 +146,23 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->query();
     }
+
+    /**
+     * 获取研发需求数据。
+     * Get story list.
+     *
+     * @param  array  $fieldList
+     * @access public
+     * @return mixed
+     */
+    public function getDevStories($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('story')
+            ->query();
+    }
 }

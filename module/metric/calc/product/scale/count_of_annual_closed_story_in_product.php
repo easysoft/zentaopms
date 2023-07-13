@@ -15,7 +15,7 @@
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -23,35 +23,40 @@
  */
 class count_of_annual_closed_story_in_product extends baseCalc
 {
-    public $dataset = 'getStories';
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.closedDate');
+    public $fieldList = array('t1.product', 't1.closedDate', 't1.status');
 
     public $result = array();
 
-    public function calculate($data)
+    public function calculate($row)
     {
-        $product    = $data->product;
-        $closedDate = $data->closedDate;
+        if($row->status != 'closed') return;
 
-        $year  = substr($closedDate, 0, 4);
+        $product    = $row->product;
+        $closedDate = $row->closedDate;
 
-        if($year == '0000') return;
+        $year = substr($closedDate, 0, 4);
+
+        if(empty($year) || $year == '0000') return;
 
         if(!isset($this->result[$product])) $this->result[$product] = array();
         if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;
-
         $this->result[$product][$year] += 1;
     }
 
-    public function getResult($options = null)
+    public function getResult($options = array())
     {
         $records = array();
         foreach($this->result as $product => $years)
         {
             foreach($years as $year => $value)
             {
-                $records[] = array('product' => $product, 'year' => $year, 'value' => $value);
+                $records[] = array(
+                    'product' => $product,
+                    'year'    => $year,
+                    'value'   => $value,
+                );
             }
         }
 

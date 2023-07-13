@@ -8,9 +8,7 @@
  * 目的：scale
  * 度量名称：按产品统计的年度完成研发需求数
  * 单位：个
- * 描述：产品中关闭时间在某年且关闭原因为已完成的研发需求的个数求和
-过滤已删除的研发需求
-过滤已删除的产品
+ * 描述：产品中关闭时间在某年且关闭原因为已完成的研发需求的个数求和 过滤已删除的研发需求 过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +21,43 @@
  */
 class count_of_annual_finished_story_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.closedDate', 't1.status', 't1.closedReason');
 
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function calculate($row)
+    {
+        if($row->status != 'closed' or $row->closedReason != 'done') return;
 
-    //public function calculate($data)
-    //{
-    //}
+        $product    = $row->product;
+        $closedDate = $row->closedDate;
 
-    //public function getResult()
-    //{
-    //}
+        $year = substr($closedDate, 0, 4);
+
+        if(empty($year) || $year == '0000') return;
+
+        if(!isset($this->result[$product])) $this->result[$product] = array();
+        if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;
+        $this->result[$product][$year] += 1;
+    }
+
+    public function getResult($options = array())
+    {
+        $records = array();
+        foreach($this->result as $product => $years)
+        {
+            foreach($years as $year => $value)
+            {
+                $records[] = array(
+                    'product' => $product,
+                    'year'    => $year,
+                    'value'   => $value,
+                );
+            }
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
