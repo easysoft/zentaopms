@@ -38,6 +38,10 @@ $(document).off('click', '#batchUnlinkStory').on('click', '#batchUnlinkStory', f
 
          zui.Modal.open({id: 'batchUnlinkStoryBox'});
          $('#batchUnlinkStoryBox').html(data);
+         $('#batchUnlinkStoryBox').off('mousedown', '.confirmBtn').on('mousedown', '.confirmBtn', function()
+         {
+             loadCurrentPage();
+         });
     });
 });
 

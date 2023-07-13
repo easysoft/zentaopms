@@ -19,6 +19,7 @@ foreach($executionStories as $story)
     $executionLink = helper::createLink('execution', 'story', "executionID={$story->executionID}");
     $tableTR[] = h::tr
     (
+        h::td($story->id),
         h::td(a(set::href($storyLink), set::title($story->title), set::style(array('color' => '#5988e2')), $story->title)),
         h::td(a(set::href($executionLink), set::title($story->execution), set::style(array('color' => '#32579c')), $story->execution)),
     );
@@ -29,6 +30,7 @@ h::table
     set::class('table'),
     h::tr
     (
+        h::th(set::width('60px'), $lang->idAB),
         h::th($lang->story->title),
         h::th($lang->story->link . $lang->execution->common),
     ),
@@ -36,7 +38,7 @@ h::table
     h::tr
     (
         setClass('text-center'),
-        h::td(set::colspan(2), setStyle(array('text-align' => 'center')), btn(setClass('primary'), on::mousedown('loadCurrentPage'), set('data-dismiss', 'modal'), $lang->projectstory->confirm))
+        h::td(set::colspan(3), setStyle(array('text-align' => 'center')), btn(setClass('primary confirmBtn'), set('data-dismiss', 'modal'), $lang->projectstory->confirm))
     )
 );
 
