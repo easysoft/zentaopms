@@ -58,6 +58,24 @@ class dataset
     }
 
     /**
+     * 按产品获取发布数据。
+     * Get release list according to product.
+     *
+     * @param  int    $fieldList
+     * @access public
+     * @return mixed
+     */
+    public function getProductReleases($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_RELEASE)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->query();
+    }
+
+    /**
      * 获取产品计划数据。
      * Get plan list.
      *
