@@ -33,12 +33,12 @@ class count_of_annual_created_plan_in_product extends baseCalc
 
     public function calculate($row)
     {
-        if(!empty($row->year))
-        {
-            if(!isset($this->result[$row->year])) $this->result[$row->year] = array();
-            if(!isset($this->result[$row->year][$row->product])) $this->result[$row->year][$row->product] = 0;
-            $this->result[$row->year][$row->product] ++;
-        }
+        if(empty(trim($row->year))) return;
+        if($row->year == '0000')    return;
+
+        if(!isset($this->result[$row->year])) $this->result[$row->year] = array();
+        if(!isset($this->result[$row->year][$row->product])) $this->result[$row->year][$row->product] = 0;
+        $this->result[$row->year][$row->product] ++;
     }
 
     public function getResult($options = array())
