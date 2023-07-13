@@ -159,6 +159,8 @@ formPanel
             $lang->project->copy
         )
     ),
+    on::click('.addLine', 'addNewLine'),
+    on::click('.removeLine', 'removeLine'),
     formRow
     (
         formGroup
@@ -404,14 +406,12 @@ formPanel
                 btn
                 (
                     setClass('btn ghost addLine'),
-                    on::click('addNewLine'),
                     icon('plus')
                 ),
                 btn
                 (
                     setClass('btn ghost removeLine'),
                     icon('trash'),
-                    on::click('removeLine'),
                     $i == 0 ? set::disabled(true) : null
                 ),
             )

@@ -430,12 +430,9 @@ window.addNewLine = function(e)
 {
     const obj     = e.target
     const newLine = $(obj).closest('.form-row').clone();
-    let index = 0;
 
-    newLine.find('.addLine').on('click', addNewLine);
-    newLine.find('.removeLine').on('click', removeLine);
-    newLine.find("[name^='products']").on('change', productChange);
-    newLine.find("[name^='branch']").on('change', branchChange);
+    let index   = 0;
+    let options = zui.Picker.query("[name^='products']").options;
 
     $("[name^='products']").each(function()
     {
@@ -451,18 +448,28 @@ window.addNewLine = function(e)
     newLine.find('.form-label').html('');
     newLine.find('.removeLine').removeClass('disabled');
     newLine.find('[name="newProduct"]').closest('div.items-center').remove();
-    newLine.find('.chosen-container').remove();
-    newLine.find("[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).val('');
-    newLine.find("[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]').val('');
-    newLine.find("[name^='branch']").val('');
-    newLine.find("[name^='plans']").empty();
+    newLine.find("[name^='products']").attr('name', `products[${index}]`).attr('id', `products${index}`);
+    newLine.find("[name^='plans']").attr('name', `plans[${index}][0][]`);
     newLine.find('.form-group').eq(0).addClass('w-1/2').removeClass('w-1/4');
     newLine.find('.form-group').eq(1).addClass('hidden');
     newLine.find("div[id^='plan']").attr('id', 'plan' + index);
 
     $(obj).closest('.form-row').after(newLine);
-    let product = newLine.find("[name^='products']");
-    let branch  = newLine.find("[name^='branch']");
+
+    newLine.find('.form-group').eq(0).find('.picker-box').empty();
+    newLine.find('.form-group').eq(0).find('.picker-box').append(`<div id=products${index}></div>`);
+
+    newLine.find('div[id^=plan] .picker-box').empty();
+    newLine.find('div[id^=plan] .picker-box').append(`<div id=plans${index}></div>`);
+
+    options.name = `products[${index}]`;
+    new zui.Picker(`#products${index}`, options);
+
+    new zui.Picker(`#plans${index}`, {
+        items:[],
+        multiple: true,
+        name: `plans[${index}]`,
+    });
 }
 
 /**
