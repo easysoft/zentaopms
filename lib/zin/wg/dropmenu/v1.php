@@ -85,7 +85,7 @@ class dropmenu extends wg
         }
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
-        if(empty($text) && !empty($tab))
+        if(empty($text) && !empty($tab) && !empty($objectID))
         {
             $object = $app->control->loadModel($tab)->getByID((int)$objectID);
             $text   = $object->name;
