@@ -250,32 +250,29 @@ class backup extends control
      * Delete.
      *
      * @param  string $fileName
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function delete($fileName, $confirm = 'no')
+    public function delete($fileName)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->backup->confirmDelete, inlink('delete', "fileName=$fileName&confirm=yes")));
-
         /* Delete database file. */
         if(file_exists($this->backupPath . $fileName . '.sql.php') and !unlink($this->backupPath . $fileName . '.sql.php'))
         {
-            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql.php')));
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql.php')));
         }
         if(file_exists($this->backupPath . $fileName . '.sql') and !unlink($this->backupPath . $fileName . '.sql'))
         {
-            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql')));
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql')));
         }
 
         /* Delete attatchments file. */
         if(file_exists($this->backupPath . $fileName . '.file.zip.php') and !unlink($this->backupPath . $fileName . '.file.zip.php'))
         {
-            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip.php')));
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip.php')));
         }
         if(file_exists($this->backupPath . $fileName . '.file.zip') and !unlink($this->backupPath . $fileName . '.file.zip'))
         {
-            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip')));
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip')));
         }
         if(file_exists($this->backupPath . $fileName . '.file'))
         {
@@ -287,11 +284,11 @@ class backup extends control
         /* Delete code file. */
         if(file_exists($this->backupPath . $fileName . '.code.zip.php') and !unlink($this->backupPath . $fileName . '.code.zip.php'))
         {
-            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip.php')));
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip.php')));
         }
         if(file_exists($this->backupPath . $fileName . '.code.zip') and !unlink($this->backupPath . $fileName . '.code.zip'))
         {
-            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip')));
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip')));
         }
         if(file_exists($this->backupPath . $fileName . '.code'))
         {
@@ -300,7 +297,7 @@ class backup extends control
             $this->backup->processSummary($this->backupPath . $fileName . '.code', 0, 0, array(), 0, 'delete');
         }
 
-        return print(js::reload('parent'));
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**

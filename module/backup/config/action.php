@@ -17,8 +17,10 @@ $config->backup->actionList['restore']['hint']        = $lang->backup->restore;
 $config->backup->actionList['restore']['url']         = array('module' => 'backup', 'method' => 'restore', 'params' => 'file={name}');
 $config->backup->actionList['restore']['data-toggle'] = 'modal';
 
-$config->backup->actionList['delete']['icon'] = 'trash';
-$config->backup->actionList['delete']['text'] = $lang->delete;
-$config->backup->actionList['delete']['hint'] = $lang->delete;
-$config->backup->actionList['delete']['url']  = helper::createLink('backup', 'delete', 'file={name}');
+$config->backup->actionList['delete']['icon']         = 'trash';
+$config->backup->actionList['delete']['text']         = $lang->delete;
+$config->backup->actionList['delete']['hint']         = $lang->delete;
+$config->backup->actionList['delete']['className']    = 'ajax-submit';
+$config->backup->actionList['delete']['url']          = helper::createLink('backup', 'delete', 'file={name}');
+$config->backup->actionList['delete']['data-confirm'] = $lang->backup->confirmDelete;
 
