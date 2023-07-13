@@ -208,7 +208,8 @@ detailBody
                     inputGroup
                     (
                         $modeText
-                    )
+                    ),
+                    formHidden('mode', $task->mode)
                 ),
             item
             (
@@ -391,7 +392,8 @@ detailBody
                     (
                         setClass('span-text'),
                         icon('time')
-                    )
+                    ),
+                    formHidden('consumed', $task->consumed)
                 )
             ),
             item
