@@ -74,7 +74,7 @@ class featureBar extends wg
                     $subItem = array();
                     $subItem['text']   = $text;
                     $subItem['active'] = $key == $current;
-                    $subItem['url']    = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', $key, $link);
+                    $subItem['url']    = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', (string)$key, $link);
                     $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID];
 
                     if($item->name == 'QUERY')
