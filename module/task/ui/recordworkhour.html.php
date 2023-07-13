@@ -50,20 +50,89 @@ to::header
     )
 );
 
-
 if($efforts)
 {
-    div
-    (
-        setClass('table-title'),
-        $lang->task->committed
-    );
-    $tableData = initTableData($efforts, $config->task->effortTable->fieldList, $this->task);
-    dtable
-    (
-        set::cols(array_values($config->task->effortTable->fieldList)),
-        set::data($tableData),
-    );
+    /* 多人串行任务工时分两部分. */
+    if(!empty($task->team) and $task->mode == 'linear')
+    {
+        include './linearefforts.html.php';
+    }
+    else
+    {
+        $effortRows = array();
+        foreach($efforts as $effort)
+        {
+            $effortRows[] = h::tr
+                (
+                    h::td($effort->id),
+                    h::td($effort->date),
+                    h::td(zget($users, $effort->account)),
+                    h::td($effort->work),
+                    h::td($effort->consumed . ' H'),
+                    h::td($effort->left . ' H'),
+                    h::td
+                    (
+                        common::hasPriv('task', 'editEffort') ? a
+                        (
+                            setClass('btn ghost toolbar-item square size-sm'),
+                            set::href(createLink('task', 'editEffort', "id={$effort->id}")),
+                            icon('edit')
+                        ) : null,
+                        common::hasPriv('task', 'deleteWorkhour') ? a
+                        (
+                            setClass('btn ghost toolbar-item square size-sm ajax-submit'),
+                            set('data-confirm', $lang->task->confirmDeleteEstimate),
+                            set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
+                            icon('trash')
+                        ) : null,
+                    ),
+                );
+        }
+        div
+        (
+            setClass('table-title'),
+            $lang->task->committed
+        );
+        h::table 
+        (
+            setClass('table condensed bordered'),
+            h::tr
+            (
+                h::th
+                (
+                    width('32px'),
+                    $lang->idAB
+                ),
+                h::th
+                (
+                    width('100px'),
+                    $lang->task->date
+                ),
+                h::th
+                (
+                    width('100px'),
+                    $lang->task->recordedBy
+                ),
+                h::th($lang->task->work),
+                h::th
+                (
+                    width('60px'),
+                    $lang->task->consumedAB
+                ),
+                h::th
+                (
+                    width('60px'),
+                    $lang->task->leftAB
+                ),
+                h::th
+                (
+                    width('80px'),
+                    $lang->actions
+                ),
+            ),
+            $effortRows
+        );
+    }
 }
 
 if(!$this->task->canOperateEffort($task))
