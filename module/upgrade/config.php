@@ -759,3 +759,5 @@ $config->upgrade->recoveryActions->testcase->review['name']     = $lang->upgrade
 $config->upgrade->recoveryActions->testcase->review['method']   = 'operate';
 $config->upgrade->recoveryActions->testcase->review['open']     = 'normal';
 $config->upgrade->recoveryActions->testcase->review['position'] = 'browseandview';
+
+$config->upgrade->missedFlowFieldVersions = array('max4_4_alpha1', 'max4_4_beta1', 'max4_4', 'max4_5', 'biz4_4_alpha1', 'biz4_4_beta1', 'biz4_4', 'biz4_5');
