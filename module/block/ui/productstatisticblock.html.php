@@ -183,7 +183,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                         span
                                         (
                                             set('class', 'text-sm text-gray'),
-                                            $lang->block->productstatistic->totalStory
+                                            $lang->block->productstatistic->effectiveStory
                                         )
                                     )
                                 ),
@@ -208,7 +208,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                         span
                                         (
                                             set('class', 'text-sm text-gray'),
-                                            $lang->block->productstatistic->closed
+                                            $lang->block->productstatistic->delivered
                                         )
                                     )
                                 ),
@@ -221,11 +221,11 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                         (
                                             set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=unclosed&param=0&storyType=story")),
                                             set('class', 'text-black'),
-                                            $stories ? $stories['notClosed'] : 0
+                                            $stories ? $stories['unclosed'] : 0
                                         ) : span
                                         (
                                             set('class', 'text-black'),
-                                            $stories ? $stories['notClosed'] : 0
+                                            $stories ? $stories['unclosed'] : 0
                                         )
                                     ),
                                     div
@@ -233,7 +233,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                         span
                                         (
                                             set('class', 'text-sm text-gray'),
-                                            $lang->block->productstatistic->notClosed
+                                            $lang->block->productstatistic->unclosed
                                         )
                                     )
                                 )

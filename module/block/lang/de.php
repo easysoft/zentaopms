@@ -519,9 +519,9 @@ $lang->block->customModeTip->ALM    = 'The concept is more complete and rigorous
 $lang->block->customModeTip->light  = "Provides the core function of {$lang->projectCommon} management, suitable for small R&D teams.";
 
 $lang->block->productstatistic = new stdclass();
-$lang->block->productstatistic->totalStory      = 'Total Story';
-$lang->block->productstatistic->closed          = 'Closed';
-$lang->block->productstatistic->notClosed       = 'Not Closed';
+$lang->block->productstatistic->effectiveStory  = 'Effective stories';
+$lang->block->productstatistic->delivered       = 'Delivered';
+$lang->block->productstatistic->unclosed        = 'unclosed';
 $lang->block->productstatistic->storyStatistics = 'Story Statistics';
 $lang->block->productstatistic->monthDone       = 'Completed this month <span class="text-success font-bold">%s</span>';
 $lang->block->productstatistic->monthOpened     = 'Added this month <span class="text-black font-bold">%s</span>';

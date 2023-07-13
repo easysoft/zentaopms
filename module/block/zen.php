@@ -884,11 +884,11 @@ class blockZen extends block
         $stories = array();
         foreach($productStories as $product => $stageStories)
         {
-            $stories[$product] = array('closed' => 0, 'notClosed' => 0, 'total' => 0);
+            $stories[$product] = array('closed' => 0, 'unclosed' => 0, 'total' => 0);
             foreach($stageStories as $stage => $story)
             {
-                if($stage == 'closed') $stories[$product]['closed']    += $story->count;
-                if($stage != 'closed') $stories[$product]['notClosed'] += $story->count;
+                if($stage == 'closed') $stories[$product]['closed']   += $story->count;
+                if($stage != 'closed') $stories[$product]['unclosed'] += $story->count;
                 $stories[$product]['total'] += $story->count;
             }
         }
@@ -1496,7 +1496,7 @@ class blockZen extends block
             ->andWhere('project')->ne(0)
             ->andWhere('status')->eq('doing')
             ->andWhere('deleted')->eq(0)
-            ->orderBy('realBegan_asc')
+            ->orderBy('begin_asc')
             ->fetchGroup('product');
 
         $waitTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)

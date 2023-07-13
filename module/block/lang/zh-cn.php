@@ -531,9 +531,9 @@ $lang->block->customModeTip->ALM    = '适用于中大型团队的管理模式�
 $lang->block->customModeTip->light  = "适用于小型研发团队的管理模式，提供{$lang->projectCommon}管理的核心功能。";
 
 $lang->block->productstatistic = new stdclass();
-$lang->block->productstatistic->totalStory      = '需求总数';
-$lang->block->productstatistic->closed          = '已关闭';
-$lang->block->productstatistic->notClosed       = '未关闭';
+$lang->block->productstatistic->effectiveStory  = '有效需求数';
+$lang->block->productstatistic->delivered       = '已交付';
+$lang->block->productstatistic->unclosed        = '未关闭';
 $lang->block->productstatistic->storyStatistics = '需求统计';
 $lang->block->productstatistic->monthDone       = '本月完成 <span class="text-success font-bold">%s</span>';
 $lang->block->productstatistic->monthOpened     = '本月新增 <span class="text-black font-bold">%s</span>';
