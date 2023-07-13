@@ -32,13 +32,14 @@ div
 );
 $cols = array();
 foreach($config->release->dtable->defaultFields['linkBug'] as $field) $cols[$field] = zget($config->bug->dtable->fieldList, $field, array());
-$cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $data = array_values($allBugs);
+$cols['title']['data-size']   = 'lg';
+$cols['title']['data-toggle'] = 'modal';
 dtable
 (
     set::userMap($users),
     set::data($data),
-    set::cols($config->repo->bugDtable->fieldList),
+    set::cols($cols),
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),

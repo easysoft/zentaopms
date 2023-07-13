@@ -172,56 +172,6 @@ $config->repo->blameDtable->fieldList['content']['title'] = $lang->repo->code;
 $config->repo->blameDtable->fieldList['content']['type']  = 'html';
 $config->repo->blameDtable->fieldList['content']['width'] = '700';
 
-$app->loadLang('story');
-$app->loadModuleConfig('story');
-
-$config->repo->storyDtable = new stdclass();
-$config->repo->storyDtable->fieldList = array();
-$config->repo->storyDtable->fieldList['id']['name']     = 'id';
-$config->repo->storyDtable->fieldList['id']['title']    = $lang->idAB;
-$config->repo->storyDtable->fieldList['id']['type']     = 'id';
-$config->repo->storyDtable->fieldList['id']['checkbox'] = true;
-
-$config->repo->storyDtable->fieldList['pri']        = $config->story->dtable->fieldList['pri'];
-$config->repo->storyDtable->fieldList['plan']       = $config->story->dtable->fieldList['plan'];
-$config->repo->storyDtable->fieldList['module']     = $config->story->dtable->fieldList['module'];
-$config->repo->storyDtable->fieldList['title']      = $config->story->dtable->fieldList['title'];
-$config->repo->storyDtable->fieldList['openedBy']   = $config->story->dtable->fieldList['openedBy'];
-$config->repo->storyDtable->fieldList['assignedTo'] = $config->story->dtable->fieldList['assignedTo'];
-$config->repo->storyDtable->fieldList['estimate']   = $config->story->dtable->fieldList['estimate'];
-$config->repo->storyDtable->fieldList['status']     = $config->story->dtable->fieldList['status'];
-$config->repo->storyDtable->fieldList['stage']      = $config->story->dtable->fieldList['stage'];
-
-$config->repo->storyDtable->fieldList['title']['nestedToggle'] = false;
-$config->repo->storyDtable->fieldList['title']['type']         = 'text';
-$config->repo->storyDtable->fieldList['title']['fixed']        = '';
-$config->repo->storyDtable->fieldList['title']['minWidth']     = '200';
-$config->repo->storyDtable->fieldList['title']['sortType']     = true;
-$config->repo->storyDtable->fieldList['id']['fixed']           = '';
-$config->repo->storyDtable->fieldList['pri']['fixed']          = '';
-$config->repo->storyDtable->fieldList['pri']['sortType']       = true;
-$config->repo->storyDtable->fieldList['plan']['name']          = 'planTitle';
-$config->repo->storyDtable->fieldList['plan']['width']         = 'auto';
-$config->repo->storyDtable->fieldList['assignedTo']['type']    = 'user';
-
-$app->loadLang('bug');
-$app->loadModuleConfig('bug');
-
-$config->repo->bugDtable = new stdclass();
-$config->repo->bugDtable->fieldList = array();
-$config->repo->bugDtable->fieldList['id']['name']     = 'id';
-$config->repo->bugDtable->fieldList['id']['title']    = $lang->idAB;
-$config->repo->bugDtable->fieldList['id']['type']     = 'id';
-$config->repo->bugDtable->fieldList['id']['checkbox'] = true;
-
-$config->repo->bugDtable->fieldList['pri']        = $config->bug->dtable->fieldList['pri'];
-$config->repo->bugDtable->fieldList['title']      = $config->bug->dtable->fieldList['title'];
-$config->repo->bugDtable->fieldList['openedBy']   = $config->bug->dtable->fieldList['openedBy'];
-$config->repo->bugDtable->fieldList['assignedTo'] = $config->bug->dtable->fieldList['assignedTo'];
-$config->repo->bugDtable->fieldList['status']     = $config->bug->dtable->fieldList['status'];
-
-$config->repo->bugDtable->fieldList['pri']['fixed'] = 'left';
-
 $app->loadLang('task');
 $app->loadModuleConfig('task');
 
@@ -238,4 +188,9 @@ $config->repo->taskDtable->fieldList['finishedBy'] = $config->task->dtable->fiel
 $config->repo->taskDtable->fieldList['assignedTo'] = $config->task->dtable->fieldList['assignedTo'];
 $config->repo->taskDtable->fieldList['status']     = $config->task->dtable->fieldList['status'];
 
-$config->repo->taskDtable->fieldList['pri']['fixed'] = 'left';
+$config->repo->taskDtable->fieldList['pri']['fixed']         = 'left';
+$config->repo->taskDtable->fieldList['name']['data-toggle']  = 'modal';
+$config->repo->taskDtable->fieldList['name']['data-size']    = 'lg';
+$config->repo->taskDtable->fieldList['name']['nestedToggle'] = false;
+$config->repo->taskDtable->fieldList['name']['title']        = $lang->task->name;
+$config->repo->taskDtable->fieldList['assignedTo']['title']  = $lang->task->assignedTo;

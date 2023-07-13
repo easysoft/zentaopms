@@ -39,13 +39,18 @@ div
         $lang->productplan->unlinkedBugs . "({$pager->recTotal})"
     )
 );
-$allBugs = initTableData($allBugs, $config->repo->bugDtable->fieldList);
-$data = array_values($allBugs);
+$cols = array();
+foreach($config->release->dtable->defaultFields['linkBug'] as $field) $cols[$field] = zget($config->bug->dtable->fieldList, $field, array());
+$cols['title']['data-size']   = 'lg';
+$cols['title']['data-toggle'] = 'modal';
+
+$allBugs = initTableData($allBugs, $cols);
+$data    = array_values($allBugs);
 dtable
 (
     set::userMap($users),
     set::data($data),
-    set::cols($config->repo->bugDtable->fieldList),
+    set::cols($cols),
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),

@@ -33,8 +33,9 @@ div
 $cols = array();
 foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->release->dtable->story->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
-$cols['title']['link']         = $this->createLink('mr', 'link', "MRID={id}");
+$cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
 $cols['title']['nestedToggle'] = false;
+$cols['title']['data-size']    = 'lg';
 
 $data = array_values($allStories);
 dtable

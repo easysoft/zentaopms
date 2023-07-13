@@ -606,7 +606,8 @@ class mr extends control
 
         $this->loadModel('story');
         $this->app->loadLang('release');
-        $this->app->loadConfig('release');
+        $this->app->loadLang('release');
+        $this->app->loadModuleConfig('release');
         $this->app->loadLang('productplan');
 
         $product = $this->loadModel('product')->getById($productID);
@@ -696,6 +697,8 @@ class mr extends control
         }
 
         $this->loadModel('bug');
+        $this->app->loadLang('release');
+        $this->app->loadModuleConfig('release');
         $this->app->loadLang('productplan');
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 

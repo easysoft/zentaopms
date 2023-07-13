@@ -1064,6 +1064,8 @@ class repo extends control
         }
 
         $this->loadModel('story');
+        $this->app->loadLang('release');
+        $this->app->loadModuleConfig('release');
         $this->app->loadLang('productplan');
 
         $repo    = $this->repo->getByID($repoID);
@@ -1151,6 +1153,8 @@ class repo extends control
         }
 
         $this->loadModel('bug');
+        $this->app->loadLang('release');
+        $this->app->loadModuleConfig('release');
         $this->app->loadLang('productplan');
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 

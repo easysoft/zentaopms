@@ -39,15 +39,21 @@ div
         $lang->productplan->unlinkedStories . "({$pager->recTotal})"
     )
 );
-$config->repo->storyDtable->fieldList['module']['map'] = $modules;
-$config->repo->storyDtable->fieldList['title']['width'] = '100';
-$allStories = initTableData($allStories, $config->repo->storyDtable->fieldList);
-$data = array_values($allStories);
+
+$cols = array();
+foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->release->dtable->story->fieldList, $field, array());
+$cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
+$cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
+$cols['title']['nestedToggle'] = false;
+$cols['title']['data-size']    = 'lg';
+
+$allStories = initTableData($allStories, $cols);
+$data       = array_values($allStories);
 dtable
 (
     set::userMap($users),
     set::data($data),
-    set::cols($config->repo->storyDtable->fieldList),
+    set::cols($cols),
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
