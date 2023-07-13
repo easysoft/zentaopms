@@ -35,11 +35,11 @@ class dtable extends wg
                     'text' => $app->lang->datatable->custom
                 ),
                 'setGlobal' => array(
-                    'url' => '',
+                    'url' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}"),
                     'text' => $app->lang->datatable->setGlobal,
                 ),
                 'reset' => array(
-                    'url' => '',
+                    'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}"),
                     'text' => $app->lang->datatable->reset,
                 ),
             ));

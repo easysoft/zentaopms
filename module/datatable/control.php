@@ -201,21 +201,37 @@ class datatable extends control
      *
      * @param  string $module
      * @param  string $method
-     * @param  string $confirm
+     * @param  int    $system
      * @access public
      * @return void
      */
-    public function ajaxReset($module, $method, $system = 0, $confirm = 'no')
+    public function ajaxReset($module, $method, $system = 0)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->datatable->confirmReset, inlink('ajaxReset', "module=$module&method=$method&system=$system&confirm=yes")));
-
         $account = $this->app->user->account;
         $target  = $module . ucfirst($method);
-        $mode    = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
-        $key     = $mode == 'datatable' ? 'cols' : 'tablecols';
 
-        $this->loadModel('setting')->deleteItems("owner=$account&module=datatable&section=$target&key=$key");
-        if($system) $this->setting->deleteItems("owner=system&module=datatable&section=$target&key=$key");
-        return print(js::reload('parent'));
+        $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$target}&key=cols");
+        if($system) $this->setting->deleteItems("owner=system&module=datatable&section={$target}&key=cols");
+        return $this->send(array('result' => 'success', 'load' => true));
+    }
+
+    /**
+     * 应用自定义列配置到全局。
+     * Ajax save setting to global.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  int    $system
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveGlobal($module, $method)
+    {
+        $account  = $this->app->user->account;
+        $target   = $module . ucfirst($method);
+        $settings = isset($this->config->datatable->$target->cols) ? $this->config->datatable->$target->cols : '';
+        if(!empty($settings)) $this->loadModel('setting')->setItem("system.datatable.{$target}.cols", $settings);
+
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 }
