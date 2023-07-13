@@ -98,7 +98,7 @@ modalTrigger
     set(array('data-size' => 'sm', 'backdrop' => false)),
     modal
     (
-        setID('waitting'),
+        setID('waiting'),
         html($lang->backup->waitting),
         set::closeBtn(false),
         div

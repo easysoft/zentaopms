@@ -7,7 +7,7 @@ window.backup = function(e)
         {
             clearInterval(timeID);
 
-            $('#waitting .modal-body #message').append(data);
+            $('#waiting .modal-body #message').append(data);
 
             setTimeout(function()
             {
@@ -16,14 +16,16 @@ window.backup = function(e)
         },
     });
 
-    $('#waitting .modal-body #backupType').html(backup);
-    zui.Modal.open({id: 'waitting', size: 'sm', backdrop: false, show: true});
+    $('#waiting .modal-body #backupType').html(backup);
+
+    zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
+    $('#waiting').addClass('show');
 
     timeID = setInterval(function()
     {
         $.get($.createLink('backup', 'ajaxGetProgress'), function(data)
         {
-            $('#waitting .modal-content #message').html(data);
+            $('#waiting .modal-content #message').html(data);
         });
     }, 1000);
 }
