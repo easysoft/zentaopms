@@ -144,6 +144,15 @@ $(function()
     }
   });
   $('.target-form-group .option input:checked').trigger('change');
+
+  /* Enable buttons after going testing. */
+  $('#mainForm').ajaxForm({
+    finish: function(response, _, $form)
+    {
+      if(response.locate) setTimeout(function() {$.apps.open(response.locate);}, 1200);
+      $form.enableForm();
+    }
+  });
 });
 </script>
 
