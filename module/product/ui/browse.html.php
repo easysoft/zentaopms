@@ -219,6 +219,7 @@ unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert
 unset($lang->story->reasonList[''], $lang->story->reasonList['subdivided'], $lang->story->reasonList['duplicate']);
 unset($plans[''], $lang->story->stageList[''], $users['']);
 
+$planItems = $planItems ?? array();
 foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchReview', "result=$key"));
 foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchReview', "result=reject&reason=$key"));
 foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
@@ -232,14 +233,14 @@ foreach($lang->story->stageList as $key => $stageName)
 foreach($users as $account => $realname)
 {
     if($account == 'closed') continue;
-    $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchAssignTo', "productID={$product->id}"), 'data-account' => $account);
+    $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchAssignTo', "productID={$productID}"), 'data-account' => $account);
 }
 
 if(isset($reviewResultItems['reject'])) $reviewResultItems['reject'] = array('class' => 'not-hide-menu', 'text' => $lang->story->reviewResultList['reject'], 'items' => $reviewRejectItems);
 $reviewResultItems = array_values($reviewResultItems);
 
 $navActionItems = array();
-if($canBatchClose)  $navActionItems[] = array('text' => $lang->close, 'class' => 'batch-btn', 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchClose', "productID={$product->id}"));
+if($canBatchClose)  $navActionItems[] = array('text' => $lang->close, 'class' => 'batch-btn', 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchClose', "productID={$productID}"));
 if($canBatchReview) $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->review, 'items' => $reviewResultItems);
 if($canBatchChangeBranch && $product->type != 'normal') $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->product->branchName[$product->type], 'items' => $branchItems);
 if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->stageAB, 'items' => $stageItems);
@@ -247,7 +248,7 @@ if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu', 
 featureBar
 (
     set::current($storyBrowseType),
-    set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID")),
+    set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID")),
     li(searchToggle(set::open($browseType == 'bysearch'), set::module('story'))),
     div(
         zui::menu
