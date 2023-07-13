@@ -650,11 +650,12 @@ class upgradeModel extends model
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan7.2.beta.sql';
                     $this->execSQL($xuanxuanSql);
                 }
+
+                if($this->config->edition != 'open' and in_array($fromVersion, $this->config->upgrade->missedFlowFieldVersions))
+                {
+                    $this->fixMissedFlowField();
+                }
                 break;
-        }
-        if($fromEdition != 'open' and in_array($fromVersion, $this->config->upgrade->missedFlowFieldVersions))
-        {
-            $this->fixMissedFlowField();
         }
 
         $this->deletePatch();
