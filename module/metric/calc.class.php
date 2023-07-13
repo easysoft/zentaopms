@@ -24,7 +24,7 @@ class baseCalc
      * 数据库连接。
      * Database connection.
      *
-     * @var int
+     * @var object
      * @access public
      */
     public $dao = null;
@@ -169,5 +169,41 @@ class baseCalc
     {
         foreach($options as $scope => $option) $options[$scope] = explode(',', $option);
         return $options;
+    }
+
+    /**
+     * 获取数据源的SQL语句
+     * Get SQL of data source.
+     *
+     * @access public
+     * @return string
+     */
+    public function getSQL()
+    {
+        return $this->dao->get();
+    }
+
+    /**
+     * 打印数据源的SQL语句
+     * Print SQL of data source.
+     *
+     * @access public
+     * @return void
+     */
+    public function printSQL()
+    {
+        echo $this->getSQL();
+    }
+
+    /**
+     * 获取数据源的结果集。
+     * Get rows of data source.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRows()
+    {
+        return $this->getStatement()->fetchAll();
     }
 }
