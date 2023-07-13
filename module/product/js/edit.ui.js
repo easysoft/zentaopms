@@ -11,8 +11,8 @@ function toggleLineByProgram(obj)
 
     $.get($.createLink('product', 'ajaxGetLine', 'programID=' + programID), function(data)
     {
-        $('#line').remove();
-        $('#lineBox .form-group').append("<div class='form-group-wrapper picker-box' id='line'></div>");
-        return new zui.Picker('#line', JSON.parse(data));
+        let $picker = $('#line').zui('picker');
+        $picker.render(JSON.parse(data));
+        $picker.$.setValue('');
     })
 }

@@ -1,4 +1,4 @@
-$(document).on('click', '.batch-btn', function()
+$(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 {
     const $this       = $(this);
     const dtable      = zui.DTable.query($('#stories'));
@@ -19,7 +19,7 @@ $(document).on('click', '.batch-btn', function()
     }
 });
 
-$(document).on('click', '#batchUnlinkStory', function(e)
+$(document).off('click', '#batchUnlinkStory').on('click', '#batchUnlinkStory', function(e)
 {
     const $this       = $(this);
     const dtable      = zui.DTable.query($('#stories'));
@@ -40,3 +40,47 @@ $(document).on('click', '#batchUnlinkStory', function(e)
          $('#batchUnlinkStoryBox').html(data);
     });
 });
+
+window.renderCell = function(result, info)
+{
+    if(info.col.name == 'title' && result)
+    {
+        const story = info.row.data;
+        let html = '';
+        if(typeof modulePairs[story.rawModule] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.rawModule] + "</span> ";
+        if(html) result.unshift({html});
+    }
+    return result;
+};
+
+window.setStatistics = function(element, checkedIdList)
+{
+    if(checkedIdList.length == 0) return {html: pageSummary};
+
+    let total     = checkedIdList.length;
+    let estimate  = 0;
+    let rate      = '0%';
+    let hasCase   = 0;
+    let rateCount = total;
+
+    const rows  = element.layout.allRows;
+    rows.forEach((row) => {
+        if(checkedIdList.includes(row.id))
+        {
+            const story = row.data;
+            estimate   += parseFloat(story.estimate);
+            if(story.cases > 0)
+            {
+                hasCase += 1;
+            }
+            else if(typeof story.isParent != 'undefined' && story.isParent)
+            {
+                rateCount -= 1;
+            }
+        }
+    })
+
+    if(rateCount) rate = Math.round(hasCase / rateCount * 10000 / 100) + '' + '%';
+
+    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', estimate).replace('%rate%', rate)};
+};

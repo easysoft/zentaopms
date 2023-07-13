@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('projectID', $projectID);
-
+$storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
 $isProjectStory    = $this->app->rawModule == 'projectstory';
 $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
@@ -23,6 +22,11 @@ $storyProductIds   = array();
 
 foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
 $storyProductID = count($storyProductIds) > 1 ? 0 : $productID;
+
+jsVar('projectID', $projectID);
+jsVar('modulePairs', $modulePairs);
+jsVar('pageSummary', $summary);
+jsVar('checkedSummary', str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary));
 
 /* Generate sidebar to display module tree menu. */
 $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branchID)
@@ -170,12 +174,17 @@ $data    = array();
 $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules, 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $project);
 foreach($stories as $story)
 {
+    $story->rawModule    = $story->module;
     $options['branches'] = zget($branchOptions, $story->product, array());
     $data[] = $this->story->formatStoryForList($story, $options);
     if(!isset($story->children)) continue;
 
     /* Children. */
-    foreach($story->children as $key => $child) $data[] = $this->story->formatStoryForList($child, $options);
+    foreach($story->children as $key => $child)
+    {
+        $child->rawModule = $child->module;
+        $data[] = $this->story->formatStoryForList($child, $options);
+    }
 }
 
 data('storyBrowseType', $storyBrowseType);
@@ -287,9 +296,10 @@ dtable
     set::checkable($canBatchAction),
     set::cols($cols),
     set::data($data),
+    set::onRenderCell(jsRaw('window.renderCell')),
+    set::checkInfo(jsRaw('function(checkedIdList){return window.setStatistics(this, checkedIdList);}')),
     set::footPager(usePager()),
     set::footToolbar($footToolbar),
-    set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
 );
 
 modal(set::id('#batchUnlinkStoryBox'));

@@ -963,7 +963,7 @@ class fileModel extends model
      * @access public
      * @return bool
      */
-    public function updateObjectID(string $uid, int $objectID, string $objectType): bool
+    public function updateObjectID(string|bool $uid, int $objectID, string $objectType): bool
     {
         if(empty($uid)) return true;
         if(empty($_SESSION['album']['used'][$uid])) return true;
