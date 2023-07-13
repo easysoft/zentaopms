@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 $scope    = $this->session->testTaskVersionScope;
-$status   = $this->session->testTaskVersionStatus;
+$status   = $this->session->testTaskVersionStatus ? $this->session->testTaskVersionStatus : '';
 $viewName = $scope == 'local'? $productName : $lang->testtask->all;
 jsVar('condition', "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
 
@@ -21,7 +21,8 @@ $productDropdown = productMenu
     (
         array('text' => $lang->testtask->all, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=0&type=all,$status")),
         array('text' => $productName, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status"))
-    ))
+    )),
+    set::link(createLink('qa', 'index')),
 );
 featureBar
 (
