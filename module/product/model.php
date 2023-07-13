@@ -1965,7 +1965,20 @@ class productModel extends model
             ->andWhere('status')->eq('closed')
             ->andWhere('closedReason')->eq('done')
             ->fetchPairs('product', 'finish');
-        foreach($products as $productID => $product) $products[$productID]->finishClosedStories = isset($finishClosedStory[$productID]) ? $finishClosedStory[$productID] : 0;
+        $launchedStory = $this->dao->select('product, count(1) as launched')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('launched')
+            ->fetchPairs('product', 'launched');
+        $developingStory = $this->dao->select('product, count(1) as developing')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('developing')
+            ->fetchPairs('product', 'developing');
+        foreach($products as $productID => $product)
+        {
+            $products[$productID]->finishClosedStories = isset($finishClosedStory[$productID]) ? $finishClosedStory[$productID] : 0;
+            $products[$productID]->launchedStories     = isset($launchedStory[$productID]) ? $launchedStory[$productID] : 0;
+            $products[$productID]->developingStories   = isset($developingStory[$productID]) ? $developingStory[$productID] : 0;
+        }
 
         return $products;
     }
