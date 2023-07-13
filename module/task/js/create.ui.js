@@ -411,7 +411,7 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
         }
 
         assignedToList += `<div class='picker-multi-selection' data-index=${index}><span class='text'>${realname}</span><div class="picker-deselect-btn btn size-xs ghost"><span class="close"></span></div></div>`;
-        assignedToList += '<i class="icon icon-arrow-right"></i>';
+        if(mode == 'linear') assignedToList += '<i class="icon icon-arrow-right"></i>';
     })
 
     if(error) return false;
@@ -427,7 +427,7 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
     }
 
     /* 将选中的团队成员展示在指派给后面. */
-    const regex    = /<i class="icon icon-arrow-right"><\/i>(?!.*<i class="icon icon-arrow-right"><\/i>)/;
+    const regex = /<i class="icon icon-arrow-right"><\/i>(?!.*<i class="icon icon-arrow-right"><\/i>)/;
     assignedToList = assignedToList.replace(regex, '');
     $('div.assignedToList').prepend(assignedToList);
 
