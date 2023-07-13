@@ -20,7 +20,7 @@ $data[0]['items'] = $this->program->buildTree($programs);
 $json = array();
 $json['data']       = $data;
 $json['searchHint'] = $lang->searchAB;
-$json['link']       = $link;
+$json['link']       = array('program' => $link);
 $json['labelMap']   = array('program' => $lang->program->common);
 $json['expandName'] = 'closed';
 $json['itemType']   = 'program';
