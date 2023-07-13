@@ -444,18 +444,21 @@ class aiModel extends model
     }
 
     /**
-     * toggle prompt status.
+     * Toggle prompt status.
      *
-     * @param  int     $id
+     * @param  int|object  $prompt  prompt (or id) to toggle.
+     * @param  string      $status  optional, will set status to $status if provided.
      * @access public
      * @return bool
      */
-    public function togglePromptStatus($id)
+    public function togglePromptStatus($prompt, $status = '')
     {
-        $prompt = $this->getPromptById($id);
-        if(!$prompt) return false;
+        if(is_int($prompt)) $prompt = $this->getPromptById($prompt);
+        if(empty($prompt)) return false;
 
-        $prompt->status = $prompt->status == 'draft' ? 'active' : 'draft';
+        $flipedStatus = $prompt->status == 'draft' ? 'active' : 'draft';
+
+        $prompt->status = empty($status) ? $flipedStatus : $status;
         return $this->updatePrompt($prompt);
     }
 

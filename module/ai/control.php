@@ -342,6 +342,7 @@ class ai extends control
             $prompt->desc = $data->desc;
 
             $this->ai->updatePrompt($prompt);
+            $this->ai->togglePromptStatus($prompt, 'active');
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($isJumpToNext)
