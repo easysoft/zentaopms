@@ -122,7 +122,9 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
         }
 
         $progressMax = max($product->addYesterday, $product->addToday, $product->resolvedYesterday, $product->resolvedToday, $product->closedYesterday, $product->closedToday);
+        $progress      = array();
         $progressBlcok = array();
+        $progressLabel = array();
         foreach(array('addYesterday', 'addToday', 'resolvedYesterday', 'resolvedToday', 'closedYesterday', 'closedToday') as $key => $field)
         {
             $progressLabel[] = div(set('class', ($key % 2 === 0 ? 'py-1' : 'text-gray pt-1 pb-3')), span($lang->block->qastatistic->{$field}), span(set('class', 'ml-1'), $product->{$field}));
