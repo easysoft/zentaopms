@@ -8,14 +8,12 @@
  * 目的：scale
  * 度量名称：按产品统计的月度完成研发需求数
  * 单位：个
- * 描述：产品中关闭时间为某年某月且关闭原因为已完成的研发需求的个数求和
-过滤已删除的研发需求
-过滤已删除的产品
+ * 描述：产品中关闭时间为某年某月且关闭原因为已完成的研发需求的个数求和 过滤已删除的研发需求 过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -23,21 +21,46 @@
  */
 class count_of_monthly_finished_story_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.closedDate', 't1.closedReason');
 
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function calculate($row)
+    {
+        $product    = $row->product;
+        $closedDate = $row->closedDate;
 
-    //public function calculate($data)
-    //{
-    //}
+        $year  = substr($closedDate, 0, 4);
+        $month = substr($closedDate, 5, 2);
 
-    //public function getResult()
-    //{
-    //}
+        if(empty($year) or empty($month)) return;
+        if($year == '0000' or $month == '00') return;
+
+        if(!isset($this->result[$product])) $this->result[$product] = array();
+        if(!isset($this->result[$product][$year])) $this->result[$product][$year] = array();
+        if(!isset($this->result[$product][$year][$month])) $this->result[$product][$year][$month] = 0;
+
+        $this->result[$product][$year][$month] ++;
+
+    }
+
+    public function getResult($options = array())
+    {
+        $records = array();
+        foreach($this->result as $product => $years)
+        {
+            foreach($years as $year => $months)
+            {
+                foreach($months as $month => $value)
+                {
+                    $records[] = array('product' => $product, 'year' => $year, 'month' => $month, 'value' => $value);
+                }
+            }
+        }
+
+        return $this->filterByOptions($records, $options);
+
+    }
 }
