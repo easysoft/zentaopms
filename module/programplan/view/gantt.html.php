@@ -17,6 +17,10 @@
 <style>
 .submitBtn{display:none}
 .gantt_row_task:hover .submitBtn{ display: inline-block;}
+.editDeadline {display: none;}
+td:hover > .deadline + .editDeadline {display: inline-block; line-height: normal !important; padding: 2px 6px; color: #fff !important;}
+.gantt_tree_content table {width: 100%;}
+.gantt_tree_content table td {padding: 0 !important;}
 #ganttView {height: 600px;}
 #mainContent:before {background: #fff;}
 .checkbox-primary {margin-top: 0px; margin-left: 10px;}
@@ -90,6 +94,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('showFields', $this->config->programplan->ganttCustom->ganttFields);?>
 <?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
 <?php js::set('zooming', isset($zooming) ? $zooming : 'day');?>
+<?php js::set('canEditDeadline', common::hasPriv('review', 'edit'));?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <?php if($this->app->getModuleName() == 'programplan'):?>
   <div class='btn-toolbar pull-left'>
@@ -609,7 +614,7 @@ $(function()
     if(showFields.indexOf('PM') != -1) gantt.config.columns.push({name: 'owner_id', align: 'left', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}})
     if(showFields.indexOf('status') != -1) gantt.config.columns.push({name: 'status', align: 'center', resize: true, width: 80});
     gantt.config.columns.push({name: 'start_date', align: 'center', resize: true, width: 80});
-    if(showFields.indexOf('deadline') != -1) gantt.config.columns.push({name: 'end_date', align: 'center', resize: true, width: 80});
+    if(showFields.indexOf('deadline') != -1) gantt.config.columns.push({name: 'end_date', align: 'center', resize: true, width: 140, template: getDeadlineBtn});
     gantt.config.columns.push({name: 'duration', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('estimate') != -1) gantt.config.columns.push({name: 'estimate', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('progress') != -1) gantt.config.columns.push({name: 'percent', align: 'center', resize: true, width:70, template: function(plan){ if(plan.percent) return Math.round(plan.percent) + '%';}});
@@ -619,6 +624,13 @@ $(function()
     if(showFields.indexOf('consumed') != -1) gantt.config.columns.push({name: 'consumed', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('delay') != -1) gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('delayDays') != -1) gantt.config.columns.push({name: 'delayDays', align: 'center', resize: false, width: 60});
+
+    function getDeadlineBtn(task)
+    {
+        var date = task.end_date;
+        if(task.type == 'point' && canEditDeadline && (!task.rawStatus || task.rawStatus == 'fail')) return "<table><tr><td><span class='deadline'>" + gridDateToStr(new Date(date.valueOf() - 1)) + '</span> <a class="btn btn-primary editDeadline" title="<?php echo $lang->programplan->edit;?>"><i class="icon-common-edit icon-edit"></i> <?php echo $lang->programplan->edit;?></a></td></tr></table>';
+        return gridDateToStr(new Date(date.valueOf() - 1));
+    }
 
     function getSubmitBtn(task)
     {
@@ -771,6 +783,41 @@ $(function()
     var taskModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%'});
     gantt.attachEvent('onTaskClick', function(id, e)
     {
+        if($(e.srcElement).hasClass('editDeadline'))
+        {
+           var parentID = id.split("-")[0];
+           var stageEndDate = $("div[data-task-id='" + parentID + "']").find('div[data-column-name="end_date"] > .gantt_tree_content').text();
+           var reviewID     = id;
+
+           $(e.srcElement).datetimepicker(
+           {
+               weekStart: 1,
+               todayBtn:  1,
+               autoclose: 1,
+               todayHighlight: 1,
+               startView: 2,
+               minView: 2,
+               forceParse: 0,
+               format: "yyyy-mm-dd",
+               startDate: new Date(),
+               endDate: new Date(stageEndDate)
+           })
+           .on('changeDate', function(ev){
+               var year = ev.date.getFullYear();
+               var month = ev.date.getMonth() + 1;
+               var day = ev.date.getDate();
+               var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+
+               $.post(createLink('review', 'ajaxChangeTRDeadline'), {'deadline' : formattedDate, 'id' : reviewID , 'projectID' : projectID}, function()
+               {
+                   $(e.srcElement).parents('div.gantt_tree_content').find('.deadline').text(formattedDate);
+                   $(e.srcElement).parents('div.gantt_row_task').find('div[data-column-name="start_date"] .gantt_tree_content').text(formattedDate);
+               });
+           });
+           $(e.srcElement).datetimepicker('show');
+           return false;
+        }
+
         if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
 
         var task = gantt.getTask(id);
