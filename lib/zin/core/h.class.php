@@ -266,7 +266,7 @@ class h extends wg
     public static function createJsScopeCode(string|array $codes): string
     {
         if(is_array($codes)) $codes = implode("\n", $codes);
-        return "(function(){\n$codes\n}());";
+        return ";(function(){\n$codes\n}());";
     }
 
     public static function jsRaw(): string
