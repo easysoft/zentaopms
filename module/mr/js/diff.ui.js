@@ -150,17 +150,17 @@ function findItemInTreeItems(list, key, level) {
         {
             parentTree = [item.key];
         }
-        else
-        {
-            parentTree.push(item.key);
-        }
 
         if (item.key === key) return item;
 
         if (item.items && item.items.length > 0)
         {
             const findedItem = findItemInTreeItems(item.items, key);
-            if (findedItem) return findedItem;
+            if (findedItem)
+            {
+                parentTree.push(item.key);
+                return findedItem;
+            }
         }
     }
 }

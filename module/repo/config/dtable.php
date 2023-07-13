@@ -71,7 +71,7 @@ $config->repo->repoDtable->fieldList['name']['title']    = $lang->repo->name;
 $config->repo->repoDtable->fieldList['name']['minWidth'] = '160';
 $config->repo->repoDtable->fieldList['name']['sortType'] = false;
 $config->repo->repoDtable->fieldList['name']['type']     = 'shortTitle';
-$config->repo->repoDtable->fieldList['name']['fixed']    = 'left';
+$config->repo->repoDtable->fieldList['name']['fixed']    = false;
 $config->repo->repoDtable->fieldList['name']['hint']     = true;
 $config->repo->repoDtable->fieldList['name']['checkbox'] = false;
 
@@ -104,14 +104,16 @@ $config->repo->commentDtable = new stdclass();
 $config->repo->commentDtable->fieldList['id']['title']    = '';
 $config->repo->commentDtable->fieldList['id']['name']     = '';
 $config->repo->commentDtable->fieldList['id']['type']     = 'checkID';
+$config->repo->commentDtable->fieldList['id']['fixed']    = false;
 $config->repo->commentDtable->fieldList['id']['sortType'] = false;
 $config->repo->commentDtable->fieldList['id']['checkbox'] = true;
-$config->repo->commentDtable->fieldList['id']['width']    = '40';
+$config->repo->commentDtable->fieldList['id']['width']    = '25';
 
 $config->repo->commentDtable->fieldList['revision']['name']     = 'revision';
 $config->repo->commentDtable->fieldList['revision']['title']    = $lang->repo->revisions;
 $config->repo->commentDtable->fieldList['revision']['sortType'] = false;
 $config->repo->commentDtable->fieldList['revision']['type']     = 'title';
+$config->repo->commentDtable->fieldList['revision']['fixed']    = false;
 $config->repo->commentDtable->fieldList['revision']['width']    = '100';
 $config->repo->commentDtable->fieldList['revision']['hint']     = true;
 

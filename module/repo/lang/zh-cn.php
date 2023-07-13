@@ -28,7 +28,7 @@ $lang->repo->branch          = '分支';
 $lang->repo->tag             = '标签';
 $lang->repo->addWebHook      = '添加Webhook';
 $lang->repo->apiGetRepoByUrl = '接口：通过URL获取代码库';
-$lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息，<span class="tip-circular"></span> %name 于 %time 提交 %version %comment';
+$lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息： %name 于 %time 提交 %version %comment';
 $lang->repo->notRelated      = '暂时没有关联禅道对象';
 
 $lang->repo->browseAction    = '浏览代码库';

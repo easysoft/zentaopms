@@ -25,7 +25,7 @@
 .sync-main-content h3 {font-size: 16px; font-weight: 700;}
 .sync-main-content p {color: #313c52;}
 .sync-main-content .alert > [class*="icon-"] {font-size: 42px;opacity: 0.8;}
-.repo-linkstory-title {background-color: #e6f0ff; color: #2e7fff; padding: 4px 0 12px;}
+.repo-linkstory-title {background-color: #e6f0ff; color: #2e7fff; padding: 12px 6px 12px;}
 #sourceSwapper {text-align: left; margin-bottom: 2px;}
 .sidebar {background-color: white}
 #monacoTabs .nav > li > a {padding: 8px 10px; display: flex; white-space: pre;}

@@ -45,7 +45,7 @@ div(
     (
         set::id('monacoTabs'),
         set::class('relative'),
-        div(setStyle(array('position' => 'absolute', 'width' => '100%', 'height' => '35px', 'background' => '#efefef', 'top' => '0px'))),
+        div(setStyle(array('position' => 'absolute', 'width' => '100%', 'height' => '40px', 'background' => '#efefef', 'top' => '0px'))),
         tabPane
         (
             set::title($pathInfo['basename']),

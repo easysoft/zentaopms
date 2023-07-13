@@ -6,14 +6,14 @@ window.renderCell = function(result, {col, row})
     if(col.name === 'name')
     {
         var iconHtml = '<span class="' + (row.data.kind == 'dir' ? 'directory' : 'file') + ' mini-icon"></span>';
-        result[0] = {html:iconHtml + '<a href="' + row.data.link + '">' + row.data.name + '</a>', style:{flexDirection:"column"}};
+        result[0] = {html:iconHtml + '<a href="' + row.data.link + '">' + row.data.name + '</a>'};
 
         return result;
     }
 
     if(col.name === 'originalComment')
     {
-        result[0] = {html:'<span class="repo-comment">' + row.data.comment + '</span>', style:{flexDirection:"column"}};
+        result[0] = {html:'<span class="repo-comment">' + row.data.comment + '</span>'};
 
         return result;
     }
