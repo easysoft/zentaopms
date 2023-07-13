@@ -1656,6 +1656,7 @@ class programplanModel extends model
             {
                 if($parent->status != 'closed')
                 {
+                    if($project->model == 'ipd' and $parent->parent == $project->id) break;
                     $newParent    = $this->execution->buildExecutionByStatus('closed');
                     $parentAction = 'closedbychild';
                 }
