@@ -320,14 +320,24 @@ class testcase extends control
         $cases = $this->testcase->appendData($cases);
 
         $groupCases  = array();
-        $groupByList = array();
         foreach($cases as $case)
         {
-            if($groupBy == 'story')
+            if($groupBy == 'story') $groupCases[$case->story][] = $case;
+        }
+
+        $story = '';
+        foreach($cases as $index => $case)
+        {
+            if($case->storyDeleted)
             {
-                if($case->storyDeleted) continue;
-                $groupCases[$case->story][] = $case;
-                $groupByList[$case->story]  = $case->storyTitle;
+                unset($cases[$index]);
+                continue;
+            }
+            $case->rowspan = 0;
+            if($story !== $case->story)
+            {
+                $story = $case->story;
+                if(!empty($groupCases[$case->story])) $case->rowspan = count($groupCases[$case->story]);
             }
         }
 
@@ -342,8 +352,7 @@ class testcase extends control
         $this->view->browseType  = 'group';
         $this->view->groupBy     = $groupBy;
         $this->view->orderBy     = $groupBy;
-        $this->view->groupByList = $groupByList;
-        $this->view->cases       = $groupCases;
+        $this->view->cases       = $cases;
         $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->suiteID     = 0;
         $this->view->moduleID    = 0;
