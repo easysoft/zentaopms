@@ -75,7 +75,6 @@ if($linkedProducts)
                             set::items($allProducts),
                             set::last($product->id),
                             $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null,
-                            on::change('productChange')
                         )
                     ),
                 )
@@ -92,7 +91,6 @@ if($linkedProducts)
                         set::name("branch[$i][]"),
                         set::items($branches),
                         set::value(implode(',', $product->branches)),
-                        on::change('branchChange')
                     )
                 ),
             ),
@@ -119,14 +117,12 @@ if($linkedProducts)
                     btn
                     (
                         setClass('btn ghost addLine'),
-                        on::click('addNewLine'),
                         icon('plus')
                     ),
                     btn
                     (
                         setClass('btn ghost removeLine'),
                         icon('close'),
-                        on::click('removeLine'),
                         $i == 0 ? set::disabled(true) : null
                     ),
                 )
@@ -160,13 +156,25 @@ formPanel
                 setClass("$labelClass h-5 px-2"),
                 zget($lang->project->modelList, $model, '')
             ),
-            set::trigger('click'),
             set::placement('bottom'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::items($projectModelItems),
-            on::click('changModel')
         )
     )),
+    on::click('.addLine', 'addNewLine'),
+    on::click('.removeLine', 'removeLine'),
+    on::click('.project-type-1', 'changeType(1)'),
+    on::click('.project-type-0', 'changeType(0)'),
+    on::click('.project-stageBy-0', 'changeStageBy(0)'),
+    on::click('.project-stageBy-1', 'changeStageBy(1)'),
+    on::change('[name^=products]', 'productChange'),
+    on::change('[name^=branch]', 'branchChange'),
+    on::change('#parent', 'setParentProgram'),
+    on::change('#begin', 'computeWorkDays'),
+    on::change('#end', 'computeWorkDays'),
+    on::change('[name=delta]', 'setDate'),
+    on::change('[name=future]', 'toggleBudget'),
+    on::change('[name=newProduct]', 'addProduct'),
     formRow
     (
         formGroup
@@ -177,7 +185,6 @@ formPanel
             set::label($lang->project->parent),
             set::disabled($disableParent),
             set::items($programList),
-            on::change('setParentProgram')
         ),
         $disableParent ? formHidden('parent', $project->parent) : null,
         formGroup
@@ -290,28 +297,22 @@ formPanel
             set::required(true),
             inputGroup
             (
-                input
+                datePicker
                 (
                     set::name('begin'),
-                    set::type('date'),
                     set('id', 'begin'),
                     set::value($project->begin),
                     set::placeholder($lang->project->begin),
                     set::required(true),
-                    /* TODO associate event */
-                    on::change('computeWorkDays')
                 ),
                 $lang->project->to,
-                input
+                datePicker
                 (
                     set::name('end'),
                     set('id', 'end'),
-                    set::type('date'),
                     set::value($project->end),
                     set::placeholder($lang->project->end),
                     set::required(true),
-                    /* TODO associate event */
-                    on::change('computeWorkDays')
                 ),
             )
         ),
@@ -321,7 +322,6 @@ formPanel
             setClass('items-center'),
             radioList
             (
-                on::change('setDate'),
                 set::name('delta'),
                 set::value((strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1),
                 set::inline(true),
@@ -363,14 +363,12 @@ formPanel
                 btn
                 (
                     setClass('primary-pale project-stageBy-0'),
-                    on::click('changeStageBy(0)'),
                     set::disabled($disableStageBy),
                     $lang->project->stageByList[0]
                 ),
                 btn
                 (
                     setClass('project-stageBy-1'),
-                    on::click('changeStageBy(1)'),
                     set::disabled($disableStageBy),
                     $lang->project->stageByList[1]
                 ),
@@ -386,7 +384,6 @@ formPanel
         set::control('editor'),
         set::placeholder($lang->project->editorPlaceholder)
     ),
-    /* TODO printExtendFields() */
     formGroup
     (
         set::width('1/2'),

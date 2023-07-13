@@ -159,6 +159,8 @@ formPanel
     on::click('.removeLine', 'removeLine'),
     on::click('.project-type-1', 'changeType(1)'),
     on::click('.project-type-0', 'changeType(0)'),
+    on::click('.project-stageBy-0', 'changeStageBy(0)'),
+    on::click('.project-stageBy-1', 'changeStageBy(1)'),
     on::change('[name^=products]', 'productChange'),
     on::change('[name^=branch]', 'branchChange'),
     on::change('#parent', 'setParentProgram'),
@@ -362,7 +364,7 @@ formPanel
                 ),
                 div
                 (
-                    setClass('flex items-center pl-2'),
+                    setClass('flex items-center pl-2 clip'),
                     checkbox
                     (
                         set::name('newProduct'),
@@ -454,14 +456,12 @@ formPanel
                 set::seg(true),
                 btn(
                     setClass('primary-pale project-stageBy-0'),
-                    on::click('changeStageBy(0)'),
                     set::disabled($copyProjectID),
                     $lang->project->stageByList[0]
                 ),
                 btn
                 (
                     setClass('project-stageBy-1'),
-                    on::click('changeStageBy(1)'),
                     set::disabled($copyProjectID),
                     $lang->project->stageByList[1]
                 ),
@@ -476,7 +476,6 @@ formPanel
         set::control('editor'),
         set::placeholder($lang->project->editorPlaceholder)
     ),
-    /* TODO printExtendFields() */
     formRow
     (
         set::id('aclList'),
@@ -490,7 +489,6 @@ formPanel
             set::value($copyProjectID ? $copyProject->acl : 'private'),
         )
     ),
-    /* TODO add events */
     formGroup
     (
         set::width('1/2'),

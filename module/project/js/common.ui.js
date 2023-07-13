@@ -462,7 +462,8 @@ window.addNewLine = function(e)
     newLine.find('div[id^=plan] .picker-box').empty();
     newLine.find('div[id^=plan] .picker-box').append(`<div id=plans${index}></div>`);
 
-    options.name = `products[${index}]`;
+    options.name         = `products[${index}]`;
+    options.defaultValue = '';
     new zui.Picker(`#products${index}`, options);
 
     new zui.Picker(`#plans${index}`, {
