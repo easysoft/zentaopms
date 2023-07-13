@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度关闭研发需求规模数。
- * .
+ * Scale of annual closed story in product.
  *
  * 范围：product
  * 对象：story
@@ -9,8 +9,8 @@
  * 度量名称：按产品统计的年度关闭研发需求规模数
  * 单位：sp/工时
  * 描述：产品中关闭时间在某年的研发需求的规模数求和
-过滤已删除的研发需求
-过滤已删除的产品
+ *       过滤已删除的研发需求
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +23,39 @@
  */
 class scale_of_annual_closed_story_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.closedDate', 't1.estimate');
 
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function calculate($data)
+    {
+        $product    = $data->product;
+        $closedDate = $data->closedDate;
+        $estimate   = $data->estimate;
 
-    //public function calculate($data)
-    //{
-    //}
+        $year  = substr($closedDate, 0, 4);
 
-    //public function getResult()
-    //{
-    //}
+        if($year == '0000') return;
+
+        if(!isset($this->result[$product])) $this->result[$product] = array();
+        if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;
+
+        $this->result[$product][$year] += $estimate;
+    }
+
+    public function getResult($options = null)
+    {
+        $records = array();
+        foreach($this->result as $product => $years)
+        {
+            foreach($years as $year => $value)
+            {
+                $records[] = array('product' => $product, 'year' => $year, 'value' => $value);
+            }
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
