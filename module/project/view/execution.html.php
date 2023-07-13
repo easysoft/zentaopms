@@ -104,7 +104,7 @@
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
           <th class='w-50px'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
-          <th class='c-date'><?php echo $lang->programplan->end;?></th>
+          <th class='c-enddate'><?php echo $lang->programplan->end;?></th>
           <th class='w-50px text-right'><?php echo $lang->task->estimateAB;?></th>
           <th class='w-50px text-right'><?php echo $lang->task->consumedAB;?></th>
           <th class='w-50px text-right'><?php echo $lang->task->leftAB;?> </th>

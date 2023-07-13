@@ -628,7 +628,7 @@ $(function()
     function getDeadlineBtn(task)
     {
         var date = task.end_date;
-        if(task.type == 'point' && canEditDeadline && (!task.rawStatus || task.rawStatus == 'fail')) return "<table><tr><td><span class='deadline'>" + gridDateToStr(new Date(date.valueOf() - 1)) + '</span> <a class="btn btn-primary editDeadline" title="<?php echo $lang->programplan->edit;?>"><i class="icon-common-edit icon-edit"></i> <?php echo $lang->programplan->edit;?></a></td></tr></table>';
+        if(task.type == 'point' && canEditDeadline && (!task.rawStatus || task.rawStatus == 'fail' || task.rawStatus == 'draft')) return "<table><tr><td><span class='deadline'>" + gridDateToStr(new Date(date.valueOf() - 1)) + '</span> <a class="btn btn-primary editDeadline" title="<?php echo $lang->programplan->edit;?>"><i class="icon-common-edit icon-edit"></i> <?php echo $lang->programplan->edit;?></a></td></tr></table>';
         return gridDateToStr(new Date(date.valueOf() - 1));
     }
 
@@ -803,9 +803,9 @@ $(function()
                endDate: new Date(stageEndDate)
            })
            .on('changeDate', function(ev){
-               var year = ev.date.getFullYear();
+               var year  = ev.date.getFullYear();
                var month = ev.date.getMonth() + 1;
-               var day = ev.date.getDate();
+               var day   = ev.date.getUTCDate();
                var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
 
                $.post(createLink('review', 'ajaxChangeTRDeadline'), {'deadline' : formattedDate, 'id' : reviewID , 'projectID' : projectID}, function()
