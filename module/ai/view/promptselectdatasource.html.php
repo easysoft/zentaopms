@@ -37,6 +37,7 @@
   .obj-view-header.checkbox-inline, .obj-view-item.checkbox-inline {margin: 4px; cursor: unset;}
   .obj-view-item.checkbox-inline+.obj-view-item.checkbox-inline {margin-left: 4px; margin-top: 4px;}
   .checkbox-inline > label, .checkbox-inline > input {cursor: pointer;}
+  .checkbox-primary > label {padding-left: 0;}
   #selected-data-sorter .list-group {padding: 0; margin: 0; list-style: none; overflow: hidden;}
   #selected-data-sorter .list-group-item {padding: 8px 16px; display: flex; align-items: center; cursor: move; transition: background-color 0.2s ease-in-out;}
   #selected-data-sorter .list-group-item > span {flex-grow: 1;}
@@ -195,7 +196,7 @@ class DataPropertyCheckbox extends HTMLDivElement
     const source = this.getAttribute('source');
     const group  = this.getAttribute('group');
 
-    this.classList.add('checkbox-inline');
+    this.classList.add('checkbox-primary', 'checkbox-inline');
     const itemOption = document.createElement('input');
     itemOption.setAttribute('type', 'checkbox');
     itemOption.setAttribute('prop', !!group ? `${source}.${prop}` : source);
