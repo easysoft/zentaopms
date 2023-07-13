@@ -453,7 +453,7 @@ class aiModel extends model
      */
     public function togglePromptStatus($prompt, $status = '')
     {
-        if(is_int($prompt)) $prompt = $this->getPromptById($prompt);
+        if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
         if(empty($prompt)) return false;
 
         $flipedStatus = $prompt->status == 'draft' ? 'active' : 'draft';
@@ -720,7 +720,7 @@ class aiModel extends model
      */
     public function executePrompt($prompt, $objectId)
     {
-        if(is_int($prompt)) $prompt = $this->getPromptById($prompt);
+        if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
         if(empty($prompt)) return false;
 
         $objectData = $this->getObjectForPromptById($prompt, $objectId);
@@ -744,7 +744,7 @@ class aiModel extends model
      */
     public function isExecutable($prompt)
     {
-        if(is_int($prompt)) $prompt = $this->getByID($prompt);
+        if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return false;
 
         $executable = true;
@@ -800,7 +800,7 @@ class aiModel extends model
      */
     public function getTargetFormLocation($prompt, $objectId)
     {
-        if(is_int($prompt)) $prompt = $this->getByID($prompt);
+        if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return false;
 
         $targetForm = $prompt->targetForm;
