@@ -9,10 +9,10 @@
  * 度量名称：按产品统计的研发完成需求的Bug密度
  * 单位：个
  * 描述：复用：
-按产品统计的有效Bug数
-按产品统计的研发完成的研发需求规模数
-公式：
-按产品统计的研发完成需求的Bug密度=按产品统计的有效Bug数/按产品统计的研发完成的研发需求规模数
+         按产品统计的有效Bug数
+         按产品统计的研发完成的研发需求数
+         公式：
+         按产品统计的研发完成需求的Bug密度=按产品统计的有效Bug数/按产品统计的研发完成的研发需求规模数
  * 度量库：
  * 收集方式：realtime
  *
@@ -25,21 +25,51 @@
  */
 class bug_concentration_of_developed_story_in_product extends baseCalc
 {
-    public $dataset = '';
-
-    public $fieldList = array();
-
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function getStatement()
+    {
+        $developedStory = $this->dao->select('product, count(id) AS storyNum')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
+            ->andWhere('stage', true)->in('developed,testing,tested,verified,released')
+            ->orWhere('closedReason')->eq('done')
+            ->markRight(1)
+            ->groupBy('product')
+            ->get();
 
-    //public function calculate($data)
-    //{
-    //}
+        $effectiveBug = $this->dao->select('product, count(id) AS bugNum')
+            ->from(TABLE_BUG)
+            ->where('resolution')->in('fixed,postponed')
+            ->orWhere('status')->eq('active')
+            ->groupBy('product')
+            ->get();
 
-    //public function getResult()
-    //{
-    //}
+        return $this->dao->select('t1.id, t1.name, t2.storyNum, t3.bugNum')
+            ->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin("($developedStory)")->alias('t2')->on('t1.id = t2.product')
+            ->leftJoin("($effectiveBug)")->alias('t3')->on('t1.id = t3.product')
+            ->where('deleted')->eq(0)
+            ->query();
+    }
+
+    public function calculate($data)
+    {
+        $product    = $data->id;
+        $storyCount = $data->storyNum;
+        $bugCount   = $data->bugNum;
+
+        $this->result[$product] = (empty($storyCount) || empty($bugCount)) ? 0 : round($bugCount / $storyCount, 4);
+    }
+
+    public function getResult($options = null)
+    {
+        $records = array();
+        foreach($this->result as $product => $value)
+        {
+            $records[] = array('product' => $product, 'value' => $value);
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
