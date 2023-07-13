@@ -4,6 +4,7 @@ include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
 zdTable('feedback')->gen(1000);
+zdTable('product')->gen(200);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
@@ -16,7 +17,7 @@ pid=1
 
 */
 
-r(count($calc->getResult()))                && p('')        && e('46'); // 测试反馈按产品分组数。
+r(count($calc->getResult()))                   && p('')        && e('100'); // 测试反馈按产品分组数。
 r($calc->getResult(array('product' => '78')))  && p('0:value') && e('8');  // 测试产品78的反馈数。
 r($calc->getResult(array('product' => '84')))  && p('0:value') && e('8');  // 测试产品84的反馈数。
 r($calc->getResult(array('product' => '999'))) && p('')        && e('0');  // 测试不存在的产品的反馈数。

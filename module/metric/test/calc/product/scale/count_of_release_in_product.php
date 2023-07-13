@@ -3,6 +3,7 @@
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
+zdTable('product')->gen(200);
 zdTable('release')->gen(20);
 
 $metric = new metricTest();
