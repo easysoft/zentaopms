@@ -67,7 +67,7 @@ function setDate()
  */
 window.setParentProgram = function()
 {
-    const programID = $('#parent').val();
+    const programID = $('[name=parent]').val();
     const link = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
     loadPage(link, '#aclList');
     $('#whitelist').closest('.form-row').removeClass('hidden')
@@ -123,13 +123,13 @@ function computeWorkDays(e)
 
     if(isBactchEdit)
     {
-        beginDate = $('#begins\\[' + index + '\\]').val();
-        endDate   = $('#ends\\[' + index + '\\]').val();
+        beginDate = $('#begins\\[' + index + '\\]').zui('datePicker').$.state.value;
+        endDate   = $('#ends\\[' + index + '\\]').zui('datePicker').$.state.value;
     }
     else
     {
-        beginDate = $('#begin').val();
-        endDate   = $('#end').val();
+        beginDate = $('#begin').zui('datePicker').$.state.value;
+        endDate   = $('#end').zui('datePicker').$.state.value;
 
         var begin = new Date(beginDate.replace(/-/g,"/"));
         var end   = new Date(endDate.replace(/-/g,"/"));
@@ -161,19 +161,19 @@ function computeWorkDays(e)
  */
 function computeEndDate(delta)
 {
-    beginDate = $('#begin').val();
+    let beginDate = $('#begin').zui('datePicker').$.state.value;
     if(!beginDate) return;
 
-    delta     = parseInt(delta);
+    delta = parseInt(delta);
     if(delta == 999)
     {
-        $('#end').val('').attr('disabled', true);
+        $('#end').datePicker({disabled: true});
         $('#days').val(0).closest('.form-row').addClass('hidden');
         outOfDateTip();
         return false;
     }
 
-    $('#end').removeAttr('disabled');
+    $('#end').datePicker({disabled: false});
     $('#days').closest('.form-row').removeClass('hidden');
 
     beginDate = convertStringToDate(beginDate);
@@ -182,9 +182,8 @@ function computeEndDate(delta)
         delta = (weekend == 2) ? (delta - 2) : (delta - 1);
     }
 
-
     endDate = formatDate(beginDate, delta - 1);
-    $('#end').val(endDate);
+    $('#end').zui('datePicker').$.changeState({value: endDate});
     computeWorkDays();
 }
 
@@ -434,6 +433,7 @@ window.addNewLine = function(e)
     let index   = 0;
     let options = zui.Picker.query("[name^='products']").options;
 
+    /* 将已有产品下拉的最大name属性的值加1赋值给新行. */
     $("[name^='products']").each(function()
     {
         let id = $(this).attr('name').replace(/[^\d]/g, '');
@@ -444,18 +444,18 @@ window.addNewLine = function(e)
         index = id > index ? id : index;
     })
 
+    /* 处理新一行控件的显示/隐藏，宽度/是否居中等样式问题. */
     newLine.addClass('newLine');
     newLine.find('.form-label').html('');
     newLine.find('.removeLine').removeClass('disabled');
     newLine.find('[name="newProduct"]').closest('div.items-center').remove();
-    newLine.find("[name^='products']").attr('name', `products[${index}]`).attr('id', `products${index}`);
-    newLine.find("[name^='plans']").attr('name', `plans[${index}][0][]`);
     newLine.find('.form-group').eq(0).addClass('w-1/2').removeClass('w-1/4');
     newLine.find('.form-group').eq(1).addClass('hidden');
     newLine.find("div[id^='plan']").attr('id', 'plan' + index);
 
     $(obj).closest('.form-row').after(newLine);
 
+    /* 重新初始化新一行的下拉控件. */
     newLine.find('.form-group').eq(0).find('.picker-box').empty();
     newLine.find('.form-group').eq(0).find('.picker-box').append(`<div id=products${index}></div>`);
 
@@ -518,8 +518,7 @@ window.loadBranches = function(product)
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
             zui.Modal.alert(errorSameProducts);
-            $product.val(0);
-            $product.trigger("chosen:updated");
+            $(`#${product.id}`).zui('picker').$.setValue(0);
             return false;
         }
     });

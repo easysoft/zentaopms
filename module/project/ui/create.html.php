@@ -60,7 +60,6 @@ if(!empty($products))
                             set::items($allProducts),
                             set::last($product->id),
                             set::required(true),
-                            on::change('productChange')
                         )
                     ),
                 )
@@ -78,7 +77,6 @@ if(!empty($products))
                         set::name("branch[$i][]"),
                         set::items($branches),
                         set::value(implode(',', $product->branches)),
-                        on::change('branchChange')
                     )
                 ),
             ),
@@ -102,14 +100,12 @@ if(!empty($products))
                     btn
                     (
                         setClass('btn ghost addLine'),
-                        on::click('addNewLine'),
                         icon('plus')
                     ),
                     btn
                     (
                         setClass('btn ghost removeLine'),
                         icon('trash'),
-                        on::click('removeLine'),
                         $i == 0 ? set::disabled(true) : null
                     ),
                 )
@@ -161,16 +157,27 @@ formPanel
     ),
     on::click('.addLine', 'addNewLine'),
     on::click('.removeLine', 'removeLine'),
+    on::click('.project-type-1', 'changeType(1)'),
+    on::click('.project-type-0', 'changeType(0)'),
+    on::change('[name^=products]', 'productChange'),
+    on::change('[name^=branch]', 'branchChange'),
+    on::change('#parent', 'setParentProgram'),
+    on::change('[name=multiple]', 'toggleMultiple'),
+    on::change('#begin', 'computeWorkDays'),
+    on::change('#end', 'computeWorkDays'),
+    on::change('[name=delta]', 'setDate'),
+    on::change('[name=future]', 'toggleBudget'),
+    on::change('[name=newProduct]', 'addProduct'),
     formRow
     (
         formGroup
         (
             set::width('1/2'),
+            set::id('parent'),
             set::name('parent'),
             set::label($lang->project->parent),
             set::items($programList),
             set::value($programID),
-            on::change('setParentProgram')
         ),
         formGroup
         (
@@ -219,7 +226,6 @@ formPanel
         set::items($lang->project->multipleList),
         set::disabled($copyProjectID),
         set::value('1'),
-        on::change('toggleMultiple'),
         $copyProjectID ? formHidden('multiple', $copyProject->multiple) : null,
     ) : null,
     formGroup
@@ -232,13 +238,11 @@ formPanel
             btn
             (
                 setClass('primary-pale project-type-1'),
-                on::click('changeType(1)'),
                 set::disabled($copyProjectID),
                 $lang->project->projectTypeList[1]
             ),
             btn(
                 setClass('project-type-0'),
-                on::click('changeType(0)'),
                 set::disabled($copyProjectID),
                 $lang->project->projectTypeList[0]
             )
@@ -276,7 +280,6 @@ formPanel
             setClass('items-center'),
             set::control(array('type' => 'checkList', 'inline' => true)),
             set::items(array('1' => $lang->project->future)),
-            on::change('toggleBudget')
         )
     ),
     formRow
@@ -294,7 +297,6 @@ formPanel
                     set('id', 'begin'),
                     set::value(date('Y-m-d')),
                     set::required(true),
-                    on::change('computeWorkDays')
                 ),
                 $lang->project->to,
                 datepicker
@@ -303,7 +305,6 @@ formPanel
                     set('id', 'end'),
                     set::placeholder($lang->project->end),
                     set::required(true),
-                    on::change('computeWorkDays')
                 ),
             )
         ),
@@ -313,7 +314,6 @@ formPanel
             setClass('items-center'),
             radioList
             (
-                on::change('setDate'),
                 set::name('delta'),
                 set::inline(true),
                 set::items($lang->project->endList)
@@ -358,7 +358,6 @@ formPanel
                     (
                         set::name('products[0]'),
                         set::items($allProducts),
-                        on::change('productChange')
                     )
                 ),
                 div
@@ -368,7 +367,6 @@ formPanel
                     (
                         set::name('newProduct'),
                         set::text($lang->project->newProduct),
-                        on::change('addProduct')
                     )
                 )
             )
@@ -383,7 +381,6 @@ formPanel
                 picker
                 (
                     set::name("branch[0][]"),
-                    on::change('branchChange')
                 )
             ),
         ),
@@ -440,7 +437,6 @@ formPanel
                     (
                         set::name('newProduct'),
                         set::text($lang->project->newProduct),
-                        on::change('addProduct')
                     )
                 )
             )
