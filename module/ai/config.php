@@ -56,7 +56,20 @@ $config->ai->targetFormVars['execution'] = array();
 
 /* Menu printing configurations. */
 $config->ai->menuPrint = new stdclass();
-$config->ai->menuPrint->locations = array(); // Menu location definations, defines acceptable module-methods and on page menu locations.
+/**
+ * Menu location definations, defines acceptable module-methods and on page menu locations, etc.
+ *
+ * @param string $module           prompt module name (actual module could differ from prompt module name)
+ * @param string $targetContainer  injection target container selector
+ * @param string $class            class of menu or dropdown button
+ * @param string $buttonClass      specified class of action menu buttons
+ * @param string $dropdownClass    specified class of dropdown menu button
+ * @param string $objectVarName    object variable name of view
+ * @param string $stylesheet       stylesheet to be injected
+ * @param string $injectMethod     injection jQuery method, `append` by default
+ * @see ./view/promptmenu.html.php
+ */
+$config->ai->menuPrint->locations = array();
 $config->ai->menuPrint->locations['story']['view']          = (object)array('module' => 'story', 'targetContainer' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title', 'class' => 'pull-right', 'stylesheet' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}');
 $config->ai->menuPrint->locations['projectstory']['view']   = $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['execution']['storyView'] = $config->ai->menuPrint->locations['story']['view'];
