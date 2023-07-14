@@ -1212,37 +1212,34 @@ class story extends control
             $response['message'] = $this->lang->story->successToTask;
 
             $tasks = $this->story->batchToTask($executionID, $projectID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $tasks));
-            return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('execution', 'task', "executionID=$executionID")));
         }
 
-        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+        if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
 
-        $stories    = $this->story->getByList($_POST['storyIdList']);
-        $storyGroup = array();
+        $stories       = $this->story->getByList($_POST['storyIdList']);
+        $activeStories = array();
+        $storyPairs    = array();
         foreach($stories as $story)
         {
-            if(strpos('draft,reviewing,changing,closed', $story->status) !== false)
-            {
-                unset($stories[$story->id]);
-                continue;
-            }
+            if(str_contains(',draft,reviewing,changing,closed,', ",{$story->status},")) continue;
 
-            if(isset($storyGroup[$story->module])) continue;
-            $storyGroup[$story->module] = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $story->module, 'short', 'active');
+            $activeStories[$story->id] = $story;
+            $storyPairs[$story->id]    = $story->title;
         }
 
-        if(empty($stories)) return print(js::error($this->lang->story->noStoryToTask) . js::locate($this->session->storyList));
+        if(empty($stories)) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->noStoryToTask, 'load' => $this->session->storyList));
 
         $this->view->title          = $this->lang->story->batchToTask;
         $this->view->executionID    = $executionID;
         $this->view->syncFields     = empty($_POST['fields']) ? array() : $_POST['fields'];
         $this->view->hourPointValue = empty($_POST['hourPointValue']) ? 0 : $_POST['hourPointValue'];
         $this->view->taskType       = empty($_POST['type']) ? '' : $_POST['type'];
-        $this->view->stories        = $stories;
-        $this->view->storyGroup     = $storyGroup;
+        $this->view->stories        = $activeStories;
+        $this->view->storyPairs     = $storyPairs;
         $this->view->modules        = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, 'allModule');
         $this->view->members        = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->view->storyTasks     = $this->loadModel('task')->getStoryTaskCounts(array_keys($stories), $executionID);
