@@ -59,6 +59,26 @@ class dtable extends wg
             if(isset($config['link']) && is_array($config['link'])) $config['link'] = $this->getLink($config['link']);
             if(isset($config['assignLink']) && is_array($config['assignLink'])) $config['assignLink'] = $this->getLink($config['assignLink']);
 
+            if(!empty($config['type']) && $config['type'] == 'control')
+            {
+                if(!empty($config['control']) && is_string($config['control'])) $config['control'] = array('type' => $config['control']);
+
+                if(isset($config['controlItems']))
+                {
+                    if(empty($config['control'])) $config['control'] = array('type' => 'picker');
+
+                    $items    = $config['controlItems'];
+                    $newItems = array();
+                    foreach($items as $key => $value)
+                    {
+                        if(is_numeric($key) && is_array($value)) $newItems[] = $value;
+                        else $newItems[] = array('text' => $value, 'value' => $key);
+                    }
+                    $config['control']['props']['items'] = $newItems;
+                    unset($config['controlItems']);
+                }
+            }
+
             if(!empty($config['actionsMap']))
             {
                 foreach($config['actionsMap'] as &$action)
