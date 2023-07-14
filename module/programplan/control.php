@@ -18,19 +18,21 @@ class programplan extends control
      * @param  int    $projectID
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return int
      */
-    public function commonAction(int $projectID, int $productID = 0)
+    public function commonAction(int $projectID, int $productID = 0): int
     {
         $this->loadModel('product');
         $this->loadModel('project');
         $products  = $this->product->getProductPairsByProject($projectID);
 
-        $this->product->saveState($productID, $products);
+        $productID = $this->product->saveState($productID, $products);
         $project = $this->project->getByID($projectID);
 
         $this->session->set('hasProduct', $project->hasProduct);
         $this->project->setMenu($projectID);
+
+        return $productID;
     }
 
     /**
@@ -77,13 +79,13 @@ class programplan extends control
      */
     public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage')
     {
-        $this->commonAction($projectID, $productID);
+        $this->productID = $this->commonAction($projectID, $productID);
         if($_POST)
         {
             $formData = form::data($this->config->programplan->create->form);
             $formData = $this->programplanZen->beforeCreate($formData);
 
-            $this->programplan->create($formData, $projectID, $productID, $planID);
+            $this->programplan->create($formData, $projectID, $this->productID, $planID);
             if(dao::isError())
             {
                 $errors = dao::getError();
@@ -103,7 +105,7 @@ class programplan extends control
         /* Set programplan typeList. */
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 
-        $plans = $this->programplan->getStage($planID ?: $projectID, $productID, 'parent', 'order_asc');
+        $plans = $this->programplan->getStage($planID ?: $projectID, $this->productID, 'parent', 'order_asc');
         if(!empty($planID) && !empty($plans) && $project->model == 'waterfallplus')
         {
             $executionType = 'stage';
