@@ -5,19 +5,23 @@ window.toggleReviewer = function(obj)
     const $this     = $(obj);
     const isChecked = $this.prop('checked');
 
-    $('#reviewer').attr('disabled', isChecked ? 'disabled' : null).trigger('chosen:updated');
+    $reviewer = $('#reviewer').zui('picker');
+    options   = $reviewer.options;
     if(isChecked)
     {
+        options.disabled = true;
+        $reviewer.render(options);
         $('#reviewerBox').closest('.form-row').addClass('hidden');
         $('#needNotReview').val(1);
     }
     else
     {
+        options.disabled = false;
+        $reviewer.render(options);
         $('#reviewerBox').closest('.form-row').removeClass('hidden');
         $('#needNotReview').val(0);
     }
 }
-toggleReviewer($('#needNotReview[type=checkbox]'));
 
 window.toggleFeedback = function(obj)
 {
@@ -30,7 +34,7 @@ window.toggleFeedback = function(obj)
 
 $(document).on('change', '#module', function(){loadURS();})
 
-if($("form select[id^='branches']").length == $('.switchBranch #branchBox option').length)
+if(branchCount <= 1)
 {
     $('.switchBranch .addNewLine').css('pointer-events', 'none')
     $('.switchBranch .addNewLine').addClass('disabled')
@@ -46,9 +50,10 @@ window.loadProduct = function(e)
 window.loadBranchRelation = function(e)
 {
     const $this       = $(e.target);
-    const branch      = $this.val();
-    const branchIndex = $this.data('index');
-    const productID   = $('#product').val();
+    const $picker     = $this.zui('picker');
+    const branch      = $picker.$.value;
+    const branchIndex = $picker.options.index;
+    const productID   = $('[name=product]').val();
 
     $.ajaxSettings.async = false;
     loadModuleForTwins(productID, branch, branchIndex)
@@ -60,55 +65,49 @@ window.loadBranchRelation = function(e)
 
 window.addBranchesBox = function(e)
 {
-    const productID = $('#product').val();
-    const $formRow  = $(e.target).closest('.form-row');
+    const productID     = $('#product').zui('picker').$.value;
+    const $formRow      = $(e.target).closest('.form-row');
+    const $branchPicker = $('.switchBranch #branchBox .picker-box').zui('picker');
+    const $modulePicker = $('.switchBranch #moduleIdBox .picker-box').zui('picker');
+    const $planPicker   = $('.switchBranch #planIdBox .picker-box').zui('picker');
 
     $('#storyNoticeBranch').removeClass('hidden');
-    if($("form select[id^='branches']").length == $('.switchBranch #branchBox option').length) return false;
+    if($("form [name^='branches']").length == $branchPicker.options.items.length) return false;
 
     var selectedVal = [];
-    $("form select[id^='branches']").each(function()
+    $("form [name^='branches']").each(function()
     {
         var selectedProduct = $(this).val();
         if(!selectedVal.includes(selectedProduct)) selectedVal.push(selectedProduct);
     });
 
     var branch = 0;
-    $('.switchBranch [id^=branches] option').each(function()
+    $branchPicker.options.items.forEach(function(item)
     {
-        if(!selectedVal.includes($(this).val()))
+        if(!selectedVal.includes(item.value))
         {
-            branch = $(this).val();
+            branch = item.value;
             return false;
         }
     });
 
      var $newLine = $('#addBranchesBox').clone();
+     $formRow.after($newLine);
 
      $newLine.addClass('newLine').removeClass('hidden').addClass('addBranchesBox' + itemIndex).removeAttr('id');
-     $newLine.find('[id^=branches]').attr('name', 'branches[' + itemIndex + ']').attr('id', 'branches[' + itemIndex + ']').attr('data-index', itemIndex).on('change', loadBranchRelation);
-     $newLine.find('[id^=modules]').attr('name', 'modules[' + itemIndex + ']').attr('id', 'modules[' + itemIndex + ']');
-     $newLine.find('[id^=plans]').attr('name', 'plans[' + itemIndex + ']').attr('id', 'plans[' + itemIndex + ']');
+     $newLine.find('#branches').addClass('picker-box').attr('id', 'branches_' + itemIndex).attr('data-on', 'change').attr('data-call', 'loadBranchRelation').attr('data-params', 'event').picker($.extend({}, $branchPicker.options, {name: "branches[" + itemIndex + "]", index: itemIndex, afterRender: function(){disableSelectedBranches()}}));
+     $newLine.find('#modules').addClass('picker-box').attr('id', 'modules_' + itemIndex).picker($.extend({}, $modulePicker.options, {name: "modules[" + itemIndex + "]"}));
+     $newLine.find('#plans').addClass('picker-box').attr('id', 'plans_' + itemIndex).picker($.extend({}, $planPicker.options, {name: "plans[" + itemIndex + "]"}));
      $newLine.find('.addNewLine').on('click', addBranchesBox);
      $newLine.find('.removeNewLine').on('click', deleteBranchesBox);
 
-     //$('#branches_i__chosen').remove();
-     //$('#branches' + itemIndex).chosen();
-     //$('#modules_i__chosen').remove();
-     //$('#modules' + itemIndex).chosen();
-     //$('#plans_i__chosen').remove();
-     //$('#plans' + itemIndex).chosen();
-     //$('.addBranchesBox' + itemIndex + ' #planIdBox').css('flex', '0 0 ' + gap + 'px');
-     $formRow.after($newLine);
 
      $.ajaxSettings.async = false;
      loadModuleForTwins(productID, branch, itemIndex)
      loadPlanForTwins(productID, branch, itemIndex)
      $.ajaxSettings.async = true;
 
-     disableSelectedBranches();
-
-    if($("form select[id^='branches']").length == $('.switchBranch #branchBox option').length)
+    if($("form [id^='branches']").length == $branchPicker.options.items.length)
     {
         $('.addNewLine').css('pointer-events', 'none')
         $('.addNewLine').addClass('disabled')
@@ -125,7 +124,7 @@ window.deleteBranchesBox = function(e)
 
      $('.addNewLine').css('pointer-events', 'auto')
      $('.addNewLine').removeClass('disabled')
-     if($('form select[name^="branches"]').length < 2) $('#storyNoticeBranch').addClass('hidden');
+     if($('form [name^="branches"]').length < 2) $('#storyNoticeBranch').addClass('hidden');
 };
 
 window.loadProductPlans = function(productID, branch)
@@ -133,15 +132,24 @@ window.loadProductPlans = function(productID, branch)
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
 
-    var param      = config.currentMethod == 'edit' ? 'skipParent|forStory' : 'skipParent';
-    var expired    = config.currentMethod == 'create' ? 'unexpired' : '';
-    var planLink   = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent,forStory,' + config.currentMethod);
-    var $planIdBox = $('#planIdBox');
+    let planID     = $('[name=plan]').val();
+    let param      = config.currentMethod == 'edit' ? 'skipParent|forStory' : 'skipParent';
+    let expired    = config.currentMethod == 'create' ? 'unexpired' : '';
+    let planLink   = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + planID + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent,forStory,' + config.currentMethod);
+    let $planIdBox = $('#planIdBox');
 
-    $planIdBox.load(planLink, function()
+    $.get(planLink, function(data)
     {
-        //$planIdBox.find('#plan').chosen();
-    });
+        let items = JSON.parse(data);
+        let $inputGroup = $planIdBox.closest('.input-group');
+        $inputGroup.html("<span id='planIdBox'><div class='picker-box' id='plan'></div></span>")
+        new zui.Picker('#planIdBox #plan', {items: items, name: 'plan', defaultValue: planID.toString()});
+        if(items.length == 0)
+        {
+            $inputGroup.append('<a class="btn btn-default" type="button" data-toggle="modal" href="' + $.createLink('productplan', 'create', 'productID=' + productID + '&branch=' + branch) + '"><i class="icon icon-plus"></i></a>');
+            $inputGroup.append('<button class="refresh btn" type="button" onclick="loadProductPlans(' + productID + ')"><i class="icon icon-refresh"></i></button>');
+        }
+    })
 };
 
 window.setLane = function(e)
@@ -150,11 +158,7 @@ window.setLane = function(e)
     const laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=story&field=lane');
     $.get(laneLink, function(lane)
     {
-        if(!lane) lane = "<select id='lane' name='lane' class='form-control'></select>";
-        $('#lane').replaceWith(lane);
-        $('#lane' + "_chosen").remove();
-        $('#lane').next('.picker').remove();
-        $('#lane').chosen();
+        $('#myPicker').picker(JSON.parse(lane));
     });
 };
 
@@ -162,7 +166,7 @@ function loadModuleForTwins(productID, branch, branchIndex)
 {
     /* Load module */
     var currentModule = 0;
-    var moduleLink = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + branchIndex + '&needManage=false&extra=nodeleted&currentModuleID=' + currentModule);
+    var moduleLink    = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + branchIndex + '&needManage=false&extra=nodeleted&currentModuleID=' + currentModule);
     if(branchIndex > 0)
     {
         var $moduleIdBox = $('.addBranchesBox' + branchIndex + ' #moduleIdBox');
@@ -172,10 +176,7 @@ function loadModuleForTwins(productID, branch, branchIndex)
         var $moduleIdBox = $('.switchBranch #moduleIdBox');
     }
 
-    $moduleIdBox.load(moduleLink, function()
-    {
-        //$moduleIdBox.find('[id^=#modules]').chosen();
-    });
+    $.get(moduleLink, function(data){$moduleIdBox.find('.picker-box').picker(JSON.parse(data));});
 }
 
 function loadPlanForTwins(productID, branch, branchIndex)
@@ -191,32 +192,37 @@ function loadPlanForTwins(productID, branch, branchIndex)
     {
         var $planIdBox = $('.switchBranch #planIdBox');
     }
-    $planIdBox.load(planLink, function()
-    {
-        //$planIdBox.find('[id^=plans]').chosen();
-    });
+
+    $.get(planLink, function(data){$planIdBox.find('.picker-box').picker(JSON.parse(data));});
 }
 
 function disableSelectedBranches()
 {
-    $("form select[id^='branches'] option[disabled='disabled']").removeAttr('disabled');
-
-    var selectedVal = [];
-    $("form select[id^='branches']").each(function()
+    let selectedVal = [];
+    let $pickers    = [];
+    $("form [name^='branches']").each(function()
     {
-        var selectedBranch = $(this).val();
-        if(!selectedVal.includes(selectedBranch)) selectedVal.push(selectedBranch);
+        let $picker = $(this).zui('picker');
+        let value   = $picker.$.value;
+
+        $pickers.push($picker);
+        if(!selectedVal.includes(value)) selectedVal.push(value);
     })
 
-    $("form select[id^='branches']").each(function()
+    $pickers.forEach(function($picker)
     {
-        var selectedBranch = $(this).val();
-        $(this).find('option').each(function()
+        let value   = $picker.$.value;
+        let options = $picker.options;
+        let items   = [];
+        options.items.forEach(function(item)
         {
-            var optionVal = $(this).attr('value');
-            if(optionVal != selectedBranch && selectedVal.includes(optionVal)) $(this).attr('disabled', 'disabled');
+            item = $.extend({}, item, {disabled: false});
+            if(value !== item.value && selectedVal.includes(item.value)) item = $.extend({}, item, {disabled: true});
+            items.push(item);
         })
-    })
+        options.items = items;
+        delete options.afterRender;
 
-    //$("form select[id^=branches]").trigger('chosen:updated');
+        $picker.render(options);
+    });
 }

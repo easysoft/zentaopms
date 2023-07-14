@@ -551,7 +551,7 @@ class tree extends control
         }
         else
         {
-            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch, $extra);
+            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, (int)$branch, $extra);
         }
 
         if(strpos($extra, 'excludeModuleID') !== false)

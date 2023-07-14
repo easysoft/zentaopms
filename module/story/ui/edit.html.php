@@ -251,7 +251,7 @@ detailBody
                         set::id('planIdBox'),
                         picker(setID('plan'), set::name($multiplePlan ? 'plan[]' : 'plan'), set::items($plans), set::value($story->plan), set::multiple($multiplePlan)),
                     ),
-                    empty($plans) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), set('data-toggle', 'modal'), icon('cog')) : null,
+                    empty($plans) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), set('data-toggle', 'modal'), icon('plus')) : null,
                     empty($plans) ? btn(set('data-on', 'click'), set('data-call', 'loadProductPlans'), set('data-params', $story->product), setClass('refresh'), icon('refresh')) : null,
                 )
             ),

@@ -134,9 +134,9 @@ class treeModel extends model
      * @param  string    $grade
      * @param  string    $divide /|>
      * @access public
-     * @return void
+     * @return array
      */
-    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted', $grade = 'all', $divide = '/')
+    public function getOptionMenu(int $rootID, string $type = 'story', int $startModule = 0, int|array $branch = 0, string $param = 'nodeleted', string $grade = 'all', string $divide = '/'): array
     {
         if(empty($branch) and !is_array($branch)) $branch = 0;
         if(commonModel::isTutorialMode())

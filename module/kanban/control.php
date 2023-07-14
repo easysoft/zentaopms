@@ -1987,14 +1987,11 @@ class kanban extends control
 
         if($this->viewType == 'json') return print($lanes);
 
-        if($pageType == 'batch')
-        {
-            $laneList = array();
-            foreach($lanes as $laneID => $laneName) $laneList[] = array('value' => $laneID, 'text' => $laneName);
-            return $this->send($laneList);
-        }
+        $laneList = array();
+        foreach($lanes as $laneID => $laneName) $laneList[] = array('value' => $laneID, 'text' => $laneName);
 
-        return print(html::select($field, $lanes, '', "class='form-control'"));
+        if($pageType == 'batch') return $this->send($laneList);
+        return print(json_encode(array('items' => $laneList, 'name' => $field)));
     }
 
     /**
