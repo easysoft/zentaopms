@@ -35,7 +35,7 @@ class programplanZen extends programplan
     public function buildCreateView(object $viewData)
     {
         /* Compute fields for create view. */
-        list($visibleFields, $requiredFields, $customFields, $showFields) = $this->computeFieldsCreateView($viewData->executionType);
+        list($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields) = $this->computeFieldsCreateView($viewData->executionType);
 
         $this->view->title              = $this->lang->programplan->create . $this->lang->colon . $viewData->project->name;
         $this->view->productList        = $viewData->productList;
@@ -53,6 +53,7 @@ class programplanZen extends programplan
         $this->view->showFields         = $showFields;
         $this->view->visibleFields      = $visibleFields;
         $this->view->requiredFields     = $requiredFields;
+        $this->view->defaultFields      = $defaultFields;
         $this->view->colspan            = count($visibleFields) + 3;
         $this->view->enableOptionalAttr = empty($viewData->programPlan) || $viewData->programPlan->attribute == 'mix';
 
@@ -188,6 +189,7 @@ class programplanZen extends programplan
         $customFields       = array();
         $custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
         $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
+        $defaultFields      = $this->config->programplan->$custom->defaultFields;
 
         foreach(explode(',', $this->config->programplan->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->{$field};
 
@@ -208,7 +210,7 @@ class programplanZen extends programplan
 
         if(empty($this->config->setPercent)) unset($visibleFields['percent'], $requiredFields['percent']);
 
-        return array($visibleFields, $requiredFields, $customFields, $showFields);
+        return array($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields);
     }
 
     /**
