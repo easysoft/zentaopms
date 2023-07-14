@@ -10,24 +10,26 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+  .required:after {right: -12px;}
+</style>
 <div id='mainContent' class='main-content'>
   <form id='mainForm' class='load-indicator main-form form-ajax' method='post'>
     <table class='table table-form mw-800px'>
       <tr>
         <th><?php echo $lang->ai->models->type;?></th>
-        <td><div class="required required-wrapper"></div><?php echo html::select('type', $lang->ai->models->typeList, $modelConfig->type, "class='form-control chosen'");?></td>
+        <td><?php echo html::select('type', $lang->ai->models->typeList, $modelConfig->type, "class='form-control chosen' required");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->ai->models->apiKey;?></th>
-        <td><div class="required required-wrapper"></div><?php echo html::input('key', $modelConfig->key, "class='form-control'");?></td>
+        <td><?php echo html::input('key', $modelConfig->key, "class='form-control' required");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->ai->models->proxyType;?></th>
         <td>
           <div class='row'>
             <div class='col-md-4'>
-              <div class="required required-wrapper"></div>
-              <?php echo html::select('proxyType', $lang->ai->models->proxyTypes, $modelConfig->proxyType, "class='form-control chosen' data-disable_search='true'");?>
+              <?php echo html::select('proxyType', $lang->ai->models->proxyTypes, $modelConfig->proxyType, "class='form-control chosen' data-disable_search='true' required");?>
             </div>
             <div class='col-md-8' id='proxyAddrContainer' <?php if(empty($modelConfig->proxyType)) echo 'style="display: none;"'; ?>>
               <div class='row'>

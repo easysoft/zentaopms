@@ -48,6 +48,16 @@ class ai extends control
         if(strtolower($this->server->request_method) == 'post')
         {
             $modelConfig = fixer::input('post')->get();
+
+            $errors = array();
+            if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
+            if(empty($modelConfig->key))  $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->apiKey);
+            if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr))
+            {
+                $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
+            }
+            if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode('<br>', $errors)));
+
             $this->loadModel('setting')->setItems('system.ai', $modelConfig);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
