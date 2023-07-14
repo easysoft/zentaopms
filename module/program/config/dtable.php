@@ -199,7 +199,7 @@ $config->program->browse->dtable->fieldList['name']['name']         = 'name';
 $config->program->browse->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->program->browse->dtable->fieldList['name']['width']        = 200;
 $config->program->browse->dtable->fieldList['name']['type']         = 'link';
-$config->program->browse->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; if(row.data.type == 'project') return {url:$.createLink('project', 'browse', 'projectID=' + row.data.id)}; if(row.data.type == 'program') return {url:$.createLink('program', 'project', 'programID=' + row.data.id)};}>RAWJS";
+$config->program->browse->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; if(row.data.type == 'project') return {url:$.createLink('project', 'index', 'projectID=' + row.data.id)}; if(row.data.type == 'program') return {url:$.createLink('program', 'project', 'programID=' + row.data.id)};}>RAWJS";
 $config->program->browse->dtable->fieldList['name']['flex']         = 1;
 $config->program->browse->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->browse->dtable->fieldList['name']['checkbox']     = true;

@@ -9,7 +9,7 @@ $cols = $this->loadModel('datatable')->getSetting('program');
 $data = array();
 foreach($programs as $program)
 {
-    if(empty($program->parent)) $program->parent = null;
+    if(empty($program->parent)) $program->parent = 0;
 
     /* Delay status. */
     if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')
