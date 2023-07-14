@@ -325,3 +325,8 @@ $lang->ai->execute->fail    = 'Prompt execution failed.';
 
 $lang->ai->audit = new stdclass();
 $lang->ai->audit->designPrompt = 'Prompt Design';
+$lang->ai->audit->afterSave    = 'After saving,';
+
+$lang->ai->audit->backLocationList = array();
+$lang->ai->audit->backLocationList[0] = 'back to audit page.';
+$lang->ai->audit->backLocationList[1] = 'back to audit page and regenerate.';

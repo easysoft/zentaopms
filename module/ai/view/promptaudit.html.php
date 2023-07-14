@@ -10,19 +10,19 @@
  */
 ?>
 
-<?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/header.lite.html.php'; ?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block'>
-    <div class="main-header">
-      <p>
-        <?php echo $this->lang->ai->audit->designPrompt;?>
-        <strong><?php echo $object->{$prompt->module}->title ?></strong>
-        <span class='label label-id'> <?php echo $object->{$prompt->module}->id;?></span>
-      </p>
-    </div>
-    <div class="bg-gray-3" style="display: flex;">
-      <div style="flex-basis: 50%; flex-grow: 1;padding: 5px 10px;  border-right: #E6EAF1 1px solid">
-        <form method="post" class="main-form form-ajax" target="hiddenwin">
+  <form method="post" class="main-form form-ajax" target="hiddenwin">
+    <div class='center-block'>
+      <div class="main-header">
+        <p>
+          <?php echo $this->lang->ai->audit->designPrompt; ?>
+          <strong><?php echo $object->{$prompt->module}->title ?></strong>
+          <span class='label label-id'> <?php echo $object->{$prompt->module}->id; ?></span>
+        </p>
+      </div>
+      <div class="bg-gray-3" style="display: flex;">
+        <div style="flex-basis: 50%; flex-grow: 1;padding: 5px 10px;  border-right: #E6EAF1 1px solid">
           <h4><?php echo $this->lang->ai->prompts->assignRole; ?></h4>
           <div class='content-row'>
             <div class='input-label'><span><?php echo $this->lang->ai->prompts->role; ?></span></div>
@@ -74,29 +74,34 @@
             <div class='input-label'
                  style="text-align: left;"><?php echo $this->lang->ai->targetForm[$prompt->module][explode('.', $prompt->targetForm)[1]]; ?></div>
           </div>
-        </form>
+        </div>
+        <div style="flex-basis: 50%; flex-grow: 1; display: flex; flex-direction: column; word-break: break-all;">
+          <div style="padding: 5px 10px; border-bottom: #E6EAF1 1px solid">
+            <h4
+              style="margin-bottom: 24px;"><?php echo sprintf($this->lang->ai->models->promptFor, $this->lang->ai->models->typeList['openai-gpt35']); ?></h4>
+            <p class="text-gray"><?php echo $this->lang->ai->prompts->assignRole; ?></p>
+            <p id="roleDisplay"><?php echo $prompt->role; ?></p>
+            <p id="characterizationDisplay"><?php echo $prompt->characterization; ?></p>
+          </div>
+          <div style="padding: 5px 10px; border-bottom: #E6EAF1 1px solid">
+            <p class="text-gray"><?php echo $this->lang->ai->prompts->selectDataSource; ?></p>
+            <p><?php echo $dataPrompt; ?></p>
+          </div>
+          <div style="padding: 5px 10px;">
+            <p class="text-gray"><?php echo $this->lang->ai->prompts->setPurpose; ?></p>
+            <p id="purposeDisplay"><?php echo $prompt->purpose; ?></p>
+            <p id="elaborationDisplay"><?php echo $prompt->elaboration; ?></p>
+          </div>
+        </div>
       </div>
-      <div style="flex-basis: 50%; flex-grow: 1; display: flex; flex-direction: column; word-break: break-all;">
-        <div style="padding: 5px 10px; border-bottom: #E6EAF1 1px solid">
-          <h4 style="margin-bottom: 24px;"><?php echo sprintf($this->lang->ai->models->promptFor, $this->lang->ai->models->typeList['openai-gpt35']);?></h4>
-          <p class="text-gray"><?php echo $this->lang->ai->prompts->assignRole;?></p>
-          <p id="roleDisplay"><?php echo $prompt->role; ?></p>
-          <p id="characterizationDisplay"><?php echo $prompt->characterization; ?></p>
-        </div>
-        <div style="padding: 5px 10px; border-bottom: #E6EAF1 1px solid">
-          <p class="text-gray"><?php echo $this->lang->ai->prompts->selectDataSource;?></p>
-          <p><?php echo $dataPrompt; ?></p>
-        </div>
-        <div style="padding: 5px 10px;">
-          <p class="text-gray"><?php echo $this->lang->ai->prompts->setPurpose;?></p>
-          <p id="purposeDisplay"><?php echo $prompt->purpose;?></p>
-          <p id="elaborationDisplay"><?php echo $prompt->elaboration;?></p>
-        </div>
+      <div style="margin-top: 15px;">
+        <p style="display: inline-block"><?php echo $this->lang->ai->audit->afterSave; ?></p>
+        <?php echo html::radio('backLocation', $this->lang->ai->audit->backLocationList, 1); ?>
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 10px;">
+        <?php echo html::submitButton($this->lang->save, '', 'btn btn-primary disabled'); ?>
       </div>
     </div>
-    <div style="display: flex; justify-content: center; margin-top: 10px;">
-      <?php echo html::submitButton($this->lang->save, '', 'btn btn-primary disabled');?>
-    </div>
-  </div>
+  </form>
 </div>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php include '../../common/view/footer.lite.html.php'; ?>
