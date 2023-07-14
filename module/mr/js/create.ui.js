@@ -28,19 +28,23 @@ function getBranchPriv(project)
     });
 }
 
-function onProjectChange(event)
+function onProjectChange()
 {
-    const $project = $(event.target) ;
-    var sourceProject = urlencode($project.val());
-  console.log(sourceProject);
-    if(!sourceProject) return false;
-
-    var branchSelect  = $project.parents('div').find('select[name*=Branch]');
-    var branchUrl     = $.createLink(hosts[hostID].type, 'ajaxGetProjectBranches', hosts[hostID].type + "ID=" + hostID + "&projectID=" + sourceProject);
-    $.get(branchUrl, function(response)
+    var branchUrl     = $.createLink(hostType, 'ajaxGetProjectBranches', hostType + "ID=" + hostID + "&projectID=" + projectID);
+    $.ajaxSubmit(
     {
-        branchSelect.html('').append(response);
+        url: branchUrl,
+        method: 'get',
+        onComplete: function(result)
+        {
+            zui.Picker.query("[name='sourceBranch']").render({items: result});
+            zui.Picker.query("[name='targetBranch']").render({items: result});
+            $("[name='targetBranch']").picker('setValue', '');
+          console.log(zui.Picker.query("[name='targetBranch']"));
+        },
     });
+
+    getBranchPriv(projectID);
 }
 
 function onSourceProjectChange()
@@ -96,13 +100,10 @@ function onNeedCiChange(event)
     }
 }
 
-function pageInit()
+$(function()
 {
     if(repo.gitService)
     {
-        $('#sourceProject').trigger('change');
-        $('#targetProject').trigger('change');
+        onProjectChange();
     }
-}
-
-window.addEventListener('load', pageInit);
+});

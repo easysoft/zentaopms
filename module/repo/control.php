@@ -74,12 +74,12 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function maintain($objectID = 0, $orderBy = 'id_desc', $recPerPage = 20, $pageID = 1)
+    public function maintain(int $objectID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
     {
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
-        $repoList      = $this->repo->getList(0, '', $orderBy, null, false, true);
+        $repoList      = $this->repo->getList(0, '', $orderBy, null, false, true, $type, $param);
         $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(array_keys($repoList));
 
         /* Pager. */
@@ -103,7 +103,7 @@ class repo extends control
         session_start();
         $this->config->repo->search['params']['product']['values']  = $products;
         $this->config->repo->search['params']['projects']['values'] = $projects;
-        $this->config->repo->search['actionURL'] = $this->createLink('repo', 'maintain');
+        $this->config->repo->search['actionURL'] = $this->createLink('repo', 'maintain', "objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
         $this->config->repo->search['queryID']   = 0;
         $this->config->repo->search['onMenuBar']   = 'yes';
         $this->loadModel('search')->setSearchParams($this->config->repo->search);
@@ -1627,7 +1627,7 @@ class repo extends control
     public function ajaxGetDropMenu(int $repoID, string $module = 'repo', string $method = 'browse', int $projectID = 0)
     {
         if($module == 'repo' and !in_array($method, array('review', 'diff'))) $method = 'browse';
-        if($module == 'mr')  $method = 'browse';
+        if($module == 'mr' && $method != 'create')  $method = 'browse';
         if($module == 'job') $method = 'browse';
         if($module == 'compile' and $method == 'logs') $method = 'browse';
         if($module == 'bug' and $method == 'view')

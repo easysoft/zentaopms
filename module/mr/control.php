@@ -127,7 +127,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function create()
+    public function create(int $repoID = 0)
     {
         if($_POST)
         {
@@ -135,7 +135,7 @@ class mr extends control
             return $this->send($result);
         }
 
-        $repoID = $this->loadModel('repo')->saveState(0);
+        $repoID = $this->loadModel('repo')->saveState($repoID);
         $repo   = $this->repo->getByID($repoID);
 
         $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject);

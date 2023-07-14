@@ -111,10 +111,38 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getList($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null, $getCodePath = false, $lastSubmitTime = false)
+    public function getList($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null, $getCodePath = false, $lastSubmitTime = false, $type = '', $param = 0)
     {
+        $repoQuery = '';
+        if($type == 'bySearch')
+        {
+            $queryID = $param;
+            $queryName = 'repoQuery';
+
+            if($queryID && $queryID != 'myQueryID')
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set($queryName, $query->sql);
+                    $this->session->set($queryName . 'Form', $query->form);
+                }
+                else
+                {
+                    $this->session->set($queryName, ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+            }
+
+            $repoQuery = $this->session->$queryName;
+        }
+
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
+            ->beginIF(!empty($repoQuery))->andWhere($repoQuery)->fi()
             ->beginIF($SCM)->andWhere('SCM')->eq($SCM)->fi()
             ->orderBy($orderBy)
             ->page($pager)

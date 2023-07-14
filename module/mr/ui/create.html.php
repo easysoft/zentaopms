@@ -14,6 +14,7 @@ h::importJs('js/misc/base64.js');
 jsVar('hostType', strtolower($repo->SCM));
 jsVar('hostID', $repo->gitService);
 jsVar('repo', $repo);
+jsVar('projectID', $project->id);
 jsVar('mrLang', $lang->mr);
 jsVar('branchPrivs', array());
 
@@ -33,8 +34,6 @@ formPanel
             set::id('sourceProject'),
             set::items(array($project->id => $project->name_with_namespace)),
             set::disabled(true),
-            on::change('onProjectChange'),
-            on::change('onSourceProjectChange'),
         ),
         formGroup
         (
@@ -56,7 +55,6 @@ formPanel
             set::name('targetProject'),
             set::items(array($project->id => $project->name_with_namespace)),
             set::disabled(true),
-            on::change('onProjectChange'),
         ),
         formGroup
         (
@@ -96,12 +94,12 @@ formPanel
         (
             set::name('removeSourceBranch'),
             set::width('150px'),
-            set::control(array('type' => 'checkbox', 'text' => $lang->mr->removeSourceBranch)),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->removeSourceBranch, 'value' => '1')),
         ),
         formGroup
         (
             set::name('squash'),
-            set::control(array('type' => 'checkbox', 'text' => $lang->mr->squash)),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1')),
         ),
     ),
     formRow
@@ -121,6 +119,16 @@ formPanel
         set::name('description'),
         set::label($lang->mr->description),
         set::control('editor'),
+    ),
+    formRow
+    (
+        setClass('hidden'),
+        formGroup
+        (
+            set::name('repoID'),
+            set::label($lang->devops->repo),
+            set::value($repo->id),
+        ),
     ),
 );
 

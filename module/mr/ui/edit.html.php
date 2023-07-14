@@ -18,42 +18,47 @@ $hostName = $this->loadModel('pipeline')->getByID($MR->hostID)->name;
 $sourceProject = $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->sourceProject)->name_with_namespace : $MR->sourceProject;
 $targetProject = $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace : $MR->targetProject;
 
+$noEditBranch = $MR->status == 'merged' || $MR->status == 'closed' || $host->type == 'gogs';
+
 dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 
 formPanel
 (
-    set::labelWidth('11em'),
     set::title($lang->mr->edit),
-    formGroup
+    formRow
     (
-        set::label($lang->mr->server),
-        set::value($hostName),
-        set::control('static'),
-    ),
-    formGroup
-    (
-        set::label($lang->mr->sourceProject),
-        set::value($sourceProject . $MR->sourceBranch),
-        set::control('static'),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->mr->sourceProject),
+            set::value($sourceProject),
+            set::control('static'),
+        ),
+        formGroup
+        (
+            set::labelWidth('5em'),
+            set::label($lang->mr->sourceBranch),
+            set::value($MR->sourceBranch),
+            set::control('static'),
+        ),
     ),
     formRow
     (
         formGroup
         (
-            set::width('2/3'),
-            set::required(true),
+            set::width('1/2'),
             set::label($lang->mr->targetProject),
-            inputGroup
-            (
-                $targetProject,
-                ':',
-                ($MR->status == 'merged' or $MR->status == 'closed' or $host->type == 'gogs') ? $MR->targetBranch : select
-                (
-                    set::name('targetBranch'),
-                    set::items($targetBranchList),
-                    set::value($MR->targetBranch),
-                ),
-            )
+            set::value($targetProject),
+            set::control('static'),
+        ),
+        formGroup
+        (
+            set::labelWidth('6em'),
+            !$noEditBranch ? set::required(true) : null,
+            set::label($lang->mr->targetBranch),
+            set::value($MR->targetBranch),
+            !$noEditBranch ? set::name('targetBranch') : null,
+            !$noEditBranch ? set::items($targetBranchList) : set::control('static'),
         ),
     ),
     formGroup
@@ -65,42 +70,43 @@ formPanel
     ),
     formGroup
     (
-        set::name('description'),
-        set::label($lang->mr->description),
-        set::control('textarea'),
-        set::value($MR->description),
-    ),
-    formGroup
-    (
+        set::width('1/2'),
         set::required(true),
-        set::name('repoID'),
-        set::label($lang->devops->repo),
+        set::name('assignee'),
+        set::label($lang->mr->reviewer),
         set::control('picker'),
-        set::items($repoList),
-        set::value($MR->repoID),
-        on::change('onRepoChange'),
+        set::items($users),
+        set::value($assignee)
     ),
-    formGroup
+    formRow
     (
-        set::name('removeSourceBranch'),
-        set::label($lang->mr->removeSourceBranch),
-        set::control('checkbox'),
-        set::disabled(!$MR->canDeleteBranch),
-        set::checked($MR->canDeleteBranch && $MR->removeSourceBranch == '1'),
-    ),
-    formGroup
-    (
-        set::name('needCI'),
-        set::label($lang->mr->needCI),
-        set::control('checkbox'),
-        on::change('onNeedCiChange'),
-        set::checked($MR->needCI == '1'),
+        formGroup
+        (
+            set::label($lang->mr->submitType),
+            set::name('needCI'),
+            set::width('270px'),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->needCI, 'value' => '1', 'checked' => $MR->needCI == '1')),
+            on::change('onNeedCiChange'),
+        ),
+        formGroup
+        (
+            set::name('removeSourceBranch'),
+            set::width('150px'),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->removeSourceBranch, 'value' => '1', 'checked' => $MR->canDeleteBranch && $MR->removeSourceBranch == '1')),
+            set::disabled(!$MR->canDeleteBranch),
+        ),
+        formGroup
+        (
+            set::name('squash'),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1', 'checked' => $MR->squash == '1')),
+        ),
     ),
     formRow
     (
         setClass('hidden'),
         formGroup
         (
+            set::width('1/2'),
             set::required(true),
             set::name('jobID'),
             set::label($lang->job->common),
@@ -111,20 +117,22 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/2'),
-        set::name('squash'),
-        set::label($lang->mr->squash),
-        set::control('checkbox'),
-        set::checked($MR->squash == '1'),
+        set::name('description'),
+        set::label($lang->mr->description),
+        set::control('textarea'),
+        set::value($MR->description),
     ),
-    formGroup
+    formRow
     (
-        set::required(true),
-        set::name('assignee'),
-        set::label($lang->mr->assignee),
-        set::control('picker'),
-        set::items($users),
-        set::value($assignee)
+        setClass('hidden'),
+        formGroup
+        (
+            set::name('repoID'),
+            set::label($lang->devops->repo),
+            set::control('picker'),
+            set::items($repoList),
+            set::value($MR->repoID),
+        ),
     ),
 );
 

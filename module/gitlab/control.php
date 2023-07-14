@@ -1310,12 +1310,14 @@ class gitlab extends control
         if(!$gitlabID or !$projectID) return $this->send(array('message' => array()));
 
         $branches = $this->gitlab->apiGetBranches($gitlabID, $projectID);
-        $options  = "<option value=''></option>";
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
         foreach($branches as $branch)
         {
-            $options .= "<option value='{$branch->name}'>{$branch->name}</option>";
+            $options[] = array('text' => $branch->name, 'value' => $branch->name);
         }
-        $this->send($options);
+        return print(json_encode($options));
     }
 
     /**
