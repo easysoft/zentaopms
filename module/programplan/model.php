@@ -560,7 +560,7 @@ class programplanModel extends model
             if(empty($name)) continue;
 
             $plan = new stdclass();
-            $plan->id         = isset($planIDList[$key]) ? $planIDList[$key] : '';
+            $plan->id         = isset($planIDList[$key]) ? (int)$planIDList[$key] : '';
             $plan->type       = empty($type[$key]) ? 'stage' : $type[$key];
             $plan->project    = $projectID;
             $plan->parent     = $parentID ? $parentID : $projectID;
@@ -686,14 +686,14 @@ class programplanModel extends model
         if($project->stageBy)
         {
             $linkProducts = array(0 => $productID);
-            $linkBranches = array(0 => $productList[$productID]->branches);
+            !empty($productList) && $linkBranches = array(0 => $productList[$productID]->branches);
         }
         else
         {
             $linkProducts = array_keys($productList);
             foreach($linkProducts as $index => $productID)
             {
-                $linkBranches[$index] = $productList[$productID]->branches;
+                !empty($productList) && $linkBranches[$index] = $productList[$productID]->branches;
             }
         }
         $this->post->set('products', $linkProducts);
@@ -710,7 +710,7 @@ class programplanModel extends model
             }
 
             $plan->days  = helper::diffDate($plan->end, $plan->begin) + 1;
-            $plan->order = current($orders);
+            $plan->order = (int)current($orders);
 
             if($plan->id)
             {
