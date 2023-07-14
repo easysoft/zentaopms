@@ -311,19 +311,20 @@ js::set('vision',        $this->config->vision);
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
 
-      $canBeChanged         = common::canModify('product', $product);
-      $canBatchEdit         = ($canBeChanged and common::hasPriv($storyType, 'batchEdit'));
-      $canBatchClose        = (common::hasPriv($storyType, 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
-      $canBatchReview       = ($canBeChanged and common::hasPriv($storyType, 'batchReview'));
-      $canBatchChangeStage  = ($canBeChanged and common::hasPriv('story', 'batchChangeStage') and $storyType == 'story');
-      $canBatchChangeBranch = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID);
-      $canBatchChangeModule = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
-      $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story' and (!$isProjectStory or $projectHasProduct or ($isProjectStory and isset($project->model) and $project->model == 'scrum')));
-      $canBatchAssignTo     = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
-      $canBatchUnlink       = ($canBeChanged and $projectHasProduct and common::hasPriv('projectstory', 'batchUnlinkStory'));
-      $canBatchImportToLib  = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib') and helper::hasFeature('storylib'));
+      $canBeChanged          = common::canModify('product', $product);
+      $canBatchEdit          = ($canBeChanged and common::hasPriv($storyType, 'batchEdit'));
+      $canBatchClose         = (common::hasPriv($storyType, 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
+      $canBatchReview        = ($canBeChanged and common::hasPriv($storyType, 'batchReview'));
+      $canBatchChangeStage   = ($canBeChanged and common::hasPriv('story', 'batchChangeStage') and $storyType == 'story');
+      $canBatchChangeBranch  = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID);
+      $canBatchChangeModule  = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
+      $canBatchChangePlan    = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story' and (!$isProjectStory or $projectHasProduct or ($isProjectStory and isset($project->model) and $project->model == 'scrum')));
+      $canBatchAssignTo      = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
+      $canBatchUnlink        = ($canBeChanged and $projectHasProduct and common::hasPriv('projectstory', 'batchUnlinkStory'));
+      $canBatchImportToLib   = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib') and helper::hasFeature('storylib'));
+      $canBatchChangeRoadmap = common::hasPriv('story', 'batchChangeRoadmap');
 
-      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch);
+      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch or $canBatchChangeRoadmap);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
@@ -584,6 +585,39 @@ js::set('vision',        $this->config->vision);
             </div>
           </div>
           <?php endif;?>
+
+          <?php if($canBatchChangeRoadmap and $config->edition == 'ipd' and strpos($product->vision, 'or') !== false):?>
+          <div class="btn-group dropup">
+            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->roadmap->common;?> <span class="caret"></span></button>
+            <?php
+            unset($roadmaps['']);
+            $roadmaps   = array(0 => $lang->null) + $roadmaps;
+            $withSearch = count($roadmaps) > 8;
+            ?>
+            <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
+              <?php if($withSearch):?>
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
+                <input id="planSearchBox" type="search" autocomplete="off" class="form-control search-input">
+                <label for="planSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+                <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+              </div>
+              <?php $roadmapsPinYin = common::convert2Pinyin($roadmaps);?>
+              <?php endif;?>
+              <div class="list-group">
+                <?php
+                foreach($roadmaps as $roadmapID => $roadmap)
+                {
+                    $position   = stripos($roadmap, '/');
+                    $searchKey  = $withSearch ? ('data-key="' . zget($roadmapsPinYin, $roadmap, '') . '"') : '';
+                    $actionLink = $this->createLink('story', 'batchChangeRoadmap', "roadmapID=$roadmapID");
+                    echo html::a('#', $roadmap, '', "$searchKey title='{$roadmap}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
+                }
+                ?>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
+
           <?php endif;?>
 
           <?php if($canBatchAssignTo):?>
