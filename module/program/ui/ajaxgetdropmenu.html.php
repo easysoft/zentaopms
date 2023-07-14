@@ -12,9 +12,11 @@ declare(strict_types=1);
 namespace zin;
 
 $topItem = array();
-$topItem['id']   = 0;
-$topItem['type'] = 'program';
-$topItem['text'] = $lang->program->common;
+$topItem['id']    = 0;
+$topItem['type']  = 'program';
+$topItem['text']  = $lang->program->common;
+$topItem['url']   = false;
+$topItem['label'] = false;
 
 $data[0] = $topItem;
 
