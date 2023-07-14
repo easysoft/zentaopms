@@ -107,10 +107,10 @@ foreach($lang->admin->menuList as $menuKey => $menu)
     $settingItems[] = div
     (
         setClass('pb-4 pr-4 w-1/5 h-32'),
-        set(array('data-id' => $menuKey, 'data-url' => $url)),
         col
         (
-            setClass('border border-hover rounded-md px-2 py-1 h-full'),
+            setClass('setting-box cursor-pointer border border-hover rounded-md px-2 py-1 h-full'),
+            set(array('data-id' => $menuKey, 'data-url' => $url)),
             $menu['disabled'] ? set::title($lang->admin->noPriv) : null,
             h4
             (
@@ -265,11 +265,12 @@ div
     div
     (
         setID('settings'),
-        setClass('bg-white rounded-md cursor-pointer mb-4'),
+        setClass('bg-white rounded-md mb-4'),
         $buildHeader($lang->admin->setting),
         div
         (
             setClass('flex flex-wrap pl-4'),
+            on::click('redirectSetting'),
             $settingItems
         )
     ),
