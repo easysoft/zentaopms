@@ -199,28 +199,38 @@ $config->execution->importBug->dtable->fieldList['status']['type']      = 'statu
 $config->execution->importBug->dtable->fieldList['status']['sortType']  = false;
 $config->execution->importBug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
 
-$config->execution->importBug->dtable->fieldList['taskPri']['title']    = $lang->bug->pri;
-$config->execution->importBug->dtable->fieldList['taskPri']['name']     = 'pri';
-$config->execution->importBug->dtable->fieldList['taskPri']['type']     = 'html';
-$config->execution->importBug->dtable->fieldList['taskPri']['width']    = 68;
-$config->execution->importBug->dtable->fieldList['taskPri']['sortType'] = false;
+$config->execution->importBug->dtable->fieldList['taskPri']['title']        = $lang->bug->pri;
+$config->execution->importBug->dtable->fieldList['taskPri']['name']         = 'pri';
+$config->execution->importBug->dtable->fieldList['taskPri']['type']         = 'html';
+$config->execution->importBug->dtable->fieldList['taskPri']['width']        = 68;
+$config->execution->importBug->dtable->fieldList['taskPri']['sortType']     = false;
+$config->execution->importBug->dtable->fieldList['taskPri']['type']         = 'control';
+$config->execution->importBug->dtable->fieldList['taskPri']['control']      = 'select';
+$config->execution->importBug->dtable->fieldList['taskPri']['controlItems'] = $lang->task->priList;
 
 $config->execution->importBug->dtable->fieldList['assignedTo']['title']    = $lang->bug->assignedTo;
-$config->execution->importBug->dtable->fieldList['assignedTo']['type']     = 'html';
 $config->execution->importBug->dtable->fieldList['assignedTo']['width']    = 108;
 $config->execution->importBug->dtable->fieldList['assignedTo']['sortType'] = false;
+$config->execution->importBug->dtable->fieldList['assignedTo']['type']     = 'control';
+$config->execution->importBug->dtable->fieldList['assignedTo']['control']  = 'picker';
 
 $config->execution->importBug->dtable->fieldList['estimate']['title']    = $lang->task->estimate;
 $config->execution->importBug->dtable->fieldList['estimate']['type']     = 'number';
 $config->execution->importBug->dtable->fieldList['estimate']['sortType'] = false;
+$config->execution->importBug->dtable->fieldList['estimate']['type']     = 'control';
+$config->execution->importBug->dtable->fieldList['estimate']['control']  = 'input';
 
 $config->execution->importBug->dtable->fieldList['estStarted']['title']    = $lang->task->estStarted;
 $config->execution->importBug->dtable->fieldList['estStarted']['type']     = 'datetime';
 $config->execution->importBug->dtable->fieldList['estStarted']['sortType'] = false;
+$config->execution->importBug->dtable->fieldList['estStarted']['type']     = 'control';
+$config->execution->importBug->dtable->fieldList['estStarted']['control']  = 'datePicker';
 
 $config->execution->importBug->dtable->fieldList['deadline']['title']    = $lang->task->deadline;
 $config->execution->importBug->dtable->fieldList['deadline']['type']     = 'datetime';
 $config->execution->importBug->dtable->fieldList['deadline']['sortType'] = false;
+$config->execution->importBug->dtable->fieldList['deadline']['type']     = 'control';
+$config->execution->importBug->dtable->fieldList['deadline']['control']  = 'datePicker';
 
 $app->loadLang('story');
 $config->execution->linkStory = new stdclass();
