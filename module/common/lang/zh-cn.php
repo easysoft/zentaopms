@@ -25,6 +25,7 @@ $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
 $lang->and       = '和';
+$lang->separater = '、';
 
 $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';

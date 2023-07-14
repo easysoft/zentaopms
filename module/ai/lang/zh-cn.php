@@ -69,6 +69,8 @@ $lang->ai->prompts->selectDataTip    = '选择对象后，此处会展示已选�
 $lang->ai->prompts->selectedFormat   = '已选对象为{0}，已选 {1} 条数据';
 $lang->ai->prompts->nonSelected      = '暂无所选数据。';
 $lang->ai->prompts->sortTip          = '可根据重要性给数据字段排序。';
+$lang->ai->prompts->object           = '对象';
+$lang->ai->prompts->field            = '数据';
 
 /* Purpose setting. */
 $lang->ai->prompts->purpose        = '操作';
@@ -190,6 +192,8 @@ $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = '不使用代理';
 $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
+
+$lang->ai->models->promptFor = '输入给 %s';
 
 $lang->ai->designStepNav = array();
 $lang->ai->designStepNav['assignrole']       = '指定角色';
@@ -318,3 +322,6 @@ $lang->ai->dataInject->fail    = '提词执行结果填写失败';
 $lang->ai->execute = new stdclass();
 $lang->ai->execute->success = '提词执行成功';
 $lang->ai->execute->fail    = '提词执行失败';
+
+$lang->ai->audit = new stdclass();
+$lang->ai->audit->designPrompt = '提词设计';

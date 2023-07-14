@@ -21,6 +21,15 @@
         <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '', 'class="story-title"');?>
         <small><?php echo $lang->arrow . ' ' . $lang->story->change;?></small>
       </h2>
+      <?php if(isset($_SESSION['auditPrompt'])): ?>
+        <?php
+        $this->app->loadLang('ai');
+        $prompt = $_SESSION['auditPrompt']['prompt'];
+        ?>
+      <div class="pull-right btn-toolbar">
+        <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$story->id", '', true), $lang->ai->audit->designPrompt, '', 'class="btn btn-info iframe"'); ?>
+      </div>
+      <?php endif;?>
     </div>
     <form class="main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>

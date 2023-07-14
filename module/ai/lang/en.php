@@ -69,6 +69,8 @@ $lang->ai->prompts->selectDataTip    = 'Select an object and its fields will be 
 $lang->ai->prompts->selectedFormat   = 'Selecting data from {0}, {1} fields selected.';
 $lang->ai->prompts->nonSelected      = 'No data selected.';
 $lang->ai->prompts->sortTip          = 'Sorting fields by priority is suggested.';
+$lang->ai->prompts->object           = 'object';
+$lang->ai->prompts->field            = 'field';
 
 /* Purpose setting. */
 $lang->ai->prompts->purpose        = 'Purpose';
@@ -190,6 +192,8 @@ $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = 'No Proxy';
 $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
+
+$lang->ai->models->promptFor = 'Prompt for %s';
 
 $lang->ai->designStepNav = array();
 $lang->ai->designStepNav['assignrole']       = 'Specify Role';
@@ -318,3 +322,6 @@ $lang->ai->dataInject->fail    = 'Failed to fill in prompt execution results.';
 $lang->ai->execute = new stdclass();
 $lang->ai->execute->success = 'Prompt executed.';
 $lang->ai->execute->fail    = 'Prompt execution failed.';
+
+$lang->ai->audit = new stdclass();
+$lang->ai->audit->designPrompt = 'Prompt Design';

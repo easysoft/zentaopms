@@ -399,4 +399,24 @@ class ai extends control
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->ai->execute->success, 'locate' => $location));
     }
+
+    /**
+     * Audit prompt modal.
+     *
+     * @param  int    $promptId
+     * @param  int    $objectId
+     * @access public
+     * @return void
+     */
+    public function promptAudit($promptId, $objectId)
+    {
+        $prompt                    = $this->ai->getPromptByID($promptId);
+        list($objectData, $object) = $this->ai->getObjectForPromptById($prompt, $objectId);
+
+        $this->view->prompt     = $prompt;
+        $this->view->object     = $object;
+        $this->view->dataPrompt = $this->ai->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
+
+        $this->display();
+    }
 }

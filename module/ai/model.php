@@ -653,7 +653,7 @@ class aiModel extends model
             }
         }
 
-        return $objectData;
+        return array($objectData, $object);
     }
 
     /**
@@ -723,7 +723,7 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
         if(empty($prompt)) return false;
 
-        $objectData = $this->getObjectForPromptById($prompt, $objectId);
+        list($objectData) = $this->getObjectForPromptById($prompt, $objectId);
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
 
         $wholePrompt = $this->assemblePrompt($prompt, $dataPrompt);
