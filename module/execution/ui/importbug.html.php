@@ -22,6 +22,7 @@ featureBar
     )
 );
 
+$config->execution->importBug->dtable->fieldList['assignedTo']['controlItems'] = $users;
 formBase
 (
     setID('importForm'),
@@ -34,8 +35,7 @@ formBase
         set::data($bugs),
         set::checkable(true),
         set::showToolbarOnChecked(false),
-        set::onRenderCell(jsRaw('window.handleImportBug')),
-        set::onRenderRow(jsRaw('window.onRenderRow')),
+        set::plugins(array('form')),
         set::footToolbar(array(
             'items' => array(
                 array(
