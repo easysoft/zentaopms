@@ -67,7 +67,7 @@ if($canSwitchCaseType)
         }
         else
         {
-            $url  = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type");
+            $url  = $rawMethod == 'groupcase' ? $this->createLink('testcase', 'groupcase', "productID=$productID&branch=$branch&groupBy=$groupBy&projectID=$projectID&caseType=$type") : $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type");
             $text = $typeName;
         }
 
