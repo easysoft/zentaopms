@@ -126,14 +126,21 @@ $config->testcase->dtable->fieldList['actions']['group']    = 7;
 $config->testcase->group = new stdclass();
 $config->testcase->group->dtable = new stdclass();
 $config->testcase->group->dtable->fieldList['storyTitle']['title']    = $lang->testcase->story;
-$config->testcase->group->dtable->fieldList['storyTitle']['type']     = 'desc';
-$config->testcase->group->dtable->fieldList['storyTitle']['fixed']    = 'left';
+$config->testcase->group->dtable->fieldList['storyTitle']['width']    = 'auto';
+$config->testcase->group->dtable->fieldList['storyTitle']['type']     = 'title';
+$config->testcase->group->dtable->fieldList['storyTitle']['fixed']    = false;
 $config->testcase->group->dtable->fieldList['storyTitle']['sortType'] = true;
-$config->testcase->group->dtable->fieldList['storyTitle']['group']    = '1';
+$config->testcase->group->dtable->fieldList['storyTitle']['group']    = 'story';
+
 $config->testcase->group->dtable->fieldList['id'] = $config->testcase->dtable->fieldList['id'];
-$config->testcase->group->dtable->fieldList['id']['type'] = 'id';
+$config->testcase->group->dtable->fieldList['id']['type']  = 'id';
+$config->testcase->group->dtable->fieldList['id']['fixed'] = false;
+
 $config->testcase->group->dtable->fieldList['title']  = $config->testcase->dtable->fieldList['title'];
+$config->testcase->group->dtable->fieldList['title']['width']        = 'auto';
 $config->testcase->group->dtable->fieldList['title']['nestedToggle'] = false;
+$config->testcase->group->dtable->fieldList['title']['fixed']        = false;
+
 $config->testcase->group->dtable->fieldList['pri']           = $config->testcase->dtable->fieldList['pri'];
 $config->testcase->group->dtable->fieldList['status']        = $config->testcase->dtable->fieldList['status'];
 $config->testcase->group->dtable->fieldList['lastRunResult'] = $config->testcase->dtable->fieldList['lastRunResult'];
@@ -144,6 +151,7 @@ $config->testcase->group->dtable->fieldList['stepNumber']    = $config->testcase
 $config->testcase->group->dtable->fieldList['lastRunner']    = $config->testcase->dtable->fieldList['lastRunner'];
 $config->testcase->group->dtable->fieldList['lastRunDate']   = $config->testcase->dtable->fieldList['lastRunDate'];
 $config->testcase->group->dtable->fieldList['actions']       = $config->testcase->dtable->fieldList['actions'];
+$config->testcase->group->dtable->fieldList['actions']['fixed'] = false;
 
 $config->testcase->bug = new stdclass();
 $config->testcase->bug->dtable = new stdclass();

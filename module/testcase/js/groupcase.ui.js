@@ -17,7 +17,14 @@ window.onRenderCell = function(result, {row, col})
 {
     if(result && col.name == 'storyTitle')
     {
-        result.unshift({html: '<a class="dtable-nested-toggle state" data-on="click" data-story=' + row.data.story + ' data-call="deformation" data-params="event")><span class="toggle-icon is-expanded"></span></a>'});
+        if(row.data.hidden)
+        {
+            result.unshift({html: '<a class="dtable-nested-toggle state" data-on="click" data-story=' + row.data.story + ' data-call="deformation" data-params="event")><span class="toggle-icon is-collapsed"></span></a>'});
+        }
+        else
+        {
+            result.unshift({html: '<a class="dtable-nested-toggle state" data-on="click" data-story=' + row.data.story + ' data-call="deformation" data-params="event")><span class="toggle-icon is-expanded"></span></a>'});
+        }
     }
 
     return result;
@@ -33,39 +40,64 @@ window.onRenderCell = function(result, {row, col})
  */
 window.getCellSpan = function(cell)
 {
-    if(cell.col.name == 'storyTitle')
+    if(cell.col.name == 'storyTitle' && cell.row.data.rowspan)
     {
-        if(cell.row.data.rowspan)
-        {
-            return {rowSpan: cell.row.data.rowspan};
-        }
+        return {rowSpan: cell.row.data.rowspan};
+    }
+    if(cell.col.name == 'id' && cell.row.data.colspan)
+    {
+        return {colSpan: cell.row.data.colspan};
     }
 }
 
 window.deformation = function(event)
 {
-    const options = zui.DTable.query().options;
-    const story   = $(event.target).parent().data('story');
-    let   newOptions;
+    let newData      = [];
+    const options    = zui.DTable.query().options;
+    const story      = $(event.target).closest('a').data('story');
+    const oldOptions = $.extend(true, {}, initialOptions);
 
-    if($(event.target).hasClass('is-collapsed'))
+
+    if($(event.target).closest('a').find('span').hasClass('is-collapsed'))
     {
-        newOptions = $.extend(true, {}, initialOptions);
-        $(event.target).removeClass('is-collapsed').addClass('is-expanded');
+        console.log(initialOptions.data);
+        $.each(options.data, function(index)
+        {
+            if(!options.data[index]) return;
+            if(options.data[index].story == story)
+            {
+                $.each(oldOptions.data, function(key)
+                {
+                    if(!oldOptions.data[key]) return;
+                    if(oldOptions.data[key].story == story) newData.push(oldOptions.data[key]);
+                });
+            }
+            else
+            {
+                newData.push(options.data[index]);
+            }
+        });
+        options.data = newData;
+        $(event.target).closest('a').find('span').removeClass('is-collapsed').addClass('is-expanded');
+        $('#groupCaseTable').zui('dtable').render(options);
     }
     else
     {
-        options.data = options.data.filter(function(option){return option.story != story || option.rowspan != 0;});
+        options.data = options.data.filter(function(option)
+        {
+            return option.story != story || option.rowspan != 0;
+        });
         $.each(options.data, function(index)
         {
             if(options.data[index] && options.data[index].story == story)
             {
+                options.data[index].id      = allTestcases + ' ' + options.data[index].rowspan;
                 options.data[index].rowspan = 1;
+                options.data[index].colspan = 12;
+                options.data[index].hidden  = 1;
             }
         });
-        $(event.target).removeClass('is-expanded').addClass('is-collapsed');
-        newOptions = options;
+        $(event.target).closest('a').find('span').removeClass('is-expanded').addClass('is-collapsed');
+        $('#groupCaseTable').zui('dtable').render();
     }
-    console.log(newOptions);
-    $('#groupCaseTable').zui('dtable').render(newOptions);
 }

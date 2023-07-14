@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('allTestcases', $lang->testcase->allTestcases);
 
 include 'header.html.php';
 
