@@ -912,7 +912,9 @@ class product extends control
         $projects = $this->product->getProjectPairsByProduct($productID, $branch);
         if($this->app->getViewType() == 'json') return print(json_encode($projects));
 
-        return print(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
+        $items = array();
+        foreach($projects as $projectID => $projectName) $items[] = array('text' => $projectName, 'value' => $projectID, 'keys' => $projectName);
+        return print(json_encode($items));
     }
 
      /**
@@ -960,12 +962,17 @@ class product extends control
         $executions = $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, $from == 'showImport' ? '' : $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
-        $items = array();
-        foreach($executions as $executionID => $executionName) $items[] = array('value' => $executionID, 'text' => $executionName);
-
-        if($pageType == 'batch') return $this->send($items);
-
-        return print(json_encode($items));
+        $executionList = array();
+        if($pageType == 'batch')
+        {
+            foreach($executions as $executionID => $executionName) $executionList[] = array('value' => $executionID, 'text' => $executionName);
+            return $this->send($executionList);
+        }
+        else
+        {
+            foreach($executions as $executionID => $executionName) $executionList[] = array('text' => $executionName, 'value' => $executionID, 'keys' => $executionName);
+            return print(json_encode($executionList));
+        }
     }
 
     /**

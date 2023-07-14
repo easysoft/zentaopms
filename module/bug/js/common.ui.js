@@ -29,7 +29,8 @@ function changeProduct(event)
         loadProductModules(productID);
         loadProductProjects(productID);
         loadExecutions(productID);
-        loadAssignedTo();
+        loadAssignedTo(productID);
+        loadProductBuilds(productID);
         loadProductPlans(productID);
         loadProductStories(productID, bug.story);
     }
@@ -37,12 +38,12 @@ function changeProduct(event)
 
 function changeBranch(event)
 {
-    const productID = $('#product').val();
+    const productID = $('[name="product"]').val();
 
     loadProductModules(productID);
     loadProductProjects(productID);
     loadExecutions(productID);
-    loadAssignedTo();
+    loadAssignedTo(productID);
     loadProductBuilds(productID);
     loadProductPlans(productID);
     loadProductStories(productID, bug.story);
@@ -50,18 +51,18 @@ function changeBranch(event)
 
 function changeProject(event)
 {
-    const productID = $('#product').val();
+    const productID = $('[name="product"]').val();
     const projectID = $(event.target).val();
 
     loadExecutionLabel(projectID);
     loadExecutions(productID, projectID);
-    loadAssignedTo();
+    loadAssignedTo(productID, projectID);
 }
 
 function changeExecution(event)
 {
-    const productID   = $('#product').val();
-    const projectID   = $('#project').val() == 'undefined' ? 0 : $('#project').val();
+    const productID   = $('[name="product"]').val();
+    const projectID   = $('[name="project"]').val() == 'undefined' ? 0 : $('[name="project"]').val();
     const executionID = $(event.target).val();
 
     if(executionID)
@@ -93,9 +94,9 @@ function changeExecution(event)
 function changeModule(event)
 {
     const moduleID  = $(event.target).val();
-    const productID = $('#product').val();
+    const productID = $('[name="product"]').val();
     const storyID   = $('#story').val();
-    let executionID = $('#execution').val();
+    let executionID = $('[name="execution"]').val();
     if(typeof(executionID) == 'undefined') executionID = 0;
     loadAssignedToByModule(moduleID, productID);
     loadProductStories(productID, storyID, executionID, moduleID);
@@ -120,7 +121,7 @@ function changeContact(event)
 
 function refreshModule(event)
 {
-    const productID = $('#product').val();
+    const productID = $('[name="product"]').val();
     loadProductModules(productID);
 }
 
@@ -131,30 +132,37 @@ function refreshContact(event)
 
 function refreshProductBuild(event)
 {
-    const productID = $('#product').val();
+    const productID = $('[name="product"]').val();
     loadProductBuilds(productID);
 }
 
 function refreshExecutionBuild(event)
 {
-    const executionID = $('#execution').val();
+    const executionID = $('[name="execution"]').val();
     loadExecutionBuilds(executionID);
 }
 
 function loadProductBranches(productID)
 {
-    $('#branch').remove();
-
     const branchStatus = config.currentMethod == 'create' ? 'active' : 'all';
     const oldBranch    = config.currentMethod == 'edit' ? bug.branch : 0;
     let   param        = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + branchStatus;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + bug[tab];
     $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
     {
+        let branch = $('[name="branch"]').val();
+        if($('[name="branch"]').length > 0)
+        {
+            $('[name="branch"]').zui('picker').destroy();
+            $('[name="product"]').closest('.picker-box').next('.picker-box').remove();
+        }
+        $('#branchPicker').remove();
         if(data)
         {
-            $('#product').closest('.input-group').append(data);
-            $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px');
+            data = JSON.parse(data);
+
+            $('[name="product"]').closest('.input-group').append($('<div id="branchPicker" class="form-group-wrapper picker-box"></div>').picker({name: 'branch', items: data}));
+            $('#branchPicker').css('width', config.currentMethod == 'create' ? '120px' : '65px');
         }
     });
 }
@@ -163,33 +171,68 @@ function loadProductModules(productID)
 {
     if(config.currentMethod == 'edit')
     {
-        const moduleID = $('#module').val();
+        const moduleID = $('[name="module"]').val();
     }
 
-    let branch = $('#branch').val();
+    let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined')   branch   = 0;
     if(typeof(moduleID) == 'undefined') moduleID = 0;
 
-    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + moduleID);
-    $('#moduleBox').load(link);
+    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + moduleID);
+    $.get(link, function(data)
+    {
+        let moduleID      = $('[name="module"]').val();
+        let $modulePicker = $('[name="module"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $modulePicker.render({items: data});
+            if(moduleID != 0) $modulePicker.$.setValue('0');
+        }
+    });
 }
 
 function loadProductProjects(productID)
 {
-    let branch = $('#branch').val();
+    let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + bug.project);
-    $('#projectBox').load(link);
+    const link = $.createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + $('[name="project"]').val());
+    $.get(link, function(data)
+    {
+        let project        = $('[name="project"]').val();
+        let $projectPicker = $('[name="project"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $projectPicker.render({items: data});
+            if(project != '0')
+            {
+                $projectPicker.$.clear();
+                $projectPicker.$.setValue(project);
+            }
+        }
+    });
 }
 
 function loadExecutions(productID, projectID = 0)
 {
-    let branch = $('#branch').val();
+    let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
     const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&pageType=&executionID=from=&mode=stagefilter');
-    $('#executionBox').load(link);
+    $.get(link, function(data)
+    {
+        let executionID      = $('[name="execution"]').val();
+        let $executionPicker = $('[name="execution"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $executionPicker.render({items: data});
+            $executionPicker.$.clear();
+            $executionPicker.$.setValue(executionID);
+        }
+    });
 
     projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
 }
@@ -206,12 +249,8 @@ function loadExecutionLabel(projectID)
     }
 }
 
-function loadAssignedTo()
+function loadAssignedTo(productID, projectID = 0, executionID = 0)
 {
-    const projectID   = $('#project').val();
-    const productID   = $('#product').val();
-    const executionID = $('#execution').val();
-
     if(projectID)
     {
         loadAssignedToByProject(projectID);
@@ -228,49 +267,75 @@ function loadAssignedTo()
 
 function loadAssignedToByProduct(productID)
 {
-    let branch = $('#branch').val();
+    let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('bug', 'ajaxGetProductMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val() + '&branchID=' + branch);
+    const link = $.createLink('bug', 'ajaxGetProductMembers', 'productID=' + productID + '&selectedUser=' + $('[name="assignedTo"]').val() + '&branchID=' + branch);
     $.get(link, function(data)
     {
-        $('#assignedTo').replaceWith(data);
+        let assignedTo        = $('[name="assignedTo"]').val();
+        let $assignedToPicker = $('[name="assignedTo"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $assignedToPicker.render({items: data});
+            $assignedToPicker.$.clear();
+            $assignedToPicker.$.setValue(assignedTo);
+        }
     });
 }
 
 function loadAssignedToByProject(projectID)
 {
-    const link = $.createLink('bug', 'ajaxGetProjectTeamMembers', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
+    const link = $.createLink('bug', 'ajaxGetProjectTeamMembers', 'projectID=' + projectID);
     $.get(link, function(data)
     {
-        $('#assignedTo').replaceWith(data);
+        let assignedTo        = $('[name="assignedTo"]').val();
+        let $assignedToPicker = $('[name="assignedTo"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $assignedToPicker.render({items: data});
+            $assignedToPicker.$.clear();
+            $assignedToPicker.$.setValue(assignedTo);
+        }
     });
 }
 
 function loadAssignedToByExecution(executionID)
 {
-    const link = $.createLink('bug', 'ajaxLoadAssignedTo', 'executionID=' + executionID + '&selectedUser=' + $('#assignedTo').val());
+    const link = $.createLink('bug', 'ajaxLoadAssignedTo', 'executionID=' + executionID + '&selectedUser=' + $('[name="assignedTo"]').val());
     $.get(link, function(data)
     {
-        $('#assignedTo').replaceWith(data);
+        let assignedTo        = $('[name="assignedTo"]').val();
+        let $assignedToPicker = $('[name="assignedTo"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $assignedToPicker.render({items: data});
+            $assignedToPicker.$.clear();
+            $assignedToPicker.$.setValue(assignedTo);
+        }
     });
 }
 
 function loadAssignedToByModule(moduleID, productID)
 {
-    if(typeof(productID) == 'undefined') productID = $('#product').val();
-    if(typeof(moduleID) == 'undefined')  moduleID  = $('#module').val();
+    if(typeof(productID) == 'undefined') productID = $('[name="product"]').val();
+    if(typeof(moduleID) == 'undefined')  moduleID  = $('[name="module"]').val();
     const link = $.createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
     $.get(link, function(owner)
     {
-        owner        = JSON.parse(owner);
-        var account  = owner[0];
-        var realName = owner[1];
-        var isExist  = false;
-        var count    = $('#assignedTo').find('option').length;
-        for(var i=0; i < count; i++)
+        owner                 = JSON.parse(owner);
+        var account           = owner[0];
+        var realName          = owner[1];
+        var isExist           = false;
+        var $assignedToPicker = $('[name="assignedTo"]').zui('picker');
+        var assignedToItems   = $assignedToPicker.ref.current.state.items;
+        var count             = assignedToItems.length;
+        for(var i = 0; i < count; i++)
         {
-            if($('#assignedTo').get(0).options[i].value == account)
+            if(assignedToItems[i].value == account)
             {
                 isExist = true;
                 break;
@@ -278,19 +343,19 @@ function loadAssignedToByModule(moduleID, productID)
         }
         if(!isExist && account)
         {
-            option = "<option title='" + realName + "' value='" + account + "'>" + realName + "</option>";
-            $("#assignedTo").append(option);
+            assignedToItems = {text: realName, value: account, keys: realName};
+            $assignedToPicker.render({items: data, value: account});
         }
-        $('#assignedTo').val(account);
+        $assignedToPicker.$.setValue(account);
     });
 }
 
 function loadProjectBuilds(projectID)
 {
-    let branch = $('#branch').val();
+    let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const productID      = $('#product').val();
+    const productID      = $('[name="product"]').val();
     const oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
 
     if(config.currentMethod == 'create')
@@ -298,7 +363,14 @@ function loadProjectBuilds(projectID)
         const link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=&branch=' + branch);
         $.get(link, function(data)
         {
-            $('#openedBuild').replaceWith(data);
+            let $buildPicker = $('[name^="openedBuild"]').zui('picker');
+            if(data)
+            {
+                data = JSON.parse(data);
+                $buildPicker.render({items: data});
+                $buildPicker.$.clear();
+            }
+            loadBuildActions();
         })
     }
     else
@@ -320,18 +392,23 @@ function loadProjectBuilds(projectID)
 
 function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
 {
-    let branch = $('#branch').val();
+    let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
     if(config.currentMethod == 'create')
     {
         if(buildBox == 'all' || buildBox == 'openedBuild')
         {
+            let selectBuild = $('[name^="openedBuild"]').val();
             const link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=&branch=' + branch + '&index=0&type=' + type);
             $.get(link, function(data)
             {
-                $('#openedBuild').replaceWith(data);
-                loadBuildActions();
+                let $buildPicker = $('[name^="openedBuild"]').zui('picker');
+                if(data)
+                {
+                    data = JSON.parse(data);
+                    $buildPicker.render({items: data}); } loadBuildActions();
+                    $buildPicker.$.clear();
             })
         }
     }
@@ -398,32 +475,63 @@ function loadExecutionBuilds(executionID, num)
 
 function loadProductPlans(productID)
 {
-    let branch = $('#branch').val();
+    if($('[name="plan"]').length == 0) return;
+    let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
     const link = $.createLink('productplan', 'ajaxGetProductplans', 'productID=' + productID + '&branch=' + branch);
-    $('#planBox').load(link);
+    $.get(link, function(data)
+    {
+        let planID      = $('[name="plan"]').val();
+        let $planPicker = $('[name="plan"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $planPicker.render({items: data});
+            $planPicker.$.clear();
+            $planPicker.$.setValue(planID);
+        }
+    });
 }
 
 function loadProductStories(productID, storyID, moduleID = 0, executionID = 0)
 {
-    let branch = $('#branch').val();
+    let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
     const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=&limit=0&type=full&hasParent=0&executionID=' + executionID);
-    $('#storyBox').load(link);
+    $.get(link, function(data)
+    {
+        let $storyPicker = $('[name="story"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $storyPicker.render({items: data});
+            $storyPicker.$.clear();
+            $storyPicker.$.setValue('');
+        }
+    });
 }
 
-function loadExecutionStories(executionID, num)
+function loadExecutionStories(executionID)
 {
-    if(typeof(num) == 'undefined') num = '';
-
-    const productID = $('#product' + num).val();
-    let   branch    = $('#branch' + num).val();
+    const productID = $('[name="product"]').val();
+    let   branch    = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
     const link = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + productID + '&branch=' + branch + '&moduleID=0&storyID=' + bug.story + '&number=' + num + '&type=full&status=all&from=bug');
-    $('#storyBox' + num).load(link);
+    $.get(link, function(data)
+    {
+        let story        = $('[name="story"]').val();
+        let $storyPicker = $('[name="story"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $storyPicker.render({items: data});
+            $storyPicker.$.clear();
+            $storyPicker.$.setValue(storyID);
+        }
+    });
 }
 
 function loadExecutionTasks(executionID)
@@ -431,7 +539,13 @@ function loadExecutionTasks(executionID)
     const link = $.createLink('task', 'ajaxGetExecutionTasks', 'executionID=' + executionID + '&taskID=' + bug.task);
     $.post(link, function(data)
     {
-        $('#task').replaceWith(data);
+        let $taskPicker = $('[name="task"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $taskPicker.render({items: data});
+            $taskPicker.$.clear();
+        }
     })
 }
 
@@ -440,14 +554,9 @@ function loadProjectByExecutionID(executionID)
     const link = $.createLink('project', 'ajaxGetPairsByExecution', 'executionID=' + executionID, 'json');
     $.post(link, function(data)
     {
-        if($('#project').find('option[value="' + data.id + '"]').length > 0)
-        {
-            $('#project').val(data.id);
-        }
-        else
-        {
-            $('#project').append('<option value="' + data.id + '" data-keys="' + data.namePinyin + '" selected="selected">' + data.name + '</option>');
-        }
+        $projectPicker = $('[name="project"]').zui('picker');
+        $projectPicker.$.clear();
+        $projectPicker.$.setValue(data.id.toString());
     }, 'json')
 }
 
@@ -467,7 +576,7 @@ function loadTestTasks(productID, executionID)
 
 function loadAllBuilds(event)
 {
-    const productID = $('#product').val();
+    const productID = $('[name="product"]').val();
     const buildBox  = $(event.target).closest('.input-group').find('select').attr('id');
     loadProductBuilds(productID, 'all', buildBox);
 }
@@ -484,8 +593,8 @@ function loadAllUsers(event)
             $('#assignedTo').replaceWith(data);
             if(!isClosedBug)
             {
-                const moduleID  = $('#module').val();
-                const productID = $('#product').val();
+                const moduleID  = $('[name="module"]').val();
+                const productID = $('[name="product"]').val();
                 loadAssignedToByModule(moduleID, productID);
             }
         }
@@ -607,15 +716,15 @@ function loadBuildActions()
     if(itemCount <= 1)
     {
         let html = '';
-        if($('#execution').length == 0 || $('#execution').val() == 0)
+        if($('#execution').length == 0 || $('[name="execution"]').val() == 0)
         {
-            let branch    = $('#branch').val();
-            let projectID = $('#project').val();
+            let branch    = $('[name="branch"]').val();
+            let projectID = $('[name="project"]').val();
 
             if(typeof(branch)    == 'undefined') branch    = 0;
             if(typeof(projectID) == 'undefined') projectID = 0;
 
-            let link = $.createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch);
+            let link = $.createLink('release', 'create', 'productID=' + $('[name="product"]').val() + '&branch=' + branch);
             if(projectID > 0) link = $.createLink('projectrelease', 'create', 'projectID=' + projectID);
 
             html += '<a href="' + link + '" data-toggle="modal" style="padding-right:5px">' + createRelease + '</a> ';
@@ -623,9 +732,9 @@ function loadBuildActions()
         }
         else
         {
-            const executionID = $('#execution').val();
-            const productID   = $('#product').val();
-            const projectID   = $('#project').val();
+            const executionID = $('[name="execution"]').val();
+            const productID   = $('[name="product"]').val();
+            const projectID   = $('[name="project"]').val();
             let link = $.createLink('build', 'create','executionID=' + executionID + '&productID=' + productID + '&projectID=' + projectID);
             link += link.indexOf('?') >= 0 ? '&onlybody=yes' : '?onlybody=yes';
             html += '<a href="' + link + '" data-toggle="modal" style="padding-right:5px">' + createBuild + '</a> ';
@@ -654,3 +763,8 @@ function setMailto(contactID)
         $('#mailto').replaceWith(users);
     });
 }
+
+let checkHasCheckedData = function(item, checkedValue)
+{
+    return item.value == checkedValue;
+};

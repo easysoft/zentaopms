@@ -1234,14 +1234,12 @@ class bug extends control
     public function ajaxLoadAssignedTo(int $executionID, string $selectedUser = ''): string
     {
         $executionMembers = $this->user->getTeamMemberPairs($executionID, 'execution');
-
-        if(empty($selectedUser))
+        $items            = array();
+        foreach($executionMembers as $account => $member)
         {
-            $execution    = $this->loadModel('execution')->getByID($executionID);
-            $selectedUser = $execution->QD;
+            if($account) $items[] = array('text' => $member, 'value' => $account, 'keys' => $member);
         }
-
-        return print(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));
+        return print(json_encode($items));
     }
 
     /**
@@ -1339,7 +1337,12 @@ class bug extends control
         $productMembers = array_filter($productMembers);
         if(empty($productMembers)) $productMembers = $this->loadModel('user')->getPairs('devfirst|noclosed');
 
-        return print(html::select('assignedTo', $productMembers, $selectedUser, 'class="form-control"'));
+        $items = array();
+        foreach($productMembers as $account => $member)
+        {
+            if($account) $items[] = array('text' => $member, 'value' => $account, 'keys' => $member);
+        }
+        return print(json_encode($items));
     }
 
     /**
@@ -1370,19 +1373,22 @@ class bug extends control
      * Ajax get project team members.
      *
      * @param  int    $projectID
-     * @param  string $selectedUser
      * @access public
      * @return string
      */
-    public function ajaxGetProjectTeamMembers(int $projectID, string $selectedUser = '')
+    public function ajaxGetProjectTeamMembers(int $projectID)
     {
         $teamMembers = empty($projectID) ? array() : $this->loadModel('project')->getTeamMemberPairs($projectID);
+        $items       = array();
         foreach($teamMembers as $account => $member)
         {
-            if($account) $teamMembers[$account] = ucfirst(mb_substr($account, 0, 1)) . ':' . ($member ? $member : $account);
+            if($account)
+            {
+                $userName = ucfirst(mb_substr($account, 0, 1)) . ':' . ($member ? $member : $account);
+                $items[] = array('text' => $userName, 'value' => $account, 'keys' => $userName);
+            }
         }
-
-        return print(html::select('assignedTo', $teamMembers, $selectedUser, 'class="form-control"'));
+        return print(json_encode($items));
     }
 
     /**

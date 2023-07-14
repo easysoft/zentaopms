@@ -562,6 +562,13 @@ class tree extends control
             if(isset($optionMenu[$excludeModuleID])) unset($optionMenu[$excludeModuleID]);
         }
 
+        if($returnType == 'items')
+        {
+            $output = array();
+            foreach($optionMenu as $menuID => $menu) $output[] = array('text' => $menu, 'value' => $menuID, 'keys' => $menu);
+            return print(json_encode($output));
+        }
+
         if($returnType == 'html')
         {
             //Code for task #5081.
@@ -596,7 +603,7 @@ class tree extends control
             if($viewType == 'task') $changeFunc = "onchange='setStories(this.value, $rootID)'";
             $field  = $fieldID ? "modules[$fieldID]" : 'module';
             $output = html::select("$field", $optionMenu, '', "class='input' $changeFunc");
-            die($output);
+            return print($output);
         }
         if($returnType == 'json') die(json_encode($optionMenu));
     }

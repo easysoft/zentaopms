@@ -36,13 +36,13 @@ $showKeywords         = strpos(",$showFields,", ',keywords,')         !== false;
 
 formPanel
 (
-    on::change('#product',              'changeProduct'),
-    on::change('#branch',               'changeBranch'),
-    on::change('#project',              'changeProject'),
-    on::change('#execution',            'changeExecution'),
-    on::change('#module',               'changeModule'),
-    on::change('#region',               'changeRegion'),
-    on::change('#contactListMenu',      'changeContact'),
+    on::change('[name="product"]',              'changeProduct'),
+    on::change('[name="branch"]',               'changeBranch'),
+    on::change('[name="project"]',              'changeProject'),
+    on::change('[name="execution"]',            'changeExecution'),
+    on::change('[name="module"]',               'changeModule'),
+    on::change('[name="region"]',               'changeRegion'),
+    on::change('[name="contactListMenu"]',      'changeContact'),
     on::click('#allBuilds',             'loadAllBuilds'),
     on::click('#allUsers',              'loadAllUsers'),
     on::click('#refreshModule',         'refreshModule'),

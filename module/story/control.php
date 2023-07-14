@@ -1811,12 +1811,9 @@ class story extends control
             return $this->send($storyList);
         }
 
-        $storyID = isset($stories[$storyID]) ? $storyID : 0;
-        $select  = html::select('story', empty($stories) ? array() : $stories, $storyID, "class='form-control'");
-
-        /* If only need options, remove select wrap. */
-        if($onlyOption == 'true') return print(substr($select, strpos($select, '>') + 1, -10));
-        echo $select;
+        $items = array();
+        foreach($stories as $storyID => $storyName) $items[] = array('text' => $storyName, 'value' => $storyID, 'keys' => $storyName);
+        return print(json_encode($items));
     }
 
     /**

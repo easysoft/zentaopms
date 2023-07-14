@@ -401,7 +401,10 @@ class build extends control
             $params = ($type == 'all') ? 'noempty,withbranch,noreleased' : 'noempty,noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
-            return print(html::select($varName . '[]', $builds, $build, 'size=4 class=form-control multiple'));
+
+            $items = array();
+            foreach($builds as $buildID => $buildName) $items[] = array('text' => $buildName, 'value' => $buildID, 'keys' => $buildName);
+            return print(json_encode($items));
         }
         if($varName == 'openedBuilds' )
         {
@@ -458,7 +461,7 @@ class build extends control
                 if(empty($id)) continue;
                 $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
             }
-            return print(json_encode($builds));
+            return print(json_encode($items));
         }
         if($varName == 'resolvedBuild')
         {

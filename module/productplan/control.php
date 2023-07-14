@@ -578,10 +578,11 @@ class productplan extends control
      */
     public function ajaxGetProductplans($productID, $branch = 0, $number = '', $expired = '')
     {
-        $plans    = $this->productplan->getPairs($productID, empty($branch) ? '' : $branch, $expired, true);
-        $planName = $number === '' ? 'plan' : "plan[$number]";
-        $plans    = empty($plans) ? array() : $plans;
-        echo html::select($planName, $plans, '', "class='form-control'");
+        $plans = $this->productplan->getPairs($productID, empty($branch) ? '' : $branch, $expired, true);
+        $plans = empty($plans) ? array() : $plans;
+        $items = array();
+        foreach($plans as $planID => $planName) $items[] = array('text' => $planName, 'value' => $planID, 'keys' => $planName);
+        return print(json_encode($items));
     }
 
     /**

@@ -974,7 +974,9 @@ class task extends control
     public function ajaxGetExecutionTasks($executionID, $taskID = 0)
     {
         $tasks = $this->task->getExecutionTaskPairs((int)$executionID);
-        echo html::select('task', empty($tasks) ? array() : $tasks, $taskID, "class='form-control'");
+        $items = array();
+        foreach($tasks as $taskID => $taskName) $items[] = array('text' => $taskName, 'value' => $taskID, 'keys' => $taskName);
+        return print(json_encode($items));
     }
 
     /**
