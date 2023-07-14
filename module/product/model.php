@@ -2182,14 +2182,14 @@ class productModel extends model
         foreach($productStats as $product)
         {
             $productStructure[$product->program][$product->line]['products'][$product->id] = $product;
-            if($product->line)
+            if($product->line and $this->config->vision != 'or')
             {
                 /* Line name. */
                 $productStructure[$product->program][$product->line]['lineName'] = $product->lineName;
                 $productStructure[$product->program][$product->line] = $this->statisticData('line', $productStructure, $product);
             }
 
-            if($product->program)
+            if($product->program and $this->config->vision != 'or')
             {
                 /* Init vars. */
                 /* Program name. */
