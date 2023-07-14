@@ -22,7 +22,7 @@
         </p>
       </div>
       <div class="bg-gray-3" style="display: flex;">
-        <div style="flex-basis: 50%; flex-grow: 1;padding: 5px 10px;  border-right: #E6EAF1 1px solid">
+        <div style="flex-basis: 50%; flex-grow: 1;padding: 5px 20px 5px 10px;  border-right: #E6EAF1 1px solid">
           <h4><?php echo $this->lang->ai->prompts->assignRole; ?></h4>
           <div class='content-row'>
             <div class='input-label'><span><?php echo $this->lang->ai->prompts->role; ?></span></div>
@@ -94,7 +94,7 @@
           </div>
         </div>
       </div>
-      <div style="margin-top: 15px;">
+      <div style="margin-top: 15px; padding-left: 10px;">
         <p style="display: inline-block"><?php echo $this->lang->ai->audit->afterSave; ?></p>
         <?php echo html::radio('backLocation', $this->lang->ai->audit->backLocationList, 1); ?>
       </div>
