@@ -84,18 +84,20 @@
                 <td class='c-description' title='<?php echo $prompt->desc;?>'><?php echo $prompt->desc;?></td>
                 <td class='text-center c-actions' data-prompt-id='<?php echo $prompt->id?>'>
                   <?php
+                    $isPublish = $prompt->status == 'active';
+                    $disabled = $isPublish ? ' disabled' : '';
                     $canTest = $this->ai->isExecutable($prompt);
-                    echo html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon-design text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->design}'");
+                    echo html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon-design text-primary"></i>', '', "class='btn$disabled' title='{$lang->ai->prompts->action->design}'");
                     if($canTest)
                     {
                       $location = $this->ai->getTestingLocation($prompt);
-                      echo html::a($location, '<i class="icon-bug text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->test}'");
+                      echo html::a($location, '<i class="icon-bug text-primary"></i>', '', "class='btn$disabled' title='{$lang->ai->prompts->action->test}'");
                     }
                     else
                     {
                       echo html::a('javascript:void(0)', '<i class="icon-bug text-primary"></i>', '', "data-toggle='modal' data-target='#designConfirmModal' class='btn' title='{$lang->ai->prompts->action->test}'");
                     }
-                    echo html::a(helper::createLink('ai', '', "prompt=$prompt->id"), '<i class="icon-edit text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->edit}'");
+                    echo html::a(helper::createLink('ai', '', "prompt=$prompt->id"), '<i class="icon-edit text-primary"></i>', '', "class='btn$disabled' title='{$lang->ai->prompts->action->edit}'");
                     if($prompt->status == 'draft')
                     {
                       if($canTest)
