@@ -947,30 +947,25 @@ class product extends control
      */
     public function ajaxGetExecutions(int $productID, int $projectID = 0, string $branch = '', string $pageType = '', int $executionID = 0, string $from = '', string $mode = '')
     {
-        if($this->app->tab == 'execution' and $this->session->execution)
+        if($this->app->tab == 'execution' && $this->session->execution)
         {
             $execution = $this->loadModel('execution')->getByID($this->session->execution);
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
         if($projectID) $project = $this->loadModel('project')->getByID($projectID);
-        $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
+
+        $mode .= ($from == 'bugToTask' || empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
         $executions = $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, $from == 'showImport' ? '' : $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
-        if($pageType == 'batch')
-        {
-            $executions    = $executions;
-            $executionList = array();
-            foreach($executions as $executionID => $executionName) $executionList[] = array('value' => $executionID, 'text' => $executionName);
-            return $this->send($executionList);
-        }
-        else
-        {
-            $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
-            return print(html::select('execution', $executions, $executionID, "class='form-control' $datamultiple"));
-        }
+        $items = array();
+        foreach($executions as $executionID => $executionName) $items[] = array('value' => $executionID, 'text' => $executionName);
+
+        if($pageType == 'batch') return $this->send($items);
+
+        return print(json_encode($items));
     }
 
     /**

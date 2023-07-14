@@ -6,9 +6,11 @@
  */
 function loadProductRelated()
 {
-    loadExecutions($('#product').val());
-    loadTestReports($('#product').val());
-    loadExecutionBuilds($('#execution').val())
+    const productID = $('[name=product]').val();
+
+    loadExecutions(productID);
+    loadTestReports(productID);
+    loadExecutionBuilds(productID)
 }
 
 /**
@@ -20,14 +22,14 @@ function loadProductRelated()
  */
 function loadExecutions(productID)
 {
-    var executionID = $('#execution').val();
-
-    link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=');
-    $.get(link, function(data)
+    $.get($.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch='), function(data)
     {
-        if(!data) data = '<select id="execution" name="execution" class="form-control"></select>';
-        $('#execution').replaceWith(data);
-        $("#execution").val(executionID);
+        if(data)
+        {
+            data = JSON.parse(data);
+            $('#execution').picker({items: data});
+            $('#execution').picker('setValue', $('[name=execution]').val());
+        }
     });
 }
 
