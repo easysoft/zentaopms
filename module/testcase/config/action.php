@@ -66,6 +66,11 @@ $config->testcase->actionList['deleteScene']['text'] = $lang->testcase->deleteSc
 $config->testcase->actionList['deleteScene']['hint'] = $lang->testcase->deleteScene;
 $config->testcase->actionList['deleteScene']['url']  = array('module' => 'testcase', 'method' => 'deleteScene', 'params' => 'sceneID={id}');
 
+$config->testcase->actionList['delete']['icon'] = 'trash';
+$config->testcase->actionList['delete']['text'] = $lang->testcase->deleteAction;
+$config->testcase->actionList['delete']['hint'] = $lang->testcase->deleteAction;
+$config->testcase->actionList['delete']['url']  = array('module' => 'testcase', 'method' => 'delete', 'params' => 'caseID={id}');
+
 $config->scene = new stdclass();
 $config->scene->menu = array('editScene', 'deleteScene');
 
