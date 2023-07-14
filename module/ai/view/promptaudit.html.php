@@ -76,25 +76,21 @@
           </div>
         </form>
       </div>
-      <div style="flex-basis: 50%; flex-grow: 1; display: flex; flex-direction: column;">
+      <div style="flex-basis: 50%; flex-grow: 1; display: flex; flex-direction: column; word-break: break-all;">
         <div style="padding: 5px 10px; border-bottom: #E6EAF1 1px solid">
           <h4 style="margin-bottom: 24px;"><?php echo sprintf($this->lang->ai->models->promptFor, $this->lang->ai->models->typeList['openai-gpt35']);?></h4>
           <p class="text-gray"><?php echo $this->lang->ai->prompts->assignRole;?></p>
-          <p>
-            <?php
-            echo $prompt->role;
-            echo $prompt->characterization;
-            ?>
-          </p>
+          <p id="roleDisplay"><?php echo $prompt->role; ?></p>
+          <p id="characterizationDisplay"><?php echo $prompt->characterization; ?></p>
         </div>
         <div style="padding: 5px 10px; border-bottom: #E6EAF1 1px solid">
           <p class="text-gray"><?php echo $this->lang->ai->prompts->selectDataSource;?></p>
-          <p style="word-break: break-all;"><?php echo $dataPrompt; ?></p>
+          <p><?php echo $dataPrompt; ?></p>
         </div>
         <div style="padding: 5px 10px;">
           <p class="text-gray"><?php echo $this->lang->ai->prompts->setPurpose;?></p>
-          <p><?php echo $prompt->purpose;?></p>
-          <p><?php echo $prompt->elaboration;?></p>
+          <p id="purposeDisplay"><?php echo $prompt->purpose;?></p>
+          <p id="elaborationDisplay"><?php echo $prompt->elaboration;?></p>
         </div>
       </div>
     </div>
