@@ -846,6 +846,7 @@ class aiModel extends model
         return $this->dao->select('*')->from(TABLE_PROMPT)
             ->where('module')->eq($module)
             ->andWhere('status', true)->eq('active')->orWhere('createdBy')->eq($this->app->user->account)->markRight(1)
+            ->orderBy('id_desc')
             ->fetchAll();
     }
 
