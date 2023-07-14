@@ -688,6 +688,7 @@ $lang->navGroup->app              = 'devops';
 $lang->navGroup->pipeline         = 'devops';
 $lang->navGroup->devopssetting    = 'devops';
 $lang->navGroup->space            = 'devops';
+$lang->navGroup->store            = 'devops';
 $lang->navGroup->instance         = 'devops';
 
 $lang->navGroup->company        = 'system';
