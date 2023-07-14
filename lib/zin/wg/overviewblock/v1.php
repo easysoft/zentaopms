@@ -28,7 +28,7 @@ class overviewBlock extends wg
 
     protected function buildCard($card): wg
     {
-        $class = 'text-2xl text-center font-bold leading-relaxed ' . (!empty($card->class) ? $card->class : '');
+        $class = 'text-2xl text-center leading-relaxed ' . (!empty($card->class) ? $card->class : '');
 
         return col
         (
@@ -59,6 +59,7 @@ class overviewBlock extends wg
         return div
         (
             setClass('cards flex w-1/2'),
+            setStyle(array('margin-top' => '-20px')),
             $cards
         );
     }
@@ -104,6 +105,7 @@ class overviewBlock extends wg
                     h::ul
                     (
                         setClass('flex justify-around items-end w-full'),
+                        setStyle(array('height' => '60px')),
                         $bars
                     )
                 ),
