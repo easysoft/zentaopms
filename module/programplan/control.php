@@ -82,7 +82,7 @@ class programplan extends control
         $this->productID = $this->commonAction($projectID, $productID);
         if($_POST)
         {
-            $formData = form::data($this->config->programplan->create->form);
+            $formData = form::data($this->config->programplan->form->create);
             $formData = $this->programplanZen->beforeCreate($formData);
 
             $this->programplan->create($formData, $projectID, $this->productID, $planID);

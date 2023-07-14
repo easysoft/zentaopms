@@ -515,10 +515,10 @@ class programplanModel extends model
     {
         /* Get every value from formData without use extract(). */
         $planIDList     = $formData->get('planIDList');
-        $names          = $formData->get('names');
+        $names          = $formData->get('name');
         $projectManager = $formData->get('PM');
-        $percents       = $formData->get('percents');
-        $attributes     = $formData->get('attributes');
+        $percents       = $formData->get('percent');
+        $attributes     = $formData->get('attribute');
         $acl            = $formData->get('acl');
         $milestone      = $formData->get('milestone');
         $begin          = $formData->get('begin');

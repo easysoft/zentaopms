@@ -20,3 +20,24 @@ $config->programplan->ajaxCustom->form['zooming']     = array('required' => fals
 $config->programplan->ajaxCustom->form['stageCustom'] = array('required' => false, 'type' => 'array');
 $config->programplan->ajaxCustom->form['ganttFields'] = array('required' => false, 'type' => 'array');
 
+/* Batch stages creation. */
+global $app, $lang;
+$app->loadLang('execution');
+$app->loadLang('stage');
+!isset($config->programplan->form) && $config->programplan->form = new stdClass();
+$config->programplan->form->create = common::formConfig('programplan', 'create');
+$config->programplan->form->create['planIDList'] = array('type' => 'array', 'control' => 'text', 'required' => false, 'default' => '');
+$config->programplan->form->create['orders']     = array('type' => 'array', 'control' => 'text', 'required' => false, 'default' => '');
+$config->programplan->form->create['type']       = array('label' => $lang->execution->method,      'type' => 'array', 'control' => 'select',   'required' => true,  'default' => '',     'options' => $lang->execution->typeList);
+$config->programplan->form->create['name']       = array('label' => $lang->nameAB,                 'type' => 'array', 'control' => 'text',     'required' => true,  'default' => '',     'base' => true);
+$config->programplan->form->create['code']       = array('label' => $lang->code,                   'type' => 'array', 'control' => 'select',   'required' => false, 'default' => '',     'options' => array());
+$config->programplan->form->create['PM']         = array('label' => $lang->programplan->PMAB,      'type' => 'array', 'control' => 'select',   'required' => false, 'default' => '',     'options' => array());
+$config->programplan->form->create['percent']    = array('label' => $lang->programplan->percent,   'type' => 'array', 'control' => 'number',   'required' => false, 'default' => 0,      'options' => array());
+$config->programplan->form->create['attribute']  = array('label' => $lang->programplan->attribute, 'type' => 'array', 'control' => 'select',   'required' => false, 'default' => 0,      'options' => $lang->stage->typeList);
+$config->programplan->form->create['acl']        = array('label' => $lang->programplan->acl,       'type' => 'array', 'control' => 'select',   'required' => false, 'default' => 'open', 'options' => $lang->execution->aclList);
+$config->programplan->form->create['milestone']  = array('label' => $lang->programplan->milestone, 'type' => 'array', 'control' => 'select',   'required' => false, 'default' => 0,      'options' => $lang->programplan->milestoneList);
+$config->programplan->form->create['begin']      = array('label' => $lang->programplan->begin,     'type' => 'array', 'control' => 'text',     'required' => true,  'default' => '');
+$config->programplan->form->create['end']        = array('label' => $lang->programplan->end,       'type' => 'array', 'control' => 'text',     'required' => true,  'default' => '');
+$config->programplan->form->create['realBegan']  = array('label' => $lang->programplan->realBegan, 'type' => 'array', 'control' => 'text',     'required' => false, 'default' => '');
+$config->programplan->form->create['realEnd']    = array('label' => $lang->programplan->realEnd,   'type' => 'array', 'control' => 'text',     'required' => false, 'default' => '');
+$config->programplan->form->create['desc']       = array('label' => $lang->programplan->desc,      'type' => 'array', 'control' => 'textarea', 'required' => false, 'default' => '');
