@@ -20,6 +20,10 @@ $lang->prompt->module = 'Module';
 $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';
 
+$lang->ai->validate = new stdclass();
+$lang->ai->validate->noEmpty   = '%s cannot be empty.';
+$lang->ai->validate->dirtyForm = 'The design step of %s has changed. Do you want to save and return it?';
+
 $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = 'Prompt';
 $lang->ai->prompts->emptyList   = 'No prompts yet.';
@@ -31,6 +35,18 @@ $lang->ai->prompts->createdBy   = 'Creator';
 $lang->ai->prompts->createdDate = 'Created Date';
 $lang->ai->prompts->targetForm  = 'Target Form';
 $lang->ai->prompts->funcDesc    = 'Function Description';
+
+$lang->ai->prompts->summary = 'There are %s prompts on this page.';
+
+$lang->ai->prompts->action = new stdclass();
+$lang->ai->prompts->action->goDesignConfirm = 'The current prompt is not complete, continue designing?';
+$lang->ai->prompts->action->goDesign        = 'Go designing';
+$lang->ai->prompts->action->draftConfirm    = 'Once unpublished, the prompt cannot be used any further. Are you sure you want to proceed?';
+$lang->ai->prompts->action->design          = 'Design';
+$lang->ai->prompts->action->test            = 'Test';
+$lang->ai->prompts->action->edit            = 'Edit';
+$lang->ai->prompts->action->publish         = 'Publish';
+$lang->ai->prompts->action->unpublish       = 'Unpublish';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';
@@ -125,8 +141,9 @@ $lang->ai->targetForm['execution']['createrisk']       = 'Create Risk';
 $lang->ai->targetForm['execution']['createissue']      = 'Create Issue';
 
 $lang->ai->prompts->statuses = array();
-$lang->ai->prompts->statuses[''] = 'All';
-$lang->ai->prompts->statuses['draft'] = 'Draft';
+$lang->ai->prompts->statuses['']       = 'All';
+$lang->ai->prompts->statuses['draft']  = 'Draft';
+$lang->ai->prompts->statuses['active'] = 'Active';
 
 $lang->ai->prompts->modules = array();
 $lang->ai->prompts->modules['']            = 'All';

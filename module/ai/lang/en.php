@@ -39,9 +39,14 @@ $lang->ai->prompts->funcDesc    = 'Function Description';
 $lang->ai->prompts->summary = 'There are %s prompts on this page.';
 
 $lang->ai->prompts->action = new stdclass();
-$lang->ai->prompts->action->goDesignConfirm = 'The current prompt is not completed, do you want to continue with the design?';
-$lang->ai->prompts->action->goDesign = 'Go to design';
-$lang->ai->prompts->action->draftConfirm = 'Once unpublished, the prompt cannot be used any further. Are you sure you want to unpublish?';
+$lang->ai->prompts->action->goDesignConfirm = 'The current prompt is not complete, continue designing?';
+$lang->ai->prompts->action->goDesign        = 'Go designing';
+$lang->ai->prompts->action->draftConfirm    = 'Once unpublished, the prompt cannot be used any further. Are you sure you want to proceed?';
+$lang->ai->prompts->action->design          = 'Design';
+$lang->ai->prompts->action->test            = 'Test';
+$lang->ai->prompts->action->edit            = 'Edit';
+$lang->ai->prompts->action->publish         = 'Publish';
+$lang->ai->prompts->action->unpublish       = 'Unpublish';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';

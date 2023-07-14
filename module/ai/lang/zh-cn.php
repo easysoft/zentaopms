@@ -42,6 +42,11 @@ $lang->ai->prompts->action = new stdclass();
 $lang->ai->prompts->action->goDesignConfirm = '当前提词未完成，是否继续设计？';
 $lang->ai->prompts->action->goDesign        = '去设计';
 $lang->ai->prompts->action->draftConfirm    = '下架后，提词将不能继续使用，您确定要下架吗？';
+$lang->ai->prompts->action->design          = '设计';
+$lang->ai->prompts->action->test            = '调试';
+$lang->ai->prompts->action->edit            = '编辑';
+$lang->ai->prompts->action->publish         = '发布';
+$lang->ai->prompts->action->unpublish       = '下架';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = '指定角色';
