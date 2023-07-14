@@ -113,7 +113,10 @@ featureBar
             set::title($currentTypeName),
             set::items($caseTypeItems),
             set::activeKey($caseType),
-            set::link($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param")),
+            set::link
+            (
+                $rawMethod == 'groupcase' ? $this->createLink('testcase', 'groupcase', "productID=$productID&branch=$branch&groupBy=$groupBy&projectID=$projectID") : $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param")
+            ),
             set::closeLink('#'),
         )
     ) : null,
