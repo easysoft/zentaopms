@@ -1,0 +1,9 @@
+.detail-header .icon-info-sign {color: rgba(var(--color-secondary-500-rgb),var(--tw-bg-opacity));}
+.app-name-container {margin: auto; margin-left: 8px; font-size: 24px;}
+.img-thumbnail {width: 32%; height: auto; padding: 5px;}
+.img-thumbnail img {width: 100%; height: auto; object-fit: contain; border: solid 1px #ddd; border-radius: 3px;}
+.errorBox{padding: 20px; border: solid 1px #ddd;}
+#dynamicPager {justify-content: flex-end;}
+#dynamicPager .ghost {color: rgb(131, 138, 157);}
+#dynamicTable a {color: inherit;}
+#store-detail-action .install-btn {padding-left: 25px; padding-right: 25px;}
