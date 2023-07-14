@@ -112,19 +112,6 @@
               step.previousElementSibling.lastElementChild.classList.remove('solid-arrow');
             }
           });
-          const link = step.querySelector('a');
-          if(!link) continue;
-          step.addEventListener('click', function(e)
-          {
-            const result = validateForm();
-            if(!result) {
-              e.preventDefault();
-              return;
-            }
-            const submitButton = document.getElementById('saveButton');
-            if(!submitButton) return;
-            submitButton.click();
-          })
         }
       }
     })();
