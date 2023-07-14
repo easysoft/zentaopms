@@ -117,7 +117,7 @@ featureBar
             set::closeLink('#'),
         )
     ) : null,
-    $canDisplaySuite ? li
+    $canDisplaySuite && $rawMethod != 'groupcase' ? li
     (
         set::class('nav-item'),
         dropdown
@@ -131,7 +131,7 @@ featureBar
             set::items($suiteItems)
         )
     ) : null,
-    $canBrowseZeroCase ? li
+    $canBrowseZeroCase && $rawMethod != 'groupcase' ? li
     (
         set::class('nav-item'),
         a
@@ -154,7 +154,7 @@ featureBar
             $lang->testcase->onlyScene
         )
     ) : null,
-    $rawMethod != 'browseunits' && $rawMethod != 'zerocase' ? li
+    $rawMethod != 'browseunits' && $rawMethod != 'zerocase' && $rawMethod != 'groupcase' ? li
     (
         set::class('nav-item'),
         checkbox
@@ -165,17 +165,17 @@ featureBar
             $lang->testcase->onlyAutomated
         )
     ) : null,
-    $rawMethod != 'browseunits' ? (searchToggle(set::open($browseType == 'bysearch'))) : null
+    $rawMethod != 'browseunits' && $rawMethod != 'groupcase' ? (searchToggle(set::open($browseType == 'bysearch'))) : null
 );
 
-$viewItems   = array(array('text' => $lang->testcase->listView, 'active' => true));
+$viewItems   = array(array('text' => $lang->testcase->listView, 'url' => inlink('browse', "productID=$productID&branch=$branch&browseType=all"), 'active' => $rawMethod != 'groupcase' ? true : false));
 $exportItems = array();
 $importItems = array();
 $createItems = array();
 if($canBrowseGroupCase)
 {
     $link = inlink('groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$caseType");
-    $viewItems[] = array('text' => $lang->testcase->groupView, 'url' => $link, 'data-app' => $app->tab);
+    $viewItems[] = array('text' => $lang->testcase->groupView, 'url' => $link, 'data-app' => $app->tab, 'active' => $rawMethod == 'groupcase' ? true : false);
 }
 
 if(!empty($productID))
