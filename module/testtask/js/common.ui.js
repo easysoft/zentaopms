@@ -26,15 +26,21 @@ function loadExecutionRelated()
  */
 function loadExecutionBuilds(executionID)
 {
-    var selectedBuild = $('#build').val();
+    const productID   = $('[name=product]').val();
+    var selectedBuild = $('[name=build]').val();
     if(!selectedBuild) selectedBuild = 0;
 
-    var link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild);
-    if(executionID == 0) link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=build&build=' + selectedBuild + '&branch=&index=&needCreate=&type=noempty,notrunk,withexecution');
+    var link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=testTaskBuild&build=' + selectedBuild);
+    if(executionID == 0) link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=build&build=' + selectedBuild + '&branch=&index=&needCreate=&type=noempty,notrunk,withexecution');
 
     $.get(link, function(data)
     {
-        $('#build').replaceWith(data);
+        if(data)
+        {
+            data = JSON.parse(data);
+            $('#build').picker({items: data});
+            $('#build').picker('setValue', '0');
+        }
     });
 }
 
@@ -47,11 +53,14 @@ function loadExecutionBuilds(executionID)
  */
 function loadTestReports(productID)
 {
-    link = $.createLink('testtask', 'ajaxGetTestReports', 'productID=' + productID);
-    $.get(link, function(data)
+    $.get($.createLink('testtask', 'ajaxGetTestReports', 'productID=' + productID), function(data)
     {
-        if(!data) data = '<select id="testreport" name="testreport" class="form-control"></select>';
-        $('#testreport').replaceWith(data);
+        if(data)
+        {
+            data = JSON.parse(data);
+            $('#testreport').picker({items: data});
+            $('#testreport').picker('setValue', '0');
+        }
     });
 }
 

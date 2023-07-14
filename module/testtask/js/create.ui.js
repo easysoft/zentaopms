@@ -6,11 +6,12 @@
  */
 function loadProductRelated()
 {
-    const productID = $('[name=product]').val();
+    const productID   = $('[name=product]').val();
+    const executionID = $('[name=execution]').val();
 
     loadExecutions(productID);
     loadTestReports(productID);
-    loadExecutionBuilds(productID)
+    loadExecutionBuilds(executionID)
 }
 
 /**

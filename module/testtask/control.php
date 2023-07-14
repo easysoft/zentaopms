@@ -1576,11 +1576,15 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function ajaxGetTestReports($productID)
+    public function ajaxGetTestReports(int $productID)
     {
         /* Testreport list. */
-        $pairs = $this->loadModel('testreport')->getPairs($productID);
-        return print(html::select('testreport', array('') + $pairs, '', "class='form-control chosen'"));
+        $testReportPairs = $this->loadModel('testreport')->getPairs($productID);
+
+        $items = array();
+        foreach($testReportPairs as $testReportID => $testReportName) $items[] = array('text' => $testReportName, 'value' => $testReportID);
+
+        return print(json_encode($items));
     }
 
     /**

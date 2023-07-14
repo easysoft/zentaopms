@@ -419,9 +419,12 @@ class build extends control
         }
 
         $builds = $this->build->getBuildPairs($productID, $branch, $type, 0, 'project', $build, false);
-        if(strpos($extra, 'multiple') !== false) $varName .= '[]';
         if($isJsonView) return print(json_encode($builds));
-        return print(html::select($varName, $builds, $build, "class='form-control' $extra"));
+
+        $items = array();
+        foreach($builds as $buildID => $buildName) $items[] = array('text' => $buildName, 'value' => $buildID);
+
+        return print(json_encode($items));
     }
 
     /**
@@ -475,6 +478,7 @@ class build extends control
         }
 
         if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type, $extra);
+
         $builds = $this->build->getBuildPairs($productID, $branch, $type, $projectID, 'project', $build, false);
         if($isJsonView) return print(json_encode($builds));
 
@@ -484,7 +488,10 @@ class build extends control
             if(empty($id)) continue;
             $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
+
         if($isJsonView) return print(json_encode($builds));
+
+        return print(json_encode($items));
     }
 
     /**
@@ -502,7 +509,7 @@ class build extends control
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal', $number = '')
+    public function ajaxGetExecutionBuilds(int $executionID, int $productID, string $varName, string $build = '', string|int $branch = 'all', int $index = 0, bool $needCreate = false, string $type = 'normal', string $number = '')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
@@ -539,7 +546,13 @@ class build extends control
             $builds = $this->build->getBuildPairs($productID, $branch, 'noempty,notrunk', $executionID, 'execution', '', false);
             if($isJsonView) return print(json_encode($builds));
 
-            return print(html::select('build', array('') + $builds, $build, "class='form-control'"));
+            $items = array();
+            foreach($builds as $buildID => $buildName)
+            {
+                $items[] = array('text' => $buildName, 'value' => $buildID);
+            }
+
+            return print(json_encode($items));
         }
         if($varName == 'dropdownList')
         {

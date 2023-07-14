@@ -54,6 +54,7 @@ formPanel
             set::seg(true),
             picker
             (
+                setID('build'),
                 set::name('build'),
                 set::items($builds),
                 set::required(true),
