@@ -147,6 +147,28 @@ $(function()
 
   /* Enable buttons after going testing. */
   $('#mainForm').ajaxForm({
+    success: function(response, status)
+    {
+      var message  = response.msg;
+      var location = response.locate;
+      var target   = response.target ? response.target : '#submit';
+      if(message)
+      {
+        var $targetSubmitBtn = $(target);
+        if($targetSubmitBtn.length)
+        {
+          $targetSubmitBtn.popover({
+            container: 'body',
+            trigger:   'manual',
+            content:   message,
+            tipClass:  'popover-in-modal popover-success popover-form-result',
+            placement: 'right',
+          }).popover('show');
+          setTimeout(function() {$targetSubmitBtn.popover('destroy');}, 2000);
+        }
+      }
+      if(location) setTimeout(function() {$.apps.open(location);}, 1200);
+    },
     finish: function(response, _, $form)
     {
       if(response.locate) setTimeout(function() {$.apps.open(response.locate);}, 1200);

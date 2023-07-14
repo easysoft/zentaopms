@@ -310,7 +310,7 @@ class ai extends control
             if(!empty($data->goTesting)) // Go to testing object view.
             {
                 $location = $this->ai->getTestingLocation($prompt);
-                return $this->send(empty($location) ? array('result' => 'fail', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'message' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
+                return $this->send(empty($location) ? array('result' => 'fail', 'target' => '#go-test-btn', 'msg' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'target' => '#go-test-btn', 'msg' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
             }
 
             if($isJumpToNext)
