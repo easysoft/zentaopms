@@ -1,2 +1,2 @@
 #mainContent {display: flex;}
-#mainContent .setting-box:hover > button {border-color: var(--color-primary-500)}
+.border-hover:hover {border-color: var(--color-primary-500)}
