@@ -391,6 +391,12 @@ class ai extends control
         $location = $this->ai->getTargetFormLocation($prompt, $objectId);
         if(empty($location)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
 
+        if($prompt->status == 'draft')
+        {
+            $_SESSION['auditPrompt']['time'] = time();
+            $_SESSION['auditPrompt']['prompt'] = $prompt;
+        }
+
         return $this->send(array('result' => 'success', 'message' => $this->lang->ai->execute->success, 'locate' => $location));
     }
 }

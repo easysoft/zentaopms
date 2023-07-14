@@ -26,6 +26,10 @@
       js::set('injectData', $injectData);
       unset($_SESSION['aiInjectData'][$module][$method]);
       $this->app->loadLang('ai');
+      if(isset($_SESSION['auditPrompt']))
+      {
+        if(time() - $_SESSION['auditPrompt']['time'] > 30 * 60) unset($_SESSION['auditPrompt']);
+      }
     ?>
     <script>
       $(function()
