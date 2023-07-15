@@ -63,9 +63,9 @@ formPanel
                     set::items($moduleOptionMenu),
                     set::value($currentModuleID)
                 ),
-                count($moduleOptionMenu) == 1 ? span
+                span
                 (
-                    set('class', 'input-group-addon'),
+                    set('class', 'input-group-addon' . (count($moduleOptionMenu) > 1 ? ' hidden' : '')),
                     a
                     (
                         set('class', 'mr-2'),
@@ -80,7 +80,7 @@ formPanel
                         set('href', 'javascript:void(0)'),
                         icon('refresh')
                     )
-                ) : null
+                ),
             )
         ),
     ),

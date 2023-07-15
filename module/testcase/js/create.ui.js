@@ -10,14 +10,14 @@ function changeProduct(event)
 
 function changeBranch(event)
 {
-    const productID = $('#product').val();
+    const productID = $('[name=product]').val();
     loadProductModules(productID);
     loadProductStories(productID);
 }
 
 function clickRefresh(event)
 {
-    const productID = $('#product').val();
+    const productID = $('[name=product]').val();
     loadProductModules(productID);
 }
 
@@ -77,6 +77,8 @@ function loadProductModules(productID)
             data = JSON.parse(data);
             $modulePicker.render({items: data});
             $modulePicker.$.changeState({value: ''});
+
+            $('#module').next('.input-group-addon').toggleClass('hidden', data.length > 1);
         }
     })
 }
