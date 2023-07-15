@@ -24,7 +24,12 @@ window.onRenderCell = function(result, {row, col})
         else
         {
             result.unshift({html: '<a class="dtable-nested-toggle state" data-on="click" data-story=' + row.data.story + ' data-call="deformation" data-params="event")><span class="toggle-icon is-expanded"></span></a>'});
+            result.push({outer: false, style: {alignItems: 'start', 'padding-top': '8px'}})
         }
+    }
+    if(result && col.name == 'id' && row.data.hidden)
+    {
+        result.push({outer: false, style: {alignItems: 'center', justifyContent: 'start'}})
     }
 
     return result;
@@ -91,7 +96,7 @@ window.deformation = function(event)
         {
             if(options.data[index] && options.data[index].story == story)
             {
-                options.data[index].id      = allTestcases + ' ' + options.data[index].rowspan;
+                options.data[index].id      = {html: '<span class="text-gray">' + allTestcases + ' ' + '<strong>' + options.data[index].rowspan + '</strong></span>'};
                 options.data[index].rowspan = 1;
                 options.data[index].colspan = 12;
                 options.data[index].hidden  = 1;
