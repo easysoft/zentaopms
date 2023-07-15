@@ -27,7 +27,7 @@ formPanel
     set::url(inlink('test')),
     formGroup(
         set::width('1/3'),
-        setClass('mx-8'),
+        setClass('mx-4'),
         set::control('picker'),
         set::name('to'),
         set::value($app->user->account),
