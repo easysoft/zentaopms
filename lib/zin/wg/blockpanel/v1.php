@@ -55,4 +55,12 @@ class blockPanel extends panel
 
         $this->setDefaultProps($defaultProps);
     }
+
+    protected function buildProps(): array
+    {
+        $props = parent::buildProps();
+        $name = $this->prop('name');
+        if(!empty($name)) $props[] = setData('block', $name);
+        return $props;
+    }
 }
