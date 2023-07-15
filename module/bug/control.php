@@ -160,14 +160,17 @@ class bug extends control
         $product   = $this->product->getByID($productID);
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
-        $projects = $this->product->getProjectPairsByProduct($productID, (string)$bug->branch);
-        $this->session->set("project", key($projects), 'project');
+        $projects  = $this->product->getProjectPairsByProduct($productID, (string)$bug->branch);
+        $projectID = key($projects);
+        $this->session->set("project", $projectID, 'project');
 
         $this->executeHooks($bugID);
 
         $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
         $this->view->product     = $product;
         $this->view->project     = $this->loadModel('project')->getByID($bug->project);
+        $this->view->projects    = $projects;
+        $this->view->executions  = $this->product->getExecutionPairsByProduct($productID, $bug->branch, (string)$projectID, 'noclosed');
         $this->view->bug         = $bug;
         $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getById($bug->module);
         $this->view->modulePath  = $this->loadModel('tree')->getParents($bug->module);
@@ -1364,7 +1367,7 @@ class bug extends control
         unset($productBugs[$bugID]);
 
         $bugList = array();
-        foreach($productBugs as $bugID => $bugName) $bugList[] = array('value' => $bugID, 'text' => $bugName);
+        foreach($productBugs as $bugID => $bugName) $bugList[] = array('value' => $bugID, 'text' => $bugName, 'keys' => $bugName);
         return $this->send($bugList);
     }
 

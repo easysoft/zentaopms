@@ -4,15 +4,13 @@ function setDuplicate()
     if(resolution == 'duplicate')
     {
         $.ajaxSettings.async = false;
+
         $.getJSON($.createLink('bug', 'ajaxGetProductBugs', 'projectID=' + productID + '&bugID=' + bugID),function(bugs)
         {
             if(!bugs) return;
 
-            const $duplicateBug = $('#duplicateBug').empty();
-            $.each(bugs, function(index, bug)
-            {
-                $duplicateBug.append('<option value="' + bug.value + '">' + bug.text + '</option>');
-            });
+            const $duplicateBug = $('[name="duplicateBug"]').zui('picker');
+            $duplicateBug.render({items: bugs});
         });
         $.ajaxSettings.async = true;
         $('#duplicateBugBox').removeClass('hidden');

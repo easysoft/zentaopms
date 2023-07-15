@@ -10,8 +10,9 @@ $(document).on('click', '#toStory', function()
 
 $(document).on('click', '#toTaskButton', function()
 {
-    const projectID   = $('#taskProjects').val();
-    const executionID = $('#execution').val() ? $('#execution').val() : 0;
+    const projectID   = $('[name="taskProjects"]').val();
+    const executionID = $('[name="execution"]').val() ? $('[name="execution"]').val() : 0;
+    changeTaskProjects();
 
     if(projectID && executionID != 0)
     {
@@ -31,7 +32,16 @@ $(document).on('click', '#toTaskButton', function()
 
 function changeTaskProjects(event)
 {
-    const projectID = $(event.target).val();
-    const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID +'&branch=' + branchID + '&number=&executionID=0&from=bugToTask');
-    $('#executionBox').load(link);
+    const projectID = event != undefined ?  $(event.target).val() : $('[name="project"]').val();
+    const link      = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID +'&branch=' + branchID + '&number=&executionID=0&from=bugToTask');
+    $.get(link, function(data)
+    {
+        let $executionPicker = $('[name="execution"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $executionPicker.render({items: data});
+            $executionPicker.$.clear();
+        }
+    });
 }

@@ -325,7 +325,7 @@ modal
                     picker
                     (
                         set::name('execution'),
-                        set::items(),
+                        set::items($executions),
                     )
                 )
             )
