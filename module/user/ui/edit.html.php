@@ -50,6 +50,7 @@ formPanel
     ),
     set::formClass('border-0'),
     on::click('button[type="submit"]', 'computePassword'),
+    on::change('input[name^=visions]', 'changeVision'),
     formRow
     (
         formGroup
@@ -63,7 +64,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->role),
-            set::control('select'),
+            set::control('picker'),
             set::name('role'),
             set::items($lang->user->roleList),
             set::value($user->role),
@@ -75,7 +76,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->dept),
-            set::control('select'),
+            set::control('picker'),
             set::name('dept'),
             set::items($depts),
             set::value($user->dept)
@@ -95,9 +96,9 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->group),
-            select
+            picker
             (
-                set::name('group'),
+                set::name('group[]'),
                 set::items($groups),
                 set::value($userGroups),
                 set::multiple(true),
@@ -109,7 +110,7 @@ formPanel
             set::label($lang->user->company),
             inputGroup
             (
-                select
+                picker
                 (
                     set::name('company'),
                     set::items($companies),
@@ -142,7 +143,7 @@ formPanel
             set::label($lang->user->type),
             radioList
             (
-                on::click('changeType'),
+                on::change('changeType'),
                 set::inline(true),
                 set::name('type'),
                 set::items($lang->user->typeList),
@@ -236,8 +237,7 @@ formPanel
             set::label($lang->user->visions),
             checkList
             (
-                on::click('updateGroup'),
-                set::name('visions'),
+                set::name('visions[]'),
                 set::items($visionList),
                 set::value($user->visions),
                 set::inline(true),

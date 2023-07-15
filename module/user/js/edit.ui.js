@@ -3,7 +3,6 @@ $(function()
     password1Encrypted = false;
     password2Encrypted = false;
     changeType();
-    updateGroup();
 });
 
 /**
@@ -62,42 +61,21 @@ function changeType(event)
     let type       = $typeGroup.find('input[type="radio"]:checked').val();
     if(type == 'inside')
     {
-        $('#company').closest('.form-group').addClass('hidden');
-        $('#dept, #commiter').closest('.form-row').removeClass('hidden');
+        $('[name="company"]').closest('.form-group').addClass('hidden');
+        $('[name="dept"]').closest('.form-row').removeClass('hidden');
+        $('#commiter').closest('.form-row').removeClass('hidden');
     }
     else
     {
-        $('#company').closest('.form-group').removeClass('hidden');
-        $('#dept, #commiter').closest('.form-row').addClass('hidden');
+        $('[name="company"]').closest('.form-group').removeClass('hidden');
+        $('[name="dept"]').closest('.form-row').addClass('hidden');
+        $('#commiter').closest('.form-row').addClass('hidden');
     }
-}
-
-/**
- * Update groups when visions change.
- *
- * @param  event  $event
- * @access public
- * @return void
- */
-function updateGroup(event)
-{
-    let visions      = '';
-    let group        = $('#group').val();
-    let $visionGroup = event != undefined ? $(event.target).closest('.form-group') : $('input[name="visions"]').closest('.form-group');
-    $.each($visionGroup.find('input[type="checkbox"]:checked'), function(index)
-    {
-        if(index > 0) visions += ',';
-        visions += $(this).val();
-    });
-    $.post($.createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + 0 + '&selected=' + group), function(data)
-    {
-        $('#group').replaceWith(data);
-    });
 }
 
 function toggleNew(event)
 {
-    const $company    = $('#company');
+    const $company    = $('[name="company"]').closest('.picker-box');
     const $newCompany = $('#newCompany');
     if($(event.target).prop('checked'))
     {
