@@ -21,22 +21,25 @@
   {
     $html = '';
     $executable  = $this->ai->isExecutable($prompt);
-    $publishable = $prompt->status == 'draft';
+    $published   = $prompt->status == 'active';
 
     /* Design button. */
-    $html .= html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon-design text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->design}'");
+    $html .= html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon-design text-primary"></i>', '', "class='btn" . ($published ? ' disabled' : '') . "' title='{$lang->ai->prompts->action->design}'");
 
     /* Test / audit button. */
-    $html .= html::a($executable ? $this->ai->getTestingLocation($prompt) : '#', '<i class="icon-bug text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->test}'" . ($executable ? '' : " data-toggle='modal' data-target='#designConfirmModal'"));
+    $html .= html::a($executable ? $this->ai->getTestingLocation($prompt) : '#', '<i class="icon-bug text-primary"></i>', '', "class='btn"  . ($executable && !$published ? '' : ' disabled') . "' title='{$lang->ai->prompts->action->test}'" . ($executable ? '' : " data-toggle='modal' data-target='#designConfirmModal'"));
 
     /* Edit button. */
     $html .= html::a(helper::createLink('ai', '', "prompt=$prompt->id"), '<i class="icon-edit text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->edit}'");
 
+    /* Divider. */
+    $html .= '<div class="dividing-line"></div>';
+
     /* Publish button. */
-    $html .= html::a($publishable && $executable ? "javascript:togglePromptStatus($prompt->id)" : '#', '<i class="icon-publish text-primary"></i>', '', "class='btn"  . ($publishable ? '' : ' disabled') . "' title='{$lang->ai->prompts->action->publish}'" . ($executable ? '' : " data-toggle='modal' data-target='#designConfirmModal'"));
+    $html .= html::a(!$published && $executable ? "javascript:togglePromptStatus($prompt->id)" : '#', '<i class="icon-publish text-primary"></i>', '', "class='btn"  . (!$published && $executable ? '' : ' disabled') . "' title='{$lang->ai->prompts->action->publish}'" . ($executable ? '' : " data-toggle='modal' data-target='#designConfirmModal'"));
 
     /* Unpublish button. */
-    $html .= html::a('#', '<i class="icon-ban text-primary"></i>', '', "class='btn" . ($publishable ? ' disabled' : '') . "' title='{$lang->ai->prompts->action->unpublish}'" . ($publishable ? '' : " data-toggle='modal' data-target='#draftConfirmModal'"));
+    $html .= html::a('#', '<i class="icon-ban text-primary"></i>', '', "class='btn" . (!$published || !$executable ? ' disabled' : '') . "' title='{$lang->ai->prompts->action->unpublish}'" . (!$published ? '' : " data-toggle='modal' data-target='#draftConfirmModal'"));
 
     echo $html;
   }
