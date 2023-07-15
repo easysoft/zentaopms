@@ -112,7 +112,13 @@ class sonarqube extends control
             if(!empty($project) and !in_array($project->key, $existsProject)) $projectPairs[$project->key] = $project->name;
         }
 
-        echo html::select('projectKey', $projectPairs, str_replace('*', '-', $projectKey), "class='form-control chosen'");
+        $options = array();
+        foreach($projectPairs as $productKey => $projectName)
+        {
+            $options[] = array('text' => $projectName, 'value' => $productKey);
+        }
+        return print(json_encode($options));
+        //echo html::select('projectKey', $projectPairs, str_replace('*', '-', $projectKey), "class='form-control chosen'");
     }
 
     /**

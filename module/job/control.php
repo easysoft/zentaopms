@@ -407,7 +407,13 @@ class job extends control
         $repo = $this->loadModel('repo')->getByID($repoID);
         if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
         if($repo->SCM != 'Gitlab') $refList = $this->repo->getBranches($repo, true);
-        $this->send(array('result' => 'success', 'refList' => $refList));
+
+        $options = array();
+        foreach($refList as $branch => $branchName)
+        {
+            $options[] = array('text' => $branchName, 'value' => $branch);
+        }
+        $this->send(array('result' => 'success', 'refList' => $options));
     }
 
     /**

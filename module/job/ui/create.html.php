@@ -13,6 +13,8 @@ namespace zin;
 jsVar('frameList', $lang->job->frameList);
 jsVar('repoPairs', $repoPairs);
 jsVar('gitlabRepos', $gitlabRepos);
+jsVar('dirChange', $lang->job->dirChange);
+jsVar('buildTag', $lang->job->buildTag);
 
 if($this->session->repoID)
 {
@@ -96,9 +98,10 @@ formPanel
         setClass('svn-fields hidden'),
         formGroup
         (
+            set::id('svnDirBox'),
             set::name('svnDir[]'),
             set::label($lang->job->svnDir),
-            set::items(array()),
+            set::control('select'),
         ),
     ),
     formRow
@@ -111,6 +114,7 @@ formPanel
             set::items(array('' => '') +$sonarqubeServerList),
             set::value(''),
             set::required(true),
+            on::change('changeSonarqubeServer'),
         ),
     ),
     formRow

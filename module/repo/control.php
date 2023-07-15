@@ -1612,6 +1612,7 @@ class repo extends control
             $dirs['/'] = $this->repo->encodePath($path);
             foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
         }
+
         return print(json_encode($dirs));
     }
 
@@ -1829,7 +1830,14 @@ class repo extends control
     public function ajaxLoadProducts($repoID)
     {
         $productPairs = $this->repo->getProductsByRepo($repoID);
-        echo html::select('product', array('') + $productPairs, key($productPairs), "class='form-control chosen'");
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
+        foreach($productPairs as $productID => $productName)
+        {
+            $options[] = array('text' => $productName, 'value' => $productID);
+        }
+        return print(json_encode($options));
     }
 
     /**

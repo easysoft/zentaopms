@@ -49,7 +49,7 @@ function changeFrame(event)
 
 function changeRepo(event)
 {
-    var repoID = $(event.taget).val();
+    const repoID = $(event.target).val();
     if(repoID <= 0) return;
 
     var link = $.createLink('repo', 'ajaxLoadProducts', 'repoID=' + repoID);
@@ -57,9 +57,12 @@ function changeRepo(event)
     {
         if(data)
         {
-            $('#product').replaceWith(data);
-            $('#product_chosen').remove();
-            $('#product').picker();
+            $productPicker = $('#product').zui('picker');
+            data = JSON.parse(data);
+
+            $productPicker.render({items: data});
+            $productPicker.$.clear();
+            if(data[1]) $productPicker.$.setValue(data[1].value);
         }
     });
 
@@ -71,7 +74,7 @@ function changeRepo(event)
         {
             if(data.type.indexOf('git') != -1)
             {
-                $('.reference').show();
+                $('.reference').removeClass('hidden');
                 $('.svn-fields').addClass('hidden');
                 $('#reference option').remove();
 
@@ -79,20 +82,16 @@ function changeRepo(event)
                 {
                     if(response.result == 'success')
                     {
-                        $.each(response.refList, function(reference, name)
-                        {
-                            $('#reference').append("<option value='" + reference + "'>" + name + "</option>");
-                        });
+                        $('#reference').zui('picker').render({items: response.refList});
                     }
-                    $('#reference').trigger('chosen:updated');
                 });
             }
             else
             {
                 if($('#triggerType').val() == 'tag') $('.svn-fields').removeClass('hidden');
 
-                $('#svnDirBox .input-group').empty();
-                $('#svnDirBox .input-group').append("<div class='load-indicator loading'></div>");
+                $('#svnDir').remove();
+                $('#svnDirBox').append("<div class='load-indicator loading'></div>");
                 $.getJSON($.createLink('repo', 'ajaxGetSVNDirs', 'repoID=' + repoID), function(tags)
                 {
                     html = "<select id='svnDir' name='svnDir[]' class='form-control'>";
@@ -103,11 +102,16 @@ function changeRepo(event)
                     }
                     html += '</select>';
                     $('#svnDirBox .loading').remove();
-                    $('#svnDirBox .input-group').append(html);
-                    $('#svnDirBox #svnDir').chosen();
+                    $('#svnDirBox').append(html);
                 })
             }
-            $('#triggerggerType option[value=tag]').html(data.type == 'gitlab' ? buildTag : dirChange).trigger('chosen:updated');
+
+            var triggerOptions = $('#triggerType').zui('picker').options.items;
+            for(i in triggerOptions)
+            {
+                if(triggerOptions[i].value == 'tag') triggerOptions[i].text = data.type == 'gitlab' ? buildTag : dirChange;
+            }
+            $('#triggerType').zui('picker').render({items: triggerOptions});
         }
     });
 
@@ -171,17 +175,13 @@ function changeTriggerType(event)
     }
 }
 
-function changeSonarqubeServer()
+function changeSonarqubeServer(event)
 {
-    var sonarqubeID = $(this).val();
-    $('#sonarProject #projectKey').remove();
-    $('#sonarProject #projectKey_chosen').remove();
-    $('#sonarProject .input-group').append("<div class='load-indicator loading'></div>");
-    $.get(createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID), function(html)
+    var sonarqubeID = $(event.target).val();
+    $.get($.createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID), function(data)
     {
-        $('#sonarProject .loading').remove();
-        $('#sonarProject .input-group').append(html);
-        $('#sonarProject #projectKey').chosen({drop_direction: 'auto'});
+        data = JSON.parse(data);
+        $('#projectKey').zui('picker').render({items: data});
     })
 
     /* There has been a problem with handling the prompt label. */

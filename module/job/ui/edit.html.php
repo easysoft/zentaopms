@@ -170,7 +170,7 @@ formPanel
         (
             set::name('svnDir[]'),
             set::label($lang->job->svnDir),
-            set::items(array()),
+            set::control('select'),
         ),
     ),
     formRow
@@ -183,6 +183,7 @@ formPanel
             set::items(array('' => '') +$sonarqubeServerList),
             set::value($job->sonarqubeServer),
             set::required(true),
+            on::change('changeSonarqubeServer'),
         ),
     ),
     formRow
