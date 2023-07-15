@@ -64,27 +64,21 @@ foreach($lines as $line)
             formGroup
             (
                 set::width($config->systemMode == 'ALM' ? '1/2' : 'full'),
+                set::control(array('type' => 'text', 'id' => "modules_id{$line->id}")),
                 set::name("modules[id$line->id]"),
                 set::value($line->name),
             ),
             $config->systemMode == 'ALM' ? formGroup
             (
-                setID("programs_id{$line->id}"),
                 set::width('1/2'),
                 set::class('ml-4'),
+                set::control(array('type' => 'picker', 'id' => "programs_id{$line->id}")),
                 set::name("programs[id$line->id]"),
                 set::items($programs),
                 set::value($line->root),
             ) : null,
         ),
-        cell
-        (
-            set::width('100px'),
-            formGroup
-            (
-                setClass('ml-2 pl-2 flex self-center'),
-            )
-        )
+        cell(set::width('100px')),
     );
 }
 
@@ -99,13 +93,14 @@ for($i = 0; $i <= 5; $i ++)
             formGroup
             (
                 set::width($config->systemMode == 'ALM' ? '1/2' : 'full'),
+                set::control(array('type' => 'text', 'id' => "modules_{$i}")),
                 set::name("modules[$i]"),
             ),
             $config->systemMode == 'ALM' ? formGroup
             (
                 set::width('1/2'),
-                setID("programs_{$i}"),
                 set::class('ml-4'),
+                set::control(array('type' => 'picker', 'id' => "programs_{$i}")),
                 set::name("programs[$i]"),
                 set::items($programs),
             ) : null,

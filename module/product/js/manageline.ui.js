@@ -7,12 +7,13 @@
  */
 function addNewLine(e)
 {
-    const newLine = $(e.target).closest('.form-row').clone();
+    const $formRow = $(e.target).closest('.form-row');
+    const newLine  = $formRow.clone();
 
     newLine.find('.addLine').on('click', addNewLine);
     newLine.find('.removeLine').on('click', removeLine);
-    newLine.find('input[name^=modules]').val('').attr('name', 'modules[' + index + ']').attr('id', 'modules[' + index + ']');
-    newLine.find('select[name^=programs]').val('').attr('name', 'programs[' + index + ']').attr('id', 'programs[' + index + ']');
+    newLine.find('[name^=modules]').val('').attr('name', 'modules[' + index + ']').attr('id', 'modules_' + index);
+    newLine.find('[name^=programs]').closest('.picker-box').attr('id', 'programs_' + index).picker($.extend({}, $formRow.find('.picker-box[id^=programs]').zui('picker').options, {name:"programs[" + index + "]"}));
     $(e.target).closest('.form-row').after(newLine);
 
     index ++;
