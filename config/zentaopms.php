@@ -341,6 +341,7 @@ define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
 define('TABLE_MRAPPROVAL',    '`' . $config->db->prefix . 'mrapproval`');
 
+define('TABLE_SERVERROOM',   '`' . $config->db->prefix . 'serverroom`');
 define('TABLE_REPO',         '`' . $config->db->prefix . 'repo`');
 define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY',  '`' . $config->db->prefix . 'repohistory`');
