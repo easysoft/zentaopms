@@ -752,7 +752,7 @@ class aiModel extends model
 
         foreach($requiredFields as $field)
         {
-            if(empty($prompt->$field))
+            if(empty($prompt->$field) && $prompt->$field != ',,')
             {
                 $executable = false;
                 break;
@@ -821,16 +821,13 @@ class aiModel extends model
      */
     public function getLastActiveStep($prompt)
     {
-        if(empty($prompt)) return 'assignrole';
-
-        if($prompt->status == 'active') return 'finalize';
-
-        if(!empty($prompt->targetForm)) return 'settargetform';
-
-        if(!empty($prompt->purpose)) return 'setpurpose';
-
-        if(!empty($prompt->source)) return 'selectdatasource';
-
+        if(!empty($prompt))
+        {
+            if($prompt->status == 'active') return 'finalize';
+            if(!empty($prompt->targetForm)) return 'settargetform';
+            if(!empty($prompt->purpose))    return 'setpurpose';
+            if(!empty($prompt->source))     return 'selectdatasource';
+        }
         return 'assignrole';
     }
 
