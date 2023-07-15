@@ -207,11 +207,10 @@ class datatable extends control
      */
     public function ajaxReset($module, $method, $system = 0)
     {
-        $account = $this->app->user->account;
+        $account = !$system ? $this->app->user->account : 'system';
         $target  = $module . ucfirst($method);
 
         $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$target}&key=cols");
-        if($system) $this->setting->deleteItems("owner=system&module=datatable&section={$target}&key=cols");
         return $this->send(array('result' => 'success', 'load' => true));
     }
 

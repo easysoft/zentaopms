@@ -42,6 +42,10 @@ class dtable extends wg
                     'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}"),
                     'text' => $app->lang->datatable->reset,
                 ),
+                'resetGlobal' => array(
+                    'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1"),
+                    'text' => $app->lang->datatable->resetGlobal,
+                ),
             ));
         }
 
