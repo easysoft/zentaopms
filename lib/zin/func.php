@@ -1279,6 +1279,14 @@ function dashboard(): dashboard
 }
 
 /**
+ * Dashboard panel widget.
+ */
+function blockPanel(): blockPanel
+{
+    return createWg('blockPanel', func_get_args());
+}
+
+/**
  * Zentao detail page section widget.
  *
  * string            title
