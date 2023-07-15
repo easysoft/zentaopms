@@ -149,8 +149,11 @@ class wg
         if($config->debug)
         {
             $zinDebug = data('zinDebug');
-            $zinDebug['basePath'] = $app->getBasePath();
-            if(isset($app->zinErrors)) $zinDebug['errors'] = $app->zinErrors;
+            if(is_array($zinDebug))
+            {
+                $zinDebug['basePath'] = $app->getBasePath();
+                if(isset($app->zinErrors)) $zinDebug['errors'] = $app->zinErrors;
+            }
         }
 
         $rawContent = ob_get_contents();
