@@ -20,10 +20,11 @@ $config->company->user->actionList['edit']['text'] = '';
 $config->company->user->actionList['edit']['hint'] = '';
 $config->company->user->actionList['edit']['url']  = array('module' => 'user', 'method' => 'edit', 'params' => 'userID={id}&from=company');
 
-$config->company->user->actionList['delete']['icon'] = 'trash';
-$config->company->user->actionList['delete']['text'] = '';
-$config->company->user->actionList['delete']['hint'] = '';
-$config->company->user->actionList['delete']['url']  = array('module' => 'user', 'method' => 'delete', 'params' => 'userID={id}');
+$config->company->user->actionList['delete']['icon']        = 'trash';
+$config->company->user->actionList['delete']['text']        = '';
+$config->company->user->actionList['delete']['hint']        = '';
+$config->company->user->actionList['delete']['url']         = array('module' => 'user', 'method' => 'delete', 'params' => 'userID={id}');
+$config->company->user->actionList['delete']['data-toggle'] = 'modal';
 
 $config->company->user->dtable = new stdclass();
 $config->company->user->dtable->fieldList['id']['name']     = 'id';
