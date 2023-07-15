@@ -73,7 +73,7 @@ function setCssVar(array|string $name, ?string $value = null): directive
  *
  * @return ?directive
  */
-function setID(string $id): directive
+function setID(?string $id = null): directive
 {
     return set('id', $id);
 }
