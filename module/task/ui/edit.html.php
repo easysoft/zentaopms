@@ -99,7 +99,7 @@ detailBody
             editor
             (
                 set::name('desc'),
-                isHTML($task->desc) ? html($task->desc) : $task->desc
+                $task->desc && isHTML($task->desc) ? html($task->desc) : $task->desc
             )
         ),
         section
@@ -138,7 +138,7 @@ detailBody
             item
             (
                 set::name($lang->task->execution),
-                picker 
+                picker
                 (
                     set::name('execution'),
                     set::required(true),
