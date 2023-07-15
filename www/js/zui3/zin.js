@@ -962,7 +962,7 @@
                 updatePerfInfo({id: 'page'}, 'renderEnd', {id: 'page', perf: {requestBegin: Math.max(0, requestBegin), requestEnd: startTime, renderBegin: startTime}});
                 showZinDebugInfo(window.zinDebug, {id: 'page'});
             }
-            if(!isInAppTab) loadCurrentPage();
+            if(!isInAppTab && !zui.store.get('Zinbar:hidden')) loadCurrentPage();
         }
     });
 }());
