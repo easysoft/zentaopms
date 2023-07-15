@@ -317,6 +317,8 @@ class company extends control
     public function ajaxGetOutsideCompany()
     {
         $companies = $this->company->getOutsideCompanies();
-        return print(html::select('company', $companies, '', "class='form-control chosen'"));
+        $items = array();
+        foreach($companies as $companyID => $companyName) $items[] = array('text' => $companyName, 'value' => $companyID, 'keys' => $companyName);
+        return print(json_encode($items));
     }
 }

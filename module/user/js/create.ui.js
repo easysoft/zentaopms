@@ -28,12 +28,16 @@ function changeType(event)
     if(type == 'inside')
     {
         $('#companyBox').addClass('hidden');
-        $('#dept, #join, #commiter').closest('.form-row').removeClass('hidden');
+        $('[name="dept"]').closest('.form-row').removeClass('hidden');
+        $('[name="join"]').closest('.form-row').removeClass('hidden');
+        $('#commiter').closest('.form-row').removeClass('hidden');
     }
     else
     {
         $('#companyBox').removeClass('hidden');
-        $('#dept, #join, #commiter').closest('.form-row').addClass('hidden');
+        $('[name="dept"]').closest('.form-row').addClass('hidden');
+        $('[name="join"]').closest('.form-row').addClass('hidden');
+        $('#commiter').closest('.form-row').addClass('hidden');
     }
 }
 
@@ -42,39 +46,24 @@ function changeAddCompany(event)
     const checked = $(event.target).prop('checked');
     if(checked)
     {
-        $('#company').replaceWith("<input name='company' id='company' class='form-control'/>");
+        const $inputGroup = $('[name="company"]').closest('.picker-box');
+        if($inputGroup.length == 0) return;
+        $('[name="company"]').zui('picker').destroy();
+        $inputGroup.replaceWith("<input name='company' id='company' class='form-control'/>");
     }
     else
     {
         const link = $.createLink('company', 'ajaxGetOutsideCompany');
         $.post(link, function(data)
         {
-            $('#company').replaceWith(data);
+            var $companyPicker = $('#company').replaceWith('<div id="companyPicker" class="form-group-wrapper picker-box"></div>');
+            if(data)
+            {
+                data = JSON.parse(data);
+                new zui.Picker('#companyPicker', {name: 'company', items: data});
+            }
         })
     }
-}
-
-function changeVision(event)
-{
-    var visions = [];
-    $('input[name="visions[]"]:checked').each(function()
-    {
-        visions.push($(this).val());
-    });
-
-    const link  = $.createLink('user', 'ajaxGetGroup', 'visions=' + visions);
-    $.get(link, function(data)
-    {
-        let group        = $('[name^="group"]').val();
-        let $groupPicker = $('[name^="group"]').zui('picker');
-        if(data)
-        {
-            data = JSON.parse(data);
-            $groupPicker.render({items: data});
-            $groupPicker.$.clear();
-            $groupPicker.$.setValue(group);
-        }
-    });
 }
 
 function clickSubmit()

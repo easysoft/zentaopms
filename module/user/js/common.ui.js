@@ -88,3 +88,33 @@ function checkPassword(event)
         $('#passwordStrength').removeClass('hidden');
     }
 }
+
+/**
+ * Update groups when visions change.
+ *
+ * @param  event  $event
+ * @access public
+ * @return void
+ */
+function changeVision(event)
+{
+    var visions = [];
+    $('input[name="visions[]"]:checked').each(function()
+    {
+        visions.push($(this).val());
+    });
+
+    const link  = $.createLink('user', 'ajaxGetGroup', 'visions=' + visions);
+    $.get(link, function(data)
+    {
+        let group        = $('[name^="group"]').val();
+        let $groupPicker = $('[name^="group"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $groupPicker.render({items: data});
+            $groupPicker.$.clear();
+            $groupPicker.$.setValue(group);
+        }
+    });
+}
