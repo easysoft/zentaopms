@@ -5,7 +5,7 @@ namespace zin;
 class panel extends wg
 {
     protected static array $defineProps = array(
-        'class?: string="rounded shadow ring-0 canvas"', // 类名。
+        'class?: string="rounded shadow ring-0 bg-canvas"', // 类名。
         'size?: "sm"|"lg"',         // 额外尺寸。
         'title?: string',           // 标题。
         'titleClass?: string',      // 标题类名。
@@ -21,9 +21,9 @@ class panel extends wg
     );
 
     protected static array $defineBlocks = array(
-        'heading' => array(),
+        'heading'        => array(),
         'headingActions' => array('map' => 'toolbar'),
-        'footer'  => array('map' => 'nav')
+        'footer'         => array('map' => 'nav')
     );
 
     protected function buildHeadingActions(): ?wg
@@ -87,7 +87,7 @@ class panel extends wg
 
     protected function buildProps(): array
     {
-        list($class, $size) = $this->prop(['class', 'size']);
+        list($class, $size) = $this->prop(array('class', 'size'));
         return array(setClass('panel', $class, empty($size) ? null : "size-$size"));
     }
 
