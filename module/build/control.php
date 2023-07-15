@@ -512,7 +512,7 @@ class build extends control
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionBuilds(int $executionID, int $productID, string $varName, string $build = '', string|int $branch = 'all', int $index = 0, bool $needCreate = false, string $type = 'normal', string $number = '')
+    public function ajaxGetExecutionBuilds(int $executionID, int $productID, string $varName, string $build = '', string $branch = 'all', int $index = 0, bool $needCreate = false, string $type = 'normal', string $number = '')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')

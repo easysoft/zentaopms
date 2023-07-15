@@ -14,7 +14,7 @@ $(function()
  */
 function loadExecutionRelated()
 {
-    loadExecutionBuilds($('#execution').val());
+    loadExecutionBuilds();
 }
 
 /**
@@ -24,9 +24,10 @@ function loadExecutionRelated()
  * @access public
  * @return void
  */
-function loadExecutionBuilds(executionID)
+function loadExecutionBuilds()
 {
     const productID   = $('[name=product]').val();
+    const executionID = $('[name=execution]').val();
     var selectedBuild = $('[name=build]').val();
     if(!selectedBuild) selectedBuild = 0;
 
@@ -35,11 +36,12 @@ function loadExecutionBuilds(executionID)
 
     $.get(link, function(data)
     {
+        let $buildPicker = $('[name="build"]').zui('picker');
         if(data)
         {
             data = JSON.parse(data);
-            $('#build').picker({items: data});
-            $('#build').picker('setValue', '0');
+            $buildPicker.render({items: data});
+            $buildPicker.$.changeState({value: '0'});
         }
     });
 }
@@ -55,11 +57,12 @@ function loadTestReports(productID)
 {
     $.get($.createLink('testtask', 'ajaxGetTestReports', 'productID=' + productID), function(data)
     {
+        let $testreportPicker = $('[name="testreport"]').zui('picker');
         if(data)
         {
             data = JSON.parse(data);
-            $('#testreport').picker({items: data});
-            $('#testreport').picker('setValue', '0');
+            $testreportPicker.render({items: data});
+            $testreportPicker.$.changeState({value: '0'});
         }
     });
 }

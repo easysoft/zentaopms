@@ -6,12 +6,11 @@
  */
 function loadProductRelated()
 {
-    const productID   = $('[name=product]').val();
-    const executionID = $('[name=execution]').val();
+    const productID = $('[name=product]').val();
 
     loadExecutions(productID);
     loadTestReports(productID);
-    loadExecutionBuilds(executionID)
+    loadExecutionBuilds()
 }
 
 /**
@@ -25,16 +24,12 @@ function loadExecutions(productID)
 {
     $.get($.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch='), function(data)
     {
+        let $executionPicker = $('[name="execution"]').zui('picker');
         if(data)
         {
             data = JSON.parse(data);
-            $('#execution').picker({items: data});
-            $('#execution').picker('setValue', $('[name=execution]').val());
+            $executionPicker.render({items: data});
+            $executionPicker.$.changeState({value: '0'});
         }
     });
 }
-
-$(function()
-{
-    loadProductRelated();
-});
