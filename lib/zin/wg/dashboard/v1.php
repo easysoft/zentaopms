@@ -28,6 +28,7 @@ class dashboard extends wg
      */
     protected static array $defineProps = array(
         'id?: string',                        // ID。
+        'cache?: bool|string',                // 是否启用缓存。
         'responsive?: bool',                  // 是否启用响应式。
         'blocks: array',                      // 区块列表。
         'grid?: int',                         // 栅格数。
@@ -45,7 +46,7 @@ class dashboard extends wg
 
     protected function created()
     {
-        $this->setDefaultProps(array('id' => static::$dashboardID ? static::$dashboardID : 'dashboard'));
+        $this->setDefaultProps(array('id' => static::$dashboardID ? static::$dashboardID : 'dashboard', 'cache' => data('app.user.account')));
         static::$dashboardID++;
     }
 
