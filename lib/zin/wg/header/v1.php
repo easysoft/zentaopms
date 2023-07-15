@@ -138,6 +138,7 @@ class header extends wg
                 'tag'       => 'a',
                 'href'      => createLink('my', 'profile', '', '', true),
                 'className' => 'items-center gap-2 px-2 py-1 row text-inherit',
+                'style'     => array('padding-left' => 0),
                 'renders'   => array(array('__html' => implode('', array
                 (
                     userAvatar(set::user($user), setClass('flex-none'))->render(),
@@ -250,7 +251,7 @@ class header extends wg
         (
             a
             (
-                setClass('w-7 h-7'),
+                setClass('w-7 h-7 cursor-pointer'),
                 userAvatar
                 (
                     set::circle(true),
