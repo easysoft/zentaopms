@@ -479,11 +479,12 @@ class deptModel extends model
             foreach($groups as $deptID => $node)
             {
                 $node->managerName = zget($users, $node->manager);
+                $node->url         = helper::createLink('dept', 'browse', "deptID={$deptID}");
+                $node->key         = $node->name;
                 if(isset($tree[$deptID]))
                 {
                     $node->items   = $tree[$deptID];
                     $node->actions = array('delete' => false);
-                    $node->url     = helper::createLink('dept', 'browse', "deptID={$deptID}");
                     unset($tree[$deptID]);
                 }
                 $tree[$node->parent][] = $node;
