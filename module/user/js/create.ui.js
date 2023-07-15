@@ -62,12 +62,19 @@ function changeVision(event)
         visions.push($(this).val());
     });
 
-    const group = $('#group').val();
-    const link  = $.createLink('user', 'ajaxGetGroup', 'visions=' + visions + '&i=0&selected=' + group);
-    $.post(link, function(data)
+    const link  = $.createLink('user', 'ajaxGetGroup', 'visions=' + visions);
+    $.get(link, function(data)
     {
-        $('#group').replaceWith(data);
-    })
+        let group        = $('[name^="group"]').val();
+        let $groupPicker = $('[name^="group"]').zui('picker');
+        if(data)
+        {
+            data = JSON.parse(data);
+            $groupPicker.render({items: data});
+            $groupPicker.$.clear();
+            $groupPicker.$.setValue(group);
+        }
+    });
 }
 
 function clickSubmit()

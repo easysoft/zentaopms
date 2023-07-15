@@ -1413,7 +1413,9 @@ class user extends control
             if($i > 1) $groupList = $groupList + array('ditto' => $this->lang->user->ditto);
             return print(html::select("group[$i][]", $groupList, $selected, 'size=3 multiple=multiple class="form-control chosen"'));
         }
-        return print(html::select('group[]', $groupList, $selected, 'size=3 multiple=multiple class="form-control chosen"'));
+        $items = array();
+        foreach($groupList as $groupID => $groupName) $items[] = array('text' => $groupName, 'value' => $groupID, 'keys' => $groupName);
+        return print(json_encode($items));
     }
 
     /**

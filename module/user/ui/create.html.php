@@ -63,9 +63,9 @@ formPanel
             set::label($lang->user->company),
             inputGroup
             (
-                select
+                picker
                 (
-                    set::control('select'),
+                    set::control('picker'),
                     set::name('company'),
                     set::items($companies),
                     set::value('')
@@ -90,7 +90,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->dept),
-            set::control('select'),
+            set::control('picker'),
             set::name('dept'),
             set::items($depts),
             set::value($deptID)
@@ -182,7 +182,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->role),
-            set::control('select'),
+            set::control('picker'),
             set::name('role'),
             set::items($lang->user->roleList),
             set::value(''),
@@ -196,10 +196,9 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->group),
-            set::control('select'),
-            set::multiple(true),
+            set::control(array("type" => "picker","multiple" => true)),
             set::name('group[]'),
-            set::items(),
+            set::items($groupList),
             set::tip($lang->user->placeholder->group),
             set::tipClass('form-tip')
         )
