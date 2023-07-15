@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'blockpanel' . DS . 'v1.php';
+
 class overviewBlock extends wg
 {
     protected static array $defineProps = array(
@@ -134,26 +136,13 @@ class overviewBlock extends wg
     {
         list($id, $title, $block, $groups) = $this->prop(array('id', 'title', 'block', 'groups'));
 
-        if(!$id)    $id    = $block->module . '-' . $block->code . '-' . $block->id;
-        if(!$title) $title = $block->title;
-
-        global $lang;
-        return panel
+        return new blockPanel
         (
-            setID($id),
-            setClass('overview-block'),
+            set::block($block),
             set::title($title),
-            to::headingActions
-            (
-                $block->moreLink ? a
-                (
-                    set('class', 'text-gray'),
-                    set('href', $block->moreLink),
-                    $lang->more,
-                    icon('caret-right')
-                ) : null
-            ),
+            set::id($id),
             set::bodyClass('flex block-base p-0'),
+
             $this->buildBody($groups)
         );
     }

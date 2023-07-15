@@ -1,1 +1,1 @@
-.overview-block .cards > .card + .card > :first-child {border-left-width: 1px;}
+.block-overview .cards > .card + .card > :first-child {border-left-width: 1px;}
