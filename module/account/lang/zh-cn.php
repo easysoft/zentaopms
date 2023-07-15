@@ -28,3 +28,5 @@ $lang->account->byQuery       = '搜索';
 $lang->account->empty = '暂时没有账号';
 
 $lang->account->typeList = array();
+
+$lang->account->featureBar['browse']['all'] = $lang->account->all;

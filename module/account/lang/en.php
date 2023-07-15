@@ -28,3 +28,5 @@ $lang->account->byQuery       = 'search';
 $lang->account->empty = 'No Account';
 
 $lang->account->typeList = array();
+
+$lang->account->featureBar['browse']['all'] = $lang->account->all;

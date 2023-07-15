@@ -1,6 +1,5 @@
 <?php
-global $lang, $app;
-$app->loadLang('serverroom');
+global $lang;
 
 $config->serverroom->dtable = new stdclass();
 

@@ -29,7 +29,7 @@ class account extends control
         $browseType = strtolower($browseType);
 
         $this->session->set('accountList', $this->app->getURI(true));
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $accountList = $this->account->getList($browseType, $param, $orderBy, $pager);
@@ -67,7 +67,7 @@ class account extends control
             $this->loadModel('action')->create('account', $id, 'created');
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse'), 'closeModal' => true));
         }
 
         $this->app->loadLang('serverroom');
@@ -100,8 +100,7 @@ class account extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $from == 'parent' ? 'parent' : 'reload'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse'), 'closeModal' => true));
         }
 
         $this->view->title   = $this->lang->account->edit;
@@ -147,24 +146,18 @@ class account extends control
     {
         $this->account->delete(TABLE_ACCOUNT, $id);
 
-        /* if ajax request, send result. */
-        if($this->server->ajax)
+        if(dao::isError())
         {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            return $this->send($response);
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError(true);
         }
-
-        if(isOnlyBody()) return print(js::reload('parent.parent'));
-        return print(js::reload('parent'));
+        else
+        {
+            $response['result']  = 'success';
+            $response['message'] = '';
+            $response['load']    = true;
+        }
+        return $this->send($response);
     }
 
     /**

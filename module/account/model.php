@@ -48,7 +48,6 @@ class accountModel extends model
     public function getList($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $pager = null)
     {
         $query   = '';
-        $modules = '';
         if($browseType == 'bysearch')
         {
             /* Concatenate the conditions for the query. */
@@ -63,7 +62,7 @@ class accountModel extends model
             }
             else
             {
-                if($this->session->accountQuery == false) $this->session->set('accountQuery', ' 1 = 1');
+                if(!$this->session->accountQuery) $this->session->set('accountQuery', ' 1 = 1');
             }
             $query = $this->session->accountQuery;
         }
@@ -101,7 +100,7 @@ class accountModel extends model
 
         $this->dao->insert(TABLE_ACCOUNT)
             ->data($account)
-            ->batchCheck($this->config->account->require->create, 'notempty')
+            ->batchCheck($this->config->account->create->requiredFields, 'notempty')
             ->checkIf($account->email, 'email', 'email')
             ->checkIf($account->mobile, 'mobile', 'mobile')
             ->exec();
@@ -127,7 +126,7 @@ class accountModel extends model
             ->get();
 
         $this->dao->update(TABLE_ACCOUNT)->data($newAccount)->autoCheck()
-            ->batchCheck($this->config->account->require->edit, 'notempty')
+            ->batchCheck($this->config->account->edit->requiredFields, 'notempty')
             ->checkIf($newAccount->email, 'email', 'email')
             ->checkIf($newAccount->mobile, 'mobile', 'mobile')
             ->where('id')->eq($id)
