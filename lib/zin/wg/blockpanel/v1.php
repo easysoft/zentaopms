@@ -25,7 +25,9 @@ class blockPanel extends panel
     protected static array $defineProps = array
     (
         'class?: string="rounded bg-canvas panel-block"', // 类名。
+        'id?: string',                      // ID。
         'name?: string',                    // 区块内部名称。
+        'block?: object|array',             // 区块对象。
         'title?: string',                   // 标题。
         'headingClass?: string="border-b"', // 标题栏类名。
         'moreLink?: string'                 // 更多链接。
@@ -33,34 +35,43 @@ class blockPanel extends panel
 
     protected function created()
     {
-        global $lang, $app;
-        $defaultProps = array();
+        global $lang;
+        $props = array();
 
         $name = $this->prop('name');
-        $block = data('block');
+        $block = $this->prop('block', data('block'));
+
+        if(is_array($block)) $block = (object)$block;
         if(empty($name) && !empty($block))
         {
             $name = $block->code;
-            $defaultProps['name'] = $name;
+            $props['name'] = $name;
+
+            if(empty($this->prop('id'))) $props['id'] = $block->module . '-' . $block->code . '-' . $block->id;
         }
 
         $moreLink = $this->prop('moreLink');
         if(empty($moreLink) && !empty($block) && isset($block->moreLink)) $moreLink = $block->moreLink;
-        if(!$this->hasProp('headingActions') && !empty($moreLink))
+        if(empty($this->prop('headingActions')) && !empty($moreLink))
         {
-            $defaultProps['headingActions'] = array(array('type' => 'ghost', 'url' => $moreLink, 'text' => $lang->more, 'caret' => 'right'));
+            $props['headingActions'] = array(array('type' => 'ghost', 'url' => $moreLink, 'text' => $lang->more, 'caret' => 'right'));
         }
 
-        if(!$this->hasProp('title')) $defaultProps['title'] = $lang->block->titleList[$name];
+        if(empty($this->prop('title'))) $props['title'] = empty($block) ? $lang->block->titleList[$name] : $block->title;
 
-        $this->setDefaultProps($defaultProps);
+        $this->setProp($props);
     }
 
     protected function buildProps(): array
     {
         $props = parent::buildProps();
         $name = $this->prop('name');
-        if(!empty($name)) $props[] = setData('block', $name);
+        if(!empty($name))
+        {
+            $props[] = setData('block', $name);
+            $props[] = setClass("block-{$name}");
+            $props[] = setID($this->prop('id'));
+        }
         return $props;
     }
 }
