@@ -13,7 +13,8 @@ namespace zin;
 
 overviewBlock
 (
-    set(array('block' => $block, 'groups' => $groups))
+    set::block($block),
+    set::groups($groups)
 );
 
 render();
