@@ -263,18 +263,20 @@ class branch extends control
      */
     public function ajaxGetBranches(int $productID, int $oldBranch = 0, string $browseType = 'all', int $projectID = 0, bool $withMainBranch = true, string $isTwins = 'no', string $fieldID = '0', string $multiple = '')
     {
-        $product = $this->loadModel('product')->getById($productID);
-        if(empty($product) or $product->type == 'normal') return;
+        $product = $this->loadModel('product')->getByID($productID);
+        if(empty($product) || $product->type == 'normal') return false;
 
         $branches = $this->loadModel('branch')->getList($productID, $projectID, $browseType, 'order', null, $withMainBranch);
+
         $branchTagOption = array();
         foreach($branches as $branchInfo)
         {
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
-        if(is_numeric($oldBranch) and !isset($branchTagOption[$oldBranch]))
+
+        if(is_numeric($oldBranch) && !isset($branchTagOption[$oldBranch]))
         {
-            $branch = $this->branch->getById($oldBranch, $productID, '');
+            $branch = $this->branch->getByID($oldBranch, $productID, '');
             $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
         }
 
@@ -286,6 +288,7 @@ class branch extends control
         }
 
         if($isTwins == 'yes') return print(html::select("branches[$fieldID]", $branchTagOption, $oldBranch, "onchange='loadBranchRelation(this.value, $fieldID);' class='form-control chosen control-branch'"));
+
         return print(json_encode($items));
     }
 

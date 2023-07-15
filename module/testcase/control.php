@@ -2613,9 +2613,14 @@ class testcase extends control
     public function ajaxGetModuleScenes($productID, $branch = 0, $moduleID = 0, $stype = 1, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $number = '', $currentScene = 0)
     {
         $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $currentScene);
-        $output     = ($stype == 1) ? html::select("parent", $optionMenu, "", "class='form-control'") : $output = html::select("scene".$number, $optionMenu, array(), "class='form-control'");
 
-        die($output);
+        $items = array();
+        foreach($optionMenu as $optionID => $optionName)
+        {
+            $items[] = array('text' => $optionName, 'value' => $optionID);
+        }
+
+        return print(json_encode($items));
     }
 
     /**
@@ -2643,7 +2648,7 @@ class testcase extends control
         }
         else
         {
-            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch);
+            $optionMenu = $this->tree->getOptionMenu((int)$rootID, $viewType, $rootModuleID, $branch);
         }
 
         if($returnType == 'html')
@@ -2655,33 +2660,24 @@ class testcase extends control
                 $output .= "<span class='input-group-addon' style='border-radius: 0px 2px 2px 0px; border-right-width: 1px;'>";
                 $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $viewType == 'line' ? $this->lang->tree->manageLine : $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                 $output .= '</span>';
+
+                die($output);
             }
             else
             {
-                $changeFunc = '';
-                if($viewType == 'bug') $changeFunc = "onchange='loadModuleRelatedNew()'";
-                if($viewType == 'task') $changeFunc = "";
-                $field = $fieldID ? "modules[$fieldID]" : 'module';
-
-                $currentModule   = $this->tree->getById($currentModuleID);
-                $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
-
-                $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control' $changeFunc");
-                if(count($optionMenu) == 1 and $needManage)
+                $items = array();
+                foreach($optionMenu as $optionID => $optionName)
                 {
-                    $output .= "<div class='input-group-btn flex'>";
-                    $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='btn' data-toggle='modal'");
-                    $output .= html::a("javascript:;", $this->lang->refresh, '', "class='refresh btn' onclick='loadProductModule($rootID)'");
-                    $output .= '</span>';
+                    $items[] = array('text' => $optionName, 'value' => $optionID);
                 }
+
+                return print(json_encode($items));
             }
-            die($output);
         }
 
         if($returnType == 'mhtml')
         {
             $changeFunc = '';
-            if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelatedNew()'";
             if($viewType == 'task') $changeFunc = "";
             $field  = $fieldID ? "modules[$fieldID]" : 'module';
             $output = html::select("$field", $optionMenu, '', "class='input' $changeFunc");
