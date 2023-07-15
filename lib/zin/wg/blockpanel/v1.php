@@ -54,7 +54,7 @@ class blockPanel extends panel
         if(empty($moreLink) && !empty($block) && isset($block->moreLink)) $moreLink = $block->moreLink;
         if(empty($this->prop('headingActions')) && !empty($moreLink))
         {
-            $props['headingActions'] = array(array('type' => 'ghost', 'url' => $moreLink, 'text' => $lang->more, 'caret' => 'right'));
+            $props['headingActions'] = array(array('type' => 'ghost', 'url' => $moreLink, 'text' => $lang->more, 'caret' => 'right', 'size' => 'sm'));
         }
 
         if(empty($this->prop('title'))) $props['title'] = empty($block) ? $lang->block->titleList[$name] : $block->title;
