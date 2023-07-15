@@ -10,6 +10,37 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php
+  /**
+   * Prompt action menu printer, based on prompt status and completion state.
+   *
+   * @param  object $prompt  prompt object
+   * @return void
+   */
+  $printPromptActionMenu = function($prompt) use($lang)
+  {
+    $html = '';
+    $executable  = $this->ai->isExecutable($prompt);
+    $publishable = $prompt->status == 'draft';
+
+    /* Design button. */
+    $html .= html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon-design text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->design}'");
+
+    /* Test / audit button. */
+    $html .= html::a($executable ? $this->ai->getTestingLocation($prompt) : '#', '<i class="icon-bug text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->test}'" . ($executable ? '' : " data-toggle='modal' data-target='#designConfirmModal'"));
+
+    /* Edit button. */
+    $html .= html::a(helper::createLink('ai', '', "prompt=$prompt->id"), '<i class="icon-edit text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->edit}'");
+
+    /* Publish button. */
+    $html .= html::a($publishable && $executable ? "javascript:togglePromptStatus($prompt->id)" : '#', '<i class="icon-publish text-primary"></i>', '', "class='btn"  . ($publishable ? '' : ' disabled') . "' title='{$lang->ai->prompts->action->publish}'" . ($executable ? '' : " data-toggle='modal' data-target='#designConfirmModal'"));
+
+    /* Unpublish button. */
+    $html .= html::a('#', '<i class="icon-ban text-primary"></i>', '', "class='btn" . ($publishable ? ' disabled' : '') . "' title='{$lang->ai->prompts->action->unpublish}'" . ($publishable ? '' : " data-toggle='modal' data-target='#draftConfirmModal'"));
+
+    echo $html;
+  }
+?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <div class="title" title="<?php echo $this->lang->ai->prompts->modules[$module];?>">
@@ -83,39 +114,7 @@
                 </td>
                 <td class='c-description' title='<?php echo $prompt->desc;?>'><?php echo $prompt->desc;?></td>
                 <td class='text-center c-actions' data-prompt-id='<?php echo $prompt->id?>'>
-                  <?php
-                    $isPublish = $prompt->status == 'active';
-                    $disabled = $isPublish ? ' disabled' : '';
-                    $canTest = $this->ai->isExecutable($prompt);
-                    echo html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon-design text-primary"></i>', '', "class='btn$disabled' title='{$lang->ai->prompts->action->design}'");
-                    if($canTest)
-                    {
-                      $location = $this->ai->getTestingLocation($prompt);
-                      echo html::a($location, '<i class="icon-bug text-primary"></i>', '', "class='btn$disabled' title='{$lang->ai->prompts->action->test}'");
-                    }
-                    else
-                    {
-                      echo html::a('javascript:void(0)', '<i class="icon-bug text-primary"></i>', '', "data-toggle='modal' data-target='#designConfirmModal' class='btn' title='{$lang->ai->prompts->action->test}'");
-                    }
-                    echo html::a(helper::createLink('ai', '', "prompt=$prompt->id"), '<i class="icon-edit text-primary"></i>', '', "class='btn$disabled' title='{$lang->ai->prompts->action->edit}'");
-                    if($prompt->status == 'draft')
-                    {
-                      if($canTest)
-                      {
-                        echo html::a("javascript:togglePromptStatus($prompt->id)", '<i class="icon-publish text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->publish}'");
-                      }
-                      else
-                      {
-                        echo html::a('#', '<i class="icon-publish text-primary"></i>', '', "data-toggle='modal' data-target='#designConfirmModal' class='btn' title='{$lang->ai->prompts->action->publish}'");
-                      }
-                      echo html::a('#', '<i class="icon-ban text-primary"></i>', '', "class='disabled btn' title='{$lang->ai->prompts->action->unpublish}'");
-                    }
-                    else
-                    {
-                      echo html::a('javascript:void(0)', '<i class="icon-publish text-primary"></i>', '', "class='disabled btn' title='{$lang->ai->prompts->action->publish}'");
-                      echo html::a('javascript:void(0)', '<i class="icon-ban text-primary"></i>', '', "data-toggle='modal' data-target='#draftConfirmModal' class='btn' title='{$lang->ai->prompts->action->unpublish}'");
-                    }
-                  ?>
+                  <?php $printPromptActionMenu($prompt);?>
                 </td>
               </tr>
             <?php endforeach;?>
