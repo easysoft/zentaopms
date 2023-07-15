@@ -1219,6 +1219,7 @@ class bugZen extends bug
         }
 
         $this->view->title            = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
+        $this->view->resolvedBuilds   = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'noempty');
         $this->view->bug              = $bug;
         $this->view->product          = $product;
         $this->view->moduleOptionMenu = $moduleOptionMenu;

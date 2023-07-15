@@ -1560,13 +1560,16 @@ class testtask extends control
      *
      * @param  int    $productID
      * @param  int    $executionID
+     * @param  int    $appendTaskID
      * @access public
      * @return void
      */
-    public function ajaxGetTestTasks($productID, $executionID = 0)
+    public function ajaxGetTestTasks(int $productID, int $executionID = 0, int $appendTaskID = 0)
     {
-        $pairs = $this->testtask->getPairs($productID, $executionID);
-        return print(html::select('testtask', $pairs, '', "class='form-control chosen'"));
+        $pairs = $this->testtask->getPairs($productID, $executionID, $appendTaskID);
+        $items = array();
+        foreach($pairs as $testtaskID => $testtaskName) $items[] = array('text' => $testtaskName, 'value' => $testtaskID, 'keys' => $testtaskName);
+        return print(json_encode($items));
     }
 
     /**

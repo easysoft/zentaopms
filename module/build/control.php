@@ -418,7 +418,10 @@ class build extends control
             $params = ($type == 'all') ? 'withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
-            return print(html::select($varName, $builds, $build, "class='form-control'"));
+
+            $items = array();
+            foreach($builds as $buildID => $buildName) $items[] = array('text' => $buildName, 'value' => $buildID, 'keys' => $buildName);
+            return print(json_encode($items));
         }
 
         $builds = $this->build->getBuildPairs($productID, $branch, $type, 0, 'project', $build, false);
@@ -523,8 +526,9 @@ class build extends control
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $executionID, 'execution', $build);
             if($isJsonView) return print(json_encode($builds));
 
-            $varName = $number === '' ? $varName : $varName . "[$number]";
-            return print(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
+            $items = array();
+            foreach($builds as $buildID => $buildName) $items[] = array('text' => $buildName, 'value' => $buildID, 'keys' => $buildName);
+            return print(json_encode($items));
         }
         if($varName == 'openedBuilds')
         {

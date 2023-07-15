@@ -35,13 +35,13 @@ detailHeader
 
 detailBody
 (
-    on::change('#product',       'changeProduct'),
-    on::change('#branch',        'changeBranch'),
-    on::change('#project',       'changeProject'),
-    on::change('#execution',     'changeExecution'),
-    on::change('#module',        'changeModule'),
-    on::change('#resolvedBuild', 'changeResolvedBuild'),
-    on::change('#resolution',    'changeResolution'),
+    on::change('[name="product"]',       'changeProduct'),
+    on::change('[name="branch"]',        'changeBranch'),
+    on::change('[name="project"]',       'changeProject'),
+    on::change('[name="execution"]',     'changeExecution'),
+    on::change('[name="module"]',        'changeModule'),
+    on::change('[name="resolvedBuild"]', 'changeResolvedBuild'),
+    on::change('[name="resolution"]',    'changeResolution'),
     on::click('#linkBug',        'linkBug'),
     on::click('#refresh',        'clickRefresh'),
     on::click('#allBuilds',      'loadAllBuilds'),

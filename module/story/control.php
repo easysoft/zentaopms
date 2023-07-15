@@ -1751,7 +1751,9 @@ class story extends control
         }
         else
         {
-            return print(html::select('story', empty($stories) ? array() : $stories, $storyID, 'class=form-control'));
+            $items = array();
+            foreach($stories as $storyID => $storyName) $items[] = array('text' => $storyName, 'value' => $storyID, 'keys' => $storyName);
+            return print(json_encode($items));
         }
     }
 
