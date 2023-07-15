@@ -157,12 +157,14 @@ detailBody
                 (
                     picker
                     (
+                        setID('product'),
                         set::name('product'),
                         set::items($products),
                         set::value($productID),
                     ),
                     isset($product->type) && $product->type != 'normal' ? picker
                     (
+                        setID('branch'),
                         set::name('branch'),
                         set::items($branchTagOption),
                         set::value($case->branch),
@@ -177,6 +179,7 @@ detailBody
                     set::id('moduleIdBox'),
                     picker
                     (
+                        setID('module'),
                         set::name('module'),
                         set::items($moduleOptionMenu),
                         set::value($currentModuleID),
@@ -207,6 +210,7 @@ detailBody
                     set::id('storyIdBox'),
                     picker
                     (
+                        setID('story'),
                         set::name('story'),
                         set::items($stories),
                         set::value($case->story),

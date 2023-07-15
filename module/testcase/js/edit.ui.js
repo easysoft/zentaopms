@@ -1,9 +1,47 @@
 function loadLibModules()
 {
     const libID = $('#lib').val();
-    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'libID=' + libID + '&viewtype=caselib&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=true');
+    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'libID=' + libID + '&viewtype=caselib&branch=0&rootModuleID=0&returnType=items&fieldID=&needManage=true');
 
-    $('#moduleIdBox').load(link);
+    $.get(link, function(data)
+    {
+        if(data)
+        {
+            let $libPicker = $('[name=lib]').zui('picker');
+            data = JSON.parse(data);
+            $libPicker.render({items: data});
+            $libPicker.$.changeState({value: ''});
+        }
+    });
+}
+
+function loadProductRelated()
+{
+    const productID = $(event.target).val();
+    console.log(productID);
+
+    loadProductBranches(productID);
+    loadProductModules(productID);
+    loadScenes(productID);
+    loadProductStories(productID);
+}
+
+function loadBranchRelated()
+{
+    const productID = $('[name=product]').val();
+
+    loadProductModules(productID);
+    loadScenes(productID);
+    loadProductStories(productID);
+}
+
+function loadModuleRelated()
+{
+    const productID = $('[name=product]').val();
+
+    loadScenes(productID);
+
+    if($('#story').length) loadProductStories(productID);
 }
 
 function checkScript()

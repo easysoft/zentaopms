@@ -104,117 +104,112 @@ function setModules(event)
     loadStories(productID, moduleID, 0, $currentRow);
 }
 
-/**
- * Load module related items when the module changed.
- *
- * @access public
- * @return void
- */
-function loadModuleRelated()
+function loadProductStories(productID)
 {
-    if($('#story').length) setStories();
-    setScenes();
-}
+    let branch   = $('[name=branch]').val();
+    let moduleID = $('[name=module]').val();
+    let storyID  = $('[name=story]').val();
 
-/**
- * Set story field.
- *
- * @access public
- * @return void
- */
-function setStories()
-{
-    const moduleID  = $('#module').val();
-    const productID = $('#product').val();
-    var branch      = $('#branch').val();
-    if(typeof(branch) == 'undefined') branch = 0;
-    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=' + executionID);
+    if(typeof(branch)   == 'undefined') branch   = 0;
+    if(typeof(moduleID) == 'undefined') moduleID = 0;
+    if(typeof(storyID)  == 'undefined') storyID  = 0;
 
-    $.get(link, function(stories)
-    {
-        const value = $('#story').val();
-
-        if(!stories) stories = '<select id="story" name="story"></select>';
-
-        $('#story').replaceWith(stories);
-
-        $('#story').val(value);
-    });
-}
-
-function setScenes()
-{
-    const moduleID  = $('#module').val();
-    const productID = $('#product').val();
-    const stype     = config.currentMethod == 'createscene' || config.currentMethod == 'editscene' ? 1 : 2;
-    var branch      = $('#branch').val();
-    if(typeof(branch) == 'undefined') branch = 0;
-
-    const link = $.createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=' + stype + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1');
-
+    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=' + executionID);
     $.get(link, function(data)
     {
         if(data)
         {
-            if(config.currentMethod == 'createscene' || config.currentMethod == 'editscene')
-            {
-                $('#parent').remove();
-                $('#sceneIdBox').append(data);
-            }
-            else
-            {
-                $('#sceneIdBox').html(data);
-            }
+            let $storyPicker = $('[name=story]').zui('picker');
+            data = JSON.parse(data);
+            $storyPicker.render({items: data});
+            $storyPicker.$.changeState({value: ''});
         }
     })
 }
 
-function loadProductRelated()
+function loadProductBranches(productID)
 {
-    loadProductBranches();
-    loadProductModules();
-    setScenes();
-    if(config.currentMethod == 'create' || config.currentMethod == 'edit') setStories();
-}
-
-function loadProductBranches()
-{
-    $('#branch').remove();
-
-    const productID = $('#product').val();
     var param     = config.currentMethod == 'create' ? 'active' : 'all';
-    var oldBranch = typeof(caseBranch) != 'undefined' ? caseBranch : 0;
-    var param     = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + param;
-    if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
+    var oldBranch = config.currentMethod == 'edit' ? caseBranch : 0;
+    var param     = 'productID=' + productID + '&oldBranch=' + oldBranch + '&param=' + param;
+    if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += '&projectID=' + objectID;
+
     $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
     {
         if(data)
         {
-            $('#product').closest('.input-group').append(data);
-            $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '95px');
+            $('#branch').show();
+
+            let $branchPicker = $('[name=branch]').zui('picker');
+            data = JSON.parse(data);
+            $branchPicker.render({items: data});
+            $branchPicker.$.changeState({value: ''});
+        }
+        else
+        {
+            $('#branch').hide();
         }
     })
 }
 
-function loadProductModules()
+function loadProductModules(productID)
 {
-    const productID = $('#product').val();
-    var branch      = $('#branch').val();
-    const moduleID  = config.currentMethod == 'edit' ? $('#module').val() : 0;
+    let branch = $('[name=branch]').val();
+    if(typeof(branch) == 'undefined') branch = 0;
 
-    if(!branch) branch = 0;
+    const currentModuleID = config.currentMethod == 'edit' ? $('[name=module]').val() : 0;
+    const getModuleLink   = $.createLink('testcase', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + currentModuleID);
 
-    link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + moduleID);
-    $('#moduleIdBox').load(link, function()
+    $.get(getModuleLink, function(data)
     {
-        if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>");
-    });
+        if(data)
+        {
+            let $modulePicker = $('[name=module]').zui('picker');
+            data = JSON.parse(data);
+            $modulePicker.render({items: data});
+            $modulePicker.$.changeState({value: ''});
+
+            $('#module').next('.input-group-addon').toggleClass('hidden', data.length > 1);
+        }
+    })
 }
 
-function loadBranchRelated()
+function loadProductStories(productID)
 {
-    loadProductModules();
+    let branch   = $('[name=branch]').val();
+    let moduleID = $('[name=module]').val();
+    let storyID  = $('[name=story]').val();
 
-    setScenes();
-    if(config.currentMethod == 'create' || config.currentMethod == 'edit') setStories();
+    if(typeof(branch)   == 'undefined') branch   = 0;
+    if(typeof(moduleID) == 'undefined') moduleID = 0;
+    if(typeof(storyID)  == 'undefined') storyID  = 0;
+
+    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=' + executionID);
+    $.get(link, function(data)
+    {
+        if(data)
+        {
+            let $storyPicker = $('[name=story]').zui('picker');
+            data = JSON.parse(data);
+            $storyPicker.render({items: data});
+            $storyPicker.$.changeState({value: ''});
+        }
+    })
+}
+
+function loadScenes(productID)
+{
+    let branch   = $('[name=branch]').val();
+    let moduleID = $('[name=module]').val();
+    if(typeof(branch) == 'undefined')   branch   = 0;
+    if(typeof(moduleID) == 'undefined') moduleID = 0;
+
+    const link = $.createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1');
+    $.get(link, function(data)
+    {
+        let $scenePicker = $('[name=scene]').zui('picker');
+        data = JSON.parse(data);
+        $scenePicker.render({items: data});
+        $scenePicker.$.changeState({value: ''});
+    });
 }
