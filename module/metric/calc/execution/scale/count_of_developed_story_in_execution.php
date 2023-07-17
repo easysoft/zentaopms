@@ -11,7 +11,6 @@
  */
 class count_of_developed_story_in_execution extends baseCalc
 {
-    public $dao = null;
     public $result = array();
 
     public function getStatement()
@@ -31,7 +30,7 @@ class count_of_developed_story_in_execution extends baseCalc
         $this->result[] = $data;
     }
 
-    public function getResult()
+    public function getResult($options = array())
     {
         return $this->result;
     }
