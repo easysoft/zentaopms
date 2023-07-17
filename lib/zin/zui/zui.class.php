@@ -28,12 +28,13 @@ class zui extends wg
         '_props?: array',
         '_size?: array',
         '_id?: string',
-        '_class?: string'
+        '_class?: string',
+        '_call?: string'
     );
 
     protected function build(): wg
     {
-        list($name, $target, $tagName, $targetProps, $size, $id, $class, $map) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map'));
+        list($name, $target, $tagName, $targetProps, $size, $id, $class, $map, $call) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map', '_call'));
         list($width, $height) = $size;
 
         $options  = $this->getRestProps();
@@ -54,6 +55,8 @@ class zui extends wg
             }
         }
 
+        if(empty($call)) $call = '~zui.create';
+
         if(empty($target))
         {
             return h
@@ -65,11 +68,11 @@ class zui extends wg
                 setStyle('width', $width),
                 setStyle('height', $height),
                 $children,
-                h::jsCall('~zui.create', $name, $selector, $options)
+                h::jsCall($call, $name, $selector, $options)
             );
         }
 
-        return  h::jsCall('~zui.create', $name, $selector, $options);
+        return  h::jsCall($call, $name, $selector, $options);
     }
 
     public static function __callStatic($name, $args)
