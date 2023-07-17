@@ -23,10 +23,10 @@ formPanel
         set::text($scene->title),
         set::reverse(true),
     ),
-    on::change('#product', 'loadProductBranch'),
-    on::change('#branch', 'loadProductModule'),
-    on::change('#module', 'loadModuleRelatedNew'),
-    on::click('.refresh', 'loadProductModule'),
+    on::change('#product', 'loadProductRelated'),
+    on::change('#branch', 'loadBranchRelated'),
+    on::change('#module', 'loadModuleRelated'),
+    on::click('.refresh', 'refreshModules'),
     formRow
     (
         formGroup
@@ -37,15 +37,17 @@ formPanel
             (
                 picker
                 (
+                    setID('product'),
                     set::name('product'),
                     set::items($products),
                     set::value($scene->product),
                 ),
                 isset($product->type) && $product->type != 'normal' ? picker
                 (
+                    setID('branch'),
                     zui::width('120px'),
                     set::name('branch'),
-                    set::items($branches),
+                    set::items($branchTagOption),
                     set::value($scene->branch)
                 ) : null
             )
@@ -58,6 +60,7 @@ formPanel
                 set::id('moduleIdBox'),
                 picker
                 (
+                    setID('module'),
                     set::name('module'),
                     set::items($moduleOptionMenu),
                     set::value($scene->module),

@@ -18,9 +18,9 @@ formPanel
     set::title($lang->testcase->createScene),
 
     on::change('#product', 'loadProductRelated'),
-    on::change('#branch', 'loadProductModules'),
+    on::change('#branch', 'loadBranchRelated'),
     on::change('#module', 'loadModuleRelated'),
-    on::click('.refresh', 'loadProductModules'),
+    on::click('.refresh', 'refreshModules'),
     formRow
     (
         formGroup
@@ -31,12 +31,14 @@ formPanel
             (
                 picker
                 (
+                    setID('product'),
                     set::name('product'),
                     set::items($products),
                     set::value($productID),
                 ),
                 isset($product->type) && $product->type != 'normal' ? picker
                 (
+                    setID('branch'),
                     zui::width('120px'),
                     set::name('branch'),
                     set::items($branches),
@@ -52,6 +54,7 @@ formPanel
                 set::id('moduleIdBox'),
                 picker
                 (
+                    setID('module'),
                     set::name('module'),
                     set::items($moduleOptionMenu),
                     set::value($currentModuleID),
@@ -82,6 +85,7 @@ formPanel
         set::id('sceneIdBox'),
         picker
         (
+            setID('parent'),
             set::name('parent'),
             set::items($sceneOptionMenu),
             set::value($currentParentID),
