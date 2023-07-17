@@ -111,7 +111,7 @@ formPanel
                     colorPicker
                     (
                         set::name('color'),
-                        set::value($bug->color),
+                        set::value(''),
                         set::syncColor('#title')
                     )
                 )
