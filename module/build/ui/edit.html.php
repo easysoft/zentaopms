@@ -49,12 +49,16 @@ if(!$build->execution)
         formGroup
         (
             set::width('1/2'),
-            set::name('builds[]'),
             set::label($lang->build->builds),
-            set::items($builds),
-            set::value($build->builds),
-            set::disabled(!empty($testtaskID)),
-            set::placeholder($lang->build->placeholder->multipleSelect),
+            picker
+            (
+                set::name('builds[]'),
+                set::items($builds),
+                set::value($build->builds),
+                set::disabled(!empty($testtaskID)),
+                set::placeholder($lang->build->placeholder->multipleSelect),
+                set::multiple(true),
+            )
         ),
         formGroup
         (
