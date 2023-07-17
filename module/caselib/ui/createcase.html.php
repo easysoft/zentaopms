@@ -85,7 +85,7 @@ formPanel
                 set('id', 'stageBox'),
                 picker
                 (
-                    set::name('stage'),
+                    set::name('stage[]'),
                     set::multiple(true),
                     set::items($lang->testcase->stageList),
                     set::value($stage)
@@ -98,8 +98,24 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->title),
-            set::name('title'),
-            set::value($caseTitle)
+            inputControl
+            (
+                input
+                (
+                    set::name('title'),
+                    set::value($caseTitle)
+                ),
+                set::suffixWidth('icon'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::name('color'),
+                        set::value($bug->color),
+                        set::syncColor('#title')
+                    )
+                )
+            )
         ),
         formGroup
         (
