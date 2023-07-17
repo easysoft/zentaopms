@@ -737,6 +737,15 @@
 
         if(DEBUG) console.log('[APP] open url', url, options);
 
+        if(options.confirm)
+        {
+            return zui.Modal.confirm(options.confirm).then(confirmed =>
+            {
+                if(!confirmed) return;
+                openUrl(url, $.extend({}, options, {confirm: false}), event);
+            });
+        }
+
         const load = options.load;
         if(typeof load === 'string' || load)
         {
