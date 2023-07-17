@@ -18,7 +18,6 @@ function loadLibModules()
 function loadProductRelated()
 {
     const productID = $(event.target).val();
-    console.log(productID);
 
     loadProductBranches(productID);
     loadProductModules(productID);
