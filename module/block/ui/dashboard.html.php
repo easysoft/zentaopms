@@ -24,10 +24,10 @@ $blocks = json_decode(json_encode($blocks), true);
 
 $blockMenuItems = array();
 $blockMenuItems[] = array('text' => $lang->block->refresh, 'attrs' => array('data-type' => 'refresh'));
-$blockMenuItems[] = array('text' => $lang->edit, 'data-url' => createLink('block', 'edit', "blockID={id}"), 'data-toggle' => 'modal', 'data-size' => 'sm');
-$blockMenuItems[] = array('text' => $lang->block->hidden, 'data-url' => createLink('block', 'delete', "blockID={id}&type=hidden"));
-$blockMenuItems[] = array('text' => $lang->block->createBlock, 'data-url' => createLink('block', 'create', "dashboard=$dashboard"), 'data-toggle' => 'modal', 'data-size' => 'sm');
-$blockMenuItems[] = array('text' => $lang->block->reset, 'data-url' => createLink('block', 'reset', "dashboard=$dashboard"));
+$blockMenuItems[] = array('text' => $lang->edit, 'url' => createLink('block', 'edit', "blockID={id}"), 'data-toggle' => 'modal', 'data-size' => 'sm');
+$blockMenuItems[] = array('text' => $lang->block->hidden, 'url' => createLink('block', 'delete', "blockID={id}&type=hidden"), 'data-confirm' => $lang->block->confirmRemoveBlock);
+$blockMenuItems[] = array('text' => $lang->block->createBlock, 'url' => createLink('block', 'create', "dashboard=$dashboard"), 'data-toggle' => 'modal', 'data-size' => 'sm');
+$blockMenuItems[] = array('text' => $lang->block->reset, 'url' => createLink('block', 'reset', "dashboard=$dashboard"), 'data-confirm' => $lang->block->confirmReset);
 
 dashboard
 (
