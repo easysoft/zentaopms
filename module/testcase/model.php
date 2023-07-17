@@ -773,8 +773,8 @@ class testcaseModel extends model
      */
     public function update($caseID, $testtasks = array())
     {
-        $steps   = $this->post->steps;
-        $expects = $this->post->expects;
+        $steps   = $this->post->steps ? $this->post->steps : array();
+        $expects = $this->post->expects ? $this->post->expects : array();
         foreach($expects as $key => $value)
         {
             if(!empty($value) and empty($steps[$key]))

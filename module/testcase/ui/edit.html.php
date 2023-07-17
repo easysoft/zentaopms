@@ -74,9 +74,25 @@ detailBody
             set::title($lang->testcase->title),
             formGroup
             (
-                set::name('title'),
-                set::value($case->title),
-                set::placeholder($lang->case->title),
+                inputControl
+                (
+                    input
+                    (
+                        set::name('title'),
+                        set::value($case->title),
+                        set::placeholder($lang->case->title),
+                    ),
+                    set::suffixWidth('icon'),
+                    to::suffix
+                    (
+                        colorPicker
+                        (
+                            set::name('color'),
+                            set::value($case->color),
+                            set::syncColor('#title')
+                        )
+                    )
+                )
             )
         ),
         section
@@ -90,6 +106,7 @@ detailBody
                     set::name('scene'),
                     set::items($sceneOptionMenu),
                     set::value($currentSceneID),
+                    set::required(true),
                 )
             )
         ),
@@ -183,6 +200,7 @@ detailBody
                         set::name('module'),
                         set::items($moduleOptionMenu),
                         set::value($currentModuleID),
+                        set::required(true),
                     ),
                     count($moduleOptionMenu) == 1 ? span
                     (
@@ -272,7 +290,7 @@ detailBody
             item
             (
                 set::name($lang->testcase->pri),
-                picker
+                priPicker
                 (
                     set::name('pri'),
                     set::items($lang->testcase->priList),

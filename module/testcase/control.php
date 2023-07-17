@@ -895,7 +895,7 @@ class testcase extends control
             if($comment == false or $comment == 'false')
             {
                 $changes = $this->testcase->update($caseID, $testtasks);
-                if(dao::isError()) return print(js::error(dao::getError()));
+                if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
             if($this->post->comment != '' or !empty($changes))
             {
@@ -915,7 +915,7 @@ class testcase extends control
             }
             else
             {
-                return print(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('testcase', 'view', "caseID={$caseID}")));
             }
         }
 

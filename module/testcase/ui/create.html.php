@@ -61,7 +61,8 @@ formPanel
                     set::id('module'),
                     set::name('module'),
                     set::items($moduleOptionMenu),
-                    set::value($currentModuleID)
+                    set::value($currentModuleID),
+                    set::required(true),
                 ),
                 span
                 (
@@ -98,7 +99,8 @@ formPanel
                     set::id('scene'),
                     set::name('scene'),
                     set::items($sceneOptionMenu),
-                    set::value($currentSceneID)
+                    set::value($currentSceneID),
+                    set::required(true),
                 )
             )
         )
@@ -135,14 +137,14 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->testcase->scene),
+            set::label($lang->testcase->stage),
             inputGroup
             (
                 set('id', 'stageBox'),
                 picker
                 (
                     set::id('stage'),
-                    set::name('stage'),
+                    set::name('stage[]'),
                     set::multiple(true),
                     set::items($lang->testcase->stageList),
                     set::value($stage)
@@ -186,8 +188,24 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->title),
-            set::name('title'),
-            set::value($caseTitle)
+            inputControl
+            (
+                input
+                (
+                    set::name('title'),
+                    set::value($caseTitle)
+                ),
+                set::suffixWidth('icon'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::name('color'),
+                        set::value(''),
+                        set::syncColor('#title')
+                    )
+                )
+            )
         ),
         formGroup
         (
@@ -202,7 +220,8 @@ formPanel
             set::items($lang->testcase->reviewList),
             set::id('forceNotReview'),
             set::name('forceNotReview'),
-            set::value('1')
+            set::value('1'),
+            set::required(true),
         )
     ),
     formRow
