@@ -374,6 +374,10 @@ $lang->devops->platform    = 'Platform';
 $lang->devops->set         = 'Set';
 $lang->devops->WIPs        = 'WIPs';
 $lang->devops->environment = 'Environment';
+$lang->devops->resource    = 'Resource';
+$lang->devops->dblist      = 'Database';
+$lang->devops->domain      = 'Domain';
+$lang->devops->oss         = 'Oss';
 
 $lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';

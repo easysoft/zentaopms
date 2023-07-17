@@ -375,6 +375,10 @@ $lang->devops->platform    = '平台';
 $lang->devops->set         = '设置';
 $lang->devops->WIPs        = '制品库';
 $lang->devops->environment = '环境';
+$lang->devops->resource    = '资源';
+$lang->devops->dblist      = '数据库';
+$lang->devops->domain      = '域名';
+$lang->devops->oss         = '对象存储';
 
 $lang->admin->module      = '功能配置';
 $lang->admin->system      = '系统';

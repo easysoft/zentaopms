@@ -1,12 +1,9 @@
 $(function()
 {
-});
-
-window.onload = function()
-{
     onScmChange();
     onHostChange();
-}
+});
+
 function onProductChange(event)
 {
     var projects = $('#projects').val();
@@ -44,7 +41,15 @@ function onProjectChange()
  */
 function onScmChange()
 {
-    const scm = $('[name=SCM]').val();
+    var scm = $('[name=SCM]').val();
+    if(!scm)
+    {
+        for(i in scmList)
+        {
+            scm = i;
+            break;
+        }
+    }
 
     (scm == 'Git') ? $('.tips-git').removeClass('hidden') : $('.tips-git').addClass('hidden');
     if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')

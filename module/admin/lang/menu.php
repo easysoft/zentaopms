@@ -182,6 +182,28 @@ $lang->admin->menuList->dev['menuOrder']['15'] = 'langItem';
 $lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
+$lang->admin->menuList->platform['subMenu']['dashboard']   = array('link' => "{$lang->dashboard}|system|dashboard");
+$lang->admin->menuList->platform['subMenu']['plat']        = array('link' => "{$lang->devops->platform}|system", 'subModule' => 'backup');
+$lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
+$lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|system|resource");
+$lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules");
+
+$lang->admin->menuList->platform['tabMenu']['plat']['backup'] = array('link' => "{$lang->backup->common}|system|index|", 'subModule' => 'backup');
+$lang->admin->menuList->platform['tabMenu']['plat']['dblist'] = array('link' => "{$lang->devops->dblist}|system|dblist|");
+$lang->admin->menuList->platform['tabMenu']['plat']['domain'] = array('link' => "{$lang->devops->domain}|system|configDomain|");
+$lang->admin->menuList->platform['tabMenu']['plat']['oss']    = array('link' => "{$lang->devops->oss}|system|ossview|");
+
+$lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['5']  = 'backup';
+$lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['10'] = 'dblist';
+
+$lang->admin->menuList->platform['menuOrder']['5']  = 'dashboard';
+$lang->admin->menuList->platform['menuOrder']['10'] = 'plat';
+$lang->admin->menuList->platform['menuOrder']['15'] = 'environment';
+$lang->admin->menuList->platform['menuOrder']['20'] = 'resource';
+$lang->admin->menuList->platform['menuOrder']['25'] = 'setrules';
+
+$lang->admin->menuList->platform['dividerMenu'] = ',plat,setrules,';
+
 if($config->edition != 'max')
 {
     unset($lang->admin->menuList->model['subMenu']['scrum']);
