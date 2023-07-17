@@ -28,6 +28,7 @@ $config->job->dtable->fieldList['lastStatus']['name']     = 'lastStatus';
 $config->job->dtable->fieldList['lastStatus']['sortType'] = true;
 $config->job->dtable->fieldList['lastStatus']['width']    = '110';
 $config->job->dtable->fieldList['lastStatus']['hint']     = true;
+$config->job->dtable->fieldList['lastStatus']['map']      = $lang->compile->statusList;
 
 $config->job->dtable->fieldList['buildSpec']['title']    = $lang->job->buildSpec;
 $config->job->dtable->fieldList['buildSpec']['name']     = 'buildSpec';

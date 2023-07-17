@@ -76,7 +76,6 @@ class job extends control
                 if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
             }
 
-            $job->lastStatus  = zget($this->lang->compile->statusList, (string)$job->lastStatus, '');
             $job->lastExec    = $job->lastExec ? $job->lastExec : '';
             $job->triggerType = $this->job->getTriggerConfig($job);
             $job->buildSpec   = urldecode($job->pipeline) . '@' . $job->jenkinsName;

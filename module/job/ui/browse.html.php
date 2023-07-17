@@ -47,6 +47,7 @@ dtable
     set::cols($config->job->dtable->fieldList),
     set::data($tableData),
     set::sortLink(jsRaw('createSortLink')),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
 );
 
