@@ -206,11 +206,7 @@ function loadProductProjects(productID)
         {
             data = JSON.parse(data);
             $projectPicker.render({items: data});
-            if(project != '0')
-            {
-                $projectPicker.$.clear();
-                $projectPicker.$.setValue(project);
-            }
+            $projectPicker.$.setValue(project != '0' ? project : '');
         }
     });
 }
@@ -229,8 +225,7 @@ function loadExecutions(productID, projectID = 0)
         {
             data = JSON.parse(data);
             $executionPicker.render({items: data});
-            $executionPicker.$.setValue('');
-            if(executionID != '0') $executionPicker.$.setValue(executionID);
+            $executionPicker.$.setValue(executionID != '0' ? executionID : '');
         }
     });
 
