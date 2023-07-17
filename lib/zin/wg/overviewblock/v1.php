@@ -141,6 +141,7 @@ class overviewBlock extends wg
             set::block($block),
             set::title($title),
             set::id($id),
+            set::headingClass('border-0'),
             set::bodyClass('flex block-base p-0'),
 
             $this->buildBody($groups)
