@@ -13,6 +13,7 @@ namespace zin;
 import('/js/md5.js', 'js');
 
 jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
+jsVar('roleGroup', $roleGroup);
 
 $visionList       = $this->user->getVisionList();
 $showVisionList   = count($visionList) > 1;
@@ -26,13 +27,15 @@ foreach($visionList as $key => $label)
         set::id("visions$key"),
         set::name('visions[]'),
         set::text($label),
-        set::value($key)
+        set::value($key),
+        set::checked($key == 'rnd'),
     );
 }
 
 formPanel
 (
     on::change('input[name=type]', 'changeType'),
+    on::change('input[name=role]', 'changeRole'),
     on::change('#addCompany', 'changeAddCompany'),
     on::change('input[name^=visions]', 'changeVision'),
     on::change('#password1,#password2,#verifyPassword', 'changePassword'),

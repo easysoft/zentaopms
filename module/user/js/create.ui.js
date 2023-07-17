@@ -87,3 +87,23 @@ function clickSubmit()
         password2Encrypted = true;
     }
 }
+
+/**
+ * Change group when change role.
+ *
+ * @param  role $role
+ * @access public
+ * @return void
+ */
+function changeRole(event)
+{
+    var role = $(event.target).val();
+    if(role && roleGroup[role])
+    {
+        $('[name^="group"]').zui('picker').$.setValue(roleGroup[role]);
+    }
+    else
+    {
+        $('[name^="group"]').zui('picker').$.setValue('');
+    }
+}

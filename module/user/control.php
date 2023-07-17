@@ -529,14 +529,14 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
         }
 
-        $groups = $this->dao->select('id, name, role')
+        $groups = $this->dao->select('id, name, role, vision')
             ->from(TABLE_GROUP)
             ->fetchAll();
         $groupList = array();
         $roleGroup = array();
         foreach($groups as $group)
         {
-            $groupList[$group->id] = $group->name;
+            if($group->vision == 'rnd') $groupList[$group->id] = $group->name;
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
