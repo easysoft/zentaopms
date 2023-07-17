@@ -61,7 +61,6 @@ namespace zin;
 panel
 (
     set('class', 'docstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set('headingClass', 'border-b'),
     set::title($block->title),
     rawContent()
 );

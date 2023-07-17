@@ -350,6 +350,15 @@ $config->block->size['qa']['testtask']  = array('2' => '6', '1' => '6');
 $config->block->size['qa']['bug']       = array('2' => '6', '1' => '6');
 $config->block->size['qa']['case']      = array('2' => '6', '1' => '6');
 
+$config->block->size['doc']['docstatistic']    = array('2' => '3', '1' => '3');
+$config->block->size['doc']['docmycollection'] = array('2' => '4', '1' => '4');
+$config->block->size['doc']['docrecentupdate'] = array('2' => '4', '1' => '4');
+$config->block->size['doc']['productdoc']      = array('2' => '6', '1' => '6');
+$config->block->size['doc']['projectdoc']      = array('2' => '6', '1' => '6');
+$config->block->size['doc']['docdynamic']      = array('1' => '8');
+$config->block->size['doc']['docviewlist']     = array('1' => '4');
+$config->block->size['doc']['doccollectlist']  = array('1' => '4');
+
 $config->block->size['welcome']['welcome']                 = array('2' => '3');
 $config->block->size['guide']['guide']                     = array('2' => '6');
 $config->block->size['assigntome']['assigntome']           = array('2' => '6', '1' => '6');
