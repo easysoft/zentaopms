@@ -122,9 +122,10 @@ function updateAssignedTo()
             let realname = $(this).find('.picker-single-selection').text();
 
             if(realname == '') return;
-            if($(this).val() == currentUser) isTeamMember = true;
 
-            let account  = $(this).find('[name^=team]').val();
+            let account = $(this).find('[name^=team]').val();
+            if(account == currentUser) isTeamMember = true;
+
             users.push({'text': realname, 'value': account});
         });
     }
@@ -143,7 +144,7 @@ function updateAssignedTo()
     $assignedToPicker.render({items: users});
     $assignedToPicker.$.changeState({value: assignedTo});
 
-    if(mode == 'multi' && isTeamMember && mode != 'linear')
+    if(mode == 'multi' && isTeamMember)
     {
         $('#assignedTo').picker({disabled: false});
     }
