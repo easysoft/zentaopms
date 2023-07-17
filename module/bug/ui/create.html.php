@@ -104,7 +104,8 @@ formPanel
                 (
                     set::name('module'),
                     set::items($moduleOptionMenu),
-                    set::value($bug->moduleID)
+                    set::value($bug->moduleID),
+                    set::required('true')
                 ),
                 count($moduleOptionMenu) == 1 ? span
                 (

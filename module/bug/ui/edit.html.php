@@ -133,7 +133,8 @@ detailBody
                         (
                             set::name('module'),
                             set::items($moduleOptionMenu),
-                            set::value($currentModuleID)
+                            set::value($bug->module),
+                            set::required('true')
                         ),
                         count($moduleOptionMenu) == 1 ? span
                         (
