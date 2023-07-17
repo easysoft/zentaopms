@@ -25,7 +25,7 @@ $getMeasureItem = function($data)
         (
             div
             (
-                set('class', 'text-3xl text-primary font-bold h-40px'),
+                set('class', 'text-3xl text-primary h-40px'),
                 a(set('href', $info['href']), $info['number'])
             ),
             div(zget($welcomeLabel, $key, '')),
