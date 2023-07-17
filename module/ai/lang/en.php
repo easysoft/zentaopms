@@ -21,8 +21,9 @@ $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';
 
 $lang->ai->validate = new stdclass();
-$lang->ai->validate->noEmpty   = '%s cannot be empty.';
-$lang->ai->validate->dirtyForm = 'The design step of %s has changed. Do you want to save and return it?';
+$lang->ai->validate->noEmpty       = '%s cannot be empty.';
+$lang->ai->validate->dirtyForm     = 'The design step of %s has changed. Do you want to save and return it?';
+$lang->ai->validate->nameNotUnique = 'A prompt with the same name already exists, please change the name.';
 
 $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = 'Prompt';

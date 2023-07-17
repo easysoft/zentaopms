@@ -410,6 +410,9 @@ class aiModel extends model
         $prompt->createdDate = helper::now();
         $prompt->createdBy   = $this->app->user->account;
 
+        /* Override uniqueness error message. */
+        $this->lang->error->unique = $this->lang->ai->validate->nameNotUnique;
+
         $this->dao->insert(TABLE_PROMPT)
             ->data($prompt)
             ->autoCheck()
@@ -433,6 +436,9 @@ class aiModel extends model
     {
         $prompt->editedDate = helper::now();
         $prompt->editedBy   = $this->app->user->account;
+
+        /* Override uniqueness error message. */
+        $this->lang->error->unique = $this->lang->ai->validate->nameNotUnique;
 
         $this->dao->update(TABLE_PROMPT)
             ->data($prompt)
