@@ -164,6 +164,9 @@ $lang->action->objectTypes['privlang']         = 'Priv';
 $lang->action->objectTypes['scene']            = 'Scene';
 $lang->action->objectTypes['pivot']            = 'Pivot';
 $lang->action->objectTypes['privpackage']      = 'Priv Package';
+$lang->action->objectTypes['serverroom']       = 'IDC';
+$lang->action->objectTypes['account']          = 'Account';
+$lang->action->objectTypes['host']             = 'Host';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

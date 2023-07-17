@@ -378,6 +378,13 @@ $lang->devops->resource    = 'Resource';
 $lang->devops->dblist      = 'Database';
 $lang->devops->domain      = 'Domain';
 $lang->devops->oss         = 'Oss';
+$lang->devops->host        = 'Host';
+$lang->devops->account     = 'Account';
+$lang->devops->serverroom  = 'IDC';
+$lang->devops->provider    = 'IDC Provider';
+$lang->devops->cpuBrand    = 'CPU Brand';
+$lang->devops->city        = 'IDC Location';
+$lang->devops->os          = 'OS Version';
 
 $lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';

@@ -141,6 +141,9 @@ $lang->action->objectTypes['repo']             = '代码库';
 $lang->action->objectTypes['dataview']         = '数据表';
 $lang->action->objectTypes['scene']            = 'Scene';
 $lang->action->objectTypes['pivot']            = '透视表';
+$lang->action->objectTypes['serverroom']       = '機房';
+$lang->action->objectTypes['account']          = '账号';
+$lang->action->objectTypes['host']             = '主機';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();

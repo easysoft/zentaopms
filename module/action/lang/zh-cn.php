@@ -164,6 +164,9 @@ $lang->action->objectTypes['privlang']         = '权限';
 $lang->action->objectTypes['scene']            = '场景';
 $lang->action->objectTypes['pivot']            = '透视表';
 $lang->action->objectTypes['privpackage']      = '权限包';
+$lang->action->objectTypes['serverroom']       = '机房';
+$lang->action->objectTypes['account']          = '账号';
+$lang->action->objectTypes['host']             = '主机';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();

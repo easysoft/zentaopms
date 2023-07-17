@@ -54,6 +54,9 @@ $config->action->objectNameFields['zanode']       = 'name';
 $config->action->objectNameFields['privlang']     = 'name';
 $config->action->objectNameFields['scene']        = 'title';
 $config->action->objectNameFields['pivot']        = 'name';
+$config->action->objectNameFields['serverroom']   = 'name';
+$config->action->objectNameFields['account']      = 'name';
+$config->action->objectNameFields['host']         = 'name';
 
 $config->action->commonImgSize = 870;
 

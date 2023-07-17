@@ -689,8 +689,6 @@ $lang->navGroup->devopssetting    = 'devops';
 $lang->navGroup->space            = 'devops';
 $lang->navGroup->store            = 'devops';
 $lang->navGroup->instance         = 'devops';
-$lang->navGroup->serverroom       = 'devops';
-$lang->navGroup->account          = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';
@@ -737,6 +735,10 @@ $lang->navGroup->holidayseason = 'admin';
 $lang->navGroup->measurement   = 'admin';
 $lang->navGroup->system        = 'admin';
 $lang->navGroup->holiday       = 'admin';
+$lang->navGroup->serverroom    = 'admin';
+$lang->navGroup->account       = 'admin';
+$lang->navGroup->host          = 'admin';
+$lang->navGroup->ops           = 'admin';
 
 $lang->navGroup->index   = 'index';
 $lang->navGroup->misc    = 'misc';

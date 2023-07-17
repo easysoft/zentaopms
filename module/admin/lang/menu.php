@@ -185,7 +185,7 @@ $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 $lang->admin->menuList->platform['subMenu']['dashboard']   = array('link' => "{$lang->dashboard}|system|dashboard|");
 $lang->admin->menuList->platform['subMenu']['plat']        = array('link' => "{$lang->devops->platform}|system|", 'subModule' => 'backup');
 $lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
-$lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|system|resource|");
+$lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse", 'subModule' => 'host,account,serverroom');
 $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
 
 $lang->admin->menuList->platform['tabMenu']['plat']['backup'] = array('link' => "{$lang->backup->common}|system|index|", 'subModule' => 'backup');
@@ -195,6 +195,18 @@ $lang->admin->menuList->platform['tabMenu']['plat']['oss']    = array('link' => 
 
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['5']  = 'backup';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['10'] = 'dblist';
+
+$lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,view,treemap', 'subModule' => 'tree');
+$lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit');
+$lang->admin->menuList->platform['tabMenu']['resource']['account']    = array('link' => "{$lang->devops->account}|account|browse|", 'alias' => 'create,edit');
+$lang->admin->menuList->platform['tabMenu']['resource']['provider']   = array('link' => "{$lang->devops->provider}|ops|setting|", 'alias' => 'setting');
+$lang->admin->menuList->platform['tabMenu']['resource']['city']       = array('link' => "{$lang->devops->city}|ops|setting|module=serverroom&field=city", 'alias' => 'setting');
+$lang->admin->menuList->platform['tabMenu']['resource']['cpuBrand']   = array('link' => "{$lang->devops->cpuBrand}|ops|setting|module=host&field=cpuBrand", 'alias' => 'setting');
+$lang->admin->menuList->platform['tabMenu']['resource']['os']         = array('link' => "{$lang->devops->os}|ops|setting|module=host&field=osVersion", 'alias' => 'setting');
+
+$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['5']  = 'host';
+$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['10'] = 'serverroom';
+$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['15'] = 'account';
 
 $lang->admin->menuList->platform['menuOrder']['5']  = 'dashboard';
 $lang->admin->menuList->platform['menuOrder']['10'] = 'plat';

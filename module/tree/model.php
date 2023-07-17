@@ -855,6 +855,34 @@ class treeModel extends model
     }
 
     /**
+     * Get project story tree menu.
+     *
+     * @access public
+     * @return array
+     */
+    public function getHostTreeMenu(): array
+    {
+        $menu = array();
+        /* tree menu. */
+        $treeMenu = array();
+        $stmt = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('type')->eq('host')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('grade_desc,id_asc')
+            ->query();
+
+        while($module = $stmt->fetch())
+        {    
+            $treeMenu = $this->buildTree($module, '', 0, array('this', 'createHostLink'));
+            if($module->parent == 0) $treeMenu->parent = $module->root;
+
+            $menu[] = $treeMenu;
+        }
+
+        return $menu;
+    }
+
+    /**
      * Build tree.
      *
      * @param  object     $module
@@ -1455,6 +1483,28 @@ class treeModel extends model
     }
 
     /**
+     * Create link of a host.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  int    $parent
+     * @param  array  $extra
+     * @access public
+     * @return object
+     */
+    public function createHostLink(string $type, object $module, int $parent = 0, array $extra = array()): object
+    {
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : $module->id;
+        $data->parent = $parent ? $parent : $module->parent;
+        $data->name   = $module->name;
+
+        $data->url = helper::createLink('host', 'browse', "browseType=bymodule&param={$module->id}");
+
+        return $data;
+    }
+
+    /**
      * Get sons of a module.
      *
      * @param  int    $rootID
@@ -1537,6 +1587,27 @@ class treeModel extends model
                 ->orderBy('`order`, type')
                 ->fetchAll();
         }
+    }
+
+    /**
+     * Get sons of a host module.
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function getHostSons($moduleID)
+    {
+        $sons = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('parent')->eq($moduleID)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('type')->eq('host')
+            ->orderBy('order')
+            ->fetchAll();
+
+        return $sons;
     }
 
     /**
