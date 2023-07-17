@@ -11,17 +11,19 @@ declare(strict_types=1);
 
 namespace zin;
 ?>
-
 <?php if(empty($actions)): ?>
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <style>
-.block-docdynamic .timeline > li .timeline-text {max-width: 600px; display: block; white-space: nowrap; overflow: hidden; text-overflow: clip; max-height: 20px;}
-.block-docdynamic .panel-body {padding-top: 0;}
-.timeline-text {margin-left: -18px;}
-.block-docdynamic .label-action {padding: 0 6px;}
-.block-docdynamic .label-action + a {padding-left: 6px;}
-.timeline > li.active:before {left: -30px; background-color: #FFF;}
+.dynamic-block .timeline > li .timeline-text {max-width: 600px; display: block; white-space: nowrap; overflow: hidden; text-overflow: clip; max-height: 20px;}
+.dynamic-block .panel-body {padding-top: 0;}
+.dynamic-block .timeline-text {margin-left: -18px;}
+.dynamic-block .label-action {padding: 0 6px;}
+.dynamic-block .label-action + a {padding-left: 6px;}
+.timeline > li:before, .timeline > li > a:after, .timeline > li > div:after {position: absolute; left: -20px; display: block; width: 15px; height: 15px; content: ' '; border-radius: 50%;}
+.timeline > li > a:after, .timeline > li > div:after {position: absolute; content: ' '; top: 11px; left: -17px; display: block; z-index: 3; width: 9px; height: 9px; background-color: #2e7fff; border-radius: 50%; opacity: 0;}
+.timeline > li.active > a:after, .timeline > li.active > div:after {opacity: 1;}
+.timeline > li.active:before {top: 8px; left: -30px; width: 15px; z-index: 3; height: 15px; background-color: #FFF; border: none;}
 .timeline > li.collected > div:after {background-color: #FFAF65;}
 .timeline > li.releaseddoc > div:after {background-color: #66A2FF;}
 .timeline > li > div:after {left: -27px;}
@@ -53,11 +55,10 @@ namespace zin;
   ?>
 </ul>
 <?php endif;?>
-
 <?php
 panel
 (
-    set('headingClass', 'border-b'),
+    set('class', 'dynamic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::title($block->title),
     div
     (
