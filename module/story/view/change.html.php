@@ -21,14 +21,18 @@
         <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '', 'class="story-title"');?>
         <small><?php echo $lang->arrow . ' ' . $lang->story->change;?></small>
       </h2>
-      <?php if(isset($_SESSION['auditPrompt'])): ?>
+      <?php if(isset($_SESSION['aiInjectData']) && isset($_SESSION['auditPrompt'])): ?>
         <?php
         $this->app->loadLang('ai');
-        $prompt = $_SESSION['auditPrompt']['prompt'];
+        $prompt    = $_SESSION['auditPrompt']['prompt'];
+        if(isset($_SESSION['auditPrompt']['time'])) $auditTime = $_SESSION['auditPrompt']['time'];
         ?>
-      <div class="pull-right btn-toolbar">
-        <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$story->id", '', true), $lang->ai->audit->designPrompt, '', 'class="btn btn-info iframe"'); ?>
-      </div>
+        <div class="pull-right btn-toolbar">
+          <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$story->id", '', true), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'class="btn btn-link"');?>
+          <?php if(!empty($auditTime) && time() - $auditTime < 30 * 60): ?>
+            <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$story->id", '', true), $lang->ai->audit->designPrompt, '', 'class="btn btn-info iframe"'); ?>
+          <?php endif;?>
+        </div>
       <?php endif;?>
     </div>
     <form class="main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
