@@ -136,6 +136,24 @@ class ai extends control
     }
 
     /**
+     * View prompt details.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function promptView($id)
+    {
+        $prompt = $this->ai->getPromptById($id);
+
+        $this->view->prompt     = $prompt;
+        $this->view->title      = $this->lang->ai->prompts->common;
+        $this->view->position[] = $this->lang->ai->prompts->common;
+
+        $this->display();
+    }
+
+    /**
      * Create a prompt.
      *
      * @access public

@@ -35,6 +35,7 @@ $lang->ai->prompts->createdBy   = 'Creator';
 $lang->ai->prompts->createdDate = 'Created Date';
 $lang->ai->prompts->targetForm  = 'Target Form';
 $lang->ai->prompts->funcDesc    = 'Function Description';
+$lang->ai->prompts->deleted     = 'Deleted';
 
 $lang->ai->prompts->summary = 'There are %s prompts on this page.';
 

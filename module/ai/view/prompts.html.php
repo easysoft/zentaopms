@@ -101,7 +101,7 @@
               <tr>
                 <td class='c-id'><?php echo $prompt->id;?></td>
                 <td class='c-name' title='<?php echo $prompt->name;?>'>
-                  <?php echo $prompt->name;?>
+                  <?php echo html::a(helper::createLink('ai', 'promptview', "id=$prompt->id"), $prompt->name, '_self', "title='$prompt->name'");?>
                   <?php if($prompt->status == 'draft') echo "<span class='label label-light label-badge'>{$this->lang->ai->prompts->statuses[$prompt->status]}</span>";?>
                 </td>
                 <td class='c-createdby'><?php echo $prompt->createdBy;?></td>
