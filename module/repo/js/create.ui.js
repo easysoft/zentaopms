@@ -44,7 +44,7 @@ function onProjectChange()
  */
 function onScmChange()
 {
-    const scm = $('#SCM').val();
+    const scm = $('[name=SCM]').val();
 
     (scm == 'Git') ? $('.tips-git').removeClass('hidden') : $('.tips-git').addClass('hidden');
     if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')

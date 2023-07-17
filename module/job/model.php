@@ -30,6 +30,10 @@ class jobModel extends model
             $job->project   = $pipeline->project;
             $job->reference = $pipeline->reference;
         }
+        elseif($job->engine == 'jenkins')
+        {
+            if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
+        }
         return $job;
     }
 
