@@ -9133,7 +9133,7 @@ class upgradeModel extends model
                     $filter->field      = $varName;
                     $filter->name       = $vars->showName[$index];
                     $filter->type       = $vars->requestType[$index];
-                    $filter->typeOption = $filter->type == 'select' ? $vars->selectList[$index] : '';
+                    $filter->typeOption = $filter->type == 'select' ? zget($vars->selectList, $index, '') : '';
                     $filter->default    = isset($vars->default) ? zget($vars->default, $index, '') : '';
 
                     $filters[] = $filter;
