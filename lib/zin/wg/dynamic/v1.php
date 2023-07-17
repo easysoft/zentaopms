@@ -32,7 +32,7 @@ class dynamic extends wg
                     span
                     (
                         setClass('text-gray px-1'),
-                        $dynamic->dynamicLabel
+                        zget($dynamic, 'dynamicLabel', '')
                     ),
                     span($dynamic->objectLabel, setClass('pr-1')),
                     a
