@@ -1,3 +1,3 @@
 .content-row {display: flex; flex-direction: row; padding: 8px 0px;}
-.input-label {width: 120px; padding: 6px 12px; text-align: right;}
+.input-label {width: 120px; flex-shrink: 0; padding: 6px 12px; text-align: right;}
 .input {flex-grow: 1;}

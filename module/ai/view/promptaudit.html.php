@@ -37,12 +37,12 @@
           <h4><?php echo $this->lang->ai->prompts->selectDataSource; ?></h4>
           <div class='content-row'>
             <div class='input-label text-gray'><span><?php echo $this->lang->ai->prompts->object; ?></span></div>
-            <div class='input-label'
-                 style="text-align: left;"><?php echo $this->lang->ai->dataSource[$prompt->module]['common']; ?></div>
+            <div class='input'
+                 style="text-align: left; padding: 6px 0;"><?php echo $this->lang->ai->dataSource[$prompt->module]['common']; ?></div>
           </div>
           <div class='content-row'>
             <div class='input-label text-gray'><span><?php echo $this->lang->ai->prompts->field; ?></span></div>
-            <div class='input-label' style="text-align: left; width: fit-content;">
+            <div class='input' style="padding: 6px 0;">
               <?php
               $sources = explode(',', $prompt->source);
               $sources = array_filter($sources);
@@ -71,8 +71,7 @@
           <h4><?php echo $this->lang->ai->prompts->setTargetForm; ?></h4>
           <div class='content-row'>
             <div class='input-label'><span><?php echo $this->lang->ai->prompts->selectTargetForm; ?></span></div>
-            <div class='input-label'
-                 style="text-align: left;"><?php echo $this->lang->ai->targetForm[$prompt->module][explode('.', $prompt->targetForm)[1]]; ?></div>
+            <div class='input' style="padding: 6px 0;"><?php echo $this->lang->ai->targetForm[$prompt->module][explode('.', $prompt->targetForm)[1]]; ?></div>
           </div>
         </div>
         <div style="flex-basis: 50%; flex-grow: 1; display: flex; flex-direction: column; word-break: break-all;">
