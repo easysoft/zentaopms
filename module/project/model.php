@@ -2100,7 +2100,7 @@ class projectModel extends model
                 $data->project = $projectID;
                 $data->product = $productID;
                 $data->branch  = (int)$branchID;
-                $data->plan    = isset($plans[$productID]) ? implode(',', $plans[$productID]) : $oldPlan;
+                $data->plan    = (isset($plans[$productID]) && !empty($plans[$productID])) ? implode(',', $plans[$productID]) : $oldPlan;
                 $data->plan    = trim((string)$data->plan, ',');
                 $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
 
