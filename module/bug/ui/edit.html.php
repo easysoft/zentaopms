@@ -53,10 +53,23 @@ detailBody
         section
         (
             set::title($lang->bug->title),
-            input
+            inputControl
             (
-                set::name('title'),
-                set::value($bug->title)
+                input
+                (
+                    set::name('title'),
+                    set::value($bug->title)
+                ),
+                set::suffixWidth('icon'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::name('color'),
+                        set::value($bug->color),
+                        set::syncColor('#title')
+                    )
+                )
             )
         ),
         section
@@ -184,7 +197,7 @@ detailBody
             item
             (
                 set::name($lang->bug->severity),
-                picker
+                severityPicker
                 (
                     set::items($lang->bug->severityList),
                     set::name('severity'),
@@ -194,7 +207,7 @@ detailBody
             item
             (
                 set::name($lang->bug->pri),
-                picker
+                priPicker
                 (
                     set::items($lang->bug->priList),
                     set::name('pri'),

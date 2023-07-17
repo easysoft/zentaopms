@@ -290,14 +290,30 @@ formPanel
         formGroup
         (
             set::label($lang->bug->title),
-            set::name('title'),
-            set::value($bug->title)
+            inputControl
+            (
+                input
+                (
+                    set::name('title'),
+                    set::value($bug->title)
+                ),
+                set::suffixWidth('icon'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::name('color'),
+                        set::value($bug->color),
+                        set::syncColor('#title')
+                    )
+                )
+            )
         ),
         formGroup
         (
             set::width('180px'),
             set::label($lang->bug->severity),
-            set::control('picker'),
+            set::control('severityPicker'),
             set::items($lang->bug->severityList),
             set::name('severity'),
             set::value($bug->severity)
@@ -306,7 +322,7 @@ formPanel
         (
             set::width('180px'),
             set::label($lang->bug->pri),
-            set::control('picker'),
+            set::control('priPicker'),
             set::items($lang->bug->priList),
             set::name('pri'),
             set::value($bug->pri)
