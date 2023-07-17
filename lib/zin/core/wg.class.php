@@ -146,7 +146,7 @@ class wg
 
         global $app, $config;
         $zinDebug = null;
-        if($config->debug)
+        if($config->debug && (!isAjaxRequest() || isAjaxRequest('zin')))
         {
             $zinDebug = data('zinDebug');
             if(is_array($zinDebug))
