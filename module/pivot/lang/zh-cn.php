@@ -332,6 +332,7 @@ $lang->pivot->typeOptions['dept']      = '部门';
 
 $lang->pivot->step2 = new stdclass();
 $lang->pivot->step2->group       = '行分组';
+$lang->pivot->step2->summary     = '汇总设置';
 $lang->pivot->step2->column      = '列设置';
 $lang->pivot->step2->groupTip    = '选择字段';
 $lang->pivot->step2->groupNum    = array('一', '二', '三');
@@ -344,6 +345,7 @@ $lang->pivot->step2->columnField = '字段';
 $lang->pivot->step2->calcMode    = '计算方式';
 
 $lang->pivot->step2->moreThanOne = '至少选择一个分组字段。';
+$lang->pivot->step2->summaryTip  = '勾选后，可配置行分组、列设置、显示列的汇总。';
 $lang->pivot->step2->groupsTip   = '通过选择分组字段，对SQL查询的数据进行分组，并分层级显示在透视表中。';
 $lang->pivot->step2->columnsTip  = '在透视表中添加1列并对其进行设置。';
 
