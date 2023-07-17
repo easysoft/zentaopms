@@ -98,9 +98,27 @@
         <?php echo html::radio('backLocation', $this->lang->ai->audit->backLocationList, 1); ?>
       </div>
       <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <?php echo html::submitButton($this->lang->save, '', 'btn btn-primary disabled'); ?>
+        <?php echo html::submitButton($this->lang->save, '', 'btn btn-primary'); ?>
       </div>
     </div>
   </form>
 </div>
+<script>
+  (function()
+  {
+    const submitButton = document.getElementById('submit');
+    if(!submitButton) return;
+    const purpose = document.getElementsByName('purpose')[0];
+    if(!purpose) return;
+
+    if(!purpose.value)
+    {
+      submitButton.disabled = true;
+    }
+    purpose.addEventListener('input', function()
+    {
+      submitButton.disabled = !purpose.value;
+    });
+  })();
+</script>
 <?php include '../../common/view/footer.lite.html.php'; ?>
