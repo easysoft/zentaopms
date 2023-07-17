@@ -349,7 +349,7 @@ class bugZen extends bug
         $branch      = $bug->branch;
         $projectID   = $bug->projectID;
         $executionID = $bug->executionID;
-        $projects    = array(0 => '');
+        $projects    = array();
         $products    = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, '', 'all');
 
         if($executionID)
