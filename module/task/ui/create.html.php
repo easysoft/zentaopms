@@ -120,7 +120,6 @@ $storyPreviewBtn = span
                 set::icon('eye'),
             ),
         ),
-        set::url('')
     ),
 );
 
@@ -142,11 +141,11 @@ for($i = 1; $i <= 3; $i ++)
         h::td
         (
             set::width('240px'),
-            select
+            picker
             (
                 set::name("team[]"),
                 set::items($members),
-            ),
+            )
         ),
         h::td
         (
@@ -228,11 +227,13 @@ formPanel
         formGroup
         (
             set::width('1/4'),
-            set::name('type'),
             set::label($lang->task->type),
-            set::control('select'),
-            set::items($lang->task->typeList),
-            set::value($task->type),
+            picker
+            (
+                set::name('type'),
+                set::items($lang->task->typeList),
+                set::value($task->type),
+            ),
             on::change('typeChange')
         ),
         formGroup
@@ -256,7 +257,7 @@ formPanel
         (
             set::label($lang->task->assignTo),
             setClass('assignedToBox'),
-            select
+            picker
             (
                 set::id('assignedTo'),
                 set::name('assignedTo[]'),
@@ -467,7 +468,7 @@ formPanel
                     ),
                     h::td
                     (
-                        select
+                        picker
                         (
                             set::name("mode"),
                             set::value("linear"),

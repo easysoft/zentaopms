@@ -50,16 +50,14 @@ function typeChange(e)
     /* Change assigned person to multiple selection, and hide multiple team box. */
     if(result == 'affair')
     {
-        $("#multipleBox").removeAttr("checked");
-        $('.team-group').addClass('hidden');
-        $('.modeBox').addClass('hidden');
         $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
         $('#assignedTo').next('.picker').removeClass('hidden');
 
         $('#assignedTo').attr('multiple', 'multiple');
         $('.affair').hide();
-        $('.team-group').addClass('hidden');
-        $('.modeBox').addClass('hidden');
+        $('.assignedToList').addClass('hidden');
+        $('.add-team').addClass('hidden');
+        $("[name='multiple']").prop("checked", false);
         $('#selectAllUser').removeClass('hidden');
     }
     /* If assigned selection is multiple, remove multiple and hide the selection of select all members. */
@@ -89,7 +87,7 @@ function typeChange(e)
 function toggleSelectTestStory(executionID)
 {
     executionID = parseInt(executionID);
-    if(!executionID) executionID = $('#execution').val();
+    if(!executionID) executionID = $("[name='execution'").val();
 
     $('#testStoryBox').load($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID));
     if(!$('#selectTestStoryBox').hasClass('hidden') && $('#selectTestStory').prop('checked'))
@@ -185,9 +183,9 @@ function loadModules(executionID)
  */
 function loadExecutionStories()
 {
-    var   storyID      = $('#story').val();
-    const executionID  = $('#execution').val();
-    const moduleID     = $('#module').val();
+    var   storyID      = $('[name="story"]').val();
+    const executionID  = $('[name="execution"]').val();
+    const moduleID     = $('[name="module"]').val();
     const getStoryLink = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=' + storyID + '&number=&type=full&status=active');
     $.get(getStoryLink, function(stories)
     {
@@ -292,6 +290,7 @@ function setPreview()
 
         $('#preview').removeClass('hidden');
         $('#preview .btn').attr('data-url', storyLink);
+        $('#preview .btn').attr('data-size', 'lg');
         $('.title-group.required > div').attr('id', 'copyStory-input').removeClass('.required');
     }
 
@@ -390,14 +389,12 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
     let mode            = $('[name="mode"]').val();
     let assignedToList  = '';
 
-    $(this).closest('form').find('select[name^="team"]').each(function(index)
+    $(this).closest('#teamTable').find('.picker-box').each(function(index)
     {
-        if($(this).val() == '') return;
+        if(!$(this).find('[name^=team]').val()) return;
 
-        let selectObj = $(this)[0];
-
-        let realname = selectObj.options[selectObj.selectedIndex].text;
-        let account  = selectObj.options[selectObj.selectedIndex].value;
+        let realname = $(this).find('.picker-single-selection').text();
+        let account  = $(this).find('[name^=team]').val();
         if(!team.includes(realname)) team.push(realname);
 
         let estimate = parseFloat($(this).closest('tr').find('[name^=teamEstimate]').val());
@@ -445,7 +442,7 @@ $('#taskCreateForm').on('click', '.assignedToList .picker-multi-selection', func
     }
 
     /* 删除人员前后的箭头. */
-    if($(this).next('.icon').length) 
+    if($(this).next('.icon').length)
     {
         $(this).next('.icon').remove();
     }
@@ -457,16 +454,18 @@ $('#taskCreateForm').on('click', '.assignedToList .picker-multi-selection', func
     $(this).remove();
 
     /* 删除团队中，已经选中的人. */
-    let index = $(this).data('index') + 1;
+    let index = $(this).data('index');
     $('#teamTable').find('tr').eq(index).remove();
 
-    let totalEstimate   = 0;
+    let totalEstimate = 0;
 
-    $('#teamTable').find('select[name^="team"]').each(function(index)
+    $('#teamTable').find('[name^=teamEstimate]').each(function(index)
     {
-        let estimate = parseFloat($(this).closest('tr').find('[name^=teamEstimate]').val());
+        let estimate = parseFloat($(this).val());
         if(!isNaN(estimate) && estimate > 0) totalEstimate += estimate;
     })
 
     $('#estimate').val(totalEstimate);
+
+    setLineIndex();
 })

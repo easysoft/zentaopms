@@ -2,13 +2,21 @@ $('#teamTable').on('click.team', '.btn-add', function()
 {
     var $newRow = $(this).closest('tr').clone();
 
-    $newRow.find('select').val('');
-    $newRow.find('input').val('');
+    let options = zui.Picker.query("[name^='team']").options;
 
+    $newRow.find('.picker-box').empty();
+    $newRow.find('.picker-box').append(`<div id='line'></div>`);
+
+    $newRow.find('input').val('');
     $(this).closest('tr').after($newRow);
 
     toggleBtn();
-    setLineIndex();
+    let index = setLineIndex();
+    let newID = $newRow.find('[id^=line]').attr('id');
+
+    options.defaultValue = '';
+    new zui.Picker(`#${newID}`, options);
+
 })
 
 $('#teamTable').on('click.team', '.btn-delete', function()
@@ -43,11 +51,9 @@ function setLineIndex()
     $('.team-number').each(function()
     {
         $(this).text(index);
-        $(this).closest('tr').find('select[name^=team]').attr('name', 'team[' + index + ']');
-        $(this).closest('tr').find('input[name^=teamEstimate]').attr('name', 'teamEstimate[' + index + ']');
+        $(this).closest('tr').find('[id^="line"]').attr('id', 'line' + index);
         index ++;
     });
-
 }
 
 /**
