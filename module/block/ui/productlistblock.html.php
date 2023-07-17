@@ -23,7 +23,7 @@ foreach($productStats as $product)
     if(!empty($product->PO))
     {
         $product->PO        = zget($users, $product->PO);
-        $product->POAvatar  = zget($userAvatars, $product->PO);
+        $product->POAvatar  = zget($avatarList, $product->PO);
         $product->POAccount = $product->PO;
     }
 }
