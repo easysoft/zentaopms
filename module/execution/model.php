@@ -5352,6 +5352,7 @@ class executionModel extends model
         }
 
         $disabled = !empty($execution->children) ? ' disabled' : '';
+        if($this->config->systemMode == 'PLM' and in_array($execution->attribute, array_keys($this->lang->stage->ipdTypeList))) $disabled = '';
         if($execution->status != 'closed' and common::hasPriv('execution', 'close', $execution))
         {
             $ipdDisabled = '';
