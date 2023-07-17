@@ -77,7 +77,7 @@ featureBar
     li
     (
         set::class('burnByBox'),
-        select
+        picker
         (
             set::name('burnBy'),
             set::items($lang->execution->burnByList),
@@ -88,7 +88,7 @@ featureBar
     $interval ? li
     (
         set::class('intervalBox ml-4'),
-        select
+        picker
         (
             set::name('interval'),
             set::items($dayList),

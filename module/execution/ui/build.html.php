@@ -18,7 +18,7 @@ featureBar
     div
     (
         set::class('select-product-box'),
-        select
+        picker
         (
             set::name('product'),
             set::value($product),
