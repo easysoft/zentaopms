@@ -1,17 +1,13 @@
 <?php
 /**
  * 按产品统计的已立项研发需求的用例覆盖率
- * .
  *
  * 范围：product
  * 对象：story
  * 目的：scale
  * 度量名称：按产品统计的已立项研发需求的用例覆盖率
  * 单位：个
- * 描述：公式：
-按产品统计的已立项研发需求的用例覆盖率=按产品统计的有用例的已立项研发需求数/按产品统计的已立项的研发需求数
-过滤已删除的研发需求
-过滤已删除的产品
+ * 描述：公式： 按产品统计的已立项研发需求的用例覆盖率=按产品统计的有用例的已立项研发需求数/按产品统计的已立项的研发需求数 过滤已删除的研发需求 过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -30,7 +26,7 @@ class testcase_coverage_of_story_in_product extends baseCalc
 
     public function getStatement()
     {
-       return $this->dao->select('t1.id,t1.product,t3.id as caseid')->from(TABLE_STORY)->alias('t1')
+       return $this->dao->select('t1.id,t1.product,t3.id as case')->from(TABLE_STORY)->alias('t1')
           ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
           ->leftJoin(TABLE_CASE)->alias('t3')->on('t1.id=t3.story')
           ->where('t1.stage')->eq('projected')
@@ -41,13 +37,12 @@ class testcase_coverage_of_story_in_product extends baseCalc
 
     public function calculate($row)
     {
-       if($row->stage != 'projected') return;
        if(in_array($row->id, $this->idList)) return;
 
        if(!isset($this->result[$row->product])) $this->result[$row->product] = array('total' => 0, 'haveCase' => 0);
 
        $this->result[$row->product]['total'] ++;
-       if($row->caseid !== null) $this->result[$row->product]['haveCase'] ++;
+       if($row->case !== null) $this->result[$row->product]['haveCase'] ++;
 
        $this->idList[] = $row->id;
     }
@@ -59,7 +54,7 @@ class testcase_coverage_of_story_in_product extends baseCalc
        {
            $records[] = array(
                'product' => $productID,
-               'rate'    => $result['total'] ? round($result['haveCase'] / $result['total'], 2) : 0,
+               'rate'    => $result['total'] ? $result['haveCase'] / $result['total'] : 0,
            );
        }
     }
