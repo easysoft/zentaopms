@@ -21,7 +21,7 @@ formPanel
             set::label($lang->testcase->lib),
             inputGroup
             (
-                select
+                picker
                 (
                     set::name('lib'),
                     set::items($libraries),
@@ -36,7 +36,7 @@ formPanel
             inputGroup
             (
                 set('id', 'moduleBox'),
-                select
+                picker
                 (
                     set::name('module'),
                     set::items($moduleOptionMenu),
@@ -69,7 +69,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->testcase->type),
-            select
+            picker
             (
                 set::name('type'),
                 set::items($lang->testcase->typeList),
@@ -83,7 +83,7 @@ formPanel
             inputGroup
             (
                 set('id', 'stageBox'),
-                select
+                picker
                 (
                     set::name('stage'),
                     set::multiple(true),
@@ -105,7 +105,7 @@ formPanel
         (
             set::width('180px'),
             set::label($lang->testcase->pri),
-            set::control(array('type' => 'select', 'items' => $lang->testcase->priList)),
+            set::control(array('type' => 'priPicker', 'items' => $lang->testcase->priList)),
             set::name('pri'),
             set::value()
         ),

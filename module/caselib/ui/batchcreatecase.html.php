@@ -24,7 +24,7 @@ $items[] = array
 (
     'name'     => 'module',
     'label'    => $lang->testcase->module,
-    'control'  => 'select',
+    'control'  => 'picker',
     'items'    => $moduleOptionMenu,
     'value'    => $currentModuleID,
     'width'    => '200px',
@@ -37,7 +37,7 @@ $items[] = array
 (
     'name'     => 'type',
     'label'    => $lang->testcase->type,
-    'control'  => 'select',
+    'control'  => 'picker',
     'items'    => $lang->testcase->typeList,
     'value'    => 1,
     'width'    => '160px',
@@ -51,7 +51,7 @@ $items[] = array
     'name'     => 'stage',
     'label'    => $lang->testcase->stage,
     'control'  => array(
-        'type'     => 'select',
+        'type'     => 'picker',
         'items'    => $lang->testcase->stageList,
         'value'    => '',
         'multiple' => true,
@@ -75,7 +75,7 @@ $items[] = array
 (
     'name'     => 'pri',
     'label'    => $lang->testcase->pri,
-    'control'  => 'select',
+    'control'  => 'priPicker',
     'items'    => $lang->testcase->priList,
     'value'    => 3,
     'width'    => '80px',

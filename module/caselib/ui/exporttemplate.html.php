@@ -28,7 +28,7 @@ form
         set::label($lang->caselib->templateType),
         set::name('encode'),
         set::value('utf-8'),
-        set::control(array('type' => 'select', 'items' => $config->charsets[$this->cookie->lang])),
+        set::control(array('type' => 'picker', 'items' => $config->charsets[$this->cookie->lang])),
     ),
     set::actions(array('submit')),
     set::submitBtnText($lang->export),
@@ -40,21 +40,21 @@ js
     function setDownloading()
     {
         if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true; // Opera don't support, omit it.
-    
+
         $.cookie.set('downloading', 0);
-    
+
         time = setInterval(function()
         {
             if($.cookie.get('downloading') == 1)
             {
                 $('.modal .modal-actions .close')[0].click();
-    
+
                 $.cookie.set('downloading', null);
-    
+
                 clearInterval(time);
             }
         }, 300);
-    
+
         return true;
     }
     JAVASCRIPT
