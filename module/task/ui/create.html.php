@@ -313,7 +313,7 @@ formPanel
             setClass(empty($stories) ? 'hidden' : ''),
             inputGroup
             (
-                select
+                picker
                 (
                     set::id('story'),
                     set::name('story'),

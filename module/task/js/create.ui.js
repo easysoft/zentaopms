@@ -278,14 +278,14 @@ function setStoryRelated()
  */
 function setPreview()
 {
-    if(!Number($('#story').val()))
+    if(!Number($("[name='story']").val()))
     {
         $('#preview').addClass('hidden');
         $('.title-group.required > div').removeAttr('id', 'copyStory-input').addClass('.required');
     }
     else
     {
-        var storyLink = $.createLink('execution', 'storyView', "storyID=" + $('#story').val());
+        var storyLink = $.createLink('execution', 'storyView', "storyID=" + $("[name='story']").val());
         var concat    = storyLink.indexOf('?') < 0 ? '?' : '&';
 
         if(storyLink.indexOf("onlybody=yes") < 0) storyLink = storyLink + concat + 'onlybody=yes';
