@@ -106,12 +106,14 @@ class programplan extends control
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 
         $plans = $this->programplan->getStage($planID ?: $projectID, $this->productID, 'parent', 'order_asc');
-        if(!empty($planID) && !empty($plans) && $project->model == 'waterfallplus')
+        if(!empty($planID) && $project->model == 'waterfallplus')
         {
-            $executionType = 'stage';
-            unset($this->lang->programplan->typeList['agileplus']);
-
-            if(!empty($executions))
+            if(!empty($plans))
+            {
+                $executionType = 'stage';
+                unset($this->lang->programplan->typeList['agileplus']);
+            }
+            elseif(!empty($executions))
             {
                 $executionType = 'agileplus';
                 unset($this->lang->programplan->typeList['stage']);
@@ -119,7 +121,6 @@ class programplan extends control
         }
 
         $viewData = new stdclass();
-        $viewData->projectID     = $projectID;
         $viewData->productID     = $productID;
         $viewData->planID        = $planID;
         $viewData->executionType = $executionType;
