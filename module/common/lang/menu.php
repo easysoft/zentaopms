@@ -512,7 +512,6 @@ $lang->devops->homeMenu->environment['subMenu']->gogs      = array('link' => 'Go
 $lang->devops->homeMenu->environment['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
 $lang->devops->homeMenu->environment['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
 $lang->devops->homeMenu->environment['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
-$lang->devops->homeMenu->environment['subMenu']->setrules  = array('link' => "{$lang->devops->rules}|repo|setrules");
 
 /* Kanban menu. */
 $lang->kanban->menu = new stdclass();
