@@ -577,10 +577,10 @@ class programplanModel extends model
             if($setCode)    $plan->code    = $codes[$key];
             if($setPercent) $plan->percent = $percents[$key];
 
-            if(!empty($begin[$key]))     $plan->begin     = $begin[$key];
-            if(!empty($end[$key]))       $plan->end       = $end[$key];
-            if(!empty($realBegan[$key])) $plan->realBegan = $realBegan[$key];
-            if(!empty($realEnd[$key]))   $plan->realEnd   = $realEnd[$key];
+            $plan->begin     = empty($begin[$key])     ? '' : $begin[$key];
+            $plan->end       = empty($end[$key])       ? '' : $end[$key];
+            $plan->realBegan = empty($realBegan[$key]) ? '' : $realBegan[$key];
+            $plan->realEnd   = empty($realEnd[$key])   ? '' : $realEnd[$key];
 
             $plans[] = $plan;
         }
