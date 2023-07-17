@@ -807,12 +807,12 @@ $(function()
                var month = ev.date.getMonth() + 1;
                var day   = ev.date.getUTCDate();
                var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-
+               var taskID = id;
                $.post(createLink('review', 'ajaxChangeTRDeadline'), {'deadline' : formattedDate, 'id' : reviewID , 'projectID' : projectID}, function()
                {
-                   $(e.srcElement).parents('div.gantt_tree_content').find('.deadline').text(formattedDate);
-                   $(e.srcElement).parents('div.gantt_row_task').find('div[data-column-name="start_date"] .gantt_tree_content').text(formattedDate);
+                  location.reload();
                });
+
            });
            $(e.srcElement).datetimepicker('show');
            return false;
