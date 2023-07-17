@@ -113,7 +113,7 @@ function changeVision(event)
         {
             data = JSON.parse(data);
             $groupPicker.render({items: data});
-            $groupPicker.$.setValue(group);
+            $groupPicker.$.changeState({value: group});
         }
     });
 }
