@@ -6,8 +6,9 @@ class echarts extends wg
 {
     public static function getPageJS(): string|false
     {
-        $echarts = dirname(__FILE__, 5) . DS . implode(DS, array('www', 'js', 'echarts', 'echarts.common.min.js'));
-        return file_get_contents($echarts);
+        global $app;
+        $jsFile = $app->getWebRoot() . 'js/echarts/echarts.common.min.js';
+        return 'window.createEcharts=(name,selector,options) => $.getScript("' . $jsFile . '",() => zui.create(name,selector,options));';
     }
 
     public function size(string|int $width, string|int $height): echarts
@@ -32,6 +33,6 @@ class echarts extends wg
 
     protected function build(): zui
     {
-        return zui::echarts(inherit($this));
+        return zui::echarts(inherit($this), set::_call('~createEcharts'));
     }
 }
