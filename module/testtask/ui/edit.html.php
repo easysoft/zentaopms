@@ -146,7 +146,7 @@ formPanel
     (
         set::label($lang->testtask->mailto),
         set::name('mailto[]'),
-        set::value(str_replace(' ', '', $task->mailto)),
+        set::value($task->mailto ? str_replace(' ', '', $task->mailto) : ''),
         set::control('picker'),
         set::items($users),
         set::multiple(true)
