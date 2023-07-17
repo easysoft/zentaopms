@@ -26,7 +26,7 @@ class testcase_coverage_of_story_in_product extends baseCalc
 
     public function getStatement()
     {
-       return $this->dao->select('t1.id,t1.product,t3.id as case')->from(TABLE_STORY)->alias('t1')
+       return $this->dao->select('t1.id,t1.product,t3.id as caseID')->from(TABLE_STORY)->alias('t1')
           ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
           ->leftJoin(TABLE_CASE)->alias('t3')->on('t1.id=t3.story')
           ->where('t1.stage')->eq('projected')
@@ -42,7 +42,7 @@ class testcase_coverage_of_story_in_product extends baseCalc
        if(!isset($this->result[$row->product])) $this->result[$row->product] = array('total' => 0, 'haveCase' => 0);
 
        $this->result[$row->product]['total'] ++;
-       if($row->case !== null) $this->result[$row->product]['haveCase'] ++;
+       if($row->caseID !== null) $this->result[$row->product]['haveCase'] ++;
 
        $this->idList[] = $row->id;
     }
@@ -54,8 +54,10 @@ class testcase_coverage_of_story_in_product extends baseCalc
        {
            $records[] = array(
                'product' => $productID,
-               'rate'    => $result['total'] ? $result['haveCase'] / $result['total'] : 0,
+               'value'    => $result['total'] ? round($result['haveCase'] / $result['total'], 2) : 0,
            );
        }
+
+       return $this->filterByOptions($records, $options);
     }
 }
