@@ -752,7 +752,7 @@ class aiModel extends model
 
         foreach($requiredFields as $field)
         {
-            if(empty($prompt->$field) && $prompt->$field != ',,')
+            if(empty($prompt->$field) || $prompt->$field == ',,')
             {
                 $executable = false;
                 break;
