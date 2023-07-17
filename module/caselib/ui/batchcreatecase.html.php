@@ -24,7 +24,6 @@ $items[] = array
 (
     'name'     => 'module',
     'label'    => $lang->testcase->module,
-    'hidden'   => zget($visibleFields, 'module', true, false),
     'control'  => 'select',
     'items'    => $moduleOptionMenu,
     'value'    => $currentModuleID,
