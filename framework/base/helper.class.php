@@ -689,7 +689,7 @@ class baseHelper
      * 检查是否是AJAX请求。
      * Check is ajax request.
      *
-     * @param  ?string $type   zin|modal
+     * @param  ?string $type   zin|modal|fetch
      * @static
      * @access public
      * @return bool
@@ -701,6 +701,7 @@ class baseHelper
 
         if($type === 'zin')   return array_key_exists('HTTP_X_ZIN_OPTIONS', $_SERVER);
         if($type === 'modal') return isset($_SERVER['HTTP_X_ZUI_MODAL']) && $_SERVER['HTTP_X_ZUI_MODAL'] == true;
+        if($type === 'fetch') return !array_key_exists('HTTP_X_ZIN_OPTIONS', $_SERVER) && !(isset($_SERVER['HTTP_X_ZUI_MODAL']) && $_SERVER['HTTP_X_ZUI_MODAL'] == true);
 
         return $isAjax;
     }
