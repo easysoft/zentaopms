@@ -10,15 +10,43 @@ declare(strict_types=1);
 */
 
 namespace zin;
-
+?>
+<div>
+  <?php if(empty($docList)):?>
+    <div class='table-empty-tip'><p><span class='text-muted'><?php echo $lang->doc->noDoc;?></p></span></div>
+  <?php else:?>
+  <div class="doc-list table-row w-full">
+    <?php $rank = 1;?>
+    <?php foreach($docList as $doc):?>
+    <div class='doc-title'>
+      <span class="pri-<?php echo $rank;?> label-pri label-rank label-rank-<?php echo $rank;?>"><?php echo $rank;?></span>
+      <?php
+      if(common::hasPriv('doc', 'view'))
+      {
+          echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $doc->title, '', "title='{$doc->title}' class='doc-name' data-app='{$this->app->tab}'");
+      }
+      else
+      {
+          echo "<span class='doc-name' title='{$doc->title}'>{$doc->title}</span>";
+      }
+      ?>
+      <div class='label-collect-count'>
+        <?php $flameClass = $rank < 4 ? '' : 'text-gray';?>
+        <?php echo html::image("static/svg/flame.svg", "class='icon-flame $flameClass'");?>
+        <span class='view-text'><?php echo sprintf($lang->doc->collectCount, $doc->collects);?></span>
+      </div>
+    </div>
+    <?php $rank ++;?>
+    <?php endforeach;?>
+  </div>
+  <?php endif;?>
+</div>
+<?php
 panel
 (
-    set('headingClass', 'border-b'),
+    set('class', 'doccollectlist-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::title($block->title),
-    div
-    (
-        '正在开发中...'
-    )
+    rawContent()
 );
 
 render();

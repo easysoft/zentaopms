@@ -1,0 +1,13 @@
+.doccollectlist-block .panel-body {padding-top: 0px;}
+.doccollectlist-block .doc-list > .doc-title {display: flex; overflow: hidden; text-overflow: clip; white-space: nowrap; padding: 8px 0;}
+.doccollectlist-block .doc-list > .doc-title > .label-rank {margin-right: 10px; padding-top: 1px; border: unset; color: #2E7FFF; background-color: #D5E5FF;}
+.doccollectlist-block .doc-list > .doc-title > .label-rank-1 {color: #FC5959; background-color: #FFE2D9;}
+.doccollectlist-block .doc-list > .doc-title > .label-rank-2 {color: #FF8058; background-color: #FFE2D9;}
+.doccollectlist-block .doc-list > .doc-title > .label-rank-3 {color: #FF9F46; background-color: #FFECDB;}
+.doccollectlist-block .doc-list > .doc-title > .doc-name {overflow: hidden; max-width: calc(100% - 130px);}
+[zh] .doccollectlist-block .doc-list > .doc-title > .doc-name {max-width: calc(100% - 110px);}
+.doccollectlist-block .doc-list > .doc-title > .label-collect-count {margin-left: 10px;}
+.doccollectlist-block .doc-list > .doc-title > .label-collect-count > .icon-flame {margin-bottom: 3px;}
+.doccollectlist-block .doc-list > .doc-title > .label-collect-count > .icon-flame.text-gray {filter: grayscale(100%);}
+.doccollectlist-block .doc-list > .doc-title > .label-collect-count > .view-text {color: #838A9D;}
+.doccollectlist-block .table-row {display: table; table-layout: fixed;}
