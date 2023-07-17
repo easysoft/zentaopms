@@ -5396,7 +5396,8 @@ class executionModel extends model
 
         if(!empty($execution->points) and $this->cookie->showStage)
         {
-            foreach($execution->points as $point) echo $this->buildPointList($execution, $point);
+            $pendingReviews = $this->loadModel('approval')->getPendingReviews('review');
+            foreach($execution->points as $point) echo $this->buildPointList($execution, $point, $pendingReviews);
         }
     }
 
