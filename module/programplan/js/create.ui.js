@@ -5,6 +5,11 @@ window.onRenderRow = function(row, rowIdx, data)
     row.children('.form-batch-row-actions').children('[data-type=delete]').remove();
 };
 
+window.onChangeExecutionType = function(event)
+{
+    loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${planID}&type=` + $(event.target).val()));
+};
+
 /**
  * Add row errors.
  *

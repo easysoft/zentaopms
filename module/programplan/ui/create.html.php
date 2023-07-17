@@ -70,34 +70,42 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
     {
         foreach($typeList as $key => $value)
         {
-            // TODO implements click event
-            $items[] = checkbox
+            $items[] = div(setClass('px-1'), checkbox
             (
                 set::type('radio'),
                 set::name('executionType'),
                 set::text($value),
                 set::value($key),
-                //on::change('window.onChangeExecutionType'),
+                on::change('window.onChangeExecutionType'),
                 set::checked($key == $executionType)
-            );
+            ));
         }
-        $items[] = icon(setClass('icon-help'));
     }
     else
     {
-        $items[] = zget($typeList, $executionType);
+        $items[] = div(setClass('px-1'), zget($typeList, $executionType));
     }
+
+    /* Append method tip. */
+    $items[] = icon(setClass('icon-help'), setID('methodTip'));
+    $items[] = tooltip(
+        set::_to('#methodTip'),
+        set::title($lang->programplan->methodTip),
+        set::placement('right'),
+        set::type('white'),
+        set::className('text-darker border border-light')
+    );
 
     return div
     (
-        setClass('flex w-1/2'),
-        $lang->programplan->subPlanManage . ':',
+        setClass('flex w-1/2 items-center'),
+        div(setClass('font-bold'), $lang->programplan->subPlanManage . ':'),
         $items
     );
 };
 
 /* Generate form fields. */
-$fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields, $PMUsers)
+$fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType)
 {
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
@@ -128,6 +136,26 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
         if(!str_contains($renderFields, ",$name,"))
         {
             $field['hidden'] = true;
+        }
+
+        /* Sub-stage. */
+        if($name == 'attribute' && !$enableOptionalAttr)
+        {
+            $field['disabled'] = true;
+            $field['value']    = $programPlan->attribute;
+        }
+
+        if($name == 'acl' && !$enableOptionalAttr)
+        {
+            $field['disabled'] = true;
+            $field['value']    = empty($programPlan) ? 'open' : $programPlan->acl;
+        }
+
+        /* Field for agileplus. */
+        if($name == 'type' && $planID != 0 && $executionType == 'agileplus')
+        {
+            $field['hidden'] = false;
+            $field['items']  = $lang->execution->typeList;
         }
 
         $items[] = $field;
@@ -203,6 +231,11 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
 };
 
 /* ZIN: layout. */
+jsVar('projectID', $project->id);
+jsVar('productID', $productID);
+jsVar('planID',    $planID);
+jsVar('type',      $executionType);
+
 featureBar(li
 (
     setClass('nav-item'),
