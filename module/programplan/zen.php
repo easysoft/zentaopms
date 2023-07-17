@@ -55,7 +55,7 @@ class programplanZen extends programplan
         $this->view->requiredFields     = $requiredFields;
         $this->view->defaultFields      = $defaultFields;
         $this->view->colspan            = count($visibleFields) + 3;
-        $this->view->enableOptionalAttr = empty($viewData->programPlan) || $viewData->programPlan->attribute == 'mix';
+        $this->view->enableOptionalAttr = empty($viewData->programPlan) || (!empty($viewData->programPlan) && $viewData->programPlan->attribute == 'mix');
 
         $this->display();
     }
