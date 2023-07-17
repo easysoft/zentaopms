@@ -8,8 +8,8 @@ function loadProduct()
     $('#shell').val('');
     $('#scriptPath').val('');
 
-    var productID = $('#product').val();
-    var url = createLink('zanode', 'ajaxGetZTFScript', "type=product&objectID=" + productID)
+    var productID = $('[name=product]').val();
+    var url       = $.createLink('zanode', 'ajaxGetZTFScript', "type=product&objectID=" + productID)
     $.get(url, function(result)
     {
         if(result.result == 'success')
@@ -17,7 +17,7 @@ function loadProduct()
             data = result.data;
             if(!data) return false;
 
-            $('#node').val(data.node)
+            $('#node').picker('setValue', data.node);
             $('#shell').val(data.shell);
             $('#scriptPath').val(data.scriptPath);
 

@@ -50,6 +50,7 @@ form
         (
             picker
             (
+                setID('node'),
                 set::name('node'),
                 set::items($nodeList),
                 set::value(!empty($automation->node) ? $automation->node : ''),
