@@ -31,13 +31,13 @@
       if(count($prompts) > 1)
       {
         $html .= '<div class="dropdown' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->dropdownClass) ? ' ' . $menuOptions->dropdownClass : '')) . '"><button class="btn btn-link' . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '') . '" type="button" data-toggle="dropdown">' . $lang->ai->promptMenu->dropdownTitle . ' <i class="icon-caret-down"></i></button><ul class="dropdown-menu">';
-        foreach($prompts as $prompt) $html .= '<li>' . html::linkButton($prompt->name . ($prompt->status != 'active' ? '<span class="label label-info label-badge">' . $lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''), helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId"), 'self', "title='{$prompt->desc}' style='width: 100%;'", 'btn btn-link text-left') . '</li>';
+        foreach($prompts as $prompt) $html .= '<li>' . html::linkButton($prompt->name . ($prompt->status != 'active' ? '<span class="label label-info label-badge">' . $lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''), helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId"), 'self', "style='width: 100%;'" . (empty($prompt->desc) ? '' : " data-toggle='popover' data-container='body' data-trigger='hover' data-content='$prompt->desc' data-title='$prompt->name' data-placement='left'"), 'btn btn-link text-left') . '</li>';
         $html .= '</ul></div>';
       }
       else
       {
         $prompt = current($prompts);
-        $html .= html::linkButton($prompt->name . ($prompt->status != 'active' ? '<span class="label label-info label-badge">' . $lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''), helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId"), 'self', "title='{$prompt->desc}'", 'btn btn-link' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '')));
+        $html .= html::linkButton($prompt->name . ($prompt->status != 'active' ? '<span class="label label-info label-badge">' . $lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''), helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId"), 'self', (empty($prompt->desc) ? '' : "data-toggle='popover' data-container='body' data-trigger='hover' data-content='$prompt->desc' data-title='$prompt->name' data-placement='bottom'"), 'btn btn-link' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '')));
       }
     ?>
 
@@ -46,7 +46,11 @@
     <?php endif;?>
 
     <script>
-      $(function() {$(`<?php echo $menuOptions->targetContainer;?>`).<?php echo isset($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append';?>(`<?php echo $html;?>`);});
+      $(function()
+      {
+        $(`<?php echo $menuOptions->targetContainer;?>`).<?php echo isset($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append';?>(`<?php echo $html;?>`);
+        $('[data-toggle="popover"]').popover({template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
+      });
     </script>
 
 <?php endif; endif;?>
