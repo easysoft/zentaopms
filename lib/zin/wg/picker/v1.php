@@ -54,8 +54,8 @@ class picker extends wg
         'onSelect?: function',              // 当选择值时的回调函数。
         'onClear?: function',               // 当清空值时的回调函数。
         'popContainer?: string',            // 下拉面板容器元素。
-        'popWidth: number|"auto"|"100%"',   // 菜单宽度，如果设置为 `'100%'` 则与选择框宽度一致，默认 `'100%'`。
-        'popHeight: number|"auto"',         // 菜单高度，默认 `'auto'`。
+        'popWidth?: number|"auto"|"100%"',   // 菜单宽度，如果设置为 `'100%'` 则与选择框宽度一致，默认 `'100%'`。
+        'popHeight?: number|"auto"',         // 菜单高度，默认 `'auto'`。
         'popMaxHeight?: number',            // 菜单最大高度，默认 `300`。
         'popMinHeight?: number',            // 菜单最小高度，默认 `32`。
         'popMaxWidth?: number',             // 菜单最大宽度，当宽度设置为 `'auto'` 时生效。
