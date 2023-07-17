@@ -1,0 +1,20 @@
+---
+title: zt_feedback
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: product
+  range: 1-100{10}
+- field: openedDate
+  range: "20100101 000000-20210101 230000:2D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedDate
+  range: "20110101 000000-20210101 230000:3D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: 0{2},1{2}
+...

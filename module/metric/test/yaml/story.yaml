@@ -1,0 +1,26 @@
+---
+title: zt_story
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: product
+  range: 1-100{10}
+- field: openedDate
+  range: "20100101 000000-20210101 230000:2D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedDate
+  range: "20110101 000000-20210101 230000:3D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: estimate
+  range: 1-10{10}
+- field: stage
+  range: wait{4},planned{4},projected{4},developing{4},developed{4},testing{4},tested{4},verified{4},released{4},closed{4}
+- field: closedReason
+  range: bydesign{4},cancel{4},done{4},duplicate{4},postponed{4},subdivided{4},willnotdo{4}
+- field: deleted
+  range: 0{2},1{2}
+...
