@@ -234,7 +234,7 @@ function loadExecutions(productID, projectID = 0)
 
 function loadExecutionLabel(projectID)
 {
-    if(config.currentMethod == 'create' && projectID)
+    if(config.currentMethod == 'create' && projectID > 0)
     {
         const link = $.createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
         $.post(link, function(executionLang)
