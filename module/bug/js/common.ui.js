@@ -274,7 +274,6 @@ function loadAssignedToByProduct(productID)
         {
             data = JSON.parse(data);
             $assignedToPicker.render({items: data});
-            $assignedToPicker.$.clear();
             $assignedToPicker.$.setValue(assignedTo);
         }
     });
@@ -291,7 +290,6 @@ function loadAssignedToByProject(projectID)
         {
             data = JSON.parse(data);
             $assignedToPicker.render({items: data});
-            $assignedToPicker.$.clear();
             $assignedToPicker.$.setValue(assignedTo);
         }
     });
@@ -308,7 +306,6 @@ function loadAssignedToByExecution(executionID)
         {
             data = JSON.parse(data);
             $assignedToPicker.render({items: data});
-            $assignedToPicker.$.clear();
             $assignedToPicker.$.setValue(assignedTo);
         }
     });
@@ -341,7 +338,6 @@ function loadAssignedToByModule(moduleID, productID)
             assignedToItems = {text: realName, value: account, keys: realName};
             $assignedToPicker.render({items: data, value: account});
         }
-        $assignedToPicker.$.clear();
         $assignedToPicker.$.setValue(account);
     });
 }
@@ -365,7 +361,6 @@ function loadProjectBuilds(projectID)
             {
                 data = JSON.parse(data);
                 $buildPicker.render({items: data});
-                $buildPicker.$.clear();
                 $buildPicker.$.setValue(buildID);
             }
             loadBuildActions();
@@ -382,7 +377,6 @@ function loadProjectBuilds(projectID)
             {
                 data = JSON.parse(data);
                 $buildPicker.render({items: data});
-                $buildPicker.$.clear();
                 $buildPicker.$.setValue(buildID);
             }
             loadBuildActions();
@@ -398,7 +392,6 @@ function loadProjectBuilds(projectID)
             {
                 data = JSON.parse(data);
                 $buildPicker.render({items: data});
-                $buildPicker.$.clear();
                 $buildPicker.$.setValue(buildID);
             }
             $buildPicker.$.setValue(oldResolvedBuild);
@@ -424,7 +417,6 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
                 {
                     data = JSON.parse(data);
                     $buildPicker.render({items: data});
-                    $buildPicker.$.clear();
                     $buildPicker.$.setValue(buildID);
                 }
                 loadBuildActions();
@@ -444,7 +436,6 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
                 {
                     data = JSON.parse(data);
                     $buildPicker.render({items: data});
-                    $buildPicker.$.clear();
                     $buildPicker.$.setValue(buildID);
                 }
             });
@@ -462,7 +453,6 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
                 {
                     data = JSON.parse(data);
                     $buildPicker.render({items: data});
-                    $buildPicker.$.clear();
                     $buildPicker.$.setValue(buildID);
                 }
                 $buildPicker.$.setValue(oldResolvedBuild);
@@ -492,7 +482,6 @@ function loadExecutionBuilds(executionID, num)
             {
                 data = JSON.parse(data);
                 $buildPicker.render({items: data});
-                $buildPicker.$.clear();
                 $buildPicker.$.setValue(oldOpenedBuild);
             }
             loadBuildActions();
@@ -508,7 +497,6 @@ function loadExecutionBuilds(executionID, num)
             {
                 data = JSON.parse(data);
                 $buildPicker.render({items: data});
-                $buildPicker.$.clear();
                 $buildPicker.$.setValue(oldOpenedBuild);
             }
         });
@@ -522,7 +510,6 @@ function loadExecutionBuilds(executionID, num)
             {
                 data = JSON.parse(data);
                 $buildPicker.render({items: data});
-                $buildPicker.$.clear();
                 $buildPicker.$.setValue(oldResolvedBuild);
             }
         });
@@ -544,7 +531,6 @@ function loadProductPlans(productID)
         {
             data = JSON.parse(data);
             $planPicker.render({items: data});
-            $planPicker.$.clear();
             $planPicker.$.setValue(planID);
         }
     });
@@ -563,7 +549,6 @@ function loadProductStories(productID, storyID, moduleID = 0, executionID = 0)
         {
             data = JSON.parse(data);
             $storyPicker.render({items: data});
-            $storyPicker.$.clear();
             $storyPicker.$.setValue('');
         }
     });
@@ -584,7 +569,6 @@ function loadExecutionStories(executionID)
         {
             data = JSON.parse(data);
             $storyPicker.render({items: data});
-            $storyPicker.$.clear();
             $storyPicker.$.setValue(story);
         }
     });
@@ -600,7 +584,6 @@ function loadExecutionTasks(executionID)
         {
             data = JSON.parse(data);
             $taskPicker.render({items: data});
-            $taskPicker.$.clear();
         }
     })
 }
@@ -612,7 +595,6 @@ function loadProjectByExecutionID(executionID)
     {
         if($('[name="project"]').val() == data.id.toString()) return;
         $projectPicker = $('[name="project"]').zui('picker');
-        $projectPicker.$.clear();
         $projectPicker.$.setValue(data.id.toString());
     }, 'json')
 }
@@ -631,7 +613,6 @@ function loadTestTasks(productID, executionID)
         {
             data = JSON.parse(data);
             $testtaskPicker.render({items: data});
-            $testtaskPicker.$.clear();
             $testtaskPicker.$.setValue(testtask);
         }
     });
