@@ -174,7 +174,7 @@ formPanel
             editor
             (
                 set::name('desc'),
-                set::value(htmlSpecialString($build->desc)),
+                set::html($build->desc),
                 set::rows('10'),
             )
         ),

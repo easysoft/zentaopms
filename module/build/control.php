@@ -494,9 +494,6 @@ class build extends control
             if(empty($id)) continue;
             $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
-
-        if($isJsonView) return print(json_encode($builds));
-
         return print(json_encode($items));
     }
 

@@ -102,7 +102,7 @@ formPanel
         (
             set::width('1/2'),
             set::name('branch[]'),
-            set::label($lang->product->branchName[$productType]),
+            set::label($lang->product->branchName['branch']),
             set::value(key($productBranches)),
             set::items($branches),
         )

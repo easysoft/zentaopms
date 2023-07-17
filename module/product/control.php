@@ -872,14 +872,17 @@ class product extends control
      */
     public function ajaxGetProducts(int $executionID)
     {
-        if(empty($executionID)) return print(html::select('product', array(), '', "class='form-control chosen' required"));
+        $items = array();
+        if(empty($executionID)) return print(json_encode($items));
 
         $this->app->loadLang('build');
         $status   = empty($this->config->CRProduct) ? 'noclosed' : 'all';
         $products = $this->product->getProductPairsByProject($executionID, $status);
 
         if(empty($products)) return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID", '', 'true'), 'project');
-        return print(html::select('product', $products, '', "onchange='loadBranches();' class='form-control chosen' required"));
+
+        foreach($products as $productID => $productName) $items[] = array('text' => $productName, 'value' => $productID);
+        return print(json_encode($items));
     }
 
     /**

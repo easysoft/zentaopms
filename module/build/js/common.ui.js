@@ -8,7 +8,7 @@
 window.loadBranches = function(productID)
 {
     productID = parseInt(productID);
-    if(!productID) productID = $(this).val();
+    if(!productID) productID = $('input[name=product]').val();
     if($('input[name=isIntegrated]:checked').val() == 'yes')
     {
         $('#branch').closest('.form-row').addClass('hidden');
@@ -21,11 +21,13 @@ window.loadBranches = function(productID)
         oldBranch = productGroups[productID]['branches'];
     }
 
-    $.get($.createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + $('#execution').val() + '&withMainBranch=true&isSiblings=no&fieldID=0&multiple=multiple'), function(data)
+    $.get($.createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + $('input[name=execution]').val() + '&withMainBranch=true&isSiblings=no&fieldID=0&multiple=multiple'), function(data)
     {
         if(data)
         {
-            $('#branch').replaceWith(data);
+            data = JSON.parse(data);
+            const $branchPicker = $('input[name^=branch]').zui('picker');
+            $branchPicker.render({items: data});
             $('#branch').closest('.form-row').removeClass('hidden');
         }
         else

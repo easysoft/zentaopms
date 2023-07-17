@@ -7,34 +7,34 @@ $().ready(function()
         $('#name').val($(this).text());
     });
 
-    $(document).on('change', '#product, #branch', function()
+    $(document).off('change', '#product, #branch').on('change', '#product, #branch', function()
     {
-        var projectID = $('#project').val();
-        var productID = $('#product').val();
-        $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
+        let projectID = $('input[name=project]').val();
+        let productID = $('input[name=product]').val();
+        $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&letName=builds&build=&branch=all&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
         {
             if(data)
             {
                 data = JSON.parse(data);
-                new zui.Picker('#builds', {
-                    items: data,
-                    multiple: true,
-                    name: 'builds[]'
-                });
+                const $buildsPicker = $('select[name^=builds]').zui('picker');
+                $buildsPicker.render({items: data, multiple: true});
                 $('#builds').attr('data-placeholder', multipleSelect);
             }
         });
 
-        $.get($.createLink('product', 'ajaxGetProductById', 'produtID=' + productID), function(data)
+        if(productID)
         {
-            $('#branch').closest('.form-label').text(data.branchName);
-        }, 'json');
+            $.get($.createLink('product', 'ajaxGetProductById', 'produtID=' + productID), function(data)
+            {
+                $('#branch').prev('.form-label').html(data.branchName);
+            }, 'json');
+        }
     });
 
     $(document).on('change', 'input[name=isIntegrated]', function()
     {
-        var projectID   = $('#project').val();
-        var executionID = $('#execution').val();
+        let projectID   = $('input[name=project]').val();
+        let executionID = $('input[name=execution]').val();
 
         if($(this).val() == 'no')
         {
@@ -48,17 +48,14 @@ $().ready(function()
             $('#builds').closest('.form-row').removeClass('hidden');
 
             loadProducts(projectID);
-            var productID = $('#product').val();
-            $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
+            let productID = $('input[name=product]').val();
+            $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&letName=builds&build=&branch=all&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
             {
                 if(data)
                 {
                     data = JSON.parse(data);
-                    new zui.Picker('#builds', {
-                        items: data,
-                        multiple: true,
-                        name: 'builds[]'
-                    });
+                    const $buildsPicker = $('select[name^=builds]').zui('picker');
+                    $buildsPicker.render({items: data, multiple: true});
                     $('#builds').attr('data-placeholder', multipleSelect);
                 }
             });
@@ -77,28 +74,21 @@ $().ready(function()
 function loadProducts(executionID)
 {
     executionID = parseInt(executionID);
-    if(!executionID) executionID = $(this).val();
+    if(!executionID) executionID = $('input[name=execution]').val();
     $.get($.createLink('product', 'ajaxGetProducts', 'executionID=' + executionID), function(data)
     {
         if(data)
         {
-            if(data.indexOf("required") != -1)
-            {
-                $('#productBox').addClass('required');
-            }
-            else
-            {
-                $('#productBox').removeClass('required');
-            }
+            data = JSON.parse(data);
+            const $product       = $('input[name=product]');
+            const $productPicker = $product.zui('picker');
+            const productID      = data[0].value;
+            $productPicker.render({items: data});
+            $productPicker.$.setValue(productID);
 
-            $('#product').replaceWith(data);
+            $('#builds').attr('data-placeholder', multipleSelect);
 
-            $.get($.createLink('product', 'ajaxGetProductById', 'produtID=' + $("#product").val()), function(data)
-            {
-                $('#branch').closest('.form-label').text(data.branchName);
-            }, 'json');
-
-            loadBranches($('#product').val());
+            loadBranches(productID);
         }
     });
 
@@ -113,9 +103,9 @@ function loadProducts(executionID)
  */
 function loadLastBuild()
 {
-    var isIntegrated = $('input[name=isIntegrated]:checked').val();
-    var projectID    = $('#project').val();
-    var executionID  = $('#execution').val();
+    let isIntegrated = $('input[name=isIntegrated]:checked').val();
+    let projectID    = $('input[name=project]').val();
+    let executionID  = $('input[name=execution]').val();
     if(isIntegrated == 'yes') executionID = 0;
     $.get($.createLink('build', 'ajaxGetLastBuild', 'projectID=' + projectID + '&executionID=' + executionID), function(data)
     {
