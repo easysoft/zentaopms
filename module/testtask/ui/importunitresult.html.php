@@ -128,7 +128,7 @@ formPanel
         (
             set::label($lang->testtask->pri),
             set::width('160px'),
-            picker
+            priPicker
             (
                 zui::width('80px'),
                 set::name('pri'),

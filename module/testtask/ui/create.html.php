@@ -152,7 +152,7 @@ formPanel
                 set::required(true),
             ),
             $lang->testtask->pri,
-            picker
+            priPicker
             (
                 zui::width('80px'),
                 set::name('pri'),
