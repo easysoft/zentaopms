@@ -10,15 +10,59 @@ declare(strict_types=1);
 */
 
 namespace zin;
-
+?>
+<div class="flex items-center justify-center h-full">
+  <div class='flex flex-column statistic'>
+    <div class='flex'>
+      <div class="tile">
+        <div class="tile-amount"><?php echo (int)$statistic->totalDocs;?></div>
+        <div class="tile-title"><?php echo $lang->doc->allDoc;?></div>
+      </div>
+      <div class="tile divider">
+        <div class="tile-amount"><?php echo (int)$statistic->todayEditedDocs;?></div>
+        <div class="tile-title"><?php echo $lang->doc->todayEdited;?></div>
+      </div>
+    </div>
+  </div>
+  <div class='flex flex-column created'>
+    <div class='flex'>
+      <?php if(common::hasPriv('doc', 'mySpace')):?>
+      <a class="tile" href="<?php echo $this->createLink('doc', 'mySpace', 'type=createdBy');?>">
+      <?php else:?>
+      <div class="tile">
+      <?php endif;?>
+        <div class="tile-amount"><?php echo (int)$statistic->myDocs;?></div>
+        <div class="tile-title"><?php echo $lang->doc->docCreated;?></div>
+      <?php if(common::hasPriv('doc', 'mySpace')):?>
+      </a>
+      <?php else:?>
+      </div>
+      <?php endif;?>
+      <div class="tile">
+        <div class="tile-amount"><?php echo (int)$statistic->myDoc->docViews;?></div>
+        <div class="tile-title"><?php echo $lang->doc->docViews;?></div>
+      </div>
+      <div class="tile divider">
+        <div class="tile-amount"><?php echo (int)$statistic->myDoc->docCollects;?></div>
+        <div class="tile-title"><?php echo $lang->doc->docCollects;?></div>
+      </div>
+    </div>
+  </div>
+  <div class='flex flex-column edited'>
+    <div class='flex'>
+      <div class="tile">
+        <div class="tile-amount"><?php echo (int)$statistic->myEditedDocs;?></div>
+        <div class="tile-title"><?php echo $lang->doc->docEdited;?></div>
+      </div>
+    </div>
+  </div>
+</div>
+<?php
 panel
 (
+    set('class', 'docstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
     set::title($block->title),
-    div
-    (
-        '正在开发中...'
-    )
+    rawContent()
 );
-
 render();
