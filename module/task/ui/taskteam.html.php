@@ -60,7 +60,7 @@ if(!empty($task->team))
             h::td
             (
                 set::width('240px'),
-                select
+                picker
                 (
                     set::name("team[]"),
                     set::items($members),
@@ -152,7 +152,7 @@ for($i; $i < $count; $i ++)
         h::td
         (
             set::width('240px'),
-            select
+            picker
             (
                 set::name("team[]"),
                 set::items($members),
