@@ -22,13 +22,13 @@
     justify-content: center;
     align-items: center;
     background-color: #ffffff;
-    cursor: pointer;
 }
 
 .step > a
 {
     position: relative;
     left: 5px;
+    cursor: pointer;
 }
 
 .step:first-child
@@ -71,12 +71,12 @@
 .step.disabled
 {
     background-color: #ffffff;
-    cursor: not-allowed;
 }
 
 .step.disabled > a
 {
     color: #c4c4c4;
+    cursor: not-allowed;
     pointer-events: none;
 }
 

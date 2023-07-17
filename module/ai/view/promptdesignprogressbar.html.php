@@ -79,6 +79,8 @@
     </div>
   </div>
   <script>
+    let isPromptDesignDirty = false;
+
     (function()
     {
       const steps = document.getElementsByClassName('steps')[0];
@@ -112,11 +114,25 @@
               step.previousElementSibling.lastElementChild.classList.remove('solid-arrow');
             }
           });
+
+          const link = step.querySelector('a');
+          if(!link) continue;
+          link.addEventListener('click', function(e)
+          {
+            if(!isPromptDesignDirty) return;
+            const result = validateForm();
+            if(!result) {
+              e.preventDefault();
+              return;
+            }
+            const submitButton = document.getElementById('saveButton');
+            if(!submitButton) return;
+            submitButton.click();
+          })
         }
       }
     })();
 
-    let isPromptDesignDirty = false;
     (function()
     {
       const backButton = document.querySelector('.design-steps button:first-child');
