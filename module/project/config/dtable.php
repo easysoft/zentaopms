@@ -209,16 +209,17 @@ $config->projectExecution->dtable->fieldList['burn']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['burn']['width']    = '88';
 $config->projectExecution->dtable->fieldList['burn']['group']    = '4';
 
-$config->projectExecution->dtable->fieldList['actions']['name']       = 'actions';
-$config->projectExecution->dtable->fieldList['actions']['title']      = $lang->actions;
-$config->projectExecution->dtable->fieldList['actions']['type']       = 'actions';
-$config->projectExecution->dtable->fieldList['actions']['width']      = '160';
-$config->projectExecution->dtable->fieldList['actions']['sortType']   = false;
-$config->projectExecution->dtable->fieldList['actions']['fixed']      = 'right';
-$config->projectExecution->dtable->fieldList['actions']['list']       = $config->execution->actionList;
-$config->projectExecution->dtable->fieldList['actions']['scrum']      = array('start', 'createTask', 'edit', 'close|activate', 'delete');
-$config->projectExecution->dtable->fieldList['actions']['waterfall']  = array('start', 'createTask', 'createChildStage', 'edit', 'close|activate', 'delete');
-$config->projectExecution->dtable->fieldList['actions']['task']       = array('startTask', 'finishTask', 'closeTask', 'recordWorkhour', 'editTask', 'batchCreate');
+$config->projectExecution->dtable->fieldList['actions']['name']          = 'actions';
+$config->projectExecution->dtable->fieldList['actions']['title']         = $lang->actions;
+$config->projectExecution->dtable->fieldList['actions']['type']          = 'actions';
+$config->projectExecution->dtable->fieldList['actions']['width']         = '160';
+$config->projectExecution->dtable->fieldList['actions']['sortType']      = false;
+$config->projectExecution->dtable->fieldList['actions']['fixed']         = 'right';
+$config->projectExecution->dtable->fieldList['actions']['list']          = $config->execution->actionList;
+$config->projectExecution->dtable->fieldList['actions']['scrum']         = array('start', 'createTask', 'edit', 'close|activate', 'delete');
+$config->projectExecution->dtable->fieldList['actions']['waterfall']     = array('start', 'createTask', 'createChildStage', 'edit', 'close|activate', 'delete');
+$config->projectExecution->dtable->fieldList['actions']['waterfallplus'] = array('start', 'createTask', 'createChildStage', 'edit', 'close|activate', 'delete');
+$config->projectExecution->dtable->fieldList['actions']['task']          = array('startTask', 'finishTask', 'closeTask', 'recordWorkhour', 'editTask', 'batchCreate');
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['icon']        = 'play';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['hint']        = $lang->task->start;
