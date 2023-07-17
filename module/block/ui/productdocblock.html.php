@@ -11,14 +11,138 @@ declare(strict_types=1);
 
 namespace zin;
 
+/**
+ * 获取区块左侧的产品列表。
+ * Get product tabs on the left side.
+ *
+ * @param  array  $products
+ * @param  string $blockNavCode
+ * @param  bool   $longBlock
+ * @return array
+ */
+$getProductTabs = function(array $products, string $blockNavCode, bool $longBlock): array
+{
+    $navTabs  = array();
+    $selected = key($products);
+    $navTabs[] = li
+    (
+        set('class', 'nav-item overflow-hidden nav-prev rounded-full bg-white shadow-md h-6 w-6'),
+        a(icon(set('size', '24'), 'angle-left'))
+    );
+    foreach($products as $product)
+    {
+        $navTabs[] = li
+        (
+            set('class', 'nav-item nav-switch w-full'),
+            a
+            (
+                set('class', 'ellipsis text-dark title ' . ($longBlock && $product->id == $selected ? ' active' : '')),
+                $longBlock ? set('data-toggle', 'tab') : null,
+                set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
+                set('href', $longBlock ? "#tab3{$blockNavCode}Content{$product->id}" : helper::createLink('product', 'browse', "productID=$product->id")),
+                $product->name
+
+            ),
+            !$longBlock ? a
+            (
+                set('class', 'hidden' . ($product->id == $selected ? ' active' : '')),
+                set('data-toggle', 'tab'),
+                set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
+                set('href', "#tab3{$blockNavCode}Content{$product->id}"),
+            ) : null,
+            a
+            (
+                set('class', 'link flex-1 text-right hidden'),
+                set('href', helper::createLink('product', 'browse', "productID=$product->id")),
+                icon
+                (
+                    set('class', 'rotate-90 text-primary'),
+                    setStyle(array('--tw-rotate' => '270deg')),
+                    'import'
+                )
+            )
+        );
+    }
+    $navTabs[] = li
+    (
+        set('class', 'nav-item overflow-hidden nav-next rounded-full bg-white shadow-md h-6 w-6'),
+        a(icon(set('size', '24'), 'angle-right'))
+    );
+    return $navTabs;
+};
+
+/**
+ * 获取区块右侧显示的产品信息。
+ * Get product statistical information.
+ *
+ * @param  array  $products
+ * @param  array  $docGroup
+ * @param  string $blockNavID
+ * @param  bool   $longBlock
+ * @return array
+ */
+$getProductInfo = function(array $products, array $docGroup, string $blockNavID, bool $longBlock): array
+{
+    global $lang, $config;
+    $tabItems = array();
+    $selected = key($products);
+    foreach($products as $product)
+    {
+        $tabItems[] = div
+        (
+            set('class', 'tab-pane h-full' . ($product->id == $selected ? ' active' : '')),
+            set('id', "tab3{$blockNavID}Content{$product->id}"),
+            dtable
+            (
+                set::height(318),
+                set::bordered(false),
+                set::horzScrollbarPos('inside'),
+                set::cols(array_values($config->block->doc->dtable->fieldList)),
+                set::data(array_values($docGroup[$product->id])),
+                set::userMap($users),
+            )
+        );
+    }
+    return $tabItems;
+};
+
+$blockNavCode = 'nav-' . uniqid();
 panel
 (
+    set('id', "productdoc-block-{$block->id}"),
+    on::click('.nav-prev,.nav-next', 'switchNav'),
+    set('class', 'productdoc-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
     set::title($block->title),
+    to::headingActions
+    (
+        a
+        (
+            set('class', 'text-gray'),
+            set('href', createLink('doc', 'productspace')),
+            $lang->more,
+            icon('caret-right')
+        )
+    ),
     div
     (
-        '正在开发中...'
+        set('class', "flex h-full overflow-hidden " . ($longBlock ? '' : 'col')),
+        cell
+        (
+            $longBlock ? set('width', '22%') : null,
+            set('class', $longBlock ? 'bg-secondary-pale overflow-y-auto overflow-x-hidden' : ''),
+            ul
+            (
+                set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked' : 'pt-4 px-4')),
+                $getProductTabs($products, $blockNavCode, $longBlock)
+            ),
+        ),
+        cell
+        (
+            set('class', 'tab-content'),
+            set('width', '78%'),
+            $getProductInfo($products, $docGroup, $blockNavCode, $longBlock)
+        )
     )
 );
-
 render();

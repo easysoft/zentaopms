@@ -1,0 +1,20 @@
+.projectdoc-block {background: #FCFDFE;}
+.projectdoc-block .panel-body {padding: 0;}
+
+.projectdoc-block .tab-content {width: 100%;}
+.projectdoc-block .tab-pane {padding: 0;}
+.projectdoc-block .bg-secondary-pale {background: #F3F6FA;}
+.projectdoc-block .chart {margin: auto;}
+.projectdoc-block .story-num {margin: auto;}
+
+.projectdoc-block.block-sm .nav-tabs .nav-item.active {display: flex!important;}
+.projectdoc-block.block-sm .nav-tabs .nav-item > a {width: 100%;}
+.projectdoc-block.block-sm .nav-tabs .nav-item {display: none}
+.projectdoc-block.block-sm .nav-tabs .nav-item.nav-prev {display: flex}
+.projectdoc-block.block-sm .nav-tabs .nav-item.nav-prev > a {padding: 0;}
+.projectdoc-block.block-sm .nav-tabs .nav-item.nav-next {display: flex}
+.projectdoc-block.block-sm .nav-tabs .nav-item.nav-next > a {padding: 0;}
+
+.projectdoc-block .chart > div {margin: auto;}
+.projectdoc-block .pie-chart {position: relative;}
+.projectdoc-block .pie-chart .pie-chart-title {position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -35px}

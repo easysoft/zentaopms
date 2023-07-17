@@ -1,0 +1,20 @@
+.productdoc-block {background: #FCFDFE;}
+.productdoc-block .panel-body {padding: 0;}
+
+.productdoc-block .tab-content {width: 100%;}
+.productdoc-block .tab-pane {padding: 0;}
+.productdoc-block .bg-secondary-pale {background: #F3F6FA;}
+.productdoc-block .chart {margin: auto;}
+.productdoc-block .story-num {margin: auto;}
+
+.productdoc-block.block-sm .nav-tabs .nav-item.active {display: flex!important;}
+.productdoc-block.block-sm .nav-tabs .nav-item > a {width: 100%;}
+.productdoc-block.block-sm .nav-tabs .nav-item {display: none}
+.productdoc-block.block-sm .nav-tabs .nav-item.nav-prev {display: flex}
+.productdoc-block.block-sm .nav-tabs .nav-item.nav-prev > a {padding: 0;}
+.productdoc-block.block-sm .nav-tabs .nav-item.nav-next {display: flex}
+.productdoc-block.block-sm .nav-tabs .nav-item.nav-next > a {padding: 0;}
+
+.productdoc-block .chart > div {margin: auto;}
+.productdoc-block .pie-chart {position: relative;}
+.productdoc-block .pie-chart .pie-chart-title {position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -35px}

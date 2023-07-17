@@ -60,6 +60,16 @@ panel
 (
     set('class', 'docmycollection-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::title($block->title),
+    to::headingActions
+    (
+        a
+        (
+            set('class', 'text-gray'),
+            set('href', createLink('doc', 'myspace', 'type=collect&libID=0&moduleID=0&browseType=all&param=0&orderBy=editedDate_desc')),
+            $lang->more,
+            icon('caret-right')
+        )
+    ),
     rawContent()
 );
 
