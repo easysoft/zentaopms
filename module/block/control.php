@@ -60,9 +60,9 @@ class block extends control
             $formData->left = $formData->width == 1 ? 2 : 0;
             $formData->top  = $this->block->computeBlockTop($formData);
 
-            $this->block->create($formData);
+            $blockID = $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadComponent('#dashboard')", 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadComponent('#dashboard'); setTimeout(() => $('#dashboard .dashboard-block[data-id=\"$blockID\"]').scrollIntoView({behavior: 'smooth'}), 500);", 'closeModal' => true));
         }
 
         $modules = $this->blockZen->getAvailableModules($dashboard);
