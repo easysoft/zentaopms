@@ -33,7 +33,7 @@ function toggleAcl(type)
             let link = $.createLink('doc', 'ajaxGetWhitelist', 'doclibID=' + doclibID + '&acl=' + acl);
             $.get(link, function(users)
             {
-                if(users)
+                if(users != 'private' && users)
                 {
                     users = JSON.parse(users);
                     const $usersPicker = $('select[name^=users]').zui('picker');

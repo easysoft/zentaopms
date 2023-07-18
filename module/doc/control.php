@@ -262,7 +262,8 @@ class doc extends control
 
             $response['message']    = $this->lang->saveSuccess;
             $response['result']     = 'success';
-            $response['locate']     = 'parent';
+            $response['closeModal'] = true;
+            $response['load']       = true;
             return $this->send($response);
         }
 
