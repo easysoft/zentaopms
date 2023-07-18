@@ -218,8 +218,11 @@ $lang->action->desc->unlinkparentstory   = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->deletechildrenstory = '$date, 由 <strong>$actor</strong> 刪除子需求<strong>$extra</strong>。' . "\n";
 
 /* 關聯用例和移除用例時的歷史操作記錄。*/
-$lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 關聯相關用例 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkrelatedcase = '$date, 由 <strong>$actor</strong> 移除相關用例 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkrelatedcase     = '$date, 由 <strong>$actor</strong> 關聯相關用例 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkrelatedcase   = '$date, 由 <strong>$actor</strong> 移除相關用例 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->online              = '$date, 由 <strong>$actor</strong> 上架。' . "\n";
+$lang->action->desc->offline             = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
+$lang->action->desc->linkhost            = '$date, 由 <strong>$actor</strong> 关联主机。' . "\n";
 
 /* 用來顯示動態信息。*/
 $lang->action->label                        = new stdclass();
@@ -335,6 +338,9 @@ $lang->action->label->restore               = '還原了';
 $lang->action->label->mergedbranch          = '合併分支';
 $lang->action->label->linkedrepo            = '關聯代碼庫到';
 $lang->action->label->unlinkedrepo          = '取消了項目与代碼庫的關聯';
+$lang->action->label->online                = '上架了';
+$lang->action->label->offline               = '下架了';
+$lang->action->label->linkhost              = '主机关联到';
 
 /* 動態信息按照對象分組 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -605,6 +611,9 @@ $lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s&type=all';
 $lang->action->label->kanbancard   = '看板卡片|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = '合併請求|mr|view|id=%s';
+$lang->action->label->serverroom   = '机房|serverroom|browse|';
+$lang->action->label->host         = '主机|host|view|id=%s';
+$lang->action->label->account      = "账号|account|view|id=%s";
 
 /* Object type. */
 $lang->action->search = new stdclass();

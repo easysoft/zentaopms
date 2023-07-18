@@ -40,19 +40,16 @@ $config->host->dtable->fieldList['serverRoom']['data-toggle'] = 'modal';
 $config->host->dtable->fieldList['intranet']['title']    = $lang->host->intranet;
 $config->host->dtable->fieldList['intranet']['name']     = 'intranet';
 $config->host->dtable->fieldList['intranet']['type']     = 'text';
-$config->host->dtable->fieldList['intranet']['width']    = 80;
 $config->host->dtable->fieldList['intranet']['sortType'] = true;
 
 $config->host->dtable->fieldList['extranet']['title']    = $lang->host->extranet;
 $config->host->dtable->fieldList['extranet']['name']     = 'extranet';
 $config->host->dtable->fieldList['extranet']['type']     = 'text';
-$config->host->dtable->fieldList['extranet']['width']    = 80;
 $config->host->dtable->fieldList['extranet']['sortType'] = true;
 
 $config->host->dtable->fieldList['osVersion']['title']    = $lang->host->osVersion;
 $config->host->dtable->fieldList['osVersion']['name']     = 'osVersion';
 $config->host->dtable->fieldList['osVersion']['type']     = 'text';
-$config->host->dtable->fieldList['osVersion']['width']    = 80;
 $config->host->dtable->fieldList['osVersion']['sortType'] = true;
 
 $config->host->dtable->fieldList['status']['title']    = $lang->host->status;
@@ -67,18 +64,18 @@ $config->host->actionList['online']['icon']        = 'arrow-up';
 $config->host->actionList['online']['text']        = $lang->host->online;
 $config->host->actionList['online']['hint']        = $lang->host->online;
 $config->host->actionList['online']['data-toggle'] = 'modal';
-$config->host->actionList['online']['url']         = array('module' => 'host', 'method' => 'changeStatus', 'params' => 'id={id}&status=online');
+$config->host->actionList['online']['url']         = helper::createLink('host', 'changeStatus', 'id={id}&status=offline');
+
 
 $config->host->actionList['offline']['icon']        = 'arrow-down';
-$config->host->actionList['offline']['text']        = $lang->host->online;
-$config->host->actionList['offline']['hint']        = $lang->host->online;
+$config->host->actionList['offline']['text']        = $lang->host->offline;
+$config->host->actionList['offline']['hint']        = $lang->host->offline;
 $config->host->actionList['offline']['data-toggle'] = 'modal';
-$config->host->actionList['offline']['url']         = array('module' => 'host', 'method' => 'changeStatus', 'params' => 'id={id}&status=offline');
+$config->host->actionList['offline']['url']         = helper::createLink('host', 'changeStatus', 'id={id}&status=online');
 
 $config->host->actionList['edit']['icon']        = 'edit';
 $config->host->actionList['edit']['text']        = $lang->edit;
 $config->host->actionList['edit']['hint']        = $lang->edit;
-$config->host->actionList['edit']['data-toggle'] = 'modal';
 $config->host->actionList['edit']['url']         = array('module' => 'host', 'method' => 'edit', 'params' => 'id={id}');
 
 $config->host->actionList['delete']['icon']       = 'trash';

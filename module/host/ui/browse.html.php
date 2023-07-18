@@ -26,7 +26,7 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 $canCreate  = hasPriv('host', 'create');
 $createLink = $this->createLink('host', 'create');
-$createItem = array('text' => $lang->host->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
+$createItem = array('text' => $lang->host->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus');
 
 $config->host->dtable->fieldList['group']['map']      = $optionMenu;
 $config->host->dtable->fieldList['admin']['map']      = $accounts;

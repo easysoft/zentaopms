@@ -196,7 +196,7 @@ $lang->admin->menuList->platform['tabMenu']['plat']['oss']    = array('link' => 
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['5']  = 'backup';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['10'] = 'dblist';
 
-$lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,view,treemap', 'subModule' => 'tree');
+$lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,view,treemap,changestatus', 'subModule' => 'tree');
 $lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit');
 $lang->admin->menuList->platform['tabMenu']['resource']['account']    = array('link' => "{$lang->devops->account}|account|browse|", 'alias' => 'create,edit');
 $lang->admin->menuList->platform['tabMenu']['resource']['provider']   = array('link' => "{$lang->devops->provider}|ops|setting|", 'alias' => 'setting');

@@ -253,6 +253,9 @@ $lang->action->desc->createdsnapshot      = '$date, <strong>$actor</strong> 创�
 $lang->action->desc->restoredsnapshot     = '$date, <strong>$actor</strong> 还原了快照 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->editsnapshot         = '$date, <strong>$actor</strong> 编辑了快照 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->deletesnapshot       = '$date, <strong>$actor</strong> 删除了快照 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->online               = '$date, 由 <strong>$actor</strong> 上架。' . "\n";
+$lang->action->desc->offline              = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
+$lang->action->desc->linkhost             = '$date, 由 <strong>$actor</strong> 关联主机。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -451,6 +454,9 @@ $lang->action->label->saveddraft            = '存为草稿';
 $lang->action->label->releaseddoc           = '发布了';
 $lang->action->label->collected             = '收藏了';
 $lang->action->label->uncollected           = '取消收藏了';
+$lang->action->label->online                = '上架了';
+$lang->action->label->offline               = '下架了';
+$lang->action->label->linkhost              = '主机关联到';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -789,6 +795,9 @@ $lang->action->label->stage        = '瀑布模型的阶段|stage|browse|';
 $lang->action->label->module       = '模块|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = '工单|ticket|view|id=%s';
 $lang->action->label->chartgroup   = '分组';
+$lang->action->label->serverroom   = '机房|serverroom|browse|';
+$lang->action->label->host         = '主机|host|view|id=%s';
+$lang->action->label->account      = "账号|account|view|id=%s";
 
 /* Object type. */
 $lang->action->search = new stdclass();

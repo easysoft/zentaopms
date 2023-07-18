@@ -383,4 +383,25 @@ class hostModel extends model
         }
         return $groupTree;
     }
+
+    /**
+     * 判断列表页操作按钮是否可点击。
+     * Judge an action is clickable or not.
+     *
+     * @param object $host
+     * @param string $action
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($host, $action)
+    {
+        if(!$host->id)                                return false;
+        if (!common::hasPriv('host', 'changeStatus')) return false;
+
+        if($host->status == 'online'  && $action == 'online')  return false;
+        if($host->status == 'offline' && $action == 'offline') return false;
+
+        return true;
+    }
 }

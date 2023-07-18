@@ -66,7 +66,7 @@ class host extends control
      * @access public
      * @return void
      */
-    public function create()
+    public function create($osName = 'linux')
     {
         if($_POST)
         {
@@ -83,6 +83,7 @@ class host extends control
         );
 
         $this->view->title      = $this->lang->host->create;
+        $this->view->osName     = $osName;
         $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->host->common);
         $this->view->position[] = $this->lang->host->create;
 
@@ -99,7 +100,7 @@ class host extends control
      * @access public
      * @return void
      */
-    public function edit($id)
+    public function edit($id, $osName = '')
     {
         if($_POST)
         {
@@ -123,6 +124,7 @@ class host extends control
         $this->view->position[] = $this->lang->host->edit;
 
         $this->view->host       = $this->host->getById($id);
+        $this->view->osName     = $osName ? $osName : $this->view->host->osName;
         $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
@@ -163,7 +165,7 @@ class host extends control
         $this->send($response);
     }
 
-    public function changeStatus($id, $hostID, $status)
+    public function changeStatus($id, $status)
     {
         $hostStatus = $status == 'offline' ? 'online' : 'offline';
         $reasonKey  = $hostStatus . 'Reason';
@@ -173,15 +175,14 @@ class host extends control
             $postData = fixer::input('post')->get();
             if(empty($postData->reason))
             {
-                dao::$errors['submit'][] = sprintf($this->lang->error->notempty, $reason);
-                die(js::error(dao::getError()));
+                dao::$errors['reason'][] = sprintf($this->lang->error->notempty, $reason);
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            $this->host->updateStatus($hostID, $hostStatus);
+            $this->host->updateStatus($id, $hostStatus);
 
             $this->loadModel('action')->create('host', $id, $hostStatus, $postData->reason);
-            if(isonlybody()) die(js::reload('parent.parent'));
-            die(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
         }
 
         $this->view->title  = $this->lang->host->{$hostStatus};

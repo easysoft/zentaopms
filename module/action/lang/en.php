@@ -253,6 +253,9 @@ $lang->action->desc->createdsnapshot      = '$date, <strong>$actor</strong> crea
 $lang->action->desc->restoredsnapshot     = '$date, <strong>$actor</strong> restored a snapshot <strong>$extra</strong>。' . "\n";
 $lang->action->desc->editsnapshot         = '$date, <strong>$actor</strong> edited the snapshot <strong>$extra</strong>。' . "\n";
 $lang->action->desc->deletesnapshot       = '$date, <strong>$actor</strong> deleted snapshot <strong>$extra</strong>。' . "\n";
+$lang->action->desc->online               = '$date, set online by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->offline              = '$date, set offline by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->linkhost             = '$date, the host is linked by <strong>$actor</strong> .' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -451,6 +454,9 @@ $lang->action->label->saveddraft            = 'save draft';
 $lang->action->label->releaseddoc           = 'released';
 $lang->action->label->collected             = 'collected';
 $lang->action->label->uncollected           = 'uncollected';
+$lang->action->label->online                = 'online';
+$lang->action->label->offline               = 'offline';
+$lang->action->label->linkhost              = 'link hosts to';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -789,6 +795,9 @@ $lang->action->label->stage        = 'Stage|stage|browse|';
 $lang->action->label->module       = 'Module|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = 'Ticket|ticket|view|id=%s';
 $lang->action->label->chartgroup   = 'Group';
+$lang->action->label->serverroom   = 'IDC|serverroom|browse|';
+$lang->action->label->host         = 'Host|host|view|id=%s';
+$lang->action->label->account      = "Account|account|view|id=%s";
 
 /* Object type. */
 $lang->action->search = new stdclass();

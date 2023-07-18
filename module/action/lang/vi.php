@@ -210,8 +210,11 @@ $lang->action->desc->unlinkparentstory   = '$date, <strong>$actor</strong> unlin
 $lang->action->desc->deletechildrenstory = '$date, <strong>$actor</strong> deleted a child story <strong>$extra</strong>。' . "\n";
 
 /* Historical record of actions when associating and removing tình huống. */
-$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked a case <strong>$extra</strong>.' . "\n";
-$lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked a case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkrelatedcase     = '$date, <strong>$actor</strong> linked a case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->unlinkrelatedcase   = '$date, <strong>$actor</strong> unlinked a case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->online              = '$date, set online by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->offline             = '$date, set offline by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->linkhost            = '$date, the host is linked by <strong>$actor</strong> .' . "\n";
 
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
@@ -324,6 +327,9 @@ $lang->action->label->destroy               = 'destroyed';
 $lang->action->label->synctwins             = 'synchronized changes';
 $lang->action->label->linkedrepo            = 'Linked Code Repo';
 $lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
+$lang->action->label->online                = 'online';
+$lang->action->label->offline               = 'offline';
+$lang->action->label->linkhost              = 'link hosts to';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -590,6 +596,9 @@ $lang->action->label->risk        = 'Risk|risk|view|riskID%s';
 $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
+$lang->action->label->serverroom  = 'IDC|serverroom|browse|';
+$lang->action->label->host        = 'Host|host|view|id=%s';
+$lang->action->label->account     = "Account|account|view|id=%s";
 
 /* Object type. */
 $lang->action->search = new stdclass();
