@@ -15,14 +15,6 @@ title=count_of_delivered_story_in_product
 timeout=0
 cid=1
 
-- 测试分组数 @17
-
-- 测试产品1交付需求数第0条的value属性 @1
-
-- 测试产品25交付需求数第0条的value属性 @2
-
-- 测试不存在产品交付需求数 @0
-
 */
 r(count($calc->getResult())) && p('')&& e('17');                          // 测试分组数
 r($calc->getResult(array('product' => '1')))   && p('0:value') && e('1'); // 测试产品1交付需求数

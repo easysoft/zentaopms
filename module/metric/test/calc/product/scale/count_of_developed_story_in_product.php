@@ -15,19 +15,6 @@ title=count_of_developed_story_in_product.php
 timeout=0
 cid=1
 
-- 测试分组数 @86
-
-- 测试产品1，2，3已开发的需求数
- - 第0条的value属性 @1
- - 第1条的value属性 @1
-
-- 测试产品11，12，13已开发的需求数
- - 第0条的value属性 @1
- - 第1条的value属性 @1
- - 第2条的value属性 @1
-
-- 测试不存在的产品下的需求数 @0
-
 */
 
 r(count($calc->getResult()))                        && p('')                        && e('86');    // 测试分组数

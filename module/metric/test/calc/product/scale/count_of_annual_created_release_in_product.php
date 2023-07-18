@@ -14,14 +14,6 @@ title=count_of_annual_created_release_in_product
 timeout=0
 cid=1
 
-- 测试分组数。 @10
-
-- 测试产品1的发布数。第0条的value属性 @10
-
-- 测试产品10的发布数。第0条的value属性 @10
-
-- 测试不存在的产品的发布数。 @0
-
 */
 
 r(count($calc->getResult()))                                     && p('')        && e('10'); // 测试分组数。
