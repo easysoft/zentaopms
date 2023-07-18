@@ -1,8 +1,8 @@
 .dynamic > li {position: relative; list-style: none}
 .dynamic > li:before, .dynamic > li > a:after, .dynamic > li > div:after {position: absolute; left: -20px; display: block; width: 15px; height: 15px; content: ' '; border-radius: 50%}
-.dynamic > li:before {top: 12px; left: -16px; z-index: 3; width: 7px; height: 7px; background-color: #c4c4c4; border: none; border: 1px solid #c4c4c4}
+.dynamic > li:before {top: 12px; left: -17px; z-index: 3; width: 10px; height: 10px; background-color: #c4c4c4; border: none; border: 2px solid #fff;}
 .dynamic > li > a:after, .dynamic > li > div:after {top: 11px; left: -17px; z-index: 3; width: 9px; height: 9px; background-color: #2e7fff; border-radius: 50%; opacity: 0}
-.dynamic > li + li:after {position: absolute; top: -12px; bottom: 20px; left: -13px; z-index: 1; display: block; content: ' '; border-left: 1px solid #eee}
+.dynamic > li + li:after {position: absolute; top: -12px; bottom: 20px; left: -13px; z-index: 1; display: block; content: ' '; border-left: 2px solid #eee;}
 .dynamic > li.active > a:after, .dynamic > li.active > div:after {opacity: 1}
 .dynamic > li.active:before {top: 8px; left: -20px; width: 15px; height: 15px; background-color: rgba(46,127,255, .2); border: none}
 .dynamic > li > a, .dynamic > li > div {display: block; padding: 5px; line-height: 20px}

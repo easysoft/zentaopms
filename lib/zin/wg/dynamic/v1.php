@@ -17,6 +17,8 @@ class dynamic extends wg
 
     protected function dynamicItem(object $dynamic, array $users): wg
     {
+        $dynamicLabel = zget($dynamic, 'dynamicLabel', '');
+        if(empty($dynamicLabel)) $dynamicLabel = zget($dynamic, 'actionLabel', '');
         return li
         (
             setClass($dynamic->major ? 'active': ''),
@@ -32,7 +34,7 @@ class dynamic extends wg
                     span
                     (
                         setClass('text-gray px-1'),
-                        zget($dynamic, 'dynamicLabel', '')
+                        $dynamicLabel
                     ),
                     span($dynamic->objectLabel, setClass('pr-1')),
                     a
