@@ -183,11 +183,11 @@ $lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
 $lang->admin->menuList->ai['subMenu']['prompts']       = array('link' => "{$lang->admin->ai->prompt}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize');
-$lang->admin->menuList->ai['subMenu']['conversations'] = array('link' => "{$lang->admin->ai->conversation}|ai|conversations|");
+// $lang->admin->menuList->ai['subMenu']['conversations'] = array('link' => "{$lang->admin->ai->conversation}|ai|conversations|");
 $lang->admin->menuList->ai['subMenu']['models']        = array('link' => "{$lang->admin->ai->model}|ai|models|", 'alias' => 'editmodel');
 
 $lang->admin->menuList->ai['menuOrder']['5']  = 'prompts';
-$lang->admin->menuList->ai['menuOrder']['10'] = 'conversations';
+// $lang->admin->menuList->ai['menuOrder']['10'] = 'conversations';
 $lang->admin->menuList->ai['menuOrder']['15'] = 'models';
 
 if($config->edition != 'max')
