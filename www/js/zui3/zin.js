@@ -588,6 +588,7 @@
     {
         options = $.extend({url}, options);
         if(!target) return zui.Modal.open(options);
+        else if(target === 'current') target = zui.Modal.query().id;
 
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
