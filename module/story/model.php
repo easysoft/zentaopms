@@ -4522,6 +4522,7 @@ class storyModel extends model
      */
     public static function isClickable($story, $action)
     {
+        global $app, $config;
         $action = strtolower($action);
 
         if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
@@ -4531,8 +4532,8 @@ class storyModel extends model
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and !empty($story->twins)) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
+        if($action == 'submitreview' and strpos('draft,changing', $story->status) === false) return false;
 
-        global $app, $config;
         static $shadowProducts = array();
         static $hasShadow      = true;
         if($hasShadow and empty($shadowProducts[$story->product]))
