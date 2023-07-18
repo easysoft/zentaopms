@@ -46,7 +46,7 @@ class rate_of_finish_story_in_product extends baseCalc
         {
             $records[] = array(
                 'product' => $productID,
-                'value'   => $storyInfo['total'] ? round($storyInfo['finished'] / ($storyInfo['total'] - $storyInfo['invalid']) * 100, 2) : 0,
+                'value'   => $storyInfo['total'] ? round($storyInfo['finished'] / ($storyInfo['total'] - $storyInfo['invalid']), 4) : 0,
             );
         }
 
