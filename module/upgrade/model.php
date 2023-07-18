@@ -9189,8 +9189,18 @@ class upgradeModel extends model
 
                 $columns[] = $column;
 
-                $data->stage = 'draft';
-                $data->step  = 1;
+                $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+                $stmt = $this->dbh->query($data->sql);
+
+                if(!$stmt)
+                {
+                    $data->stage = 'draft';
+                    $data->step  = 1;
+                }
+                else
+                {
+                    $settings->summary = 'notuse';
+                }
             }
 
             $settings->columns = $columns;
