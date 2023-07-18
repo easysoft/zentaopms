@@ -64,6 +64,10 @@
         {
             loadPage(url);
         },
+        openApp: function(url, options)
+        {
+            loadPage(url, options);
+        }
     }, parent.window.$.apps);
 
     const renderMap =
