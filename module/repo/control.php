@@ -1698,6 +1698,12 @@ class repo extends control
 
         $selectedProjects = array_intersect(array_keys($accessProjects), $projectIds);
 
+        $options = array();
+        foreach($accessProjects as $projectID => $project)
+        {
+            $options[] = array('text' => $project, 'value' => $projectID);
+        }
+        return print(json_encode($options));
         $name = isset($postData->number) ? "projects[{$postData->number}][]" : 'projects[]';
         return print (html::select($name, $accessProjects, $selectedProjects, "class='form-control chosen' multiple"));
     }
@@ -1713,7 +1719,13 @@ class repo extends control
     {
         $scm   = strtolower($scm);
         $hosts = $this->loadModel($scm)->getPairs();
-        return print(html::select('pipelineHost', $hosts, '', "class='form-control chosen'"));
+
+        $options = array();
+        foreach($hosts as $hostID => $host)
+        {
+            $options[] = array('text' => $host, 'value' => $hostID);
+        }
+        return print(json_encode($options));
     }
 
     /**
@@ -1747,7 +1759,13 @@ class repo extends control
         $options = "<option value=''></option>";
         foreach($projects as $project) $options .= "<option value='{$project->full_name}' data-name='{$project->name}'>{$project->full_name}</option>";
 
-        return print($options);
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
+        foreach($projects as $project)
+        {
+            $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
+        }
+        return print(json_encode($options));
     }
 
     /**
@@ -1767,7 +1785,13 @@ class repo extends control
             foreach($projects as $project) $options .= "<option value='{$project->full_name}' data-name='{$project->name}'>{$project->full_name}</option>";
         }
 
-        return print($options);
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
+        foreach($projects as $project)
+        {
+            $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
+        }
+        return print(json_encode($options));
     }
 
     /**
@@ -1780,9 +1804,9 @@ class repo extends control
      */
     public function ajaxGetGitlabProjects($gitlabID, $projectIdList = '', $filter = '')
     {
-        $projects = $this->repo->getGitlabProjeccts($gitlabID, $projectIdList, $filter);
+        $projects = $this->repo->getGitlabProjects($gitlabID, $projectIdList, $filter);
 
-        if(!$projects) $this->send(array('message' => array()));
+        if(!$projects) return print('[]');
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
         $options = "<option value=''></option>";
         foreach($projects as $project)
@@ -1791,7 +1815,14 @@ class repo extends control
             $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
         }
 
-        return print($options);
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
+        foreach($projects as $project)
+        {
+            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
+            $options[] = array('text' => $project->name_with_namespace, 'value' => $project->id);
+        }
+        return print(json_encode($options));
     }
 
     /**

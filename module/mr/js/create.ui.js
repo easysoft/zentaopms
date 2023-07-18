@@ -40,7 +40,6 @@ function onProjectChange()
             zui.Picker.query("[name='sourceBranch']").render({items: result});
             zui.Picker.query("[name='targetBranch']").render({items: result});
             $("[name='targetBranch']").picker('setValue', '');
-          console.log(zui.Picker.query("[name='targetBranch']"));
         },
     });
 

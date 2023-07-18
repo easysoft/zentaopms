@@ -5,24 +5,32 @@ $(function()
 
 function onProductChange(event)
 {
-    var projects = $('#projects').val();
-    var products = $('#product').val();
+    var projects = $('[name="projects[]"]').val();
+    var products = $('[name="product[]"]').val();
 
     $.post($.createLink('repo', 'ajaxProjectsOfProducts'), {products, projects}, function(response)
     {
-        $('#projects').replaceWith(response);
+        var data      = JSON.parse(response);
+        var $projects = $('#projects').zui('picker');
+        $projects.render({items: data});
+        $projects.$.clear();
     });
 }
 
 function onHostChange()
 {
-    var host = $('#serviceHost').val();
+    var host = $('[name=serviceHost]').val();
     var url  = $.createLink('repo', 'ajaxGetProjects', "host=" + host);
     if(host == '') return false;
 
+    toggleLoading('#serviceProject', true);
     $.get(url, function(response)
     {
-        $('#serviceProject').html(response);
+        var data = JSON.parse(response);
+        var $project = $('#serviceProject').zui('picker');
+        $project.render({items: data});
+        $project.$.clear();
+        toggleLoading('#serviceProject', false);
     });
 }
 
@@ -41,7 +49,15 @@ function onProjectChange()
  */
 function onScmChange(isFirstRequest = false)
 {
-    const scm = $('#SCM').val();
+    var scm = $('[name=SCM]').val();
+    if(!scm)
+    {
+        for(i in scmList)
+        {
+            scm = i;
+            break;
+        }
+    }
 
     (scm == 'Git') ? $('.tips-git').removeClass('hidden') : $('.tips-git').addClass('hidden');
     if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')
@@ -83,7 +99,10 @@ function onScmChange(isFirstRequest = false)
             var url = $.createLink('repo', 'ajaxGetHosts', "scm=" + scm);
             $.get(url, function(response)
             {
-                $('#serviceHost').html(response);
+                var data = JSON.parse(response);
+                var $hostPicker = $('#serviceHost').zui('picker');
+                $hostPicker.render({items: data});
+                $hostPicker.$.clear();
                 onHostChange();
             });
         }
