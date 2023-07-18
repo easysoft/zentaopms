@@ -152,7 +152,15 @@ div
                             set::required(true),
                         ),
                     )
-                )
+                ),
+                $module == 'html' ? formRow
+                (
+                    formGroup
+                    (
+                        set::label($lang->block->lblHtml),
+                        editor(set::name('params[html]')),
+                    )
+                ) : null
             )
         )
     )
