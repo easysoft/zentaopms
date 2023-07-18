@@ -12,7 +12,7 @@
 
 <?php include '../../common/view/header.lite.html.php'; ?>
 <div id='mainContent' class='main-content'>
-  <form method="post" class="main-form form-ajax" target="hiddenwin">
+  <form method="post" class="main-form form-ajax">
     <div class='center-block'>
       <div class="main-header">
         <p>
@@ -120,5 +120,15 @@
       submitButton.disabled = !purpose.value;
     });
   })();
+
+  function reloadPrompt(promptId, objectId) {
+    let link = createLink('ai', 'promptexecute', 'promptId=' + promptId + '&objectId=' + objectId);
+    link = link.replace('onlybody=yes', '');
+    const aTag = document.createElement('a');
+    aTag.href = link;
+    aTag.style.display = 'none';
+    parent.document.body.appendChild(aTag);
+    aTag.click();
+  }
 </script>
 <?php include '../../common/view/footer.lite.html.php'; ?>

@@ -428,8 +428,32 @@ class ai extends control
      */
     public function promptAudit($promptId, $objectId)
     {
-        $prompt = $this->ai->getPromptByID($promptId);
+        $prompt                    = $this->ai->getPromptByID($promptId);
 
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+
+            $prompt->role             = $data->role;
+            $prompt->characterization = $data->characterization;
+            $prompt->purpose          = $data->purpose;
+            $prompt->elaboration      = $data->elaboration;
+
+            $this->ai->updatePrompt($prompt);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if($data->backLocation == 1)
+            {
+                $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "reloadPrompt($promptId, $objectId)");
+            }
+            else
+            {
+                $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true);
+            }
+
+            $this->sendSuccess($response);
+        }
         list($objectData, $object) = $this->ai->getObjectForPromptById($prompt, $objectId);
 
         $this->view->prompt     = $prompt;
