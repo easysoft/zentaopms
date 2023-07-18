@@ -61,6 +61,7 @@ $lang->pivot->percent     = '%';
 $lang->pivot->undefined   = 'Undefiniert';
 $lang->pivot->project     = $lang->projectCommon;
 $lang->pivot->PO          = 'PO';
+$lang->pivot->showOrigin  = 'Show Origin Data';
 
 $lang->pivot->colors[] = 'AFD8F8';
 $lang->pivot->colors[] = 'AFD8F8';

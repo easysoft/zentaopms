@@ -5,6 +5,7 @@ $(function()
     expandTree();
     renderFilters(pivot);
     initQueryBtn();
+    initOriginQueryBtn();
 
     $('body').resize(() => {calcPreviewGrowFilter();});
 
@@ -20,17 +21,14 @@ function expandTree()
     tree.expand($('.pivot-' + pivotID).parents('li'));
 }
 
-/*$('.btn-export').click(function()
-{
-    if(typeof pivotID == 'undefined' || !pivotID) return;
-    pivot = getQueryInfo();
-});
-*/
-
 function getQueryInfo()
 {
-    var pivotInfo = pivot;
+    // if not use JSON.parse(JSON.stringify()), edit pivotInfo also affects pivot. If click btn-query-origin, pivot setting also have summary field.
+    var pivotInfo = JSON.parse(JSON.stringify(pivot));
     pivotInfo.searchFilters = JSON.parse(JSON.stringify(pivotInfo.filters));
+    pivotInfo.step = 4;
+
+    if(!pivotInfo.searchFilters) return pivotInfo;
 
     if(isQueryFilter(pivotInfo.filters))
     {
@@ -70,7 +68,6 @@ function getQueryInfo()
         });
     }
 
-    pivotInfo.step = 4;
     return pivotInfo;
 }
 
@@ -84,16 +81,39 @@ function initQueryBtn()
 {
     $('.btn-query').click(function()
     {
-        pivotInfo = getQueryInfo();
-        $.post(createLink('pivot', 'ajaxGetPivot'), pivotInfo,function(resp)
-        {
-            var myDatagrid = $('#datagirdInfo');
-            myDatagrid.find('.reportData').remove();
-            myDatagrid.append(resp);
-        });
-
+        var pivotInfo = getQueryInfo();
+        refreshReport(pivotInfo);
     });
 }
+
+/**
+ * Init origin query button.
+ *
+ * @access public
+ * @return void
+ */
+function initOriginQueryBtn()
+{
+    $('.btn-query-origin').click(function()
+    {
+        var pivotInfo = getQueryInfo();
+        pivotInfo.settings['summary'] = 'notuse';
+        refreshReport(pivotInfo, true);
+    });
+}
+
+function refreshReport(pivotInfo, hideFilter = false)
+{
+    $.post(createLink('pivot', 'ajaxGetPivot'), pivotInfo,function(resp)
+    {
+        var myDatagrid = $('#datagirdInfo');
+        myDatagrid.find('.reportData').remove();
+        myDatagrid.append(resp);
+
+        if(hideFilter) $('#filterItems').addClass('hidden');
+    });
+}
+
 
 function calcPreviewGrowFilter()
 {

@@ -30,12 +30,15 @@
   </div>
   <hr class="space">
   <?php else:?>
-  <div class='panel-heading heading-padding'>
+  <div class='panel-heading heading-padding content-border flex-between'>
     <div class='panel-title'>
       <?php echo $pivot->name;?>
       <?php if(!empty($pivot->desc)):?>
       <a data-toggle='tooltip' data-placement='auto' title='<?php echo $pivot->desc;?>'><i class='icon-help'></i></a>
       <?php endif;?>
+    </div>
+    <div>
+      <?php echo html::a('#', "{$lang->pivot->showOrigin}", '', "class='btn-query-origin' title='{$lang->pivot->showOrigin}'");?>
     </div>
   </div>
   <div class='panel-body' style='padding:0px;'>
