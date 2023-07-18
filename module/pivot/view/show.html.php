@@ -38,7 +38,8 @@
       <?php endif;?>
     </div>
     <div>
-      <?php echo html::a('#', "{$lang->pivot->showOrigin}", '', "class='btn-query-origin' style='color:#3785ff;' title='{$lang->pivot->showOrigin}'");?>
+      <?php echo html::a('#', "{$lang->pivot->showOrigin}", '', "id='origin-query' class='query-after query-color btn-query-origin' title='{$lang->pivot->showOrigin}'");?>
+      <?php echo html::a('#', "{$lang->pivot->showPivot}",  '', "id='pivot-query'  class='query-after query-color btn-query hidden' title='{$lang->pivot->showPivot}'");?>
     </div>
   </div>
   <div class='panel-body' style='padding:0px;'>

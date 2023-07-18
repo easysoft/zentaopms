@@ -21,5 +21,6 @@
 .content-border {padding-top: 16px; padding-bottom: 16px; border-bottom: 1px solid #F1F5F9; border-top: 1px solid #F1F5F9;}
 .flex-between {display:flex; justify-content: space-between;}
 
-.btn-query-origin {position: relative; padding-right: 10px;}
-.btn-query-origin::after {content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 1px; background-color: #F1F5F9;}
+.query-after {position: relative; padding-right: 10px;}
+.query-after::after {content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 1px; background-color: #F1F5F9;}
+.query-color {color: #3785ff;}

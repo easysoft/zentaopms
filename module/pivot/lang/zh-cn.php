@@ -71,6 +71,7 @@ $lang->pivot->percent     = '百分比';
 $lang->pivot->undefined   = '未设定';
 $lang->pivot->project     = $lang->projectCommon;
 $lang->pivot->PO          = 'PO';
+$lang->pivot->showPivot   = '查看透视表';
 $lang->pivot->showOrigin  = '查看原始数据';
 
 $lang->pivot->colors[] = 'AFD8F8';

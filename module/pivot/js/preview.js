@@ -102,7 +102,7 @@ function initOriginQueryBtn()
     });
 }
 
-function refreshReport(pivotInfo, hideFilter = false)
+function refreshReport(pivotInfo, isOrigin = false)
 {
     $.post(createLink('pivot', 'ajaxGetPivot'), pivotInfo,function(resp)
     {
@@ -110,7 +110,20 @@ function refreshReport(pivotInfo, hideFilter = false)
         myDatagrid.find('.reportData').remove();
         myDatagrid.append(resp);
 
-        if(hideFilter) $('#filterItems').addClass('hidden');
+        if(isOrigin)
+        {
+            $('#filterItems').addClass('hidden');
+
+            $('#pivot-query').removeClass('hidden');
+            $('#origin-query').addClass('hidden');
+        }
+        else
+        {
+            $('#filterItems').removeClass('hidden');
+
+            $('#pivot-query').addClass('hidden');
+            $('#origin-query').removeClass('hidden');
+        }
     });
 }
 
