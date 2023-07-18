@@ -11,11 +11,17 @@
 $lang->ai->common = 'AI';
 
 /* Definitions of table columns, used to sprintf error messages to dao::$errors. */
-$lang->prompt = new stdclass();
-$lang->prompt->name   = 'Name';
-$lang->prompt->desc   = 'Description';
-$lang->prompt->model  = 'Model';
-$lang->prompt->module = 'Module';
+$lang->prompt  = new stdclass();
+$lang->prompt->name        = 'Name';
+$lang->prompt->desc        = 'Description';
+$lang->prompt->model       = 'Model';
+$lang->prompt->module      = 'Module';
+$lang->prompt->basicInfo   = 'Basic Info';
+$lang->prompt->editInfo    = 'Edit Info';
+$lang->prompt->createdBy   = 'Created By';
+$lang->prompt->publishedBy = 'Published By';
+$lang->prompt->draftedBy   = 'Drafted By';
+$lang->prompt->lastEditor  = 'Last Editor';
 
 $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';

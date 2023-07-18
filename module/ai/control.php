@@ -10,6 +10,12 @@
  */
 class ai extends control
 {
+    public function __construct($module = '', $method = '')
+    {
+        parent::__construct($module, $method);
+        $this->loadModel('user');
+    }
+
     /**
      * List models.
      *
@@ -151,6 +157,7 @@ class ai extends control
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
         $this->view->title       = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name";
         $this->view->position[]  = $this->lang->ai->prompts->common;
+        $this->view->users       = $this->user->getPairs('noletter');
 
         $this->display();
     }

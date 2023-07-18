@@ -67,7 +67,60 @@
     </div>
   </div>
   <div class="side-col col-4">
-
+    <div class="cell">
+      <div class='tabs'>
+        <ul class='nav nav-tabs'>
+          <li class='active'><a href='#promptBasicInfo' data-toggle='tab'><?php echo $lang->prompt->basicInfo; ?></a></li>
+          <li><a href='#promptEditInfo' data-toggle='tab'><?php echo $lang->prompt->editInfo; ?></a></li>
+        </ul>
+      </div>
+      <div class='tab-content'>
+        <div class='tab-pane active' id='promptBasicInfo'>
+          <table class="table table-data">
+            <tbody>
+            <tr>
+              <th class="w-90px"><?php echo $lang->prompt->module; ?></th>
+              <td><?php echo $this->lang->ai->dataSource[$prompt->module]['common']; ?></td>
+            </tr>
+            <tr>
+              <th class="w-90px"><?php echo $lang->prompt->desc; ?></th>
+              <td><?php echo $prompt->desc; ?></td>
+            </tr>
+            <tr>
+              <th class="w-90px"><?php echo $lang->ai->prompts->stage; ?></th>
+              <td><?php echo $lang->ai->prompts->statuses[$prompt->status]; ?></td>
+            </tr>
+            <tr>
+              <th class="w-90px"><?php echo $lang->ai->prompts->model; ?></th>
+              <td><?php echo $lang->ai->models->typeList['openai-gpt35']; ?></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='tab-pane' id='promptEditInfo'>
+          <table class="table table-data">
+            <tbody>
+            <tr>
+              <th class="w-90px"><?php echo $lang->prompt->createdBy; ?></th>
+              <td><?php echo zget($users, $prompt->createdBy) . $lang->at . $prompt->createdDate;?></td>
+            </tr>
+            <tr>
+<!-- TODO: Continue when have a record  -->
+              <th class="w-90px"><?php echo $lang->prompt->publishedBy; ?></th>
+              <td><?php echo 'publishedBy' ?></td>
+            </tr>
+            <tr>
+              <th class="w-90px"><?php echo $lang->prompt->draftedBy; ?></th>
+              <td><?php echo 'draftedBy' ?></td>
+            </tr>
+            <tr>
+              <th class="w-90px"><?php echo $lang->prompt->lastEditor; ?></th>
+              <td><?php echo zget($users, $prompt->editedBy) . $lang->at . $prompt->editedDate;?></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
   </div>
 </div>
 
