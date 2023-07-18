@@ -16,6 +16,7 @@ class actionItem extends wg
         'tagName:string="a"',
         'icon?:string',
         'text?:string',
+        'textClass?: string',
         'url?:string',
         'target?:string',
         'active?:bool',
@@ -37,14 +38,14 @@ class actionItem extends wg
 
     protected function buildHeadingItem()
     {
-        list($icon, $text, $trailingIcon) = $this->prop(array('icon', 'text', 'trailingIcon'));
+        list($icon, $text, $trailingIcon, $textClass) = $this->prop(array('icon', 'text', 'trailingIcon', 'textClass'));
 
         return h::div
         (
             set($this->props->skip(array_keys(actionItem::definedPropsList()))),
             set($this->prop('props')),
             $icon ? icon($icon) : null,
-            empty($text) ? null : span($text, setClass('text')),
+            empty($text) ? null : span($text, setClass('text', $textClass)),
             $this->children(),
             $trailingIcon ? icon($trailingIcon) : null,
         );
@@ -52,7 +53,7 @@ class actionItem extends wg
 
     protected function buildDropdownItem()
     {
-        list($dropdown, $items, $icon, $text, $trailingIcon, $active, $disabled, $badge, $props, $caret) = $this->prop(array('dropdown', 'items', 'icon', 'text', 'trailingIcon', 'active', 'disabled', 'badge', 'props', 'caret'));
+        list($dropdown, $items, $icon, $text, $trailingIcon, $active, $disabled, $badge, $props, $caret, $textClass) = $this->prop(array('dropdown', 'items', 'icon', 'text', 'trailingIcon', 'active', 'disabled', 'badge', 'props', 'caret', 'textClass'));
 
         if(is_string($badge))
         {
@@ -72,7 +73,7 @@ class actionItem extends wg
                 set($this->getRestProps()),
                 set($props),
                 $icon ? icon($icon) : null,
-                $text,
+                span($text, setClass('text', $textClass)),
                 $badge,
                 $this->children(),
                 $trailingIcon ? icon($trailingIcon) : null,
@@ -103,7 +104,7 @@ class actionItem extends wg
         $methodName = "build{$type}Item";
         if(method_exists($this, $methodName)) return $this->$methodName();
 
-        list($tagName, $icon, $text, $trailingIcon, $url, $target, $active, $disabled, $badge) = $this->prop(array('tagName', 'icon', 'text', 'trailingIcon', 'url', 'target', 'active', 'disabled', 'badge'));
+        list($tagName, $icon, $text, $trailingIcon, $url, $target, $active, $disabled, $badge, $textClass) = $this->prop(array('tagName', 'icon', 'text', 'trailingIcon', 'url', 'target', 'active', 'disabled', 'badge', 'textClass'));
 
         if(is_string($badge))     $badge = label($badge);
         else if(is_array($badge)) $badge = label(set($badge));
@@ -116,7 +117,7 @@ class actionItem extends wg
             set($this->getRestProps()),
             set($this->prop('props')),
             $icon ? icon($icon) : null,
-            $text,
+            span($text, setClass('text', $textClass)),
             $badge,
             $this->children(),
             $trailingIcon ? icon($trailingIcon) : null,
@@ -130,7 +131,7 @@ class actionItem extends wg
         return h::create
         (
             $outerTag,
-            setClass($type !== 'item' ? 'nav-item' : '', "$name-$type", $outerClass),
+            setClass("$name-$type", $outerClass),
             set($outerProps),
             $this->buildItem()
         );
