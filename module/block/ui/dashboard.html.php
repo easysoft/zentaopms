@@ -23,16 +23,17 @@ foreach($blocks as $block)
 $blocks = json_decode(json_encode($blocks), true);
 
 $blockMenuItems = array();
-$blockMenuItems[] = array('text' => $lang->block->refresh, 'attrs' => array('data-type' => 'refresh'));
-$blockMenuItems[] = array('text' => $lang->edit, 'url' => createLink('block', 'edit', "blockID={id}"), 'data-toggle' => 'modal', 'data-size' => 'sm');
-$blockMenuItems[] = array('text' => $lang->block->hidden, 'url' => createLink('block', 'delete', "blockID={id}&type=hidden"), 'data-confirm' => $lang->block->confirmRemoveBlock);
-$blockMenuItems[] = array('text' => $lang->block->createBlock, 'url' => createLink('block', 'create', "dashboard=$dashboard"), 'data-toggle' => 'modal', 'data-size' => 'sm');
-$blockMenuItems[] = array('text' => $lang->block->reset, 'url' => createLink('block', 'reset', "dashboard=$dashboard"), 'data-confirm' => $lang->block->confirmReset);
+$blockMenuItems[] = array('text' => $lang->block->refresh, 'className' => 'not-open-url', 'data' => array('type' => 'refresh'));
+$blockMenuItems[] = array('text' => $lang->edit, 'className' => 'not-open-url', 'data' => array('type' => 'edit', 'url' => createLink('block', 'edit', "blockID={id}"), 'size' => 'sm'));
+$blockMenuItems[] = array('text' => $lang->block->hidden, 'className' => 'not-open-url', 'data' => array('type' => 'delete', 'url' => createLink('block', 'delete', "blockID={id}&type=hidden"), 'confirm' => $lang->block->confirmRemoveBlock));
+$blockMenuItems[] = array('text' => $lang->block->createBlock, 'className' => 'not-open-url', 'data' => array('type' => 'create', 'url' => createLink('block', 'create', "dashboard=$dashboard"), 'toggle' => 'modal', 'size' => 'sm'));
+$blockMenuItems[] = array('text' => $lang->block->reset, 'className' => 'not-open-url', 'data' => array('type' => 'reset', 'url' => createLink('block', 'reset', "dashboard=$dashboard"), 'confirm' => $lang->block->confirmReset));
 
 dashboard
 (
     set::blocks(array_values($blocks)),
-    set::blockMenu(array('items' => $blockMenuItems))
+    set::blockMenu(array('items' => $blockMenuItems)),
+    set::onClickMenu(jsRaw('handleClickBlockMenu'))
 );
 
 render();
