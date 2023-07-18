@@ -22,9 +22,9 @@ formPanel
 (
     in_array($lib->type, array('product', 'project', 'execution')) ? formGroup
     (
-        setClass('items-center'),
         set::label($lang->doc->{$lib->type}),
-        $object->name
+        set::control('static'),
+        set::value($object->name),
     ) : null,
     formGroup
     (
