@@ -44,7 +44,7 @@ class rate_of_finish_story_in_product extends baseCalc
         $this->result = $result;
     }
 
-    public function getResult()
+    public function getResult($options = array())
     {
         $records = array();
         foreach($this->result as $productID => $storyInfo)
@@ -54,5 +54,7 @@ class rate_of_finish_story_in_product extends baseCalc
                 'value'   => $storyInfo['total'] ? round($storyInfo['finished'] / ($storyInfo['total'] - $storyInfo['invalid']) * 100, 2) : 0,
             );
         }
+
+        return $this->filterByOptions($records, $options);
     }
 }
