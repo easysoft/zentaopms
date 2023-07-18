@@ -104,7 +104,7 @@
         <tr>
           <td></td>
           <td class='text-center form-actions'>
-            <?php if(isset($_SESSION['aiInjectData']) && isset($_SESSION['auditPrompt'])): ?>
+            <?php if(isset($_SESSION['aiInjectData']) && isset($_SESSION['auditPrompt']) && $prompt->status == 'draft'): ?>
             <?php echo html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id" ,'btn btn-primary btn-wide');?>
             <?php else:
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
