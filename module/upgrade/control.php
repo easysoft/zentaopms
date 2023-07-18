@@ -96,6 +96,14 @@ class upgrade extends control
             $this->config->version = ($this->config->edition == 'biz' ? 'LiteVIP' : 'Lite') . $this->config->liteVersion;
         }
 
+        if($this->config->edition == 'ipd')
+        {
+            foreach($this->lang->upgrade->fromVersions as $key => $value)
+            {
+                if(strpos($key, 'ipd') === false) unset($this->lang->upgrade->fromVersions[$key]);
+            }
+        }
+
         if($_POST) return print(js::locate(helper::createLink('upgrade', 'confirm', "fromVersion={$this->post->fromVersion}")));
 
         $this->view->title      = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
@@ -114,6 +122,7 @@ class upgrade extends control
     public function confirm($fromVersion = '')
     {
         if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
+        if(strpos($fromVersion, 'ipd') !== false) $fromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
         $confirmSql = $this->upgrade->getConfirm($fromVersion);
         $confirmSql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $confirmSql);
 
