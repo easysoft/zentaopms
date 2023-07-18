@@ -56,7 +56,7 @@ CREATE TABLE `zt_space` (
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_instance`;
 CREATE TABLE IF NOT EXISTS `zt_instance` (
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
   PRIMARY KEY (`id`),
   KEY `space` (`space`),
   KEY `k8name` (`k8name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_solution`;
 CREATE TABLE IF NOT EXISTS `zt_solution` (
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `zt_solution` (
   `createdAt` datetime NOT NULL,
   `updatedDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `zt_session` (
     `id` varchar(32) NOT NULL,
