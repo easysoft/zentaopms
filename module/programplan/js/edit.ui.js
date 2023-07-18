@@ -5,17 +5,15 @@
  * @param  stageID stageID
  * @return void
  */
-function changeParentStage(stageID)
+function changeParentStage(event)
 {
+    const stageID = parseInt($(event.target).val());
     if(stageID == 0) $('#acl').attr('disabled', false);
     $('#acl').attr('disabled', true);
 
-    $.get(createLink('programplan', 'ajaxGetAttribute', 'stageID=' + stageID + '&attribute=' + plan.attribute), function(attribute)
+    $.get($.createLink('programplan', 'ajaxGetAttribute', 'stageID=' + stageID + '&attribute=' + plan.attribute), function(attribute)
     {
-        $('#attributeType td:first').html(attribute);
-        $('#attribute' + '_chosen').remove();
-        $('#attribute').next('.picker').remove();
-        $('#attribute').chosen();
+        $('#attributeType').html(attribute);
     });
 }
 

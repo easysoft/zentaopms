@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('plan', $plan);
+jsVar('plan',           $plan);
 jsVar('stageTypeList',  $lang->stage->typeList);
 jsVar('changeAttrLang', $lang->programplan->confirmChangeAttr);
 jsVar('isTopStage',     $isTopStage);
@@ -20,8 +20,6 @@ jsVar('isLeafStage',    $isLeafStage);
 
 formPanel
 (
-    set::title(''),
-    set::actions(array()),
     div
     (
         setClass('flex items-center pb-2.5'),
@@ -31,73 +29,53 @@ formPanel
     ),
     formGroup
     (
-        set(array(
-            'label' => $lang->programplan->parent,
-            'width' => '2/3'
-        )),
-        select
+        set::label($lang->programplan->parent),
+        set::width('2/3'),
+        picker
         (
-            on::change('changeParentStage(this)'),
-            set(array(
-                'id'       => 'parent',
-                'name'     => 'parent',
-                'items'    => $parentStageList,
-                'value'    => $plan->parent,
-                'required' => true
-            ))
+            setID('parent'),
+            set::name('parent'),
+            set::items($parentStageList),
+            set::value($plan->parent),
+            set::required(true),
+            on::change('changeParentStage')
         )
     ),
     formGroup
     (
-        set(array(
-            'label'    => $lang->programplan->name,
-            'required' => true,
-            'width'    => '2/3'
-        )),
-        input(set(array(
-            'name'  => 'name',
-            'value' => $plan->name
-        )))
+        set::label($lang->programplan->name),
+        set::width('2/3'),
+        set::required(true),
+        input(set::name('name'), set::value($plan->name))
     ),
     isset($config->setCode) && $config->setCode == 1 ?
     formGroup
     (
-        set(array(
-            'label'    => $lang->execution->code,
-            'required' => true,
-            'width'    => '2/3'
-        )),
-        input(set(array(
-            'name'  => 'code',
-            'value' => $plan->code
-        )))
+        set::label($lang->execution->code),
+        set::width('2/3'),
+        set::required(true),
+        input(set::name('code'), set::value($plan->code))
     ): null,
     formGroup
     (
-        set(array(
-            'label' => $lang->programplan->PM,
-            'width' => '2/3'
-        )),
-        select(set(array(
-            'name'     => 'PM',
-            'items'    => $PMUsers,
-            'value'    => $plan->PM,
-            'required' => true
-        )))
+        set::label($lang->programplan->PM),
+        set::width('2/3'),
+        picker
+        (
+            set::name('PM'),
+            set::items($PMUsers),
+            set::value($plan->PM),
+            set::required(true)
+        )
     ),
     isset($config->setPercent) && $config->setPercent == 1 ?
     formGroup
     (
-        set(array(
-            'label' => $lang->programplan->percent,
-            'width' => '2/3'
-        )),
+        set::label($lang->programplan->percent),
+        set::width('2/3'),
         inputControl
         (
-            input(set(array(
-                'name'  => 'percent',
-                'value' => $plan->percent
-            ))),
+            input(set::name('percent'), set::value($plan->percent)),
             to::suffix('%'),
             set::suffixWidth('lg')
         )
@@ -106,19 +84,21 @@ formPanel
     (
         formGroup
         (
-            set(array(
-                'label' => $lang->programplan->attribute,
-                'width' => '2/3'
-            )),
-            $enableOptionalAttr ?
-            select(set(array(
-                'id'       => 'attribute',
-                'name'     => 'attribute',
-                'items'    => $lang->stage->typeList,
-                'value'    => $plan->attribute,
-                'required' => true
-            ))):
-            zget($lang->stage->typeList, $plan->attribute)
+            set::label($lang->programplan->attribute),
+            set::width('2/3'),
+            div
+            (
+                setID('attributeType'),
+                setClass('flex self-center w-full'),
+                $enableOptionalAttr ?
+                select(set(array(
+                    'id'       => 'attribute',
+                    'name'     => 'attribute',
+                    'items'    => $lang->stage->typeList,
+                    'value'    => $plan->attribute,
+                    'required' => true
+                ))) : zget($lang->stage->typeList, $plan->attribute)
+            )
         ),
         formGroup
         (
@@ -139,87 +119,59 @@ formPanel
             )
         )
     ),
+    formGroup
+    (
+        set::label($lang->programplan->planDateRange),
+        set::width('2/3'),
+        set::required(true),
+        inputGroup
+        (
+            datepicker(set::name('begin'), set::value($plan->begin)),
+            $lang->project->to,
+            datepicker(set::name('end'), set::value($plan->end))
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->programplan->realDateRange),
+        set::width('2/3'),
+        inputGroup
+        (
+            datepicker(set::name('realBegan'), set::value($plan->realBegan)),
+            $lang->project->to,
+            datepicker(set::name('realEnd'), set::value($plan->realEnd))
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->project->acl),
+        set::width('2/3'),
+        select
+        (
+            set::name('acl'),
+            set::items($lang->execution->aclList),
+            set::value($plan->acl),
+            set::disabled($plan->grade == 2 ? 'disabled' : ''),
+            set::required(true)
+        )
+    ),
     $plan->setMilestone ?
     formGroup
     (
-        set(array(
-            'label' => $lang->programplan->milestone,
-            'width' => '2/3'
-        )),
-        radioList(set(array(
-            'name'   => 'milestone',
-            'items'  => $lang->programplan->milestoneList,
-            'value'  => $plan->milestone,
-            'inline' => true
-        )))
-    ) : input(set(array(
-        'type'  => 'hidden',
-        'value' => $plan->milestone
-    ))),
-    formGroup
-    (
-        set(array(
-            'label' => $lang->project->acl,
-            'width' => '2/3'
-        )),
-        select(set(array(
-            'name'     => 'acl',
-            'items'    => $lang->execution->aclList,
-            'value'    => $plan->acl,
-            'disabled' => $plan->grade == 2 ? 'disabled' : '',
-            'required' => true
-        )))
-    ),
-    formGroup
-    (
-        set(array(
-            'label'    => $lang->programplan->planDateRange,
-            'required' => true,
-            'width'    => '2/3'
-        )),
-        inputGroup
-        (
-            input(set(array(
-                'type'  => 'date',
-                'name'  => 'begin',
-                'value' => $plan->begin
-            ))),
-            $lang->project->to,
-            input(set(array(
-                'type'  => 'date',
-                'name'  => 'end',
-                'value' => $plan->end
-            )))
+        set::label($lang->programplan->milestone),
+        set::width('2/3'),
+        radioList(
+            set::name('milestone'),
+            set::items($lang->programplan->milestoneList),
+            set::value($plan->milestone),
+            set::inline(true)
         )
-    ),
-    formGroup
-    (
-        set(array(
-            'label' => $lang->programplan->realDateRange,
-            'width' => '2/3'
-        )),
-        inputGroup
-        (
-            input(set(array(
-                'type'  => 'date',
-                'name'  => 'realBegan',
-                'value' => $plan->realBegan
-            ))),
-            $lang->project->to,
-            input(set(array(
-                'type'  => 'date',
-                'name'  => 'realEnd',
-                'value' => $plan->realEnd
-            )))
-        )
-    ),
+    ) : input(set::type('hidden'), set::value($plan->milestone)),
     isset($this->config->qcVersion) ?
     formGroup
     (
-        set(array(
-            'label' => $lang->programplan->output,
-            'width' => '2/3'
-        )),
+        set::label($lang->programplan->output),
+        set::width('2/3'),
         select(set(array(
             'name'     => 'output[]',
             'items'    => $documentList,
@@ -227,22 +179,7 @@ formPanel
             'multiple' => true,
             'required' => true
         )))
-    ) : null,
-    formGroup
-    (
-        set(array(
-            'width' => '2/3',
-            'class' => 'justify-center form-actions'
-        )),
-        btn
-        (
-            on::click('editStage()'),
-            set(array(
-                'text'  => $lang->save,
-                'class' => 'primary toolbar-item'
-            ))
-        )
-    )
+    ) : null
 );
 
 render();

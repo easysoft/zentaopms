@@ -117,7 +117,7 @@ class programplanZen extends programplan
         $this->view->isCreateTask       = $this->programplan->isCreateTask($plan->id);
         $this->view->plan               = $plan;
         $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $plan->id, $plan->product);
-        $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
+        $this->view->enableOptionalAttr = empty($parentStage) || (!empty($parentStage) && $parentStage->attribute == 'mix');
         $this->view->isTopStage         = $this->programplan->isTopStage($plan->id);
         $this->view->isLeafStage        = $this->programplan->checkLeafStage($plan->id);
         $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
