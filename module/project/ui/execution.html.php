@@ -57,6 +57,20 @@ $config->projectExecution->dtable->fieldList['actions']['menu'] = $config->proje
 $executions = $this->execution->generateRow($executionStats, $users, $avatarList);
 $executions = initTableData($executions, $config->projectExecution->dtable->fieldList, $this->project);
 
+/* Generate data table fields. */
+$fnGenerateCols = function() use ($config, $project)
+{
+    $fieldList = $config->projectExecution->dtable->fieldList;
+
+    /* waterfall & waterfallplus model with different edit link. */
+    if(in_array($project->model, array('waterfall', 'waterfallplus')))
+    {
+        $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
+    }
+
+    return array_values($fieldList);
+};
+
 /* zin: Define the feature bar on main menu. */
 $checked = $this->cookie->showTask ? 'checked' : '';
 $productMenuLink = createLink(
@@ -118,7 +132,7 @@ toolbar
 dtable
 (
     set::userMap($users),
-    set::cols(array_values($config->projectExecution->dtable->fieldList)),
+    set::cols($fnGenerateCols()),
     set::data($executions),
     set::checkable($canBatchAction),
     set::fixedLeftWidth('44%'),
