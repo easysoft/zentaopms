@@ -18,5 +18,6 @@ cid=1
 */
 
 r(count($calc->getResult())) && p('') && e('25'); // 测试分组数
+
 r($calc->getResult(array('product' => '2,3,4')))    && p('0:value;1:value;2:value') && e('2;2;2'); // 测试产品1需求数
-r($calc->getResult(array('product' => '999,1000'))) && p('') && e('0');                            // 测试不存在产品的需求数
+r($calc->getResult(array('product' => '999,1000'))) && p('')                        && e('0');     // 测试不存在产品的需求数

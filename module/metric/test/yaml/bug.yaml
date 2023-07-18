@@ -5,11 +5,9 @@ version: "1.0"
 fields:
 - field: id
   range: 1-10000
-- field: status
-  range: active{4},resolved{4},closed{4}
-- field: resolution
-  range: bydesign{4},duplicate{4},external{4},fixed{4},notrepro{4},postponed{4},tostory{4},willnotfixi{4}
+- field: product
+  range: 1-10{2}
 - field: deleted
-  range: 0{2},1{2}
+  range: 0{1},1{1}
 ...
 

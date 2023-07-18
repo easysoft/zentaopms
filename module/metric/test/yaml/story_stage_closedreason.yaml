@@ -6,7 +6,7 @@ fields:
 - field: id
   range: 1-10000
 - field: product
-  range: 1-50{40}
+  range: 1-10{140}
 - field: openedDate
   range: "20100101 000000-20210101 230000:10D"
   type: timestamp
@@ -20,11 +20,9 @@ fields:
 - field: stage
   range: wait{1},planned{1},projected{1},developing{1},developed{1},testing{1},tested{1},verified{1},released{1},closed{1}
 - field: closedReason
-  range: bydesign{1},cancel{1},done{1},duplicate{1},postponed{1},subdivided{1},willnotdo{1}
-- field: status
-  range: changing{1},active{1},draft{1},reviewing{1},closed{1}
+  range: bydesign{10},cancel{10},done{10},duplicate{10},postponed{10},subdivided{10},willnotdo{10}
 - field: type
-  range: requirement{20},story{20}
+  range: story
 - field: deleted
-  range: 0{10},1{10}
+  range: 0{70},1{70}
 ...

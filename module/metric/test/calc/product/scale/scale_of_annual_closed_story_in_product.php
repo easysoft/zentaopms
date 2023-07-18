@@ -3,8 +3,8 @@
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
-zdTable('product')->gen(200);
-zdTable('story')->config('story_close')->gen(5000);
+zdTable('product')->config('product', $useCommon = true, $levels = 4)->gen(10);
+zdTable('story')->config('story_stage_closedreason', $useCommon = true, $levels = 4)->gen(3000);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
@@ -16,8 +16,11 @@ cid=1
 pid=1
 
 */
-r(count($calc->getResult())) && p('') && e('371'); // 测试按产品的年度关闭需求分组数。
+r(count($calc->getResult())) && p('') && e('25'); // 测试按产品的年度关闭需求分组数。
 
-r($calc->getResult(array('product' => '16',  'year' => '2019'))) && p('0:value') && e('110'); // 测试2019年产品16关闭的需求规模数。
-r($calc->getResult(array('product' => '78',  'year' => '2020'))) && p('0:value') && e('55'); // 测试2020年产品78关闭的需求规模数。
-r($calc->getResult(array('product' => '999', 'year' => '2021'))) && p('')        && e('0');  // 测试不存在的产品的需求规模数。
+r($calc->getResult(array('product' => '7',  'year' => '2012')))  && p('0:value') && e('180'); // 测试2012年产品7关闭的需求规模数。
+r($calc->getResult(array('product' => '7',  'year' => '2015')))  && p('0:value') && e('208'); // 测试2015年产品7关闭的需求规模数。
+r($calc->getResult(array('product' => '9',  'year' => '2011')))  && p('0:value') && e('276'); // 测试2011年产品9关闭的需求规模数。
+r($calc->getResult(array('product' => '9',  'year' => '2012')))  && p('0:value') && e('216'); // 测试2012年产品9关闭的需求规模数。
+r($calc->getResult(array('product' => '8',  'year' => '2012')))  && p('0:value') && e('0');   // 测试已删除产品关闭的需求规模数。
+r($calc->getResult(array('product' => '999', 'year' => '2021'))) && p('')        && e('0');   // 测试不存在的产品的需求规模数。

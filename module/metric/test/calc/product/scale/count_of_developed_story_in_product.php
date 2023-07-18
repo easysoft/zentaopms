@@ -3,21 +3,22 @@
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
-zdTable('story')->gen(1000);
-zdTable('product')->gen(1000);
+zdTable('story')->config('story_stage_closedreason', $useCommon = true, $levels = 4)->gen(2000);
+zdTable('product')->config('product', $useCommon = true, $levels = 4)->gen(10);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
 /**
 
-title=count_of_developed_story_in_product.php
+title=count_of_developed_story_in_product
 timeout=0
 cid=1
 
 */
 
-r(count($calc->getResult()))                        && p('')                        && e('86');    // 测试分组数
-r($calc->getResult(array('product' => '1,2,3')))    && p('0:value;1:value')         && e('1,1');   // 测试产品1，2，3已开发的需求数
-r($calc->getResult(array('product' => '11,12,13'))) && p('0:value;1:value;2:value') && e('1,1,1'); // 测试产品11，12，13已开发的需求数
-r($calc->getResult(array('product' => '9999')))     && p('')                        && e('0');     // 测试不存在的产品下的需求数
+r(count($calc->getResult()))                    && p('')        && e('5'); // 测试分组数
+r($calc->getResult(array('product' => '1')))    && p('0:value') && e('1'); // 测试产品1已开发的需求数
+r($calc->getResult(array('product' => '3')))    && p('0:value') && e('1'); // 测试产品3已开发的需求数
+r($calc->getResult(array('product' => '4')))    && p('0:value') && e('0'); // 测试已删除产品4已开发的需求数
+r($calc->getResult(array('product' => '9999'))) && p('')        && e('0'); // 测试不存在的产品下的需求数

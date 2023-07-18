@@ -6,11 +6,11 @@ fields:
 - field: id
   range: 1-10000
 - field: product
-  range: 1-100{10}
+  range: 1-10{2}
 - field: createdDate
-  range: "20100101 000000-20210101 230000:2D"
+  range: "20100101 000000-20210101 230000:10D"
   type: timestamp
   format: YYYY-MM-DD hh:mm:ss
 - field: deleted
-  range: 0{2},1{2}
+  range: 0{1},1{1}
 ...

@@ -3,8 +3,8 @@
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
-zdTable('story')->gen(100);
-zdTable('product')->gen(100);
+zdTable('story')->config('story_stage_closedreason', $useCommon = true, $levels = 4)->gen(2000);
+zdTable('product')->config('product', $useCommon = true, $levels = 4)->gen(10);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
@@ -16,7 +16,9 @@ timeout=0
 cid=1
 
 */
-r(count($calc->getResult())) && p('')&& e('17');                          // 测试分组数
-r($calc->getResult(array('product' => '1')))   && p('0:value') && e('1'); // 测试产品1交付需求数
-r($calc->getResult(array('product' => '25')))  && p('0:value') && e('2'); // 测试产品25交付需求数
-r($calc->getResult(array('product' => '999'))) && p('')        && e('0'); // 测试不存在产品交付需求数
+
+r(count($calc->getResult()))                   && p('')        && e('5');  // 测试分组数
+r($calc->getResult(array('product' => '3')))   && p('0:value') && e('32'); // 测试产品3交付需求数
+r($calc->getResult(array('product' => '5')))   && p('0:value') && e('29'); // 测试产品5交付需求数
+r($calc->getResult(array('product' => '4')))   && p('0:value') && e('0');  // 测试已删除产品4交付需求数
+r($calc->getResult(array('product' => '999'))) && p('')        && e('0');  // 测试不存在产品交付需求数
