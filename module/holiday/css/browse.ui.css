@@ -1,4 +1,4 @@
-.sidebar > .cell {padding: 10px; background-color: #fff; border-radius: 4px; position: relative; left: 0; width: 180px; -webkit-transition: left .2s,opacity .2s; -o-transition: left .2s,opacity .2s; transition: left .2s,opacity .2s;}
+.sidebar > .cell {padding: 10px; background-color: #fff; border-radius: 4px; position: relative; left: 0; -webkit-transition: left .2s,opacity .2s; -o-transition: left .2s,opacity .2s; transition: left .2s,opacity .2s;}
 .list-group.tab-menu > a {padding: 6px 24px;}
 
 .main-col.main-content .main-header {display: flex}

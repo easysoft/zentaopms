@@ -14,6 +14,7 @@ jsVar('changeYearLink', createLink('holiday', 'browse', 'year={year}'));
 
 sidebar
 (
+    set::showToggle(false),
     div
     (
         setClass('cell'),
@@ -69,7 +70,7 @@ div
                     setClass('form-name'),
                     h::strong($lang->holiday->checkYear),
                 ),
-                select
+                picker
                 (
                     set::name('year'),
                     set::value($currentYear),
