@@ -2,6 +2,45 @@
 declare(strict_types=1);
 namespace zin;
 
+/**
+ * Build params rows.
+ *
+ * @param array $params
+ * @return array
+ */
+function buildParamsRows(?array $params = null): array
+{
+    if(empty($params)) $params = data('params');
+    $rows = array();
+    foreach($params as $key => $row)
+    {
+        $rows[] = formRow
+        (
+            formGroup
+            (
+                set::label($row['name']),
+                set::name("params[$key]"),
+                set::value(zget($row, 'default', '')),
+                set::control(array
+                (
+                    'id'       => "params$key",
+                    'type'     => $row['control'],
+                    'items'    => isset($row['options']) ? $row['options'] : null,
+                )),
+                set::required($row['control'] === 'picker'),
+            ),
+        );
+    }
+    return $rows;
+}
+
+/**
+ * Build block module nav.
+ *
+ * @param array  $modules
+ * @param string $module
+ * @return array
+ */
 function buildBlockModuleNav(?array $modules = null, ?string $module = null): wg
 {
     if(empty($modules)) $modules = data('modules');
@@ -27,7 +66,7 @@ function buildBlockModuleNav(?array $modules = null, ?string $module = null): wg
 
     return nav
     (
-        set::class('block-modules-nav'),
+        set::class('block-modules-nav py-2'),
         set::stacked(true),
         set::items($items),
         on::click('.nav-item>a', 'getForm'),

@@ -5,7 +5,7 @@ function getForm(event)
     const module = field == 'code' ? $('#blockEditForm #module').val() : $target.attr('data-module');
     const code   = field == 'code' ? $target.val() : '';
     const url    = $.createLink('block', 'edit', 'blockID=' + blockID + '&module=' + module + '&code=' + (code ? code : ''));
-    loadPage({url: url, selector: '#blockEditForm #codesRow, #blockEditForm #paramsRow, #blockEditForm #module', partial: true});
+    loadPartial(url, '#blockCreateForm #codesRow, #blockCreateForm #paramsRow, #blockCreateForm #module');
 
     const $nav = $('#blockEditForm .block-modules-nav');
     $nav.find('.nav-item>.active').removeClass('active');

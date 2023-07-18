@@ -24,36 +24,13 @@ $widths       = !empty($config->block->size[$module][$code]) ? array_keys($confi
 $widthOptions = array();
 foreach($widths as $width) $widthOptions[$width] = zget($lang->block->widthOptions, $width);
 
-$defaultWidth = !empty($config->block->size[$module][$code]) ? reset(array_keys($config->block->size[$module][$code])) : 1;
-
-$paramsRows  = array();
-foreach($params as $key => $row)
-{
-    $paramsRows[] = formRow
-    (
-        formGroup
-        (
-            set::label($row['name']),
-            set::name("params[$key]"),
-            set::value(zget($row, 'default', '')),
-            set::control(array
-            (
-                'id'       => "params$key",
-                'type'     => $row['control'],
-                'items'    => isset($row['options']) ? $row['options'] : null,
-            )),
-            $row['control'] == 'picker' ? set::required(true) : '',
-        ),
-    );
-}
-
 row
 (
     setID('blockEditForm'),
     $showModules ? cell
     (
         set::width(128),
-        set::class('bg-surface rounded rounded-r-none rounded-tl-none overflow-y-auto'),
+        set::class('flex-none bg-surface rounded rounded-r-none rounded-tl-none overflow-y-auto'),
         buildBlockModuleNav()
     ) : null,
     cell
@@ -105,7 +82,7 @@ row
                         set::control('input')
                     ),
                 ),
-                $paramsRows,
+                buildParamsRows(),
                 formRow
                 (
                     setClass(empty($code) ? 'hidden' : ''),
