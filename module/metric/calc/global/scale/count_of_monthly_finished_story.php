@@ -25,20 +25,35 @@
  */
 class count_of_monthly_finished_story extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $fieldList = array('t1.closedDate');
 
     public function calculate($data)
     {
+        $closedDate = $data->closedDate;
+
+        $year  = substr($closedDate, 0, 4);
+        $month = substr($closedDate, 5, 2);
+
+        if($year == '0000') return;
+
+        if(!isset($this->result[$year])) $this->result[$year] = array();
+        if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;
+
+        $this->result[$year][$month] += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array();
+        foreach($this->result as $year => $months)
+        {
+            foreach($months as $month => $value)
+            {
+                $records[] = array('year' => $year, 'month' => $month, 'value' => $value);
+            }
+        }
+        return $this->filterByOptions($records, $options);
     }
 }
