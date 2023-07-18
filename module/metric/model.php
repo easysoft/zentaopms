@@ -17,9 +17,9 @@ class metricModel extends model
      *
      * @param  object $calculator
      * @access public
-     * @return PDOStatement
+     * @return PDOStatement|string
      */
-    public function getSourceStatement($calculator, $returnType = 'statement')
+    public function getDataStatement($calculator, $returnType = 'statement')
     {
         if(!empty($calculator->dataset))
         {
@@ -35,6 +35,7 @@ class metricModel extends model
         else
         {
             $calculator->setDAO($this->dao);
+
             $statement = $calculator->getStatement();
             $sql       = $calculator->dao->get();
         }
@@ -47,7 +48,7 @@ class metricModel extends model
      * Get result of calculate metric by code.
      *
      * @param  string $code
-     * @param  array  $options
+     * @param  array  $options e.g. array('product' => '1,2,3', 'year' => '2023')
      * @access public
      * @return array
      */
@@ -63,7 +64,7 @@ class metricModel extends model
         include_once $calcPath;
         $calculator = new $metric->code;
 
-        $statement = $this->getSourceStatement($calculator);
+        $statement = $this->getDataStatement($calculator);
         $rows = $statement->fetchAll();
 
         foreach($rows as $row) $calculator->calculate($row);
@@ -74,8 +75,8 @@ class metricModel extends model
      * 根据代号列表批量获取度量项的结果。
      * Get result of calculate metric by code list.
      *
-     * @param  array $codes
-     * @param  array $options
+     * @param  array $codes   e.g. array('code1', 'code2')
+     * @param  array $options e.g. array('product' => '1,2,3', 'year' => '2023')
      * @access public
      * @return array
      */
@@ -121,7 +122,7 @@ class metricModel extends model
     }
 
     /**
-     * 获取可计算的度量项对象。
+     * 获取可计算的度量项对象列表。
      * Get executable calculator list.
      *
      * @access public
@@ -205,7 +206,7 @@ class metricModel extends model
      * 对度量项按照通用数据集进行归类，没有数据集不做归类。
      * Classify calculator instance list by its data set.
      *
-     * @param  array  $calcInstanceList
+     * @param  array  $calcList
      * @access public
      * @return array
      */
@@ -235,7 +236,7 @@ class metricModel extends model
 
     /**
      * 对度量项的字段列表取并集。
-     * Unite field list of each calc.
+     * Unite field list of each calculator.
      *
      * @param  array  $calcList
      * @access public
