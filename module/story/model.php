@@ -3268,7 +3268,7 @@ class storyModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->andWhere('t1.type')->eq($type)
-            ->beginIF($branch != 'all')->andWhere("t1.branch")->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere("t1.branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("t1.module")->in($modules)->fi()
             ->beginIF($operator == 'equal' and $fieldName != 'reviewBy' and $fieldName != 'assignedBy')->andWhere('t1.' . $fieldName)->eq($fieldValue)->fi()
             ->beginIF($operator == 'include' and $fieldName != 'reviewBy' and $fieldName != 'assignedBy')->andWhere('t1.' . $fieldName)->like("%$fieldValue%")->fi()
