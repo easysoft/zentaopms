@@ -76,12 +76,13 @@ $getProjectTabs = function(array $projects, string $blockNavCode, bool $longBloc
  * Get project doc list.
  *
  * @param  array  $projects
+ * @param  array  $users
  * @param  array  $docGroup
  * @param  string $blockNavID
  * @param  bool   $longBlock
  * @return array
  */
-$getProjectInfo = function(array $projects, array $docGroup, string $blockNavID, bool $longBlock): array
+$getProjectInfo = function(array $projects, array $users, array $docGroup, string $blockNavID, bool $longBlock): array
 {
     global $lang, $config;
     $tabItems = array();
@@ -113,7 +114,24 @@ panel
     on::click('.nav-prev,.nav-next', 'switchNav'),
     set('class', 'projectdoc-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
-    set::title($block->title),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title'),
+            span(span($block->title)),
+            dropdown
+            (
+                a
+                (
+                    setClass('text-gray ml-4'),
+                    $lang->project->involved,
+                    span(setClass('caret align-middle ml-1'))
+                ),
+                set::items(array(array('text' => $lang->project->involved), array('text' => $lang->project->all)))
+            ),
+        )
+    ),
     to::headingActions
     (
         a
@@ -141,7 +159,7 @@ panel
         (
             set('class', 'tab-content'),
             set('width', '78%'),
-            $getProjectInfo($projects, $docGroup, $blockNavCode, $longBlock)
+            $getProjectInfo($projects, $users, $docGroup, $blockNavCode, $longBlock)
         )
     )
 );

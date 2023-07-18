@@ -7,6 +7,7 @@ $config->block->doc->dtable = new stdclass();
 $config->block->doc->dtable->fieldList = array();
 $config->block->doc->dtable->fieldList['title']['name']  = 'title';
 $config->block->doc->dtable->fieldList['title']['title'] = $lang->doc->title;
+$config->block->doc->dtable->fieldList['title']['link']  = array('module' => 'doc', 'method' => 'view', 'params' => 'docID={id}');
 $config->block->doc->dtable->fieldList['title']['type']  = 'title';
 
 $config->block->doc->dtable->fieldList['addedBy']['name']  = 'addedBy';

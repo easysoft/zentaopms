@@ -113,7 +113,24 @@ panel
     on::click('.nav-prev,.nav-next', 'switchNav'),
     set('class', 'productdoc-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set('headingClass', 'border-b'),
-    set::title($block->title),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title'),
+            span(span($block->title)),
+            dropdown
+            (
+                a
+                (
+                    setClass('text-gray ml-4'),
+                    $lang->product->involved,
+                    span(setClass('caret align-middle ml-1'))
+                ),
+                set::items(array(array('text' => $lang->product->involved), array('text' => $lang->product->all)))
+            ),
+        )
+    ),
     to::headingActions
     (
         a
