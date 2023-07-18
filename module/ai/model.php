@@ -415,9 +415,9 @@ class aiModel extends model
 
         $this->dao->insert(TABLE_PROMPT)
             ->data($prompt)
-            ->autoCheck()
             ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
             ->check('name', 'unique')
+            ->autoCheck()
             ->exec();
 
         return dao::isError() ? false : $this->dao->lastInsertID();
@@ -442,9 +442,9 @@ class aiModel extends model
 
         $this->dao->update(TABLE_PROMPT)
             ->data($prompt)
-            ->autoCheck()
             ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
-            ->check('name', 'unique')
+            ->check('name', 'unique', "`id` != {$prompt->id}")
+            ->autoCheck()
             ->where('id')->eq($prompt->id)
             ->exec();
 
