@@ -221,12 +221,13 @@ class personnel extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->personnel->confirmDelete, inLink('unbindWhitelist',"id=$id&confirm=yes")));
+            $confirmURL = inlink('unbindWhitelist',"id=$id&confirm=yes");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->personnel->confirmDelete}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
         else
         {
             $acl = $this->dao->select('*')->from(TABLE_ACL)->where('id')->eq($id)->fetch();
-            if(empty($acl)) return print(js::reload('parent'));
+            if(empty($acl)) return $this->send(array('result' => 'success', 'load' => true));
 
             $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
             $whitelist    = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
@@ -242,10 +243,9 @@ class personnel extends control
             if($acl->objectType == 'sprint')  $this->personnel->deleteProjectWhitelist($acl->objectID, $acl->account);
 
             $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, array($acl->account));
-
             $this->loadModel('action')->create('whitelist', $acl->objectID, 'managedWhitelist', '', $acl->objectType);
 
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
     }
 }

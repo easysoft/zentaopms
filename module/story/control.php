@@ -784,7 +784,7 @@ class story extends control
     public function delete($storyID, $confirm = 'no', $from = '', $storyType = 'story')
     {
         $story = $this->story->getById($storyID);
-        if($story->parent < 0) return print(js::alert($this->lang->story->cannotDeleteParent));
+        if($story->parent < 0) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->story->cannotDeleteParent}');"));
 
         if($confirm == 'no')
         {

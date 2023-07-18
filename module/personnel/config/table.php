@@ -37,11 +37,13 @@ $config->personnel->accessible->dtable->fieldList['gender']['map']    = $lang->u
 $config->personnel->whitelist         = new stdclass();
 $config->personnel->whitelist->dtable = new stdclass();
 
-$config->personnel->whitelist->actionList['unbindWhitelist']['icon']  = 'unlink';
-$config->personnel->whitelist->actionList['unbindWhitelist']['hint']  = $lang->personnel->delete;
-$config->personnel->whitelist->actionList['unbindWhitelist']['text']  = $lang->personnel->delete;
-$config->personnel->whitelist->actionList['unbindWhitelist']['show']  = 'clickable';
-$config->personnel->whitelist->actionList['unbindWhitelist']['url']   = array('module' => 'personnel', 'method' => 'unbindWhitelist', 'params' => 'userID={id}');
+$config->personnel->whitelist->actionList['unbindWhitelist']['icon']         = 'unlink';
+$config->personnel->whitelist->actionList['unbindWhitelist']['hint']         = $lang->personnel->delete;
+$config->personnel->whitelist->actionList['unbindWhitelist']['text']         = $lang->personnel->delete;
+$config->personnel->whitelist->actionList['unbindWhitelist']['show']         = true;
+$config->personnel->whitelist->actionList['unbindWhitelist']['url']          = array('module' => 'personnel', 'method' => 'unbindWhitelist', 'params' => 'userID={id}&confim=yes');
+$config->personnel->whitelist->actionList['unbindWhitelist']['className']    = 'ajax-submit';
+$config->personnel->whitelist->actionList['unbindWhitelist']['data-confirm'] = json_encode(array('message' => array('html' => "<strong><i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$lang->personnel->confirmDelete}</strong>")));
 
 $config->personnel->whitelist->dtable->fieldList['id']['name']  = 'id';
 $config->personnel->whitelist->dtable->fieldList['id']['title'] = $lang->idAB;
