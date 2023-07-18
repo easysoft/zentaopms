@@ -24,20 +24,35 @@
  */
 class count_of_monthly_created_story extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $fieldList = array('t1.openedDate');
 
     public function calculate($data)
     {
+        $openedDate = $data->openedDate;
+
+        $year  = substr($openedDate, 0, 4);
+        $month = substr($openedDate, 5, 2);
+
+        if($year == '0000') return;
+
+        if(!isset($this->result[$year])) $this->result[$year] = array();
+        if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;
+
+        $this->result[$year][$month] += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array();
+        foreach($this->result as $year => $months)
+        {
+            foreach($months as $month => $value)
+            {
+                $records[] = array('year' => $year, 'month' => $month, 'value' => $value);
+            }
+        }
+        return $this->filterByOptions($records, $options);
     }
 }
