@@ -51,28 +51,23 @@ else
     foreach($dateGroups as $date => $actions)
     {
         $isToday   = date(DT_DATE4) == $date;
-        $content[] = div
+        $content[] = li
         (
-            setClass('flex flex-col mt-4'),
             div
             (
-                setClass('flex items-center justify-between w-30 p-2 border-2 rounded-md date-block'),
+                setClass('my-4 cursor-pointer'),
+                icon('angle-down text-primary border-2 rounded-full toolbar z-10 bg-canvas'),
                 span
                 (
-                    setClass('text-gray'),
+                    setClass('article-h3 ml-2'),
                     $isToday ? $lang->action->dynamic->today : $date,
                 ),
-                btn
-                (
-                    setClass('ml-4 btn-link nav-feature'),
-                    set::type('link'),
-                    icon('caret-down btn-caret'),
-                    on::click('toggleActions'),
-                )
+                on::click('toggleCollapse')
             ),
             div
             (
-                setClass('flex-auto p-2 ml-4 border-2 rounded-md px-4'),
+                setClass('flex-auto mx-6 mt-2 px-4 alert lighter'),
+                setClass($type == 'today' ? 'border-secondary' : ''),
                 dynamic
                 (
                     set::dynamics($actions),
@@ -81,9 +76,32 @@ else
             )
         );
     }
+
+    $content = ul
+    (
+        setClass('timeline'),
+        $content
+    );
 }
 
-panel
-(
-    $content
-);
+
+panel($content);
+
+if(!empty($firstAction))
+{
+    $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
+    $lastDate  = substr($action->originalDate, 0, 10);
+    $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
+    $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
+    $preLink   = $hasPre ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
+    $nextLink  = $hasNext ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+
+    if($hasPre || $hasNext)
+    {
+        floatPreNextBtn
+        (
+            empty($hasPre)  ? null : set::preLink($preLink),
+            empty($hasNext) ? null : set::nextLink($nextLink)
+        );
+    }
+}

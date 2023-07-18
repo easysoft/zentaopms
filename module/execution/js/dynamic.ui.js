@@ -6,7 +6,7 @@ window.changeUser = function()
     loadPage($.createLink('execution', 'dynamic', `productID=${executionID}&type=${type}&param=${user}`));
 }
 
-window.toggleActions = function()
+window.toggleCollapse = function()
 {
-    $(this).closest('.flex-col').find('.dynamic').toggleClass('collapsed');
+    $(this).parent().toggleClass('collapsed');
 }
