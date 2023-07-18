@@ -131,7 +131,7 @@ panel
                     formGroup
                     (
                         set::label($lang->user->contacts->selectedUsers),
-                        select
+                        picker
                         (
                             set::multiple(true),
                             set::name('userList[]'),
