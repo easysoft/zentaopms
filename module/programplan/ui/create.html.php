@@ -167,13 +167,10 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
 /* Generate default rendering data. */
 $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType)
 {
-    /* If the $planID variable is not empty, then the user is on the sub-stages creation page and no default values should be used. */
-    if(!empty($planID)) return array();
-
     $items = array();
 
     /* Created a new project witho no stages. */
-    if(empty($plans))
+    if(empty($plans) && $planID == 0)
     {
         foreach($stages as $stage)
         {
@@ -208,16 +205,17 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         {
             $item->code = $plan->code;
         }
-        $item->PM        = $plan->PM;
-        $item->percent   = $plan->percent;
-        $item->attribute = $plan->attribute;
-        $item->acl       = $plan->acl;
-        $item->milestone = $plan->milestone;
-        $item->begin     = $plan->begin;
-        $item->end       = $plan->end;
-        $item->realBegan = $plan->realBegan;
-        $item->realEnd   = $plan->realEnd;
-        $item->desc      = $plan->desc;
+        $item->PM           = $plan->PM;
+        $item->percent      = $plan->percent;
+        $item->attribute    = $plan->attribute;
+        $item->acl          = $plan->acl;
+        $item->milestone    = $plan->milestone;
+        $item->begin        = $plan->begin;
+        $item->end          = $plan->end;
+        $item->realBegan    = $plan->realBegan;
+        $item->realEnd      = $plan->realEnd;
+        $item->desc         = $plan->desc;
+        $item->setMilestone = $plan->setMilestone;
         if($config->edition == 'max' && $executionType == 'stage')
         {
             $item->output = empty($plan->output) ? 0 : explode(',', $plan->output);

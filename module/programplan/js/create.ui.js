@@ -2,7 +2,14 @@ window.onRenderRow = function(row, rowIdx, data)
 {
     if(!data || !data.planIDList) return;
 
-    row.children('.form-batch-row-actions').children('[data-type=delete]').remove();
+    row.children('.form-batch-row-actions').children('[data-type=delete]').addClass('hidden');
+    row.children('[data-name=type]').children('select').attr('disabled', 'disabled');
+
+    /* Use the flag variable 'setMilestone' to toggle the enable/disable status of the milestone field. */
+    if(!data.setMilestone)
+    {
+        row.children('[data-name=milestone]').children('select').attr('disabled', 'disabled');
+    }
 };
 
 window.onChangeExecutionType = function(event)
