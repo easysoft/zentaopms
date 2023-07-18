@@ -13,7 +13,7 @@
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -21,20 +21,27 @@
  */
 class count_of_valid_story_in_product extends baseCalc
 {
-    public $dataset = null;
-
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
-
-    public function calculate($data)
+    public function getStatement()
     {
+        return $this->dao->select('t1.product,t1.id')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('story')
+            ->andWhere('t1.closedReason')->notin('duplicate,willnotdo,bydesign,cancel')
+            ->query();
+    }
+
+    public function calculate($row)
+    {
+        if(!isset($this->result[$row->product])) $this->result[$row->product] = 0;
+        $this->result[$row->product] += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array();
+        foreach($this->result as $product => $value) $records[] = array('product' => $product, 'value' => $value);
+        return $this->filterByOptions($records, $options);
     }
 }
