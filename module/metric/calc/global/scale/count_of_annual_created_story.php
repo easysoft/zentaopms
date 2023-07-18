@@ -24,20 +24,30 @@
  */
 class count_of_annual_created_story extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $fieldList = array('t1.openedDate');
 
     public function calculate($data)
     {
+        $openedDate = $data->openedDate;
+
+        $year  = substr($openedDate, 0, 4);
+
+        if($year == '0000') return;
+
+        if(!isset($this->result[$year])) $this->result[$year] = 0;
+
+        $this->result[$year] += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array();
+        foreach($this->result as $year => $value)
+        {
+            $records[] = array('year' => $year, 'value' => $value);
+        }
+        return $this->filterByOptions($records, $options);
     }
 }
