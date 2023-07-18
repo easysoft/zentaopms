@@ -74,8 +74,8 @@
             <div class='input' style="padding: 6px 0;">
               <?php
               $targetForm = explode('.', $prompt->targetForm);
-              echo $this->lang->ai->targetForm[$targetForm[0]][$targetForm[1]]
-              ; ?>
+              echo $this->lang->ai->targetForm[$targetForm[0]][$targetForm[1]];
+              ?>
             </div>
           </div>
         </div>
