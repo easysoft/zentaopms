@@ -505,7 +505,7 @@
     function loadPage(options, selector)
     {
         if(typeof options === 'string') options = {url: options};
-        else if(!options) options = {};
+        options = options || {};
 
         if ($.apps.isOldPage(options.url)) return loadOldPage(options.url);
         else hideOldPage();
@@ -534,6 +534,11 @@
 
         if(DEBUG) console.log('[APP] ', 'load:', options.url);
         fetchContent(options.url, options.selector, options);
+    }
+
+    function loadPartial(url, selector, options)
+    {
+        loadPage($.extend({partial: true, url: url, selector: selector}, options));
     }
 
     /** Load zui component. */
@@ -868,7 +873,7 @@
         return result;
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial});
     $.extend($.apps, {openUrl: openUrl});
 
     /* Transfer click event to parent */
