@@ -2553,11 +2553,12 @@ EOF;
      */
     public static function hasPriv($module, $method, $object = null, $vars = '')
     {
-        global $app, $lang;
+        global $app, $lang, $config;
         $module = strtolower($module);
         $method = strtolower($method);
         parse_str($vars, $params);
 
+        if($config->vision == 'or' and $module == 'story') $module = 'requirement';
         if(empty($params['storyType']) and $module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
         if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
         if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
