@@ -15,7 +15,7 @@
 .dynamic > li.trophy:before {background: url('static/svg/trophy.svg') no-repeat; width: 20px; height: 20px; background-size: 100%; left: -22px; top: 9px;}
 .dynamic > li > div {display: block; padding: 5px; line-height: 20px}
 .dynamic > li.trophy .dynamic-text {background: #fff;}
-.dynamic > li.trophy .dynamic-text img {opacity: 0.5; transform: rotate(10deg);}
+.dynamic > li.trophy .dynamic-text img {opacity: 0.2; transform: rotate(10deg);}
 .dynamic > li.green > div, .dynamic > li.active > div, .dynamic > li.yellow > div {color: #313c52}
 
 .dynamic-tag {position: absolute; top: 5px; left: -115px; font-size: 12px}
