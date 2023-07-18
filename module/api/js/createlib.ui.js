@@ -1,0 +1,4 @@
+$(function()
+{
+    toggleLibType(libType);
+});
