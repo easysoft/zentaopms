@@ -30,7 +30,7 @@
     $html .= html::a($executable ? $this->ai->getTestingLocation($prompt) : '#', '<i class="icon-bug text-primary"></i>', '', "class='btn"  . ($executable && !$published ? '' : ' disabled') . "' title='{$lang->ai->prompts->action->test}'" . ($executable ? '' : " data-toggle='modal' data-target='#designConfirmModal'"));
 
     /* Edit button. */
-    $html .= html::a(helper::createLink('ai', '', "prompt=$prompt->id"), '<i class="icon-edit text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->edit}'");
+    $html .= html::a(helper::createLink('ai', 'promptedit', "prompt=$prompt->id"), '<i class="icon-edit text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->edit}'");
 
     /* Divider. */
     $html .= '<div class="dividing-line"></div>';

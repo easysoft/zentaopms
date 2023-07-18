@@ -428,7 +428,8 @@ class ai extends control
      */
     public function promptAudit($promptId, $objectId)
     {
-        $prompt                    = $this->ai->getPromptByID($promptId);
+        $prompt = $this->ai->getPromptByID($promptId);
+
         list($objectData, $object) = $this->ai->getObjectForPromptById($prompt, $objectId);
 
         $this->view->prompt     = $prompt;
@@ -436,5 +437,35 @@ class ai extends control
         $this->view->dataPrompt = $this->ai->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
 
         $this->display();
+    }
+
+    /**
+     * Publish prompt, set status to active.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function promptPublish($id)
+    {
+        $this->ai->togglePromptStatus($id, 'active');
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Unpublish prompt, set status to draft.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function promptUnpublish($id)
+    {
+        $this->ai->togglePromptStatus($id, 'draft');
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success'));
     }
 }

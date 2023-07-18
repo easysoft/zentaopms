@@ -49,6 +49,8 @@ $lang->ai->prompts->action->test            = 'Test';
 $lang->ai->prompts->action->edit            = 'Edit';
 $lang->ai->prompts->action->publish         = 'Publish';
 $lang->ai->prompts->action->unpublish       = 'Unpublish';
+$lang->ai->prompts->action->delete          = 'Delete';
+$lang->ai->prompts->action->deleteConfirm   = 'Are you sure to delete this prompt?';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';
