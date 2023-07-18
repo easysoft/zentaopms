@@ -871,49 +871,32 @@ class blockZen extends block
         $products       = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
         $productIdList  = array_keys($products);
 
-        /* 根据产品列表获取产品下不同阶段的需求数量。 */
-        /* Obtain the required quantity for different stages of the product based on the product list. */
-        $productStories = $this->dao->select('product, stage, COUNT(status) AS count')->from(TABLE_STORY)
-            ->where('deleted')->eq('0')
-            ->andWhere('product')->in($productIdList)
-            ->andWhere('type')->eq('story')
-            ->groupBy('product, stage')
-            ->fetchGroup('product', 'stage');
+        $storyDeliveryRate = $this->loadModel('metric')->getResultByCode('rate_of_delivery_story_in_product', array('product' => join(',', $productIdList)));
+        $storyDeliveryRate = json_decode(json_encode($storyDeliveryRate), true);
+        $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
 
-        /* 计算出各产品总需求数、关闭的需求数、未关闭的需求数。 */
-        /* Calculate the total demand, closed demand, and unclosed demand for each product. */
-        $stories = array();
-        foreach($productStories as $product => $stageStories)
+        $totalStories = $this->metric->getResultByCode('count_of_valid_story_in_product', array('product' => join(',', $productIdList)));
+        $totalStories = json_decode(json_encode($totalStories), true);
+        $totalStories = array_column($totalStories, null, 'product');
+
+        $closedStories = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => join(',', $productIdList)));
+        $closedStories = json_decode(json_encode($closedStories), true);
+        $closedStories = array_column($closedStories, null, 'product');
+
+        $unclosedStories = $this->metric->getResultByCode('count_of_unclosed_story_in_product', array('product' => join(',', $productIdList)));
+        $unclosedStories = json_decode(json_encode($unclosedStories), true);
+        $unclosedStories = array_column($unclosedStories, null, 'product');
+
+        $years  = array();
+        $months = array();
+        for($i = 0; $i <= 5; $i ++)
         {
-            $stories[$product] = array('closed' => 0, 'unclosed' => 0, 'total' => 0);
-            foreach($stageStories as $stage => $story)
-            {
-                if($stage == 'closed') $stories[$product]['closed']   += $story->count;
-                if($stage != 'closed') $stories[$product]['unclosed'] += $story->count;
-                $stories[$product]['total'] += $story->count;
-            }
+            $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
+            $months[date('m', strtotime("first day of -{$i} month"))] = date('m', strtotime("first day of -{$i} month"));
+            $groups[date('Y-m', strtotime("first day of -{$i} month"))] = date('Y-m', strtotime("first day of -{$i} month"));
         }
-
-        /* 根据产品列表获取前6个月的数据，数据按照年月分组。 */
-        /* Obtain data from the first 6 months based on the product list, and group the data by month, month, and year. */
-        $monthStories = $this->dao->select("DATE_FORMAT(openedDate, '%Y-%m') AS date, product, COUNT(id) as opened, COUNT(IF(stage = 'closed' and closedReason = 'done', 1, null)) AS done")->from(TABLE_STORY)
-            ->where('deleted')->eq('0')
-            ->andWhere('product')->in($productIdList)
-            ->andWhere('type')->eq('story')
-            ->andWhere('openedDate')->ge(date('Y-m-01', strtotime('-5 month')))
-            ->groupBy('date, product')
-            ->fetchGroup('date', 'product');
-
-        /* 将按照年月分组的需求列表调整为按照产品和年月分组。 */
-        /* Adjust the demand list grouped by year and year to be grouped by product and year and year. */
-        foreach($monthStories as $month => $productStories)
-        {
-            foreach($productStories as $product => $story)
-            {
-                $monthStories[$product][$month] = $story;
-            }
-            unset($monthStories[$month]);
-        }
+        $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
+        $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
 
         /* 根据产品列表获取预计开始日期距离现在最近且预计开始日期大于当前日期的未开始状态计划。 */
         /* Obtain an unstarted status plan based on the product list, with an expected start date closest to the current date and an expected start date greater than the current date. */
@@ -949,11 +932,27 @@ class blockZen extends block
         /* Place statistical data grouped by product into the product list. */
         foreach($products as $productID => $product)
         {
-            $product->stories      = isset($stories[$productID]) ? $stories[$productID] : 0;
-            $product->monthStories = isset($monthStories[$productID]) ? $monthStories[$productID] : '';
-            $product->newPlan      = isset($newPlan[$productID][$productID]) ? $newPlan[$productID][$productID] : '';
-            $product->newExecution = isset($newExecution[$productID][$productID]) ? $newExecution[$productID][$productID] : '';
-            $product->newRelease   = isset($newRelease[$productID][$productID]) ? $newRelease[$productID][$productID] : '';
+            $product->storyDeliveryRate = isset($storyDeliveryRate[$productID]['value']) ? $storyDeliveryRate[$productID]['value'] : 0;
+            $product->totalStories      = isset($totalStories[$productID]['value']) ? $totalStories[$productID]['value'] : 0;
+            $product->closedStories     = isset($closedStories[$productID]['value']) ? $closedStories[$productID]['value'] : 0;
+            $product->unclosedStories   = isset($unclosedStories[$productID]['value']) ? $unclosedStories[$productID]['value'] : 0;
+            $product->newPlan           = isset($newPlan[$productID][$productID]) ? $newPlan[$productID][$productID] : '';
+            $product->newExecution      = isset($newExecution[$productID][$productID]) ? $newExecution[$productID][$productID] : '';
+            $product->newRelease        = isset($newRelease[$productID][$productID]) ? $newRelease[$productID][$productID] : '';
+
+            foreach($groups as $group)
+            {
+                $product->monthFinish[$group]  = 0;
+                $product->monthCreated[$group] = 0;
+                foreach($monthFinish as $story)
+                {
+                    if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthFinish[$group] = $story->value;
+                }
+                foreach($monthCreated as $story)
+                {
+                    if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthCreated[$group] = $story->value;
+                }
+            }
         }
 
         $this->view->products = $products;

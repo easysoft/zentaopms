@@ -89,30 +89,29 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
     $tabItems = array();
     foreach($products as $product)
     {
-        $product->storyDeliveryRate = rand(0, 100);
-        $product->monthStories = array();
-        $product->monthStories[date('Y-m')] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
-        $product->monthStories[date('Y-m', strtotime('first day of -1 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
-        $product->monthStories[date('Y-m', strtotime('first day of -2 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
-        $product->monthStories[date('Y-m', strtotime('first day of -3 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
-        $product->monthStories[date('Y-m', strtotime('first day of -4 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
-        $product->monthStories[date('Y-m', strtotime('first day of -5 month'))] = array('done' => rand(0, 100), 'opened' => rand(0, 100));
-
         $doneData   = array();
         $openedData = array();
-        foreach($product->monthStories as $date => $monthStories)
+        foreach($product->monthFinish as $date => $count)
         {
             if($date == date('Y-m'))
             {
-                $product->monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH] = $monthStories;
-                unset($product->monthStories[$date]);
+                $product->monthFinish[$lang->datepicker->dpText->TEXT_THIS_MONTH] = $count;
+                unset($product->monthFinish[$date]);
             }
-            $doneData[]   = $monthStories['done'];
-            $openedData[] = $monthStories['opened'];
+            $doneData[] = $count;
+        }
+        foreach($product->monthCreated as $date => $count)
+        {
+            if($date == date('Y-m'))
+            {
+                $product->monthCreated[$lang->datepicker->dpText->TEXT_THIS_MONTH] = $count;
+                unset($product->monthCreated[$date]);
+            }
+            $openedData[] = $count;
         }
 
-        $stories      = $product->stories;
-        $monthStories = $product->monthStories;
+        $monthFinish  = $product->monthFinish;
+        $monthCreated = $product->monthCreated;
         $tabItems[]   = div
         (
             set('class', 'tab-pane h-full' . ($product->id == $selected ? ' active' : '')),
@@ -167,15 +166,13 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                     set('class', 'flex-1 text-center'),
                                     div
                                     (
-                                        common::hasPriv('product', 'browse') ? a
+                                        common::hasPriv('product', 'browse') && $product->totalStories ? a
                                         (
                                             set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=allStory&param=0&storyType=story")),
-                                            set('class', 'text-black'),
-                                            $stories ? $stories['total'] : 0
+                                            $product->totalStories
                                         ) : span
                                         (
-                                            set('class', 'text-black'),
-                                            $stories ? $stories['total'] : 0
+                                            $product->totalStories
                                         )
                                     ),
                                     div
@@ -192,15 +189,13 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                     set('class', 'flex-1 text-center'),
                                     div
                                     (
-                                        common::hasPriv('product', 'browse') ? a
+                                        common::hasPriv('product', 'browse') && $product->closedStories ? a
                                         (
                                             set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=closedstory&param=0&storyType=story")),
-                                            set('class', 'text-black'),
-                                            $stories ? $stories['closed'] : 0
+                                            $product->closedStories
                                         ) : span
                                         (
-                                            set('class', 'text-black'),
-                                            $stories ? $stories['closed'] : 0
+                                            $product->closedStories
                                         )
                                     ),
                                     div
@@ -217,15 +212,13 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                     set('class', 'flex-1 text-center'),
                                     div
                                     (
-                                        common::hasPriv('product', 'browse') ? a
+                                        common::hasPriv('product', 'browse') && $product->unclosedStories ? a
                                         (
                                             set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=unclosed&param=0&storyType=story")),
-                                            set('class', 'text-black'),
-                                            $stories ? $stories['unclosed'] : 0
+                                            $product->unclosedStories
                                         ) : span
                                         (
-                                            set('class', 'text-black'),
-                                            $stories ? $stories['unclosed'] : 0
+                                            $product->unclosedStories
                                         )
                                     ),
                                     div
@@ -257,12 +250,12 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                     span
                                     (
                                         set('class', 'border-r pr-2 text-sm text-gray'),
-                                        html(sprintf($lang->block->productstatistic->monthDone, !empty($monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['done']) ? $monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['done'] : 0))
+                                        html(sprintf($lang->block->productstatistic->monthDone, !empty($monthFinish[$lang->datepicker->dpText->TEXT_THIS_MONTH]) ? $monthFinish[$lang->datepicker->dpText->TEXT_THIS_MONTH] : 0))
                                     ),
                                     span
                                     (
                                         set('class', 'pl-2 text-sm text-gray'),
-                                        html(sprintf($lang->block->productstatistic->monthOpened, !empty($monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['opened']) ? $monthStories[$lang->datepicker->dpText->TEXT_THIS_MONTH]['opened'] : 0))
+                                        html(sprintf($lang->block->productstatistic->monthOpened, !empty($monthCreated[$lang->datepicker->dpText->TEXT_THIS_MONTH]) ? $monthCreated[$lang->datepicker->dpText->TEXT_THIS_MONTH] : 0))
                                     )
                                 ),
                                 div
@@ -273,7 +266,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                         set::color(array('#2B80FF', '#17CE97')),
                                         set::grid(array('left' => '10px', 'top' => '30px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
                                         set::legend(array('show' => true, 'right' => '0')),
-                                        set::xAxis(array('type' => 'category', 'data' => array_keys($monthStories), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
+                                        set::xAxis(array('type' => 'category', 'data' => array_keys($monthFinish), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
                                         set::yAxis(array('type' => 'value', 'name' => '个', 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
                                         set::series
                                         (

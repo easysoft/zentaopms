@@ -524,7 +524,7 @@ $lang->block->productstatistic->delivered       = 'Delivered';
 $lang->block->productstatistic->unclosed        = 'unclosed';
 $lang->block->productstatistic->storyStatistics = 'Story Statistics';
 $lang->block->productstatistic->monthDone       = 'Completed this month <span class="text-success font-bold">%s</span>';
-$lang->block->productstatistic->monthOpened     = 'Added this month <span class="text-black font-bold">%s</span>';
+$lang->block->productstatistic->monthOpened     = 'Added this month <span class="text-primary font-bold">%s</span>';
 $lang->block->productstatistic->news            = 'Latest product advancements';
 $lang->block->productstatistic->newPlan         = 'Latest Plan';
 $lang->block->productstatistic->newExecution    = 'Latest Execution';

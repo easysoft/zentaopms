@@ -324,7 +324,7 @@ class block extends control
         if(isset($block->params->num) && !isset($block->params->count)) $block->params->count = $block->params->num;
 
         $code = $block->code;
-        if($code == 'statistic' || $code == 'list' || $code == 'overview') $code = $block->module . ucfirst($code);
+        if($code == 'statistic' || $code == 'list' || $code == 'overview' || $code == 'team') $code = $block->module . ucfirst($code);
 
         $function = 'print' . ucfirst($code) . 'Block';
         if(method_exists('blockZen', $function)) $this->blockZen->$function($block, (array)$params);
