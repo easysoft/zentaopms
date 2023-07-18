@@ -20,7 +20,7 @@ foreach($doneStoryEstimate as $projectID => $storyEstimate)
         setClass('flex py-1.5 pr-4 text-sm'),
         cell
         (
-            setClass('hidden-nowrap mr-1 text-right'),
+            setClass('overflow-hidden whitespace-nowrap mr-1 text-right'),
             set::width('50%'),
             span
             (
@@ -57,7 +57,7 @@ foreach($doneStoryCount as $projectID => $storyCount)
         setClass('flex py-1.5 pr-4 text-sm'),
         cell
         (
-            setClass('hidden-nowrap mr-1 text-right'),
+            setClass('overflow-hidden whitespace-nowrap mr-1 text-right'),
             set::width('50%'),
             span
             (
@@ -93,7 +93,7 @@ foreach($resolvedBugCount as $projectID => $bugCount)
         setClass('flex py-1.5 pr-4 text-sm'),
         cell
         (
-            setClass('hidden-nowrap mr-1 text-right'),
+            setClass('overflow-hidden whitespace-nowrap mr-1 text-right'),
             set::width('50%'),
             span
             (

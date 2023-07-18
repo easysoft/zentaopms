@@ -71,7 +71,7 @@ foreach($projects as $project)
 
     $lastestExecution = (!empty($project->executions) && $project->multiple) ? cell
     (
-        setClass('flex-1 hidden-nowrap' . (!$longBlock ? ' text-left w-full' : ' text-right')),
+        setClass('flex-1 overflow-hidden whitespace-nowrap' . (!$longBlock ? ' text-left w-full' : ' text-right')),
         $longBlock ? set::width($width) : '',
         span
         (
@@ -118,7 +118,7 @@ foreach($projects as $project)
             }
             $cells[] = cell
             (
-                setClass('flex-1 hidden-nowrap project-statistic-table scrum' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : ' ml-4') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
+                setClass('flex-1 overflow-hidden whitespace-nowrap project-statistic-table scrum' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : ' ml-4') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
                 set::width($longBlock ? ($module == 'cost' ? 'calc(25% - 1rem)' : '25%') : 'calc(50% - 1rem)'),
                 div
                 (
