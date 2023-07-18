@@ -1301,7 +1301,7 @@ class programModel extends model
      * @access public
      * @return void
      */
-    public function refreshStats()
+    public function refreshStats($refreshAll = false)
     {
         $updateTime = zget($this->app->config->global, 'projectStatsTime', '');
         $now        = helper::now();
@@ -1311,7 +1311,11 @@ class programModel extends model
          * Else only refresh the latest executions in action table.
          */
         $projects = array();
-        if($updateTime > date('Y-m-d', strtotime('-14 days')))
+        if($updateTime < date('Y-m-d', strtotime('-14 days')) or $refreshAll)
+        {
+            $projects = $this->dao->select('id,project,model')->from(TABLE_PROJECT)->fetchAll('id');
+        }
+        else
         {
             $projects = $this->dao->select('distinct t1.project,t2.model')->from(TABLE_ACTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')

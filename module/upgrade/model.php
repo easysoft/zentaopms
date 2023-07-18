@@ -656,6 +656,10 @@ class upgradeModel extends model
                     $this->fixMissedFlowField();
                 }
                 break;
+            case '18_5':
+                $this->loadModel('product')->refreshStats(true);
+                $this->loadModel('program')->refreshStats(true);
+                break;
         }
 
         $this->deletePatch();
