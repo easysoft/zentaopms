@@ -34,6 +34,8 @@ class count_of_annual_closed_feedback_in_product extends baseCalc
         $product    = $data->product;
         $closedDate = $data->closedDate;
 
+        if(empty($closedDate)) return;
+
         $year = substr($closedDate, 0, 4);
 
         if($year == '0000') return;

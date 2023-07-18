@@ -34,6 +34,8 @@ class count_of_annual_created_feedback_in_product extends baseCalc
         $product    = $data->product;
         $openedDate = $data->openedDate;
 
+        if(empty($openedDate)) return;
+
         $year = substr($openedDate, 0, 4);
 
         if($year == '0000') return;

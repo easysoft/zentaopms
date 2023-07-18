@@ -35,6 +35,8 @@ class count_of_annual_created_requirement_in_product extends baseCalc
         $type    = $data->type;
         $openedDate = $data->openedDate;
 
+        if(empty($openedDate)) return;
+
         $year = substr($openedDate, 0, 4);
         if($year == '0000') return;
 

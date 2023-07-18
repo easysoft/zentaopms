@@ -32,6 +32,8 @@ class count_of_monthly_finished_story_in_product extends baseCalc
         $product    = $row->product;
         $closedDate = $row->closedDate;
 
+        if(empty($closedDate)) return;
+
         $year  = substr($closedDate, 0, 4);
         $month = substr($closedDate, 5, 2);
 

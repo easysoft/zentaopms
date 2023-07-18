@@ -35,6 +35,8 @@ class scale_of_annual_closed_story_in_product extends baseCalc
         $closedDate = $data->closedDate;
         $estimate   = $data->estimate;
 
+        if(empty($closedDate)) return;
+
         $year  = substr($closedDate, 0, 4);
 
         if($year == '0000') return;

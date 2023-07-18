@@ -34,6 +34,8 @@ class count_of_monthly_finished_story extends baseCalc
         $closedDate   = $data->closedDate;
         $closedReason = $data->closedReason;
 
+        if(empty($closedDate)) return;
+
         $year  = substr($closedDate, 0, 4);
         $month = substr($closedDate, 5, 2);
 

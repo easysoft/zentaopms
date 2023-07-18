@@ -34,6 +34,8 @@ class count_of_monthly_created_story_in_product extends baseCalc
         $product    = $data->product;
         $openedDate = $data->openedDate;
 
+        if(empty($openedDate)) return;
+
         $year  = substr($openedDate, 0, 4);
         $month = substr($openedDate, 5, 2);
 
