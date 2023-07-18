@@ -129,7 +129,7 @@ class style extends dataset
         foreach($this->data as $prop => $value)
         {
             /* Skip any empty value */
-            if(empty($value)) continue;
+            if($value === null || $value === '') continue;
 
             $pairs[] = $prop . ': ' . strval($value) . ';';
         }

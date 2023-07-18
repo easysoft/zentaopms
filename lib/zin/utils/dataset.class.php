@@ -166,7 +166,7 @@ class dataset
         $count = 0;
         foreach($this->data as $value)
         {
-            if(!empty($value)) $count++;
+            if($value !== null) $count++;
         }
         return $count;
     }
