@@ -1,0 +1,14 @@
+.detail-title {
+    font-weight: normal;
+    color:#838a9d;
+}
+.detail-title::before {
+    content: '[';
+}
+.detail-title::after {
+    content: ']';
+}
+
+.detail-content + .detail-title {
+    margin-top: 10px;
+}

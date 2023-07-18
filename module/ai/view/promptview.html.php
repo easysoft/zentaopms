@@ -28,6 +28,30 @@
 
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
+    <div class="cell">
+      <div class="detail">
+        <div class="detail-title"><?php echo $lang->ai->prompts->role?></div>
+        <div class="detail-content article-content"><?php echo $prompt->role?></div>
+        <div class="detail-title"><?php echo $lang->ai->prompts->characterization?></div>
+        <div class="detail-content article-content"><?php echo $prompt->characterization?></div>
+      </div>
+      <div class="detail">
+        <div class="detail-title"><?php echo $lang->ai->prompts->object?></div>
+        <div class="detail-content article-content"><?php echo $this->lang->ai->dataSource[$prompt->module]['common']; ?></div>
+        <div class="detail-title"><?php echo $lang->ai->prompts->field?></div>
+        <div class="detail-content article-content"><?php echo $dataPreview?></div>
+      </div>
+      <div class="detail">
+        <div class="detail-title"><?php echo $lang->ai->prompts->setPurpose?></div>
+        <div class="detail-content article-content"><?php echo $prompt->purpose?></div>
+        <div class="detail-title"><?php echo $lang->ai->prompts->elaboration?></div>
+        <div class="detail-content article-content"><?php echo $prompt->elaboration?></div>
+      </div>
+      <div class="detail">
+        <div class="detail-title"><?php echo $lang->ai->prompts->selectTargetForm?></div>
+        <div class="detail-content article-content"><?php echo $this->lang->ai->targetForm[$prompt->module][explode('.', $prompt->targetForm)[1]]; ?></div>
+      </div>
+    </div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php echo html::a(helper::createLink('ai', 'prompts'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn'");?>
