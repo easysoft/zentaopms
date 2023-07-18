@@ -962,6 +962,7 @@ class doc extends control
         $docs = $this->dao->select('id, title')->from(TABLE_DOC)
             ->where('lib')->eq($libID)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('normal')
             ->andWhere('id')->in($docIdList)
             ->orderBy('`order` asc')
             ->fetchPairs();
