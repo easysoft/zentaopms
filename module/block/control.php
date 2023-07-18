@@ -42,7 +42,14 @@ class block extends control
             $formData->dashboard = $dashboard;
             $formData->account   = $this->app->user->account;
             $formData->vision    = $this->config->vision;
-            $formData->params    = json_encode($formData->params);
+
+            if($formData->module == 'html')
+            {
+                $formData = $this->loadModel('file')->processImgURL($formData, 'html', $this->post->uid);
+                $formData->params['html'] = $formData->html;
+            }
+            $formData->params = json_encode($formData->params);
+            unset($formData->html);
 
             $defaultSize = array('1' => '3');
             if(!empty($this->config->block->size[$formData->module][$formData->code]))                   $defaultSize      = $this->config->block->size[$formData->module][$formData->code];
@@ -108,8 +115,15 @@ class block extends control
         if($_POST)
         {
             $formData = form::data($this->config->block->form->edit)->get();
-            $formData->id     = $blockID;
-            $formData->params = helper::jsonEncode($formData->params);
+            $formData->id = $blockID;
+            if($formData->module == 'html')
+            {
+                $formData = $this->loadModel('file')->processImgURL($formData, 'html', $this->post->uid);
+                $formData->params['html'] = $formData->html;
+            }
+            $formData->params = json_encode($formData->params);
+            unset($formData->html);
+
             if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
 
             $this->block->update($formData);

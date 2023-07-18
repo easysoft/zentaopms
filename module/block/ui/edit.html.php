@@ -15,10 +15,16 @@ set::title($title);
 jsVar('blockID', $block->id);
 jsVar('blockTitle', $lang->block->blockTitle);
 
-$paramsRows  = array();
-$showModules = ($dashboard == 'my' && $modules);
-$showCodes   = (($showModules && $module && $codes) || $dashboard != 'my');
+$showModules  = ($dashboard == 'my' && $modules);
+$showCodes    = (($showModules && $module && $codes) || $dashboard != 'my');
+$code         = $showCodes ? $code : $module;
+$widths       = !empty($config->block->size[$module][$code]) ? array_keys($config->block->size[$module][$code]) : array('1', '2');
+$widthOptions = array();
+foreach($widths as $width) $widthOptions[$width] = zget($lang->block->widthOptions, $width);
 
+$defaultWidth = !empty($config->block->size[$module][$code]) ? reset(array_keys($config->block->size[$module][$code])) : 1;
+
+$paramsRows  = array();
 foreach($params as $key => $row)
 {
     $paramsRows[] = formRow
@@ -145,7 +151,15 @@ div
                             set::required(true),
                         ),
                     )
-                )
+                ),
+                $module == 'html' ? formRow
+                (
+                    formGroup
+                    (
+                        set::label($lang->block->lblHtml),
+                        editor(set::name('html'), html($block->param->html)),
+                    )
+                ) : null
             )
         )
     )
