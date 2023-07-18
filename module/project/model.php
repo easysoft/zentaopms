@@ -201,16 +201,17 @@ class projectModel extends model
      * Get a project by id.
      *
      * @param  int    $projectID
+     * @param  string $type
      * @access public
      * @return object|false
      */
-    public function getByID(int $projectID): object|false
+    public function getByID(int $projectID, string $type = ''): object|false
     {
         /* Using demo data during tutorials. */
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProject();
 
         /* Get project info. */
-        $project = $this->projectTao->fetchProjectInfo($projectID);
+        $project = $this->projectTao->fetchProjectInfo($projectID, $type);
         if(!$project) return false;
 
         /* Replace image url. */

@@ -209,12 +209,17 @@ class projectTao extends projectModel
      * Get project details, including all contents of the project.
      *
      * @param  int       $projectID
+     * @param  string    $type
      * @access protected
      * @return object|false
      */
-    protected function fetchProjectInfo(int $projectID): object|false
+    protected function fetchProjectInfo(int $projectID, string $type = ''): object|false
     {
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $project = $this->dao->select('*')
+            ->from(TABLE_PROJECT)
+            ->where('id')->eq($projectID)
+            ->beginIF(!empty($type))->andWhere('`type`')->in($type)->fi()
+            ->fetch();
 
         /* Filter the date is empty or 1970. */
         if($project && helper::isZeroDate($project->end)) $project->end = '';
