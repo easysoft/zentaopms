@@ -50,6 +50,7 @@
 <script>
   $(function()
   {
+    /* TODO: use new modal for this deleter. */
     $('.deleter').on('click', function()
     {
       if(confirm('<?php echo $lang->ai->prompts->action->deleteConfirm;?>'))
