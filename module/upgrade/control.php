@@ -121,8 +121,11 @@ class upgrade extends control
      */
     public function confirm($fromVersion = '')
     {
+        $this->view->fromVersion = $fromVersion;
+
         if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
-        if(strpos($fromVersion, 'ipd') !== false) $fromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
+        if(strpos($fromVersion, 'ipd') !== false)  $fromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
+
         $confirmSql = $this->upgrade->getConfirm($fromVersion);
         $confirmSql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $confirmSql);
 
@@ -130,7 +133,6 @@ class upgrade extends control
         $this->view->title       = $this->lang->upgrade->confirm;
         $this->view->position[]  = $this->lang->upgrade->common;
         $this->view->confirm     = $confirmSql;
-        $this->view->fromVersion = $fromVersion;
 
         /* When sql is empty then skip it. */
         if(empty($this->view->confirm)) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
@@ -162,9 +164,10 @@ class upgrade extends control
             return $this->display();
         }
 
-        $fromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
-        if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
-        $this->upgrade->execute($fromVersion);
+        $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
+        if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
+        if(strpos($fromVersion, 'ipd') !== false)  $rawFromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
+        $this->upgrade->execute($rawFromVersion);
 
         if(!$this->upgrade->isError())
         {
@@ -173,7 +176,7 @@ class upgrade extends control
             /* Delete all patch actions if upgrade success. */
             $this->loadModel('action')->deleteByType('patch');
 
-            $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
+            $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $rawFromVersion));
             $selectMode = true;
 
             if($systemMode == 'classic')
