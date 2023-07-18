@@ -15,17 +15,8 @@ title=count_of_invalid_story_in_product
 timeout=0
 cid=1
 
-- 测试分组数 @14
-
-- 测试产品1无效需求数
- - 第0条的value属性 @1
- - 第1条的value属性 @1
- - 第2条的value属性 @1
-
-- 测试不存在产品的无效需求数 @0
-
 */
 
-r(count($calc->getResult())) && p('') && e('14'); // 测试分组数
-r($calc->getResult(array('product' => '1,2,5')))    && p('0:value;1:value;2:value') && e('1;1;1'); // 测试产品1无效需求数
-r($calc->getResult(array('product' => '999,1000'))) && p('') && e('0');                             // 测试不存在产品的无效需求数
+r(count($calc->getResult())) && p('') && e('21'); // 测试分组数
+r($calc->getResult(array('product' => '2,3,4')))    && p('0:value;1:value;2:value') && e('1;2;1'); // 测试产品1无效需求数
+r($calc->getResult(array('product' => '999,1000'))) && p('') && e('0');                  // 测试不存在产品的无效需求数
