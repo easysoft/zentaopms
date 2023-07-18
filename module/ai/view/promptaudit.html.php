@@ -71,7 +71,12 @@
           <h4><?php echo $this->lang->ai->prompts->setTargetForm; ?></h4>
           <div class='content-row'>
             <div class='input-label'><span><?php echo $this->lang->ai->prompts->selectTargetForm; ?></span></div>
-            <div class='input' style="padding: 6px 0;"><?php echo $this->lang->ai->targetForm[$prompt->module][explode('.', $prompt->targetForm)[1]]; ?></div>
+            <div class='input' style="padding: 6px 0;">
+              <?php
+              $targetForm = explode('.', $prompt->targetForm);
+              echo $this->lang->ai->targetForm[$targetForm[0]][$targetForm[1]]
+              ; ?>
+            </div>
           </div>
         </div>
         <div style="flex-basis: 50%; flex-grow: 1; display: flex; flex-direction: column; word-break: break-all;">
