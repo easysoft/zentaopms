@@ -37,7 +37,7 @@ class count_of_annual_created_plan_in_product extends baseCalc
         if(empty(trim($row->year))) return;
         if($row->year == '0000')    return;
 
-        if(!isset($this->result[$row->year])) $this->result[$row->year] = array();
+        if(!isset($this->result[$row->year]))                $this->result[$row->year] = array();
         if(!isset($this->result[$row->year][$row->product])) $this->result[$row->year][$row->product] = 0;
         $this->result[$row->year][$row->product] ++;
     }
@@ -49,7 +49,7 @@ class count_of_annual_created_plan_in_product extends baseCalc
         {
             foreach($products as $product => $count)
             {
-                $records[] = (object)array(
+                $records[] = array(
                     'year'    => $year,
                     'product' => $product,
                     'value'   => $count,

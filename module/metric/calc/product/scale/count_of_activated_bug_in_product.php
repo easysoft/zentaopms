@@ -25,29 +25,23 @@ class count_of_activated_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.product', 't1.status', 't1.resolution');
+    public $fieldList = array('t1.product', 't1.status');
 
     public $result = array();
 
     public function calculate($data)
     {
         $product = $data->product;
+        $status  = $data->status;
+
         if(!isset($this->result[$product])) $this->result[$product] = 0;
-
-        $resolution = $data->resolution;
-        $status     = $data->status;
-
         if($status == 'active') $this->result[$product] += 1;
     }
 
     public function getResult($options = null)
     {
         $records = array();
-        foreach($this->result as $product => $value)
-        {
-            $records[] = array('product' => $product, 'value' => $value);
-        }
-
+        foreach($this->result as $product => $value) $records[] = array('product' => $product, 'value' => $value);
         return $this->filterByOptions($records, $options);
     }
 }

@@ -66,11 +66,7 @@ class bug_concentration_of_developed_story_in_product extends baseCalc
     public function getResult($options = null)
     {
         $records = array();
-        foreach($this->result as $product => $value)
-        {
-            $records[] = array('product' => $product, 'value' => $value);
-        }
-
+        foreach($this->result as $product => $value) $records[] = array('product' => $product, 'value' => $value);
         return $this->filterByOptions($records, $options);
     }
 }
