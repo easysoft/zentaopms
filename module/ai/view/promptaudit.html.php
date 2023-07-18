@@ -84,7 +84,7 @@
           </div>
           <div style="padding: 5px 10px; border-bottom: #E6EAF1 1px solid">
             <p class="text-gray"><?php echo $this->lang->ai->prompts->selectDataSource; ?></p>
-            <p><?php echo $dataPrompt; ?></p>
+            <p><?php echo htmlspecialchars($dataPrompt); ?></p>
           </div>
           <div style="padding: 5px 10px;">
             <p class="text-gray"><?php echo $this->lang->ai->prompts->setPurpose; ?></p>
