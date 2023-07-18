@@ -428,7 +428,7 @@ class ai extends control
      */
     public function promptAudit($promptId, $objectId)
     {
-        $prompt                    = $this->ai->getPromptByID($promptId);
+        $prompt = $this->ai->getPromptByID($promptId);
 
         if($_POST)
         {
