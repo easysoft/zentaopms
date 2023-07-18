@@ -344,6 +344,9 @@ $config->block->size['scrumproject']['projectdynamic'] = array('1' => '8', '2' =
 
 $config->block->size['execution']['overview']  = array('1' => '3');
 $config->block->size['execution']['statistic'] = array('2' => '5', '1' => '8');
+$config->block->size['execution']['list']      = array('2' => '6', '1' => '6');
+$config->block->size['execution']['task']      = array('2' => '6', '1' => '6');
+$config->block->size['execution']['build']     = array('2' => '6', '1' => '6');
 
 $config->block->size['qa']['statistic'] = array('2' => '5', '1' => '8');
 $config->block->size['qa']['testtask']  = array('2' => '6', '1' => '6');

@@ -1744,7 +1744,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printExecutionBlock(object $block): void
+    protected function printExecutionListBlock(object $block): void
     {
         if(!empty($block->params->type) && preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
@@ -1757,7 +1757,18 @@ class blockZen extends block
 
         $projectID = $block->module == 'my' ? 0 : (int)$this->session->project;
 
-        $this->view->executionStats = $this->execution->getStatData($projectID, $status, 0, 0, false, 'skipParent', 'id_asc', $pager);
+        $executions = $this->execution->getStatData($projectID, $status, 0, 0, false, 'skipParent', 'id_asc', $pager);
+        if($executions)
+        {
+            foreach($executions as $execution)
+            {
+                $execution->totalEstimate  = $execution->hours->totalEstimate;
+                $execution->totalLeft      = $execution->hours->totalLeft;
+                $execution->progress       = $execution->hours->progress;
+                $execution->burns          = !empty($execution->burns) ? join(',', $execution->burns) : array();
+            }
+        }
+        $this->view->executions = $executions ? $executions : array();
     }
 
     /**

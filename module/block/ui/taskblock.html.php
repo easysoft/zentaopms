@@ -21,7 +21,7 @@ panel
 (
     set::class('task-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::title($block->title),
-    set('headingClass', 'border-b'),
+    set::headingClass('border-b'),
     to::headingActions
     (
         a
@@ -34,7 +34,7 @@ panel
     ),
     dtable
     (
-        set::id('task'),
+        set::height(318),
         set::bordered(false),
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->task->dtable->fieldList)),

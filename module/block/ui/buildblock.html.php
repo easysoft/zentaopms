@@ -33,8 +33,8 @@ panel
     ),
     dtable
     (
-        set::bordered(false),
         set::height(318),
+        set::bordered(false),
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->build->dtable->fieldList)),
         set::data(array_values($builds)),
