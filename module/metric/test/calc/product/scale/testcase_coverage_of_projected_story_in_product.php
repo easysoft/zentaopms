@@ -12,14 +12,14 @@ $calc   = $metric->calcMetric(__FILE__);
 
 /**
 
-title=testcase_coverage_of_story_in_product.php
+title=testcase_coverage_of_projected_story_in_product
 timeout=0
 cid=1
 
 */
 
-r($calc->getResult(array('product' => '1')))  && p('0:value') && e('0.4'); // 测试产品1的已立项研发需求用例覆盖率数。
-r($calc->getResult(array('product' => '2')))  && p('0:value') && e('0.6'); // 测试产品2的已立项研发需求用例覆盖率数。
+r($calc->getResult(array('product' => '1')))  && p('0:value') && e('0.6'); // 测试产品1的已立项研发需求用例覆盖率数。
+r($calc->getResult(array('product' => '2')))  && p('0:value') && e('0.4'); // 测试产品2的已立项研发需求用例覆盖率数。
 r($calc->getResult(array('product' => '3')))  && p('0:value') && e('1');   // 测试产品3的已立项研发需求用例覆盖率数。
 r($calc->getResult(array('product' => '4')))  && p('0:value') && e('0');   // 测试产品4的已立项研发需求用例覆盖率数。
 r($calc->getResult(array('product' => '5')))  && p('0:value') && e('0');   // 测试产品5的已立项研发需求用例覆盖率数。
