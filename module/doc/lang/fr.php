@@ -365,5 +365,8 @@ $lang->doc->libDropdown['delModule']     = 'Delete Directory';
 $lang->doc->featureBar['tableContents']['all']   = 'All';
 $lang->doc->featureBar['tableContents']['draft'] = 'Draft';
 
+$lang->doc->featureBar['myspace']['all']   = 'All';
+$lang->doc->featureBar['myspace']['draft'] = 'Draft';
+
 $lang->doc->showDocList[1] = 'Yes';
 $lang->doc->showDocList[0] = 'No';

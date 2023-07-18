@@ -365,5 +365,8 @@ $lang->doc->libDropdown['delModule']     = '删除目录';
 $lang->doc->featureBar['tableContents']['all']   = '全部';
 $lang->doc->featureBar['tableContents']['draft'] = '草稿';
 
+$lang->doc->featureBar['myspace']['all']   = '全部';
+$lang->doc->featureBar['myspace']['draft'] = '草稿';
+
 $lang->doc->showDocList[1] = '是';
 $lang->doc->showDocList[0] = '否';
