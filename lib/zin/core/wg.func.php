@@ -19,6 +19,16 @@ require_once __DIR__ . DS . 'wg.class.php';
 require_once __DIR__ . DS . 'context.func.php';
 
 /**
+ * Create an new widget.
+ *
+ * @return wg
+ */
+function wg(): wg
+{
+    return new wg(func_get_args());
+}
+
+/**
  * Set widget properties.
  *
  * @param  string|array|props|null $name
