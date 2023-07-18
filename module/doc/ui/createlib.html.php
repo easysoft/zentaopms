@@ -101,8 +101,8 @@ formPanel
                 set::name('acl'),
                 set::items($lang->doclib->aclList),
                 set::value($acl),
-                on::change("toggleAcl('lib');"),
-            )
+                on::change("toggleAcl('lib')"),
+            ),
         ),
     ),
     formRow
@@ -156,7 +156,6 @@ formPanel
             (
                 set::name('acl'),
                 set::items($lang->api->aclList),
-                set::value('open'),
             )
         )
     ),
@@ -171,7 +170,6 @@ formPanel
             (
                 set::name('acl'),
                 set::items($lang->doclib->aclList),
-                set::value('default'),
             )
         ),
         formHidden('type', $type),

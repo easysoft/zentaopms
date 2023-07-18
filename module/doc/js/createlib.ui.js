@@ -20,6 +20,7 @@ window.changeDoclibAcl = function(e)
     {
         $('.apilib').removeClass('hidden');
         $('#aclBox .check-list').html($('#aclAPIBox .check-list').html());
+        $("#aclBox input[id='acl_open']").prop('checked', true);
 
         $('.executionBox').addClass('hidden');
     }
@@ -27,6 +28,7 @@ window.changeDoclibAcl = function(e)
     {
         $('.apilib').addClass('hidden');
         $('#aclBox .check-list').html($('#aclOtherBox .check-list').html());
+        $("#aclBox input[id='acl_default']").prop('checked', true);
 
         $('.executionBox').removeClass('hidden');
     }
