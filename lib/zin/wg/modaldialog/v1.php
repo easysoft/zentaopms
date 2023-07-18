@@ -8,6 +8,7 @@ class modalDialog extends wg
         'title?: string',
         'titleClass?: string',
         'size?: string|number',
+        'condensed?: bool',
         'itemID?: int',
         'headerClass?: string',
         'headerProps?: array',
@@ -105,7 +106,7 @@ class modalDialog extends wg
     {
         return div
         (
-            setClass('modal-dialog'),
+            setClass('modal-dialog', $this->prop('condensed') ? 'modal-condensed' : ''),
             set($this->getRestProps()),
             $this->setSize(),
             div
