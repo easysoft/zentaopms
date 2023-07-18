@@ -2391,6 +2391,39 @@ class blockZen extends block
     }
 
     /**
+     * 打印团队成就区块。
+     * Print Team Achievement block.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function printTeamAchievementBlock()
+    {
+        $finishedTasks    = 111;
+        $yesterdayTasks   = 0;
+        $createdStories   = 111;
+        $yesterdayStories = 0;
+        $closedBugs       = 111;
+        $yesterdayBugs    = 0;
+        $runCases         = 111;
+        $yesterdayCases   = 0;
+        $consumedHours    = 111;
+        $yesterdayHours   = 0;
+        $this->view->finishedTasks   = $finishedTasks;
+        $this->view->comparedTasks   = $finishedTasks - $yesterdayTasks;
+        $this->view->createdStories  = $createdStories;
+        $this->view->comparedStories = $createdStories - $yesterdayStories;
+        $this->view->closedBugs      = $closedBugs;
+        $this->view->comparedBugs    = $closedBugs - $yesterdayBugs;
+        $this->view->runCases        = $runCases;
+        $this->view->comparedCases   = $runCases - $yesterdayCases;
+        $this->view->consumedHours   = $consumedHours;
+        $this->view->comparedHours   = $consumedHours - $yesterdayHours;
+        $this->view->totalWorkload   = 111;
+        $this->view->todayWorkload   = 11;
+    }
+
+    /**
      * 判断是否为内部调用。
      * Check request client is chandao or not.
      *

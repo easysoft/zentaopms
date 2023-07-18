@@ -668,6 +668,15 @@ $lang->block->releasestatistic = new stdclass();
 $lang->block->releasestatistic->monthly = '月度发布次数趋势图';
 $lang->block->releasestatistic->annual  = "年度发布榜（%s年）";
 
+$lang->block->teamachievement = new stdclass();
+$lang->block->teamachievement->finishedTasks     = '完成任务数量';
+$lang->block->teamachievement->createdStories    = '创建需求数量';
+$lang->block->teamachievement->closedBugs        = '关闭的Bug数';
+$lang->block->teamachievement->runCases          = '执行的用例数';
+$lang->block->teamachievement->consumedHours     = '消耗工时';
+$lang->block->teamachievement->totalWorkload     = '累计工作量';
+$lang->block->teamachievement->comparedYesterday = '较昨日';
+
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
 $lang->block->moduleList['execution']       = $lang->execution->common;
