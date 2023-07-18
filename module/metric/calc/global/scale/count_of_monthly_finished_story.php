@@ -10,9 +10,9 @@
  * 单位：个
  * 描述：按全局统计的月度完成研发需求数表示每月完成的研发需求的数量。该度量项反映了组织每月完成的研发需求数量，可以用于评估组织的研发需求完成情况和效率。
  * 定义：所有的研发需求个数求和
-关闭时间为某年某月
-关闭原因为已完成
-过滤已删除的研发需求
+ *       关闭时间为某年某月
+ *       关闭原因为已完成
+ *       过滤已删除的研发需求
  * 度量库：
  * 收集方式：realtime
  *
@@ -27,16 +27,17 @@ class count_of_monthly_finished_story extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.closedDate');
+    public $fieldList = array('t1.closedDate', 't1.closedReason');
 
     public function calculate($data)
     {
-        $closedDate = $data->closedDate;
+        $closedDate   = $data->closedDate;
+        $closedReason = $data->closedReason;
 
         $year  = substr($closedDate, 0, 4);
         $month = substr($closedDate, 5, 2);
 
-        if($year == '0000') return;
+        if($year == '0000' || $closedReason != 'done') return;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;

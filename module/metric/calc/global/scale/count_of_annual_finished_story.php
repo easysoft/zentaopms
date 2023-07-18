@@ -10,9 +10,9 @@
  * 单位：个
  * 描述：按全局统计的年度完成研发需求数表示每年完成的研发需求的数量。该度量项反映了组织每年完成的研发需求数量，可以用于评估组织的研发需求完成能力和绩效。
  * 定义：所有的研发需求个数求和
-关闭时间为某年
-关闭原因为已完成
-过滤已删除的研发需求
+ *       关闭时间为某年
+ *       关闭原因为已完成
+ *       过滤已删除的研发需求
  * 度量库：
  * 收集方式：realtime
  *
@@ -25,20 +25,31 @@
  */
 class count_of_annual_finished_story extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $fieldList = array('t1.closedDate', 't1.closedReason');
 
     public function calculate($data)
     {
+        $closedDate   = $data->closedDate;
+        $closedReason = $data->closedReason;
+
+        $year = substr($closedDate, 0, 4);
+
+        if($year == '0000' || $closedReason != 'done') return;
+
+        if(!isset($this->result[$year])) $this->result[$year] = 0;
+
+        $this->result[$year] += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array();
+        foreach($this->result as $year => $value)
+        {
+            $records[] = array('year' => $year, 'value' => $value);
+        }
+        return $this->filterByOptions($records, $options);
     }
 }
