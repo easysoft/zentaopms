@@ -37,7 +37,7 @@
       </div>
       <div class="detail">
         <div class="detail-title"><?php echo $lang->ai->prompts->object?></div>
-        <div class="detail-content article-content"><?php echo $this->lang->ai->dataSource[$prompt->module]['common']; ?></div>
+        <div class="detail-content article-content"><?php echo $prompt->module ? $this->lang->ai->dataSource[$prompt->module]['common'] : ''; ?></div>
         <div class="detail-title"><?php echo $lang->ai->prompts->field?></div>
         <div class="detail-content article-content"><?php echo $dataPreview?></div>
       </div>
@@ -49,7 +49,15 @@
       </div>
       <div class="detail">
         <div class="detail-title"><?php echo $lang->ai->prompts->selectTargetForm?></div>
-        <div class="detail-content article-content"><?php echo $this->lang->ai->targetForm[$prompt->module][explode('.', $prompt->targetForm)[1]]; ?></div>
+        <div class="detail-content article-content">
+          <?php
+            if(empty($prompt->targetForm)) echo '';
+            else
+            {
+              $targetForm = explode('.', $prompt->targetForm);
+              echo $this->lang->ai->targetForm[$targetForm[0]][$targetForm[1]];
+            }
+          ?></div>
       </div>
     </div>
     <div class='main-actions'>
@@ -80,7 +88,7 @@
             <tbody>
             <tr>
               <th class="w-90px"><?php echo $lang->prompt->module; ?></th>
-              <td><?php echo $this->lang->ai->dataSource[$prompt->module]['common']; ?></td>
+              <td><?php echo $prompt->module ? $this->lang->ai->dataSource[$prompt->module]['common'] : ''; ?></td>
             </tr>
             <tr>
               <th class="w-90px"><?php echo $lang->prompt->desc; ?></th>
@@ -115,7 +123,7 @@
             </tr>
             <tr>
               <th class="w-90px"><?php echo $lang->prompt->lastEditor; ?></th>
-              <td><?php echo zget($users, $prompt->editedBy) . $lang->at . $prompt->editedDate;?></td>
+              <td><?php echo $prompt->editedBy ? zget($users, $prompt->editedBy) . $lang->at . $prompt->editedDate : '';?></td>
             </tr>
             </tbody>
           </table>

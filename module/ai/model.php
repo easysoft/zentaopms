@@ -544,6 +544,9 @@ class aiModel extends model
     {
         $sources = explode(',', $source);
         $sources = array_filter($sources);
+
+        if(empty($sources)) return '';
+
         foreach($sources as $index => $source)
         {
             $sources[$index] = explode('.', $source);
