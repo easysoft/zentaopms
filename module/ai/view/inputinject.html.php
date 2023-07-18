@@ -54,6 +54,7 @@
                   if(editorInstance)
                   {
                     editorInstance.html(data[inputName]);
+                    editorInstance.sync();
                     break;
                   }
                 }
