@@ -20,7 +20,7 @@ $lang->doclib->select     = '选择文档库';
 $lang->doclib->execution  = $lang->executionCommon . '库';
 $lang->doclib->product    = $lang->productCommon . '库';
 $lang->doclib->apiLibName = '库名称';
-$lang->doclib->privateACL = "私有 <span class='acl-tip'>（仅创建者和有%s权限的白名单用户可访问）</span>";
+$lang->doclib->privateACL = "私有 （仅创建者和有%s权限的白名单用户可访问）";
 
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "执行为空时，创建的库为{$lang->projectCommon}库";
@@ -36,12 +36,12 @@ $lang->doclib->aclListB['open']    = '公开';
 $lang->doclib->aclListB['custom']  = '自定义';
 $lang->doclib->aclListB['private'] = '私有';
 
-$lang->doclib->mySpaceAclList['private'] = "私有<span class='acl-tip text-muted'>（仅创建者可访问）</span>";
+$lang->doclib->mySpaceAclList['private'] = "私有（仅创建者可访问）";
 
 $lang->doclib->aclList = array();
-$lang->doclib->aclList['open']    = "公开 <span class='acl-tip'>（有文档视图权限即可访问）</span>";
-$lang->doclib->aclList['default'] = "默认 <span class='acl-tip'>（有所选%s访问权限用户可以访问）</span>";
-$lang->doclib->aclList['private'] = "私有 <span class='acl-tip'>（仅创建者和白名单用户可访问）</span>";
+$lang->doclib->aclList['open']    = "公开 （有文档视图权限即可访问）";
+$lang->doclib->aclList['default'] = "默认 （有所选%s访问权限用户可以访问）";
+$lang->doclib->aclList['private'] = "私有 （仅创建者和白名单用户可访问）";
 
 $lang->doclib->create['product']   = '创建' . $lang->productCommon . '文档库';
 $lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档库';
@@ -238,8 +238,8 @@ $lang->doc->statusList['']       = "";
 $lang->doc->statusList['normal'] = "已发布";
 $lang->doc->statusList['draft']  = "草稿";
 
-$lang->doc->aclList['open']    = "公开<span class='text-gray'>（有所属库权限即可访问）</span>";
-$lang->doc->aclList['private'] = "私有<span class='text-gray'>（仅创建者和白名单用户可访问）</span>";
+$lang->doc->aclList['open']    = "公开（有所属库权限即可访问）";
+$lang->doc->aclList['private'] = "私有（仅创建者和白名单用户可访问）";
 
 $lang->doc->space = '所属空间';
 $lang->doc->spaceList['mine']    = '我的空间';

@@ -20,7 +20,7 @@ $lang->doclib->select     = 'Sélect.';
 $lang->doclib->execution  = 'Bibliothèque ' . $lang->executionCommon;
 $lang->doclib->product    = $lang->productCommon . ' Library';
 $lang->doclib->apiLibName = 'Library Name';
-$lang->doclib->privateACL = "Private <span class='acl-tip'>(Only creators and whitelisted users with %s permissions can access it)</span>";
+$lang->doclib->privateACL = "Private (Only creators and whitelisted users with %s permissions can access it)";
 
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
@@ -36,12 +36,12 @@ $lang->doclib->aclListB['open']    = 'Public';
 $lang->doclib->aclListB['custom']  = 'Person.';
 $lang->doclib->aclListB['private'] = 'Privée';
 
-$lang->doclib->mySpaceAclList['private'] = "Private <span class='acl-tip text-muted'>(Only creators can access it)</span>";
+$lang->doclib->mySpaceAclList['private'] = "Private (Only creators can access it)";
 
 $lang->doclib->aclList = array();
-$lang->doclib->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
-$lang->doclib->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s or users in the whiltelist can access it)</span>";
-$lang->doclib->aclList['private'] = "Private <span class='acl-tip'> (Only the one who created it or users in the whiltelist can access it)</span>";
+$lang->doclib->aclList['open']    = "Public (Users who can access doccan access it)";
+$lang->doclib->aclList['default'] = "Default (Users who can access the selected %s or users in the whiltelist can access it)";
+$lang->doclib->aclList['private'] = "Private (Only the one who created it or users in the whiltelist can access it)";
 
 $lang->doclib->create['product']   = 'Créer ' . $lang->productCommon . ' Library';
 $lang->doclib->create['execution'] = 'Créer ' . 'Bibliothèque ' . $lang->executionCommon;
@@ -238,8 +238,8 @@ $lang->doc->statusList['']       = "";
 $lang->doc->statusList['normal'] = "Released";
 $lang->doc->statusList['draft']  = "Draft";
 
-$lang->doc->aclList['open']    = "Public <span class='text-gray'>(Access with library permissions)</span>";
-$lang->doc->aclList['private'] = "Privé <span class='text-gray'>(Only creators and whitelist users can access)</span>";
+$lang->doc->aclList['open']    = "Public (Access with library permissions)";
+$lang->doc->aclList['private'] = "Private (Only creators and whitelist users can access)";
 
 $lang->doc->space = 'Space';
 $lang->doc->spaceList['mine']    = 'My Space';

@@ -981,47 +981,22 @@ class doc extends control
 
         if($control == 'group')
         {
-            $groups = $this->loadModel('group')->getPairs();
-            if($doclib->acl == 'custom')
-            {
-                foreach($groups as $groupID => $group)
-                {
-                    if(strpos(",{$doclib->groups},", ",{$groupID},") === false) unset($groups[$groupID]);
-                }
-                return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control picker-select' multiple $dropDirection"));
-            }
-            if($doclib->acl == 'open') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control picker-select' multiple $dropDirection"));
-            if($doclib->acl == 'default') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control picker-select' multiple $dropDirection"));
-            if($doclib->acl == 'private') echo 'private';
-
-            return false;
+            if($doclib->acl == 'private') return print('private');
+            $groupItems = array();
+            $groups     = $this->loadModel('group')->getPairs();
+            foreach($groups as $groupID => $groupName) $groupItems[] = array('text' => $groupName, 'value' => $groupID, 'keys' => $groupName);
+            return print(json_encode($groupItems));
         }
 
-        if($control == 'user')
+        if($doclib->acl == 'private') return print('private');
+
+        $userItems = array();
+        foreach($users as $account => $realname)
         {
-            foreach($users as $account => $user)
-            {
-                if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, (string)$account) === false ) unset($users[$account]);
-            }
-
-            if($doclib->acl == 'custom') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
-            if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
-            if($doclib->acl == 'default') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
-            if($doclib->acl == 'private') echo 'private';
-            return false;
+            if($doclib->acl == 'private' && strpos($doclib->users, (string)$account) === false ) unset($users[$account]);
+            $userItems[] = array('text' => $realname, 'value' => $account, 'keys' => $realname);
         }
-
-        /* Sync whitelist when doclib permissions changed. */
-        if($doclib->acl != 'custom' and !empty($doclib->project) and $acl == 'custom')
-        {
-            $project      = $this->loadModel('project')->getById($doclib->project);
-            $projectTeams = $this->loadModel('user')->getTeamMemberPairs($doclib->project);
-            $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($doclib->project);
-            $whitelist    = implode(',', array_keys($projectTeams + $stakeholders)) . $project->whitelist . ',' . $project->PM . ',' . $doclib->users;
-            $selectedUser = $whitelist;
-        }
-
-        return print(html::select('users[]', $users, $selectedUser, "class='form-control picker-select' multiple"));
+        return print(json_encode($userItems));
     }
 
     /**
@@ -1495,12 +1470,15 @@ class doc extends control
      */
     public function ajaxGetExecution($projectID)
     {
-        $executions     = $this->execution->getList($projectID);
-        $executionPairs = array(0 => '') + $this->execution->getPairs($projectID, 'sprint,stage', 'multiple,leaf,noprefix');
+        $json  = array();
+        $items = array();
 
-        $project  = $this->project->getById($projectID);
-        $disabled = $project->multiple ? '' : 'disabled';
-        return print(html::select('execution', $executionPairs, 0, "class='form-control' data-placeholder='{$this->lang->doclib->tip->selectExecution}' $disabled data-drop_direction='down' data-drop-direction='down'"));
+        $executionPairs = $this->execution->getPairs($projectID, 'sprint,stage', 'multiple,leaf,noprefix');
+        foreach($executionPairs as $id => $name) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+
+        $json['items']   = $items;
+        $json['project'] = $this->project->getById($projectID);
+        return print(json_encode($json));
     }
 
     /**

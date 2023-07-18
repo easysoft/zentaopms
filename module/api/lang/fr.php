@@ -69,9 +69,9 @@ $lang->api->deleteCatalog    = 'Delete Catalog';
 
 /* Common access control lang. */
 $lang->api->whiteList          = 'Whitelist';
-$lang->api->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
-$lang->api->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s can access it)</span>";
-$lang->api->aclList['private'] = "Private <span class='acl-tip'> (Only the one who created it or users in the whiltelist can access it)</span>";
+$lang->api->aclList['open']    = "Public (Users who can access doccan access it)";
+$lang->api->aclList['default'] = "Default (Users who can access the selected %s can access it)";
+$lang->api->aclList['private'] = "Private (Only the one who created it or users in the whiltelist can access it)";
 $lang->api->group              = 'Group';
 $lang->api->user               = 'User';
 

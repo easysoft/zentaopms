@@ -69,9 +69,9 @@ $lang->api->deleteCatalog    = '删除目录';
 
 /* Common access control lang. */
 $lang->api->whiteList          = '白名单';
-$lang->api->aclList['open']    = "公开 <span class='acl-tip'>（有文档视图权限即可访问）</span>";
-$lang->api->aclList['default'] = "默认 <span class='acl-tip'>（有所选%s访问权限用户可以访问）</span>";
-$lang->api->aclList['private'] = "私有 <span class='acl-tip'>（仅创建者和白名单用户可访问）</span>";
+$lang->api->aclList['open']    = "公开 （有文档视图权限即可访问）";
+$lang->api->aclList['default'] = "默认 （有所选%s访问权限用户可以访问）";
+$lang->api->aclList['private'] = "私有 （仅创建者和白名单用户可访问）";
 $lang->api->group              = '分组';
 $lang->api->user               = '用户';
 
