@@ -28,7 +28,6 @@ $config->index->oldPages[] = 'product-roadmap';
 $config->index->oldPages[] = 'product-kanban';
 $config->index->oldPages[] = 'program-kanban';
 $config->index->oldPages[] = 'project-kanban';
-$config->index->oldPages[] = 'project-dynamic';
 $config->index->oldPages[] = 'execution-taskkanban';
 $config->index->oldPages[] = 'execution-grouptask';
 $config->index->oldPages[] = 'execution-testtask';
