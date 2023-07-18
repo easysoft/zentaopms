@@ -393,7 +393,7 @@ class treeModel extends model
             }
             else
             {
-                $treeMenu[$module->parent] = $moduleName;;
+                $treeMenu[$module->parent] = $moduleName;
             }
             $treeMenu[$module->parent] .= $treeMenu[$module->id];
         }
@@ -873,7 +873,7 @@ class treeModel extends model
 
         while($module = $stmt->fetch())
         {    
-            $treeMenu = $this->buildTree($module, '', 0, array('this', 'createHostLink'));
+            $treeMenu = $this->buildTree($module, '', 0, array('treeModel', 'createHostLink'));
             if($module->parent == 0) $treeMenu->parent = $module->root;
 
             $menu[] = $treeMenu;
@@ -1587,27 +1587,6 @@ class treeModel extends model
                 ->orderBy('`order`, type')
                 ->fetchAll();
         }
-    }
-
-    /**
-     * Get sons of a host module.
-     *
-     * @param  int    $rootID
-     * @param  int    $productID
-     * @param  int    $moduleID
-     * @access public
-     * @return void
-     */
-    public function getHostSons($moduleID)
-    {
-        $sons = $this->dao->select('*')->from(TABLE_MODULE)
-            ->where('parent')->eq($moduleID)
-            ->andWhere('deleted')->eq('0')
-            ->andWhere('type')->eq('host')
-            ->orderBy('order')
-            ->fetchAll();
-
-        return $sons;
     }
 
     /**

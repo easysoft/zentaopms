@@ -44,6 +44,7 @@ if($viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->c
 $childTitle = $lang->tree->child;
 if(strpos($viewType, 'doc') !== false or $viewType == 'api') $childTitle = $lang->doc->childType;
 if($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') $childTitle = '';
+if($viewType == 'host') $childTitle = $lang->tree->childGroup;
 
 $editTitle   = $lang->tree->edit;
 $deleteTitle = $lang->tree->delete;
@@ -127,7 +128,7 @@ if($viewType == 'doc' or $viewType == 'api')
         <form id='childrenForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root=$rootID&viewType=$viewType");?>'>
           <table class='table table-form table-auto'>
             <tr>
-              <?php if($viewType != 'line' && $viewType != 'trainskill' && $viewType != 'trainpost'):?>
+              <?php if($viewType != 'line' && $viewType != 'trainskill' && $viewType != 'trainpost' && $viewType != 'host'):?>
               <td class="text-middle text-right with-padding">
                 <?php
                 echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType&currentModuleID=0&branch=0&from=$from", '', ''), empty($root->name) ? '' : $root->name, '', "data-app='{$this->app->tab}'") . "<i class='icon icon-angle-right muted'></i></span>";
@@ -196,7 +197,7 @@ if($viewType == 'doc' or $viewType == 'api')
               </td>
             </tr>
             <tr>
-              <?php if($viewType != 'line' && $viewType != 'trainskill' && $viewType != 'trainpost'):?>
+              <?php if($viewType != 'line' && $viewType != 'trainskill' && $viewType != 'trainpost' && $viewType != 'host'):?>
               <td></td>
               <?php endif;?>
               <td colspan="2" class="form-actions">

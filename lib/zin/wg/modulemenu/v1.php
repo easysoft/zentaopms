@@ -78,6 +78,7 @@ class moduleMenu extends wg
     private function buildBtns(): wg
     {
         $settingLink = $this->prop('settingLink');
+        $settingText = $this->prop('settingText');
         $showDisplay = $this->prop('showDisplay');
         if(!$settingLink && !$showDisplay) return null;
 
@@ -85,6 +86,8 @@ class moduleMenu extends wg
         $lang = $app->loadLang('datatable')->datatable;
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;
+
+        if(!$settingText) $settingText = $lang->moduleSetting;
 
         $datatableId = $app->moduleName . ucfirst($app->methodName);
 
@@ -99,7 +102,7 @@ class moduleMenu extends wg
                     setStyle('box-shadow', 'none'),
                     set('data-app', $app->tab),
                     set::href($settingLink),
-                    $lang->moduleSetting
+                    $settingText
                 )
                 : null,
             $showDisplay
