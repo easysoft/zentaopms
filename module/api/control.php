@@ -481,7 +481,7 @@ class api extends control
             setCookie("objectType", $this->post->libType, $this->config->cookieLife, $this->config->webRoot);
             setCookie("objectID", $this->post->libType == 'project' ? $this->post->project : $this->post->product, $this->config->cookieLife, $this->config->webRoot);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('api', 'index', "libID=$libID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('api', 'index', "libID=$libID"), 'closeModal' => true));
         }
 
         $defaultAclLang = in_array($type, array('product', 'product')) ? $this->lang->{$type}->common : $this->lang->product->common;
