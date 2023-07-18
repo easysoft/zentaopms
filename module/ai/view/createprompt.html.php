@@ -29,7 +29,7 @@
           </tr>
           <tr>
             <td colspan="2" class="text-center form-actions">
-              <?php echo html::submitButton($this->lang->ai->nextStep, '', 'btn btn-wide btn-primary disabled');?>
+              <?php echo html::submitButton($this->lang->ai->nextStep, 'disabled', 'btn btn-wide btn-primary disabled');?>
             </td>
           </tr>
         </tbody>
@@ -43,11 +43,11 @@ $(function() {
     {
         if($(this).val().length > 0)
         {
-            $('button[type="submit"]').removeClass('disabled');
+            $('button[type="submit"]').removeClass('disabled').removeAttr('disabled');
         }
         else
         {
-            $('button[type="submit"]').addClass('disabled');
+            $('button[type="submit"]').addClass('disabled').attr('disabled', 'disabled');
         }
     });
 });
