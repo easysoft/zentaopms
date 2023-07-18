@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `zt_prompt` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL,
+  `name` varchar(20) NOT NULL,
   `desc` text DEFAULT NULL,
   `model` mediumint(8) unsigned DEFAULT NULL,
   `module` varchar(30) DEFAULT NULL,
