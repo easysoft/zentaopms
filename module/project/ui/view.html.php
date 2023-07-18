@@ -442,7 +442,7 @@ div
                     (
                         setClass('progress-bar'),
                         set('role', 'progressbar'),
-                        setStyle(['width' => $progress . $lang->percent]),
+                        setStyle(array('width' => $progress . $lang->percent)),
                     )
                 )
             ),

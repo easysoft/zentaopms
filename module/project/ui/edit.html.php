@@ -193,7 +193,7 @@ formPanel
             div
             (
                 setClass('pl-2 flex self-center'),
-                setStyle(['color' => 'var(--form-label-color)']),
+                setStyle(array('color' => 'var(--form-label-color)')),
                 icon('help')
             )
         ),

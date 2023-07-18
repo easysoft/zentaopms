@@ -20,7 +20,7 @@ jsVar('defaultOpen',   (isset($open) and !empty($open)) ? $open : '');
 jsVar('manualText',    $lang->manual);
 jsVar('manualUrl',     ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
 jsVar('searchObjectList', array_keys($lang->searchObjects));
-jsVar('lang',          array_merge(['search' => $lang->index->search, 'searchAB' => $lang->searchAB], (array)$lang->index->dock));
+jsVar('lang',          array_merge(array('search' => $lang->index->search, 'searchAB' => $lang->searchAB), (array)$lang->index->dock));
 
 set::zui(true);
 set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');
@@ -64,7 +64,7 @@ div
                 a
                 (
                     set::class('menu-toggle justify-center cursor-pointer'),
-                    toggle::tooltip(['placement' => 'right', 'collapse-text' => $lang->collapseMenu, 'unfold-text' => $lang->unfoldMenu]),
+                    toggle::tooltip(array('placement' => 'right', 'collapse-text' => $lang->collapseMenu, 'unfold-text' => $lang->unfoldMenu)),
                     icon('menu-collapse icon-sm')
                 )
             )

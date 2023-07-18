@@ -123,7 +123,7 @@ class zandResponse implements ResponseInterface
         }
 
         $new = clone $this;
-        $new->setHeaders([$header => $value]);
+        $new->setHeaders(array($header => $value));
 
         return $new;
     }

@@ -121,7 +121,7 @@ formPanel
         (
             set::name('delta'),
             set::class('pl-4 items-center'),
-            set::control(['type' => 'radioList', 'inline' => true, 'rootClass' => 'ml-4', 'items' => $lang->program->endList]),
+            set::control(array('type' => 'radioList', 'inline' => true, 'rootClass' => 'ml-4', 'items' => $lang->program->endList)),
             $program->end == LONG_TIME ? set::value(999) : null,
             on::change('setDate'),
         ),

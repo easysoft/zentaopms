@@ -15,7 +15,7 @@ class inputGroup extends wg
 
     public function onBuildItem($item): wg
     {
-        if(is_string($item)) $item = new item(set(['type' => 'addon', 'text' => $item]));
+        if(is_string($item)) $item = new item(set(array('type' => 'addon', 'text' => $item)));
         elseif(is_array($item)) $item = new item(set($item));
         elseif($item instanceof wg) return $item;
 

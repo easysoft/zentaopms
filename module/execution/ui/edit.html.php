@@ -90,7 +90,7 @@ if($project->model == 'waterfall' || $project->model == 'waterfallplus')
                 div
                 (
                     setClass('pl-2 flex self-center'),
-                    setStyle(['color' => 'var(--form-label-color)']),
+                    setStyle(array('color' => 'var(--form-label-color)')),
                     icon
                     (
                         'help',

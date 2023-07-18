@@ -87,7 +87,7 @@ class zui extends wg
 
     public static function setClass($name, ...$args)
     {
-        $class = [$name => true];
+        $class = array($name => true);
         foreach($args as $arg)
         {
             if(is_bool($arg)) $class[$name]        = $arg;

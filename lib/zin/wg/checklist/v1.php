@@ -49,7 +49,7 @@ class checkList extends wg
             $valueList = $this->getValueList();
             foreach($items as $key => $item)
             {
-                if(!is_array($item))         $item = ['text' => $item, 'value' => $key];
+                if(!is_array($item))         $item = array('text' => $item, 'value' => $key);
                 if(!isset($item['checked'])) $item['checked'] = in_array($item['value'], $valueList);
                 $items[$key] = $this->onBuildItem($item);
             }
