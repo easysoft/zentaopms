@@ -71,7 +71,15 @@ if(!empty($lang->custom->{$module}->fields))
     }
 }
 
-$sidebarMenu = $menuItems ? menu(
-        setClass('w-48'),
-        $menuItems
-    ) : null;
+$sidebarMenu = $menuItems ? sidebar
+(
+    set::showToggle(false),
+    div
+    (
+        setClass('cell p-2.5 bg-white'),
+        menu
+        (
+            $menuItems
+        )
+    )
+) : null;

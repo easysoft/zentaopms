@@ -17,7 +17,7 @@ sidebar
     set::showToggle(false),
     div
     (
-        setClass('cell'),
+        setClass('cell p-2.5 bg-white'),
         menu
         (
             setClass('menu'),

@@ -468,7 +468,8 @@ else
 
 div
 (
-    setClass('flex'),
+    set::id('mainContent'),
+    setClass('row has-sidebar-left'),
     $sidebarMenu,
     formPanel
     (
@@ -476,10 +477,14 @@ div
         set::headingClass('justify-start'),
         to::headingActions($headingTips),
         setClass('flex-auto'),
-        setClass($sidebarMenu ? 'ml-4' : null),
+        setClass($sidebarMenu ? 'ml-0.5' : null),
         set::actionsClass($actionWidth),
-        set::title($lang->custom->$module->fields[$field]),
         set::actions($formActions),
+        span
+        (
+            setClass('article-h2'),
+            $lang->custom->$module->fields[$field],
+        ),
         $formItems,
     )
 );

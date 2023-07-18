@@ -51,13 +51,14 @@ if(common::hasPriv('custom', 'resetRequired'))
 if(!in_array($module, array('productplan', 'release', 'testsuite', 'testreport', 'caselib', 'doc')) && $config->vision == 'rnd') include 'sidebar.html.php';
 div
 (
-    setClass('flex'),
+    set::id('mainContent'),
+    setClass('row has-sidebar-left'),
     $sidebarMenu,
     formPanel
     (
         set::id('requiredForm'),
         setClass('flex-auto'),
-        setClass($sidebarMenu ? 'ml-4' : null),
+        setClass($sidebarMenu ? 'ml-0.5' : null),
         set::actionsClass('w-1/2'),
         set::actions($formActions),
         span
