@@ -84,7 +84,6 @@
         activeMenu:    (data) => activeNav(data),
         navbar:        updateNavbar,
         heading:       updateHeading,
-        table:         updateTable,
         fatal:         showFatalError,
         zinDebug:      (data, _info, options) => showZinDebugInfo(data, options),
         zinErrors:     (data, _info, options) => showErrors(data, options.id === 'page'),
@@ -227,16 +226,6 @@
         if($active.data('id') === activeID) return;
         $active.removeClass('active');
         $nav.find('.nav-item>a[data-id="' + activeID + '"]').addClass('active');
-    }
-
-    function updateTable(data)
-    {
-        const props = data.props;
-        const $table = $('#' + props.id).closest('[data-zui-dtable]');
-        if(!$table.length) return;
-        const dtable = zui.DTable.get($table[0]);
-        if(DEBUG) console.log('[APP] ', 'update table:', {data, props});
-        dtable.render(props);
     }
 
     function beforeUpdate($target, info, options)
@@ -583,16 +572,8 @@
             const urlInfo = $.parseLink(url);
             target = urlInfo.moduleName ? `table-${urlInfo.moduleName}-${urlInfo.methodName}` : ($('.dtable').attr('id') || 'dtable');
         }
-        if(target[0] !== '#' || target[0] !== '.') target = `#${target}`;
-        if(!$(target).length) return loadPage({id: target, url: url});
-
-        loadPage($.extend(
-        {
-            url: url,
-            id: target,
-            target: target,
-            selector: `table/${target}:type=json&data=props,#featureBar>*`
-        }, options));
+        if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
+        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: `dtable/${target}:component,#featureBar>*`}, options));
     }
 
     /**
@@ -608,7 +589,7 @@
         options = $.extend({url}, options);
         if(!target) return zui.Modal.open(options);
 
-        if(target[0] !== '#' || target[0] !== '.') target = `#${target}`;
+        if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
         modal.render(options);
