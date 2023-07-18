@@ -12,6 +12,8 @@ class modalDialog extends wg
         'itemID?: int',
         'headerClass?: string',
         'headerProps?: array',
+        'bodyClass?: string',
+        'bodyProps?: array',
         'actions?: array',
         'closeBtn?: bool|array=true',
         'footerActions?: array',
@@ -88,7 +90,8 @@ class modalDialog extends wg
         $rawContent = $this->prop('rawContent', !zin::$rawContentCalled);
         return div
         (
-            setClass('modal-body'),
+            setClass('modal-body', $this->prop('bodyClass')),
+            set($this->prop('bodyProps')),
             $this->children(),
             $rawContent ? rawContent() : null,
         );
