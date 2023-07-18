@@ -13,8 +13,6 @@ $config->block->task->dtable->fieldList['id']['fixed'] = false;
 $config->block->task->dtable->fieldList['name']['name']        = 'name';
 $config->block->task->dtable->fieldList['name']['title']       = $lang->task->name;
 $config->block->task->dtable->fieldList['name']['link']        = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
-$config->block->task->dtable->fieldList['name']['data-toggle'] = 'modal';
-$config->block->task->dtable->fieldList['name']['data-size']   = 'lg';
 $config->block->task->dtable->fieldList['name']['type']        = 'title';
 $config->block->task->dtable->fieldList['name']['fixed']       = false;
 

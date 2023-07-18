@@ -10,11 +10,12 @@ $config->block->build->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->block->build->dtable->fieldList['id']['type']  = 'id';
 $config->block->build->dtable->fieldList['id']['fixed'] = false;
 
-$config->block->build->dtable->fieldList['name']['name']  = 'name';
-$config->block->build->dtable->fieldList['name']['title'] = $lang->build->name;
-$config->block->build->dtable->fieldList['name']['type']  = 'title';
-$config->block->build->dtable->fieldList['name']['width'] = '50%';
-$config->block->build->dtable->fieldList['name']['fixed'] = false;
+$config->block->build->dtable->fieldList['name']['name']        = 'name';
+$config->block->build->dtable->fieldList['name']['title']       = $lang->build->name;
+$config->block->build->dtable->fieldList['name']['link']        = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}');
+$config->block->build->dtable->fieldList['name']['type']        = 'title';
+$config->block->build->dtable->fieldList['name']['width']       = '50%';
+$config->block->build->dtable->fieldList['name']['fixed']       = false;
 
 $config->block->build->dtable->fieldList['product']['name']     = 'product';
 $config->block->build->dtable->fieldList['product']['title']    = $lang->build->product;

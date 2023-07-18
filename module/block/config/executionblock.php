@@ -8,8 +8,6 @@ $config->block->execution->dtable->fieldList = array();
 $config->block->execution->dtable->fieldList['name']['name']        = 'name';
 $config->block->execution->dtable->fieldList['name']['title']       = $lang->execution->name;
 $config->block->execution->dtable->fieldList['name']['link']        = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={id}');
-$config->block->execution->dtable->fieldList['name']['data-toggle'] = 'modal';
-$config->block->execution->dtable->fieldList['name']['data-size']   = 'lg';
 $config->block->execution->dtable->fieldList['name']['type']        = 'title';
 
 $config->block->execution->dtable->fieldList['end']['name']     = 'end';
