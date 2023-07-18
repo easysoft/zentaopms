@@ -76,7 +76,7 @@ toolbar
         'url'         => createLink('api', 'create', "libID={$libID}&moduleID={$moduleID}"),
         'data-toggle' => 'modal'
     ))) : null,
-    $libID && common::hasPriv('doc', 'create') ? $createButton : null
+    $libType != 'api' && $libID && common::hasPriv('doc', 'create') ? $createButton : null
 );
 
 /* ====== Render page ====== */
