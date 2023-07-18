@@ -2,4 +2,3 @@
 #blockCreateForm #paramsRow:not(.hidden)~:not(.hidden), #blockCreateForm #codesRow:not(.hidden)~:not(.hidden) {margin: 0;}
 #blockCreateForm #paramsRow .form-row {--tw-space-y-reverse: 0; margin-bottom: calc(1rem*var(--tw-space-y-reverse)); margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));}
 #blockCreateForm .form-actions {margin-top: 20px; margin-bottom: 20px;}
-.modal-body {padding: 0; padding-right: 35px;}

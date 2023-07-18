@@ -10,18 +10,12 @@ function deleteBlock(dashboard, data, block)
 
 function editBlock(dashboard, data, block)
 {
-    const url = zui.formatString(data.url, block);
-    const modal = zui.Modal.ensure(document.body, {type: 'ajax', url: url, size: data.size});
-    modal.on('editBlock', dashboard.update(block.id));
-    modal.show();
+    zui.Modal.open({url: zui.formatString(data.url, block), size: data.size});
 }
 
 function createBlock(dashboard, data, block)
 {
-    const url = zui.formatString(data.url, block);
-    const modal = zui.Modal.ensure(document.body, {type: 'ajax', url: url, size: data.size});
-    modal.on('createBlock', dashboard.add(block.id));
-    modal.show();
+    zui.Modal.open({url: zui.formatString(data.url, block), size: data.size});
 }
 
 function resetBlocks(dashboard, data, block)

@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include 'common.ui.php';
+
 set::title($title);
 jsVar('blockID', $block->id);
 jsVar('blockTitle', $lang->block->blockTitle);
@@ -45,54 +47,20 @@ foreach($params as $key => $row)
     );
 }
 
-$moduleTabs = array();
-foreach($modules as $moduleKey => $moduleName)
-{
-    if(!$moduleKey || !$moduleName) continue;
-    if($moduleKey == 'welcome') $moduleTabs[] = li(width('calc(100% - 2rem)'), setClass('nav-divider'));
-    $moduleTabs[] = li
-    (
-        setClass('nav-item w-full'),
-        a
-        (
-            setClass('ellipsis text-dark title' . ($moduleKey == $module ? ' active' : '')),
-            on::click('getForm'),
-            set('data-tab', $moduleKey),
-            set('data-toggle', 'tab'),
-            $moduleName
-        ),
-        span
-        (
-            setClass('link flex-1 text-right pr-2 hidden'),
-            icon
-            (
-                setClass('text-primary'),
-                'arrow-right'
-            )
-        )
-    );
-}
-
-div
+row
 (
-    set::id('blockEditForm'),
-    setClass('flex h-full overflow-hidden'),
+    setID('blockEditForm'),
     $showModules ? cell
     (
-        width('128px'),
-        setClass('bg-secondary-pale overflow-y-auto'),
-        ul
-        (
-            setClass('nav nav-tabs nav-stacked my-2'),
-            $moduleTabs
-        ),
-    ) : '',
+        set::width(128),
+        set::class('bg-surface rounded rounded-r-none rounded-tl-none overflow-y-auto'),
+        buildBlockModuleNav()
+    ) : null,
     cell
     (
-        width('calc(100% - ' . ($showModules ? '130' : '2') .  'px)'),
+        setClass('flex-auto pr-6 pb-4'),
         form
         (
-            setClass('border-b-0'),
             on::change('#code', 'getForm'),
             on::change('#paramstype', 'onParamsTypeChange'),
             formRow
@@ -126,6 +94,7 @@ div
             div
             (
                 set::id('paramsRow'),
+                set::class('space-y-4'),
                 formRow
                 (
                     formGroup
@@ -164,5 +133,12 @@ div
         )
     )
 );
+
+if(isInModal())
+{
+    set::condensed(true);
+    set::bodyClass('border-t');
+    set::bodyProps(array('style' => array('padding' => 0)));
+}
 
 render();

@@ -1,10 +1,15 @@
 function getForm(event)
 {
-    const field  = $(event.target).attr('name');
-    const module = field == 'code' ? $('#blockEditForm #module').val() : $(event.target).attr('data-tab');
-    const code   = field == 'code' ? $(event.target).val() : '';
+    const $target = $(event.target).closest('a,input');
+    const field  = $target.attr('name');
+    const module = field == 'code' ? $('#blockEditForm #module').val() : $target.attr('data-module');
+    const code   = field == 'code' ? $target.val() : '';
     const url    = $.createLink('block', 'edit', 'blockID=' + blockID + '&module=' + module + '&code=' + (code ? code : ''));
-    loadPage(url, '#blockEditForm #codesRow, #blockEditForm #paramsRow, #blockEditForm #module');
+    loadPage({url: url, selector: '#blockEditForm #codesRow, #blockEditForm #paramsRow, #blockEditForm #module', partial: true});
+
+    const $nav = $('#blockEditForm .block-modules-nav');
+    $nav.find('.nav-item>.active').removeClass('active');
+    $nav.find(`.nav-item>a[data-module="${module}"]`).addClass('active');
 }
 
 /**
@@ -14,7 +19,6 @@ function getForm(event)
  */
 function onParamsTypeChange()
 {
-    const lang  = config.clientLang;
     const $code = $('#code')[0];
 
     /* 在项目仪表盘创建的待测版本区块时，直接取类型名称为该区块的标题。*/

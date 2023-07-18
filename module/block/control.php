@@ -128,7 +128,7 @@ class block extends control
 
             $this->block->update($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($this->app->tab, 'index'), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "$('#dashboard').dashboard('load', '$blockID')", 'closeModal' => true));
         }
 
         /* 如果没传 $code 说明是首次进入页面，直接使用待编辑 $block 的 $code。 */

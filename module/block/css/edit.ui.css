@@ -1,5 +1,0 @@
-#blockEditForm .bg-secondary-pale {background: #F3F6FA;}
-#blockEditForm #paramsRow:not(.hidden)~:not(.hidden), #blockEditForm #codesRow:not(.hidden)~:not(.hidden) {margin: 0;}
-#blockEditForm #paramsRow .form-row {--tw-space-y-reverse: 0; margin-bottom: calc(1rem*var(--tw-space-y-reverse)); margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));}
-#blockEditForm .form-actions {margin-top: 20px; margin-bottom: 20px;}
-.modal-body {padding: 0; padding-right: 35px;}
