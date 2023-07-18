@@ -32,6 +32,7 @@ class testcase_coverage_of_story_in_product extends baseCalc
           ->where('t1.stage')->eq('projected')
           ->andWhere('t1.deleted')->eq(0)
           ->andWhere('t2.deleted')->eq(0)
+          ->andWhere('t2.shadow')->eq(0)
           ->query();
     }
 

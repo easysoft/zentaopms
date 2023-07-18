@@ -54,6 +54,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.hasProduct')->eq(1)
+            ->andWhere('t3.shadow')->eq(0)
             ->query();
     }
 
@@ -72,6 +73,7 @@ class dataset
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
             ->query();
     }
 
@@ -90,6 +92,7 @@ class dataset
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
             ->query();
     }
 
@@ -108,6 +111,7 @@ class dataset
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
             ->query();
     }
 
@@ -126,6 +130,7 @@ class dataset
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
             ->query();
     }
 
@@ -144,6 +149,7 @@ class dataset
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
             ->query();
     }
 
@@ -163,6 +169,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
+            ->andWhere('t2.shadow')->eq(0)
             ->query();
     }
 
@@ -180,6 +187,7 @@ class dataset
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t1.stage', true)->eq('released')
             ->orWhere('t1.closedReason')->eq('done')
             ->markRight(1)

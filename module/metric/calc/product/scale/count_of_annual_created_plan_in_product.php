@@ -28,6 +28,7 @@ class count_of_annual_created_plan_in_product extends baseCalc
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
             ->query();
     }
 

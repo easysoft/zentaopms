@@ -23,7 +23,7 @@
  */
 class scale_of_annual_closed_story_in_product extends baseCalc
 {
-    public $dataset = 'getStories';
+    public $dataset = 'getDevStories';
 
     public $fieldList = array('t1.product', 't1.closedDate', 't1.estimate');
 
