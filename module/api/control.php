@@ -512,7 +512,7 @@ class api extends control
 
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "redirectParentWindow($id)"));
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $lib  = $this->doc->getLibById($id);

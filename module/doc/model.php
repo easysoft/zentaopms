@@ -289,6 +289,8 @@ class docModel extends model
 
         $data = fixer::input('post')
             ->trim('name')
+            ->add('product', $oldLib->product)
+            ->add('project', $oldLib->project)
             ->join('groups', ',')
             ->join('users', ',')
             ->remove('uid,contactListMenu,type')
@@ -316,7 +318,7 @@ class docModel extends model
         if(!dao::isError())
         {
             $this->loadModel('action');
-            $changes  = common::createChanges($oldDoc, $data);
+            $changes  = common::createChanges($oldLib, $data);
             $actionID = $this->action->create('docLib', $id, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
