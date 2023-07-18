@@ -174,6 +174,22 @@ class dataset
     }
 
     /**
+     * 获取所有研发需求数据。
+     * Get all story list.
+     *
+     * @param  int    $fieldList
+     * @access public
+     * @return mixed
+     */
+    public function getAllDevStories($fieldList)
+    {
+        return $this->dao->select($fieldList) ->from(TABLE_STORY)->alias('t1')
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('story')
+            ->query();
+    }
+
+    /**
      * 获取已交付的需求数据。
      * Get delivered story list.
      *
