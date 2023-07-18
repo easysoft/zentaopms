@@ -298,7 +298,14 @@ class pivot extends control
         $processSqlData = $this->loadModel('chart')->getTables($sql);
         $sql = $processSqlData['sql'];
 
-        list($data, $configs) = $this->pivot->genSheet($fields, $settings, $sql, $filterFormat, $langs);
+        if(isset($settings['summary']) and $settings['summary'] == 'notuse')
+        {
+            list($data, $configs) = $this->pivot->genOriginSheet($fields, $settings, $sql, $filterFormat, $langs);
+        }
+        else
+        {
+            list($data, $configs) = $this->pivot->genSheet($fields, $settings, $sql, $filterFormat, $langs);
+        }
 
         $this->pivot->buildPivotTable($data, $configs, $fields, $sql);
     }
