@@ -15,8 +15,6 @@ foreach($blocks as $block)
 {
     $block->color  = isset($block->params->color) ? $block->params->color : null;
     $block->fetch  = $block->blockLink;
-    $block->height = $block->height ? $block->height : 3;
-    $block->size   = array($block->width, $block->height);
     unset($block->title);
 }
 

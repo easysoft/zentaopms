@@ -1,10 +1,15 @@
 function getForm(event)
 {
-    const field  = $(event.target).attr('name');
-    const module = field == 'code' ? $('#blockCreateForm #module').val() : $(event.target).attr('data-tab');
-    const code   = field == 'code' ? $(event.target).val() : '';
-    const url    = $.createLink('block', 'create', 'dashboard=' + dashboard + '&module=' + module + '&code=' + (code ? code : ''));
-    loadPage(url, '#blockCreateForm #codesRow, #blockCreateForm #paramsRow, #blockCreateForm #module');
+    const $target = $(event.target).closest('a,input');
+    const field   = $target.attr('name');
+    const module  = field == 'code' ? $('#blockCreateForm #module').val() : $target.attr('data-module');
+    const code    = field == 'code' ? $target.val() : '';
+    const url     = $.createLink('block', 'create', 'dashboard=' + dashboard + '&module=' + module + '&code=' + (code ? code : ''));
+    loadPartial(url, '#blockCreateForm #codesRow, #blockCreateForm #paramsRow, #blockCreateForm #module');
+
+    const $nav = $('#blockCreateForm .block-modules-nav');
+    $nav.find('.nav-item>.active').removeClass('active');
+    $nav.find(`.nav-item>a[data-module="${module}"]`).addClass('active');
 }
 
 /**
@@ -21,7 +26,7 @@ function onParamsTypeChange()
     /* When creating a test version block in the project dashboard, directly take the name of the block of type.*/
     if($('#module').val() == 'scrumtest' && $('#paramstype').val() != 'all')
     {
-        $('#title').val($code.options[$code.selectedIndex].text);
+        $('#title').val($code.options[$code.selectedIndex].text || '');
         return;
     }
 

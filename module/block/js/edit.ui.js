@@ -1,10 +1,10 @@
 function getForm(event)
 {
     const $target = $(event.target).closest('a,input');
-    const field  = $target.attr('name');
-    const module = field == 'code' ? $('#blockEditForm #module').val() : $target.attr('data-module');
-    const code   = field == 'code' ? $target.val() : '';
-    const url    = $.createLink('block', 'edit', 'blockID=' + blockID + '&module=' + module + '&code=' + (code ? code : ''));
+    const field   = $target.attr('name');
+    const module  = field == 'code' ? $('#blockEditForm #module').val() : $target.attr('data-module');
+    const code    = field == 'code' ? $target.val() : '';
+    const url     = $.createLink('block', 'edit', 'blockID=' + blockID + '&module=' + module + '&code=' + (code ? code : ''));
     loadPartial(url, '#blockCreateForm #codesRow, #blockCreateForm #paramsRow, #blockCreateForm #module');
 
     const $nav = $('#blockEditForm .block-modules-nav');
