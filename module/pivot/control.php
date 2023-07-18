@@ -72,7 +72,14 @@ class pivot extends control
             $processSqlData = $this->loadModel('chart')->getTables($sql);
             $sql = $processSqlData['sql'];
 
-            list($data, $configs) = $this->pivot->genSheet(json_decode(json_encode($pivot->fieldSettings), true), $pivot->settings, $sql, $filterFormat, json_decode($pivot->langs, true));
+            if(isset($pivot->settings['summary']) and $pivot->settings = 'notuse')
+            {
+                list($data, $configs) = $this->pivot->genOriginSheet(json_decode(json_encode($pivot->fieldSettings), true), $pivot->settings, $sql, $filterFormat, json_decode($pivot->langs, true));
+            }
+            else
+            {
+                list($data, $configs) = $this->pivot->genSheet(json_decode(json_encode($pivot->fieldSettings), true), $pivot->settings, $sql, $filterFormat, json_decode($pivot->langs, true));
+            }
             $this->view->data     = $data;
             $this->view->configs  = $configs;
         }
