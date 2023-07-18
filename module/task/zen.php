@@ -1466,7 +1466,7 @@ class taskZen extends task
     {
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
         if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID={$task->id}"));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true);
     }
 
     /**
