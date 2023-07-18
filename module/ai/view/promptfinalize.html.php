@@ -42,7 +42,7 @@
           </div>
         </div>
         <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
-          <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->nextStep, 'disabled name="jumpToNext" value="1"');?></div>
+          <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->prompts->action->publish, 'disabled name="jumpToNext" value="1"');?></div>
         </div>
       </div>
     </div>
