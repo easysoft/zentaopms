@@ -51,6 +51,8 @@ $lang->ai->prompts->action->publish         = '发布';
 $lang->ai->prompts->action->unpublish       = '下架';
 $lang->ai->prompts->action->delete          = '删除';
 $lang->ai->prompts->action->deleteConfirm   = '删除后，提词将不能继续使用，您确定要删除吗？';
+$lang->ai->prompts->action->publishSuccess  = '发布成功';
+
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = '指定角色';

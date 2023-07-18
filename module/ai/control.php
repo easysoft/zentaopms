@@ -467,14 +467,21 @@ class ai extends control
      * Publish prompt, set status to active.
      *
      * @param  int    $id
+     * @param  bool   $backToTestingLocation
      * @access public
      * @return void
      */
-    public function promptPublish($id)
+    public function promptPublish($id, $backToTestingLocation = false)
     {
         $this->ai->togglePromptStatus($id, 'active');
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if($backToTestingLocation)
+        {
+            $prompt = $this->ai->getPromptByID($id);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'locate' => $this->ai->getTestingLocation($prompt)));
+        }
+
         return $this->send(array('result' => 'success'));
     }
 

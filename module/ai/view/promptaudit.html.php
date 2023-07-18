@@ -121,7 +121,8 @@
     });
   })();
 
-  function reloadPrompt(promptId, objectId) {
+  function reloadPrompt(promptId, objectId)
+  {
     let link = createLink('ai', 'promptexecute', 'promptId=' + promptId + '&objectId=' + objectId);
     link = link.replace('onlybody=yes', '');
     const aTag = document.createElement('a');
