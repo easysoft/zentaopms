@@ -89,10 +89,12 @@
               <?php $vars = "module=$module&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
               <th class='c-id text-left w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->ai->prompts->id);?></th>
               <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->ai->prompts->name);?></th>
+              <?php if(empty($status)):?>
+                <th class='c-status w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->ai->prompts->stage);?></th>
+              <?php endif;?>
               <th class='c-createdby w-120px'><?php common::printOrderLink('createdby', $orderBy, $vars, $lang->ai->prompts->createdBy);?></th>
               <th class='c-createddate w-180px'><?php common::printOrderLink('createddate', $orderBy, $vars, $lang->ai->prompts->createdDate);?></th>
-              <th class='c-targetform'><?php common::printOrderLink('targetform', $orderBy, $vars, $lang->ai->prompts->targetForm);?></th>
-              <th class='c-desc'><?php echo $lang->ai->prompts->funcDesc;?></th>
+              <th class='c-targetform w-200px'><?php common::printOrderLink('targetform', $orderBy, $vars, $lang->ai->prompts->targetForm);?></th>
               <th class='text-center c-actions-5'><?php echo $lang->actions;?></th>
             </tr>
           </thead>
@@ -100,10 +102,10 @@
             <?php foreach($prompts as $prompt):?>
               <tr>
                 <td class='c-id'><?php echo $prompt->id;?></td>
-                <td class='c-name' title='<?php echo $prompt->name;?>'>
-                  <?php echo html::a(helper::createLink('ai', 'promptview', "id=$prompt->id"), $prompt->name, '_self', "title='$prompt->name'");?>
-                  <?php if($prompt->status == 'draft') echo "<span class='label label-light label-badge'>{$this->lang->ai->prompts->statuses[$prompt->status]}</span>";?>
-                </td>
+                <td class='c-name'><?php echo html::a(helper::createLink('ai', 'promptview', "id=$prompt->id"), $prompt->name, '_self', "title='$prompt->name'");?></td>
+                <?php if(empty($status)):?>
+                  <td class='c-status'><?php echo $lang->ai->prompts->statuses[$prompt->status];?></td>
+                <?php endif;?>
                 <td class='c-createdby'><?php echo $prompt->createdBy;?></td>
                 <td class='c-createddate'><?php echo $prompt->createdDate;?></td>
                 <td class='c-targetform'>
@@ -115,7 +117,6 @@
                     }
                   ?>
                 </td>
-                <td class='c-description' title='<?php echo $prompt->desc;?>'><?php echo $prompt->desc;?></td>
                 <td class='text-center c-actions' data-prompt-id='<?php echo $prompt->id?>'>
                   <?php $printPromptActionMenu($prompt);?>
                 </td>

@@ -37,6 +37,7 @@ $lang->ai->prompts->createdDate = '创建时间';
 $lang->ai->prompts->targetForm  = '表单';
 $lang->ai->prompts->funcDesc    = '功能描述';
 $lang->ai->prompts->deleted     = '已删除';
+$lang->ai->prompts->stage       = '阶段';
 
 $lang->ai->prompts->summary = '本页共 %s 个提词。';
 
