@@ -437,6 +437,7 @@ $config->objectTables['privlang']     = TABLE_PRIVLANG;
 $config->objectTables['privmanager']  = TABLE_PRIVMANAGER;
 $config->objectTables['privrelation'] = TABLE_PRIVRELATION;
 $config->objectTables['scene']        = TABLE_SCENE;
+$config->objectTables['prompt']       = TABLE_PROMPT;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';

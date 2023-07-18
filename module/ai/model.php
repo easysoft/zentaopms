@@ -373,13 +373,15 @@ class aiModel extends model
      */
     public function getPrompts($module = '', $status = '', $order = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_PROMPT)
+        $prompts = $this->dao->select('*')->from(TABLE_PROMPT)
             ->where('1=1')
             ->beginIF(!empty($module))->andWhere('module')->eq($module)->fi()
             ->beginIF(!empty($status))->andWhere('status')->eq($status)->fi()
             ->orderBy($order)
             ->page($pager)
             ->fetchAll();
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'prompt');
+        return $prompts;
     }
 
     /**

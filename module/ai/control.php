@@ -147,7 +147,8 @@ class ai extends control
         $prompt = $this->ai->getPromptById($id);
 
         $this->view->prompt     = $prompt;
-        $this->view->title      = $this->lang->ai->prompts->common;
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
+        $this->view->title      = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name";
         $this->view->position[] = $this->lang->ai->prompts->common;
 
         $this->display();

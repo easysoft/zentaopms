@@ -47,6 +47,10 @@
   </div>
 </div>
 
+<div id="mainActions" class='main-actions'>
+  <?php common::printPreAndNext($preAndNext, helper::createLink('ai', 'promptview', 'id=%d'));?>
+</div>
+
 <script>
   $(function()
   {
