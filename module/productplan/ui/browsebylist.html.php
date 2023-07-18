@@ -185,7 +185,7 @@ $canBatchEdit         = common::hasPriv('productplan', 'batchEdit');
 $canBatchChangeStatus = common::hasPriv('productplan', 'batchChangeStatus');
 
 /* Generate dropdown menu for the batch change status button on footbar. */
-$fnGenerateDropdownMenu = function() use($lang, $canBatchChangeStatus)
+$fnGenerateDropdownMenu = function() use($lang, $canBatchChangeStatus, $productID)
 {
     if(!$canBatchChangeStatus) return;
 
@@ -242,7 +242,7 @@ toolbar
     (
         set::icon('plus'),
         setClass('primary'),
-        set::url(createLink('productplan', 'create', "productID=$product->id&branch=$branch")),
+        set::url(createLink('productplan', 'create', "productID=$productID&branch=$branch")),
         $lang->productplan->create
     ) : null
 );

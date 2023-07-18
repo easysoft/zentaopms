@@ -220,28 +220,24 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function batchChangeStatus($status, $productID)
+    public function batchChangeStatus(string $status, int $productID)
     {
-        $this->loadModel('product')->setMenu($productID);
-        $this->loadModel('action');
         $planIdList = $this->post->planIdList;
 
-        if($status !== 'closed')
+        if($status !== 'closed' || $this->post->comment)
         {
             $this->productplan->batchChangeStatus($status);
-            return $this->send(array('result' => 'success', 'load' => true));
-        }
-        else
-        {
-            if($this->post->comments) return $this->send(array('result' => 'success', 'load' => inlink('browse', "product=$productID")));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIdList)->fetchAll('id');
-
-            $this->view->reasonList  = $this->lang->productplan->closedReasonList;
-            $this->view->plans       = $plans;
-            $this->view->productID   = $productID;
-            $this->display();
+            if($status !== 'closed') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            if($this->post->comment) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', "product=$productID")));
         }
+
+        $this->commonAction($productID);
+
+        $this->view->plans     = $this->productplan->getByIDList($planIdList);
+        $this->view->productID = $productID;
+        $this->display();
     }
 
     /**

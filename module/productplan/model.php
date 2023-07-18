@@ -34,13 +34,13 @@ class productplanModel extends model
     /**
      * Get plans by idList
      *
-     * @param  int    $planIDList
+     * @param  int    $planIdList
      * @access public
      * @return array
      */
-    public function getByIDList($planIDList)
+    public function getByIDList($planIdList)
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIDList)->orderBy('begin desc')->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIdList)->orderBy('begin desc')->fetchAll('id');
     }
 
     /**
@@ -723,11 +723,8 @@ class productplanModel extends model
             return;
         }
 
-        if(count($childStatus) == 1 and isset($childStatus['wait']))
-        {
-            return;
-        }
-        elseif(count($childStatus) == 1 and isset($childStatus['closed']))
+        if(count($childStatus) == 1 and isset($childStatus['wait'])) return;
+        if(count($childStatus) == 1 and isset($childStatus['closed']))
         {
             if($parent->status != 'closed')
             {
@@ -825,52 +822,51 @@ class productplanModel extends model
     /**
      * Batch change the status of productplan.
      *
-     * @param  array   $planIDList
+     * @param  array   $planIdList
      * @param  string  $status
      * @access public
      * @return array
      */
-    public function batchChangeStatus($status)
+    public function batchChangeStatus(string $status): array|bool
     {
         $this->loadModel('action');
-        $allChanges = array();
+        $allChanges    = array();
+        $planIdList    = $this->post->planIdList;
+        $closedReasons = $status == 'closed' ? $this->post->closedReason : array();
 
-        $planIDList = $this->post->planIDList;
-        if($status == 'closed') $closedReasons = $this->post->closedReasons;
+        if($status == 'closed')
+        {
+            foreach($closedReasons as $planID => $reason)
+            {
+                if(empty($reason)) return dao::$errors['closedReason[]'] = sprintf($this->lang->error->notempty, $this->lang->productplan->closedReason);
+            }
+        }
 
-        $oldPlans = $this->getByIDList($planIDList, $status);
-
-        foreach($planIDList as $planID)
+        $oldPlans = $this->getByIDList($planIdList);
+        foreach($planIdList as $planID)
         {
             $oldPlan = $oldPlans[$planID];
             if($status == $oldPlan->status) continue;
 
             $plan = new stdclass();
             $plan->status = $status;
-            if($status == 'closed')  $plan->closedReason = $closedReasons[$planID];
-            if($status !== 'closed') $plan->closedReason = '';
+            if($status == 'closed') $plan->closedReason = $closedReasons[$planID];
+            if($status != 'closed') $plan->closedReason = '';
 
             $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq((int)$planID)->exec();
+            if(dao::isError()) return false;
 
             if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
 
-            if(!dao::isError())
-            {
-                $allChanges[$planID] = common::createChanges($oldPlan, $plan);
-            }
-            else
-            {
-                return print(js::error(dao::getError()));
-            }
-        }
+            $changes = common::createChanges($oldPlan, $plan);
+            if(empty($changes)) continue;
 
-        foreach($allChanges as $planID => $changes)
-        {
-            $comment = $this->post->comments[$planID] ? $this->post->comments[$planID] : '';
+            $comment  = isset($_POST['comment'][$planID]) ? $this->post->comment[$planID] : '';
             $actionID = $this->action->create('productplan', $planID, 'edited', $comment);
             $this->action->logHistory($actionID, $changes);
         }
-        return $allChanges;
+
+        return true;
     }
 
     /**
