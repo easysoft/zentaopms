@@ -274,24 +274,9 @@
         if(selector.type === 'json')
         {
             const props = info.data.props;
-            if(typeof props === 'object')
-            {
-                const targetData = $target.data();
-                const zuiComName = Object.keys(targetData).find(prop => prop.startsWith('zui.'));
-                if(zuiComName)
-                {
-                    const zuiCom = targetData[zuiComName];
-                    if(typeof zuiCom === 'object' && typeof zuiCom.render === 'function')
-                    {
-                        Object.keys(props).forEach(prop =>
-                        {
-                            const value = props[prop];
-                            if(typeof value === 'string' && value.startsWith('RAWJS<')) delete props[prop];
-                        });
-                        zuiCom.render(props);
-                    }
-                }
-            }
+            if(typeof props !== 'object') return;
+            const component = $target.zui(info.name);
+            if(typeof component === 'object' && typeof component.render === 'function') component.render(props);
             return;
         }
 
@@ -340,7 +325,7 @@
     function requestContent(options, onFinish)
     {
         const target    = options.target || '#main';
-        const selectors = Array.isArray(options.selector) ? options.selector : options.selector.split(',');
+        const selectors = (Array.isArray(options.selector) ? options.selector : options.selector.split(',')).map(selector => selector.replace(':component', ':type=json&data=props'));
         const url       = options.url;
 
         if(DEBUG) console.log('[APP]', 'request', options);
@@ -560,6 +545,27 @@
 
         if(DEBUG) console.log('[APP] ', 'load:', options.url);
         fetchContent(options.url, options.selector, options);
+    }
+
+    /** Load zui component. */
+    function loadComponent(target, options)
+    {
+        if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
+        options = $.extend({url: currentAppUrl, id: target, target: target}, options);
+        if(!$(target).length) return loadPage({url: options.url, id: target});
+
+        if(!options.selector)
+        {
+            let name = options.component;
+            if(!name)
+            {
+                const component = $(target).zui();
+                if(!component) return;
+                name = component.constructor.ZUI;
+            }
+            options.selector = `${name}/${target}:component`;
+        }
+        loadPage(options);
     }
 
     /**
@@ -880,7 +886,7 @@
         return result;
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent});
     $.extend($.apps, {openUrl: openUrl});
 
     /* Transfer click event to parent */
