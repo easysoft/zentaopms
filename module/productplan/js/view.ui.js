@@ -35,7 +35,7 @@ window.showLink = function(obj)
     $(idName).load($this.data('linkurl'));
 };
 
-$(document).on('click', '.batch-btn', function()
+$(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 {
     const $this  = $(this);
     const type   = $this.data('type');

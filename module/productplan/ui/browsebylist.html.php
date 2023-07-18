@@ -190,22 +190,22 @@ $fnGenerateDropdownMenu = function() use($lang, $canBatchChangeStatus)
     if(!$canBatchChangeStatus) return;
 
     $items = array();
-    foreach($lang->productplan->statusList as $statKey => $statText)
+    foreach($lang->productplan->statusList as $statusKey => $statusText)
     {
-        if($statKey == 'closed') continue;
-
-        $items[] = array
+        $items[$statusKey] = array
         (
-            'text' => $statText,
-            'onclick' => jsRaw("function(){console.log('$statText')}")
+            'text' => $statusText,
+            'class' => 'batch-btn',
+            'data-formaction' => $this->createLink('productplan', 'batchChangeStatus', "status={$statusKey}&productID={$productID}"),
         );
+        if($statusKey == 'closed') $items[$statusKey]['data-page'] = 'batch';
     }
 
     zui::menu
     (
         set::id('footbarActionMenu'),
         set::class('menu dropdown-menu'),
-        set::items($items)
+        set::items(array_values($items))
     );
 };
 
@@ -252,6 +252,7 @@ $fnGenerateDropdownMenu();
 
 dtable
 (
+    setID('planList'),
     set::cols($fnGetTableFieldList()),
     set::data($fnGenerateTableData($plans)),
     set::emptyTip($lang->productplan->noPlan),
@@ -268,7 +269,9 @@ dtable
             (
                 'text'    => $lang->edit,
                 'btnType' => 'secondary',
-                'url'     => inlink('batchEdit', "productID=$product->id&branch=$branch"),
+                'className' => 'batch-btn',
+                'data-page' => 'batch',
+                'data-formaction' => inlink('batchEdit', "productID=$productID&branch=$branch"),
             ) : null,
             $canBatchChangeStatus ? array
             (

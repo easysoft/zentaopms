@@ -599,7 +599,7 @@ modal
         formGroup
         (
             set::label($lang->story->lib),
-            select
+            picker
             (
                 set::name('lib'),
                 set::items($libs),
@@ -609,7 +609,7 @@ modal
         (!common::hasPriv('assetlib', 'approveStory') && !common::hasPriv('assetlib', 'batchApproveStory')) ? formGroup
         (
             set::label($lang->story->approver),
-            select
+            picker
             (
                 set::name('assignedTo'),
                 set::items($approvers),

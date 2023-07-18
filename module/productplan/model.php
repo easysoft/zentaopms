@@ -764,74 +764,31 @@ class productplanModel extends model
      * Batch update plan.
      *
      * @param  int    $productID
+     * @param  array  $plans
      * @access public
      * @return array
      */
-    public function batchUpdate($productID)
+    public function batchUpdate(int $productID, array $plans): array|bool
     {
-        $data     = fixer::input('post')->get();
-        $oldPlans = $this->getByIDList($data->id);
-
-        $this->app->loadClass('purifier', true);
-        $config   = HTMLPurifier_Config::createDefault();
-        $config->set('Cache.DefinitionImpl', null);
-
-        $plans = array();
-        $extendFields = $this->getFlowExtendFields();
+        $this->loadModel('action');
+        $oldPlans     = $this->getByIDList(array_keys($plans));
         $product      = $this->loadModel('product')->getByID($productID);
-        foreach($data->id as $planID)
-        {
-            if($product->type != 'normal' and $oldPlans[$planID]->parent != '-1' and !isset($data->branch[$planID]))
-            {
-                $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-                return helper::end(js::error(sprintf($this->lang->error->notempty, $this->lang->product->branch)));
-            }
-
-            $plan = new stdclass();
-            $plan->branch = isset($data->branch[$planID]) ? implode(',', $data->branch[$planID]) : $oldPlans[$planID]->branch;
-            $plan->title  = $data->title[$planID];
-            $plan->begin  = isset($data->begin[$planID]) ? $data->begin[$planID] : '';
-            $plan->end    = isset($data->end[$planID]) ? $data->end[$planID] : '';
-            $plan->status = isset($data->status[$planID]) ? $data->status[$planID] : $oldPlans[$planID]->status;
-            $plan->parent = $oldPlans[$planID]->parent;
-            $plan->id     = $planID;
-
-            if(empty($plan->title)) return helper::end(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
-            if($plan->begin > $plan->end and !empty($plan->end)) return helper::end(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
-
-            if($plan->begin == '') $plan->begin = $this->config->productplan->future;
-            if($plan->end   == '') $plan->end   = $this->config->productplan->future;
-
-            foreach($extendFields as $extendField)
-            {
-                $plan->{$extendField->field} = $this->post->{$extendField->field}[$planID];
-                if(is_array($plan->{$extendField->field})) $plan->{$extendField->field} = implode(',', $plan->{$extendField->field});
-
-                $plan->{$extendField->field} = htmlSpecialString($plan->{$extendField->field});
-            }
-
-            $plans[$planID] = $plan;
-        }
+        $futureConfig = $this->config->productplan->future;
 
         $changes = array();
         $parents = array();
         foreach($plans as $planID => $plan)
         {
-            $parentID = $oldPlans[$planID]->parent;
+            $oldPlan  = $oldPlans[$planID];
+            $parentID = $oldPlan->parent;
             /* Determine whether the begin and end dates of the parent plan and the child plan are correct. */
             if($parentID > 0)
             {
-                $parent = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
-                if($parent->begin != $this->config->productplan->future and $plan->begin != $this->config->productplan->future and $plan->begin < $parent->begin)
-                {
-                    return helper::end(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin)));
-                }
-                elseif($parent->end != $this->config->productplan->future and $plan->end != $this->config->productplan->future and $plan->end > $parent->end)
-                {
-                    return helper::end(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end)));
-                }
+                $parent = zget($plans, $parentID, $this->getByID($parentID));
+                if($parent->begin != $futureConfig and $plan->begin != $futureConfig and $plan->begin < $parent->begin) return dao::$errors[] = sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin);
+                if($parent->end != $futureConfig and $plan->end != $futureConfig and $plan->end > $parent->end)         return dao::$errors[] = sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end);
             }
-            elseif($parentID == -1 and $plan->begin != $this->config->productplan->future)
+            elseif($parentID == -1 and $plan->begin != $futureConfig)
             {
                 $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
                 $minBegin   = $plan->begin;
@@ -840,25 +797,29 @@ class productplanModel extends model
                 {
                     $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
                     if($childPlan->begin < $minBegin and $minBegin != $this->config->productplan->future) $minBegin = $childPlan->begin;
-                    if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future) $maxEnd = $childPlan->end;
+                    if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future)       $maxEnd   = $childPlan->end;
                 }
-                if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) return helper::end(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
-                if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) return helper::end(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
+                if($minBegin < $plan->begin and $minBegin != $futureConfig) return dao::$errors[] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
+                if($maxEnd > $plan->end     and $maxEnd != $futureConfig)   return dao::$errors[] = sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd);
             }
 
-            $change = common::createChanges($oldPlans[$planID], $plan);
-            if($change)
-            {
-                if($parentID > 0 and !isset($parents[$parentID])) $parents[$parentID] = $parentID;
-                $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->checkFlow()->where('id')->eq($planID)->exec();
-                if(dao::isError()) return helper::end(js::error(dao::getError()));
-                $changes[$planID] = $change;
-            }
+            $change = common::createChanges($oldPlan, $plan);
+            if(empty($change)) continue;
+
+            if($parentID > 0 and !isset($parents[$parentID])) $parents[$parentID] = $parentID;
+
+            $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->checkFlow()->where('id')->eq($planID)->exec();
+            if(dao::isError()) return false;
+
+            $actionID = $this->action->create('productplan', $planID, 'Edited');
+            $this->action->logHistory($actionID, $change);
+
+            $changes[$planID] = $change;
         }
 
         foreach($parents as $parent) $this->updateParentStatus($parent);
-
-        return $changes;
+        if($changes) $this->unlinkOldBranch($changes);
+        return true;
     }
 
     /**
@@ -1547,5 +1508,45 @@ class productplanModel extends model
             'hint'     => $title,
             'disabled' => !$isClick
         );
+    }
+
+    /**
+     * Unlink story and bug when edit branch of plan.
+     * @param  int    $planID
+     * @param  int    $oldBranch
+     * @access protected
+     * @return void
+     */
+    public function unlinkOldBranch($changes)
+    {
+        foreach($changes as $planID => $changes)
+        {
+            $oldBranch = '';
+            $newBranch = '';
+            foreach($changes as $change)
+            {
+                if($change['field'] == 'branch')
+                {
+                    $oldBranch = $change['old'];
+                    $newBranch = $change['new'];
+                    break;
+                }
+            }
+
+            $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
+            $planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all');
+            if($oldBranch)
+            {
+                foreach($planStories as $storyID => $story)
+                {
+                    if($story->branch and str_contains(",$newBranch,", ",$story->branch,")) $this->unlinkStory($storyID, $planID);
+                }
+
+                foreach($planBugs as $bugID => $bug)
+                {
+                    if($bug->branch and str_contains(",$newBranch,", ",$bug->branch,")) $this->unlinkBug($bugID, $planID);
+                }
+            }
+        }
     }
 }

@@ -133,8 +133,7 @@ class productplan extends control
         {
             $changes = $this->productplan->update($planID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $change[$planID] = $changes;
-            $this->unlinkOldBranch($change);
+            $this->productplan->unlinkOldBranch(array($planID => $changes));
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
@@ -182,24 +181,20 @@ class productplan extends control
     {
         if(!empty($_POST['title']))
         {
-            $changes = $this->productplan->batchUpdate($productID);
-            $this->unlinkOldBranch($changes);
-            $this->loadModel('action');
-            foreach($changes as $planID => $change)
-            {
-                $actionID = $this->action->create('productplan', $planID, 'Edited');
-                $this->action->logHistory($actionID, $change);
-            }
+            /* 从POST中获取数据。 */
+            $plans = $this->productplanZen->buildPlansForBatchEdit();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $this->productplan->batchUpdate($productID, $plans);
             $this->loadModel('score')->create('ajax', 'batchOther');
-            return print(js::locate($this->session->productPlanList, 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->productPlanList));
         }
 
-        if(!$this->post->planIDList) return print(js::locate($this->session->productPlanList, 'parent'));
+        if(!$this->post->planIdList) return $this->send(array('result' => 'success', 'load' => $this->session->productPlanList));
 
         $this->commonAction($productID, $branch);
 
-        $plans        = $this->productplan->getByIDList($this->post->planIDList);
+        $plans        = $this->productplan->getByIDList($this->post->planIdList);
         $oldBranch    = array();
         $parentIdList = array();
 
@@ -229,18 +224,18 @@ class productplan extends control
     {
         $this->loadModel('product')->setMenu($productID);
         $this->loadModel('action');
-        $planIDList = $this->post->planIDList;
+        $planIdList = $this->post->planIdList;
 
         if($status !== 'closed')
         {
             $this->productplan->batchChangeStatus($status);
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'load' => true));
         }
         else
         {
-            if($this->post->comments) return print(js::locate(inlink('browse', "product=$productID")));
+            if($this->post->comments) return $this->send(array('result' => 'success', 'load' => inlink('browse', "product=$productID")));
 
-            $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIDList)->fetchAll('id');
+            $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIdList)->fetchAll('id');
 
             $this->view->reasonList  = $this->lang->productplan->closedReasonList;
             $this->view->plans       = $plans;
@@ -880,45 +875,6 @@ class productplan extends control
         foreach($this->post->bugIdList as $bugID) $this->productplan->unlinkBug($bugID);
         $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIdList));
         return $this->send(array('result' => 'success', 'load' => $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy")));
-    }
-
-    /**
-     * Unlink story and bug when edit branch of plan.
-     * @param  int    $planID
-     * @param  int    $oldBranch
-     * @access protected
-     * @return void
-     */
-    protected function unlinkOldBranch($changes)
-    {
-        foreach($changes as $planID => $changes)
-        {
-            $oldBranch = '';
-            $newBranch = '';
-            foreach($changes as $change)
-            {
-                if($change['field'] == 'branch')
-                {
-                    $oldBranch = $change['old'];
-                    $newBranch = $change['new'];
-                    break;
-                }
-            }
-            $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
-            $planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all');
-            if($oldBranch)
-            {
-                foreach($planStories as $storyID => $story)
-                {
-                    if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $this->productplan->unlinkStory($storyID, $planID);
-                }
-
-                foreach($planBugs as $bugID => $bug)
-                {
-                    if($bug->branch and strpos(",$newBranch,", ",$bug->branch,") === false) $this->productplan->unlinkBug($bugID, $planID);
-                }
-            }
-        }
     }
 
     /**
