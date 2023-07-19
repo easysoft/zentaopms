@@ -2393,6 +2393,7 @@ class testcase extends control
             if(!empty($caseID)) return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => true, 'closeModal' => true));
         }
+        $this->view->title     = $this->lang->testcase->importToLib;
         $this->view->libraries = $this->loadModel('caselib')->getLibraries();
         $this->display();
     }
