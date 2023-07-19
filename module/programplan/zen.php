@@ -71,7 +71,7 @@ class programplanZen extends programplan
     protected function beforeEdit(object $formData): object
     {
         $rowData = $formData->data;
-        return isset($rowData->output) ? $formData->join($rowData->output, ',')->get() : $rowData;
+        return isset($rowData->output) ? $formData->join('output', ',')->get() : $rowData;
     }
 
     /**
