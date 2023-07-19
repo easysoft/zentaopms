@@ -32,7 +32,7 @@ formPanel
             (
                 set::name('desc'),
                 set::rows('5'),
-                set::value(htmlSpecialString($suite->desc))
+                html($suite->desc)
             ),
         )
     ),

@@ -236,7 +236,7 @@ class testsuite extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $messgae = $this->executeHooks($suiteID);
+            $message = $this->executeHooks($suiteID);
             if($message) $response['message'] = $message;
 
             $response['locate']  = inlink('view', "suiteID=$suiteID");

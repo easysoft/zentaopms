@@ -38,7 +38,7 @@ $config->testsuite->dtable->fieldList['name']['fixed']    = 'left';
 
 $config->testsuite->dtable->fieldList['desc']['name']  = 'desc';
 $config->testsuite->dtable->fieldList['desc']['title'] = $lang->testsuite->desc;
-$config->testsuite->dtable->fieldList['desc']['type']  = 'text';
+$config->testsuite->dtable->fieldList['desc']['type']  = 'html';
 
 $config->testsuite->dtable->fieldList['addedBy']['name']     = 'addedBy';
 $config->testsuite->dtable->fieldList['addedBy']['title']    = $lang->testsuite->addedBy;
