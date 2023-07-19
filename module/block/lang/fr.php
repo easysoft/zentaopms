@@ -648,13 +648,13 @@ $lang->block->releasestatistic->monthly = 'Monthly releases trend chart';
 $lang->block->releasestatistic->annual  = "Annual release list (%s year)";
 
 $lang->block->teamachievement = new stdclass();
-$lang->block->teamachievement->finishedTasks     = 'Finished Tasks';
-$lang->block->teamachievement->createdStories    = 'New Stories';
-$lang->block->teamachievement->closedBugs        = 'Closed Bugs';
-$lang->block->teamachievement->runCases          = 'Run Cases';
-$lang->block->teamachievement->consumedHours     = 'Consumed Hours';
-$lang->block->teamachievement->totalWorkload     = 'Total Workload';
-$lang->block->teamachievement->comparedYesterday = 'Compared';
+$lang->block->teamachievement->finishedTasks  = 'Finished Tasks';
+$lang->block->teamachievement->createdStories = 'New Stories';
+$lang->block->teamachievement->closedBugs     = 'Closed Bugs';
+$lang->block->teamachievement->runCases       = 'Run Cases';
+$lang->block->teamachievement->consumedHours  = 'Consumed Hours';
+$lang->block->teamachievement->totalWorkload  = 'Total Workload';
+$lang->block->teamachievement->vs             = 'VS';
 
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
