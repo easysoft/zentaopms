@@ -78,109 +78,81 @@ if($block->width == 3)
 
     blockPanel
     (
-        set::bodyClass('gradient flex p-0'),
+        set::bodyClass('gradient row p-0'),
         set::headingClass('border-0'),
         set::bodyProps(array('style' => array('background-image' => 'linear-gradient( 90deg, #ECF7FE 0%, #FFF 22%)'))),
         col
         (
             setID("{$id}-overview"),
-            setStyle(array('width' => '62.5%')),
+            width('62.5%'),
             div
             (
                 setClass('text-sm font-bold mt-2 ml-4'),
                 $lang->block->productoverview->overview
             ),
-            div
+            row
             (
-                setClass('flex mt-4'),
-                div
+                setClass('mt-4 text-center'),
+                col
                 (
-                    setClass(' flex w-2/5'),
+                    setClass('w-1/5 gap-2'),
                     div
                     (
-                        setClass('col w-1/2'),
-                        span
-                        (
-                            setClass('text-3xl leading-none text-center'),
-                            $data->productLineCount
-                        ),
-                        span
-                        (
-                            setClass('text-center'),
-                            $lang->block->productoverview->productLineCount
-                        )
+                        setClass('text-3xl leading-none num'),
+                        $data->productLineCount
                     ),
-                    div
-                    (
-                        setClass('col w-1/2'),
-                        a
-                        (
-                            setClass('text-3xl leading-none text-center text-primary'),
-                            hasPriv('product', 'all') ? set::href(createLink('product', 'all', 'browseType=all')) : null,
-                            $data->productCount
-                        ),
-                        span
-                        (
-                            setClass('text-center'),
-                            $lang->block->productoverview->productCount
-                        )
-                    )
+                    div($lang->block->productoverview->productLineCount)
                 ),
-                div
+                col
                 (
-                    setClass(' flex w-3/5'),
-                    div
+                    setClass('w-1/5 gap-2'),
+                    a
                     (
-                        setClass('col w-1/3'),
-                        span
-                        (
-                            setClass('text-3xl leading-none text-center border-l'),
-                            $data->unfinishedPlanCount
-                        ),
-                        span
-                        (
-                            setClass('text-center border-l'),
-                            $lang->block->productoverview->unfinishedPlanCount
-                        )
+                        setClass('text-3xl leading-none text-primary num'),
+                        hasPriv('product', 'all') ? set::href(createLink('product', 'all', 'browseType=all')) : null,
+                        $data->productCount
                     ),
+                    div($lang->block->productoverview->productCount)
+                ),
+                col
+                (
+                    setClass('w-1/5 gap-2 border-l'),
                     div
                     (
-                        setClass('col w-1/3'),
-                        span
-                        (
-                            setClass('text-3xl leading-none text-center'),
-                            $data->unclosedStoryCount
-                        ),
-                        span
-                        (
-                            setClass('text-center'),
-                            $lang->block->productoverview->unclosedStoryCount
-                        )
+                        setClass('text-3xl leading-none num'),
+                        $data->unfinishedPlanCount
                     ),
+                    div($lang->block->productoverview->unfinishedPlanCount)
+                ),
+                col
+                (
+                    setClass('w-1/5 gap-2'),
                     div
                     (
-                        setClass('col w-1/3'),
-                        span
-                        (
-                            setClass('text-3xl leading-none text-center'),
-                            $data->activeBugCount
-                        ),
-                        span
-                        (
-                            setClass('text-center'),
-                            $lang->block->productoverview->activeBugCount
-                        )
-                    )
+                        setClass('text-3xl leading-none num'),
+                        $data->unclosedStoryCount
+                    ),
+                    div($lang->block->productoverview->unclosedStoryCount)
+                ),
+                col
+                (
+                    setClass('w-1/5 gap-2 border-r'),
+                    div
+                    (
+                        setClass('text-3xl leading-none num'),
+                        $data->activeBugCount
+                    ),
+                    div($lang->block->productoverview->activeBugCount)
                 )
             )
         ),
         col
         (
             setID("{$id}-annual"),
-            setStyle(array('width' => '37.5%')),
-            div
+            setClass('flex-auto'),
+            row
             (
-                setClass('text-sm font-bold mt-2 ml-4 flex'),
+                setClass('text-sm font-bold mt-2 ml-4'),
                 span($lang->block->productoverview->yearFinished),
                 dropdown
                 (
@@ -195,85 +167,80 @@ if($block->width == 3)
                     set::items($items)
                 )
             ),
-            div
+            row
             (
-                setClass(' flex mt-4'),
-                div
+                setClass('mt-4 text-center'),
+                col
                 (
-                    setClass('col w-1/3'),
-                    span
+                    setClass('w-1/3 gap-2'),
+                    div
                     (
-                        setClass('text-3xl leading-none text-center border-l'),
+                        setClass('text-3xl leading-none num'),
                         $data->finishedReleaseCount['year']
                     ),
-                    span
+                    div
                     (
-                        setClass('text-center border-l'),
-                        $lang->block->productoverview->finishedReleaseCount
-                    ),
-                    !empty($data->finishedReleaseCount['week']) ? span
-                    (
-                        setClass('text-center'),
-                        $lang->block->productoverview->thisWeek,
-                        span
+                        $lang->block->productoverview->finishedReleaseCount,
+                        !empty($data->finishedReleaseCount['week']) ? div
                         (
-                            setClass('text-warning ml-1'),
-                            '+' . $data->finishedReleaseCount['week']
-                        )
-                    ) : null
+                            setClass('text-center'),
+                            $lang->block->productoverview->thisWeek,
+                            span
+                            (
+                                setClass('text-warning ml-1 num'),
+                                '+' . $data->finishedReleaseCount['week']
+                            )
+                        ) : null
+                    ),
                 ),
-                div
+                col
                 (
-                    setClass('col w-1/3'),
-                    span
+                    setClass('w-1/3 gap-2'),
+                    div
                     (
-                        setClass('text-3xl leading-none text-center'),
+                        setClass('text-3xl leading-none num'),
                         $data->finishedStoryCount['year']
                     ),
-                    span
+                    div
                     (
-                        setClass('text-center'),
-                        $lang->block->productoverview->finishedStoryCount
-                    ),
-                    !empty($data->finishedStoryCount['week']) ? span
-                    (
-                        setClass('text-center'),
-                        $lang->block->productoverview->thisWeek,
-                        span
+                        $lang->block->productoverview->finishedStoryCount,
+                        !empty($data->finishedStoryCount['week']) ? div
                         (
-                            setClass('text-warning ml-1'),
-                            '+' . $data->finishedStoryCount['week']
-                        )
-                    ) : null
+                            $lang->block->productoverview->thisWeek,
+                            span
+                            (
+                                setClass('text-warning ml-1 num'),
+                                '+' . $data->finishedStoryCount['week']
+                            )
+                        ) : null
+                    ),
                 ),
-                div
+                col
                 (
-                    setClass('col w-1/3'),
-                    span
+                    setClass('w-1/3 gap-2'),
+                    div
                     (
-                        setClass('text-3xl leading-none text-center'),
+                        setClass('text-3xl leading-none num'),
                         $data->finishedStoryPoint['year']
                     ),
-                    span
+                    div
                     (
-                        setClass('text-center'),
                         $lang->block->productoverview->finishedStoryPoint,
                         span
                         (
                             setClass('text-gray'),
                             '(SP)'
-                        )
-                    ),
-                    !empty($data->finishedStoryPoint['week']) ? span
-                    (
-                        setClass('text-center'),
-                        $lang->block->productoverview->thisWeek,
-                        span
+                        ),
+                        !empty($data->finishedStoryPoint['week']) ? div
                         (
-                            setClass('text-warning ml-1'),
-                            '+' . $data->finishedStoryPoint['week']
-                        )
-                    ) : null
+                            $lang->block->productoverview->thisWeek,
+                            span
+                            (
+                                setClass('text-warning ml-1 num'),
+                                '+' . $data->finishedStoryPoint['week']
+                            )
+                        ) : null
+                    ),
                 )
             )
         )
