@@ -41,8 +41,8 @@ formPanel
         set::width('1/3'),
         set::name('pri'),
         set::label($lang->bug->pri),
-        set::control('picker')
-        set::items($lang->bug->priList)
+        set::control('picker'),
+        set::items($lang->bug->priList),
         set::value($bug->pri)
     ),
     formRow
