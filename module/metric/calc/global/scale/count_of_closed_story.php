@@ -10,8 +10,8 @@
  * 单位：个
  * 描述：按全局统计的已关闭研发需求数表示已经关闭的研发需求的数量。该度量项反映了组织中已经关闭的研发需求的数量，可以用于评估组织的研发需求管理绩效和成果。
  * 定义：所有的研发需求个数求和
-状态为已关闭
-过滤已删除的研发需求
+ *       状态为已关闭
+ *       过滤已删除的研发需求
  * 度量库：
  * 收集方式：realtime
  *
@@ -24,20 +24,21 @@
  */
 class count_of_closed_story extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.status');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($data)
     {
+        $status = $data->status;
+        if($status == 'closed') $this->result ++;
     }
 
     public function getResult($options = array())
     {
+        $records = array(array('value' => $this->result));
         return $this->filterByOptions($this->result, $options);
     }
 }
