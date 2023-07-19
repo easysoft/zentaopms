@@ -120,3 +120,66 @@ function locateNewLib(type, objectID, libID)
 
     loadPage($.createLink(module, method, params));
 }
+
+window.myDocCell = function(result, {col, row})
+{
+    if(col.name == 'title')
+    {
+        let docNameHtml = `<div data-status='${row.data.status}' class='flex w-full doc-title'>`;
+        const docType   = iconList[row.data.type];
+        const docIcon   = `<img src='static/svg/${docType}.svg' class='file-icon mr-1'>`;
+        if(canViewDoc)
+        {
+            docNameHtml += `<a class="doc-name flex" href="` + $.createLink('doc', 'view', 'docID=' + row.data.id) + '">' + docIcon + ' ' + row.data.title + '</a>';
+        }
+        else
+        {
+            docNameHtml += `<span class='doc-name flex'>${docIcon} ${row.data.title}</span>`;
+        }
+
+        if(row.data.status == 'draft') docNameHtml += `<span class="label special-pale rounded-full ml-1">${draftText}</span>`;
+        if(canCollect)
+        {
+            const starIcon = row.data.collector.indexOf(',' + currentAccount + ',') >= 0 ? 'star' : 'star-empty';
+
+            docNameHtml += `<a class='ajaxCollect ajax-submit' href="` + $.createLink('doc', 'collect', `objectID=${row.data.id}&objectType=doc`) + `"><img src='static/svg/${starIcon}.svg' class='${starIcon} ml-1'></a>`;
+        }
+        docNameHtml +='</div>';
+        result[0] = {html: docNameHtml};
+        return result;
+    }
+
+    if(col.name == 'module')
+    {
+        const moduleDivide = row.data.moduleName ? ' > ' : '';
+        const moduleName   = row.data.libName + moduleDivide + row.data.moduleName;
+        const spaceMethod  = spaceMethodList[row.data.objectType];
+
+        let moduleHtml = '';
+        if(eval(`${spaceMethod}Priv`))
+        {
+            let spaceParams = `libID=${row.data.lib}&moduleID=${row.data.module}`;
+            if(['product', 'project', 'execution', 'custom'].indexOf(row.data.objectType) !== -1) spaceParams = `objectID=${row.data.objectID}&${spaceParams}`;
+            if(row.data.objectType == 'mine') spaceParams = `type=${row.data.objectType}&${spaceParams}`;
+
+            moduleHtml = `<a data-app='${currentTab}' href="` + $.createLink('doc', spaceMethod, spaceParams) + '">' + moduleName + '</a>';
+        }
+        else
+        {
+            moduleHtml = `<span>${moduleName}</span>`;
+        }
+
+        result[0] = {html: moduleHtml};
+
+        return result;
+    }
+    if(col.name == 'actions')
+    {
+        if(col.setting.list.edit && row.data.type != 'text')
+        {
+            result[0][0]['data-toggle'] = 'modal';
+            return result;
+        }
+    }
+    return result;
+}

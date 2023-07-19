@@ -635,64 +635,29 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function delete($docID, $confirm = 'no', $from = 'list')
+    public function delete($docID)
     {
         $this->loadModel('file');
-        if($confirm == 'no')
+        $doc        = $this->doc->getByID($docID);
+        $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
+        $this->doc->delete(TABLE_DOC, $docID);
+
+        /* Delete doc files. */
+        if($doc->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('1')->where('id')->in(array_keys($doc->files))->exec();
+
+        /* if ajax request, send result. */
+        if(dao::isError())
         {
-            $type = $this->dao->select('type')->from(TABLE_DOC)->where('id')->eq($docID)->fetch('type');
-            $tips = $type == 'chapter' ? $this->lang->doc->confirmDeleteChapter : $this->lang->doc->confirmDelete;
-            return print(js::confirm($tips, inlink('delete', "docID=$docID&confirm=yes")));
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
         else
         {
-            $doc        = $this->doc->getByID($docID);
-            $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
-            $this->doc->delete(TABLE_DOC, $docID);
-
-            /* Delete doc files. */
-            if($doc->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('1')->where('id')->in(array_keys($doc->files))->exec();
-
-            /* if ajax request, send result. */
-            if($this->server->ajax)
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-
-                    if($from == 'lib')
-                    {
-                        $method   = 'teamSpace';
-                        $objectID = 0;
-                        if($objectType == 'product')
-                        {
-                            $method   = 'productSpace';
-                            $objectID = $doc->product;
-                        }
-                        elseif(in_array($objectType, array('project', 'execution')) and $this->app->tab != 'execution')
-                        {
-                            $method   = 'projectSpace';
-                            $objectID = $doc->project;
-                        }
-                        elseif($this->app->tab == 'execution')
-                        {
-                            $objectID = $doc->execution;
-                        }
-                        $params = "objectID={$objectID}&libID={$doc->lib}";
-                        $response['locate'] = $this->createLink('doc', $method, $params);
-                    }
-                }
-                return $this->send($response);
-            }
-
-            return print(js::locate($this->session->docList, 'parent'));
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['load']    = true;
         }
+        return $this->send($response);
     }
 
     /**

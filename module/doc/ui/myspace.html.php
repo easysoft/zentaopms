@@ -40,5 +40,7 @@ toolbar
     $libID && common::hasPriv('doc', 'create') ? $createButton : null
 );
 
+include 'mydoclist.html.php';
+
 /* ====== Render page ====== */
 render();

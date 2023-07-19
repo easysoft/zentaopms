@@ -52,10 +52,10 @@ dtable
     set::sortLink(jsRaw('createSortLink')),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(
-        usePager(),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={page}")),
+        usePager
+        (
+            array('linkCreator' => helper::createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={page}")),
+        ),
     ),
 );
 

@@ -1,0 +1,2 @@
+.dtable-cells div[data-col=title] .dtable-cell-html {width: inherit;}
+.doc-title[data-status=draft] .doc-name {max-width: calc(100% - 60px); overflow: hidden;}

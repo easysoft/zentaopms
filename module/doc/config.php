@@ -85,3 +85,15 @@ $config->doc->search['params']['editedBy']   = array('operator' => '=',       'c
 $config->doc->search['params']['editedDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->doc->search['params']['keywords']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['version']    = array('operator' => '=',       'control' => 'input',  'values' => '');
+
+$config->doc->actionList['edit']['icon'] = 'edit';
+$config->doc->actionList['edit']['hint'] = $lang->edit;
+$config->doc->actionList['edit']['text'] = $lang->edit;
+$config->doc->actionList['edit']['url']  = helper::createLink('doc', 'edit', 'docID={id}');
+
+$config->doc->actionList['delete']['icon']         = 'trash';
+$config->doc->actionList['delete']['hint']         = $lang->delete;
+$config->doc->actionList['delete']['text']         = $lang->delete;
+$config->doc->actionList['delete']['url']          = helper::createLink('doc', 'delete', 'docID={id}');
+$config->doc->actionList['delete']['className']    = 'ajax-submit';
+$config->doc->actionList['delete']['data-confirm'] = $lang->doc->confirmDelete;
