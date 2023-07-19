@@ -17,5 +17,5 @@ featureBar
             'onchange' => "window.switchAccount(this.value);"
         ))
     )),
-    set::items($this->user->getFeatureBarMenus($user))
+    set::items($this->user->getFeatureBarMenus($user)),
 );

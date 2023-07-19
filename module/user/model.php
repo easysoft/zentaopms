@@ -3015,22 +3015,22 @@ class userModel extends model
         $params     = $this->app->params;
 
         $featureBarMenus = array();
-        $featureBarMenus['todo'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'todo', "userID={$user->id}&type=all"), 'text' => $this->lang->user->schedule);
-        $featureBarMenus['task'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'task', "userID={$user->id}"), 'text' => $this->lang->user->task);
+        $featureBarMenus['todo'] = array('active' => false, 'url' => helper::createLink($moduleName, 'todo', "userID={$user->id}&type=all"), 'text' => $this->lang->user->schedule);
+        $featureBarMenus['task'] = array('active' => false, 'url' => helper::createLink($moduleName, 'task', "userID={$user->id}"), 'text' => $this->lang->user->task);
 
-        if($this->config->URAndSR) $featureBarMenus['requirement'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'story', "userID={$user->id}&storyType=requirement"), 'text' => $this->lang->URCommon);
+        if($this->config->URAndSR) $featureBarMenus['requirement'] = array('active' => false, 'url' => helper::createLink($moduleName, 'story', "userID={$user->id}&storyType=requirement"), 'text' => $this->lang->URCommon);
 
-        $featureBarMenus['story']    = array('type' => 'link', 'url' => helper::createLink($moduleName, 'story', "userID={$user->id}&storyType=story"), 'text' => $this->lang->SRCommon);
-        $featureBarMenus['bug']      = array('type' => 'link', 'url' => helper::createLink($moduleName, 'bug', "userID={$user->id}"), 'text' => $this->lang->user->bug);
-        $featureBarMenus['testtask'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'testtask', "userID={$user->id}"), 'text' => $this->lang->user->testTask);
-        $featureBarMenus['testcase'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'testcase', "userID={$user->id}"), 'text' => $this->lang->user->testCase);
+        $featureBarMenus['story']    = array('active' => false, 'url' => helper::createLink($moduleName, 'story', "userID={$user->id}&storyType=story"), 'text' => $this->lang->SRCommon);
+        $featureBarMenus['bug']      = array('active' => false, 'url' => helper::createLink($moduleName, 'bug', "userID={$user->id}"), 'text' => $this->lang->user->bug);
+        $featureBarMenus['testtask'] = array('active' => false, 'url' => helper::createLink($moduleName, 'testtask', "userID={$user->id}"), 'text' => $this->lang->user->testTask);
+        $featureBarMenus['testcase'] = array('active' => false, 'url' => helper::createLink($moduleName, 'testcase', "userID={$user->id}"), 'text' => $this->lang->user->testCase);
 
-        if($this->config->systemMode == 'ALM') $featureBarMenus['execution'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'execution', "userID={$user->id}"), 'text' => $this->lang->user->execution);
-        if($this->config->edition == 'max')    $featureBarMenus['issue']     = array('type' => 'link', 'url' => helper::createLink($moduleName, 'issue', "userID={$user->id}"), 'text' => $this->lang->user->issue);
-        if($this->config->edition == 'max')    $featureBarMenus['risk']      = array('type' => 'link', 'url' => helper::createLink($moduleName, 'risk', "userID={$user->id}"), 'text' => $this->lang->user->risk);
+        if($this->config->systemMode == 'ALM') $featureBarMenus['execution'] = array('active' => false, 'url' => helper::createLink($moduleName, 'execution', "userID={$user->id}"), 'text' => $this->lang->user->execution);
+        if($this->config->edition == 'max')    $featureBarMenus['issue']     = array('active' => false, 'url' => helper::createLink($moduleName, 'issue', "userID={$user->id}"), 'text' => $this->lang->user->issue);
+        if($this->config->edition == 'max')    $featureBarMenus['risk']      = array('active' => false, 'url' => helper::createLink($moduleName, 'risk', "userID={$user->id}"), 'text' => $this->lang->user->risk);
 
-        $featureBarMenus['dynamic'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'dynamic', "userID={$user->id}&type=today"), 'text' => $this->lang->user->dynamic);
-        $featureBarMenus['profile'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'profile', "userID={$user->id}"), 'text' => $this->lang->user->profile);
+        $featureBarMenus['dynamic'] = array('active' => false, 'url' => helper::createLink($moduleName, 'dynamic', "userID={$user->id}&type=today"), 'text' => $this->lang->user->dynamic);
+        $featureBarMenus['profile'] = array('active' => false, 'url' => helper::createLink($moduleName, 'profile', "userID={$user->id}"), 'text' => $this->lang->user->profile);
 
         if($methodName != 'story') $featureBarMenus[$methodName]['active'] = true;
         if($methodName == 'story' and $params['storyType'] == 'story')       $featureBarMenus['story']['active']       = true;
