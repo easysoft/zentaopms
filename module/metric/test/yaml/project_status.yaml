@@ -1,0 +1,16 @@
+---
+title: zt_project
+author: zhouxin
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: type
+  range: project
+- field: model
+  range: scrum{20},waterfall{20},kanban{20},agileplus{20},waterfallplus{20}
+- field: status
+  range: wait{5},doing{5},suspended{5},closed{5}
+- field: deleted
+  range: 0{100},1{100}
+---
