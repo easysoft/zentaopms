@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-import('/js/md5.js', 'js');
-
 modalHeader
 (
     set::title(''),
@@ -21,7 +19,7 @@ modalHeader
 
 formPanel
 (
-    import('/js/md5.js', 'js'),
+    h::import($config->webRoot . 'js/md5.js', 'js'),
     formGroup
     (
         set::label($lang->user->verifyPassword),
@@ -40,4 +38,3 @@ formPanel
 );
 
 render();
-

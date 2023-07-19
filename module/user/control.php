@@ -706,30 +706,17 @@ class user extends control
         if($this->app->user->admin and $this->app->user->account == $user->account) return;
         if($_POST)
         {
-            if($this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return print(js::alert($this->lang->user->error->verifyPassword));
+            if($this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return $this->send(array('result' => 'fail', 'message' => array('verifyPassword' => $this->lang->user->error->verifyPassword)));
+
             $this->user->delete(TABLE_USER, $userID);
-            if(!dao::isError())
-            {
-                $this->loadModel('mail');
-                if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('delete', $user->email);
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('mail');
+            if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('delete', $user->email);
 
             /* if ajax request, send result. */
-            if($this->server->ajax or $this->viewType == 'json')
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
-            }
-            return print(js::locate($this->session->userList, 'parent.parent'));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->rand = $this->user->updateSessionRandom();
