@@ -3962,14 +3962,14 @@ EOT;
         global $app, $config;
 
         /* build operate menu. */
-        $moduleName = $app->moduleName;
-        $methodName = $app->methodName;
-        $actions    = array();
+        $moduleName  = $app->moduleName;
+        $methodName  = $app->methodName;
+        $actionsMenu = array();
 
         $this->loadModel($moduleName);
         foreach($config->{$moduleName}->actions->{$methodName} as $menu => $actionList)
         {
-            $$menu = array();
+            $actions = array();
             foreach($actionList as $action)
             {
                 $actionData = $config->{$moduleName}->actionList[$action];
@@ -3998,11 +3998,11 @@ EOT;
 
                 if($menu == 'suffixActions' && !empty($actionData['text'])) $actionData['text'] = '';
 
-                $$menu[] = $actionData;
+                $actions[] = $actionData;
             }
-            $actions[$menu] = $$menu;
+            $actionsMenu[$menu] = $actions;
         }
-        return $actions;
+        return $actionsMenu;
     }
 }
 
