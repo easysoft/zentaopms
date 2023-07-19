@@ -60,6 +60,7 @@ $lang->system->ldapTypeList['extra']   = '外部映射';
 /* OSS */
 $lang->system->oss = new stdclass;
 $lang->system->oss->common    = '对象存储';
+$lang->system->oss->appURL    = '应用地址';
 $lang->system->oss->user      = '用户名';
 $lang->system->oss->password  = '密码';
 $lang->system->oss->manage    = '管理';

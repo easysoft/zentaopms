@@ -180,8 +180,8 @@ $lang->admin->menuSetting['dev']['name']       = 'Develop';
 $lang->admin->menuSetting['dev']['desc']       = 'Support for secondary development of the system.';
 $lang->admin->menuSetting['convert']['name']   = 'Data Import';
 $lang->admin->menuSetting['convert']['desc']   = 'Data import from third-party systems.';
-$lang->admin->menuSetting['platform']['name']  = 'Platform';
-$lang->admin->menuSetting['platform']['desc']  = 'Settings of platform.';
+$lang->admin->menuSetting['platform']['name']  = 'DevOps';
+$lang->admin->menuSetting['platform']['desc']  = 'Settings of DevOps elements such as resources and environment.';
 
 $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';
