@@ -14,6 +14,8 @@ title=count_of_project
 timeout=0
 cid=1
 
+- 执行calc模块的getResult方法  @25
+
 */
 
-r($calc->getResult()) && p('') && e('25');
+r($calc->getResult()) && p('') && e('100');
