@@ -66,3 +66,4 @@ $config->index->oldPages[] = 'tree-browse';
 $config->index->oldPages[] = 'user-dynamic';
 $config->index->oldPages[] = 'product-dashboard';
 $config->index->oldPages[] = 'repo-setrules';
+$config->index->oldPages[] = 'host-treemap';

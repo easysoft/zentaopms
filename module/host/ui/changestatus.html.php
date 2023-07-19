@@ -21,7 +21,7 @@ formPanel
         formGroup
         (
             set::name('reason'),
-            set::control('editor'),
+            set::control('textarea'),
         ),
     ),
 );

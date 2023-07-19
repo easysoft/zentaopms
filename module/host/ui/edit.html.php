@@ -17,7 +17,7 @@ jsVar('host', $host);
 formPanel
 (
     set::id('hostCreateForm'),
-    set::title($lang->host->create),
+    set::title($lang->host->edit),
     formRow
     (
         formGroup

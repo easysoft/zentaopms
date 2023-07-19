@@ -160,7 +160,7 @@ class host extends control
         {
             $response['result']  = 'success';
             $response['message'] = '';
-            $response['load'] = true;
+            $response['load']    = true;
         }
         $this->send($response);
     }

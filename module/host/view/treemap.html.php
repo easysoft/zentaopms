@@ -11,7 +11,8 @@
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
-<?php include '../../common/ext/view/treemap.html.php';?>
+<?php css::import($themeRoot . 'zui/treemap/min.css');?>
+<?php js::import($jsRoot . 'zui/treemap/min.js');?>
 <style>#hostsTreemap{overflow:auto;}</style>
 <?php js::set('browseType', $type);?>
 <div id='mainMenu' class='clearfix'>
