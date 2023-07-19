@@ -30,7 +30,7 @@ class count_of_valid_story extends baseCalc
 
     public function getStatement()
     {
-        return $this->dao->select('t1.id')->from(TABLE_STORY)->alias('t1')
+        return $this->dao->select('count(t1.id) as value')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
@@ -42,7 +42,7 @@ class count_of_valid_story extends baseCalc
 
     public function calculate($row)
     {
-        $this->result += 1;
+        $this->result = $row->value;
     }
 
     public function getResult($options = array())
