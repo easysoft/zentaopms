@@ -10,10 +10,10 @@
  * 单位：个
  * 描述：按全局统计的有效研发需求数是指被确认为有效的研发需求数量。有效需求指的是符合产品策略和目标，可以实施并且对用户有价值的需求。通过对有效需求的统计，可以帮助团队评估产品需求的质量和重要性，并进行优先级排序和资源分配。较高的有效需求数量通常表示产品的功能和特性满足了用户和市场的期望，有利于实现产品的成功交付和用户满意度。
  * 定义：复用：
-按全局统计的无效研发需求数
-按全局统计的研发需求总数
-公式：
-按全局统计的有效研发需求数=按全局统计的研发需求总数-按全局统计的无效研发需求数
+ *       按全局统计的无效研发需求数
+ *       按全局统计的研发需求总数
+ *       公式：
+ *       按全局统计的有效研发需求数=按全局统计的研发需求总数-按全局统计的无效研发需求数
  * 度量库：
  * 收集方式：realtime
  *
@@ -26,20 +26,28 @@
  */
 class count_of_valid_story extends baseCalc
 {
-    public $dataset = null;
+    public $result = 0;
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
-
-    public function calculate($data)
+    public function getStatement()
     {
+        return $this->dao->select('t1.id')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
+            ->andWhere('t1.type')->eq('story')
+            ->andWhere('t1.closedReason')->notin('duplicate,willnotdo,bydesign,cancel')
+            ->query();
+    }
+
+    public function calculate($row)
+    {
+        $this->result += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array(array('value' => $this->result));
+        return $this->filterByOptions($records, $options);
     }
 }
