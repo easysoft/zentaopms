@@ -156,7 +156,7 @@ formPanel
                 picker
                 (
                     set::multiple(true),
-                    set::name('openedBuild'),
+                    set::name('openedBuild[]'),
                     set('data-items', count($builds)),
                     set::items($builds),
                     set::value(empty($bug->buildID) ? 'trunk' : $bug->buildID)
