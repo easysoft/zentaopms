@@ -564,10 +564,18 @@ class screenModel extends model
             $settings = json_decode($chart->settings, true);
             $fields   = json_decode($chart->fields, true);
             $langs    = json_decode($chart->langs, true);
-            list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs);
+
+            if(isset($settings['summary']) and $settings['summary'] == 'notuse')
+            {
+                list($options, $config) = $this->loadModel('pivot')->genOriginSheet($fields, $settings, $chart->sql, $filters, $langs);
+            }
+            else
+            {
+                list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs);
+            }
 
             $colspan = array();
-            if($options->columnTotal and $options->columnTotal == 'sum' and !empty($options->array))
+            if(isset($options->columnTotal) and $options->columnTotal == 'sum' and !empty($options->array))
             {
                 $optionsData = $options->array;
                 $count       = count($optionsData);

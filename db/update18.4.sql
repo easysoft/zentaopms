@@ -50,3 +50,5 @@ CREATE INDEX `project` ON `zt_project` (`project`);
 
 UPDATE `zt_privlang` SET `value`='删除风险' WHERE `objectID`=197 AND `objectType`='manager';
 UPDATE `zt_auditcl` SET `deleted` = '0' WHERE `deleted` = '';
+
+UPDATE `zt_workflowdatasource` SET `vision` = 'rnd' WHERE `code` IN ('products','projects','productLines','stories','tasks','bugs','groups','users','branches','builds','modules','plans','productType','productStatus','productAcl','projectType','projectStatus','projectAcl','releaseStatus','storySource','storyPri','storyStatus','storyStage','bugSeverity','bugPri','bugType','bugOs','bugBrowser','bugStatus','taskType','taskPri','taskStatus','testcasePri','testcaseType','testcaseStage','testcaseStatus','testtaskPri','testtaskStatus','feedbackStatus','bugResolution','cases','feedbackModules','storyType','executions','projectModel','feedbackType','feedbackSolution','feedbackclosedReason','taskReason','testsuiteAuth','programs','storyClosedReason');

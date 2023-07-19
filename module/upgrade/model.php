@@ -650,6 +650,11 @@ class upgradeModel extends model
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan7.2.beta.sql';
                     $this->execSQL($xuanxuanSql);
                 }
+
+                if($this->config->edition != 'open' and in_array($fromVersion, $this->config->upgrade->missedFlowFieldVersions))
+                {
+                    $this->fixMissedFlowField();
+                }
                 break;
         }
 
@@ -9398,5 +9403,126 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_PIVOT)->set('stage')->eq($stage)->where('id')->eq($pivotID)->exec();
         }
+    }
+
+    /**
+     * Fix missed rnd workflow field.
+     *
+     * @access public
+     * @return void
+     */
+    public function fixMissedFlowField()
+    {
+        $this->loadModel('workflow');
+        $this->loadModel('workflowaction');
+        $this->loadModel('workflowlayout');
+
+        $modules         = $this->config->workflow->buildin->modules;
+        $actions         = $this->config->workflowaction->buildin->actions;
+        $actionTypes     = $this->config->workflowaction->buildin->types;
+        $actionMethods   = $this->config->workflowaction->buildin->methods;
+        $actionOpens     = $this->config->workflowaction->buildin->opens;
+        $actionLayouts   = $this->config->workflowaction->buildin->layouts;
+        $actionPositions = $this->config->workflowaction->buildin->positions;
+        $actionShows     = $this->config->workflowaction->buildin->shows;
+        $layouts         = $this->config->workflowlayout->buildin->layouts;
+
+        $account = isset($this->app->user) ? $this->app->user->account : 'admin';
+        $now     = helper::now();
+
+        /* Insert buildin modules to TABLE_WORKFLOW. */
+        $data = new stdclass();
+        $data->vision      = 'rnd';
+        $data->buildin     = 1;
+        $data->createdBy   = $account;
+        $data->createdDate = $now;
+        $data->status      = 'normal';
+        foreach($modules as $app => $appModules)
+        {
+            $data->app = $app;
+            foreach($appModules as $module => $options)
+            {
+                $this->app->loadLang($module);
+
+                $data->module    = $module;
+                $data->name      = isset($this->lang->$module->common) ? $this->lang->$module->common : $module;
+                $data->table     = str_replace('`', '', zget($options, 'table', ''));
+                $data->navigator = zget($options, 'navigator', 'secondary');
+                if($module == 'story')     $data->name = $this->lang->searchObjects['story'];
+                if($module == 'execution') $data->name = $this->lang->workflow->execution;
+
+                $modelField = $this->dao->select('id')->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq('rnd')->fetch('id');
+                if(!$modelField) $this->dao->insert(TABLE_WORKFLOW)->data($data)->exec();
+            }
+        }
+
+        /* Insert actions of buildin modules to TABLE_WORKFLOWACTION. */
+        $data = new stdclass();
+        $data->buildin       = 1;
+        $data->role          = 'buildin';
+        $data->extensionType = 'none';
+        $data->createdBy     = $account;
+        $data->createdDate   = $now;
+        foreach($actions as $module => $moduleActions)
+        {
+            $data->module = $module;
+            foreach($moduleActions as $action)
+            {
+                $data->action = $action;
+
+                /* Use default action name if not set flow action name. */
+                $name = '';
+                if(isset($this->lang->$module->$action)) $name = $this->lang->$module->$action;
+                if(empty($name) && in_array($action, array_keys($this->config->flowAction)))
+                {
+                    $methodName = $this->config->flowAction[$action];
+                    if(isset($this->lang->$module->$methodName)) $name = $this->lang->$module->$methodName;
+                }
+                if(empty($name) && isset($this->lang->workflowaction->default->actions[$action])) $name = $this->lang->workflowaction->default->actions[$action];
+                if(empty($name)) $name = $action;
+                $data->name   = $name;
+
+                $data->method   = $data->action;
+                $data->open     = 'normal';
+                $data->layout   = 'normal';
+                $data->type     = 'single';
+                $data->position = 'browseandview';
+                $data->show     = 'direct';
+                if(isset($actionMethods[$module][$action]))   $data->method   = $actionMethods[$module][$action];
+                if(isset($actionOpens[$module][$action]))     $data->open     = $actionOpens[$module][$action];
+                if(isset($actionLayouts[$module][$action]))   $data->layout   = $actionLayouts[$module][$action];
+                if(isset($actionTypes[$module][$action]))     $data->type     = $actionTypes[$module][$action];
+                if(isset($actionPositions[$module][$action])) $data->position = $actionPositions[$module][$action];
+                if(isset($actionShows[$module][$action]))     $data->show     = $actionShows[$module][$action];
+
+                $actionField = $this->dao->select('id')->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq('rnd')->fetch('id');
+                if(!$actionField) $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
+            }
+        }
+
+        /* Insert layouts of buildin modules to TABLE_WORKFLOWLAYOUT. */
+        $data = new stdclass();
+        foreach($layouts as $module => $moduleLayouts)
+        {
+            $data->module = $module;
+            foreach($moduleLayouts as $action => $layoutFields)
+            {
+                $order = 1;
+                $data->action = $action;
+                foreach($layoutFields as $field => $options)
+                {
+                    $data->field      = $field;
+                    $data->width      = zget($options, 'width', 0);
+                    $data->mobileShow = zget($options, 'mobileShow', 0);
+                    $data->order      = $order++;
+
+                    if($data->width == 'auto') $data->width = 0;
+
+                    $layoutField = $this->dao->select('id')->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq('rnd')->fetch('id');
+                    if(!$layoutField) $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($data)->exec();
+                }
+            }
+        }
+
     }
 }

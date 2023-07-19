@@ -332,6 +332,7 @@ $lang->pivot->typeOptions['dept']      = 'Dept';
 
 $lang->pivot->step2 = new stdclass();
 $lang->pivot->step2->group       = 'Row Grouping';
+$lang->pivot->step2->summary     = 'Summary Setting';
 $lang->pivot->step2->column      = 'Column Settings';
 $lang->pivot->step2->groupTip    = 'Select Field';
 $lang->pivot->step2->groupNum    = array('One', 'Two', 'Three');
@@ -344,6 +345,7 @@ $lang->pivot->step2->columnField = 'Field';
 $lang->pivot->step2->calcMode    = 'Calc Mode';
 
 $lang->pivot->step2->moreThanOne = 'Select at least one group field.';
+$lang->pivot->step2->summaryTip  = 'After this parameter is selected, you can configure Row Grouping, Column Settings, and Show column totals';
 $lang->pivot->step2->groupsTip   = 'By selecting a grouping field, the data of the SQL query is grouped and displayed hierarchically in the pivot table.';
 $lang->pivot->step2->columnsTip  = 'Add 1 column to the pivot table and set it.';
 
