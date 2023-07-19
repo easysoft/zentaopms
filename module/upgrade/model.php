@@ -43,7 +43,7 @@ class upgradeModel extends model
         {
             if(!is_numeric($version[0])) continue;
             if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
-            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array());
+            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array(), 'ipd' => array());
         }
         if($fromEdition == 'open') return $versions;
 
@@ -67,6 +67,11 @@ class upgradeModel extends model
             if(isset($versions[$open])) $versions[$open]['max'][] = $max;
         }
 
+        /* Update ipd sql only from ipd. */
+        foreach($this->config->upgrade->ipdVersion as $ipd => $open)
+        {
+            if(isset($versions[$open])) $versions[$open]['ipd'][] = $ipd;
+        }
         return $versions;
     }
 
@@ -125,6 +130,15 @@ class upgradeModel extends model
                 $this->saveLogs("Execute $maxVersion");
                 $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
                 $this->executeMax($maxVersion);
+            }
+
+            /* Execute ipd. */
+            foreach($chargedVersions['ipd'] as $ipdVersion)
+            {
+                $ipdVersion = array_search($openVersion, $this->config->upgrade->ipdVersion);
+                $this->saveLogs("Execute $ipdVersion");
+                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $ipdVersion)));
+                $this->executeIpd($ipdVersion);
             }
         }
 
@@ -656,6 +670,9 @@ class upgradeModel extends model
                     $this->fixMissedFlowField();
                 }
                 break;
+            case '18_5':
+                $this->execSQL($this->getUpgradeFile('ipdinstall'));
+                break;
         }
 
         $this->deletePatch();
@@ -812,6 +829,17 @@ class upgradeModel extends model
                 $this->addDefaultKanbanPri();
                 break;
         }
+    }
+
+    /**
+     * Process data for ipd.
+     *
+     * @param  int   $ipdVersion
+     * @access public
+     * @return void
+     */
+    public function executeIpd($ipdVersion)
+    {
     }
 
     /**
