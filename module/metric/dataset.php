@@ -154,12 +154,12 @@ class dataset
     }
 
     /**
-     * 获取研发需求数据。
-     * Get story list.
+     * 获取研发需求数据，过滤影子产品。
+     * Get story list, filter shadow product.
      *
      * @param  array  $fieldList
      * @access public
-     * @return mixed
+     * @return PDOStatement
      */
     public function getDevStories($fieldList)
     {
@@ -174,18 +174,21 @@ class dataset
     }
 
     /**
-     * 获取所有研发需求数据。
-     * Get all story list.
+     * 获取所有研发需求数据，不过滤影子产品。
+     * Get all story list, don't filter shadow product.
      *
-     * @param  int    $fieldList
+     * @param  array  $fieldList
      * @access public
-     * @return mixed
+     * @return PDOStatement
      */
     public function getAllDevStories($fieldList)
     {
-        return $this->dao->select($fieldList) ->from(TABLE_STORY)->alias('t1')
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('story')
+        return $this->dao->select($fieldList)
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('story')
             ->query();
     }
 
