@@ -10,13 +10,13 @@
  * 单位：个
  * 描述：按全局统计的年度关闭研发需求规模数表示某年度关闭的研发需求的规模总数。该度量项反映了组织每年关闭的研发需求的规模总数，可以用于评估组织的研发需求规模管理和调整情况。
  * 定义：所有的研发需求规模数求和
-关闭时间为某年
-过滤已删除的研发需求
+ *       关闭时间为某年
+ *       过滤已删除的研发需求
  * 度量库：
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -24,20 +24,28 @@
  */
 class scale_of_annual_closed_story extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.estimate', 't1.status', 't1.closedDate');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
-
-    public function calculate($data)
+    public function calculate($row)
     {
+        if(empty($row->closedDate) or !isset($row->estimate)) return;
+
+        $year = substr($row->closedDate, 0, 4);
+        if($year == '0000') return;
+
+        if($row->status == 'closed')
+        {
+            if(!isset($this->result[$year])) $this->result[$year] = 0;
+            $this->result[$year] += $row->estimate;
+        }
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array();
+        foreach($this->result as $year => $value) $records[] = array('year' => $year, 'value' => $value);
+        return $this->filterByOptions($this->result, $records);
     }
 }
