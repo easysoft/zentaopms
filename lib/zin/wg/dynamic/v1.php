@@ -25,17 +25,54 @@ class dynamic extends wg
         if($objectType == 'release' && $action == 'opened') return 'trophy';
         if($objectType == 'project' && $action == 'closed') return 'trophy';
 
-        if(strpos($action, 'open')   !== false || strpos($action, 'activate') !== false) return 'active';
-        if(strpos($action, 'finish') !== false || strpos($action, 'resolve')  !== false) return 'green';
-        if(strpos($action, 'assign') !== false || strpos($action, 'collect')  !== false) return 'yellow';
+        if(strpos($action, 'assigned') !== false) return 'blue';
+        if(strpos($action, 'finished') !== false || strpos($action, 'resolved') !== false || ($action == 'closed' && $objectType != 'product')) return 'green';
 
         return '';
     }
 
     protected function dynamicItem(object $dynamic, array $users): wg
     {
+        global $config;
         $dynamicLabel = zget($dynamic, 'dynamicLabel', '');
         if(empty($dynamicLabel)) $dynamicLabel = zget($dynamic, 'actionLabel', '');
+
+        $objectLabel = array();
+        if($dynamic->action != 'login' && $dynamic->action != 'logout')
+        {
+            $objectLabel[] = span
+            (
+                $dynamic->objectLabel,
+            );
+            $objectID = $dynamic->objectID && strpos(',module,chartgroup,', ",$dynamic->objectType,") !== false && strpos(',created,edited,moved,', "$dynamic->action") !== false ? trim($dynamic->extra, ',') : $dynamic->objectID;
+            $objectLabel[] = $objectID ? span
+            (
+                setClass('label light-outline mx-2 font-sm'),
+                $objectID,
+            ) : null;
+
+            if(($config->edition == 'max' && strpos($config->action->assetType, ",{$dynamic->objectType},") !== false) && empty($dynamic->objectName))
+            {
+                $objectLabel[] = span("#{$dynamic->objectID}");
+            }
+            elseif(empty($dynamic->objectID) and $dynamic->extra)
+            {
+                $objectLabel[] = span("#{$dynamic->extra}");
+            }
+            elseif(empty($dynamic->objectLink))
+            {
+                $objectLabel[] = span($dynamic->objectName);
+            }
+            else
+            {
+                $objectLabel[] = a
+                (
+                    set::href($dynamic->objectLink),
+                    set::title($dynamic->objectName),
+                    $dynamic->objectName
+                );
+            }
+        }
 
         $dynamicClass = $this->getStatusClass($dynamic);
         return li
@@ -45,8 +82,8 @@ class dynamic extends wg
             (
                 span
                 (
-                    setClass('dynamic-tag p-1'),
-                    $dynamic->date
+                    setClass('dynamic-tag p-1 text-gray'),
+                    $dynamic->time
                 ),
                 div
                 (
@@ -60,13 +97,7 @@ class dynamic extends wg
                             setClass('text-gray px-1'),
                             $dynamicLabel
                         ),
-                        span($dynamic->objectLabel, setClass('pr-1')),
-                        a
-                        (
-                            set::href($dynamic->objectLink),
-                            set::title($dynamic->objectName),
-                            $dynamic->objectName
-                        )
+                        $objectLabel,
                     ),
                     $dynamicClass == 'trophy' ? h::img
                     (
@@ -89,7 +120,11 @@ class dynamic extends wg
 
         $users    = $this->prop('users', (array)data('users'));
         $dynamics = $this->prop('dynamics', (array)data('dynamics'));
-        foreach($dynamics as $dynamic) $dynamicListView->add($this->dynamicItem($dynamic, $users));
+        foreach($dynamics as $dynamic)
+        {
+            if($dynamic->action == 'adjusttasktowait') continue;
+            $dynamicListView->add($this->dynamicItem($dynamic, $users));
+        }
 
         return $dynamicListView;
     }
