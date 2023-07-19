@@ -10,7 +10,7 @@
  * 单位：个
  * 描述：按全局统计的研发需求总数表示组织中的研发需求的总数。该度量项反映了组织中所有研发需求的数量，可以用于评估组织的研发活动和需求管理能力。
  * 定义：所有的研发需求个数求和
-过滤已删除的研发需求
+ *       过滤已删除的研发需求
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,20 +23,20 @@
  */
 class count_of_story extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.id');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($data)
     {
+        $this->result += 1;
     }
 
     public function getResult($options = array())
     {
+        $records = array(array('value' => $this->result));
         return $this->filterByOptions($this->result, $options);
     }
 }
