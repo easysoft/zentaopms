@@ -62,7 +62,7 @@ $(document).ready(function()
     $('#verifyPassword').closest('form').find('button[type="submit"]').on('click', function()
     {
         var password = $('input#verifyPassword').val().trim();
-        var rand     = $('input#verifyRand').val();
+        var rand     = $('input[name=verifyRand]').val();
         if(!verifyEncrypted && password) $('input#verifyPassword').val(md5(md5(password) + rand));
         verifyEncrypted = true;
     });

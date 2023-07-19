@@ -1,4 +1,5 @@
 <?php
+global $lang;
 $config->user->form = new stdclass();
 $config->user->form->batchCreate = common::formConfig('user', 'batchCreate');
 $config->user->form->batchCreate['dept']     = array('required' => false, 'type' => 'int',    'default' => 0);
@@ -14,3 +15,24 @@ $config->user->form->batchCreate['email']    = array('required' => false, 'type'
 $config->user->form->batchCreate['gender']   = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->batchCreate['password'] = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->batchCreate['join']     = array('required' => false, 'type' => 'date',   'default' => null);
+
+$config->user->form->batchEdit = array();
+$config->user->form->batchEdit['dept']     = array('required' => false, 'type' => 'int',    'width' => '200px', 'name' => 'dept',     'label' => $lang->user->dept,     'control' => 'picker', 'default' => 0, 'ditto' => true);
+$config->user->form->batchEdit['account']  = array('required' => true,  'type' => 'string', 'width' => '160px', 'name' => 'account',  'label' => $lang->user->account,  'control' => 'text',   'default' => '', 'filter' => 'trim', 'base' => true);
+$config->user->form->batchEdit['realname'] = array('required' => true,  'type' => 'string', 'width' => '150px', 'name' => 'realname', 'label' => $lang->user->realname, 'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['visions']  = array('required' => true,  'type' => 'string', 'width' => '200px', 'name' => 'visions',  'label' => $lang->user->visions,  'control' => 'picker', 'default' => $config->vision, 'multiple' => true, 'filter' => 'join');
+$config->user->form->batchEdit['role']     = array('required' => false, 'type' => 'string', 'width' => '200px', 'name' => 'role',     'label' => $lang->user->role,     'control' => 'picker', 'default' => '', 'ditto' => true, 'items' => $lang->user->roleList);
+$config->user->form->batchEdit['type']     = array('required' => false, 'type' => 'string', 'width' => '200px', 'name' => 'type',     'label' => $lang->user->type,     'control' => 'picker', 'default' => 'inside', 'items' => $lang->user->typeList);
+$config->user->form->batchEdit['commiter'] = array('required' => false, 'type' => 'string', 'width' => '160px', 'name' => 'commiter', 'label' => $lang->user->commiter, 'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['email']    = array('required' => false, 'type' => 'string', 'width' => '160px', 'name' => 'email',    'label' => $lang->user->email,    'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['join']     = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'join',     'label' => $lang->user->join,     'control' => 'date',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['skype']    = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'skype',    'label' => $lang->user->skype,    'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['qq']       = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'qq',       'label' => $lang->user->qq,       'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['dingding'] = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'dingding', 'label' => $lang->user->dingding, 'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['weixin']   = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'weixin',   'label' => $lang->user->weixin,   'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['mobile']   = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'mobile',   'label' => $lang->user->mobile,   'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['slack']    = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'slack',    'label' => $lang->user->slack,    'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['whatsapp'] = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'whatsapp', 'label' => $lang->user->whatsapp, 'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['phone']    = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'phone',    'label' => $lang->user->phone,    'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['address']  = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'address',  'label' => $lang->user->address,  'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->user->form->batchEdit['zipcode']  = array('required' => false, 'type' => 'date',   'width' => '160px', 'name' => 'zipcode',  'label' => $lang->user->zipcode,  'control' => 'text',   'default' => '', 'filter' => 'trim');

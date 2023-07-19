@@ -660,19 +660,14 @@ class user extends control
      */
     public function batchEdit($deptID = 0)
     {
-        if(isset($_POST['users']))
+        if(empty($_POST)) return $this->send(array('result' => 'success', 'load' => $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID")));
+        if(!empty($_POST['account']))
         {
-            $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->users)->orderBy('id')->fetchAll('id');
+            $this->user->batchEdit();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID")));
         }
-        elseif($_POST)
-        {
-            if($this->post->account) $this->user->batchEdit();
-            return print(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID"), 'parent'));
-        }
-        else
-        {
-            return print(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID"), 'parent'));
-        }
+        if(isset($_POST['users'])) $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->users)->orderBy('id')->fetchAll('id');
 
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;

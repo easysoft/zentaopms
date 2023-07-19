@@ -29,9 +29,12 @@ $config->company->user->actionList['delete']['data-toggle'] = 'modal';
 $config->company->user->dtable = new stdclass();
 $config->company->user->dtable->fieldList['id']['name']     = 'id';
 $config->company->user->dtable->fieldList['id']['title']    = $lang->idAB;
-$config->company->user->dtable->fieldList['id']['type']     = 'id';
+$config->company->user->dtable->fieldList['id']['type']     = 'checkID';
 $config->company->user->dtable->fieldList['id']['fixed']    = 'left';
 $config->company->user->dtable->fieldList['id']['sortType'] = true;
+$config->company->user->dtable->fieldList['id']['checkbox'] = true;
+$config->company->user->dtable->fieldList['id']['show']     = true;
+$config->company->user->dtable->fieldList['id']['group']    = 1;
 
 $config->company->user->dtable->fieldList['realname']['name']     = 'realname';
 $config->company->user->dtable->fieldList['realname']['title']    = $lang->user->realname;
@@ -39,6 +42,7 @@ $config->company->user->dtable->fieldList['realname']['type']     = 'text';
 $config->company->user->dtable->fieldList['realname']['group']    = '1';
 $config->company->user->dtable->fieldList['realname']['fixed']    = 'left';
 $config->company->user->dtable->fieldList['realname']['sortType'] = true;
+$config->company->user->dtable->fieldList['realname']['group']    = '1';
 
 $config->company->user->dtable->fieldList['account']['name']     = 'account';
 $config->company->user->dtable->fieldList['account']['title']    = $lang->user->account;
@@ -86,6 +90,7 @@ else
 $config->company->user->dtable->fieldList['email']['name']     = 'email';
 $config->company->user->dtable->fieldList['email']['title']    = $lang->user->email;
 $config->company->user->dtable->fieldList['email']['type']     = 'text';
+$config->company->user->dtable->fieldList['email']['width']    = 200;
 $config->company->user->dtable->fieldList['email']['sortType'] = true;
 $config->company->user->dtable->fieldList['email']['group']    = '4';
 

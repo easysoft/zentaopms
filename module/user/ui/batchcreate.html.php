@@ -27,7 +27,7 @@ foreach(explode(',', $config->user->create->requiredFields) as $field)
 
 formBatchPanel
 (
-    import('/js/md5.js', 'js'),
+    h::import($config->webRoot . 'js/md5.js', 'js'),
     set::headingClass('user-batchcreate-heading'),
     set::title($lang->user->batchCreate),
     on::change('[data-name="new"]', 'toggleNew'),

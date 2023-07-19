@@ -53,24 +53,25 @@ sidebar
         'modules'   => $deptTree,
         'activeKey' => $type == 'bydept' ? $param : 0,
         'settingLink' => $settingLink,
-        'closeLink' => $closeLink
+        'closeLink' => $closeLink,
+        'showDisplay' => false,
+        'settingText' => $lang->dept->manage,
     )))
 );
 $footToolbar = common::hasPriv('user', 'batchEdit') ? array(
-    'items' => array
-    (
-        array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'data-url' => createLink('user', 'batchEdit')),
-    ),
+    'items' => array(array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'data-url' => createLink('user', 'batchEdit'))),
     'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')
-) : '';
+) : null;
 
 if(common::hasPriv('user', 'batchEdit')) $this->config->company->user->dtable->fieldList['id']['type'] = 'checkID';
 
 $tableData = initTableData($users, $this->config->company->user->dtable->fieldList, $this->loadModel('user'));
 dtable
 (
+    setID('userList'),
     set::cols($this->config->company->user->dtable->fieldList),
     set::data($tableData),
+    set::checkable(common::hasPriv('user', 'batchEdit')),
     set::fixedLeftWidth('0.2'),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
