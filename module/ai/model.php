@@ -492,8 +492,10 @@ class aiModel extends model
 
         $flipedStatus = $prompt->status == 'draft' ? 'active' : 'draft';
 
+        $originalPrompt = clone $prompt;
         $prompt->status = empty($status) ? $flipedStatus : $status;
-        return $this->updatePrompt($prompt);
+
+        return $this->updatePrompt($prompt, $originalPrompt);
     }
 
     /**

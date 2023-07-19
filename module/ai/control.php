@@ -202,11 +202,13 @@ class ai extends control
             $isJumpToNext = $role->jumpToNext == '1';
             unset($role->jumpToNext);
 
+            $originalPrompt = clone $prompt;
+
             $prompt->model            = 0; // TODO: use actual $role->model;
             $prompt->role             = $role->role;
             $prompt->characterization = $role->characterization;
 
-            $this->ai->updatePrompt($prompt);
+            $this->ai->updatePrompt($prompt, $originalPrompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -244,10 +246,12 @@ class ai extends control
             $isJumpToNext = $data->jumpToNext == '1';
             unset($data->jumpToNext);
 
+            $originalPrompt = clone $prompt;
+
             $prompt->module = $data->datagroup;
             $prompt->source = ",$data->datasource,";
 
-            $this->ai->updatePrompt($prompt);
+            $this->ai->updatePrompt($prompt, $originalPrompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -287,10 +291,12 @@ class ai extends control
             $isJumpToNext = $data->jumpToNext == '1';
             unset($data->jumpToNext);
 
+            $originalPrompt = clone $prompt;
+
             $prompt->purpose     = $data->purpose;
             $prompt->elaboration = $data->elaboration;
 
-            $this->ai->updatePrompt($prompt);
+            $this->ai->updatePrompt($prompt, $originalPrompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -328,9 +334,11 @@ class ai extends control
             $isJumpToNext = $data->jumpToNext == '1';
             unset($data->jumpToNext);
 
+            $originalPrompt = clone $prompt;
+
             $prompt->targetForm = $data->targetForm;
 
-            $this->ai->updatePrompt($prompt);
+            $this->ai->updatePrompt($prompt, $originalPrompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -375,10 +383,12 @@ class ai extends control
             $isJumpToNext = $data->jumpToNext == '1';
             unset($data->jumpToNext);
 
+            $originalPrompt = clone $prompt;
+
             $prompt->name = $data->name;
             $prompt->desc = $data->desc;
 
-            $this->ai->updatePrompt($prompt);
+            $this->ai->updatePrompt($prompt, $originalPrompt);
             $this->ai->togglePromptStatus($prompt, 'active');
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -443,12 +453,14 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
+            $originalPrompt = clone $prompt;
+
             $prompt->role             = $data->role;
             $prompt->characterization = $data->characterization;
             $prompt->purpose          = $data->purpose;
             $prompt->elaboration      = $data->elaboration;
 
-            $this->ai->updatePrompt($prompt);
+            $this->ai->updatePrompt($prompt, $originalPrompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
