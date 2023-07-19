@@ -495,6 +495,7 @@ class ai extends control
      */
     public function promptPublish($id, $backToTestingLocation = false)
     {
+        unset($_SESSION['auditPrompt']);
         $this->ai->togglePromptStatus($id, 'active');
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
