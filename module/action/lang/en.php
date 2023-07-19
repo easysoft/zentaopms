@@ -284,12 +284,12 @@ $lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> remove storie
 $lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
 
 /* Describes the history of operations when a document is saved as a draft or released. */
-$lang->action->desc->saveddraft  = '$date, 由 <strong>$actor</strong> save draft <strong>$extra</strong>。' . "\n";
-$lang->action->desc->releaseddoc = '$date, 由 <strong>$actor</strong> released <strong>$extra</strong>。' . "\n";
+$lang->action->desc->saveddraft  = '$date, <strong>$actor</strong> save draft <strong>$extra</strong>。' . "\n";
+$lang->action->desc->releaseddoc = '$date, <strong>$actor</strong> released <strong>$extra</strong>。' . "\n";
 
 /* This parameter describes historical operations that are performed when a document is collected or uncollected. */
-$lang->action->desc->collected   = '$date, 由 <strong>$actor</strong> collected <strong>$extra</strong>。' . "\n";
-$lang->action->desc->uncollected = '$date, 由 <strong>$actor</strong> uncollected <strong>$extra</strong>。' . "\n";
+$lang->action->desc->collected   = '$date, <strong>$actor</strong> collected <strong>$extra</strong>。' . "\n";
+$lang->action->desc->uncollected = '$date, <strong>$actor</strong> uncollected <strong>$extra</strong>。' . "\n";
 
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
