@@ -55,23 +55,30 @@ else
         (
             div
             (
-                setClass('my-4 cursor-pointer'),
-                icon('angle-down text-primary border-2 rounded-full toolbar z-10 bg-canvas'),
+                setClass('cursor-pointer leading-5'),
                 span
                 (
-                    setClass('article-h3 ml-2'),
+                    icon('angle-down text-primary border-2 rounded-full toolbar z-10 bg-canvas align-middle'),
+                ),
+                span
+                (
+                    setClass('ml-2'),
                     $isToday ? $lang->action->dynamic->today : $date,
                 ),
                 on::click('toggleCollapse')
             ),
             div
             (
-                setClass('flex-auto mx-6 mt-2 px-4 alert lighter'),
-                setClass($type == 'today' ? 'border-secondary' : ''),
-                dynamic
+                setClass('border-l border-l-1 mx-2 px-4 py-3'),
+                div
                 (
-                    set::dynamics($actions),
-                    set::users($accountPairs),
+                    setClass('flex-auto px-4 alert actions-box'),
+                    setClass($type == 'today' ? 'border-secondary' : ''),
+                    dynamic
+                    (
+                        set::dynamics($actions),
+                        set::users($accountPairs),
+                    )
                 )
             )
         );
