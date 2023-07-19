@@ -36,34 +36,39 @@ foreach($docList as $doc)
 
     $docItems[] = cell
     (
-        setClass('doc-box border rounded-lg shadow p-2 relative'),
         set::width('32%'),
-        span
+        setClass('border rounded-lg shadow p-2 relative'),
+        a
         (
-            setClass('text-gray absolute right-2 my-2'),
-            $editTip,
-        ),
-        div
-        (
-            setClass('article-h3 pr-1 my-2 mr-2'),
-            img
+            setClass('text-left w-full'),
+            set('href', $canView ? createLink('doc', 'view', "docID={$doc->id}") : null),
+            span
             (
-                setClass('inline pr-1'),
-                set('src', "static/svg/{$docType}.svg")
+                setClass('text-gray absolute right-2 my-2'),
+                $editTip,
             ),
-            $doc->title
-        ),
-        p
-        (
-            setClass('edit-date text-gray'),
-            $lang->doc->editedDate . (common::checkNotCN() ? ': ' : '：') . $doc->editedDate
+            div
+            (
+                setClass('article-h3 pr-1 my-2 mr-2'),
+                img
+                (
+                    setClass('inline pr-1'),
+                    set('src', "static/svg/{$docType}.svg")
+                ),
+                $doc->title
+            ),
+            p
+            (
+                setClass('edit-date text-gray'),
+                $lang->doc->editedDate . (common::checkNotCN() ? ': ' : '：') . $doc->editedDate
+            )
         )
     );
 }
 
 blockPanel
 (
-    empty($docList) ? $lang->doc->noDoc : div(setClass('doc-list flex flex-wrap content-between gap-3'), $docItems)
+    empty($docList) ? $lang->doc->noDoc : div(setClass('flex flex-wrap content-between gap-3'), $docItems)
 );
 
 render();
