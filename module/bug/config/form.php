@@ -19,6 +19,7 @@ $config->bug->form->create['notifyEmail'] = array('required' => false, 'type' =>
 $config->bug->form->create['type']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->create['os']          = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->create['browser']     = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->bug->form->create['relatedBug']  = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->create['color']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->create['severity']    = array('required' => false, 'type' => 'int',    'default' => 3);
 $config->bug->form->create['pri']         = array('required' => false, 'type' => 'int',    'default' => 3);
