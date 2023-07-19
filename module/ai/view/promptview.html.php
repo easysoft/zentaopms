@@ -79,8 +79,8 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <li class='active'><a href='#promptBasicInfo' data-toggle='tab'><?php echo $lang->prompt->basicInfo; ?></a></li>
-          <li><a href='#promptEditInfo' data-toggle='tab'><?php echo $lang->prompt->editInfo; ?></a></li>
+          <li class='active'><a href='#promptBasicInfo' data-toggle='tab'><?php echo $lang->ai->prompts->basicInfo; ?></a></li>
+          <li><a href='#promptEditInfo' data-toggle='tab'><?php echo $lang->ai->prompts->editInfo; ?></a></li>
         </ul>
       </div>
       <div class='tab-content'>
@@ -96,11 +96,11 @@
               <td><?php echo $prompt->desc; ?></td>
             </tr>
             <tr>
-              <th class="w-90px"><?php echo $lang->ai->prompts->stage; ?></th>
+              <th class="w-90px"><?php echo $lang->prompt->status; ?></th>
               <td><?php echo $lang->ai->prompts->statuses[$prompt->status]; ?></td>
             </tr>
             <tr>
-              <th class="w-90px"><?php echo $lang->ai->prompts->model; ?></th>
+              <th class="w-90px"><?php echo $lang->prompt->model; ?></th>
               <td><?php echo $lang->ai->models->typeList['openai-gpt35']; ?></td>
             </tr>
             </tbody>
@@ -115,15 +115,15 @@
             </tr>
             <tr>
 <!-- TODO: Continue when have a record  -->
-              <th class="w-90px"><?php echo $lang->prompt->publishedBy; ?></th>
+              <th class="w-90px"><?php echo $lang->ai->prompts->publishedBy; ?></th>
               <td><?php echo 'publishedBy' ?></td>
             </tr>
             <tr>
-              <th class="w-90px"><?php echo $lang->prompt->draftedBy; ?></th>
+              <th class="w-90px"><?php echo $lang->ai->prompts->draftedBy; ?></th>
               <td><?php echo 'draftedBy' ?></td>
             </tr>
             <tr>
-              <th class="w-90px"><?php echo $lang->prompt->lastEditor; ?></th>
+              <th class="w-90px"><?php echo $lang->prompt->editedBy; ?></th>
               <td><?php echo $prompt->editedBy ? zget($users, $prompt->editedBy) . $lang->at . $prompt->editedDate : '';?></td>
             </tr>
             </tbody>

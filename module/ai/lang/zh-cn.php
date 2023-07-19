@@ -12,16 +12,22 @@ $lang->ai->common = 'AI';
 
 /* Definitions of table columns, used to sprintf error messages to dao::$errors. */
 $lang->prompt = new stdclass();
-$lang->prompt->name        = '名称';
-$lang->prompt->desc        = '描述';
-$lang->prompt->model       = '语言模型';
-$lang->prompt->module      = '所属分组';
-$lang->prompt->basicInfo   = '基本信息';
-$lang->prompt->editInfo    = '创建编辑';
-$lang->prompt->createdBy   = '由谁创建';
-$lang->prompt->publishedBy = '由谁发布';
-$lang->prompt->draftedBy   = '由谁下架';
-$lang->prompt->lastEditor  = '最后编辑';
+$lang->prompt->name             = '名称';
+$lang->prompt->desc             = '描述';
+$lang->prompt->model            = '语言模型';
+$lang->prompt->module           = '所属分组';
+$lang->prompt->source           = '对象数据';
+$lang->prompt->targetForm       = '目标表单';
+$lang->prompt->purpose          = '操作';
+$lang->prompt->elaboration      = '补充要求';
+$lang->prompt->role             = '角色';
+$lang->prompt->characterization = '角色描述';
+$lang->prompt->status           = '阶段';
+$lang->prompt->createdBy        = '由谁创建';
+$lang->prompt->createdDate      = '创建时间';
+$lang->prompt->editedBy         = '最后编辑';
+$lang->prompt->editedDate       = '编辑时间';
+$lang->prompt->deleted          = '是否已删除';
 
 $lang->ai->nextStep  = '下一步';
 $lang->ai->goTesting = '去调试';
@@ -44,7 +50,12 @@ $lang->ai->prompts->targetForm  = '表单';
 $lang->ai->prompts->funcDesc    = '功能描述';
 $lang->ai->prompts->deleted     = '已删除';
 $lang->ai->prompts->stage       = '阶段';
-
+$lang->ai->prompts->basicInfo   = '基本信息';
+$lang->ai->prompts->editInfo    = '创建编辑';
+$lang->ai->prompts->createdBy   = '由谁创建';
+$lang->ai->prompts->publishedBy = '由谁发布';
+$lang->ai->prompts->draftedBy   = '由谁下架';
+$lang->ai->prompts->lastEditor  = '最后编辑';
 
 $lang->ai->prompts->summary = '本页共 %s 个提词。';
 

@@ -11,11 +11,23 @@
 $lang->ai->common = 'AI';
 
 /* Definitions of table columns, used to sprintf error messages to dao::$errors. */
-$lang->prompt = new stdclass();
-$lang->prompt->name   = 'Name';
-$lang->prompt->desc   = 'Description';
-$lang->prompt->model  = 'Model';
-$lang->prompt->module = 'Module';
+$lang->prompt  = new stdclass();
+$lang->prompt->name             = 'Name';
+$lang->prompt->desc             = 'Description';
+$lang->prompt->model            = 'Model';
+$lang->prompt->module           = 'Module';
+$lang->prompt->source           = 'Data Source';
+$lang->prompt->targetForm       = 'Target Form';
+$lang->prompt->purpose          = 'Purpose';
+$lang->prompt->elaboration      = 'Elaboration';
+$lang->prompt->role             = 'Role';
+$lang->prompt->characterization = 'Characterization';
+$lang->prompt->status           = 'Status';
+$lang->prompt->createdBy        = 'Created By';
+$lang->prompt->createdDate      = 'Created Date';
+$lang->prompt->editedBy         = 'Edited By';
+$lang->prompt->editedDate       = 'Edited Date';
+$lang->prompt->deleted          = 'Deleted';
 
 $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';
@@ -38,6 +50,12 @@ $lang->ai->prompts->targetForm  = 'Target Form';
 $lang->ai->prompts->funcDesc    = 'Function Description';
 $lang->ai->prompts->deleted     = 'Deleted';
 $lang->ai->prompts->stage       = 'Stage';
+$lang->ai->prompts->basicInfo   = 'Basic Info';
+$lang->ai->prompts->editInfo    = 'Edit Info';
+$lang->ai->prompts->createdBy   = 'Created By';
+$lang->ai->prompts->publishedBy = 'Published By';
+$lang->ai->prompts->draftedBy   = 'Drafted By';
+$lang->ai->prompts->lastEditor  = 'Last Editor';
 
 $lang->ai->prompts->summary = 'There are %s prompts on this page.';
 
