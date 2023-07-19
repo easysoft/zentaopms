@@ -456,6 +456,11 @@ class aiModel extends model
             {
                 $actionType = $prompt->status == 'draft' ? 'unpublished' : 'published';
             }
+            else
+            {
+                $changes = common::createChanges($originalPrompt, $prompt);
+            }
+
         }
 
         $prompt->editedDate = helper::now();
@@ -473,7 +478,9 @@ class aiModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $this->loadModel('action')->create('prompt', $prompt->id, $actionType);
+        $actionId = $this->loadModel('action')->create('prompt', $prompt->id, $actionType);
+        if(!empty($changes)) $this->action->logHistory($actionId, $changes);
+
         return true;
     }
 
