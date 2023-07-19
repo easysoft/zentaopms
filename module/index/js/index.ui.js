@@ -686,7 +686,7 @@ $(window).on('popstate', function(event)
 {
     const state = event.state;
     if(debug) console.log('[APPS]', 'popstate:', state);
-    if(state) openApp(state.url, state.code, state.type !== 'show');
+    if(state) openApp(state.url, state.code, false);
 });
 
 $.get($.createLink('index', 'app'), html =>
