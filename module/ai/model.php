@@ -421,21 +421,43 @@ class aiModel extends model
             ->check('name', 'unique')
             ->autoCheck()
             ->exec();
+        if(dao::isError()) return false;
 
-        return dao::isError() ? false : $this->dao->lastInsertID();
+        $promptId = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('prompt', $promptId, 'created');
+
+        return $promptId;
     }
 
     /**
      * Update a prompt.
      *
-     * TODO: fully implement this.
-     *
      * @param  object    $prompt
+     * @param  object    $originalPrompt  optional, original prompt to compare with and generate action.
      * @access public
      * @return bool
      */
-    public function updatePrompt($prompt)
+    public function updatePrompt($prompt, $originalPrompt = null)
     {
+        /* Action name to create action record with. */
+        $actionType = 'updated';
+
+        /* Compare with original, check what changed. */
+        if(!empty($originalPrompt))
+        {
+            $changedFields = array();
+            foreach($prompt as $key => $value)
+            {
+                if($value != $originalPrompt->$key) $changedFields[] = $key;
+            }
+
+            /* If only status changed, action is either published or unpublished. */
+            if(count($changedFields) == 1 && current($changedFields) == 'status')
+            {
+                $actionType = $prompt->status == 'draft' ? 'unpublished' : 'published';
+            }
+        }
+
         $prompt->editedDate = helper::now();
         $prompt->editedBy   = $this->app->user->account;
 
@@ -449,8 +471,10 @@ class aiModel extends model
             ->autoCheck()
             ->where('id')->eq($prompt->id)
             ->exec();
+        if(dao::isError()) return false;
 
-        return !dao::isError();
+        $this->loadModel('action')->create('prompt', $prompt->id, $actionType);
+        return true;
     }
 
     /**
