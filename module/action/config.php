@@ -53,6 +53,7 @@ $config->action->objectNameFields['zahost']       = 'name';
 $config->action->objectNameFields['zanode']       = 'name';
 $config->action->objectNameFields['privlang']     = 'name';
 $config->action->objectNameFields['scene']        = 'title';
+$config->action->objectNameFields['prompt']       = 'name';
 
 $config->action->commonImgSize = 870;
 

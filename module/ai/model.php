@@ -440,7 +440,7 @@ class aiModel extends model
     public function updatePrompt($prompt, $originalPrompt = null)
     {
         /* Action name to create action record with. */
-        $actionType = 'updated';
+        $actionType = 'edited';
 
         /* Compare with original, check what changed. */
         if(!empty($originalPrompt))
