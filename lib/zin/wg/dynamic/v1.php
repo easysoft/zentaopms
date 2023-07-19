@@ -114,7 +114,7 @@ class dynamic extends wg
     {
         $dynamicListView = h::ul
         (
-            setClass('dynamic dynamic-tag-left pt-0 overflow-x-hidden'),
+            setClass('dynamic dynamic-tag-left pt-0 overflow-hidden'),
             setClass($this->prop('className')),
         );
 
