@@ -188,12 +188,13 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->title),
+            set::required(true),
             inputControl
             (
                 input
                 (
                     set::name('title'),
-                    set::value($caseTitle)
+                    set::value($caseTitle),
                 ),
                 set::suffixWidth('icon'),
                 to::suffix
