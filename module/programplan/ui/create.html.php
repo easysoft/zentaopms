@@ -105,10 +105,17 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
 };
 
 /* Generate form fields. */
-$fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType)
+$fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType)
 {
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
+
+    /* If enabled set stage code, then append 'code' field to the required fields list. */
+    if(isset($config->setCode) && $config->setCode == 1)
+    {
+        $requiredFields = array_merge($requiredFields, array('code'=> true));
+        $fields['code']['required'] = true;
+    }
 
     $renderFields = implode(',', array_keys($requiredFields));
     $renderFields = ",$renderFields,$showFields,";

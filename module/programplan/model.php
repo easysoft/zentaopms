@@ -528,7 +528,7 @@ class programplanModel extends model
         $desc           = $formData->get('desc');
         $orders         = $formData->get('orders');
         $type           = $formData->get('type');
-        $codes          = $formData->get('codes');
+        $codes          = $formData->get('code');
         $output         = $formData->get('output');
 
         /* Determine if a task has been created under the parent phase. */

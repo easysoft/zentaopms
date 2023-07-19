@@ -8,7 +8,27 @@ window.onRenderRow = function(row, rowIdx, data)
     /* Use the flag variable 'setMilestone' to toggle the enable/disable status of the milestone field. */
     if(!data.setMilestone)
     {
-        row.children('[data-name=milestone]').children('select').attr('disabled', 'disabled');
+        let name  = '';
+        let value = '';
+        const checkBoxList = row.children('[data-name=milestone]').find('input');
+        Object.values(checkBoxList).forEach(function(ele){
+            if(typeof ele !== 'object') return;
+
+            name = ele.name;
+            if(ele.checked)
+            {
+                value = ele.value;
+            }
+        });
+
+        checkBoxList.attr('disabled', 'disabled');
+
+        /* Append hidden input element for passing value. */
+        let inputEle = document.createElement('input');
+        inputEle.setAttribute('name',  name);
+        inputEle.setAttribute('value', value);
+        inputEle.setAttribute('type',  'hidden');
+        row.children('[data-name=milestone]').append(inputEle);
     }
 };
 

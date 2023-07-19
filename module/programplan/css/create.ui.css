@@ -1,2 +1,3 @@
 .panel-actions {display: flex; width: 100%; flex-direction: row-reverse; justify-content: space-between;}
 menu .panel-actions {width: auto;}
+td .check-list {flex-direction:row;}
