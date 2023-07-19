@@ -28,7 +28,7 @@
 
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
-    <div class="cell">
+    <div class="cell prompt-details">
       <div class="detail">
         <div class="detail-title"><?php echo $lang->ai->prompts->role?></div>
         <div class="detail-content article-content"><?php echo $prompt->role?></div>
@@ -60,6 +60,7 @@
           ?></div>
       </div>
     </div>
+    <div class="cell"><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php echo html::a(helper::createLink('ai', 'prompts'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn'");?>

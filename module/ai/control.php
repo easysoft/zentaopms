@@ -155,6 +155,7 @@ class ai extends control
         $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
         $this->view->prompt      = $prompt;
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
+        $this->view->actions     = $this->loadModel('action')->getList('prompt', $id);
         $this->view->title       = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name";
         $this->view->position[]  = $this->lang->ai->prompts->common;
         $this->view->users       = $this->user->getPairs('noletter');

@@ -1,14 +1,14 @@
-.detail-title {
+.prompt-details .detail-title {
     font-weight: normal;
     color:#838a9d;
 }
-.detail-title::before {
+.prompt-details .detail-title::before {
     content: '[';
 }
-.detail-title::after {
+.prompt-details .detail-title::after {
     content: ']';
 }
 
-.detail-content + .detail-title {
+.prompt-details .detail-content + .detail-title {
     margin-top: 10px;
 }
