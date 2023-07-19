@@ -13,7 +13,7 @@
 .dynamic > li > div {display: block; padding: 3px 0px; line-height: 20px}
 .dynamic > li .dynamic-text {padding: 2px 5px;}
 .dynamic > li.trophy .dynamic-text {background: #fff;}
-.dynamic > li.trophy .dynamic-text img {opacity: 0.2; transform: rotate(10deg);}
+.dynamic > li.trophy .dynamic-text img {opacity: 0.2; transform: rotate(6deg); position: relative; max-width: 2.25rem; top: -15px; left: -35px; width: 2.25rem; height: 2.25rem;}
 
 .dynamic-tag {position: absolute; top: 5px; left: -110px; font-size: 12px}
 .dynamic-tag-left {padding-left: 110px;}

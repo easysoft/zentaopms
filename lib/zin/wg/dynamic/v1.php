@@ -99,11 +99,15 @@ class dynamic extends wg
                         ),
                         $objectLabel,
                     ),
-                    $dynamicClass == 'trophy' ? h::img
+                    $dynamicClass == 'trophy' ?
+                    div
                     (
-                        set::src('static/svg/trophy.svg'),
-                        setClass('ml-2'),
-                        set::width(30)
+                        setClass('w-0 h-0'),
+                        h::img
+                        (
+                            set::src('static/svg/trophy.svg'),
+                            setClass('ml-2'),
+                        )
                     ) : null
                 )
             )
