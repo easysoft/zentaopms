@@ -407,32 +407,6 @@ class programplanModel extends model
     }
 
     /**
-     * 获取阶段百分比。
-     * Get total percent.
-     *
-     * @param  object    $stage
-     * @param  bool      $parent
-     * @access public
-     * @return int|float
-     */
-    public function getTotalPercent(object $stage, bool $parent = false): int|float
-    {
-        /* When parent is equal to true, query the total workload of the subphase. */
-        $executionID = $parent ? $stage->id : $stage->project;
-        $plans = $this->programplanTao->getStageList((int)$executionID, (int)$stage->product, $browseType = 'parent');
-
-        $totalPercent = 0;
-        $stageID      = $stage->id;
-        foreach($plans as $id => $stage)
-        {
-            if($id == $stageID) continue;
-            $totalPercent += $stage->percent;
-        }
-
-        return $totalPercent;
-    }
-
-    /**
      * 批量查询阶段关联的项目和属性并过滤日期。
      * Get product and attribute for stage correlation.
      *
@@ -929,8 +903,9 @@ class programplanModel extends model
         $relatedExecutionsID = $this->loadModel('execution')->getRelatedExecutions($planID);
         $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '0';
 
+        /* Pass and unset the arguments after use. */
         $plan->relatedExecutionsID = $relatedExecutionsID;
-        $plan->parentStage         = $setCode;
+        $plan->setCode             = $setCode;
 
         $result = $this->programplanTao->updateRow($plan, $oldPlan, $parentStage);
         if(!$result) return false;

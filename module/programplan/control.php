@@ -159,8 +159,7 @@ class programplan extends control
 
             if($changes) $this->programplanZen->afterEdit($plan, $changes);
 
-            $locate = isonlybody() ? 'parent' : inlink('browse', "program=$plan->program&type=lists");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage', 'closeModal' => true));
         }
 
         $this->programplanZen->buildEditView($plan);

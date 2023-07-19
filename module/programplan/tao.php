@@ -20,20 +20,24 @@ class programplanTao extends programplanModel
      * @access protected
      * @return bool
      */
-    protected function updateRow(object $plan, object $oldPlan, object|null $parentStage): bool
+    protected function updateRow(object $plan, object $oldPlan, object|bool $parentStage): bool
     {
         $requiredFields = $this->config->programplan->edit->requiredFields ?? '';
 
         $getname = '';
         if($plan->relatedExecutionsID && $oldPlan->project && $parentStage && $oldPlan->parent) $getname = true;
 
+        $relatedExecutionsID = $plan->relatedExecutionsID;
+        $setCode             = $plan->setCode;
+        unset($plan->relatedExecutionsID, $plan->setCode);
+
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheckIF($requiredFields, $requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
             ->checkIF(!empty($plan->percent), 'percent', 'float')
-            ->checkIF(!empty($plan->name) && $getname, 'name', 'unique', "id in ({$plan->relatedExecutionsID}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
-            ->checkIF(!empty($plan->code) and $plan->setCode, 'code', 'unique', "id != {$plan->id} and type in ('sprint','stage','kanban') and `deleted` = '0'")
+            ->checkIF(!empty($plan->name) && $getname, 'name', 'unique', "id in ({$relatedExecutionsID}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
+            ->checkIF(!empty($plan->code) && $setCode, 'code', 'unique', "id != {$plan->id} and type in ('sprint','stage','kanban') and `deleted` = '0'")
             ->where('id')->eq($plan->id)
             ->exec();
 
@@ -569,4 +573,31 @@ class programplanTao extends programplanModel
         $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
         return !dao::isError();
     }
+
+    /**
+     * 获取阶段百分比。
+     * Get total percent.
+     *
+     * @param  object    $stage
+     * @param  bool      $parent
+     * @access public
+     * @return int|float
+     */
+    protected function getTotalPercent(object $stage, bool $parent = false): int|float
+    {
+        /* When parent is equal to true, query the total workload of the subphase. */
+        $executionID = $parent ? $stage->id : $stage->project;
+        $plans = $this->getStageList((int)$executionID, (int)$stage->product, 'parent');
+
+        $totalPercent = 0;
+        $stageID      = $stage->id;
+        foreach($plans as $id => $stage)
+        {
+            if($id == $stageID) continue;
+            $totalPercent += $stage->percent;
+        }
+
+        return $totalPercent;
+    }
+
 }
