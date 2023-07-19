@@ -18,19 +18,20 @@ jsVar('changeAttrLang', $lang->programplan->confirmChangeAttr);
 jsVar('isTopStage',     $isTopStage);
 jsVar('isLeafStage',    $isLeafStage);
 
+modalHeader
+(
+    set::title($this->lang->programplan->edit),
+    set::entityText($plan->name),
+    set::entityID($plan->id)
+);
+
 formPanel
 (
-    div
-    (
-        setClass('flex items-center pb-2.5'),
-        span($lang->edit),
-        span($plan->name, setClass('text-lg font-bold ml-3')),
-        label($plan->id,  setClass('circle ml-2 label-id px-2'))
-    ),
+    set::submitBtnText($lang->save),
     formGroup
     (
         set::label($lang->programplan->parent),
-        set::width('2/3'),
+        set::width('1/2'),
         picker
         (
             setID('parent'),
@@ -44,7 +45,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->name),
-        set::width('2/3'),
+        set::width('1/2'),
         set::required(true),
         input(set::name('name'), set::value($plan->name))
     ),
@@ -52,14 +53,14 @@ formPanel
     formGroup
     (
         set::label($lang->execution->code),
-        set::width('2/3'),
+        set::width('1/2'),
         set::required(true),
         input(set::name('code'), set::value($plan->code))
     ): null,
     formGroup
     (
         set::label($lang->programplan->PM),
-        set::width('2/3'),
+        set::width('1/2'),
         picker
         (
             set::name('PM'),
@@ -72,7 +73,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->percent),
-        set::width('2/3'),
+        set::width('1/2'),
         inputControl
         (
             input(set::name('percent'), set::value($plan->percent)),
@@ -85,7 +86,7 @@ formPanel
         formGroup
         (
             set::label($lang->programplan->attribute),
-            set::width('2/3'),
+            set::width('1/2'),
             div
             (
                 setID('attributeType'),
@@ -112,6 +113,7 @@ formPanel
             div
             (
                 $lang->execution->typeTip,
+                setClass('w-1/3'),
                 set(array(
                     'id'    => 'helpTip',
                     'class' => 'tooltip darker'
@@ -145,7 +147,7 @@ formPanel
     formGroup
     (
         set::label($lang->project->acl),
-        set::width('2/3'),
+        set::width('1/2'),
         select
         (
             set::name('acl'),
@@ -159,7 +161,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->milestone),
-        set::width('2/3'),
+        set::width('1/2'),
         radioList(
             set::name('milestone'),
             set::items($lang->programplan->milestoneList),
@@ -171,7 +173,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->output),
-        set::width('2/3'),
+        set::width('1/2'),
         select(set(array(
             'name'     => 'output[]',
             'items'    => $documentList,
@@ -182,4 +184,4 @@ formPanel
     ) : null
 );
 
-render();
+render('modalDialog');
