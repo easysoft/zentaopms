@@ -28,9 +28,9 @@
         if(isset($_SESSION['auditPrompt']['time'])) $auditTime = $_SESSION['auditPrompt']['time'];
         ?>
         <div class="pull-right btn-toolbar">
-          <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$story->id"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'class="btn btn-link"');?>
+          <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$story->id"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');?>
           <?php if(!empty($auditTime) && time() - $auditTime < 30 * 60): ?>
-            <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$story->id"), $lang->ai->audit->designPrompt, '', 'class="btn btn-info iframe"'); ?>
+            <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$story->id"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"'); ?>
           <?php endif;?>
         </div>
       <?php endif;?>

@@ -83,12 +83,26 @@
           publishButton.addEventListener('click', function(e)
           {
             e.preventDefault();
+
+            const container = publishButton.ownerDocument.defaultView.parent.document.querySelector('.load-indicator');
+            if(container) container.classList.toggle('loading', true);
+
             const promptId = publishButton.dataset.promptid;
             const aTag = document.createElement('a');
             aTag.href = createLink('ai', 'promptPublish', 'promptId=' + promptId + '&$backToTestingLocation=true');
             aTag.style.display = 'none';
             document.body.appendChild(aTag);
             aTag.click();
+          });
+        }
+
+        const regenerateButton = document.getElementById('promptRegenerate');
+        if(regenerateButton)
+        {
+          regenerateButton.addEventListener('click', function()
+          {
+            const container = regenerateButton.ownerDocument.defaultView.parent.document.querySelector('.load-indicator');
+            if(container) container.classList.toggle('loading', true);
           });
         }
       });
