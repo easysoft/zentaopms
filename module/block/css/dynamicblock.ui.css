@@ -1,0 +1,6 @@
+.dynamic-block {background-color: var(--color-slate-50);}
+.dynamic-block .panel-body {padding-top: 0px;}
+.dynamic-block .dynamic > li.trophy .dynamic-text {box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow); --tw-shadow: var(--shadow); --tw-shadow-colored: var(--shadow); margin: 1px;}
+.dynamic-block .dynamic > li.trophy .dynamic-text img {position: relative; top: 14px; left: 11px;}
+.dynamic-block .dynamic > li:before {background-color: var(--color-slate-50);}
+.dynamic-block .dynamic > li.trophy:before {background-color: var(--color-slate-50);}
