@@ -139,7 +139,7 @@ formPanel
                 (
                     set::name('execution'),
                     set::items($executions),
-                    set::value(isset($bug->execution) ? $bug->execution->id : '')
+                    set::value(!empty($bug->execution->id) ? $bug->execution->id : '')
                 )
             )
         )
