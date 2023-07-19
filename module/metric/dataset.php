@@ -22,6 +22,22 @@ class dataset
     }
 
     /**
+     * Get all projects.
+     * 获取所有项目。
+     *
+     * @param  array  $fieldList
+     * @access public
+     * @return mixed
+     */
+    public function getAllProjects($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('project')
+            ->query();
+    }
+
+    /**
      * 获取执行数据。
      * Get all executions.
      *

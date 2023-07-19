@@ -24,16 +24,15 @@
  */
 class count_of_closed_project extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getAllProjects';
 
-    public $fieldList = array();
+    public $fieldList = array('status');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
-    public function calculate($data)
+    public function calculate($row)
     {
+        if($row->status == 'closed') $this->result ++;
     }
 
     public function getResult($options = array())

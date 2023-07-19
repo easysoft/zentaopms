@@ -15,7 +15,7 @@
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -23,16 +23,15 @@
  */
 class count_of_project extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getAllProjects';
 
-    public $fieldList = array();
+    public $fieldList = array('id');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
-    public function calculate($data)
+    public function calculate($row)
     {
+        $this->result += 1;
     }
 
     public function getResult($options = array())
