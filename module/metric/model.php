@@ -198,7 +198,7 @@ class metricModel extends model
     public function getDataset()
     {
         $datasetPath = $this->metricTao->getDatasetPath();
-        include $datasetPath;
+        include_once $datasetPath;
         return new dataset($this->dao);
     }
 
