@@ -1,0 +1,53 @@
+{
+    "name": "spiral/roadrunner-cli",
+    "type": "library",
+    "description": "RoadRunner: Command Line Interface",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anton Titov (wolfy-j)",
+            "email": "wolfy-j@spiralscout.com"
+        },
+        {
+            "name": "RoadRunner Community",
+            "homepage": "https://github.com/spiral/roadrunner/graphs/contributors"
+        }
+    ],
+    "bin": [
+        "bin/rr"
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "composer/semver": "^3.2",
+        "spiral/roadrunner-worker": ">=2.0.2",
+        "spiral/tokenizer": "^2.13 || ^3.0",
+        "symfony/console": "^4.4|^5.0|^6.0",
+        "symfony/http-client": "^4.4|^5.0|^6.0",
+        "symfony/polyfill-php80": "^1.22",
+        "symfony/yaml": "^5.4 || ^6.0"
+    },
+    "require-dev": {
+        "jetbrains/phpstorm-attributes": "^1.0",
+        "vimeo/psalm": "^4.4",
+        "symfony/var-dumper": "^4.4|^5.0"
+    },
+    "scripts": {
+        "analyze": "psalm"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spiral\\RoadRunner\\Console\\": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.1.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

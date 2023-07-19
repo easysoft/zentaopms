@@ -1,0 +1,61 @@
+{
+    "name": "spiral/goridge",
+    "type": "goridge",
+    "description": "High-performance PHP-to-Golang RPC bridge",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anton Titov / Wolfy-J",
+            "email": "wolfy.jd@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "ext-sockets": "*",
+        "symfony/polyfill-php80": "^1.22"
+    },
+    "require-dev": {
+        "vimeo/psalm": "^4.18.1",
+        "google/protobuf": "^3.17",
+        "rybakit/msgpack": "^0.7",
+        "phpunit/phpunit": "^9.5",
+        "jetbrains/phpstorm-attributes": "^1.0",
+        "infection/infection": "^0.26.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spiral\\Goridge\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Spiral\\Goridge\\Tests\\": "tests/Goridge"
+        }
+    },
+    "suggest": {
+        "ext-msgpack": "MessagePack codec support",
+        "ext-protobuf": "Protobuf codec support",
+        "rybakit/msgpack": "(^0.7) MessagePack codec support",
+        "google/protobuf": "(^3.0) Protobuf codec support"
+    },
+    "scripts": {
+        "test": "phpunit --no-coverage --colors=always",
+        "test-cover": "phpunit --coverage-clover=coverage.xml",
+        "test-static": "psalm",
+        "test-mutations": "infection"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.3.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true,
+            "composer/package-versions-deprecated": true
+        }
+    }
+}

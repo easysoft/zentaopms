@@ -1,0 +1,64 @@
+{
+    "name": "spiral/roadrunner-jobs",
+    "type": "library",
+    "description": "RoadRunner Queues (Jobs) plugin API library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Wolfy-J",
+            "email": "wolfy.jd@gmail.com"
+        },
+        {
+            "name": "Kirill Nesmeyanov (SerafimArts)",
+            "email": "kirill.nesmeyanov@spiralscout.com"
+        },
+        {
+            "name": "RoadRunner Community",
+            "homepage": "https://github.com/spiral/roadrunner/graphs/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "ramsey/uuid": "^3 || ^4",
+        "spiral/roadrunner-worker": "^2.0",
+        "spiral/roadrunner": "^2.0",
+        "spiral/goridge": "^3.1",
+        "google/protobuf": "^3.7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "spiral/code-style": "^1.0",
+        "vimeo/psalm": ">=4.14",
+        "symfony/var-dumper": "^5.1",
+        "roave/security-advisories": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spiral\\RoadRunner\\Jobs\\": ["src", "generated/Spiral/RoadRunner/Jobs"],
+            "GPBMetadata\\": "generated/GPBMetadata"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Spiral\\RoadRunner\\Jobs\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "build": "protoc --proto_path=resources/proto/v1 --php_out=generated resources/proto/v1/jobs.proto",
+        "tests": "phpunit",
+        "cs-fix": "spiral-cs fix src",
+        "cs-check": "spiral-cs check src",
+        "psalm": "psalm --no-cache"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

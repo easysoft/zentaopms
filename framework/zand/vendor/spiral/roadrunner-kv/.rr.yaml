@@ -1,0 +1,16 @@
+version: '2.7'
+
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+kv:
+  test:
+    driver: memory
+    config:
+      interval: 1
+  test-2:
+      driver: boltdb
+      config:
+        file: "rr.db"
+        permissions: 0777
+        interval: 10 # seconds

@@ -381,6 +381,9 @@ define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
 define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
 define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 
+define('TABLE_FEEDBACK', '`' . $config->db->prefix . 'feedback`');
+define('TABLE_TICKET',   '`' . $config->db->prefix . 'ticket`');
+
 if(!defined('TABLE_BASICMEAS'))          define('TABLE_BASICMEAS', '`' . $config->db->prefix . 'basicmeas`');
 if(!defined('TABLE_DERIVEMEAS'))         define('TABLE_DERIVEMEAS', '`' . $config->db->prefix . 'derivemeas`');
 if(!defined('TABLE_MEASRECORDS'))        define('TABLE_MEASRECORDS', '`' . $config->db->prefix . 'measrecords`');

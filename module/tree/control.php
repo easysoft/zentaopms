@@ -20,12 +20,12 @@ class tree extends control
      * @param  int    $rootID
      * @param  string $viewType story|bug|case|doc
      * @param  int    $currentModuleID
-     * @param  int    $branch
+     * @param  string $branch
      * @param  string $from
      * @access public
      * @return void
      */
-    public function browse(int $rootID, string $viewType, int $currentModuleID = 0, int $branch = 0, string $from = '')
+    public function browse(int $rootID, string $viewType, int $currentModuleID = 0, string $branch = 'all', string $from = '')
     {
         $this->loadModel('product');
 
@@ -394,8 +394,16 @@ class tree extends control
     {
         if(!empty($_POST))
         {
+
             $this->tree->update($moduleID);
-            return print(js::reload('parent'));
+
+            $response = array();
+            $response['result']     = 'success';
+            $response['message']    = $this->lang->saveSuccess;
+            $response['closeModal'] = true;
+            $response['load']       = true;
+
+            $this->send($response);
         }
 
         $module = $this->tree->getById($moduleID);
@@ -416,6 +424,24 @@ class tree extends control
             $this->view->libs = $this->doc->getLibs($docLib->type, '', '', $objectID, 'book');
         }
 
+        if($type == 'doc' or $type == 'api')
+        {
+            $name  = $this->lang->tree->dir;
+            $title = $this->lang->tree->editDir;
+        }
+        elseif($type == 'line')
+        {
+            $name  = $this->lang->tree->line;
+            $title = $this->lang->tree->manageLine;
+        }
+        else
+        {
+            $name  = $this->lang->tree->name;
+            $title = $this->lang->tree->edit;
+        }
+
+        $this->view->name   = $name;
+        $this->view->title  = $title;
         $this->view->module = $module;
         $this->view->type   = $type;
         $this->view->branch = $branch;
@@ -506,13 +532,12 @@ class tree extends control
     /**
      * Delete a module.
      *
-     * @param  int    $rootID
      * @param  int    $moduleID
      * @param  string $confirm yes|no
      * @access public
      * @return void
      */
-    public function delete($rootID, $moduleID, $confirm = 'no')
+    public function delete($moduleID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -522,14 +547,17 @@ class tree extends control
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
             if($module->type == 'host') $confirmLang = $this->lang->tree->confirmDeleteHost;
             if(strpos($this->config->tree->groupTypes, ",$module->type,") !== false) $confirmLang = $this->lang->tree->confirmDeleteGroup;
-            return print(js::confirm($confirmLang, $this->createLink($this->app->rawModule, $this->app->rawMethod, "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
+
+            $confirmURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "moduleID=$moduleID&confirm=yes");
+
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$confirmLang}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
         else
         {
             $result = $this->tree->delete($moduleID);
             if(!$result) return;
 
-            die(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
     }
 

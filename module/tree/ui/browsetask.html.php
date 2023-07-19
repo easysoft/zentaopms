@@ -172,7 +172,13 @@ div
         panel
         (
             set::title($title),
-            tree(set('items', $tree)),
+            tree
+            (
+                set('type', 'task'),
+                set('items', $tree),
+                set('canEdit', common::hasPriv('tree', 'edit') && $canBeChanged),
+                set('canDelete', common::hasPriv('tree', 'delete') && $canBeChanged),
+            ),
         )
     ),
     div

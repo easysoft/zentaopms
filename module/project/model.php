@@ -361,8 +361,8 @@ class projectModel extends model
             {
                 if($stage->project != $projectID) continue;
 
-                $stageTotalConsumed = isset($totalHour[$projectID][$stageID]) ? $totalHour[$projectID][$stageID]->totalConsumed : 0;
-                $stageTotalLeft     = isset($totalHour[$projectID][$stageID]) ? round($totalHour[$projectID][$stageID]->totalLeft, 1) : 0;
+                $stageTotalConsumed = isset($totalHour[$projectID][$stageID]) ? (float)$totalHour[$projectID][$stageID]->totalConsumed : 0;
+                $stageTotalLeft     = isset($totalHour[$projectID][$stageID]) ? round((float)$totalHour[$projectID][$stageID]->totalLeft, 1) : 0;
 
                 $projectConsumed += $stageTotalConsumed;
                 $projectLeft     += $stageTotalLeft;

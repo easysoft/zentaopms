@@ -1,0 +1,76 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * RoadRunner is a high-performance PHP application server, load-balancer,
+ * and process manager written in Golang.
+ *
+ * This file responsive for cli commands.
+ */
+
+declare(strict_types=1);
+
+use Spiral\RoadRunner\Console\DownloadProtocBinaryCommand;
+use Spiral\RoadRunner\Console\GetBinaryCommand;
+use Spiral\RoadRunner\Console\MakeConfigCommand;
+use Spiral\RoadRunner\Console\VersionsCommand;
+use Spiral\RoadRunner\Version;
+
+//
+// Checking the PHP working environment.
+//
+
+if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
+    $error = vsprintf('Info CLI should be invoked via the CLI version of PHP, not the %s SAPI', [
+        PHP_SAPI,
+    ]);
+
+    fwrite(STDERR, $error);
+    exit(1);
+}
+
+//
+// Lookup the Composer's autoloader and require it.
+//
+
+$composerAutoloadPaths = [
+    // Install as dependency
+    __DIR__ . '/../../../autoload.php',
+    __DIR__ . '/../../autoload.php',
+    __DIR__ . '/../autoload.php',
+
+    // Install as root package
+    __DIR__ . '/../vendor/autoload.php',
+];
+
+foreach ($composerAutoloadPaths as $file) {
+    if (is_file($file)) {
+        define('RR_COMPOSER_INSTALL', $file);
+
+        break;
+    }
+}
+
+if (! defined('RR_COMPOSER_INSTALL')) {
+    fwrite(STDERR, <<<'RR_CLI_ERROR'
+    You need to set up the project dependencies using Composer:
+
+        composer install
+
+    You can learn all about Composer on https://getcomposer.org/.
+    RR_CLI_ERROR);
+
+    exit(1);
+}
+
+require RR_COMPOSER_INSTALL;
+
+
+$app = new Symfony\Component\Console\Application('RoadRunner CLI', Version::current());
+
+$app->add(new GetBinaryCommand());
+$app->add(new VersionsCommand());
+$app->add(new DownloadProtocBinaryCommand());
+$app->add(new MakeConfigCommand());
+
+$app->run();

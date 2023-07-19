@@ -1,0 +1,67 @@
+{
+    "name": "spiral/roadrunner-kv",
+    "type": "library",
+    "description": "RoadRunner kv plugin bridge",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kirill Nesmeyanov (SerafimArts)",
+            "email": "kirill.nesmeyanov@spiralscout.com"
+        },
+        {
+            "name": "RoadRunner Community",
+            "homepage": "https://github.com/spiral/roadrunner/graphs/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "ext-json": "*",
+        "psr/simple-cache": "2 - 3",
+        "spiral/roadrunner": "^2.0",
+        "spiral/goridge": "^3.1",
+        "google/protobuf": "^3.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spiral\\RoadRunner\\KeyValue\\": ["src", "generated/Spiral/RoadRunner/KeyValue"],
+            "GPBMetadata\\": "generated/GPBMetadata"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0",
+        "spiral/code-style": "^1.0",
+        "vimeo/psalm": ">=4.4",
+        "symfony/var-dumper": "^5.1",
+        "roave/security-advisories": "dev-master"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Spiral\\RoadRunner\\KeyValue\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "build": [
+            "protoc --proto_path=resources/proto/v1 --php_out=generated resources/proto/v1/kv.proto"
+        ],
+        "tests": "phpunit",
+        "cs-fix": "spiral-cs fix src tests",
+        "analyze": [
+            "psalm --no-cache",
+            "spiral-cs check src tests"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "suggest": {
+        "ext-igbinary": "(>3.1.6) Igbinary serailizer support",
+        "ext-sodium": "Sodium serailizer support"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
