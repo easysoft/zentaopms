@@ -159,7 +159,7 @@ formPanel
                     set::name('openedBuild[]'),
                     set('data-items', count($builds)),
                     set::items($builds),
-                    set::value(empty($bug->buildID) ? '' : $bug->buildID)
+                    set::value(empty($bug->buildID) ? 'trunk' : $bug->buildID)
                 ),
                 span
                 (
