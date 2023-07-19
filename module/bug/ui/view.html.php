@@ -188,7 +188,7 @@ detailBody
             set::useHtml(true)
         ),
     ),
-    history(),
+    history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'bug', 'objectID' => $bug->id)))),
     floatToolbar
     (
         set::object($bug),
