@@ -16,7 +16,7 @@
     <?php echo html::a(helper::createLink('ai', 'prompts'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <div class="page-title">
-      <span class="label label-id"><?php echo $prompt->id?></span>
+      <span class="label label-id"><?php echo $prompt->id;?></span>
       <span class="text" title='<?php echo $prompt->name;?>'><?php echo $prompt->name;?></span>
       <?php if($prompt->deleted) echo "<span class='label label-danger'>{$lang->ai->prompts->deleted}</span>";?>
     </div>
@@ -30,25 +30,25 @@
   <div class="main-col col-8">
     <div class="cell prompt-details">
       <div class="detail">
-        <div class="detail-title"><?php echo $lang->ai->prompts->role?></div>
-        <div class="detail-content article-content"><?php echo $prompt->role?></div>
-        <div class="detail-title"><?php echo $lang->ai->prompts->characterization?></div>
-        <div class="detail-content article-content"><?php echo $prompt->characterization?></div>
+        <div class="detail-title"><?php echo $lang->ai->prompts->role;?></div>
+        <div class="detail-content article-content"><?php echo $prompt->role;?></div>
+        <div class="detail-title"><?php echo $lang->ai->prompts->characterization;?></div>
+        <div class="detail-content article-content"><?php echo $prompt->characterization;?></div>
       </div>
       <div class="detail">
-        <div class="detail-title"><?php echo $lang->ai->prompts->object?></div>
+        <div class="detail-title"><?php echo $lang->ai->prompts->object;?></div>
         <div class="detail-content article-content"><?php echo $prompt->module ? $this->lang->ai->dataSource[$prompt->module]['common'] : ''; ?></div>
-        <div class="detail-title"><?php echo $lang->ai->prompts->field?></div>
-        <div class="detail-content article-content"><?php echo $dataPreview?></div>
+        <div class="detail-title"><?php echo $lang->ai->prompts->field;?></div>
+        <div class="detail-content article-content"><?php echo $dataPreview;?></div>
       </div>
       <div class="detail">
-        <div class="detail-title"><?php echo $lang->ai->prompts->setPurpose?></div>
-        <div class="detail-content article-content"><?php echo $prompt->purpose?></div>
-        <div class="detail-title"><?php echo $lang->ai->prompts->elaboration?></div>
-        <div class="detail-content article-content"><?php echo $prompt->elaboration?></div>
+        <div class="detail-title"><?php echo $lang->ai->prompts->setPurpose;?></div>
+        <div class="detail-content article-content"><?php echo $prompt->purpose;?></div>
+        <div class="detail-title"><?php echo $lang->ai->prompts->elaboration;?></div>
+        <div class="detail-content article-content"><?php echo $prompt->elaboration;?></div>
       </div>
       <div class="detail">
-        <div class="detail-title"><?php echo $lang->ai->prompts->selectTargetForm?></div>
+        <div class="detail-title"><?php echo $lang->ai->prompts->selectTargetForm;?></div>
         <div class="detail-content article-content">
           <?php
             if(empty($prompt->targetForm)) echo '';
@@ -113,15 +113,26 @@
               <th class="w-90px"><?php echo $lang->prompt->createdBy; ?></th>
               <td><?php echo zget($users, $prompt->createdBy) . $lang->at . $prompt->createdDate;?></td>
             </tr>
-            <tr>
-<!-- TODO: Continue when have a record  -->
-              <th class="w-90px"><?php echo $lang->ai->prompts->publishedBy; ?></th>
-              <td><?php echo 'publishedBy' ?></td>
-            </tr>
-            <tr>
-              <th class="w-90px"><?php echo $lang->ai->prompts->draftedBy; ?></th>
-              <td><?php echo 'draftedBy' ?></td>
-            </tr>
+            <?php
+              /* Search for last publish / unpublish action. */
+              $lastPublishAction = null;
+              foreach(array_reverse($actions) as $action)
+              {
+                if(in_array($action->action, array('published', 'unpublished'))) $lastPublishAction = $action;
+                break;
+              }
+            ?>
+            <?php if($prompt->status == 'active'):?>
+              <tr>
+                <th class="w-90px"><?php echo $lang->ai->prompts->publishedBy; ?></th>
+                <td><?php echo zget($users, empty($lastPublishAction) ? $prompt->createdBy : $lastPublishAction->actor);?></td>
+              </tr>
+            <?php else:?>
+              <tr>
+                <th class="w-90px"><?php echo empty($lastPublishAction) ? $lang->ai->prompts->publishedBy : $lang->ai->prompts->draftedBy;?></th>
+                <td><?php if(!empty($lastPublishAction)) echo zget($users, $lastPublishAction->actor);?></td>
+              </tr>
+            <?php endif;?>
             <tr>
               <th class="w-90px"><?php echo $lang->prompt->editedBy; ?></th>
               <td><?php echo $prompt->editedBy ? zget($users, $prompt->editedBy) . $lang->at . $prompt->editedDate : '';?></td>
