@@ -318,6 +318,7 @@ detailHeader
     ) : null
 );
 
+$actions = $this->loadModel('common')->buildOperateMenu($case);
 detailBody
 (
     sectionList
@@ -373,17 +374,10 @@ detailBody
         (
             floatToolbar
             (
+                set::object($case),
                 $isInModal ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
-                set::main($this->testcase->buildOperateMenu($case, 'view')),
-                set::suffix
-                (
-                    array
-                    (
-                        array('icon' => 'edit',  'url' => $this->createLink('testcase', 'edit',   "caseID={$case->id}")),
-                        array('icon' => 'copy',  'url' => $this->createLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}&from=testcase&param={$case->id}")),
-                        array('icon' => 'trash', 'url' => $this->createLink('testcase', 'delete', "caseID={$case->id}")),
-                    ),
-                ),
+                set::main($actions['mainActions']),
+                set::suffix($actions['suffixActions'])
             ),
         ),
     ),

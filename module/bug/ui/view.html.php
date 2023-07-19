@@ -119,44 +119,6 @@ $steps     = str_replace('<p></p>', '', $steps);
 $files = '';
 foreach($bug->files as $file) $files .= "{$file->title},";
 
-/* build operate menu. */
-$moduleName = $app->moduleName;
-$methodName = $app->methodName;
-foreach($config->{$moduleName}->actions->{$methodName} as $menu => $actionList)
-{
-    $$menu = array();
-    foreach($actionList as $action)
-    {
-        $actionData = $config->{$moduleName}->actionList[$action];
-
-        if(!empty($actionData['url']) && is_array($actionData['url']))
-        {
-            $module = $actionData['url']['module'];
-            $method = $actionData['url']['method'];
-            $params = $actionData['url']['params'];
-            if(!common::hasPriv($module, $method)) continue;
-            $actionData['url'] = helper::createLink($module, $method, $params);
-        }
-        else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
-        {
-            $module = $actionData['data-url']['module'];
-            $method = $actionData['data-url']['method'];
-            $params = $actionData['data-url']['params'];
-            if(!common::hasPriv($module, $method)) continue;
-            $actionData['data-url'] = helper::createLink($module, $method, $params);
-        }
-        else
-        {
-            if(!common::hasPriv($moduleName, $action)) continue;
-        }
-        if(!$this->{$moduleName}->isClickable($$moduleName, $action)) continue;
-
-        if($menu == 'suffixActions' && !empty($actionData['text'])) $actionData['text'] = '';
-
-        $$menu[] = $actionData;
-    }
-}
-
 detailHeader
 (
     to::title
@@ -208,6 +170,7 @@ $buildItems = function($items): array
     return $itemList;
 };
 
+$actions = $this->loadModel('common')->buildOperateMenu($bug);
 detailBody
 (
     sectionList
@@ -230,8 +193,8 @@ detailBody
     (
         set::object($bug),
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
-        set::main($mainActions),
-        set::suffix($suffixActions)
+        set::main($actions['mainActions']),
+        set::suffix($actions['suffixActions'])
     ),
     detailSide
     (

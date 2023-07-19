@@ -34,6 +34,12 @@ $config->testcase->actionList['review']['hint']        = $lang->testcase->review
 $config->testcase->actionList['review']['url']         = array('module' => 'testcase', 'method' => 'review', 'params' => 'caseID={id}');
 $config->testcase->actionList['review']['data-toggle'] = 'modal';
 
+$config->testcase->actionList['importToLib']['icon']        = 'assets';
+$config->testcase->actionList['importToLib']['text']        = $lang->testcase->importToLib;
+$config->testcase->actionList['importToLib']['hint']        = $lang->testcase->importToLib;
+$config->testcase->actionList['importToLib']['url']         = array('module' => 'testcase', 'method' => 'importToLib', 'params' => 'caseID={id}');
+$config->testcase->actionList['importToLib']['data-toggle'] = 'modal';
+
 $config->testcase->actionList['createBug']['icon']        = 'bug';
 $config->testcase->actionList['createBug']['text']        = $lang->testcase->createBug;
 $config->testcase->actionList['createBug']['hint']        = $lang->testcase->createBug;

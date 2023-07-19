@@ -19,8 +19,9 @@ $config->testcase->export   = new stdclass();
 $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status');
 
 $config->testcase->actions = new stdclass();
-$config->testcase->actions->browse = 'results,runcase,edit,review,createBug,create,showscript';
-$config->testcase->actions->view   = 'results,runcase';
+$config->testcase->actions->view = array();
+$config->testcase->actions->view['mainActions']   = array('runResult', 'runCase', 'review', 'importToLib', 'createBug', 'showScript');
+$config->testcase->actions->view['suffixActions'] = array('edit', 'create', 'delete');
 
 $config->testcase->exportFields = '
     id, product, branch, module, story,

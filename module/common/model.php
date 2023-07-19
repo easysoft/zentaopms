@@ -3948,6 +3948,62 @@ EOT;
         foreach($attrs as $attr => $value) $item[$attr] = $value;
         return $item;
     }
+
+    /**
+     * 按照模块生成详情页的操作按钮。
+     * Build operate actions menu.
+     *
+     * @param  object $data
+     * @access public
+     * @return array
+     */
+    public function buildOperateMenu(object $data): array
+    {
+        global $app, $config;
+
+        /* build operate menu. */
+        $moduleName = $app->moduleName;
+        $methodName = $app->methodName;
+        $actions    = array();
+
+        $this->loadModel($moduleName);
+        foreach($config->{$moduleName}->actions->{$methodName} as $menu => $actionList)
+        {
+            $$menu = array();
+            foreach($actionList as $action)
+            {
+                $actionData = $config->{$moduleName}->actionList[$action];
+
+                if(!empty($actionData['url']) && is_array($actionData['url']))
+                {
+                    $module = $actionData['url']['module'];
+                    $method = $actionData['url']['method'];
+                    $params = $actionData['url']['params'];
+                    if(!common::hasPriv($module, $method)) continue;
+                    $actionData['url'] = helper::createLink($module, $method, $params);
+                }
+                else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
+                {
+                    $module = $actionData['data-url']['module'];
+                    $method = $actionData['data-url']['method'];
+                    $params = $actionData['data-url']['params'];
+                    if(!common::hasPriv($module, $method)) continue;
+                    $actionData['data-url'] = helper::createLink($module, $method, $params);
+                }
+                else
+                {
+                    if(!common::hasPriv($moduleName, $action)) continue;
+                }
+                if(!$this->{$moduleName}->isClickable($data, $action)) continue;
+
+                if($menu == 'suffixActions' && !empty($actionData['text'])) $actionData['text'] = '';
+
+                $$menu[] = $actionData;
+            }
+            $actions[$menu] = $$menu;
+        }
+        return $actions;
+    }
 }
 
 class common extends commonModel

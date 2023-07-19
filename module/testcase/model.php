@@ -2575,57 +2575,6 @@ class testcaseModel extends model
     }
 
     /**
-     * 构造详情页或列表页需要的操作菜单。
-     * Build action menu.
-     *
-     * @param  object $case
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-    public function buildOperateMenu(object $case = null, string $type = 'view'): array
-    {
-        $caseID         = $case ? $case->id             : '{id}';
-        $runID          = $case ? $case->runID          : '0';
-        $version        = $case ? $case->version        : '';
-        $currentVersion = $case ? $case->currentVersion : '{version}';
-        $product        = $case ? $case->product        : '{product}';
-        $branch         = $case ? $case->branch         : '{branch}';
-        $module         = $case ? $case->module         : '{module}';
-
-        $params     = "caseID={$caseID}";
-        $editParams = $params;
-        if($this->app->tab == 'project')   $editParams = "{$params}&comment=false&projectID={$this->session->project}";
-        if($this->app->tab == 'execution') $editParams = "{$params}&comment=false&executionID={$this->session->execution}";
-        $createBugParams = "product={$product}&branch={$branch}&extra=caseID={$caseID},version={$version},runID=";
-        $copyParams      = "productID={$product}&branch={$branch}&moduleID={$module}&from=testcase&param={$caseID}";
-
-        $actions = array();
-        $actions['results']    = array('icon' => 'list-alt',  'text' => '结果',           'url' => helper::createLink('testcase', 'results',    "{$params}&version={$version}"),        'data-toggle' => 'modal');
-        $actions['runcase']    = array('icon' => 'play',      'text' => '执行',           'url' => helper::createLink('testcase', 'runCase',    "{$params}&version={$currentVersion}"), 'data-toggle' => 'modal');
-        $actions['edit']       = array('icon' => 'edit',      'text' => '编辑',           'url' => helper::createLink('testcase', 'edit',       $editParams));
-        $actions['review']     = array('icon' => 'review',    'text' => '审批',           'url' => helper::createLink('testcase', 'review',     $params), 'data-toggle' => 'modal');
-        $actions['createBug']  = array('icon' => 'bug',       'text' => '转Bug',          'url' => helper::createLink('testcase', 'createBug',  $createBugParams), 'data-toggle' => 'modal');
-        $actions['create']     = array('icon' => 'copy',      'text' => '复制',           'url' => helper::createLink('testcase', 'create',     $copyParams));
-        $actions['showscript'] = array('icon' => 'file-code', 'text' => '查看自动化脚本', 'url' => helper::createLink('testcase', 'showScript', $params), 'data-toggle' => 'modal');
-
-        foreach($actions as $action => $actionData)
-        {
-            $actionsConfig = $this->config->testcase->actions->{$type};
-            if(strpos(",{$actionsConfig},", ",{$action},") === false)
-            {
-                unset($actions[$action]);
-                continue;
-            }
-            $actions[$action]['hint'] = $actions[$action]['text'];
-            if($type == 'browse') unset($actions[$action]['text']);
-        }
-
-        if($type == 'browse') $this->config->testcase->dtable->fieldList['actions']['actionsMap'] = $actions;
-        return $actions;
-    }
-
-    /**
      * processDatas
      *
      * @param  array  $datas
