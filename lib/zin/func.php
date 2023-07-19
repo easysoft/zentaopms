@@ -1626,3 +1626,15 @@ function hr(): hr
 {
     return createWg('hr', func_get_args());
 }
+
+/**
+ * Global search widget.
+ *
+ * string commonSearchText
+ * string commonSearchUrl
+ * array  searchItems
+ */
+function globalSearch(): globalSearch
+{
+    return createWg('globalSearch', func_get_args());
+}
