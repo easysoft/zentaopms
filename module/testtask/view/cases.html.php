@@ -18,6 +18,7 @@
 <?php js::set('browseType', $browseType);?>
 <?php js::set('moduleID', $moduleID);?>
 <?php js::set('case2RunMap', $case2RunMap);?>
+<?php js::set('taskID', $taskID);?>
 <?php js::set('automation',     !empty($automation) ? $automation->id : 0);?>
 <?php $this->app->loadLang('zanode');?>
 <?php js::set('runCaseConfirm', $lang->zanode->runCaseConfirm);?>

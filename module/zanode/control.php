@@ -618,7 +618,7 @@ class zanode extends control
         if($_POST)
         {
             $caseIDList = $_POST['caseIDList'];
-            $runIDList  = $_POST['runIDList'];
+            $runIDList  = empty($_POST['runIDList']) ? array() : $_POST['runIDList'];
             $script     = $this->zanode->getAutomationByID($scriptID);
             $cases      = $this->loadModel('testcase')->getByList($caseIDList);
 
@@ -635,7 +635,7 @@ class zanode extends control
             $runIDListArray  = explode(',', $runIDList);
             $case2RunMap     = array();
 
-            foreach($caseIDListArray as $index => $caseID) $case2RunMap[$caseID] = $runIDListArray[$index];
+            foreach($caseIDListArray as $index => $caseID) $case2RunMap[$caseID] = empty($runIDListArray[$index]) ? 0 : $runIDListArray[$index];
 
             foreach($cases as $id => $case)
             {
