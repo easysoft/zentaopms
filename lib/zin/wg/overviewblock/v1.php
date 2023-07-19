@@ -30,7 +30,7 @@ class overviewBlock extends wg
 
     protected function buildCard($card): wg
     {
-        $class = 'text-2xl text-center leading-relaxed ' . (!empty($card->class) ? $card->class : '');
+        $class = 'text-2xl text-center leading-relaxed num ' . (!empty($card->class) ? $card->class : '');
 
         return col
         (
@@ -58,9 +58,9 @@ class overviewBlock extends wg
         $cards = array();
         foreach($group->cards as $card) $cards[] = $this->buildCard($card);
 
-        return div
+        return row
         (
-            setClass('cards flex w-1/2'),
+            setClass('w-1/2'),
             setStyle(array('margin-top' => '-20px')),
             $cards
         );

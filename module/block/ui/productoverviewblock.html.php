@@ -15,53 +15,50 @@ $id = $block->module . '-' . $block->code . '-' . $block->id;
 
 if($block->width == 1)
 {
-    panel
+    blockPanel
     (
-        setID($id),
-        setClass('product-overview-block'),
-        set::title($block->title),
-        set::titleClass('text-md'),
-        set::bodyClass('flex p-0'),
-        div
+        set::bodyClass('row items-center text-center'),
+        set::headingClass('border-0'),
+        cell
         (
-            setClass('card col w-1/3 mt-6'),
+            width('1/3'),
             a
             (
-                setClass('text-3xl text-center text-primary'),
+                setClass('text-3xl leading-none text-primary num'),
                 hasPriv('product', 'all') ? set::href(createLink('product', 'all', 'browseType=all')) : null,
                 $data->productCount
             ),
-            span
+            div
             (
-                setClass('text-gray text-sm text-center mt-3'),
+                setClass('text-gray text-sm mt-3'),
                 $lang->block->productoverview->productCount
             )
         ),
-        div
+        cell
         (
-            setClass('card col w-1/3 mt-6'),
-            span
+            width('1/3'),
+            div
             (
-                setClass('text-3xl text-center'),
+                setClass('text-3xl leading-none text-center num'),
                 $data->releaseCount
             ),
-            span
+            div
             (
-                setClass('text-gray text-sm text-center mt-3'),
+                setClass('text-gray text-sm mt-3'),
                 $lang->block->productoverview->releaseCount
             )
         ),
-        div
+        cell
         (
-            setClass('card col w-1/3 mt-6'),
-            span
+            width('1/3'),
+            div
             (
-                setClass('text-3xl text-center text-important'),
+                setClass('text-3xl leading-none text-important num'),
                 $data->milestoneCount
             ),
-            span
+            div
             (
-                setClass('text-gray text-sm text-center mt-3'),
+                setClass('text-gray text-sm mt-3'),
                 $lang->block->productoverview->milestoneCount
             )
         )
@@ -79,13 +76,11 @@ if($block->width == 3)
         $items[] = array('text' => $year . $suffix, 'url' => $url, 'data-load' => 'target', 'data-selector' => "#{$id}-annual", 'data-partial' => true);
     }
 
-    panel
+    blockPanel
     (
-        setID($id),
-        setClass('product-overview-block'),
-        set::title($block->title),
-        set::titleClass('text-md'),
         set::bodyClass('gradient flex p-0'),
+        set::headingClass('border-0'),
+        set::bodyProps(array('style' => array('background-image' => 'linear-gradient( 90deg, #ECF7FE 0%, #FFF 22%)'))),
         col
         (
             setID("{$id}-overview"),
@@ -100,13 +95,13 @@ if($block->width == 3)
                 setClass('flex mt-4'),
                 div
                 (
-                    setClass('cards flex w-2/5'),
+                    setClass(' flex w-2/5'),
                     div
                     (
-                        setClass('card col w-1/2'),
+                        setClass('col w-1/2'),
                         span
                         (
-                            setClass('text-3xl text-center'),
+                            setClass('text-3xl leading-none text-center'),
                             $data->productLineCount
                         ),
                         span
@@ -117,10 +112,10 @@ if($block->width == 3)
                     ),
                     div
                     (
-                        setClass('card col w-1/2'),
+                        setClass('col w-1/2'),
                         a
                         (
-                            setClass('text-3xl text-center text-primary'),
+                            setClass('text-3xl leading-none text-center text-primary'),
                             hasPriv('product', 'all') ? set::href(createLink('product', 'all', 'browseType=all')) : null,
                             $data->productCount
                         ),
@@ -133,13 +128,13 @@ if($block->width == 3)
                 ),
                 div
                 (
-                    setClass('cards flex w-3/5'),
+                    setClass(' flex w-3/5'),
                     div
                     (
-                        setClass('card col w-1/3'),
+                        setClass('col w-1/3'),
                         span
                         (
-                            setClass('text-3xl text-center border-l'),
+                            setClass('text-3xl leading-none text-center border-l'),
                             $data->unfinishedPlanCount
                         ),
                         span
@@ -150,10 +145,10 @@ if($block->width == 3)
                     ),
                     div
                     (
-                        setClass('card col w-1/3'),
+                        setClass('col w-1/3'),
                         span
                         (
-                            setClass('text-3xl text-center'),
+                            setClass('text-3xl leading-none text-center'),
                             $data->unclosedStoryCount
                         ),
                         span
@@ -164,10 +159,10 @@ if($block->width == 3)
                     ),
                     div
                     (
-                        setClass('card col w-1/3'),
+                        setClass('col w-1/3'),
                         span
                         (
-                            setClass('text-3xl text-center'),
+                            setClass('text-3xl leading-none text-center'),
                             $data->activeBugCount
                         ),
                         span
@@ -202,13 +197,13 @@ if($block->width == 3)
             ),
             div
             (
-                setClass('cards flex mt-4'),
+                setClass(' flex mt-4'),
                 div
                 (
-                    setClass('card col w-1/3'),
+                    setClass('col w-1/3'),
                     span
                     (
-                        setClass('text-3xl text-center border-l'),
+                        setClass('text-3xl leading-none text-center border-l'),
                         $data->finishedReleaseCount['year']
                     ),
                     span
@@ -229,10 +224,10 @@ if($block->width == 3)
                 ),
                 div
                 (
-                    setClass('card col w-1/3'),
+                    setClass('col w-1/3'),
                     span
                     (
-                        setClass('text-3xl text-center'),
+                        setClass('text-3xl leading-none text-center'),
                         $data->finishedStoryCount['year']
                     ),
                     span
@@ -253,10 +248,10 @@ if($block->width == 3)
                 ),
                 div
                 (
-                    setClass('card col w-1/3'),
+                    setClass('col w-1/3'),
                     span
                     (
-                        setClass('text-3xl text-center'),
+                        setClass('text-3xl leading-none text-center'),
                         $data->finishedStoryPoint['year']
                     ),
                     span
