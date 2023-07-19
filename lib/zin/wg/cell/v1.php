@@ -8,7 +8,7 @@ class cell extends wg
         'order?: int',
         'grow?: int',
         'shrink?: int',
-        'flex?: string="auto"',  // 'auto'|'none'|string
+        'flex?: string',        // 'auto'|'none'|'1'|string
         'width?: string|int',
         'align?: string'         // 'auto'|'flex-start'|'flex-end'|'center'|'baseline'|'stretch'
     );
