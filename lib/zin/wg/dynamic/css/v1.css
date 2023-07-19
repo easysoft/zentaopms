@@ -15,8 +15,10 @@
 .dynamic > li.trophy .dynamic-text {background: #fff;}
 .dynamic > li.trophy .dynamic-text img {opacity: 0.2; transform: rotate(10deg);}
 
-.dynamic-tag {position: absolute; top: 5px; left: -65px; font-size: 12px}
-.dynamic-tag-left {padding-left: 65px;}
+.dynamic-tag {position: absolute; top: 5px; left: -110px; font-size: 12px}
+.dynamic-tag-left {padding-left: 110px;}
+.dynamic-tag.has-time {left: -65px;}
+.has-time .dynamic-tag-left {padding-left: 65px;}
 
 .dynamic-sm {font-size: 12px}
 .dynamic-sm > li:before, .dynamic-sm > li > div:after {top: 10px; left: -20px; width: 11px; height: 11px}

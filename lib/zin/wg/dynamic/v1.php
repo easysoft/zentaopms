@@ -83,7 +83,7 @@ class dynamic extends wg
                 span
                 (
                     setClass('dynamic-tag p-1 text-gray'),
-                    $dynamic->time
+                    isset($dynamic->time) ? $dynamic->time : $dynamic->date,
                 ),
                 div
                 (
@@ -112,14 +112,16 @@ class dynamic extends wg
 
     protected function build(): wg
     {
+        $users    = $this->prop('users', (array)data('users'));
+        $dynamics = $this->prop('dynamics', (array)data('dynamics'));
+        $hasTime  = !empty($dynamisc) && isset(reset($dynamics)->time) ? 'has-time' : '';
+
         $dynamicListView = h::ul
         (
-            setClass('dynamic dynamic-tag-left pt-0 overflow-hidden'),
+            setClass('dynamic dynamic-tag-left pt-0 overflow-hidden has-time'),
             setClass($this->prop('className')),
         );
 
-        $users    = $this->prop('users', (array)data('users'));
-        $dynamics = $this->prop('dynamics', (array)data('dynamics'));
         foreach($dynamics as $dynamic)
         {
             if($dynamic->action == 'adjusttasktowait') continue;
