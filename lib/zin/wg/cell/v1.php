@@ -21,6 +21,7 @@ class cell extends wg
         $flex  = $this->prop('flex');
         if(!empty($width))
         {
+            $basis = $width;
             if(is_numeric($width)) $basis = $width . 'px';
             elseif(preg_match('/^(\d+)\/(\d+)$/', $width, $matches) !== 0) $basis = ((int)$matches[1] / (int)$matches[2] * 100) . '%';
         }
