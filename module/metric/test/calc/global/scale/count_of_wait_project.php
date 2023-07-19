@@ -18,4 +18,4 @@ cid=1
 
 */
 
-r($calc->getResult()) && p('') && e('25');
+r($calc->getResult()) && p('') && e('25'); // 测试全局范围内未开始项目数

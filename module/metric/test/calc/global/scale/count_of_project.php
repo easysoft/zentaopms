@@ -14,8 +14,6 @@ title=count_of_project
 timeout=0
 cid=1
 
-- 执行calc模块的getResult方法  @25
-
 */
 
-r($calc->getResult()) && p('') && e('100');
+r($calc->getResult()) && p('') && e('100'); // 测试项目全局范围内项目总数

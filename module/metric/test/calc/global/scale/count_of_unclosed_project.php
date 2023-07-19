@@ -16,4 +16,4 @@ cid=1
 
 */
 
-r($calc->getResult()) && p('') && e('75');
+r($calc->getResult()) && p('') && e('75'); //测试全局范围内未关闭的项目数
