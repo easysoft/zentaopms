@@ -5,12 +5,12 @@ namespace zin;
 class cell extends wg
 {
     protected static array $defineProps = array(
-        'order?: int',
-        'grow?: int',
-        'shrink?: int',
-        'flex?: string',        // 'auto'|'none'|'1'|string
-        'width?: string|int',
-        'align?: string'         // 'auto'|'flex-start'|'flex-end'|'center'|'baseline'|'stretch'
+        'flex?: string',        // flex 类型或具体的值，例如：'auto'、'none'、'1'、'auto 1 1'。
+        'order?: int',          // flex-order 属性。
+        'grow?: int',           // flex-grow 属性。
+        'shrink?: int',         // flex-shrink 属性。
+        'width?: string|int',   // flex-basis 属性，支持数值或百分比，例如 128px、1/3、30%、128px。
+        'align?: string'        // align-self 属性，例如 'auto'、'flex-start'、'flex-end'、'center'、'baseline'、'stretch'。
     );
 
     protected function build(): wg

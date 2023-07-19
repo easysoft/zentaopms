@@ -5,8 +5,8 @@ namespace zin;
 class row extends wg
 {
     protected static array $defineProps = array(
-        'justify?:string',
-        'align?:string'
+        'justify?: string',
+        'align?: string'
     );
 
     protected function build(): wg
