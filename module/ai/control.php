@@ -264,7 +264,7 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID") . '#app=admin'));
         }
 
-        $this->view->activeDataSource = empty($prompt->module) ? 'story' : $prompt->module;
+        $this->view->activeDataSource = empty($prompt->module) ? 'my' : $prompt->module;
         $this->view->dataSource       = $this->config->ai->dataSource;
         $this->view->prompt           = $prompt;
         $this->view->promptID         = $promptID;
