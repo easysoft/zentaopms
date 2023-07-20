@@ -14,30 +14,8 @@ namespace zin;
 $cards = array();
 foreach($projects as $projectID => $project)
 {
-    $viewLink = $this->createLink('project', 'index', "projectID=$project->id");
-
-    if($project->model == 'waterfall')
-    {
-        $stages = array();
-        foreach($project->executions as $stage)
-        {
-            if($stage->grade == 1) $stages[] = $stage;
-        }
-
-        $stageItems = array();
-        foreach($stages as $stage)
-        {
-            $stageItems[] = div
-            (
-                set::class("project-stage-item is-{$stage->status}" . ($stage->status != 'wait' ? ' is-going' : '')),
-                div($stage->name)
-            );
-        }
-    }
-    else
-    {
-        $execution = empty($project->executions) ? '' : end($project->executions);
-    }
+    $viewLink  = $this->createLink('project', 'index', "projectID=$project->id");
+    $execution = empty($project->executions) ? '' : end($project->executions);
 
     $cards[] = cell
     (
@@ -53,26 +31,7 @@ foreach($projects as $projectID => $project)
                 $project->name
             )
         ),
-        $project->model == 'waterfall' && empty($stages) ? label
-        (
-            zget($lang->project->statusList, $project->status),
-            setClass('label-outline')
-        ) : null,
-        $project->model == 'waterfall' && !empty($stages) ? p
-        (
-            set::class('text-gray'),
-            $lang->project->ongoingStage
-        ) : null,
-        $project->model == 'waterfall' && !empty($stages) ? div
-        (
-            set::class('project-stages-container'),
-            div
-            (
-                set::class('project-stages-row'),
-                $stageItems,
-            )
-        ) : null,
-        ($project->model != 'waterfall' && $project->multiple && $execution) ?  div
+        ($project->multiple && $execution) ?  div
         (
             set('class', 'card-body py-1.5'),
             div
