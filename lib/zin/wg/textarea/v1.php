@@ -12,6 +12,7 @@ class textarea extends wg
         'placeholder?: string',
         'rows?: int',
         'cols?: int',
+        'value?: string',
     );
 
     protected static array $defaultProps = array(
@@ -19,8 +20,24 @@ class textarea extends wg
         'rows' => 10
     );
 
+    protected function onAddChild(array|string|wg|directive $child)
+    {
+        if(is_string($child) && !$this->props->has('value'))
+        {
+            $this->setProp('value', $child);
+            return false;
+        }
+
+        return $child;
+    }
+
     protected function build(): wg
     {
-        return h::textarea(set($this->props), $this->children());
+        return h::textarea
+        (
+            set($this->props->pick(array('name', 'id', 'class', 'required', 'placeholder', 'rows', 'cols'))),
+            $this->prop('value'),
+            $this->children()
+        );
     }
 }
