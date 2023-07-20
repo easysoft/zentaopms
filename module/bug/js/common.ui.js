@@ -768,7 +768,8 @@ function loadBuildActions()
             if(typeof(branch)    == 'undefined') branch    = 0;
             if(typeof(projectID) == 'undefined') projectID = 0;
 
-            let link = $.createLink('release', 'create', 'productID=' + $('[name="product"]').val() + '&branch=' + branch);
+            let productID = $('[name="product"]').length > 0 ? $('[name="product"]').val() : bug.productID;
+            let link = $.createLink('release', 'create', 'productID=' + productID + '&branch=' + branch);
             if(projectID > 0) link = $.createLink('projectrelease', 'create', 'projectID=' + projectID);
 
             html += '<a href="' + link + '" data-toggle="modal" style="padding-right:5px">' + createRelease + '</a> ';

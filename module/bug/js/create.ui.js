@@ -1,21 +1,21 @@
 $(function()
 {
     changeProductConfirmed = true;
-    if(parseInt($('#execution').val()))
+    if(parseInt(bug.execution.id))
     {
         changeExecution();
     }
-    else if(parseInt($('#project').val()))
+    else if(parseInt(bug.project))
     {
-        const projectID = $('#project').val()
+        const projectID = bug.projectID;
         loadProjectBuilds(projectID);
         loadAssignedToByProject(projectID);
     }
     else
     {
-        const productID  = $('#product').val();
-        const moduleID   = $('#module').val();
-        const assignedTo = $('#assignedTo').val();
+        const productID  = bug.productID;
+        const moduleID   = bug.moduleID;
+        const assignedTo = bug.assignedTo;
         if(!assignedTo) setTimeout(function(){loadAssignedToByModule(moduleID, productID)}, 500);
     }
     loadBuildActions();
