@@ -6,8 +6,9 @@ $config->testtask->create->requiredFields = 'build,begin,end,name';
 $config->testtask->edit->requiredFields   = 'build,begin,end,name';
 
 $config->testtask->actions = new stdclass();
-$config->testtask->actions->browse = 'cases,linkCase,report,view,edit,delete';
-$config->testtask->actions->view   = 'start,close,block,activate,cases,linkCase';
+$config->testtask->actions->view = array();
+$config->testtask->actions->view['mainActions']   = array('start', 'close', 'block', 'activate', 'cases', 'linkCase');
+$config->testtask->actions->view['suffixActions'] = array('edit', 'delete');
 
 $config->testtask->importUnit = new stdclass();
 $config->testtask->importUnit->requiredFields = 'execution,build,begin,end,name,resultFile';

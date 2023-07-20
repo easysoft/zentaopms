@@ -40,33 +40,7 @@ if($task->mailto)
     foreach(explode(',', str_replace(' ', '', $task->mailto)) as $account) $mailto .= zget($users, $account, $account);
 }
 
-$actionList  = array();
-$actionCodes = explode(',', $config->testtask->actions->view);
-foreach($actionCodes as $actionCode)
-{
-    $actionConfig = $config->testtask->actionList[$actionCode];
-    if(!empty($actionConfig['url']['module']) && !empty($actionConfig['url']['method']))
-    {
-        $moduleName = $actionConfig['url']['module'];
-        $methodName = $actionConfig['url']['method'];
-
-        if(!$this->testtask->isClickable($task, $actionCode)) continue;
-
-        $params = !empty($actionConfig['url']['params']) ? $actionConfig['url']['params'] : array();
-
-        preg_match_all("/\{(.+?)\}/i", $params, $vars);
-        foreach($vars[0] as $key => $var)
-        {
-            $realVar = $vars[1][$key];
-            $params = str_replace($var, (string)$task->$realVar, $params);
-        }
-
-        $actionConfig['url'] = createLink($moduleName, $methodName, $params);
-    }
-
-    $actionList[$actionCode] = $actionConfig;
-}
-
+$actions = $this->loadModel('common')->buildOperateMenu($task);
 detailBody
 (
     sectionList
@@ -82,19 +56,10 @@ detailBody
         (
             floatToolbar
             (
-                set::prefix
-                (
-                    array(array('icon' => 'back', 'text' => $lang->goback))
-                ),
-                set::main($actionList),
-                set::suffix
-                (
-                    array
-                    (
-                        array('icon' => 'edit',  'url' => $this->createLink('testtask', 'edit',   "taskID={$testtask->id}")),
-                        array('icon' => 'trash', 'url' => $this->createLink('testtask', 'delete', "taskID={$testtask->id}")),
-                    )
-                )
+                set::object($task),
+                isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
+                set::main($actions['mainActions']),
+                set::suffix($actions['suffixActions'])
             )
         )
     ),
