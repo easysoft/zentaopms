@@ -65,7 +65,7 @@ class branchModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($productID and $executionID)->andWhere('id')->in(array_keys($executionBranches))->fi()
-            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF(!in_array($browseType, array('withClosed', 'all')))->andWhere('status')->eq($browseType)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

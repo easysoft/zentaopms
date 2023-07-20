@@ -12,6 +12,7 @@ namespace zin;
 /* ====== Preparing and processing page data ====== */
 jsVar('confirmFinish', $lang->task->confirmFinish);
 jsVar('noticeTaskStart', $lang->task->noticeTaskStart);
+jsVar('type', $type);
 
 /* zin: Set variables to define control for form. */
 $hidden = $type != 'story' && $module->type == 'story';
@@ -27,21 +28,25 @@ formPanel
         set::class($hiddenProduct ? 'hidden' : ''),
         formGroup
         (
-            set::name('root'),
             set::label($lang->tree->product),
-            set::control('picker'),
-            set::value($module->root),
-            set::items($products)
+            picker
+            (
+                set::name('root'),
+                set::value($module->root),
+                set::items($products),
+                on::change('loadBranches')
+            )
         ),
         $product->type != 'normal' ? formGroup
         (
-            set::label($lang->tree->product),
+            setClass('branchBox'),
             control
             (
                 set::type('picker'),
                 set::name('branch'),
                 set::value($module->branch),
-                set::items($branches)
+                set::items($branches),
+                on::change('loadModules')
             )
         ) : null,
     ) : null,
@@ -56,7 +61,7 @@ formPanel
     ) : null,
     $module->type != 'line' ? formGroup
     (
-        set::class($hidden ? 'hidden' : ''),
+        set::class($hidden ? 'moduleBox hidden' : 'moduleBox'),
         set::label(($type == 'doc' or $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent),
         control
         (
