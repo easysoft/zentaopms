@@ -435,11 +435,14 @@ class bugZen extends bug
         $executionID = $bug->executionID;
 
         $projects    = $bug->projects;
-        $executions  = array(0 => '');
+        $executions  = array();
 
-        if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', (string)$projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
-        $execution  = $executionID ? $this->loadModel('execution')->getByID($executionID) : '';
-        $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
+        $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', (string)$projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
+        if($executionID)
+        {
+            $execution  = $this->loadModel('execution')->getByID($executionID);
+            $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
+        }
 
         return $this->updateBug($bug, array('executions' => $executions, 'execution' => $execution));
     }
