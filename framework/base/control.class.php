@@ -493,7 +493,7 @@ class baseControl
 
         /* Common css file with lang. like module/story/css/common.en.css. */
         $mainCssLangFile = $mainCssPath . $devicePrefix . "common.{$clientLang}{$suffix}.css";
-        if(!file_exists($mainCssLangFile) and $notCNLang) $mainCssLangFile = $mainCssPath . $devicePrefix . "common.en.css";
+        if(!file_exists($mainCssLangFile) and $notCNLang) $mainCssLangFile = $mainCssPath . $devicePrefix . "common{$suffix}.en.css";
         if(is_file($mainCssLangFile)) $css .= file_get_contents($mainCssLangFile);
 
         /* Method css file. like module/story/css/create.css. */
@@ -515,10 +515,10 @@ class baseControl
                 $cssMethodExt = $cssPath . $methodName . DS;
                 $cssCommonExt = $cssPath . 'common' . DS;
 
-                $cssExtFiles = glob($cssCommonExt . $devicePrefix . '*.css');
+                $cssExtFiles = glob($cssCommonExt . $devicePrefix . "*{$suffix}.css");
                 if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
 
-                $cssExtFiles = glob($cssMethodExt . $devicePrefix . '*.css');
+                $cssExtFiles = glob($cssMethodExt . $devicePrefix . "*{$suffix}.css");
                 if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
             }
         }
@@ -609,10 +609,10 @@ class baseControl
                 $jsMethodExt = $jsPath . $methodName . DS;
                 $jsCommonExt = $jsPath . 'common' . DS;
 
-                $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . '*.js');
+                $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . "*{$suffix}.js");
                 if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
 
-                $jsExtFiles = glob($jsMethodExt . $this->devicePrefix . '*.js');
+                $jsExtFiles = glob($jsMethodExt . $this->devicePrefix . "*{$suffix}.js");
                 if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
             }
         }
