@@ -43,6 +43,7 @@ class customModel extends model
         }
 
         $sectionLang = array();
+
         foreach($allCustomLang as $customLang)
         {
             $sectionLang[$customLang->module][$customLang->section][$customLang->lang] = $customLang->lang;
@@ -52,6 +53,7 @@ class customModel extends model
         foreach($allCustomLang as $customLang)
         {
             if(isset($sectionLang[$customLang->module][$customLang->section]['all']) and isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) and $customLang->lang == 'all') continue;
+
 
             if(strpos($customLang->section, 'featureBar-') !== false or strpos($customLang->section, 'moreSelects-') !== false)
             {
@@ -72,6 +74,7 @@ class customModel extends model
                 $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
             }
         }
+
 
         return $processedLang;
     }

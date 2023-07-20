@@ -22,31 +22,68 @@ class ops extends control
         $this->locate($this->createLink('deploy', 'browse'));
     }
 
-    public function provider()
+    /**
+     * 管理机房供应商信息。
+     * Manger provider options of serverroom. 
+     * 
+     * @param string $currentLang
+     * @access public
+     * @return void
+     */
+    public function provider($currentLang = '')
     {
-        $this->setting('serverroom', 'provider');
+        $this->setting('serverroom', 'provider', 'provider', $currentLang);
     }
 
-    public function city()
+    /**
+     * 管理机房城市信息。
+     * Manger city options of serverroom. 
+     * 
+     * @param string $currentLang
+     * @access public
+     * @return void
+     */
+    public function city($currentLang = '')
     {
-        $this->setting('serverroom', 'city');
+        $this->setting('serverroom', 'city', 'city', $currentLang);
     }
     
-    public function cpuBrand()
+    /**
+     * 管理主机CPU品牌信息。
+     * Manger cpuBrand options of host. 
+     * 
+     * @param string $currentLang
+     * @access public
+     * @return void
+     */
+    public function cpuBrand($currentLang = '')
     {
-        $this->setting('host', 'cpuBrand');
+        $this->setting('host', 'cpuBrand', 'cpuBrand', $currentLang);
     }
 
-    public function os($field = 'osVersion')
+    /**
+     * 管理主机系统版本信息。
+     * Manger OS options of host. 
+     * 
+     * @param string $currentLang
+     * @param string $field
+     * @access public
+     * @return void
+     */
+    public function os($currentLang = '', $field = 'linux')
     {
-        $this->setting('host', $field);
+        $this->setting('host', 'os', $field, $currentLang);
     }
 
-    public function setting($module = 'serverroom', $field = 'provider', $currentLang = '')
+    /**
+     * 自定义语言项。
+     * Manger options of lang. 
+     * @param string $currentLang
+     * @access public
+     * @return void
+     */
+    public function setting($module, $method, $field = 'provider', $currentLang = '')
     {
-        if($module == 'host') $module = 'zahost';
-        if($field == 'osVersion') $field = 'linux';
-
         $fieldList = $field . 'List';
         if($_POST)
         {
@@ -61,25 +98,21 @@ class ops extends control
 
                 $this->custom->setItem("{$lang}.$module.$fieldList.{$key}.{$system}", $value);
             }
-            if(dao::isError()) die(js::error(dao::getError()));
-            $target = isonlybody() ? 'parent.parent' : 'parent';
-            $lang   = str_replace('-', '_', $lang);
-            die(js::locate($this->createLink('ops', $this->methodName, "field={$field}"), $target));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $lang = str_replace('-', '_', $lang);
+            return $this->send(array('result' => 'success', 'load' => $this->createLink('ops', $method, "lang=$lang")));
         }
 
-        $langModule = $module;
-        if($langModule == 'host') $langModule = 'zahost';
-
         $this->app->loadLang('custom');
-        $this->app->loadLang($langModule);
+        $this->app->loadLang($module);
 
         if(empty($currentLang)) $currentLang = str_replace('-', '_', $this->app->getClientLang());
 
-        $this->view->title = $this->lang->ops->setting;
+        $this->view->title      = $this->lang->ops->setting;
         $this->view->position[] = $this->lang->ops->setting;
 
         $this->view->module      = $module;
-        $this->view->langModule  = $langModule;
         $this->view->field       = $field;
         $this->view->fieldList   = $fieldList;
         $this->view->currentLang = $currentLang;

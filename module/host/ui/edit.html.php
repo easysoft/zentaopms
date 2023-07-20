@@ -81,6 +81,12 @@ formPanel
             set::name('memory'),
             set::label($lang->host->memory),
             set::value($host->memory),
+            set::control(array
+            (
+                'type'        => 'inputControl',
+                'suffix'      => 'GB',
+                'suffixWidth' => 40,
+            )),
         ),
         formGroup
         (
@@ -88,6 +94,12 @@ formPanel
             set::name('diskSize'),
             set::label($lang->host->diskSize),
             set::value($host->diskSize),
+            set::control(array
+            (
+                'type'        => 'inputControl',
+                'suffix'      => 'GB',
+                'suffixWidth' => 40,
+            )),
         )
     ),
     formRow
