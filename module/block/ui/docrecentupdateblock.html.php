@@ -37,19 +37,20 @@ foreach($docList as $doc)
     $docItems[] = cell
     (
         set::width('32%'),
-        setClass('border rounded-lg shadow p-2 relative'),
+        setStyle('width', '32%'),
+        setClass('border rounded-lg p-2'),
         a
         (
             setClass('text-left w-full'),
             set('href', $canView ? createLink('doc', 'view', "docID={$doc->id}") : null),
             span
             (
-                setClass('text-gray absolute right-2 my-2'),
+                setClass('text-gray my-2 pl-2 pull-right'),
                 $editTip,
             ),
             div
             (
-                setClass('article-h3 pr-1 my-2 mr-2'),
+                setClass('article-h3 my-2 mr-2 clip'),
                 img
                 (
                     setClass('inline pr-1'),
