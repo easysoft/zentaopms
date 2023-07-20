@@ -286,49 +286,6 @@ $lang->ai->dataSource['doc']['doc']['addedDate']  = '创建日期';
 $lang->ai->dataSource['doc']['doc']['editedBy']   = '修改者';
 $lang->ai->dataSource['doc']['doc']['editedDate'] = '修改日期';
 
-$lang->ai->dataSource['task']['task']['common']      = '任务';
-$lang->ai->dataSource['task']['task']['name']        = '任务名称';
-$lang->ai->dataSource['task']['task']['pri']         = '优先级';
-$lang->ai->dataSource['task']['task']['status']      = '状态';
-$lang->ai->dataSource['task']['task']['estimate']    = '预计';
-$lang->ai->dataSource['task']['task']['consumed']    = '消耗';
-$lang->ai->dataSource['task']['task']['left']        = '剩余';
-$lang->ai->dataSource['task']['task']['progress']    = '进度';
-$lang->ai->dataSource['task']['task']['estStarted']  = '预计开始';
-$lang->ai->dataSource['task']['task']['realStarted'] = '实际开始';
-
-$lang->ai->dataSource['case']['case']['common']        = '用例';
-$lang->ai->dataSource['case']['case']['title']         = '标题';
-$lang->ai->dataSource['case']['case']['precondition']  = '前置条件';
-$lang->ai->dataSource['case']['case']['scene']         = '所属场景';
-$lang->ai->dataSource['case']['case']['product']       = '所属产品';
-$lang->ai->dataSource['case']['case']['module']        = '所属模块';
-$lang->ai->dataSource['case']['case']['pri']           = '优先级';
-$lang->ai->dataSource['case']['case']['type']          = '类型';
-$lang->ai->dataSource['case']['case']['lastRunResult'] = '结果';
-$lang->ai->dataSource['case']['case']['status']        = '状态';
-
-$lang->ai->dataSource['case']['steps']['common'] = '步骤列表';
-$lang->ai->dataSource['case']['steps']['desc']   = '步骤描述';
-$lang->ai->dataSource['case']['steps']['expect'] = '预期';
-
-$lang->ai->dataSource['bug']['bug']['common']    = 'Bug';
-$lang->ai->dataSource['bug']['bug']['title']     = 'Bug标题';
-$lang->ai->dataSource['bug']['bug']['steps']     = '重现步骤';
-$lang->ai->dataSource['bug']['bug']['severity']  = '级别';
-$lang->ai->dataSource['bug']['bug']['pri']       = '优先级';
-$lang->ai->dataSource['bug']['bug']['status']    = '状态';
-$lang->ai->dataSource['bug']['bug']['confirmed'] = '确认';
-$lang->ai->dataSource['bug']['bug']['type']      = 'Bug类型';
-
-$lang->ai->dataSource['doc']['doc']['common']     = '文档';
-$lang->ai->dataSource['doc']['doc']['title']      = '文档标题';
-$lang->ai->dataSource['doc']['doc']['content']    = '文档正文';
-$lang->ai->dataSource['doc']['doc']['addedBy']    = '创建者';
-$lang->ai->dataSource['doc']['doc']['addedDate']  = '创建日期';
-$lang->ai->dataSource['doc']['doc']['editedBy']   = '修改者';
-$lang->ai->dataSource['doc']['doc']['editedDate'] = '修改日期';
-
 /* Target form definition. See `$config->ai->targetForm`. */
 $lang->ai->targetForm = array();
 $lang->ai->targetForm['product']['common']        = '产品';
