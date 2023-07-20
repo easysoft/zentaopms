@@ -1,55 +1,34 @@
-/**
- * Toggle acl.
- *
- * @param  string $acl
- * @param  string $type
- * @access public
- * @return void
- */
-window.toggleAcl = function(type)
+$('.form-row').on('click', '.btn-add', function()
 {
-    const acl = $('input[name=acl]:checked').val();
-    if(acl == 'private')
+    var $newRow = $(this).closest('tr').clone();
+    $newRow.find('input').val('');
+    $newRow.find('textarea').val('');
+
+    var key = $newRow.data('key');
+
+    $newRow.attr('data-key', genKey());
+
+    if($(`tr[data-parent=${key}]`).length > 0)
     {
-        $('#whiteListBox').removeClass('hidden');
+        $(`tr[data-parent=${key}]`).last().after($newRow);
     }
     else
     {
-        $('#whiteListBox').addClass('hidden');
+        $(this).closest('tr').after($newRow);
     }
-}
+});
 
-/**
- * Toggle lib type.
- *
- * @param  string $libType
- * @access public
- * @return void
- */
-window.toggleLibType = function()
+$('.form-row').on('click', '.btn-split', function()
 {
-    const libType = $('input[name=libType]:checked').val();
-    if(libType == 'project')
-    {
-        $('#projectBox').removeClass('hidden');
-        $('#productBox').addClass('hidden');
-        $('#acl_default').parent().show();
-        $('#acl_default').next('label').html($('#acl_default').next('label').html().replace(productLang, projectLang));
-    }
-    else if(libType == 'product')
-    {
-        $('#projectBox').addClass('hidden');
-        $('#productBox').removeClass('hidden');
-        $('#acl_default').parent().show();
-        $('#acl_default').next('label').html($('#acl_default').next('label').html().replace(projectLang, productLang));
-    }
-    else
-    {
-        const acl = $("input[name='acl']:checked").val();
-        if(acl == 'default') $("input[id='acl_open']").prop('checked', true);
+    var $newRow = $(this).closest('tr').clone();
+    $newRow.find('input').val('');
+    $newRow.find('textarea').val('');
 
-        $('#projectBox').addClass('hidden');
-        $('#productBox').addClass('hidden');
-        $('#acl_default').parent().hide();
-    }
-}
+    $newRow.attr('data-parent', $newRow.data('key'));
+    $newRow.attr('data-key', genKey());
+    $newRow.attr('data-level', $newRow.data('level') + 1);
+    $newRow.addClass('child');
+    $newRow.find('td').first().css('padding-left', $newRow.data('level') * 10 + 'px');
+
+    $(this).closest('tr').after($newRow);
+});

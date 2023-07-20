@@ -288,6 +288,7 @@ formPanel
                 (
                     select
                     (
+                        setClass('objectType'),
                         set::value('object'),
                         set::items($lang->api->paramsTypeOptions)
                     )
@@ -376,6 +377,9 @@ formPanel
             h::tr
             (
                 setClass('input-row'),
+                set('data-level', 1),
+                set('data-key', 'origin'),
+                set('data-parent', '0'),
                 h::td
                 (
                     input(),
@@ -384,6 +388,7 @@ formPanel
                 (
                     select
                     (
+                        setClass('objectType'),
                         set::value('object'),
                         set::items($lang->api->paramsTypeOptions)
                     )
@@ -424,6 +429,7 @@ formPanel
             ),
         ),
     ),
+    formHidden('response', '[]'),
     formGroup
     (
         set::width('1/2'),

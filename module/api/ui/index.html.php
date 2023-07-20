@@ -63,7 +63,6 @@ toolbar
         'class'       => 'btn primary',
         'text'        => $lang->api->createApi,
         'url'         => createLink('api', 'create', "libID={$libID}&moduleID={$moduleID}"),
-        'data-toggle' => 'modal'
     ))) : null,
 );
 
