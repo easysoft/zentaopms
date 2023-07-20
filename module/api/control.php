@@ -302,11 +302,8 @@ class api extends control
             $this->api->publishLib($data);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->sendSuccess(array('locate' => 'parent'));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
-
-        $libName = isset($lib->name) ? $lib->name : '';
-        $this->view->title = $this->lang->api->createRelease . $libName;
 
         $this->display();
     }
