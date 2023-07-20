@@ -210,8 +210,9 @@ class release extends control
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
             ->where('t1.id')->in($release->stories)
             ->andWhere('t1.deleted')->eq(0)
+            ->groupBy('t1.id')
             ->beginIF($type == 'story')->orderBy($sort)->fi()
-            ->page($storyPager)
+            ->page($storyPager, 't1.id')
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
@@ -219,27 +220,36 @@ class release extends control
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
-        $sort = common::appendOrder($orderBy);
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)
-            ->where('id')->in($release->bugs)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($type == 'bug')->orderBy($sort)->fi()
-            ->page($bugPager)
-            ->fetchAll();
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
+        $sort     = common::appendOrder($orderBy);
+        $bugs     = array();
+        if($release->bugs)
+        {
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)
+                ->where('id')->in($release->bugs)
+                ->andWhere('deleted')->eq(0)
+                ->beginIF($type == 'bug')->orderBy($sort)->fi()
+                ->page($bugPager)
+                ->fetchAll();
+
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
+        }
 
         $sort = common::appendOrder($orderBy);
         if($type == 'leftBug' and strpos($orderBy, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
         $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
 
-        $leftBugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->beginIF($release->leftBugs)->andWhere('id')->in($release->leftBugs)->fi()
-            ->beginIF($type == 'leftBug')->orderBy($sort)->fi()
-            ->page($leftBugPager)
-            ->fetchAll();
+        $leftBugs = array();
+        if($release->leftBugs)
+        {
+            $leftBugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in($release->leftBugs)
+                ->beginIF($type == 'leftBug')->orderBy($sort)->fi()
+                ->page($leftBugPager)
+                ->fetchAll();
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
+        }
 
         $this->commonAction($release->product);
         $product = $this->product->getById($release->product);
