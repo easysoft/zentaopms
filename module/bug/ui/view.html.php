@@ -261,7 +261,7 @@ modal
             btn($lang->cancel, set::id('cancelButton'), set('data-dismiss', 'modal'))
         )
     ),
-    form
+    formPanel
     (
         on::change('#taskProjects', 'changeTaskProjects'),
         set::actions(''),
