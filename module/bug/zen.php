@@ -434,8 +434,8 @@ class bugZen extends bug
         $projectID   = $bug->projectID;
         $executionID = $bug->executionID;
 
-        $projects    = $bug->projects;
         $executions  = array();
+        $execution   = null;
 
         $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', (string)$projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
         if($executionID)
