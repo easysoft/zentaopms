@@ -118,6 +118,7 @@ $lang->ai->moduleDisableTip = 'Module is automatically selected based on selecte
 /* Data source definition. */
 $lang->ai->dataSource = array();
 
+$lang->ai->dataSource['my']['common']          = 'My';
 $lang->ai->dataSource['product']['common']     = 'Product';
 $lang->ai->dataSource['story']['common']       = 'Story';
 $lang->ai->dataSource['execution']['common']   = 'Execution';
@@ -128,6 +129,17 @@ $lang->ai->dataSource['task']['common']        = 'Task';
 $lang->ai->dataSource['case']['common']        = 'Test Case';
 $lang->ai->dataSource['bug']['common']         = 'Bug';
 $lang->ai->dataSource['doc']['common']         = 'Document';
+
+$lang->ai->dataSource['my']['efforts']['common']    = 'Efforts';
+$lang->ai->dataSource['my']['efforts']['date']      = 'Date';
+$lang->ai->dataSource['my']['efforts']['work']      = 'Work';
+$lang->ai->dataSource['my']['efforts']['account']   = 'Account';
+$lang->ai->dataSource['my']['efforts']['consumed']  = 'Consumed';
+$lang->ai->dataSource['my']['efforts']['left']      = 'Left';
+$lang->ai->dataSource['my']['efforts']['objectID']  = 'Object';
+$lang->ai->dataSource['my']['efforts']['product']   = 'Product';
+$lang->ai->dataSource['my']['efforts']['project']   = 'Project';
+$lang->ai->dataSource['my']['efforts']['execution'] = 'Execution';
 
 $lang->ai->dataSource['product']['product']['common']  = 'Product';
 $lang->ai->dataSource['product']['product']['name']    = 'Product Name';

@@ -119,6 +119,7 @@ $lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
 /* Data source definition. */
 $lang->ai->dataSource = array();
 
+$lang->ai->dataSource['my']['common']          = '地盘';
 $lang->ai->dataSource['product']['common']     = '产品';
 $lang->ai->dataSource['story']['common']       = '需求';
 $lang->ai->dataSource['execution']['common']   = '执行';
@@ -129,6 +130,17 @@ $lang->ai->dataSource['task']['common']        = '任务';
 $lang->ai->dataSource['case']['common']        = '用例';
 $lang->ai->dataSource['bug']['common']         = 'Bug';
 $lang->ai->dataSource['doc']['common']         = '文档';
+
+$lang->ai->dataSource['my']['efforts']['common']    = '日志列表';
+$lang->ai->dataSource['my']['efforts']['date']      = '日期';
+$lang->ai->dataSource['my']['efforts']['work']      = '工作内容';
+$lang->ai->dataSource['my']['efforts']['account']   = '记录人';
+$lang->ai->dataSource['my']['efforts']['consumed']  = '耗时';
+$lang->ai->dataSource['my']['efforts']['left']      = '剩余';
+$lang->ai->dataSource['my']['efforts']['objectID']  = '对象';
+$lang->ai->dataSource['my']['efforts']['product']   = '产品';
+$lang->ai->dataSource['my']['efforts']['project']   = '项目';
+$lang->ai->dataSource['my']['efforts']['execution'] = '执行';
 
 $lang->ai->dataSource['product']['product']['common']  = '产品';
 $lang->ai->dataSource['product']['product']['name']    = '产品名称';
