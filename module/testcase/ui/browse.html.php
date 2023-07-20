@@ -86,7 +86,7 @@ if($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchCon
 if($canBatchChangeBranch)
 {
     $branchItems = array();
-    foreach($branchTagOption as $branchID => $branchName) $branchItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchId"));
+    foreach($branchTagOption as $branchID => $branchName) $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchID"));
 
     menu
     (
