@@ -1534,6 +1534,7 @@ class testcase extends control
         $bugs2Link = array_chunk($bugs2Link, $pager->recPerPage);
 
         /* Assign. */
+        $this->view->title      = $this->lang->testcase->linkBugs;
         $this->view->case       = $case;
         $this->view->bugs2Link  = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
