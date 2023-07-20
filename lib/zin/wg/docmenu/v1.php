@@ -32,8 +32,8 @@ class docMenu extends wg
         $url = $item->url;
         if(!empty($url)) return $url;
 
-        $linkParams = sprintf($this->linkParams, "libID={$this->libID}&moduleID={$this->moduleID}");
-        if($this->spaceType != 'api' && $this->rawModule == 'api') $linkParams = "objectID={$item->objectID}&{$linkParams}";
+        $linkParams = sprintf($this->linkParams, "libID={$item->id}&moduleID={$this->moduleID}");
+        if(in_array($this->spaceType, array('product', 'project', 'custom'))) $linkParams = "objectID={$item->objectID}&{$linkParams}";
 
         $objectType = $this->objectType;
 
@@ -69,7 +69,10 @@ class docMenu extends wg
                 $type       = in_array(strtolower($item->type), array('view', 'collect', 'createdby', 'editedby')) ? strtolower($item->type) : 'mine';
                 $linkParams = "type={$type}&libID={$this->libID}&moduleID={$item->id}";
             }
-            if($item->type == 'apiDoc') $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$this->release}"));
+            if($item->type == 'apiDoc')
+            {
+                $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$this->release}"), $linkParams);
+            }
         }
         return helper::createLink($moduleName, $methodName, $linkParams);
     }
@@ -255,7 +258,7 @@ class docMenu extends wg
         if(empty($activeKey))
         {
             $allText = $this->prop('allText');
-            if(empty($allText)) return $lang->all;
+            if(empty($allText)) return '';
             return $allText;
         }
 
@@ -328,7 +331,7 @@ class docMenu extends wg
         return div
         (
             setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
-            h::header
+            $title ? h::header
             (
                 setClass('h-10 flex items-center pl-4 flex-none gap-3'),
                 span
@@ -337,7 +340,7 @@ class docMenu extends wg
                     $title
                 ),
                 $this->buildCloseBtn(),
-            ),
+            ) : null,
             h::main
             (
                 setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),

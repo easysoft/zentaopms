@@ -133,6 +133,7 @@ class doc extends control
         $this->view->canExport      = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
         $this->view->libType        = 'lib';
         $this->view->objectDropdown = $objectDropdown;
+        $this->view->spaceType      = 'mine';
 
         $this->display();
     }
@@ -1284,6 +1285,7 @@ class doc extends control
         $this->view->canExport      = $canExport;
         $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->apiLibID       = key($apiLibs);
+        $this->view->spaceType      = $type;
 
         $this->display();
     }
@@ -1303,7 +1305,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function productSpace($objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'status,id_desc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $products = $this->product->getPairs('nocode');
         $objectID = $this->product->saveState($objectID, $products);

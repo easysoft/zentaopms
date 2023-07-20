@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-if($libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
+if($libType != 'api' && $libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
 
 /* zin: Define the set::module('doc') feature bar on main menu. */
 featureBar
@@ -79,6 +79,7 @@ toolbar
     $libType != 'api' && $libID && common::hasPriv('doc', 'create') ? $createButton : null
 );
 
+include 'left.html.php';
 if($browseType == 'annex')
 {
     include 'showfiles.html.php';
