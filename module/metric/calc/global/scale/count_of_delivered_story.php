@@ -10,7 +10,7 @@
  * 单位：个
  * 描述：按全局统计的已交付研发需求数表示已交付给用户的研发需求的数量。该度量项反映了组织中已经交付给用户的研发需求的数量，可以用于评估组织的研发需求交付能力和合作效果。
  * 定义：所有的所处阶段为已发布或关闭原因为已完成的研发需求个数求和
-过滤已删除的研发需求
+ *       过滤已删除的研发需求
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,20 +23,23 @@
  */
 class count_of_delivered_story extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.stage', 't1.closedReason');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($data)
     {
+        $stage        = $data->stage;
+        $closedReason = $data->closedReason;
+
+        if($stage == 'released' || $closedReason == 'done') $this->result += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array(array('value' => $this->result));
+        return $this->filterByOptions($records, $options);
     }
 }
