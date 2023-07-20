@@ -379,6 +379,7 @@ $lang->ai->dataType->realStarted  = $lang->ai->dataType->datetime;
 $lang->ai->dataType->finishedDate = $lang->ai->dataType->datetime;
 
 $lang->ai->demoData            = new stdclass();
+$lang->ai->demoData->notExist  = 'The demo data does not exist for now.';
 $lang->ai->demoData->story     = array(
     'story' => array
     (

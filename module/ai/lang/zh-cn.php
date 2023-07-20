@@ -380,6 +380,7 @@ $lang->ai->dataType->realStarted  = $lang->ai->dataType->datetime;
 $lang->ai->dataType->finishedDate = $lang->ai->dataType->datetime;
 
 $lang->ai->demoData            = new stdclass();
+$lang->ai->demoData->notExist  = '暂无演示数据。';
 $lang->ai->demoData->story     = array(
     'story' => array
     (

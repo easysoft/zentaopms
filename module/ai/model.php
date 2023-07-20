@@ -575,6 +575,8 @@ class aiModel extends model
      */
     public function generateDemoDataPrompt($module, $source)
     {
+        if(empty($this->lang->ai->demoData->$module)) return $this->lang->ai->demoData->notExist;
+
         $sources = explode(',', $source);
         $sources = array_filter($sources);
 
