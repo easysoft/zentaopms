@@ -75,7 +75,7 @@ class moduleMenu extends wg
         return '';
     }
 
-    private function buildBtns(): wg
+    private function buildBtns(): wg|null
     {
         $settingLink = $this->prop('settingLink');
         $settingText = $this->prop('settingText');
