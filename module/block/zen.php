@@ -1909,7 +1909,7 @@ class blockZen extends block
                 foreach($objects as $k => $task)
                 {
                     if(in_array($task->status, array('closed', 'cancel'))) unset($objects[$k]);
-                    $task->deadline  = date('m-d', strtotime($task->deadline));
+                    if($task->deadline) $task->deadline = date('m-d', strtotime($task->deadline));
                     $task->estimate .= 'h';
                     $task->left     .= 'h';
                 }
