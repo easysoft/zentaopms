@@ -36,6 +36,7 @@ $config->bug->dtable->fieldList['status']['group']     = 2;
 $config->bug->dtable->fieldList['type']['title'] = $lang->bug->type;
 $config->bug->dtable->fieldList['type']['type']  = 'category';
 $config->bug->dtable->fieldList['type']['map']   = $lang->bug->typeList;
+$config->bug->dtable->fieldList['type']['flex']  = false;
 $config->bug->dtable->fieldList['type']['group'] = 2;
 
 $config->bug->dtable->fieldList['branch']['title'] = $lang->bug->branch;
@@ -72,6 +73,7 @@ $config->bug->dtable->fieldList['confirmed']['title'] = $lang->bug->confirmed;
 $config->bug->dtable->fieldList['confirmed']['type']  = 'category';
 $config->bug->dtable->fieldList['confirmed']['map']   = $lang->bug->confirmedList;
 $config->bug->dtable->fieldList['confirmed']['show']  = true;
+$config->bug->dtable->fieldList['confirmed']['flex']  = false;
 $config->bug->dtable->fieldList['confirmed']['group'] = 5;
 
 $config->bug->dtable->fieldList['assignedTo']['title']      = $lang->bug->assignedTo;

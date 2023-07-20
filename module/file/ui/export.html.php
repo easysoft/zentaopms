@@ -107,7 +107,7 @@ if($isCustomExport)
     );
 }
 
-form
+formPanel
 (
     css('.form-grid .form-label.required:after{content:""}'), // Remove required tag.
     css('.modal-content{padding-top: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; padding-bottom: 1.25rem;}'),
@@ -145,7 +145,8 @@ form
         set::required(true)
     ),
     /* Fields for KanBan. */
-    formRow(
+    formRow
+    (
         $hideExportRange ? setClass('hidden') : null,
         formGroup
         (
