@@ -207,7 +207,11 @@ class upgrade extends control
             }
             if(version_compare($openVersion, '18_0_beta1', '>=')) $selectMode = false;
 
-            if($selectMode) $this->locate(inlink('to18Guide', "fromVersion=$fromVersion"));
+            if($selectMode)
+            {
+                if($this->config->edition == 'ipd') $this->locate(inlink('to18Guide', "fromVersion=$fromVersion&mode=ALM"));
+                $this->locate(inlink('to18Guide', "fromVersion=$fromVersion"));
+            }
 
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
@@ -224,12 +228,13 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function to18Guide($fromVersion)
+    public function to18Guide($fromVersion, $mode = '')
     {
-        if($_POST)
+        if($_POST or $mode)
         {
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
+            if($this->config->edition == 'ipd') $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
             $this->loadModel('custom')->disableFeaturesByMode($mode);
 
             /* Update sprint concept. */
