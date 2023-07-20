@@ -151,9 +151,9 @@ $footToolbar = $canBatchAction ? array('items' => array
         array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
         array('caret' => 'up', 'data-placement' => 'top-start', 'class' => 'btn btn-caret size-sm secondary', 'items' => $batchItems),
     )),
-    array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => ($this->session->currentProductType == 'normal' || !$canBatchChangeBranch ? 'hidden' : ''), 'items' => $branchItems),
-    array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'type' => 'dropdown', 'data-placement' => 'top-start', 'className' => $canBatchChangeModule ? '' : 'hidden', 'items' => $moduleItems),
-    array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'type' => 'dropdown', 'data-placement' => 'top-start', 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'items' => $assignedToItems),
+    $canBatchChangeBranch && $this->session->currentProductType != 'normal' ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'items' => $branchItems) : null,
+    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $moduleItems) : null,
+    $canBatchAssignTo ? array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $assignedToItems) : null,
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 if(empty($bugs))

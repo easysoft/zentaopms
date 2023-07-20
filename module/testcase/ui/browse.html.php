@@ -34,93 +34,63 @@ $caseProductIds = array();
 foreach($cases as $case) $caseProductIds[$case->product] = $case->product;
 $caseProductID = count($caseProductIds) > 1 ? 0 : $productID;
 
-$footToolbar = $canBatchAction ? array('items' => array
-(
-    $canGroupBatch ? array('type' => 'btn-group', 'items' => array
-    (
-        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
-        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
-        ($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange) ? array('caret' => 'up', 'className' => 'secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
-    )) : null,
-    $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'btnType' => 'secondary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
-    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'btnType' => 'secondary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
-    $canBatchChangeScene ? array('caret' => 'up', 'text' => $lang->testcase->scene, 'btnType' => 'secondary', 'url' => '#navScene','data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
-    $canImportToLib ? array('text' => $lang->testcase->importToLib, 'btnType' => 'secondary', 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
-)) : null;
-
-if($canBatchReview)
-{
-    $reviewItems = array();
-    foreach($lang->testcase->reviewResultList as $key => $result)
-    {
-        if($key == '') continue;
-        $reviewItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn', 'data-url' => $this->createLink('testcase', 'batchReview', "result=$key"));
-    }
-}
-
-if($canBatchCaseTypeChange)
-{
-    $typeItems = array();
-    foreach($lang->testcase->typeList as $key => $result)
-    {
-        $typeItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchCaseTypeChange', "result=$key"));
-    }
-}
-
+$navActions = array();
 if($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange)
 {
-    menu
-    (
-        set::id('navActions'),
-        set::class('menu dropdown-menu'),
-        set::items(array
-        (
-            $canBatchReview ? array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems) : null,
-            $canBatchDelete ? array('text' => $lang->delete, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchDelete', "productID=$productID")) : null,
-            $canBatchCaseTypeChange ? array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $typeItems) : null,
-            $canBatchConfirmStoryChange ? array('text' => $lang->testcase->confirmStoryChange, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchConfirmStoryChange', "productID=$productID")) : null,
-        ))
-    );
-}
-
-if($canBatchChangeBranch)
-{
-    $branchItems = array();
-    foreach($branchTagOption as $branchID => $branchName) $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchID"));
-
-    menu
-    (
-        set::id('navBranch'),
-        set::class('dropdown-menu'),
-        set::items($branchItems)
-    );
+    if($canBatchReview)
+    {
+        $reviewItems = array();
+        foreach($lang->testcase->reviewResultList as $key => $result)
+        {
+            if($key == '') continue;
+            $reviewItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn', 'data-url' => $this->createLink('testcase', 'batchReview', "result=$key"));
+        }
+        $navActions[] = array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems);
+    }
+    if($canBatchDelete) $navActions[] = array('text' => $lang->delete, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchDelete', "productID=$productID"));
+    if($canBatchCaseTypeChange)
+    {
+        $typeItems = array();
+        foreach($lang->testcase->typeList as $key => $result)
+        {
+            $typeItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchCaseTypeChange', "result=$key"));
+        }
+        $navActions[] = array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $typeItems);
+    }
+    if($canBatchConfirmStoryChange) $navActions[] = array('text' => $lang->testcase->confirmStoryChange, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchConfirmStoryChange', "productID=$productID"));
 }
 
 if($canBatchChangeModule)
 {
     $moduleItems = array();
     foreach($modules as $moduleId => $module) $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID=$moduleId"));
+}
 
-    menu
-    (
-        set::id('navModule'),
-        set::class('dropdown-menu'),
-        set::items($moduleItems)
-    );
+if($canBatchChangeBranch)
+{
+    $branchItems = array();
+    foreach($branchTagOption as $branchID => $branchName) $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchID"));
 }
 
 if($canBatchChangeScene)
 {
     $sceneItems = array();
     foreach($iscenes as $sceneID => $scene) $sceneItems[] = array('text' => $scene, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeScene', "sceneId=$sceneID"));
-
-    menu
-    (
-        set::id('navScene'),
-        set::class('dropdown-menu'),
-        set::items($sceneItems)
-    );
 }
+
+$footToolbar = $canBatchAction ? array('items' => array
+(
+    $canGroupBatch ? array('type' => 'btn-group', 'items' => array
+    (
+        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
+        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
+        !empty($navActions) ? array('caret' => 'up', 'className' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start') : null,
+    )) : null,
+    $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'type' => 'dropdown', 'items' => $branchItems, 'data-placement' => 'top-start') : null,
+    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'type' => 'dropdown', 'items' => $moduleItems, 'data-placement' => 'top-start') : null,
+    $canBatchChangeScene ? array('caret' => 'up', 'text' => $lang->testcase->scene, 'type' => 'dropdown', 'items' => $sceneItems, 'data-placement' => 'top-start') : null,
+    $canImportToLib ? array('text' => $lang->testcase->importToLib, 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $cols = $isOnlyScene ? $this->config->scene->dtable->fieldList : $this->loadModel('datatable')->getSetting('testcase');
 if(!empty($cols['actions']['list']))
@@ -172,7 +142,7 @@ modal
     on::click('button[type="submit"]', 'getCheckedCaseIdList'),
     set::id('importToLib'),
     set::modalProps(array('title' => $lang->testcase->importToLib)),
-    form
+    formPanel
     (
         set::url(createLink('testcase', 'importToLib')),
         set::actions(array('submit')),
