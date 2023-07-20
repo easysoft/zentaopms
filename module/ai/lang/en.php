@@ -71,7 +71,6 @@ $lang->ai->prompts->action->unpublish       = 'Unpublish';
 $lang->ai->prompts->action->delete          = 'Delete';
 $lang->ai->prompts->action->deleteConfirm   = 'Deleted prompts will be no longer available. Are you sure you want to proceed?';
 $lang->ai->prompts->action->publishSuccess  = 'Publish Success';
-
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';
 $lang->ai->prompts->selectDataSource = 'Select Data Source';
@@ -286,10 +285,18 @@ $lang->ai->dataSource['doc']['doc']['addedDate']  = 'Created Date';
 $lang->ai->dataSource['doc']['doc']['editedBy']   = 'Edited By';
 $lang->ai->dataSource['doc']['doc']['editedDate'] = 'Edited Date';
 
-/* Target form definition. */
+/* Target form definition. See `$config->ai->targetForm`. */
 $lang->ai->targetForm = array();
-$lang->ai->targetForm['story']['common']     = 'Story';
-$lang->ai->targetForm['execution']['common'] = 'Execution';
+$lang->ai->targetForm['product']['common']        = 'Product';
+$lang->ai->targetForm['story']['common']          = 'Story';
+$lang->ai->targetForm['productplan']['common']    = 'Plan';
+$lang->ai->targetForm['projectrelease']['common'] = 'Release';
+$lang->ai->targetForm['project']['common']        = 'Project';
+$lang->ai->targetForm['execution']['common']      = 'Execution';
+$lang->ai->targetForm['task']['common']           = 'Task';
+$lang->ai->targetForm['testcase']['common']       = 'Test Case';
+$lang->ai->targetForm['bug']['common']            = 'Bug';
+$lang->ai->targetForm['doc']['common']            = 'Document';
 
 $lang->ai->targetForm['story']['create']         = 'Create Story';
 $lang->ai->targetForm['story']['batchcreate']    = 'Batch Create Story';
@@ -298,11 +305,34 @@ $lang->ai->targetForm['story']['totask']         = 'Story to Task';
 $lang->ai->targetForm['story']['testcasecreate'] = 'Create Test Case';
 $lang->ai->targetForm['story']['subdivide']      = 'Subdivide Story';
 
+$lang->ai->targetForm['productplan']['edit']   = 'Edit Plan';
+$lang->ai->targetForm['productplan']['create'] = 'Create Sub-Plan';
+
+$lang->ai->targetForm['projectrelease']['doc/create'] = 'Create Doc';
+
+$lang->ai->targetForm['project']['risk/create']        = 'Create Risk';
+$lang->ai->targetForm['project']['issue/create']       = 'Create Issue';
+$lang->ai->targetForm['project']['doc/create']         = 'Create Doc';
+$lang->ai->targetForm['project']['programplan/create'] = 'Set Program Plan';
+
 $lang->ai->targetForm['execution']['batchcreatetask']  = 'Batch Create Task';
 $lang->ai->targetForm['execution']['createtestreport'] = 'Create Test Report';
 $lang->ai->targetForm['execution']['createqa']         = 'Create QA';
 $lang->ai->targetForm['execution']['createrisk']       = 'Create Risk';
 $lang->ai->targetForm['execution']['createissue']      = 'Create Issue';
+
+$lang->ai->targetForm['task']['edit']        = 'Edit Task';
+$lang->ai->targetForm['task']['batchCreate'] = 'Batch Create Task';
+
+$lang->ai->targetForm['testcase']['edit']         = 'Edit Test Case';
+$lang->ai->targetForm['testcase']['createscript'] = 'Create Script';
+
+$lang->ai->targetForm['bug']['edit']            = 'Edit Bug';
+$lang->ai->targetForm['bug']['story/create']    = 'Bug to Story';
+$lang->ai->targetForm['bug']['testcase/create'] = 'Bug to Test Case';
+
+$lang->ai->targetForm['doc']['create'] = 'Create Doc';
+$lang->ai->targetForm['doc']['edit']   = 'Edit Doc';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = 'All';

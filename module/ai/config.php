@@ -71,9 +71,18 @@ $config->ai->dataSource['bug']['bug'] = array('title', 'steps', 'severity','pri'
 
 $config->ai->dataSource['doc']['doc'] = array('title', 'addedBy', 'addedDate', 'editedBy', 'editedDate', 'content');
 
+/* Available target form definations. Please also update `$lang->ai->targetForm` upon changes! */
 $config->ai->targetForm = array();
-$config->ai->targetForm['story']     = array('create', 'batchcreate', 'change', 'totask', 'testcasecreate', 'subdivide');
-$config->ai->targetForm['execution'] = array('batchcreatetask', 'createtestreport', 'createqa', 'createrisk', 'createissue');
+$config->ai->targetForm['product']        = array('tree/managechild', 'doc/create');
+$config->ai->targetForm['story']          = array('create', 'batchcreate', 'change', 'totask', 'testcasecreate', 'subdivide');
+$config->ai->targetForm['productplan']    = array('edit', 'create');
+$config->ai->targetForm['projectrelease'] = array('doc/create');
+$config->ai->targetForm['project']        = array('risk/create', 'issue/create', 'doc/create', 'programplan/create');
+$config->ai->targetForm['execution']      = array('batchcreatetask', 'createtestreport', 'createqa', 'createrisk', 'createissue');
+$config->ai->targetForm['task']           = array('edit', 'batchCreate');
+$config->ai->targetForm['testcase']       = array('edit', 'createscript');
+$config->ai->targetForm['bug']            = array('edit', 'story/create', 'testcase/create');
+$config->ai->targetForm['doc']            = array('create', 'edit');
 
 /* Used to format form redirection links. */
 $config->ai->targetFormVars = array();

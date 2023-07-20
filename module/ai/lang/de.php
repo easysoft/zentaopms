@@ -58,7 +58,6 @@ $lang->ai->prompts->draftedBy   = 'Drafted By';
 $lang->ai->prompts->lastEditor  = 'Last Editor';
 
 $lang->ai->prompts->summary = 'There are %s prompts on this page.';
-
 $lang->ai->prompts->action = new stdclass();
 $lang->ai->prompts->action->goDesignConfirm = 'The current prompt is not complete, continue designing?';
 $lang->ai->prompts->action->goDesign        = 'Go designing';
@@ -70,6 +69,7 @@ $lang->ai->prompts->action->publish         = 'Publish';
 $lang->ai->prompts->action->unpublish       = 'Unpublish';
 $lang->ai->prompts->action->delete          = 'Delete';
 $lang->ai->prompts->action->deleteConfirm   = 'Deleted prompts will be no longer available. Are you sure you want to proceed?';
+$lang->ai->prompts->action->publishSuccess  = 'Publish Success';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';
@@ -92,6 +92,8 @@ $lang->ai->prompts->selectDataTip    = 'Select an object and its fields will be 
 $lang->ai->prompts->selectedFormat   = 'Selecting data from {0}, {1} fields selected.';
 $lang->ai->prompts->nonSelected      = 'No data selected.';
 $lang->ai->prompts->sortTip          = 'Sorting fields by priority is suggested.';
+$lang->ai->prompts->object           = 'object';
+$lang->ai->prompts->field            = 'field';
 
 /* Purpose setting. */
 $lang->ai->prompts->purpose        = 'Purpose';
@@ -145,10 +147,18 @@ $lang->ai->dataSource['execution']['tasks']['realStarted'] = 'Actual start date'
 $lang->ai->dataSource['execution']['tasks']['finishedDate']= 'Finished date';
 $lang->ai->dataSource['execution']['tasks']['closedReason']= 'Closing reason';
 
-/* Target form definition. */
+/* Target form definition. See `$config->ai->targetForm`. */
 $lang->ai->targetForm = array();
-$lang->ai->targetForm['story']['common']     = 'Story';
-$lang->ai->targetForm['execution']['common'] = 'Execution';
+$lang->ai->targetForm['product']['common']        = 'Product';
+$lang->ai->targetForm['story']['common']          = 'Story';
+$lang->ai->targetForm['productplan']['common']    = 'Plan';
+$lang->ai->targetForm['projectrelease']['common'] = 'Release';
+$lang->ai->targetForm['project']['common']        = 'Project';
+$lang->ai->targetForm['execution']['common']      = 'Execution';
+$lang->ai->targetForm['task']['common']           = 'Task';
+$lang->ai->targetForm['testcase']['common']       = 'Test Case';
+$lang->ai->targetForm['bug']['common']            = 'Bug';
+$lang->ai->targetForm['doc']['common']            = 'Document';
 
 $lang->ai->targetForm['story']['create']         = 'Create Story';
 $lang->ai->targetForm['story']['batchcreate']    = 'Batch Create Story';
@@ -157,11 +167,34 @@ $lang->ai->targetForm['story']['totask']         = 'Story to Task';
 $lang->ai->targetForm['story']['testcasecreate'] = 'Create Test Case';
 $lang->ai->targetForm['story']['subdivide']      = 'Subdivide Story';
 
+$lang->ai->targetForm['productplan']['edit']   = 'Edit Plan';
+$lang->ai->targetForm['productplan']['create'] = 'Create Sub-Plan';
+
+$lang->ai->targetForm['projectrelease']['doc/create'] = 'Create Doc';
+
+$lang->ai->targetForm['project']['risk/create']        = 'Create Risk';
+$lang->ai->targetForm['project']['issue/create']       = 'Create Issue';
+$lang->ai->targetForm['project']['doc/create']         = 'Create Doc';
+$lang->ai->targetForm['project']['programplan/create'] = 'Set Program Plan';
+
 $lang->ai->targetForm['execution']['batchcreatetask']  = 'Batch Create Task';
 $lang->ai->targetForm['execution']['createtestreport'] = 'Create Test Report';
 $lang->ai->targetForm['execution']['createqa']         = 'Create QA';
 $lang->ai->targetForm['execution']['createrisk']       = 'Create Risk';
 $lang->ai->targetForm['execution']['createissue']      = 'Create Issue';
+
+$lang->ai->targetForm['task']['edit']        = 'Edit Task';
+$lang->ai->targetForm['task']['batchCreate'] = 'Batch Create Task';
+
+$lang->ai->targetForm['testcase']['edit']         = 'Edit Test Case';
+$lang->ai->targetForm['testcase']['createscript'] = 'Create Script';
+
+$lang->ai->targetForm['bug']['edit']            = 'Edit Bug';
+$lang->ai->targetForm['bug']['story/create']    = 'Bug to Story';
+$lang->ai->targetForm['bug']['testcase/create'] = 'Bug to Test Case';
+
+$lang->ai->targetForm['doc']['create'] = 'Create Doc';
+$lang->ai->targetForm['doc']['edit']   = 'Edit Doc';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = 'All';
@@ -213,6 +246,8 @@ $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = 'No Proxy';
 $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
+
+$lang->ai->models->promptFor = 'Prompt for %s';
 
 $lang->ai->designStepNav = array();
 $lang->ai->designStepNav['assignrole']       = 'Specify Role';
@@ -341,3 +376,12 @@ $lang->ai->dataInject->fail    = 'Failed to fill in prompt execution results.';
 $lang->ai->execute = new stdclass();
 $lang->ai->execute->success = 'Prompt executed.';
 $lang->ai->execute->fail    = 'Prompt execution failed.';
+
+$lang->ai->audit = new stdclass();
+$lang->ai->audit->designPrompt = 'Prompt Design';
+$lang->ai->audit->afterSave    = 'After saving,';
+$lang->ai->audit->regenerate   = 'Regenerate';
+
+$lang->ai->audit->backLocationList = array();
+$lang->ai->audit->backLocationList[0] = 'back to audit page.';
+$lang->ai->audit->backLocationList[1] = 'back to audit page and regenerate.';

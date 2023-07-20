@@ -72,7 +72,6 @@ $lang->ai->prompts->action->delete          = '删除';
 $lang->ai->prompts->action->deleteConfirm   = '删除后，提词将不能继续使用，您确定要删除吗？';
 $lang->ai->prompts->action->publishSuccess  = '发布成功';
 
-
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = '指定角色';
 $lang->ai->prompts->selectDataSource = '选择对象';
@@ -287,10 +286,64 @@ $lang->ai->dataSource['doc']['doc']['addedDate']  = '创建日期';
 $lang->ai->dataSource['doc']['doc']['editedBy']   = '修改者';
 $lang->ai->dataSource['doc']['doc']['editedDate'] = '修改日期';
 
-/* Target form definition. */
+$lang->ai->dataSource['task']['task']['common']      = '任务';
+$lang->ai->dataSource['task']['task']['name']        = '任务名称';
+$lang->ai->dataSource['task']['task']['pri']         = '优先级';
+$lang->ai->dataSource['task']['task']['status']      = '状态';
+$lang->ai->dataSource['task']['task']['estimate']    = '预计';
+$lang->ai->dataSource['task']['task']['consumed']    = '消耗';
+$lang->ai->dataSource['task']['task']['left']        = '剩余';
+$lang->ai->dataSource['task']['task']['progress']    = '进度';
+$lang->ai->dataSource['task']['task']['estStarted']  = '预计开始';
+$lang->ai->dataSource['task']['task']['realStarted'] = '实际开始';
+
+$lang->ai->dataSource['case']['case']['common']        = '用例';
+$lang->ai->dataSource['case']['case']['title']         = '标题';
+$lang->ai->dataSource['case']['case']['precondition']  = '前置条件';
+$lang->ai->dataSource['case']['case']['scene']         = '所属场景';
+$lang->ai->dataSource['case']['case']['product']       = '所属产品';
+$lang->ai->dataSource['case']['case']['module']        = '所属模块';
+$lang->ai->dataSource['case']['case']['pri']           = '优先级';
+$lang->ai->dataSource['case']['case']['type']          = '类型';
+$lang->ai->dataSource['case']['case']['lastRunResult'] = '结果';
+$lang->ai->dataSource['case']['case']['status']        = '状态';
+
+$lang->ai->dataSource['case']['steps']['common'] = '步骤列表';
+$lang->ai->dataSource['case']['steps']['desc']   = '步骤描述';
+$lang->ai->dataSource['case']['steps']['expect'] = '预期';
+
+$lang->ai->dataSource['bug']['bug']['common']    = 'Bug';
+$lang->ai->dataSource['bug']['bug']['title']     = 'Bug标题';
+$lang->ai->dataSource['bug']['bug']['steps']     = '重现步骤';
+$lang->ai->dataSource['bug']['bug']['severity']  = '级别';
+$lang->ai->dataSource['bug']['bug']['pri']       = '优先级';
+$lang->ai->dataSource['bug']['bug']['status']    = '状态';
+$lang->ai->dataSource['bug']['bug']['confirmed'] = '确认';
+$lang->ai->dataSource['bug']['bug']['type']      = 'Bug类型';
+
+$lang->ai->dataSource['doc']['doc']['common']     = '文档';
+$lang->ai->dataSource['doc']['doc']['title']      = '文档标题';
+$lang->ai->dataSource['doc']['doc']['content']    = '文档正文';
+$lang->ai->dataSource['doc']['doc']['addedBy']    = '创建者';
+$lang->ai->dataSource['doc']['doc']['addedDate']  = '创建日期';
+$lang->ai->dataSource['doc']['doc']['editedBy']   = '修改者';
+$lang->ai->dataSource['doc']['doc']['editedDate'] = '修改日期';
+
+/* Target form definition. See `$config->ai->targetForm`. */
 $lang->ai->targetForm = array();
-$lang->ai->targetForm['story']['common']     = '需求';
-$lang->ai->targetForm['execution']['common'] = '执行';
+$lang->ai->targetForm['product']['common']        = '产品';
+$lang->ai->targetForm['story']['common']          = '需求';
+$lang->ai->targetForm['productplan']['common']    = '计划';
+$lang->ai->targetForm['projectrelease']['common'] = '发布';
+$lang->ai->targetForm['project']['common']        = '项目';
+$lang->ai->targetForm['execution']['common']      = '执行';
+$lang->ai->targetForm['task']['common']           = '任务';
+$lang->ai->targetForm['testcase']['common']       = '用例';
+$lang->ai->targetForm['bug']['common']            = 'Bug';
+$lang->ai->targetForm['doc']['common']            = '文档';
+
+$lang->ai->targetForm['product']['tree/managechild'] = '维护模块';
+$lang->ai->targetForm['product']['doc/create']       = '创建文档';
 
 $lang->ai->targetForm['story']['create']         = '提需求';
 $lang->ai->targetForm['story']['batchcreate']    = '批量提需求';
@@ -299,11 +352,34 @@ $lang->ai->targetForm['story']['totask']         = '需求建任务';
 $lang->ai->targetForm['story']['testcasecreate'] = '需求建用例';
 $lang->ai->targetForm['story']['subdivide']      = '需求细分';
 
+$lang->ai->targetForm['productplan']['edit']   = '编辑计划';
+$lang->ai->targetForm['productplan']['create'] = '创建子计划';
+
+$lang->ai->targetForm['projectrelease']['doc/create'] = '创建文档';
+
+$lang->ai->targetForm['project']['risk/create']        = '创建风险';
+$lang->ai->targetForm['project']['issue/create']       = '创建问题';
+$lang->ai->targetForm['project']['doc/create']         = '创建文档';
+$lang->ai->targetForm['project']['programplan/create'] = '设置阶段';
+
 $lang->ai->targetForm['execution']['batchcreatetask']  = '批量创建任务';
 $lang->ai->targetForm['execution']['createtestreport'] = '创建测试报告';
 $lang->ai->targetForm['execution']['createqa']         = '创建 QA';
 $lang->ai->targetForm['execution']['createrisk']       = '创建风险';
 $lang->ai->targetForm['execution']['createissue']      = '创建问题';
+
+$lang->ai->targetForm['task']['edit']        = '编辑任务';
+$lang->ai->targetForm['task']['batchCreate'] = '批量创建子任务';
+
+$lang->ai->targetForm['testcase']['edit']         = '编辑用例';
+$lang->ai->targetForm['testcase']['createscript'] = '创建自动化脚本';
+
+$lang->ai->targetForm['bug']['edit']            = '编辑 Bug';
+$lang->ai->targetForm['bug']['story/create']    = 'Bug 转需求';
+$lang->ai->targetForm['bug']['testcase/create'] = 'Bug 建用例';
+
+$lang->ai->targetForm['doc']['create'] = '创建文档';
+$lang->ai->targetForm['doc']['edit']   = '编辑文档';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = '全部';
