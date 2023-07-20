@@ -1,7 +1,6 @@
 <?php
 /**
  * 按产品统计的每日新增Bug数。
- * .
  *
  * 范围：product
  * 对象：Bug
@@ -9,13 +8,13 @@
  * 度量名称：按产品统计的每日新增Bug数
  * 单位：个
  * 描述：产品中每日创建的Bug数求和
-过滤已删除的Bug
-过滤已删除的产品
+ *       过滤已删除的Bug
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -23,21 +22,43 @@
  */
 class count_of_daily_created_bug_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getBugs';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.openedDate');
 
-    public $result = array();
+    public function calculate($row)
+    {
+        if(empty($row->openedDate)) return;
 
-    //public function getStatement()
-    //{
-    //}
+        $date = substr($row->openedDate, 0, 10);
+        list($year, $month, $day) = explode('-', $date);
+        if($year == '0000' || $month == '00' || $day == '00') return;
 
-    //public function calculate($data)
-    //{
-    //}
+        if(!isset($this->result[$row->product]))                      $this->result[$row->product] = array();
+        if(!isset($this->result[$row->product][$year]))               $this->result[$row->product][$year] = array();
+        if(!isset($this->result[$row->product][$year][$month]))       $this->result[$row->product][$year][$month] = array();
+        if(!isset($this->result[$row->product][$year][$month][$day])) $this->result[$row->product][$year][$month][$day] = 0;
 
-    //public function getResult()
-    //{
-    //}
+        $this->result[$row->product][$year][$month][$day] ++;
+    }
+
+    public function getResult($options = array())
+    {
+        $records = array();
+        foreach($this->result as $product => $years)
+        {
+            foreach($years as $year => $months)
+            {
+                foreach($months as $month => $days)
+                {
+                    foreach($days as $day => $value)
+                    {
+                        $records[] = array('product' => $product, 'year' => $year, 'month' => $month, 'day' => $day, 'value' => $value);
+                    }
+                }
+            }
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
