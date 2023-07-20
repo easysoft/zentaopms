@@ -10,13 +10,13 @@
  * 单位：个
  * 描述：按全局统计的年度关闭项目数是指在某月度关闭的项目数量。这个度量项可以帮助团队了解某年度项目的执行情况和成果，并进行项目交付能力的评估。较高的年度关闭项目数表明团队在项目交付方面具有较高的效率。
  * 定义：所有的项目个数求和
-关闭时间为某年某月
-过滤已删除的项目
+ *       关闭时间为某年某月
+ *       过滤已删除的项目
  * 度量库：
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -24,20 +24,35 @@
  */
 class count_of_monthly_closed_project extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getAllProjects';
 
-    public $fieldList = array();
+    public $fieldList = array('status', 'closedDate');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
-
-    public function calculate($data)
+    public function calculate($row)
     {
+        if(empty($row->closedDate) || $row->status != 'closed') return;
+
+        $year  = substr($row->closedDate, 0, 4);
+        $month = substr($row->closedDate, 5, 2);
+
+        if($year == '0000') return;
+
+        if(!isset($this->result[$year])) $this->result[$year] = array();
+        if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;
+
+        $this->result[$year][$month] += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array();
+        foreach($this->result as $year => $months)
+        {
+            foreach($months as $month => $value)
+            {
+                $records[] = array('year' => $year, 'month' => $month, 'value' => $value);
+            }
+        }
+        return $this->filterByOptions($records, $options);
     }
 }

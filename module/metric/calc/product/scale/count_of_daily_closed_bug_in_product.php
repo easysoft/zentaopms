@@ -32,7 +32,7 @@ class count_of_daily_closed_bug_in_product extends baseCalc
 
         $date = substr($row->closedDate, 0, 10);
         list($year, $month, $day) = explode('-', $date);
-        if($year == '0000' || $month == '00' || $day == '00') return;
+        if($year == '0000') return;
 
         if(!isset($this->result[$row->product]))                      $this->result[$row->product] = array();
         if(!isset($this->result[$row->product][$year]))               $this->result[$row->product][$year] = array();
