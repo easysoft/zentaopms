@@ -99,33 +99,7 @@ formPanel
             set::label($lang->custom->value),
         ),
     ),
-    ...$formRows,
-);
-
-formRow
-(
-    setID('opsTemplate'),
-    setStyle('display', 'none'),
-    formGroup
-    (
-        set::width('150px'),
-        set::name('keys[]'),
-        set::value($key),
-    ),
-    formGroup
-    (
-        setClass('ml-3'),
-        set::width('1/3'),
-        set::name('values[]'),
-        set::value($value),
-        set::readonly(empty($key) ? true : false)
-    ),
-    div
-    (
-        setClass('ops-actions'),
-        icon('plus', setClass('ml-2'), on::click('addItem')),
-        icon('close', setClass('ml-2'), on::click('removeItem')),
-    ),
+    $formRows,
 );
 
 if(!empty($lang->{$module}->osNameList) && array_key_exists($field, $lang->{$module}->osNameList))
@@ -141,7 +115,7 @@ if(!empty($lang->{$module}->osNameList) && array_key_exists($field, $lang->{$mod
         div
         (
             setClass('flex osOpsList col p-4 bg-white'),
-            ...$osListWg
+            $osListWg
         )
     );
 }

@@ -101,7 +101,7 @@ class ops extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $lang = str_replace('-', '_', $lang);
-            return $this->send(array('result' => 'success', 'load' => $this->createLink('ops', $method, "lang=$lang&field=$field")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('ops', $method, "lang=$lang&field=$field")));
         }
 
         $this->app->loadLang('custom');
