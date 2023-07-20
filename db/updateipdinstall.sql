@@ -128,7 +128,7 @@ CREATE TABLE `zt_roadmap` (
   `createdDate` date NOT NULL,
   `closedBy` char(30) NOT NULL,
   `closedDate` datetime NOT NULL,
-  `closedReason` enum('done','canceled') DEFAULT NULL;
+  `closedReason` enum('done','canceled') DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -158,8 +158,6 @@ ALTER TABLE `zt_review` MODIFY `doc` varchar(255);
 ALTER TABLE `zt_review` MODIFY `docVersion` varchar(255);
 
 ALTER TABLE `zt_object` ADD `end` date NULL AFTER `designEst`;
-
-ALTER TABLE `zt_roadmap` ADD `closedReason` enum('done','canceled') DEFAULT NULL AFTER `closedDate`;
 
 ALTER TABLE `zt_charter` ADD `closedBy`      char(30) NULL;
 ALTER TABLE `zt_charter` ADD `closedDate`    datetime NULL;
