@@ -10,7 +10,7 @@
  * 单位：个
  * 描述：按全局统计的里程碑发布总数表示在发布中的重要里程碑的数量。该度量项反映了组织在发布中所设定的重要里程碑的数量，可以用于评估组织在产品发布过程中的进展和跟踪。
  * 定义：所有的里程碑发布个数求和
-过滤已删除的发布
+ *       过滤已删除的发布
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,20 +23,20 @@
  */
 class count_of_marker_release extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getReleases';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.marker');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result;
 
     public function calculate($data)
     {
+        if($data->marker == 1) $this->result += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array(array('value' => $this->result));
+        return $this->filterByOptions($records, $options);
     }
 }
