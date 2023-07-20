@@ -25,9 +25,9 @@ class dataset
      * Get all projects.
      * 获取所有项目。
      *
-     * @param  array  $fieldList
+     * @param  string $fieldList
      * @access public
-     * @return mixed
+     * @return PDOStatement
      */
     public function getAllProjects($fieldList)
     {
@@ -57,7 +57,7 @@ class dataset
      * 获取发布数据。
      * Get release list.
      *
-     * @param  int    $fieldList
+     * @param  string $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -76,9 +76,9 @@ class dataset
      * 按产品获取发布数据。
      * Get release list according to product.
      *
-     * @param  int    $fieldList
+     * @param  string $fieldList
      * @access public
-     * @return mixed
+     * @return PDOStatement
      */
     public function getProductReleases($fieldList)
     {
@@ -95,7 +95,7 @@ class dataset
      * 获取产品计划数据。
      * Get plan list.
      *
-     * @param  array    $fieldList
+     * @param  string $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -114,7 +114,7 @@ class dataset
      * 获取bug数据。
      * Get bug list.
      *
-     * @param  array    $fieldList
+     * @param  string $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -133,7 +133,7 @@ class dataset
      * 获取反馈数据。
      * Get feedback list.
      *
-     * @param  array    $fieldList
+     * @param  string $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -152,7 +152,7 @@ class dataset
      * 获取需求数据。
      * Get story list.
      *
-     * @param  array    $fieldList
+     * @param  string $fieldList
      * @access public
      * @return void
      */
@@ -171,7 +171,7 @@ class dataset
      * 获取研发需求数据，过滤影子产品。
      * Get story list, filter shadow product.
      *
-     * @param  array  $fieldList
+     * @param  string $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -191,7 +191,7 @@ class dataset
      * 获取所有研发需求数据，不过滤影子产品。
      * Get all story list, don't filter shadow product.
      *
-     * @param  array  $fieldList
+     * @param  string $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -210,9 +210,9 @@ class dataset
      * 获取已交付的需求数据。
      * Get delivered story list.
      *
-     * @param  int    $fieldList
+     * @param  string $fieldList
      * @access public
-     * @return mixed
+     * @return PDOStatement
      */
     public function getDeliveredStories($fieldList)
     {
@@ -225,6 +225,25 @@ class dataset
             ->orWhere('t1.closedReason')->eq('done')
             ->markRight(1)
             ->groupBy('t1.product')
+            ->query();
+    }
+
+    /**
+     * 获取用例数据。
+     * Get case list.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getCases($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
             ->query();
     }
 }
