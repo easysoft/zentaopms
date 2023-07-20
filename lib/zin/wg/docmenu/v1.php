@@ -192,7 +192,7 @@ class docMenu extends wg
     private function getOperateItems($item): array
     {
         $menus = array();
-        if($item->type == 'docLib')
+        if(in_array($item->type, array('docLib', 'apiLib')))
         {
             if(hasPriv($this->currentModule, 'addCatalog'))
             {
