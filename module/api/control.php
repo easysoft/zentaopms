@@ -239,6 +239,7 @@ class api extends control
      */
     public function releases($libID, $orderBy = 'id')
     {
+        $this->app->loadLang('custom');
         $libs = $this->doc->getApiLibs();
         $this->app->loadClass('pager', $static = true);
         $this->lang->modulePageNav = $this->generateLibsDropMenu($libs[$libID]);
@@ -256,22 +257,16 @@ class api extends control
     }
 
     /**
-     * @param  int    $libID
-     * @param  int    $id
-     * @param  string $confirm
+     * Delete a release.
+     *
+     * @param  int $libID
+     * @param  int $id
      */
-    public function deleteRelease($libID, $id = 0, $confirm = 'no')
+    public function deleteRelease($libID, $id = 0)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('api', 'deleteRelease', "libID=$libID&id=$id&confirm=yes"), ''));
-        }
-        else
-        {
-            $this->api->deleteRelease($id);
-            if(dao::isError()) return $this->sendError(dao::getError());
-            return print(js::execute("parent.removeRelease($id)"));
-        }
+        $this->api->deleteRelease($id);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->sendSuccess(array('load' => true, 'closeModal' => true));
     }
 
     /**
