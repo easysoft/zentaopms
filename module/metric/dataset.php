@@ -246,4 +246,21 @@ class dataset
             ->andWhere('t2.shadow')->eq(0)
             ->query();
     }
+
+    /**
+     * 获取产品数据。
+     * Get product list.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getProducts($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_PRODUCT)->alias('t1')
+            ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
+            ->query();
+    }
 }

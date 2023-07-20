@@ -10,8 +10,8 @@
  * 单位：个
  * 描述：按全局统计的产品总数表示整个组织中的产品数量。此度量项反映了组织所提供的产品数量，可以用于评估组织的产品组合的规模和多样性。
  * 定义：所有产品的个数求和
-过滤已删除的产品
-（过滤影子产品）
+ *       过滤已删除的产品
+ *      （过滤影子产品）
  * 度量库：
  * 收集方式：realtime
  *
@@ -24,20 +24,20 @@
  */
 class count_of_product extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getProducts';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.id');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($data)
     {
+        $this->result += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array(array('value' => $this->result));
+        return $this->filterByOptions($records, $options);
     }
 }
