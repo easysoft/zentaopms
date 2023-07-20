@@ -11,6 +11,12 @@ declare(strict_types=1);
 namespace zin;
 if($libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
 
+jsVar('browseType', $browseType);
+jsVar('docLang', $lang->doc);
+jsVar('confirmDelete', $lang->doc->confirmDelete);
+jsVar('appTab', $app->tab);
+jsVar('treeData', $libTree);
+
 /* zin: Define the set::module('doc') feature bar on main menu. */
 featureBar
 (
@@ -40,6 +46,7 @@ toolbar
     $libID && common::hasPriv('doc', 'create') ? $createButton : null
 );
 
+include 'left.html.php';
 include 'mydoclist.html.php';
 
 /* ====== Render page ====== */
