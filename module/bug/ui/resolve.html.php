@@ -117,12 +117,10 @@ formPanel
     (
         set::width('1/3'),
         set::label($lang->bug->resolvedDate),
-        input
+        datePicker
         (
             set::name('resolvedDate'),
-            set::type('date'),
-            set::value(helper::now()),
-            set::required(true)
+            set::value(helper::now())
         ),
     ),
     formGroup

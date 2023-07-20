@@ -60,7 +60,7 @@ $duplicateLink = $bug->duplicateBug && $canViewBug ? a
     set('data-size', 'lg'),
     $bug->duplicateBugTitle
 ) : '';
-$duplicateBug = $bug->duplicateBug ? "#{$bug->duplicateBug}:{$duplicateLink}" : '';
+$duplicateBug = $bug->duplicateBug ? span("#{$bug->duplicateBug}:", $duplicateLink) : '';
 
 $relatedBugs = array();
 foreach($legendMisc['relatedBug']['text'] as $relatedBugID => $relatedBugTitle)
@@ -100,7 +100,7 @@ $legendBasic['mailto']['text']        = $mailtoHTML;
 $legendBasic['severity']['text']      = severityLabel(set::level(zget($lang->bug->severityList, $legendBasic['severity']['text'])), set::isIcon(true));
 $legendBasic['pri']['text']           = priLabel(zget($lang->bug->priList, $legendBasic['pri']['text']));
 $legendLife['openedBuild']['text']    = $buildsHTML;
-$legendLife['resolution']['text']     = div(zget($lang->bug->resolutionList, $bug->resolution) . $duplicateBug);
+$legendLife['resolution']['text']     = div(zget($lang->bug->resolutionList, $bug->resolution), $duplicateBug);
 $legendMain['story']['text']          = $bug->story ? div(label(set('class', 'dark-outline rounded-full size-sm mr-2'), $bug->story), span($bug->storyTitle)) : '';
 $legendMain['task']['text']           = $bug->task  ? div(label(set('class', 'dark-outline rounded-full size-sm mr-2'), $bug->task),  span($bug->taskName))   : '';;
 $legendMisc['relatedBug']['text']     = $relatedBugs;
