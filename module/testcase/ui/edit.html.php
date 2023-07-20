@@ -113,7 +113,7 @@ detailBody
         section
         (
             set::title($lang->testcase->precondition),
-            editor
+            textarea
             (
                 set::name('precondition'),
                 set::value($case->precondition),
