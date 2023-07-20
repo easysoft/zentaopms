@@ -9,43 +9,60 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('iconList', $config->doc->iconList);
-jsVar('draftText', $lang->doc->draft);
-jsVar('canViewDoc', common::hasPriv('doc', 'view'));
-jsVar('canCollect', common::hasPriv('doc', 'collect') && $libType && $libType != 'api');
-jsVar('currentAccount', $app->user->account);
-jsVar('spaceMethodList', $config->doc->spaceMethod);
-jsVar('myspacePriv', common::hasPriv('doc', 'myspace'));
-jsVar('productspacePriv', common::hasPriv('doc', 'productspace'));
-jsVar('projectspacePriv', common::hasPriv('doc', 'projectspace'));
-jsVar('teamspacePriv', common::hasPriv('doc', 'teamspace'));
-jsVar('currentTab', $app->tab);
-
-$cols = array();
-foreach($config->doc->dtable->fieldList as $colName => $col)
+if(empty($docs))
 {
-    if($type == 'mine' && in_array($colName, array('objectName', 'module', 'editedBy'))) continue;
-    if($colName == 'addedBy' && in_array($type, array('mine', 'createdby'))) continue;
-
-    if($canExport && $colName == 'id') $col['type'] = 'checkID';
-    $cols[$colName] = $col;
-}
-
-$tableData = initTableData($docs, $cols);
-
-$params = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
-if($app->rawMethod == 'myspace') $params = "type={$type}&" . $params;
-dtable
-(
-    set::userMap($users),
-    set::cols($cols),
-    set::data($tableData),
-    set::checkable($canExport),
-    set::onRenderCell(jsRaw('window.rendDocCell')),
-    set::footPager(
-        usePager
+    if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
+    div
+    (
+        setClass('table-empty-tip flex justify-center items-center'),
+        span
         (
-            array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params)),
+            setClass('text-gray'),
+            $lang->doc->noDoc
         ),
-    ),
-);
+        $browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create') ? $createButton : null
+    );
+}
+else
+{
+    jsVar('iconList', $config->doc->iconList);
+    jsVar('draftText', $lang->doc->draft);
+    jsVar('canViewDoc', common::hasPriv('doc', 'view'));
+    jsVar('canCollect', common::hasPriv('doc', 'collect') && $libType && $libType != 'api');
+    jsVar('currentAccount', $app->user->account);
+    jsVar('spaceMethodList', $config->doc->spaceMethod);
+    jsVar('myspacePriv', common::hasPriv('doc', 'myspace'));
+    jsVar('productspacePriv', common::hasPriv('doc', 'productspace'));
+    jsVar('projectspacePriv', common::hasPriv('doc', 'projectspace'));
+    jsVar('teamspacePriv', common::hasPriv('doc', 'teamspace'));
+    jsVar('currentTab', $app->tab);
+
+    $cols = array();
+    foreach($config->doc->dtable->fieldList as $colName => $col)
+    {
+        if($type == 'mine' && in_array($colName, array('objectName', 'module', 'editedBy'))) continue;
+        if($colName == 'addedBy' && in_array($type, array('mine', 'createdby'))) continue;
+
+        if($canExport && $colName == 'id') $col['type'] = 'checkID';
+        $cols[$colName] = $col;
+    }
+
+    $tableData = initTableData($docs, $cols);
+
+    $params = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
+    if($app->rawMethod == 'myspace') $params = "type={$type}&" . $params;
+    dtable
+    (
+        set::userMap($users),
+        set::cols($cols),
+        set::data($tableData),
+        set::checkable($canExport),
+        set::onRenderCell(jsRaw('window.rendDocCell')),
+        set::footPager(
+            usePager
+            (
+                array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params)),
+            ),
+        ),
+    );
+}

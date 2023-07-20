@@ -9,35 +9,51 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-
-jsVar('iconList', $config->doc->iconList);
-jsVar('draftText', $lang->doc->draft);
-jsVar('canViewDoc', common::hasPriv('doc', 'view'));
-jsVar('canCollect', common::hasPriv('doc', 'collect') && $libType && $libType != 'api');
-jsVar('currentAccount', $app->user->account);
-
-$cols = array();
-foreach($config->doc->dtable->fieldList as $colName => $col)
+if(empty($docs))
 {
-    if($canExport && $colName == 'id') $col['type'] = 'checkID';
-    if(!in_array($colName, array('id', 'title', 'addedBy', 'addedDate', 'editedBy', 'editedDate', 'actions'))) continue;
-
-    $cols[$colName] = $col;
-}
-
-$params    = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
-$tableData = initTableData($docs, $cols);
-dtable
-(
-    set::userMap($users),
-    set::cols($cols),
-    set::data($tableData),
-    set::checkable($canExport),
-    set::onRenderCell(jsRaw('window.rendDocCell')),
-    set::footPager(
-        usePager
+    if($browseType != 'bySearch' && $libID && (common::hasPriv('doc', 'create') || (common::hasPriv('api', 'create') && !$apiLibID))) include 'createbutton.html.php';
+    div
+    (
+        setClass('table-empty-tip flex justify-center items-center'),
+        span
         (
-            array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params)),
+            setClass('text-gray'),
+            $lang->doc->noDoc
         ),
-    ),
-);
+        $browseType != 'bySearch' && $libID && (common::hasPriv('doc', 'create') || (common::hasPriv('api', 'create') && !$apiLibID)) ? $createButton : null
+    );
+}
+else
+{
+    jsVar('iconList', $config->doc->iconList);
+    jsVar('draftText', $lang->doc->draft);
+    jsVar('canViewDoc', common::hasPriv('doc', 'view'));
+    jsVar('canCollect', common::hasPriv('doc', 'collect') && $libType && $libType != 'api');
+    jsVar('currentAccount', $app->user->account);
+
+    $cols = array();
+    foreach($config->doc->dtable->fieldList as $colName => $col)
+    {
+        if($canExport && $colName == 'id') $col['type'] = 'checkID';
+        if(!in_array($colName, array('id', 'title', 'addedBy', 'addedDate', 'editedBy', 'editedDate', 'actions'))) continue;
+
+        $cols[$colName] = $col;
+    }
+
+    $params    = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
+    $tableData = initTableData($docs, $cols);
+    dtable
+    (
+        set::userMap($users),
+        set::cols($cols),
+        set::data($tableData),
+        set::checkable($canExport),
+        set::onRenderCell(jsRaw('window.rendDocCell')),
+        set::footPager(
+            usePager
+            (
+                array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params)),
+            ),
+        ),
+    );
+}
