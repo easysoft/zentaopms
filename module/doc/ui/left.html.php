@@ -23,59 +23,6 @@ jsVar('spaceMethod', $config->doc->spaceMethod);
 jsVar('canSortDocCatalog', common::hasPriv('doc', 'sortCatalog'));
 jsVar('canSortAPICatalog', common::hasPriv('api', 'sortCatalog'));
 
-//div
-//(
-//    setID('fileTree'),
-//    (isset($type) && $type == 'project') ? div
-//    (
-//        div
-//        (
-//            setClass('project-tree border-b tree-child'),
-//            div
-//            (
-//                setClass('title'),
-//                icon('project btn-info'),
-//                $lang->projectCommon
-//            ),
-//            div
-//            (
-//                setID('projectTree'),
-//                set('data-id', 'project')
-//            )
-//        ),
-//        div
-//        (
-//            setClass('execution-tree border-b tree-child'),
-//            div
-//            (
-//                setClass('title'),
-//                icon('execution btn-info'),
-//                $lang->executionCommon
-//            ),
-//            div
-//            (
-//                setID('executionTree'),
-//                set('data-id', 'execution')
-//            )
-//        ),
-//        div
-//        (
-//            setClass('annex-tree border-b tree-child'),
-//            div
-//            (
-//                setClass('title'),
-//                icon('annex btn-info'),
-//                $lang->annexCommon
-//            ),
-//            div
-//            (
-//                setID('annexTree'),
-//                set('data-id', 'annex')
-//            )
-//        ),
-//    ) : null
-//);
-
 $docMenuTree = null;
 if($spaceType != 'project')
 {
@@ -108,6 +55,7 @@ else
             );
     }
 }
+
 sidebar
 (
     $docMenuTree

@@ -337,7 +337,7 @@ class docMenu extends wg
                 span
                 (
                     setClass('module-title text-lg font-semibold'),
-                    $title
+                    html($title)
                 ),
                 $this->buildCloseBtn(),
             ) : null,
