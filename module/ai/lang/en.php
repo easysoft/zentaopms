@@ -117,8 +117,91 @@ $lang->ai->moduleDisableTip = 'Module is automatically selected based on selecte
 
 /* Data source definition. */
 $lang->ai->dataSource = array();
-$lang->ai->dataSource['story']['common']     = 'Story';
-$lang->ai->dataSource['execution']['common'] = 'Execution';
+
+$lang->ai->dataSource['product']['common']     = 'Product';
+$lang->ai->dataSource['story']['common']       = 'Story';
+$lang->ai->dataSource['execution']['common']   = 'Execution';
+$lang->ai->dataSource['productplan']['common'] = 'Product Plan';
+$lang->ai->dataSource['release']['common']     = 'Release';
+$lang->ai->dataSource['project']['common']     = 'Project';
+$lang->ai->dataSource['task']['common']        = 'Task';
+$lang->ai->dataSource['case']['common']        = 'Test Case';
+$lang->ai->dataSource['bug']['common']         = 'Bug';
+$lang->ai->dataSource['doc']['common']         = 'Document';
+
+$lang->ai->dataSource['product']['product']['common']  = 'Product';
+$lang->ai->dataSource['product']['product']['name']    = 'Product Name';
+$lang->ai->dataSource['product']['product']['desc']    = 'Description';
+$lang->ai->dataSource['product']['modules']['common']  = 'Module';
+$lang->ai->dataSource['product']['modules']['name']    = 'Module Name';
+$lang->ai->dataSource['product']['modules']['modules'] = 'Sub Modules';
+
+$lang->ai->dataSource['productplan']['productplan']['common'] = 'Product Plan';
+$lang->ai->dataSource['productplan']['productplan']['title']  = 'Title';
+$lang->ai->dataSource['productplan']['productplan']['desc']   = 'Description';
+$lang->ai->dataSource['productplan']['productplan']['begin']  = 'Begin';
+$lang->ai->dataSource['productplan']['productplan']['end']    = 'End';
+
+$lang->ai->dataSource['productplan']['stories']['common']   = 'Stories';
+$lang->ai->dataSource['productplan']['stories']['title']    = 'Title';
+$lang->ai->dataSource['productplan']['stories']['module']   = 'Module';
+$lang->ai->dataSource['productplan']['stories']['pri']      = 'Priority';
+$lang->ai->dataSource['productplan']['stories']['estimate'] = 'Estimates';
+$lang->ai->dataSource['productplan']['stories']['status']   = 'Status';
+$lang->ai->dataSource['productplan']['stories']['stage']    = 'Stage';
+
+$lang->ai->dataSource['productplan']['bugs']['common'] = 'Bugs';
+$lang->ai->dataSource['productplan']['bugs']['title']  = 'Title';
+$lang->ai->dataSource['productplan']['bugs']['pri']    = 'Priority';
+$lang->ai->dataSource['productplan']['bugs']['status'] = 'Status';
+
+$lang->ai->dataSource['release']['release']['common']  = 'Release';
+$lang->ai->dataSource['release']['release']['product'] = 'Product';
+$lang->ai->dataSource['release']['release']['name']    = 'Name';
+$lang->ai->dataSource['release']['release']['desc']    = 'Description';
+$lang->ai->dataSource['release']['release']['date']    = 'Release Date';
+
+$lang->ai->dataSource['release']['stories']['common']   = 'Stories';
+$lang->ai->dataSource['release']['stories']['title']    = 'Title';
+$lang->ai->dataSource['release']['stories']['estimate'] = 'Estimates';
+
+$lang->ai->dataSource['release']['bugs']['common'] = 'Bugs';
+$lang->ai->dataSource['release']['bugs']['title']  = 'Title';
+
+$lang->ai->dataSource['project']['project']['common']   = 'Project';
+$lang->ai->dataSource['project']['project']['name']     = 'Name';
+$lang->ai->dataSource['project']['project']['type']     = 'Type';
+$lang->ai->dataSource['project']['project']['desc']     = 'Description';
+$lang->ai->dataSource['project']['project']['begin']    = 'Begin';
+$lang->ai->dataSource['project']['project']['end']      = 'End';
+$lang->ai->dataSource['project']['project']['estimate'] = 'Estimates';
+
+$lang->ai->dataSource['project']['programplan']['common']       = 'Program Plan';
+$lang->ai->dataSource['project']['programplan']['name']         = 'Name';
+$lang->ai->dataSource['project']['programplan']['desc']         = 'Description';
+$lang->ai->dataSource['project']['programplan']['status']       = 'Status';
+$lang->ai->dataSource['project']['programplan']['begin']        = 'Begin';
+$lang->ai->dataSource['project']['programplan']['end']          = 'End';
+$lang->ai->dataSource['project']['programplan']['realBegan']    = 'Actual Start';
+$lang->ai->dataSource['project']['programplan']['realEnd']      = 'Actual End';
+$lang->ai->dataSource['project']['programplan']['planDuration'] = 'Plan Duration';
+$lang->ai->dataSource['project']['programplan']['progress']     = 'Progress';
+$lang->ai->dataSource['project']['programplan']['estimate']     = 'Estimates';
+$lang->ai->dataSource['project']['programplan']['consumed']     = 'Consumed';
+$lang->ai->dataSource['project']['programplan']['left']         = 'Left';
+
+$lang->ai->dataSource['project']['execution']['common']    = 'Execution';
+$lang->ai->dataSource['project']['execution']['name']      = 'Name';
+$lang->ai->dataSource['project']['execution']['desc']      = 'Description';
+$lang->ai->dataSource['project']['execution']['status']    = 'Status';
+$lang->ai->dataSource['project']['execution']['begin']     = 'Begin';
+$lang->ai->dataSource['project']['execution']['end']       = 'End';
+$lang->ai->dataSource['project']['execution']['realBegan'] = 'Actual Start';
+$lang->ai->dataSource['project']['execution']['realEnd']   = 'Actual End';
+$lang->ai->dataSource['project']['execution']['estimate']  = 'Estimates';
+$lang->ai->dataSource['project']['execution']['consumed']  = 'Consumed';
+$lang->ai->dataSource['project']['execution']['left']      = 'Left';
+$lang->ai->dataSource['project']['execution']['progress']  = 'Progress';
 
 $lang->ai->dataSource['story']['story']['common']   = 'Story';
 $lang->ai->dataSource['story']['story']['title']    = 'Title';
@@ -147,6 +230,49 @@ $lang->ai->dataSource['execution']['tasks']['estStarted']  = 'Estimated start da
 $lang->ai->dataSource['execution']['tasks']['realStarted'] = 'Actual start date';
 $lang->ai->dataSource['execution']['tasks']['finishedDate']= 'Finished date';
 $lang->ai->dataSource['execution']['tasks']['closedReason']= 'Closing reason';
+
+$lang->ai->dataSource['task']['task']['common']      = 'Task';
+$lang->ai->dataSource['task']['task']['name']        = 'Name';
+$lang->ai->dataSource['task']['task']['pri']         = 'Priority';
+$lang->ai->dataSource['task']['task']['status']      = 'Status';
+$lang->ai->dataSource['task']['task']['estimate']    = 'Estimates';
+$lang->ai->dataSource['task']['task']['consumed']    = 'Consumed';
+$lang->ai->dataSource['task']['task']['left']        = 'Left';
+$lang->ai->dataSource['task']['task']['progress']    = 'Progress';
+$lang->ai->dataSource['task']['task']['estStarted']  = 'Start Date';
+$lang->ai->dataSource['task']['task']['realStarted'] = 'Actual Start';
+
+$lang->ai->dataSource['case']['case']['common']        = 'Test Case';
+$lang->ai->dataSource['case']['case']['title']         = 'Title';
+$lang->ai->dataSource['case']['case']['precondition']  = 'Prerequisite';
+$lang->ai->dataSource['case']['case']['scene']         = 'Scene';
+$lang->ai->dataSource['case']['case']['product']       = 'Product';
+$lang->ai->dataSource['case']['case']['module']        = 'Module';
+$lang->ai->dataSource['case']['case']['pri']           = 'Priority';
+$lang->ai->dataSource['case']['case']['type']          = 'Type';
+$lang->ai->dataSource['case']['case']['lastRunResult'] = 'Result';
+$lang->ai->dataSource['case']['case']['status']        = 'Status';
+
+$lang->ai->dataSource['case']['steps']['common'] = 'Steps';
+$lang->ai->dataSource['case']['steps']['desc']   = 'Description';
+$lang->ai->dataSource['case']['steps']['expect'] = 'Expectation';
+
+$lang->ai->dataSource['bug']['bug']['common']    = 'Bug';
+$lang->ai->dataSource['bug']['bug']['title']     = 'Title';
+$lang->ai->dataSource['bug']['bug']['steps']     = 'Repro Steps';
+$lang->ai->dataSource['bug']['bug']['severity']  = 'Severity';
+$lang->ai->dataSource['bug']['bug']['pri']       = 'Priority';
+$lang->ai->dataSource['bug']['bug']['status']    = 'Status';
+$lang->ai->dataSource['bug']['bug']['confirmed'] = 'Confirmed';
+$lang->ai->dataSource['bug']['bug']['type']      = 'Type';
+
+$lang->ai->dataSource['doc']['doc']['common']     = 'Document';
+$lang->ai->dataSource['doc']['doc']['title']      = 'Title';
+$lang->ai->dataSource['doc']['doc']['content']    = 'Text';
+$lang->ai->dataSource['doc']['doc']['addedBy']    = 'Created By';
+$lang->ai->dataSource['doc']['doc']['addedDate']  = 'Created Date';
+$lang->ai->dataSource['doc']['doc']['editedBy']   = 'Edited By';
+$lang->ai->dataSource['doc']['doc']['editedDate'] = 'Edited Date';
 
 /* Target form definition. */
 $lang->ai->targetForm = array();
