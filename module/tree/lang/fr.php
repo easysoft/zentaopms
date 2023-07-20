@@ -37,6 +37,7 @@ $lang->tree->manageDashboard      = 'Manage Dashboard Module';
 $lang->tree->manageDashboardChild = 'Manage Dashboard Child Module';
 $lang->tree->manageProjectChild   = "Gérer Sous-Modules {$lang->projectCommon}";
 $lang->tree->manageTaskChild      = "Gérer Sous-Modules {$lang->execution->common}";
+$lang->tree->manageHostGroup      = 'Manage host group';
 $lang->tree->manageHostChild      = 'Manage child host';
 $lang->tree->syncFromProduct      = "Copier d'un autre {$lang->productCommon}";
 $lang->tree->dragAndSort          = "Faites glisser pour ordonner";

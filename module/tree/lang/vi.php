@@ -33,6 +33,7 @@ $lang->tree->manageCaseChild      = 'Quản lý tình huống con';
 $lang->tree->manageCaselibChild   = 'Quản lý thư viện con';
 $lang->tree->manageDashboard      = 'Manage Dashboard Module';
 $lang->tree->manageDashboardChild = 'Manage Dashboard Child Module';
+$lang->tree->manageHostGroup      = 'Manage host group';
 $lang->tree->manageHostChild      = 'Manage child host';
 $lang->tree->manageTaskChild      = "Quản lý module {$lang->executionCommon} con";
 $lang->tree->syncFromProduct      = "Sao chép từ {$lang->productCommon} khác";

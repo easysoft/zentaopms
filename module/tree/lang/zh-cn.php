@@ -38,6 +38,7 @@ $lang->tree->manageDashboardChild = '维护仪表盘子模块';
 $lang->tree->manageProjectChild   = "维护{$lang->projectCommon}子模块";
 $lang->tree->manageTaskChild      = "维护{$lang->execution->common}子模块";
 $lang->tree->manageTaskChild      = "维护{$lang->execution->common}子模块";
+$lang->tree->manageHostGroup      = '维护主机分组';
 $lang->tree->manageHostChild      = '维护主机子分组';
 $lang->tree->syncFromProduct      = '复制模块';
 $lang->tree->dragAndSort          = "拖放排序";
