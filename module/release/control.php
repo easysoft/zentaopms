@@ -21,6 +21,7 @@ class release extends control
      */
     public function commonAction($productID, $branch = 0)
     {
+        $productID = (int)$productID;
         $this->loadModel('product')->setMenu($productID, $branch);
 
         $product = $this->product->getById($productID);
