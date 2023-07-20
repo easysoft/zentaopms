@@ -108,7 +108,7 @@ foreach($hasViewPriv as $type => $bool)
         (
             set::height(318),
             set::bordered(false),
-            $type == 'todo' ? set::fixedLeftWidth('0.44') : '',
+            $type == 'todo'  || $type == 'task' ? set::fixedLeftWidth('0.44') : '',
             set::horzScrollbarPos('inside'),
             set::onRenderCell(jsRaw('window.renderCell')),
             set::cols(array_values($config->block->{$configType}->dtable->fieldList)),

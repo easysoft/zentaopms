@@ -465,7 +465,7 @@ class blockZen extends block
         $type    = $block->params->type;
 
         $this->app->loadLang('execution');
-        $this->view->tasks = $this->loadModel('task')->getUserTasks($account, $type, $this->viewType == 'json' ? 0 : (int)$block->params->count, null, $block->params->orderBy);
+        $this->view->tasks = $$this->loadModel('task')->getUserTasks($account, $type, $this->viewType == 'json' ? 0 : (int)$block->params->count, null, $block->params->orderBy);;
     }
 
     /**
@@ -1909,6 +1909,9 @@ class blockZen extends block
                 foreach($objects as $k => $task)
                 {
                     if(in_array($task->status, array('closed', 'cancel'))) unset($objects[$k]);
+                    $task->deadline  = date('m-d', strtotime($task->deadline));
+                    $task->estimate .= 'h';
+                    $task->left     .= 'h';
                 }
                 if($limitCount > 0) $objects = array_slice($objects, 0, $limitCount);
             }
