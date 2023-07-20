@@ -4,7 +4,7 @@ include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
 zdTable('product')->config('product', $useCommon = true, $levels = 4)->gen(10);
-zdTable('feedback')->config('feedback', $useCommon = true, $levels = 4)->gen(800);
+zdTable('case')->config('case', $useCommon = true, $levels = 4)->gen(800);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
