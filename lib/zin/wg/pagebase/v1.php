@@ -75,8 +75,6 @@ class pageBase extends wg
 
         $currentLang = $this->props->get('lang');
         if(empty($currentLang)) $currentLang = $app->getClientLang();
-        // $zeneditorPath = $app->getWebRoot() . 'js/zeneditor/tiptap-component.esm.js';
-        $zeneditorPath = 'https://zui-dist.oop.cc/zeneditor/tiptap-component.esm.js';
 
         return h::html
         (
@@ -92,7 +90,6 @@ class pageBase extends wg
                 $zui ? h::importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs', set::id('zuiJS')) : null,
                 h::jsVar('window.config', $jsConfig, setID('configJS')),
                 $zui ? h::importJs($app->getWebRoot() . 'js/zui3/zin.js', set::id('zinJS')) : null,
-                html("<script async type=\"module\" src=\"$zeneditorPath\"></script>"),
                 $head,
             ),
             h::body
