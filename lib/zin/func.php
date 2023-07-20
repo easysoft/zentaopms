@@ -1091,6 +1091,18 @@ function moduleMenu(): moduleMenu
 }
 
 /**
+ * Zentao doc module menu widget.
+ *
+ * array  modules
+ * int    activeKey
+ * string closeLink
+ */
+function docMenu(): docMenu
+{
+    return createWg('docMenu', func_get_args());
+}
+
+/**
  * Zentao tree widget.
  *
  * ?array items
