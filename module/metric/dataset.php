@@ -69,8 +69,6 @@ class dataset
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->andWhere('t2.hasProduct')->eq(1)
-            ->andWhere('t3.shadow')->eq(0)
             ->query();
     }
 
