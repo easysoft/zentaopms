@@ -210,9 +210,8 @@ class release extends control
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
             ->where('t1.id')->in($release->stories)
             ->andWhere('t1.deleted')->eq(0)
-            ->groupBy('t1.id')
             ->beginIF($type == 'story')->orderBy($sort)->fi()
-            ->page($storyPager, 't1.id')
+            ->page($storyPager)
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
