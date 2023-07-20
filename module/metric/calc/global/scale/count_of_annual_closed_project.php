@@ -26,7 +26,7 @@ class count_of_annual_closed_project extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('t1.status', 't1.closedDate');
+    public $fieldList = array('status', 'closedDate');
 
     public function calculate($row)
     {
