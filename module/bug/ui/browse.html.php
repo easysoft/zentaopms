@@ -101,18 +101,6 @@ sidebar
     )))
 );
 
-$footToolbar = $canBatchAction ? array('items' => array
-(
-    array('type' => 'btn-group', 'items' => array
-    (
-        array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
-        array('caret' => 'up', 'class' => 'btn btn-caret size-sm secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-end'),
-    )),
-    array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => ($this->session->currentProductType == 'normal' || !$canBatchChangeBranch ? 'hidden' : '') , 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'className' => $canBatchChangeModule ? '' : 'hidden', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
-
 $resolveItems = array();
 foreach($lang->bug->resolutionList as $key => $resolution)
 {
@@ -130,17 +118,12 @@ foreach($lang->bug->resolutionList as $key => $resolution)
     }
 }
 
-menu
+$batchItems = array
 (
-    set::id('navActions'),
-    set::class('menu dropdown-menu'),
-    set::items(array
-    (
-        array('text' => $lang->bug->confirm,  'class' => 'batch-btn ajax-btn', 'disabled' => ($canBatchConfirm ? '' : 'disabled'), 'data-url' => helper::createLink('bug', 'batchConfirm')),
-        array('text' => $lang->bug->close,    'class' => 'batch-btn ajax-btn', 'disabled' => ($canBatchClose ? '' : 'disabled'), 'data-url' => helper::createLink('bug', 'batchClose')),
-        array('text' => $lang->bug->activate, 'class' => 'batch-btn', 'disabled' => ($canBatchActivate ? '' : 'disabled'), 'data-url' => helper::createLink('bug', 'batchActivate', "productID=$product->id&branch=$branch")),
-        array('text' => $lang->bug->resolve,  'class' => 'not-hide-menu' . ($canBatchResolve ? '' : ' hidden'), 'items' => $resolveItems),
-    ))
+    array('text' => $lang->bug->confirm,  'class' => 'batch-btn ajax-btn ' . ($canBatchConfirm ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchConfirm')),
+    array('text' => $lang->bug->close,    'class' => 'batch-btn ajax-btn ' . ($canBatchClose ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchClose')),
+    array('text' => $lang->bug->activate, 'class' => 'batch-btn' . ($canBatchActivate ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchActivate', "productID=$product->id&branch=$branch")),
+    array('text' => $lang->bug->resolve,  'class' => 'not-hide-menu ' . ($canBatchResolve ? '' : 'hidden'), 'items' => $resolveItems)
 );
 
 $branchItems = array();
@@ -149,25 +132,11 @@ foreach($branchTagOption as $branchID => $branchName)
     $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchChangeBranch', "branchID=$branchID"));
 }
 
-menu
-(
-    set::id('navBranch'),
-    set::class('dropdown-menu'),
-    set::items($branchItems)
-);
-
 $moduleItems = array();
 foreach($modules as $moduleID => $module)
 {
     $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchChangeModule', "moduleID=$moduleID"));
 }
-
-menu
-(
-    set::id('navModule'),
-    set::class('dropdown-menu'),
-    set::items($moduleItems)
-);
 
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
@@ -175,12 +144,17 @@ foreach ($memberPairs as $key => $value)
     $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
 }
 
-menu
+$footToolbar = $canBatchAction ? array('items' => array
 (
-    set::id('navAssignedTo'),
-    set::class('dropdown-menu'),
-    set::items($assignedToItems)
-);
+    array('type' => 'btn-group', 'items' => array
+    (
+        array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
+        array('caret' => 'up', 'data-placement' => 'top-start', 'class' => 'btn btn-caret size-sm secondary', 'items' => $batchItems),
+    )),
+    array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => ($this->session->currentProductType == 'normal' || !$canBatchChangeBranch ? 'hidden' : ''), 'items' => $branchItems),
+    array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'type' => 'dropdown', 'data-placement' => 'top-start', 'className' => $canBatchChangeModule ? '' : 'hidden', 'items' => $moduleItems),
+    array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'type' => 'dropdown', 'data-placement' => 'top-start', 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'items' => $assignedToItems),
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 if(empty($bugs))
 {

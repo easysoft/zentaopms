@@ -457,12 +457,12 @@ class bugModel extends model
         if(dao::isError()) return false;
 
         /* Add score. */
-        $this->loadModel('score')->create('bug', 'resolve', $bug);
+        $this->loadModel('score')->create('bug', 'resolve', $oldBug);
 
         /* Move bug card in kanban. */
-        if($bug->execution)
+        if($oldBug->execution)
         {
-            if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($bug->execution, 'bug', $bug->id);
+            if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug', $bug->id);
             if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         }
 
@@ -473,7 +473,7 @@ class bugModel extends model
         $files      = $this->loadModel('file')->saveUpload('bug', $bug->id);
         $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
         $changes    = common::createChanges($oldBug, $bug);
-        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . $bug->comment, $bug->resolution . (isset($bug->duplicateBug) ? ':' . $bug->duplicateBug : ''));
+        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . (!empty($bug->comment) ? $bug->comment : ''), $bug->resolution . (isset($bug->duplicateBug) ? ':' . $bug->duplicateBug : ''));
         if($changes) $this->action->logHistory($actionID, $changes);
 
         /* If the edition is not pms, update feedback. */
