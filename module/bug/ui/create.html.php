@@ -34,6 +34,16 @@ $showTask             = strpos(",$showFields,", ',task,')             !== false;
 $showMailto           = strpos(",$showFields,", ',mailto,')           !== false;
 $showKeywords         = strpos(",$showFields,", ',keywords,')         !== false;
 
+foreach($lang->bug->severityList as $severityKey => $severityValue)
+{
+    if(empty($severityValue)) unset($lang->bug->severityList[$severityKey]);
+}
+
+foreach($lang->bug->priList as $priKey => $priValue)
+{
+    if(empty($priValue)) unset($lang->bug->priList[$priKey]);
+}
+
 formPanel
 (
     on::change('[name="product"]',              'changeProduct'),

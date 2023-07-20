@@ -15,6 +15,11 @@ jsVar('tab', $this->app->tab);
 if($app->tab == 'execution') jsVar('objectID', $executionID);
 if($app->tab == 'project')   jsVar('objectID', $projectID);
 
+foreach($lang->testcase->priList as $priKey => $priValue)
+{
+    if(empty($priValue)) unset($lang->testcase->priList[$priKey]);
+}
+
 formPanel
 (
     on::change('#product', 'changeProduct'),
@@ -212,7 +217,7 @@ formPanel
         (
             set::width('150px'),
             set::label($lang->testcase->pri),
-            priPicker(set::name('pri'), set::items($lang->testcase->priList), set::value('')),
+            priPicker(set::name('pri'), set::items($lang->testcase->priList), set::value($pri)),
         ),
         formGroup
         (
