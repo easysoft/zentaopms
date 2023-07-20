@@ -47,6 +47,6 @@ class count_of_invalid_story extends baseCalc
     public function getResult($options = array())
     {
         $records = array(array('value' => $this->result));
-        return $this->filterByOptions($this->result, $options);
+        return $this->filterByOptions($records, $options);
     }
 }

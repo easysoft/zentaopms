@@ -39,6 +39,7 @@ class count_of_unclosed_project extends baseCalc
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array(array('value' => $this->result));
+        return $this->filterByOptions($records, $options);
     }
 }
