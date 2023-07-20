@@ -820,6 +820,7 @@ class storyModel extends model
             ->setIF($this->post->closedReason && $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedBy     || $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason && $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
+            ->setIF($this->post->stage == 'released', 'releasedDate', $now)
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
@@ -1996,6 +1997,9 @@ class storyModel extends model
             $story->lastEditedDate = $now;
             $story->stage          = $stage;
             $story->stagedBy       = $account;
+
+            /* Add for record released date. */
+            if($story->stage == 'released') $story->releasedDate = $now;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
             $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->set('stagedBy')->eq($account)->where('story')->eq((int)$storyID)->exec();
@@ -5421,5 +5425,24 @@ class storyModel extends model
         }
 
         return $story;
+    }
+
+    /**
+     * 更新需求的发布日期
+     * Update the released date of story.
+     *
+     * @param  string $stories
+     * @param  string $releasedDate
+     * @access public
+     * @return bool
+     */
+    public function updateStoryReleasedDate(string $stories, string $releasedDate): bool
+    {
+        $this->dao->update(TABLE_STORY)
+            ->set('releasedDate')->eq($releasedDate)
+            ->where('id')->in($stories)
+            ->exec();
+
+        return !dao::isError();
     }
 }
