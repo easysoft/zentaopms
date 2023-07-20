@@ -9,8 +9,8 @@
  * 度量名称：按产品统计的年度新增有效Bug数
  * 单位：个
  * 描述：产品中创建时间为某年的解决方案为已解决和延期处理的或者状态为激活的Bug的个数求和
-过滤已删除的Bug
-过滤已删除的产品
+ *       过滤已删除的Bug
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +23,41 @@
  */
 class count_of_annual_created_effective_bug_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getBugs';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.status', 't1.resolution', 't1.openedDate');
 
     public $result = array();
 
-    //public function getStatement()
-    //{
-    //}
+    public function calculate($data)
+    {
+        $openedDate = $data->openedDate;
 
-    //public function calculate($data)
-    //{
-    //}
+        if(empty($openedDate)) return;
+        $year = substr($openedDate, 0 ,4);
+        if($year == '0000') return;
 
-    //public function getResult()
-    //{
-    //}
+        $product = $data->product;
+        if(!isset($this->result[$product])) $this->result[$product] = array();
+        if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;
+
+        $resolution = $data->resolution;
+        $status     = $data->status;
+
+        if($status == 'active' or $resolution == 'fixed' or $resolution == 'postponed') $this->result[$product][$year] += 1;
+    }
+
+    public function getResult($options = array())
+    {
+        $records = array();
+        foreach($this->result as $product => $years)
+        {
+            foreach($years as $year => $value)
+            {
+                $records[] = array('product' => $product, 'year' => $year, 'value' => $value);
+            }
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
