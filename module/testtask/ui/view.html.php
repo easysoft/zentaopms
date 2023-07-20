@@ -23,10 +23,10 @@ detailHeader
     ),
 );
 
-$taskBuild = array
+$taskBuild = a
 (
-    'text' => $task->buildName,
-    'url' => createLink('build', 'view', "buildID=$task->build"),
+    set::href(createLink('build', 'view', "buildID=$task->build")),
+    $task->buildName,
 );
 if($isInModal)              $taskBuild = $task->buildName;
 if($task->build == 'trunk') $taskBuild = $lang->trunk;
@@ -100,74 +100,79 @@ detailBody
     ),
     detailSide
     (
-        panel
+        tabs
         (
-            set::title($lang->testtask->legendBasicInfo),
-            tableData
+            set::collapse(true),
+            tabPane
             (
-                !empty($execution->multiple) ? item
+                set::title($lang->testtask->legendBasicInfo),
+                set::active(true),
+                tableData
                 (
-                    set::name($lang->testtask->execution),
-                    $isInModal ? $task->executionName : a
+                    !empty($execution->multiple) ? item
                     (
-                        set('href', createLink('execution', 'story', "executionID=$task->execution")),
-                        set('title', $task->executionName),
-                        $task->executionName,
-                    ),
-                ) : null,
-                item
-                (
-                    set::name($lang->testtask->build),
-                    item(set($taskBuild)),
-                ),
-                item
-                (
-                    set::name($lang->testtask->type),
-                    $taskType
-                ),
-                item
-                (
-                    set::name($lang->testtask->owner),
-                    zget($users, $task->owner)
-                ),
-                item
-                (
-                    set::name($lang->testtask->mailto),
-                    $mailto 
-                ),
-                item
-                (
-                    set::name($lang->testtask->pri),
-                    priLabel(zget($lang->testtask->priList, $task->pri))
-                ),
-                item
-                (
-                    set::name($lang->testtask->begin),
-                    $task->begin
-                ),
-                item
-                (
-                    set::name($lang->testtask->end),
-                    $task->end
-                ),
-                item
-                (
-                    set::name($lang->testtask->realFinishedDate),
-                    !helper::isZeroDate($task->realFinishedDate) ? $task->realFinishedDate : ''
-                ),
-                item
-                (
-                    set::name($lang->testtask->status),
-                    $this->processStatus('testtask', $task)
-                ),
-                item
-                (
-                    set::name($lang->testtask->testreport),
-                    !empty($task->testreport) ? a
-                    (
-                        set('href', createLink('testreport', 'view', "reportID=$task->testreport")),
-                        $testreportTitle
+                        set::name($lang->testtask->execution),
+                        $isInModal ? $task->executionName : a
+                        (
+                            set('href', createLink('execution', 'story', "executionID=$task->execution")),
+                            set('title', $task->executionName),
+                            $task->executionName,
+                        ),
                     ) : null,
+                    item
+                    (
+                        set::name($lang->testtask->build),
+                        span($taskBuild),
+                    ),
+                    item
+                    (
+                        set::name($lang->testtask->type),
+                        $taskType
+                    ),
+                    item
+                    (
+                        set::name($lang->testtask->owner),
+                        zget($users, $task->owner)
+                    ),
+                    item
+                    (
+                        set::name($lang->testtask->mailto),
+                        $mailto
+                    ),
+                    item
+                    (
+                        set::name($lang->testtask->pri),
+                        priLabel(zget($lang->testtask->priList, $task->pri))
+                    ),
+                    item
+                    (
+                        set::name($lang->testtask->begin),
+                        $task->begin
+                    ),
+                    item
+                    (
+                        set::name($lang->testtask->end),
+                        $task->end
+                    ),
+                    item
+                    (
+                        set::name($lang->testtask->realFinishedDate),
+                        !helper::isZeroDate($task->realFinishedDate) ? $task->realFinishedDate : ''
+                    ),
+                    item
+                    (
+                        set::name($lang->testtask->status),
+                        $this->processStatus('testtask', $task)
+                    ),
+                    item
+                    (
+                        set::name($lang->testtask->testreport),
+                        !empty($task->testreport) ? a
+                        (
+                            set('href', createLink('testreport', 'view', "reportID=$task->testreport")),
+                            $testreportTitle
+                        ) : null,
+                    )
                 )
             )
         )

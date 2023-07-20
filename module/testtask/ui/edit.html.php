@@ -124,18 +124,13 @@ formPanel
         editor
         (
             set::name('desc'),
-            set::rows(10),
-            set::value(htmlSpecialString($task->desc))
+            html($task->desc)
         )
     ),
     formGroup
     (
         set::label($lang->comment),
-        editor
-        (
-            set::name('comment'),
-            set::rows(5),
-        )
+        editor(set::name('comment'))
     ),
     formGroup
     (
