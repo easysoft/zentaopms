@@ -81,7 +81,7 @@ sidebar
     (
         set::modules($libTree),
         set::spaceMethod($config->doc->spaceMethod),
-        set::libID($libID),
+        set::libID((int)$libID),
         set::moduleID($moduleID),
         set::linkParams("type=$type&libID=$libID&moduleID=$moduleID&browseType=$barType"),
         set::spaceType($session->spaceType),

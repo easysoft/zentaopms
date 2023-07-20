@@ -66,7 +66,7 @@ class docMenu extends wg
             {
                 if(in_array($item->type, array('lib', 'annex', 'api', 'execution'))) $item->id = 0;
 
-                $typeo      = in_array(strtolower($item->type), array('view', 'collect', 'createdby', 'editedby')) ? strtolower($item->type) : 'mine';
+                $type       = in_array(strtolower($item->type), array('view', 'collect', 'createdby', 'editedby')) ? strtolower($item->type) : 'mine';
                 $linkParams = "type={$type}&libID={$this->libID}&moduleID={$item->id}";
             }
             if($item->type == 'apiDoc') $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$this->release}"));
