@@ -35,6 +35,7 @@ if($spaceType != 'project')
             set::linkParams("%s&browseType={$barType}"),
             set::spaceType($spaceType),
             set::objectType(isset($type) ? $type : ''),
+            set::objectID(isset($objectID) ? $objectID : 0),
         );
 }
 else

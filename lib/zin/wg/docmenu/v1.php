@@ -15,6 +15,9 @@ class docMenu extends wg
         'linkParams?: string="%s"',
         'libID?: int=0',
         'moduleID?: int=0',
+        'spaceType?: string',
+        'objectType?: string',
+        'objectID?: int=0',
     );
 
     public static function getPageCSS(): string|false
@@ -31,9 +34,15 @@ class docMenu extends wg
     {
         $url = $item->url;
         if(!empty($url)) return $url;
+        if(in_array($item->type, array('apiLib', 'docLib')))
+        {
+            $this->libID    = $item->id;
+            $this->moduleID = 0;
+        }
+        if($item->type == 'module') $this->moduleID = $item->id;
 
-        $linkParams = sprintf($this->linkParams, "libID={$item->id}&moduleID={$this->moduleID}");
-        if(in_array($this->spaceType, array('product', 'project', 'custom'))) $linkParams = "objectID={$item->objectID}&{$linkParams}";
+        $linkParams = sprintf($this->linkParams, "libID={$this->libID}&moduleID={$this->moduleID}");
+        if(in_array($this->spaceType, array('product', 'project', 'custom'))) $linkParams = "objectID={$this->objectID}&{$linkParams}";
 
         $objectType = $this->objectType;
 
@@ -64,12 +73,12 @@ class docMenu extends wg
             $methodName = $this->spaceMethod[$objectType] ? $this->spaceMethod[$objectType] : 'teamSpace';
             if(in_array($objectType, array('mine', 'view', 'collect', 'createdby', 'editedby')))
             {
-                if(in_array($item->type, array('lib', 'annex', 'api', 'execution'))) $item->id = 0;
+                if(in_array($item->type, array('docLib', 'annex', 'api', 'execution'))) $item->id = 0;
 
                 $type       = in_array(strtolower($item->type), array('view', 'collect', 'createdby', 'editedby')) ? strtolower($item->type) : 'mine';
                 $linkParams = "type={$type}&libID={$this->libID}&moduleID={$item->id}";
             }
-            if($item->type == 'apiDoc')
+            if($item->type == 'module' && $item->object == 'api')
             {
                 $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$this->release}"), $linkParams);
             }
@@ -123,7 +132,8 @@ class docMenu extends wg
         $this->modules     = $this->prop('modules');
         $this->linkParams  = $this->prop('linkParams', '%s');
         $this->spaceType   = $this->prop('spaceType', '');
-        $this->objectType   = $this->prop('objectType', '');
+        $this->objectType  = $this->prop('objectType', '');
+        $this->objectID    = $this->prop('objectID', 0);
         $this->spaceMethod = $this->prop('spaceMethod');
 
         if($this->rawModule == 'api' && $this->rawMethod == 'view') $this->spaceType = 'api';
@@ -155,7 +165,7 @@ class docMenu extends wg
     private function getOperateItems($item): array
     {
         $menus = array();
-        if($item->type == 'lib')
+        if($item->type == 'docLib')
         {
             if(hasPriv($this->currentModule, 'addCatalog'))
             {
@@ -190,7 +200,7 @@ class docMenu extends wg
                 );
             }
         }
-        elseif($item->type == 'doc')
+        elseif($item->type == 'module')
         {
             if(hasPriv($this->currentModule, 'addCatalog'))
             {
@@ -239,8 +249,8 @@ class docMenu extends wg
     private function getIcon($item): string
     {
         $type = $item->type;
-        if($type == 'apiDoc')    return 'interface-lib';
-        if($type == 'lib')       return 'wiki-lib';
+        if($type == 'apiLib')    return 'interface-lib';
+        if($type == 'docLib')    return 'wiki-lib';
         if($type == 'annex')     return 'annex-lib';
         if($type == 'execution') return 'execution';
         if($type == 'text')      return 'file-text';

@@ -2969,12 +2969,13 @@ class docModel extends model
             unset($modules[$module->id]);
 
             $item = new stdclass();
-            $item->id       = $module->id;
-            $item->name     = $module->name;
-            $item->type     = $module->type == 'api' ? 'apiDoc' : $module->type;
-            $item->active   = $module->id == $moduleID ? 1 : 0;
-            $item->order    = $module->order;
-            $item->children = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules);
+            $item->id         = $module->id;
+            $item->name       = $module->name;
+            $item->objectType = $module->type;
+            $item->type       = 'module';
+            $item->active     = $module->id == $moduleID ? 1 : 0;
+            $item->order      = $module->order;
+            $item->children   = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules);
             $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
             $showDoc = $showDoc === '0' ? 0 : 1;
             if($this->app->rawMethod == 'view' and $module->type != 'api' and $showDoc)
@@ -3042,7 +3043,7 @@ class docModel extends model
 
             $item = new stdclass();
             $item->id         = $lib->id;
-            $item->type       = $lib->type == 'api' ? 'api' : 'lib';
+            $item->type       = $lib->type == 'api' ? 'apiLib' : 'docLib';
             $item->name       = $lib->name;
             $item->order      = $lib->order;
             $item->objectType = $type;
@@ -3051,7 +3052,7 @@ class docModel extends model
             $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc', 0, $releaseModule);
             $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
             $showDoc = $showDoc === '0' ? 0 : 1;
-            if($this->app->rawMethod == 'view' and $lib->type != 'api' and $showDoc)
+            if($this->app->rawMethod == 'view' and $lib->type != 'apiLib' and $showDoc)
             {
                 $docIDList = $this->getPrivDocs($lib->id);
                 $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
@@ -3068,8 +3069,8 @@ class docModel extends model
             }
             if(($type == 'project' and $lib->type != 'execution') or $type != 'project')
             {
-                if($item->type == 'lib') $libTree[$lib->type][$lib->id] = $item;
-                if($item->type == 'api') $apiLibs[$lib->id] = $item;
+                if($item->type == 'docLib') $libTree[$lib->type][$lib->id] = $item;
+                if($item->type == 'apiLib') $apiLibs[$lib->id] = $item;
             }
             else
             {
@@ -3086,7 +3087,7 @@ class docModel extends model
                     if(count($executionLibs[$executionID]) == 1)
                     {
                         $execution->id        = $item->id;
-                        $execution->type      = 'lib';
+                        $execution->type      = 'docLib';
                         $execution->hasAction = true;
                         $execution->children  = $item->children;
                     }
@@ -3099,7 +3100,7 @@ class docModel extends model
                 $libTree['execution'][$executionID]->children[] = $item;
             }
 
-            if($lib->type == 'api') $apiLibIDList[] = $lib->id;
+            if($lib->type == 'apiLib') $apiLibIDList[] = $lib->id;
         }
 
         if(in_array($type, array('product', 'project', 'execution')))
@@ -3135,7 +3136,7 @@ class docModel extends model
         {
             foreach($libList as &$lib)
             {
-                if(!is_object($lib) or $lib->type != 'api') continue;
+                if(!is_object($lib) or $lib->type != 'apiLib') continue;
 
                 $lib->versions = array();
                 foreach($releases as $index => $release)
