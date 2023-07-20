@@ -551,7 +551,7 @@ class program extends control
         if($confirm == 'no')
         {
             $actionUrl = $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->program->confirmUnlink, 'callback' => "unlinkStakeholderConfirm('{$this->lang->program->confirmUnlink}', '$actionUrl')"));
+            return $this->send(array('result' => 'success', 'callback' => "unlinkStakeholderConfirm('{$this->lang->program->confirmUnlink}', '$actionUrl')"));
         }
 
         $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch('user');
