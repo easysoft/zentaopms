@@ -41,7 +41,7 @@ formPanel
         set::width('1/3'),
         set::name('pri'),
         set::label($lang->bug->pri),
-        set::control('picker'),
+        set::control('priPicker'),
         set::items($lang->bug->priList),
         set::value($bug->pri)
     ),
@@ -59,11 +59,13 @@ formPanel
     formGroup
     (
         set::label($lang->bug->lblMailto),
-        set::control('picker'),
-        set::items($users),
-        set::multiple(true),
-        set::name('mailto[]'),
-        set::value(str_replace(' ', '', $bug->mailto ?: '')),
+        picker
+        (
+            set::items($users),
+            set::multiple(true),
+            set::name('mailto[]'),
+            set::value(str_replace(' ', '', $bug->mailto ? $bug->mailto : '')),
+        )
     ),
     formGroup
     (
