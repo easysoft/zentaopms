@@ -121,7 +121,7 @@ window.locateNewLib = function(type, objectID, libID)
     loadPage($.createLink(module, method, params));
 }
 
-window.myDocCell = function(result, {col, row})
+window.rendDocCell = function(result, {col, row})
 {
     if(col.name == 'title')
     {

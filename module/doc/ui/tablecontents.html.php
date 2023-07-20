@@ -79,5 +79,18 @@ toolbar
     $libType != 'api' && $libID && common::hasPriv('doc', 'create') ? $createButton : null
 );
 
+if($browseType == 'annex')
+{
+    include 'showfiles.html.php';
+}
+elseif($libType == 'api')
+{
+    include '../../api/view/apilist.html.php';
+}
+else
+{
+    include 'doclist.html.php';
+}
+
 /* ====== Render page ====== */
 render();
