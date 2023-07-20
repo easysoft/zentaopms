@@ -32,3 +32,21 @@ $('.form-row').on('click', '.btn-split', function()
 
     $(this).closest('tr').after($newRow);
 });
+
+$('.form-row').on('click', '.btn-delete', function()
+{
+    if($(this).closest('table').find('.input-row').length == 1) return false;
+
+    let $table = $(this).closest('table');
+    let isResponse = $(this).closest('div.form-group').hasClass('response');
+    $(this).closest('tr').remove();
+
+    if(isResponse)
+    {
+        generateResponse($table);
+    }
+    else
+    {
+        generateParams($table);
+    }
+});

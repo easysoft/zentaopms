@@ -7,13 +7,24 @@ formPanel
         div
         (
             setClass('panel-title text-lg'),
-            $title
+            $lang->api->create
         ),
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->api->lib),
+        input
+        (
+            set::value($libName),
+            set::disabled(true)
+        )
     ),
     formHidden('lib', $libID),
     formGroup
     (
         set::width('1/2'),
+        set::required(true),
         set::label($lang->api->module),
         picker
         (
@@ -23,6 +34,7 @@ formPanel
     ),
     formGroup
     (
+        set::width('1/2'),
         set::label($lang->api->title),
         input
         (
@@ -33,17 +45,20 @@ formPanel
     (
         formGroup
         (
-            set::width('2/5'),
+            set::width('330px'),
+            set::required(true),
             set::label($lang->api->path),
             inputGroup
             (
                 picker
                 (
+                    set::required(true),
                     set::items($lang->api->protocalOptions),
                     set::name('protocol'),
                 ),
                 picker
                 (
+                    set::required(true),
                     set::width('1/5'),
                     set::items($lang->api->methodOptions),
                     set::name('method'),
@@ -117,7 +132,6 @@ formPanel
                 h::th
                 (
                     width('100px'),
-                    $lang->struct->action
                 ),
             ),
             h::tr
@@ -185,7 +199,6 @@ formPanel
                 h::th
                 (
                     width('100px'),
-                    $lang->struct->action
                 ),
             ),
             h::tr
@@ -271,7 +284,6 @@ formPanel
                 h::th
                 (
                     width('100px'),
-                    $lang->struct->action
                 ),
             ),
             h::tr
@@ -371,7 +383,6 @@ formPanel
                 h::th
                 (
                     width('100px'),
-                    $lang->struct->action
                 ),
             ),
             h::tr

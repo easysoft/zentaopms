@@ -1,0 +1,11 @@
+.form-group tr td:last-child {
+  border: none;
+}
+
+.form-group tr th:last-child {
+  border: none;
+}
+
+.form-group tr{
+    border-bottom-width: 0px
+}
