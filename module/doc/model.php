@@ -3118,7 +3118,7 @@ class docModel extends model
 
             if($type == 'project')
             {
-                $libTree['annex'] = $annex;
+                $libTree['annex'][] = $annex;
             }
             else
             {

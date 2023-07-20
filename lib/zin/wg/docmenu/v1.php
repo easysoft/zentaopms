@@ -91,8 +91,7 @@ class docMenu extends wg
         if(empty($items)) $items = $this->modules;
         if(empty($items)) return array();
 
-        $parentItems = array();
-        $activeKey   = $this->prop('activeKey');
+        $activeKey = $this->prop('activeKey');
         foreach($items as $setting)
         {
             $setting->parentID = $parentID;
@@ -137,7 +136,35 @@ class docMenu extends wg
         $this->spaceMethod = $this->prop('spaceMethod');
 
         if($this->rawModule == 'api' && $this->rawMethod == 'view') $this->spaceType = 'api';
-        $this->setProp('items', $this->buildMenuTree(array(), $this->libID));
+        if($this->spaceType != 'project')
+        {
+            $this->setProp('items', $this->buildMenuTree(array(), $this->libID));
+        }
+        else
+        {
+            $items = array();
+            foreach($this->modules as $treeType => $modules)
+            {
+                if($treeType == 'project')
+                {
+                    $treeTitle = $lang->projectCommon;
+                    $treeIcon  = 'project';
+                }
+                elseif($treeType == 'execution')
+                {
+                    $treeTitle = $lang->execution->common;
+                    $treeIcon  = 'run';
+                }
+                else
+                {
+                    $treeTitle = $lang->files;
+                    $treeIcon  = 'paper-clip';
+                }
+                $items[] = array('text' => $treeTitle, 'icon' => $treeIcon, 'class' => 'project-tree-title');
+                $items   = array_merge($items, $this->buildMenuTree($modules, $this->libID));
+            }
+            $this->setProp('items', $items);
+        }
     }
 
     private function getActions($item): array|null

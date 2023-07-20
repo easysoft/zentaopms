@@ -23,43 +23,19 @@ jsVar('spaceMethod', $config->doc->spaceMethod);
 jsVar('canSortDocCatalog', common::hasPriv('doc', 'sortCatalog'));
 jsVar('canSortAPICatalog', common::hasPriv('api', 'sortCatalog'));
 
-$docMenuTree = null;
-if($spaceType != 'project')
-{
-    $docMenuTree = docMenu
-        (
-            set::modules($libTree),
-            set::spaceMethod($config->doc->spaceMethod),
-            set::libID((int)$libID),
-            set::moduleID((int)$moduleID),
-            set::linkParams("%s&browseType={$barType}"),
-            set::spaceType($spaceType),
-            set::objectType(isset($type) ? $type : ''),
-            set::objectID(isset($objectID) ? $objectID : 0),
-        );
-}
-else
-{
-    foreach($libTree as $treeType => $treeData)
-    {
-        if($treeType == 'annex') $treeData = array($treeData);
-        $docMenuTree[] = docMenu
-            (
-                set::modules($treeData),
-                set::spaceMethod($config->doc->spaceMethod),
-                set::libID((int)$libID),
-                set::moduleID((int)$moduleID),
-                set::linkParams("%s&browseType={$barType}"),
-                set::spaceType($spaceType),
-                set::objectType(isset($type) ? $type : ''),
-                set::allText($config->doc->treeNameList[$treeType]),
-            );
-    }
-}
-
 sidebar
 (
-    $docMenuTree
+    docMenu
+    (
+        set::modules($libTree),
+        set::spaceMethod($config->doc->spaceMethod),
+        set::libID((int)$libID),
+        set::moduleID((int)$moduleID),
+        set::linkParams("%s&browseType={$barType}"),
+        set::spaceType($spaceType),
+        set::objectType(isset($type) ? $type : ''),
+        set::objectID(isset($objectID) ? $objectID : 0),
+    )
 );
 
 if($app->rawMethod == 'view' and common::hasPriv('doc', 'displaySetting'))

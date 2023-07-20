@@ -97,7 +97,3 @@ $config->doc->actionList['delete']['text']         = $lang->delete;
 $config->doc->actionList['delete']['url']          = helper::createLink('doc', 'delete', 'docID={id}');
 $config->doc->actionList['delete']['className']    = 'ajax-submit';
 $config->doc->actionList['delete']['data-confirm'] = $lang->doc->confirmDelete;
-
-$config->doc->treeNameList['project']   = "<i class='icon icon-project'></i> {$lang->projectCommon}";
-$config->doc->treeNameList['execution'] = "<i class='icon icon-run'></i> {$lang->execution->common}";
-$config->doc->treeNameList['annex']     = "<i class='icon icon-paper-clip'></i> {$lang->files}";
