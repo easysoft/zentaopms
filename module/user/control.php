@@ -1033,9 +1033,9 @@ class user extends control
         $_SESSION = array();
         session_destroy();
 
-        if($this->app->getViewType() == 'json') return print(json_encode(array('status' => 'success')));
+        if($this->app->getViewType() == 'json') return $this->send(array('status' => 'success'));
         $vars = !empty($referer) ? "referer=$referer" : '';
-        $this->locate($this->createLink('user', 'login', $vars));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('user', 'login', $vars)));
     }
 
     /**
