@@ -10,7 +10,7 @@
  * 单位：个
  * 描述：按全局统计的发布总数表示整个组织的总发布数量。该度量项反映了组织总共发布的产品或服务的数量，可以用于评估组织的产品发布活动和战略。
  * 定义：所有的发布个数求和
-过滤已删除的发布
+ *       过滤已删除的发布
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,20 +23,20 @@
  */
 class count_of_release extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getReleases';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.id');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($data)
     {
+        $this->result += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array(array('value' => $this->result));
+        return $this->filterByOptions($records, $options);
     }
 }
