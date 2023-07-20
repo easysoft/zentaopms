@@ -167,3 +167,5 @@ ALTER TABLE `zt_charter` ADD `activatedDate` datetime NULL;
 
 UPDATE `zt_priv` SET `vision` = ',rnd,or,' WHERE `module` = 'requirement' AND `method` = 'import';
 UPDATE `zt_priv` SET `vision` = ',rnd,or,' WHERE `module` = 'requirement' AND `method` = 'exportTemplate';
+
+REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'mode', 'PLM');
