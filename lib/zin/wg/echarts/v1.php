@@ -8,7 +8,7 @@ class echarts extends wg
     {
         global $app;
         $jsFile = $app->getWebRoot() . 'js/echarts/echarts.common.min.js';
-        return 'window.createEcharts=(name,selector,options) => $.getScript("' . $jsFile . '",() => zui.create(name,selector,options));';
+        return 'window.createEcharts=(name,selector,options) => $.getScript("' . $jsFile . '", null, () => zui.create(name,selector,options));';
     }
 
     public function size(string|int $width, string|int $height): echarts
