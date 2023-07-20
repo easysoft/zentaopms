@@ -72,7 +72,7 @@ formPanel
         set::required(true),
         inputGroup
         (
-            select
+            picker
             (
                 set::name('user'),
                 set::items($members)
