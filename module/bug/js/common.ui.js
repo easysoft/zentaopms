@@ -621,7 +621,7 @@ function loadTestTasks(productID, executionID)
 function loadAllBuilds(event)
 {
     const productID = $('[name="product"]').val();
-    const buildBox  = $(event.target).closest('.input-group').find('select').attr('id');
+    const buildBox  = $(event.target).closest('.input-group').find('select').attr('name').replace('[]', '');
     loadProductBuilds(productID, 'all', buildBox);
 }
 
