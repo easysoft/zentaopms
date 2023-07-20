@@ -98,7 +98,7 @@ window.loadWhitelist = function(libID)
  * @access public
  * @return void
  */
-function locateNewLib(type, objectID, libID)
+window.locateNewLib = function(type, objectID, libID)
 {
     let method = 'teamSpace';
     let params = 'objectID=' + objectID + '&libID=' + libID;
