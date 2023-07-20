@@ -807,7 +807,7 @@ $(function()
                var month = ev.date.getMonth() + 1;
                var day   = ev.date.getUTCDate();
                var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-               var taskID = id;
+
                $.post(createLink('review', 'ajaxChangeTRDeadline'), {'deadline' : formattedDate, 'id' : reviewID , 'projectID' : projectID}, function()
                {
                   location.reload();
