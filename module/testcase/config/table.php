@@ -248,6 +248,36 @@ $config->testcase->importfromlib->dtable->fieldList['type']['title'] = $lang->te
 $config->testcase->importfromlib->dtable->fieldList['type']['type']  = 'status';
 $config->testcase->importfromlib->dtable->fieldList['type']['statusMap'] = $lang->testcase->typeList;
 
+$config->testcase->linkbugs = new stdclass();
+$config->testcase->linkbugs->dtable = new stdclass();
+$config->testcase->linkbugs->dtable->fieldList['id']['name']  = 'id';
+$config->testcase->linkbugs->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->testcase->linkbugs->dtable->fieldList['id']['type']  = 'checkID';
+$config->testcase->linkbugs->dtable->fieldList['id']['fixed'] = false;
+
+$config->testcase->linkbugs->dtable->fieldList['pri']['name']  = 'pri';
+$config->testcase->linkbugs->dtable->fieldList['pri']['title'] = $lang->priAB;
+$config->testcase->linkbugs->dtable->fieldList['pri']['type']  = 'pri';
+
+$config->testcase->linkbugs->dtable->fieldList['title']['name']  = 'title';
+$config->testcase->linkbugs->dtable->fieldList['title']['title'] = $lang->bug->title;
+$config->testcase->linkbugs->dtable->fieldList['title']['type']  = 'title';
+$config->testcase->linkbugs->dtable->fieldList['title']['fixed'] = false;
+
+$config->testcase->linkbugs->dtable->fieldList['type']['name']  = 'type';
+$config->testcase->linkbugs->dtable->fieldList['type']['title'] = $lang->bug->type;
+$config->testcase->linkbugs->dtable->fieldList['type']['type']  = 'category';
+$config->testcase->linkbugs->dtable->fieldList['type']['map']   = $lang->bug->typeList;
+
+$config->testcase->linkbugs->dtable->fieldList['openedBy']['name']  = 'openedBy';
+$config->testcase->linkbugs->dtable->fieldList['openedBy']['title'] = $lang->openedByAB;
+$config->testcase->linkbugs->dtable->fieldList['openedBy']['type']  = 'user';
+
+$config->testcase->linkbugs->dtable->fieldList['status']['name']      = 'status';
+$config->testcase->linkbugs->dtable->fieldList['status']['title']     = $lang->statusAB;
+$config->testcase->linkbugs->dtable->fieldList['status']['type']      = 'status';
+$config->testcase->linkbugs->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
+
 $config->scene->dtable = new stdclass();
 $config->scene->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->scene->dtable->fieldList['id']['type']     = 'checkID';
