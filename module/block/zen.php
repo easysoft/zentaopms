@@ -873,19 +873,19 @@ class blockZen extends block
 
         $storyDeliveryRate = $this->loadModel('metric')->getResultByCode('rate_of_delivery_story_in_product', array('product' => join(',', $productIdList)));
         $storyDeliveryRate = json_decode(json_encode($storyDeliveryRate), true);
-        $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
+        if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
 
         $totalStories = $this->metric->getResultByCode('count_of_valid_story_in_product', array('product' => join(',', $productIdList)));
         $totalStories = json_decode(json_encode($totalStories), true);
-        $totalStories = array_column($totalStories, null, 'product');
+        if(!empty($totalStories)) $totalStories = array_column($totalStories, null, 'product');
 
         $closedStories = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => join(',', $productIdList)));
         $closedStories = json_decode(json_encode($closedStories), true);
-        $closedStories = array_column($closedStories, null, 'product');
+        if(!empty($closedStories)) $closedStories = array_column($closedStories, null, 'product');
 
         $unclosedStories = $this->metric->getResultByCode('count_of_unclosed_story_in_product', array('product' => join(',', $productIdList)));
         $unclosedStories = json_decode(json_encode($unclosedStories), true);
-        $unclosedStories = array_column($unclosedStories, null, 'product');
+        if(!empty($unclosedStories)) $unclosedStories = array_column($unclosedStories, null, 'product');
 
         $years  = array();
         $months = array();
@@ -944,13 +944,19 @@ class blockZen extends block
             {
                 $product->monthFinish[$group]  = 0;
                 $product->monthCreated[$group] = 0;
-                foreach($monthFinish as $story)
+                if(!empty($monthFinish))
                 {
-                    if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthFinish[$group] = $story->value;
+                    foreach($monthFinish as $story)
+                    {
+                        if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthFinish[$group] = $story->value;
+                    }
                 }
-                foreach($monthCreated as $story)
+                if(!empty($monthCreated))
                 {
-                    if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthCreated[$group] = $story->value;
+                    foreach($monthCreated as $story)
+                    {
+                        if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthCreated[$group] = $story->value;
+                    }
                 }
             }
         }
