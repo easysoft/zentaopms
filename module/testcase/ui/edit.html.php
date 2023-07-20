@@ -17,8 +17,8 @@ jsVar('executionID', $case->execution);
 
 set::title($lang->testcase->edit);
 
-$rootID   = $isCaseLib ? $libID : $productID;
-$viewType = $isCaseLib ? 'caselib' : 'product';
+$rootID   = $isLibCase ? $libID : $productID;
+$viewType = $isLibCase ? 'caselib' : 'product';
 $createModuleLink = createLink('tree', 'browse', "rootID={$rootID}&view={$viewType}&currentModuleID=0&branch={$case->branch}");
 
 if($case->type != 'unit') unset($lang->testcase->typeList['unit']);
@@ -64,7 +64,7 @@ detailBody
     on::change('#module', 'loadModuleRelated'),
     on::change('#branch', 'loadBranchRelated'),
     on::change('#scriptFile', 'readScriptContent'),
-    on::click('.refresh', $isCaseLib ? 'loadLibModules' : 'loadProductModules'),
+    on::click('.refresh', $isLibCase ? 'loadLibModules' : 'loadProductModules'),
     on::click('#auto', 'checkScript'),
     on::click('.autoScript .file-delete', 'showUploadScriptBtn'),
     sectionList
