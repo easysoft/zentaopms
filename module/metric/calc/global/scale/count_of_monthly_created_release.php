@@ -26,15 +26,15 @@ class count_of_monthly_created_release extends baseCalc
 {
     public $dataset = "getReleases";
 
-    public $fieldList = array('t1.createdDate');
+    public $fieldList = array('t1.date');
 
     public $result = array();
 
     public function calculate($data)
     {
-        if(empty($data->createdDate)) return;
+        if(empty($data->date)) return;
 
-        $date = $data->createdDate;
+        $date = $data->date;
 
         $year  = substr($date, 0, 4);
         $month = substr($date, 5, 2);
