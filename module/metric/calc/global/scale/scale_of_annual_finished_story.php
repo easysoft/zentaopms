@@ -47,6 +47,6 @@ class scale_of_annual_finished_story extends baseCalc
     {
         $records = array();
         foreach($this->result as $year => $value) $records[] = array('year' => $year, 'value' => $value);
-        return $this->filterByOptions($this->result, $records);
+        return $this->filterByOptions($records, $options);
     }
 }
