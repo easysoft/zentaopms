@@ -14,7 +14,6 @@ namespace zin;
 
 formPanel
 (
-    set::shadow(!isonlybody()),
     set::title($lang->group->create),
     formGroup
     (
@@ -43,5 +42,3 @@ formPanel
     ) : null,
     set::actions(array('submit'))
 );
-
-render();

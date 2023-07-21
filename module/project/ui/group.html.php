@@ -23,11 +23,11 @@ toolbar
 (
     item(set(array
     (
-        'icon'       => 'plus',
-        'text'       => $lang->group->create,
-        'class'      => "primary create-project-btn",
-        'url'        => $this->createLink('project', 'createGroup', '', '', true),
-        'data-modal' => 'modal'
+        'icon'        => 'plus',
+        'text'        => $lang->group->create,
+        'class'       => "primary create-project-btn",
+        'url'         => $this->createLink('project', 'createGroup', "projectID={$projectID}"),
+        'data-toggle' => 'modal'
     )))
 );
 
