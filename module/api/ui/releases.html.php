@@ -24,7 +24,7 @@ foreach($releases as $release)
         h::td(substr($release->addedDate, 0, 10)),
         h::td
         (
-            common::hasPriv('api', 'deleteRelease') ? html(html::a(helper::createLink('api', 'deleteRelease', "libID=$libID&id=$release->id"), '<i class="icon-trash"></i>', '', "data-confirm={$lang->custom->notice->confirmDelete} class='ghost'")) : null
+            common::hasPriv('api', 'deleteRelease') ? html(html::a(helper::createLink('api', 'deleteRelease', "libID=$libID&id=$release->id"), '<i class="icon-trash"></i>', '', "data-confirm={$lang->custom->notice->confirmDelete} class='ghost ajax-submit'")) : null
         ),
     );
 }
