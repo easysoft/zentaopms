@@ -10,7 +10,7 @@
  * 单位：个
  * 描述：按全局统计的一级项目集总数表示组织中处于一级层级的项目集数量。此度量项反映了组织中一级项目集的数量，可以用于评估组织的项目集管理的结构和层级划分。
  * 定义：所有一级项目集的个数求和
-过滤已删除的项目集
+ *       过滤已删除的项目集
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,20 +23,20 @@
  */
 class count_of_top_program extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getPrograms';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.id', 't1.grade');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($data)
     {
+        if($data->grade == 1) $this->result += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array(array('value' => $this->result));
+        return $this->filterByOptions($records, $options);
     }
 }

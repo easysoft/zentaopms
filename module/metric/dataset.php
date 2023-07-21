@@ -22,6 +22,23 @@ class dataset
     }
 
     /**
+     * 获取所有的项目集。
+     * Get all program list.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getPrograms($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_PROJECT)->alias('t1')
+            ->where('type')->eq('program')
+            ->andWhere('deleted')->eq('0')
+            ->query();
+    }
+
+    /**
      * Get all projects.
      * 获取所有项目。
      *
