@@ -28,3 +28,7 @@ $config->host->featureBar = array(
         'url'    => helper::createLink('host', 'treemap', 'type=group'),
     ),
 );
+
+$config->host->actions = new stdclass();
+$config->host->actions->view = array();
+$config->host->actions->view['suffixActions'] = array('edit', 'delete');

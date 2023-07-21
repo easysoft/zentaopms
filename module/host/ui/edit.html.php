@@ -22,14 +22,14 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('name'),
             set::label($lang->host->name),
             set::value($host->name),
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::label($lang->host->admin),
             set::control('picker'),
             set::name('admin'),
@@ -41,7 +41,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::label($lang->host->cpuBrand),
             set::control('picker'),
             set::name('cpuBrand'),
@@ -50,7 +50,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('cpuModel'),
             set::label($lang->host->cpuModel),
             set::value($host->cpuModel),
@@ -60,14 +60,14 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('cpuNumber'),
             set::label($lang->host->cpuNumber),
             set::value($host->cpuNumber),
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('cpuCores'),
             set::label($lang->host->cpuCores),
             set::value($host->cpuCores),
@@ -77,7 +77,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('memory'),
             set::label($lang->host->memory),
             set::value($host->memory),
@@ -90,7 +90,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('diskSize'),
             set::label($lang->host->diskSize),
             set::value($host->diskSize),
@@ -106,7 +106,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::label($lang->host->group),
             set::control('picker'),
             set::name('group'),
@@ -115,7 +115,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::label($lang->host->serverRoom),
             set::control('picker'),
             set::name('serverRoom'),
@@ -127,14 +127,14 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('serverModel'),
             set::label($lang->host->serverModel),
             set::value($host->serverModel),
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::label($lang->host->hostType),
             set::control('picker'),
             set::name('hostType'),
@@ -146,7 +146,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::label($lang->host->osName),
             set::control('picker'),
             set::name('osName'),
@@ -156,7 +156,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::label($lang->host->osVersion),
             set::control('picker'),
             set::name('osVersion'),
@@ -168,14 +168,14 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('zap'),
             set::label($lang->host->zap),
             set::value($host->zap ? $host->zap : 8086),
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::label($lang->host->tags),
             set::control('picker'),
             set::name('vsoft'),
@@ -187,14 +187,14 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('intranet'),
             set::label($lang->host->intranet),
             set::value($host->intranet),
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('extranet'),
             set::label($lang->host->extranet),
             set::value($host->extranet),
@@ -204,7 +204,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::label($lang->host->provider),
             set::control('picker'),
             set::name('provider'),
@@ -213,7 +213,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('400px'),
             set::name('status'),
             set::control('radioList'),
             set::label($lang->host->status),

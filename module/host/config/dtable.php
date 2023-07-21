@@ -76,13 +76,15 @@ $config->host->actionList['offline']['url']         = helper::createLink('host',
 $config->host->actionList['edit']['icon']        = 'edit';
 $config->host->actionList['edit']['text']        = $lang->edit;
 $config->host->actionList['edit']['hint']        = $lang->edit;
+$config->host->actionList['edit']['showText']    = true;
 $config->host->actionList['edit']['url']         = array('module' => 'host', 'method' => 'edit', 'params' => 'id={id}');
 
-$config->host->actionList['delete']['icon']       = 'trash';
-$config->host->actionList['delete']['text']       = $lang->delete;
-$config->host->actionList['delete']['hint']       = $lang->delete;
-$config->host->actionList['delete']['ajaxSubmit'] = true;
-$config->host->actionList['delete']['url']        = array('module' => 'host', 'method' => 'delete', 'params' => 'id={id}');
+$config->host->actionList['delete']['icon']         = 'trash';
+$config->host->actionList['delete']['text']         = $lang->delete;
+$config->host->actionList['delete']['hint']         = $lang->delete;
+$config->host->actionList['delete']['showText']     = true;
+$config->host->actionList['delete']['data-confirm'] = $lang->host->confirmDelete;
+$config->host->actionList['delete']['url']          = array('module' => 'host', 'method' => 'delete', 'params' => 'id={id}');
 
 $config->host->dtable->fieldList['actions']['name']     = 'actions';
 $config->host->dtable->fieldList['actions']['title']    = $lang->actions;

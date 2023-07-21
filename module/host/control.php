@@ -1,4 +1,9 @@
 <?php
+
+use Symfony\Component\Yaml\Inline;
+
+use function zin\isAjaxRequest;
+
 /**
  * The control file of host of ZenTaoPMS.
  *
@@ -113,9 +118,7 @@ class host extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse'), 'closeModal' => true));
         }
 
         $this->view->accounts   = $this->loadModel('account')->getPairs();
@@ -158,9 +161,12 @@ class host extends control
         }
         else
         {
-            $response['result']  = 'success';
-            $response['message'] = '';
-            $response['load']    = true;
+            $response['result']     = 'success';
+            $response['message']    = '';
+            $response['load']       = true;
+            $response['closeModal'] = true;
+
+            if(helper::isAjaxRequest('modal')) return print(js::execute("loadCurrentPage();$('.modal').removeClass('show')"));
         }
         $this->send($response);
     }
