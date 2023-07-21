@@ -2393,17 +2393,16 @@ class docModel extends model
     }
 
     /**
-     * Create the select code of doc.
+     * Get the dropmenu link.
      *
      * @param  string $type
-     * @param  string $objectTitle
      * @param  int    $objectID
      * @param  array  $libs
      * @param  int    $libID
      * @access public
      * @return string
      */
-    public function select($type, $objectTitle, $objectID)
+    public function getDropMeunLink($type, $objectID)
     {
         if(!in_array($type, array('product', 'project'))) return '';
 
@@ -2415,11 +2414,7 @@ class docModel extends model
             $currentMethod = $type . 'Space';
         }
 
-        $dropMenuLink = helper::createLink('doc', 'ajaxGetDropMenu', "objectType=$type&objectID=$objectID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group selectBox' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$objectTitle}'><span class='text'>{$objectTitle}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
-        return $output;
+        return helper::createLink('doc', 'ajaxGetDropMenu', "objectType=$type&objectID=$objectID&module=$currentModule&method=$currentMethod");
     }
 
     /**
@@ -2801,7 +2796,7 @@ class docModel extends model
         }
         if($this->app->tab == 'doc' and $type == 'execution') $type = 'project';
 
-        $objectDropdown = '';
+        $objectDropdown = array('text' => '', 'link' => '');
         $appendObject   = $objectID;
         if(in_array($type, array('project', 'product', 'execution')))
         {
@@ -2823,23 +2818,19 @@ class docModel extends model
             $objectTitle = zget($objects, $objectID, '');
             if($this->app->tab != 'doc' and isset($libs[$libID]))
             {
-                $objectTitle    = zget($libs[$libID], 'name', '');
-                $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
+                $objectDropdown['text'] = zget($libs[$libID], 'name', '');
             }
             else
             {
-                $objectDropdown = $this->select($type, $objectTitle, $appendObject);
+                $objectDropdown['text'] = $objectTitle;
+                $objectDropdown['link'] = $this->getDropMeunLink($type, $appendObject);
             }
         }
         else
         {
             $libs = $this->getLibsByObject($type, 0, '', $appendLib);
             if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
-            if(isset($libs[$libID]))
-            {
-                $objectTitle    = zget($libs[$libID], 'name', '');
-                $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
-            }
+            if(isset($libs[$libID])) $objectDropdown['text'] = zget($libs[$libID], 'name', '');
 
             $object     = new stdclass();
             $object->id = 0;
