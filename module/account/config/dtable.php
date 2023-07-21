@@ -42,6 +42,7 @@ $config->account->dtable->fieldList['mobile']['sortType'] = true;
 $config->account->dtable->fieldList['createdBy']['title']    = $lang->account->createdBy;
 $config->account->dtable->fieldList['createdBy']['name']     = 'createdBy';
 $config->account->dtable->fieldList['createdBy']['type']     = 'user';
+$config->account->dtable->fieldList['createdBy']['width']    = '100px';
 $config->account->dtable->fieldList['createdBy']['sortType'] = true;
 
 $config->account->actionList = array();

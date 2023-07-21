@@ -67,7 +67,7 @@ class serverroom extends control
         if($_POST)
         {
             $createID = $this->serverroom->create();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('serverRoom', $createID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('serverroom', 'browse')));
@@ -93,7 +93,7 @@ class serverroom extends control
         if($_POST)
         {
             $changes = $this->serverroom->update($id);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => implode("\n", (dao::getError()))));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
             {

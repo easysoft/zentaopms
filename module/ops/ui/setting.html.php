@@ -90,7 +90,7 @@ formPanel
         setClass('ops-header'),
         formGroup
         (
-            set::width('1/3'),
+            set::width('1/4'),
             set::label($lang->custom->key),
         ),
         formGroup
