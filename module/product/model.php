@@ -1571,14 +1571,14 @@ class productModel extends model
     {
         if(empty($productID))
         {
-            if($this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = $this->cookie->preProductID;
-            if(empty($this->session->product)) $productID = (int)key($products);
+            if($this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = (int)$this->cookie->preProductID;
+            if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
         }
 
         if(isset($products[$productID])) return $productID;
 
         /* 产品ID已经被删除，不存在于产品列表中。*/
-        /* Product ID does not exsit in products list, it may be deleted. */
+        /* Product ID does not exist in products list, it may be deleted. */
         /* Confirm if product exist. */
         $product = $this->getByID($productID);
         if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
@@ -1590,7 +1590,7 @@ class productModel extends model
             $this->accessDenied($this->lang->product->accessDenied);
         }
 
-        return $productID;
+        return (int)$productID;
     }
 
     /**
