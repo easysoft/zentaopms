@@ -180,6 +180,7 @@ class jobModel extends model
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->remove('repoType,reference')
+            ->cleanInt('product')
             ->get();
 
         if($job->engine == 'jenkins')

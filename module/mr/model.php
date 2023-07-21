@@ -1334,7 +1334,7 @@ class mrModel extends model
                     ->exec();
                 if (dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.refresh()');
+                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true);
             }
         }
         return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));

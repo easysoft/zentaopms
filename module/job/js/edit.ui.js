@@ -193,4 +193,9 @@ $(document).ready(function()
 {
     changeEngine(engine);
     $('[name=triggerType]').val(job.triggerType).trigger('change');
+
+    $(document).on('click', '.dropmenu-list li.tree-item', function()
+    {
+        $('#jkTask').val($('#pipelineDropmenu button.dropmenu-btn').data('value'));
+    });
 });

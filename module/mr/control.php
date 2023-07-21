@@ -377,14 +377,14 @@ class mr extends control
         if(isset($rawMR->state) and $rawMR->state == 'merged')
         {
             $this->mr->logMergedAction($MR);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'locate' => helper::createLink('mr', 'browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'load' => true));
         }
 
         /* The type of variable `$rawMR->message` is string. This is different with apiCreateMR. */
         if(isset($rawMR->message))
         {
             $errorMessage = $this->mr->convertApiError($rawMR->message);
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->sudo, $errorMessage), 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->sudo, $errorMessage)));
         }
 
         return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));

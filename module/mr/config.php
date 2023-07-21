@@ -60,7 +60,6 @@ $config->mr->actionList['delete']['data-confirm'] = $lang->mr->confirmDelete;
 $config->mr->actionList['accept']['icon']        = 'flow';
 $config->mr->actionList['accept']['text']        = $lang->mr->acceptMR;
 $config->mr->actionList['accept']['url']         = helper::createLink('mr', 'accept', "MRID={id}");
-$config->mr->actionList['accept']['data-toggle'] = 'modal';
 
 $config->mr->actionList['approval']['icon']        = 'ok';
 $config->mr->actionList['approval']['text']        = $lang->mr->approve;
@@ -72,7 +71,7 @@ $config->mr->actionList['reject']['text']        = $lang->mr->reject;
 $config->mr->actionList['reject']['url']         = helper::createLink('mr', 'approval', "MRID={id}&action=reject");
 $config->mr->actionList['reject']['data-toggle'] = 'modal';
 
-$config->mr->actionList['close']['icon']        = 'bug';
+$config->mr->actionList['close']['icon']        = 'off';
 $config->mr->actionList['close']['text']        = $lang->mr->close;
 $config->mr->actionList['close']['url']         = helper::createLink('mr', 'close', "MRID={id}");
 $config->mr->actionList['close']['data-toggle'] = 'modal';

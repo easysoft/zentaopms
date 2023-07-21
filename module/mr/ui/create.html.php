@@ -23,6 +23,12 @@ dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 formPanel
 (
     set::title($lang->mr->create),
+    formGroup
+    (
+        setClass('hidden'),
+        set::name('hostID'),
+        set::value($repo->gitService),
+    ),
     formRow
     (
         formGroup
