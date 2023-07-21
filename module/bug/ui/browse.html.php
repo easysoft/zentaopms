@@ -108,48 +108,48 @@ foreach($lang->bug->resolutionList as $key => $resolution)
     if($key == 'fixed')
     {
         $buildItems = array();
-        foreach($builds as $key => $build) $buildItems[] = array('text' => $build, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key"));
+        foreach($builds as $key => $build) $buildItems[] = array('text' => $build, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key"));
 
         $resolveItems[] = array('text' => $resolution, 'class' => 'not-hide-menu', 'items' => $buildItems);
     }
     else
     {
-        $resolveItems[] = array('text' => $resolution, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchResolve', "resolution=$key"));
+        $resolveItems[] = array('text' => $resolution, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => createLink('bug', 'batchResolve', "resolution=$key"));
     }
 }
 
 $batchItems = array
 (
-    array('text' => $lang->bug->confirm,  'class' => 'batch-btn ajax-btn ' . ($canBatchConfirm ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchConfirm')),
-    array('text' => $lang->bug->close,    'class' => 'batch-btn ajax-btn ' . ($canBatchClose ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchClose')),
-    array('text' => $lang->bug->activate, 'class' => 'batch-btn' . ($canBatchActivate ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchActivate', "productID=$product->id&branch=$branch")),
+    array('text' => $lang->bug->confirm,  'class' => 'batch-btn ajax-btn not-open-url ' . ($canBatchConfirm ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchConfirm')),
+    array('text' => $lang->bug->close,    'class' => 'batch-btn ajax-btn not-open-url ' . ($canBatchClose ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchClose')),
+    array('text' => $lang->bug->activate, 'class' => 'batch-btn not-open-url ' . ($canBatchActivate ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchActivate', "productID=$product->id&branch=$branch")),
     array('text' => $lang->bug->resolve,  'class' => 'not-hide-menu ' . ($canBatchResolve ? '' : 'hidden'), 'items' => $resolveItems)
 );
 
 $branchItems = array();
 foreach($branchTagOption as $branchID => $branchName)
 {
-    $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchChangeBranch', "branchID=$branchID"));
+    $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchChangeBranch', "branchID=$branchID"));
 }
 
 $moduleItems = array();
 foreach($modules as $moduleID => $module)
 {
-    $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchChangeModule', "moduleID=$moduleID"));
+    $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchChangeModule', "moduleID=$moduleID"));
 }
 
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
-    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
+    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
 }
 
 $footToolbar = $canBatchAction ? array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
     (
-        array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
-        array('caret' => 'up', 'data-placement' => 'top-start', 'class' => 'btn btn-caret size-sm secondary', 'items' => $batchItems),
+        array('text' => $lang->edit, 'className' => 'secondary batch-btn not-open-url', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
+        array('caret' => 'up', 'data-placement' => 'top-start', 'class' => 'btn btn-caret size-sm secondary not-open-url', 'items' => $batchItems),
     )),
     $canBatchChangeBranch && $this->session->currentProductType != 'normal' ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'items' => $branchItems) : null,
     $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $moduleItems) : null,
