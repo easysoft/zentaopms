@@ -1527,6 +1527,8 @@ class projectModel extends model
 
         $this->projectTao->doStart($projectID, $project);
 
+        $this->recordFirstEnd($projectID);
+
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError())
         {
@@ -3013,5 +3015,20 @@ class projectModel extends model
         }
 
         return $project;
+    }
+
+    /**
+     * 记录项目启动时的计划完成日期。
+     * Record the end date when the project is started.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return bool
+     */
+    public function recordFirstEnd(int $projectID): bool
+    {
+        $project = $this->getByID($projectID);
+        $this->dao->update(TABLE_PROJECT)->set('firstEnd')->eq($project->end)->where('id')->eq($projectID)->exec();
+        return !dao::isError();
     }
 }
