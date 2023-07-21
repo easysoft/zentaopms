@@ -228,6 +228,7 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->task->type),
+            set::required(true),
             picker
             (
                 set::name('type'),
