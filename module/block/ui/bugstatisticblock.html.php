@@ -11,7 +11,8 @@ declare(strict_types=1);
 
 namespace zin;
 
-$blockNavCode   = 'nav-' . uniqid();
+$uniqid         =  uniqid();
+$blockNavCode   = 'nav-' . $uniqid;
 $navTabs        = array();
 $selected       = key($products);
 $statisticCells = array();
@@ -52,14 +53,15 @@ foreach($products as $productID => $product)
                     (
                         setClass('pl-0.5'),
                         set('data-toggle', 'tooltip'),
-                        set('href', 'totalProgressTooltip'),
+                        set('href', 'totalProgressTooltip' . $uniqid),
                         'help'
                     ),
                 ),
                 div
                 (
-                    setClass('tooltip shadow bg-white text-gray leading-6'),
-                    set::id('totalProgressTooltip'),
+                    setClass('tooltip'),
+                    set::id('totalProgressTooltip' . $uniqid),
+                    set::type('white'),
                     'fixBugRateTip'
                 ),
             ),
