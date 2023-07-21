@@ -66,5 +66,55 @@ toolbar
     ))) : null,
 );
 
-/* ====== Render page ====== */
-render();
+include '../../doc/ui/left.html.php';
+
+$list = array();
+foreach($apiList as $api)
+{
+    $list[] = h::li
+        (
+            setClass('list-group-item'),
+            div
+            (
+                setClass("heading {$api->method}"),
+                a
+                (
+                    set::href(createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0")),
+                    span
+                    (
+                        setClass('method'),
+                        $api->method
+                    ),
+                    span
+                    (
+                        setClass('path'),
+                        $api->path
+                    ),
+                    span
+                    (
+                        setClass('desc'),
+                        $api->title
+                    ),
+                )
+            )
+        );
+}
+$delimiter = strpos($app->clientLang, 'zh') === 0 ? '：' : ': ';
+panel
+(
+    div
+    (
+        setClass('detail base-url'),
+        $lang->api->baseUrl . $delimiter . $lib->baseUrl,
+    ),
+    h::hr(setClass('mb-4')),
+    div
+    (
+        setClass('detail'),
+        h::ul
+        ( 
+            setClass('list-group'),
+            $list
+        )
+    )
+);
