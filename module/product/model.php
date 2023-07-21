@@ -1542,7 +1542,7 @@ class productModel extends model
     {
         if(commonModel::isTutorialMode()) return $productID;
 
-        $productID = $this->getAccessableProductID($productID, $products);
+        $productID = $this->getAccessibleProductID($productID, $products);
 
         $this->session->set('product', $productID, $this->app->tab);
 
@@ -1560,14 +1560,14 @@ class productModel extends model
 
     /**
      * 获取可访问的产品ID。
-     * Get accessable product ID.
+     * Get accessible product ID.
      *
      * @param  int       $productID
      * @param  array     $products
      * @access protected
      * @return int
      */
-    protected function getAccessableProductID(int $productID, array $products): int
+    protected function getAccessibleProductID(int $productID, array $products): int
     {
         if(empty($productID))
         {

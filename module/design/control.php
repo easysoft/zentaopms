@@ -44,7 +44,7 @@ class design extends control
 
         ksort($products);
 
-        $productID = $this->product->getAccessableProductID($productID, $products);
+        $productID = $this->product->getAccessibleProductID($productID, $products);
 
         $this->lang->modulePageNav = $this->design->setMenu($projectID, $products, $productID);
         $this->project->setMenu($projectID);

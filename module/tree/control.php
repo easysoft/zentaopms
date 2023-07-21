@@ -111,7 +111,7 @@ class tree extends control
             /* Set menu.*/
             $products = $this->product->getPairs($mode = '', $programID = 0, $append = '', 'all');
 
-            $rootID = $this->product->getAccessableProductID($rootID, $products);
+            $rootID = $this->product->getAccessibleProductID($rootID, $products);
             $this->session->set('product', $rootID, $this->app->tab);
 
             unset($products[$rootID]);
@@ -182,7 +182,7 @@ class tree extends control
                 unset($this->lang->product->menu->set['subModule']);
 
                 $products = $this->product->getPairs();
-                $productID = $this->product->getAccessableProductID($productID, $products);
+                $productID = $this->product->getAccessibleProductID($productID, $products);
                 $this->session->set('product', $productID, $this->app->tab);
             }
             elseif($from == 'project')
