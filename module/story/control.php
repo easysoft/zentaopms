@@ -1503,6 +1503,11 @@ class story extends control
 
         $this->executeHooks($storyID);
 
+        if($this->config->edition == 'ipd')
+        {
+            $this->view->roadmaps = $this->loadModel('roadmap')->getPairs($story->product);
+        }
+
         $title      = "STORY #$story->id $story->title - $product->name";
         $position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $position[] = $this->lang->story->common;

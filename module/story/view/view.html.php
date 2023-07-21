@@ -268,6 +268,30 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
+                <?php if($config->edition == 'ipd' && $story->type == 'requirement'):?>
+                <tr>
+                  <th><?php echo $lang->roadmap->common;?></th>
+                  <td>
+                  <?php
+                  if($story->roadmap && isset($roadmaps[$story->roadmap]))
+                  {
+                      if(commonModel::hasPriv('roadmap', 'view'))
+                      {
+                          echo html::a($this->createLink('roadmap', 'view', "roadmapID={$story->roadmap}"), $roadmaps[$story->roadmap]);
+                      }
+                      else
+                      {
+                          echo $roadmaps[$story->roadmap];
+                      }
+                  }
+                  else
+                  {
+                      echo '';
+                  }
+                  ?>
+                  </td>
+                </tr>
+                <?php endif;?>
                 <?php if($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan):?>
                 <tr class='plan-line'>
                   <th><?php echo $lang->story->plan;?></th>
