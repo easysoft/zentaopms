@@ -278,6 +278,36 @@ $config->testcase->linkbugs->dtable->fieldList['status']['title']     = $lang->s
 $config->testcase->linkbugs->dtable->fieldList['status']['type']      = 'status';
 $config->testcase->linkbugs->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
 
+$config->testcase->linkcases = new stdclass();
+$config->testcase->linkcases->dtable = new stdclass();
+$config->testcase->linkcases->dtable->fieldList['id']['name']  = 'id';
+$config->testcase->linkcases->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->testcase->linkcases->dtable->fieldList['id']['type']  = 'checkID';
+$config->testcase->linkcases->dtable->fieldList['id']['fixed'] = false;
+
+$config->testcase->linkcases->dtable->fieldList['pri']['name']  = 'pri';
+$config->testcase->linkcases->dtable->fieldList['pri']['title'] = $lang->priAB;
+$config->testcase->linkcases->dtable->fieldList['pri']['type']  = 'pri';
+
+$config->testcase->linkcases->dtable->fieldList['title']['name']  = 'pri';
+$config->testcase->linkcases->dtable->fieldList['title']['title'] = $lang->testcase->title;
+$config->testcase->linkcases->dtable->fieldList['title']['type']  = 'title';
+$config->testcase->linkcases->dtable->fieldList['title']['fixed'] = false;
+
+$config->testcase->linkcases->dtable->fieldList['type']['name']  = 'type';
+$config->testcase->linkcases->dtable->fieldList['type']['title'] = $lang->testcase->type;
+$config->testcase->linkcases->dtable->fieldList['type']['type']  = 'category';
+$config->testcase->linkcases->dtable->fieldList['type']['map']   = $lang->testcase->typeList;
+
+$config->testcase->linkcases->dtable->fieldList['openedBy']['name']  = 'openedBy';
+$config->testcase->linkcases->dtable->fieldList['openedBy']['title'] = $lang->openedByAB;
+$config->testcase->linkcases->dtable->fieldList['openedBy']['type']  = 'user';
+
+$config->testcase->linkcases->dtable->fieldList['status']['name']      = 'status';
+$config->testcase->linkcases->dtable->fieldList['status']['title']     = $lang->statusAB;
+$config->testcase->linkcases->dtable->fieldList['status']['type']      = 'status';
+$config->testcase->linkcases->dtable->fieldList['status']['statusMap'] = $lang->testcase->statusList;
+
 $config->scene->dtable = new stdclass();
 $config->scene->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->scene->dtable->fieldList['id']['type']     = 'checkID';
