@@ -34,16 +34,6 @@ $showTask             = strpos(",$showFields,", ',task,')             !== false;
 $showMailto           = strpos(",$showFields,", ',mailto,')           !== false;
 $showKeywords         = strpos(",$showFields,", ',keywords,')         !== false;
 
-foreach($lang->bug->severityList as $severityKey => $severityValue)
-{
-    if(empty($severityValue)) unset($lang->bug->severityList[$severityKey]);
-}
-
-foreach($lang->bug->priList as $priKey => $priValue)
-{
-    if(empty($priValue)) unset($lang->bug->priList[$priKey]);
-}
-
 formPanel
 (
     on::change('[name="product"]',              'changeProduct'),
@@ -327,7 +317,7 @@ formPanel
             set::width('180px'),
             set::label($lang->bug->severity),
             set::control('severityPicker'),
-            set::items($lang->bug->severityList),
+            set::items(array_filter($lang->bug->severityList)),
             set::name('severity'),
             set::value($bug->severity)
         ),
@@ -336,7 +326,7 @@ formPanel
             set::width('180px'),
             set::label($lang->bug->pri),
             set::control('priPicker'),
-            set::items($lang->bug->priList),
+            set::items(array_filter($lang->bug->priList)),
             set::name('pri'),
             set::value($bug->pri)
         ) : null
