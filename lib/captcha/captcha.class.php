@@ -135,7 +135,7 @@ class captcha
         } else {
             $this->builder = $builder;
         }
-        
+
         $this->phrase = is_string($phrase) ? $phrase : $this->builder->build($phrase);
     }
 
@@ -357,7 +357,7 @@ class captcha
             $w = $box[2] - $box[0];
             $angle = $this->rand(-$this->maxAngle, $this->maxAngle);
             $offset = $this->rand(-$this->maxOffset, $this->maxOffset);
-            \imagettftext($image, $size, $angle, $x, $y + $offset, $col, $font, $symbol);
+            \imagettftext($image, $size, $angle, (int)$x, (int)($y + $offset), $col, $font, $symbol);
             $x += $w;
         }
 
@@ -787,7 +787,7 @@ class PhraseBuilder
     {
         return self::doNiceize($str);
     }
-    
+
     /**
      * A static helper to niceize
      */
