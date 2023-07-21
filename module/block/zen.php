@@ -581,7 +581,6 @@ class blockZen extends block
         $orderBy = isset($block->params->type) ? $block->params->orderBy : 'id_asc';
 
         $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $this->viewType != 'json' ? $pager : '', 'story');
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter');
     }
 
     /**
@@ -2619,7 +2618,6 @@ class blockZen extends block
         $productID = $this->session->product;
 
         $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $this->viewType != 'json' ? $pager : '', 'story', true, 0, $productID);
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter');
     }
 
     /**

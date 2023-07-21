@@ -47,8 +47,7 @@ panel
     dtable
     (
         set::height(318),
-        set::fixedLeftWidth('0.5'),
-        set::userMap($users),
+        set::fixedLeftWidth($longBlock ? '0.5' : '0.8'),
         set::cols(array_values($config->block->story->dtable->fieldList)),
         set::data(array_values($stories))
     )
