@@ -1170,7 +1170,7 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function saveBackUriSession4Dynamic(): void
+    protected function saveBackUriSessionForDynamic(): void
     {
         $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri, 'product');
@@ -1200,7 +1200,7 @@ class productZen extends product
      * @access protected
      * @return [array, object]
      */
-    protected function getActions4Dynamic(string $account, string $orderBy, int $productID, string $type, int $recTotal, string $date, string $direction): array
+    protected function getActionsForDynamic(string $account, string $orderBy, int $productID, string $type, int $recTotal, string $date, string $direction): array
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);

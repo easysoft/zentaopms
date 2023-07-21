@@ -468,10 +468,10 @@ class product extends control
         $this->loadModel('action');
 
         /* Save env data. */
-        $this->productZen->saveBackUriSession4Dynamic();
+        $this->productZen->saveBackUriSessionForDynamic();
         $this->product->setMenu($productID, 0, $type);
 
-        /* Generate order by string. */
+        /* Generate orderBy string. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
         /* Get user account. */
@@ -483,7 +483,7 @@ class product extends control
         }
 
         /* Get actions. */
-        list($actions, $pager) = $this->productZen->getActions4Dynamic($account, $orderBy, $productID, $type, $recTotal, $date, $direction);
+        list($actions, $pager) = $this->productZen->getActionsForDynamic($account, $orderBy, $productID, $type, $recTotal, $date, $direction);
         if(empty($recTotal)) $recTotal = count($actions);
 
         /* Assign. */
