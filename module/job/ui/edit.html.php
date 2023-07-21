@@ -270,6 +270,7 @@ formPanel
                 (
                     set::name('jkTask'),
                     set::type('hidden'),
+                    set::value($job->rawPipeline),
                 ),
                 dropmenu
                 (

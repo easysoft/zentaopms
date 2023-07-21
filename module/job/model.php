@@ -32,7 +32,11 @@ class jobModel extends model
         }
         elseif($job->engine == 'jenkins')
         {
-            if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
+            if(strpos($job->pipeline, '/job/') !== false)
+            {
+                $job->rawPipeline = $job->pipeline;
+                $job->pipeline    = trim(str_replace('/job/', '/', $job->pipeline), '/');
+            }
         }
         return $job;
     }
