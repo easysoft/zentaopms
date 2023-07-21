@@ -351,14 +351,14 @@ class testreport extends control
         if($_POST)
         {
             $changes = $this->testreport->update($reportID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'success', 'message' => dao::getError()));
 
             $files      = $this->loadModel('file')->saveUpload('testreport', $reportID);
             $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
             $actionID   = $this->loadModel('action')->create('testreport', $reportID, 'Edited', $fileAction);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
-            return print(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "reportID=$reportID")));
         }
 
         $report    = $this->testreport->getById($reportID);

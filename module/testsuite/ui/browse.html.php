@@ -45,7 +45,7 @@ dtable
 (
     set::cols($cols),
     set::data($data),
-    set::fixedLeftWidth('0.2'),
+    set::fixedLeftWidth('0.33'),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
 );

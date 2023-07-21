@@ -370,7 +370,7 @@ div
                                     div(html(sprintf($lang->testreport->bugSummary, $bugSummary['foundBugs'], count($legacyBugs), $bugSummary['activatedBugs'],  $bugSummary['countBugByTask'], $bugSummary['bugConfirmedRate'] . '%', $bugSummary['bugCreateByCaseRate'] . '%')))
                                 )
                             ),
-                            item(set::name($lang->testreport->legendComment), empty($report->report) ? $lang->testreport->none : $report->report),
+                            item(set::name($lang->testreport->legendComment), empty($report->report) ? $lang->testreport->none : html($report->report)),
                         )
                     ),
                     $report->files ? section

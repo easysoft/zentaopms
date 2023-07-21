@@ -154,11 +154,7 @@ formPanel
         formGroup
         (
             set::label($lang->testreport->report),
-            editor
-            (
-                set::name('report'),
-                set::value()
-            )
+            editor(set::name('report'))
         )
     ),
     formRow

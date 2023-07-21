@@ -131,7 +131,7 @@ formPanel
             editor
             (
                 set::name('report'),
-                set::value($report->report)
+                html($report->report)
             )
         )
     ),

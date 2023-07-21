@@ -54,7 +54,6 @@ $config->testsuite->dtable->fieldList['addedDate']['sortType'] = true;
 $config->testsuite->dtable->fieldList['actions']['name']       = 'actions';
 $config->testsuite->dtable->fieldList['actions']['title']      = $lang->actions;
 $config->testsuite->dtable->fieldList['actions']['type']       = 'actions';
-$config->testsuite->dtable->fieldList['actions']['width']      = '140';
 $config->testsuite->dtable->fieldList['actions']['fixed']      = 'right';
 $config->testsuite->dtable->fieldList['actions']['sortType']   = false;
 $config->testsuite->dtable->fieldList['actions']['list']       = $config->testsuite->actionList;
