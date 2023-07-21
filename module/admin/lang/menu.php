@@ -183,12 +183,12 @@ $lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
 $lang->admin->menuList->platform['subMenu']['dashboard']   = array('link' => "{$lang->dashboard}|system|dashboard|");
-$lang->admin->menuList->platform['subMenu']['plat']        = array('link' => "{$lang->devops->platform}|system|", 'subModule' => 'system');
+$lang->admin->menuList->platform['subMenu']['plat']        = array('link' => "{$lang->devops->platform}|system|browsebackup|", 'subModule' => 'system');
 $lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
-$lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse", 'subModule' => 'host,account,serverroom,ops');
+$lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops');
 $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
 
-$lang->admin->menuList->platform['tabMenu']['plat']['backup'] = array('link' => "{$lang->backup->common}|system|index|");
+$lang->admin->menuList->platform['tabMenu']['plat']['backup'] = array('link' => "{$lang->backup->common}|system|browsebackup|");
 $lang->admin->menuList->platform['tabMenu']['plat']['dblist'] = array('link' => "{$lang->devops->dblist}|system|dblist|");
 $lang->admin->menuList->platform['tabMenu']['plat']['domain'] = array('link' => "{$lang->devops->domain}|system|editdomain|");
 $lang->admin->menuList->platform['tabMenu']['plat']['oss']    = array('link' => "{$lang->devops->oss}|system|ossview|");

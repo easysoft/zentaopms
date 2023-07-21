@@ -11,6 +11,32 @@
  */
 class system extends control
 {
+
+    /**
+     * __construct
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+
+        $this->backupPath = $this->loadModel('backup')->getBackupPath();
+        if(!is_dir($this->backupPath))
+        {
+            if(!mkdir($this->backupPath, 0755, true)) $this->view->error = sprintf($this->lang->system->backup->error->noWritable, $this->backupPath);
+        }
+        else
+        {
+            if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->system->backup->error->noWritable, $this->backupPath);
+        }
+        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->system->backup->error->noWritable, $this->app->getTmpRoot());
+
+        $this->loadModel('action');
+        $this->loadModel('setting');
+    }
+
     /**
      * System index.
      *
@@ -403,8 +429,6 @@ class system extends control
     {
         $domainSettings = $this->system->getDomainSettings();
         if($domainSettings->customDomain) return print(js::locate($this->inLink('domainView')));
-
-        return print(js::locate($this->inLink('editDomain')));
     }
 
     /**
@@ -544,6 +568,44 @@ class system extends control
         $this->view->title       = $this->lang->system->SLB->common;
         $this->view->slbSettings = $this->system->getSLBSettings();
 
+        $this->display();
+    }
+
+    public function browseBackup()
+    {
+        $backups = array();
+        if(empty($this->view->error))
+        {
+            $sqlFiles = glob("{$this->backupPath}*.sql*");
+            if(!empty($sqlFiles))
+            {
+                foreach($sqlFiles as $file)
+                {
+                    $fileName   = basename($file);
+                    $backupFile = new stdclass();
+                    $backupFile->time  = filemtime($file);
+                    $backupFile->name  = substr($fileName, 0, strpos($fileName, '.'));
+                    $backupFile->sqlSummary   = $this->system->getSQLSummary($file);
+                    $backupFile->files[$file] = $this->backup->getBackupSummary($file);
+
+                    $fileBackup = $this->backup->getBackupFile($backupFile->name, 'file');
+                    if($fileBackup) $backupFile->files[$fileBackup] = $this->backup->getBackupSummary($fileBackup);
+
+                    $codeBackup = $this->backup->getBackupFile($backupFile->name, 'code');
+                    if($codeBackup) $backupFile->files[$codeBackup] = $this->backup->getBackupSummary($codeBackup);
+
+                    $backups[$backupFile->name] = $backupFile;
+                }
+            }
+        }
+        krsort($backups);
+
+        /* Fresh latest version of QuCheng platform in session.  */
+        $this->session->set('platformLatestVersion', $this->loadModel('store')->platformLatestVersion());
+
+        $this->view->title      = $this->lang->backup->common;
+        $this->view->position[] = $this->lang->backup->common;
+        $this->view->backups    = $backups;
         $this->display();
     }
 

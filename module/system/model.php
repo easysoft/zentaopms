@@ -940,4 +940,189 @@ class systemModel extends model
         $this->config->debug = $systemDebug;
         return $encrypted;
     }
+
+    /**
+     * Backup SQL.
+     *
+     * @param  string    $backupFile
+     * @access public
+     * @return object
+     */
+    public function backSQL($backupFile, $backupType = 'manual')
+    {
+        $zdb = $this->app->loadClass('zdb');
+        $dumpStatus = $zdb->dump($backupFile);
+        if($dumpStatus->result === true) $this->processSQLSummary($backupFile, $backupType);
+        return $dumpStatus;
+    }
+
+    /**
+     * Restore SQL.
+     *
+     * @param  string    $backupFile
+     * @access public
+     * @return object
+     */
+    public function restoreSQL($backupFile)
+    {
+        $zdb    = $this->app->loadClass('zdb');
+        $nosafe = strpos($this->config->backup->setting, 'nosafe') !== false;
+
+        $backupDir    = dirname($backupFile);
+        $fileName     = date('YmdHis') . mt_rand(0, 9);
+        $backFileName = "{$backupDir}/{$fileName}.sql";
+        if(!$nosafe) $backFileName .= '.php';
+
+        $result = $this->backSQL($backFileName, 'restore');
+        if($result->result and !$nosafe) $this->addFileHeader($backFileName);
+
+        $allTables = $zdb->getAllTables();
+        foreach($allTables as $tableName => $tableType)
+        {
+            try
+            {
+                $this->dbh->query("DROP $tableType IF EXISTS `$tableName`");
+            }
+            catch(PDOException $e){}
+        }
+
+        $importResult = $zdb->import($backupFile);
+
+        if($importResult && $importResult->result)
+        {
+            $this->loadModel('instance')->restoreInstanceList();
+            $this->processRestoreSummary('sql', 'done');
+        }
+
+        return $importResult;
+    }
+
+    /**
+     * Restore File.
+     *
+     * @param  string    $backupFile
+     * @access public
+     * @return object
+     */
+    public function restoreFile($backupFile)
+    {
+        $return = new stdclass();
+        $return->result = true;
+        $return->error  = '';
+
+        if(is_file($backupFile))
+        {
+            $oldDir = getcwd();
+            chdir($this->app->getTmpRoot());
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($backupFile);
+            if($zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_TEMP_FILE_ON) == 0)
+            {
+                $return->result = false;
+                $return->error  = $zip->errorInfo();
+            }
+            chdir($oldDir);
+        }
+        elseif(is_dir($backupFile))
+        {
+            $zfile = $this->app->loadClass('zfile');
+            $zfile->copyDir($backupFile, $this->app->getAppRoot() . 'www/data/', $showDetails = false);
+        }
+
+        $this->processRestoreSummary('file', 'done');
+
+        return $return;
+    }
+
+    /**
+     * Get backup account and backup type.
+     *
+     * @param  string  $file
+     * @access public
+     * @return array
+     */
+    public function getSQLSummary($file)
+    {
+        $summaryFile = $this->loadModel('backup')->getBackupPath() . DS . 'summary';
+        $sqlSummary = json_decode(file_get_contents($summaryFile), true);
+        return isset($sqlSummary[basename($file)]) ? $sqlSummary[basename($file)] : array();
+    }
+
+    /**
+     * Process restore summay.
+     *
+     * @param  string $restoreType
+     * @param  string $status
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function processRestoreSummary($restoreType = 'sql', $status = 'done', $action = 'add')
+    {
+        $summaryFile = $this->loadModel('backup')->getBackupPath() . DS . 'restoreSummary';
+        if(!file_exists($summaryFile) and !touch($summaryFile)) return false;
+
+        $summary = json_decode(file_get_contents($summaryFile), true);
+        if(empty($summary)) $summary = array();
+
+        if($action == 'add')
+        {
+            $summary[$restoreType] = $status;
+        }
+        else
+        {
+            $summary = array();
+        }
+        if(file_put_contents($summaryFile, json_encode($summary))) return true;
+        return false;
+
+    }
+
+    /**
+     * Save backup account and backup type.
+     *
+     * @param  string $file
+     * @param  string $type
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function processSQLSummary($file, $type = 'manual', $action = 'add')
+    {
+        $backupPath = dirname($file);
+        $fileName   = basename($file);
+
+        $summaryFile = $backupPath . DS . 'summary';
+        if(!file_exists($summaryFile) and !touch($summaryFile)) return false;
+
+        $summary = json_decode(file_get_contents($summaryFile), true);
+        if(empty($summary)) $summary = array();
+
+        if($action == 'add')
+        {
+            $summary[$fileName]['account']    = $this->app->user->account == 'guest' ? '' : $this->app->user->account;
+            $summary[$fileName]['backupType'] = $type;
+        }
+        else
+        {
+            unset($summary[$fileName]);
+        }
+
+        if(file_put_contents($summaryFile, json_encode($summary))) return true;
+        return false;
+    }
+
+    /**
+     * Check upgrade process is overtime (5 miniutes) or not.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function isGradeOvertime()
+    {
+        $upgradedAt = $this->loadModel('setting')->getItem('owner=system&module=backup&section=global&key=upgradedAt');
+
+        return (time() - intval($upgradedAt)) > 300;
+    }
+
 }
