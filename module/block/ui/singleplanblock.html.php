@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('delay', $lang->block->delay);
+
 if(!$longBlock)
 {
     unset($config->block->plan->dtable->fieldList['id']);
@@ -33,6 +35,7 @@ panel
     (
         set::height(318),
         set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
+        set::onRenderCell(jsRaw('window.onRenderPlanNameCell')),
         set::cols(array_values($config->block->plan->dtable->fieldList)),
         set::data(array_values($plans))
     )
