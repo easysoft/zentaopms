@@ -2621,6 +2621,35 @@ class blockZen extends block
     }
 
     /**
+     * 打印单个产品发布列表区块数据。
+     * Print releases block.
+     *
+     * @param  object    $block
+     * @access protected
+     * @return void
+     */
+    protected function printSingleReleaseBlock(object $block): void
+    {
+        $uri = $this->createLink('product', 'dashboard');
+        $this->session->set('releaseList', $uri, 'product');
+        $this->session->set('buildList', $uri, 'execution');
+
+        $productID = $this->session->product;
+
+        $this->app->loadLang('release');
+        $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.shadow')->eq(0)
+            ->andWhere('t1.product')->eq($productID)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
+            ->orderBy('t1.id desc')
+            ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
+            ->fetchAll();
+    }
+
+    /**
      * 判断是否为内部调用。
      * Check request client is chandao or not.
      *

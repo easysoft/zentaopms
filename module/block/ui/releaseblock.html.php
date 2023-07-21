@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('markerTitle', $lang->release->marker);
+
 if(!$longBlock)
 {
     unset($config->block->release->dtable->fieldList['id']);
@@ -27,6 +29,7 @@ panel
     (
         set::height(318),
         set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
+        set::onRenderCell(jsRaw('window.onRenderReleaseNameCell')),
         set::cols(array_values($config->block->release->dtable->fieldList)),
         set::data(array_values($releases))
     )

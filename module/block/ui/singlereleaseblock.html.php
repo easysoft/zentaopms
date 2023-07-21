@@ -11,13 +11,27 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('markerTitle', $lang->release->marker);
+
+if(!$longBlock)
+{
+    unset($config->block->release->dtable->fieldList['id']);
+    unset($config->block->release->dtable->fieldList['productName']);
+    unset($config->block->release->dtable->fieldList['buildName']);
+}
+
 panel
 (
-    set('headingClass', 'border-b'),
+    setClass('p-0'),
     set::title($block->title),
-    div
+    set::bodyClass('p-0 no-shadow border-t'),
+    dtable
     (
-        '正在开发中...'
+        set::height(318),
+        set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
+        set::onRenderCell(jsRaw('window.onRenderReleaseNameCell')),
+        set::cols(array_values($config->block->release->dtable->fieldList)),
+        set::data(array_values($releases))
     )
 );
 
