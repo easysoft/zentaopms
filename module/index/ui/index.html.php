@@ -74,6 +74,11 @@ div
 
 div
 (
+    setID('apps'),
+);
+
+div
+(
     setID('appsBar'),
     ul
     (
@@ -83,6 +88,16 @@ div
     toolbar
     (
         setID('appsToolbar'),
+        globalSearch
+        (
+            set::commonSearchUrl(''),
+            set::searchItems
+            (
+                array(
+                   // array('key' => '', 'text' => '', 'url' => ''),
+                )
+            ),
+        ),
         item
         (
             set::class('ghost btn-zentao'),
@@ -92,12 +107,7 @@ div
             set::hint($version),
             set::text($versionName)
         )
-    )
-);
-
-div
-(
-    setID('apps'),
+    ),
 );
 
 render('pagebase');

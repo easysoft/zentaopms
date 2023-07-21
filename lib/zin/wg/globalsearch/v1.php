@@ -17,7 +17,12 @@ class globalSearch extends wg
 
         $input = inputGroup
         (
-            input(setID('globalSearchInput')),
+            set($this->getRestProps()),
+            input
+            (
+                setID('globalSearchInput'),
+                set::placeholder($lang->index->pleaseInput),
+            ),
             btn
             (
                 set::icon('search'),
