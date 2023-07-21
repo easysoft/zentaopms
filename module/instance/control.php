@@ -89,7 +89,8 @@ class instance extends control
         $this->view->instance        = $instance;
         $this->view->cloudApp        = $this->loadModel('store')->getAppInfoByChart($instance->chart, $instance->channel, false);
         $this->view->seniorAppList   = $tab == 'baseinfo' ? $this->instance->seniorAppList($instance, $instance->channel) :  array();
-        $this->view->logs            = $this->action->getList('instance', $id, 'date desc', $pager);
+        $this->view->actions         = $this->loadModel('action')->getList('instance', $id);
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->defaultAccount  = $this->cne->getDefaultAccount($instance);
         $this->view->instanceMetric  = $instanceMetric;
         $this->view->currentResource = $currentResource;

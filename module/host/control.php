@@ -163,7 +163,7 @@ class host extends control
         {
             $response['result']     = 'success';
             $response['message']    = '';
-            $response['load']       = true;
+            $response['load']       = inLink('browse');
             $response['closeModal'] = true;
 
             if(helper::isAjaxRequest('modal')) return print(js::execute("loadCurrentPage();$('.modal').removeClass('show')"));

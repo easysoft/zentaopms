@@ -1700,21 +1700,6 @@ class InstanceModel extends model
     }
 
     /**
-     * Print instance status.
-     *
-     * @param  object $instance
-     * @param  bool   $showText
-     * @access public
-     * @return void
-     */
-    public function printStatus($instance, $showText = true)
-    {
-        $html = zget($this->lang->instance->htmlStatuses, $instance->status, $this->lang->instance->htmlStatuses['busy']);
-        $statusText = zget($this->lang->instance->statusList, $instance->status, '');
-        return $showText ? printf($html, $statusText) : sprintf($html, $statusText);
-    }
-
-    /**
      * Print CPU usage.
      *
      * @param  object $instance
@@ -1879,7 +1864,7 @@ class InstanceModel extends model
      * @param  object $instance
      * @param  object $log
      * @access public
-     * @return void
+     * @return string
      */
     public function printLog($instance, $log)
     {
@@ -1890,8 +1875,7 @@ class InstanceModel extends model
         $extra = json_decode($log->extra);
         if(empty($extra) or !isset($extra->data))
         {
-            echo $logText;
-            return;
+            return $logText;
         }
 
         switch($log->action)
@@ -1918,7 +1902,7 @@ class InstanceModel extends model
             default:
         }
 
-        echo $logText;
+        return $logText;
     }
 
     /*

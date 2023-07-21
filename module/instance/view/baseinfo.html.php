@@ -8,7 +8,7 @@
               <tr>
                 <th><?php echo $lang->instance->status;?></th>
                 <td class="instance-status" instance-id="<?php echo $instance->id;?>" data-status="<?php echo $instance->status;?>">
-                  <?php echo $this->instance->printStatus($instance);?>
+                  <?php echo $this->instance->printStatus($instance, false);?>
                 </td>
               </tr>
               <tr>
