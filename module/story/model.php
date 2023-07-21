@@ -4681,7 +4681,7 @@ class storyModel extends model
 
                 if(($this->app->rawModule == 'projectstory' or ($this->app->tab != 'product' and $storyType == 'requirement')) and $this->config->vision != 'lite')
                 {
-                    if($canCreateCase and ($canClose or $canUnlinkStory)) $menu .= "<div class='dividing-line'></div>";
+                    if($canClose) $menu .= "<div class='dividing-line'></div>";
 
                     $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
                     if(!empty($execution) and $execution->hasProduct and !($storyType == 'requirement' and $story->type == 'story')) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
@@ -5199,7 +5199,7 @@ class storyModel extends model
             }
             elseif($id == 'actions')
             {
-                $class .= ($tab == 'project' and $story->type == 'requirement') ? ' text-center' : ' text-left';
+                $class .= ' text-left';
             }
             elseif($id == 'order')
             {
