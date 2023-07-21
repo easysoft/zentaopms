@@ -134,6 +134,9 @@ formPanel
         formGroup
         (
             setClass('reference hidden'),
+            set::labelWidth('5em'),
+            set::label($lang->job->repo),
+            set::required(true),
             set::name('reference'),
             set::items($refList),
             set::value(isset($job->reference) ? $job->reference : ''),

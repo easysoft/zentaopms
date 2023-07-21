@@ -17,6 +17,7 @@ $lang->job->browseAction = '流水线列表';
 $lang->job->id              = 'ID';
 $lang->job->name            = '流水线名称';
 $lang->job->repo            = '关联代码库';
+$lang->job->branch          = '分支';
 $lang->job->product         = '关联' . $lang->productCommon;
 $lang->job->svnDir          = 'SVN监控路径';
 $lang->job->jenkins         = 'Jenkins';

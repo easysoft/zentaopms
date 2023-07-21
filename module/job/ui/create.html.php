@@ -66,6 +66,9 @@ formPanel
         formGroup
         (
             setClass('reference hidden'),
+            set::labelWidth('5em'),
+            set::label($lang->job->branch),
+            set::required(true),
             set::name('reference'),
             set::items(array()),
         ),

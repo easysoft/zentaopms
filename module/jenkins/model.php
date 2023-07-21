@@ -118,10 +118,10 @@ class jenkinsModel extends model
                     $job = json_decode($response);
                 }
 
-                $tasks[basename($job->url)] = array();
+                $tasks[urldecode(basename($job->url))] = array();
                 if(empty($job->jobs)) continue;
 
-                $tasks[basename($job->url)] = $this->getDepthJobs($job->jobs, $userPWD, $depth + 1);
+                $tasks[urldecode(basename($job->url))] = $this->getDepthJobs($job->jobs, $userPWD, $depth + 1);
             }
         }
 

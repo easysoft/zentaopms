@@ -17,6 +17,7 @@ $lang->job->browseAction = 'Pipeline List';
 $lang->job->id              = 'ID';
 $lang->job->name            = 'Name';
 $lang->job->repo            = 'Repo';
+$lang->job->branch          = 'Branch';
 $lang->job->product         = $lang->productCommon;
 $lang->job->svnDir          = 'SVN Tag Watch Path';
 $lang->job->jenkins         = 'Jenkins';

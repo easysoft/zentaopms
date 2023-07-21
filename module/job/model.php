@@ -192,7 +192,7 @@ class jobModel extends model
         {
             $repo    = $this->loadModel('repo')->getByID($job->repo);
             $project = zget($repo, 'project');
-            if(!empty($repo))
+            if($job->repo && !empty($repo))
             {
                 $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, $this->post->reference);
                 if(!is_array($pipeline) or empty($pipeline))
