@@ -23,7 +23,7 @@ class rate_of_restored_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.resolution', 't1.status');
+    public $fieldList = array('t1.product', 't1.resolution', 't1.status');
 
     public function calculate($row)
     {

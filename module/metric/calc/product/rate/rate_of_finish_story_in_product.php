@@ -35,7 +35,7 @@ class rate_of_finish_story_in_product extends baseCalc
         if(!isset($this->result[$row->product])) $this->result[$row->product] = array('finished' => 0, 'total' => 0, 'invalid' => 0);
 
         $this->result[$row->product]['total'] ++;
-        if($row->status == 'done') $this->result[$row->product]['finished'] ++;
+        if($row->status == 'closed' and $row->closedReason == 'done') $this->result[$row->product]['finished'] ++;
         if($row->status == 'closed' and in_array($row->closedReason, array('duplicate', 'willnotdo', 'bydesign', 'cancel'))) $this->result[$row->product]['invalid'] ++;
     }
 

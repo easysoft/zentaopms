@@ -22,7 +22,7 @@ fields:
 - field: status
   range: active{1},resolved{1},closed{1}
 - field: resolution
-  range: bydesign{3},duplicate{3},external{3},fixed{3},notrepro{3},postponed{3},tostory{3},willnotfixi{3}
+  range: bydesign{3},duplicate{3},external{3},fixed{3},notrepro{3},postponed{3},tostory{3},willnotfix{3}
 - field: deleted
   range: 0{24},1{24}
 ...
