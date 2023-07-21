@@ -48,17 +48,9 @@ panel
                     icon
                     (
                         setClass('pl-0.5'),
-                        set('data-toggle', 'tooltip'),
-                        set('href', 'totalProgressTooltip' . $uniqid),
+                        toggle::tooltip(array('title' => '提示文本')),
                         'help'
                     ),
-                ),
-                div
-                (
-                    setClass('tooltip'),
-                    set::id('totalProgressTooltip' . $uniqid),
-                    set::type('white'),
-                    'fixBugRateTip'
                 ),
             ),
             cell
