@@ -1,26 +1,34 @@
 $('.form-row').on('click', '.btn-add', function()
 {
-    var $newRow = $(this).closest('tr').clone();
+    let $newRow   = $(this).closest('tr').clone();
+
     $newRow.find('input').val('');
     $newRow.find('textarea').val('');
 
-    var key = $newRow.data('key');
+    let key = $newRow.data('key');
 
     $newRow.attr('data-key', genKey());
 
-    if($(`tr[data-parent=${key}]`).length > 0)
+    let parentRow   = $(this).closest('.input-row')[0];
+    let nextSibling = parentRow.nextElementSibling;
+    while(nextSibling && parseInt(nextSibling.dataset.level) > parseInt(parentRow.dataset.level))
     {
-        $(`tr[data-parent=${key}]`).last().after($newRow);
+        nextSibling = nextSibling.nextElementSibling;
+    }
+
+    if(nextSibling)
+    {
+        parentRow.parentNode.insertBefore($newRow[0], nextSibling);
     }
     else
     {
-        $(this).closest('tr').after($newRow);
+        parentRow.parentNode.appendChild($newRow[0]);
     }
 });
 
 $('.form-row').on('click', '.btn-split', function()
 {
-    var $newRow = $(this).closest('tr').clone();
+    let $newRow = $(this).closest('tr').clone();
     $newRow.find('input').val('');
     $newRow.find('textarea').val('');
 
