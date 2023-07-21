@@ -38,7 +38,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('300px'),
             set::label($lang->serverroom->city),
             set::control('picker'),
             set::name('city'),
@@ -50,7 +50,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('300px'),
             set::label($lang->serverroom->line),
             set::control('picker'),
             set::name('line'),
@@ -62,7 +62,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('300px'),
             set::label($lang->serverroom->provider),
             set::control('picker'),
             set::name('provider'),
@@ -74,7 +74,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('300px'),
             set::label($lang->serverroom->owner),
             set::control('picker'),
             set::name('owner'),

@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 global $lang;
 
+$actions = $this->loadModel('common')->buildOperateMenu($serverRoom);
+
 detailHeader
 (
     isAjaxRequest('modal') ? to::prefix() : '',
@@ -73,6 +75,12 @@ detailBody
         ),
     ),
     history(),
+    floatToolbar
+    (
+        set::object($serverRoom),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
+        set::suffix($actions['suffixActions'])
+    ),
 );
 
 render();

@@ -57,10 +57,11 @@ $config->serverroom->dtable->fieldList['createdDate']['type']     = 'datetime';
 $config->serverroom->dtable->fieldList['createdDate']['sortType'] = true;
 
 $config->serverroom->actionList = array();
-$config->serverroom->actionList['edit']['icon'] = 'edit';
-$config->serverroom->actionList['edit']['text'] = $lang->serverroom->edit;
-$config->serverroom->actionList['edit']['hint'] = $lang->serverroom->edit;
-$config->serverroom->actionList['edit']['url']  = array('module' => 'serverroom', 'method' => 'edit', 'params' => 'id={id}');
+$config->serverroom->actionList['edit']['icon']     = 'edit';
+$config->serverroom->actionList['edit']['text']     = $lang->serverroom->edit;
+$config->serverroom->actionList['edit']['hint']     = $lang->serverroom->edit;
+$config->serverroom->actionList['edit']['showText'] = true;
+$config->serverroom->actionList['edit']['url']      = array('module' => 'serverroom', 'method' => 'edit', 'params' => 'id={id}');
 
 $config->serverroom->actionList['delete']['icon']       = 'trash';
 $config->serverroom->actionList['delete']['text']       = $lang->serverroom->delete;
