@@ -345,7 +345,7 @@ formPanel
         set::label($lang->story->spec),
         set::control('editor'),
         set::name('spec'),
-        set::placeholder(htmlSpecialString($lang->story->specTemplate . "\n" . $lang->noticePasteImg)),
+        set::placeholder($lang->story->specTemplate . "\n" . $lang->noticePasteImg),
         set::value($fields['spec']['default']),
         set::required($fields['spec']['required']),
     ),
