@@ -370,7 +370,7 @@ $config->block->size['zentaodynamic']['zentaodynamic']     = array('1' => '4');
 $config->block->size['teamachievement']['teamachievement'] = array('1' => '6');
 
 $config->block->size['singleproduct']['singlestatistic']       = array('2' => '5', '1' => '11');
-$config->block->size['singleproduct']['singlebug']             = array('2' => '6', '1' => '6');
+$config->block->size['singleproduct']['singlebugstatistic']    = array('2' => '5', '1' => '8');
 $config->block->size['singleproduct']['roadmap']               = array('2' => '6', '1' => '6');
 $config->block->size['singleproduct']['singlestory']           = array('2' => '6', '1' => '6');
 $config->block->size['singleproduct']['singleplan']            = array('2' => '6', '1' => '6');

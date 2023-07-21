@@ -465,7 +465,7 @@ class blockZen extends block
         $type    = $block->params->type;
 
         $this->app->loadLang('execution');
-        $this->view->tasks = $$this->loadModel('task')->getUserTasks($account, $type, $this->viewType == 'json' ? 0 : (int)$block->params->count, null, $block->params->orderBy);;
+        $this->view->tasks = $this->loadModel('task')->getUserTasks($account, $type, $this->viewType == 'json' ? 0 : (int)$block->params->count, null, $block->params->orderBy);;
     }
 
     /**
@@ -2539,6 +2539,62 @@ class blockZen extends block
         $this->view->product      = $product;
         $this->view->monthFinish  = $monthFinish;
         $this->view->monthCreated = $monthCreated;
+    }
+
+    /**
+     * 打印单个产品的bug统计区块。
+     * Print single product bug statistic block.
+     *
+     * @param  object    $block
+     * @access protected
+     * @return void
+     */
+    protected function printSingleBugStatisticBlock(object $block)
+    {
+        $this->app->loadClass('pager', true);
+        $count     = isset($block->params->count) ? (int)$block->params->count : 0;
+        $type      = isset($block->params->type) ? $block->params->type : '';
+        $pager     = pager::init(0, $count , 1);
+        $productID = $this->session->product;
+
+        $today = strtotime(helper::today());
+        $begin = strtotime(date('Y-m', strtotime('-2 month', $today)));
+        $end   = strtotime(date('Y-m', $today));
+
+        $closedBug     = rand(10, 10000);
+        $unresovledBug = rand(10, 1000);
+        $totalBug      = rand(100, 10000);
+        $resolvedRate  = rand(1, 100);
+        $months        = array();
+        $activateBugs  = array();
+        $resolveBugs   = array();
+        $closeBugs     = array();
+        for($date = $begin; $date <= $end; $date = strtotime('+1 month', $date))
+        {
+            $month = date('Y-m', $date);
+            $activateBugs[$month] = rand(100, 400);
+            $resolveBugs[$month]  = rand(100, 400);
+            $closeBugs[$month]    = rand(100, 400);
+
+            $month = (int)ltrim(date('m', $date), '0');
+
+            $monthName = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? "{$month}{$this->lang->block->month}" : zget($this->lang->datepicker->monthNames, $month - 1, '');
+            if($month == 1) $monthName .= "\n" . date('Y', $date) . (in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $this->lang->year : '');
+
+            $months[] = $monthName;
+        }
+
+        $this->app->loadLang('bug');
+
+        $this->view->months        = $months;
+        $this->view->productID     = $productID;
+        $this->view->totalBug      = $totalBug;
+        $this->view->closedBug     = $closedBug;
+        $this->view->unresovledBug = $unresovledBug;
+        $this->view->resolvedRate  = $resolvedRate;
+        $this->view->activateBugs  = $activateBugs;
+        $this->view->resolveBugs   = $resolveBugs;
+        $this->view->closeBugs     = $closeBugs;
     }
 
     /**
