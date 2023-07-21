@@ -10,8 +10,8 @@
  * 单位：个
  * 描述：按全局统计的年度关闭计划数表示每年关闭的计划数量。该度量项反映了组织每年关闭的计划数量，可以用于评估组织的计划管理效能和调整情况。
  * 定义：所有的计划个数求和
-关闭时间为某年
-过滤已删除的计划
+ *       关闭时间为某年
+ *       过滤已删除的计划
  * 度量库：
  * 收集方式：realtime
  *
@@ -24,20 +24,32 @@
  */
 class count_of_annual_closed_productplan extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getPlans';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.closedDate');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = array();
 
     public function calculate($data)
     {
+        $closedDate = $data->closedDate;
+        if(empty($closedDate)) return;
+
+        $year = substr($closedDate, 0, 4);
+        if($year == '0000') return;
+
+        if(!isset($this->result[$year])) $this->result[$year] = 0;
+
+        $this->result[$year] += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array();
+        foreach($this->result as $year => $value)
+        {
+            $records[] = array('year' => $year, 'value' => $value);
+        }
+        return $this->filterByOptions($records, $options);
     }
 }
