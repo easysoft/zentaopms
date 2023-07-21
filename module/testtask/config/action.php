@@ -67,10 +67,11 @@ $config->testtask->actionList['delete']['className']    = 'ajax-submit';
 $config->testtask->actionList['delete']['data-confirm'] = $lang->testtask->confirmDelete;
 
 if(!isset($config->testtask->cases)) $config->testtask->cases = new stdclass();
-$config->testtask->cases->actionList['confirmChange']['icon'] = 'search';
-$config->testtask->cases->actionList['confirmChange']['text'] = $lang->testcase->confirmChange;
-$config->testtask->cases->actionList['confirmChange']['hint'] = $lang->testcase->confirmChange;
-$config->testtask->cases->actionList['confirmChange']['url']  = array('module' => 'testcase', 'method' => 'confirmChange', 'params' => 'id={case}&taskID={task}&from=list');
+$config->testtask->cases->actionList['confirmChange']['icon']  = 'search';
+$config->testtask->cases->actionList['confirmChange']['text']  = $lang->testcase->confirmChange;
+$config->testtask->cases->actionList['confirmChange']['hint']  = $lang->testcase->confirmChange;
+$config->testtask->cases->actionList['confirmChange']['url']   = array('module' => 'testcase', 'method' => 'confirmChange', 'params' => 'id={case}&taskID={task}&from=list');
+$config->testtask->cases->actionList['confirmChange']['class'] = 'ajax-submit';
 
 $config->testtask->cases->actionList['createBug']['icon']        = 'bug';
 $config->testtask->cases->actionList['createBug']['text']        = $lang->testcase->createBug;
@@ -79,15 +80,19 @@ $config->testtask->cases->actionList['createBug']['url']         = array('module
 $config->testtask->cases->actionList['createBug']['data-width']  = '90%';
 $config->testtask->cases->actionList['createBug']['data-toggle'] = 'modal';
 
-$config->testtask->cases->actionList['runCase']['icon'] = 'play';
-$config->testtask->cases->actionList['runCase']['text'] = $lang->testtask->runCase;
-$config->testtask->cases->actionList['runCase']['hint'] = $lang->testtask->runCase;
-$config->testtask->cases->actionList['runCase']['url']  = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'id={id}');
+$config->testtask->cases->actionList['runCase']['icon']        = 'play';
+$config->testtask->cases->actionList['runCase']['text']        = $lang->testtask->runCase;
+$config->testtask->cases->actionList['runCase']['hint']        = $lang->testtask->runCase;
+$config->testtask->cases->actionList['runCase']['url']         = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'id={id}');
+$config->testtask->cases->actionList['runCase']['data-size']   = 'lg';
+$config->testtask->cases->actionList['runCase']['data-toggle'] = 'modal';
 
 $config->testtask->cases->actionList['results']['icon'] = 'list-alt';
 $config->testtask->cases->actionList['results']['text'] = $lang->testtask->results;
 $config->testtask->cases->actionList['results']['hint'] = $lang->testtask->results;
 $config->testtask->cases->actionList['results']['url']  = array('module' => 'testtask', 'method' => 'results', 'params' => 'id={id}');
+$config->testtask->cases->actionList['results']['data-size']   = 'lg';
+$config->testtask->cases->actionList['results']['data-toggle'] = 'modal';
 
 $config->testtask->cases->actionList['unlinkCase']['icon']         = 'unlink';
 $config->testtask->cases->actionList['unlinkCase']['text']         = $lang->testtask->unlinkCase;
