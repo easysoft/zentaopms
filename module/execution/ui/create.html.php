@@ -301,6 +301,7 @@ formPanel
     ),
     formGroup
     (
+        set::required(true),
         set::width('1/2'),
         set::name('project'),
         set::label($lang->execution->projectName),
