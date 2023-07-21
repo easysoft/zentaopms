@@ -199,8 +199,8 @@ $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['15'] = 'domain
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['20'] = 'oss';
 
 $lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,view,treemap,changestatus', 'subModule' => 'tree');
-$lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit');
-$lang->admin->menuList->platform['tabMenu']['resource']['account']    = array('link' => "{$lang->devops->account}|account|browse|", 'alias' => 'create,edit');
+$lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit,view');
+$lang->admin->menuList->platform['tabMenu']['resource']['account']    = array('link' => "{$lang->devops->account}|account|browse|", 'alias' => 'create,edit,view');
 $lang->admin->menuList->platform['tabMenu']['resource']['provider']   = array('link' => "{$lang->devops->provider}|ops|provider|", 'alias' => 'provider');
 $lang->admin->menuList->platform['tabMenu']['resource']['city']       = array('link' => "{$lang->devops->city}|ops|city|", 'alias' => 'city');
 $lang->admin->menuList->platform['tabMenu']['resource']['cpuBrand']   = array('link' => "{$lang->devops->cpuBrand}|ops|cpuBrand|", 'alias' => 'cpubrand');

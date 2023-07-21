@@ -3996,9 +3996,10 @@ EOT;
                 {
                     if(!common::hasPriv($moduleName, $action)) continue;
                 }
-                if(!$this->{$moduleName}->isClickable($data, $action)) continue;
 
-                if($menu == 'suffixActions' && !empty($actionData['text'])) $actionData['text'] = '';
+                if(false === $this->{$moduleName}->isClickable($data, $action)) continue;
+
+                if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
 
                 $actions[] = $actionData;
             }
