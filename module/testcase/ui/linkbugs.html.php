@@ -20,11 +20,11 @@ modalHeader
 div
 (
     setID('searchFormPanel'),
-    set('data-module', 'testcase'),
+    set('data-module', 'bug'),
     searchToggle
     (
         set::open(true),
-        set::module('testcase')
+        set::module('bug')
     )
 );
 
