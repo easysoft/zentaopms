@@ -520,22 +520,9 @@ class product extends control
         /* Get product. */
         $product   = $this->product->getStatByID($productID);
         if(!$product) return print(js::locate('product', 'all'));
-        $product->desc = $this->loadModel('file')->setImgSize($product->desc);
 
-        /* Save env data. */
-        $this->productZen->saveBackUriSession4Dashboard();
-        $this->product->setMenu($productID);
-
-        /* Assign. */
-        $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->view;
-        $this->view->product  = $product;
-        $this->view->actions  = $this->loadModel('action')->getList('product', $productID);
-        $this->view->users    = $this->user->getPairs('noletter');
-        $this->view->lines    = array('') + $this->product->getLinePairs();
-        $this->view->dynamics = $this->productZen->getActions4Dashboard($productID);
-        $this->view->roadmaps = $this->product->getRoadmap($productID, '0', 6);
-
-        $this->display();
+        $this->view->title = $product->name . $this->lang->colon . $this->lang->product->view;
+        echo $this->fetch('block', 'dashboard', 'dashboard=singleproduct');
     }
 
     /**

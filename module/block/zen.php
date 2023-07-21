@@ -2432,6 +2432,116 @@ class blockZen extends block
     }
 
     /**
+     * 打印单个产品统计区块。
+     * Print product statistic block.
+     *
+     * @param  object    $block
+     * @access protected
+     * @return bool
+     */
+    protected function printSingleStatisticBlock(object $block): void
+    {
+        /* 获取需要统计的产品列表。 */
+        /* Obtain a list of product that require statistics. */
+        $status    = isset($block->params->type)  ? $block->params->type  : '';
+        $count     = isset($block->params->count) ? $block->params->count : '';
+        $productID = $this->session->product;
+
+        $storyDeliveryRate = $this->loadModel('metric')->getResultByCode('rate_of_delivery_story_in_product', array('product' => $productID));
+        $storyDeliveryRate = json_decode(json_encode($storyDeliveryRate), true);
+        if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
+
+        $totalStories = $this->metric->getResultByCode('count_of_valid_story_in_product', array('product' => $productID));
+        $totalStories = json_decode(json_encode($totalStories), true);
+        if(!empty($totalStories)) $totalStories = array_column($totalStories, null, 'product');
+
+        $closedStories = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => $productID));
+        $closedStories = json_decode(json_encode($closedStories), true);
+        if(!empty($closedStories)) $closedStories = array_column($closedStories, null, 'product');
+
+        $unclosedStories = $this->metric->getResultByCode('count_of_unclosed_story_in_product', array('product' => $productID));
+        $unclosedStories = json_decode(json_encode($unclosedStories), true);
+        if(!empty($unclosedStories)) $unclosedStories = array_column($unclosedStories, null, 'product');
+
+        $years  = array();
+        $months = array();
+        for($i = 0; $i <= 5; $i ++)
+        {
+            $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
+            $months[date('m', strtotime("first day of -{$i} month"))] = date('m', strtotime("first day of -{$i} month"));
+            $groups[date('Y-m', strtotime("first day of -{$i} month"))] = date('Y-m', strtotime("first day of -{$i} month"));
+        }
+        $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
+        $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
+        if(empty($monthFinish)) $monthFinish = array();
+        if(empty($monthCreated)) $monthCreated = array();
+
+        /* 根据产品列表获取预计开始日期距离现在最近且预计开始日期大于当前日期的未开始状态计划。 */
+        /* Obtain an unstarted status plan based on the product list, with an expected start date closest to the current date and an expected start date greater than the current date. */
+        $newPlan = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->andWhere('begin')->ge(date('Y-m-01'))
+            ->andWhere('status')->eq('wait')
+            ->orderBy('begin_desc')
+            ->fetch();
+
+        /* 根据产品列表获取实际开始日期距离当前最近的进行中状态的执行。 */
+        /* Obtain the execution of the current in progress status closest to the actual start date based on the product list. */
+        $newExecution = $this->dao->select('execution.*,relation.product')->from(TABLE_EXECUTION)->alias('execution')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('relation')->on('execution.id=relation.project')
+            ->where('execution.deleted')->eq('0')
+            ->andWhere('execution.type')->eq('sprint')
+            ->andWhere('relation.product')->eq($productID)
+            ->andWhere('execution.status')->eq('doing')
+            ->orderBy('realBegan_asc')
+            ->fetch();
+
+        /* 根据产品列表获取发布日期距离现在最近且发布日期小于当前日期的发布。 */
+        /* Retrieve releases with the latest release date from the product list and a release date earlier than the current date. */
+        $newRelease = $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->andWhere('date')->lt(date('Y-m-01'))
+            ->orderBy('date_asc')
+            ->fetch();
+
+        $product = $this->loadModel('product')->getByID($productID);
+
+        $product->storyDeliveryRate = !empty($storyDeliveryRate) && !empty($storyDeliveryRate[$productID]) ? zget($storyDeliveryRate[$productID], 'value') : 0;
+        $product->totalStories      = !empty($totalStories)      && !empty($totalStories[$productID])      ? zget($totalStories[$productID], 'value') : 0;
+        $product->closedStories     = !empty($closedStories)     && !empty($closedStories[$productID])     ? zget($closedStories[$productID], 'value') : 0;
+        $product->unclosedStories   = !empty($unclosedStories)   && !empty($unclosedStories[$productID])   ? zget($unclosedStories[$productID], 'value') : 0;
+        $product->newPlan           = $newPlan;
+        $product->newExecution      = $newExecution;
+        $product->newRelease        = $newRelease;
+
+        foreach($groups as $group)
+        {
+            $product->monthFinish[$group]  = 0;
+            $product->monthCreated[$group] = 0;
+            if(!empty($monthFinish))
+            {
+                foreach($monthFinish as $story)
+                {
+                    if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthFinish[$group] = $story->value;
+                }
+            }
+            if(!empty($monthCreated))
+            {
+                foreach($monthCreated as $story)
+                {
+                    if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthCreated[$group] = $story->value;
+                }
+            }
+        }
+
+        $this->view->product      = $product;
+        $this->view->monthFinish  = $monthFinish;
+        $this->view->monthCreated = $monthCreated;
+    }
+
+    /**
      * 判断是否为内部调用。
      * Check request client is chandao or not.
      *

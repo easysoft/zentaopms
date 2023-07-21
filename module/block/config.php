@@ -368,3 +368,12 @@ $config->block->size['assigntome']['assigntome']           = array('2' => '6', '
 $config->block->size['dynamic']['dynamic']                 = array('1' => '8');
 $config->block->size['zentaodynamic']['zentaodynamic']     = array('1' => '4');
 $config->block->size['teamachievement']['teamachievement'] = array('1' => '6');
+
+$config->block->size['singleproduct']['singlestatistic']       = array('2' => '5', '1' => '11');
+$config->block->size['singleproduct']['singlebug']             = array('2' => '6', '1' => '6');
+$config->block->size['singleproduct']['roadmap']               = array('2' => '6', '1' => '6');
+$config->block->size['singleproduct']['singlestory']           = array('2' => '6', '1' => '6');
+$config->block->size['singleproduct']['singleplan']            = array('2' => '6', '1' => '6');
+$config->block->size['singleproduct']['singlerelease']         = array('2' => '6', '1' => '6');
+$config->block->size['singleproduct']['singledyncmic']         = array('1' => '13');
+$config->block->size['singleproduct']['singlemonthlyprogress'] = array('2' => '5', '1' => '13');
