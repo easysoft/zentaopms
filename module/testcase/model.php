@@ -991,6 +991,8 @@ class testcaseModel extends model
         $oldCases = $this->getByList($caseIdList);
         foreach($caseIdList as $caseID)
         {
+            if(empty($oldCases[$caseID])) continue;
+
             $oldCase = $oldCases[$caseID];
             if($oldCase->status != 'wait') continue;
 

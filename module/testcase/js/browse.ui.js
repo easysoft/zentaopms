@@ -6,7 +6,11 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 
     const url  = $(this).data('url');
     const form = new FormData();
-    checkedList.forEach((id) => form.append('caseIdList[]', id));
+
+    checkedList.forEach((id) => {
+        const caseInfo = dtable.$.getRowInfo(id).data;
+        if(caseInfo.isCase != 2) form.append('caseIdList[]', id);
+    });
 
     if($(this).hasClass('ajax-btn'))
     {

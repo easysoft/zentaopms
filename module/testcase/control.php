@@ -665,12 +665,12 @@ class testcase extends control
         $this->loadModel('story');
         if(!empty($_POST))
         {
-            $caseIDList = $this->testcase->batchCreate($productID, $branch, $storyID);
+            $caseIdList = $this->testcase->batchCreate($productID, $branch, $storyID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIDList));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIdList));
 
             helper::setcookie('caseModule', 0);
             $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
@@ -1275,12 +1275,13 @@ class testcase extends control
      */
     public function batchReview($result)
     {
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList, 'parent'));
-        $caseIdList = array_unique($this->post->caseIDList);
-        $actions    = $this->testcase->batchReview($caseIdList, $result);
+        if($this->post->caseIdList)
+        {
+            $caseIdList = array_unique($this->post->caseIdList);
+            $actions    = $this->testcase->batchReview($caseIdList, $result);
+        }
 
-        if(dao::isError()) return print(js::error(dao::getError()));
-        echo js::locate($this->session->caseList, 'parent');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
     }
 
     /**
@@ -1336,22 +1337,24 @@ class testcase extends control
      */
     public function batchDelete($productID = 0)
     {
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
-        $caseIDList = array_unique($this->post->caseIDList);
+        if(!$this->post->caseIdList) return print(js::locate($this->session->caseList));
+        $caseIdList = array_unique($this->post->caseIdList);
 
-        foreach($caseIDList as $caseID)
+        foreach($caseIdList as $caseID)
         {
             $vs = $this->dao->findById((int)$caseID)->from(VIEW_SCENECASE)->fetch();
+            if(empty($vs)) continue;
+
             if($vs->isCase == 2)
             {
-                $this->testcase->delete(TABLE_SCENE, $caseID-CHANGEVALUE);
+                $this->testcase->delete(TABLE_SCENE, $caseID);
             }
             else
             {
                 $this->testcase->delete(TABLE_CASE, $caseID);
             }
         }
-        echo js::locate($this->session->caseList);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
     }
 
     /**
@@ -1363,12 +1366,12 @@ class testcase extends control
      */
     public function batchChangeBranch($branchID)
     {
-        if($this->post->caseIDList)
+        if($this->post->caseIdList)
         {
-            $caseIDList = $this->post->caseIDList;
-            $caseIDList = array_unique($caseIDList);
-            unset($_POST['caseIDList']);
-            $allChanges = $this->testcase->batchChangeBranch($caseIDList, $branchID);
+            $caseIdList = $this->post->caseIdList;
+            $caseIdList = array_unique($caseIdList);
+            unset($_POST['caseIdList']);
+            $allChanges = $this->testcase->batchChangeBranch($caseIdList, $branchID);
             if(dao::isError()) return print(js::error(dao::getError()));
             foreach($allChanges as $caseID => $changes)
             {
@@ -1378,7 +1381,7 @@ class testcase extends control
             }
         }
 
-        echo js::locate($this->session->caseList, 'parent');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
     }
 
     /**
@@ -1390,13 +1393,13 @@ class testcase extends control
      */
     public function batchChangeModule($moduleID)
     {
-        if($this->post->caseIDList)
+        if($this->post->caseIdList)
         {
-            $caseIDList = $this->post->caseIDList;
-            $caseIDList = array_unique($caseIDList);
-            unset($_POST['caseIDList']);
-            $allChanges = $this->testcase->batchChangeModule($caseIDList, $moduleID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $caseIdList = $this->post->caseIdList;
+            $caseIdList = array_unique($caseIdList);
+            unset($_POST['caseIdList']);
+            $allChanges = $this->testcase->batchChangeModule($caseIdList, $moduleID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if (!empty($allChanges[1]))
             {
@@ -1419,7 +1422,7 @@ class testcase extends control
             }
         }
 
-        echo js::locate($this->session->caseList, 'parent');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
     }
 
     /**
@@ -1431,12 +1434,11 @@ class testcase extends control
      */
     public function batchCaseTypeChange($result)
     {
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList, 'parent'));
-        $caseIdList = array_unique($this->post->caseIDList);
+        if(!$this->post->caseIdList) return print(js::locate($this->session->caseList, 'parent'));
+        $caseIdList = array_unique($this->post->caseIdList);
         $this->testcase->batchCaseTypeChange($caseIdList, $result);
 
-        if(dao::isError()) return print(js::error(dao::getError()));
-        echo js::locate($this->session->caseList, 'parent');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
     }
 
     /**
@@ -1656,11 +1658,12 @@ class testcase extends control
      */
     public function batchConfirmStoryChange($productID = 0)
     {
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
-        $caseIDList = array_unique($this->post->caseIDList);
-
-        foreach($caseIDList as $caseID) $this->confirmStoryChange($caseID,false);
-        echo js::locate($this->session->caseList);
+        if($this->post->caseIdList)
+        {
+            $caseIdList = array_unique($this->post->caseIdList);
+            foreach($caseIdList as $caseID) $this->confirmStoryChange($caseID,false);
+        }
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
     }
 
     /**
@@ -1716,11 +1719,11 @@ class testcase extends control
             /* Get cases. */
             if($this->session->testcaseOnlyCondition)
             {
-                $caseIDList = array();
-                if($taskID) $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
+                $caseIdList = array();
+                if($taskID) $caseIdList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
 
                 $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
-                    ->beginIF($taskID)->andWhere('id')->in($caseIDList)->fi()
+                    ->beginIF($taskID)->andWhere('id')->in($caseIdList)->fi()
                     ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($orderBy)
                     ->beginIF($this->post->limit)->limit($this->post->limit)->fi()
@@ -2734,13 +2737,13 @@ class testcase extends control
      */
     public function batchChangeScene($sceneId)
     {
-        if($this->post->caseIDList)
+        if($this->post->caseIdList)
         {
-            $caseIDList = $this->post->caseIDList;
-            $caseIDList = array_unique($caseIDList);
-            unset($_POST['caseIDList']);
-            $allChanges = $this->testcase->batchChangeScene($caseIDList, $sceneId);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $caseIdList = $this->post->caseIdList;
+            $caseIdList = array_unique($caseIdList);
+            unset($_POST['caseIdList']);
+            $allChanges = $this->testcase->batchChangeScene($caseIdList, $sceneId);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($allChanges[1]))
             {
@@ -2761,7 +2764,7 @@ class testcase extends control
             }
         }
 
-        echo js::locate($this->session->caseList, 'parent');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
     }
 
     /**

@@ -43,47 +43,47 @@ if($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchCon
         foreach($lang->testcase->reviewResultList as $key => $result)
         {
             if($key == '') continue;
-            $reviewItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn', 'data-url' => $this->createLink('testcase', 'batchReview', "result=$key"));
+            $reviewItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn not-open-url', 'data-url' => $this->createLink('testcase', 'batchReview', "result=$key"));
         }
         $navActions[] = array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems);
     }
-    if($canBatchDelete) $navActions[] = array('text' => $lang->delete, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchDelete', "productID=$productID"));
+    if($canBatchDelete) $navActions[] = array('text' => $lang->delete, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchDelete', "productID=$productID"));
     if($canBatchCaseTypeChange)
     {
         $typeItems = array();
         foreach($lang->testcase->typeList as $key => $result)
         {
-            $typeItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchCaseTypeChange', "result=$key"));
+            $typeItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchCaseTypeChange', "result={$key}"));
         }
         $navActions[] = array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $typeItems);
     }
-    if($canBatchConfirmStoryChange) $navActions[] = array('text' => $lang->testcase->confirmStoryChange, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchConfirmStoryChange', "productID=$productID"));
+    if($canBatchConfirmStoryChange) $navActions[] = array('text' => $lang->testcase->confirmStoryChange, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchConfirmStoryChange', "productID=$productID"));
 }
 
 if($canBatchChangeModule)
 {
     $moduleItems = array();
-    foreach($modules as $moduleId => $module) $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID=$moduleId"));
+    foreach($modules as $moduleId => $module) $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID=$moduleId"));
 }
 
 if($canBatchChangeBranch)
 {
     $branchItems = array();
-    foreach($branchTagOption as $branchID => $branchName) $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchID"));
+    foreach($branchTagOption as $branchID => $branchName) $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchID"));
 }
 
 if($canBatchChangeScene)
 {
     $sceneItems = array();
-    foreach($iscenes as $sceneID => $scene) $sceneItems[] = array('text' => $scene, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeScene', "sceneId=$sceneID"));
+    foreach($iscenes as $sceneID => $scene) $sceneItems[] = array('text' => $scene, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeScene', "sceneId=$sceneID"));
 }
 
 $footToolbar = $canBatchAction ? array('items' => array
 (
     $canGroupBatch ? array('type' => 'btn-group', 'items' => array
     (
-        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
-        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
+        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn secondary not-open-url', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
+        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn secondary not-open-url', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
         !empty($navActions) ? array('caret' => 'up', 'className' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start') : null,
     )) : null,
     $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'type' => 'dropdown', 'items' => $branchItems, 'data-placement' => 'top-start') : null,
