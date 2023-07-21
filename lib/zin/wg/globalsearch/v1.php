@@ -5,13 +5,16 @@ namespace zin;
 class globalSearch extends wg
 {
     protected static array $defineProps = array(
-        'commonSearchText: string',
+        'commonSearchText?: string',
         'commonSearchUrl: string',
         'searchItems: array',
     );
 
     protected function build(): array
     {
+        global $lang;
+        $this->setDefaultProps(array('commonSearchText' => $lang->searchAB));
+
         $input = inputGroup
         (
             input(setID('globalSearchInput')),
