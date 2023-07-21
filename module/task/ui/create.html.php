@@ -359,6 +359,7 @@ formPanel
             set::width('4/5'),
             set::label($lang->task->name),
             set::strong(true),
+            set::required(true),
             inputControl
             (
                 input
