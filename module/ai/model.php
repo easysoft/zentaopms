@@ -821,6 +821,39 @@ class aiModel extends model
     {
         $module = $prompt->module;
 
+        if($module == 'my')
+        {
+            return helper::createLink('my', 'effort', "type=all");
+        }
+        if($module == 'product')
+        {
+            $productId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCT)
+                ->where('id')->in($this->app->user->view->products)
+                ->fetch('maxId');
+            if(!empty($productId)) return helper::createLink('product', 'view', "productID=$productId");
+        }
+        if($module == 'productplan')
+        {
+            $productplanId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCTPLAN)
+                ->where('product')->in($this->app->user->view->products)
+                ->fetch('maxId');
+            if(!empty($productplanId)) return helper::createLink('productplan', 'view', "productplanID=$productplanId");
+        };
+        if($module == 'release')
+        {
+            $releaseId = $this->dao->select('max(id) as maxId')->from(TABLE_RELEASE)
+                                   ->where('project')->in($this->app->user->view->projects)
+                                   ->orWhere('product')->in($this->app->user->view->products)
+                                   ->fetch('maxId');
+            if(!empty($releaseId)) return helper::createLink('release', 'view', "releaseID=$releaseId");
+        }
+        if($module == 'project')
+        {
+            $projectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
+                ->where('id')->in($this->app->user->view->projects)
+                ->fetch('maxId');
+            if(!empty($projectId)) return helper::createLink('project', 'view', "projectID=$projectId");
+        }
         if($module == 'story')
         {
             $storyId = $this->dao->select('max(id) as maxId')->from(TABLE_STORY)
@@ -833,6 +866,37 @@ class aiModel extends model
             $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
             $executionId  = max($executionIds);
             if(!empty($executionId)) return helper::createLink('execution', 'view', "executionID=$executionId");
+        }
+        if($module == 'task')
+        {
+            $taskId = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)
+                                ->where('project')->in($this->app->user->view->projects)
+                                ->fetch('maxId');
+            if(!empty($taskId)) return helper::createLink('task', 'view', "taskID=$taskId");
+        }
+        if($module == 'case')
+        {
+            $caseId = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)
+                                ->where('project')->in($this->app->user->view->projects)
+                                ->orWhere('product')->in($this->app->user->view->products)
+                                ->fetch('maxId');
+            if(!empty($caseId)) return helper::createLink('testcase', 'view', "caseID=$caseId");
+        }
+        if($module == 'bug')
+        {
+            $bugId = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)
+                               ->where('project')->in($this->app->user->view->projects)
+                               ->orWhere('product')->in($this->app->user->view->products)
+                               ->fetch('maxId');
+            if(!empty($bugId)) return helper::createLink('bug', 'view', "bugID=$bugId");
+        }
+        if($module == 'doc')
+        {
+            $docId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
+                               ->where('project')->in($this->app->user->view->projects)
+                               ->orWhere('product')->in($this->app->user->view->products)
+                               ->fetch('maxId');
+            if(!empty($docId)) return helper::createLink('doc', 'view', "docID=$docId");
         }
 
         return false;
