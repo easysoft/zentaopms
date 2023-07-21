@@ -271,10 +271,12 @@ class buildModel extends model
      */
     public function getBuildPairs($products, $branch = 'all', $params = 'noterminate, nodone', $objectID = 0, $objectType = 'execution', $buildIdList = '', $replace = true)
     {
-        $sysBuilds      = array();
-        $selectedBuilds = array();
-        if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
         $productIdList = is_array($products) ? array_keys($products) : $products;
+
+        $sysBuilds = array();
+        if(strpos($params, 'notrunk') === false) $sysBuilds = array('trunk' => $this->lang->trunk);
+
+        $selectedBuilds = array();
         if($buildIdList)
         {
             $buildIdList = str_replace('trunk', '0', $buildIdList);
@@ -286,10 +288,8 @@ class buildModel extends model
                 ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('deleted')->eq(0)->fi()
                 ->fetchPairs();
         }
-        $branchPairs = $this->dao->select('id,name')->from(TABLE_BRANCH)->fetchPairs();
 
         $shadows   = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow');
-        $branchs   = strpos($params, 'separate') === false ? "0,$branch" : $branch;
         $allBuilds = $this->dao->select('t1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.type as productType')->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
             ->beginIF($objectType === 'project')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->fi()
@@ -309,16 +309,26 @@ class buildModel extends model
         $deletedExecutions = $this->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->andWhere('deleted')->eq('1')->fetchPairs();
 
         /* Set builds and filter done executions and terminate releases. */
-        $builds      = array();
-        $buildIdList = array();
+        $builds                = array();
+        $validBuildIdList      = array();
+        $excludedBuildIdList   = array();
+        $excludedReleaseIdList = array();
+        $branchPairs = $this->dao->select('id,name')->from(TABLE_BRANCH)->fetchPairs();
         $this->app->loadLang('branch');
         foreach($allBuilds as $id => $build)
         {
             if($build->branch === '') $build->branch = 0;
-            if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) continue;
-            if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
-            if((strpos($params, 'withexecution') !== false) and $build->execution and isset($deletedExecutions[$build->execution])) continue;
-            if($branch !== 'all' and strpos(",{$build->branch},", ",{$branch},") === false) continue;
+            if(
+                (empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) ||
+                ((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) ||
+                ((strpos($params, 'withexecution') !== false) and $build->execution and isset($deletedExecutions[$build->execution])) ||
+                ($branch !== 'all' and strpos(",{$build->branch},", ",{$branch},") === false)
+            )
+            {
+                $excludedBuildIdList[] = $id;
+                $excludedReleaseIdList[] = $build->releaseID;
+                continue;
+            }
 
             if($build->deleted == 1) $build->name .= ' (' . $this->lang->build->deleted . ')';
 
@@ -348,7 +358,7 @@ class buildModel extends model
             $buildName = $build->name;
             if(strpos($params, 'withbranch') !== false and $build->productType != 'normal') $buildName = $branchName . '/' . $buildName;
 
-            $buildIdList[$id] = $id;
+            $validBuildIdList[$id]     = $id;
             $builds[$build->date][$id] = $buildName;
         }
 
@@ -361,11 +371,12 @@ class buildModel extends model
                 ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
                 ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
                 ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
-                ->where('t2.id')->in($buildIdList)
-                ->andWhere('t1.product')->in($productIdList)
+                ->where('t1.product')->in($productIdList)
+                ->beginIF(!empty($buildIdList))->andWhere('t2.id')->in($buildIdList)->fi()
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t1.shadow')->ne(0)
                 ->fetchAll('id');
+
             if($shadows)
             {
                 /* Append releases of only shadow and not link build. */
@@ -377,15 +388,19 @@ class buildModel extends model
                     ->andWhere('t1.deleted')->eq(0)
                     ->fetchAll('id');
             }
+
+            $branches = strpos($params, 'separate') === false ? "0,$branch" : $branch;
             foreach($releases as $release)
             {
+                if(strpos($params, 'noterminate') !== false && in_array($release->id, $excludedReleaseIdList)) continue;
+
                 if($branch !== 'all')
                 {
                     $inBranch = false;
                     foreach(explode(',', trim($release->branch, ',')) as $branchID)
                     {
                         if($branchID === '') continue;
-                        if(strpos(",{$branchs},", ",{$branchID},") !== false) $inBranch = true;
+                        if(strpos(",{$branches},", ",{$branchID},") !== false) $inBranch = true;
                     }
                     if(!$inBranch) continue;
                 }
