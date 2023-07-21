@@ -113,44 +113,41 @@ sidebar
     ),
 );
 
+$reviewItems = array();
+if($canBatchReview)
+{
+    foreach($lang->testcase->reviewResultList as $key => $result)
+    {
+        if($key == '') continue;
+        $reviewItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn not-open-url', 'data-url' => $this->createLink('testcase', 'batchReview', "result=$key"));
+    }
+}
+
+$moduleItems = array();
+if($canBatchChangeModule)
+{
+    foreach($modules as $moduleID => $module) $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID=$moduleID"));
+}
+
+$navActions = array();
+if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
+{
+    $navActions = array
+    (
+        $canBatchReview ? array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems) : null,
+        $canBatchDelete ? array('text' => $lang->delete, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchDelete', "libID=$libID")) : null,
+        $canBatchChangeModule ? array('text' => $lang->testcase->module, 'class' => 'not-hide-menu', 'items' => $moduleItems) : null,
+    );
+}
+
 $footToolbar = $canBatchAction ? array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
     (
-        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', "libID=$libID&branch=0&type=lib")) : null,
-        ($canBatchReview || $canBatchDelete || $canBatchChangeModule) ? array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : ''
+        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchEdit', "libID=$libID&branch=0&type=lib")) : null,
+        !empty($navActions) ? array('caret' => 'up', 'btnType' => 'primary', 'items' => $navActions, 'data-placement' => 'top-start') : null
     )),
 )) : null;
-
-if($canBatchReview)
-{
-    $reviewItems = array();
-    foreach($lang->testcase->reviewResultList as $key => $result)
-    {
-        if($key == '') continue;
-        $reviewItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn', 'data-url' => $this->createLink('testcase', 'batchReview', "result=$key"));
-    }
-}
-if($canBatchChangeModule)
-{
-    $moduleItems = array();
-    foreach($modules as $moduleID => $module) $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID=$moduleID"));
-}
-
-if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
-{
-    menu
-    (
-        set::id('navActions'),
-        set::class('menu dropdown-menu'),
-        set::items(array
-        (
-            $canBatchReview ? array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems) : null,
-            $canBatchDelete ? array('text' => $lang->delete, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchDelete', "libID=$libID")) : null,
-            $canBatchChangeModule ? array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $moduleItems) : null,
-        ))
-    );
-}
 
 dtable
 (
