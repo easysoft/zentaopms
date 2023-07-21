@@ -270,7 +270,7 @@
                 </tr>
                 <?php if($config->edition == 'ipd' && $story->type == 'requirement'):?>
                 <tr>
-                  <th><?php echo $lang->roadmap->common;?></th>
+                  <th><?php echo $lang->story->roadmap;?></th>
                   <td>
                   <?php
                   if($story->roadmap && isset($roadmaps[$story->roadmap]))
