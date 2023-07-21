@@ -10,6 +10,17 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$manageTitle = $lang->tree->manageChild;
+if(strpos($viewType, 'doc') !== false)
+{
+    $manageTitle = $lang->doc->manageType;
+}
+elseif(strpos($viewType, 'trainskill') === false and strpos($viewType, 'trainpost') === false)
+{
+    $manageChild = 'manage' . ucfirst($viewType) . 'Child';
+    $manageTitle = $lang->tree->$manageChild;
+}
+
 $maxOrder = 0;
 
 /* Generate module rows. */
@@ -163,7 +174,7 @@ div
         setClass('basis-4/6'),
         panel
         (
-            set::title($execution->multiple ? $lang->tree->manageTaskChild : $lang->tree->manageProjectChild),
+            set::title($manageTitle),
             div
             (
                 setClass('flex'),
