@@ -262,6 +262,16 @@ $lang->block->modules['product']->availableBlocks['plan']             = "计划�
 $lang->block->modules['product']->availableBlocks['release']          = '发布列表';
 $lang->block->modules['product']->availableBlocks['story']            = "{$lang->SRCommon}列表";
 
+$lang->block->modules['singleproduct'] = new stdclass();
+$lang->block->modules['singleproduct']->availableBlocks['singlestatistic']       = $lang->productCommon . '统计';
+$lang->block->modules['singleproduct']->availableBlocks['singlebugstatistic']    = "{$lang->productCommon}Bug统计";
+$lang->block->modules['singleproduct']->availableBlocks['roadmap']               = "{$lang->productCommon}路线图";
+$lang->block->modules['singleproduct']->availableBlocks['singlestory']           = "{$lang->SRCommon}列表";
+$lang->block->modules['singleproduct']->availableBlocks['singleplan']            = "计划列表";
+$lang->block->modules['singleproduct']->availableBlocks['singlerelease']         = '发布列表';
+$lang->block->modules['singleproduct']->availableBlocks['singledynamic']         = '最新动态';
+$lang->block->modules['singleproduct']->availableBlocks['singlemonthlyprogress'] = "{$lang->productCommon}月度推进分析";
+
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks['statistic'] = $lang->execution->common . '统计';
 $lang->block->modules['execution']->availableBlocks['overview']  = $lang->execution->common . '总览';
@@ -287,16 +297,6 @@ $lang->block->modules['doc']->availableBlocks['docviewlist']     = '浏览排行
 if($config->vision == 'rnd') $lang->block->modules['doc']->availableBlocks['productdoc'] = $lang->productCommon . '文档';
 $lang->block->modules['doc']->availableBlocks['doccollectlist']  = '收藏排行榜';
 $lang->block->modules['doc']->availableBlocks['projectdoc']      = $lang->projectCommon . '文档';
-
-$lang->block->modules['singleproduct'] = new stdclass();
-$lang->block->modules['singleproduct']->availableBlocks['singlestatistic']       = $lang->productCommon . '统计';
-$lang->block->modules['singleproduct']->availableBlocks['singlebugstatistic']    = "{$lang->productCommon}Bug统计";
-$lang->block->modules['singleproduct']->availableBlocks['roadmap']               = "{$lang->productCommon}路线图";
-$lang->block->modules['singleproduct']->availableBlocks['singlestory']           = "{$lang->SRCommon}列表";
-$lang->block->modules['singleproduct']->availableBlocks['singleplan']            = "计划列表";
-$lang->block->modules['singleproduct']->availableBlocks['singlerelease']         = '发布列表';
-$lang->block->modules['singleproduct']->availableBlocks['singledynamic']         = '最新动态';
-$lang->block->modules['singleproduct']->availableBlocks['singlemonthlyprogress'] = "{$lang->productCommon}月度推进分析";
 
 $lang->block->orderByList = new stdclass();
 $lang->block->orderByList->product = array();
