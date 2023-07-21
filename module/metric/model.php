@@ -12,6 +12,21 @@
 class metricModel extends model
 {
     /**
+     * 根据代号获取度量项信息。
+     * Get metric info by code.
+     *
+     * @param  string       $code
+     * @param  string|array $fieldList
+     * @access public
+     * @return object|false
+     */
+    public function getByCode($code, $fieldList = '*')
+    {
+        if(is_array($fieldList)) $fieldList = implode(',', $fieldList);
+        return $this->dao->select($fieldList)->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
+    }
+
+    /**
      * 获取度量项数据源句柄。
      * Get data source statement of calculator.
      *
