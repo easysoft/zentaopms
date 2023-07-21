@@ -335,10 +335,6 @@ detailBody
                     set::name('linkCase[]'),
                     set::value(isset($case->linkCaseTitles) ? array_keys($case->linkCaseTitles) : ''),
                     set::items($linkCaseItems),
-                ),
-                span
-                (
-                    set::id('linkCaseBox'),
                 )
             ) : null,
             (!$isLibCase && hasPriv('testcase', 'linkBugs')) ? item
@@ -361,10 +357,6 @@ detailBody
                     set::value(array_keys($case->toBugs)),
                     set::items($linkBugItems),
                 ),
-                span
-                (
-                    set::id('linkBugBox'),
-                )
             ) : null,
         ),
         tableData
