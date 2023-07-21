@@ -2648,6 +2648,30 @@ class blockZen extends block
     }
 
     /**
+     * 打印单个产品计划列表区块。
+     * Print singe product lan block.
+     *
+     * @param  object    $block
+     * @access protected
+     * @return bool
+     */
+    protected function printSinglePlanBlock(object $block): void
+    {
+        $uri = $this->createLink('product', 'dashboard');
+        $this->session->set('productList', $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+
+        $this->app->loadClass('pager', true);
+        $count     = isset($block->params->count) ? (int)$block->params->count : 0;
+        $pager     = pager::init(0, $count , 1);
+        $productID = $this->session->product;
+        $product   = $this->loadModel('product')->getByID($productID);
+
+        $this->view->plans    = $this->loadModel('productplan')->getList($productID, 0, 'all', $pager, 'begin_desc', 'noproduct');
+        $this->view->products = array($productID => $product->name);
+    }
+
+    /**
      * 判断是否为内部调用。
      * Check request client is chandao or not.
      *

@@ -11,13 +11,30 @@ declare(strict_types=1);
 
 namespace zin;
 
+if(!$longBlock)
+{
+    unset($config->block->plan->dtable->fieldList['id']);
+    unset($config->block->plan->dtable->fieldList['product']);
+    unset($config->block->plan->dtable->fieldList['hour']);
+    unset($config->block->plan->dtable->fieldList['bugs']);
+}
+else
+{
+    $config->block->plan->dtable->fieldList['product']['map'] = $products;
+    foreach($plans as $plan) $plan->hour .= $config->hourUnit;
+}
+
 panel
 (
-    set('headingClass', 'border-b'),
+    setClass('p-0 plan-block'),
     set::title($block->title),
-    div
+    set::bodyClass('p-0 no-shadow border-t'),
+    dtable
     (
-        '正在开发中...'
+        set::height(318),
+        set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
+        set::cols(array_values($config->block->plan->dtable->fieldList)),
+        set::data(array_values($plans))
     )
 );
 
