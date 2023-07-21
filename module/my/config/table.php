@@ -7,6 +7,7 @@ $app->loadLang('story');
 $app->loadLang('doc');
 $app->loadLang('testtask');
 $app->loadLang('testcase');
+$app->loadLang('product');
 $app->loadModuleConfig('testtask');
 $app->loadModuleConfig('testcase');
 $app->loadModuleConfig('company');

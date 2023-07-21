@@ -45,26 +45,19 @@ $config->bug->dtable->fieldList['product']['link'] = 'RAWJS<function(info){ if(i
 
 foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
 
-$footToolbar = $canBatchAction ? array('items' => array
-(
-    array('text' => $lang->edit, 'className' => 'batch-btn ' . ($canBatchEdit ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchEdit')),
-    array('text' => $lang->confirm, 'className' => 'batch-btn ajax-btn ' . ($canBatchConfirm ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchConfirm')),
-    array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . ($canBatchClose ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchClose')),
-    array('text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'caret' => 'up', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
-
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
     $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&productID=0&type=my"));
 }
 
-menu
+$footToolbar = $canBatchAction ? array('items' => array
 (
-    set::id('navAssignedTo'),
-    set::class('dropdown-menu'),
-    set::items($assignedToItems)
-);
+    array('text' => $lang->edit, 'className' => 'batch-btn ' . ($canBatchEdit ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchEdit')),
+    array('text' => $lang->confirm, 'className' => 'batch-btn ajax-btn ' . ($canBatchConfirm ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchConfirm')),
+    array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . ($canBatchClose ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchClose')),
+    array('text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'type' => 'dropdown', 'items' => $assignedToItems, 'caret' => 'up', 'data-placement' => 'top-start'),
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $cols = $this->loadModel('datatable')->getSetting('my');
 $cols['actions']['list']['edit']['data-toggle'] = 'modal';
