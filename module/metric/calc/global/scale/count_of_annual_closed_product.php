@@ -10,9 +10,9 @@
  * 单位：个
  * 描述：按全局统计的年度结束产品数表示每年停止研发和运营的产品数量。此度量项反映了组织每年停止研发和运营的产品数量，可以用于评估组织的产品组合调整和战略转型情况。
  * 定义：所有的产品个数求和
-关闭时间为某年
-过滤已删除的产品
-（过滤影子产品）
+ *       关闭时间为某年
+ *       过滤已删除的产品
+ *       （过滤影子产品）
  * 度量库：
  * 收集方式：realtime
  *
@@ -25,20 +25,32 @@
  */
 class count_of_annual_closed_product extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getProducts';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.closedDate');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = array();
 
     public function calculate($data)
     {
+        $closedDate = $data->closedDate;
+        if(empty($closedDate)) return;
+
+        $year = substr($closedDate, 0, 4);
+        if($year == '0000') return;
+
+        if(!isset($this->result[$year])) $this->result[$year] = 0;
+        $this->result[$year] += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = array();
+        foreach($this->result as $year => $value)
+        {
+            $records[] = array('year' => $year, 'value' => $value);
+        }
+
+        return $this->filterByOptions($records, $options);
     }
 }
