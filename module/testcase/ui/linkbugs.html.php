@@ -28,12 +28,13 @@ div
     )
 );
 
-$footToolbar = array('items' => array(array('text' => $lang->save, 'btnType' => 'secondary')));
+$footToolbar = array('items' => array(array('text' => $lang->save, 'btnType' => 'secondary', 'className' => 'link-btn')));
 
 dtable
 (
     set::cols($config->testcase->linkbugs->dtable->fieldList),
     set::data($bugs2Link),
+    set::userMap($users),
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
