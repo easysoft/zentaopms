@@ -574,6 +574,10 @@ class productplanModel extends model
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
             ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
+            ->setIF($this->post->status == 'done', 'finishedDate', helper::now())
+            ->setIF($this->post->status == 'closed', 'closedDate', helper::now())
+            ->setIF($this->post->status == 'doing', 'finishedDate', '')
+            ->setIF($this->post->status == 'doing', 'closedDate', '')
             ->setDefault('branch', 0)
             ->cleanINT('parent')
             ->join('branch', ',')
@@ -682,12 +686,27 @@ class productplanModel extends model
      */
     public function updateStatus(int $planID, string $status = '', string $action = '')
     {
+        $today = helper::today();
         $oldPlan = $this->getByID($planID);
 
         $plan = new stdclass();
         $plan->status = $status;
-        if($status == 'closed' and $this->post->closedReason) $plan->closedReason = $this->post->closedReason;
-        if($status !== 'closed') $plan->closedReason = '';
+
+        $plan->closedReason = '';
+        if($status == 'done')
+        {
+            $plan->finishedDate = $today;
+        }
+        elseif($status == 'closed')
+        {
+            $plan->closedDate = $today;
+            if($this->post->closedReason) $plan->closedReason = $this->post->closedReason;
+        }
+        elseif($status == 'doing')
+        {
+            $plan->finishedDate = null;
+            $plan->closedDate   = null;
+        }
 
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
 
