@@ -168,7 +168,7 @@ $lang->block->default['product'][] = array('title' => "指派给我的{$lang->SR
 
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}统计",         'module' => 'singleproduct', 'code' => 'singlestatistic',        'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的Bug数据",    'module' => 'singleproduct', 'code' => 'singlebugstatistic',     'width' => '2', 'params' => array('count' => '20'));
-$lang->block->default['singleproduct'][] = array('title' => "产品路线图",                         'module' => 'singleproduct', 'code' => 'roadmap',                'width' => '2');
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}路线图",       'module' => 'singleproduct', 'code' => 'roadmap',                'width' => '2');
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的需求列表",   'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的计划列表",   'module' => 'singleproduct', 'code' => 'singleplan',             'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的发布统计",   'module' => 'singleproduct', 'code' => 'singlerelease',          'width' => '2', 'params' => array('count' => '20'));
@@ -291,7 +291,7 @@ $lang->block->modules['doc']->availableBlocks['projectdoc']      = $lang->projec
 $lang->block->modules['singleproduct'] = new stdclass();
 $lang->block->modules['singleproduct']->availableBlocks['singlestatistic']       = $lang->productCommon . '统计';
 $lang->block->modules['singleproduct']->availableBlocks['singlebugstatistic']    = "{$lang->productCommon}Bug统计";
-$lang->block->modules['singleproduct']->availableBlocks['roadmap']               = "产品路线图";
+$lang->block->modules['singleproduct']->availableBlocks['roadmap']               = "{$lang->productCommon}路线图";
 $lang->block->modules['singleproduct']->availableBlocks['singlestory']           = "{$lang->SRCommon}列表";
 $lang->block->modules['singleproduct']->availableBlocks['singleplan']            = "计划列表";
 $lang->block->modules['singleproduct']->availableBlocks['singlerelease']         = '发布列表';

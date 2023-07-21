@@ -158,6 +158,15 @@ $lang->block->default['product'][] = array('title' => "Offene {$lang->productCom
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon} Overview",  'module' => 'product', 'code' => 'overview',  'width' => '1', 'height' => '3', 'left' => '2', 'top' => '0');
 $lang->block->default['product'][] = array('title' => "Meine {$lang->SRCommon}",          'module' => 'product', 'code' => 'story',     'width' => '1', 'height' => '6', 'left' => '2', 'top' => '3', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Statistic",                  'module' => 'singleproduct', 'code' => 'singlestatistic',        'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Bugs",                       'module' => 'singleproduct', 'code' => 'singlebugstatistic',     'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Roadmap",                    'module' => 'singleproduct', 'code' => 'roadmap',                'width' => '2');
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Stores",                     'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Plans",                      'module' => 'singleproduct', 'code' => 'singleplan',             'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Releases",                   'module' => 'singleproduct', 'code' => 'singlerelease',          'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "Dynamic",                                           'module' => 'singleproduct', 'code' => 'singledynamic',          'width' => '1');
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Monthly Advancing Analysis", 'module' => 'singleproduct', 'code' => 'singlemonthlyprogress',  'width' => '1');
+
 $lang->block->default['qa'][] = array('title' => 'Test Report', 'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'height' => '5', 'left' => '0', 'top' => '0', 'params' => array('type' => 'noclosed',   'count' => '20'));
 $lang->block->default['qa'][] = array('title' => 'Test List',   'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'height' => '6', 'left' => '0', 'top' => '5', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
 $lang->block->default['qa'][] = array('title' => 'Bug List',    'module' => 'qa', 'code' => 'bug',       'width' => '1', 'height' => '6', 'left' => '2', 'top' => '0', 'params' => array('type' => 'assignedTo', 'count' => '15', 'orderBy' => 'id_desc'));
@@ -265,6 +274,16 @@ $lang->block->modules['doc']->availableBlocks['docviewlist']     = 'Browse Leade
 if($config->vision == 'rnd') $lang->block->modules['doc']->availaableBlocks['productdoc'] = $lang->productCommon . 'Document';
 $lang->block->modules['doc']->availableBlocks['doccollectlist']  = 'Favorite Leaderboard';
 $lang->block->modules['doc']->availableBlocks['projectdoc']      = $lang->projectCommon . 'Document';
+
+$lang->block->modules['singleproduct'] = new stdclass();
+$lang->block->modules['singleproduct']->availableBlocks['singlestatistic']       = $lang->productCommon . ' Statistic';
+$lang->block->modules['singleproduct']->availableBlocks['singlebugstatistic']    = "{$lang->productCommon} Bugs";
+$lang->block->modules['singleproduct']->availableBlocks['roadmap']               = "{$lang->productCommon} RoadMap";
+$lang->block->modules['singleproduct']->availableBlocks['singlestory']           = "{$lang->SRCommon} List";
+$lang->block->modules['singleproduct']->availableBlocks['singleplan']            = "Plan List";
+$lang->block->modules['singleproduct']->availableBlocks['singlerelease']         = 'Release List';
+$lang->block->modules['singleproduct']->availableBlocks['singledynamic']         = 'Dynamic';
+$lang->block->modules['singleproduct']->availableBlocks['singlemonthlyprogress'] = "{$lang->productCommon} Monthly Advancing Analysis";
 
 $lang->block->orderByList = new stdclass();
 $lang->block->orderByList->product = array();
