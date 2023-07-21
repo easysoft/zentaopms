@@ -581,6 +581,7 @@ class blockZen extends block
         $orderBy = isset($block->params->type) ? $block->params->orderBy : 'id_asc';
 
         $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $this->viewType != 'json' ? $pager : '', 'story');
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter');
     }
 
     /**
@@ -2595,6 +2596,30 @@ class blockZen extends block
         $this->view->activateBugs  = $activateBugs;
         $this->view->resolveBugs   = $resolveBugs;
         $this->view->closeBugs     = $closeBugs;
+    }
+
+    /**
+     * 打印单个产品的需求列表区块。
+     * Print single product story block.
+     *
+     * @params object     $block
+     * @access protected
+     * @return void
+     */
+    protected function printSingleStoryBlock(object $block): void
+    {
+        $this->session->set('storyList', $this->createLink('product', 'dashboard'), 'product');
+        if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
+
+        $this->app->loadClass('pager', true);
+        $count     = isset($block->params->count) ? (int)$block->params->count : 0;
+        $pager     = pager::init(0, $count , 1);
+        $type      = isset($block->params->type) ? $block->params->type : 'assignedTo';
+        $orderBy   = isset($block->params->type) ? $block->params->orderBy : 'id_asc';
+        $productID = $this->session->product;
+
+        $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $this->viewType != 'json' ? $pager : '', 'story', true, 0, $productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter');
     }
 
     /**

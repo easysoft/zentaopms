@@ -267,6 +267,8 @@ $config->block->params['productDoc'] = $config->block->params['default']->count;
 
 $config->block->params['projectDoc'] = $config->block->params['default']->count;
 
+$config->block->params['singlestory'] = $config->block->params['story'];
+
 $config->block->modules['project'] = new stdclass();
 $config->block->modules['project']->moreLinkList = new stdclass();
 $config->block->modules['project']->moreLinkList->recentproject  = 'project|browse|';

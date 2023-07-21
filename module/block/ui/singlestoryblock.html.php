@@ -11,13 +11,46 @@ declare(strict_types=1);
 
 namespace zin;
 
+if(!$longBlock)
+{
+    unset($config->block->story->dtable->fieldList['status']);
+    unset($config->block->story->dtable->fieldList['category']);
+    unset($config->block->story->dtable->fieldList['estimate']);
+    unset($config->block->story->dtable->fieldList['stage']);
+}
+else
+{
+    foreach($stories as $story) $story->estimate .= $config->hourUnit;
+}
+
+$method = $block->params->type == 'assignedTo' ? 'work' : 'contribute';
+
 panel
 (
-    set('headingClass', 'border-b'),
+    setClass('p-0'),
     set::title($block->title),
-    div
+    set::bodyClass('p-0 no-shadow border-t'),
+    to::headingActions
     (
-        '正在开发中...'
+        hasPriv('my', $method) && $block->params->type != 'reviewBy' ? h::nav
+        (
+            setClass('toolbar'),
+            btn
+            (
+                setClass('ghost toolbar-item size-sm z-10'),
+                set::url(createLink('my', $method, "mode=story&browseType={$block->params->type}")),
+                $lang->more,
+                span(setClass('caret-right')),
+            )
+        ) : '',
+    ),
+    dtable
+    (
+        set::height(318),
+        set::fixedLeftWidth('0.5'),
+        set::userMap($users),
+        set::cols(array_values($config->block->story->dtable->fieldList)),
+        set::data(array_values($stories))
     )
 );
 

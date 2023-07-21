@@ -2901,10 +2901,11 @@ class storyModel extends model
      * @param  object     $pager
      * @param  string     $storyType    requirement|story
      * @param  string|int $shadow       all | 0 | 1
+     * @param  int        $productID
      * @access public
      * @return array
      */
-    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story', $includeLibStories = true, $shadow = 0)
+    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story', $includeLibStories = true, $shadow = 0, $productID = 0)
     {
         $sql = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id');
@@ -2924,6 +2925,7 @@ class storyModel extends model
             ->fi()
             ->beginIF($includeLibStories == false and $this->config->edition == 'max')->andWhere('t1.lib')->eq('0')->fi()
             ->beginIF($shadow !== 'all')->andWhere('t2.shadow')->eq((int)$shadow)->fi()
+            ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

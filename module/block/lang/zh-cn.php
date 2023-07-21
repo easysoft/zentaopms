@@ -166,14 +166,14 @@ $lang->block->default['product'][] = array('title' => "未关闭{$lang->productC
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon}发布统计",         'module' => 'product', 'code' => 'releasestatistic', 'width' => '2');
 $lang->block->default['product'][] = array('title' => "指派给我的{$lang->SRCommon}",            'module' => 'product', 'code' => 'story',            'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
-$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}统计",         'module' => 'singleproduct', 'code' => 'singlestatistic',        'width' => '2', 'params' => array('count' => '20'));
-$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的Bug数据",    'module' => 'singleproduct', 'code' => 'singlebugstatistic',     'width' => '2', 'params' => array('count' => '20'));
-$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}路线图",       'module' => 'singleproduct', 'code' => 'roadmap',                'width' => '2');
-$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的需求列表",   'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('count' => '20'));
-$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的计划列表",   'module' => 'singleproduct', 'code' => 'singleplan',             'width' => '2', 'params' => array('count' => '20'));
-$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的发布统计",   'module' => 'singleproduct', 'code' => 'singlerelease',          'width' => '2', 'params' => array('count' => '20'));
-$lang->block->default['singleproduct'][] = array('title' => "最新动态",                           'module' => 'singleproduct', 'code' => 'singledynamic',          'width' => '1');
-$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}月度推进分析", 'module' => 'singleproduct', 'code' => 'singlemonthlyprogress',  'width' => '1');
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}统计",               'module' => 'singleproduct', 'code' => 'singlestatistic',        'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的Bug数据",          'module' => 'singleproduct', 'code' => 'singlebugstatistic',     'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}路线图",             'module' => 'singleproduct', 'code' => 'roadmap',                'width' => '2');
+$lang->block->default['singleproduct'][] = array('title' => "未关闭的{$lang->productCommon}的需求列表", 'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['singleproduct'][] = array('title' => "未关闭的{$lang->productCommon}的计划列表", 'module' => 'singleproduct', 'code' => 'singleplan',             'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "未关闭的{$lang->productCommon}的发布统计", 'module' => 'singleproduct', 'code' => 'singlerelease',          'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "最新动态",                                 'module' => 'singleproduct', 'code' => 'singledynamic',          'width' => '1');
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}月度推进分析",       'module' => 'singleproduct', 'code' => 'singlemonthlyprogress',  'width' => '1');
 
 $lang->block->default['qa'][] = array('title' => '测试统计',   'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'params' => array('type' => 'noclosed',   'count' => '20'));
 $lang->block->default['qa'][] = array('title' => '测试单列表', 'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
