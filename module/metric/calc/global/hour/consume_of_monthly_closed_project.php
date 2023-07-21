@@ -66,17 +66,7 @@ class consume_of_monthly_closed_project extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $months)
-        {
-            foreach($months as $month => $projects)
-            {
-                foreach($projects as $project => $value)
-                {
-                    $records[] = array('project' => $project, 'year' => $year, 'month' => $month, 'value' => $value);
-                }
-            }
-        }
+        $records = $this->getRecords(array('year', 'month', 'project', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }

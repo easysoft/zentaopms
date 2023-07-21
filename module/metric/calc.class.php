@@ -206,4 +206,41 @@ class baseCalc
     {
         return $this->getStatement()->fetchAll();
     }
+
+    /**
+     * 转换计算结果数组为度量记录数据数组。
+     * Get records from result.
+     *
+     * @param  array  $keyNames
+     * @access public
+     * @return array
+     */
+    public function getRecords($keyNames)
+    {
+        if(empty($keyNames)) return $this->result;
+
+        $records = array();
+        $keyName = array_shift($keyNames);
+        foreach($this->result as $key => $value) $records[] = array($keyName => $key, 'value' => $value);
+
+        while($keyName = array_shift($keyNames))
+        {
+            if($keyName == 'value') break;
+
+            $newRecords = array();
+            foreach($records as $record)
+            {
+                foreach($record['value'] as $key => $value)
+                {
+                    $record[$keyName] = $key;
+                    $record['value']  = $value;
+                    $newRecords[] = $record;
+                }
+            }
+
+            $records = $newRecords;
+        }
+
+        return $records;
+    }
 }
