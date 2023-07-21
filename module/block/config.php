@@ -378,5 +378,5 @@ $config->block->size['singleproduct']['roadmap']               = array('2' => '6
 $config->block->size['singleproduct']['singlestory']           = array('2' => '6', '1' => '6');
 $config->block->size['singleproduct']['singleplan']            = array('2' => '6', '1' => '6');
 $config->block->size['singleproduct']['singlerelease']         = array('2' => '6', '1' => '6');
-$config->block->size['singleproduct']['singledyncmic']         = array('1' => '13');
+$config->block->size['singleproduct']['singledynamic']         = array('1' => '8');
 $config->block->size['singleproduct']['singlemonthlyprogress'] = array('2' => '5', '1' => '13');

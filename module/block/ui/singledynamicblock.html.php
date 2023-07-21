@@ -11,14 +11,47 @@ declare(strict_types=1);
 
 namespace zin;
 
+$content = array();
+if(empty($actions))
+{
+    $content[] = div
+    (
+        setClass('flex items-center justify-center h-64'),
+        span
+        (
+            setClass('text-gray'),
+            $lang->action->noDynamic
+        ),
+    );
+}
+else
+{
+    $content[] = div
+    (
+        setClass('flex-auto actions-box'),
+        dynamic
+        (
+            set::dynamics($actions),
+            set::users($users),
+        )
+    );
+}
+
 panel
 (
-    set('headingClass', 'border-b'),
+    setClass('dynamic-block'),
     set::title($block->title),
-    div
+    to::headingActions
     (
-        '正在开发中...'
-    )
+        a
+        (
+            set('class', 'text-gray'),
+            set('href', createLink('project', 'browse', 'program=0&browseType=' . $block->params->type)),
+            $lang->more,
+            icon('caret-right')
+        )
+    ),
+    $content,
 );
 
 render();

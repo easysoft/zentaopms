@@ -2649,7 +2649,7 @@ class blockZen extends block
 
     /**
      * 打印单个产品计划列表区块。
-     * Print singe product lan block.
+     * Print single product plan block.
      *
      * @param  object    $block
      * @access protected
@@ -2669,6 +2669,24 @@ class blockZen extends block
 
         $this->view->plans    = $this->loadModel('productplan')->getList($productID, 0, 'all', $pager, 'begin_desc', 'noproduct');
         $this->view->products = array($productID => $product->name);
+    }
+
+    /**
+     * Print single product latest dynamic.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function printSingleDynamicBlock(): void
+    {
+        $productID = $this->session->product;
+
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, 30, 1);
+
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager, $productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
     }
 
     /**
