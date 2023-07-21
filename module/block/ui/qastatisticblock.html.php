@@ -202,7 +202,19 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                                 (
                                     set::class('pie-chart-title text-center'),
                                     div(span(set::class('text-2xl font-bold'), $product->closedBugRate . '%')),
-                                    div(span(set::class('text-sm text-gray'), $lang->block->qastatistic->closedBugRate, icon('help', set('data-toggle', 'tooltip'), set('id', 'storyTip'), set('class', 'text-light'))))
+                                    div
+                                    (
+                                        span
+                                        (
+                                            setClass('text-sm text-gray'),
+                                            $lang->block->qastatistic->closedBugRate,
+                                            icon
+                                            (
+                                                'help',
+                                                toggle::tooltip(array('title' => '提示文本'))
+                                            )
+                                        )
+                                    )
                                 )
                             ),
                             div

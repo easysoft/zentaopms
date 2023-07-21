@@ -166,16 +166,9 @@ foreach($projects as $project)
                     icon
                     (
                         setClass('pl-0.5'),
-                        set('data-toggle', 'tooltip'),
-                        set('href', 'totalProgressTooltip'),
+                        toggle::tooltip(array('title' => $lang->block->projectstatistic->totalProgressTip)),
                         'help'
                     ),
-                ),
-                div
-                (
-                    setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
-                    set::id('totalProgressTooltip'),
-                    $lang->block->projectstatistic->totalProgressTip
                 ),
             )
         );

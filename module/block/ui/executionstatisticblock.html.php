@@ -224,7 +224,20 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
                                     (
                                         set::class('pie-chart-title text-center'),
                                         div(span(set::class('text-2xl font-bold'), $execution->progress . '%')),
-                                        div(span(set::class('text-sm text-gray'), $lang->block->executionstatistic->progress, icon('help', set('data-toggle', 'tooltip'), set('id', 'storyTip'), set('class', 'text-light'))))
+                                        div
+                                        (
+                                            span
+                                            (
+                                                setClass('text-sm text-gray'),
+                                                $lang->block->executionstatistic->progress,
+                                                icon
+                                                (
+                                                    'help',
+                                                    toggle::tooltip(array('title' => '提示文本')),
+                                                    setClass('text-light')
+                                                )
+                                            )
+                                        )
                                     )
                                 ),
                                 !$longBlock ? cell

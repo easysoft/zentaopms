@@ -77,7 +77,20 @@ panel
                         (
                             set::class('pie-chart-title text-center'),
                             div(span(set::class('text-2xl font-bold'), $product->storyDeliveryRate . '%')),
-                            div(span(set::class('text-sm text-gray'), $lang->block->productstatistic->deliveryRate, icon('help', set('data-toggle', 'tooltip'), set('id', 'storyTip'), setClass('text-light'))))
+                            div
+                            (
+                                span
+                                (
+                                    setClass('text-sm text-gray'),
+                                    $lang->block->productstatistic->deliveryRate,
+                                    icon
+                                    (
+                                        'help',
+                                        setClass('text-light'),
+                                        toggle::tooltip(array('title' => '提示文本')),
+                                    )
+                                )
+                            )
                         )
                     ),
                     div

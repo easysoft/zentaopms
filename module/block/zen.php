@@ -932,7 +932,7 @@ class blockZen extends block
         /* Place statistical data grouped by product into the product list. */
         foreach($products as $productID => $product)
         {
-            $product->storyDeliveryRate = isset($storyDeliveryRate[$productID]['value']) ? $storyDeliveryRate[$productID]['value'] : 0;
+            $product->storyDeliveryRate = isset($storyDeliveryRate[$productID]['value']) ? $storyDeliveryRate[$productID]['value'] * 100 : 0;
             $product->totalStories      = isset($totalStories[$productID]['value']) ? $totalStories[$productID]['value'] : 0;
             $product->closedStories     = isset($closedStories[$productID]['value']) ? $closedStories[$productID]['value'] : 0;
             $product->unclosedStories   = isset($unclosedStories[$productID]['value']) ? $unclosedStories[$productID]['value'] : 0;
@@ -2508,7 +2508,7 @@ class blockZen extends block
 
         $product = $this->loadModel('product')->getByID($productID);
 
-        $product->storyDeliveryRate = !empty($storyDeliveryRate) && !empty($storyDeliveryRate[$productID]) ? zget($storyDeliveryRate[$productID], 'value') : 0;
+        $product->storyDeliveryRate = !empty($storyDeliveryRate) && !empty($storyDeliveryRate[$productID]) ? zget($storyDeliveryRate[$productID], 'value') * 100 : 0;
         $product->totalStories      = !empty($totalStories)      && !empty($totalStories[$productID])      ? zget($totalStories[$productID], 'value') : 0;
         $product->closedStories     = !empty($closedStories)     && !empty($closedStories[$productID])     ? zget($closedStories[$productID], 'value') : 0;
         $product->unclosedStories   = !empty($unclosedStories)   && !empty($unclosedStories[$productID])   ? zget($unclosedStories[$productID], 'value') : 0;
