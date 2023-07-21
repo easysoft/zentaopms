@@ -198,17 +198,10 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->sv,
                             icon
                             (
-                                set('data-toggle', 'tooltip'),
-                                set('href', 'svTooltip'),
+                                toggle::tooltip(array('title' => '提示文本')),
                                 'help'
                             ),
                             ':',
-                            div
-                            (
-                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
-                                set::id('svTooltip'),
-                                'svTooltip'
-                            ),
                         ),
                         h::td
                         (
@@ -228,17 +221,10 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->pv,
                             icon
                             (
-                                set('data-toggle', 'tooltip'),
-                                set('href', 'pvTooltip'),
+                                toggle::tooltip(array('title' => '提示文本')),
                                 'help'
                             ),
                             ':',
-                            div
-                            (
-                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
-                                set::id('pvTooltip'),
-                                'pvTooltip'
-                            ),
                         ),
                         h::td
                         (
@@ -258,17 +244,10 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->ev,
                             icon
                             (
-                                set('data-toggle', 'tooltip'),
-                                set('href', 'evTooltip'),
+                                toggle::tooltip(array('title' => '提示文本')),
                                 'help'
                             ),
                             ':',
-                            div
-                            (
-                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
-                                set::id('evTooltip'),
-                                'evTooltip'
-                            ),
                         ),
                         h::td
                         (
@@ -309,17 +288,10 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->cv,
                             icon
                             (
-                                set('data-toggle', 'tooltip'),
-                                set('href', 'cvTooltip'),
+                                toggle::tooltip(array('title' => '提示文本')),
                                 'help'
                             ),
                             ':',
-                            div
-                            (
-                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
-                                set::id('cvTooltip'),
-                                'cvTooltip'
-                            ),
                         ),
                         h::td
                         (
@@ -339,17 +311,10 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->ev,
                             icon
                             (
-                                set('data-toggle', 'tooltip'),
-                                set('href', 'evTooltip'),
+                                toggle::tooltip(array('title' => '提示文本')),
                                 'help'
                             ),
                             ':',
-                            div
-                            (
-                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
-                                set::id('evTooltip'),
-                                'evTooltip'
-                            ),
                         ),
                         h::td
                         (
@@ -369,17 +334,10 @@ foreach($projects as $project)
                             $lang->block->projectstatistic->ac,
                             icon
                             (
-                                set('data-toggle', 'tooltip'),
-                                set('href', 'acTooltip'),
+                                toggle::tooltip(array('title' => '提示文本')),
                                 'help'
                             ),
                             ':',
-                            div
-                            (
-                                setClass('tooltip z-50 shadow bg-white text-gray leading-6'),
-                                set::id('acTooltip'),
-                                'acTooltip'
-                            ),
                         ),
                         h::td
                         (
