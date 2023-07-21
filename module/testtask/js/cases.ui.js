@@ -1,6 +1,6 @@
 $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 {
-    const dtable = zui.DTable.query(this);
+    const dtable = zui.DTable.query();
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
@@ -8,8 +8,8 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     const form  = new FormData();
     let autoRun = false;
     checkedList.forEach((id) => {
-        form.append('caseIdList[]', id);
         const caseInfo = dtable.$.getRowInfo(id).data;
+        form.append('caseIdList[]', caseInfo.case);
         if(caseInfo.auto == 'auto') autoRun = true;
     });
 

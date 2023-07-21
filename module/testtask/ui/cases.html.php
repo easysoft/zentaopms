@@ -101,42 +101,26 @@ if($canBatchAction)
     $footToolbar = array('items' => array());
     if($canBatchEdit && $canBatchUnlink)
     {
-        zui::menu
-        (
-            set::id('navActions'),
-            set::class('menu dropdown-menu'),
-            set::items(array
-            (
-                array('text' => $lang->unlink, 'class' => 'batch-btn ajax-btn', 'data-url' => inlink('batchUnlinkCases', "taskID=$task->id"))
-            ))
-        );
         $footToolbar['items'][] = array('type' => 'btn-group', 'items' => array
         (
-            array('text' => $lang->edit, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$productID&branch=all")),
-            array('caret' => 'up', 'className' => 'secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start')
+            array('text' => $lang->edit, 'className' => 'batch-btn not-open-url secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$productID&branch=all")),
+            array('caret' => 'up', 'className' => 'secondary', 'items' => array(array('text' => $lang->unlink, 'class' => 'batch-btn not-open-url ajax-btn', 'data-url' => inlink('batchUnlinkCases', "taskID=$task->id"))), 'data-placement' => 'top-start')
         ));
     }
-    if($canBatchEdit && !$canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'batch-btn', 'btnType' => 'secondary', 'data-url' => $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=all"));
-    if(!$canBatchEdit && $canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->unlink, 'className' => 'batch-btn', 'btnType' => 'secondary', 'data-url' => inlink('batchUnlinkCases', "taskID=$task->id"));
+    if($canBatchEdit && !$canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=all"));
+    if(!$canBatchEdit && $canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->unlink, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchUnlinkCases', "taskID=$task->id"));
     if($canBatchAssign)
     {
         $userItems = array();
-        foreach($assignedToList as $account => $realname) $userItems[] = array('text' => $realname, 'class' => 'batch-btn ajax-btn', 'data-url' => inlink('batchAssign', "taskID=$task->id"));
+        foreach($assignedToList as $account => $realname) $userItems[] = array('text' => $realname, 'class' => 'batch-btn ajax-btn not-open-url', 'data-url' => inlink('batchAssign', "taskID=$task->id&account=$account"));
 
-        zui::menu
-        (
-            set::id('navUser'),
-            set::class('dropdown-menu'),
-            set::items($userItems)
-        );
-
-        $footToolbar['items'][] = array('text' => $lang->testtask->assign, 'caret' => 'up', 'btnType' => 'secondary', 'url' => '#navUser', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
+        $footToolbar['items'][] = array('text' => $lang->testtask->assign, 'caret' => 'up', 'btnType' => 'secondary', 'type' => 'dropdown', 'items' => $userItems, 'data-placement' => 'top-start');
     }
-    if($canBatchRun) $footToolbar['items'][] = array('text' => $lang->testtask->runCase, 'className' => 'batch-btn batch-run', 'btnType' => 'secondary', 'data-url' => inlink('batchRun', "productID=$productID&orderBy=id_desc&from=testtask&taskID=$task->id&confirm=yes"));
+    if($canBatchRun) $footToolbar['items'][] = array('text' => $lang->testtask->runCase, 'className' => 'batch-btn batch-run not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchRun', "productID=$productID&orderBy=id_desc&from=testtask&taskID=$task->id&confirm=yes"));
 }
 
 $cols = $this->loadModel('datatable')->getSetting('testtask');
-if(isset($cols['id']['name'])) $cols['id']['name']  = 'case';
+if(isset($cols['id']['name'])) $cols['id']['name'] = 'case';
 if(isset($cols['title']['link']['params'])) $cols['title']['link']['params'] = 'caseID={case}';
 if(!empty($cols['actions']['list']['createBug']['url']))
 {

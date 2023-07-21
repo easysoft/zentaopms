@@ -1184,11 +1184,12 @@ class testtask extends control
                 ->where('task')->eq((int)$taskID)
                 ->andWhere('`case`')->in($this->post->caseIdList)
                 ->exec();
+
             $this->loadModel('action');
             foreach($_POST['caseIdList'] as $caseID) $this->action->create('case', $caseID, 'unlinkedfromtesttask', '', $taskID);
         }
 
-        return print(js::locate($this->createLink('testtask', 'cases', "taskID=$taskID")));
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('testtask', 'cases', "taskID=$taskID")));
     }
 
     /**
@@ -1456,19 +1457,21 @@ class testtask extends control
      * Batch assign cases.
      *
      * @param  int    $taskID
+     * @param  string $account
      * @access public
      * @return void
      */
-    public function batchAssign($taskID)
+    public function batchAssign($taskID, $account)
     {
         $this->dao->update(TABLE_TESTRUN)
-            ->set('assignedTo')->eq($this->post->assignedTo)
+            ->set('assignedTo')->eq($account)
             ->where('task')->eq((int)$taskID)
             ->andWhere('`case`')->in($this->post->caseIdList)
             ->exec();
         $this->loadModel('action');
-        foreach($this->post->caseIdList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $this->post->assignedTo);
-        return print(js::locate($this->session->caseList, 'parent'));
+        foreach($this->post->caseIdList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $account);
+
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
