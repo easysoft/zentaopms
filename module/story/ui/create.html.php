@@ -321,7 +321,7 @@ formPanel
     (
         formGroup
         (
-            set::width('3/4'),
+            set::width('3/5'),
             set::label($lang->story->title),
             set::required($fields['title']['required']),
             input(set::name('title'), set::value($fields['title']['default'])),
@@ -329,6 +329,7 @@ formPanel
         formGroup
         (
             setClass('no-background'),
+            set::width('2/5'),
             inputGroup
             (
                 $lang->story->category,
