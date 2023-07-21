@@ -2,3 +2,6 @@
 .module-menu .active {color: var(--color-primary-600); font-weight: 500;}
 .module-menu header a:hover > .icon {color: var(--color-primary-600) !important;}
 .module-menu .tree-item * {white-space: nowrap;}
+
+#docDropmenu .is-leading {display: none;}
+#docDropmenu .primary {--tw-ring-color: var(--btn-border-color); background-color: var(--btn-bg); color: inherit; width: 100%;}

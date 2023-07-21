@@ -18,6 +18,7 @@ class docMenu extends wg
         'spaceType?: string',
         'objectType?: string',
         'objectID?: int=0',
+        'hover?: bool=true',
     );
 
     public static function getPageCSS(): string|false
@@ -363,12 +364,14 @@ class docMenu extends wg
     protected function build(): wg
     {
         $this->setMenuTreeProps();
-        $title = $this->getTitle();
+        $title        = $this->getTitle();
+        $dropmenuUrl  = $this->prop('dropmenuUrl', '');
+        $dropmenuText = $this->prop('dropmenuText', '');
 
         return div
         (
             setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
-            $title ? h::header
+            $title && empty($dropmenuUrl) ? h::header
             (
                 setClass('h-10 flex items-center pl-4 flex-none gap-3'),
                 span
@@ -378,10 +381,16 @@ class docMenu extends wg
                 ),
                 $this->buildCloseBtn(),
             ) : null,
+            $dropmenuUrl ? dropmenu
+            (
+                set::id('docDropmenu'),
+                set::text($dropmenuText),
+                set::url($dropmenuUrl),
+            ) : null,
             h::main
             (
                 setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
-                zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'))))
+                zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover'))))
             ),
             $this->buildBtns(),
             $this->buildDropDownMenu(),
