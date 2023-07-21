@@ -269,6 +269,7 @@ $config->block->params['projectDoc'] = $config->block->params['default']->count;
 
 $config->block->params['singlestory']   = $config->block->params['story'];
 $config->block->params['singlerelease'] = $config->block->params['release'];
+unset($config->block->params['singlestory']->type['options']['reviewedBy']);
 
 $config->block->modules['project'] = new stdclass();
 $config->block->modules['project']->moreLinkList = new stdclass();
