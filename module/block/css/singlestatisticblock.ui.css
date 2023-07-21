@@ -9,4 +9,4 @@
 
 .singleproductstatistic-block .chart > div {margin: auto;}
 .singleproductstatistic-block .pie-chart {position: relative;}
-.singleproductstatistic-block .pie-chart .pie-chart-title {position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -45px}
+.singleproductstatistic-block .pie-chart .pie-chart-title {position: relative; top: -85px;}
