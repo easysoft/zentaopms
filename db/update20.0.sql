@@ -280,3 +280,4 @@ INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `name`, `code`, `unit`, `d
 
 ALTER TABLE `zt_story` ADD `releasedDate` datetime DEFAULT NULL AFTER `reviewedDate`;
 ALTER TABLE `zt_project` ADD `firstEnd` date DEFAULT NULL AFTER `end`;
+ALTER TABLE `zt_product` ADD `closedDate` date DEFAULT NULL AFTER `createdVersion`;
