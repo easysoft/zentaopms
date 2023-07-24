@@ -46,7 +46,7 @@ panel
         a
         (
             set('class', 'text-gray'),
-            set('href', createLink('project', 'browse', 'program=0&browseType=' . $block->params->type)),
+            set('href', createLink('product', 'dynamic', 'productID=' . $productID)),
             $lang->more,
             icon('caret-right')
         )
