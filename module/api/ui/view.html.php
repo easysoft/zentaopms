@@ -74,7 +74,7 @@ for($itemVersion = $api->version; $itemVersion > 0; $itemVersion--)
 }
 
 $apiHeader = $apiQuery = $apiParams = $apiResponse = array();
-$parseTree = function($data, $typeList, $level = 0)
+$parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
 {
     global $lang;
 
@@ -84,9 +84,9 @@ $parseTree = function($data, $typeList, $level = 0)
 
     $tbody[] = h::tr
     (
-        h::td($field),
-        h::td(zget($typeList, $data['paramsType'], '')),
-        h::td(zget($lang->api->boolList, $data['required'], '')),
+        h::td(html($field)),
+        h::td(zget($typeList, (string)$data['paramsType'], '')),
+        h::td(zget($lang->api->boolList, (string)$data['required'], '')),
         h::td($data['desc']),
     );
 
@@ -160,7 +160,7 @@ if($api->params['query'])
 if($api->params['params'])
 {
     $tbody = array();
-    foreach($api->params['params'] as $param) $tbody = $parseTree($params, $typeList);
+    foreach($api->params['params'] as $param) $tbody = array_merge($tbody, $parseTree($param, $typeList));
 
     $apiParams[] = h3($lang->api->params);
     $apiParams[] = h::table
@@ -180,7 +180,7 @@ if($api->params['params'])
 if($api->response)
 {
     $tbody = array();
-    foreach($api->response as $response) $tbody = $parseTree($response, $typeList);
+    foreach($api->response as $response) $tbody = array_merge($tbody, $parseTree($response, $typeList));
 
     $apiResponse[] = h3($lang->api->response);
     $apiResponse[] = h::table
@@ -272,6 +272,7 @@ panel
         $api->responseExample ? html("<pre><code>" . $api->responseExample . "</code></pre>") : null,
     )
 );
+
 panel
 (
     set::id('history'),
