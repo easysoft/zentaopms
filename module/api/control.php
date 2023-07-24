@@ -659,25 +659,18 @@ class api extends control
      * @access public
      * @return void
      */
-    public function delete($apiID, $confirm = 'no')
+    public function delete($apiID)
     {
-        if($confirm == 'no')
+        $api = $this->api->getLibById($apiID);
+        $this->api->delete(TABLE_API, $apiID);
+
+        if(dao::isError())
         {
-            return print(js::confirm($this->lang->api->confirmDelete, inlink('delete', "apiID=$apiID&confirm=yes")));
+            $this->sendError(dao::getError());
         }
         else
         {
-            $api = $this->api->getLibById($apiID);
-            $this->api->delete(TABLE_API, $apiID);
-
-            if(dao::isError())
-            {
-                $this->sendError(dao::getError());
-            }
-            else
-            {
-                return print(js::locate($this->session->structList ? $this->session->structList : inlink('index', "libID=$api->lib&module=$api->module"), 'parent'));
-            }
+            return $this->sendSuccess(array('load' => inlink('index', "libID=$api->lib&module=$api->module")));
         }
     }
 

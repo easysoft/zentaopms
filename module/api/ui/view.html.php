@@ -235,7 +235,8 @@ panel
                 (!$isRelease && common::hasPriv('api', 'delete')) ? btn
                 (
                     set::url(createLink('api', 'delete', "apiID=$api->id")),
-                    setClass('btn ghost'),
+                    setClass('btn ghost ajax-submit'),
+                    set('data-confirm', $lang->api->confirmDelete),
                     icon('trash'),
                 ) : null,
                 btn
@@ -251,6 +252,7 @@ panel
     div
     (
         set::Class('panel-body'),
+        set::id('content'),
         h2($api->title),
         div(setClass('desc'), $api->desc),
         $apiHeader,
@@ -262,4 +264,10 @@ panel
         $api->responseExample ? h3($lang->api->responseExample) : null,
         $api->responseExample ? html("<pre><code>" . $api->responseExample . "</code></pre>") : null,
     )
+);
+panel
+(
+    set::id('history'),
+    setClass('hidden'),
+    history()
 );
