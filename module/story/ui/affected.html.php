@@ -15,7 +15,7 @@ $getAffectedTabs = function($story, $users)
         $affectedProjects[] = h6
         (
             $execution->name,
-            $teams ? small(icon('group'), $teams) : null
+            $teams ? h::small(icon('group'), $teams) : null
         );
         $affectedProjects[] = dtable
         (
