@@ -6,7 +6,6 @@ window.onChangeUser = function(event)
     loadPage($.createLink('product', 'dynamic', `productID=${productID}&type=${type}&param=${user}`));
 };
 
-window.toggleCollapse = function(event)
-{
-    $(event.target).parent().parent().toggleClass('collapsed');
-};
+$(document).off('click', '.dynamic-collapse-icon').on('click', '.dynamic-collapse-icon', function(event){
+    $(event.target).parent().parent().parent().toggleClass('collapsed');
+});
