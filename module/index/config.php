@@ -34,7 +34,6 @@ $config->index->oldPages[] = 'kanban-space';
 $config->index->oldPages[] = 'screen-browse';
 $config->index->oldPages[] = 'pivot-preview';
 $config->index->oldPages[] = 'chart-preview';
-$config->index->oldPages[] = 'company-dynamic';
 $config->index->oldPages[] = 'group-managepriv';
 $config->index->oldPages[] = 'kanban-space';
 $config->index->oldPages[] = 'kanban-view';
