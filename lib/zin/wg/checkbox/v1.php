@@ -14,7 +14,8 @@ class checkbox extends wg
         'type: string="checkbox"',
         'value?: string',
         'typeClass?: string',
-        'rootClass?: string'
+        'rootClass?: string',
+        'labelClass?: string',
     );
 
     public function onAddChild($child)
@@ -28,7 +29,7 @@ class checkbox extends wg
 
     protected function buildPrimary()
     {
-        list($id, $text, $name, $checked, $disabled, $type, $typeClass, $rootClass, $value) = $this->prop(array('id', 'text', 'name', 'checked', 'disabled', 'type', 'typeClass', 'rootClass', 'value'));
+        list($id, $text, $name, $checked, $disabled, $type, $typeClass, $rootClass, $labelClass, $value) = $this->prop(array('id', 'text', 'name', 'checked', 'disabled', 'type', 'typeClass', 'rootClass', 'labelClass', 'value'));
 
         if(empty($typeClass)) $typeClass = $type;
         if(empty($id))        $id        = $name . '_' . $value;
@@ -47,6 +48,7 @@ class checkbox extends wg
             h::label
             (
                 set::for($id),
+                setClass($labelClass),
                 $text,
             ),
             $this->children()

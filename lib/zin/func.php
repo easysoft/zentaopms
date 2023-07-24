@@ -103,6 +103,7 @@ function switcher(): switcher
  * ?string value
  * ?string typeClass
  * ?string rootClass
+ * ?string labelClass
  */
 function checkbox(): checkbox
 {
