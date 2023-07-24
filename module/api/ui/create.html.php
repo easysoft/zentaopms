@@ -102,7 +102,7 @@ formPanel
         (
             set::name('owner'),
             set::items($allUsers),
-            set::value($user),
+            set::value($app->user->account),
         ),
     ),
     formGroup
