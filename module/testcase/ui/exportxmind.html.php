@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('xmindSettingTip', $lang->testcase->xmindSettingTip);
-
 set::title($lang->testcase->exportXmind);
 
 form
@@ -35,19 +33,16 @@ form
         set::control('picker'),
         set::items($moduleOptionMenu),
     ),
-    formRow
+    formRowGroup
     (
-        set::class('border-b border-b-1'),
-        span
+        set::title($lang->testcase->xmindExportSetting),
+        to::suffix
         (
-            set::class('bg-lighter font-black px-3 py-1'),
-            $lang->testcase->xmindExportSetting,
             icon
             (
                 'help',
-                set::class('text-gray pl-1'),
-                set('data-toggle', 'tooltip'),
-                set::id('xmindSettingTip'),
+                setClass('text-gray pl-1'),
+                toggle::tooltip(array('title' => $lang->testcase->xmindSettingTip)),
             )
         ),
     ),

@@ -1,8 +1,3 @@
-$(function()
-{
-    new zui.Tooltip('#xmindSettingTip', {title: xmindSettingTip, trigger: 'hover', placement: 'right', type: 'white'});
-})
-
 function setDownloading()
 {
     if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true; // Opera don't support, omit it.

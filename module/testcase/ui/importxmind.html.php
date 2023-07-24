@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('xmindSettingTip', $lang->testcase->xmindSettingTip);
-
 set::title($lang->testcase->importXmind);
 
 form
@@ -21,19 +19,16 @@ form
         set::label($lang->testcase->importFile),
         fileInput()
     ),
-    formRow
+    formRowGroup
     (
-        set::class('border-b border-b-1'),
-        span
+        set::title($lang->testcase->xmindImportSetting),
+        to::suffix
         (
-            set::class('bg-lighter font-black px-3 py-1'),
-            $lang->testcase->xmindImportSetting,
             icon
             (
                 'help',
-                set::class('text-gray pl-1'),
-                set('data-toggle', 'tooltip'),
-                set::id('xmindSettingTip'),
+                setClass('text-gray pl-1'),
+                toggle::tooltip(array('title' => $lang->testcase->xmindSettingTip)),
             )
         ),
     ),
