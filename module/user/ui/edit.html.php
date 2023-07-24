@@ -163,15 +163,7 @@ formPanel
             ),
         ),
     ),
-    formRow
-    (
-        setClass('border-b border-b-1'),
-        div
-        (
-            setClass('bg-lighter font-black px-3 py-1'),
-            $lang->user->accountInfo
-        ),
-    ),
+    formRowGroup(set::title($lang->user->accountInfo)),
     formRow
     (
         formGroup
@@ -244,15 +236,7 @@ formPanel
             ),
         )
     ),
-    formRow
-    (
-        setClass('border-b border-b-1'),
-        div
-        (
-            setClass('bg-lighter font-black px-3 py-1'),
-            $lang->user->contactInfo
-        ),
-    ),
+    formRowGroup(set::title($lang->user->contactInfo)),
     $contacts,
     formRow
     (
@@ -271,15 +255,7 @@ formPanel
             set::value($user->zipcode),
         )
     ),
-    formRow
-    (
-        setClass('border-b border-b-1'),
-        div
-        (
-            setClass('bg-lighter font-black px-3 py-1'),
-            $lang->user->verify
-        ),
-    ),
+    formRowGroup(set::title($lang->user->verify)),
     formRow
     (
         formGroup

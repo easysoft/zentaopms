@@ -392,15 +392,7 @@ formPanel
         set::required(true),
     ) : null,
     $productsBox,
-    formRow
-    (
-        setClass('border-b border-b-1'),
-        div
-        (
-            setClass('bg-lighter font-black px-3 py-1'),
-            $lang->execution->teamSetting
-        ),
-    ),
+    formRowGroup(set::title($lang->execution->teamSetting)),
     formGroup
     (
         set::width('1/2'),
