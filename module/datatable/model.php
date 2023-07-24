@@ -28,6 +28,7 @@ class datatableModel extends model
 
         $config = $this->config->$module;
         if(!empty($method) && isset($config->$method) && isset($config->$method->dtable)) $config = $config->$method;
+
         $fieldList = $config->dtable->fieldList;
 
         /* If doesn't need product, remove 'product' field. */
@@ -76,12 +77,14 @@ class datatableModel extends model
      * Get save setting field.
      *
      * @param  string $module
+     * @param  string $method
+     * @param  bool   $showAll
      * @access public
      * @return object
      */
-    public function getSetting(string $module)
+    public function getSetting(string $module, string $method = '', bool $showAll = false)
     {
-        $method      = $this->app->getMethodName();
+        if(!$method) $method = $this->app->getMethodName();
         $datatableId = $module . ucfirst($method);
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
@@ -96,21 +99,29 @@ class datatableModel extends model
         }
         else
         {
-            foreach($setting as $key => $set)
+            foreach($setting as $field => $set)
             {
-                if(empty($set['required']) && empty($set['show']))
+                if(isset($fieldList[$field]))
                 {
-                    unset($setting[$key]);
+                    foreach($fieldList[$field] as $key => $value)
+                    {
+                        if(!isset($set[$key])) $setting[$field][$key] = $value;
+                    }
+                }
+
+                if(!$showAll && empty($set['required']) && empty($set['show']))
+                {
+                    unset($setting[$field]);
                     continue;
                 }
 
-                if($this->session->currentProductType === 'normal' and $set['id'] === 'branch')
+                if($this->session->currentProductType === 'normal' and $field === 'branch')
                 {
-                    unset($setting[$key]);
+                    unset($setting[$field]);
                     continue;
                 }
 
-                if($set['name'] == 'actions') $set['width'] = $fieldList['actions']['width'];
+                if($field == 'actions') $setting[$field]['width'] = $fieldList[$field]['width'];
             }
         }
 
