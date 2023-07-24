@@ -39,7 +39,6 @@ class ai extends control
 
         $this->view->modelConfig = $modelConfig;
         $this->view->title       = $this->lang->ai->models->title;
-        $this->view->position[]  = $this->lang->ai->models->common;
         $this->display();
     }
 
@@ -83,7 +82,6 @@ class ai extends control
 
         $this->view->modelConfig = $modelConfig;
         $this->view->title       = $this->lang->ai->models->title;
-        $this->view->position[]  = $this->lang->ai->models->common;
         $this->display();
     }
 
@@ -136,7 +134,6 @@ class ai extends control
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->title      = $this->lang->ai->prompts->common;
-        $this->view->position[] = $this->lang->ai->prompts->common;
 
         $this->display();
     }
@@ -158,7 +155,6 @@ class ai extends control
         $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->title       = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name";
-        $this->view->position[]  = $this->lang->ai->prompts->common;
 
         $this->display();
     }
@@ -181,7 +177,6 @@ class ai extends control
         }
 
         $this->view->title      = $this->lang->ai->prompts->create;
-        $this->view->position[] = $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -225,7 +220,6 @@ class ai extends control
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = $this->lang->ai->prompts->assignRole . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[]     = $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -270,7 +264,6 @@ class ai extends control
         $this->view->promptID         = $promptID;
         $this->view->lastActiveStep   = $this->ai->getLastActiveStep($prompt);
         $this->view->title            = $this->lang->ai->prompts->selectDataSource . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[]       = $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -313,7 +306,6 @@ class ai extends control
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = $this->lang->ai->prompts->setPurpose . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[]     = $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -362,7 +354,6 @@ class ai extends control
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = $this->lang->ai->prompts->setTargetForm . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[]     = $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -405,7 +396,6 @@ class ai extends control
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = $this->lang->ai->prompts->finalize . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[]     = $this->lang->ai->prompts->common;
         $this->display();
     }
 
