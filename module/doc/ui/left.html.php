@@ -10,19 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('release', isset($release) ? $release : 0);
-jsVar('versionLang', $lang->build->common);
-jsVar('spaceType', $this->session->spaceType);
-jsVar('rawModule', $this->app->rawModule);
-jsVar('rawMethod', $this->app->rawMethod);
-jsVar('objectType', isset($type) ? $type : '');
-jsVar('objectID',   isset($objectID) ? $objectID : '');
-jsVar('isFirstLoad', isset($isFirstLoad) ? $isFirstLoad: '');
-jsVar('canViewFiles', common::hasPriv('doc', 'showfiles'));
-jsVar('spaceMethod', $config->doc->spaceMethod);
-jsVar('canSortDocCatalog', common::hasPriv('doc', 'sortCatalog'));
-jsVar('canSortAPICatalog', common::hasPriv('api', 'sortCatalog'));
-
 sidebar
 (
     docMenu
@@ -37,21 +24,7 @@ sidebar
         set::objectID(isset($objectID) ? $objectID : 0),
         set::title(isset($objectDropdown['text']) ? $objectDropdown['text'] : ''),
         set::menuLink(isset($objectDropdown['link']) ? $objectDropdown['link'] : ''),
+        set::settingLink($app->rawMethod !== 'view' && common::hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : ''),
+        set::settingText($lang->doc->displaySetting),
     )
 );
-
-if($app->rawMethod == 'view' and common::hasPriv('doc', 'displaySetting'))
-{
-    div
-    (
-        setClass('text-center bottom-btn-tree'),
-        a
-        (
-            setClass('btn btn-sm btn-primary'),
-            set('href', inlink('displaySetting')),
-            set('data-toggle', 'modal'),
-            set('data-size', 'sm'),
-            $lang->doc->displaySetting
-        )
-    );
-}
