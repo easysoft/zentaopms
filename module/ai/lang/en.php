@@ -71,6 +71,7 @@ $lang->ai->prompts->action->unpublish       = 'Unpublish';
 $lang->ai->prompts->action->delete          = 'Delete';
 $lang->ai->prompts->action->deleteConfirm   = 'Deleted prompts will be no longer available. Are you sure you want to proceed?';
 $lang->ai->prompts->action->publishSuccess  = 'Publish Success';
+
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';
 $lang->ai->prompts->selectDataSource = 'Select Data Source';
@@ -298,6 +299,9 @@ $lang->ai->targetForm['testcase']['common']       = 'Test Case';
 $lang->ai->targetForm['bug']['common']            = 'Bug';
 $lang->ai->targetForm['doc']['common']            = 'Document';
 
+$lang->ai->targetForm['product']['tree/managechild'] = 'Manage Modules';
+$lang->ai->targetForm['product']['doc/create']       = 'Create Doc';
+
 $lang->ai->targetForm['story']['create']         = 'Create Story';
 $lang->ai->targetForm['story']['batchcreate']    = 'Batch Create Story';
 $lang->ai->targetForm['story']['change']         = 'Change Story';
@@ -504,6 +508,18 @@ $lang->ai->formSchema['story']['change']->properties->spec->description   = 'Des
 $lang->ai->formSchema['story']['change']->properties->verify->type        = 'string';
 $lang->ai->formSchema['story']['change']->properties->verify->description = 'Acceptance criteria of the story';
 $lang->ai->formSchema['story']['change']->required = array('title', 'spec', 'verify');
+
+$lang->ai->formSchema['doc']['edit'] = new stdclass();
+$lang->ai->formSchema['doc']['edit']->title = 'Document';
+$lang->ai->formSchema['doc']['edit']->type  = 'object';
+$lang->ai->formSchema['doc']['edit']->properties = new stdclass();
+$lang->ai->formSchema['doc']['edit']->properties->title   = new stdclass();
+$lang->ai->formSchema['doc']['edit']->properties->content = new stdclass();
+$lang->ai->formSchema['doc']['edit']->properties->title->type          = 'string';
+$lang->ai->formSchema['doc']['edit']->properties->title->description   = 'Title of the document';
+$lang->ai->formSchema['doc']['edit']->properties->content->type        = 'string';
+$lang->ai->formSchema['doc']['edit']->properties->content->description = 'Content of the document';
+$lang->ai->formSchema['doc']['edit']->required = array('title', 'content');
 
 $lang->ai->promptMenu = new stdclass();
 $lang->ai->promptMenu->dropdownTitle = 'AI';

@@ -509,6 +509,18 @@ $lang->ai->formSchema['story']['change']->properties->verify->type        = 'str
 $lang->ai->formSchema['story']['change']->properties->verify->description = '需求的验收标准';
 $lang->ai->formSchema['story']['change']->required = array('title', 'spec', 'verify');
 
+$lang->ai->formSchema['doc']['edit'] = new stdclass();
+$lang->ai->formSchema['doc']['edit']->title = '文档';
+$lang->ai->formSchema['doc']['edit']->type  = 'object';
+$lang->ai->formSchema['doc']['edit']->properties = new stdclass();
+$lang->ai->formSchema['doc']['edit']->properties->title   = new stdclass();
+$lang->ai->formSchema['doc']['edit']->properties->content = new stdclass();
+$lang->ai->formSchema['doc']['edit']->properties->title->type          = 'string';
+$lang->ai->formSchema['doc']['edit']->properties->title->description   = '文档的标题';
+$lang->ai->formSchema['doc']['edit']->properties->content->type        = 'string';
+$lang->ai->formSchema['doc']['edit']->properties->content->description = '文档的正文';
+$lang->ai->formSchema['doc']['edit']->required = array('title', 'content');
+
 $lang->ai->promptMenu = new stdclass();
 $lang->ai->promptMenu->dropdownTitle = 'AI';
 

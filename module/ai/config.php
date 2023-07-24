@@ -118,6 +118,7 @@ foreach($config->ai->targetForm as $forms)
 $config->ai->targetFormVars = array();
 $config->ai->targetFormVars['story']     = array('change' => 'storyID=%d');
 $config->ai->targetFormVars['execution'] = array();
+$config->ai->targetFormVars['doc']       = array('edit' => 'docID=%d');
 
 /* Menu printing configurations. */
 $config->ai->menuPrint = new stdclass();

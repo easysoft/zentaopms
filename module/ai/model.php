@@ -681,6 +681,10 @@ class aiModel extends model
             if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
             if(isset($sourceGroups['tasks']))     $object->tasks     = $this->loadModel('task')->getExecutionTasks($objectId);
         }
+        if($module == 'doc')
+        {
+            if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
+        }
 
         $objectVars = get_object_vars($object);
         if(empty($objectVars)) return false;
