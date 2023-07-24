@@ -135,7 +135,7 @@
                       <label class='text-left <?php if(!empty($menusSelect) and $menusPrivs != $menusSelect) echo 'checkbox-indeterminate-block';?>' for='actions[<?php echo $moduleName;?>]browse'><?php echo $lang->$moduleName->browse;?></label>
                     </div>
                     <i class="priv-toggle icon"></i>
-                    <div class='menus-privs hidden data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>''>
+                    <div class='menus-privs hidden' data-module='<?php echo $moduleName;?>' data-package='<?php echo $packageID;?>'>
                       <div class="arrow"></div>
                       <div class='popover-content'>
                         <?php foreach($lang->$moduleName->menus as $method => $name):?>

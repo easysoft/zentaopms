@@ -371,14 +371,7 @@ class group extends control
             $this->view->indexPrivs   = $indexPrivs;
         }
 
-        if($type == 'byModule')
-        {
-            $this->display('group', 'privbymodule');
-        }
-        else
-        {
-            $this->display();
-        }
+        $this->display();
     }
 
     /**
