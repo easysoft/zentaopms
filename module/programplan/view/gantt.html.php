@@ -783,13 +783,15 @@ $(function()
     var taskModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%'});
     gantt.attachEvent('onTaskClick', function(id, e)
     {
-        if($(e.srcElement).hasClass('editDeadline'))
+        var editBtn = $(e.srcElement);
+        if(editBtn.hasClass('editDeadline'))
         {
            var parentID = id.split("-")[0];
            var stageEndDate = $("div[data-task-id='" + parentID + "']").find('div[data-column-name="end_date"] > .gantt_tree_content').text();
            var reviewID     = id;
+           var deadlineDate = editBtn.prev().text();
 
-           $(e.srcElement).datetimepicker(
+           editBtn.datetimepicker(
            {
                weekStart: 1,
                todayBtn:  1,
@@ -800,7 +802,8 @@ $(function()
                forceParse: 0,
                format: "yyyy-mm-dd",
                startDate: new Date(),
-               endDate: new Date(stageEndDate)
+               endDate: new Date(stageEndDate),
+               initialDate: new Date(deadlineDate),
            })
            .on('changeDate', function(ev){
                var year  = ev.date.getFullYear();
@@ -814,17 +817,17 @@ $(function()
                });
 
            });
-           $(e.srcElement).datetimepicker('show');
+           editBtn.datetimepicker('show');
            return false;
         }
 
-        if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
+        if(editBtn.hasClass('gantt_close') || editBtn.hasClass('gantt_open')) return false;
 
         var task = gantt.getTask(id);
         if(task.type == 'point' && task.rawStatus) location.href = createLink('review', 'view', 'reviewID=' + task.reviewID);
         if(task.type == 'plan' && !task.isParent)  window.parent.$.apps.open(createLink('execution', 'task', 'id=' + task.id), 'execution');
 
-        if($(e.srcElement).hasClass('icon-confirm'))
+        if(editBtn.hasClass('icon-confirm'))
         {
             var pointAttr = JSON.parse(reviewPoints);
             var category  = id.split("-")[1];
