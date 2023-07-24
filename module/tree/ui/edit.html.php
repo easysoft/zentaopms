@@ -18,11 +18,12 @@ jsVar('type', $type);
 $hidden = $type != 'story' && $module->type == 'story';
 
 /* ====== Define the page structure with zin widgets ====== */
-modalHeader();
+modalHeader(set::title($title));
 formPanel
 (
     setID('editForm'),
     set::action(helper::createLink($app->rawModule, $app->rawMethod, 'module=' . $module->id .'&type=' . $type)),
+    set::submitBtnText($lang->save),
     $showProduct ? formRow
     (
         set::class($hiddenProduct ? 'hidden' : ''),
@@ -59,6 +60,13 @@ formPanel
         set::value($module->root),
         set::items($libs)
     ) : null,
+    formGroup
+    (
+        set::name('name'),
+        set::label($name),
+        set::control('input'),
+        set::value($module->name),
+    ),
     $module->type != 'line' ? formGroup
     (
         set::class($hidden ? 'moduleBox hidden' : 'moduleBox'),
@@ -71,13 +79,6 @@ formPanel
             set::items($optionMenu)
         )
     ) : null,
-    formGroup
-    (
-        set::name('name'),
-        set::label($name),
-        set::control('input'),
-        set::value($module->name),
-    ),
     $type == 'bug' ? formGroup
     (
         set::label($lang->tree->owner),
@@ -102,7 +103,3 @@ formPanel
         )
     ),
 );
-hr();
-
-/* ====== Render page ====== */
-render();
