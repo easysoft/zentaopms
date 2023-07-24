@@ -139,24 +139,24 @@ $lang->block->titleList['bug']            = 'Bug';
 $lang->block->titleList['case']           = 'Case';
 $lang->block->titleList['testtask']       = 'Test Request';
 
-$lang->block->default['scrumproject'][] = array('title' => "{$lang->projectCommon} Overview",   'module' => 'scrumproject', 'code' => 'scrumoverview',  'width' => '2', 'height' => '3', 'left' => '0', 'top' => '0');
-$lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon} List",     'module' => 'scrumproject', 'code' => 'scrumlist',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '3', 'params' => array('type' => 'undone', 'count' => '20', 'orderBy' => 'id_desc'));
-$lang->block->default['scrumproject'][] = array('title' => 'Test Request',                      'module' => 'scrumproject', 'code' => 'scrumtest',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '9', 'params' => array('type' => 'wait', 'count' => '15', 'orderBy' => 'id_desc'));
-$lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon} Overview", 'module' => 'scrumproject', 'code' => 'sprint',         'width' => '1', 'height' => '3', 'left' => '2', 'top' => '0');
-$lang->block->default['scrumproject'][] = array('title' => 'Dynamic',                           'module' => 'scrumproject', 'code' => 'projectdynamic', 'width' => '1', 'height' => '8', 'left' => '2', 'top' => '3');
+$lang->block->default['scrumproject'][] = array('title' => "{$lang->projectCommon} Overview",   'module' => 'scrumproject', 'code' => 'scrumoverview',  'width' => '2');
+$lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon} List",     'module' => 'scrumproject', 'code' => 'scrumlist',      'width' => '2', 'params' => array('type' => 'undone', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['scrumproject'][] = array('title' => 'Test Request',                      'module' => 'scrumproject', 'code' => 'scrumtest',      'width' => '2', 'params' => array('type' => 'wait', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon} Overview", 'module' => 'scrumproject', 'code' => 'sprint',         'width' => '1');
+$lang->block->default['scrumproject'][] = array('title' => 'Dynamic',                           'module' => 'scrumproject', 'code' => 'projectdynamic', 'width' => '1');
 
 $lang->block->default['kanbanproject']    = $lang->block->default['scrumproject'];
 $lang->block->default['agileplusproject'] = $lang->block->default['scrumproject'];
 
-$lang->block->default['waterfallproject'][] = array('title' => "{$lang->projectCommon}Plan", 'module' => 'waterfallproject', 'code' => 'waterfallgantt', 'width' => '2', 'height' => '3', 'left' => '0', 'top' => '0');
-$lang->block->default['waterfallproject'][] = array('title' => 'Dynamic',                'module' => 'waterfallproject', 'code' => 'projectdynamic', 'width' => '1', 'height' => '8', 'left' => '2', 'top' => '0');
+$lang->block->default['waterfallproject'][] = array('title' => "{$lang->projectCommon}Plan", 'module' => 'waterfallproject', 'code' => 'waterfallgantt', 'width' => '2');
+$lang->block->default['waterfallproject'][] = array('title' => 'Dynamic',                    'module' => 'waterfallproject', 'code' => 'projectdynamic', 'width' => '1');
 
 $lang->block->default['waterfallplusproject'] = $lang->block->default['waterfallproject'];
 
-$lang->block->default['product'][] = array('title' => "{$lang->productCommon} Statistic", 'module' => 'product', 'code' => 'statistic', 'width' => '2', 'height' => '5', 'left' => '0', 'top' => '0', 'params' => array('type' => 'all',        'count' => '20'));
-$lang->block->default['product'][] = array('title' => "Offene {$lang->productCommon}s",   'module' => 'product', 'code' => 'list',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '5', 'params' => array('type' => 'noclosed',   'count' => '15'));
-$lang->block->default['product'][] = array('title' => "{$lang->productCommon} Overview",  'module' => 'product', 'code' => 'overview',  'width' => '1', 'height' => '3', 'left' => '2', 'top' => '0');
-$lang->block->default['product'][] = array('title' => "Meine {$lang->SRCommon}",          'module' => 'product', 'code' => 'story',     'width' => '1', 'height' => '6', 'left' => '2', 'top' => '3', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['product'][] = array('title' => "{$lang->productCommon} Statistic", 'module' => 'product', 'code' => 'statistic', 'width' => '2', 'params' => array('type' => 'all',        'count' => '20'));
+$lang->block->default['product'][] = array('title' => "Offene {$lang->productCommon}s",   'module' => 'product', 'code' => 'list',      'width' => '2', 'params' => array('type' => 'noclosed',   'count' => '15'));
+$lang->block->default['product'][] = array('title' => "{$lang->productCommon} Overview",  'module' => 'product', 'code' => 'overview',  'width' => '1');
+$lang->block->default['product'][] = array('title' => "Meine {$lang->SRCommon}",          'module' => 'product', 'code' => 'story',     'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Statistic",                  'module' => 'singleproduct', 'code' => 'singlestatistic',        'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Bug Statistic",              'module' => 'singleproduct', 'code' => 'singlebugstatistic',     'width' => '2', 'params' => array('count' => '20'));
@@ -167,32 +167,35 @@ $lang->block->default['singleproduct'][] = array('title' => "Unclosed {$lang->pr
 $lang->block->default['singleproduct'][] = array('title' => "Dynamic",                                           'module' => 'singleproduct', 'code' => 'singledynamic',          'width' => '1');
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Monthly Advancing Analysis", 'module' => 'singleproduct', 'code' => 'singlemonthlyprogress',  'width' => '1');
 
-$lang->block->default['qa'][] = array('title' => 'Test Report', 'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'height' => '5', 'left' => '0', 'top' => '0', 'params' => array('type' => 'noclosed',   'count' => '20'));
-$lang->block->default['qa'][] = array('title' => 'Test List',   'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'height' => '6', 'left' => '0', 'top' => '5', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
-$lang->block->default['qa'][] = array('title' => 'Bug List',    'module' => 'qa', 'code' => 'bug',       'width' => '1', 'height' => '6', 'left' => '2', 'top' => '0', 'params' => array('type' => 'assignedTo', 'count' => '15', 'orderBy' => 'id_desc'));
-$lang->block->default['qa'][] = array('title' => 'Case List',   'module' => 'qa', 'code' => 'case',      'width' => '1', 'height' => '6', 'left' => '2', 'top' => '6', 'params' => array('type' => 'assigntome', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => 'Test Report', 'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'params' => array('type' => 'noclosed',   'count' => '20'));
+$lang->block->default['qa'][] = array('title' => 'Test List',   'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => 'Bug List',    'module' => 'qa', 'code' => 'bug',       'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => 'Case List',   'module' => 'qa', 'code' => 'case',      'width' => '1', 'params' => array('type' => 'assigntome', 'count' => '15', 'orderBy' => 'id_desc'));
 
-$lang->block->default['full']['my'][] = array('title' => 'Willkommen',                                      'module' => 'welcome',    'code' => 'welcome',       'width' => '2', 'height' => '3', 'left' => '0', 'top' => '0');
-$lang->block->default['full']['my'][] = array('title' => 'Guides',                                          'module' => 'guide',      'code' => 'guide',         'width' => '2', 'height' => '6', 'left' => '0', 'top' => '3');
-$lang->block->default['full']['my'][] = array('title' => "Recent {$lang->projectCommon}s",                  'module' => 'project',    'code' => 'recentproject', 'width' => '2', 'height' => '4', 'left' => '0', 'top' => '9');
-$lang->block->default['full']['my'][] = array('title' => "Undone {$lang->execution->common} Statistic",     'module' => 'execution',  'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '13', 'params' => array('type' => 'undone',   'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "Unclosed {$lang->productCommon} test statistics", 'module' => 'qa',         'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '18', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "Unclosed {$lang->productCommon} Statistic",       'module' => 'product',    'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '23', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon} Statistic",                'module' => 'project',    'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '28', 'params' => array('type' => 'undone',   'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "Undone {$lang->projectCommon} list",              'module' => 'project',    'code' => 'project',       'width' => '2', 'height' => '6', 'left' => '0', 'top' => '33', 'params' => array('type' => 'undone',   'count' => '20', 'orderBy' => 'id_desc'));
-$lang->block->default['full']['my'][] = array('title' => 'Todo',                                            'module' => 'assigntome', 'code' => 'assigntome',    'width' => '2', 'height' => '6', 'left' => '0', 'top' => '39', 'params' => array('todoCount' => '20',  'taskCount' => '20', 'bugCount' => '20', 'riskCount' => '20', 'issueCount' => '20', 'storyCount' => '20', 'reviewCount' => '20', 'meetingCount' => '20', 'feedbackCount' => '20'));
-$lang->block->default['full']['my'][] = array('title' => 'Verlauf',                                         'module' => 'dynamic',    'code' => 'dynamic',       'width' => '1', 'height' => '8', 'left' => '2', 'top' => '0');
-$lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon} Overview",                 'module' => 'project',    'code' => 'overview',      'width' => '1', 'height' => '3', 'left' => '2', 'top' => '8');
-$lang->block->default['full']['my'][] = array('title' => "{$lang->productCommon} Overview",                 'module' => 'product',    'code' => 'overview',      'width' => '1', 'height' => '3', 'left' => '2', 'top' => '11');
+$lang->block->default['full']['my'][] = array('title' => 'welcome',                                         'module' => 'welcome',         'code' => 'welcome',         'width' => '2');
+$lang->block->default['full']['my'][] = array('title' => 'Guides',                                          'module' => 'guide',           'code' => 'guide',           'width' => '2');
+$lang->block->default['full']['my'][] = array('title' => "Recent {$lang->projectCommon}s",                  'module' => 'project',         'code' => 'recentproject',   'width' => '2');
+$lang->block->default['full']['my'][] = array('title' => 'Todo',                                            'module' => 'assigntome',      'code' => 'assigntome',      'width' => '2', 'params' => array('todoCount' => '20',  'taskCount' => '20', 'bugCount' => '20', 'riskCount' => '20', 'issueCount' => '20', 'storyCount' => '20', 'reviewCount' => '20', 'meetingCount' => '20', 'feedbackCount' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "Unclosed {$lang->productCommon} Statistic",       'module' => 'product',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon} Statistic",                'module' => 'project',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "Undone {$lang->execution->common} Statistic",     'module' => 'execution',       'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "Unclosed {$lang->productCommon} test statistics", 'module' => 'qa',              'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "Undone {$lang->projectCommon} list",              'module' => 'project',         'code' => 'project',         'width' => '2', 'params' => array('type' => 'undone',   'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['full']['my'][] = array('title' => "Zentao Dynamic",                                  'module' => 'zentaodynamic',   'code' => 'zentaodynamic',   'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "Team",                                            'module' => 'teamachievement', 'code' => 'teamachievement', 'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => 'Dynamic',                                         'module' => 'dynamic',         'code' => 'dynamic',         'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "{$lang->productCommon} Overview",                 'module' => 'product',         'code' => 'overview',        'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon} Overview",                 'module' => 'project',         'code' => 'overview',        'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "{$lang->executionCommon} Overview",               'module' => 'execution',       'code' => 'overview',        'width' => '1');
 
-$lang->block->default['doc'][] = array('title' => 'Statistic',                   'module' => 'doc', 'code' => 'docstatistic',    'width' => '2', 'height' => '3', 'left' => '0', 'top' => '0');
-$lang->block->default['doc'][] = array('title' => 'My Collection Document',               'module' => 'doc', 'code' => 'docmycollection', 'width' => '2', 'height' => '6', 'left' => '0', 'top' => '3');
-$lang->block->default['doc'][] = array('title' => 'Recently Update Document',             'module' => 'doc', 'code' => 'docrecentupdate', 'width' => '2', 'height' => '6', 'left' => '0', 'top' => '9');
-$lang->block->default['doc'][] = array('title' => "{$lang->productCommon} Document", 'module' => 'doc', 'code' => 'productdoc',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '15', 'params' => array('count' => '20'));
-$lang->block->default['doc'][] = array('title' => "{$lang->projectCommon} Document", 'module' => 'doc', 'code' => 'projectdoc',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '21', 'params' => array('count' => '20'));
-$lang->block->default['doc'][] = array('title' => 'Dynamic',                   'module' => 'doc', 'code' => 'docdynamic',      'width' => '1', 'height' => '8', 'left' => '2', 'top' => '0');
-$lang->block->default['doc'][] = array('title' => 'Browse Leaderboard',                 'module' => 'doc', 'code' => 'docviewlist',     'width' => '1', 'height' => '6', 'left' => '2', 'top' => '8');
-$lang->block->default['doc'][] = array('title' => 'Favorite Leaderboard',                 'module' => 'doc', 'code' => 'doccollectlist',  'width' => '1', 'height' => '6', 'left' => '2', 'top' => '14');
+$lang->block->default['doc'][] = array('title' => 'Statistic',                       'module' => 'doc', 'code' => 'docstatistic',    'width' => '2');
+$lang->block->default['doc'][] = array('title' => 'My Collection Document',          'module' => 'doc', 'code' => 'docmycollection', 'width' => '2');
+$lang->block->default['doc'][] = array('title' => 'Recently Update Document',        'module' => 'doc', 'code' => 'docrecentupdate', 'width' => '2');
+$lang->block->default['doc'][] = array('title' => "{$lang->productCommon} Document", 'module' => 'doc', 'code' => 'productdoc',      'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['doc'][] = array('title' => "{$lang->projectCommon} Document", 'module' => 'doc', 'code' => 'projectdoc',      'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['doc'][] = array('title' => 'Dynamic',                         'module' => 'doc', 'code' => 'docdynamic',      'width' => '1');
+$lang->block->default['doc'][] = array('title' => 'Browse Leaderboard',              'module' => 'doc', 'code' => 'docviewlist',     'width' => '1');
+$lang->block->default['doc'][] = array('title' => 'Favorite Leaderboard',            'module' => 'doc', 'code' => 'doccollectlist',  'width' => '1');
 
 $lang->block->count   = 'Count';
 $lang->block->type    = 'Type';
