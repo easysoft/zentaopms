@@ -293,7 +293,7 @@ EOF;
         /* The title and position. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
@@ -323,6 +323,7 @@ EOF;
         $this->view->doingCount   = $doingCount;
         $this->view->importFuture = ($type != 'today');
         $this->view->pager        = $pager;
+        $this->view->orderBy      = $sort;
         $this->display();
     }
 
