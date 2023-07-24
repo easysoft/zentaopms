@@ -12,8 +12,9 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('orderBy',  $orderBy);
-jsVar('sortLink', helper::createLink('host', 'browse', "browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+jsVar('orderBy',   $orderBy);
+jsVar('hostLang',  $lang->host);
+jsVar('sortLink',  helper::createLink('host', 'browse', "browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
 
 $config->host->featureBar[0]['active'] = true;
 $config->host->featureBar[0]['badge']  = $pager->recTotal != '' ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null;
@@ -58,6 +59,7 @@ dtable
     set::cols(array_values($config->host->dtable->fieldList)),
     set::data($tableData),
     set::sortLink(jsRaw('createSortLink')),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
 );
 

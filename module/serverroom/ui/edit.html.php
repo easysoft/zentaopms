@@ -20,6 +20,7 @@ formPanel
     (
         formGroup
         (
+            set::width('600px'),
             set::name('name'),
             set::label($lang->serverroom->name),
             set::value($serverRoom->name),
@@ -29,6 +30,7 @@ formPanel
     (
         formGroup
         (
+            set::width('600px'),
             set::name('bandwidth'),
             set::label($lang->serverroom->bandwidth),
             set::value($serverRoom->bandwidth),
