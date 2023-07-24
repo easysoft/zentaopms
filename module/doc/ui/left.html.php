@@ -35,8 +35,8 @@ sidebar
         set::spaceType($spaceType),
         set::objectType(isset($type) ? $type : ''),
         set::objectID(isset($objectID) ? $objectID : 0),
-        set::dropmenuText($objectDropdown['text']),
-        set::dropmenuUrl($objectDropdown['link']),
+        set::dropmenuText(isset($objectDropdown['text']) ? $objectDropdown['text'] : ''),
+        set::dropmenuUrl(isset($objectDropdown['link']) ? $objectDropdown['link'] : ''),
     )
 );
 
