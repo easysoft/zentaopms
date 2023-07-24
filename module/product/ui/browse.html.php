@@ -295,18 +295,20 @@ toolbar
 
 $fnGenerateSideBar();
 
+$footToolbar = $fnGenerateFootToolbar();
+
 dtable
 (
     set::id('stories'),
     set::userMap($users),
     set::customCols(true),
-    set::checkable($canBatchAction),
+    set::checkable(!empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
     set::cols($cols),
     set::data($data),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::checkInfo(jsRaw('function(checkedIdList){return window.setStatistics(this, checkedIdList);}')),
     set::footPager(usePager()),
-    set::footToolbar($fnGenerateFootToolbar()),
+    set::footToolbar($footToolbar),
 );
 
 modal(set::id('#batchUnlinkStoryBox'));
