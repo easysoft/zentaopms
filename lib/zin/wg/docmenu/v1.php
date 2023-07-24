@@ -11,7 +11,8 @@ class docMenu extends wg
         'activeKey?: int',
         'settingLink?: string',
         'closeLink: string',
-        'allText?: string',
+        'menuLink: string',
+        'title?: string',
         'linkParams?: string="%s"',
         'libID?: int=0',
         'moduleID?: int=0',
@@ -144,6 +145,7 @@ class docMenu extends wg
         else
         {
             $items = array();
+            $index = 0;
             foreach($this->modules as $treeType => $modules)
             {
                 if($treeType == 'project')
@@ -161,8 +163,14 @@ class docMenu extends wg
                     $treeTitle = $lang->files;
                     $treeIcon  = 'paper-clip';
                 }
-                $items[] = array('text' => $treeTitle, 'icon' => $treeIcon, 'class' => 'project-tree-title');
-                $items   = array_merge($items, $this->buildMenuTree($modules, $this->libID));
+                $items[] = array(
+                    'text' => $treeTitle,
+                    'icon' => $treeIcon,
+                    'class' => 'project-tree-title ' . ($index > 0 ? 'border-t mt-2 pt-2' : ''),
+                );
+
+                $items = array_merge($items, $this->buildMenuTree($modules, $this->libID));
+                $index ++;
             }
             $this->setProp('items', $items);
         }
@@ -293,12 +301,7 @@ class docMenu extends wg
         global $lang;
         $activeKey = $this->prop('activeKey');
 
-        if(empty($activeKey))
-        {
-            $allText = $this->prop('allText');
-            if(empty($allText)) return '';
-            return $allText;
-        }
+        if(empty($activeKey)) return $this->prop('title');
 
         foreach($this->modules as $module)
         {
@@ -364,14 +367,13 @@ class docMenu extends wg
     protected function build(): wg
     {
         $this->setMenuTreeProps();
-        $title        = $this->getTitle();
-        $dropmenuUrl  = $this->prop('dropmenuUrl', '');
-        $dropmenuText = $this->prop('dropmenuText', '');
+        $title    = $this->getTitle();
+        $menuLink = $this->prop('menuLink', '');
 
         return div
         (
             setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
-            $title && empty($dropmenuUrl) ? h::header
+            $title && empty($menuLink) ? h::header
             (
                 setClass('h-10 flex items-center pl-4 flex-none gap-3'),
                 span
@@ -381,14 +383,15 @@ class docMenu extends wg
                 ),
                 $this->buildCloseBtn(),
             ) : null,
-            $dropmenuUrl ? dropmenu
+            $menuLink ? dropmenu
             (
                 set::id('docDropmenu'),
-                set::text($dropmenuText),
-                set::url($dropmenuUrl),
+                set::text($title),
+                set::url($menuLink),
             ) : null,
             h::main
             (
+                setClass($menuLink ? 'pt-3' : ''),
                 setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
                 zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover'))))
             ),
