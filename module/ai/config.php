@@ -40,6 +40,7 @@ $config->ai->createprompt->requiredFields = 'name';
 $config->ai->testPrompt = new stdclass();
 $config->ai->testPrompt->requiredFields = 'name,module,source,purpose,targetForm';
 
+/* Data source object props definations. */
 $config->ai->dataSource = array();
 $config->ai->dataSource['my']['efforts'] = array('date', 'work', 'account', 'consumed', 'left', 'objectID', 'product', 'project', 'execution');
 
@@ -114,7 +115,7 @@ foreach($config->ai->targetForm as $forms)
     }
 }
 
-/* Used to format form redirection links. */
+/* Used to format form redirection links, useful if method requires additional arguments. */
 $config->ai->targetFormVars = array();
 $config->ai->targetFormVars['story']     = array('change' => 'storyID=%d');
 $config->ai->targetFormVars['execution'] = array();
