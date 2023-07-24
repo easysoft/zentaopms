@@ -33,7 +33,7 @@ class baseCalc
      * 参数列表。
      * fieldList
      *
-     * @var int
+     * @var array
      * @access public
      */
     public $fieldList = array();
@@ -178,8 +178,18 @@ class baseCalc
      * @access public
      * @return string
      */
-    public function getSQL()
+    public function getSQL($dao)
     {
+        if(!empty($this->dataset))
+        {
+            $dataSource = $this->dataset;
+            include_once dirname(__FILE__) . '/dataset.class.php';
+            $dataset = new dataset($dao);
+
+            $statement = $dataset->$dataSource(implode(',', $this->fieldList));
+            return $statement->queryString;
+        }
+
         return $this->dao->get();
     }
 
@@ -187,23 +197,35 @@ class baseCalc
      * 打印数据源的SQL语句
      * Print SQL of data source.
      *
+     * @param  object $dao
      * @access public
-     * @return void
+     * @return mixed
      */
-    public function printSQL()
+    public function printSQL($dao)
     {
-        echo $this->getSQL();
+        echo $this->getSQL($dao);
     }
 
     /**
      * 获取数据源的结果集。
      * Get rows of data source.
      *
+     * @param  object $dao
      * @access public
      * @return array
      */
-    public function getRows()
+    public function getRows($dao = null)
     {
+        if(!empty($this->dataset))
+        {
+            $dataSource = $this->dataset;
+            include_once dirname(__FILE__) . '/dataset.class.php';
+            $dataset = new dataset($dao);
+
+            $statement = $dataset->$dataSource(implode(',', $this->fieldList));
+            return $statement->fetchAll();
+        }
+
         return $this->getStatement()->fetchAll();
     }
 
