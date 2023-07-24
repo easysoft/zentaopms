@@ -156,13 +156,21 @@ $config->ai->menuPrint->locations['execution']['storyView']   = $config->ai->men
 $config->ai->menuPrint->locations['execution']['view'] = (object)array(
     'module'          => 'execution',
     'injectMethod'    => 'prepend',
-    'targetContainer' => '#mainContent.main-row > .col-4.side-col .detail:first-child',
+    'targetContainer' => '#mainContent.main-row > .col-4.side-col .detail:first-child  > .detail-title',
     'class'           => 'pull-right'
 );
-$config->ai->menuPrint->locations['product']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
-$config->ai->menuPrint->locations['product']['view']->module = 'product';
+
 $config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
 $config->ai->menuPrint->locations['project']['view']->module = 'project';
+$config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
+$config->ai->menuPrint->locations['project']['view']->module = 'project';
+
+$config->ai->menuPrint->locations['product']['view']        = (object)array(
+    'module'          => 'product',
+    'injectMethod'    => 'append',
+    'targetContainer' => '#mainContent.main-row > .col-8.main-col .detail:first-child > .detail-title',
+    'class'           => 'pull-right'
+);
 
 $config->ai->menuPrint->locations['productplan']['view'] = (object)array(
     'module'          => 'productplan',
@@ -170,8 +178,6 @@ $config->ai->menuPrint->locations['productplan']['view'] = (object)array(
     'objectVarName'   => 'plan'
 );
 $config->ai->menuPrint->locations['projectplan']['view']     = $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['project']['view']->module = 'project';
 $config->ai->menuPrint->locations['release']['view']         = clone $config->ai->menuPrint->locations['productplan']['view'];
 $config->ai->menuPrint->locations['release']['view']->module = 'release';
 unset($config->ai->menuPrint->locations['release']['view']->objectVarName);
