@@ -163,13 +163,6 @@ class mail extends control
 
             $mailExist = !empty($this->mail->mailExist());
             return $this->send(array('result' => 'success', 'callback' => "window.mailTips({$mailExist});"));
-
-            $this->session->set('mailConfig', '');
-
-            $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->save;
-
-            $this->view->mailExist  = $this->mail->mailExist();
-            $this->display();
         }
     }
 

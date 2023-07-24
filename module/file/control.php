@@ -307,6 +307,7 @@ class file extends control
         $this->view->showDelete = $showDelete;
         $this->view->showEdit   = $showEdit;
 
+        if(empty($files)) return null;
         if(strpos('view,edit', $method) !== false and $this->app->clientDevice != 'mobile') return $this->display('file', 'viewfiles');
         $this->display();
     }
@@ -335,15 +336,15 @@ class file extends control
 
             $extension = "." . $file->extension;
             $actionID  = $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', '', $fileName);
-            $changes[] = array('field' => 'fileName', 'old' => $file->title, 'new' => $fileName);
+            $changes[] = array('field' => 'fileName', 'old' => $file->title, 'new' => $fileName, 'diff' => '');
             $this->action->logHistory($actionID, $changes);
 
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase' and $file->title != $fileName) $this->file->updateTestcaseVersion($file);
             $newFile = $this->file->getByID($fileID);
 
-            if($this->app->clientDevice == 'mobile') return print(js::reload('parent.parent'));
-            echo json_encode($newFile);
+            if($this->app->clientDevice == 'mobile') return $this->send(array('load' => true));
+            return print(json_encode($newFile));
         }
 
         if($this->app->clientDevice == 'mobile')

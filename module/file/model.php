@@ -1249,10 +1249,10 @@ class fileModel extends model
         $downloadLink  = helper::createLink('file', 'download', "fileID=$file->id");
         $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
         $downloadLink .= $sessionString;
-        $html .= "<li class='file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
 
         $objectType = zget($this->config->file->objectType, $file->objectType);
 
+        $html .= "<li class='file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
         if(strpos('view,edit', $method) !== false)
         {
             if(common::hasPriv($objectType, 'view', $object)) $html = $this->buildFileActions($html, $downloadLink, $imageWidth, $showEdit, $showDelete, $file, $object);
@@ -1262,8 +1262,8 @@ class fileModel extends model
             if(common::hasPriv($objectType, 'edit', $object))
             {
                 $html .= "<span class='right-icon'>&nbsp; ";
-                if(common::hasPriv('file', 'edit')) $html .= html::a(helper::createLink('file', 'edit', "fileID=$file->id"), $this->lang->file->edit, '', "data-width='400' class='fileAction btn btn-link edit iframe text-primary' title='{$this->lang->file->edit}'");
-                if(common::hasPriv('file', 'delete')) $html .= html::a('###', $this->lang->delete, '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id)' title='{$this->lang->delete}'");
+                if(common::hasPriv('file', 'edit'))   $html .= html::a(helper::createLink('file', 'edit', "fileID=$file->id"), $this->lang->file->edit, '', "data-width='400' class='fileAction btn btn-link' title='{$this->lang->file->edit}'");
+                if(common::hasPriv('file', 'delete')) $html .= html::a('###', $this->lang->delete, '', "class='fileAction btn btn-link' onclick='deleteFile($file->id)' title='{$this->lang->delete}'");
                 $html .= '</span>';
             }
         }
