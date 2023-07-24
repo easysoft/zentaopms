@@ -181,6 +181,35 @@ class ai extends control
     }
 
     /**
+     * Edit a prompt.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function promptEdit($id)
+    {
+        $prompt = $this->ai->getPromptByID($id);
+
+        if(strtolower($this->server->request_method) == 'post')
+        {
+            $data = fixer::input('post')->get();
+
+            $prompt->name = $data->name;
+            $prompt->desc = $data->desc;
+
+            $this->ai->updatePrompt($prompt);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptView', "id={$prompt->id}") . '#app=admin'));
+        }
+
+        $this->view->prompt = $prompt;
+        $this->view->title  = $this->lang->ai->prompts->edit;
+        $this->display();
+    }
+
+    /**
      * Edit role of prompt, prompt editing step 2.
      *
      * @param  int    $promptID

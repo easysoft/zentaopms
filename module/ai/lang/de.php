@@ -41,6 +41,7 @@ $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = 'Prompt';
 $lang->ai->prompts->emptyList   = 'No prompts yet.';
 $lang->ai->prompts->create      = 'Create Prompt';
+$lang->ai->prompts->edit        = 'Edit Prompt';
 $lang->ai->prompts->id          = 'ID';
 $lang->ai->prompts->name        = 'Name';
 $lang->ai->prompts->description = 'Description';

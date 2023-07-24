@@ -41,6 +41,7 @@ $lang->ai->prompts = new stdclass();
 $lang->ai->prompts->common      = '提词';
 $lang->ai->prompts->emptyList   = '暂时没有提词。';
 $lang->ai->prompts->create      = '创建提词';
+$lang->ai->prompts->edit        = '编辑提词';
 $lang->ai->prompts->id          = 'ID';
 $lang->ai->prompts->name        = '名称';
 $lang->ai->prompts->description = '描述';
