@@ -48,6 +48,7 @@ pipeline {
         stage("Pull") {
           steps {
             checkout scm
+            sh 'env'
           }
         }
 
@@ -102,24 +103,9 @@ pipeline {
         }
 
         stage("Build") {
-          environment {
-            GIT_TAG_BUILD_TYPE = """${sh(
-                              returnStdout: true,
-                              script: 'misc/parse_tag.sh $TAG_NAME type'
-            ).trim()}"""
-
-            GIT_TAG_BUILD_GROUP = """${sh(
-                              returnStdout: true,
-                              script: 'misc/parse_tag.sh $TAG_NAME group'
-            ).trim()}"""
-          }
-
           stages {
             stage("make ciCommon") {
               steps {
-
-                sh "echo $GIT_TAG_BUILD_TYPE/abc"
-                sh "echo $GIT_TAG_BUILD_GROUP/def"
                 withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http',gitToolName: 'git-tool')]) {
                   container('package') {
                     sh 'mkdir ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
@@ -162,6 +148,11 @@ pipeline {
                                 script: 'cat ${SRC_ZENTAOEXT_PATH}/MAXVERSION'
             ).trim()}"""
 
+            GIT_COMMIT = """${sh(
+                              returnStdout: true,
+                              script: 'git rev-parse HEAD'
+            ).trim()}"""
+
             GIT_TAG_BUILD_TYPE = """${sh(
                               returnStdout: true,
                               script: 'misc/parse_tag.sh $TAG_NAME type'
@@ -172,11 +163,16 @@ pipeline {
                               script: 'misc/parse_tag.sh $TAG_NAME group'
             ).trim()}"""
 
+            GIT_TAGGER_NAME = """${sh(
+                            returnStdout: true,
+                            script: 'git for-each-ref --format="%(taggername)" refs/tags/$(git tag --points-at HEAD)'
+            ).trim()}"""
+
             OUTPUT_PKG_PATH = "${ZENTAO_RELEASE_PATH}/output"
 
             ARTIFACT_REPOSITORY = """${sh(
                                 returnStdout: true,
-                                script: 'echo easycorp-snapshot'
+                                script: 'misc/parse_tag.sh $TAG_NAME type | grep release >/dev/null && echo easycorp || echo easycorp-snapshot'
                 ).trim()}"""
             ARTIFACT_HOST = "nexus.qc.oop.cc"
             ARTIFACT_PROTOCOL = "https"
@@ -239,7 +235,6 @@ pipeline {
                               sh 'mkdir $ZENTAO_RELEASE_PATH'
                               sh '${ZENTAO_BUILD_PATH}/package.sh zip'
                               sh 'mkdir $OUTPUT_PKG_PATH'
-                              sh 'env | grep GIT_TAG'
                             }
                         }
                       }
@@ -250,7 +245,7 @@ pipeline {
                             nexusVersion: 'nexus3',
                             protocol: env.ARTIFACT_PROTOCOL,
                             nexusUrl: env.ARTIFACT_HOST,
-                            groupId: 'zentao.base' + '.' + env.GIT_TAG_BUILD_GROUP,
+                            groupId: 'zentao.pmsPack' + '.' + env.GIT_TAG_BUILD_GROUP,
                             version: env.PMS_VERSION,
                             repository: env.ARTIFACT_REPOSITORY,
                             credentialsId: env.ARTIFACT_CRED_ID,
@@ -265,7 +260,7 @@ pipeline {
                             nexusVersion: 'nexus3',
                             protocol: env.ARTIFACT_PROTOCOL,
                             nexusUrl: env.ARTIFACT_HOST,
-                            groupId: 'zentao.biz' + '.' + env.GIT_TAG_BUILD_GROUP,
+                            groupId: 'zentao.bizPack' + '.' + env.GIT_TAG_BUILD_GROUP,
                             version: env.BIZ_VERSION,
                             repository: env.ARTIFACT_REPOSITORY,
                             credentialsId: env.ARTIFACT_CRED_ID,
@@ -284,7 +279,7 @@ pipeline {
                             nexusVersion: 'nexus3',
                             protocol: env.ARTIFACT_PROTOCOL,
                             nexusUrl: env.ARTIFACT_HOST,
-                            groupId: 'zentao.max' + '.' + env.GIT_TAG_BUILD_GROUP,
+                            groupId: 'zentao.maxPack' + '.' + env.GIT_TAG_BUILD_GROUP,
                             version: env.MAX_VERSION,
                             repository: env.ARTIFACT_REPOSITORY,
                             credentialsId: env.ARTIFACT_CRED_ID,
@@ -311,8 +306,8 @@ pipeline {
 
                       stage("syspack") {
                         when {
-                          buildingTag()
-                          // environment name: 'GIT_TAG_BUILD_TYPE', value: 'release'
+                          // buildingTag()
+                          environment name: 'GIT_TAG_BUILD_TYPE', value: 'release'
                         }
                         steps{
                           sh 'env | grep GIT_TAG'
@@ -329,26 +324,6 @@ pipeline {
                         }
 
                         steps {
-                          nexusArtifactUploader(
-                            nexusVersion: 'nexus3',
-                            protocol: env.ARTIFACT_PROTOCOL,
-                            nexusUrl: env.ARTIFACT_HOST,
-                            groupId: 'zentao.pms' + '.' + env.GIT_TAG_BUILD_GROUP,
-                            version: env.PMS_VERSION,
-                            repository: env.ARTIFACT_REPOSITORY,
-                            credentialsId: env.ARTIFACT_CRED_ID,
-                            artifacts: [
-                              [artifactId: env.ARTIFACT_NAME,
-                               classifier: env.PHPVERSION + '-1.noarch',
-                               file: env.ZENTAO_RELEASE_PATH + '/zentao.rpm',
-                               type: 'rpm'],
-                              [artifactId: env.ARTIFACT_NAME,
-                               classifier: env.PHPVERSION + '.1.all',
-                               file: env.ZENTAO_RELEASE_PATH + '/zentao.deb',
-                               type: 'deb']
-                            ]
-                          )
-
                           sh 'mv ${ZENTAO_RELEASE_PATH}/zentao.rpm ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}-1.noarch.rpm'
                           sh 'mv ${ZENTAO_RELEASE_PATH}/zentao.deb ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.1.all.deb'
                         }
@@ -382,14 +357,22 @@ pipeline {
               } // End matrix
 
             } // End Merge and Upload Max
+          }
 
-            stage("Notice") {
-              steps {
-                container('xuanimbot') {
-                  sh 'git config --global --add safe.directory $(pwd)'
-                  //sh '/usr/local/bin/xuanimbot  --users "qishiyao" --title "zentao build with tag ${TAG_NAME} success" --url ""${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/#browse/browse:${ARTIFACT_REPOSITORY}:zentao"" --content "zentaopms build success, click buttom below for browse artifacts" --debug --custom'
-                  sh '/usr/local/bin/xuanimbot  --users "qishiyao" --groups "fced7fb3-0d48-449f-b408-ecae52a50f89" --title "zentao build with tag ${TAG_NAME} success" --url ""${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/#browse/browse:${ARTIFACT_REPOSITORY}:zentao"" --content "zentaopms build success, click buttom below for browse artifacts" --debug --custom'
-                }
+          post {
+            success {
+              container('xuanimbot') {
+                sh 'env | grep GIT'
+                sh 'git config --global --add safe.directory $(pwd)'
+                sh './misc/gen_build_report.sh > /tmp/success.md'
+                sh '/usr/local/bin/xuanimbot --users "qishiyao" --title "zentaopms build success" --url "${RUN_DISPLAY_URL}" --content-file /tmp/success.md --debug --custom'
+                sh '/usr/local/bin/xuanimbot --groups "84be4c6e-02e3-4fdc-b081-318c0c1eca02" --title "zentaopms build success" --url "${RUN_DISPLAY_URL}" --content-file /tmp/success.md --debug --custom'
+              }
+            }
+            failure {
+              container('xuanimbot') {
+                sh 'git config --global --add safe.directory $(pwd)'
+                sh '/usr/local/bin/xuanimbot --users qishiyao --users ${GIT_TAGGER_NAME} --title "zentaopms build failed" --url "${BUILD_URL}" --content "" --debug --custom'
               }
             }
           }
