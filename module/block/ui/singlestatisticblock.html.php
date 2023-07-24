@@ -75,7 +75,7 @@ panel
                         )->size('100%', 120),
                         div
                         (
-                            set::class('pie-chart-title text-center'),
+                            set::class('pie-chart-title text-center h-0'),
                             div(span(set::class('text-2xl font-bold'), $product->storyDeliveryRate . '%')),
                             div
                             (
