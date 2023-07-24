@@ -47,27 +47,47 @@ if($confirm != 'yes')
             $childID = 0;
         }
 
-        $itemTds = array();
-        if($step->type != 'group')
-        {
-            $itemTds[] = h::td
+        $stepItemID = $childID != 0 ? "{$stepID}.{$childID}" : $stepID;
+        $stepTrs[] = h::tr
+        (
+            setClass("step {$stepClass}"),
+            h::td
             (
-                setClass('text-left'),
+                setClass('text-left border'),
+                div
+                (
+                    setClass('inputGroup'),
+                    h::span
+                    (
+                        setClass('step-item-id mr-2'),
+                        $childID != 0 ? setClass('ml-2') : '',
+                        $stepItemID,
+                    ),
+                    nl2br(zget($step, 'desc', '')),
+                ),
+            ),
+            h::td
+            (
+                setClass('text-left border'),
                 nl2br(zget($step, 'expect', '')),
-            );
-            $itemTds[] = h::td
+            ),
+            h::td
             (
-                setClass("text-center"),
+                setClass('result-td'),
+                setClass('text-center'),
                 picker
                 (
                     on::change('checkStepValue'),
                     set::name("steps[{$step->id}]"),
                     set::items($lang->testcase->resultList),
-                    set::value('pass'),
+                    set::value($step->type != 'group' ? 'pass' : ''),
+                    set::required($step->type != 'group'),
+                    set::disabled($step->type == 'group'),
                 ),
-            );
-            $itemTds[] = h::td
+            ),
+            h::td
             (
+                setClass('real-td'),
                 h::table
                 (
                     setClass('w-full'),
@@ -76,60 +96,36 @@ if($confirm != 'yes')
                         h::td
                         (
                             setClass('p-0 bd-0'),
-                            h::textarea
+                            textarea
                             (
                                 on::keyup('realChange'),
-                                setClass('leading-4 w-full'),
+                                setClass('leading-4 w-full' ),
                                 set('rows', '1'),
                                 set::name("reals[{$step->id}]"),
                                 nl2br(zget($step, 'real', '')),
+                                $step->type == 'group' ? set('disabled', 'disabled') : '',
                             )
                         ),
                         h::td
                         (
                             setClass('p-0 bd-0 text-right'),
-                            width('50px'),
+                            width('40px'),
                             btn
                             (
-                                setClass('ml-4'),
-                                set::url("#fileModal{$step->id}"),
-                                set('data-toggle', 'modal'),
+                                setClass('ml-2 text-primary'),
+                                $step->type != 'group' ? set::url("#fileModal{$step->id}") : '',
+                                $step->type != 'group' ? set('data-toggle', 'modal') : '',
                                 set('title', $lang->testtask->files),
                                 set::icon('paper-clip'),
+                                set::disabled($step->type == 'group'),
                             ),
                         ),
                     ),
                 ),
-            );
-        }
-
-        $stepTrs[] = h::tr
-        (
-            setClass("step {$stepClass}"),
-            h::th
-            (
-                setClass('step-id'),
-                $stepID,
             ),
-            h::td
-            (
-                setClass('text-left'),
-                $step->type == 'group' ? set('colspan', '4') : '',
-                div
-                (
-                    setClass('inputGroup'),
-                    $step->type == 'item' ? h::span
-                    (
-                        setClass('step-item-id mr-2'),
-                        "{$stepID}.{$childID}",
-                    ) : '',
-                    nl2br(zget($step, 'desc', '')),
-                ),
-            ),
-            $itemTds,
         );
 
-        $childId ++;
+        $childID ++;
 
         $fileModals[] = modal
         (
@@ -153,32 +149,40 @@ if($confirm != 'yes')
     }
 }
 
+!empty($run->case->precondition) ? h::table
+(
+    setClass('mb-6'),
+    h::tr
+    (
+        h::td
+        (
+            setClass('case-precondition w-16 align-top'),
+            $lang->testcase->precondition,
+        ),
+        h::td
+        (
+            nl2br(zget($run->case, 'precondition', '')),
+            nl2br(zget($run->case, 'precondition', '')),
+            nl2br(zget($run->case, 'precondition', '')),
+            nl2br(zget($run->case, 'precondition', '')),
+            nl2br(zget($run->case, 'precondition', '')),
+            nl2br(zget($run->case, 'precondition', '')),
+        ),
+    ),
+) : '';
+
 
 form
 (
+    set::id('caseStepForm'),
     set::actions(array()),
     h::table
     (
-        setClass('table bordered'),
+        setClass('table'),
         h::thead
         (
-            h::tr
-            (
-                h::td
-                (
-                    set('colspan', '5'),
-                    h::strong($lang->testcase->precondition),
-                    h::br(),
-                    nl2br(zget($run->case, 'precondition', '')),
-                ),
-            ),
             $confirm != 'yes' ? h::tr
             (
-                h::td
-                (
-                    width('50px'),
-                    $lang->testcase->stepID,
-                ),
                 h::td
                 (
                     width('cal(30%)'),
@@ -207,11 +211,11 @@ form
             (
                 h::td
                 (
-                    set('colspan', '5'),
+                    set('colspan', '4'),
                     div
                     (
                         setClass('text-center'),
-                        $preCase ? h::a
+                        $preCase ? a
                         (
                             setClass('btn btn-wide w-24'),
                             set::id('pre'),
@@ -224,7 +228,7 @@ form
                             set::btnType('submit'),
                             $lang->save,
                         ) : '',
-                        $nextCase ? h::a
+                        $nextCase ? a
                         (
                             setClass('btn btn-wide w-24'),
                             set::id('next'),

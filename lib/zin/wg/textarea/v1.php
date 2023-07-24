@@ -35,7 +35,7 @@ class textarea extends wg
     {
         return h::textarea
         (
-            set($this->props->pick(array('name', 'id', 'class', 'required', 'placeholder', 'rows', 'cols'))),
+            set($this->props->pick(array('name', 'id', 'class', 'required', 'placeholder', 'rows', 'cols', 'disabled'))),
             $this->prop('value'),
             $this->children()
         );

@@ -1,0 +1,9 @@
+.case-precondition {color: var(--color-slate-700);}
+#caseStepForm tr {border-width: 0px;}
+#caseStepForm thead {background-color: unset;}
+#caseStepForm thead > tr > * {padding-left: 0px; font-size: 14px; color: var(--color-slate-900); font-weight: 600;}
+#caseStepForm tbody > tr > td:not(.p-0) {padding: 0.5rem; vertical-align: top; line-height: 1.5rem;}
+#caseStepForm tbody > tr > td.real-td, #caseStepForm tbody > tr > td.result-td {padding: 0.25rem 0.5rem; vertical-align: middle;}
+#caseStepForm tbody > tr > td.real-td {padding-left: 0px;}
+#caseStepForm .step-item-id {color: var(--color-slate-500);}
+
