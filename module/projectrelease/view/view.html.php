@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->release->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->release->confirmUnlinkBug)?>
 <?php js::set('storySummary', $summary);?>

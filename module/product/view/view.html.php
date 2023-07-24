@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php $style = isonlybody() ? 'style="margin-top: 0px;"' : '';?>
 <div id='mainContent' class="main-row" <?php echo $style;?>>
   <div class="col-8 main-col">

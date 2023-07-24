@@ -105,7 +105,72 @@ $config->ai->menuPrint = new stdclass();
  * @see ./view/promptmenu.html.php
  */
 $config->ai->menuPrint->locations = array();
-$config->ai->menuPrint->locations['story']['view']          = (object)array('module' => 'story', 'targetContainer' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title', 'class' => 'pull-right', 'stylesheet' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}');
+$config->ai->menuPrint->locations['story']['view']          = (object)array(
+    'module'          => 'story',
+    'targetContainer' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title',
+    'class'           => 'pull-right',
+    'stylesheet'      => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}'
+);
 $config->ai->menuPrint->locations['projectstory']['view']   = $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['execution']['storyView'] = $config->ai->menuPrint->locations['story']['view'];
-$config->ai->menuPrint->locations['execution']['view']      = (object)array('module' => 'execution', 'injectMethod' => 'prepend', 'targetContainer' => '#mainContent.main-row > .col-4.side-col .detail:first-child', 'class' => 'pull-right');
+$config->ai->menuPrint->locations['execution']['view']      = (object)array(
+    'module'          => 'execution',
+    'injectMethod'    => 'prepend',
+    'targetContainer' => '#mainContent.main-row > .col-4.side-col .detail:first-child',
+    'class'           => 'pull-right'
+);
+$config->ai->menuPrint->locations['product']['view']        = (object)array(
+    'module'          => 'product',
+    'injectMethod'    => 'prepend',
+    'targetContainer' => '#mainContent.main-row > .col-8.main-col .detail:first-child',
+    'class'           => 'pull-right'
+);
+$config->ai->menuPrint->locations['productplan']['view']    = (object)array(
+    'module'          => 'productplan',
+    'injectMethod'    => 'append',
+    'targetContainer' => '#mainMenu>.btn-toolbar.pull-right',
+);
+$config->ai->menuPrint->locations['projectplan']['view']    = $config->ai->menuPrint->locations['productplan']['view'];
+$config->ai->menuPrint->locations['project']['view']        = (object)array(
+    'module'          => 'project',
+    'injectMethod'    => 'append',
+    'targetContainer' => '#mainMenu>.btn-toolbar.pull-right',
+);
+$config->ai->menuPrint->locations['release']['view']        = (object)array(
+    'module'          => 'release',
+    'injectMethod'    => 'append',
+    'targetContainer' => '#mainMenu>.btn-toolbar.pull-right',
+);;
+$config->ai->menuPrint->locations['projectrelease']['view'] = $config->ai->menuPrint->locations['release']['view'];
+$config->ai->menuPrint->locations['project']['view']        = (object)array(
+    'module'          => 'project',
+    'injectMethod'    => 'prepend',
+    'targetContainer' => '#mainContent.main-row > .col-4.side-col .detail:first-child',
+    'class'           => 'pull-right'
+);
+$config->ai->menuPrint->locations['task']['view']           = (object)array(
+    'module'          => 'task',
+    'injectMethod'    => 'append',
+    'targetContainer' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title',
+    'class'           => 'pull-right',
+    'stylesheet'      => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}'
+);
+$config->ai->menuPrint->locations['testcase']['view']       = (object)array(
+    'module'          => 'case',
+    'injectMethod'    => 'append',
+    'targetContainer' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title',
+    'class'           => 'pull-right',
+    'stylesheet'      => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}'
+);
+$config->ai->menuPrint->locations['bug']['view']            = (object)array(
+    'module'          => 'bug',
+    'injectMethod'    => 'append',
+    'targetContainer' => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title',
+    'class'           => 'pull-right',
+    'stylesheet'      => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}'
+);
+$config->ai->menuPrint->locations['doc']['view']            = (object)array(
+    'module'          => 'doc',
+    'injectMethod'    => 'prepend',
+    'targetContainer' => '#mainMenu>.btn-toolbar.pull-right',
+);

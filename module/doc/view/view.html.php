@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php js::set('treeData', $libTree);?>
 <?php js::set('docID', $docID);?>
 <?php js::set('linkParams', "objectID=$objectID&%s");?>
