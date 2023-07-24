@@ -280,10 +280,10 @@ $config->story->dtable->fieldList['actions']['actionsMap']['createTask']['hint']
 $config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['icon'] = 'pluses';
 $config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['hint'] = $lang->task->batchCreate;
 
+$app->loadLang('execution');
 $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['icon'] = 'estimate';
 $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['hint'] = $lang->execution->storyEstimate;
 
-$app->loadLang('execution');
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['icon'] = 'unlink';
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['hint'] = $lang->execution->unlinkStory;
 
