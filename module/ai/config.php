@@ -143,13 +143,13 @@ $config->ai->menuPrint->locations['story']['view'] = (object)array(
     'class'           => 'pull-right',
     'stylesheet'      => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}'
 );
-$config->ai->menuPrint->locations['task']['view']             = $config->ai->menuPrint->locations['story']['view'];
+$config->ai->menuPrint->locations['task']['view']             = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['task']['view']->module     = 'task';
-$config->ai->menuPrint->locations['testcase']['view']         = $config->ai->menuPrint->locations['story']['view'];
+$config->ai->menuPrint->locations['testcase']['view']         = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['testcase']['view']->module = 'case';
-$config->ai->menuPrint->locations['bug']['view']              = $config->ai->menuPrint->locations['story']['view'];
+$config->ai->menuPrint->locations['bug']['view']              = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['bug']['view']->module      = 'bug';
-$config->ai->menuPrint->locations['projectstory']['view']     = $config->ai->menuPrint->locations['story']['view'];
+$config->ai->menuPrint->locations['projectstory']['view']     = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['execution']['storyView']   = $config->ai->menuPrint->locations['story']['view'];
 
 $config->ai->menuPrint->locations['execution']['view'] = (object)array(
@@ -158,21 +158,24 @@ $config->ai->menuPrint->locations['execution']['view'] = (object)array(
     'targetContainer' => '#mainContent.main-row > .col-4.side-col .detail:first-child',
     'class'           => 'pull-right'
 );
-$config->ai->menuPrint->locations['product']['view']         = $config->ai->menuPrint->locations['execution']['view'];
+$config->ai->menuPrint->locations['product']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
 $config->ai->menuPrint->locations['product']['view']->module = 'product';
-$config->ai->menuPrint->locations['project']['view']         = $config->ai->menuPrint->locations['execution']['view'];
+$config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
 $config->ai->menuPrint->locations['project']['view']->module = 'project';
 
 $config->ai->menuPrint->locations['productplan']['view'] = (object)array(
     'module'          => 'productplan',
     'targetContainer' => '#mainMenu>.btn-toolbar.pull-right',
+    'objectVarName'   => 'plan'
 );
 $config->ai->menuPrint->locations['projectplan']['view']     = $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['project']['view']         = $config->ai->menuPrint->locations['productplan']['view'];
+$config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['productplan']['view'];
 $config->ai->menuPrint->locations['project']['view']->module = 'project';
-$config->ai->menuPrint->locations['release']['view']         = $config->ai->menuPrint->locations['productplan']['view'];
+$config->ai->menuPrint->locations['release']['view']         = clone $config->ai->menuPrint->locations['productplan']['view'];
 $config->ai->menuPrint->locations['release']['view']->module = 'release';
-$config->ai->menuPrint->locations['projectrelease']['view']  = $config->ai->menuPrint->locations['productplan']['view'];
+unset($config->ai->menuPrint->locations['release']['view']->objectVarName);
+$config->ai->menuPrint->locations['projectrelease']['view']  = clone $config->ai->menuPrint->locations['productplan']['view'];
+unset($config->ai->menuPrint->locations['projectrelease']['view']->objectVarName);
 
 $config->ai->menuPrint->locations['doc']['view'] = (object)array(
     'module'          => 'doc',
