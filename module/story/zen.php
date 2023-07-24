@@ -827,7 +827,7 @@ class storyZen extends story
         }
         if($this->post->result == false)
         {
-            dao::$errors[] = $this->lang->story->mustChooseResult;
+            dao::$errors['result'][] = $this->lang->story->mustChooseResult;
             return false;
         }
 
