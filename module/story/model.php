@@ -3065,9 +3065,9 @@ class storyModel extends model
      *
      * @param  object $story
      * @access public
-     * @return void
+     * @return array
      */
-    public function getChangedStories($story)
+    public function getChangedStories($story): array
     {
         if($story->type == 'requirement') return array();
 
