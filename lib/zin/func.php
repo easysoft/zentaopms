@@ -327,6 +327,18 @@ function formRow(): formRow
 }
 
 /**
+ * Form row group widget.
+ *
+ * ?string width
+ * ?array  items
+ * ?bool   hidden
+ */
+function formRowGroup(): formRowGroup
+{
+    return createWg('formRowGroup', func_get_args());
+}
+
+/**
  * Html input with prefix or suffix.
  *
  * mixed      prefix
