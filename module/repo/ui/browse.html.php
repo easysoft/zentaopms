@@ -193,7 +193,6 @@ toolbar
     dropdown
     (
         set::staticMenu(true),
-        set::subMenuTrigger('manual'),
         btn
         (
             setClass('primary download-btn'),

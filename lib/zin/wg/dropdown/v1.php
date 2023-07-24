@@ -13,7 +13,6 @@ class dropdown extends wg
         'strategy?:string',
         'offset?: int',
         'flip?: bool',
-        'subMenuTrigger?: string',
         'arrow?: string',
         'trigger?: string',
         'menu?: array',
@@ -33,15 +32,15 @@ class dropdown extends wg
 
     protected function build(): array
     {
-        list($items, $placement, $strategy, $offset, $flip, $subMenuTrigger, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'subMenuTrigger', 'arrow', 'trigger', 'menu', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu'));
+        list($items, $placement, $strategy, $offset, $flip, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'arrow', 'trigger', 'menu', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu'));
 
         $triggerBlock = $this->block('trigger');
         $menu         = $this->block('menu');
         $itemsList    = $this->block('items');
 
-        if(empty($id))        $id        = $this->gid;
-        if(empty($target))    $target    = "#$id";
-        if(empty($menuProps)) $menuProps = array();
+        if(empty($id))                      $id        = $this->gid;
+        if(empty($target) && empty($items)) $target    = "#$id";
+        if(empty($menuProps))               $menuProps = array();
 
         if(empty($triggerBlock))        $triggerBlock = h::a($this->children());
         elseif(is_array($triggerBlock)) $triggerBlock = $triggerBlock[0];
@@ -59,7 +58,6 @@ class dropdown extends wg
                 'data-strategy'       => $strategy,
                 'data-offset'         => $offset,
                 'data-flip'           => $flip,
-                'data-subMenuTrigger' => $subMenuTrigger,
                 'data-arrow'          => $arrow,
                 'data-trigger'        => $trigger
             );
@@ -140,8 +138,6 @@ class dropdown extends wg
                         'strategy'       => $strategy,
                         'arrow'          => $arrow,
                         'flip'           => $flip,
-                        'subMenuTrigger' => $subMenuTrigger,
-                        'trigger'        => $trigger,
                         'offset'         => $offset,
                         'target'         => $target,
                         'className'      => $menuClass,

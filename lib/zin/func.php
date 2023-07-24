@@ -711,7 +711,6 @@ function menu(): menu
  * ?string strategy
  * ?int    offset
  * ?bool   flip
- * ?string subMenuTrigger
  * ?string arrow
  * ?string trigger
  * ?array  menu
