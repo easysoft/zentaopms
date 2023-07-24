@@ -49,6 +49,7 @@
       <div class='queryBtn query-outside'><?php echo html::submitButton($lang->pivot->query, "", 'btn btn-primary btn-query');?></div>
       <?php endif;?>
     </div>
+    <div id="filterMargin" class='hidden'></div>
     <div id='datagirdInfo' class='datagrid datagrid-padding'>
       <?php $sql = $this->loadModel('chart')->parseSqlVars($pivot->sql, $pivot->filters);?>
       <?php $this->pivot->buildPivotTable($data, $configs, json_decode(json_encode($pivot->fieldSettings), true), $sql);?>

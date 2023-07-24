@@ -82,7 +82,7 @@ function initQueryBtn()
     $('.btn-query').click(function()
     {
         var pivotInfo = getQueryInfo();
-        refreshReport(pivotInfo);
+        refreshPivot(pivotInfo);
     });
 }
 
@@ -98,11 +98,11 @@ function initOriginQueryBtn()
     {
         var pivotInfo = getQueryInfo();
         pivotInfo.settings['summary'] = 'notuse';
-        refreshReport(pivotInfo, true);
+        refreshPivot(pivotInfo, true);
     });
 }
 
-function refreshReport(pivotInfo, isOrigin = false)
+function refreshPivot(pivotInfo, isOrigin = false)
 {
     $.post(createLink('pivot', 'ajaxGetPivot'), pivotInfo,function(resp)
     {
@@ -113,6 +113,7 @@ function refreshReport(pivotInfo, isOrigin = false)
         if(isOrigin)
         {
             $('#filterItems').addClass('hidden');
+            $('#filterMargin').removeClass('hidden');
 
             $('#pivot-query').removeClass('hidden');
             $('#origin-query').addClass('hidden');
@@ -120,6 +121,7 @@ function refreshReport(pivotInfo, isOrigin = false)
         else
         {
             $('#filterItems').removeClass('hidden');
+            $('#filterMargin').addClass('hidden');
 
             $('#pivot-query').addClass('hidden');
             $('#origin-query').removeClass('hidden');
