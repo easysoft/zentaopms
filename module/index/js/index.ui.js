@@ -677,8 +677,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
         if(code !== 'my') items.push({text: lang.close, onClick: function(){closeApp(code)}});
     }
 
-    const options = {items: items, event: event, onClickItem: function(_item, _$item, e){e.preventDefault();}};
-    zui.ContextMenu.show(options);
+    zui.ContextMenu.show({element: $btn[0], placement: 'right-start', items: items, event: event, onClickItem: function(_item, _$item, e){e.preventDefault();}});
     event.preventDefault();
 });
 
