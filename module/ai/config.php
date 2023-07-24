@@ -45,7 +45,6 @@ $config->ai->dataSource = array();
 $config->ai->dataSource['my']['efforts'] = array('date', 'work', 'account', 'consumed', 'left', 'objectID', 'product', 'project', 'execution');
 
 $config->ai->dataSource['product']['product'] = array('name', 'desc');
-$config->ai->dataSource['product']['modules'] = array('name', 'modules');
 
 $config->ai->dataSource['productplan']['productplan'] = array('title', 'desc', 'begin', 'end');
 $config->ai->dataSource['productplan']['stories']     = array('title', 'module', 'pri', 'estimate', 'status', 'stage');
