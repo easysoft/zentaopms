@@ -82,22 +82,23 @@ class datatable extends control
             $account = $this->app->user->account;
             if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
 
-            $rawModule = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
-            $fieldList = $this->datatable->getFieldList($rawModule, $method);
-            $fieldList = $this->datatable->formatFields($module, $fieldList, false);
-            $fields    = json_decode($this->post->fields);
-            foreach($fields as $index => $field)
+            $rawModule  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
+            $fieldList  = $this->datatable->getFieldList($rawModule, $method);
+            $postFields = json_decode($this->post->fields);
+
+            $fields = array();
+            foreach($postFields as $index => $field)
             {
                 $id = $field->id;
                 if(!isset($fieldList[$id])) continue;
 
-                $fieldList[$id]['order'] = $field->order;
-                $fieldList[$id]['width'] = $field->width;
-                $fieldList[$id]['show']  = $field->show ? true : false;
+                $fields[$id]['order'] = $field->order;
+                $fields[$id]['width'] = $field->width;
+                $fields[$id]['show']  = $field->show ? true : false;
             }
 
             $name  = 'datatable.' . $module . ucfirst($method) . '.cols';
-            $value = json_encode($fieldList);
+            $value = json_encode($fields);
             $this->loadModel('setting')->setItem($account . '.' . $name, $value);
             if($this->post->global) $this->setting->setItem('system.' . $name, $value);
 
