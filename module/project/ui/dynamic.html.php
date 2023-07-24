@@ -48,9 +48,11 @@ else
 {
     $content     = array();
     $firstAction = '';
+    $lastAction  = '';
     foreach($dateGroups as $date => $actions)
     {
         $isToday   = date(DT_DATE4) == $date;
+        if(empty($firstAction)) $firstAction = reset($actions);
         $content[] = li
         (
             div
@@ -75,6 +77,7 @@ else
                 )
             )
         );
+        $lastAction = end($actions);
     }
 
     $content = ul
@@ -90,7 +93,7 @@ panel($content);
 if(!empty($firstAction))
 {
     $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
-    $lastDate  = substr($action->originalDate, 0, 10);
+    $lastDate  = substr($lastAction->originalDate, 0, 10);
     $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
     $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
     $preLink   = $hasPre ? inlink('dynamic', "projectID=$projectID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
@@ -100,8 +103,8 @@ if(!empty($firstAction))
     {
         floatPreNextBtn
         (
-            empty($hasPre)  ? null : set::preLink($preLink),
-            empty($hasNext) ? null : set::nextLink($nextLink)
+            empty($hasNext)  ? null : set::preLink($nextLink),
+            empty($hasPre) ? null : set::nextLink($preLink)
         );
     }
 }

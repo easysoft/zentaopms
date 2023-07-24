@@ -110,7 +110,8 @@ if($hasPre || $hasNext)
 {
     floatPreNextBtn
     (
-        empty($hasPre)  ? null : set::preLink($preLink),
-        empty($hasNext) ? null : set::nextLink($nextLink)
+        empty($hasNext)  ? null : set::preLink($nextLink),
+        empty($hasPre) ? null : set::nextLink($preLink)
+
     );
 }
