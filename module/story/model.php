@@ -3751,19 +3751,23 @@ class storyModel extends model
     /**
      * Print cell data
      *
-     * @param  object $col
-     * @param  object $story
-     * @param  array  $users
-     * @param  array  $branches
-     * @param  array  $storyStages
-     * @param  array  $modulePairs
-     * @param  array  $storyTasks
-     * @param  array  $storyBugs
-     * @param  array  $storyCases
+     * @param  object  $col
+     * @param  object  $story
+     * @param  array   $users
+     * @param  array   $branches
+     * @param  array   $storyStages
+     * @param  array   $modulePairs
+     * @param  array   $storyTasks
+     * @param  array   $storyBugs
+     * @param  array   $storyCases
+     * @param  string  $mode
+     * @param  string  $stotyType
+     * @param  object  $execution
+     * @param  string  $isShowBranch
      * @access public
      * @return void
      */
-    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story', $execution = '', $isShowBranch = '')
+    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story', $execution = null, $isShowBranch = '')
     {
         $tab         = $this->app->tab;
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
