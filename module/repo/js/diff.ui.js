@@ -16,7 +16,6 @@ $('#monacoTabs').on('click', '.monaco-close', function()
     if(isActive) tabsEle.children().last().find('a').trigger('click');
 });
 
-
 window.afterPageUpdate = function()
 {
     setTimeout(function()

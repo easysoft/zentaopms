@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('copied', $lang->repo->copied);
+
 dropmenu(set::module('repo'), set::tab('repo'));
 
 /* Prepare repo select data. */

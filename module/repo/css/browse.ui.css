@@ -4,3 +4,4 @@
 .dtable-cell-html{width: 100%;}
 .container .sidebar{width: 550px;}
 #actionBar .dropdown-menu {margin-top: 10px; padding: 10px;}
+#actionBar>.dropdown {position: absolute!important;}

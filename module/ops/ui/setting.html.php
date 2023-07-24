@@ -78,11 +78,13 @@ $formRows[] = formRow
     )
 );
 
-$actions = array('submit');
+$hasSideBar = !empty($lang->{$module}->osNameList) && array_key_exists($field, $lang->{$module}->osNameList);
+$actions    = array('submit');
 if(common::hasPriv('custom', 'restore')) $actions[] = array('class' => 'ajax-submit', 'text' => $lang->custom->restore, 'data-confirm' => $lang->custom->confirmRestore, 'url' => $this->createLink('custom', 'restore', "module=$module&field=$fieldList"));
 formPanel
 (
     setID('opsForm'),
+    $hasSideBar ? setClass('ops-ml-0') : null,
     set::title($lang->$module->common . '  >   ' . $lang->$module->$field),
     set::actions($actions),
     formRow
@@ -102,7 +104,7 @@ formPanel
     $formRows,
 );
 
-if(!empty($lang->{$module}->osNameList) && array_key_exists($field, $lang->{$module}->osNameList))
+if($hasSideBar)
 {
     $osListWg = array();
     foreach($lang->{$module}->osNameList as $key => $value)

@@ -214,11 +214,11 @@ $('.copy-btn').on('click', function()
     copyText[0].selectionStart = copyText[0].selectionEnd;
     copyText[0].blur();
 
-    $(this).tooltip('show');
+    $(that).tooltip('show');
     var that = this;
     setTimeout(function()
     {
-        $(that).tooltip('hide')
+        $(that).tooltip('hide');
     }, 2000)
 })
 
@@ -232,3 +232,16 @@ $('.copy-btn').on('click', function()
 //     delete window.renderCommentCell;
 //     delete window.renderCell;
 // }
+
+window.afterPageUpdate = function()
+{
+    setTimeout(function()
+    {
+        $('.copy-btn').tooltip({
+            trigger: 'click',
+            placement: 'bottom',
+            title: copied,
+            tipClass: 'success',
+        });
+    }, 200);
+};
