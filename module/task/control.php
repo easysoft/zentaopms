@@ -836,7 +836,7 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) return $this->taskZen->responseModal($oldTask, $from, $regionID);
+            if(isonlybody()) return $this->taskZen->responseModal($oldTask, $from);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID")));
         }
 
