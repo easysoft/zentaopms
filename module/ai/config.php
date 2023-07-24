@@ -73,16 +73,46 @@ $config->ai->dataSource['doc']['doc'] = array('title', 'addedBy', 'addedDate', '
 
 /* Available target form definations. Please also update `$lang->ai->targetForm` upon changes! */
 $config->ai->targetForm = array();
-$config->ai->targetForm['product']        = array('tree/managechild', 'doc/create');
-$config->ai->targetForm['story']          = array('create', 'batchcreate', 'change', 'totask', 'testcasecreate', 'subdivide');
-$config->ai->targetForm['productplan']    = array('edit', 'create');
-$config->ai->targetForm['projectrelease'] = array('doc/create');
-$config->ai->targetForm['project']        = array('risk/create', 'issue/create', 'doc/create', 'programplan/create');
-$config->ai->targetForm['execution']      = array('batchcreatetask', 'createtestreport', 'createqa', 'createrisk', 'createissue');
-$config->ai->targetForm['task']           = array('edit', 'batchCreate');
-$config->ai->targetForm['testcase']       = array('edit', 'createscript');
-$config->ai->targetForm['bug']            = array('edit', 'story/create', 'testcase/create');
-$config->ai->targetForm['doc']            = array('create', 'edit');
+$config->ai->targetForm['product']['tree/managechild']   = (object)array('m' => 'tree', 'f' => 'browse');
+$config->ai->targetForm['product']['doc/create']         = (object)array('m' => 'doc', 'f' => 'create');
+$config->ai->targetForm['story']['create']               = (object)array('m' => 'story', 'f' => 'create');
+$config->ai->targetForm['story']['batchcreate']          = (object)array('m' => 'story', 'f' => 'batchCreate');
+$config->ai->targetForm['story']['change']               = (object)array('m' => 'story', 'f' => 'change');
+$config->ai->targetForm['story']['totask']               = (object)array('m' => 'task', 'f' => 'batchCreate');
+$config->ai->targetForm['story']['testcasecreate']       = (object)array('m' => 'testcase', 'f' => 'create');
+$config->ai->targetForm['story']['subdivide']            = (object)array('m' => 'story', 'f' => 'batchCreate');
+$config->ai->targetForm['productplan']['edit']           = (object)array('m' => 'productplan', 'f' => 'edit');
+$config->ai->targetForm['productplan']['create']         = (object)array('m' => 'productplan', 'f' => 'create');
+$config->ai->targetForm['projectrelease']['doc/create']  = (object)array('m' => 'doc', 'f' => 'create');
+$config->ai->targetForm['project']['risk/create']        = (object)array('m' => 'risk', 'f' => 'create');
+$config->ai->targetForm['project']['issue/create']       = (object)array('m' => 'issue', 'f' => 'create');
+$config->ai->targetForm['project']['doc/create']         = (object)array('m' => 'doc', 'f' => 'create');
+$config->ai->targetForm['project']['programplan/create'] = (object)array('m' => 'programplan', 'f' => 'create');
+$config->ai->targetForm['execution']['batchcreatetask']  = (object)array('m' => 'execution', 'f' => 'batchCreateTask');
+$config->ai->targetForm['execution']['createtestreport'] = (object)array('m' => 'execution', 'f' => 'createTestReport');
+$config->ai->targetForm['execution']['createqa']         = (object)array('m' => 'execution', 'f' => 'createQA');
+$config->ai->targetForm['execution']['createrisk']       = (object)array('m' => 'execution', 'f' => 'createRisk');
+$config->ai->targetForm['execution']['createissue']      = (object)array('m' => 'execution', 'f' => 'createIssue');
+$config->ai->targetForm['task']['edit']                  = (object)array('m' => 'task', 'f' => 'edit');
+$config->ai->targetForm['task']['batchCreate']           = (object)array('m' => 'task', 'f' => 'batchCreate');
+$config->ai->targetForm['testcase']['edit']              = (object)array('m' => 'testcase', 'f' => 'edit');
+$config->ai->targetForm['testcase']['createscript']      = (object)array('m' => 'testcase', 'f' => 'createScript');
+$config->ai->targetForm['bug']['edit']                   = (object)array('m' => 'bug', 'f' => 'edit');
+$config->ai->targetForm['bug']['story/create']           = (object)array('m' => 'story', 'f' => 'create');
+$config->ai->targetForm['bug']['testcase/create']        = (object)array('m' => 'testcase', 'f' => 'create');
+$config->ai->targetForm['doc']['create']                 = (object)array('m' => 'doc', 'f' => 'create');
+$config->ai->targetForm['doc']['edit']                   = (object)array('m' => 'doc', 'f' => 'edit');
+
+/* Used to check if form injection is available. */
+$config->ai->availableForms = array();
+foreach($config->ai->targetForm as $forms)
+{
+    foreach($forms as $form)
+    {
+        if(!empty($config->ai->availableForms[$form->m]) && in_array($form->f, $config->ai->availableForms[$form->m])) continue;
+        $config->ai->availableForms[$form->m][] = $form->f;
+    }
+}
 
 /* Used to format form redirection links. */
 $config->ai->targetFormVars = array();

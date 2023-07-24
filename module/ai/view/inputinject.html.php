@@ -16,7 +16,7 @@
   $this->app->loadConfig('ai');
   $module = $this->app->getModuleName();
   $method = $this->app->getMethodName();
-  if(isset($config->ai->targetForm[$module]) && in_array($method, $config->ai->targetForm[$module])):
+  if(isset($config->ai->availableForms[$module]) && in_array($method, $config->ai->availableForms[$module])):
 ?>
   <?php
     if(isset($_SESSION['aiInjectData']) && isset($_SESSION['aiInjectData'][$module]) && isset($_SESSION['aiInjectData'][$module][$method])) $injectData = $_SESSION['aiInjectData'][$module][$method];

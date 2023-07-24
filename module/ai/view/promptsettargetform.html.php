@@ -60,7 +60,7 @@
                     <div><?php echo $lang->ai->targetForm[$name]['common'];?></div>
                   </div>
                   <div class='options'>
-                    <?php foreach($forms as $form):?>
+                    <?php foreach(array_keys($forms) as $form):?>
                       <div class='option'>
                         <input type='radio' name='targetForm' value='<?php echo "$name.$form";?>' <?php echo "$name.$form" == $prompt->targetForm ? 'checked' : '';?>>
                         <label><?php echo $lang->ai->targetForm[$name][$form];?></label>
