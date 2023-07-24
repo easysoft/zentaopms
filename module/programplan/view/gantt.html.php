@@ -784,9 +784,13 @@ $(function()
     gantt.attachEvent('onTaskClick', function(id, e)
     {
         var editBtn = $(e.srcElement);
+        if(editBtn.hasClass('icon-common-edit'))
+        {
+           editBtn = editBtn.parent();
+        }
         if(editBtn.hasClass('editDeadline'))
         {
-           var parentID = id.split("-")[0];
+           var parentID     = id.split("-")[0];
            var stageEndDate = $("div[data-task-id='" + parentID + "']").find('div[data-column-name="end_date"] > .gantt_tree_content').text();
            var reviewID     = id;
            var deadlineDate = editBtn.prev().text();
