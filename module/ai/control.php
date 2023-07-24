@@ -469,7 +469,7 @@ class ai extends control
         $objectForPrompt = $this->ai->getObjectForPromptById($prompt, $objectId);
         if(empty($objectForPrompt))
         {
-            // TODO(chenjianyu): handle empty object.
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
         }
 
         list($objectData, $object) = $objectForPrompt;
