@@ -118,80 +118,46 @@ class datatable extends control
      */
     public function ajaxCustom($module, $method, $extra = '')
     {
-        $moduleName = $module;
-        $target     = $module . ucfirst($method);
+        $cols = $this->datatable->getSetting($module, $method, true);
 
-        $this->view->module = $module;
-
-        if($module == 'testtask')
-        {
-            $this->loadModel('testcase');
-            $this->app->loadConfig('testtask');
-            $this->config->testcase->dtable->defaultField = $this->config->testtask->dtable->defaultField;
-            $this->config->testcase->dtable->fieldList['actions']['width'] = '100';
-            $this->config->testcase->dtable->fieldList['status']['width']  = '90';
-        }
-        if($module == 'testcase')
-        {
-            $this->loadModel('testcase');
-            unset($this->config->testcase->dtable->fieldList['assignedTo']);
-        }
-
-        $module  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
-        $setting = '';
-        if(isset($this->config->datatable->$target->cols)) $setting = $this->config->datatable->$target->cols;
-
-        if(empty($setting))
-        {
-            $cols = $this->datatable->getFieldList($module, $method);
-            $cols = $this->datatable->formatFields($module, $cols, false);
-        }
-        else
-        {
-            $cols = json_decode($setting, true);
-        }
-
-        usort($cols, array('datatableModel', 'sortCols'));
+        if($module == 'testcase') unset($cols['assignedTo']);
 
         if($module == 'story' && $extra != 'requirement') unset($cols['SRS']);
 
         if($extra == 'requirement')
         {
-            unset($cols['plan']);
-            unset($cols['stage']);
-            unset($cols['taskCount']);
-            unset($cols['bugCount']);
-            unset($cols['caseCount']);
-            unset($cols['URS']);
+            foreach(array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount', 'URS') as $field) unset($cols[$field]);
 
             $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
         }
 
-        if($moduleName == 'project' and $method == 'bug')
+        if($module == 'project' && $method == 'bug')
         {
             $project = $this->loadModel('project')->getByID($this->session->project);
 
             if(!$project->multiple) unset($cols['execution']);
-            if(!$project->hasProduct and $project->model != 'scrum') unset($cols['plan']);
+            if(!$project->hasProduct && $project->model != 'scrum') unset($cols['plan']);
             if(!$project->hasProduct) unset($cols['branch']);
         }
 
-        if($moduleName == 'execution' and $method == 'bug')
+        if($module == 'execution' && $method == 'bug')
         {
             $execution = $this->loadModel('execution')->getByID($this->session->execution);
             $project   = $this->loadModel('project')->getByID($execution->project);
-            if(!$project->hasProduct and $project->model != 'scrum') unset($cols['plan']);
+            if(!$project->hasProduct && $project->model != 'scrum') unset($cols['plan']);
             if(!$project->hasProduct) unset($cols['branch']);
         }
 
-        if($moduleName == 'execution' and $method == 'story')
+        if($module == 'execution' && $method == 'story')
         {
             $execution = $this->loadModel('execution')->getByID($this->session->execution);
-            if(!$execution->hasProduct and !$execution->multiple) unset($cols['plan']);
+            if(!$execution->hasProduct && !$execution->multiple) unset($cols['plan']);
             if(!$execution->hasProduct) unset($cols['branch']);
         }
-        if($extra == 'unsetStory' and isset($cols['story'])) unset($cols['story']);
 
+        if($extra == 'unsetStory' && isset($cols['story'])) unset($cols['story']);
+
+        $this->view->module = $module;
         $this->view->method = $method;
         $this->view->cols   = $cols;
         $this->display();
