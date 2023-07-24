@@ -44,6 +44,7 @@ $formItems['reviewer'] = formGroup
     (
         picker
         (
+            setID('reviewer'),
             set::name('reviewer[]'),
             set::multiple(true),
             set::items($fields['reviewer']['options']),
