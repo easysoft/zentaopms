@@ -682,7 +682,8 @@ class aiModel extends model
             if(isset($sourceGroups['tasks']))     $object->tasks     = $this->loadModel('task')->getExecutionTasks($objectId);
         }
 
-        if(empty(get_object_vars($object))) return false;
+        $objectVars = get_object_vars($object);
+        if(empty($objectVars)) return false;
 
         /* Format data as per data source definitions. */
         foreach($sourceGroups as $objectName => $objectKeys)
