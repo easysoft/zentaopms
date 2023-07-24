@@ -671,15 +671,23 @@ class aiModel extends model
         $object     = new stdclass();
         $objectData = new stdclass();
 
-        /* Query necessary object data from zentao. TODO: add more later. */
-        if($module == 'story')
-        {
-            if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
-        }
-        if($module == 'execution')
-        {
-            if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
-            if(isset($sourceGroups['tasks']))     $object->tasks     = $this->loadModel('task')->getExecutionTasks($objectId);
+        /* Query necessary object data from zentao. */
+        switch($module){
+            case 'story':
+                if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
+                break;
+            case 'execution':
+                if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
+                if(isset($sourceGroups['tasks']))     $object->tasks     = $this->loadModel('task')->getExecutionTasks($objectId);
+                break;
+            case 'product':
+                if(isset($sourceGroups['product'])) $object->product = $this->loadModel('product')->getById($objectId);
+                break;
+            case 'project':
+                if(isset($sourceGroups['project'])) $object->project = $this->loadModel('project')->getById($objectId);
+                break;
+            case 'my':
+                /* TODO: add more later. */
         }
         if($module == 'doc')
         {
