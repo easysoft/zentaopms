@@ -86,9 +86,9 @@ toolbar
     (
         array
         (
-            $canLinkCase ? array('class' => 'ghost', 'icon' => 'link', 'text' => $lang->testtask->linkCase, 'url' => inlink('linkCase', "taskID=$task->id")): null,
+            $canLinkCase ? array('class' => 'ghost', 'icon' => 'link', 'text' => $lang->testtask->linkCase, 'url' => inlink('linkCase', "taskID=$task->id")) : null,
             $canExport   ? array('class' => 'ghost', 'icon' => 'export', 'text' => $lang->export, 'url' => $this->createLink('testcase', 'export', "productID=$productID&orderBy=case_desc&taskID=$task->id"), 'data-toggle' => 'modal') : null,
-            $canReport   ? array('class' => 'ghost', 'icon' => 'bar-chart', 'text' => $lang->testtask->report->common, 'url' => "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID)): null,
+            $canReport   ? array('class' => 'ghost', 'icon' => 'bar-chart', 'text' => $lang->testtask->report->common, 'url' => inlink('report', "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID))) : null,
             $canView     ? array('class' => 'ghost', 'icon' => 'list-alt', 'text' => $lang->testtask->view, 'url' => inlink('view', "taskID=$task->id")) : null,
             array('class' => 'ghost', 'icon' => 'back', 'text' => $lang->goback, 'url' => $this->session->testtaskList)
         )

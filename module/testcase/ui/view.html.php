@@ -300,7 +300,7 @@ detailHeader
     (
         entityLabel
         (
-            set::entityID(17),
+            set::entityID($case->id),
             set::level(1),
             set::text($case->title)
         )
