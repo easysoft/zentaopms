@@ -72,33 +72,34 @@ $list = array();
 foreach($apiList as $api)
 {
     $list[] = h::li
+    (
+        setClass('list-group-item'),
+        div
         (
-            setClass('list-group-item'),
-            div
+            setClass("heading {$api->method}"),
+            a
             (
-                setClass("heading {$api->method}"),
-                a
+                set::href(createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0")),
+                span
                 (
-                    set::href(createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0")),
-                    span
-                    (
-                        setClass('method'),
-                        $api->method
-                    ),
-                    span
-                    (
-                        setClass('path'),
-                        $api->path
-                    ),
-                    span
-                    (
-                        setClass('desc'),
-                        $api->title
-                    ),
-                )
+                    setClass('method'),
+                    $api->method
+                ),
+                span
+                (
+                    setClass('path'),
+                    $api->path
+                ),
+                span
+                (
+                    setClass('desc'),
+                    $api->title
+                ),
             )
-        );
+        )
+    );
 }
+
 $delimiter = strpos($app->clientLang, 'zh') === 0 ? '：' : ': ';
 panel
 (

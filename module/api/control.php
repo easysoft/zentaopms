@@ -106,7 +106,7 @@ class api extends control
         /* Get an api doc. */
         if($apiID > 0)
         {
-            echo $this->fetch('api', 'view', "libID=$libID&apiID=$apiID&moduleID=$moduleID&release=$release&version=$version");
+            echo $this->fetch('api', 'view', "libID=$libID&apiID=$apiID&moduleID=$moduleID&version=$version&release=$release");
             return;
         }
         else
@@ -147,6 +147,7 @@ class api extends control
         $this->view->libTree        = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, $param);
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->objectDropdown = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
+        $this->view->spaceType      = 'api';
 
         $this->display();
     }
@@ -226,6 +227,8 @@ class api extends control
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->libTree        = $libTree;
         $this->view->objectDropdown = $objectDropdown;
+        $this->view->spaceType      = 'api';
+
         $this->display();
     }
 
