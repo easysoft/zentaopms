@@ -854,9 +854,9 @@ class aiModel extends model
         if($module == 'release')
         {
             $releaseId = $this->dao->select('max(id) as maxId')->from(TABLE_RELEASE)
-                                   ->where('project')->in($this->app->user->view->projects)
-                                   ->orWhere('product')->in($this->app->user->view->products)
-                                   ->fetch('maxId');
+                ->where('project')->in($this->app->user->view->projects)
+                ->orWhere('product')->in($this->app->user->view->products)
+                ->fetch('maxId');
             if(!empty($releaseId)) return helper::createLink('release', 'view', "releaseID=$releaseId");
         }
         if($module == 'project')
@@ -882,32 +882,32 @@ class aiModel extends model
         if($module == 'task')
         {
             $taskId = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)
-                                ->where('project')->in($this->app->user->view->projects)
-                                ->fetch('maxId');
+                ->where('project')->in($this->app->user->view->projects)
+                ->fetch('maxId');
             if(!empty($taskId)) return helper::createLink('task', 'view', "taskID=$taskId");
         }
         if($module == 'case')
         {
             $caseId = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)
-                                ->where('project')->in($this->app->user->view->projects)
-                                ->orWhere('product')->in($this->app->user->view->products)
-                                ->fetch('maxId');
+                ->where('project')->in($this->app->user->view->projects)
+                ->orWhere('product')->in($this->app->user->view->products)
+                ->fetch('maxId');
             if(!empty($caseId)) return helper::createLink('testcase', 'view', "caseID=$caseId");
         }
         if($module == 'bug')
         {
             $bugId = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)
-                               ->where('project')->in($this->app->user->view->projects)
-                               ->orWhere('product')->in($this->app->user->view->products)
-                               ->fetch('maxId');
+                ->where('project')->in($this->app->user->view->projects)
+                ->orWhere('product')->in($this->app->user->view->products)
+                ->fetch('maxId');
             if(!empty($bugId)) return helper::createLink('bug', 'view', "bugID=$bugId");
         }
         if($module == 'doc')
         {
             $docId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
-                               ->where('project')->in($this->app->user->view->projects)
-                               ->orWhere('product')->in($this->app->user->view->products)
-                               ->fetch('maxId');
+                ->where('project')->in($this->app->user->view->projects)
+                ->orWhere('product')->in($this->app->user->view->products)
+                ->fetch('maxId');
             if(!empty($docId)) return helper::createLink('doc', 'view', "docID=$docId");
         }
 
