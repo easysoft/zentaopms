@@ -74,6 +74,31 @@ for($itemVersion = $api->version; $itemVersion > 0; $itemVersion--)
 }
 
 $apiHeader = $apiQuery = $apiParams = $apiResponse = array();
+$parseTree = function($data, $typeList, $level = 0)
+{
+    global $lang;
+
+    $field = '';
+    for($i = 0; $i < $level; $i++) $field .= '&nbsp;&nbsp;'. ($i == $level-1 ? '∟' : '&nbsp;') . '&nbsp;&nbsp;';
+    $field .= $data['field'];
+
+    $tbody[] = h::tr
+    (
+        h::td($field),
+        h::td(zget($typeList, $data['paramsType'], '')),
+        h::td(zget($lang->api->boolList, $data['required'], '')),
+        h::td($data['desc']),
+    );
+
+    if(isset($data['children']) && count($data['children']) > 0)
+    {
+        $level++;
+        foreach($data['children'] as $item) $tbody[] = $parseTree($item, $typeList, $level);
+    }
+
+    return $tbody;
+};
+
 if($api->params['header'])
 {
     $tbody = array();
@@ -135,16 +160,7 @@ if($api->params['query'])
 if($api->params['params'])
 {
     $tbody = array();
-    foreach($api->params['params'] as $param)
-    {
-        $tbody[] = h::tr
-        (
-            h::td($param['field']),
-            h::td(zget($typeList, (string)$param['paramsType'], '')),
-            h::td(zget($lang->api->boolList, (string)$param['required'])),
-            h::td($param['desc']),
-        );
-    }
+    foreach($api->params['params'] as $param) $tbody = $parseTree($params, $typeList);
 
     $apiParams[] = h3($lang->api->params);
     $apiParams[] = h::table
@@ -164,16 +180,7 @@ if($api->params['params'])
 if($api->response)
 {
     $tbody = array();
-    foreach($api->response as $response)
-    {
-        $tbody[] = h::tr
-        (
-            h::td($response['field']),
-            h::td(zget($typeList, (string)$response['paramsType'], '')),
-            h::td(zget($lang->api->boolList, (string)$response['required'])),
-            h::td($response['desc']),
-        );
-    }
+    foreach($api->response as $response) $tbody = $parseTree($response, $typeList);
 
     $apiResponse[] = h3($lang->api->response);
     $apiResponse[] = h::table
