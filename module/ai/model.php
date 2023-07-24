@@ -516,6 +516,8 @@ class aiModel extends model
      */
     public function serializeDataToPrompt($module, $sources, $data)
     {
+        if(empty($data)) return '';
+
         /* Handle object data. */
         if(is_object($data)) $data = (array)$data;
 
@@ -645,10 +647,10 @@ class aiModel extends model
     /**
      * Get object data for prompt by id.
      *
-     * @param  object $prompt
-     * @param  int    $objectId
+     * @param  object        $prompt    prompt object
+     * @param  int           $objectId  object id
      * @access public
-     * @return object
+     * @return array|false   array of object data and object, or false if error.
      */
     public function getObjectForPromptById($prompt, $objectId)
     {
@@ -679,6 +681,8 @@ class aiModel extends model
             if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
             if(isset($sourceGroups['tasks']))     $object->tasks     = $this->loadModel('task')->getExecutionTasks($objectId);
         }
+
+        if(empty(get_object_vars($object))) return false;
 
         /* Format data as per data source definitions. */
         foreach($sourceGroups as $objectName => $objectKeys)
@@ -771,7 +775,10 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
         if(empty($prompt)) return false;
 
-        list($objectData) = $this->getObjectForPromptById($prompt, $objectId);
+        $objectForPrompt = $this->getObjectForPromptById($prompt, $objectId);
+        if(empty($objectForPrompt)) return false;
+
+        list($objectData) = $objectForPrompt;
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
 
         $wholePrompt = $this->assemblePrompt($prompt, $dataPrompt);

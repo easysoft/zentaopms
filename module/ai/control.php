@@ -466,7 +466,13 @@ class ai extends control
 
             $this->sendSuccess($response);
         }
-        list($objectData, $object) = $this->ai->getObjectForPromptById($prompt, $objectId);
+        $objectForPrompt = $this->ai->getObjectForPromptById($prompt, $objectId);
+        if(empty($objectForPrompt))
+        {
+            // TODO(chenjianyu): handle empty object.
+        }
+
+        list($objectData, $object) = $objectForPrompt;
 
         $this->view->prompt     = $prompt;
         $this->view->object     = $object;
