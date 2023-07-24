@@ -244,7 +244,7 @@ class todoModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $type = 'today', string $account = '', string|array $status = 'all', int $limit = 0, object $pager = null, string $orderBy="date, status, begin"): array
+    public function getList(string $type = 'today', string $account = '', string|array $status = 'all', int $limit = 0, object $pager = null, string $orderBy="date,status,begin"): array
     {
         $type  = strtolower($type);
 
