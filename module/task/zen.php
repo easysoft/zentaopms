@@ -1329,7 +1329,7 @@ class taskZen extends task
 
     /**
      * 如果页面是弹窗，则调用此方法得到正确的返回链接。
-     * Get response infomation of a modal page.
+     * Get response information of a modal page.
      *
      * @param  object    $task
      * @param  string    $from     ''|taskkanban
