@@ -111,6 +111,17 @@ function checkbox(): checkbox
 }
 
 /**
+ * Checkbox group widget.
+ *
+ * array title
+ * array items
+ */
+function checkboxGroup(): checkboxGroup
+{
+    return createWg('checkboxGroup', func_get_args());
+}
+
+/**
  * Base form widget.
  *
  * ?string id='$GID'
