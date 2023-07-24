@@ -103,7 +103,7 @@ $config->ai->targetForm['bug']['testcase/create']        = (object)array('m' => 
 $config->ai->targetForm['doc']['create']                 = (object)array('m' => 'doc', 'f' => 'create');
 $config->ai->targetForm['doc']['edit']                   = (object)array('m' => 'doc', 'f' => 'edit');
 
-/* Used to check if form injection is available. */
+/* Used to check if form injection is available, generated from `$config->ai->targetForm`. */
 $config->ai->availableForms = array();
 foreach($config->ai->targetForm as $forms)
 {
