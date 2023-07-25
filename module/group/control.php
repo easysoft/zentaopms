@@ -1055,4 +1055,17 @@ class group extends control
         $privList       = $this->group->getRelatedPrivs($privIdList, '', $excludeIdList, $recommedSelect);
         return print(json_encode($privList));
     }
+
+    /**
+     * AJAX: Get recommend's priv tree.
+     *
+     * @param  string $data
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRecommendTree($data)
+    {
+        $this->view->data = json_decode($data);
+        $this->display();
+    }
 }

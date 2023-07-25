@@ -14,6 +14,10 @@ if($group->role == 'limited')
 }
 else
 {
+    jsVar('window.selectedPrivIdList', $selectedPrivIdList);
+    jsVar('excludeIdList', $excludePrivsIdList);
+    jsVar('groupID', $groupID);
+    jsVar('type', $type);
     $params        = "type=byPackage&param=$groupID&menu=%s&version=$version";
     $mainNavItems  = null;
     $i             = 0;
@@ -82,7 +86,7 @@ else
                     set('data-id', "{$moduleName}-{$method}"),
                     set('data-module', $moduleName),
                     set('data-package', 0),
-                    set('data-divID', "{$moduleName}0"),
+                    set('data-divid', "{$moduleName}0"),
                     checkbox
                     (
                         set::name("actions[{$moduleName}]"),
@@ -96,20 +100,21 @@ else
         return $methodItems;
     };
 
-    function getPrivsItems($privs, $moduleName)
+    function getPrivsItems($privs, $moduleName, $packageID, $groupPrivs)
     {
         global $lang;
         $privsBox = array();
         foreach($privs as $privID => $priv)
         {
             if(!empty($lang->$moduleName->menus) && ($priv->method == 'browse' or in_array($priv->method, array_keys($lang->$moduleName->menus)))) continue;
+            $privMethod = isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '';
             $privsBox[] = div
                 (
                     setClass('group-item'),
                     set('data-id', zget($priv, 'id', 0)),
                     set('data-module', $moduleName),
                     set('data-package', $packageID),
-                    set('data-divID', "{$moduleName}{$packageID}"),
+                    set('data-divid', "{$moduleName}{$packageID}"),
                     div
                     (
                         setClass('checkbox-primary'),
@@ -117,7 +122,8 @@ else
                         (
                             set::name("actions[{$priv->module}]"),
                             setID("actions[{$priv->module}]{$priv->method}"),
-                            set::value(isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : ''),
+                            set::value($priv->method),
+                            set::checked($priv->method == $privMethod),
                             set::text($priv->name),
                             set('data-id', $priv->action),
                         )
@@ -151,7 +157,7 @@ else
                         set('data-package', $packageID),
                         set('all-privs', $packagePrivs),
                         set('select-privs', $packageSelect),
-                        set('data-divID', "{$moduleName}{$packageID}"),
+                        set('data-divid', "{$moduleName}{$packageID}"),
                         div
                         (
                             setClass('checkbox-primary checkbox-inline checkbox-left check-all'),
@@ -171,7 +177,7 @@ else
                         setClass('privs hidden'),
                         set('data-module', $moduleName),
                         set('data-package', $packageID),
-                        set('data-divID', "{$moduleName}{$packageID}"),
+                        set('data-divid', "{$moduleName}{$packageID}"),
                         div(setClass('arrow')),
                         div
                         (
@@ -182,7 +188,7 @@ else
                                 set('data-id', 0),
                                 set('data-module', $moduleName),
                                 set('data-package', 0),
-                                set('data-divID', "{$moduleName}{$packageID}"),
+                                set('data-divid', "{$moduleName}0"),
                                 div
                                 (
                                     setClass('checkbox-primary checkbox-inline checkbox-left check-all'),
@@ -200,7 +206,7 @@ else
                                     setClass('menus-privs hidden'),
                                     set('data-module', $moduleName),
                                     set('data-package', $packageID),
-                                    set('data-divID', "{$moduleName}{$packageID}"),
+                                    set('data-divid', "{$moduleName}{$packageID}"),
                                     div(setClass('arrow')),
                                     div
                                     (
@@ -209,7 +215,7 @@ else
                                     )
                                 )
                             ) : null,
-                            getPrivsItems($privs, $moduleName)
+                            getPrivsItems($privs, $moduleName, $packageID, $groupPrivs)
                         )
                     )
                 );
