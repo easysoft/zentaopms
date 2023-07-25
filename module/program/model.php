@@ -1328,6 +1328,7 @@ class programModel extends model
         $summary = $this->dao->select('execution, SUM(t1.estimate) AS totalEstimate, SUM(t1.consumed) AS totalConsumed, SUM(t1.`left`) AS totalLeft')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->le(0) // Ignore child task.
             ->beginIF(!empty($projects))->andWhere('t1.project')->in(array_keys($projects))->fi()
             ->groupBy('execution')
             ->fetchAll();
