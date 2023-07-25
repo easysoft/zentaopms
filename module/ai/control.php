@@ -441,7 +441,7 @@ class ai extends control
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
 
-        $object = $this->getObjectForPromptById($prompt, $objectId);
+        $object = $this->ai->getObjectForPromptById($prompt, $objectId);
         if(empty($object)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
 
         $response = $this->ai->executePrompt($prompt, $object);
