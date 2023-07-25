@@ -4007,6 +4007,67 @@ EOT;
         }
         return $actionsMenu;
     }
+
+    /**
+     * 计算应用运行时间。
+     * Print duration of a instance.
+     *
+     * @param  int    $seconds
+     * @param  string $format  y-m-d-h-i-s, case insensitive
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function printDuration(int $seconds, string $format = 'y-m-d-h-i-s'): string
+    {
+        global $lang;
+
+        $duration = '';
+        $format = strtolower($format);
+
+        if(strpos($format, 'y') !== false)
+        {
+            $years       = intval($seconds / (3600 * 24 * 365));
+            $leftSeconds = intval($seconds % (3600 * 24 * 365));
+            if($years) $duration .= $years . $lang->year;
+        }
+
+        if(strpos($format, 'm') !== false)
+        {
+            $months      = intval($leftSeconds / (3600 * 24 * 30));
+            $leftSeconds = intval($leftSeconds % (3600 * 24 * 30));
+            if($months) $duration .= $months . $lang->month;
+        }
+
+        if(strpos($format, 'd') !== false)
+        {
+            $days        = intval($leftSeconds / (3600 * 24));
+            $leftSeconds = intval($leftSeconds % (3600 * 24));
+            if($days) $duration .= $days . trim($lang->day);
+        }
+
+        if(strpos($format, 'h') !== false)
+        {
+            $hours = intval($leftSeconds / 3600);
+            $leftSeconds = intval($leftSeconds % 3600);
+            if($hours) $duration .= $hours . $lang->hour;
+        }
+
+        if(strpos($format, 'i') !== false)
+        {
+            $minutes = intval($leftSeconds / 60);
+            $leftSeconds = intval($leftSeconds % 60);
+            if($minutes) $duration .= $minutes . $lang->minute;
+        }
+
+        if(strpos($format, 's') !== false)
+        {
+            $seconds = intval($leftSeconds % 3600);
+            if($seconds) $duration .= $seconds . $lang->second;
+        }
+
+        return $duration;
+    }
 }
 
 class common extends commonModel

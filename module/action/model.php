@@ -917,6 +917,29 @@ class actionModel extends model
             {
                 $desc = $this->lang->$objectType->action->$actionType;
             }
+            elseif($action->objectType == 'instance' && isset($this->lang->action->desc->$actionType))
+            {
+                $desc  = $this->lang->action->desc->$actionType;
+                $extra = json_decode($action->extra);
+                if($actionType == 'adjustmemory')
+                {
+                    $action->newMemory = $action->comment;
+                    $action->comment = '';
+                }
+                if(!empty($extra))
+                {
+                    $action->oldName    = zget($extra->data, 'oldName', '');
+                    $action->newName    = zget($extra->data, 'newName', '');
+                    $action->oldVersion = zget($extra->data, 'oldVersion', '');
+                    $action->newVersion = zget($extra->data, 'newVersion', '');
+                    $action->oldAppName = zget($extra->data, 'oldAppName', '');
+                    $action->newAppName = zget($extra->data, 'newAppName', '');
+                    $enableAutoBackup   = zget($extra->data, 'autoBackup', 0);
+
+                    if($actionType == 'saveautobackupsettings' && $enableAutoBackup) $desc = $this->lang->action->desc->closeautobackupsettings;
+                    $action->extra = '';
+                }
+            }
             elseif(isset($this->lang->action->desc->$actionType))
             {
                 $desc = $this->lang->action->desc->$actionType;

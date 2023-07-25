@@ -156,6 +156,10 @@ $lang->selectedItems = '<strong>{0}</strong> items sélectionnés';
 
 $lang->future      = 'En Attente';
 $lang->year        = 'Année';
+$lang->month       = 'Month';
+$lang->hour        = 'Hour';
+$lang->minute      = 'Minute';
+$lang->second      = 'Second';
 $lang->workingHour = 'Heures';
 
 $lang->idAB         = 'ID';

@@ -224,6 +224,28 @@ $lang->action->desc->online              = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->offline             = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
 $lang->action->desc->linkhost            = '$date, 由 <strong>$actor</strong> 关联主机。' . "\n";
 
+/* 用来描述应用的历史操作记录。*/
+$lang->action->desc->install                 = '$date, 由 <strong>$actor</strong> 安装 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->uninstall               = '$date, 由 <strong>$actor</strong> 卸载 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->start                   = '$date, 由 <strong>$actor</strong> 启动 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->stop                    = '$date, 由 <strong>$actor</strong> 关闭 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->editextra               = '$date, 由 <strong>$actor</strong> 修改了名称，' . '从 $oldName 修改为 $newName' . '。' . "\n";
+$lang->action->desc->upgrade                 = '$date, 由 <strong>$actor</strong> 升级，从 $oldVersion 升级为 $newVersion 。' . "\n";
+$lang->action->desc->backup                  = '$date, 由 <strong>$actor</strong> 备份 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->adjustmemory            = '$date, 由 <strong>$actor</strong> 调整内存到 $newMemory 。' . "\n";
+$lang->action->desc->enableldap              = '$date, 由 <strong>$actor</strong> 启用了LDAP。' . "\n";
+$lang->action->desc->disableldap             = '$date, 由 <strong>$actor</strong> 禁用了LDAP。' . "\n";
+$lang->action->desc->enablesmtp              = '$date, 由 <strong>$actor</strong> 启用了SMTP。' . "\n";
+$lang->action->desc->disablesmtp             = '$date, 由 <strong>$actor</strong> 禁用了SMTP。' . "\n";
+$lang->action->desc->updatecustom            = '$date, 由 <strong>$actor</strong> 修改了自定义配置。' . "\n";
+$lang->action->desc->tosenior                = '$date, 由 <strong>$actor</strong> 升级服务到高级版，从 $oldAppName 升级到 $newAppName 。' . "\n";
+$lang->action->desc->saveautobackupsettings  = '$date, 由 <strong>$actor</strong> 修改了自动备份设置：开启自动备份。' . "\n";
+$lang->action->desc->closeautobackupsettings = '$date, 由 <strong>$actor</strong> 修改了自动备份设置：自动备份已关闭。' . "\n";
+$lang->action->desc->saveautorestoresettings = '$date, 由 <strong>$actor</strong> 修改了自动还原设置。' . "\n";
+$lang->action->desc->autobackup              = '$date, 系统执行了自动备份。' . "\n";
+$lang->action->desc->autorestore             = '$date, 系统执行了自动还原。' . "\n";
+$lang->action->desc->deleteexpiredbackup     = '$date, 系统删除了过期的自动备份。' . "\n";
+
 /* 用來顯示動態信息。*/
 $lang->action->label                        = new stdclass();
 $lang->action->label->created               = '創建';

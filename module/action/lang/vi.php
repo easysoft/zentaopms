@@ -216,6 +216,28 @@ $lang->action->desc->online              = '$date, set online by <strong>$actor<
 $lang->action->desc->offline             = '$date, set offline by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->linkhost            = '$date, the host is linked by <strong>$actor</strong> .' . "\n";
 
+/* 用来描述应用的历史操作记录。*/
+$lang->action->desc->install                 = '$date, installed by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->uninstall               = '$date, uninstalled by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->start                   = '$date, started by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->stop                    = '$date, closed by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->editextra               = '$date, updated from $oldname to $newName by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->upgrade                 = '$date, upgraded from $oldVersion to $newVersion by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->backup                  = '$date, backuped by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->adjustmemory            = '$date, resized to $newMemory of memory by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->enableldap              = '$date, enabled by <strong>$actor</strong> of LDAP。' . "\n";
+$lang->action->desc->disableldap             = '$date, disabled by <strong>$actor</strong> of LDAP。' . "\n";
+$lang->action->desc->enablesmtp              = '$date, enabled by <strong>$actor</strong> of SMTP。' . "\n";
+$lang->action->desc->disablesmtp             = '$date, disabled by <strong>$actor</strong> of SMTP。' . "\n";
+$lang->action->desc->updatecustom            = '$date, updated by <strong>$actor</strong> of custom settings.' . "\n";
+$lang->action->desc->tosenior                = '$date, upgraded from $oldAppName to $newAppName by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->saveautobackupsettings  = '$date, opened by <strong>$actor</strong> of autobackup.' . "\n";
+$lang->action->desc->closeautobackupsettings = '$date, closed by <strong>$actor</strong> of autobackup' . "\n";
+$lang->action->desc->saveautorestoresettings = '$date, updated by <strong>$actor</strong> of autorestore.' . "\n";
+$lang->action->desc->autobackup              = '$date, backed up of system' . "\n";
+$lang->action->desc->autorestore             = '$date, restored by system.' . "\n";
+$lang->action->desc->deleteexpiredbackup     = '$date, deleted the expired automatic backups by system.' . "\n";
+
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
 $lang->action->label->created               = 'created ';

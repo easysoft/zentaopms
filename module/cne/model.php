@@ -499,7 +499,7 @@ class cneModel extends model
     {
         $rate  = $metrics->rate;
 
-        $tip = "{$rate}% = " . helper::formatKB($metrics->usage / 1024) . ' / ' . helper::formatKB($metrics->capacity / 1024);
+        $tip = "{$rate}% = " . helper::formatKB($metrics->usage) . ' / ' . helper::formatKB($metrics->capacity);
         commonModel::printProgressBar($rate, '', $tip, 'tip');
     }
 

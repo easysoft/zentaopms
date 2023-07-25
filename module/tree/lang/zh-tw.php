@@ -33,6 +33,7 @@ $lang->tree->manageBugChild     = '維護Bug子模組';
 $lang->tree->manageCaseChild    = '維護用例子模組';
 $lang->tree->manageCaselibChild = '維護用例庫子模組';
 $lang->tree->manageTaskChild    = "維護{$lang->executionCommon}子模組";
+$lang->tree->manageHostGroup    = '维护主机分组';
 $lang->tree->manageHostChild    = '维护主机子分组';
 $lang->tree->syncFromProduct    = '複製模組';
 $lang->tree->dragAndSort        = "拖放排序";

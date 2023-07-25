@@ -131,6 +131,10 @@ $lang->selectedItems = '已選擇 <strong>{0}</strong> 項';
 
 $lang->future      = '未來';
 $lang->year        = '年';
+$lang->month       = '月';
+$lang->hour        = '小时';
+$lang->minute      = '分';
+$lang->second      = '秒';
 $lang->workingHour = '工時';
 
 $lang->idAB         = 'ID';

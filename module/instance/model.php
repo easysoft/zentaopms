@@ -401,7 +401,7 @@ class InstanceModel extends model
         $success = $this->cne->updateConfig($instnace, $settings);
         if($success)
         {
-            $this->action->create('instance', $instnace->id, 'adjustMemory', helper::formatKB(intval($size / 1024)));
+            $this->action->create('instance', $instnace->id, 'adjustMemory', helper::formatKB(intval($size)));
             return true;
         }
 
@@ -1671,7 +1671,7 @@ class InstanceModel extends model
         $options = [];
         foreach($this->lang->instance->memOptions as $size => $text)
         {
-            if($size > $currentMemory) $options[$size] = $text;
+            if($size >= $currentMemory) $options[$size] = $text;
         }
 
         return $options;
@@ -1707,12 +1707,19 @@ class InstanceModel extends model
      * @param  string $type    'bar' is progress bar, 'pie' is progress pie.
      * @static
      * @access public
-     * @return viod
+     * @return mixed
      */
     public static function printCpuUsage($instance, $metrics, $type = 'bar')
     {
         $rate = $metrics->rate;
         $tip  = "{$rate}% = {$metrics->usage} / {$metrics->limit}";
+
+        if(empty($color) && $rate == 0)               $color = 'gray';
+        if(empty($color) && $rate > 0 && $rate < 60)  $color = 'primary';
+        if(empty($color) && $rate >= 0 && $rate < 80) $color = 'warning';
+        if(empty($color) && $rate >= 80)              $color = 'danger';
+
+        if($type == 'array') return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%');
 
         if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
 
@@ -1730,12 +1737,19 @@ class InstanceModel extends model
      * @param  string $type    'bar' is progress bar, 'pie' is progress pie.
      * @static
      * @access public
-     * @return viod
+     * @return mixed
      */
     public static function printMemUsage($instnace, $metrics, $type = 'bar')
     {
         $rate = $metrics->rate;
-        $tip  = "{$rate}% = " . helper::formatKB($metrics->usage / 1024) . ' / ' . helper::formatKB($metrics->limit / 1024);
+        $tip  = "{$rate}% = " . helper::formatKB($metrics->usage) . ' / ' . helper::formatKB($metrics->limit);
+
+        if(empty($color) && $rate == 0)               $color = 'gray';
+        if(empty($color) && $rate > 0 && $rate < 60)  $color = 'primary';
+        if(empty($color) && $rate >= 0 && $rate < 80) $color = 'warning';
+        if(empty($color) && $rate >= 80)              $color = 'danger';
+
+        if($type == 'array') return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%');
 
         if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
 
@@ -1929,7 +1943,7 @@ class InstanceModel extends model
     public function getMemOptions($memList)
     {
         $newList = array();
-        foreach($memList as $memValue) $newList[$memValue] = helper::formatKB(intval($memValue / 1024));
+        foreach($memList as $memValue) $newList[$memValue] = helper::formatKB(intval($memValue));
         return $newList;
     }
 

@@ -119,6 +119,10 @@ $lang->selectedItems = 'Đã chọn <strong>{0}</strong> mục';
 
 $lang->future      = 'Đang đợi';
 $lang->year        = 'Năm';
+$lang->month       = 'Month';
+$lang->hour        = 'Hour';
+$lang->minute      = 'Minute';
+$lang->second      = 'Second';
 $lang->workingHour = 'giờ';
 
 $lang->idAB         = 'ID';

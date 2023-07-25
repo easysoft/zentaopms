@@ -156,6 +156,10 @@ $lang->selectedItems = 'Seleted <strong>{0}</strong> items';
 
 $lang->future      = 'Warte';
 $lang->year        = 'Jahr';
+$lang->month       = 'Month';
+$lang->hour        = 'Hour';
+$lang->minute      = 'Minute';
+$lang->second      = 'Second';
 $lang->workingHour = 'Stunde';
 
 $lang->idAB         = 'ID';
