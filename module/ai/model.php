@@ -1018,7 +1018,10 @@ class aiModel extends model
         $targetForm = $prompt->targetForm;
         if(empty($targetForm)) return false;
 
-        list($module, $method) = explode('.', $targetForm);
+        list($m, $f) = explode('.', $targetForm);
+        $targetFormConfig = $this->config->ai->targetForm[$m][$f];
+        $module = $targetFormConfig->m;
+        $method = $targetFormConfig->f;
 
         /* Try assemble link vars from both passed-in `$linkArgs` and object props. */
         $varsConfig = $this->config->ai->targetFormVars[$module][$method];
@@ -1091,9 +1094,9 @@ class aiModel extends model
     {
         if(is_string($form)) $form = explode('.', $form);
 
-        $module = $form[0];
-        $method = $form[1];
+        $targetForm = $this->config->ai->targetForm[$form[0]][$form[1]];
+        if(empty($targetForm)) return;
 
-        $_SESSION['aiInjectData'][$module][$method] = is_string($data) ? $data : json_encode($data);
+        $_SESSION['aiInjectData'][$targetForm->m][$targetForm->f] = is_string($data) ? $data : json_encode($data);
     }
 }
