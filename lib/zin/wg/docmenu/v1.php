@@ -99,12 +99,17 @@ class docMenu extends wg
             $setting->parentID = $parentID;
 
             $item = array(
-                'key'     => $setting->id,
-                'text'    => $setting->name,
-                'icon'    => $this->getIcon($setting),
-                'url'     => $this->buildLink($setting),
-                'active'  => zget($setting, 'active', $setting->id == $activeKey),
-                'actions' => $this->getActions($setting)
+                'key'         => $setting->id,
+                'text'        => $setting->name,
+                'icon'        => $this->getIcon($setting),
+                'url'         => $this->buildLink($setting),
+                'data-id'     => $setting->id,
+                'data-lib'    => $setting->type == 'docLib' ? $setting->id : $setting->libID,
+                'data-type'   => $setting->type,
+                'data-parent' => $setting->parentID,
+                'data-module' => $this->currentModule,
+                'active'      => zget($setting, 'active', $setting->id == $activeKey),
+                'actions'     => $this->getActions($setting)
             );
 
             $children = zget($setting, 'children', array());
@@ -164,8 +169,8 @@ class docMenu extends wg
                     $treeIcon  = 'paper-clip';
                 }
                 $items[] = array(
-                    'text' => $treeTitle,
-                    'icon' => $treeIcon,
+                    'text'  => $treeTitle,
+                    'icon'  => $treeIcon,
                     'class' => 'project-tree-title ' . ($index > 0 ? 'border-t mt-2 pt-2' : ''),
                 );
 
@@ -206,19 +211,19 @@ class docMenu extends wg
             if(hasPriv($this->currentModule, 'addCatalog'))
             {
                 $menus[] = array(
-                    'key'  => 'adddirectory',
-                    'icon' => 'add-directory',
-                    'text' => $this->lang->doc->libDropdown['addModule'],
-                    'link' => '',
+                    'key'     => 'adddirectory',
+                    'icon'    => 'add-directory',
+                    'text'    => $this->lang->doc->libDropdown['addModule'],
+                    'onClick' => jsRaw("() => addModule({$item->parentID}, 'child')")
                 );
             }
 
             if(hasPriv($this->currentModule, 'editCatalog'))
             {
                 $menus[] = array(
-                    'key'  => 'editlib',
-                    'icon' => 'edit',
-                    'text' => $this->lang->doc->libDropdown['editLib'],
+                    'key'         => 'editlib',
+                    'icon'        => 'edit',
+                    'text'        => $this->lang->doc->libDropdown['editLib'],
                     'data-toggle' => 'modal',
                     'data-url'    => createlink($this->currentModule, 'editlib', "libid={$item->parentID}"),
                 );
@@ -241,16 +246,16 @@ class docMenu extends wg
             if(hasPriv($this->currentModule, 'addCatalog'))
             {
                 $menus[] = array(
-                    'key'  => 'adddirectory',
-                    'icon' => 'add-directory',
-                    'text' => $this->lang->doc->libDropdown['addSameModule'],
-                    'link' => '',
+                    'key'     => 'adddirectory',
+                    'icon'    => 'add-directory',
+                    'text'    => $this->lang->doc->libDropdown['addSameModule'],
+                    'onClick' => jsRaw("() => addModule({$item->id}, 'same')")
                 );
                 $menus[] = array(
-                    'key'  => 'addsubdirectory',
-                    'icon' => 'add-directory',
-                    'text' => $this->lang->doc->libDropdown['addSubModule'],
-                    'link' => '',
+                    'key'     => 'addsubdirectory',
+                    'icon'    => 'add-directory',
+                    'text'    => $this->lang->doc->libDropdown['addSubModule'],
+                    'onClick' => jsRaw("() => addModule({$item->id}, 'child')")
                 );
             }
 
