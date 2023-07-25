@@ -788,7 +788,7 @@ class commonModel extends model
     /**
      * Create sub menu by settings in lang files.
      *
-     * @param  array    $items
+     * @param  object   $items
      * @param  mixed    $replace
      * @static
      * @access public
