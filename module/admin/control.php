@@ -271,19 +271,18 @@ class admin extends control
             $closedFeatures = '';
             if(isset($_POST['module']))
             {
-                foreach($this->post->module as $module => $options)
+                foreach($this->post->module as $module => $checked)
                 {
                     if($module == 'myScore') continue;
-                    $checked = reset($options);
                     if(!$checked) $closedFeatures .= "$module,";
                 }
             }
             $closedFeatures = rtrim($closedFeatures, ',');
             $this->loadModel('setting')->setItem('system.common.closedFeatures', $closedFeatures);
-            $this->loadModel('setting')->setItem('system.common.global.scoreStatus', $this->post->module['myScore'][0]);
-            $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->post->module['productUR'][0]);
+            $this->setting->setItem('system.common.global.scoreStatus', $this->post->module['myScore']);
+            $this->setting->setItem('system.custom.URAndSR', $this->post->module['productUR']);
             $this->loadModel('custom')->processMeasrecordCron();
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'window.top.reload()'));
         }
         $this->view->title            = $this->lang->admin->setModuleIndex;
         $this->view->closedFeatures   = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=closedFeatures');
