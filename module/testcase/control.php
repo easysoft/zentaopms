@@ -558,7 +558,7 @@ class testcase extends control
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
             $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
-            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
+            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
         }
