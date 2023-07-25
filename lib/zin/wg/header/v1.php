@@ -228,12 +228,12 @@ class header extends wg
         $helpItems = array();
         $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
         $helpItems[] = array('text' => $lang->manual, 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
-        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'));
+        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal');
         $items[] = array('text' => $lang->help, 'icon' => 'help', 'items' => $helpItems);
 
         /* printClientLink */
 
-        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'));
+        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal');
         $items[] = array('type' => 'html', 'className' => 'menu-item', 'html' => $lang->designedByAIUX);
 
         $items[] = array('type' => 'divider');
@@ -262,7 +262,7 @@ class header extends wg
             ),
 
             set::id('userMenu'),
-            set::trigger('hover'),
+            set::trigger('click'),
             set::placement('bottom'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::strategy('fixed'),
