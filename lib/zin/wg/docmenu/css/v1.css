@@ -11,6 +11,7 @@
 .module-menu .tree .tree-item .tree-actions {margin-left: 0;}
 .module-menu .tree .tree-item .tree-actions .icon {display: none;}
 .module-menu .tree .tree-item .tree-item-content:hover .tree-actions .icon {display: block;}
+.module-menu .tree .tree-item .tree-item-content .tree-actions .with-popover-show .icon {display: block;}
 
 .tree > .tree-item > .project-tree-title {font-size: 16px; margin-bottom: 0.5rem;}
 .tree > .tree-item > .project-tree-title .text {margin-left: 0.5rem;}
