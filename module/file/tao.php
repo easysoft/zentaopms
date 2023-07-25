@@ -29,4 +29,19 @@ class fileTao extends fileModel
 
         return $this->dao->lastInsertID();
     }
+
+    /**
+     * 转换文件大小单位。
+     * Convert file size.
+     *
+     * @param  int       $fileSize
+     * @access protected
+     * @return string
+     */
+    protected function convertFileSize(int $fileSize): string
+    {
+        if($fileSize < 1024) return $fileSize . 'B';
+        if($fileSize < 1024 * 1024) return round($fileSize / 1024, 2) . 'K';
+        if($fileSize < 1024 * 1024 * 1024) return round($fileSize / (1024 * 1024 * 1024), 2);
+    }
 }

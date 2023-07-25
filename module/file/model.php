@@ -1215,35 +1215,13 @@ class fileModel extends model
         $sessionString = session_name() . '=' . session_id();
         $uploadDate    = $this->lang->file->uploadDate . substr($file->addedDate, 0, 10);
         $fileTitle     = "<i class='icon icon-file-text'></i> &nbsp;" . $file->title;
+        $fileSize      = $this->fileTao->convertFileSize($file->size);
         if(strpos($file->title, ".{$file->extension}") === false && $file->extension != 'txt') $fileTitle .= ".{$file->extension}";
         $imageWidth = 0;
         if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false)
         {
             $imageSize  = $this->getImageSize($file);
             $imageWidth = $imageSize[0];
-        }
-
-        $fileSize = 0;
-
-        /* Show size info. */
-        if($file->size < 1024)
-        {
-            $fileSize = $file->size . 'B';
-        }
-        elseif($file->size < 1024 * 1024)
-        {
-            $file->size = round($file->size / 1024, 2);
-            $fileSize = $file->size . 'K';
-        }
-        elseif($file->size < 1024 * 1024 * 1024)
-        {
-            $file->size = round($file->size / (1024 * 1024), 2);
-            $fileSize = $file->size . 'M';
-        }
-        else
-        {
-            $file->size = round($file->size / (1024 * 1024 * 1024), 2);
-            $fileSize = $file->size . 'G';
         }
 
         $downloadLink  = helper::createLink('file', 'download', "fileID=$file->id");
@@ -1288,33 +1266,27 @@ class fileModel extends model
      */
     public function buildFileActions(string $html, string $downloadLink, int $imageWidth, bool $showEdit, bool $showDelete, object $file, object|null $object): string
     {
-        $html .= "<span class='right-icon hidden'>&nbsp; ";
+        $objectType = zget($this->config->file->objectType, $file->objectType);
+        $html      .= "<span class='right-icon hidden'>&nbsp; ";
 
         /* Determines whether the file supports preview. */
         if($file->extension == 'txt')
         {
             $extension = 'txt';
             if(($postion = strrpos($file->title, '.')) !== false) $extension = substr($file->title, $postion + 1);
-            if($extension != 'txt') $mode = 'down';
             $file->extension = $extension;
         }
 
         /* For the open source version of the file judgment. */
-        if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false)
-        {
-            $html .= html::a($downloadLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
-        }
-
-        /* For the max version of the file judgment. */
+        $canPreview = false;
+        if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false) $canPreview = true;
         if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1)
         {
             $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
-            if(stripos($officeTypes, $file->extension) !== false)
-            {
-                $html .= html::a($downloadLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
-            }
+            if(stripos($officeTypes, $file->extension) !== false) $canPreview = true;
         }
 
+        if($canPreview) $html .= html::a($downloadLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
         if(common::hasPriv('file', 'download')) $html .= html::a(helper::createLink('file', 'download', "fileID=$file->id"), "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
         if(common::hasPriv($objectType, 'edit', $object))
         {
