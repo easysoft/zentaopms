@@ -460,7 +460,8 @@ class ai extends control
         if(empty($object)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noObjectData'])));
 
         $response = $this->ai->executePrompt($prompt, $object);
-        if(empty($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
+        if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors[$response]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
+        if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
         list($objectData, $rawObject) = $object;
 

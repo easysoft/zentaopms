@@ -657,12 +657,8 @@ $lang->ai->formSchema['tree']['browse'] = new stdclass(); // TODO: This might no
 $lang->ai->formSchema['tree']['browse']->title = '模块';
 $lang->ai->formSchema['tree']['browse']->type  = 'array';
 $lang->ai->formSchema['tree']['browse']->items = new stdclass();
-$lang->ai->formSchema['tree']['browse']->items->type = 'object';
-$lang->ai->formSchema['tree']['browse']->items->properties = new stdclass();
-$lang->ai->formSchema['tree']['browse']->items->properties->{'modules[]'} = new stdclass();
-$lang->ai->formSchema['tree']['browse']->items->properties->{'modules[]'}->type = 'string';
-$lang->ai->formSchema['tree']['browse']->items->properties->{'modules[]'}->description = '模块的名称';
-$lang->ai->formSchema['tree']['browse']->items->required = array('modules[]');
+$lang->ai->formSchema['tree']['browse']->items->type = 'string';
+$lang->ai->formSchema['tree']['browse']->items->description = '模块的名称';
 
 $lang->ai->formSchema['programplan']['create'] = new stdclass();
 $lang->ai->formSchema['programplan']['create']->title = '阶段';
@@ -704,6 +700,12 @@ $lang->ai->execute->failReasons['noPrompt']     = '提词不存在';
 $lang->ai->execute->failReasons['noObjectData'] = '对象数据获取失败';
 $lang->ai->execute->failReasons['noResponse']   = '请求返回值为空';
 $lang->ai->execute->failReasons['noTargetForm'] = '目标表单地址获取失败';
+$lang->ai->execute->executeErrors = array();
+$lang->ai->execute->executeErrors[-1] = '提词不存在';
+$lang->ai->execute->executeErrors[-2] = '对象数据获取失败';
+$lang->ai->execute->executeErrors[-3] = '序列化对象数据失败';
+$lang->ai->execute->executeErrors[-4] = '表单结构获取失败';
+$lang->ai->execute->executeErrors[-5] = 'API 返回值为空或返回了错误';
 
 $lang->ai->audit = new stdclass();
 $lang->ai->audit->designPrompt = '提词设计';

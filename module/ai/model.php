@@ -19,6 +19,14 @@ class aiModel extends model
     public $modelConfig;
 
     /**
+     * Errors from last request.
+     *
+     * @var    array
+     * @access public
+     */
+    public $errors = array();
+
+    /**
      * Constructor. Get model config from system.ai settings.
      *
      * @access public
@@ -163,6 +171,29 @@ class aiModel extends model
     }
 
     /**
+     * Decode response from OpenAI API, add error to $this->errors if any.
+     *
+     * @param  string   $response  json string
+     * @access private
+     * @return mixed    false if error, json object if success
+     */
+    private function decodeResponse($response)
+    {
+        $response = json_decode($response);
+        if(json_last_error())
+        {
+            $this->errors[] = 'JSON decode error: ' . json_last_error_msg();
+            return false;
+        }
+        if(isset($response->error))
+        {
+            $this->errors[] = isset($response->error->message) ? $response->error->message : 'Unknown error';
+            return false;
+        }
+        return $response;
+    }
+
+    /**
      * Parse text responses from simple APIs. For example, completion.
      *
      * @param  string   $response  json string
@@ -171,8 +202,8 @@ class aiModel extends model
      */
     private function parseTextResponse($response)
     {
-        $response = json_decode($response);
-        if(isset($response->error)) return false;
+        $response = $this->decodeResponse($response);
+        if(empty($response)) return false;
 
         /* Extract text response choices. */
         if(isset($response->choices) && count($response->choices) > 0)
@@ -193,8 +224,8 @@ class aiModel extends model
      */
     private function parseChatResponse($response)
     {
-        $response = json_decode($response);
-        if(isset($response->error)) return false;
+        $response = $this->decodeResponse($response);
+        if(empty($response)) return false;
 
         /* Extract chat message choices. */
         if(isset($response->choices) && count($response->choices) > 0)
@@ -215,8 +246,8 @@ class aiModel extends model
      */
     private function parseFunctionCallResponse($response)
     {
-        $response = json_decode($response);
-        if(isset($response->error)) return false;
+        $response = $this->decodeResponse($response);
+        if(empty($response)) return false;
 
         /* Extract function call choices. */
         if(isset($response->choices) && count($response->choices) > 0)
@@ -827,24 +858,26 @@ class aiModel extends model
      * @param  int|object    $prompt    prompt (or id) to execute.
      * @param  int|object    $object    object (or id) to execute prompt on.
      * @access public
-     * @return string|false  returns either JSON string or false.
+     * @return string|int    returns either JSON string or negative integer on error.
      */
     public function executePrompt($prompt, $object)
     {
         if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
-        if(empty($prompt)) return false;
+        if(empty($prompt)) return -1;
 
         if(is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
-        if(empty($object)) return false;
+        if(empty($object)) return -2;
 
         list($objectData) = $object;
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
+        if(empty($dataPrompt)) return -3;
 
         $wholePrompt = $this->assemblePrompt($prompt, $dataPrompt);
         $schema      = $this->getFunctionCallSchema($prompt->targetForm);
+        if(empty($schema)) return -4;
 
         $response = $this->converseForJSON(array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
-        if(empty($response)) return false;
+        if(empty($response)) return -5;
 
         return current($response);
     }
