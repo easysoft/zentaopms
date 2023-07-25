@@ -2230,17 +2230,21 @@ class testtaskModel extends model
 
             $case = new stdclass();
             if(!empty($caseResult->id)) $case->id = $caseResult->id;
-            $case->product    = $productID;
-            if(empty($caseResult->id)) $case->title = $caseResult->title;
-            $case->pri        = 3;
-            $case->type       = 'unit';
-            $case->stage      = 'unittest';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = $now;
-            $case->version    = 1;
-            if(empty($caseResult->id)) $case->auto = 'unit';
-            $case->frame      = $frame;
+            $case->status = 'normal';
+            $case->frame  = $frame;
+
+            if(empty($caseResult->id))
+            {
+                $case->type       = 'unit';
+                $case->stage      = 'unittest';
+                $case->product    = $productID;
+                $case->title      = $caseResult->title;
+                $case->pri        = 3;
+                $case->openedBy   = $this->app->user->account;
+                $case->openedDate = $now;
+                $case->version    = 1;
+                $case->auto       = 'unit';
+            }
 
             $result = new stdclass();
             $result->case       = 0;
@@ -2298,19 +2302,22 @@ class testtaskModel extends model
             if(!isset($suites[$suiteIndex])) $suites[$suiteIndex] = $suite;
 
             $case = new stdclass();
-            if(isset($caseResult->id)) $case->id = $caseResult->id;
-            if(!isset($caseResult->id)) $case->product = $productID;
-            $case->title      = $caseResult->title;
-            $case->pri        = 3;
-            $case->type       = 'feature';
-            $case->stage      = 'feature';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = $now;
-            $case->version    = 1;
-            $case->auto       = 'func';
-            $case->frame      = $frame;
-            $case->steps      = array();
+            if(!empty($caseResult->id)) $case->id = $caseResult->id;
+            $case->title  = $caseResult->title;
+            $case->frame  = $frame;
+            $case->status = 'normal';
+            $case->steps  = array();
+            $case->auto   = 'func';
+            if(empty($caseResult->id))
+            {
+                $case->product    = $productID;
+                $case->pri        = 3;
+                $case->type       = 'feature';
+                $case->stage      = 'feature';
+                $case->openedBy   = $this->app->user->account;
+                $case->openedDate = $now;
+                $case->version    = 1;
+            }
 
             $result = new stdclass();
             $result->case       = 0;
