@@ -284,10 +284,6 @@
                           echo $roadmaps[$story->roadmap];
                       }
                   }
-                  else
-                  {
-                      echo '';
-                  }
                   ?>
                   </td>
                 </tr>
