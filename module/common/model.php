@@ -1973,7 +1973,7 @@ EOF;
     /**
      * Print pre and next link
      *
-     * @param  string $preAndNext
+     * @param  object $preAndNext
      * @param  string $linkTemplate
      * @static
      * @access public
@@ -3506,9 +3506,9 @@ EOF;
     /**
      * Replace the %s of one key of a menu by objectID or $params.
      *
-     * @param  object  $menu
-     * @param  int     $objectID
-     * @param  array   $params
+     * @param  object|string  $menu
+     * @param  int            $objectID
+     * @param  array          $params
      */
     public static function setMenuVarsEx($menu, $objectID, $params = array())
     {
