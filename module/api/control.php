@@ -1030,4 +1030,22 @@ class api extends control
         }
 
     }
+
+    /**
+     * Get api list.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return void
+     */
+    public function ajaxGetList(int $objectID, string $objectType)
+    {
+        helper::setcookie('objectType', $objectType);
+        helper::setcookie('objectID', $objectID);
+
+        $this->objectType = $objectType;
+        $this->objectID   = $objectID;
+        $this->locate(inlink('index'));
+    }
 }
