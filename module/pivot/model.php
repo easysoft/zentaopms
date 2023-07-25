@@ -2162,8 +2162,7 @@ class pivotModel extends model
      */
     public function buildPivotTable($data, $configs, $fields = array(), $sql = '')
     {
-        $clientLang  = $this->app->getClientLang();
-        $width       = 128;
+        $width = 128;
 
         /* Init table. */
         $table  = "<table class='reportData table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";

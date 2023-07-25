@@ -40,6 +40,14 @@
     <div>
       <?php echo html::a('#', "{$lang->pivot->showOrigin}", '', "id='origin-query' class='query-after query-color btn-query-origin' title='{$lang->pivot->showOrigin}'");?>
       <?php echo html::a('#', "{$lang->pivot->showPivot}",  '', "id='pivot-query'  class='query-after query-color btn-query hidden' title='{$lang->pivot->showPivot}'");?>
+
+      <?php
+        $clickable = $this->pivot->isClickable($pivot, 'design');
+        $params    = helper::safe64Encode("dimensionID=$pivot->dimension&groupID=$pivot->group&pivotID=$pivot->id");
+        if(common::hasPriv('pivot', 'design') and $clickable) echo html::a($this->createLink('pivot', 'design', "id=$pivot->id&from=preview&param=$params"), "<i class='icon icon-design'></i> {$lang->pivot->designAB}", '', "class='query-view' title='{$lang->pivot->designAB}'");
+        if(common::hasPriv('pivot', 'edit') and $clickable) echo html::a($this->createLink('pivot', 'edit', "id=$pivot->id&from=preview&params=$params", '', true), "<i class='icon icon-edit'></i> {$lang->edit}", '', "class='iframe' title='{$lang->edit}' data-width='600'");
+        if(common::hasPriv('pivot', 'delete') and $clickable) echo html::a($this->createLink('pivot', 'delete', "id=$pivot->id&confirm=no&from=preview"), "<i class='icon icon-trash'></i> {$lang->delete}", 'hiddenwin', "title='{$lang->delete}'");
+      ?>
     </div>
   </div>
   <div class='panel-body' style='padding:0px;'>

@@ -315,3 +315,9 @@ function isQueryFilter(filters)
 {
     return filters.length > 0 && filters[0].from == 'query';
 }
+
+function locate(module, method, params)
+{
+    var link = createLink(module, method, params);
+    window.location.href = link;
+}

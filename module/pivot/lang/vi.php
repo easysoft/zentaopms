@@ -10,6 +10,7 @@ $lang->pivot->design       = 'Design pivot';
 $lang->pivot->export       = 'Export pivot';
 $lang->pivot->query        = 'Query';
 $lang->pivot->browseAction = 'Design in Pivot Table';
+$lang->pivot->designAB     = 'Design';
 
 $lang->pivot->id          = 'ID';
 $lang->pivot->name        = 'Name';
