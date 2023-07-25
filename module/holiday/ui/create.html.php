@@ -10,15 +10,15 @@ declare(strict_types=1);
  */
 namespace zin;
 
+modalHeader(set::title($lang->holiday->create));
+
 formPanel
 (
-    set::title($lang->holiday->create),
     set::formClass('border-0'),
     formRow
     (
         formGroup
         (
-            set::width('1'),
             set::label($lang->holiday->type),
             radioList
             (
@@ -65,7 +65,6 @@ formPanel
     (
         formGroup
         (
-            set::width('1'),
             set::label($lang->holiday->desc),
             editor
             (
