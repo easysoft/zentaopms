@@ -2964,6 +2964,7 @@ class docModel extends model
             $item->name       = $module->name;
             $item->objectType = $module->type;
             $item->type       = 'module';
+            $item->libID      = $rootID;
             $item->active     = $module->id == $moduleID ? 1 : 0;
             $item->order      = $module->order;
             $item->children   = $this->getModuleTree($rootID, $moduleID, $type, $module->id, $modules);
