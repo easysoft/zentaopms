@@ -31,6 +31,10 @@ class formBase extends wg
         'ajax?:array'                          // Ajax 表单选项
     );
 
+    protected static array $defineBlocks = array(
+        'actions'        => array('toolbar')
+    );
+
     protected function created()
     {
         if($this->prop('actions') !== null) return;
@@ -41,6 +45,8 @@ class formBase extends wg
 
     protected function buildActions(): wg|null
     {
+        if($this->hasBlock('actions')) return $this->block('actions');
+
         $actions = $this->prop('actions');
         if(empty($actions)) return null;
 
