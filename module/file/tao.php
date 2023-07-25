@@ -42,6 +42,6 @@ class fileTao extends fileModel
     {
         if($fileSize < 1024) return $fileSize . 'B';
         if($fileSize < 1024 * 1024) return round($fileSize / 1024, 2) . 'K';
-        if($fileSize < 1024 * 1024 * 1024) return round($fileSize / (1024 * 1024 * 1024), 2);
+        if($fileSize < 1024 * 1024 * 1024) return (string)round($fileSize / (1024 * 1024 * 1024), 2);
     }
 }
