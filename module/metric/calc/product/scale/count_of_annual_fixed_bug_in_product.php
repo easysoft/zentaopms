@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度修复Bug数。
- * Count of annual restored bug in product.
+ * count of annual fixed bug in product.
  *
  * 范围：product
  * 对象：Bug
@@ -21,7 +21,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_annual_restored_bug_in_product extends baseCalc
+class count_of_annual_fixed_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 

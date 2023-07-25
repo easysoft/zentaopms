@@ -11,7 +11,7 @@ $calc   = $metric->calcMetric(__FILE__);
 
 /**
 
-title=count_of_annual_restored_story_in_product
+title=count_of_annual_fixed_bug
 timeout=0
 cid=1
 

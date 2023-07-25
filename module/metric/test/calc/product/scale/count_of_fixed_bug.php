@@ -11,7 +11,7 @@ $calc   = $metric->calcMetric(__FILE__);
 
 /**
 
-title=count_of_restored_bug_in_product
+title=count_of_fixed_bug
 cid=1
 pid=1
 

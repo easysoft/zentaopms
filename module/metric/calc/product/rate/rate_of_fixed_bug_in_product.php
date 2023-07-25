@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的Bug修复率。
- * rate_of_restored_bug_in_product.
+ * rate of fixed bug in product.
  *
  * 范围：product
  * 对象：Bug
@@ -19,7 +19,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class rate_of_restored_bug_in_product extends baseCalc
+class rate_of_fixed_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 

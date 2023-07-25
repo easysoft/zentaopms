@@ -11,7 +11,7 @@ $calc   = $metric->calcMetric(__FILE__);
 
 /**
 
-title=rate_of_restored_bug_in_product
+title=rate_of_fixed_bug
 timeout=0
 cid=1
 
