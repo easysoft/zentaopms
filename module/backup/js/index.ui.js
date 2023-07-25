@@ -29,3 +29,11 @@ window.backup = function(e)
         });
     }, 1000);
 }
+
+window.getCellSpan = function(cell)
+{
+    if((cell.col.name == 'time' || cell.col.name == 'actions') && cell.row.data.rowspan)
+    {
+        return {rowSpan: cell.row.data.rowspan};
+    }
+}

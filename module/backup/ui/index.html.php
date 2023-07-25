@@ -19,11 +19,7 @@ featureBar
     li
     (
         set::class('nav-item'),
-        a
-        (
-            set('data-app', $app->tab),
-            $lang->backup->history
-        )
+        a(set('data-app', $app->tab), $lang->backup->history)
     ),
     set::current('all')
 );
@@ -40,7 +36,7 @@ if(common::hasPriv('backup', 'setting') and common::hasPriv('backup', 'backup'))
             ([
                 'text'        => $lang->backup->setting,
                 'icon'        => 'cog',
-                'class'       => 'btn primary',
+                'class'       => 'btn primary settings',
                 'url'         => $settingLink,
                 'data-toggle' => 'modal',
                 'data-size' => 'sm'
@@ -60,35 +56,50 @@ if(common::hasPriv('backup', 'setting') and common::hasPriv('backup', 'backup'))
 $cols = $this->loadModel('datatable')->getSetting('backup');
 $data = initTableData($backups, $cols, $this->backup);
 
+$rows = array();
 foreach($data as $key => $row)
 {
-    $data[$key]->time     = date(DT_DATETIME1, filemtime(array_keys($row->files)[0]));
-    $data[$key]->file     = dirname(array_keys($row->files)[0]) . DS . '{' . implode(',', array_map('basename', array_keys($row->files))) . '}';
-    $data[$key]->count    = count($row->files);
-    $data[$key]->allCount = array_sum(array_column($row->files, 'allCount'));
-    $data[$key]->size     = helper::formatKB(array_sum(array_column($row->files, 'size')));
-
-    $isOk = $data[$key]->isOK = true;
-    $data[$key]->isPHP = false;
-    foreach($row->files as $name => $file)
+    $isOK  = true;
+    $isPHP = false;
+    foreach($row->files as $file => $attr)
     {
-        if(str_ends_with($name, '.php')) $data[$key]->isPHP  = true;
-        if($file['allCount'] != $file['count'])
-        {
-            $isOk = $data[$key]->isOK = false;
-            break;
-        }
+        if(str_ends_with($file, '.php'))    $isPHP = true;
+        if($attr['allCount'] != $attr['count']) $isOk  = false;
     }
-    $data[$key]->status = $isOk ? $lang->backup->statusList['success'] : $lang->backup->statusList['fail'];
-    if(!$data[$key]->isPHP) $data[$key]->actions[0]['disabled'] = true;
-    if(!$data[$key]->isOK)  $data[$key]->actions[1]['disabled'] = true;
+
+    $first = true;
+    foreach($row->files as $file => $attr)
+    {
+        $fileName = basename($file);
+        $backup   = new stdclass();
+        $backup->file     = $file;
+        $backup->allCount = $attr['allCount'];
+        $backup->count    = $attr['count'];
+        $backup->size     = helper::formatKB($attr['size']);
+        $backup->status   = $attr['allCount'] == $attr['count'] ? $lang->backup->statusList['success'] : $lang->backup->statusList['fail'];
+        $backup->name     = substr($fileName, 0, strpos($fileName, '.'));
+
+        if($first)
+        {
+            $backup->time    = date(DT_DATETIME1, filemtime($file));
+            $backup->rowspan = count($row->files);
+            $backup->actions = $row->actions;
+            if(!$isPHP) $backup->actions[0]['disabled'] = true;
+            if(!$isOK)  $backup->actions[1]['disabled'] = true;
+        }
+
+        $rows[] = $backup;
+        $first  = false;
+    }
 }
 
 dtable
 (
     set::customCols(false),
     set::cols($cols),
-    set::data($data),
+    set::data($rows),
+    set::plugins(array('cellspan')),
+    set::getCellSpan(jsRaw('window.getCellSpan')),
 );
 
 modalTrigger

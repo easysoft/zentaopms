@@ -11,6 +11,8 @@
  */
 class backup extends control
 {
+    protected $backupPath;
+
     /**
      * __construct
      *
