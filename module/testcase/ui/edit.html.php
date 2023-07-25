@@ -123,6 +123,7 @@ detailBody
         section
         (
             set::title($lang->testcase->steps),
+            stepsEditor(set::data($case->steps))
         ),
         section
         (

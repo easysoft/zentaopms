@@ -60,26 +60,45 @@ class testcaseModel extends model
 
         $this->loadModel('score')->create('testcase', 'create', $caseID);
 
-        $parentStepID = 0;
-        foreach($case->steps as $stepID => $stepDesc)
+        $stepTypes    = $this->post->stepType;
+        $preGrade     = 0;
+        $parentStepID = $grandPaStepID = 0;
+        foreach($case->steps as $stepKey => $stepDesc)
         {
             if(empty($stepDesc)) continue;
 
-            $stepType      = $this->post->stepType;
-            $step          = new stdClass();
-            $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
-            $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
+            $stepType = $stepTypes[$stepKey];
+            $grade    = substr_count($stepKey, '.');
+
+            if($grade == 0)
+            {
+                $parentStepID = $grandPaStepID = 0;
+            }
+            elseif($preGrade > $grade)
+            {
+                $parentStepID  = $grandPaStepID;
+                $grandPaStepID = 0;
+            }
+
+            $step = new stdClass();
+            $step->type    = $stepType;
+            $step->parent  = $parentStepID;
             $step->case    = $caseID;
             $step->version = 1;
             $step->desc    = rtrim(htmlSpecialString($stepDesc));
-            $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($case->expects[$stepID]));
+            $step->expect  = $stepType == 'item' ? '' : rtrim(htmlSpecialString(zget($case->expects, $stepKey, '')));
 
             $this->dao->insert(TABLE_CASESTEP)->data($step)
                 ->autoCheck()
                 ->exec();
 
-            if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
-            if($step->type == 'step')  $parentStepID = 0;
+            if($step->type == 'item')
+            {
+                $grandPaStepID = $parentStepID;
+                $parentStepID  = $this->dao->lastInsertID();
+            }
+
+            $preGrade = $grade;
         }
         if(dao::isError()) return false;
 
@@ -450,11 +469,59 @@ class testcaseModel extends model
         $case->files = $this->loadModel('file')->getByObject('testcase', $caseID);
         $case->currentVersion = $version ? $version : $case->version;
 
-        $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
-        foreach($case->steps as $key => $step)
+        $case->steps   = array();
+        $case->expects = array();
+        $steps         = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
+        $preGrade      = 1;
+        $parentSteps   = array();
+        $key           = array(0, 0, 0);
+        foreach($steps as $step)
         {
-            $step->desc   = html_entity_decode($step->desc);
-            $step->expect = html_entity_decode($step->expect);
+            $parentSteps[$step->id] = $step->parent;
+            $grade = 1;
+            if(isset($parentSteps[$step->parent]))
+            {
+                $grade = isset($parentSteps[$parentSteps[$step->parent]]) ? 3 : 2;
+            }
+
+            if($grade > $preGrade)
+            {
+                $key[$grade - 1] = 1;
+            }
+            else
+            {
+                if($grade < $preGrade)
+                {
+                    if($grade < 2) $key[1] = 0;
+                    if($grade < 3) $key[2] = 0;
+                }
+                $key[$grade - 1] ++;
+            }
+            $name = implode('.', $key);
+            $name = str_replace('.0', '', $name);
+
+            $data = new stdclass();
+            $data->name   = str_replace('.0', '', $name);
+            $data->step   = $step->desc;
+            $data->desc   = $step->desc;
+            $data->expect = $step->expect;
+            $data->type   = $step->type;
+
+            $case->steps[] = $data;
+
+            $preGrade = $grade;
+        }
+
+        if(empty($steps))
+        {
+            $data = new stdclass();
+            $data->name   = '1';
+            $data->step   = '';
+            $data->desc   = '';
+            $data->expect = '';
+            $data->type   = 'step';
+
+            $case->steps[] = $data;
         }
 
         return $case;
@@ -851,20 +918,45 @@ class testcaseModel extends model
                 {
                     $data = fixer::input('post')->get();
 
-                    foreach($data->steps as $stepID => $stepDesc)
+                    $preGrade     = 0;
+                    $parentStepID = $grandPaStepID = 0;
+                    foreach($data->steps as $stepKey => $stepDesc)
                     {
                         if(empty($stepDesc)) continue;
-                        $stepType = $this->post->stepType;
-                        $step = new stdclass();
-                        $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
-                        $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
+                        if(empty($stepDesc)) continue;
+
+                        $stepType = $data->stepType[$stepKey];
+                        $grade    = substr_count($stepKey, '.');
+
+                        if($grade == 0)
+                        {
+                            $parentStepID = $grandPaStepID = 0;
+                        }
+                        elseif($preGrade > $grade)
+                        {
+                            $parentStepID  = $grandPaStepID;
+                            $grandPaStepID = 0;
+                        }
+
+                        $step = new stdClass();
+                        $step->type    = $stepType;
+                        $step->parent  = $parentStepID;
                         $step->case    = $caseID;
                         $step->version = $version;
                         $step->desc    = rtrim(htmlSpecialString($stepDesc));
-                        $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
-                        $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                        if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                        if($step->type == 'step')  $parentStepID = 0;
+                        $step->expect  = $stepType == 'item' ? '' : rtrim(htmlSpecialString(zget($data->expects, $stepKey, '')));
+
+                        $this->dao->insert(TABLE_CASESTEP)->data($step)
+                            ->autoCheck()
+                            ->exec();
+
+                        if($step->type == 'item')
+                        {
+                            $grandPaStepID = $parentStepID;
+                            $parentStepID  = $this->dao->lastInsertID();
+                        }
+
+                        $preGrade = $grade;
                     }
                 }
                 else
@@ -2541,7 +2633,7 @@ class testcaseModel extends model
                 {
                     $desc     = trim($desc);
                     $stepType = isset($data->stepType[$key]) ? $data->stepType[$key] : 'step';
-                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $stepType, 'expect' => trim($data->expects[$key]));
+                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $stepType, 'expect' => trim(zget($data->expects, $key, '')));
                 }
 
                 /* If step count changed, case changed. */
