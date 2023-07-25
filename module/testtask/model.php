@@ -1490,8 +1490,8 @@ class testtaskModel extends model
         foreach($results as $resultID => $result)
         {
             $result->stepResults = unserialize($result->stepResults);
-            $result->build       = $result->run && isset($runs[$result->run]) ? $runs[$result->run]->build : 0;
-            $result->task        = $result->run && isset($runs[$result->run]) ? $runs[$result->run]->task : 0;
+            $result->build       = $result->run && !empty($runs[$result->run]->build) ? $runs[$result->run]->build : 0;
+            $result->task        = $result->run && !empty($runs[$result->run]->task) ? $runs[$result->run]->task : 0;
             $result->nodeName    = $result->node ? zget($nodes, $result->node, '') : '';
 
             if(!empty($result->ZTFResult))
