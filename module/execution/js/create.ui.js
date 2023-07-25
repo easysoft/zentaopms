@@ -64,7 +64,7 @@ $(function()
  */
 function refreshPage()
 {
-    const projectID = $('#project').val();
+    const projectID = $('#project').zui('picker').$.value;
     loadPage($.createLink('execution', 'create', 'projectID=' + projectID));
 }
 
