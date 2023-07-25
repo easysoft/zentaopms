@@ -89,7 +89,7 @@
 
             const promptId = publishButton.dataset.promptid;
             const aTag = document.createElement('a');
-            aTag.href = createLink('ai', 'promptPublish', 'promptId=' + promptId + '&$backToTestingLocation=true');
+            aTag.href = createLink('ai', 'promptPublish', 'promptId=' + promptId + '&backToTestingLocation=true');
             aTag.style.display = 'none';
             document.body.appendChild(aTag);
             aTag.click();
