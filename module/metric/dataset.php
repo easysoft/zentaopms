@@ -317,4 +317,23 @@ class dataset
             ->andWhere('t3.deleted')->eq(0)
             ->query();
     }
+
+    /**
+     * 获取产品线数据。
+     * Get product lines.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getLines($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_MODULE)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('line')
+            ->andWhere('t2.type')->eq('program')
+            ->query();
+    }
 }
