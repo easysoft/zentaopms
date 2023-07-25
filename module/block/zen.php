@@ -1589,18 +1589,17 @@ class blockZen extends block
     protected function printShortProductOverview(): void
     {
         $this->loadModel('metric');
-        //$productCount   = $this->metric->getResultByCode('count_of_line');
-        $productCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('shadow')->eq('0')->fetch('count');
-        $releaseCount = $this->metric->getResultByCode('count_of_annual_created_release');
-        $releaseCount = json_decode(json_encode($releaseCount), true);
-        if(!empty($releaseCount)) $releaseCount = array_column($releaseCount, null, 'year');
-        $releaseCount = zget($releaseCount, date('Y'), array());
+        $productCount = $this->metric->getResultByCode('count_of_product');
+        if(!empty($productCount)) $productCount = reset($productCount);
+
+        $releaseCount = $this->metric->getResultByCode('count_of_annual_created_release', array('year' => date('Y')));
+        if(!empty($releaseCount)) $releaseCount = reset($releaseCount);
 
         $milestoneCount = $this->metric->getResultByCode('count_of_marker_release');
         if(!empty($milestoneCount)) $milestoneCount = reset($milestoneCount);
 
         $data = new stdclass();
-        $data->productCount   = $productCount;
+        $data->productCount   = zget($productCount, 'value', 0);
         $data->releaseCount   = zget($releaseCount, 'value', 0);
         $data->milestoneCount = zget($milestoneCount, 'value', 0);
 
