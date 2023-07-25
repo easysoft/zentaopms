@@ -514,6 +514,9 @@ class product extends control
         /* Check and get product ID. */
         $productID = $this->product->saveState($productID, $this->products);
 
+        /* Set productID to menu. */
+        $this->product->setMenu($productID);
+
         /* Get product. */
         $product   = $this->product->getStatByID($productID);
         if(!$product) return print(js::locate('product', 'all'));
