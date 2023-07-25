@@ -13,19 +13,19 @@ namespace zin;
 
 $spanWidth             = (strlen((string)($maxStoryEstimate)) * 0.425 + 0.125) . 'rem';
 $doneStoryEstimateRows = array();
-foreach($doneStoryEstimate as $projectID => $storyEstimate)
+foreach($doneStoryEstimate as $productID => $storyEstimate)
 {
     $doneStoryEstimateRows[] = cell
     (
         setClass('flex py-1.5 pr-4 text-sm'),
         cell
         (
-            setClass('overflow-hidden whitespace-nowrap mr-1 text-right'),
+            setClass('ellipsis overflow-hidden whitespace-nowrap mr-1 text-right'),
             set::width('50%'),
             span
             (
-                set::title(zget($projectPairs, $projectID)),
-                zget($projectPairs, $projectID),
+                set::title(zget($products, $productID)),
+                zget($products, $productID),
             ),
         ),
         cell
@@ -34,10 +34,10 @@ foreach($doneStoryEstimate as $projectID => $storyEstimate)
             setClass('flex items-center'),
             div
             (
-                width("calc(calc(100% - {$spanWidth}) * " . ($storyEstimate / $maxStoryEstimate) . ')'),
-                setClass('progress-bar'),
-                set::style(array('height' => '0.75rem')),
+                width("calc(calc(100% - {$spanWidth}) * " . ($maxStoryEstimate ? $storyEstimate / $maxStoryEstimate : 0) . ')'),
+                setClass('progress progress-bar h-2'),
                 set('role', 'progressbar'),
+                setStyle(array('background' => 'var(--color-primary-300)')),
             ),
             span
             (
@@ -50,18 +50,18 @@ foreach($doneStoryEstimate as $projectID => $storyEstimate)
 
 $spanWidth          = (strlen((string)($maxStoryCount)) * 0.425 + 0.125) . 'rem';
 $doneStoryCountRows = array();
-foreach($doneStoryCount as $projectID => $storyCount)
+foreach($doneStoryCount as $productID => $storyCount)
 {
     $doneStoryCountRows[] = cell
     (
         setClass('flex py-1.5 pr-4 text-sm'),
         cell
         (
-            setClass('overflow-hidden whitespace-nowrap mr-1 text-right'),
+            setClass('ellipsis overflow-hidden whitespace-nowrap mr-1 text-right'),
             set::width('50%'),
             span
             (
-                zget($projectPairs, $projectID),
+                zget($products, $productID),
             ),
         ),
         cell
@@ -70,10 +70,10 @@ foreach($doneStoryCount as $projectID => $storyCount)
             setClass('flex items-center'),
             div
             (
-                width("calc(calc(100% - {$spanWidth}) * " . ($storyCount / $maxStoryCount) . ')'),
-                setClass('progress-bar'),
-                set::style(array('height' => '0.75rem')),
+                width("calc(calc(100% - {$spanWidth}) * " . ($maxStoryCount ? $storyCount / $maxStoryCount : 0) . ')'),
+                setClass('progress progress-bar h-2'),
                 set('role', 'progressbar'),
+                setStyle(array('background' => 'var(--color-primary-300)'))
             ),
             span
             (
@@ -86,18 +86,18 @@ foreach($doneStoryCount as $projectID => $storyCount)
 
 $spanWidth            = (strlen((string)($maxBugCount)) * 0.425 + 0.125) . 'rem';
 $resolvedBugCountRows = array();
-foreach($resolvedBugCount as $projectID => $bugCount)
+foreach($resolvedBugCount as $productID => $bugCount)
 {
     $resolvedBugCountRows[] = cell
     (
         setClass('flex py-1.5 pr-4 text-sm'),
         cell
         (
-            setClass('overflow-hidden whitespace-nowrap mr-1 text-right'),
+            setClass('ellipsis overflow-hidden whitespace-nowrap mr-1 text-right'),
             set::width('50%'),
             span
             (
-                zget($projectPairs, $projectID),
+                zget($products, $productID),
             ),
         ),
         cell
@@ -106,10 +106,10 @@ foreach($resolvedBugCount as $projectID => $bugCount)
             setClass('flex items-center'),
             div
             (
-                width("calc(calc(100% - {$spanWidth}) * " . ($bugCount / $maxBugCount) . ')'),
-                setClass('progress-bar'),
-                set::style(array('height' => '0.75rem')),
+                width("calc(calc(100% - {$spanWidth}) * " . ($maxBugCount ? $bugCount / $maxBugCount : 0) . ')'),
+                setClass('progress progress-bar h-2'),
                 set('role', 'progressbar'),
+                setStyle(array('background' => 'var(--color-primary-300)'))
             ),
             span
             (
@@ -130,7 +130,7 @@ panel
         setClass('flex h-full w-full' . ($longBlock ? ' flex-nowrap' : ' flex-wrap')),
         cell
         (
-            setClass('flex flex-wrap px-4 ' . ($longBlock ? 'py-2' : 'py-1 w-full mb-2')),
+            setClass('flex flex-wrap overflow-hidden px-4 ' . ($longBlock ? 'py-2' : 'py-1 w-full mb-2')),
             set::width($longBlock ? '1/3' : '100%'),
             cell
             (
@@ -149,7 +149,7 @@ panel
         ),
         cell
         (
-            setClass('flex flex-wrap px-4 ' . ($longBlock ? 'py-2' : 'py-3 w-full my-2')),
+            setClass('flex flex-wrap overflow-hidden px-4 ' . ($longBlock ? 'py-2' : 'py-3 w-full my-2')),
             !$longBlock ? set::style(array('background-color' => 'var(--color-slate-100)')) : '',
             set::width($longBlock ? '1/3' : '100%'),
             cell
@@ -169,7 +169,7 @@ panel
         ),
         cell
         (
-            setClass('flex flex-wrap px-4 ' . ($longBlock ? 'py-2' : 'w-full my-2')),
+            setClass('flex flex-wrap overflow-hidden px-4 ' . ($longBlock ? 'py-2' : 'w-full my-2')),
             set::width($longBlock ? '1/3' : '100%'),
             cell
             (

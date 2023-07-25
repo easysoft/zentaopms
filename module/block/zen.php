@@ -2316,22 +2316,35 @@ class blockZen extends block
      */
     protected function printAnnualWorkloadBlock()
     {
+        $products      = $this->loadModel('product')->getPairs();
+        $productIdList = array_keys($products);
+
+        $finishEstimateGroup = $this->loadModel('metric')->getResultByCode('scale_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
+        $finishEstimateGroup = json_decode(json_encode($finishEstimateGroup), true);
+        if(!empty($finishEstimateGroup)) $finishEstimateGroup = array_column($finishEstimateGroup, null, 'product');
+
+        $doneStoryGroup = $this->metric->getResultByCode('count_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
+        $doneStoryGroup = json_decode(json_encode($doneStoryGroup), true);
+        if(!empty($doneStoryGroup)) $doneStoryGroup = array_column($doneStoryGroup, null, 'product');
+
+        $resolvedBugGroup = $this->metric->getResultByCode('count_of_annual_restored_bug_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
+        $resolvedBugGroup = json_decode(json_encode($resolvedBugGroup), true);
+        if(!empty($resolvedBugGroup)) $resolvedBugGroup = array_column($resolvedBugGroup, null, 'product');
+
         $doneStoryEstimate = array();
         $doneStoryCount    = array();
         $resolvedBugCount  = array();
-
-        $projectPairs = $this->loadModel('project')->getPairs();
-        foreach($projectPairs as $projectID => $projectName)
+        foreach($products as $productID => $productName)
         {
-            $doneStoryEstimate[$projectID] = rand(0, 1000);
-            $doneStoryCount[$projectID]    = rand(0, 500);
-            $resolvedBugCount[$projectID]  = rand(0, 500);
+            $doneStoryEstimate[$productID] = isset($finishEstimateGroup[$productID]['value']) ? $finishEstimateGroup[$productID]['value'] : 0;
+            $doneStoryCount[$productID]    = isset($doneStoryGroup[$productID]['value'])      ? $doneStoryGroup[$productID]['value']      : 0;
+            $resolvedBugCount[$productID]  = isset($resolvedBugGroup[$productID]['value'])    ? $resolvedBugGroup[$productID]['value']    : 0;
         }
         arsort($doneStoryEstimate);
         arsort($doneStoryCount);
         arsort($resolvedBugCount);
 
-        $this->view->projectPairs      = $projectPairs;
+        $this->view->products          = $products;
         $this->view->doneStoryEstimate = $doneStoryEstimate;
         $this->view->doneStoryCount    = $doneStoryCount;
         $this->view->resolvedBugCount  = $resolvedBugCount;
