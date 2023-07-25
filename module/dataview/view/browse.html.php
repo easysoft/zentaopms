@@ -12,8 +12,16 @@
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php js::set('table',      $selectedTable);?>
+<?php js::set('type',       $type);?>
 <?php js::set('dataview',   $dataview);?>
 <?php js::set('warningDesign', $lang->dataview->error->warningDesign);?>
+
+<?php js::set('pageID', 1);?>
+<?php js::set('recPerPage', 25);?>
+<?php js::set('recTotal', $dataCount);?>
+<?php js::set('recTotalTip', $lang->dataview->recTotalTip);?>
+<?php js::set('recPerPageTip', $lang->dataview->recPerPageTip);?>
+
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'><?php // common::printAdminSubMenu('dev');?></div>
   <div class="btn-toolbar pull-right">
@@ -83,23 +91,24 @@
           <div class='tab-content '>
             <div class='tab-pane active' id='data'>
               <?php if(!empty($fields)):?>
-              <table class="table table-bordered" style="min-width: <?php echo count($fields)*100;?>px">
-                <thead>
-                  <tr>
-                    <?php foreach($fields as $key => $field):?>
-                    <?php
-                    $fieldName = isset($dataview->fieldSettings->$key->name) ? $dataview->fieldSettings->$key->name : $key;
-                    if(!empty($dataview->langs))
-                    {
-                        $langs = json_decode($dataview->langs, true);
-                        if(!empty($langs)) $fieldName = $langs[$key][$clientLang] ? $langs[$key][$clientLang] : $fieldName;
-                    }
-                    ?>
-                    <th><?php echo $fieldName;?></th>
-                    <?php endforeach;?>
-                  </tr>
-                </thead>
-                <tbody>
+              <div id='datas'>
+                <table class="table table-bordered" style="min-width: <?php echo count($fields)*100;?>px">
+                  <thead>
+                    <tr>
+                      <?php foreach($fields as $key => $field):?>
+                      <?php
+                      $fieldName = isset($dataview->fieldSettings->$key->name) ? $dataview->fieldSettings->$key->name : $key;
+                      if(!empty($dataview->langs))
+                      {
+                          $langs = json_decode($dataview->langs, true);
+                          if(!empty($langs)) $fieldName = $langs[$key][$clientLang] ? $langs[$key][$clientLang] : $fieldName;
+                      }
+                      ?>
+                      <th><?php echo $fieldName;?></th>
+                      <?php endforeach;?>
+                    </tr>
+                  </thead>
+                  <tbody>
                     <?php foreach($data as $value):?>
                     <?php echo '<tr>';?>
                       <?php foreach($fields as $key => $field):?>
@@ -107,8 +116,50 @@
                       <?php endforeach;?>
                     <?php echo '</tr>';?>
                     <?php endforeach;?>
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class='table-footer'>
+                <ul class="pager">
+                  <li><div class="pager-label recTotal"></div></li>
+                  <li>
+                    <div class="btn-group pager-size-menu dropup">
+                      <button type="button" class="btn dropdown-toggle recPerPage" data-toggle="dropdown" style="border-radius: 4px;"></button>
+                      <ul class="dropdown-menu">
+                        <li><a href="javascript:;" data-size="5">5</a></li>
+                        <li><a href="javascript:;" data-size="10">10</a></li>
+                        <li><a href="javascript:;" data-size="15">15</a></li>
+                        <li><a href="javascript:;" data-size="20">20</a></li>
+                        <li><a href="javascript:;" data-size="25">25</a></li>
+                        <li><a href="javascript:;" data-size="30">30</a></li>
+                        <li><a href="javascript:;" data-size="35">35</a></li>
+                        <li><a href="javascript:;" data-size="40">40</a></li>
+                        <li><a href="javascript:;" data-size="45">45</a></li>
+                        <li><a href="javascript:;" data-size="50">50</a></li>
+                        <li><a href="javascript:;" data-size="100">100</a></li>
+                        <li><a href="javascript:;" data-size="200">200</a></li>
+                        <li><a href="javascript:;" data-size="500">500</a></li>
+                        <li><a href="javascript:;" data-size="1000">1000</a></li>
+                        <li><a href="javascript:;" data-size="2000">2000</a></li>
+                      </ul>
+                    </div>
+                  </li>
+                  <li class='pager-item-left first-page'>
+                    <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-first-page'></i></a>
+                  </li>
+                  <li class='pager-item-left left-page'>
+                    <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-angle-left'></i></a>
+                  </li>
+                  <li><div class='pager-label page-number'></div></li>
+                  <li class='pager-item-right right-page'>
+                    <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-angle-right'></i></a>
+                  </li>
+                  <li class='pager-item-right last-page'>
+                    <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-last-page'></i></a>
+                  </li>
+                </ul>
+              </div>
               <?php endif;?>
             </div>
             <div class='tab-pane' id='schema'>
