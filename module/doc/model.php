@@ -2402,7 +2402,7 @@ class docModel extends model
      * @access public
      * @return string
      */
-    public function getDropMeunLink($type, $objectID)
+    public function getDropMenuLink($type, $objectID)
     {
         if(!in_array($type, array('product', 'project'))) return '';
 
@@ -2823,7 +2823,7 @@ class docModel extends model
             else
             {
                 $objectDropdown['text'] = $objectTitle;
-                $objectDropdown['link'] = $this->getDropMeunLink($type, $appendObject);
+                $objectDropdown['link'] = $this->getDropMenuLink($type, $appendObject);
             }
         }
         else
