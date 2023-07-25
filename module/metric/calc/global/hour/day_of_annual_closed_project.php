@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度已关闭项目投入总人天。
- * hour_of_annual_closed_project.
+ * day of annual closed project.
  *
  * 范围：global
  * 对象：project
@@ -23,7 +23,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class hour_of_annual_closed_project extends baseCalc
+class day_of_annual_closed_project extends baseCalc
 {
     public $dataset = null;
 
