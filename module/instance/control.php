@@ -78,12 +78,9 @@ class instance extends control
         $dbList          = new stdclass;
         $currentResource = new stdclass;
         $customItems     = array();
-        if($tab == 'advance')
-        {
-            $dbList          = $this->cne->appDBList($instance);
-            $currentResource = $this->cne->getAppConfig($instance);
-            $customItems     = $this->cne->getCustomItems($instance);
-        }
+        $dbList          = $this->cne->appDBList($instance);
+        $currentResource = $this->cne->getAppConfig($instance);
+        $customItems     = $this->cne->getCustomItems($instance);
 
         $this->view->title           = $instance->appName;
         $this->view->instance        = $instance;
@@ -225,26 +222,42 @@ class instance extends control
      * @access public
      * @return void
      */
-    public function editName($id)
+    public function setting($id)
     {
-        $instance = $this->instance->getByID($id);
-
+        $currentResource = new stdclass;
+        $instance        = $this->instance->getByID($id);
+        $currentResource = $this->cne->getAppConfig($instance);
         if(!empty($_POST))
         {
             $newInstance = fixer::input('post')->trim('name')->get();
-            $this->instance->updateByID($id, $newInstance);
-            if(dao::isError())
+            $memoryKb    = $newInstance->memory_kb;
+            unset($newInstance->memory_kb);
+
+            if(intval($currentResource->max->memory / 1024) != $memoryKb)
             {
-                $this->action->create('instance', $instance->id, 'editname', '', json_encode(array('result' => array('result' => 'fail'), 'data' => array('oldName' => $instance->name, 'newName' => $newInstance->name))));
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                /* Check free memory size is enough or not. */
+                $clusterResource = $this->cne->cneMetrics();
+                $freeMemory      = intval($clusterResource->metrics->memory->allocatable * 0.9); // Remain 10% memory for system.
+                if($memoryKb * 1024 > $freeMemory) $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->notEnoughResource));
+    
+                /* Request CNE to adjust memory size. */
+                if(!$this->instance->updateMemorySize($instance, $memoryKb * 1024))
+                {
+                    $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
             }
 
-            $this->action->create('instance', $instance->id, 'editname', '', json_encode(array('result' => array('result' => 'success'), 'data' => array('oldName' => $instance->name, 'newName' => $newInstance->name))));
-            return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+            $this->instance->updateByID($id, $newInstance);
+            if(dao::isError())  return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($newInstance->name != $instance->name)
+            {
+                $this->action->create('instance', $instance->id, 'editname', '', json_encode(array('result' => array('result' => 'success'), 'data' => array('oldName' => $instance->name, 'newName' => $newInstance->name))));
+            }
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title    = $instance->name;
-        $this->view->instance = $instance;
+        $this->view->currentResource = $currentResource;
+        $this->view->instance        = $instance;
 
         $this->display();
     }
@@ -350,9 +363,9 @@ class instance extends control
             if($cloudApp->memory > $freeMemory)
             {
                 $this->view->cloudApp       = $cloudApp;
-                $this->view->gapMemory      = helper::formatKB(intval(($cloudApp->memory - $freeMemory) / 1024));
-                $this->view->requiredMemory = helper::formatKB(intval($cloudApp->memory / 1024));
-                $this->view->freeMemory     = helper::formatKB(intval($freeMemory / 1024));
+                $this->view->gapMemory      = helper::formatKB(intval(($cloudApp->memory - $freeMemory)));
+                $this->view->requiredMemory = helper::formatKB(intval($cloudApp->memory));
+                $this->view->freeMemory     = helper::formatKB(intval($freeMemory));
 
                 return $this->display('instance','resourceerror');
             }
