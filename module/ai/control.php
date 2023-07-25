@@ -441,11 +441,14 @@ class ai extends control
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
 
-        $response = $this->ai->executePrompt($prompt, $objectId);
+        $object = $this->getObjectForPromptById($prompt, $objectId);
+        if(empty($object)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
+
+        $response = $this->ai->executePrompt($prompt, $object);
         if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
 
         $this->ai->setInjectData($prompt->targetForm, $response);
-        $location = $this->ai->getTargetFormLocation($prompt, $objectId);
+        $location = $this->ai->getTargetFormLocation($prompt, $object);
         if(empty($location)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
 
         $_SESSION['auditPrompt']['prompt'] = $prompt;

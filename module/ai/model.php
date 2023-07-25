@@ -801,19 +801,19 @@ class aiModel extends model
      * Execute prompt on object.
      *
      * @param  int|object    $prompt    prompt (or id) to execute.
-     * @param  int           $objectId  object to execute prompt on.
+     * @param  int|object    $object    object (or id) to execute prompt on.
      * @access public
      * @return string|false  returns either JSON string or false.
      */
-    public function executePrompt($prompt, $objectId)
+    public function executePrompt($prompt, $object)
     {
         if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
         if(empty($prompt)) return false;
 
-        $objectForPrompt = $this->getObjectForPromptById($prompt, $objectId);
-        if(empty($objectForPrompt)) return false;
+        if(is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
+        if(empty($object)) return false;
 
-        list($objectData) = $objectForPrompt;
+        list($objectData) = $object;
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
 
         $wholePrompt = $this->assemblePrompt($prompt, $dataPrompt);
@@ -948,11 +948,12 @@ class aiModel extends model
      * Get target form location of object for prompt.
      *
      * @param  object|int   $prompt    prompt object or prompt id
-     * @param  int          $objectId
+     * @param  object       $object
+     * @param  array        $linkArgs  optional, link arguments, as defined in `->args` of items of `$config->ai->targetFormVars`, e.g. array('story' => 1). If not provided, will try to get from object.
      * @access public
      * @return string|false returns either link or false.
      */
-    public function getTargetFormLocation($prompt, $objectId)
+    public function getTargetFormLocation($prompt, $object, $linkArgs = array())
     {
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return false;
@@ -962,8 +963,27 @@ class aiModel extends model
 
         list($module, $method) = explode('.', $targetForm);
 
-        $vars = sprintf($this->config->ai->targetFormVars[$module][$method], $objectId);
-        return helper::createLink($module, $method, $vars);
+        /* Try assemble link vars from both passed-in `$linkArgs` and object props. */
+        $varsConfig = $this->config->ai->targetFormVars[$module][$method];
+        $vars = array();
+        foreach($varsConfig->args as $arg)
+        {
+            if(!empty($linkArgs[$arg]))
+            {
+                $vars[] = $linkArgs[$arg];
+            }
+            elseif(!empty($object->$arg))
+            {
+                $vars[] = $object->$arg;
+            }
+            else
+            {
+                $vars[] = 0;
+            }
+        }
+        $linkVars = vsprintf($varsConfig->format, $vars);
+
+        return helper::createLink($module, $method, $linkVars);
     }
 
     /**
