@@ -48,15 +48,15 @@ foreach($features as $feature)
 {
     $featureItems[] = div 
     (
-        set('class', ''),
+        set('class', 'mb-2'),
         div 
         (
-            set('class', 'article-h2'),
+            set('class', 'article-h2 py-2'),
             $idx . ($idx ? '. ' : '') . $feature['title'],
         ),
         div
         (
-            set('class', 'desc'),
+            set('class', 'desc pl-4'),
             html($feature['desc']),
         )
     );
