@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的完成项目中延期完成项目数。
- * count_of_delayed_project.
+ * count of delayed finished project which finished.
  *
  * 范围：global
  * 对象：project
@@ -23,7 +23,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_delayed_project extends baseCalc
+class count_of_delayed_finished_project_which_finished extends baseCalc
 {
     public $dataset = null;
 
