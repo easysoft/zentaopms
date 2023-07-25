@@ -318,7 +318,7 @@ class commonModel extends model
             if(strpos($fieldObject->type, 'date') !== false) $type = 'date';
             if(in_array($fieldObject->type, array('float', 'decimal'))) $type = 'float';
 
-            $formConfig[$fieldObject->field] = array('type' => $type, 'default' => $fieldObject->defalult, 'control' => $fieldObject->control, 'rules' => $fieldObject->rules);
+            $formConfig[$fieldObject->field] = array('type' => $type, 'default' => $fieldObject->default, 'control' => $fieldObject->control, 'rules' => $fieldObject->rules);
             $formConfig[$fieldObject->field]['required'] = strpos(",{$fieldObject->rules},", ",{$required->id},") !== false;
             if(in_array($fieldObject->control, array('multi-select', 'checkbox'))) $formConfig[$fieldObject->field]['filter'] = 'join';
         }
