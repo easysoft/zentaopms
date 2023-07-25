@@ -85,7 +85,7 @@ if($isCustomExport)
                     set::type('picker'),
                     set::name('exportFields[]'),
                     set::items($exportFieldPairs),
-                    set::defaultValue($selectedFields),
+                    set::value($selectedFields),
                     set::multiple(true),
                     set::required(true),
                 ),

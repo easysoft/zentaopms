@@ -186,9 +186,26 @@ class file extends control
      */
     public function export2CSV()
     {
-        $this->view->fields = $this->post->fields;
-        $this->view->rows   = $this->post->rows;
-        $output = $this->parse('file', 'export2csv');
+        $fields = $this->post->fields;
+        $rows   = $this->post->rows;
+
+        /* Build csv content. */
+        $output = '';
+        if($rows)
+        {
+            $output .= '"'. implode('","', $fields) . '"' . "\n";
+            foreach($rows as $row)
+            {
+                $output .= '"';
+                foreach($fields as $fieldName => $fieldLabel)
+                {
+                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;'), array('“', ' '), htmlspecialchars_decode(strip_tags($row->$fieldName, '<img>'))) : '';
+                    $output .= '","';
+                }
+                $output .= '"' . "\n";
+            }
+            if($this->post->kind == 'task' && $this->config->vision != 'lite') $output .= $this->lang->file->childTaskTips;
+        }
         if($this->post->encode != "utf-8") $output = helper::convertEncoding($output, 'utf-8', $this->post->encode . '//TRANSLIT');
 
         $this->sendDownHeader($this->post->fileName, 'csv', $output);
@@ -202,10 +219,26 @@ class file extends control
      */
     public function export2XML()
     {
-        $this->view->fields = $this->post->fields;
-        $this->view->rows   = $this->post->rows;
+        $fields = $this->post->fields;
+        $rows   = $this->post->rows;
+        $output = "<?xml version='1.0' encoding='utf-8'?><xml>\n";
 
-        $output = $this->parse('file', 'export2XML');
+        $output .= "<fields>";
+        foreach($fields as $fieldName => $fieldLabel) $output .= "  <$fieldName>$fieldLabel</$fieldName>\n";
+        $output .= "</fields>";
+
+        $output .= "<rows>";
+        foreach($rows as $row)
+        {
+            $output .= "  <row>\n";
+            foreach($fields as $fieldName => $fieldLabel)
+            {
+                $fieldValue = isset($row->$fieldName) ? htmlSpecialString($row->$fieldName) : '';
+                $output    .= "    <$fieldName>$fieldValue</$fieldName>\n";
+            }
+            $output .= "  </row>\n";
+        }
+        $output .= "</rows></xml>";
 
         $this->sendDownHeader($this->post->fileName, 'xml', $output);
     }
@@ -218,25 +251,67 @@ class file extends control
      */
     public function export2HTML()
     {
-        $this->view->fields = $this->post->fields;
-        $this->view->rows   = $this->post->rows;
-        $this->host         = common::getSysURL();
-        $kind               = $this->post->kind;
+        $fields   = $this->post->fields;
+        $rows     = $this->post->rows;
+        $rowspans = $this->post->rowspan ? $this->post->rowspan : array();
+        $colspans = $this->post->colspan ? $this->post->colspan : array();
+        $host     = common::getSysURL();
+        $kind     = $this->post->kind;
+        $fileName = $this->post->fileName;
 
-        foreach($this->view->rows as $row)
+        $output  = "<html xmlns='http://www.w3.org/1999/xhtml'>";
+        $output .= "<head>";
+        $output .= "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />";
+        $output .= "<style>table, th, td {font-size: 12px; border: 1px solid gray; border-collapse: collapse;} table th, table td {padding: 5px;}</style>";
+        $output .= "<title>{$fileName}</title>";
+        $output .= "</head>";
+
+        $output .= "<body>";
+        if($this->post->kind == 'task') $output .=  "<div style='color:red'>" . $this->lang->file->childTaskTips . '</div>';
+
+        $output .= "<table>";
+        $output .= "<tr>";
+        $output .= implode("\n", array_map(function($fieldLabel){return "<th><nobr>$fieldLabel</nobr></th>";}, $fields));
+        $output .= "</tr>";
+
+        $i = 0;
+        foreach($rows as $row)
         {
-            foreach($row as &$field)
+            if(in_array($kind, array('story', 'bug', 'testcase'))) $row->title = html::a($host . $this->createLink($kind, 'view', "{$kind}ID=$row->id"), $row->title);
+            if($kind == 'task') $row->name = html::a($host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name);
+
+            $output    .= "<tr valign='top'>\n";
+            $col        = 0;
+            $endColspan = 0;
+            foreach($fields as $fieldName => $fieldLabel)
             {
-                if(empty($field)) continue;
-                $field = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $this->host . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $field);
+                $col ++;
+                if(!empty($endColspan) && $col < $endColspan) continue;
+                if(isset($endRowspan[$fieldName]) && $i < $endRowspan[$fieldName]) continue;
+
+                $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+
+                $rowspan = '';
+                if(isset($rowspans[$i]) && isset($rowspans[$i]['rows'][$fieldName]))
+                {
+                    $rowspan = "rowspan='{$rowspans[$i]['rows'][$fieldName]}'";
+                    $endRowspan[$fieldName] = $i + $rowspans[$i]['rows'][$fieldName];
+                }
+
+                $colspan = '';
+                if(isset($colspans[$i]) && isset($colspans[$i]['cols'][$fieldName]))
+                {
+                    $colspan    = "colspan='{$colspans[$i]['cols'][$fieldName]}'";
+                    $endColspan = $col + $colspans[$i]['cols'][$fieldName];
+                }
+
+                if($fieldValue) $fieldValue = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $host . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $fieldValue);
+                $output .= "<td $rowspan $colspan><nobr>$fieldValue</nobr></td>\n";
             }
-
-            if(in_array($kind, array('story', 'bug', 'testcase'))) $row->title = html::a($this->host . $this->createLink($kind, 'view', "{$kind}ID=$row->id"), $row->title);
-            if($kind == 'task') $row->name = html::a($this->host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name);
+            $output .= "</tr>\n";
+            $i++;
         }
-
-        $this->view->fileName = $this->post->fileName;
-        $output = $this->parse('file', 'export2Html');
+        $output .= "</table></body></html>";
 
         $this->sendDownHeader($this->post->fileName, 'html', $output);
     }
