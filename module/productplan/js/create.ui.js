@@ -9,7 +9,7 @@ $(document).on('click', 'button[type=submit]', function()
     let branches     = $('#branch').val();
     if(parentPlan > 0 && branches)
     {
-        const link = $.createLink('productplan', 'ajaxGetDiffBranchesTip', "produtID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
+        const link = $.createLink('productplan', 'ajaxGetDiffBranchesTip', "productID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
         $.get(link, function(diffBranchesTip)
         {
             const formUrl  = $('#createForm').attr('action');
