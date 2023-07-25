@@ -38,6 +38,8 @@ foreach($config->task->view->operateList['main'] as $operate)
     if(!common::hasPriv('task', $operate)) continue;
     if(!$this->task->isClickable($task, $operate)) continue;
 
+    if($operate == 'batchCreate') $config->task->actionList['batchCreate']['text'] = $lang->task->children;
+
     $operateMenus[] = $config->task->actionList[$operate];
 }
 
