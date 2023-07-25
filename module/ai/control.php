@@ -454,19 +454,19 @@ class ai extends control
     public function promptExecute($promptId, $objectId)
     {
         $prompt = $this->ai->getPromptByID($promptId);
-        if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
+        if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
 
         $object = $this->ai->getObjectForPromptById($prompt, $objectId);
-        if(empty($object)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
+        if(empty($object)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noObjectData'])));
 
         $response = $this->ai->executePrompt($prompt, $object);
-        if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
+        if(empty($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
         list($objectData, $rawObject) = $object;
 
         $this->ai->setInjectData($prompt->targetForm, $response);
         $location = $this->ai->getTargetFormLocation($prompt, $rawObject);
-        if(empty($location)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
+        if(empty($location)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm'])));
 
         $_SESSION['auditPrompt']['prompt'] = $prompt;
         if($prompt->status == 'draft')

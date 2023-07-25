@@ -711,8 +711,14 @@ $lang->ai->dataInject->success = 'Prompt execution results are filled in.';
 $lang->ai->dataInject->fail    = 'Failed to fill in prompt execution results.';
 
 $lang->ai->execute = new stdclass();
-$lang->ai->execute->success = 'Prompt executed.';
-$lang->ai->execute->fail    = 'Prompt execution failed.';
+$lang->ai->execute->success    = 'Prompt executed.';
+$lang->ai->execute->fail       = 'Prompt execution failed.';
+$lang->ai->execute->failFormat = 'Prompt execution failed: %s.';
+$lang->ai->execute->failReasons = array();
+$lang->ai->execute->failReasons['noPrompt']     = 'unable to get prompt';
+$lang->ai->execute->failReasons['noObjectData'] = 'unable to get object data';
+$lang->ai->execute->failReasons['noResponse']   = 'no response from external service';
+$lang->ai->execute->failReasons['noTargetForm'] = 'unable to get target form';
 
 $lang->ai->audit = new stdclass();
 $lang->ai->audit->designPrompt = 'Prompt Design';
