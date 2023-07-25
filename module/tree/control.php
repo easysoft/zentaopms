@@ -750,8 +750,8 @@ class tree extends control
         if(!helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => ''));;
 
         $module = $this->tree->createModule();
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => implode('\n', dao::getError())));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'module' => $module));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 }
