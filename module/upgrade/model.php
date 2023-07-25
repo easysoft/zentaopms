@@ -671,7 +671,10 @@ class upgradeModel extends model
                 }
                 break;
             case '18_5':
+                $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
                 $this->execSQL($this->getUpgradeFile('ipdinstall'));
+                if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));
+                if($this->config->edition == 'ipd' and strpos($fromVersion, 'ipd') === false) $this->addORPriv();
                 break;
         }
 
@@ -2362,6 +2365,34 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Add or view priv for adminer.
+     *
+     * @access public
+     * @return void
+     */
+    public function addORPriv()
+    {
+        $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchAll();
+
+        foreach($admins as $key => $admin) $admins[$key] = trim($admin->admins, ',');
+
+        $admins = implode(',', $admins);
+
+        $user = $this->dao->select('*')->from(TABLE_USER)
+            ->where('account')->in($admins)
+            ->fetchPairs('account', 'visions');
+
+        foreach($user as $account => $visions)
+        {
+            if(strpos($visions, 'or') === false)
+            {
+                $visions = 'or,' . $visions;
+                $this->dao->update(TABLE_USER)->set('visions')->eq($visions)->where('account')->eq($account)->exec();
+            }
+        }
     }
 
     /**
