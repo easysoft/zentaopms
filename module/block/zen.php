@@ -1588,14 +1588,21 @@ class blockZen extends block
      */
     protected function printShortProductOverview(): void
     {
+        $this->loadModel('metric');
+        //$productCount   = $this->metric->getResultByCode('count_of_line');
         $productCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('shadow')->eq('0')->fetch('count');
-        $lineCount    = $this->dao->select('COUNT(1) AS count')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('type')->eq('line')->fetch('count');
-        $releaseList  = $this->dao->select('id, marker')->from(TABLE_RELEASE)->where('deleted')->eq('0')->andWhere('createdDate')->like(date('Y') . '-%')->fetchPairs();
+        $releaseCount = $this->metric->getResultByCode('count_of_annual_created_release');
+        $releaseCount = json_decode(json_encode($releaseCount), true);
+        if(!empty($releaseCount)) $releaseCount = array_column($releaseCount, null, 'year');
+        $releaseCount = zget($releaseCount, date('Y'), array());
+
+        $milestoneCount = $this->metric->getResultByCode('count_of_marker_release');
+        if(!empty($milestoneCount)) $milestoneCount = reset($milestoneCount);
 
         $data = new stdclass();
         $data->productCount   = $productCount;
-        $data->releaseCount   = count($releaseList);
-        $data->milestoneCount = count(array_filter($releaseList));
+        $data->releaseCount   = zget($releaseCount, 'value', 0);
+        $data->milestoneCount = zget($milestoneCount, 'value', 0);
 
         $this->view->data = $data;
     }
@@ -2692,7 +2699,7 @@ class blockZen extends block
     /**
      * 打印产品月度推进分析区块.
      * Print monthly progress for the product.
-     * 
+     *
      * @access protected
      * @return void
      */
