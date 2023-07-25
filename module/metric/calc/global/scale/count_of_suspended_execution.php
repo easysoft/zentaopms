@@ -10,8 +10,8 @@
  * 单位：个
  * 描述：按全局统计的已挂起执行数表示在整个系统中已被挂起的执行项的数量，可以用来了解暂停的任务数量，可能是由于需求不明确或其他原因导致。
  * 定义：所有的执行个数求和
-状态为已挂起
-过滤已删除的执行
+ *       状态为已挂起
+ *       过滤已删除的执行
  * 度量库：
  * 收集方式：realtime
  *
@@ -24,16 +24,15 @@
  */
 class count_of_suspended_execution extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getALlExecutions';
 
-    public $fieldList = array();
+    public $fieldList = array('status');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($row)
     {
+        if($row->status == 'suspended') $this->result += 1;
     }
 
     public function getResult($options = array())

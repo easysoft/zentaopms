@@ -1,4 +1,4 @@
-r!/usr/bin/env php
+#!/usr/bin/env php
 <?php
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
@@ -10,7 +10,7 @@ $calc   = $metric->calcMetric(__FILE__);
 
 /**
 
-title=count_of_doing_execution
+title=count_of_suspended_execution
 cid=1
 pid=1
 
