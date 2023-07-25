@@ -17,6 +17,7 @@
 <?php js::set('WIDTH_DATE',   $config->pivot->widthDate);?>
 <?php js::set('pickerHeight', $config->bi->pickerHeight);?>
 <?php js::set('datepickerText', $this->lang->datepicker->dpText);?>
+<?php js::set('confirmDesign', $lang->pivot->confirm->design);?>
 <?php $queryDom = "<div class='queryBtn query-inside hidden'> <button type='submit' id='submit' class='btn btn-primary btn-query' data-loading='Loading...'>{$lang->pivot->query}</button></div>";?>
 <?php js::set('queryDom', $queryDom);?>
 
@@ -44,7 +45,9 @@
       <?php
         $clickable = $this->pivot->isClickable($pivot, 'design');
         $params    = helper::safe64Encode("dimensionID=$pivot->dimension&groupID=$pivot->group&pivotID=$pivot->id");
-        if(common::hasPriv('pivot', 'design') and $clickable) echo html::a($this->createLink('pivot', 'design', "id=$pivot->id&from=preview&param=$params"), "<i class='icon icon-design'></i> {$lang->pivot->designAB}", '', "class='pivot-design' title='{$lang->pivot->designAB}'");
+        $class     = !empty($pivot->used) ? "btn-design" : '';
+
+        if(common::hasPriv('pivot', 'design') and $clickable) echo html::a($this->createLink('pivot', 'design', "id=$pivot->id&from=preview&param=$params"), "<i class='icon icon-design'></i> {$lang->pivot->designAB}", '', "class='pivot-design $class' title='{$lang->pivot->designAB}'");
         if(common::hasPriv('pivot', 'edit') and $clickable) echo html::a($this->createLink('pivot', 'edit', "id=$pivot->id&from=preview&params=$params", '', true), "<i class='icon icon-edit'></i> {$lang->edit}", '', "class='iframe pivot-edit' title='{$lang->edit}' data-width='600'");
         if(common::hasPriv('pivot', 'delete') and $clickable) echo html::a($this->createLink('pivot', 'delete', "id=$pivot->id&confirm=no&from=preview"), "<i class='icon icon-trash'></i> {$lang->delete}", 'hiddenwin', "class='pivot-delete' title='{$lang->delete}'");
       ?>
@@ -97,3 +100,13 @@
     <div class="default-block hidden"><?php echo html::select('default', '', '', "class='form-control form-select multiple'");?></div>
   </div>
 </template>
+<script>
+$(function()
+{
+    $('.btn-design').click(function()
+    {
+        var result = confirm(confirmDesign);
+        if(!result) return false;
+    });
+});
+</script>
