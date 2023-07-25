@@ -502,8 +502,8 @@ class product extends control
     }
 
     /**
-     * 产品仪表盘。
-     * Product dashboard.
+     * 单个产品的仪表盘。
+     * The dashboard for one product.
      *
      * @param  int    $productID
      * @access public
