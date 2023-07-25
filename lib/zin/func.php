@@ -1673,3 +1673,11 @@ function globalSearch(): globalSearch
 {
     return createWg('globalSearch', func_get_args());
 }
+
+/**
+ * Steps editor widget.
+ */
+function stepsEditor(): stepsEditor
+{
+    return createWg('stepsEditor', func_get_args());
+}
