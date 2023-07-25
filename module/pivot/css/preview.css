@@ -20,9 +20,13 @@
 #filterItems .picker .picker-selections {width: auto !important;}
 .content-border {padding-top: 16px; padding-bottom: 16px; border-bottom: 1px solid #F1F5F9;}
 .flex-between {display:flex; justify-content: space-between;}
+.flex-start   {display:flex; justify-content: flex-start;}
 
-.query-after {position: relative; padding-right: 10px;}
+.query-after {position: relative; padding-right: 24px;}
 .query-after::after {content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 1px; background-color: #F1F5F9;}
 .query-color {color: #3785ff;}
 
 #filterMargin {padding-top: 8px; padding-bottom: 5px;}
+.pivot-design {padding-left: 24px; padding-right: 12px;}
+.pivot-edit {padding-left: 12px; padding-right: 12px;}
+.pivot-delete {padding-left: 12px; padding-right: 8px;}
