@@ -25,7 +25,6 @@ class user extends control
         $this->loadModel('company')->setMenu();
         $this->loadModel('dept');
         $this->loadModel('todo');
-        $this->loadModel('execution');
         $this->app->loadLang('project');
         $this->app->loadModuleConfig($this->moduleName);//Finish task #5118.(Fix bug #2271)
     }
