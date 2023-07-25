@@ -1,7 +1,7 @@
 .steps-editor {width: 100%}
 .steps-editor-header {padding-right: 40px; color: var(--color-slate-700);}
 .steps-editor-row {position: relative; display: flex; align-items: stretch; min-height: 32px; --tw-ring-color: rgba(var(--color-border-strong-rgb), 1); box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color); margin-top: 1px; z-index: 1;}
-.steps-editor-row.is-step-focus {z-index: 5;}
+.steps-editor-row.is-focus {z-index: 100;}
 .steps-editor-header .steps-editor-row {border-radius: 2px 2px 0 0; background-color: var(--color-slate-100);}
 .steps-editor-col {flex: none; display: flex; align-items: stretch;}
 .steps-editor-header .steps-editor-col {padding: 0 12px; align-items: center;}
@@ -10,7 +10,7 @@
 .steps-editor-col-add > div {width: 50%; display: flex; align-items: center; justify-content: center; position: relative;}
 .steps-editor-col-expect {flex: auto;}
 .steps-editor-body {padding-right: 40px;}
-.steps-editor-col-step.form-control {padding: 0; border-radius: 0; height: auto; z-index: 5;}
+.steps-editor-col-step.form-control {padding: 0; border-radius: 0; height: auto; z-index: 100;}
 .steps-editor-step-name {padding: 6px 0 6px 8px; flex: none; text-align: right; opacity: .5;}
 .steps-editor-step-expect,
 .steps-editor-step-text {padding: 6px 12px;; flex: auto; border: none; min-height: 32px; background: none; border-radius: 0; resize: none}
