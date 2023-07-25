@@ -241,6 +241,8 @@ class baseCalc
     {
         if(empty($keyNames)) return $this->result;
 
+        if(current($keyNames) == 'value') return array(array('value' => $this->result));
+
         $records = array();
         $keyName = array_shift($keyNames);
         foreach($this->result as $key => $value) $records[] = array($keyName => $key, 'value' => $value);
