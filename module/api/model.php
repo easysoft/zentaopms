@@ -92,7 +92,7 @@ class apiModel extends model
         $now  = helper::now();
         $data = fixer::input('post')
             ->trim('title,path')
-            ->remove('type')
+            ->remove('type,undefined')
             ->skipSpecial('params,response')
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
@@ -227,7 +227,7 @@ class apiModel extends model
             ->add('editedDate', $now)
             ->add('version', $oldApi->version)
             ->setDefault('product,module', 0)
-            ->remove('type')
+            ->remove('type,undefined')
             ->get();
 
         $changes = common::createChanges($oldApi, $data);

@@ -74,7 +74,7 @@ for($itemVersion = $api->version; $itemVersion > 0; $itemVersion--)
 }
 
 $apiHeader = $apiQuery = $apiParams = $apiResponse = array();
-$parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
+$parseTree = function($data, $typeList, $level = 0) use(&$parseTree)
 {
     global $lang;
 

@@ -1,6 +1,43 @@
 <?php
 namespace zin;
 $apiHeader = $apiQuery = $apiParams = $apiResponse = array();
+$defaultTR = h::tr
+(
+    setClass('input-row'),
+    h::td
+    (
+        input(),
+    ),
+    h::td
+    (
+        html("<input type='checkbox' />")
+    ),
+    h::td
+    (
+        textarea
+        (
+            set::rows(1)
+        ),
+    ),
+    h::td
+    (
+        div
+        (
+            setClass('pl-2 flex self-center line-btn'),
+            btn
+            (
+                setClass('btn ghost btn-add'),
+                icon('plus')
+            ),
+            btn
+            (
+                setClass('btn ghost btn-delete'),
+                icon('trash'),
+            ),
+        )
+    )
+);
+
 if(!empty($api->params['header']))
 {
     foreach($api->params['header'] as $param)
@@ -49,42 +86,7 @@ if(!empty($api->params['header']))
 }
 else
 {
-    $apiHeader = h::tr
-    (
-        setClass('input-row'),
-        h::td
-        (
-            input(),
-        ),
-        h::td
-        (
-            html("<input type='checkbox' />")
-        ),
-        h::td
-        (
-            textarea
-            (
-                set::rows(1)
-            ),
-        ),
-        h::td
-        (
-            div
-            (
-                setClass('pl-2 flex self-center line-btn'),
-                btn
-                (
-                    setClass('btn ghost btn-add'),
-                    icon('plus')
-                ),
-                btn
-                (
-                    setClass('btn ghost btn-delete'),
-                    icon('trash'),
-                ),
-            )
-        )
-    );
+    $apiHeader[] = $defaultTR;
 }
 
 if(!empty($api->params['query']))
@@ -135,42 +137,7 @@ if(!empty($api->params['query']))
 }
 else
 {
-    $apiQuery[] = h::tr
-    (
-        setClass('input-row'),
-        h::td
-        (
-            input(),
-        ),
-        h::td
-        (
-            html("<input type='checkbox' />")
-        ),
-        h::td
-        (
-            textarea
-            (
-                set::rows(1)
-            ),
-        ),
-        h::td
-        (
-            div
-            (
-                setClass('pl-2 flex self-center line-btn'),
-                btn
-                (
-                    setClass('btn ghost btn-add'),
-                    icon('plus')
-                ),
-                btn
-                (
-                    setClass('btn ghost btn-delete'),
-                    icon('trash'),
-                ),
-            )
-        )
-    );
+    $apiQuery[] = $defaultTR;
 }
 
 $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
@@ -248,10 +215,7 @@ $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
 
 if(!empty($api->params['params']))
 {
-    foreach($api->params['params'] as $param)
-    {
-        $apiParams[] = array_merge($apiParams, $parseTree($param, $typeOptions));
-    }
+    foreach($api->params['params'] as $param) $apiParams = array_merge($apiParams, $parseTree($param, $typeOptions));
 }
 else
 {
@@ -312,10 +276,7 @@ else
 
 if(!empty($api->response))
 {
-    foreach($api->response as $param)
-    {
-        $apiResponse[] = array_merge($apiResponse, $parseTree($param, $typeOptions));
-    }
+    foreach($api->response as $param) $apiResponse = array_merge($apiResponse, $parseTree($param, $typeOptions));
 }
 else
 {
@@ -547,7 +508,7 @@ formPanel
         (
             set::name('type'),
             set::inline(true),
-            set::value($api->param['params']['paramsType']),
+            set::value($api->params['paramsType']),
             set::items($lang->struct->typeOptions),
         ),
     ),
@@ -588,7 +549,7 @@ formPanel
             $apiParams
         ),
     ),
-    formHidden('params', '{"header":[],"params":[],"paramsType":"fromData","query":[]}'),
+    formHidden('params', json_encode($api->params)),
     formGroup
     (
         set::width('1/2'),
@@ -635,7 +596,7 @@ formPanel
             $apiResponse
         ),
     ),
-    formHidden('response', '[]'),
+    formHidden('response', json_encode($api->response)),
     formGroup
     (
         set::width('1/2'),

@@ -456,6 +456,6 @@ formPanel
         editor
         (
             set::name('desc'),
-        ),
-    ),
+        )
+    )
 );
