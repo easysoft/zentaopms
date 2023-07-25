@@ -24,7 +24,7 @@ sidebar
         set::objectID(isset($objectID) ? $objectID : 0),
         set::title(isset($objectDropdown['text']) ? $objectDropdown['text'] : ''),
         set::menuLink(isset($objectDropdown['link']) ? $objectDropdown['link'] : ''),
-        set::settingLink($app->rawMethod !== 'view' && common::hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : ''),
+        set::settingLink($app->rawModule == 'doc' && $app->rawMethod !== 'view' && common::hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : ''),
         set::settingText($lang->doc->displaySetting),
     )
 );
