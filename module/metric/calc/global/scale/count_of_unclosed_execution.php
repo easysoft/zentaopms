@@ -10,10 +10,10 @@
  * 单位：个
  * 描述：按全局统计的未关闭执行数表示在整个系统中未关闭的执行项的数量，可以用来了解未关闭的执行数量。
  * 定义：复用：
-按全局统计的执行总数
-按全局统计的已关闭执行数
-公式：
-按全局统计的未关闭执行数=安全局统计的执行总数-按全局统计的已关闭执行数
+ *       按全局统计的执行总数
+ *       按全局统计的已关闭执行数
+ *       公式：
+ *       按全局统计的未关闭执行数=安全局统计的执行总数-按全局统计的已关闭执行数
  * 度量库：
  * 收集方式：realtime
  *
@@ -26,16 +26,15 @@
  */
 class count_of_unclosed_execution extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getALlExecutions';
 
-    public $fieldList = array();
+    public $fieldList = array('status');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($row)
     {
+        if($row->status != 'closed') $this->result += 1;
     }
 
     public function getResult($options = array())
