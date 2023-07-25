@@ -12,7 +12,6 @@ class docMenu extends wg
         'modules: array',
         'activeKey?: int',
         'settingLink?: string',
-        'closeLink: string',
         'menuLink: string',
         'title?: string',
         'linkParams?: string="%s"',
@@ -357,27 +356,6 @@ class docMenu extends wg
         );
     }
 
-    private function buildCloseBtn(): ?wg
-    {
-        $activeKey = $this->prop('activeKey');
-        if(empty($activeKey)) return null;
-
-        return a
-        (
-            set('href', $this->prop('closeLink')),
-            icon('close', setStyle('color', 'var(--color-slate-600)'))
-        );
-    }
-
-    private function buildDropDownMenu()
-    {
-        return menu
-        (
-            setID('dropdownMenu'),
-            set::items(array())
-        );
-    }
-
     protected function build(): wg
     {
         $this->setMenuTreeProps();
@@ -395,7 +373,6 @@ class docMenu extends wg
                     setClass('module-title text-lg font-semibold'),
                     html($title)
                 ),
-                $this->buildCloseBtn(),
             ) : null,
             $menuLink ? dropmenu
             (
@@ -409,8 +386,7 @@ class docMenu extends wg
                 setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
                 zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover'))))
             ),
-            $this->buildBtns(),
-            $this->buildDropDownMenu(),
+            $this->buildBtns()
         );
     }
 }
