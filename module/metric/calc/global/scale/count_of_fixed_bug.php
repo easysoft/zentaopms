@@ -10,10 +10,10 @@
  * 单位：个
  * 描述：按全局统计的已修复Bug数是指解决并关闭的Bug数量。这个度量项反映了系统或项目解决的问题数量。已修复Bug数的增加说明开发团队在Bug解决方面的工作效率较高。
  * 定义：所有Bug个数求和
-状态为已关闭
-解决方案为已解决
-过滤已删除的Bug
-过滤已删除的产品
+ *       状态为已关闭
+ *       解决方案为已解决
+ *       过滤已删除的Bug
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -26,16 +26,15 @@
  */
 class count_of_fixed_bug extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getBugs';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.status', 't1.resolution');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($row)
     {
+        if($row->status == 'closed' and $row->resolution == 'fixed') $this->result += 1;
     }
 
     public function getResult($options = array())
