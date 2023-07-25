@@ -4,13 +4,6 @@ namespace zin;
 
 class echarts extends wg
 {
-    public static function getPageJS(): string|false
-    {
-        global $app;
-        $jsFile = $app->getWebRoot() . 'js/echarts/echarts.common.min.js';
-        return 'window.createEcharts=(name,selector,options) => $.getScript("' . $jsFile . '", null, () => zui.create(name,selector,options));';
-    }
-
     public function size(string|int $width, string|int $height): echarts
     {
         if(is_numeric($width))  $width  = "{$width}px";
@@ -33,6 +26,9 @@ class echarts extends wg
 
     protected function build(): zui
     {
-        return zui::echarts(inherit($this), set::_call('~createEcharts'));
+        global $app;
+        $jsFile = $app->getWebRoot() . 'js/echarts/echarts.common.min.js';
+
+        return zui::echarts(inherit($this), set::_call("~((name,selector,options) => $.getScript('$jsFile', null, () => zui.create(name,selector,options)))"));
     }
 }
