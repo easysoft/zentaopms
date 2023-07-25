@@ -6,6 +6,8 @@ class docMenu extends wg
 {
     private array $modules = array();
 
+    private array $mineTypes = array('mine', 'view', 'collect', 'createdby', 'editedby');
+
     protected static array $defineProps = array(
         'modules: array',
         'activeKey?: int',
@@ -73,12 +75,13 @@ class docMenu extends wg
         else
         {
             $methodName = $this->spaceMethod[$objectType] ? $this->spaceMethod[$objectType] : 'teamSpace';
-            if(in_array($objectType, array('mine', 'view', 'collect', 'createdby', 'editedby')))
+            if(in_array($objectType, $this->mineTypes))
             {
-                if(in_array($item->type, array('docLib', 'annex', 'api', 'execution'))) $item->id = 0;
+                $moduleID = $item->id;
+                if(in_array($item->type, array('docLib', 'annex', 'api', 'execution'))) $moduleID = 0;
 
-                $type       = in_array(strtolower($item->type), array('view', 'collect', 'createdby', 'editedby')) ? strtolower($item->type) : 'mine';
-                $linkParams = "type={$type}&libID={$this->libID}&moduleID={$item->id}";
+                $type       = in_array(strtolower($item->type), $this->mineTypes) ? strtolower($item->type) : 'mine';
+                $linkParams = "type={$type}&libID={$this->libID}&moduleID={$moduleID}";
             }
             if($item->type == 'module' && $item->object == 'api')
             {
@@ -98,24 +101,27 @@ class docMenu extends wg
         {
             $setting->parentID = $parentID;
 
+            $itemID = 0;
+            if(!in_array(strtolower($setting->type), $this->mineTypes)) $itemID = $setting->id ? $setting->id : $parentID;
+
             $item = array(
-                'key'         => $setting->id,
+                'key'         => $itemID,
                 'text'        => $setting->name,
                 'icon'        => $this->getIcon($setting),
                 'url'         => $this->buildLink($setting),
-                'data-id'     => $setting->id,
-                'data-lib'    => $setting->type == 'docLib' ? $setting->id : $setting->libID,
+                'data-id'     => $itemID,
+                'data-lib'    => $setting->type == 'docLib' ? $itemID : $setting->libID,
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parentID,
                 'data-module' => $this->currentModule,
-                'active'      => zget($setting, 'active', $setting->id == $activeKey),
+                'active'      => zget($setting, 'active', $itemID == $activeKey),
                 'actions'     => $this->getActions($setting)
             );
 
             $children = zget($setting, 'children', array());
             if(!empty($children))
             {
-                $children = $this->buildMenuTree($children, $setting->id ? $setting->id : $parentID);
+                $children = $this->buildMenuTree($children, $itemID);
                 $item['items'] = $children;
             }
 
@@ -208,13 +214,14 @@ class docMenu extends wg
         $menus = array();
         if(in_array($item->type, array('docLib', 'apiLib')))
         {
+            $itemID = $item->id ? $item->id : $item->parentID;
             if(hasPriv($this->currentModule, 'addCatalog'))
             {
                 $menus[] = array(
                     'key'     => 'adddirectory',
                     'icon'    => 'add-directory',
                     'text'    => $this->lang->doc->libDropdown['addModule'],
-                    'onClick' => jsRaw("() => addModule({$item->parentID}, 'child')")
+                    'onClick' => jsRaw("() => addModule({$itemID}, 'child')")
                 );
             }
 
@@ -225,7 +232,7 @@ class docMenu extends wg
                     'icon'        => 'edit',
                     'text'        => $this->lang->doc->libDropdown['editLib'],
                     'data-toggle' => 'modal',
-                    'data-url'    => createlink($this->currentModule, 'editlib', "libid={$item->parentID}"),
+                    'data-url'    => createlink($this->currentModule, 'editlib', "libID={$itemID}"),
                 );
             }
 
@@ -236,7 +243,7 @@ class docMenu extends wg
                     'icon'         => 'trash',
                     'text'         => $this->lang->doc->libDropdown['deleteLib'],
                     'class'        => 'ajax-submit',
-                    'data-url'     => createLink($this->currentModule, 'deleteLib', "libID={$item->parentID}"),
+                    'data-url'     => createLink($this->currentModule, 'deleteLib', "libID={$itemID}"),
                     'data-confirm' => $this->lang->doc->confirmDeleteLib,
                 );
             }
