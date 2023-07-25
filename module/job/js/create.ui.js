@@ -74,7 +74,10 @@ function changeRepo(event)
         {
             if(data.type.indexOf('git') != -1)
             {
-                $('.reference').removeClass('hidden');
+                var engine = $('[name=engine]').val();
+                if(engine == 'jenkins') $('.reference').removeClass('hidden');
+                $('.reference').addClass('gitRepo');
+
                 $('.svn-fields').addClass('hidden');
                 $('#reference option').remove();
 
@@ -88,6 +91,7 @@ function changeRepo(event)
             }
             else
             {
+                $('.reference').removeClass('gitRepo');
                 if($('#triggerType').val() == 'tag') $('.svn-fields').removeClass('hidden');
 
                 $('#svnDir').remove();

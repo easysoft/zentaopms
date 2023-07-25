@@ -10,11 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-foreach($instances as $instance)
-{
-    $instance->statusText = $this->instance->printStatus($instance, false);
-}
-
 $instances = initTableData($instances, $config->space->dtable->fieldList, $this->instance);
 
 featureBar
@@ -30,7 +25,7 @@ toolBar
         'text'  => $lang->space->install,
         'icon'  => 'plus',
         'class' => 'btn primary',
-        'url'   => createLink('store', 'browse'),
+        'url'   => createLink('space', 'createApplication'),
     ))) : null,
 );
 
@@ -38,6 +33,7 @@ dtable
 (
     set::cols($config->space->dtable->fieldList),
     set::data($instances),
+    set::onRenderCell(jsRaw('window.renderInstanceList')),
     set::footPager(usePager()),
 );
 

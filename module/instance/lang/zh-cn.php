@@ -1,7 +1,7 @@
 <?php
 $lang->instance = new stdclass;
 $lang->instance->name             = '名称';
-$lang->instance->appName          = '应用模板';
+$lang->instance->appName          = '应用类型';
 $lang->instance->version          = '版本';
 $lang->instance->status           = '状态';
 $lang->instance->cpu              = 'CPU';

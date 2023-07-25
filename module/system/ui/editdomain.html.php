@@ -42,6 +42,7 @@ formPanel
         h::a
         (
             setClass('leading-8'),
+            set::target('_blank'),
             set::href('https://www.qucheng.com/book/Installation-manual/47.html'),
             $lang->system->domain->dnsHelperLink
         ),

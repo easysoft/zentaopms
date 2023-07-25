@@ -20,10 +20,10 @@ class space extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
-      @access public
+       @access public
      * @return void
      */
-    public function browse($spaceID = null, $browseType = 'all', $recTotal = 0, $recPerPage = 24, $pageID = 1)
+    public function browse($spaceID = null, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 24, $pageID = 1)
     {
         $this->app->loadLang('instance');
         $this->loadModel('instance');
@@ -49,15 +49,36 @@ class space extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $instances = $this->space->getSpaceInstances($space->id, $browseType, $search, $pager);
+        $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc', $pager);
+        foreach($pipelines as $pipeline)
+        {
+            $pipeline->createdAt = $pipeline->createdDate;
+            $pipeline->appName   = ucfirst($pipeline->type);
+            $pipeline->status    = '';
+            $pipeline->type      = 'external';
+        }
+        $allInstances = array_merge($instances, $pipelines);
+
+        list($order, $sort) = explode('_', $orderBy);
+        $createdColumn = array_column((array)$allInstances, $order == 'id' ? 'createdAt' : $order);
+        array_multisort($createdColumn, $sort == 'desc' ? SORT_DESC : SORT_ASC, $allInstances);
+        $allInstances = array_slice($allInstances, 0, $recPerPage);
 
         $this->view->title        = $this->lang->space->common;
         $this->view->position[]   = $this->lang->space->common;
         $this->view->pager        = $pager;
         $this->view->browseType   = $browseType;
         $this->view->spaceType    = $spaceType;
-        $this->view->instances    = $instances;
+        $this->view->instances    = $allInstances;
         $this->view->currentSpace = $space;
         $this->view->searchName   = $search;
+
+        $this->display();
+    }
+
+    public function createApplication()
+    {
+        $this->app->loadLang('gitlab');
 
         $this->display();
     }

@@ -2031,11 +2031,12 @@ class InstanceModel extends model
      */
     public function isClickable(object $instance, string $action): bool
     {
-        if($action == 'start')     return $this->canDo('start', $instance);
-        if($action == 'stop')      return $this->canDo('stop', $instance);
+        if($action == 'start')     return empty($instance->type) ? $this->canDo('start', $instance) : false;
+        if($action == 'stop')      return empty($instance->type) ? $this->canDo('stop', $instance) : false;
         if($action == 'uninstall') return empty($instance->solution) && $this->canDo('uninstall', $instance);
-        if($action == 'visit')     return $instance->domain && $this->canDo('visit', $instance);
+        if($action == 'visit')     return empty($instance->type) ? ($instance->domain && $this->canDo('visit', $instance)) : true;
         if($action == 'upgrade')   return !empty($instance->latestVersion);
+        if($action == 'bindUser')  return empty($instance->type) ? false : true;
 
         return true;
     }

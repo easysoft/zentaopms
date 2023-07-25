@@ -14,8 +14,6 @@ jsVar('copySuccess', $lang->system->copySuccess);
 
 $apiURL = !empty($ossDomain->extra_hosts) ? zget($ossDomain->extra_hosts, 'api', '') : '';
 
-detailHeader();
-
 panel
 (
     set::size('lg'),

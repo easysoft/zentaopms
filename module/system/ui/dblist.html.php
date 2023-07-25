@@ -15,8 +15,6 @@ $config->system->dtable->dbList->fieldList['actions']['list']['management']['url
 $dbList = array((object)array('name' => 'qucheng-mysql', 'db_type' => 'mysql', 'status' => 'running'));
 $dbList = initTableData($dbList, $config->system->dtable->dbList->fieldList, $this->system);
 
-detailHeader();
-
 panel
 (
     set::size('lg'),
