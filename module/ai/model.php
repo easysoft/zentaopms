@@ -974,7 +974,7 @@ class aiModel extends model
             }
             elseif(!empty($object->$arg))
             {
-                $vars[] = $object->$arg;
+                $vars[] = is_object($object->$arg) && !empty($object->$arg->id) ? $object->$arg->id : $object->$arg;
             }
             else
             {
