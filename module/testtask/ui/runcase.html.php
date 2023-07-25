@@ -37,17 +37,9 @@ if($confirm != 'yes')
         $step->expect = '';
         $run->case->steps[] = $step;
     }
-    $stepID = $childID = 0;
     foreach($run->case->steps as $key => $step)
     {
         $stepClass = "step-{$step->type}";
-        if($step->type == 'group' or $step->type == 'step')
-        {
-            $stepID ++;
-            $childID = 0;
-        }
-
-        $stepItemID = $childID != 0 ? "{$stepID}.{$childID}" : $stepID;
         $stepTrs[] = h::tr
         (
             setClass("step {$stepClass}"),
@@ -60,8 +52,8 @@ if($confirm != 'yes')
                     h::span
                     (
                         setClass('step-item-id mr-2'),
-                        $childID != 0 ? setClass('ml-2') : '',
-                        $stepItemID,
+                        setClass('ml-' . (($step->grade- 1) * 2)),
+                        $step->name,
                     ),
                     nl2br(zget($step, 'desc', '')),
                 ),
@@ -124,8 +116,6 @@ if($confirm != 'yes')
                 ),
             ),
         );
-
-        $childID ++;
 
         $fileModals[] = modal
         (
