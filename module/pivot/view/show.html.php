@@ -38,8 +38,8 @@
       <?php endif;?>
     </div>
     <div class='flex-start'>
-      <?php echo html::a('#', "{$lang->pivot->showOrigin}", '', "id='origin-query' class='query-after query-color btn-query-origin' title='{$lang->pivot->showOrigin}'");?>
-      <?php echo html::a('#', "{$lang->pivot->showPivot}",  '', "id='pivot-query'  class='query-after query-color btn-query hidden' title='{$lang->pivot->showPivot}'");?>
+      <?php echo html::a('#', "{$lang->pivot->showOrigin}", '', "id='origin-query' class='query-after btn-query-origin' title='{$lang->pivot->showOrigin}'");?>
+      <?php echo html::a('#', "{$lang->pivot->showPivot}",  '', "id='pivot-query'  class='query-after btn-query hidden' title='{$lang->pivot->showPivot}'");?>
 
       <?php
         $clickable = $this->pivot->isClickable($pivot, 'design');
