@@ -17,8 +17,8 @@
       <div class="main-header">
         <p>
           <?php echo $this->lang->ai->audit->designPrompt; ?>
-          <strong><?php echo $object->{$prompt->module}->title ?></strong>
-          <span class='label label-id'> <?php echo $object->{$prompt->module}->id; ?></span>
+          <strong><?php echo $prompt->name ?></strong>
+          <span class='label label-id'> <?php echo $prompt->id; ?></span>
         </p>
       </div>
       <div class="bg-gray-3" style="display: flex;">
