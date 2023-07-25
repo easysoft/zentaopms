@@ -1681,3 +1681,11 @@ function stepsEditor(): stepsEditor
 {
     return createWg('stepsEditor', func_get_args());
 }
+
+/**
+ * table and chart widget.
+ */
+function tableChart(): tableChart
+{
+    return createWg('tableChart', func_get_args());
+}

@@ -26,75 +26,15 @@ detailHeader
 $reports = array();
 foreach($lang->testtask->report->charts as $key => $label) $reports[] = array('text' => $label, 'value' => $key);
 
-$colorList = array('#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC');
 $echarts   = array();
 foreach($charts as $type => $option)
 {
-    $chartData   = $datas[$type];
-    $chartOption = array();
-    $tableTR     = array();
-    $colorList   = array('#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC');
-    foreach($chartData as $key => $data)
-    {
-        $color = current($colorList);
-        $chartOption[] = array('name' => $data->name, 'value' => $option->type == 'pie' ? $data->value : array('value' => $data->value, 'itemStyle' => array('color' => $color)));
-        $tableTR[] = h::tr
-        (
-            h::td(label(set::class('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $data->name),
-            h::td($data->value),
-            h::td(($data->percent * 100) . '%')
-        );
-        if(!next($colorList)) reset($colorList);
-    }
-
-    $echarts[] = div
+    $chartData = $datas[$type];
+    $echarts[] = tableChart
     (
-        set::class('flex border'),
-        cell
-        (
-            set::width('50%'),
-            set::class('border-r chart'),
-            div(set::class('center text-base font-bold py-2'), $lang->testtask->report->charts[$type]),
-            echarts
-            (
-                set::color($colorList),
-                $option->type != 'pie' ? set::xAxis
-                (
-                    array
-                    (
-                        'type' => 'category',
-                        'data' => array_column($chartOption, 'name')
-                    )
-                ) : null,
-                $option->type != 'pie' ? set::yAxis(array('type' => 'value')) : null,
-                set::series
-                (
-                    array
-                    (
-                        array
-                        (
-                            'data' => $option->type == 'pie' ? $chartOption : array_column($chartOption, 'value'),
-                            'type' => $option->type
-                        )
-                    )
-                )
-            )->size('100%', 300),
-        ),
-        cell
-        (
-            set::width('50%'),
-            h::table
-            (
-                set::class('table'),
-                h::tr
-                (
-                    h::th($lang->report->item),
-                    h::th(set::width('100px'), $lang->report->value),
-                    h::th(set::width('120px'), $lang->report->percent)
-                ),
-                $tableTR
-            )
-        )
+        set::type($option->type),
+        set::title($lang->testtask->report->charts[$type]),
+        set::datas((array)$chartData)
     );
 }
 
