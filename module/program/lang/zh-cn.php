@@ -189,12 +189,6 @@ $lang->program->featureBar['productview']['wait']     = '未开始';
 $lang->program->featureBar['productview']['doing']    = '进行中';
 $lang->program->featureBar['productview']['more']     = $lang->more;
 
-$lang->program->featureBar['projectview']['all']      = '全部';
-$lang->program->featureBar['projectview']['unclosed'] = '未关闭';
-$lang->program->featureBar['projectview']['wait']     = '未开始';
-$lang->program->featureBar['projectview']['doing']    = '进行中';
-$lang->program->featureBar['projectview']['more']     = $lang->more;
-
 $lang->program->moreSelects['suspended'] = '已挂起';
 $lang->program->moreSelects['closed']    = '已关闭';
 
