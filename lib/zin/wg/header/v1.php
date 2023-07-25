@@ -187,7 +187,8 @@ class header extends wg
                     'icon' => 'controls',
                     'text' => $lang->preference,
                     'class' => 'iframe',
-                    'data-width' => 700
+                    'data-width' => 700,
+                    'data-toggle' => 'modal'
                 );
             }
 

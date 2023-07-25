@@ -1481,9 +1481,8 @@ EOF;
             foreach($_POST as $key => $value) $this->setting->setItem("{$this->app->user->account}.common.$key", $value);
 
             $this->setting->setItem("{$this->app->user->account}.common.preferenceSetted", 1);
-            if(isOnlybody()) return print(js::closeModal('parent.parent'));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('my', 'index')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;
