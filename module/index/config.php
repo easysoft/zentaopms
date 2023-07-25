@@ -50,7 +50,6 @@ $config->index->oldPages[] = 'dev-langitem';
 $config->index->oldPages[] = 'dev-editor';
 $config->index->oldPages[] = 'action-trash';
 $config->index->oldPages[] = 'dept-browse';
-$config->index->oldPages[] = 'story-report';
 $config->index->oldPages[] = 'user-dynamic';
 $config->index->oldPages[] = 'repo-setrules';
 $config->index->oldPages[] = 'host-treemap';
