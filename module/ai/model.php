@@ -715,10 +715,6 @@ class aiModel extends model
                 /* TODO: add more later. */
                 break;
         }
-        if($module == 'doc')
-        {
-            if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
-        }
 
         $objectVars = get_object_vars($object);
         if(empty($objectVars)) return false;
