@@ -10,9 +10,9 @@
  * 单位：个
  * 描述：按全局统计的激活Bug数是指当前尚未解决的Bug数量。这个度量项反映了系统或项目当前存在的待解决问题数量。激活Bug总数越多可能代表系统或项目的稳定性较低，需要加强Bug解决的速度和质量。
  * 定义：所有Bug个数求和
-状态为激活
-过滤已删除的Bug
-过滤已删除的产品
+ *       状态为激活
+ *       过滤已删除的Bug
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -25,16 +25,15 @@
  */
 class count_of_activated_bug extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getBugs';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.status');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($row)
     {
+        if($row->status == 'active') $this->result += 1;
     }
 
     public function getResult($options = array())
