@@ -86,7 +86,8 @@ if($browseType == 'annex')
 }
 elseif($libType == 'api')
 {
-    include '../../api/view/apilist.html.php';
+    h::css(file_get_contents($app->getModuleRoot() . 'api/css/index.ui.css'));
+    include '../../api/ui/index.html.php';
 }
 else
 {
