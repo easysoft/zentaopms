@@ -106,10 +106,13 @@ $lang->testcase->automation       = '自动化设置';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
-$lang->testcase->stepID      = '编号';
-$lang->testcase->stepDesc    = '步骤';
-$lang->testcase->stepExpect  = '预期';
-$lang->testcase->stepVersion = '版本';
+$lang->testcase->stepID             = '编号';
+$lang->testcase->stepDesc           = '步骤';
+$lang->testcase->stepExpect         = '预期';
+$lang->testcase->stepVersion        = '版本';
+$lang->testcase->stepSameLevel      = '同级';
+$lang->testcase->stepSubLevel       = '子级';
+$lang->testcase->expectDisabledTip  = '分层级后不可填写预期';
 
 $lang->testcase->index                   = "用例管理首页";
 $lang->testcase->create                  = "建用例";

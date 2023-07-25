@@ -246,7 +246,7 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->steps),
-            printStepsTable()
+            stepsEditor()
         )
     ),
     formRow
