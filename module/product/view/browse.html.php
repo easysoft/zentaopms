@@ -586,7 +586,7 @@ js::set('vision',        $this->config->vision);
           </div>
           <?php endif;?>
 
-          <?php if($canBatchChangeRoadmap and $config->edition == 'ipd'):?>
+          <?php if($canBatchChangeRoadmap and $config->edition == 'ipd' and $config->vision == 'or'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->roadmap->common;?> <span class="caret"></span></button>
             <?php
