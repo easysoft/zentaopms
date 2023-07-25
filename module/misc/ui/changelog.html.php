@@ -42,11 +42,10 @@ modalHeader
     )
 );
 
+$idx = count($features) == 1 ? '' : 1;
 $featureItems = array();
 foreach($features as $feature)
 {
-    $idx = count($features) == 1 ? '' : 1;
-
     $featureItems[] = div 
     (
         set('class', ''),
