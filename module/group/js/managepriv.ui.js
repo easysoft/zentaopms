@@ -25,7 +25,7 @@ $('.side').on('click', '.recommend input[type=checkbox]', (function()
     {
         recommendChange($(this), checked);
     }
-//    updatePrivTree(selectedPrivIdList);
+    updatePrivTree(selectedPrivIdList);
 }));
 
 $('#privPackageList').on('click', '.package > .priv-toggle.icon', function()
@@ -249,13 +249,13 @@ function updatePrivTree(privList)
         selectedPrivIdList = privList;
     }
 
-    $.ajax(
+    $.ajaxSubmit(
     {
         url: $.createLink('group', 'ajaxGetRelatedPrivs'),
         dataType: 'json',
         method: 'post',
         data: {"privList" : privList.toString(), "recommedSelect": recommedSelect.toString(), "excludeIdList": Object.values(excludeIdList).toString()},
-        success: function(data)
+        onComplete: function(data)
         {
             if(data.depend == undefined || data.depend.length == 0)
             {
@@ -264,7 +264,9 @@ function updatePrivTree(privList)
             }
             else
             {
-                $(".menuTree.depend").data('zui.tree').reload(data.depend);
+                $.cookie.set('dependData', JSON.stringify(data.depend));
+                $('.side .menuTree.depend').removeClass('hidden');
+                $('.side .menuTree.depend').load($.createLink('group', 'ajaxGetDependTree'));
                 $('.side .menuTree.depend').closest('.priv-panel').find('.table-empty-tip').addClass('hidden');
             }
 
@@ -275,8 +277,10 @@ function updatePrivTree(privList)
             }
             else
             {
+                $.cookie.set('recommendData', JSON.stringify(data.recommend));
+                $('.side .menuTree.recommend').removeClass('hidden');
                 $('.side .menuTree.recommend').closest('.priv-panel').find('.table-empty-tip').addClass('hidden');
-                $('.side .menuTree.recommend').load($.createLink('group', 'ajaxGetRecommendTree', 'data=' + JSON.stringify(data.recommend)));
+                $('.side .menuTree.recommend').load($.createLink('group', 'ajaxGetRecommendTree'));
                 $('.menuTree.recommend > li').each(function(){
                     var allItemLength     = $(this).find('ul input[type=checkbox]').length;
                     var checkedItemLength = $(this).find('ul input[type=checkbox]:checked').length;

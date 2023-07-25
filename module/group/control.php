@@ -1063,9 +1063,22 @@ class group extends control
      * @access public
      * @return void
      */
-    public function ajaxGetRecommendTree($data)
+    public function ajaxGetRecommendTree()
     {
-        $this->view->data = json_decode($data);
+        $this->view->data = json_decode($this->cookie->recommendData, true);
+        $this->display();
+    }
+
+    /**
+     * AJAX: Get depend's priv tree.
+     *
+     * @param  string $data
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDependTree()
+    {
+        $this->view->data = json_decode($this->cookie->dependData, true);
         $this->display();
     }
 }
