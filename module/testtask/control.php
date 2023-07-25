@@ -748,7 +748,7 @@ class testtask extends control
         $this->view->browseType   = 'group';
         $this->view->groupBy      = $groupBy;
         $this->view->groupByList  = $groupByList;
-        $this->view->cases        = $groupCases;
+        $this->view->cases        = $runs;
         $this->view->account      = 'all';
         $this->view->canBeChanged = $canBeChanged;
         $this->display();
