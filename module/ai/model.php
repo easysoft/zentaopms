@@ -686,8 +686,34 @@ class aiModel extends model
             case 'project':
                 if(isset($sourceGroups['project'])) $object->project = $this->loadModel('project')->getById($objectId);
                 break;
+            case 'release':
+                if(isset($sourceGroups['release'])) $object->release = $this->loadModel('release')->getById($objectId);
+                $stories = array_filter(explode(',', $object->release->stories));
+                if(isset($sourceGroups['stories'])) $object->stories = $this->loadModel('story')->getByList($stories);
+                $bugs = array_filter(explode(',', $object->release->bugs));
+                if(isset($sourceGroups['bugs'])) $object->bugs = $this->loadModel('bug')->getByList($bugs);
+                break;
+            case 'productplan':
+                if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
+                if(isset($sourceGroups['stories']))     $object->stories     = $this->loadModel('story')->getPlanStories($objectId);
+                if(isset($sourceGroups['bugs']))        $object->bugs        = $this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll();
+                break;
+            case 'task':
+                if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
+                break;
+            case 'case':
+                if(isset($sourceGroups['case'])) $object->case = $this->loadModel('testcase')->getById($objectId);
+                if(isset($sourceGroups['steps'])) $object->steps = $object->case->steps;
+                break;
+            case 'bug':
+                if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
+                break;
+            case 'doc':
+                if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
+                break;
             case 'my':
                 /* TODO: add more later. */
+                break;
         }
         if($module == 'doc')
         {
