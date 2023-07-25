@@ -469,6 +469,7 @@ class baseControl
      *
      * @param  string $moduleName
      * @param  string $methodName
+     * @param  string $suffix
      * @access public
      * @return string
      */
@@ -507,7 +508,6 @@ class baseControl
 
         if(!empty($cssExtPath))
         {
-            $realModulePath = realPath($modulePath);
             foreach($cssExtPath as $cssPath)
             {
                 if(empty($cssPath)) continue;
@@ -516,10 +516,10 @@ class baseControl
                 $cssCommonExt = $cssPath . 'common' . DS;
 
                 $cssExtFiles = glob($cssCommonExt . $devicePrefix . "*{$suffix}.css");
-                if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
+                if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles, $suffix);
 
                 $cssExtFiles = glob($cssMethodExt . $devicePrefix . "*{$suffix}.css");
-                if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
+                if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles, $suffix);
             }
         }
 
@@ -529,11 +529,12 @@ class baseControl
     /**
      * Get extension css and extension css with lang.
      *
-     * @param  array $files
+     * @param  array  $files
+     * @param  string $suffix
      * @access public
      * @return string
      */
-    public function getExtCSS(array $files): string
+    public function getExtCSS(array $files, string $suffix = ''): string
     {
         $clientLang = $this->app->getClientLang();
         $notCNLang  = !str_contains('|zh-cn|zh-tw|', "|{$clientLang}|");
@@ -561,15 +562,18 @@ class baseControl
                 if(isset($usedCodes[$code])) continue;
             }
 
-
             /* Method extension css file. like module/story/ext/css/create/effort.zh-cn.css. */
-            if(isset($filePairs["{$code}.{$clientLang}.css"]))
+            if(isset($filePairs["{$code}.{$clientLang}{$suffix}.css"]))
             {
-                $css .= file_get_contents($filePairs["{$code}.{$clientLang}.css"]);
+                $css .= file_get_contents($filePairs["{$code}.{$clientLang}{$suffix}.css"]);
             }
-            elseif($notCNLang and isset($filePairs["{$code}.en.css"]))
+            elseif($notCNLang and isset($filePairs["{$code}.en{$suffix}.css"]))
             {
-                $css .= file_get_contents($filePairs["{$code}.en.css"]);
+                $css .= file_get_contents($filePairs["{$code}.en{$suffix}.css"]);
+            }
+            elseif($notCNLang and isset($filePairs["{$code}{$suffix}.css"]))
+            {
+                $css .= file_get_contents($filePairs["{$code}{$suffix}.css"]);
             }
             $usedCodes[$code] = $code;
         }
