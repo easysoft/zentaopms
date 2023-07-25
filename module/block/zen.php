@@ -1485,80 +1485,64 @@ class blockZen extends block
         $status = isset($block->params->type)  ? $block->params->type : '';
         $count  = isset($block->params->count) ? (int)$block->params->count : 0;
 
-        $projectID  = $this->lang->navGroup->qa == 'project' ? $this->session->project : 0;
-        $products   = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID, 'all');
-        $executions = $this->loadModel('execution')->getPairs($projectID, 'all', 'empty|withdelete');
-        if(empty($products))
+        $projectID     = $this->lang->navGroup->qa == 'project' ? $this->session->project : 0;
+        $products      = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID, 'all');
+        $productIdList = array_keys($products);
+
+        $this->loadModel('metric');
+        $years  = array();
+        $months = array();
+        for($i = 0; $i <= 1; $i ++)
         {
-            $this->view->products = $products;
-            return;
+            $years[] = date('Y', strtotime("-{$i} day"));
+            $months[] = date('m', strtotime("-{$i} day"));
         }
-
-        $productIdList  = array_keys($products);
-        $today          = date(DT_DATE1);
-        $yesterday      = date(DT_DATE1, strtotime('yesterday'));
-        $doingTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
-            ->where('product')->in($productIdList)
-            ->andWhere('project')->ne(0)
-            ->andWhere('status')->eq('doing')
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('begin_asc')
-            ->fetchGroup('product');
-
-        $waitTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
-            ->where('product')->in($productIdList)
-            ->andWhere('project')->ne(0)
-            ->andWhere('status')->eq('wait')
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('begin')->ge(date('Y-m-d'))
-            ->orderBy('begin_desc')
-            ->fetchGroup('product');
-
-        $bugs = $this->dao->select("product, count(id) as total,
-            count(IF(assignedTo = '{$this->app->user->account}', 1, null)) as assignedToMe,
-            count(IF(status != 'closed', 1, null)) as unclosed,
-            count(IF(status != 'closed' and status != 'resolved', 1, null)) as unresolved,
-            count(IF(confirmed = '0' and toStory = '0', 1, null)) as unconfirmed,
-            count(IF(resolvedDate >= '$yesterday' and resolvedDate < '$today', 1, null)) as yesterdayResolved,
-            count(IF(closedDate >= '$yesterday' and closedDate < '$today', 1, null)) as yesterdayClosed")
-            ->from(TABLE_BUG)
-            ->where('product')->in($productIdList)
-            ->andWhere('execution')->in(array_keys($executions))
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('product')
-            ->fetchAll('product');
-
-        $confirmedBugs = $this->dao->select('product')->from(TABLE_ACTION)
-            ->where('objectType')->eq('bug')
-            ->andWhere('action')->eq('bugconfirmed')
-            ->andWhere('date')->ge($yesterday)
-            ->andWhere('date')->lt($today)
-            ->fetchAll();
-        $productConfirmedBugs = array();
-        foreach($confirmedBugs as $bug)
-        {
-            if(!isset($productConfirmedBugs[$bug->product])) $productConfirmedBugs[$bug->product] = 0;
-            $productConfirmedBugs[$bug->product]++;
-        }
+        $createdBugGroup  = $this->metric->getResultByCode('count_of_daily_created_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
+        $resolvedBugGroup = $this->metric->getResultByCode('count_of_daily_resolved_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
+        $closedBugGroup   = $this->metric->getResultByCode('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
 
         foreach($products as $productID => $product)
         {
-            $bug = isset($bugs[$productID]) ? $bugs[$productID] : '';
-            $product->total              = empty($bug) ? 0 : $bug->total;
-            $product->assignedToMe       = empty($bug) ? 0 : $bug->assignedToMe;
-            $product->unclosed           = empty($bug) ? 0 : $bug->unclosed;
-            $product->unresolved         = empty($bug) ? 0 : $bug->unresolved;
-            $product->unconfirmed        = empty($bug) ? 0 : $bug->unconfirmed;
-            $product->yesterdayResolved  = empty($bug) ? 0 : $bug->yesterdayResolved;
-            $product->yesterdayClosed    = empty($bug) ? 0 : $bug->yesterdayClosed;
-            $product->yesterdayConfirmed = empty($productConfirmedBugs[",$productID,"]) ? 0 : $productConfirmedBugs[",$productID,"];
+            $product->addToday          = 0;
+            $product->addYesterday      = 0;
+            $product->resolvedToday     = 0;
+            $product->resolvedYesterday = 0;
+            $product->closedToday       = 0;
+            $product->closedYesterday   = 0;
+            if(!empty($createdBugGroup))
+            {
+                foreach($createdBugGroup as $data)
+                {
+                    $currentDay = "{$data->year}-{$data->month}-{$data->day}";
+                    if($currentDay == date('Y-m-d') && $productID == $data->product)                      $product->addToday     = $data->value;
+                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data->product) $product->addYesterday = $data->value;
+                }
+            }
 
-            $product->assignedRate    = $product->total ? round($product->assignedToMe  / $product->total * 100, 2) : 0;
-            $product->unresolvedRate  = $product->total ? round($product->unresolved    / $product->total * 100, 2) : 0;
-            $product->unconfirmedRate = $product->total ? round($product->unconfirmed   / $product->total * 100, 2) : 0;
-            $product->unclosedRate    = $product->total ? round($product->unclosed      / $product->total * 100, 2) : 0;
-            $product->waitTesttasks   = isset($waitTesttasks[$productID])  ? $waitTesttasks[$productID]  : '';
-            $product->doingTesttasks  = isset($doingTesttasks[$productID]) ? $doingTesttasks[$productID] : '';
+            if(!empty($resolvedBugGroup))
+            {
+                foreach($resolvedBugGroup as $data)
+                {
+                    $currentDay = "{$data->year}-{$data->month}-{$data->day}";
+                    if($currentDay == date('Y-m-d') && $productID == $data->product)                      $product->resolvedToday     = $data->value;
+                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data->product) $product->resolvedYesterday = $data->value;
+                }
+            }
+
+            if(!empty($closedBugGroup))
+            {
+                foreach($closedBugGroup as $data)
+                {
+                    $currentDay = "{$data->year}-{$data->month}-{$data->day}";
+                    if($currentDay == date('Y-m-d') && $productID == $data->product)                      $product->closedToday     = $data->value;
+                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data->product) $product->closedYesterday = $data->value;
+                }
+            }
+
+            $product->closedBugRate     = rand(0, 100);
+            $product->totalBug          = rand(0, 100);
+            $product->closedBug         = rand(0, 100);
+            $product->activatedBug      = rand(0, 100);
         }
 
         $this->view->products = $products;

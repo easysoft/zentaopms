@@ -90,17 +90,6 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
     $tabItems = array();
     foreach($products as $product)
     {
-        $product->addYesterday      = rand(0, 100);
-        $product->addToday          = rand(0, 100);
-        $product->resolvedYesterday = rand(0, 100);
-        $product->resolvedToday     = rand(0, 100);
-        $product->closedYesterday   = rand(0, 100);
-        $product->closedToday       = rand(0, 100);
-        $product->closedBugRate     = rand(0, 100);
-        $product->totalBug          = rand(0, 100);
-        $product->closedBug         = rand(0, 100);
-        $product->activatedBug      = rand(0, 100);
-
         $waitTesttasks = array();
         if(!empty($product->waitTesttasks))
         {
@@ -138,7 +127,7 @@ $getProductInfo = function(array $products, string $blockNavID, bool $longBlock)
                     (
                         set('class', 'progress-bar'),
                         set('role', 'progressbar'),
-                        setStyle(array('width' => ($product->{$field} / $progressMax * 100) . '%', 'background' => $key % 2 === 0 ? 'var(--color-secondary-200)' : 'var(--color-primary-300)')),
+                        setStyle(array('width' => (($progressMax ? $product->{$field} / $progressMax : 0) * 100) . '%', 'background' => $key % 2 === 0 ? 'var(--color-secondary-200)' : 'var(--color-primary-300)')),
                     )
                 )
             );
