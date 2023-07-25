@@ -29,7 +29,7 @@
         ?>
         <div class="pull-right btn-toolbar">
           <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$story->id"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');?>
-          <?php if(!empty($auditTime) && time() - $auditTime < 30 * 60): ?>
+          <?php if(!empty($auditTime) && time() - $auditTime < 10 * 60): ?>
             <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$story->id"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"'); ?>
           <?php endif;?>
         </div>
