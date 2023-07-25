@@ -17,8 +17,8 @@
 <style>
 .submitBtn{display:none}
 .gantt_row_task:hover .submitBtn{ display: inline-block;}
-.editDeadline {display: none;}
-td:hover > .deadline + .editDeadline {display: inline-block; line-height: normal !important; padding: 2px 6px; color: #fff !important;}
+.editDeadline {display: none; line-height: normal !important; padding: 2px 6px; color: #fff !important;}
+td:hover > .editDeadline {display: inline-block !important;}
 .gantt_tree_content table {width: 100%;}
 .gantt_tree_content table td {padding: 0 !important;}
 #ganttView {height: 600px;}
@@ -820,6 +820,12 @@ $(function()
                   location.reload();
                });
 
+           })
+           .on('show', function(){
+               editBtn.css('display', 'inline-block');
+           });
+           .on('hide', function(){
+               editBtn.css('display', 'none');
            });
            editBtn.datetimepicker('show');
            return false;
