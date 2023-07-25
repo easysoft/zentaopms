@@ -282,8 +282,7 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
-            $isJumpToNext = $data->jumpToNext == '1';
-            unset($data->jumpToNext);
+            $isJumpToNext = !empty($data->jumpToNext);
 
             $originalPrompt = clone $prompt;
 
@@ -326,8 +325,7 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
-            $isJumpToNext = $data->jumpToNext == '1';
-            unset($data->jumpToNext);
+            $isJumpToNext = !empty($data->jumpToNext);
 
             $originalPrompt = clone $prompt;
 
@@ -368,8 +366,7 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
-            $isJumpToNext = $data->jumpToNext == '1';
-            unset($data->jumpToNext);
+            $isJumpToNext = !empty($data->jumpToNext);
 
             $originalPrompt = clone $prompt;
 
@@ -416,8 +413,7 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
-            $isJumpToNext = $data->jumpToNext == '1';
-            unset($data->jumpToNext);
+            $isJumpToNext = !empty($data->jumpToNext);
 
             $originalPrompt = clone $prompt;
 
