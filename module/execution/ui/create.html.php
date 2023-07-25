@@ -301,13 +301,16 @@ formPanel
     ),
     formGroup
     (
-        set::required(true),
         set::width('1/2'),
-        set::name('project'),
         set::label($lang->execution->projectName),
-        set::items($allProjects),
-        set::value($projectID),
-        on::change('refreshPage'),
+        picker(
+            set::required(true),
+            setID('project'),
+            set::name('project'),
+            set::items($allProjects),
+            set::value($projectID),
+            on::change('refreshPage'),
+        )
     ),
     $methodBox,
     formGroup
