@@ -24,15 +24,20 @@ panel
         set::data($queueList),
         set::userMap($users),
         set::checkable($canBatchDelete),
+        set::onRenderCell(jsRaw('window.renderCell')),
         $canBatchDelete ? set::footToolbar(array
         (
             'type'  => 'btn-group',
             'items' => array(array
             (
-                'text'    => $lang->delete,
-                'btnType' => 'secondary',
-                'url'     => createLink('mail', 'batchDelete'),
-                'onClick' => jsRaw('window.onClickBatchDelete')
+                'text'            => $lang->delete,
+                'btnType'         => 'secondary',
+                'className'       => 'batch-btn',
+                'data-on'         => 'click',
+                'data-call'       => 'onClickBatchDelete',
+                'data-params'     => 'event',
+                'data-formaction' => createLink('mail', 'batchDelete'),
+                'data-confirm'    => $lang->mail->confirmDelete,
             ))
         )) : null,
         set::footPager(usePager())

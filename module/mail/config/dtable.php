@@ -6,7 +6,7 @@ $config->mail->browse->dtable = new stdclass();
 
 $config->mail->browse->dtable->fieldList['id']['name']     = 'id';
 $config->mail->browse->dtable->fieldList['id']['title']    = $lang->idAB;
-$config->mail->browse->dtable->fieldList['id']['type']     = 'id';
+$config->mail->browse->dtable->fieldList['id']['type']     = 'checkID';
 $config->mail->browse->dtable->fieldList['id']['checkbox'] = true;
 $config->mail->browse->dtable->fieldList['id']['sortType'] = true;
 $config->mail->browse->dtable->fieldList['id']['required'] = true;
@@ -14,7 +14,7 @@ $config->mail->browse->dtable->fieldList['id']['group']    = 1;
 
 $config->mail->browse->dtable->fieldList['toList']['name']     = 'toList';
 $config->mail->browse->dtable->fieldList['toList']['title']    = $lang->mail->toList;
-$config->mail->browse->dtable->fieldList['toList']['type']     = 'text';
+$config->mail->browse->dtable->fieldList['toList']['type']     = 'user';
 $config->mail->browse->dtable->fieldList['toList']['sortType'] = true;
 $config->mail->browse->dtable->fieldList['toList']['required'] = true;
 $config->mail->browse->dtable->fieldList['toList']['group']    = 2;

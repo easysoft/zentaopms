@@ -321,10 +321,7 @@ class mail extends control
     public function resend($queueID)
     {
         $queue = $this->mail->getQueueById($queueID);
-        if($queue and $queue->status == 'sended')
-        {
-            return $this->sendSuccess(array('message' => $this->lang->mail->noticeResend, 'load' => true));
-        }
+        if($queue and $queue->status == 'sended') return $this->sendSuccess(array('message' => $this->lang->mail->noticeResend, 'load' => true));
 
         if(isset($this->config->mail->async)) $this->config->mail->async = 0;
         $this->mail->send($queue->toList, $queue->subject, $queue->data, $queue->ccList);
@@ -336,16 +333,12 @@ class mail extends control
         if($this->mail->isError())
         {
             $data->status     = 'fail';
-            $data->failReason = implode("\n", $this->mail->getError());
+            $data->failReason = str_replace("\n", '', implode("\n", $this->mail->getError()));
         }
         $this->dao->update(TABLE_NOTIFY)->data($data)->where('id')->in($queue->id)->exec();
 
-        if($data->status == 'fail')
-        {
-            return $this->send(array('callback' => "zui.Modal.alert('{$data->failReason}')"));
-        }
-
-        return $this->sendSuccess(array('message' => $this->lang->mail->noticeResend, 'load' => true));
+        if($data->status == 'fail') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert(" . json_encode(array('message' => array('html' => $data->failReason))) . ")"));
+        return $this->sendSuccess(array('result' => 'success', 'message' => $this->lang->mail->noticeResend, 'load' => true));
     }
 
     /**
@@ -380,43 +373,26 @@ class mail extends control
      * @access public
      * @return void
      */
-    public function delete($id, $confirm = 'no')
+    public function delete($id)
     {
-        if($confirm == 'no') return $this->send(array('callback' => "confirmDelete('" . inlink('delete', "id=$id&confirm=yes") . "')"));
-
         $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->eq($id)->exec();
-
-        return $this->send(array('callback' => 'loadCurrentPage()'));
+        return $this->send(array('result' => 'success', 'callback' => 'loadCurrentPage()'));
     }
 
     /**
      * Batch delete mail queue.
      *
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function batchDelete($confirm = 'no')
+    public function batchDelete()
     {
-        if($confirm == 'no')
-        {
-            if(empty($_POST)) return print(js::reload('parent'));
-            $idList = implode('|', $this->post->mailIDList);
-
-            $confirmLink  = inlink('batchDelete', "confirm=yes");
-            $confirmLink .= strpos($confirmLink, '?') === false ? '?' : '&';
-            $confirmLink .= "idList=$idList";
-
-            return $this->send(array('callback' => "confirmDelete('$confirmLink')"));
-        }
+        $idList = implode('|', $this->post->mailIdList);
+        if(empty($idList)) return $this->send(array('result' => 'fail', 'load' => true));
 
         /* Get deleted ID list from query string. */
-        $idList = array();
-        if(isset($_GET['idList'])) $idList = explode('|', $_GET['idList']);
-
-        if($idList) $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($idList)->exec();
-
-        return $this->send(array('callback' => 'loadCurrentPage()'));
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($idList)->exec();
+        return $this->send(array('result' => 'success', 'callback' => 'loadCurrentPage()'));
     }
 
     /**
