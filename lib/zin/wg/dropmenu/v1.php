@@ -38,7 +38,7 @@ class dropmenu extends wg
         'text?:     string',            // 选择按钮上显示的文本。
         'cache?:    bool|int=true',     // 是否启用缓存。
         'data?:     array',             // 手动指定数据。
-        'menuID?:   string="$GID"',     // 指定下拉菜单的ID。
+        'menuID?:   string',            // 指定下拉菜单的ID。
     );
 
     /**
@@ -65,6 +65,7 @@ class dropmenu extends wg
         $app    = data('app');
         $lang   = data('lang');
 
+        if(empty($menuID))   $menuID   = $id . '-menu';
         if(empty($tab))      $tab      = $app->tab;
         if(empty($module))   $module   = $app->rawModule;
         if(empty($method))   $method   = $app->rawMethod;
