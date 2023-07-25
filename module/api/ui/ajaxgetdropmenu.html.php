@@ -47,7 +47,7 @@ $tabs[] = array('name' => 'closed', 'text' => $lang->doc->closed);
  * 定义最终的 JSON 数据。
  * Define the final json data.
  */
-$link = $this->createLink($module, $method, "objectID=%s");
+$link = $this->createLink('api', 'index', "objectID=%s");
 
 $json = array();
 $json['data']       = $data;

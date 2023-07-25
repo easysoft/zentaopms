@@ -66,7 +66,7 @@ toolbar
     ))) : null,
 );
 
-include '../../doc/ui/left.html.php';
+if($app->rawModule == 'api') include '../../doc/ui/left.html.php';
 
 $list = array();
 foreach($apiList as $api)
@@ -113,7 +113,7 @@ panel
     (
         setClass('detail'),
         h::ul
-        ( 
+        (
             setClass('list-group'),
             $list
         )
