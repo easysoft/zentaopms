@@ -8,11 +8,11 @@
  * 目的：scale
  * 度量名称：按全局统计的已关闭Bug总数
  * 单位：个
- * 描述：按全局统计的已关闭Bug总数是指已经被关闭的Bug数量。这个度量项反映了系统或项目中已经关闭的缺陷数量。已关闭Bug总数的增加说明项目进行了持续的改进和修复工作。 
+ * 描述：按全局统计的已关闭Bug总数是指已经被关闭的Bug数量。这个度量项反映了系统或项目中已经关闭的缺陷数量。已关闭Bug总数的增加说明项目进行了持续的改进和修复工作。
  * 定义：所有Bug个数求和
-状态为已关闭
-过滤已删除的Bug
-过滤已删除的产品
+ *       状态为已关闭
+ *       过滤已删除的Bug
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -25,16 +25,15 @@
  */
 class count_of_closed_bug extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getBugs';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.status');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($row)
     {
+        if($row->status == 'closed') $this->result += 1;
     }
 
     public function getResult($options = array())
