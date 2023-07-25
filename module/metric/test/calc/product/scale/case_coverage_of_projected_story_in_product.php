@@ -12,7 +12,7 @@ $calc   = $metric->calcMetric(__FILE__);
 
 /**
 
-title=testcase_coverage_of_projected_story_in_product
+title=case_coverage_of_projected_story_in_product
 timeout=0
 cid=1
 

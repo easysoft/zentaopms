@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的已立项研发需求的用例覆盖率
- * testcase_coverage_of_projected_story_in_product.
+ * case coverage of projected story in product.
  *
  * 范围：product
  * 对象：story
@@ -19,7 +19,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class testcase_coverage_of_projected_story_in_product extends baseCalc
+class case_coverage_of_projected_story_in_product extends baseCalc
 {
     public $idList = array();
 

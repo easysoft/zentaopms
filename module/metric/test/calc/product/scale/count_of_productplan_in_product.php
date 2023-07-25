@@ -11,7 +11,7 @@ $calc   = $metric->calcMetric(__FILE__);
 
 /**
 
-title=count_of_plan_in_product
+title=count_of_productplan_in_product
 cid=1
 pid=1
 

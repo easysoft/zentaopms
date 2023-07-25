@@ -11,7 +11,7 @@ $calc   = $metric->calcMetric(__FILE__);
 
 /**
 
-title=count_of_annual_created_plan_in_product
+title=count_of_annual_created_productplan_in_product
 timeout=0
 cid=1
 

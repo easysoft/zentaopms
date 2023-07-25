@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的计划总数。
- * Count of plan in product.
+ * count of productplan in product.
  *
  * 范围：产品
  * 对象：计划
@@ -19,7 +19,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_plan_in_product extends baseCalc
+class count_of_productplan_in_product extends baseCalc
 {
     public $dataset = 'getPlans';
 
