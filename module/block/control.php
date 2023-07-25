@@ -283,7 +283,8 @@ class block extends control
 
         /* 为项目仪表盘页面，设置1.5级导航的项目ID. */
         if($this->app->rawModule == 'project' && $this->app->rawMethod == 'index') $this->view->projectID = $this->session->project;
-        if($this->app->rawModule == 'qa' && $this->app->rawMethod == 'index')      $this->view->productID = $this->session->product;
+        if(($this->app->rawModule == 'qa' && $this->app->rawMethod == 'index') ||
+         ($this->app->rawModule == 'product' && $this->app->rawMethod == 'dashboard')) $this->view->productID = $this->session->product;
 
         /* 组织渲染页面需要数据。 */
         $this->view->title     = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
