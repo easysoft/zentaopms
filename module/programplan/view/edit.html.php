@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('plan', $plan);?>
-<?php js::set('stageTypeList', $lang->stage->typeList);?>
+<?php js::set('stageTypeList', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);?>
 <?php js::set('changeAttrLang', $lang->programplan->confirmChangeAttr);?>
 <?php js::set('isTopStage', $isTopStage);?>
 <?php js::set('isLeafStage', $isLeafStage);?>

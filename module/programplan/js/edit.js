@@ -29,7 +29,6 @@ $(function()
 
     $('#submit').click(function()
     {
-        if(projectModel == 'ipd') return true;
         if(plan.parent != $('#parent').val() && $('#parent').val() != 0)
         {
             var result = true;
