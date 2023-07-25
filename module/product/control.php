@@ -54,11 +54,8 @@ class product extends control
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
         if($this->app->viewType == 'mhtml') $this->product->setMenu($productID, $branch);
 
-        /* Add create product button for view. */
-        if(common::hasPriv('product', 'create')) $this->lang->TRActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
-
         $this->view->title = $this->lang->product->index;
-        echo $this->fetch('block', 'dashboard', 'dashboard=product');
+        $this->display();
     }
 
     /**
