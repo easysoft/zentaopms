@@ -112,7 +112,11 @@
                     <?php foreach($data as $value):?>
                     <?php echo '<tr>';?>
                       <?php foreach($fields as $key => $field):?>
-                      <td title='<?php echo isset($value->$key) ? $value->$key : 'null';?>'><?php echo isset($value->$key) ? $value->$key : 'null';?></td>
+                      <?php
+                        $tdValue = isset($value->$key) ? $value->$key : 'null';
+                        if(is_array(json_decode($tdValue))) $tdValue = 'null';
+                      ?>
+                      <td title='<?php echo $tdValue;?>'><?php echo $tdValue;?></td>
                       <?php endforeach;?>
                     <?php echo '</tr>';?>
                     <?php endforeach;?>
