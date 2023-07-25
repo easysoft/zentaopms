@@ -374,7 +374,7 @@ class aiModel extends model
     public function getPrompts($module = '', $status = '', $order = 'id_desc', $pager = null)
     {
         $prompts = $this->dao->select('*')->from(TABLE_PROMPT)
-            ->where('1=1')
+            ->where('deleted')->eq(0)
             ->beginIF(!empty($module))->andWhere('module')->eq($module)->fi()
             ->beginIF(!empty($status))->andWhere('status')->eq($status)->fi()
             ->orderBy($order)
@@ -480,6 +480,29 @@ class aiModel extends model
 
         $actionId = $this->loadModel('action')->create('prompt', $prompt->id, $actionType);
         if(!empty($changes)) $this->action->logHistory($actionId, $changes);
+
+        return true;
+    }
+
+    /**
+     * Delete a prompt.
+     *
+     * @param  int  $id
+     * @access public
+     * @return bool
+     */
+    public function deletePrompt($id)
+    {
+        $prompt = $this->getPromptById($id);
+        if(empty($prompt)) return false;
+
+        $this->dao->update(TABLE_PROMPT)
+            ->set('deleted')->eq(1)
+            ->where('id')->eq($id)
+            ->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('prompt', $id, 'deleted');
 
         return true;
     }
@@ -688,10 +711,8 @@ class aiModel extends model
                 break;
             case 'release':
                 if(isset($sourceGroups['release'])) $object->release = $this->loadModel('release')->getById($objectId);
-                $stories = array_filter(explode(',', $object->release->stories));
-                if(isset($sourceGroups['stories'])) $object->stories = $this->loadModel('story')->getByList($stories);
-                $bugs = array_filter(explode(',', $object->release->bugs));
-                if(isset($sourceGroups['bugs'])) $object->bugs = $this->loadModel('bug')->getByList($bugs);
+                if(isset($sourceGroups['stories'])) $object->stories = $this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories)));
+                if(isset($sourceGroups['bugs']))    $object->bugs    = $this->loadModel('bug')->getByList(array_filter(explode(',', $object->release->bugs)));
                 break;
             case 'productplan':
                 if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
@@ -702,7 +723,7 @@ class aiModel extends model
                 if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
                 break;
             case 'case':
-                if(isset($sourceGroups['case'])) $object->case = $this->loadModel('testcase')->getById($objectId);
+                if(isset($sourceGroups['case']))  $object->case  = $this->loadModel('testcase')->getById($objectId);
                 if(isset($sourceGroups['steps'])) $object->steps = $object->case->steps;
                 break;
             case 'bug':
@@ -1015,7 +1036,8 @@ class aiModel extends model
     public function getPromptsForUser($module)
     {
         return $this->dao->select('*')->from(TABLE_PROMPT)
-            ->where('module')->eq($module)
+            ->where('deleted')->eq(0)
+            ->andWhere('module')->eq($module)
             ->andWhere('status', true)->eq('active')->orWhere('createdBy')->eq($this->app->user->account)->markRight(1)
             ->orderBy('id_desc')
             ->fetchAll();

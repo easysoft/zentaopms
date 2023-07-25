@@ -210,6 +210,21 @@ class ai extends control
     }
 
     /**
+     * Delete a prompt.
+     *
+     * @param  int    $prompt
+     * @access public
+     * @return void
+     */
+    public function promptDelete($prompt)
+    {
+        $result = $this->ai->deletePrompt($prompt);
+
+        if(dao::isError() || $result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
      * Edit role of prompt, prompt editing step 2.
      *
      * @param  int    $promptID
