@@ -331,6 +331,31 @@ class instance extends control
     }
 
     /**
+     * 访问一个应用。
+     * Visit a app.
+     *
+     * @param  int    $id
+     * @param  int    $externalID
+     * @access public
+     * @return void
+     */
+    public function visit(int $id, int $externalID): void
+    {
+        if(!$externalID)
+        {
+            $instance = $this->instance->getByID($id);
+            $url      = $this->instance->url($instance);
+        }
+        else
+        {
+            $pipeline = $this->loadModel('pipeline')->getByID($externalID);
+            $url      = $pipeline->url;
+        }
+
+        $this->locate($url);
+    }
+
+    /**
      * (Not used at present.) Install app by custom settings.
      *
      * @param int $id

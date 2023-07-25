@@ -45,31 +45,38 @@ class space extends control
             $search = $conditions->search;
         }
 
-        $this->app->loadClass('pager', true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        $instances = $this->space->getSpaceInstances($space->id, $browseType, $search, $pager);
-        $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc', $pager);
+        $instances = $this->space->getSpaceInstances($space->id, $browseType, $search);
+        foreach($instances as $instance) $instance->externalID = 0;
+        $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc');
+        $maxID = max(array_keys($instances));
         foreach($pipelines as $pipeline)
         {
-            $pipeline->createdAt = $pipeline->createdDate;
-            $pipeline->appName   = ucfirst($pipeline->type);
-            $pipeline->status    = '';
-            $pipeline->type      = 'external';
+            $pipeline->createdAt  = $pipeline->createdDate;
+            $pipeline->appName    = ucfirst($pipeline->type);
+            $pipeline->status     = '';
+            $pipeline->type       = 'external';
+            $pipeline->externalID = $pipeline->id;
+            $pipeline->id = ++ $maxID;
         }
         $allInstances = array_merge($instances, $pipelines);
 
+        /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
         $createdColumn = array_column((array)$allInstances, $order == 'id' ? 'createdAt' : $order);
         array_multisort($createdColumn, $sort == 'desc' ? SORT_DESC : SORT_ASC, $allInstances);
-        $allInstances = array_slice($allInstances, 0, $recPerPage);
+
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $recTotal = count($allInstances);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $allInstances = array_chunk($allInstances, $pager->recPerPage);
 
         $this->view->title        = $this->lang->space->common;
         $this->view->position[]   = $this->lang->space->common;
         $this->view->pager        = $pager;
         $this->view->browseType   = $browseType;
         $this->view->spaceType    = $spaceType;
-        $this->view->instances    = $allInstances;
+        $this->view->instances    = (empty($allInstances) or empty($allInstances[$pageID - 1])) ? array() : $allInstances[$pageID - 1];
         $this->view->currentSpace = $space;
         $this->view->searchName   = $search;
 

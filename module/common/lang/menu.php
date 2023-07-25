@@ -486,7 +486,7 @@ $lang->devops->homeMenu = new stdclass();
 //$lang->devops->homeMenu->dashboard   = array('link' => "{$lang->dashboard}|system|dashboard");
 $lang->devops->homeMenu->repos       = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import');
 $lang->devops->homeMenu->compile     = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->homeMenu->WIPs        = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store');
+$lang->devops->homeMenu->WIPs        = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store', 'alias' => 'createapplication');
 //$lang->devops->homeMenu->environment = array('link' => "{$lang->devops->environment}|gitlab|browse", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit,import');
 //$lang->devops->homeMenu->app         = array('link' => "{$lang->app->common}|app|serverlink|%s");
 

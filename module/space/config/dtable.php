@@ -9,7 +9,7 @@ $config->space->dtable = new stdclass();
 
 $config->space->dtable->fieldList['name']['title'] = $lang->instance->name;
 $config->space->dtable->fieldList['name']['type']  = 'title';
-$config->space->dtable->fieldList['name']['link']  = helper::createLink('instance', 'view', "id={id}");
+$config->space->dtable->fieldList['name']['link']  = array('url' => helper::createLink('instance', 'visit', 'id={id}&externalID={externalID}'), 'target' => '_blank');
 
 $config->space->dtable->fieldList['appName']['title'] = $lang->instance->appName;
 $config->space->dtable->fieldList['appName']['type']  = 'text';
@@ -48,9 +48,10 @@ $config->space->dtable->fieldList['actions']['list']['stop']['hint'] = $lang->in
 $config->space->dtable->fieldList['actions']['list']['uninstall']['icon'] = 'trash';
 $config->space->dtable->fieldList['actions']['list']['uninstall']['hint'] = $lang->instance->uninstall;
 
-$config->space->dtable->fieldList['actions']['list']['visit']['icon'] = 'menu-my';
-$config->space->dtable->fieldList['actions']['list']['visit']['hint'] = $lang->instance->visit;
-$config->space->dtable->fieldList['actions']['list']['visit']['url']  = array('module' => 'instance', 'method' => 'visit', 'params' => 'id={id}&type={type}');
+$config->space->dtable->fieldList['actions']['list']['visit']['icon']   = 'menu-my';
+$config->space->dtable->fieldList['actions']['list']['visit']['hint']   = $lang->instance->visit;
+$config->space->dtable->fieldList['actions']['list']['visit']['url']    = array('module' => 'instance', 'method' => 'visit', 'params' => 'id={id}&externalID={externalID}');
+$config->space->dtable->fieldList['actions']['list']['visit']['target'] = '_blank';
 
 $config->space->dtable->fieldList['actions']['list']['upgrade']['icon'] = 'refresh';
 $config->space->dtable->fieldList['actions']['list']['upgrade']['hint'] = $lang->space->upgrade;
