@@ -13,6 +13,7 @@ namespace zin;
 formPanel
 (
     setClass('import-holiday-panel'),
+    set::formClass('mb-4'),
     dtable
     (
         set::cols($this->config->holiday->dtable->import->fieldList),
