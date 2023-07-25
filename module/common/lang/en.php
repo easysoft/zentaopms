@@ -359,7 +359,7 @@ $lang->project->report = 'Report';
 
 $lang->report->weekly       = 'Weekly';
 $lang->report->notice       = new stdclass();
-$lang->report->notice->help = 'Note: The report is generated on the results of browsing the list. Click, e.g. AssignedToMe, then click Create Report to generate a report based on AssignedToMe list.';
+$lang->report->notice->help = '<i class="icon icon-help text-warning text-xl mr-2"></i>The report is generated on the results of browsing the list. Click, e.g. AssignedToMe, then click Create Report to generate a report based on AssignedToMe list.';
 
 $lang->testcase->case      = 'Test Case';
 $lang->testcase->testsuite = 'Test Suite';

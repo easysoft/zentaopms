@@ -356,7 +356,7 @@ $lang->project->report = 'Report';
 
 $lang->report->weekly       = 'Weekly';
 $lang->report->notice       = new stdclass();
-$lang->report->notice->help = 'Hinweis: Berichte wurde auf Basis der Suche generiert. Bitte suchen Sie in der Liste bevor Sie einen Bericht generieren.';
+$lang->report->notice->help = '<i class="icon icon-help text-warning text-xl mr-2"></i>Berichte wurde auf Basis der Suche generiert. Bitte suchen Sie in der Liste bevor Sie einen Bericht generieren.';
 
 $lang->testcase->case      = 'Test Case';
 $lang->testcase->testsuite = 'Test Suite';

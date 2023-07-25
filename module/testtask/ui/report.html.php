@@ -48,7 +48,7 @@ foreach($lang->report->typeList as $type => $typeName)
         set::active($type == $chartType),
         set::param($type),
         to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
-        span(set::class('text-gray'), str_replace('%tab%', $lang->testtask->wait . $lang->testcase->common, $lang->report->notice->help)),
+        div(set::class('pb-4 pt-2'), span(set::class('text-gray'), html(str_replace('%tab%', $lang->testtask->wait . $lang->testcase->common, $lang->report->notice->help)))),
         div($echarts)
     );
 }

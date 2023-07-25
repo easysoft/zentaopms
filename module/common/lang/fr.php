@@ -356,7 +356,7 @@ $lang->project->report = 'Report';
 
 $lang->report->weekly       = 'Weekly';
 $lang->report->notice       = new stdclass();
-$lang->report->notice->help = 'Note : Le rapport est généré à partir des résultats de la liste consultée. Par exemple, cliquez sur AssignedToMe, puis Générer Rapport pour obtenir un rapport basé sur la liste de ce qui vous est assigné.';
+$lang->report->notice->help = '<i class="icon icon-help text-warning text-xl mr-2"></i>Le rapport est généré à partir des résultats de la liste consultée. Par exemple, cliquez sur AssignedToMe, puis Générer Rapport pour obtenir un rapport basé sur la liste de ce qui vous est assigné.';
 
 $lang->testcase->case      = 'Test Case';
 $lang->testcase->testsuite = 'Test Suite';
