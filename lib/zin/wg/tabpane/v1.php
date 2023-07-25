@@ -8,6 +8,7 @@ class tabPane extends wg
         'key: string',
         'title: string',
         'active?: bool=false',
+        'param: string',
     );
 
     protected static array $defineBlocks = array(

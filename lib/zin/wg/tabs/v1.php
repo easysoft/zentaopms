@@ -29,6 +29,7 @@ class tabs extends wg
         $key    = $tabPane->prop('key');
         $title  = $tabPane->prop('title');
         $active = $tabPane->prop('active');
+        $param  = $tabPane->prop('param');
         $prefix = $tabPane->block('prefix');
         $suffix = $tabPane->block('suffix');
 
@@ -38,11 +39,12 @@ class tabs extends wg
             a
             (
                 set('data-toggle', 'tab'),
+                set('data-param', $param),
                 setClass('font-medium', $active ? 'active' : null),
                 set::href("#$key"),
                 $prefix,
                 span($title),
-                $suffix
+                $suffix,
             )
         );
     }

@@ -12,16 +12,12 @@ namespace zin;
 
 modalHeader();
 
-form
+formPanel
 (
     formGroup
     (
         set::label($lang->comment),
-        editor
-        (
-            set::name('comment'),
-            set::rows(6)
-        )
+        editor(set::name('comment'))
     ),
     set::actions(array('submit'))
 );
