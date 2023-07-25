@@ -27,15 +27,29 @@
         <tr id='headerBox'>
           <td width='90px'><?php echo html::a($backLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "id='backBtn' class='btn btn-secondary'");?></td>
           <td class="doc-title" colspan='3'><?php echo html::input('title', $doc->title, "placeholder='{$lang->doc->titlePlaceholder}'' id='editorTitle' class='form-control' required maxlength='100'");?></td>
-          <td class="text-right btn-tools">
-            <?php if($doc->status == 'draft'):?>
-            <?php echo html::commonButton($lang->doc->saveDraft, "id='saveDraft'", "btn btn-secondary");?>
-            <?php echo html::commonButton($lang->release->common, "id='saveRelease'", "btn btn-primary");?>
+            <?php if(isset($_SESSION['aiInjectData']) && isset($_SESSION['auditPrompt'])): ?>
+              <td class="text-right btn-tools">
+              <?php $this->app->loadLang('ai');
+                $prompt    = $_SESSION['auditPrompt']['prompt'];
+                if(isset($_SESSION['auditPrompt']['time'])) $auditTime = $_SESSION['auditPrompt']['time'];
+              ?>
+              <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$doc->id"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');?>
+              <?php if(!empty($auditTime) && time() - $auditTime < 30 * 60): ?>
+                <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$doc->id"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"'); ?>
+                <?php echo html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id" ,'btn btn-primary');?>
+                </td>
+              <?php endif;?>
+            <?php elseif($doc->status == 'draft'):?>
+              <td class="text-right btn-tools">
+              <?php echo html::commonButton($lang->doc->saveDraft, "id='saveDraft'", "btn btn-secondary");?>
+              <?php echo html::commonButton($lang->release->common, "id='saveRelease'", "btn btn-primary");?>
+              </td>
             <?php else:?>
-            <?php echo html::submitButton($lang->release->common, "", "btn btn-primary");?>
+              <td class="text-right btn-tools">
+              <?php echo html::submitButton($lang->release->common, "", "btn btn-primary");?>
+              <?php echo html::a('#modalBasicInfo', "<i class='icon icon-cog-outline'></i> " . $lang->settings, '', "data-toggle='modal' id='basicInfoLink' class='btn'");?>
+              </td>
             <?php endif;?>
-            <?php echo html::a('#modalBasicInfo', "<i class='icon icon-cog-outline'></i> " . $lang->settings, '', "data-toggle='modal' id='basicInfoLink' class='btn'");?>
-          </td>
         </tr>
         <tr>
           <td colspan='5' id="editorContent">
