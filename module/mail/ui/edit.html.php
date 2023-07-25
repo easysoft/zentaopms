@@ -150,7 +150,6 @@ formPanel
         set::items($config->charsets[$this->cookie->lang]),
     ),
     set::actions($formActions),
-    set::actionsClass('w-1/2'),
 );
 
 div

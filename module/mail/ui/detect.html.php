@@ -12,6 +12,7 @@ namespace zin;
 
 formPanel(
     set::labelWidth('11em'),
+    set::size('sm'),
     formGroup(
         set::width('1/2'),
         set::label($lang->mail->inputFromEmail),
