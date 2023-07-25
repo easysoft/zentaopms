@@ -10,8 +10,8 @@
  * 单位：个
  * 描述：按全局统计的已关闭执行数表示在整个系统中已关闭的执行项的数量，可以用来了解已关闭的执行数量。
  * 定义：所有的执行个数求和
-状态为已关闭
-过滤已删除的执行
+ *       状态为已关闭
+ *       过滤已删除的执行
  * 度量库：
  * 收集方式：realtime
  *
@@ -24,16 +24,15 @@
  */
 class count_of_closed_execution extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getALlExecutions';
 
-    public $fieldList = array();
+    public $fieldList = array('status');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($row)
     {
+        if($row->status == 'closed') $this->result += 1;
     }
 
     public function getResult($options = array())

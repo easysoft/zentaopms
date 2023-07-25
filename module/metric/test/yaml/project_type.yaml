@@ -6,11 +6,11 @@ fields:
 - field: id
   range: 1-10000
 - field: type
-  range: sprint{8},stage{8},kanban{8},project{8},program{8}
+  range: sprint{20},stage{20},kanban{20},project{20},program{20}
 - field: status
-  range: closed{1},doing{1},suspended{1},wait{1}
+  range: closed{4},doing{3},suspended{2},wait{1}
 - field: deleted
-  range: 0{4},1{4}
+  range: 0{10},1{10}
 - field: closedDate
   range: "20110101 000000-20210101 000000:10D"
   type: timestamp

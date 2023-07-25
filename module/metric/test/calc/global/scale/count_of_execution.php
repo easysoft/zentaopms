@@ -17,12 +17,12 @@ pid=1
 
 zdTable('project')->config('project_type', $useCommon = true, $levels = 4)->gen(356, true, false);
 $calc = $metric->calcMetric(__FILE__);
-r($calc->getResult()) && p('0:value') && e('108'); // 测试356条数据。
+r($calc->getResult()) && p('0:value') && e('120'); // 测试356条数据。
 
 zdTable('project')->config('project_type', $useCommon = true, $levels = 4)->gen(652, true, false);
 $calc = $metric->calcMetric(__FILE__);
-r($calc->getResult()) && p('0:value') && e('200'); // 测试652条数据。
+r($calc->getResult()) && p('0:value') && e('210'); // 测试652条数据。
 
 zdTable('project')->config('project_type', $useCommon = true, $levels = 4)->gen(1265, true, false);
 $calc = $metric->calcMetric(__FILE__);
-r($calc->getResult()) && p('0:value') && e('384'); // 测试1265条数据。
+r($calc->getResult()) && p('0:value') && e('390'); // 测试1265条数据。

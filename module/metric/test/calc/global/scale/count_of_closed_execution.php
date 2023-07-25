@@ -10,7 +10,7 @@ $calc   = $metric->calcMetric(__FILE__);
 
 /**
 
-title=count_of_wait_execution
+title=count_of_closed_execution
 cid=1
 pid=1
 
@@ -18,12 +18,12 @@ pid=1
 
 zdTable('project')->config('project_type', $useCommon = true, $levels = 4)->gen(356, true, false);
 $calc = $metric->calcMetric(__FILE__);
-r($calc->getResult()) && p('0:value') && e('12'); // 测试356条数据。
+r($calc->getResult()) && p('0:value') && e('48'); // 测试356条数据。
 
 zdTable('project')->config('project_type', $useCommon = true, $levels = 4)->gen(652, true, false);
 $calc = $metric->calcMetric(__FILE__);
-r($calc->getResult()) && p('0:value') && e('21'); // 测试652条数据。
+r($calc->getResult()) && p('0:value') && e('84'); // 测试652条数据。
 
 zdTable('project')->config('project_type', $useCommon = true, $levels = 4)->gen(1265, true, false);
 $calc = $metric->calcMetric(__FILE__);
-r($calc->getResult()) && p('0:value') && e('39'); // 测试1265条数据。
+r($calc->getResult()) && p('0:value') && e('156'); // 测试1265条数据。
