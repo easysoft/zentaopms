@@ -160,6 +160,22 @@ div
         panel
         (
             set::title($title),
+            ($app->tab == 'product' and $viewType == 'story') ? to::headingActions
+            (
+                btn
+                (
+                    set
+                    (
+                        array
+                        (
+                            'class'       => 'btn primary size-sm',
+                            'url'         => createLink('tree', 'viewHistory', "productID=$rootID"),
+                            'data-toggle' => 'modal',
+                        )
+                    ),
+                    $lang->history
+                ),
+            ) : null,
             tree
             (
                 set('type', $viewType),
