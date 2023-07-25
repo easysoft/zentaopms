@@ -10,9 +10,9 @@
  * 单位：个
  * 描述：按全局统计的已解决Bug数是指已经被开发团队解决的Bug数量。这个度量项反映了系统或项目在一定时间内解决的Bug数量。已解决Bug总数越多可能代表开发团队解决问题的速度较快，但同时也需要关注解决的质量。
  * 定义：所有Bug个数求和
-状态为已解决
-过滤已删除的Bug
-过滤已删除的产品
+ *       状态为已解决
+ *       过滤已删除的Bug
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -25,16 +25,15 @@
  */
 class count_of_resolved_bug extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getBugs';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.status');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($row)
     {
+        if($row->status == 'resolved') $this->result += 1;
     }
 
     public function getResult($options = array())
