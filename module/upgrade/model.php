@@ -672,7 +672,7 @@ class upgradeModel extends model
                 break;
             case '18_5':
                 $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
-                $this->execSQL($this->getUpgradeFile('ipdinstall'));
+                if(strpos($fromVersion, 'ipd') === false) $this->execSQL($this->getUpgradeFile('ipdinstall'));
                 if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));
                 if($this->config->edition == 'ipd' and strpos($fromVersion, 'ipd') === false) $this->addORPriv();
                 break;
