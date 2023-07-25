@@ -22,33 +22,23 @@ foreach($case->steps as $step)
         $childID = 0;
     }
     $stepClass  = $step->type == 'step' ? 'step-group' : "step-{$step->type}";
-    $stepItemID = $step->type == 'item' ? span(setClass('input-group pr-1'), "{$stepID}.{$childID}") : '';
 
     $steps[] = h::tr
     (
         setClass("step {$stepClass}"),
         h::td
         (
-            setClass('step-id text-center'),
+            setClass('text-left'),
             span
             (
-                setClass($step->type == 'item' ? 'hidden' : ''),
-                $stepID,
+                setClass('step-id pr-2 pl-' . (($step->grade- 1) * 2)),
+                $step->name,
             ),
+            nl2br(str_replace(' ', '&nbsp;', $step->desc)),
         ),
         h::td
         (
-            setClass('text-left'),
-            div
-            (
-                setClass('input-group'),
-                $stepItemID,
-                nl2br(str_replace(' ', '&nbsp;', $step->desc)),
-            ),
-        ),
-        h::td
-        (
-            setClass('text-left'),
+            setClass('text-left' . ($step->type == 'item' ? ' disabled-color' :'')),
             nl2br(str_replace(' ', '&nbsp;', $step->expect)),
         ),
     );
@@ -335,7 +325,7 @@ detailBody
             set::title($lang->testcase->steps),
             h::table
             (
-                setClass('table condensed bordered'),
+                setClass('table bordered'),
                 set::id('steps'),
                 h::thead
                 (
@@ -343,13 +333,8 @@ detailBody
                     (
                         h::th
                         (
-                            $lang->testcase->stepID,
-                            set::width('60px'),
-                        ),
-                        h::th
-                        (
                             $lang->testcase->stepDesc,
-                            setClass('text-left'),
+                            setClass('text-left steps'),
                         ),
                         h::th
                         (

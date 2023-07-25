@@ -506,6 +506,7 @@ class testcaseModel extends model
             $data->desc   = $step->desc;
             $data->expect = $step->expect;
             $data->type   = $step->type;
+            $data->grade  = $grade;
 
             $case->steps[] = $data;
 
