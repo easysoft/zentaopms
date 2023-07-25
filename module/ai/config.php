@@ -191,12 +191,12 @@ $config->ai->menuPrint->locations['productplan']['view'] = (object)array(
     'targetContainer' => '#mainMenu>.btn-toolbar.pull-right',
     'objectVarName'   => 'plan'
 );
-$config->ai->menuPrint->locations['projectplan']['view']     = $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['release']['view']         = clone $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['release']['view']->module = 'release';
-unset($config->ai->menuPrint->locations['release']['view']->objectVarName);
-$config->ai->menuPrint->locations['projectrelease']['view']  = clone $config->ai->menuPrint->locations['productplan']['view'];
-unset($config->ai->menuPrint->locations['projectrelease']['view']->objectVarName);
+$config->ai->menuPrint->locations['projectplan']['view']                   = $config->ai->menuPrint->locations['productplan']['view'];
+$config->ai->menuPrint->locations['release']['view']                       = clone $config->ai->menuPrint->locations['productplan']['view'];
+$config->ai->menuPrint->locations['release']['view']->module               = 'release';
+$config->ai->menuPrint->locations['release']['view']->objectVarName        = null;
+$config->ai->menuPrint->locations['projectrelease']['view']                = clone $config->ai->menuPrint->locations['productplan']['view'];
+$config->ai->menuPrint->locations['projectrelease']['view']->objectVarName = null;
 
 $config->ai->menuPrint->locations['doc']['view'] = (object)array(
     'module'          => 'doc',
