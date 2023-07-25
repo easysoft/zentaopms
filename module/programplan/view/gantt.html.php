@@ -823,7 +823,7 @@ $(function()
            })
            .on('show', function(){
                editBtn.css('display', 'inline-block');
-           });
+           })
            .on('hide', function(){
                editBtn.css('display', 'none');
            });
