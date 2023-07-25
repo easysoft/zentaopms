@@ -14,6 +14,30 @@ jsVar('allTasks', $lang->testtask->allTasks);
 jsVar('pageSummary', sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount));
 jsVar('checkedAllSummary', $lang->testtask->checkedAllSummary);
 
+featureBar
+(
+    li
+    (
+        setClass('nav-item'),
+        a
+        (
+            set('class', 'active'),
+            $lang->testtask->browse
+        )
+    )
+);
+
+toolbar
+(
+    $canBeChanged && common::hasPriv('testtask', 'create') ? btn
+    (
+        setClass('btn primary'),
+        set::icon('plus'),
+        set::url(createLink('testtask', 'create', "product=0&executionID=$executionID&build=0&projectID=$execution->project")),
+        $lang->testtask->create
+    ) : null
+);
+
 $tasks = initTableData(array_values($tasks), $config->execution->testtask->dtable->fieldList);
 
 $footToolbar = array();
