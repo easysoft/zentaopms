@@ -10,8 +10,8 @@
  * 单位：个
  * 描述：按全局统计的月度完成执行数是指在某月度已经关闭的执行数。该度量项反映了团队或组织在短期内的工作效率和完成能力。较高的月度完成执行数表示团队或组织在快速完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。
  * 定义：所有的执行个数求和
-关闭时间为某年某月
-过滤已删除的执行
+ *       关闭时间为某年某月
+ *       过滤已删除的执行
  * 度量库：
  * 收集方式：realtime
  *
@@ -24,21 +24,29 @@
  */
 class count_of_monthly_closed_execution extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getAllExecutions';
 
-    public $fieldList = array();
+    public $fieldList = array('closedDate');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = array();
 
     public function calculate($row)
     {
+        $closedDate = $row->closedDate;
+        if(empty($closedDate)) return;
+
+        $year = substr($closedDate, 0, 4);
+        if($year == '0000') return;
+        $month = substr($closedDate, 5, 2);
+
+        if(!isset($this->result[$year])) $this->result[$year] = array();
+        if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;
+        $this->result[$year][$month] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('year', 'month', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
