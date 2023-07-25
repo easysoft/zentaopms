@@ -17,6 +17,7 @@
 <?php js::set('changeAttrLang', $lang->programplan->confirmChangeAttr);?>
 <?php js::set('isTopStage', $isTopStage);?>
 <?php js::set('isLeafStage', $isLeafStage);?>
+<?php js::set('projectModel', $project->model);?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
