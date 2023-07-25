@@ -394,19 +394,20 @@ class baseControl
      *
      * @param  string $moduleName module name
      * @param  string $methodName method name
+     * @param  string $viewDir
      * @access public
      * @return string  the view file
      */
-    public function setViewFile($moduleName, $methodName)
+    public function setViewFile(string $moduleName, string $methodName, string $viewDir = 'view')
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
 
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
-        $viewExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'view');
+        $viewExtPath = $this->app->getModuleExtPath($moduleName, $viewDir);
 
         $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
-        $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
+        $mainViewFile = $modulePath . $viewDir . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
         $viewFile     = $mainViewFile;
 
         if(!empty($viewExtPath))
@@ -416,7 +417,7 @@ class baseControl
 
             $viewFile = file_exists($commonExtViewFile) ? $commonExtViewFile : $mainViewFile;
             $viewFile = (!empty($siteExtViewFile) and file_exists($siteExtViewFile)) ? $siteExtViewFile : $viewFile;
-            if(!is_file($viewFile)) $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
+            if(!is_file($viewFile)) $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, true);
 
             $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             $siteExtHookFiles   = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
@@ -907,10 +908,104 @@ class baseControl
      * @access  public
      * @return  void
      */
-    public function display($moduleName = '', $methodName = '')
+    public function display(string $moduleName = '', string $methodName = '')
     {
+        if($this->config->debug && $this->viewType === 'html' && (!isset($_GET['zin']) || $_GET['zin'] != '0'))
+        {
+            if(empty($moduleName)) $moduleName = $this->moduleName;
+            if(empty($methodName)) $methodName = $this->methodName;
+            $modulePath   = $this->app->getModulePath($this->appName, $moduleName);
+            $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
+            $mainViewFile = $modulePath . 'ui' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
+            if(file_exists($mainViewFile)) return $this->render($moduleName, $methodName);
+        }
+
         if(empty($this->output)) $this->parse($moduleName, $methodName);
+
         echo $this->output;
+    }
+
+    /**
+     * 向浏览器输出内容。
+     * Print the content of the view.
+     *
+     * @param  string $moduleName module name
+     * @param  string $methodName method name
+     * @access  public
+     * @return  void
+     */
+    public function render($moduleName = '', $methodName = '')
+    {
+        if(isset($_GET['zin']) && $_GET['zin'] == '0')
+        {
+            $this->display($moduleName, $methodName);
+            return;
+        }
+
+        if(empty($moduleName)) $moduleName = $this->moduleName;
+        if(empty($methodName)) $methodName = $this->methodName;
+
+        /* Load zin lib */
+        $this->app->loadClass('zin', true);
+        \zin\loadConfig();
+
+        /**
+         * 设置视图文件。(PHP7有一个bug，不能直接$viewFile = $this->setViewFile())。
+         * Set viewFile. (Can't assign $viewFile = $this->setViewFile() directly because one php7's bug.)
+         */
+        $results = $this->setViewFile($moduleName, $methodName, 'ui');
+
+        $viewFile = $results;
+        if(is_array($results)) extract($results);
+
+        /**
+         * 获得当前页面的CSS和JS。
+         * Get css and js codes for current method.
+         */
+        $css = $this->getCSS($moduleName, $methodName, '.ui');
+        $js  = $this->getJS($moduleName, $methodName, '.ui');
+        if($css) $this->view->pageCSS = $css;
+        if($js)  $this->view->pageJS = $js;
+
+        /**
+         * 切换到视图文件所在的目录，以保证视图文件里面的include语句能够正常运行。
+         * Change the dir to the view file to keep the relative paths work.
+         */
+        $currentPWD = getcwd();
+        chdir(dirname($viewFile));
+
+        /**
+         * Set zin context data
+         */
+        \zin\zin::$globalRenderList = array();
+        \zin\zin::$enabledGlobalRender = true;
+        \zin\zin::$rendered = false;
+        \zin\zin::$rawContentCalled = false;
+
+        \zin\zin::$data = (array)$this->view;
+        \zin\zin::$data['zinDebug'] = array();
+        if($this->config->debug && $this->config->debug >= 2)
+        {
+            \zin\zin::$data['zinDebug']['trace'] = $this->app->loadClass('trace')->getTrace();
+        }
+
+        /**
+         * 使用extract和ob方法渲染$viewFile里面的代码。
+         * Use extract and ob functions to eval the codes in $viewFile.
+         */
+        extract(\zin\zin::$data);
+        ob_start();
+        include $viewFile;
+        if(!\zin\zin::$rendered) \zin\render();
+        $content = ob_get_clean();
+        ob_start();
+        echo $content;
+
+        /**
+         * 渲染完毕后，再切换回之前的路径。
+         * At the end, chang the dir to the previous.
+         */
+        chdir($currentPWD);
     }
 
     /**

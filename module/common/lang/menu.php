@@ -13,6 +13,20 @@ $lang->navIcons['bi']        = "<i class='icon icon-statistic'></i>";
 $lang->navIcons['system']    = "<i class='icon icon-group'></i>";
 $lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
 
+$lang->navIconNames              = array();
+$lang->navIconNames['my']        = 'menu-my';
+$lang->navIconNames['program']   = 'program';
+$lang->navIconNames['product']   = 'product';
+$lang->navIconNames['project']   = 'project';
+$lang->navIconNames['execution'] = 'run';
+$lang->navIconNames['qa']        = 'test';
+$lang->navIconNames['devops']    = 'devops';
+$lang->navIconNames['kanban']    = 'kanban';
+$lang->navIconNames['doc']       = 'doc';
+$lang->navIconNames['bi']        = 'statistic';
+$lang->navIconNames['system']    = 'group';
+$lang->navIconNames['admin']     = 'cog-outline';
+
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
 list($productModule, $productMethod)     = explode('-', $config->productLink);
