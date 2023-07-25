@@ -258,6 +258,26 @@ else
             );
     }
 
+    $dependTree = null;
+    foreach($relatedPrivData['depend'] as $dependPrivs)
+    {
+        $dependTree[] = checkboxGroup
+            (
+                set::title(array('text' => $dependPrivs['title'], 'id' => "dependPrivs[{$dependPrivs['id']}]", 'name' => 'dependPrivs[]', 'data-id' => $dependPrivs['id'], 'data-has-children' => !empty($dependPrivs['children']), 'disabled' => true, 'checked' => true)),
+                !empty($dependPrivs['children']) ? set::items($dependPrivs['children']) : null,
+            );
+    }
+
+    $recommendTree = null;
+    foreach($relatedPrivData['recommend'] as $recommendPrivs)
+    {
+        $recommendTree[] = checkboxGroup
+            (
+                set::title(array('text' => $recommendPrivs['title'], 'id' => "recommendPrivs[{$recommendPrivs['id']}]", 'name' => 'recommendPrivs[]', 'data-id' => $recommendPrivs['id'], 'data-has-children' => !empty($recommendPrivs['children']))),
+                !empty($recommendPrivs['children']) ? set::items($recommendPrivs['children']) : null,
+            );
+    }
+
     div
     (
         setID('featureBar'),
@@ -315,6 +335,9 @@ else
     form
     (
         setID('managePrivForm'),
+        formHidden('actions[][]', ''),
+        formHidden('noChecked', 1),
+        set::actions(array()),
         div
         (
             setID('mainContainer'),
@@ -391,6 +414,8 @@ else
                         div
                         (
                             setClass('menuTree depend menu-active-primary menu-hover-primary'),
+                            setClass(count($relatedPrivData['depend']) == 0 ? 'hidden' : ''),
+                            $dependTree
                         ),
                         div
                         (
@@ -428,6 +453,8 @@ else
                         div
                         (
                             setClass('menuTree recommend menu-active-primary menu-hover-primary'),
+                            setClass(count($relatedPrivData['recommend']) == 0 ? 'hidden' : ''),
+                            $recommendTree
                         ),
                         div
                         (
@@ -442,6 +469,18 @@ else
                     )
                 )
             )
+        ),
+        toolbar
+        (
+            setClass('form-actions priv-footer'),
+            checkbox
+            (
+                setID('allChecker'),
+                set::rootClass('check-all'),
+                set::text($lang->selectAll),
+            ),
+            btn(set(array('text' => $lang->save, 'btnType' => 'submit', 'type' => 'primary'))),
+            btn(set(array('text' => $lang->goback, 'url' => createLink('group', 'browse'), 'back' => true))),
         ),
     );
 }

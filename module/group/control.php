@@ -305,7 +305,6 @@ class group extends control
             }
 
             $excludePrivsIdList = array_diff(array_keys($groupPrivsIdList), $selectedPrivIdList);
-            $relatedPrivData    = $this->group->getRelatedPrivs($selectedPrivIdList, '', $excludePrivsIdList);
 
             unset($privList['index']);
 
@@ -314,7 +313,7 @@ class group extends control
             $this->view->selectPrivs        = $selectPrivs;
             $this->view->privPackages       = $this->group->getPrivManagerPairs('package');
             $this->view->selectedPrivIdList = $selectedPrivIdList;
-            $this->view->relatedPrivData    = $relatedPrivData;
+            $this->view->relatedPrivData    = $this->group->getRelatedPrivs($selectedPrivIdList, '', $excludePrivsIdList);
             $this->view->excludePrivsIdList = $excludePrivsIdList;
         }
         elseif($type == 'byModule')

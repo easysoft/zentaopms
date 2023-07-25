@@ -4,24 +4,31 @@
 #featureBar > .menu {background: unset;}
 #versionSelect {flex: 0 1 12%;}
 
+.container #mainContent {padding-top: 0.5rem;}
+
 /* Manage priv by package. */
-#mainContainer {gap: 16px; height: calc(100vh - 165px);}
+#mainContainer {gap: 16px; height: calc(100vh - 165px); margin: 0;}
 #mainContainer > .main {flex: 1 1 75%; overflow-y: auto; padding: 0px; border: 1px solid #FFF; box-sizing: content-box;}
 #mainContainer > .side {flex: 1 1 25%;}
 #mainContainer .main .btn-group {position: absolute; visibility: hidden; top: 2px; display: inline-block; z-index: 2;}
 #mainContainer .main .btn-group .switchBtn {padding: 6px 10px;}
 #mainContainer .main .btn-group .switchBtn:first-child {border-radius: 4px 0px 0px 4px;}
 #mainContainer .main .btn-group .switchBtn:last-child {border-radius: 0px 4px 4px 0px;}
-.priv-panel {background: #fff; padding: 10px 16px; box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 5%);}
-.priv-panel {height: 40%;}
-.priv-panel .table-empty-tip {padding: calc(15% - 10px) 10px;}
-.priv-panel + .priv-panel .table-empty-tip {padding: calc(30% - 20px) 10px;}
-.priv-panel + .priv-panel {margin-top: 16px; height: calc(60% - 16px);}
-.priv-panel > .panel-content {height: calc(100% - 25px); overflow-y: auto; padding-left: 4px; margin-top: 10px;}
-.priv-panel > .panel-bottom {padding-top: 20px;}
-.priv-panel > .panel-title {position: relative;}
-.icon-help + .popover {font-weight: 400;}
-.menuTree li.has-list:not(:first-child) {margin-top: 20px;}
+.side .priv-panel {padding: 16px;}
+.side .priv-panel {background: #fff; padding: 10px 16px; box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 5%);}
+.side .priv-panel {height: 40%;}
+.side .priv-panel .table-empty-tip {padding: calc(15% - 10px) 10px;}
+.side .priv-panel + .priv-panel .table-empty-tip {padding: calc(30% - 20px) 10px;}
+.side .priv-panel + .priv-panel {margin-top: 16px; height: calc(60% - 16px);}
+.side .priv-panel > .panel-content {height: calc(100% - 25px); overflow-y: auto; padding-left: 4px; margin-top: 10px;}
+.side .priv-panel > .panel-bottom {padding-top: 20px;}
+.side .priv-panel > .panel-title {position: relative;}
+.side .icon-help + .popover {font-weight: 400;}
+.side .menuTree .checkbox-group + .checkbox-group {margin-top: 20px;}
+.side .menuTree .checkbox-group ul > li {padding: 5px 0; white-space: nowrap; overflow: hidden;}
+.form-actions.priv-footer {padding: 14px; z-index: 11; box-shadow: inset 0 0px 0px rgb(0 0 0 / 10%), 0 0 5px rgb(0 0 0 / 10%); position: relative; min-height: 40px; background: #fff; border-radius: 0 0 4px 4px; margin: 0 !important; margin-bottom: 10px;}
+.form-actions.priv-footer button[type=submit] {margin: 0px 20px;}
+#main {padding-bottom: 0px;}
 
 #privPackageList tr {border-bottom-width: 0;}
 #privPackageList th.module {width: 142px; min-width: 142px; max-width: 142px; background-color: #EDEEF28C; font-weight: 600; padding-left: 20px; border-color: #FFF;}
