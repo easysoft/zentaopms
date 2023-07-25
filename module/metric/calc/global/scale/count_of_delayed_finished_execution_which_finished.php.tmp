@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已完成执行中延期完成执行数。
- * count_of_delayed_execution.
+ * count of delayed finished execution which finished.
  *
  * 范围：global
  * 对象：execution
@@ -23,7 +23,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_delayed_execution extends baseCalc
+class count_of_delayed_finished_execution_which_finished extends baseCalc
 {
     public $dataset = null;
 

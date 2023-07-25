@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度完成项目中项目的按期完成率。
- * rate_of_undelayed_project_which_finished.
+ * rate of undelayed finished project which annual finished.
  *
  * 范围：global
  * 对象：project
@@ -24,7 +24,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class rate_of_undelayed_project_which_finished extends baseCalc
+class rate_of_undelayed_finished_project_which_annual_finished extends baseCalc
 {
     public $dataset = null;
 

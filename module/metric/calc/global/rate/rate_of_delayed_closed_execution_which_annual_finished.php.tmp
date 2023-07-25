@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度完成执行中执行的延期关闭率。
- * rate_of_annual_delayed_closed_execution.
+ * rate of delayed closed execution which annual finished.
  *
  * 范围：global
  * 对象：execution
@@ -24,7 +24,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class rate_of_annual_delayed_closed_execution extends baseCalc
+class rate_of_delayed_closed_execution_which_annual_finished extends baseCalc
 {
     public $dataset = null;
 
