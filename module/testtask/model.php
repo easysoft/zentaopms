@@ -1458,7 +1458,7 @@ class testtaskModel extends model
             ->andWhere('version')->in($relatedVersions)
             ->orderBy('id')
             ->fetchGroup('version', 'id');
-        $runs = $this->dao->select('t1.id,t2.build')->from(TABLE_TESTRUN)->alias('t1')
+        $runs = $this->dao->select('t1.id,t1.task,t2.build')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
             ->where('t1.id')->in($runIdList)
             ->fetchPairs();
@@ -1490,7 +1490,8 @@ class testtaskModel extends model
         foreach($results as $resultID => $result)
         {
             $result->stepResults = unserialize($result->stepResults);
-            $result->build       = $result->run ? zget($runs, $result->run, 0) : 0;
+            $result->build       = $result->run && isset($runs[$result->run]) ? $runs[$result->run]->build : 0;
+            $result->task        = $result->run && isset($runs[$result->run]) ? $runs[$result->run]->task : 0;
             $result->nodeName    = $result->node ? zget($nodes, $result->node, '') : '';
 
             if(!empty($result->ZTFResult))

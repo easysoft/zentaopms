@@ -99,7 +99,7 @@ if($confirm != 'yes')
                             textarea
                             (
                                 on::keyup('realChange'),
-                                setClass('leading-4 w-full' ),
+                                setClass('leading-4 w-60' ),
                                 set('rows', '1'),
                                 set::name("reals[{$step->id}]"),
                                 nl2br(zget($step, 'real', '')),
@@ -108,7 +108,7 @@ if($confirm != 'yes')
                         ),
                         h::td
                         (
-                            setClass('p-0 bd-0 text-right'),
+                            setClass('p-0 bd-0'),
                             width('40px'),
                             btn
                             (
@@ -185,21 +185,23 @@ form
             (
                 h::td
                 (
-                    width('cal(30%)'),
+                    setClass('w-96'),
                     $lang->testcase->stepDesc,
                 ),
                 h::td
                 (
-                    width('calc(30%)'),
+                    width('cal(760px - 24rem)'),
                     $lang->testcase->stepExpect,
                 ),
                 h::td
                 (
-                    width('100px'),
+                    setClass('result-td'),
+                    width('96px'),
                     $lang->testcase->result,
                 ),
                 h::td
                 (
+                    width('280px'),
                     $lang->testcase->real,
                 ),
             ) : '',
@@ -212,6 +214,7 @@ form
                 h::td
                 (
                     set('colspan', '4'),
+                    setClass('action-td p-0'),
                     div
                     (
                         setClass('text-center'),
@@ -224,7 +227,7 @@ form
                         ) : '',
                         $run->case->status != 'wait' && $confirm != 'yes' ? btn
                         (
-                            setClass('primary btn-wide w-24 mx-6'),
+                            setClass('primary btn-wide w-24 m-6'),
                             set::btnType('submit'),
                             $lang->save,
                         ) : '',
@@ -257,7 +260,7 @@ form
 
 div
 (
-    setClass('main'),
+    setClass('main border-t pt-6'),
     set::id('resultsContainer'),
     div
     (

@@ -115,6 +115,8 @@ function toggleShowResults(event)
 {
     var $target = $(event.target).closest('tr');
     if($target.data('status') == 'running') return;
+    $target.toggleClass('is-collapsed');
+    $target.toggleClass('is-expanded');
     $target.toggleClass('show-detail');
     var show = $target.hasClass('show-detail');
     $target.next('.result-detail').toggleClass('hidden', !show);

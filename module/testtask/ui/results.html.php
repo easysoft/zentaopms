@@ -45,45 +45,26 @@ foreach($results as $i => $result)
     if($class != 'success') $failCount ++;
     $trs[] = h::tr
     (
-        setClass("result-item result{$class}"),
+        setClass("result-item result{$class} h-12 is-collapsed"),
         on::click('toggleShowResults'),
         set('data-id', $result->id),
         set('data-status', $result->node > 0 && empty($result->ZTFResult) ? 'running': 'ready'),
         h::td
         (
+            set('colspan', '6'),
+            span(setClass('toggle-icon circle inline-block align-middle mr-2')),
             width('120px'),
-            "#{$result->id}"
-        ),
-        h::td
-        (
-            width('180px'),
-            $result->date
-        ),
-        $result->node > 0 ? h::td
-        (
-            sprintf($lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName, $lang->testtask->runCase),
-            span
+            $result->date,
+            $result->node > 0 ? sprintf($lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName, $lang->testtask->runCase) : '',
+            $result->node > 0 ? span
             (
                 setClass('label'),
                 $lang->testtask->auto
-            ),
-        ) : h::td
-        (
-            zget($users, $result->lastRunner) . ' ' . $lang->testtask->runCase,
-        ),
-        h::td
-        (
-            width('150px'),
-            zget($builds, $result->build, ''),
-        ),
-        h::td
-        (
-            setClass('text-right'),
-            width('60px'),
-            $result->node == 0 || !empty($result->ZTFResult) ? h::strong
+            ) : null,
+            $result->node == 0 && $result->task > 0 ? html(sprintf($lang->testtask->runInTask, zget($testtasks, $result->task, ''))) : '',
+            $result->node == 0 || !empty($result->ZTFResult) ? html
             (
-                setClass("result-testcase status-{$result->caseResult}"),
-                $lang->testcase->resultList[$result->caseResult],
+                sprintf($lang->testtask->runCaseResult, zget($users, $result->lastRunner), zget($builds, $result->build, ''), $class, $lang->testcase->resultList[$result->caseResult])
             ) : h::strong
             (
                 setClass('text-waring'),
@@ -190,21 +171,16 @@ foreach($results as $i => $result)
                         set('name', $inputName),
                         set('value', $key),
                     ),
-                    h::label($stepClass == 'step-group' ? $stepID : ''),
-                ) : $stepID,
-            ),
-            h::td
-            (
-                setClass('text-left'),
+                ) : '',
                 $stepResult['type'] == 'group' ? set('colspan', '6') : '',
                 div
                 (
                     setClass('inputGroup'),
-                    $stepResult['type'] == 'item' ? h::span
+                    h::span
                     (
                         setClass('step-item-id mr-2'),
-                        "{$stepID}.{$childID}",
-                    ) : '',
+                        $stepResult['type'] == 'item' ? "{$stepID}.{$childID}" : $stepID,
+                    ),
                     isset($stepResult['desc']) ? nl2br($stepResult['desc']) : '',
                 ),
             ),
@@ -240,7 +216,7 @@ foreach($results as $i => $result)
             setClass('to-bug-button'),
             btn
             (
-                setClass('btn'),
+                setClass('btn h-7'),
                 set::type('primary'),
                 set::btnType('btnType'),
                 on::click('createBug'),
@@ -279,16 +255,11 @@ foreach($results as $i => $result)
                 set('action', createLink('bug', 'create', $linkParams)),
                 h::table
                 (
-                    setClass('table condensed resultSteps'),
+                    setClass('table resultSteps'),
                     h::thead
                     (
                         h::tr
                         (
-                            h::td
-                            (
-                                width('60px'),
-                                $lang->testcase->stepID,
-                            ),
                             h::td
                             (
                                 setClass('text-left'),
@@ -340,27 +311,29 @@ div
     (
         setClass('main'),
         set::id('casesResults'),
-        h::table
+        $case->auto != 'unit' ? formRowGroup
         (
-            setClass('table condensed table-hover border'),
-            $case->auto != 'unit' ? h::caption
+            set::title($lang->testcase->result),
+            set::items
             (
-                setClass('text-left bg-lighter leading-8 px-3 border'),
-                h::strong
+                array
                 (
-                    $lang->testcase->result,
-                    h::span
+                    span
                     (
-                        setClass('ml-4'),
+                        setClass('px-3 my-1 border-r'),
                         html(sprintf($lang->testtask->showResult, $count)),
                     ),
-                    h::span
+                    span
                     (
-                        setClass('ml-2'),
+                        setClass('pl-3 my-1'),
                         html(sprintf($lang->testtask->showFail, $failCount)),
                     ),
                 ),
-            ) : '',
+            ),
+        ) : null,
+        h::table
+        (
+            setClass('table condensed table-hover border'),
             $trs,
         ),
         $fileModals,

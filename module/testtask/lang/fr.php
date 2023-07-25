@@ -140,8 +140,10 @@ $lang->testtask->browseBySuite = 'Browse by Suite';
 $lang->testtask->passAll       = 'Tout Réussir';
 $lang->testtask->pass          = 'Réussite';
 $lang->testtask->fail          = 'Echec';
-$lang->testtask->showResult    = 'Jouée <span class="text-primary">%s</span> fois';
-$lang->testtask->showFail      = 'Echouée <span class="text-danger">%s</span> fois';
+$lang->testtask->showResult    = 'Jouée <label class="label primary-pale rounded-full h-3 px-1.5 mx-1">%s</label> fois';
+$lang->testtask->showFail      = 'Echouée <label class="label danger-pale rounded-full h-3 px-1.5 mx-1">%s</label> fois';
+$lang->testtask->runInTask     = ', in <strong>%s</strong> ';
+$lang->testtask->runCaseResult = ', executed <strong>%s</strong> by <strong>%s</strong> , the results is <span class="text-%s font-bold">%s</span>.';
 
 $lang->testtask->confirmDelete     = 'Voulez-vous supprimer ce build ?';
 $lang->testtask->confirmUnlinkCase = 'Voulez-vous détacher ce CasTest ?';

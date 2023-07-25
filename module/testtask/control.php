@@ -1444,11 +1444,12 @@ class testtask extends control
         }
 
         if(empty($this->testcase)) $this->app->loadLang('testcase');
-        $this->view->case    = $case;
-        $this->view->runID   = $runID;
-        $this->view->results = $results;
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($case->product, $case->branch);
-        $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');
+        $this->view->case      = $case;
+        $this->view->runID     = $runID;
+        $this->view->results   = $results;
+        $this->view->builds    = $this->loadModel('build')->getBuildPairs($case->product, $case->branch);
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed, noletter');
+        $this->view->testtasks = $this->testtask->getPairs($case->product);
 
         $this->display();
     }
