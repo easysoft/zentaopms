@@ -1,42 +1,45 @@
 <?php
 namespace zin;
 $apiHeader = $apiQuery = $apiParams = $apiResponse = array();
-$defaultTR = h::tr
-(
-    setClass('input-row'),
-    h::td
+$defaultTR = function()
+{
+    return h::tr
     (
-        input(),
-    ),
-    h::td
-    (
-        html("<input type='checkbox' />")
-    ),
-    h::td
-    (
-        textarea
+        setClass('input-row'),
+        h::td
         (
-            set::rows(1)
+            input(),
         ),
-    ),
-    h::td
-    (
-        div
+        h::td
         (
-            setClass('pl-2 flex self-center line-btn'),
-            btn
+            html("<input type='checkbox' />")
+        ),
+        h::td
+        (
+            textarea
             (
-                setClass('btn ghost btn-add'),
-                icon('plus')
+                set::rows(1)
             ),
-            btn
+        ),
+        h::td
+        (
+            div
             (
-                setClass('btn ghost btn-delete'),
-                icon('trash'),
-            ),
+                setClass('pl-2 flex self-center line-btn'),
+                btn
+                (
+                    setClass('btn ghost btn-add'),
+                    icon('plus')
+                ),
+                btn
+                (
+                    setClass('btn ghost btn-delete'),
+                    icon('trash'),
+                ),
+            )
         )
-    )
-);
+    );
+};
 
 if(!empty($api->params['header']))
 {
