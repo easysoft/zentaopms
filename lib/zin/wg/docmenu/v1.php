@@ -110,7 +110,7 @@ class docMenu extends wg
                 'icon'        => $this->getIcon($setting),
                 'url'         => $this->buildLink($setting),
                 'data-id'     => $itemID,
-                'data-lib'    => $setting->type == 'docLib' ? $itemID : $setting->libID,
+                'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : $setting->libID,
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parentID,
                 'data-module' => $this->currentModule,
