@@ -30,27 +30,7 @@ foreach($files as $file)
         $imageWidth = $imageSize[0];
     }
 
-    $fileSize = 0;
-    /* Show size info. */
-    if($file->size < 1024)
-    {
-        $fileSize = $file->size . 'B';
-    }
-    elseif($file->size < 1024 * 1024)
-    {
-        $file->size = round($file->size / 1024, 2);
-        $fileSize = $file->size . 'K';
-    }
-    elseif($file->size < 1024 * 1024 * 1024)
-    {
-        $file->size = round($file->size / (1024 * 1024), 2);
-        $fileSize = $file->size . 'M';
-    }
-    else
-    {
-        $file->size = round($file->size / (1024 * 1024 * 1024), 2);
-        $fileSize = $file->size . 'G';
-    }
+    $fileSize = $this->file->convertFileSize($file->size);
 
     $downloadLink  = $this->createLink('file', 'download', "fileID=$file->id");
     $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';

@@ -38,6 +38,7 @@ foreach($files as $file)
 
     $uploadDate = $lang->file->uploadDate . substr($file->addedDate, 0, 10);
     $fileTitle  = $file->title;
+    $fileSize   = $this->file->convertFileSize($file->size);
     if(strpos($file->title, ".{$file->extension}") === false && $file->extension != 'txt') $fileTitle .= ".{$file->extension}";
 
     $imageWidth = 0;
@@ -45,28 +46,6 @@ foreach($files as $file)
     {
         $imageSize  = $this->file->getImageSize($file);
         $imageWidth = $imageSize[0];
-    }
-
-    $fileSize = 0;
-    /* Show size info. */
-    if($file->size < 1024)
-    {
-        $fileSize = $file->size . 'B';
-    }
-    elseif($file->size < 1024 * 1024)
-    {
-        $file->size = round($file->size / 1024, 2);
-        $fileSize = $file->size . 'K';
-    }
-    elseif($file->size < 1024 * 1024 * 1024)
-    {
-        $file->size = round($file->size / (1024 * 1024), 2);
-        $fileSize = $file->size . 'M';
-    }
-    else
-    {
-        $file->size = round($file->size / (1024 * 1024 * 1024), 2);
-        $fileSize = $file->size . 'G';
     }
 
     $downloadLink  = $this->createLink('file', 'download', "fileID=$file->id");

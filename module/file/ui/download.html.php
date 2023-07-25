@@ -58,7 +58,7 @@ else
     div
     (
         setID('txtFile'),
-        h::pre(setClass('bg-lighter'), $fileContent),
+        h::pre(set::style(array('background-color' => 'rgba(var(--color-gray-200-rgb), 1)')), $fileContent),
     );
 }
 
