@@ -78,6 +78,7 @@ $lang->admin->registerNotice->success    = "登记账户成功";
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = '关联社区帐号';
 $lang->admin->bind->success = "关联账户成功";
+$lang->admin->bind->submit  = "绑定";
 
 $lang->admin->setModule = new stdclass();
 $lang->admin->setModule->module         = '功能点';

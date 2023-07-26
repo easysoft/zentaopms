@@ -78,6 +78,7 @@ $lang->admin->registerNotice->success    = "You have signed up!";
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Link Account';
 $lang->admin->bind->success = "Account is linked!";
+$lang->admin->bind->submit  = "Bind";
 
 $lang->admin->setModule = new stdclass();
 $lang->admin->setModule->module         = 'Module';

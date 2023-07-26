@@ -132,19 +132,22 @@ div
             set::actions(array('submit')),
             set::title($lang->admin->registerNotice->bind),
             set::url(inlink('bind', "from={$from}")),
+            set::submitBtnText($lang->admin->bind->submit),
             formGroup
             (
                 setClass('w-1/2'),
                 set::label($lang->user->account),
                 set::name('account'),
-                set::value($account)
+                set::value($account),
+                set::required(true)
             ),
             formGroup
             (
                 setClass('w-1/2'),
                 set::label($lang->user->password),
                 set::control('password'),
-                set::name('password')
+                set::name('password'),
+                set::required(true)
             ),
             $buildHidden($sn, 'site')
         )

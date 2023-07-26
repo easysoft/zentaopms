@@ -78,6 +78,7 @@ $lang->admin->registerNotice->success    = "Vous êtes enregistré !";
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Lier au compte';
 $lang->admin->bind->success = "Le compte est associé !";
+$lang->admin->bind->submit  = "Lier";
 
 $lang->admin->setModule = new stdclass();
 $lang->admin->setModule->module         = 'Module';

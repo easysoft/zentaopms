@@ -78,6 +78,7 @@ $lang->admin->registerNotice->success    = "Sie haben sich erfolgreich registrie
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Konto verknüpfen';
 $lang->admin->bind->success = "Konto wurde verknüpft!";
+$lang->admin->bind->submit  = "Binden";
 
 $lang->admin->setModule = new stdclass();
 $lang->admin->setModule->module         = 'Module';
