@@ -17,9 +17,8 @@ namespace zin;
  * @param  string $name
  * @param  array  $dataset
  */
-function toggle($name, $dataset = null): directive
+function toggle(string $name, array $dataset = array()): directive
 {
-    if(empty($dataset)) $dataset = array();
     $dataset['toggle'] = $name;
     return setData($dataset);
 }

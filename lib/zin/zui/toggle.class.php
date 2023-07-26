@@ -16,8 +16,8 @@ require_once __DIR__ . DS . 'toggle.func.php';
 
 class toggle
 {
-    public static function __callStatic($name, $args)
+    public static function __callStatic(string $name, array $args): directive
     {
-        return toggle($name, empty($args) ? null : $args[0]);
+        return toggle($name, empty($args) ? array() : $args[0]);
     }
 }

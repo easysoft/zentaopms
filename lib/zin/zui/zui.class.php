@@ -80,7 +80,7 @@ class zui extends wg
         return new zui(set('_name', $name), $args);
     }
 
-    public static function toggle($name, $options = null)
+    public static function toggle($name, $options = array())
     {
         return toggle($name, $options);
     }
