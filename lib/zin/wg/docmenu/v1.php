@@ -95,9 +95,12 @@ class docMenu extends wg
         if(empty($items)) $items = $this->modules;
         if(empty($items)) return array();
 
-        $activeKey = $this->prop('activeKey');
+        $activeKey   = $this->prop('activeKey');
+        $parentItems = array();
         foreach($items as $setting)
         {
+            if(!is_object($setting)) continue;
+
             $setting->parentID = $parentID;
 
             $itemID = 0;
@@ -148,7 +151,7 @@ class docMenu extends wg
         $this->spaceMethod = $this->prop('spaceMethod');
 
         if($this->rawModule == 'api' && $this->rawMethod == 'view') $this->spaceType = 'api';
-        if($this->spaceType != 'project')
+        if(empty($this->modules['project']))
         {
             $this->setProp('items', $this->buildMenuTree(array(), $this->libID));
         }
@@ -377,6 +380,7 @@ class docMenu extends wg
             $menuLink ? dropmenu
             (
                 set::id('docDropmenu'),
+                set::menuID('docDropmenuMenu'),
                 set::text($title),
                 set::url($menuLink),
             ) : null,
