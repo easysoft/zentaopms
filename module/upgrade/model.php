@@ -2393,6 +2393,21 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_USER)->set('visions')->eq($visions)->where('account')->eq($account)->exec();
             }
         }
+
+        include('priv.php');
+        foreach($orData as $role => $name)
+        {
+            $this->dao->insert(TABLE_GROUP)
+                ->set('vision')->eq('or')
+                ->set('name')->eq($name)
+                ->set('role')->eq($role)
+                ->set('desc')->eq($name)
+                ->exec();
+            if(dao::isError()) continue;
+            $groupID = $this->dao->lastInsertID();
+            $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
+            $this->dao->exec($sql);
+        }
     }
 
     /**
