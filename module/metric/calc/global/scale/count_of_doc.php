@@ -10,7 +10,7 @@
  * 单位：个
  * 描述：按全局统计的文档总数是指系统或组织中存在的所有文档数量的统计值。它反映了整体文档管理的规模和复杂度。文档总数越大，代表着组织的信息量越丰富，也可能意味着需要更多的资源来维护和管理这些文档。
  * 定义：所有文档个数求和
-过滤已删除的文档
+ *       过滤已删除的文档
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,16 +23,15 @@
  */
 class count_of_doc extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDocs';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.id');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($row)
     {
+        $this->result += 1;
     }
 
     public function getResult($options = array())

@@ -354,4 +354,19 @@ class dataset
             ->where('t1.deleted')->eq('0')
             ->query();
     }
+
+    /**
+     * 获取文档数据。
+     * Get docs.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getDocs($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_DOC)->alias('t1')
+            ->where('t1.deleted')->eq('0')
+            ->query();
+    }
 }
