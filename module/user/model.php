@@ -269,7 +269,7 @@ class userModel extends model
         if(empty($userID) && $this->app->user->account == 'guest') return $this->app->user;
 
         if($field == 'id') $userID = (int)$userID;
-        if($field == 'account') $userID = str_replace(' ', '', $userID);
+        if($field == 'account') $userID = str_replace(' ', '', trim($userID));
 
         $user = $this->dao->select('*')->from(TABLE_USER)->where("`$field`")->eq($userID)->fetch();
         if(!$user) return false;

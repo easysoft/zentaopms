@@ -453,7 +453,7 @@ class product extends control
      *
      * @param  int    $productID
      * @param  string $type
-     * @param  int    $param
+     * @param  int    $param     userID
      * @param  int    $recTotal
      * @param  string $date
      * @param  string $direction next|pre
