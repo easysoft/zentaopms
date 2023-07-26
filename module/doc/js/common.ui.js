@@ -183,3 +183,28 @@ window.rendDocCell = function(result, {col, row})
     }
     return result;
 }
+
+window.loadObjectModules = function(e)
+{
+    const objectID   = e.target.value;
+    const objectType = e.target.name;
+
+    if(objectType == 'execution' && objectID == 0)
+    {
+        objectType = 'project';
+        objectID   = $('[name=project]').val();
+    }
+
+    if(!objectID || !objectType) return false;
+
+    if(typeof docType == 'undefined') docType = 'doc';
+    const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
+
+    $.get(link, function(data)
+    {
+        data = JSON.parse(data);
+        const $picker = $("[name='module']").zui('picker');
+        $picker.render({items: data});
+        $picker.$.setValue('');
+    });
+}

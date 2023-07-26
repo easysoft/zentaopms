@@ -392,7 +392,7 @@ class doc extends control
             $lib   = $this->doc->getLibByID($libID);
             if($docResult['status'] == 'exists')
             {
-                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
+                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'load' => $this->createLink('doc', 'view', "docID=$docID")));
             }
 
             $fileAction = '';
@@ -402,8 +402,7 @@ class doc extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $params   = "docID=" . $docResult['id'];
-            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'view', $params);
-            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link);
+            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'view', $params));
 
             return $this->send($response);
         }
@@ -793,8 +792,16 @@ class doc extends control
             $libPairs = array();
             foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
         }
+
         $moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs, $docType);
-        return print(html::select('module', $moduleOptionMenu, '', "class='form-control'"));
+
+        $items = array();
+        foreach($moduleOptionMenu as $id => $name)
+        {
+            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+        }
+
+        return print(json_encode($items));
     }
 
     /**

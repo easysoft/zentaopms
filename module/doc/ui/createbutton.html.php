@@ -35,7 +35,7 @@ $createButton = btngroup
         (
             setClass('btn primary'),
             set::icon('plus'),
-            set::url(createLink('doc', 'create', "objectType={$lib->type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html{$templateParam}")),
+            set::url(createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html{$templateParam}")),
             set('data-app', $app->tab),
             $lang->doc->create
         ),

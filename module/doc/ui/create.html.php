@@ -1,0 +1,199 @@
+<?php
+declare(strict_types=1);
+/**
+ * The create view file of doc module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Sun Guangming<sunguangming@easycorp.ltd>
+ * @package     doc
+ * @link        https://www.zentao.net
+ */
+namespace zin;
+
+jsVar('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));
+jsVar('requiredFields', ',' . $config->doc->create->requiredFields . ',');
+jsVar('libNotEmpty', sprintf($lang->error->notempty, $lang->doc->lib));
+jsVar('keywordsNotEmpty', sprintf($lang->error->notempty, $lang->doc->keywords));
+jsVar('contentNotEmpty', sprintf($lang->error->notempty, $lang->doc->content));
+
+form
+(
+    set::actions(''),
+    div
+    (
+        setClass('flex titleBox'),
+        backBtn(setClass('btn secondary'), set::icon('back'), $lang->goback),
+        formGroup
+        (
+            set::id('titleBox'),
+            input
+            (
+                set::name('title'),
+                set::placeholder($lang->doc->titlePlaceholder),
+            ),
+        ),
+        btn
+        (
+            set
+            (
+                array
+                (
+                    'class' => 'btn secondary',
+                    'text'  => $lang->doc->saveDraft,
+                    'id'    => 'saveDraft',
+                    'btnType' => 'submit',
+                )
+            )
+        ),
+        btn
+        (
+            set
+            (
+                array
+                (
+                    'class'       => 'btn primary',
+                    'text'        => $lang->doc->release,
+                    'data-toggle' => 'modal',
+                    'id'          => 'basicInfoLink',
+                    'url'         => '#modalBasicInfo'
+                )
+            )
+        )
+    ),
+    editor
+    (
+        set::name('content'),
+    ),
+    formHidden('status', 'normal'),
+    formHidden('contentType', 'html'),
+    formHidden('type', 'text'),
+    modalTrigger
+    (
+        modal
+        (
+            set::id('modalBasicInfo'),
+            on::change('#product',   "loadObjectModules"),
+            on::change('#project',   "loadObjectModules"),
+            on::change('#execution', "loadObjectModules"),
+            ($linkType == 'project') ? formGroup
+            (
+                setClass('w-1/2'),
+                set::label($lang->doc->project),
+                picker
+                (
+                    set::name('project'),
+                    set::id('project'),
+                    set::items($objects),
+                    isset($execution) ? set::value($execution->project) : set::value($objectID),
+                    on::change('loadExecutions')
+                )
+            ) : null,
+            ($linkType == 'execution') ? formGroup
+            (
+                set::width('1/2'),
+                set::label($lang->doc->execution),
+                picker
+                (
+                    set::name('execution'),
+                    set::id('execution'),
+                    set::items($objects),
+                    set::value($objectID) 
+                )
+            ) : null,
+            ($linkType == 'product') ? formGroup
+            (
+                set::width('1/2'),
+                set::label($lang->doc->product),
+                picker
+                (
+                    set::name('product'),
+                    set::id('product'),
+                    set::items($objects),
+                    set::value($objectID) 
+                )
+            ) : null,
+            formGroup
+            (
+                set::width('1/2'),
+                set::label($lang->doc->lib),
+                picker
+                (
+                    set::name('module'),
+                    set::items($moduleOptionMenu),
+                    set::value($moduleID) 
+                )
+            ),
+            formGroup
+            (
+                set::label($lang->doc->keywords),
+                input
+                (
+                    set::name('keywords'),
+                )
+            ),
+            formGroup
+            (
+                set::label($lang->doc->files),
+                upload()
+            ),
+            formGroup
+            (
+                set::label($lang->doc->mailto),
+                picker
+                (
+                    set::multiple(true),
+                    set::name('mailto[]'),
+                    set::items($users),
+                )
+            ),
+            formGroup
+            (
+                set::label($lang->doclib->control),
+                radioList
+                (
+                    set::name('acl'),
+                    set::items($lang->doc->aclList),
+                    set::value($objectType == 'mine' ? 'private' : 'open'),
+                    on::change('toggleWhiteList')
+                )
+            ),
+            formGroup
+            (
+                setClass('hidden'),
+                set::label($lang->doc->whiteList),
+                set::id('whitelistBox'),
+                picker
+                (
+                    set::name('groups[]'),
+                    set::items($groups),
+                    set::multiple(true),
+                ),
+                picker
+                (
+                    set::name('users[]'),
+                    set::items($users),
+                    set::multiple(true),
+                )
+            ),
+            formRow
+            (
+                div
+                (
+                    setClass('form-actions form-group no-label'),
+                    btn
+                    (
+                        set
+                        (
+                            array
+                            (
+                                'class'   => 'btn primary',
+                                'btnType' => 'submit',
+                            )
+                        ),
+                        $lang->doc->release
+                    )
+                )
+            )
+        )
+    )
+);
