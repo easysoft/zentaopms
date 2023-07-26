@@ -159,7 +159,7 @@ else
                     set('data-divid', "{$moduleName}0"),
                     checkbox
                     (
-                        set::name("actions[{$moduleName}]"),
+                        set::name("actions[{$moduleName}][]"),
                         set::value(isset($groupPrivs[$moduleName][$method]) ? $groupPrivs[$moduleName][$method] : ''),
                         setID("actions[{$moduleName}]{$method}"),
                         set::text($name),
@@ -190,7 +190,7 @@ else
                         setClass('checkbox-primary'),
                         checkbox
                         (
-                            set::name("actions[{$priv->module}]"),
+                            set::name("actions[{$priv->module}][]"),
                             setID("actions[{$priv->module}]{$priv->method}"),
                             set::value($priv->method),
                             set::checked($priv->method == $privMethod),
