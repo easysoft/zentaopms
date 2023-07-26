@@ -194,7 +194,8 @@ class api extends control
         $linkParams = "libID=$lib->id";
         if($methodName != 'index') $linkParams = "objectID=$linkObject&$linkParams";
 
-        $objectID = $this->objectID;
+        $spaceType = 'api';
+        $objectID  = $this->objectID;
         if($this->cookie->docSpaceParam)
         {
             $docParam   = json_decode($this->cookie->docSpaceParam);
@@ -204,6 +205,7 @@ class api extends control
             $moduleID   = $docParam->moduleID;
             $browseType = $docParam->browseType;
             $param      = $docParam->param;
+            $spaceType  = $docParam->type;
             list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
 
             $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
@@ -227,7 +229,7 @@ class api extends control
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->libTree        = $libTree;
         $this->view->objectDropdown = $objectDropdown;
-        $this->view->spaceType      = 'api';
+        $this->view->spaceType      = $spaceType;
 
         $this->display();
     }
