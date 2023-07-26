@@ -121,7 +121,7 @@ $config->ai->targetFormVars['story']['create']         = (object)array('format' 
 $config->ai->targetFormVars['story']['batchcreate']    = (object)array('format' => 'productID=%d', 'args' => array('product'));
 $config->ai->targetFormVars['story']['change']         = (object)array('format' => 'storyID=%d', 'args' => array('story'));
 $config->ai->targetFormVars['productplan']['create']   = (object)array('format' => 'productID=%d', 'args' => array('product'));
-$config->ai->targetFormVars['productplan']['edit']     = (object)array('format' => 'planID=%d', 'args' => array('plan'));
+$config->ai->targetFormVars['productplan']['edit']     = (object)array('format' => 'planID=%d', 'args' => array('productplan'));
 $config->ai->targetFormVars['task']['create']          = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution', 'story'));
 $config->ai->targetFormVars['task']['batchcreate']     = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution', 'story'));
 $config->ai->targetFormVars['task']['edit']            = (object)array('format' => 'taskID=%d', 'args' => array('task'));
