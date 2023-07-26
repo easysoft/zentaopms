@@ -49,9 +49,10 @@ foreach($products as $programID => $programProducts)
         $name  = ($config->systemMode == 'ALM' and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
 
         $item = array();
-        $item['id']    = $product->id;
-        $item['text']  = $product->name;
-        $item['keys']  = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+        $item['id']     = $product->id;
+        $item['text']   = $product->name;
+        $item['active'] = $productID == $product->id;
+        $item['keys']   = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
 
         if(!isset($data[$group][$programID])) $data[$group][$programID] = $programItem;
         $data[$group][$programID]['items'][] = $item;
