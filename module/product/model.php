@@ -1409,7 +1409,7 @@ class productModel extends model
 
         $params = "product=$product->id";
 
-        if($type == 'view') $menuList['main'][] = $this->config->product->actionList['close'];
+        if($type == 'view' && $product->status != 'closed') $menuList['main'][] = $this->config->product->actionList['close'];
 
         $menuList['suffix'][] = $this->buildMenu('product', 'edit', $params, $product, $type);
 
