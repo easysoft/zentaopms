@@ -7231,7 +7231,7 @@ class upgradeModel extends model
                 $fieldConfig = isset($upgradeConfig[$module][$code]) ? $upgradeConfig[$module][$code] : array();
                 foreach($fieldConfig as $key => $value) $field->$key = $value;
 
-                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
+                $this->dao->replace(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
             }
         }
 
