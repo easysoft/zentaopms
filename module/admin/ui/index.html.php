@@ -11,9 +11,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('hasInternet', $zentaoData->hasData);
-jsVar('isIntranet',  $isIntranet);
-
 $buildHeader = function(string $title, string $actionUrl = '', string $titleIcon = '', string $actionLang = '', string $actionIcon = ''): h
 {
     global $lang;
@@ -111,7 +108,7 @@ foreach($lang->admin->menuList as $menuKey => $menu)
         (
             setClass('setting-box cursor-pointer border border-hover rounded-md px-2 py-1 h-full'),
             set(array('data-id' => $menuKey, 'data-url' => $url)),
-            $menu['disabled'] ? set::title($lang->admin->noPriv) : null,
+            !empty($menu['disabled']) ? set::title($lang->admin->noPriv) : null,
             h4
             (
                 setClass('flex my-2.5 w-full'),
