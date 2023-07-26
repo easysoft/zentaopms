@@ -14,6 +14,7 @@
 include '../../common/view/header.html.php';
 include '../../common/view/kindeditor.html.php';
 include '../../common/view/datepicker.html.php';
+include '../../ai/view/inputinject.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
 js::set('createRelease', $lang->release->create);

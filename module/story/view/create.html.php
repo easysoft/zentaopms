@@ -11,6 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php js::set('page', 'create');?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>

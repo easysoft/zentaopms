@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../ai/view/inputinject.html.php';?>
 
 <?php if($viewType != 'story'):?>
 <style>

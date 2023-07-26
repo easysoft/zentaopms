@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php js::set('browseType', $type);?>
 <style>.icon-help{margin-left: 3px;}</style>
 <div id='mainMenu' class='clearfix'>

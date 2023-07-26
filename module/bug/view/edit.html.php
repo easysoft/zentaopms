@@ -14,6 +14,7 @@
 include '../../common/view/header.html.php';
 include '../../common/view/datepicker.html.php';
 include '../../common/view/kindeditor.html.php';
+include '../../ai/view/inputinject.html.php';
 js::set('page'                   , 'edit');
 js::set('changeProductConfirmed' , false);
 js::set('changeExecutionConfirmed' , false);
