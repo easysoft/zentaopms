@@ -1265,10 +1265,10 @@ class testtaskModel extends model
         }
 
         /* Create result of every step. */
-        foreach($postData->steps as $stepID =>$stepResult)
+        foreach($postData->steps as $stepID => $stepResult)
         {
             $step['result'] = $stepResult;
-            $step['real']   = $postData->reals[$stepID];
+            $step['real']   = zget($postData->reals, $stepID, '');
             $stepResults[$stepID] = $step;
         }
 
@@ -1502,10 +1502,38 @@ class testtaskModel extends model
             $result->files = zget($resultFiles, $resultID, array()); //Get files of case result.
             if(isset($relatedSteps[$result->version]))
             {
+                $preGrade    = 1;
+                $parentSteps = array();
+                $key         = array(0, 0, 0);
                 $relatedStep = $relatedSteps[$result->version];
                 foreach($relatedStep as $stepID => $step)
                 {
+                    $parentSteps[$step->id] = $step->parent;
+                    $grade = 1;
+                    if(isset($parentSteps[$step->parent]))
+                    {
+                        $grade = isset($parentSteps[$parentSteps[$step->parent]]) ? 3 : 2;
+                    }
+
+                    if($grade > $preGrade)
+                    {
+                        $key[$grade - 1] = 1;
+                    }
+                    else
+                    {
+                        if($grade < $preGrade)
+                        {
+                            if($grade < 2) $key[1] = 0;
+                            if($grade < 3) $key[2] = 0;
+                        }
+                        $key[$grade - 1] ++;
+                    }
+                    $name = implode('.', $key);
+                    $name = str_replace('.0', '', $name);
+
                     $relatedStep[$stepID] = (array)$step;
+                    $relatedStep[$stepID]['name']   = $name;
+                    $relatedStep[$stepID]['grade']  = $grade;
                     $relatedStep[$stepID]['desc']   = html_entity_decode($relatedStep[$stepID]['desc']);
                     $relatedStep[$stepID]['expect'] = html_entity_decode($relatedStep[$stepID]['expect']);
                     if(isset($result->stepResults[$stepID]))
@@ -1513,6 +1541,8 @@ class testtaskModel extends model
                         $relatedStep[$stepID]['result'] = $result->stepResults[$stepID]['result'];
                         $relatedStep[$stepID]['real']   = $result->stepResults[$stepID]['real'];
                     }
+
+                    $preGrade = $grade;
                 }
                 $result->stepResults = $relatedStep;
             }

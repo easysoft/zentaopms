@@ -132,11 +132,10 @@ function toggleShowResults(event)
  */
 function toggleCheckAll(event)
 {
-    var $checkAll = $(event.target).closest('td').find("input[type='checkbox']");
-    var isChecked = !$checkAll.prop('checked');
-    $checkAll.prop('checked', isChecked);
+    var $checkAll = $(event.target).closest('.check-all').find("input[type='checkbox']");
+    var isChecked = $checkAll.prop('checked');
 
-    $checkAll.closest('tbody').children('tr').find('input[type=checkbox]').prop('checked', isChecked);
+    $checkAll.closest('.resultSteps').find('.step').find('input[type=checkbox]').prop('checked', isChecked);
 }
 
 /**
@@ -148,27 +147,26 @@ function toggleCheckAll(event)
  */
 function toggleCheckChildItem(event)
 {
-    var $target = $(event.target).closest('td').find("input[type='checkbox']");
-    var isChecked = !$target.prop('checked');
-    $target.prop('checked', isChecked);
+    var $target = $(event.target).closest('.step-id').find("input[type='checkbox']");
+    var $step   = $target.closest('.step');
+    var isChecked = $target.prop('checked');
 
-    var $next = $target.closest('tr').next();
-
-    while($target.closest('tr').hasClass('step-group') && $next.length && $next.hasClass('step-item'))
+    var stepID = $step.data('id');
+    var $next = $target.closest('.step').next();
+    while(stepID == $next.data('parent'))
     {
         $next.find("input[type='checkbox']").prop('checked', isChecked);
         $next = $next.next();
     }
 
-    if($target.closest('tr').hasClass('step-item'))
+    if(stepID != 0)
     {
-        var parentStepKey   = $target.closest('tr').data('parent');
-        var allSiblings     = $target.closest('tbody').find('.step-item.group-' + parentStepKey).length
-        var checkedSiblings = $target.closest('tbody').find('.step-item.group-' + parentStepKey + ' input[type=checkbox]:checked').length
-
-        $target.closest('tr').prevAll('.step-group').first().find('input[type=checkbox]').prop('checked', allSiblings == checkedSiblings);
+        var parentStepID   = $step.data('parent');
+        var allSiblings     = $target.closest('.steps-body').find('[data-parent="' + parentStepID + '"]').length
+        var checkedSiblings = $target.closest('.steps-body').find('[data-parent="' + parentStepID + '"]' + ' input[type=checkbox]:checked').length
+        $target.closest('.step').prevAll('[data-id="' + parentStepID + '"]').find('input[type=checkbox]').prop('checked', allSiblings == checkedSiblings);
     }
 
-    var $tbody = $target.closest('tbody');
-    $tbody.find('.check-all input[type=checkbox]').prop('checked', $tbody.find('.check-item input[type=checkbox]').length == $tbody.find('.check-item input[type=checkbox]:checked').length);
+    var $stepsBody = $target.closest('.steps-body');
+    $stepsBody.find('.check-all input[type=checkbox]').prop('checked', $stepsBody.find('.check-item input[type=checkbox]').length == $stepsBody.find('.check-item input[type=checkbox]:checked').length);
 }

@@ -86,13 +86,13 @@ class testcaseModel extends model
             $step->case    = $caseID;
             $step->version = 1;
             $step->desc    = rtrim(htmlSpecialString($stepDesc));
-            $step->expect  = $stepType == 'item' ? '' : rtrim(htmlSpecialString(zget($case->expects, $stepKey, '')));
+            $step->expect  = $stepType == 'group' ? '' : rtrim(htmlSpecialString(zget($case->expects, $stepKey, '')));
 
             $this->dao->insert(TABLE_CASESTEP)->data($step)
                 ->autoCheck()
                 ->exec();
 
-            if($step->type == 'item')
+            if($step->type == 'group')
             {
                 $grandPaStepID = $parentStepID;
                 $parentStepID  = $this->dao->lastInsertID();
@@ -502,6 +502,7 @@ class testcaseModel extends model
 
             $data = new stdclass();
             $data->name   = str_replace('.0', '', $name);
+            $data->id     = $step->id;
             $data->step   = $step->desc;
             $data->desc   = $step->desc;
             $data->expect = $step->expect;
@@ -516,6 +517,7 @@ class testcaseModel extends model
         if(empty($steps))
         {
             $data = new stdclass();
+            $data->id     = 0;
             $data->name   = '1';
             $data->step   = '';
             $data->desc   = '';
@@ -945,13 +947,13 @@ class testcaseModel extends model
                         $step->case    = $caseID;
                         $step->version = $version;
                         $step->desc    = rtrim(htmlSpecialString($stepDesc));
-                        $step->expect  = $stepType == 'item' ? '' : rtrim(htmlSpecialString(zget($data->expects, $stepKey, '')));
+                        $step->expect  = $stepType == 'group' ? '' : rtrim(htmlSpecialString(zget($data->expects, $stepKey, '')));
 
                         $this->dao->insert(TABLE_CASESTEP)->data($step)
                             ->autoCheck()
                             ->exec();
 
-                        if($step->type == 'item')
+                        if($step->type == 'group')
                         {
                             $grandPaStepID = $parentStepID;
                             $parentStepID  = $this->dao->lastInsertID();

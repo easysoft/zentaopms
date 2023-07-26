@@ -25,17 +25,17 @@ function loadResult()
 function realChange(event)
 {
     var $target    = $(event.target);
-    var $preSelect = $(event.target).closest('table').closest('tr').find('select');
+    var $preSelect = $(event.target).closest('table').closest('tr').find('[name^="steps"]');
     if($target.val() == '' && $preSelect.val() == 'fail' && !custom)
     {
-        $preSelect.val('pass');
+        $preSelect.zui('picker').$.changeState({value: 'pass'});
     }
     else if($target.val() != '' && $preSelect.val() == 'pass' && !custom)
     {
-        $preSelect.val('fail').parent().addClass('has-error');
+        $preSelect.zui('picker').$.changeState({value: 'fail'});
+        $preSelect.parent().addClass('has-error');
         setTimeout(function(){$preSelect.parent().removeClass('has-error');},'1000');
     }
-
 }
 
 /**

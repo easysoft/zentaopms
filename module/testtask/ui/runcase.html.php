@@ -75,6 +75,7 @@ if($confirm != 'yes')
                     set::value($step->type != 'group' ? 'pass' : ''),
                     set::required($step->type != 'group'),
                     set::disabled($step->type == 'group'),
+                    $step->type == 'group' ? set('disabled', 'disabled') : '',
                 ),
             ),
             h::td
@@ -250,7 +251,7 @@ form
 
 div
 (
-    setClass('main border-t pt-6'),
+    setClass('main border-t'),
     set::id('resultsContainer'),
     div
     (
