@@ -959,15 +959,14 @@ class user extends control
 
             $this->loadModel('misc');
             $this->loadModel('extension');
-            $this->view->noGDLib       = sprintf($this->lang->misc->noGDLib, common::getSysURL() . $this->config->webRoot, '', false, true);
-            $this->view->title         = $this->lang->user->login;
-            $this->view->referer       = $this->referer;
-            $this->view->s             = zget($this->config->global, 'sn', '');
-            $this->view->keepLogin     = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
-            $this->view->rand          = $this->user->updateSessionRandom();
-            $this->view->unsafeSites   = $this->misc->checkOneClickPackage();
-            $this->view->plugins       = $this->extension->getExpiringPlugins(true);
-            $this->view->loginExpired  = $loginExpired;
+            $this->view->title        = $this->lang->user->login;
+            $this->view->referer      = $this->referer;
+            $this->view->s            = zget($this->config->global, 'sn', '');
+            $this->view->keepLogin    = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
+            $this->view->rand         = $this->user->updateSessionRandom();
+            $this->view->unsafeSites  = $this->misc->checkOneClickPackage();
+            $this->view->plugins      = $this->extension->getExpiringPlugins(true);
+            $this->view->loginExpired = $loginExpired;
             $this->display();
         }
     }
