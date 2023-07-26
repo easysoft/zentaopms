@@ -33,7 +33,7 @@
       <span class='text'><?php echo $lang->dataview->result;?></span>
       <button type="button" class="btn btn-link fieldSettings pull-right"><i class='icon icon-cog-outline'></i> <?php echo $lang->dataview->fieldSettings;?></button>
       <?php if($this->app->rawModule == 'dataview' and common::hasPriv('dataview', 'export')):?>
-      <button type="button" id='export' class="btn btn-link hidden dataview-export pull-right"><i class='icon icon-export'></i> <?php echo $lang->dataview->export;?></button>
+      <button type="button" id='exportDataview' class="btn btn-link hidden dataview-export pull-right"><i class='icon icon-export'></i> <?php echo $lang->dataview->export;?></button>
       <?php endif;?>
     </div>
   </div>
