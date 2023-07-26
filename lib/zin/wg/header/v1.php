@@ -200,7 +200,7 @@ class header extends wg
                     'icon' => 'cog-outline',
                     'text' => $lang->changePassword,
                     'data-toggle' => 'modal',
-                    'data-width' => 600
+                    'data-size' => 'sm'
                 );
             }
 
