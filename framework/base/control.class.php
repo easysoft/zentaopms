@@ -404,7 +404,7 @@ class baseControl
         $methodName = strtolower(trim($methodName));
 
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
-        $viewExtPath = $this->app->getModuleExtPath($moduleName, $viewDir);
+        $viewExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $viewDir);
 
         $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
         $mainViewFile = $modulePath . $viewDir . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
@@ -469,10 +469,11 @@ class baseControl
      *
      * @param  string $moduleName
      * @param  string $methodName
+     * @param  string $suffix
      * @access public
      * @return string
      */
-    public function getCSS($moduleName, $methodName)
+    public function getCSS(string $moduleName, string $methodName, string $suffix = ''): string
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
@@ -481,33 +482,32 @@ class baseControl
         $cssExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'css');
 
         $clientLang = $this->app->getClientLang();
-        $notCNLang  = strpos('|zh-cn|zh-tw|', "|{$clientLang}|") === false;
+        $notCNLang  = !str_contains('|zh-cn|zh-tw|', "|{$clientLang}|");
 
         $css          = '';
         $devicePrefix = $this->devicePrefix;
         $mainCssPath  = $modulePath . 'css' . DS;
 
         /* Common css file. like module/story/css/common.css. */
-        $mainCssFile = $mainCssPath . $devicePrefix . 'common.css';
+        $mainCssFile = $mainCssPath . $devicePrefix . "common{$suffix}.css";
         if(is_file($mainCssFile)) $css .= file_get_contents($mainCssFile);
 
         /* Common css file with lang. like module/story/css/common.en.css. */
-        $mainCssLangFile = $mainCssPath . $devicePrefix . "common.{$clientLang}.css";
-        if(!file_exists($mainCssLangFile) and $notCNLang) $mainCssLangFile = $mainCssPath . $devicePrefix . "common.en.css";
+        $mainCssLangFile = $mainCssPath . $devicePrefix . "common.{$clientLang}{$suffix}.css";
+        if(!file_exists($mainCssLangFile) and $notCNLang) $mainCssLangFile = $mainCssPath . $devicePrefix . "common{$suffix}.en.css";
         if(is_file($mainCssLangFile)) $css .= file_get_contents($mainCssLangFile);
 
         /* Method css file. like module/story/css/create.css. */
-        $methodCssFile = $mainCssPath . $devicePrefix . $methodName . '.css';
+        $methodCssFile = $mainCssPath . $devicePrefix . $methodName . "$suffix.css";
         if(is_file($methodCssFile)) $css .= file_get_contents($methodCssFile);
 
         /* Method css file with lang. like module/story/css/create.en.css. */
-        $methodCssLangFile = $mainCssPath . $devicePrefix . "{$methodName}.{$clientLang}.css";
-        if(!file_exists($methodCssLangFile) and $notCNLang) $methodCssLangFile = $mainCssPath . $devicePrefix . "{$methodName}.en.css";
+        $methodCssLangFile = $mainCssPath . $devicePrefix . "{$methodName}{$suffix}.{$clientLang}.css";
+        if(!file_exists($methodCssLangFile) and $notCNLang) $methodCssLangFile = $mainCssPath . $devicePrefix . "{$methodName}{$suffix}.en.css";
         if(is_file($methodCssLangFile)) $css .= file_get_contents($methodCssLangFile);
 
         if(!empty($cssExtPath))
         {
-            $realModulePath = realPath($modulePath);
             foreach($cssExtPath as $cssPath)
             {
                 if(empty($cssPath)) continue;
@@ -515,11 +515,11 @@ class baseControl
                 $cssMethodExt = $cssPath . $methodName . DS;
                 $cssCommonExt = $cssPath . 'common' . DS;
 
-                $cssExtFiles = glob($cssCommonExt . $devicePrefix . '*.css');
-                if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
+                $cssExtFiles = glob($cssCommonExt . $devicePrefix . "*{$suffix}.css");
+                if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles, $suffix);
 
-                $cssExtFiles = glob($cssMethodExt . $devicePrefix . '*.css');
-                if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
+                $cssExtFiles = glob($cssMethodExt . $devicePrefix . "*{$suffix}.css");
+                if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles, $suffix);
             }
         }
 
@@ -529,19 +529,20 @@ class baseControl
     /**
      * Get extension css and extension css with lang.
      *
-     * @param  array $files
+     * @param  array  $files
+     * @param  string $suffix
      * @access public
      * @return string
      */
-    public function getExtCSS($files)
+    public function getExtCSS(array $files, string $suffix = ''): string
     {
         $clientLang = $this->app->getClientLang();
-        $notCNLang  = strpos('|zh-cn|zh-tw|', "|{$clientLang}|") === false;
+        $notCNLang  = !str_contains('|zh-cn|zh-tw|', "|{$clientLang}|");
 
         $filePairs = array();
         foreach($files as $cssFile)
         {
-            $fileName             = basename($cssFile);
+            $fileName             = basename((string) $cssFile);
             $filePairs[$fileName] = $cssFile;
         }
 
@@ -553,23 +554,26 @@ class baseControl
             {
                 /* Method extension css file. like module/story/ext/css/create/effort.css. */
                 $css .= file_get_contents($cssFile);
-                list($code) = explode('.', $fileName);
+                [$code] = explode('.', $fileName);
             }
             else
             {
-                list($code) = explode('.', $fileName);
+                [$code] = explode('.', $fileName);
                 if(isset($usedCodes[$code])) continue;
             }
 
-
             /* Method extension css file. like module/story/ext/css/create/effort.zh-cn.css. */
-            if(isset($filePairs["{$code}.{$clientLang}.css"]))
+            if(isset($filePairs["{$code}.{$clientLang}{$suffix}.css"]))
             {
-                $css .= file_get_contents($filePairs["{$code}.{$clientLang}.css"]);
+                $css .= file_get_contents($filePairs["{$code}.{$clientLang}{$suffix}.css"]);
             }
-            elseif($notCNLang and isset($filePairs["{$code}.en.css"]))
+            elseif($notCNLang and isset($filePairs["{$code}.en{$suffix}.css"]))
             {
-                $css .= file_get_contents($filePairs["{$code}.en.css"]);
+                $css .= file_get_contents($filePairs["{$code}.en{$suffix}.css"]);
+            }
+            elseif($notCNLang and isset($filePairs["{$code}{$suffix}.css"]))
+            {
+                $css .= file_get_contents($filePairs["{$code}{$suffix}.css"]);
             }
             $usedCodes[$code] = $code;
         }
@@ -586,7 +590,7 @@ class baseControl
      * @access public
      * @return string
      */
-    public function getJS($moduleName, $methodName)
+    public function getJS(string $moduleName, string $methodName, string $suffix = ''): string
     {
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
@@ -595,8 +599,8 @@ class baseControl
         $jsExtPath  = $this->app->getModuleExtPath($this->appName, $moduleName, 'js');
 
         $js           = '';
-        $mainJsFile   = $modulePath . 'js' . DS . $this->devicePrefix . 'common.js';
-        $methodJsFile = $modulePath . 'js' . DS . $this->devicePrefix . $methodName . '.js';
+        $mainJsFile   = $modulePath . 'js' . DS . $this->devicePrefix . "common{$suffix}.js";
+        $methodJsFile = $modulePath . 'js' . DS . $this->devicePrefix . $methodName . $suffix . '.js';
         if(file_exists($mainJsFile)) $js .= file_get_contents($mainJsFile);
         if(is_file($methodJsFile)) $js .= file_get_contents($methodJsFile);
 
@@ -609,10 +613,10 @@ class baseControl
                 $jsMethodExt = $jsPath . $methodName . DS;
                 $jsCommonExt = $jsPath . 'common' . DS;
 
-                $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . '*.js');
+                $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . "*{$suffix}.js");
                 if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
 
-                $jsExtFiles = glob($jsMethodExt . $this->devicePrefix . '*.js');
+                $jsExtFiles = glob($jsMethodExt . $this->devicePrefix . "*{$suffix}.js");
                 if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
             }
         }

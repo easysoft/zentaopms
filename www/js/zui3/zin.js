@@ -34,6 +34,7 @@
     if(isIndexPage) return;
 
     const DEBUG       = config.debug;
+    const is18version = config.version.split('.')[0] === '18';
     const currentCode = window.name.substring(4);
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
@@ -732,6 +733,8 @@
             options.url = url;
         }
 
+        if(is18version) return $.apps.open(options.url, options.app);
+
         if(DEBUG) console.log('[APP] open url', url, options);
 
         if(options.confirm)
@@ -873,12 +876,67 @@
         return result;
     }
 
+    function handleClickLinkIn18(event)
+    {
+        var $link = $(this).closest('a,.open-url');
+        if(!$link.length) return;
+
+        if($link.is('[data-toggle]') || $link.zui('modalTrigger')) return;
+        var url = $link.hasClass('show-in-app') ? '' : ($link.attr('href') || (!$link.is('a') ? $link.data('url') : ''));
+        var thisAppCode = $link.data('app')
+        if (url) {
+            if (url.indexOf('javascript:') === 0 || url[0] === '#') return;
+            var urlInfo = $.parseLink(url);
+            if (urlInfo.external || (urlInfo.moduleName === 'file' && urlInfo.methodName === 'download')) return;
+            if (urlInfo.moduleName === 'index' && urlInfo.methodName === 'index') {
+                window.location.reload();
+                e.preventDefault();
+                return;
+            }
+        } else {
+            if (!thisAppCode) return;
+        }
+        if (!thisAppCode) {
+            thisAppCode = $.apps.getAppCode(url);
+        }
+        if (!thisAppCode) return;
+        if (thisAppCode === 'help') {
+            $.apps.appsMap.help.text = $link.text();
+            if (!$.apps.appsMap.help.url) {
+                $.apps.appsMap.help.url = url;
+            }
+        }
+        $.apps.openUrl(url, thisAppCode);
+        e.preventDefault();
+    }
+
+    function handleClickIn18(event)
+    {
+        handleClickLinkIn18(event);
+
+        var iframe = parent.document.getElementById(window.name);
+        if(!iframe) return;
+        var iframeContainer = parent.document.getElementById(iframe.name) || iframe;
+        if(!iframeContainer) return;
+
+        var customEvent;
+        if(typeof Event === 'function') {
+            customEvent = new Event(event.type, {bubbles: true});
+        } else {
+            customEvent = document.createEvent('Event');
+            customEvent.initEvent(event.type, true, true);
+        }
+        iframeContainer.dispatchEvent(customEvent);
+    }
+
     $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial});
     $.extend($.apps, {openUrl: openUrl});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
     {
+        if(is18version) return handleClickIn18(e);
+
         if(isInAppTab) window.parent.$('body').trigger('click');
 
         const $link = $(e.target).closest('a,.open-url');
