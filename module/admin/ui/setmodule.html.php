@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $rows = array();
-foreach($featureGroup as $group => $features)
+foreach($config->featureGroup as $group => $features)
 {
     if(strpos(",$disabledFeatures,", ",$group,") !== false) continue;
 
