@@ -44,6 +44,20 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
         <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '', "class='task-name'");?>
         <small><?php echo $lang->arrow . $lang->task->edit;?></small>
       </h2>
+      <?php if(isset($_SESSION['aiInjectData'])): ?>
+        <?php
+        $this->app->loadLang('ai');
+        $prompt   = $_SESSION['aiPrompt']['prompt'];
+        $objectId = $_SESSION['aiPrompt']['objectId'];
+        $isAudit  = isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60;
+        ?>
+        <div class="pull-right btn-toolbar">
+          <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');?>
+          <?php if($isAudit): ?>
+            <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"'); ?>
+          <?php endif;?>
+        </div>
+      <?php endif;?>
     </div>
     <div class='main-row'>
       <div class='main-col col-8'>
@@ -84,10 +98,14 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
             </div>
           </div>
           <div class='detail text-center form-actions'>
+            <?php if($isAudit && $prompt->status == 'draft'): ?>
+            <?php echo html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id" ,'btn btn-primary btn-wide');?>
+            <?php else:?>
             <?php echo html::hidden('lastEditedDate', $task->lastEditedDate);?>
             <?php echo html::hidden('consumed', $task->consumed);?>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
+            <?php endif;?>
           </div>
           <?php include '../../common/view/action.html.php';?>
         </div>
