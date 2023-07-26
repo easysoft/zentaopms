@@ -199,7 +199,7 @@ class header extends wg
                     'url' => createLink('my', 'changepassword', '', '', true),
                     'icon' => 'cog-outline',
                     'text' => $lang->changePassword,
-                    'class' => 'iframe',
+                    'data-toggle' => 'modal',
                     'data-width' => 600
                 );
             }
