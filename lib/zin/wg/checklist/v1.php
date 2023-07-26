@@ -26,7 +26,7 @@ class checkList extends wg
 
     public function onBuildItem($item): checkbox
     {
-        if($item instanceof item) $item = $item->props->toJsonData();
+        if($item instanceof item) $item = $item->props->toJSON();
 
         if(!isset($item['checked']))
         {

@@ -22,8 +22,8 @@ class commentDialog extends wg
 
         return modal
         (
-            set::id('comment-dialog'),
-            set::title($title),
+            setID('comment-dialog'),
+            set::modalProps(array('title' => $title)),
             commentForm
             (
                 set::url($url),

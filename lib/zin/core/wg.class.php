@@ -73,7 +73,7 @@ class wg
 
     public function __debugInfo(): array
     {
-        return $this->toJsonData();
+        return $this->toJSON();
     }
 
     public function isDomElement(): bool
@@ -429,7 +429,7 @@ class wg
      */
     public function setProp(props|array|string $prop, mixed $value = null)
     {
-        if($prop instanceof props) $prop = $prop->toJsonData();
+        if($prop instanceof props) $prop = $prop->toJSON();
 
         if(is_array($prop))
         {
@@ -498,11 +498,11 @@ class wg
         return $this->prop('id');
     }
 
-    public function toJsonData(): array
+    public function toJSON(): array
     {
         $data = array();
         $data['gid'] = $this->gid;
-        $data['props'] = $this->props->toJsonData();
+        $data['props'] = $this->props->toJSON();
 
         $data['type'] = $this->type();
         if(str_starts_with($data['type'], 'zin\\')) $data['type'] = substr($data['type'], 4);
@@ -512,9 +512,9 @@ class wg
         {
             foreach($value as $index => $child)
             {
-                if($child instanceof wg || (is_object($child) && method_exists($child, 'toJsonData')))
+                if($child instanceof wg || (is_object($child) && method_exists($child, 'toJSON')))
                 {
-                    $value[$index] = $child->toJsonData();
+                    $value[$index] = $child->toJSON();
                 }
                 elseif(isDirective($child, 'html'))
                 {
