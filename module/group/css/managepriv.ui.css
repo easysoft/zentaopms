@@ -65,3 +65,25 @@
 #managePrivForm th.text-right {text-align: right !important;}
 #mainContent.manageLimitGroup {padding: 20px; background-color: #FFF;}
 #mainContent.manageLimitGroup tr {border-bottom-width: 0;}
+
+/* Manage priv by group. */
+
+#privList td.menus {border-right: 0; padding-right: 0; width: 170px !important;}
+#privList td.menus + td {border-left: 0; padding-left: 0px; padding}
+#privList .menus .checkbox-primary {float: left; width: 160px;}
+#privList .menus .checkbox-primary:first-child {float: left; width: auto;}
+#privList .menus a {margin-left: 10px;}
+
+#privList {margin-bottom: 0px;}
+#privList tr {border-bottom-width: 0;}
+#privList tr > td {background-color: #FFF;}
+#privList tr:hover > td {background-color: #FFF;}
+#privList th.module {width: 142px; min-width: 142px; background-color: #EDEEF28C; font-weight: 600;}
+#privList th.package {width: 142px; min-width: 142px; background-color: #F4F5F78C; font-weight: 600;}
+#privList th .checkbox-inline input {margin-left: 0px;}
+#privList .check-all {display: inline-block;}
+#privList .check-all > label {padding-left: 0; font-weight: 600;}
+#privList .text-middle.text-left {padding-left: 24px;}
+#privList tbody > tr > td {padding: 4px 20px 20px 20px;}
+#privList .group-item {margin-top: 16px;}
+#privList .group-item .checkbox-inline label {padding-left: 3px;}
