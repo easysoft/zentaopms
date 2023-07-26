@@ -22,8 +22,9 @@
 .flex-between {display:flex; justify-content: space-between;}
 .flex-start   {display:flex; justify-content: flex-start;}
 
-.query-after {position: relative; padding-right: 24px; padding-top: 1px;}
-.query-after::after {content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 1px; background-color: #F1F5F9;}
+.query-after {padding-right: 8px; padding-top: 1px;}
+.query-pseudo {position: relative; padding-right: 24px; padding-top: 1px;}
+.query-pseudo::after {content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 1px; background-color: #F1F5F9;}
 
 #filterMargin {padding-top: 8px; padding-bottom: 5px;}
 .pivot-design {padding-left: 24px; padding-right: 12px;}
