@@ -12,6 +12,48 @@ namespace zin;
 
 set::title($lang->my->preference);
 
+$imageList = array();
+$imageList['program-browse']  = 'list';
+$imageList['program-project'] = 'list-recent';
+$imageList['program-kanban']  = 'kanban';
+
+$imageList['product-index']     = 'panel-recent-browse';
+$imageList['product-all']       = 'list';
+$imageList['product-dashboard'] = 'panel';
+$imageList['product-browse']    = 'list-recent';
+$imageList['product-kanban']    = 'kanban';
+
+$imageList['project-browse']    = 'list';
+$imageList['project-execution'] = 'list-recent';
+$imageList['project-index']     = 'panel-recent-browse';
+$imageList['project-kanban']    = 'kanban';
+
+$imageList['execution-all']             = 'list';
+$imageList['execution-task']            = 'list-recent';
+$imageList['execution-executionkanban'] = 'kanban';
+
+$URSRItems = array();
+foreach($URSRList as $URSRKey => $URSRValue)
+{
+    $contentHtml = "<div class=''><span class='label light-pale circle mr-4'>{$URSRKey}</span>{$URSRValue}</div>";
+    $URSRItems[] = array('value' => $URSRValue, 'text' => $URSRValue, 'content' => array('html' => $contentHtml, 'class' => 'flex w-full border p-4 preference-box'));
+}
+
+foreach(array('program', 'product', 'project', 'execution') as $objectType)
+{
+    $itemsName    = $objectType . 'Items';
+    $linkListName = $objectType . 'LinkList';
+
+    $$itemsName = array();
+    foreach($lang->my->$linkListName as $value => $label)
+    {
+        list($title, $desc) = explode('/', $label);
+
+        $contentHtml  = "<div class='basis-20'><img src='theme/default/images/guide/{$imageList[$value]}.png' /></div><div class='pl-2 col justify-around'><div class='text-black'>{$title}</div><div class='text-gray text-sm'>{$desc}</div></div>";
+        $$itemsName[] = array('value' => $value, 'text' => $title, 'content' => array('html' => $contentHtml, 'class' => 'flex w-full border no-wrap pl-1 py-4 preference-box'));
+    }
+}
+
 form
 (
     set::labelWidth('140px'),
@@ -20,20 +62,18 @@ form
         set::label($lang->my->storyConcept),
         picker
         (
-            set::class('URSR'),
             set::name('URSR'),
-            set::items($URSRList),
+            set::items($URSRItems),
             set::value($URSR),
         )
     ),
     $this->config->systemMode == 'ALM' ? formGroup
     (
-        set::label($lang->my->productLink),
+        set::label($lang->my->programLink),
         picker
         (
-            set::class('programLink'),
             set::name('programLink'),
-            set::items($lang->my->programLinkList),
+            set::items($programItems),
             set::value($programLink)
         )
     ) : null,
@@ -42,9 +82,8 @@ form
         set::label($lang->my->productLink),
         picker
         (
-            set::class('productLink'),
             set::name('productLink'),
-            set::items($lang->my->productLinkList),
+            set::items($productItems),
             set::value($productLink)
         )
     ),
@@ -53,9 +92,8 @@ form
         set::label($lang->my->projectLink),
         picker
         (
-            set::class('projectLink'),
             set::name('projectLink'),
-            set::items($lang->my->projectLinkList),
+            set::items($projectItems),
             set::value($projectLink)
         )
     ),
@@ -64,9 +102,8 @@ form
         set::label($lang->my->executionLink),
         picker
         (
-            set::class('executionLink'),
             set::name('executionLink'),
-            set::items($lang->my->executionLinkList),
+            set::items($executionItems),
             set::value($executionLink)
         )
     ),

@@ -1,0 +1,4 @@
+.picker-menu-list .menu-item>a.active, .picker-menu-list .menu-item>a.hover, .picker-menu-list .menu-item>a:hover{background: unset}
+.picker-menu-list .menu-item>a.active .preference-box{background: var(--menu-active-bg); color: var(--menu-active-color)}
+.picker-menu-list .menu-item>a:hover .preference-box, .picker-menu-list .menu-item>a.hover .preference-box{background: var(--menu-active-bg); color: var(--menu-active-color); box-shadow: 0px 0px 1px 1px #2E7FFF;}
+.picker-menu-list .menu-item>a.active .preference-box .label, .picker-menu-list .menu-item>a:hover .preference-box .label, .picker-menu-list .menu-item>a.hover .preference-box .label{background: var(--menu-active-bg); color: var(--menu-active-color);}
