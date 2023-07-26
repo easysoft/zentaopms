@@ -77,7 +77,7 @@ $(function()
 
 function showEditCheckbox(show)
 {
-    $('.icon-project,.icon-waterfall,.icon-scrum,.icon-kanban,.icon-agileplus,.icon-waterfallplus').each(function()
+    $('.icon-project,.icon-waterfall,.icon-scrum,.icon-kanban,.icon-agileplus,.icon-waterfallplus,.icon-ipd').each(function()
     {
         $this     = $(this);
         $tr       = $(this).closest('tr');
