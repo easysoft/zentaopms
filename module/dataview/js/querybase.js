@@ -40,7 +40,7 @@ function query(callback) {
         $('#querying').addClass('hidden');
         if(resp.result !== 'success')
         {
-            $('#export').addClass('hidden');
+            $('#exportDataview').addClass('hidden');
             var message = resp.message.errorInfo ? resp.message.errorInfo[2] : resp.message;
             $('.error').removeClass('hidden');
             $('.error td').html(message);
@@ -48,7 +48,7 @@ function query(callback) {
         }
         else
         {
-            $('#export').removeClass('hidden');
+            $('#exportDataview').removeClass('hidden');
             DataStorage.fields        = resp.fields;
             DataStorage.columns       = resp.columns;
             DataStorage.rows          = resp.rows;
