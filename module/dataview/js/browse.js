@@ -94,7 +94,7 @@ function buildTable(resp)
         if(dataview?.langs)
         {
             var langs = JSON.parse(dataview.langs);
-            if(langs) fieldName = langs?.[field]?.[clientLang] ? $langs[field][clientLang] : fieldName;
+            if(langs) fieldName = langs?.[field]?.[clientLang] ? langs[field][clientLang] : fieldName;
         }
 
         html += "<th>" + fieldName + "</th>";
