@@ -1,6 +1,8 @@
-#steps th {font-size:13px; color: var(--color-slate-700); padding: 8px; width: 50%;}
-#steps th.steps {padding-left: 32px;}
-#steps .step-id {font-size:13px; color: var(--color-slate-500);}
-#steps thead, #steps .step-item .disabled-color {background-color: rgba(var(--color-gray-100-rgb), 0.7);}
 #steps {font-size:13px; color: var(--color-slate-800);}
+#steps .steps-header {background-color: rgba(var(--color-gray-100-rgb), 0.7);}
+#steps .steps-header > * {font-size:13px; color: var(--color-slate-700); padding: 8px; width: 50%;}
+#steps .steps-header > .steps {padding-left: 32px;}
+#steps .steps-body .step .step-id {padding-left: 16px;}
+#steps .step-id > span {font-size:13px; color: var(--color-slate-500);}
+#steps .steps-body .step > * {padding: 8px; word-break: break-all;}
 .linkCaseTitles, .linkBugTitles {overflow: hidden; white-space: nowrap;}

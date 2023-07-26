@@ -12,38 +12,34 @@ namespace zin;
 
 $canCreateCase = hasPriv('testcase', 'create');
 
-$stepID = $childID = 0;
 $steps = array();
 foreach($case->steps as $step)
 {
-    if($step->type == 'group' || $step->type == 'step')
-    {
-        $stepID++;
-        $childID = 0;
-    }
-    $stepClass  = $step->type == 'step' ? 'step-group' : "step-{$step->type}";
+    $stepClass = $step->type == 'step' ? 'step-group' : "step-{$step->type}";
+    if(count($steps) > 0 && $step->grade == 1) $stepClass .= ' mt-1';
+    $stepClass .= count($steps) > 0 && $step->grade == 1 ? ' mt-2' : ' border-t-0';
 
-    $steps[] = h::tr
+    $steps[] = cell
     (
-        setClass("step {$stepClass}"),
-        h::td
+        setClass("step {$stepClass} border align-top flex"),
+        cell
         (
-            setClass('text-left'),
+            setClass('text-left flex border-r step-id'),
+            width('1/2'),
             span
             (
-                setClass('step-id pr-2 pl-' . (($step->grade- 1) * 2)),
+                setClass('pr-2 pl-' . (($step->grade - 1) * 2)),
                 $step->name,
             ),
-            nl2br(str_replace(' ', '&nbsp;', $step->desc)),
+            html(nl2br(str_replace(' ', '&nbsp;', $step->desc))),
         ),
-        h::td
+        cell
         (
-            setClass('text-left' . ($step->type == 'item' ? ' disabled-color' :'')),
-            nl2br(str_replace(' ', '&nbsp;', $step->expect)),
+            setClass('text-left flex'),
+            width('1/2'),
+            html(nl2br(str_replace(' ', '&nbsp;', $step->expect))),
         ),
     );
-
-    $childID ++;
 }
 
 $files = '';
@@ -323,27 +319,30 @@ detailBody
         section
         (
             set::title($lang->testcase->steps),
-            h::table
+            div
             (
-                setClass('table bordered'),
                 set::id('steps'),
-                h::thead
+                div
                 (
-                    h::tr
+                    setClass('steps-header'),
+                    div
                     (
-                        h::th
-                        (
-                            $lang->testcase->stepDesc,
-                            setClass('text-left steps'),
-                        ),
-                        h::th
-                        (
-                            $lang->testcase->stepExpect,
-                            setClass('text-left'),
-                        ),
+                        setClass('text-left inline-block steps border'),
+                        width('1/2'),
+                        $lang->testcase->stepDesc,
+                    ),
+                    div
+                    (
+                        setClass('text-left inline-block border border-l-0'),
+                        width('1/2'),
+                        $lang->testcase->stepExpect,
                     ),
                 ),
-                h::tbody($steps)
+                div
+                (
+                    setClass('steps-body'),
+                    $steps,
+                )
             ),
             set::useHtml(true),
         ),
