@@ -490,7 +490,7 @@ class instance extends control
         $result = $this->instance->start($instance);
         $this->action->create('instance', $instance->id, 'start', '', json_encode(array('result' => $result, 'app' => array('alias' => $instance->appName, 'app_version' => $instance->version))));
 
-        if($result->code == 200) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'startSuccess')));
+        if($result->code == 200) return $this->send(array('result' => 'success', 'load' => true, 'message' => zget($this->lang->instance->notices, 'startSuccess')));
 
         return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'startFail')));
     }
@@ -509,7 +509,7 @@ class instance extends control
 
         $result = $this->instance->stop($instance);
         $this->action->create('instance', $instance->id, 'stop', '', json_encode(array('result' => $result, 'app' => array('alias' => $instance->appName, 'app_version' => $instance->version))));
-        if($result->code == 200) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'stopSuccess')));
+        if($result->code == 200) return $this->send(array('result' => 'success', 'load' => true, 'message' => zget($this->lang->instance->notices, 'stopSuccess')));
 
         return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'stopFail')));
     }

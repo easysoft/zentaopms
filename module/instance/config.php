@@ -21,13 +21,14 @@ $config->instance->enableAutoRestore = in_array('auto-rollback', $features);
 global $lang, $app;
 $app->loadLang('space');
 
-$config->instance->actionList['start']['icon'] = 'play';
-$config->instance->actionList['start']['hint'] = $lang->instance->start;
-$config->instance->actionList['start']['url']  = array('module' => 'instance', 'method' => 'visit', 'params' => 'id={id}&type={type}');
+$config->instance->actionList['start']['icon']        = 'play';
+$config->instance->actionList['start']['hint']        = $lang->instance->start;
+$config->instance->actionList['start']['url']         = array('module' => 'instance', 'method' => 'ajaxStart', 'params' => 'id={id}');
 
-$config->instance->actionList['stop']['icon'] = 'off';
-$config->instance->actionList['stop']['hint'] = $lang->instance->stop;
-$config->instance->actionList['stop']['url']  = array('module' => 'instance', 'method' => 'visit', 'params' => 'id={id}&type={type}');
+$config->instance->actionList['stop']['icon']         = 'off';
+$config->instance->actionList['stop']['hint']         = $lang->instance->stop;
+$config->instance->actionList['stop']['data-confirm'] = $lang->instance->notices['confirmStop'];
+$config->instance->actionList['stop']['url']          = array('module' => 'instance', 'method' => 'ajaxStop', 'params' => 'id={id}');
 
 $config->instance->actionList['uninstall']['icon'] = 'trash';
 $config->instance->actionList['uninstall']['hint'] = $lang->instance->uninstall;
@@ -43,5 +44,5 @@ $config->instance->actionList['upgrade']['url']  = helper::createLink('instance'
 
 $config->instance->actions = new stdclass();
 $config->instance->actions->view = array();
-$config->instance->actions->view['mainActions']   = array('start');
+$config->instance->actions->view['mainActions']   = array('start', 'stop', 'upgrade');
 $config->instance->actions->view['suffixActions'] = array('uninstall');

@@ -17,7 +17,6 @@ $setting    = usePager('pager');
 $cpuInfo    = $this->instance->printCpuUsage($instance, $instanceMetric->cpu, 'array');
 $memoryInfo = $this->instance->printMemUsage($instance, $instanceMetric->memory, 'array');
 $actions    = $this->loadModel('common')->buildOperateMenu($instance);
-// $actions = array();
 
 $dbListWg = array();
 foreach($dbList as $db)
@@ -191,8 +190,7 @@ div
     ),
     div
     (
-        setClass('w-96'),
+        setStyle('width', '400px'),
         history()
     )
 );
-\a($actions);
