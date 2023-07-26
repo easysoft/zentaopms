@@ -82,17 +82,6 @@ class giteaModel extends model
     }
 
     /**
-     * Create a gitea.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-        return $this->loadModel('pipeline')->create('gitea');
-    }
-
-    /**
      * Update a gitea.
      *
      * @param  int $id

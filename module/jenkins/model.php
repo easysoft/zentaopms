@@ -129,17 +129,6 @@ class jenkinsModel extends model
     }
 
     /**
-     * Create a jenkins.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-       return $this->loadModel('pipeline')->create('jenkins');
-    }
-
-    /**
      * Update a jenkins.
      *
      * @param  int    $id

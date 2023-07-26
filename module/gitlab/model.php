@@ -429,17 +429,6 @@ class gitlabModel extends model
     }
 
     /**
-     * Create a gitlab.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-        return $this->loadModel('pipeline')->create('gitlab');
-    }
-
-    /**
      * Update a gitlab.
      *
      * @param  int $id

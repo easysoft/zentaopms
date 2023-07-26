@@ -68,8 +68,17 @@ class gogs extends control
     {
         if($_POST)
         {
-            $this->checkToken();
-            $gogsID = $this->gogs->create();
+            $gogs = form::data($this->config->gogs->form->create)
+                ->add('type', 'gogs')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,token')
+                ->skipSpecial('url,token')
+                ->remove('account,password,appType')
+                ->get();
+            $this->checkToken($gogs);
+            $gogsID = $this->loadModel('pipeline')->create($gogs);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $actionID = $this->loadModel('action')->create('gogs', $gogsID, 'created');
@@ -165,9 +174,8 @@ class gogs extends control
      * @access protected
      * @return void
      */
-    protected function checkToken()
+    protected function checkToken(object $gogs)
     {
-        $gogs = fixer::input('post')->trim('url,token')->get();
         $this->dao->update('gogs')->data($gogs)->batchCheck($this->config->gogs->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

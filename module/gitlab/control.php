@@ -62,13 +62,22 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $this->checkToken();
-            $gitlabID = $this->gitlab->create();
+            $gitlab = form::data($this->config->gitlab->form->create)
+                ->add('type', 'gitlab')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,token')
+                ->skipSpecial('url,token,account,password')
+                ->remove('account,password,appType')
+                ->get();
+            $this->checkToken($gitlab);
+            $gitlabID = $this->loadModel('pipeline')->create($gitlab);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action');
             $actionID = $this->action->create('gitlab', $gitlabID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
         $this->view->title = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->lblCreate;
@@ -116,7 +125,7 @@ class gitlab extends control
             $actionID = $this->action->create('gitlab', $id, 'edited');
             $changes  = common::createChanges($oldGitLab, $gitLab);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
         $this->view->title  = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->edit;
@@ -283,9 +292,8 @@ class gitlab extends control
      * @access protected
      * @return void
      */
-    protected function checkToken()
+    protected function checkToken(object $gitlab)
     {
-        $gitlab = fixer::input('post')->trim('url,token')->get();
         $this->dao->update('gitlab')->data($gitlab)->batchCheck($this->config->gitlab->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

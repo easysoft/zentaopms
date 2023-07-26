@@ -131,8 +131,17 @@ class sonarqube extends control
     {
         if($_POST)
         {
-            $this->checkToken();
-            $sonarqubeID = $this->loadModel('pipeline')->create('sonarqube');
+            $sonarqube = form::data($this->config->sonarqube->form->create)
+                ->add('type', 'sonarqube')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,account,password')
+                ->skipSpecial('url,token,account,password')
+                ->remove('token,appType')
+                ->get();
+            $this->checkToken($sonarqube);
+            $sonarqubeID = $this->loadModel('pipeline')->create($sonarqube);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('sonarqube', $sonarqubeID, 'created');
@@ -147,11 +156,11 @@ class sonarqube extends control
     /**
      * Check post info.
      *
-     * @param  int    $sonarqubeID
+     * @param  object    $sonarqube
      * @access protected
      * @return void
      */
-    protected function checkToken($sonarqubeID = 0)
+    protected function checkToken(object $sonarqube)
     {
         $sonarqube = fixer::input('post')->trim('url,token,account,password')->get();
         $this->dao->update('sonarqube')->data($sonarqube)
@@ -173,7 +182,7 @@ class sonarqube extends control
         $result = $this->sonarqube->apiValidate($sonarqube->url, $token);
 
         if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => $result));
-        $this->post->set('token', $token);
+        $sonarqube->token = $token;
     }
 
     /**

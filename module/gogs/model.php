@@ -66,17 +66,6 @@ class gogsModel extends model
     }
 
     /**
-     * Create a gogs.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-        return $this->loadModel('pipeline')->create('gogs');
-    }
-
-    /**
      * Update a gogs.
      *
      * @param  int $id

@@ -21,7 +21,7 @@ $lang->gitea->browseAction = 'Gitea List';
 $lang->gitea->deleteAction = 'Delete Gitea';
 
 $lang->gitea->id    = 'ID';
-$lang->gitea->name  = "Server Name";
+$lang->gitea->name  = "Application Name";
 $lang->gitea->url   = 'Server URL';
 $lang->gitea->token = 'Token';
 

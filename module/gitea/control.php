@@ -68,8 +68,17 @@ class gitea extends control
     {
         if($_POST)
         {
-            $this->checkToken();
-            $giteaID = $this->gitea->create();
+            $gitea = form::data($this->config->gitea->form->create)
+                ->add('type', 'gitea')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,token')
+                ->skipSpecial('url,token')
+                ->remove('account,password,appType')
+                ->get();
+            $this->checkToken($gitea);
+            $giteaID = $this->loadModel('pipeline')->create($gitea);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $actionID = $this->loadModel('action')->create('gitea', $giteaID, 'created');
@@ -165,9 +174,8 @@ class gitea extends control
      * @access protected
      * @return void
      */
-    protected function checkToken()
+    protected function checkToken(object $gitea)
     {
-        $gitea = fixer::input('post')->trim('url,token')->get();
         $this->dao->update('gitea')->data($gitea)->batchCheck($this->config->gitea->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

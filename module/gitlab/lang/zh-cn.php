@@ -60,7 +60,7 @@ $lang->gitlab->deleteTag            = '删除标签';
 $lang->gitlab->svaeFailed           = '『%s』保存失败';
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "服务器名称";
+$lang->gitlab->name           = "应用名称";
 $lang->gitlab->url            = '服务器地址';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = '默认项目';

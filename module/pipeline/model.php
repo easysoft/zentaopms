@@ -69,16 +69,9 @@ class pipelineModel extends model
      * @access public
      * @return bool
      */
-    public function create($type)
+    public function create(object $pipeline): int|false
     {
-        $pipeline = fixer::input('post')
-            ->add('type', $type)
-            ->add('private',md5(rand(10,113450)))
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->trim('url,token,account,password')
-            ->skipSpecial('url,token,account,password')
-            ->get();
+        $type = $pipeline->type;
         if($type == 'gitlab') $pipeline->url = rtrim($pipeline->url, '/');
 
         if(isset($pipeline->password)) $pipeline->password = base64_encode($pipeline->password);

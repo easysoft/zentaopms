@@ -85,7 +85,8 @@ class space extends control
 
     public function createApplication()
     {
-        $this->app->loadLang('gitlab');
+        $this->app->loadLang('sonarqube');
+        $this->app->loadLang('jenkins');
 
         $this->display();
     }
