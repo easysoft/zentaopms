@@ -19,6 +19,7 @@ class qa extends control
      */
     public function index($locate = 'auto', $productID = 0, $projectID = 0)
     {
+        $this->loadModel('upgrade')->updatePivotFieldsType();
         $products = $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
         if(empty($products)) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=index")));
         if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
