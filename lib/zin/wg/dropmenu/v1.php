@@ -58,12 +58,12 @@ class dropmenu extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): zui
+    protected function build(): array
     {
         list($url, $text, $objectID, $cache, $tab, $module, $method, $extra, $id, $data, $menuID) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'extra', 'id', 'data', 'menuID'));
 
-        $app    = data('app');
-        $lang   = data('lang');
+        $app  = data('app');
+        $lang = data('lang');
 
         if(empty($menuID))   $menuID   = $id . '-menu';
         if(empty($tab))      $tab      = $app->tab;
@@ -75,6 +75,45 @@ class dropmenu extends wg
         {
             $object = data($tab);
             if(isset($object->id)) $objectID = $object->id;
+        }
+
+        $branchMenu = null;
+        if($tab == 'product')
+        {
+            if($objectID)
+            {
+                $product = $app->control->loadModel('product')->getByID((int)$objectID);
+                if($product->type != 'normal')
+                {
+                    $branchID = data('branchID');
+
+                    /* Get current branch name. */
+                    $branchName = '';
+                    if($branchID == 'all')
+                    {
+                        $branchName = $lang->branch->all;
+                    }
+                    elseif($branchID == 0 || $branchID == '')
+                    {
+                        $branchName = $lang->branch->main;
+                    }
+                    elseif($branchID > 0)
+                    {
+                        $branchName = $app->control->loadModel('branch')->getById((int)$branchID);
+                    }
+
+                    $branchURL  = createLink('branch', 'ajaxGetDropMenu', "objectID=$objectID&branch=$branchID&module=$module&method=$method&extra=$extra");
+                    $branchMenu = zui::dropmenu
+                        (
+                            setID('branch-menu'),
+                            set('_id', 'branch'),
+                            set('_props', array('data-fetcher' => $branchURL)),
+                            set('data', $data),
+                            set(array('fetcher' => $branchURL, 'text' => $branchName, 'defaultValue' => $branchID)),
+                            set($this->getRestProps())
+                        );
+                }
+            }
         }
 
         if($tab == 'admin')
@@ -92,7 +131,7 @@ class dropmenu extends wg
             $text   = $object->name;
         }
 
-        return zui::dropmenu
+        return array(zui::dropmenu
         (
             setID($menuID),
             set('_id', $id),
@@ -100,6 +139,6 @@ class dropmenu extends wg
             set('data', $data),
             set(array('fetcher' => $url, 'text' => $text, 'defaultValue' => $objectID, 'cache' => $cache)),
             set($this->getRestProps())
-        );
+        ), $branchMenu);
     }
 }

@@ -317,6 +317,7 @@ $config->execution->testtask->dtable->fieldList['title']['type']  = 'title';
 $config->execution->testtask->dtable->fieldList['title']['link']  = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
 $config->execution->testtask->dtable->fieldList['title']['group'] = '2';
 $config->execution->testtask->dtable->fieldList['title']['fixed'] = false;
+$config->execution->testtask->dtable->fieldList['title']['width'] = '356';
 
 $config->execution->testtask->dtable->fieldList['build']['name']  = 'buildName';
 $config->execution->testtask->dtable->fieldList['build']['title'] = $lang->testtask->build;

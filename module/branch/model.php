@@ -603,9 +603,9 @@ class branchModel extends model
      * @access public
      * @return void
      */
-    public function setParamsForLink($module, $link, $projectID, $productID, $branch)
+    public function setParamsForLink($module, $link, $projectID, $productID)
     {
-        $linkHtml = strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID, $branch) : sprintf($link, $productID, $branch);
+        $linkHtml = strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID, '{id}') : sprintf($link, $productID, '{id}');
         return $linkHtml;
     }
 
