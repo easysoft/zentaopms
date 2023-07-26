@@ -57,8 +57,6 @@ $lang->misc->zentao->others['zdoo']     = "<img src='{$config->webRoot}theme/def
 $lang->misc->zentao->others['ydisk']    = "<img src='{$config->webRoot}theme/default/images/main/ydisk.ico' /> Y Disk";
 $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/default/images/main/meshiot.ico' /> MeshioT";
 
-$lang->misc->mobile      = "Mobile Access";
-$lang->misc->noGDLib     = "Please visit <strong>%s</strong> in the browser of your phone.";
 $lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://easycorp.ltd/' target='_blank'>ZenTao Software</a> Email <a href='mailto:Renee@easycorp.ltd'>Renee@easycorp.ltd</a>";
 $lang->misc->checkTable  = "Check Data Table";
 $lang->misc->needRepair  = "Repair Table";

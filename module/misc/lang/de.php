@@ -57,8 +57,6 @@ $lang->misc->zentao->others['zdoo']     = "<img src='{$config->webRoot}theme/def
 $lang->misc->zentao->others['ydisk']    = "<img src='{$config->webRoot}theme/default/images/main/ydisk.ico' /> Y Disk";
 $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/default/images/main/meshiot.ico' /> MeshioT";
 
-$lang->misc->mobile      = "Mobiler Zugriff";
-$lang->misc->noGDLib     = "Bitte benutzen Sie den Browser Ihres Telefons um die Seite <strong>%s</strong> aufzurufen";
 $lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://easysoft.ltd' target='_blank'>Nature Easy Soft Network Technology Co,LTD</a> Email <a href='mailto:Max@easysoft.ltd'>Max@easysoft.ltd</a>";
 $lang->misc->checkTable  = "Prüfe Datentabellen";
 $lang->misc->needRepair  = "Repariere Datentabellen";

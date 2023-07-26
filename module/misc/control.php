@@ -145,27 +145,6 @@ class misc extends control
     }
 
     /**
-     * Create qrcode for mobile login.
-     *
-     * @access public
-     * @return void
-     */
-    public function qrCode()
-    {
-        $loginAPI = common::getSysURL() . $this->config->webRoot;
-        $session  = $this->loadModel('user')->isLogon() ? '?' . $this->config->sessionVar . '=' . session_id() : '';
-
-        if(!extension_loaded('gd'))
-        {
-            $this->view->noGDLib = sprintf($this->lang->misc->noGDLib, $loginAPI);
-            return print($this->display());
-        }
-
-        $this->app->loadClass('qrcode');
-        QRcode::png($loginAPI . $session, false, 4, 9);
-    }
-
-    /**
      * Ajax ignore browser.
      *
      * @access public
