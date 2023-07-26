@@ -216,7 +216,8 @@ else
                     checkbox
                     (
                         set::name("actions[{$priv->module}][]"),
-                        set::value(isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : ''),
+                        set::value($priv->method),
+                        set::checked(isset($groupPrivs[$priv->module][$priv->method])),
                         setID("actions[{$priv->module}][{$priv->method}]"),
                         set::text($priv->name),
                         set('data-id', $priv->action),
