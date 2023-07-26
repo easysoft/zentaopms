@@ -63,7 +63,7 @@ $config->ai->dataSource['story']['story']         = array('title', 'spec', 'veri
 $config->ai->dataSource['execution']['execution'] = array('name', 'desc', 'estimate');
 $config->ai->dataSource['execution']['tasks']     = array('name', 'pri', 'status', 'estimate', 'consumed', 'left', 'progress', 'estStarted', 'realStarted', 'finishedDate', 'closedReason');
 
-$config->ai->dataSource['task']['task'] = array('name', 'pri', 'status', 'estimate', 'consumed', 'left', 'progress', 'estStarted', 'realStarted');
+$config->ai->dataSource['task']['task'] = array('name', 'desc', 'pri', 'status', 'estimate', 'consumed', 'left', 'progress', 'estStarted', 'realStarted');
 
 $config->ai->dataSource['case']['case']  = array('title', 'precondition', 'scene', 'product', 'module', 'pri', 'type', 'lastRunResult', 'status');
 $config->ai->dataSource['case']['steps'] = array('desc', 'expect');

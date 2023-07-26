@@ -246,6 +246,7 @@ $lang->ai->dataSource['execution']['tasks']['closedReason']= 'Closing reason';
 
 $lang->ai->dataSource['task']['task']['common']      = 'Task';
 $lang->ai->dataSource['task']['task']['name']        = 'Name';
+$lang->ai->dataSource['task']['task']['desc']        = 'Description';
 $lang->ai->dataSource['task']['task']['pri']         = 'Priority';
 $lang->ai->dataSource['task']['task']['status']      = 'Status';
 $lang->ai->dataSource['task']['task']['estimate']    = 'Estimates';

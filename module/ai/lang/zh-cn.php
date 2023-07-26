@@ -246,6 +246,7 @@ $lang->ai->dataSource['execution']['tasks']['closedReason']= '关闭原因';
 
 $lang->ai->dataSource['task']['task']['common']      = '任务';
 $lang->ai->dataSource['task']['task']['name']        = '任务名称';
+$lang->ai->dataSource['task']['task']['desc']        = '任务描述';
 $lang->ai->dataSource['task']['task']['pri']         = '优先级';
 $lang->ai->dataSource['task']['task']['status']      = '状态';
 $lang->ai->dataSource['task']['task']['estimate']    = '预计';
