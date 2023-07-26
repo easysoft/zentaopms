@@ -31,6 +31,7 @@ modalHeader
         (
             a
             (
+                set('href', 'javascript:;'),
                 setClass('text-gray ml-4'),
                 $version === 'latest' ? $lang->misc->feature->latest : ($lang->misc->releaseDate[$version] . ' ' . $version),
                 span(setClass('caret align-middle ml-1'))
