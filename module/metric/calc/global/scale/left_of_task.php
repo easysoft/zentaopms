@@ -31,7 +31,7 @@ class left_of_task extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->left)) return;
+        if(empty($row->left)) return false;
 
         $this->result += $row->left;
     }

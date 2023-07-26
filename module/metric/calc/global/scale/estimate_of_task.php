@@ -31,7 +31,7 @@ class estimate_of_task extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->estimate)) return;
+        if(empty($row->estimate)) return false;
 
         $this->result += $row->estimate;
     }

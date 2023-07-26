@@ -31,7 +31,7 @@ class estimate_of_annual_closed_project extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status != 'closed' or empty($row->closedDate) or $row->parent = -1) return;
+        if($row->status != 'closed' or empty($row->closedDate) or $row->parent = -1) return false;
 
         $year = substr($row->closedDate, 0, 4);
 

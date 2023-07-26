@@ -31,10 +31,10 @@ class scale_of_annual_finished_story extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->closedDate) or !isset($row->estimate)) return;
+        if(empty($row->closedDate) or !isset($row->estimate)) return false;
 
         $year = substr($row->closedDate, 0, 4);
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if($row->status == 'closed' and $row->closedReason == 'done')
         {

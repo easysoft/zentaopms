@@ -38,11 +38,11 @@ class scale_of_monthly_delivered_story extends baseCalc
         if($closedReason == 'done') $date = $closedDate;
         if($stage == 'released' && !empty($closedDate)) $date = $releasedDate;
 
-        if($date === null) return;
+        if($date === null) return false;
 
         $year  = substr($date, 0, 4);
         $month = substr($date, 5, 2);
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;

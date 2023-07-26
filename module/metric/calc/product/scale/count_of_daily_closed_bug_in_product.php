@@ -28,11 +28,11 @@ class count_of_daily_closed_bug_in_product extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status != 'closed' || empty($row->closedDate)) return;
+        if($row->status != 'closed' || empty($row->closedDate)) return false;
 
         $date = substr($row->closedDate, 0, 10);
         list($year, $month, $day) = explode('-', $date);
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if(!isset($this->result[$row->product]))                      $this->result[$row->product] = array();
         if(!isset($this->result[$row->product][$year]))               $this->result[$row->product][$year] = array();

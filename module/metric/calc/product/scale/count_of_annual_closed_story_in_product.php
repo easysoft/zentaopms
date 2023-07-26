@@ -29,14 +29,14 @@ class count_of_annual_closed_story_in_product extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status != 'closed') return;
-        if(empty($row->closedDate))  return;
+        if($row->status != 'closed') return false;
+        if(empty($row->closedDate))  return false;
 
         $product    = $row->product;
         $closedDate = $row->closedDate;
 
         $year = substr($closedDate, 0, 4);
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if(!isset($this->result[$product]))        $this->result[$product] = array();
         if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;

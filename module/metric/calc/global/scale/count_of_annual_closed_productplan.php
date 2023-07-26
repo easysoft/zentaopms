@@ -33,10 +33,10 @@ class count_of_annual_closed_productplan extends baseCalc
     public function calculate($data)
     {
         $closedDate = $data->closedDate;
-        if(empty($closedDate)) return;
+        if(empty($closedDate)) return false;
 
         $year = substr($closedDate, 0, 4);
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
 

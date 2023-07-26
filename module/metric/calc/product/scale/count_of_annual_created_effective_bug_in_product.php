@@ -33,9 +33,9 @@ class count_of_annual_created_effective_bug_in_product extends baseCalc
     {
         $openedDate = $data->openedDate;
 
-        if(empty($openedDate)) return;
+        if(empty($openedDate)) return false;
         $year = substr($openedDate, 0 ,4);
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         $product = $data->product;
         if(!isset($this->result[$product])) $this->result[$product] = array();

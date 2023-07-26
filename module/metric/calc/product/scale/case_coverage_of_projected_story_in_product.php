@@ -37,7 +37,7 @@ class case_coverage_of_projected_story_in_product extends baseCalc
 
     public function calculate($row)
     {
-       if(in_array($row->id, $this->idList)) return;
+       if(in_array($row->id, $this->idList)) return false;
 
        if(!isset($this->result[$row->product])) $this->result[$row->product] = array('total' => 0, 'haveCase' => 0);
 

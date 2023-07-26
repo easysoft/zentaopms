@@ -30,12 +30,12 @@ class count_of_annual_finished_task extends baseCalc
 
     public function calculate($data)
     {
-        if(empty($data->finishedDate) or $data->status != 'done') return;
+        if(empty($data->finishedDate) or $data->status != 'done') return false;
 
         $finishedDate = $data->finishedDate;
 
         $year = substr($finishedDate, 0, 4);
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
 

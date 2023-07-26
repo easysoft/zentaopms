@@ -33,10 +33,10 @@ class count_of_monthly_created_execution extends baseCalc
     public function calculate($row)
     {
         $openedDate = $row->openedDate;
-        if(empty($openedDate)) return;
+        if(empty($openedDate)) return false;
 
         $year = substr($openedDate, 0, 4);
-        if($year == '0000') return;
+        if($year == '0000') return false;
         $month = substr($openedDate, 5, 2);
 
         if(!isset($this->result[$year])) $this->result[$year] = array();

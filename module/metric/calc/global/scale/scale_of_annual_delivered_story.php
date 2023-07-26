@@ -38,10 +38,10 @@ class scale_of_annual_delivered_story extends baseCalc
         if($closedReason == 'done') $date = $closedDate;
         if($stage == 'released' && !empty($closedDate)) $date = $releasedDate;
 
-        if($date === null) return;
+        if($date === null) return false;
 
         $year = substr($date, 0, 4);
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
 

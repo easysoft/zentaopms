@@ -35,11 +35,11 @@ class rate_of_annual_finished_story extends baseCalc
         $closedDate   = $data->closedDate;
         $closedReason = $data->closedReason;
 
-        if(empty($closedDate)) return;
+        if(empty($closedDate)) return false;
 
         $year = substr($closedDate, 0, 4);
 
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
 

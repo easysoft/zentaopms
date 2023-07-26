@@ -30,10 +30,10 @@ class count_of_annual_closed_feedback extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->closedDate) || $row->status != 'closed') return;
+        if(empty($row->closedDate) || $row->status != 'closed') return false;
 
         $year = substr($row->closedDate, 0, 4);
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
         $this->result[$year] += 1;

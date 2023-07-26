@@ -31,7 +31,7 @@ class consume_of_task extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->consumed)) return;
+        if(empty($row->consumed)) return false;
 
         $this->result += $row->consumed;
     }

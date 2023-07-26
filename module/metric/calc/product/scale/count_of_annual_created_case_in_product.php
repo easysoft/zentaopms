@@ -32,11 +32,11 @@ class count_of_annual_created_case_in_product extends baseCalc
         $product    = $row->product;
         $openedDate = $row->openedDate;
 
-        if(empty($openedDate)) return;
+        if(empty($openedDate)) return false;
 
         $year = substr($openedDate, 0, 4);
 
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if(!isset($this->result[$product])) $this->result[$product] = array();
         if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;

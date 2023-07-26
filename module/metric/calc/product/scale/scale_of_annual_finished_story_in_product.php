@@ -36,11 +36,11 @@ class scale_of_annual_finished_story_in_product extends baseCalc
         $closedReason = $data->closedReason;
         $estimate     = $data->estimate;
 
-        if(empty($closedDate)) return;
+        if(empty($closedDate)) return false;
 
         $year  = substr($closedDate, 0, 4);
 
-        if($year == '0000') return;
+        if($year == '0000') return false;
 
         if(!isset($this->result[$product])) $this->result[$product] = array();
         if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;

@@ -30,11 +30,11 @@ class count_of_annual_finished_project extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->realEnd)) return;
+        if(empty($row->realEnd)) return false;
 
         $year = substr($row->realEnd, 0, 4);
 
-        if($year == '0000' || $row->status != 'closed') return;
+        if($year == '0000' || $row->status != 'closed') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
 

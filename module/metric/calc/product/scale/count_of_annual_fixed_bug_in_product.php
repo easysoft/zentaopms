@@ -34,10 +34,10 @@ class count_of_annual_fixed_bug_in_product extends baseCalc
         $resolution = $data->resolution;
         $closedDate = $data->closedDate;
 
-        if(empty($closedDate)) return;
+        if(empty($closedDate)) return false;
 
         $year = substr($closedDate, 0, 4);
-        if($resolution != 'fixed' || $year == '0000') return;
+        if($resolution != 'fixed' || $year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
         $this->result[$year] += 1;

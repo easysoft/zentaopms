@@ -26,7 +26,7 @@ class count_of_developed_story_in_execution extends baseCalc
 
     public function calculate($data)
     {
-        if($data->project == '' || $data->project == 0) return;
+        if($data->project == '' || $data->project == 0) return false;
         $this->result[] = $data;
     }
 
