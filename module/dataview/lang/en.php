@@ -158,6 +158,7 @@ $lang->dataview->error->warningDelete = 'The custom table has been referenced. D
 
 $lang->dataview->querying      = 'Querying, please wait...';
 $lang->dataview->queryResult   = 'Query data in row %s x %s column';
+$lang->dataview->viewResult    = '%s x %s rows of data';
 $lang->dataview->recTotalTip   = '<strong> %s </strong> items in total';
 $lang->dataview->recPerPageTip = "<strong> %s </strong> items per page <span class='caret'></span>";
 

@@ -16,7 +16,7 @@
 <?php js::set('dataview',   $dataview);?>
 <?php js::set('fieldCount', count($fields));?>
 <?php js::set('warningDesign', $lang->dataview->error->warningDesign);?>
-<?php js::set('queryResult',   $lang->dataview->queryResult);?>
+<?php js::set('viewResult',    $lang->dataview->viewResult);?>
 
 <?php js::set('pageID', 1);?>
 <?php js::set('recPerPage', 25);?>

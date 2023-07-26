@@ -114,6 +114,6 @@ function initPager(pageID, recPerPage, recTotal, fieldCount)
     if(pageID == 1) $('.first-page,.left-page').addClass('disabled');
     if(pageID == pageTotal) $('.last-page,.right-page').addClass('disabled');
 
-    $('#queryResult').html(queryResult.replace('%s', recTotal).replace('%s', fieldCount));
+    $('#queryResult').html(viewResult.replace('%s', recTotal).replace('%s', fieldCount));
 }
 

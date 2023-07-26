@@ -158,6 +158,7 @@ $lang->dataview->error->warningDelete = '中间表已被引用，删除会导致
 
 $lang->dataview->querying      = '正在查询，请稍后...';
 $lang->dataview->queryResult   = '查询到 %s行 x %s列数据';
+$lang->dataview->viewResult    = '共 %s行 x %s列数据';
 $lang->dataview->recTotalTip   = '共 <strong> %s </strong> 项';
 $lang->dataview->recPerPageTip = "每页 <strong> %s </strong> 项 <span class='caret'></span>";
 
