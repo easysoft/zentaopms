@@ -2051,6 +2051,7 @@ class InstanceModel extends model
         if($action == 'visit')     return empty($instance->type) ? ($instance->domain && $this->canDo('visit', $instance)) : true;
         if($action == 'upgrade')   return !empty($instance->latestVersion);
         if($action == 'bindUser')  return empty($instance->type) ? false : true;
+        if($action == 'edit')      return empty($instance->type) ? false : true;
 
         return true;
     }

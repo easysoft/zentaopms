@@ -9,7 +9,6 @@ $config->space->dtable = new stdclass();
 
 $config->space->dtable->fieldList['name']['title'] = $lang->instance->name;
 $config->space->dtable->fieldList['name']['type']  = 'title';
-$config->space->dtable->fieldList['name']['link']  = array('url' => helper::createLink('instance', 'visit', 'id={id}&externalID={externalID}'), 'target' => '_blank');
 
 $config->space->dtable->fieldList['appName']['title'] = $lang->instance->appName;
 $config->space->dtable->fieldList['appName']['type']  = 'text';
@@ -37,13 +36,16 @@ $config->space->dtable->fieldList['createdAt']['type']  = 'datetime';
 $config->space->dtable->fieldList['createdAt']['group'] = 'created';
 
 $config->space->dtable->fieldList['actions']['type'] = 'actions';
-$config->space->dtable->fieldList['actions']['menu'] = array('visit', 'start', 'stop', 'edit', 'bindUser', 'uninstall', 'upgrade');
+$config->space->dtable->fieldList['actions']['menu'] = array('visit', 'start|stop', 'edit', 'bindUser', 'uninstall', 'upgrade');
 
 $config->space->dtable->fieldList['actions']['list']['start']['icon'] = 'play';
 $config->space->dtable->fieldList['actions']['list']['start']['hint'] = $lang->instance->start;
+$config->space->dtable->fieldList['actions']['list']['start']['url']  = helper::createLink('instance', 'ajaxStart', "id={id}");
 
-$config->space->dtable->fieldList['actions']['list']['stop']['icon'] = 'off';
-$config->space->dtable->fieldList['actions']['list']['stop']['hint'] = $lang->instance->stop;
+$config->space->dtable->fieldList['actions']['list']['stop']['icon']         = 'off';
+$config->space->dtable->fieldList['actions']['list']['stop']['hint']         = $lang->instance->stop;
+$config->space->dtable->fieldList['actions']['list']['stop']['url']          = helper::createLink('instance', 'ajaxStop', "id={id}");
+$config->space->dtable->fieldList['actions']['list']['stop']['data-confirm'] = $lang->instance->notices['confirmStop'];
 
 $config->space->dtable->fieldList['actions']['list']['uninstall']['icon'] = 'trash';
 $config->space->dtable->fieldList['actions']['list']['uninstall']['hint'] = $lang->instance->uninstall;
@@ -59,8 +61,8 @@ $config->space->dtable->fieldList['actions']['list']['upgrade']['url']  = helper
 
 $config->space->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->space->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->edit;
-$config->space->dtable->fieldList['actions']['list']['edit']['url'] = array('module' => 'space', 'method' => 'edit', 'id={id}&type={type}');
+$config->space->dtable->fieldList['actions']['list']['edit']['url']  = array('module' => 'space', 'method' => 'edit', 'id={id}&type={type}');
 
 $config->space->dtable->fieldList['actions']['list']['bindUser']['icon'] = 'lock';
 $config->space->dtable->fieldList['actions']['list']['bindUser']['hint'] = $lang->gitlab->bindUser;
-$config->space->dtable->fieldList['actions']['list']['bindUser']['url'] = array('module' => 'space', 'method' => 'bindUser', 'id={id}');
+$config->space->dtable->fieldList['actions']['list']['bindUser']['url']  = array('module' => 'space', 'method' => 'bindUser', 'id={id}');

@@ -48,7 +48,7 @@ class space extends control
         $instances = $this->space->getSpaceInstances($space->id, $browseType, $search);
         foreach($instances as $instance) $instance->externalID = 0;
         $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc');
-        $maxID = max(array_keys($instances));
+        $maxID     = max(array_keys($instances));
         foreach($pipelines as $pipeline)
         {
             $pipeline->createdAt  = $pipeline->createdDate;
