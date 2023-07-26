@@ -37,3 +37,16 @@ window.toggleWhiteList = function(e)
     const acl = e.target.value;
     $('#whitelistBox').toggleClass('hidden', acl == 'open');
 }
+
+window.loadExecutions = function(e)
+{
+    const projectID = e.target.value;
+    const link = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix&type=sprint,stage");
+    $.get(link, function(data)
+    {
+        data = JSON.parse(data);
+        const $picker = $("[name='execution']").zui('picker');
+        $picker.render({items: data});
+        $picker.$.setValue('');
+    });
+}

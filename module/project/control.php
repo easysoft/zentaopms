@@ -1792,11 +1792,10 @@ class project extends control
      * @param  string $type all|sprint|stage|kanban
      *
      * @access public
-     * @return string
+     * @return void
      */
-    public function ajaxGetExecutions(string $projectID, string $executionID = '0', string $mode = '', string $type = 'all'): string
+    public function ajaxGetExecutions(string $projectID, string $executionID = '0', string $mode = '', string $type = 'all'): void
     {
-        $disabled   = '';
         $executions = array();
         $projectID  = (int)$projectID;
 
@@ -1804,11 +1803,15 @@ class project extends control
         {
             $project     = $this->project->getByID($projectID);
             $executions += (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
-            if(!empty($project->multiple)) $disabled = 'disabled';
         }
 
-        if($this->app->getViewType() == 'json') return print(json_encode($executionList));
-        return print(html::select('execution', $executions, $executionID, "class='form-control $disabled' $disabled"));
+        $items = array();
+        foreach($executions as $id => $name)
+        {
+            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+        }
+
+        echo json_encode($items);
     }
 
     /**

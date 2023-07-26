@@ -16,6 +16,39 @@ jsVar('libNotEmpty', sprintf($lang->error->notempty, $lang->doc->lib));
 jsVar('keywordsNotEmpty', sprintf($lang->error->notempty, $lang->doc->keywords));
 jsVar('contentNotEmpty', sprintf($lang->error->notempty, $lang->doc->content));
 
+$projectRow = null;
+if($linkType == 'project')
+{
+    $projectRow = formRow
+    (
+        formGroup
+        (
+            setClass('w-1/2'),
+            set::label($lang->doc->project),
+            picker
+            (
+                set::name('project'),
+                set::id('project'),
+                set::items($objects),
+                isset($execution) ? set::value($execution->project) : set::value($objectID),
+                on::change('loadExecutions')
+            )
+        ),
+        ($this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
+        (
+            setClass('w-1/2'),
+            set::label($lang->doc->execution),
+            picker
+            (
+                set::name('execution'),
+                set::id('execution'),
+                set::items($executions),
+                set::value(isset($execution) ? $objectID : ''),
+            )
+        ) : null,
+    );
+}
+
 form
 (
     set::actions(''),
@@ -75,19 +108,7 @@ form
             on::change('#product',   "loadObjectModules"),
             on::change('#project',   "loadObjectModules"),
             on::change('#execution', "loadObjectModules"),
-            ($linkType == 'project') ? formGroup
-            (
-                setClass('w-1/2'),
-                set::label($lang->doc->project),
-                picker
-                (
-                    set::name('project'),
-                    set::id('project'),
-                    set::items($objects),
-                    isset($execution) ? set::value($execution->project) : set::value($objectID),
-                    on::change('loadExecutions')
-                )
-            ) : null,
+            $projectRow,
             ($linkType == 'execution') ? formGroup
             (
                 set::width('1/2'),
