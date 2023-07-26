@@ -100,6 +100,7 @@ dtable
     set::data($rows),
     set::plugins(array('cellspan')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
+    set::footer(array('html' => $lang->backup->restoreTip . sprintf($lang->backup->holdDays, $config->backup->holdDays), 'className' => 'text-important')),
 );
 
 modalTrigger

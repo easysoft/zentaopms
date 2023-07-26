@@ -6,12 +6,11 @@ window.backup = function(e)
         onComplete: function(data)
         {
             clearInterval(timeID);
-
             $('#waiting .modal-body #message').append(data);
 
             setTimeout(function()
             {
-                return loadCurrentPage();
+                location.href = $.createLink('backup', 'index');
             }, 2000);
         },
     });

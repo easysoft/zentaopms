@@ -97,14 +97,8 @@ class backup extends control
 
         if(!$result->result)
         {
-            if($reload == 'yes')
-            {
-                return print(sprintf($this->lang->backup->error->noWritable, $this->backupPath));
-            }
-            else
-            {
-                printf($this->lang->backup->error->noWritable, $this->backupPath);
-            }
+            if($reload == 'yes') return print(sprintf($this->lang->backup->error->noWritable, $this->backupPath));
+            printf($this->lang->backup->error->noWritable, $this->backupPath);
         }
         if(!$nosafe) $this->backup->addFileHeader($backFileName);
 
@@ -116,14 +110,8 @@ class backup extends control
 
             if(!$result->result)
             {
-                if($reload == 'yes')
-                {
-                    return print(sprintf($this->lang->backup->error->backupFile, $result->error));
-                }
-                else
-                {
-                    printf($this->lang->backup->error->backupFile, $result->error);
-                }
+                if($reload == 'yes') return print(sprintf($this->lang->backup->error->backupFile, $result->error));
+                printf($this->lang->backup->error->backupFile, $result->error);
             }
 
             $backFileName = "{$this->backupPath}{$fileName}.code";
@@ -131,14 +119,8 @@ class backup extends control
             $result = $this->backup->backCode($backFileName);
             if(!$result->result)
             {
-                if($reload == 'yes')
-                {
-                    return print(sprintf($this->lang->backup->error->backupCode, $result->error));
-                }
-                else
-                {
-                    printf($this->lang->backup->error->backupCode, $result->error);
-                }
+                if($reload == 'yes') return print(sprintf($this->lang->backup->error->backupCode, $result->error));
+                printf($this->lang->backup->error->backupCode, $result->error);
             }
         }
 

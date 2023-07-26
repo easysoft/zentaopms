@@ -42,7 +42,7 @@ else
                 input
                 (
                     set::name('settingDir'),
-                    set::value(!empty($config->backup->settingDir) ? $config->backup->settingDir : $this->app->getTmpRoot()),
+                    set::value(!empty($config->backup->settingDir) ? $config->backup->settingDir : $this->app->getTmpRoot() . 'backup/'),
                 )
             )
         ),
