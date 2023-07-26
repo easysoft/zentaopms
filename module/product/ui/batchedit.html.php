@@ -26,8 +26,8 @@ foreach($extendFields as $extendField)
     $items[$extendField->field] = array('name' => $extendField->field, 'label' => $extendField->name,  'required' => strpos(",$extendField->rules,", ',1,') !== false, 'control' => $extendField->control, 'items' => zget($extendField, 'options', array()));
     if($extendField->control == 'multi-select')
     {
-        $items[$extendField->field]['control'] = 'select';
-        $items[$extendField->field]['mutiple'] = true;
+        $items[$extendField->field]['control']  = 'select';
+        $items[$extendField->field]['multiple'] = true;
     }
 }
 
