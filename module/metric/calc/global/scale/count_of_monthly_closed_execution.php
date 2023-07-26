@@ -26,7 +26,7 @@ class count_of_monthly_closed_execution extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('closedDate');
+    public $fieldList = array('t1.closedDate');
 
     public $result = array();
 

@@ -26,7 +26,7 @@ class count_of_doing_execution extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('status');
+    public $fieldList = array('t1.status');
 
     public $result = 0;
 
