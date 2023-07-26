@@ -57,7 +57,7 @@ class datatable extends control
         if(!empty($_POST))
         {
             $account = $this->app->user->account;
-            if($account == 'guest') return $this->send(array('result' => 'fail', 'target' => $target, 'message' => 'guest.'));
+            if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
 
             $this->loadModel('setting')->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showModule', $this->post->value);
             if($this->post->allModule !== false) $this->setting->setItem("$account.execution.task.allModule", $this->post->allModule);
