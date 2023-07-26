@@ -115,39 +115,42 @@ class admin extends control
         {
             $response = $this->admin->registerByAPI();
             $response = json_decode($response);
-            if($response->result == 'success')
+            if($response->result == 'fail')
             {
-                $user = $response->data;
-                $data['community']    = $user->account;
-                $data['ztPrivateKey'] = $user->private;
+                $message = '';
+                if(is_string($response->message))
+                {
+                    $message = $response->message;
+                }
+                else
+                {
+                    foreach($response->message as $item) $message .= is_array($item) ? join('\n', $item) . '\n' : $item . '\n';
+                }
+                $message = str_replace(array('<strong>', '</strong>'), '', $message);
 
-                $this->loadModel('setting');
-                $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
-                $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-                $this->setting->setItems('system.common.global', $data);
-
-                echo js::alert($this->lang->admin->registerNotice->success);
-                if($from == 'admin') return print(js::locate(inlink('index'), 'parent'));
-                if($from == 'mail') return print(js::locate($this->createLink('mail', 'ztcloud'), 'parent'));
+                return $this->send(array('result' => 'fail', 'message' => $message));
             }
 
-            $alertMessage = '';
-            if(is_string($response->message))
-            {
-                $alertMessage = $response->message;
-            }
-            else
-            {
-                foreach($response->message as $item) $alertMessage .= is_array($item) ? join('\n', $item) . '\n' : $item . '\n';
-            }
-            $alertMessage = str_replace(array('<strong>', '</strong>'), '', $alertMessage);
-            return print(js::alert($alertMessage));
+            $user = $response->data;
+            $data['community']    = $user->account;
+            $data['ztPrivateKey'] = $user->private;
+
+            $this->loadModel('setting');
+            $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
+            $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
+            $this->setting->setItems('system.common.global', $data);
+
+            $locate = true;
+            if($from == 'admin') $locate = inlink('index');
+            if($from == 'mail')  $locate = $this->createLink('mail', 'ztcloud');
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->admin->registerNotice->success, 'load' => $locate));
         }
 
-        $this->view->title      = $this->lang->admin->registerNotice->caption;
-        $this->view->register   = $this->admin->getRegisterInfo();
-        $this->view->sn         = $this->config->global->sn;
-        $this->view->from       = $from;
+        $this->view->title    = $this->lang->admin->registerNotice->caption;
+        $this->view->register = $this->admin->getRegisterInfo();
+        $this->view->sn       = $this->config->global->sn;
+        $this->view->from     = $from;
         $this->display();
     }
 
@@ -164,30 +167,27 @@ class admin extends control
         {
             $response = $this->admin->bindByAPI();
             $response = json_decode($response);
-            if($response->result == 'success')
-            {
-                $user = $response->data;
-                $data['community']    = $user->account;
-                $data['ztPrivateKey'] = $user->private;
 
-                $this->loadModel('setting');
-                $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
-                $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-                $this->setting->setItems('system.common.global', $data);
+            if($response->result == 'fail') return $this->send($response);
 
-                echo js::alert($this->lang->admin->bind->success);
-                if($from == 'admin') return print(js::locate(inlink('index'), 'parent'));
-                if($from == 'mail') return print(js::locate($this->createLink('mail', 'ztcloud'), 'parent'));
-            }
-            else
-            {
-                if($response->result == 'fail') return print(js::alert($response->message));
-            }
+            $user = $response->data;
+            $data['community']    = $user->account;
+            $data['ztPrivateKey'] = $user->private;
+
+            $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=community');
+            $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
+            $this->setting->setItems('system.common.global', $data);
+
+            $locate = true;
+            if($from == 'admin') $locate = inlink('index');
+            if($from == 'mail')  $locate = $this->createLink('mail', 'ztcloud');
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->admin->bind->success, 'load' => $locate));
         }
 
-        $this->view->title      = $this->lang->admin->bind->caption;
-        $this->view->sn         = $this->config->global->sn;
-        $this->view->from       = $from;
+        $this->view->title = $this->lang->admin->bind->caption;
+        $this->view->sn    = $this->config->global->sn;
+        $this->view->from  = $from;
         $this->display();
     }
 
