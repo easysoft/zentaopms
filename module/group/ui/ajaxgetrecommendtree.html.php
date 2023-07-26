@@ -14,7 +14,7 @@ foreach($data as $recommendPrivs)
 {
     checkboxGroup
         (
-            set::title(array('text' => $recommendPrivs['title'], 'id' => "recommendPrivs[{$recommendPrivs['id']}]", 'name' => 'recommendPrivs[]', 'data-id' => $recommendPrivs['id'], 'data-has-children' => !empty($recommendPrivs['children']))),
+            set::title(array('text' => $recommendPrivs['title'], 'id' => "recommendPrivs[{$recommendPrivs['id']}]", 'name' => 'recommendPrivs[]', 'data-id' => $recommendPrivs['id'], 'data-has-children' => !empty($recommendPrivs['children']), 'checked' => $recommendPrivs['checked'], 'labelClass' => $recommendPrivs['labelClass'])),
             !empty($recommendPrivs['children']) ? set::items($recommendPrivs['children']) : null,
         );
 }

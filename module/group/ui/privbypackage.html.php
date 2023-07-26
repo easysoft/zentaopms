@@ -312,7 +312,7 @@ else
                 a
                 (
                     setClass(empty($menu) ? 'active' : ''),
-                    set::href(inlink('managePriv'), sprintf($params, '')),
+                    set::href(inlink('managePriv', sprintf($params, ''))),
                     span($lang->group->all)
                 )
             ),
@@ -323,7 +323,7 @@ else
                 a
                 (
                     setClass($menu == 'general' ? 'active' : ''),
-                    set::href(inlink('managePriv'), sprintf($params, 'general')),
+                    set::href(inlink('managePriv', sprintf($params, 'general'))),
                     span($lang->group->general)
                 )
             ),
@@ -333,6 +333,7 @@ else
                 set::name('version'),
                 set::items($this->lang->group->versions),
                 set::value($version),
+                set::placeholder($this->lang->group->versions['']),
                 on::change('showPriv'),
             )
         ),

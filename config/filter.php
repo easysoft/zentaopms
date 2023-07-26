@@ -480,5 +480,7 @@ $filter->tree->browse->cookie['preBranch']    = 'reg::word';
 $filter->kanban->space->cookie['showClosed'] = 'code';
 
 $filter->group->editmanagepriv->cookie['managePrivEditType'] = 'string';
-$filter->group->default->cookie['recommendData'] = 'reg::any';
-$filter->group->default->cookie['dependData'] = 'reg::any';
+
+$filter->group->default->cookie['recommendData']   = 'string';
+$filter->group->default->cookie['dependData']      = 'string';
+$filter->group->default->cookie['recommendSelect'] = 'string';

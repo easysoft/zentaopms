@@ -1050,9 +1050,9 @@ class group extends control
     public function ajaxGetRelatedPrivs()
     {
         $privIdList     = zget($_POST, 'privList');
-        $recommedSelect = zget($_POST, 'recommedSelect');
+        $recommendSelect = zget($_POST, 'recommendSelect');
         $excludeIdList  = zget($_POST, 'excludeIdList');
-        $privList       = $this->group->getRelatedPrivs($privIdList, '', $excludeIdList, $recommedSelect);
+        $privList       = $this->group->getRelatedPrivs($privIdList, '', $excludeIdList, $recommendSelect);
         return print(json_encode($privList));
     }
 
@@ -1065,7 +1065,35 @@ class group extends control
      */
     public function ajaxGetRecommendTree()
     {
-        $this->view->data = json_decode($this->cookie->recommendData, true);
+        $data = json_decode($this->cookie->recommendData, true);
+        if($this->cookie->recommendSelect)
+        {
+            $recommendList = array();
+            foreach($data as $privs)
+            {
+                $children             = array();
+                $checkedChildrenCount = 0;
+                foreach($privs['children'] as $child)
+                {
+                    if(strpos(",{$this->cookie->recommendSelect},", ",{$child['value']},") !== false)
+                    {
+                        $child['checked'] = true;
+                        $checkedChildrenCount ++;
+                    }
+                    $children[] = $child;
+                }
+
+                $privs['checked']    = false;
+                $privs['labelClass'] = '';
+                if($checkedChildrenCount == count($children)) $privs['checked'] = true;
+                if($checkedChildrenCount > 0 && $checkedChildrenCount < count($children)) $privs['labelClass'] = 'checkbox-indeterminate-block';
+
+                $privs['children'] = $children;
+                $recommendList[] = $privs;
+            }
+            $data = $recommendList;
+        }
+        $this->view->data = $data;
         $this->display();
     }
 

@@ -58,5 +58,5 @@
 #privPackageList .priv-toggle.icon:after {position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; display: inline-block; content: ""; border: 1px solid; border-radius: 10%;}
 #privPackageList .priv-toggle.icon.open:before {content: "\e926";}
 
-.check-all label.checkbox-indeterminate-block:before {--tw-border-opacity: 1; --tw-bg-opacity: 1; background-color: rgba(var(--color-primary-500-rgb),var(--tw-bg-opacity)); border-color: rgba(var(--color-primary-500-rgb),var(--tw-border-opacity));}
-.check-all label.checkbox-indeterminate-block:after {background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgMjA0OCAyMDQ4Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTUzNiA1MTJ2MTAyNEg1MTJWNTEyaDEwMjR6Ii8+PC9zdmc+); background-size: cover; opacity: 1;}
+.checkbox-primary > label.checkbox-indeterminate-block:before {--tw-border-opacity: 1; --tw-bg-opacity: 1; background-color: rgba(var(--color-primary-500-rgb),var(--tw-bg-opacity)); border-color: rgba(var(--color-primary-500-rgb),var(--tw-border-opacity));}
+.checkbox-primary > label.checkbox-indeterminate-block:after {background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgMjA0OCAyMDQ4Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTUzNiA1MTJ2MTAyNEg1MTJWNTEyaDEwMjR6Ii8+PC9zdmc+); background-size: cover; opacity: 1;}

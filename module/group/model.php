@@ -2335,11 +2335,11 @@ class groupModel extends model
      * @param  array  $privIdList
      * @param  string $type
      * @param  array  $excludePrivs
-     * @param  array  $recommedSelect
+     * @param  array  $recommendSelect
      * @access public
      * @return array
      */
-    public function getRelatedPrivs($privIdList, $type = '', $excludePrivs = array(), $recommedSelect = array())
+    public function getRelatedPrivs($privIdList, $type = '', $excludePrivs = array(), $recommendSelect = array())
     {
         $modulePairs = $this->getPrivManagerPairs('module');
         $modules     = array_keys($modulePairs);
@@ -2352,8 +2352,8 @@ class groupModel extends model
             ->andWhere('t5.code')->in(array_keys($modulePairs))
             ->andWhere('(t1.relationPriv')->notin($privIdList)
 
-            ->beginIF(!empty($recommedSelect))
-            ->orWhere('(t1.relationPriv')->in($recommedSelect)
+            ->beginIF(!empty($recommendSelect))
+            ->orWhere('(t1.relationPriv')->in($recommendSelect)
             ->andWhere('t1.type')->eq('recommend')->markRight(1)
             ->fi()
 
