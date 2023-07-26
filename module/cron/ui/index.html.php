@@ -26,7 +26,7 @@ panel
     set::title($lang->cron->list),
     !empty($config->global->cron) ? set::headingActions(array
     (
-        array('class' => 'mr-3 ajaxRefresh', 'url' => inlink('openProcess'), 'text' => $lang->cron->openProcess),
+        array('class' => 'mr-3 ajaxRefresh', 'data-url' => inlink('ajaxExec', 'start=1'), 'text' => $lang->cron->openProcess),
         array('class' => 'mr-3 ajaxTurnon ajax-submit', 'url' => inlink('turnon'), 'text' => $lang->cron->turnonList[0], 'data-confirm' => $this->lang->cron->confirmTurnon),
         array('class' => 'mr-3 primary',     'url' => inlink('create'), 'text' => $lang->cron->create),
     )) : null,

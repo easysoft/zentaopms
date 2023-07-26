@@ -229,13 +229,10 @@ class cron extends control
                 if($cronInfo->status == 'running' and (time() - strtotime($cronInfo->lastTime)) < $this->config->cron->maxRunTime) continue;
 
                 /* Skip cron that last time is more than this cron time. */
-                if('cli' === PHP_SAPI)
+                if($cronInfo->lastTime >= $cron['time']->format(DT_DATETIME1))
                 {
-                    if($cronInfo->lastTime >= $cron['time']->format(DT_DATETIME1)) continue;
-                }
-                else
-                {
-                    if($cronInfo->lastTime > $cron['time']->format(DT_DATETIME1)) return;
+                    if('cli' === PHP_SAPI) continue;
+                    return;
                 }
 
                 if($now > $cron['time'])
