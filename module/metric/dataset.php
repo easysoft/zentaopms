@@ -339,4 +339,19 @@ class dataset
             ->andWhere('t2.type')->eq('program')
             ->query();
     }
+
+    /**
+     * 获取用户数据。
+     * Get users.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getUsers($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_USER)->alias('t1')
+            ->where('t1.deleted')->eq('0')
+            ->query();
+    }
 }
