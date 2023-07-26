@@ -37,7 +37,18 @@ $products = initTableData($products, $cols, $this->product);
 foreach($products as $product) $data[] = $this->product->formatDataForList($product, $users, $usersAvatar);
 
 $summary = sprintf($lang->product->pageSummary, count($data));
-$footToolbar = common::hasPriv('product', 'batchEdit') ? array('items' => array(array('text' => $lang->edit, 'class' => 'btn batch-btn size-sm primary', 'data-url' => $this->createLink('product', 'batchEdit', "programID={$programID}")))) : null;
+$footToolbar = common::hasPriv('product', 'batchEdit') ?
+    array(
+        'items' => array(
+            array(
+                'text'     => $lang->edit,
+                'class'    => 'btn secondary toolbar-item size-sm',
+                'data-url' => $this->createLink('product', 'batchEdit', "programID={$programID}"),
+                'onClick'  => jsRaw('window.onClickBatchEdit')
+            )
+        )
+    ) :
+    null;
 
 dtable
 (
