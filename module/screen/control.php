@@ -48,7 +48,7 @@ class screen extends control
         }
 
         $lang     = (strpos($this->app->getClientLang(), 'zh') !== false) ? 'zh' : 'en';
-        $version  = ($this->config->edition == 'biz' or $this->config->edition == 'max') ? 'biz' : 'pms';
+        $version  = $this->config->edition == 'pms' ? 'pms' : 'biz';
         $imageURL = "static/images/bi_guide_{$version}_{$lang}.png";
 
         $moduleKey   = $version . 'Guide';
