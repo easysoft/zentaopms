@@ -111,6 +111,7 @@ class docMenu extends wg
                 'text'        => $setting->name,
                 'icon'        => $this->getIcon($setting),
                 'url'         => $this->buildLink($setting),
+                'attrs'       => array('data-app' => $this->tab),
                 'data-id'     => $itemID,
                 'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : $setting->libID,
                 'data-type'   => $setting->type,
@@ -136,6 +137,7 @@ class docMenu extends wg
     {
         global $app, $lang;
         $this->lang          = $lang;
+        $this->tab           = $app->tab;
         $this->rawModule     = $app->rawModule;
         $this->rawMethod     = $app->rawMethod;
         $this->currentModule = $app->moduleName;
