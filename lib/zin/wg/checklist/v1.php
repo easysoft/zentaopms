@@ -37,6 +37,8 @@ class checkList extends wg
         }
 
         $props = $this->props->pick(['primary', 'type', 'name']);
+        if(!empty($props['name']) && !empty($item['value']))$props['id'] = $props['name'] . $item['value'];
+
         return new checkbox(set($props), set($item));
     }
 
