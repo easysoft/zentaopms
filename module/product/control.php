@@ -427,7 +427,7 @@ class product extends control
      */
     public function roadmap(int $productID,  string $branch = 'all')
     {
-        /* Set env viriables. */
+        /* Set env variables. */
         $this->product->setMenu($productID, $branch);
         $this->productZen->saveSession4Roadmap();
 
