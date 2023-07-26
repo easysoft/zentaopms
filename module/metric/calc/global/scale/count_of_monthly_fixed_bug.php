@@ -10,11 +10,11 @@
  * 单位：个
  * 描述：按全局统计的月度修复Bug数是指在一个月内解决并关闭的Bug数量。这个度量项反映了系统或项目在一个月内解决的问题数量。月度修复Bug数的增加说明开发团队的工作效率较高。
  * 定义：所有Bug个数求和
-状态为已关闭
-解决方案为已解决
-关闭时间为某年某月
-过滤已删除的Bug
-过滤已删除的产品
+ *       状态为已关闭
+ *       解决方案为已解决
+ *       关闭时间为某年某月
+ *       过滤已删除的Bug
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -27,21 +27,29 @@
  */
 class count_of_monthly_fixed_bug extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getBugs';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.closedDate', 't1.status', 't1.resolution');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = array();
 
     public function calculate($row)
     {
+        $closedDate = $row->closedDate;
+        if(empty($closedDate)) return;
+
+        $year = substr($closedDate, 0, 4);
+        if($year == '0000') return;
+        $month = substr($closedDate, 5, 2);
+
+        if(!isset($this->result[$year])) $this->result[$year] = array();
+        if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;
+        if($row->status == 'closed' and $row->resolution == 'fixed') $this->result[$year][$month] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('year', 'month', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
