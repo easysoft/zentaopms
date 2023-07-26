@@ -22,6 +22,11 @@ formPanel
         (
             set::name('comment'),
             set::rows('6'),
+        ),
+        input(
+            set::class('hidden'),
+            set::name('status'),
+            set::value('closed')
         )
     )
 );
