@@ -604,13 +604,13 @@ class productModel extends model
      * 关闭产品。
      * Close product.
      *
-     * @param  int    $productID
-     * @param  object $product    must have status field.
-     * @param  string $comment
+     * @param  int          $productID
+     * @param  object       $product    must have status field.
+     * @param  string|false $comment
      * @access public
      * @return array|false
      */
-    public function close(int $productID, object $product, string $comment = ''): array|false
+    public function close(int $productID, object $product, string|false $comment = ''): array|false
     {
         $oldProduct = $this->getByID($productID);
         if(empty($product)) return false;
