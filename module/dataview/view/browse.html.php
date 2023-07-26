@@ -18,9 +18,9 @@
 <?php js::set('warningDesign', $lang->dataview->error->warningDesign);?>
 <?php js::set('viewResult',    $lang->dataview->viewResult);?>
 
-<?php js::set('pageID', 1);?>
-<?php js::set('recPerPage', 25);?>
-<?php js::set('recTotal', $dataCount);?>
+<?php js::set('pageID', $pageID);?>
+<?php js::set('recPerPage', $recPerPage);?>
+<?php js::set('recTotal', $recTotal);?>
 <?php js::set('recTotalTip', $lang->dataview->recTotalTip);?>
 <?php js::set('recPerPageTip', $lang->dataview->recPerPageTip);?>
 
