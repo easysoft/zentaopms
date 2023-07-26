@@ -26,7 +26,7 @@
  */
 class count_of_unclosed_execution extends baseCalc
 {
-    public $dataset = 'getALlExecutions';
+    public $dataset = 'getExecutions';
 
     public $fieldList = array('status');
 

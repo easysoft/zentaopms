@@ -74,17 +74,20 @@ class dataset
 
     /**
      * 获取执行数据。
-     * Get all executions.
+     * Get executions.
      *
      * @param  string $fieldList
      * @access public
      * @return PDOStatement
      */
-    public function getAllExecutions($fieldList)
+    public function getExecutions($fieldList)
     {
-        return $this->dao->select($fieldList)->from(TABLE_PROJECT)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->in('sprint,stage,kanban')
+        return $this->dao->select($fieldList)->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->in('sprint,stage,kanban')
+            ->andWhere('t2.type')->eq('project')
             ->query();
     }
 

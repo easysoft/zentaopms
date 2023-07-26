@@ -23,7 +23,7 @@
  */
 class count_of_execution extends baseCalc
 {
-    public $dataset = 'getAllExecutions';
+    public $dataset = 'getExecutions';
 
     public $fieldList = array('id');
 
