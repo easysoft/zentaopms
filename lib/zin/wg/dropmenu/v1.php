@@ -89,11 +89,12 @@ class dropmenu extends wg
 
                     /* Get current branch name. */
                     $branchName = '';
-                    if($branchID == 'all')
+                    if($branchID == 'all' || $branchID == '')
                     {
+                        $branchID   = 'all';
                         $branchName = $lang->branch->all;
                     }
-                    elseif($branchID == 0 || $branchID == '')
+                    elseif($branchID == 0)
                     {
                         $branchName = $lang->branch->main;
                     }

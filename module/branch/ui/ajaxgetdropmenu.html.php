@@ -13,15 +13,13 @@ namespace zin;
 $data = array('active' => array(), 'closed' => array());
 
 /* 处理分组数据。Process grouped data. */
-$currentBranchID = $currentBranchID === '' ? '0' : $currentBranchID;
 foreach($branches as $branchID => $branchName)
 {
     $item = array();
-    $item['id']     = $branchID;
-    $item['text']   = $branchName;
-    $item['active'] = (string)$branchID == $currentBranchID;
-    $item['type']   = 'branch';
-    $item['keys']   = zget($branchesPinyin, $branchName, '');
+    $item['id']   = $branchID;
+    $item['text'] = $branchName;
+    $item['type'] = 'branch';
+    $item['keys'] = zget($branchesPinyin, $branchName, '');
 
     if($branchID == 'all' or empty($branchID) or $statusList[$branchID] == 'active')
     {
