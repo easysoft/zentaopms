@@ -58,7 +58,7 @@
     <div id="filterItems" class='filterBox'>
       <div class='filter-items'></div>
       <?php if(!empty($pivot->filters)):?>
-      <div class='queryBtn query-outside'><?php echo html::submitButton($lang->pivot->query, "", 'btn btn-primary btn-query');?></div>
+      <div class='queryBtn query-outside visibility-hidden'><?php echo html::submitButton($lang->pivot->query, "", 'btn btn-primary btn-query');?></div>
       <?php endif;?>
     </div>
     <div id="filterMargin" class='hidden'></div>
