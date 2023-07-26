@@ -22,10 +22,12 @@ global $lang, $app;
 $app->loadLang('space');
 
 $config->instance->actionList['start']['icon']        = 'play';
+$config->instance->actionList['start']['className']   = 'ajax-submit';
 $config->instance->actionList['start']['hint']        = $lang->instance->start;
 $config->instance->actionList['start']['url']         = array('module' => 'instance', 'method' => 'ajaxStart', 'params' => 'id={id}');
 
 $config->instance->actionList['stop']['icon']         = 'off';
+$config->instance->actionList['stop']['className']    = 'ajax-submit';
 $config->instance->actionList['stop']['hint']         = $lang->instance->stop;
 $config->instance->actionList['stop']['data-confirm'] = $lang->instance->notices['confirmStop'];
 $config->instance->actionList['stop']['url']          = array('module' => 'instance', 'method' => 'ajaxStop', 'params' => 'id={id}');

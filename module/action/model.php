@@ -938,6 +938,8 @@ class actionModel extends model
 
                     if($actionType == 'saveautobackupsettings' && $enableAutoBackup) $desc = $this->lang->action->desc->closeautobackupsettings;
                     $action->extra = '';
+
+                    if(!empty($extra->result->code) && $extra->result->code != 200 && !empty($extra->result->message)) $action->comment = $extra->result->message;
                 }
             }
             elseif(isset($this->lang->action->desc->$actionType))

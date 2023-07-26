@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('instances', $instances);
+
 $instances = initTableData($instances, $config->space->dtable->fieldList, $this->instance);
 
 featureBar

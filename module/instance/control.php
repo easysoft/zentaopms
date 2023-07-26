@@ -457,6 +457,24 @@ class instance extends control
     }
 
     /**
+     * 刷新应用状态。
+     * Refresh status of an instance.
+     *
+     * @param  int $instanceID
+     * @access public
+     * @return void
+     */
+    public function ajaxRefresh($instanceID)
+    {
+        $instance = $this->instance->getByID($instanceID);
+        if(empty($instance)) return $this->send(array('status' => ''));
+
+        $instance = $this->instance->freshStatus($instance);
+
+        return $this->send(array('status' => $instance->status));
+    }
+
+    /**
      * Uninstall app instance.
      *
      * @param  int $instanceID
@@ -492,7 +510,7 @@ class instance extends control
 
         if($result->code == 200) return $this->send(array('result' => 'success', 'load' => true, 'message' => zget($this->lang->instance->notices, 'startSuccess')));
 
-        return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'startFail')));
+        return $this->send(array('result' => 'fail', 'message' => !empty($result->message) ? $result->message : zget($this->lang->instance->notices, 'startFail')));
     }
 
     /**
@@ -511,7 +529,7 @@ class instance extends control
         $this->action->create('instance', $instance->id, 'stop', '', json_encode(array('result' => $result, 'app' => array('alias' => $instance->appName, 'app_version' => $instance->version))));
         if($result->code == 200) return $this->send(array('result' => 'success', 'load' => true, 'message' => zget($this->lang->instance->notices, 'stopSuccess')));
 
-        return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'stopFail')));
+        return $this->send(array('result' => 'fail', 'message' => !empty($result->message) ? $result->message : zget($this->lang->instance->notices, 'stopFail')));
     }
 
     /**

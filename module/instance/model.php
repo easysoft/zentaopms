@@ -468,9 +468,9 @@ class InstanceModel extends model
         switch($action)
         {
             case 'start':
-                return !($busy or in_array($instance->status, array('running', 'abnormal', 'destroyed')));
+                return $instance->status === 'stopped';
             case 'stop':
-                return !in_array($instance->status, array('stopped', 'stopping', 'destroying', 'suspending', 'suspended'));
+                return in_array($instance->status, array('abnormal', 'running'));
             case 'uninstall':
                 return !in_array($instance->status, array('destroying'));
             case 'visit':
@@ -1711,7 +1711,7 @@ class InstanceModel extends model
      */
     public static function printCpuUsage($instance, $metrics, $type = 'bar')
     {
-        $rate = $metrics->rate;
+        $rate = $instance->status == 'stopped' ? 0 : $metrics->rate;
         $tip  = "{$rate}% = {$metrics->usage} / {$metrics->limit}";
 
         if(empty($color) && $rate == 0)               $color = 'gray';
@@ -1739,9 +1739,9 @@ class InstanceModel extends model
      * @access public
      * @return mixed
      */
-    public static function printMemUsage($instnace, $metrics, $type = 'bar')
+    public static function printMemUsage($instance, $metrics, $type = 'bar')
     {
-        $rate = $metrics->rate;
+        $rate = $instance->status == 'stopped' ? 0 : $metrics->rate;
         $tip  = "{$rate}% = " . helper::formatKB($metrics->usage) . ' / ' . helper::formatKB($metrics->limit);
 
         if(empty($color) && $rate == 0)               $color = 'gray';
@@ -1754,7 +1754,7 @@ class InstanceModel extends model
         if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
 
         $valueType = 'tip';
-        if($instnace->status == 'stopped') $valueType = '';
+        if($instance->status == 'stopped') $valueType = '';
 
         commonModel::printProgressBar($rate, '', $tip, $valueType);
     }

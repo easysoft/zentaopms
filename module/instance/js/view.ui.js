@@ -1,4 +1,4 @@
-window.openAdminer = function(e)
+window.openAdminer = function()
 {
     var dbName     = $(this).data('dbname');
     var dbType     = $(this).data('dbtype');
@@ -22,4 +22,22 @@ window.openAdminer = function(e)
             }
         }
     );
+}
+
+var reloadTimes = 0;
+window.afterPageUpdate = function()
+{
+    setTimeout(function()
+    {
+        if(reloadTimes > 10) return;
+        if($('#statusTD').data('reload') === true || $('#memoryRate').data('load') == true)
+        {
+            reloadTimes++;
+            fetchContent({url: $.createLink('instance', 'view', 'id=' + instanceID),
+            selector: '#instanceInfoContainer',
+            id: 'instanceInfoContainer',
+            target: '#instanceInfoContainer',
+        });
+        }
+    }, 1000);
 }

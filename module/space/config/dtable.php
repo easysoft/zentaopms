@@ -38,11 +38,13 @@ $config->space->dtable->fieldList['createdAt']['group'] = 'created';
 $config->space->dtable->fieldList['actions']['type'] = 'actions';
 $config->space->dtable->fieldList['actions']['menu'] = array('visit', 'start|stop', 'edit', 'bindUser', 'uninstall', 'upgrade');
 
-$config->space->dtable->fieldList['actions']['list']['start']['icon'] = 'play';
-$config->space->dtable->fieldList['actions']['list']['start']['hint'] = $lang->instance->start;
-$config->space->dtable->fieldList['actions']['list']['start']['url']  = helper::createLink('instance', 'ajaxStart', "id={id}");
+$config->space->dtable->fieldList['actions']['list']['start']['icon']      = 'play';
+$config->space->dtable->fieldList['actions']['list']['start']['className'] = 'ajax-submit';
+$config->space->dtable->fieldList['actions']['list']['start']['hint']      = $lang->instance->start;
+$config->space->dtable->fieldList['actions']['list']['start']['url']       = helper::createLink('instance', 'ajaxStart', "id={id}");
 
 $config->space->dtable->fieldList['actions']['list']['stop']['icon']         = 'off';
+$config->space->dtable->fieldList['actions']['list']['stop']['className']    = 'ajax-submit';
 $config->space->dtable->fieldList['actions']['list']['stop']['hint']         = $lang->instance->stop;
 $config->space->dtable->fieldList['actions']['list']['stop']['url']          = helper::createLink('instance', 'ajaxStop', "id={id}");
 $config->space->dtable->fieldList['actions']['list']['stop']['data-confirm'] = $lang->instance->notices['confirmStop'];

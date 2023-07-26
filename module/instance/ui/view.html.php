@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('instanceID', $instance->id);
+
 $setting    = usePager('pager');
 $cpuInfo    = $this->instance->printCpuUsage($instance, $instanceMetric->cpu, 'array');
 $memoryInfo = $this->instance->printMemUsage($instance, $instanceMetric->memory, 'array');
@@ -53,10 +55,11 @@ detailHeader(
 );
 div
 (
-    setClass('flex flex-wrap gap-x-5'),
+    setClass('flex flex-normal gap-x-5'),
     div
     (
         setClass('basis-2/3'),
+        setID('instanceInfoContainer'),
         detailBody
         (
             sectionList
@@ -69,11 +72,11 @@ div
                         setClass('flex justify-between'),
                         div
                         (
-                            setClass('flex'),
+                            setClass('flex basis-full'),
                             img(set::src($instance->logo), setStyle(array('width' => '50px', 'height' => '50px'))),
                             div
                             (
-                                setClass('ml-3 flex col gap-y-1'),
+                                setClass('ml-3 flex col gap-y-1 basis-full'),
                                 div
                                 (
                                     $instance->name, setClass('text-xl'),
@@ -110,8 +113,10 @@ div
                                         setStyle('background', "var(--color-{$memoryInfo['color']}-50)"),
                                         div
                                         (
-                                            setClass('progress-bar ' . $memoryInfo['color']),
+                                            setID('memoryRate'),
                                             set::role('progressbar'),
+                                            setData('load', $instance->status == 'running' && $memoryInfo['rate'] == '0%'),
+                                            setClass('progress-bar ' . $memoryInfo['color']),
                                             setStyle('width', $memoryInfo['rate'])
                                         )
                                     )
@@ -144,6 +149,8 @@ div
                         (
                             h::td
                             (
+                                setID('statusTD'),
+                                setData('reload', in_array($instance->status, array('creating', 'initializing', 'pulling', 'startup', 'starting', 'suspending', 'installing', 'uninstalling', 'stopping', 'destroying', 'upgrading'))),
                                 span
                                 (
                                     setClass('label label-dot mr-1 ' . zget($this->lang->instance->htmlStatusesClass, $instance->status, ''))
@@ -190,7 +197,7 @@ div
     ),
     div
     (
-        setStyle('width', '400px'),
+        setClass('basis-auto'),
         history()
     )
 );

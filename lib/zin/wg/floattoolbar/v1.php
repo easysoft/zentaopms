@@ -41,7 +41,9 @@ class floatToolbar extends wg
             if(!empty($item['url']))      $item['url']      = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['url']);
             if(!empty($item['data-url'])) $item['data-url'] = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['data-url']);
 
-            $btns[] = btn(set($item), setClass('ghost text-white'));
+            $className = 'ghost text-white';
+            if(!empty($item['className'])) $className .= ' ' . $item['className'];
+            $btns[] = btn(set($item), setClass($className));
         }
         return $btns;
     }
