@@ -94,6 +94,22 @@ class aiModel extends model
         }
 
         $result = curl_exec($ch);
+
+        if(isset($this->config->debug) && $this->config->debug >= 1)
+        {
+            global $app;
+            $logFile = $app->getLogRoot() . 'saas.' . date('Ymd') . '.log.php';
+            if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
+            $fh = @fopen($logFile, 'a');
+            if($fh)
+            {
+                fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . ' AI Request' . "\n");
+                fwrite($fh, "postData:    " . print_r($data, true) . "\n");
+                fwrite($fh, "results:" . print_r($result, true) . "\n");
+                fclose($fh);
+            }
+        }
+
         if(curl_errno($ch)) return false;
         curl_close($ch);
 
