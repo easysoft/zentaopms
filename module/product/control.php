@@ -1126,7 +1126,7 @@ class product extends control
     }
 
     /**
-     * Delete a prodcut line.
+     * Delete a product line.
      *
      * @param  int    $lineID
      * @access public
