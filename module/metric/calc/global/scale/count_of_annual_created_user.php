@@ -10,7 +10,7 @@
  * 单位：个
  * 描述：按全局统计的年度新增人员数是指在一年内新增加到项目或系统中的人员数量。该度量项可以用来评估团队扩充和人员流动情况。年度新增人员数的增加可能意味着团队的增加或项目的扩大。
  * 定义：系统所有用户个数求和
-添加时间为某年
+ *       添加时间为某年
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +23,27 @@
  */
 class count_of_annual_created_user extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getUsers';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.join');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = array();
 
     public function calculate($row)
     {
+        $join = $row->join;
+        if(empty($join)) return false;
+
+        $year = substr($join, 0, 4);
+        if($year == '0000') return false;
+
+        if(!isset($this->result[$year])) $this->result[$year] = 0;
+        $this->result[$year] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('year', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
