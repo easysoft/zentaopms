@@ -14,7 +14,9 @@
 <?php js::set('table',      $selectedTable);?>
 <?php js::set('type',       $type);?>
 <?php js::set('dataview',   $dataview);?>
+<?php js::set('fieldCount', count($fields));?>
 <?php js::set('warningDesign', $lang->dataview->error->warningDesign);?>
+<?php js::set('queryResult',   $lang->dataview->queryResult);?>
 
 <?php js::set('pageID', 1);?>
 <?php js::set('recPerPage', 25);?>
@@ -163,6 +165,7 @@
                     <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-last-page'></i></a>
                   </li>
                 </ul>
+                <span style="float:left;line-height:28px" id="queryResult"></span>
               </div>
               <?php endif;?>
             </div>

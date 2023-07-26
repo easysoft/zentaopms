@@ -18,7 +18,7 @@ $(function()
         if(result) window.location.href = url;
     });
 
-    initPager(pageID, recPerPage, recTotal);
+    initPager(pageID, recPerPage, recTotal, fieldCount);
 
     $('.first-page,.left-page,.last-page,.right-page').click(function()
     {
@@ -69,8 +69,9 @@ function queryTableData()
         $('#datas').empty();
         $('#datas').append(resp.html);
 
-        recTotal = resp.recTotal;
-        initPager(pageID, recPerPage, recTotal);
+        recTotal   = resp.recTotal;
+        fieldCount = resp.fieldCount;
+        initPager(pageID, recPerPage, recTotal, fieldCount);
     });
 }
 
@@ -83,7 +84,7 @@ function queryTableData()
  * @access public
  * @return void
  */
-function initPager(pageID, recPerPage, recTotal)
+function initPager(pageID, recPerPage, recTotal, fieldCount)
 {
     var pageID     = parseInt(pageID);
     var recPerPage = parseInt(recPerPage);
@@ -112,5 +113,7 @@ function initPager(pageID, recPerPage, recTotal)
     $('.first-page,.left-page,.last-page,.right-page').removeClass('disabled');
     if(pageID == 1) $('.first-page,.left-page').addClass('disabled');
     if(pageID == pageTotal) $('.last-page,.right-page').addClass('disabled');
+
+    $('#queryResult').html(queryResult.replace('%s', recTotal).replace('%s', fieldCount));
 }
 
