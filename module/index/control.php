@@ -42,6 +42,7 @@ class index extends control
         $this->view->title             = $this->lang->index->common;
         $this->view->open              = helper::safe64Decode($open);
         $this->view->latestVersionList = $latestVersionList;
+        $this->view->appsItems         = commonModel::getMainNavList($this->app->rawModule);
 
         $this->display();
     }

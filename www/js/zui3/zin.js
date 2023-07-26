@@ -31,7 +31,6 @@
 {
     let config        = window.config;
     const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
-    if(isIndexPage) return;
 
     const DEBUG       = config.debug;
     const currentCode = window.name.substring(4);
@@ -241,9 +240,10 @@
 
     function renderPartial(info, options)
     {
-        if(window.onPageRender && window.onPageRender(info)) return;
+        if(window.onPageRender && window.onPageRender(info, options)) return;
+        if(options.onRender && options.onRender(info, options)) return;
 
-        const render   = renderMap[info.name];
+        const render   = (options.renders ? options.renders[info.name] : null) || renderMap[info.name];
         const isHtml   = info.type === 'html';
         const selector = parseSelector(info.selector);
         const $target  = selector ? $(selector.select) : $target;

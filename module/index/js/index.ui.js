@@ -588,10 +588,8 @@ function refreshMenu()
     }
 }
 
-/**
- * Init apps menu list
- */
-(() =>
+/** Init apps menu list. */
+function initAppsMenu(items)
 {
     const $helpLink = $('#helpLink');
     if($helpLink.length)
@@ -608,9 +606,11 @@ function refreshMenu()
     }
 
     const $menuMainNav = $('#menuMainNav').empty();
-    appsItems.forEach(function(item)
+    (items || appsItems).forEach(function(item)
     {
+        const oldItem = apps.map[item.code];
         if(item === 'divider') return $menuMainNav.append('<li class="divider"></li>');
+        if(oldItem !== item && oldItem) item = $.extend({}, apps.map[item.code], item, {active: oldItem.active});
 
         const $link= $('<a data-pos="menu"></a>')
             .attr('data-app', item.code)
@@ -631,6 +631,9 @@ function refreshMenu()
         if(!apps.defaultCode) apps.defaultCode = item.code;
     });
 
+    const lastApp = getLastApp();
+    if(lastApp) $menuMainNav.find('li[data-app="' + lastApp.code + '"]>a').addClass('active');
+
     apps.map.search =
     {
         opened:     false,
@@ -644,8 +647,27 @@ function refreshMenu()
         url:        '/index.php?m=search&f=index',
         vars:       ''
     };
-})();
+}
 
+/** Update apps menu. */
+function updateAppsMenu()
+{
+    loadCurrentPage(
+    {
+        selector: 'appsItems()',
+        onRender: function(info)
+        {
+            if(info.name === 'appsItems')
+            {
+                initAppsMenu(info.data);
+                refreshMenu();
+            }
+            return true;
+        }
+    });
+}
+
+initAppsMenu();
 /* Refresh more menu on window resize */
 $(window).on('resize', refreshMenu);
 refreshMenu();
@@ -704,12 +726,13 @@ $.get($.createLink('index', 'app'), html =>
 
 $.apps = $.extend(apps,
 {
-    openApp:    openApp,
-    reloadApp:  reloadApp,
-    showApp:    showApp,
-    updateApp:  updateApp,
-    getLastApp: getLastApp,
-    goBack:     goBack,
-    isOldPage:  isOldPage,
-    getAppCode: getAppCode
+    openApp:        openApp,
+    reloadApp:      reloadApp,
+    showApp:        showApp,
+    updateApp:      updateApp,
+    getLastApp:     getLastApp,
+    goBack:         goBack,
+    isOldPage:      isOldPage,
+    getAppCode:     getAppCode,
+    updateAppsMenu: updateAppsMenu
 });
