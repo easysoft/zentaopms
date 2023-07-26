@@ -31,6 +31,10 @@ class pivotZen extends pivot
         $this->view->method    = $method;
         $this->view->params    = $params;
 
+        /* This session is used to pivot-preview page, when design edit or delete a pivot in pivot-preview, use session to back current dimension and group. */
+        $this->session->set('backDimension', $dimension);
+        $this->session->set('backGroup',     $groupID);
+
         if(empty($this->view->title)) $this->view->title = $this->lang->pivot->list;
     }
 
