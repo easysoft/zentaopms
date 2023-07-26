@@ -1778,7 +1778,6 @@ class docModel extends model
                 ->orderBy('order_asc')
                 ->fetchAll('id');
 
-            $orderedExecutions = array();
             foreach($executions as $id => $execution)
             {
                 if($execution->type == 'stage' and $execution->grade != 1)
@@ -2811,8 +2810,18 @@ class docModel extends model
             }
 
             $objects  = $this->getOrderedObjects($type, 'merge', $objectID);
-            $objectID = $this->loadModel($type)->saveState($objectID, $objects);
-            $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
+
+            $this->loadModel($type);
+            if(method_exists($this->$type, 'saveState'))
+            {
+                $objectID = $this->loadModel($type)->saveState($objectID, $objects);
+            }
+            else
+            {
+                $objectID = $this->loadModel($type)->checkAccess($objectID, $objects);
+            }
+
+            $libs = $this->getLibsByObject($type, $objectID, '', $appendLib);
             if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
 
             $objectTitle = zget($objects, $objectID, '');
