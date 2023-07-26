@@ -43,7 +43,7 @@ $footToolbar = common::hasPriv('product', 'batchEdit') ?
         'items' => array(
             array(
                 'text'     => $lang->edit,
-                'btnType' => 'secondary size-sm',
+                'btnType'  => 'secondary size-sm',
                 'data-url' => $this->createLink('product', 'batchEdit', "programID={$programID}"),
                 'onClick'  => jsRaw('window.onClickBatchEdit')
             )
