@@ -73,7 +73,7 @@ $fnGenerateProgramRowData = function($programID, $program) use ($config, $users)
     $item->totalPlans           = $program['plans'];
     $item->totalProjects        = 0;
     $item->totalExecutions      = 0;
-    $item->testCaseCoverage     = $program['coverage'];
+    $item->testCaseCoverage     = $program['coverage'] ?? 0;
     $item->totalActivatedBugs   = 0;
     $item->totalBugs            = 0;
     $item->fixedRate            = $item->totalBugs == 0 ? 0 : round($program['fixedBugs'] / $item->totalBugs, 3) * 100;
@@ -108,7 +108,7 @@ $fnGenerateLineRowData = function($programID, $lineID, $line) use ($config, &$li
     $item->totalPlans           = $line['plans'];
     $item->totalProjects        = 0;
     $item->totalExecutions      = 0;
-    $item->testCaseCoverage     = $line['coverage'];
+    $item->testCaseCoverage     = $line['coverage'] ?? 0;
     $item->totalActivatedBugs   = 0;
     $item->totalBugs            = 0;
     $item->fixedRate            = !empty($item->totalBugs) ? round($line['fixedBugs'] / $item->totalBugs, 3) * 100 : 0;
