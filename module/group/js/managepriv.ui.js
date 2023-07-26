@@ -398,7 +398,7 @@ function setActions()
 
 }
 
-function setNoChecked()
+window.setNoChecked = function()
 {
     var noCheckValue = '';
     $('tbody .group-item > div > div > input').each(function()

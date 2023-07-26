@@ -60,3 +60,8 @@
 
 .checkbox-primary > label.checkbox-indeterminate-block:before {--tw-border-opacity: 1; --tw-bg-opacity: 1; background-color: rgba(var(--color-primary-500-rgb),var(--tw-bg-opacity)); border-color: rgba(var(--color-primary-500-rgb),var(--tw-border-opacity));}
 .checkbox-primary > label.checkbox-indeterminate-block:after {background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgMjA0OCAyMDQ4Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTUzNiA1MTJ2MTAyNEg1MTJWNTEyaDEwMjR6Ii8+PC9zdmc+); background-size: cover; opacity: 1;}
+
+/* Manage limit group. */
+#managePrivForm th.text-right {text-align: right !important;}
+#mainContent.manageLimitGroup {padding: 20px; background-color: #FFF;}
+#mainContent.manageLimitGroup tr {border-bottom-width: 0;}

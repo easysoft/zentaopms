@@ -9,15 +9,85 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('window.selectedPrivIdList', $selectedPrivIdList);
+jsVar('excludeIdList', $excludePrivsIdList);
+jsVar('groupID', $groupID);
+jsVar('type', $type);
+
 if($group->role == 'limited')
 {
+    div
+    (
+        setID('featureBar'),
+        menu
+        (
+            setClass('nav nav-feature'),
+            li
+            (
+                setclass('nav-item'),
+                a
+                (
+                    setclass('active'),
+                    span($group->name)
+                )
+            ),
+        )
+    );
+
+    form
+    (
+        setID('managePrivForm'),
+        set::actions(array()),
+        div
+        (
+            setID('mainContent'),
+            setClass('main main-content manageLimitGroup'),
+            h::table
+            (
+                setClass('table table-hover table-striped table-bordered'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        h::th($lang->group->module),
+                        h::th($lang->group->method),
+                    ),
+                ),
+                h::tr
+                (
+                    setClass(cycle('even, bg-gray')),
+                    h::th
+                    (
+                        setClass('text-right w-40'),
+                        $lang->my->common
+                    ),
+                    h::td
+                    (
+                        setID('my'),
+                        checkbox
+                        (
+                            setID('my-limited'),
+                            set::labelClass('priv'),
+                            set::name('actions[my][]'),
+                            set::value('limited'),
+                            set::checked(isset($groupPrivs['my']['limited'])),
+                            set::text($lang->my->limited),
+                        )
+                    ),
+                    formHidden('noChecked', ''),
+                )
+            ),
+        ),
+        toolbar
+        (
+            setClass('form-actions w-1/2'),
+            btn(set(array('text' => $lang->save, 'btnType' => 'submit', 'type' => 'primary', 'onclick' => 'setNoChecked()'))),
+            btn(set(array('text' => $lang->goback, 'url' => createLink('group', 'browse'), 'back' => true))),
+        ),
+    );
 }
 else
 {
-    jsVar('window.selectedPrivIdList', $selectedPrivIdList);
-    jsVar('excludeIdList', $excludePrivsIdList);
-    jsVar('groupID', $groupID);
-    jsVar('type', $type);
     $params        = "type=byPackage&param=$groupID&menu=%s&version=$version";
     $mainNavItems  = null;
     $i             = 0;
@@ -308,11 +378,11 @@ else
             ),
             li
             (
-                setClass('nav-item'),
+                setclass('nav-item'),
                 a
                 (
-                    setClass(empty($menu) ? 'active' : ''),
-                    set::href(inlink('managePriv', sprintf($params, ''))),
+                    setclass(empty($menu) ? 'active' : ''),
+                    set::href(inlink('managepriv', sprintf($params, ''))),
                     span($lang->group->all)
                 )
             ),
@@ -343,7 +413,7 @@ else
     (
         setID('managePrivForm'),
         formHidden('actions[][]', ''),
-        formHidden('noChecked', 1),
+        formHidden('noChecked', ''),
         set::actions(array()),
         div
         (
@@ -486,7 +556,7 @@ else
                 set::rootClass('check-all'),
                 set::text($lang->selectAll),
             ),
-            btn(set(array('text' => $lang->save, 'btnType' => 'submit', 'type' => 'primary'))),
+            btn(set(array('text' => $lang->save, 'btnType' => 'submit', 'type' => 'primary', 'onclick' => 'setNoChecked()'))),
             btn(set(array('text' => $lang->goback, 'url' => createLink('group', 'browse'), 'back' => true))),
         ),
     );
