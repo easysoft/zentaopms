@@ -10,8 +10,8 @@
  * 单位：个
  * 描述：按全局统计的用例总数是指系统或项目中的测试用例总数量。用例是用来验证系统功能和性能的测试场景。统计用例总数可以帮助评估测试覆盖的广度和深度。用例总数越高可能意味着项目进行了全面和充分的测试。
  * 定义：所有用例个数求和
-过滤已删除的用例
-过滤已删除的产品
+ *       过滤已删除的用例
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
@@ -24,16 +24,15 @@
  */
 class count_of_case extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getCases';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.id');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
     public function calculate($row)
     {
+        $this->result += 1;
     }
 
     public function getResult($options = array())

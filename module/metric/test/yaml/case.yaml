@@ -4,7 +4,7 @@ author: zhouxin
 version: "1.0"
 fields:
 - field: id
-  range: 1-800
+  range: 1-10000
 - field: product
   range: 1-10{80}
 - field: openedDate
