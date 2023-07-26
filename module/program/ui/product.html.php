@@ -39,10 +39,11 @@ foreach($products as $product) $data[] = $this->product->formatDataForList($prod
 $summary = sprintf($lang->product->pageSummary, count($data));
 $footToolbar = common::hasPriv('product', 'batchEdit') ?
     array(
+        'type'  => 'btn-group',
         'items' => array(
             array(
                 'text'     => $lang->edit,
-                'class'    => 'btn secondary toolbar-item size-sm',
+                'btnType' => 'secondary size-sm',
                 'data-url' => $this->createLink('product', 'batchEdit', "programID={$programID}"),
                 'onClick'  => jsRaw('window.onClickBatchEdit')
             )
