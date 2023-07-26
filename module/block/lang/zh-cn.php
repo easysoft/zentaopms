@@ -430,12 +430,15 @@ $lang->block->modules['ipd']['index']           = $lang->block->modules['waterfa
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
-$lang->block->modules['product']->availableBlocks->statistic = $lang->productCommon . '统计';
 $lang->block->modules['product']->availableBlocks->overview  = $lang->productCommon . '总览';
-$lang->block->modules['product']->availableBlocks->list      = $lang->productCommon . '列表';
-$lang->block->modules['product']->availableBlocks->story     = "{$lang->SRCommon}列表";
-$lang->block->modules['product']->availableBlocks->plan      = "计划列表";
-$lang->block->modules['product']->availableBlocks->release   = '发布列表';
+if($this->config->vision != 'or')
+{
+    $lang->block->modules['product']->availableBlocks->statistic = $lang->productCommon . '统计';
+    $lang->block->modules['product']->availableBlocks->list      = $lang->productCommon . '列表';
+    $lang->block->modules['product']->availableBlocks->story     = "{$lang->SRCommon}列表";
+    $lang->block->modules['product']->availableBlocks->plan      = "计划列表";
+    $lang->block->modules['product']->availableBlocks->release   = '发布列表';
+}
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();

@@ -430,12 +430,15 @@ $lang->block->modules['ipd']['index']           = $lang->block->modules['waterfa
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
-$lang->block->modules['product']->availableBlocks->statistic = $lang->productCommon . ' Berichte';
 $lang->block->modules['product']->availableBlocks->overview  = $lang->productCommon . ' Übersicht';
-$lang->block->modules['product']->availableBlocks->list      = $lang->productCommon . ' Liste';
-$lang->block->modules['product']->availableBlocks->story     = 'Story';
-$lang->block->modules['product']->availableBlocks->plan      = 'Plan';
-$lang->block->modules['product']->availableBlocks->release   = 'Release';
+if($this->config->vision != 'or')
+{
+    $lang->block->modules['product']->availableBlocks->statistic = $lang->productCommon . ' Berichte';
+    $lang->block->modules['product']->availableBlocks->list      = $lang->productCommon . ' Liste';
+    $lang->block->modules['product']->availableBlocks->story     = 'Story';
+    $lang->block->modules['product']->availableBlocks->plan      = 'Plan';
+    $lang->block->modules['product']->availableBlocks->release   = 'Release';
+}
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
