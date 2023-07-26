@@ -774,7 +774,7 @@ class aiModel extends model
                 break;
             case 'case':
                 if(isset($sourceGroups['case']))  $object->case  = $this->loadModel('testcase')->getById($objectId);
-                if(isset($sourceGroups['steps'])) $object->steps = $object->case->steps;
+                if(isset($sourceGroups['steps'])) $object->steps = array_values($object->case->steps);
                 break;
             case 'bug':
                 if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
