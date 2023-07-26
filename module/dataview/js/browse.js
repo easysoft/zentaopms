@@ -152,6 +152,7 @@ function initPager(pageID, recPerPage, recTotal, fieldCount)
 
     $('.page-number').html('<strong>' + pageID + '</strong>/<strong>' + pageTotal + '</strong>');
 
+    $('.first-page').data('page', 1);
     $('.left-page').data('page', pageID - 1);
     $('.right-page').data('page', pageID + 1);
     $('.last-page').data('page', pageTotal);
