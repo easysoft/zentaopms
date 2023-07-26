@@ -25,17 +25,21 @@
  */
 class count_of_undelayed_finished_execution_which_finished extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getExecutions';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.status', 't1.closedDate', 't1.firstEnd');
+
+    public $result = 0;
 
     public function calculate($row)
     {
+        if(empty($row->closedDate) or empty($row->firstEnd)) return false;
+
+        if($row->status == 'closed' and $row->closedDate <= $row->firstEnd) $this->result ++;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
-        return $this->filterByOptions($records, $options);
+        return $this->filterByOptions($this->result, $options);
     }
 }
