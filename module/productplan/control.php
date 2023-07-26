@@ -348,7 +348,6 @@ class productplan extends control
                 $this->view->branches = array('all' => $this->lang->productplan->allAB . ' ' . $planCount) + $branchPairs;
             }
 
-            $this->view->branchID   = $branchID;
             $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
         }
 
@@ -357,6 +356,7 @@ class productplan extends control
         $this->view->title            = $productName . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->productID        = $productID;
         $this->view->branch           = $branch;
+        $this->view->branchID         = $branchID;
         $this->view->branchStatusList = $branchStatusList;
         $this->view->productPlansNum  = $this->productplan->getList($productID, $branch, 'all');
         $this->view->browseType       = $browseType;
