@@ -21,9 +21,9 @@ class dataset
      * Store dataset properties list in an array
      *
      * @var    array
-     * @access public
+     * @access protected
      */
-    public array $data = array();
+    protected array $data = array();
 
     /**
      * Create an instance, the initialed data can be passed
@@ -31,58 +31,9 @@ class dataset
      * @access public
      * @param array $data - Properties list array
      */
-    public function __construct(?array $data = null)
+    public function __construct(array $data = array())
     {
         if($data !== null) $this->set($data);
-    }
-
-    /**
-     * Override __set
-     *
-     * @access public
-     * @param string $prop  - Property name
-     * @param mixed  $value - Property value
-     * @return void
-     */
-    public function __set(string $name, mixed $value)
-    {
-        $this->set($name, $value);
-    }
-
-    /**
-     * Override __get
-     *
-     * @access public
-     * @param string $prop - Property name
-     * @return mixed
-     */
-    public function __get(string $name)
-    {
-        $this->get($name);
-    }
-
-    /**
-     * Override __isset
-     *
-     * @access public
-     * @param string $prop - Property name
-     * @return bool
-     */
-    public function __isset(string $name): bool
-    {
-        return $this->has($name);
-    }
-
-    /**
-     * Override __unset
-     *
-     * @access public
-     * @param string $prop - Property name
-     * @return void
-     */
-    public function __unset(string $name)
-    {
-        $this->remove($name);
     }
 
     /**
@@ -94,43 +45,6 @@ class dataset
     public function __toString(): string
     {
         return $this->toStr();
-    }
-
-    /**
-     * Override __invoke
-     *
-     * @access public
-     * @return string
-     */
-    public function __invoke(string|array $name = null, mixed $value = null): string
-    {
-        if($value !== null || is_array($name)) return $this->set($name, $value);
-        if(is_string($name)) return $this->get($name);
-
-        return $this->toStr();
-    }
-
-    /**
-     * Override __call for setting property conveniently
-     *
-     * Example:
-     *
-     *     $dataset = dataset::new();
-     *
-     *     // Set color property
-     *     $dataset->color('red');
-     *
-     *     // Get color property
-     *     echo $dataset->color(); // Output "Red"
-     *
-     * @access public
-     * @return mixed
-     */
-    public function __call(string $name, array $args): mixed
-    {
-        if(count($args)) return $this->set($name, $args[0]);
-
-        return $this->get($name);
     }
 
     /**
@@ -179,10 +93,10 @@ class dataset
      */
     public function toStr(): string
     {
-        return json_encode($this->toJsonData());
+        return json_encode($this->toJSON());
     }
 
-    public function toJsonData(): array
+    public function toJSON(): array
     {
         return $this->data;
     }
@@ -231,12 +145,6 @@ class dataset
     public function getList($prop)
     {
         return $this->get($prop, array());
-    }
-
-    public function list($prop, $values = null)
-    {
-        if($values === null) return $this->getList($prop);
-        return $this->setList($prop, $values);
     }
 
     /**
