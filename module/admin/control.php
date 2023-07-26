@@ -476,7 +476,7 @@ class admin extends control
         {
             unset($_SESSION['errorTables']);
             $response['result'] = 'finished';
-            return print(json_encode($response));
+            return $this->send($response);
         }
 
         try
@@ -489,7 +489,7 @@ class admin extends control
                 if(!empty($dbProcess->Info) and strpos($dbProcess->Info, " {$thisTable} ") !== false)
                 {
                     $response['message'] = sprintf($this->lang->upgrade->changingTable, $thisTable);
-                    return print(json_encode($response));
+                    return $this->send($response);
                 }
             }
         }
@@ -512,7 +512,7 @@ class admin extends control
             $response['message'] = sprintf($this->lang->admin->changeFail, $thisTable, htmlspecialchars($e->getMessage()));
         }
 
-        return print(json_encode($response));
+        return $this->send($response);
     }
 
     /**
