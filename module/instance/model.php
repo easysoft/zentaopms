@@ -2049,7 +2049,7 @@ class InstanceModel extends model
         if($action == 'stop')      return empty($instance->type) ? $this->canDo('stop', $instance) : false;
         if($action == 'uninstall') return empty($instance->solution) && $this->canDo('uninstall', $instance);
         if($action == 'visit')     return empty($instance->type) ? ($instance->domain && $this->canDo('visit', $instance)) : true;
-        if($action == 'upgrade')   return true || !empty($instance->latestVersion);
+        if($action == 'upgrade')   return !empty($instance->latestVersion);
         if($action == 'bindUser')  return empty($instance->type) ? false : true;
         if($action == 'edit')      return empty($instance->type) ? false : true;
 

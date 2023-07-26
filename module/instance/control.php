@@ -303,9 +303,6 @@ class instance extends control
     {
         $instance = $this->instance->getByID($id);
         $instance->latestVersion = $this->store->appLatestVersion($instance->appID, $instance->version);
-        $instance->latestVersion = new stdClass();
-        $instance->latestVersion->version = 4.4;
-        $instance->latestVersion->app_version = 4.5;
 
         if($_POST)
         {
