@@ -27,7 +27,7 @@ $canBatchAssign = hasPriv('testtask', 'batchAssign');
 $canBatchRun    = hasPriv('testtask', 'batchRun');
 $canBatchAction = ($canBeChanged && ($canBatchEdit || $canBatchUnlink || $canBatchAssign || $canBatchRun));
 
-$closeLink = $browseType == 'bymodule' ? inlink('cases', "taskID=$task->id&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("taskCaseModule")';
+$closeLink = $browseType == 'bymodule' ? inlink('cases', "taskID={$task->id}&browseType={$browseType}&param=0&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("taskCaseModule")';
 sidebar
 (
     moduleMenu(set(array
@@ -40,7 +40,7 @@ sidebar
 
 /* Process variables of sutie menu. */
 $suiteItems = array();
-if(empty($suiteList))
+if(empty($suites))
 {
     if($canCreateSuite && (empty($productID) || common::canModify('product', $product)))
     {

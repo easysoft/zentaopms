@@ -55,7 +55,7 @@ $config->testcase->actionList['create']['url']  = array('module' => 'testcase', 
 $config->testcase->actionList['unlinkCase']['icon'] = 'unlink';
 $config->testcase->actionList['unlinkCase']['text'] = $lang->testtask->unlinkCase;
 $config->testcase->actionList['unlinkCase']['hint'] = $lang->testtask->unlinkCase;
-$config->testcase->actionList['unlinkCase']['url']  = array('module' => 'testtask', 'method' => 'unlinkCase', 'params' => 'caseID={id}&confirm=yes');
+$config->testcase->actionList['unlinkCase']['url']  = array('module' => 'testtask', 'method' => 'unlinkCase', 'params' => 'runID={id}&confirm=yes');
 
 $config->testcase->actionList['showScript']['icon'] = 'file-code';
 $config->testcase->actionList['showScript']['text'] = $lang->testcase->showScript;

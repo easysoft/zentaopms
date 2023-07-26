@@ -714,13 +714,11 @@ class testtask extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $runs = $this->testcase->appendData($runs, 'run');
         $groupCases  = array();
-        $groupByList = array();
         foreach($runs as $run)
         {
             if($groupBy == 'story')
             {
                 $groupCases[$run->story][] = $run;
-                $groupByList[$run->story]  = $run->storyTitle;
             }
             elseif($groupBy == 'assignedTo')
             {
@@ -735,7 +733,17 @@ class testtask extends control
             foreach($buildStories as $buildStory)
             {
                 $groupCases[$buildStory->id][] = $buildStory;
-                $groupByList[$buildStory->id]  = $buildStory->title;
+            }
+        }
+
+        $story = '';
+        foreach($runs as $index => $case)
+        {
+            $case->rowspan = 0;
+            if($story !== $case->story)
+            {
+                $story = $case->story;
+                if(!empty($groupCases[$case->story])) $case->rowspan = count($groupCases[$case->story]);
             }
         }
 
@@ -747,8 +755,7 @@ class testtask extends control
         $this->view->taskID       = $taskID;
         $this->view->browseType   = 'group';
         $this->view->groupBy      = $groupBy;
-        $this->view->groupByList  = $groupByList;
-        $this->view->cases        = $runs;
+        $this->view->runs         = $runs;
         $this->view->account      = 'all';
         $this->view->canBeChanged = $canBeChanged;
         $this->display();
