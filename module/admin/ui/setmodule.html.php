@@ -10,83 +10,77 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$buildBody = function($featureGroup): array
+$rows = array();
+foreach($featureGroup as $group => $features)
 {
-    global $lang;
-    $rows = array();
-    foreach($featureGroup as $group => $features)
+    if(strpos(",$disabledFeatures,", ",$group,") !== false) continue;
+
+    $hasData = false;
+    foreach($features as $feature)
     {
-        if(strpos(",$disabledFeatures,", ",$group,") !== false) continue;
-
-        $hasData = false;
-        foreach($features as $feature)
-        {
-            $code = $group . ucfirst($feature);
-            if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;
-            $hasData = true;
-        }
-
-        if($hasData)
-        {
-            $items = array();
-            foreach($features as $feature)
-            {
-                $code = $group. ucfirst($feature);
-                if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;
-
-                if($code == 'myScore')
-                {
-                    $value = $useScore;
-                }
-                else
-                {
-                    $value = strpos(",$closedFeatures,", ",$code,") === false ? '1' : '0';
-                }
-
-                $items[] = checkbox
-                (
-                    set::rootClass('w-40'),
-                    set::id("module{$code}"),
-                    set::name("module[{$code}]"),
-                    set::value(1),
-                    set::checked($value == 1),
-                    on::change('checkModule'),
-                    $lang->admin->setModule->{$feature}
-                );
-
-                $items[] = input
-                (
-                    set::type('hidden'),
-                    set::id("module{$code}"),
-                    set::name("module[{$code}]"),
-                    set::value($value),
-                );
-            }
-            $rows[] = h::tr
-            (
-                setClass('border-t'),
-                h::td
-                (
-                    setClass('p-2.5'),
-                    checkbox
-                    (
-                        set::id("allChecker{$group}"),
-                        set::name("allChecker[$group]"),
-                        on::change('checkGroup'),
-                        $lang->admin->setModule->{$group}
-                    )
-                ),
-                h::td
-                (
-                    setClass('flex flex-wrap p-2.5 border-l'),
-                    $items
-                )
-            );
-        }
+        $code = $group . ucfirst($feature);
+        if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;
+        $hasData = true;
     }
 
-    return $rows;
-};
+    if($hasData)
+    {
+        $items = array();
+        foreach($features as $feature)
+        {
+            $code = $group. ucfirst($feature);
+            if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;
+
+            if($code == 'myScore')
+            {
+                $value = $useScore ? 1 : 0;
+            }
+            else
+            {
+                $value = strpos(",$closedFeatures,", ",$code,") === false ? '1' : '0';
+            }
+
+            $items[] = checkbox
+            (
+                set::rootClass('w-40'),
+                set::id("module{$code}"),
+                set::name("module[{$code}]"),
+                set::value(1),
+                set::checked($value == 1),
+                on::change('checkModule'),
+                $lang->admin->setModule->{$feature}
+            );
+
+            $items[] = input
+            (
+                set::type('hidden'),
+                set::id("module{$code}"),
+                set::name("module[{$code}]"),
+                set::value($value),
+            );
+        }
+        $rows[] = h::tr
+        (
+            setClass('border-t'),
+            h::td
+            (
+                setClass('p-2.5'),
+                checkbox
+                (
+                    set::id("allChecker{$group}"),
+                    set::name("allChecker[$group]"),
+                    on::change('checkGroup'),
+                    $lang->admin->setModule->{$group}
+                )
+            ),
+            h::td
+            (
+                setClass('flex flex-wrap p-2.5 border-l'),
+                $items
+            )
+        );
+    }
+}
 
 formPanel
 (
@@ -114,7 +108,7 @@ formPanel
         ),
         h::tbody
         (
-            $buildBody($config->featureGroup),
+            $rows,
             h::tr
             (
                 setClass('border-t'),
