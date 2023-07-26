@@ -34,7 +34,7 @@ class count_of_valid_bug extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status != 'active' or $row->resolution == 'fixed' or $row->resolution == 'postponed') $this->result += 1;
+        if($row->status == 'active' or $row->resolution == 'fixed' or $row->resolution == 'postponed') $this->result += 1;
     }
 
     public function getResult($options = array())
