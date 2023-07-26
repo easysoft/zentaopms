@@ -32,42 +32,34 @@ window.renderInstanceList = function (result, {col, row, value})
     return result;
 }
 
-var refreshTimes = 0;
+var timer = null;
 window.afterPageUpdate = function()
 {
-    if(refreshTimes > 0) return;
-    setTimeout(function()
+    if(timer) return;
+    const postData = new FormData();
+    idList.forEach(function(id)
     {
-        refreshTimes++;
-        $.each(instances, function(index, instance)
-        {
-            if(!instance.externalID) refreshStatus(instance, index);
-        });
-
-    }, 1000);
-}
-
-/**
- * 刷新应用状态。
- * Refresh status of an instance.
- *
- * @param object  instance 
- * @param int     index 
- * @access public
- * @return void
- */
-function refreshStatus(instance, index)
-{
-    setTimeout(function()
+        postData.append('idList[]', id)
+    });
+    timer = setInterval(function()
     {
         $.ajaxSubmit({
-            url: $.createLink('instance', 'ajaxRefresh', 'instanceID=' + instance.id),
-            method: 'GET',
+            url: $.createLink('instance', 'ajaxStatus'),
+            method: 'POST',
+            data:postData,
             onComplete: function(res)
             {
-                if(res.status != instance.status) loadPage();
+                if(res.result != 'success') return;
+                $.each(res.data, function(index, instance)
+                {
+                    if(statusMap[instance.id] != instance.status)
+                    {
+                        clearInterval(timer);
+                        statusMap[instance.id] = instance.status;
+                        loadPage();
+                    }
+                });
             }
         });
-
-    }, 500 * index);
+    }, 5000);
 }

@@ -238,6 +238,7 @@ $lang->zahost->common     = 'ZAhost';
 $lang->zanode->common     = 'ZAnode';
 $lang->dimension->common  = 'Dimension';
 $lang->contact->common    = 'Contacts';
+$lang->instance->common   = 'Instance';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';

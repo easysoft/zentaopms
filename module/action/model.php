@@ -940,6 +940,10 @@ class actionModel extends model
                     $action->extra = '';
 
                     if(!empty($extra->result->code) && $extra->result->code != 200 && !empty($extra->result->message)) $action->comment = $extra->result->message;
+                    if(is_string($extra->result) && $extra->result != 'fail')
+                    {
+                        $action->comment = "\n" . $extra->message;
+                    }
                 }
             }
             elseif(isset($this->lang->action->desc->$actionType))

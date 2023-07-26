@@ -556,6 +556,9 @@ $config->objectTables['pivot']        = TABLE_PIVOT;
 $config->objectTables['account']      = TABLE_ACCOUNT;
 $config->objectTables['serverroom']   = TABLE_SERVERROOM;
 $config->objectTables['host']         = TABLE_ZAHOST;
+$config->objectTables['instance']     = TABLE_INSTANCE;
+$config->objectTables['space']        = TABLE_SPACE;
+$config->objectTables['solution']     = TABLE_SOLUTION;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';

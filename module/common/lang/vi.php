@@ -248,6 +248,7 @@ $lang->devops->provider    = 'IDC Provider';
 $lang->devops->cpuBrand    = 'CPU Brand';
 $lang->devops->city        = 'IDC Location';
 $lang->devops->os          = 'OS Version';
+$lang->instance->common    = 'Instance';
 
 $lang->searchTips = '';
 $lang->searchAB   = 'Tìm ki?m';

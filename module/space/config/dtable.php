@@ -57,9 +57,11 @@ $config->space->dtable->fieldList['actions']['list']['visit']['hint']   = $lang-
 $config->space->dtable->fieldList['actions']['list']['visit']['url']    = array('module' => 'instance', 'method' => 'visit', 'params' => 'id={id}&externalID={externalID}');
 $config->space->dtable->fieldList['actions']['list']['visit']['target'] = '_blank';
 
-$config->space->dtable->fieldList['actions']['list']['upgrade']['icon'] = 'refresh';
-$config->space->dtable->fieldList['actions']['list']['upgrade']['hint'] = $lang->space->upgrade;
-$config->space->dtable->fieldList['actions']['list']['upgrade']['url']  = helper::createLink('instance', 'upgrade', "id={id}");
+$config->space->dtable->fieldList['actions']['list']['upgrade']['icon']        = 'refresh';
+$config->space->dtable->fieldList['actions']['list']['upgrade']['data-toggle'] = 'modal';
+$config->space->dtable->fieldList['actions']['list']['upgrade']['data-size']   = 'sm';
+$config->space->dtable->fieldList['actions']['list']['upgrade']['hint']        = $lang->space->upgrade;
+$config->space->dtable->fieldList['actions']['list']['upgrade']['url']         = helper::createLink('instance', 'upgrade', "id={id}");
 
 $config->space->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->space->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->edit;

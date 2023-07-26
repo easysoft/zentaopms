@@ -39,5 +39,5 @@ window.afterPageUpdate = function()
             target: '#instanceInfoContainer',
         });
         }
-    }, 1000);
+    }, 5000);
 }

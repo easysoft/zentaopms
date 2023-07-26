@@ -169,6 +169,7 @@ $lang->build->common      = '版本';
 $lang->testreport->common = '測試報告';
 $lang->automation->common = '自動化：';
 $lang->zahost->common     = '宿主機';
+$lang->instance->common   = '应用';
 $lang->team->common       = '團隊';
 $lang->user->common       = '用戶';
 $lang->custom->common     = '自定義';

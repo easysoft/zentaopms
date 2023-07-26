@@ -57,6 +57,9 @@ $config->action->objectNameFields['pivot']        = 'name';
 $config->action->objectNameFields['serverroom']   = 'name';
 $config->action->objectNameFields['account']      = 'name';
 $config->action->objectNameFields['host']         = 'name';
+$config->action->objectNameFields['instance']     = 'name';
+$config->action->objectNameFields['space']        = 'name';
+$config->action->objectNameFields['solution']     = 'name';
 
 $config->action->commonImgSize = 870;
 

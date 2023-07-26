@@ -10,7 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('instances', $instances);
+$statusMap = array();
+foreach($instances as $instance) if(!$instance->externalID) $statusMap[$instance->id] = $instance->status;
+jsVar('statusMap', $statusMap);
+jsVar('idList',    array_keys($statusMap));
 
 $instances = initTableData($instances, $config->space->dtable->fieldList, $this->instance);
 

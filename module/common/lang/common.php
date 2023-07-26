@@ -98,6 +98,7 @@ $lang->contact     = new stdclass();
 $lang->dimension   = new stdclass();
 $lang->space       = new stdclass();
 $lang->store       = new stdclass();
+$lang->instance    = new stdclass();
 $lang->CNE         = new stdclass();
 $lang->account     = new stdclass();
 $lang->ops         = new stdclass();

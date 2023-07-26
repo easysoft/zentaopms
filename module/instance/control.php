@@ -303,10 +303,13 @@ class instance extends control
     {
         $instance = $this->instance->getByID($id);
         $instance->latestVersion = $this->store->appLatestVersion($instance->appID, $instance->version);
+        $instance->latestVersion = new stdClass();
+        $instance->latestVersion->version = 4.4;
+        $instance->latestVersion->app_version = 4.5;
 
         if($_POST)
         {
-            if(empty($instance->latestVersion)) $this->send(array('result' => 'fail', 'message' => $this->lang->instance->noHigherVersion));
+            if(empty($instance->latestVersion)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->noHigherVersion, 'closeModal' => true));
 
             $postData = fixer::input('post')->get();
 
@@ -317,11 +320,11 @@ class instance extends control
             {
                 $logExtra['result'] = 'fail';
                 $this->action->create('instance', $instance->id, 'upgrade', '', json_encode($logExtra));
-                $this->send(array('result' => 'fail', 'message' => $this->lang->instance->notices['upgradeFail']));
+                return $this->send(array('result' => 'fail', 'message' => !empty($logExtra['message']) ? $logExtra['message'] : $this->lang->instance->notices['upgradeFail'], 'closeModal' => true));
             }
 
             $this->action->create('instance', $instance->id, 'upgrade', '', json_encode($logExtra));
-            $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['upgradeSuccess'], 'locate' => $this->createLink('space', 'browse'), 'target' => '_self'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['upgradeSuccess'], 'load' => $this->createLink('instance', 'view', "id=$id")));
         }
 
         $this->view->title       = $this->lang->instance->upgrade . $instance->name;
@@ -339,7 +342,7 @@ class instance extends control
      * @access public
      * @return void
      */
-    public function visit(int $id, int $externalID): void
+    public function visit(int $id, int $externalID = 0): void
     {
         if(!$externalID)
         {
@@ -454,24 +457,6 @@ class instance extends control
         $this->view->pgList      = $this->instance->dbListToOptions($pgList);
 
         $this->display();
-    }
-
-    /**
-     * 刷新应用状态。
-     * Refresh status of an instance.
-     *
-     * @param  int $instanceID
-     * @access public
-     * @return void
-     */
-    public function ajaxRefresh($instanceID)
-    {
-        $instance = $this->instance->getByID($instanceID);
-        if(empty($instance)) return $this->send(array('status' => ''));
-
-        $instance = $this->instance->freshStatus($instance);
-
-        return $this->send(array('status' => $instance->status));
     }
 
     /**
