@@ -41,7 +41,6 @@ $config->index->oldPages[] = 'kanban-setting';
 $config->index->oldPages[] = 'admin-safe';
 $config->index->oldPages[] = 'admin-checkweak';
 $config->index->oldPages[] = 'admin-resetpwdsetting';
-$config->index->oldPages[] = 'admin-tableengine';
 $config->index->oldPages[] = 'webhook-browse';
 $config->index->oldPages[] = 'webhook-create';
 $config->index->oldPages[] = 'dev-api';
