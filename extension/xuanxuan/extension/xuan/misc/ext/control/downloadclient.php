@@ -3,22 +3,15 @@ class myMisc extends misc
 {
     /**
      * Download zentao client.
-     * 
+     *
      * @access public
      * @param  string $action
-     * @param  string $os 
+     * @param  string $os
      * @return void
      */
     public function downloadClient($action = 'check', $os = '')
     {
         ini_set('memory_limit', '256M'); // Temporarily handle the problem that the ZenTao client file is too large.
-
-        if($_POST)
-        {
-            $os = $this->post->os;
-
-            die(js::locate($this->createLink('misc', 'downloadClient', "action=getPackage&os=$os"), 'parent'));
-        }
 
         if($action == 'check')
         {
@@ -45,7 +38,7 @@ class myMisc extends misc
             $this->view->error     = $error;
             $this->view->errorInfo = $errorInfo;
 
-            if(!$error) die(js::locate($this->createLink('misc', 'downloadClient', "action=selectPackage")));
+            if(!$error) $this->locate($this->createLink('misc', 'downloadClient', "action=selectPackage"));
         }
 
         if($action == 'selectPackage')
@@ -83,7 +76,7 @@ class myMisc extends misc
         if($action == 'getPackage')
         {
             $this->view->os      = $os;
-            $this->view->account = $this->app->user->account; 
+            $this->view->account = $this->app->user->account;
         }
 
         if($action == 'clearTmpPackage')
@@ -113,7 +106,7 @@ class myMisc extends misc
                 $zfile = $this->app->loadClass('zfile');
                 $zfile->removeDir($clientDir);
             }
-            
+
             $this->fetch('file', 'sendDownHeader', array('fileName' => "zentao_chat_client." . $os . '.zip', 'zip', $zipContent));
         }
 
