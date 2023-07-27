@@ -6,9 +6,6 @@
 .config-day>.input-control {width: 64px; flex: none;}
 .config-day>.form-label {width: 50px;}
 .config-day>.form-label::after {content: '';}
-.form-row .tooltip-btn::before {background: #fff;}
-.form-row .tooltip-btn {box-shadow: none;}
-.form-row .tooltip-btn:hover:before {opacity: 0;}
 .input-control > .form-control.before-days {padding-left: 50px;}
 .form .label-id {height: 20px; border-color: #D8DBDE; border-radius: 10px;}
 .form-row .form-group.items-center {align-items: center;}

@@ -602,17 +602,11 @@ formPanel
                         'icon'           => 'help',
                         'data-toggle'    => 'tooltip',
                         'data-placement' => 'top-start',
-                        'href'           => 'privateTip',
+                        'data-title'     => $lang->todo->privateTip,
                         'square'         => true,
                         'class'          => 'ghost h-6 tooltip-btn'
                     )
                 )
-            ),
-            div
-            (
-                setID('privateTip'),
-                setClass('tooltip darker'),
-                $lang->todo->privateTip
             )
         )
     ),

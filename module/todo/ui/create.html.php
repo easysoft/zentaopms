@@ -366,17 +366,10 @@ formPanel
             btn
             (
                 set::icon('help'),
-                toggle::tooltip(array('placement' => 'top-start')),
-                set::href('privateTip'),
+                toggle::tooltip(array('placement' => 'top-start', 'title' => $lang->todo->privateTip)),
                 set::square(true),
                 set::class('ghost h-6 mt-0.5 tooltip-btn'),
             ),
-            div
-            (
-                setID('privateTip'),
-                setClass('tooltip darker'),
-                $lang->todo->privateTip
-            )
         )
     ),
     formRow
