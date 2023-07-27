@@ -147,7 +147,7 @@ else
                             set::name('execution'),
                             set::id('execution'),
                             set::items($objects),
-                            set::value($objectID) 
+                            set::value($objectID)
                         )
                     ) : null,
                     ($linkType == 'product') ? formGroup
@@ -159,7 +159,7 @@ else
                             set::name('product'),
                             set::id('product'),
                             set::items($objects),
-                            set::value($objectID) 
+                            set::value($objectID)
                         )
                     ) : null,
                     formGroup
@@ -170,7 +170,7 @@ else
                         (
                             set::name('module'),
                             set::items($moduleOptionMenu),
-                            set::value($moduleID) 
+                            set::value($moduleID)
                         )
                     ),
                     formGroup
@@ -249,8 +249,3 @@ else
         )
     );
 }
-
-set::zui(true);
-to::main(false);
-to::header(false);
-render(isInModal() ? 'modalDialog' : 'pagebase');
