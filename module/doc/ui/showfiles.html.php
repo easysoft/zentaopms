@@ -15,9 +15,9 @@ jsVar('sessionString', session_name() . '=' . session_id());
 jsVar('+searchLink', createLink('doc', 'showFiles', "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&searchTitle=%s"));
 
 $filesBody = null;
-if($viewType == 'list')
+if(!empty($files))
 {
-    if(!empty($files))
+    if($viewType == 'list')
     {
         $tableData = initTableData($files, $config->doc->showfiles->dtable->fieldList);
         $filesBody = dtable
@@ -36,19 +36,22 @@ if($viewType == 'list')
     }
     else
     {
-        $filesBody = div
+        $filesBody = panel
             (
-                setClass('table-empty-tip flex justify-center items-center'),
-                span
-                (
-                    setClass('text-gray'),
-                    $lang->pager->noRecord
-                ),
             );
     }
 }
 else
 {
+    $filesBody = div
+        (
+            setClass('table-empty-tip flex justify-center items-center'),
+            span
+            (
+                setClass('text-gray'),
+                $lang->pager->noRecord
+            ),
+        );
 }
 
 include 'left.html.php';
