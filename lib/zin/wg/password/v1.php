@@ -8,7 +8,8 @@ class password extends wg
     protected static array $defineProps = array(
         'id?: string="password1"',
         'name?: string="password1"',
-        'strengthID?: string="passwordStrength"'
+        'strengthID?: string="passwordStrength"',
+        'strengthClass?: string="passwordStrength"'
     );
 
     public static function getPageJS(): string|false
@@ -22,11 +23,12 @@ class password extends wg
         $app->loadLang('user');
         $jsRoot = $app->getWebRoot() . 'js/';
 
-        list($id, $name, $strengthID) = $this->prop(array('id', 'name', 'strengthID'));
+        list($id, $name, $strengthID, $strengthClass) = $this->prop(array('id', 'name', 'strengthID', 'strengthClass'));
 
         return array
         (
             h::jsCall('$.getScript', $jsRoot . 'md5.js'),
+            jsVar('strengthClass', $strengthClass),
             jsVar('passwordStrengthList', $lang->user->passwordStrengthList),
             inputGroup
             (
@@ -41,7 +43,7 @@ class password extends wg
                 span
                 (
                     setID($strengthID),
-                    setClass('input-group-addon hidden')
+                    setClass("input-group-addon {$strengthClass} hidden")
                 )
             )
         );
