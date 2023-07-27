@@ -32,12 +32,6 @@ $(function()
     });
 })
 
-window.toggleWhiteList = function(e)
-{
-    const acl = e.target.value;
-    $('#whitelistBox').toggleClass('hidden', acl == 'open');
-}
-
 window.loadExecutions = function(e)
 {
     const projectID = e.target.value;

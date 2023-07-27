@@ -208,3 +208,10 @@ window.loadObjectModules = function(e)
         $picker.$.setValue('');
     });
 }
+
+window.toggleWhiteList = function(e)
+{
+    const acl = e.target.value;
+    $('#whitelistBox').toggleClass('hidden', acl == 'open');
+}
+
