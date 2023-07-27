@@ -38,7 +38,8 @@ class editor extends wg
         $editor = new h
         (
             setTag('tiptap-editor'),
-            setClass('form-control', 'p-0', 'h-auto'),
+            setClass('form-control', 'p-0'),
+            $this->prop('size') === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
         );
         $props  = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
         foreach($props as $key => $value)
@@ -57,6 +58,7 @@ class editor extends wg
         return div
         (
             setClass('editor-container'),
+            $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
             $editor,
             textarea
             (
