@@ -19,12 +19,12 @@ foreach($lang->doc->createList as $typeKey => $typeName)
     if($typeKey == 'template' and $config->edition == 'max') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID={$moduleID}&type=html&from=template";
 
     $buttonItems[] = array
-        (
-            'content'     => array('html' => "<img class='mr-2' src='static/svg/{$docType}.svg'/>{$typeName}", 'class' => 'flex w-full'),
-            'url'         => createLink('doc', 'create', $params),
-            'data-app'    => $app->tab,
-            'data-toggle' => strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'modal' : ''
-        );
+    (
+        'content'     => array('html' => "<img class='mr-2' src='static/svg/{$docType}.svg'/>{$typeName}", 'class' => 'flex w-full'),
+        'url'         => createLink('doc', 'create', $params),
+        'data-app'    => $app->tab,
+        'data-toggle' => strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'modal' : ''
+    );
 
     if($typeKey == 'template') $buttonItems[] = array('type' => 'divider');
 }

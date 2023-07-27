@@ -149,7 +149,7 @@ if($api->response)
 div
 (
     setID('docContent'),
-    setClass('flex flex-wrap'),
+    setClass('flex flex-wrap content-start'),
     featureBar
     (
         li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),

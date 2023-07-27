@@ -21,7 +21,7 @@ jsVar('treeData', $libTree);
 
 div
 (
-    setClass('flex flex-wrap'),
+    setClass('flex flex-wrap content-start'),
     /* zin: Define the set::module('doc') feature bar on main menu. */
     featureBar
     (

@@ -36,7 +36,7 @@ else
 /* zin: Define the set::module('doc') feature bar on main menu. */
 div
 (
-    setClass('flex flex-wrap'),
+    setClass('flex flex-wrap content-start'),
     featureBar
     (
         set::current($browseType),
