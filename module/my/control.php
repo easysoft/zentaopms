@@ -1361,10 +1361,9 @@ EOF;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('my', 'index')));
         }
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
-        $this->view->user       = $this->user->getById($this->app->user->account);
-        $this->view->rand       = $this->user->updateSessionRandom();
-
+        $this->view->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
+        $this->view->user  = $this->user->getById($this->app->user->account);
+        $this->view->rand  = $this->user->updateSessionRandom();
         $this->display();
     }
 
