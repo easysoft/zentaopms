@@ -857,11 +857,11 @@ class userModel extends model
         if(!$canNoPassword and empty($_POST['password1'])) dao::$errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
         if(!empty($_POST['password1']))
         {
-            if(isset($this->config->safe->mode) && ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, $this->config->safe->mode, $this->lang->user->weakPassword) . '<br/>';
+            if(isset($this->config->safe->mode) && ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, $this->config->safe->mode, $this->lang->user->weakPassword);
 
-            if(isset($_POST['passwordLength']) && $this->post->passwordLength < 6 && empty(dao::$errors['password1'])) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, 0, $this->lang->user->weakPassword) . '<br/>';
+            if(isset($_POST['passwordLength']) && $this->post->passwordLength < 6 && empty(dao::$errors['password1'])) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, 0, $this->lang->user->weakPassword);
 
-            if($this->post->password1 != $this->post->password2) dao::$errors['password1'][] = $this->lang->error->passwordsame . '<br/>';
+            if($this->post->password1 != $this->post->password2) dao::$errors['password1'][] = $this->lang->error->passwordsame;
 
             if(!empty($this->config->safe->changeWeak))
             {
