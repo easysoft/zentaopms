@@ -214,7 +214,7 @@ $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['25'] = 'ci
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['30'] = 'cpuBrand';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['35'] = 'os';
 
-$lang->admin->menuList->platform['menuOrder']['5']  = 'dashboard';
+//$lang->admin->menuList->platform['menuOrder']['5']  = 'dashboard';
 $lang->admin->menuList->platform['menuOrder']['10'] = 'plat';
 $lang->admin->menuList->platform['menuOrder']['15'] = 'environment';
 $lang->admin->menuList->platform['menuOrder']['20'] = 'resource';
