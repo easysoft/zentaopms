@@ -34,6 +34,17 @@ class mainNavbar extends nav
         'right' => array('map' => 'toolbar'),
     );
 
+    /**
+     * Load the css file.
+     *
+     * @access public
+     * @return string|false
+     */
+    public static function getPageCSS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function created()
     {
         global $app;
@@ -91,6 +102,7 @@ class mainNavbar extends nav
 
         $leftBlock  = $this->block('left');
         $rightBlock = $this->block('right');
+        if(empty($leftBlock)) $leftBlock = $this->buildSwitcher();
 
         return div
         (
@@ -103,5 +115,38 @@ class mainNavbar extends nav
                 empty($rightBlock) ? null : div(setClass('main-navbar-right'), $rightBlock)
             )
         );
+    }
+
+    /**
+     * 构建2.5级下拉菜单。
+     * Build switcher.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildSwitcher(): array|null
+    {
+        global $app, $config;
+
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
+
+        if(in_array("$moduleName-$methodName", is_array($config->excludeSwitcherList) ? $config->excludeSwitcherList : array())) return null;
+
+        if(in_array($moduleName, is_array($config->hasSwitcherModules) ? $config->hasSwitcherModules : array()))
+        {
+            $fetcher = createLink($moduleName, 'ajaxGetDropMenu', data('switcherParams'));
+            return array(zui::dropmenu
+                (
+                    setID("{$moduleName}-menu"),
+                    set('_id', 'switcher'),
+                    set('data', data('data')),
+                    set('_props', array('data-fetcher' => $fetcher)),
+                    set(array('fetcher' => createLink($moduleName, 'ajaxGetDropMenu', data('switcherParams')), 'text' => data('switcherText'), 'defaultValue' => data('switcherObjectID'))),
+                    set($this->getRestProps())
+                ));
+        }
+
+        return null;
     }
 }
