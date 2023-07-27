@@ -18,7 +18,7 @@ class password extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build(): array
+    protected function build(): array|wg
     {
         global $app, $config, $lang;
         $app->loadLang('user');
@@ -47,14 +47,11 @@ class password extends wg
                     setClass("input-group-addon {$strengthClass} hidden")
                 )
             )
-        ) : array
+        ) : input
         (
-            input
-            (
-                set::type('password'),
-                set::name($name),
-                set($this->getRestProps()),
-            ),
+            set::type('password'),
+            set::name($name),
+            set($this->getRestProps()),
         );
     }
 }
