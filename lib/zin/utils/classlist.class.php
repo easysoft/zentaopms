@@ -28,10 +28,10 @@ class classlist
     /**
      * Create an classlist instance
      *
-     * @param string|array $names - A string or a class name list
+     * @param string|array|null $names - A string or a class name list
      * @return classlist
      */
-    public static function new(string|array $names = array()): classlist
+    public static function new(string|array|null $names = array()): classlist
     {
         return new classlist($names);
     }
@@ -42,7 +42,7 @@ class classlist
      * @param string|array $names - A string or a class name list
      * @return string
      */
-    public static function str(array|string $names): string
+    public static function str(string|array $names): string
     {
         return classlist::new($names)->toStr();
     }
@@ -86,11 +86,11 @@ class classlist
      *     $classlist->set(array('btn' => true, 'primary' => true, 'rounded' => $isRounded));
      *
      * @access public
-     * @param string|array $list - A string or a class name list
-     * @param bool         $reset
+     * @param string|array|null $list - A string or a class name list
+     * @param bool              $reset
      * @return classlist
      */
-    public function set(string|array $list, bool $reset = false): classlist
+    public function set(string|array|null $list, bool $reset = false): classlist
     {
         if(is_string($list)) $list = explode(' ', $list);
 
