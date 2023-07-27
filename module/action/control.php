@@ -131,7 +131,7 @@ class action extends control
             $this->loadModel('story');
             $storyIdList = array();
             foreach($trashes as $trash) $storyIdList[] = $trash->objectID;
-            $this->view->productList = $this->story->getByList($storyIdList, 'story', 'all');
+            $this->view->productList = $this->story->getByList($storyIdList, 'all');
         }
 
         /* Get the executions name of task. */

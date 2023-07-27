@@ -804,7 +804,7 @@ class storyTao extends storyModel
     {
         if(empty($storyID) || empty($URList)) return;
 
-        $requirements = $this->getByList($URList, 'requirement');
+        $requirements = $this->getByList($URList);
         $data         = new stdclass();
         foreach($URList as $URID)
         {

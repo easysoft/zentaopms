@@ -29,13 +29,12 @@ class storyTest
      * Test get by list.
      *
      * @param  int    $storyIdList
-     * @param  string $type
      * @access public
      * @return void
      */
-    public function getByListTest($storyIdList = 0, $type = 'story')
+    public function getByListTest($storyIdList = 0)
     {
-        $stories = $this->objectModel->getByList($storyIdList, $type);
+        $stories = $this->objectModel->getByList($storyIdList);
 
         if(dao::isError()) return dao::getError();
 
