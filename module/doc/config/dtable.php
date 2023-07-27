@@ -28,3 +28,27 @@ $config->doc->dtable->fieldList['editedDate']['type'] = 'date';
 $config->doc->dtable->fieldList['actions']['type'] = 'actions';
 $config->doc->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
 $config->doc->dtable->fieldList['actions']['list'] = $config->doc->actionList;
+
+$config->doc->showfiles->dtable = new stdclass();
+
+$config->doc->showfiles->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->doc->showfiles->dtable->fieldList['id']['type']  = 'id';
+
+$config->doc->showfiles->dtable->fieldList['title']['title'] = $lang->doc->fileTitle;
+$config->doc->showfiles->dtable->fieldList['title']['type']  = 'title';
+
+$config->doc->showfiles->dtable->fieldList['objectID']['title']    = $lang->doc->source;
+$config->doc->showfiles->dtable->fieldList['objectID']['type']     = 'desc';
+$config->doc->showfiles->dtable->fieldList['objectID']['sortType'] = true;
+
+$config->doc->showfiles->dtable->fieldList['extension']['type'] = 'category';
+
+$config->doc->showfiles->dtable->fieldList['size']['type'] = 'count';
+
+$config->doc->showfiles->dtable->fieldList['addedBy']['type'] = 'user';
+
+$config->doc->showfiles->dtable->fieldList['addedDate']['type'] = 'date';
+
+$config->doc->showfiles->dtable->fieldList['actions']['type'] = 'actions';
+$config->doc->showfiles->dtable->fieldList['actions']['menu'] = array('download');
+$config->doc->showfiles->dtable->fieldList['actions']['list'] = $config->doc->showfiles->actionList;

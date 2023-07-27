@@ -6,6 +6,7 @@ $config->doc->createlib = new stdclass();
 $config->doc->editlib   = new stdclass();
 $config->doc->create    = new stdclass();
 $config->doc->edit      = new stdclass();
+$config->doc->showfiles = new stdclass();
 
 $config->doc->createlib->requiredFields = 'name';
 $config->doc->editlib->requiredFields   = 'name';
@@ -97,3 +98,9 @@ $config->doc->actionList['delete']['text']         = $lang->delete;
 $config->doc->actionList['delete']['url']          = helper::createLink('doc', 'delete', 'docID={id}');
 $config->doc->actionList['delete']['className']    = 'ajax-submit';
 $config->doc->actionList['delete']['data-confirm'] = $lang->doc->confirmDelete;
+
+$config->doc->showfiles->actionList['download']['icon']      = 'import';
+$config->doc->showfiles->actionList['download']['hint']      = $lang->doc->download;
+$config->doc->showfiles->actionList['download']['text']      = $lang->doc->download;
+$config->doc->showfiles->actionList['download']['url']       = array('module' => 'file', 'method' => 'download', 'params' => 'fileID={id}');
+$config->doc->showfiles->actionList['download']['className'] = 'ajax-submit';
