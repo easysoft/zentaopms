@@ -346,7 +346,7 @@ $lang->ai->prompts->statuses['active'] = 'Active';
 
 $lang->ai->prompts->modules = array();
 $lang->ai->prompts->modules['']            = 'All';
-$lang->ai->prompts->modules['my']          = 'My';
+// $lang->ai->prompts->modules['my']          = 'My';
 $lang->ai->prompts->modules['product']     = 'Product';
 $lang->ai->prompts->modules['project']     = 'Project';
 $lang->ai->prompts->modules['story']       = 'Story';

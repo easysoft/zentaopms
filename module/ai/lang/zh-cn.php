@@ -347,7 +347,7 @@ $lang->ai->prompts->statuses['active'] = '已发布';
 
 $lang->ai->prompts->modules = array();
 $lang->ai->prompts->modules['']            = '所有分组';
-$lang->ai->prompts->modules['my']          = '地盘';
+// $lang->ai->prompts->modules['my']          = '地盘';
 $lang->ai->prompts->modules['product']     = '产品';
 $lang->ai->prompts->modules['project']     = '项目';
 $lang->ai->prompts->modules['story']       = '需求';
