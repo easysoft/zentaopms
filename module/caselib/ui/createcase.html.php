@@ -95,8 +95,10 @@ formPanel
     ),
     formRow
     (
+        setClass('title-row'),
         formGroup
         (
+            setClass('grow'),
             set::label($lang->testcase->title),
             inputControl
             (
@@ -119,11 +121,11 @@ formPanel
         ),
         formGroup
         (
-            set::width('180px'),
+            setClass('grow-0'),
             set::label($lang->testcase->pri),
             set::control(array('type' => 'priPicker', 'items' => $lang->testcase->priList)),
             set::name('pri'),
-            set::value()
+            set::value('3')
         ),
     ),
     formRow
