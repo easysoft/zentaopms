@@ -1417,16 +1417,18 @@ class testtaskModel extends model
      * @param  int    $runID
      * @param  int    $caseID
      * @param  string $status all|done
+     * @param  string $type   all|fail
      * @access public
      * @return void
      */
-    public function getResults($runID, $caseID = 0, $status = 'all')
+    public function getResults($runID, $caseID = 0, $status = 'all', $type = 'all')
     {
         if($runID > 0)
         {
             $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
                 ->where('run')->eq($runID)
                 ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
+                ->beginIF($type != 'all')->andWhere('caseResult')->eq($type)->fi()
                 ->orderBy('id desc')
                 ->fetchAll('id');
         }
@@ -1435,6 +1437,7 @@ class testtaskModel extends model
             $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
                 ->where('`case`')->eq($caseID)
                 ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
+                ->beginIF($type != 'all')->andWhere('caseResult')->eq($type)->fi()
                 ->orderBy('id desc')
                 ->fetchAll('id');
         }

@@ -1427,17 +1427,18 @@ class testtask extends control
      * @param  int    $caseID
      * @param  int    $version
      * @param  string $status  all|done
+     * @param  string $type    all|fail
      * @access public
      * @return void
      */
-    public function results($runID, $caseID = 0, $version = 0, $status = 'done')
+    public function results($runID, $caseID = 0, $version = 0, $status = 'done', $type = 'all')
     {
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         if($runID)
         {
             $case    = $this->testtask->getRunById($runID)->case;
-            $results = $this->testtask->getResults($runID, 0, $status);
+            $results = $this->testtask->getResults($runID, 0, $status, $type);
 
             $testtaskID = $this->dao->select('task')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('task');
             $testtask   = $this->dao->select('id, build, execution, product')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
@@ -1447,13 +1448,14 @@ class testtask extends control
         else
         {
             $case    = $this->loadModel('testcase')->getByID($caseID, $version);
-            $results = $this->testtask->getResults(0, $caseID, $status);
+            $results = $this->testtask->getResults(0, $caseID, $status, $type);
         }
 
         if(empty($this->testcase)) $this->app->loadLang('testcase');
         $this->view->case      = $case;
         $this->view->runID     = $runID;
         $this->view->results   = $results;
+        $this->view->type      = $type;
         $this->view->builds    = $this->loadModel('build')->getBuildPairs($case->product, $case->branch);
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed, noletter');
         $this->view->testtasks = $this->testtask->getPairs($case->product);

@@ -127,15 +127,17 @@ foreach($results as $i => $result)
 
         $stepResultTrs[] = div
         (
-            setClass("step flex border-b step-item "),
+            setClass("step flex border-b step-{$stepResult['type']} "),
             set('data-parent', $stepResult['parent']),
+            set('data-grade', $stepResult['grade']),
             set('data-id', $key),
             div
             (
-                setClass('step-id flex border-r'),
+                setClass('step-id flex border-r check-item'),
                 width('calc(75% - 378px)'),
                 $result->caseResult == 'fail' ? checkbox
                 (
+                    on::click('toggleCheckChildItem'),
                     set::id("stepIdList[{$stepResult['id']}]"),
                     set('name', "stepIdList[{$stepResult['id']}]"),
                     set('value', $key),
@@ -175,11 +177,10 @@ foreach($results as $i => $result)
         h::td
         (
             setClass('pd-0'),
-            h::form
+            form
             (
-                setClass('form load-indicator form-ajax form-grid'),
                 set('data-params', $linkParams),
-                set('action', createLink('bug', 'create', $linkParams)),
+                set::actions(array()),
                 div
                 (
                     setClass('resultSteps ' . $result->caseResult),
@@ -235,15 +236,12 @@ foreach($results as $i => $result)
                         ),
                         div
                         (
-                            setClass('to-bug-button ml-8'),
                             btn
                             (
-                                setClass('btn h-7 px-6'),
+                                setClass('btn h-7 px-6 ml-8 to-bug-button'),
                                 set::type('primary'),
-                                set::btnType('btnType'),
+                                set('data-dismiss', 'modal'),
                                 on::click('createBug'),
-                                set('data-target', '_blank'),
-                                set('data-close-modal', true),
                                 $lang->testcase->createBug
                             ),
                         ),
@@ -269,9 +267,9 @@ div
 (
     div
     (
-        setClass('main pt-6'),
+        setClass('main' . ($type != 'fail' ? ' mt-6' : '')),
         set::id('casesResults'),
-        $case->auto != 'unit' ? formRowGroup
+        $case->auto != 'unit' && $type != 'fail' ? formRowGroup
         (
             set::title($lang->testcase->result),
             set::items
@@ -287,7 +285,6 @@ div
         $fileModals,
     ),
 );
-jsVar('bugCreateParams', $linkParams);
 
 render();
 
