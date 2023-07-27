@@ -326,8 +326,9 @@ class instance extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['upgradeSuccess'], 'load' => $this->createLink('instance', 'view', "id=$id"), 'closeModal' => true));
         }
 
-        $this->view->title       = $this->lang->instance->upgrade . $instance->name;
-        $this->view->instance    = $instance;
+        $this->view->title    = $this->lang->instance->upgrade . $instance->name;
+        $this->view->desc     = $this->instanceZen->getLastArticle($instance->appID);
+        $this->view->instance = $instance;
 
         $this->display();
     }

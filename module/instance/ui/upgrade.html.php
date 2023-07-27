@@ -18,6 +18,7 @@ formPanel
     set::title(''),
     set::actions(array('submit')),
     set::submitBtnText($lang->instance->upgrade),
+    h::p($desc),
     span
     (
         setClass('p-5'),
