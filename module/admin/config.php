@@ -98,3 +98,11 @@ $config->admin->navsGroup['feature']['qa']        = ',bug,testcase,testsuite,tes
 $config->admin->navsGroup['model']['common']      = ',project,build,issue,risk,opportunity,nc,';
 $config->admin->navsGroup['template']['type']     = ',baseline,';
 if($config->vision == 'lite') $config->admin->navsGroup['feature']['my'] .= 'task,';
+
+global $lang;
+$config->admin->checkWeak = new stdclass();
+$config->admin->checkWeak->actionList = array();
+$config->admin->checkWeak->actionList['edit']['icon']        = 'edit';
+$config->admin->checkWeak->actionList['edit']['text']        = $lang->user->edit;
+$config->admin->checkWeak->actionList['edit']['hint']        = $lang->user->edit;
+$config->admin->checkWeak->actionList['edit']['url']         = array('module' => 'user', 'method' => 'edit', 'params' => 'userID={id}');

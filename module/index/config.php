@@ -38,7 +38,6 @@ $config->index->oldPages[] = 'kanban-view';
 $config->index->oldPages[] = 'kanban-edit';
 $config->index->oldPages[] = 'kanban-close';
 $config->index->oldPages[] = 'kanban-setting';
-$config->index->oldPages[] = 'admin-checkweak';
 $config->index->oldPages[] = 'admin-resetpwdsetting';
 $config->index->oldPages[] = 'webhook-browse';
 $config->index->oldPages[] = 'webhook-create';

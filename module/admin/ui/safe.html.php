@@ -46,7 +46,7 @@ if(common::hasPriv('admin', 'resetPWDSetting'))
         a
         (
             set::href(createLink('admin', 'resetPWDSetting')),
-            $lang->admin->safe->resetPWDSetting,
+            $lang->admin->resetPWDSetting,
         )
     );
 }
