@@ -1,0 +1,12 @@
+.panel-heading .title {font-size: 18px; font-weight: 600}
+.panel-heading { justify-content: space-between; }
+.panel-actions { margin-left: auto; }
+#content .user-time {margin-right: 4px; color: #838a9d}
+#content .user-time .icon {margin-right: 4px}
+
+.scrollbar-hover { overflow-y: scroll; }
+#mainContent .panel+.panel {flex: none}
+#history{ position: relative;}
+#history > #closeBtn { position: absolute; right: 10px; top: 10px;}
+
+#content {height: calc(100vh - 300px); overflow-y: auto}
