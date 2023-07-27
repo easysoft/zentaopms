@@ -45,7 +45,7 @@ formPanel
     (
         set::label($lang->user->newPassword),
         set::required(true),
-        password()
+        password(set::checkStrength(true))
     ),
     formGroup
     (
