@@ -293,7 +293,7 @@ $lang->action->desc->uncollected = '$date, 由 <strong>$actor</strong> 取消收
 
 /* 用来描述应用的历史操作记录。*/
 $lang->action->desc->install                 = '$date, 由 <strong>$actor</strong> 安装。' . "\n";
-$lang->action->desc->uninstall               = '$date, 由 <strong>$actor</strong> 卸载。' . "\n";
+$lang->action->desc->uninstall               = '$date, 由 <strong>$actor</strong> 删除。' . "\n";
 $lang->action->desc->start                   = '$date, 由 <strong>$actor</strong> 启动。' . "\n";
 $lang->action->desc->stop                    = '$date, 由 <strong>$actor</strong> 关闭。' . "\n";
 $lang->action->desc->editname                = '$date, 由 <strong>$actor</strong> 修改了名称，从 <strong>$oldName</strong> 修改为 <strong>$newName</strong> 。' . "\n";
@@ -316,7 +316,7 @@ $lang->action->desc->deleteexpiredbackup     = '$date, 系统删除了过期的�
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->install                 = '安装了';
-$lang->action->label->uninstall               = '卸载了';
+$lang->action->label->uninstall               = '删除了';
 $lang->action->label->upgrade                 = '升级了';
 $lang->action->label->start                   = '启动了';
 $lang->action->label->stop                    = '关闭了';
