@@ -99,8 +99,8 @@ $config->doc->actionList['delete']['url']          = helper::createLink('doc', '
 $config->doc->actionList['delete']['className']    = 'ajax-submit';
 $config->doc->actionList['delete']['data-confirm'] = $lang->doc->confirmDelete;
 
-$config->doc->showfiles->actionList['download']['icon']      = 'import';
-$config->doc->showfiles->actionList['download']['hint']      = $lang->doc->download;
-$config->doc->showfiles->actionList['download']['text']      = $lang->doc->download;
-$config->doc->showfiles->actionList['download']['url']       = array('module' => 'file', 'method' => 'download', 'params' => 'fileID={id}');
-$config->doc->showfiles->actionList['download']['className'] = 'ajax-submit';
+$config->doc->showfiles->actionList['download']['icon']   = 'import';
+$config->doc->showfiles->actionList['download']['hint']   = $lang->doc->download;
+$config->doc->showfiles->actionList['download']['text']   = $lang->doc->download;
+$config->doc->showfiles->actionList['download']['url']    = array('module' => 'file', 'method' => 'download', 'params' => 'fileID={id}');
+$config->doc->showfiles->actionList['download']['target'] = '_blank';

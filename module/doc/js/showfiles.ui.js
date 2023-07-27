@@ -15,7 +15,7 @@ window.renderCell = function(result, {col, row})
         let titleHtml = '';
         if(imageExtensionList.includes(row.data.extension))
         {
-            titleHtml += `<div style='display: inline-block'><img onload='setImageSize(19)' src='${row.data.webPath}' data-extension='${row.data.extension}' data-id='${row.data.id}' data-width='${row.data.imageWidth}'/></div>`;
+            titleHtml += `<div style='display: inline-block'><img width='16' src='${row.data.webPath}' data-extension='${row.data.extension}' data-id='${row.data.id}' data-width='${row.data.imageWidth}'/></div>`;
         }
         else
         {
@@ -45,35 +45,6 @@ window.renderCell = function(result, {col, row})
     }
 
     return result;
-}
-
-
-/**
- * Set the max with of image.
- *
- * @access public
- * @return void
- */
-window.setImageSize = function(maxWidth, maxHeight)
-{
-    var $image = $(this);
-    if($image.parent().prop('tagName').toLowerCase() == 'a') return;
-
-    /* If not set maxWidth, set it auto. */
-    if(!maxWidth)
-    {
-        bodyWidth = $('body').width();
-        maxWidth  = bodyWidth - 470; // The side bar's width is 336, and add some margins.
-    }
-    if(!maxHeight) maxHeight = $(top.window).height();
-
-    setTimeout(function()
-    {
-        maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
-        if(!document.getElementsByClassName('xxc-embed').length && $image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
-        $image.wrap('<a href="javascript:;" style="display:inline-block;position:relative;overflow:hidden;' + maxHeightStyle + '" onclick="return downloadFile(' + $image.attr('data-id') + ",'" + $image.attr('data-extension') + "', " +  $image.attr('data-width') + ')"></a>');
-        if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + lang.expand + " <i class='icon-angle-down'></i></a>");
-    }, 50);
 }
 
 window.downloadFile = function(fileID, extension, imageWidth)

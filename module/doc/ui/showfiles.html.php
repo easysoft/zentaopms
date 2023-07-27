@@ -61,6 +61,7 @@ if(!empty($files))
                                     set('style', "background-image: url({$file->webPath})"),
                                     img
                                     (
+                                        setClass(empty($file->imageWidth) ? 'not-exist' : ''),
                                         set('src', $file->webPath),
                                     )
                                 ) : html($file->fileIcon),
