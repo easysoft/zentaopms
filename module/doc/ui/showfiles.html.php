@@ -17,6 +17,7 @@ jsVar('+searchLink', createLink('doc', 'showFiles', "type={$type}&objectID={$obj
 $filesBody = null;
 if(!empty($files))
 {
+    $linkTpl = array('linkCreator' => helper::createLink('doc', $app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&searchTitle={$searchTitle}"));
     if($viewType == 'list')
     {
         $tableData = initTableData($files, $config->doc->showfiles->dtable->fieldList);
@@ -26,19 +27,18 @@ if(!empty($files))
                 set::cols($config->doc->showfiles->dtable->fieldList),
                 set::data($tableData),
                 set::onRenderCell(jsRaw('window.renderCell')),
-                set::footPager(
-                    usePager
-                    (
-                        array('linkCreator' => helper::createLink('doc', $app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&searchTitle={$searchTitle}")),
-                    ),
-                ),
+                set::footPager(usePager($linkTpl)),
             );
     }
     else
     {
         $filesBody = panel
-            (
-            );
+        (
+            pager(
+                setClass('flex justify-end items-center'),
+                set(usePager($linkTpl)),
+            )
+        );
     }
 }
 else
