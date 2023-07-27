@@ -1,7 +1,3 @@
-#mainNavbar , #header {display: none}
-#mainContent {padding-top: 0;}
-#main>.container { padding: 0;}
-.container {max-width: 100%;}
 .editor-container {margin-top: 0px !important;}
 #title {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px; --tw-ring-shadow: none}
 #title:focus {box-shadow: none; outline: unset}
@@ -12,3 +8,4 @@
 #whitelistBox .form-group-wrapper+.form-group-wrapper {margin-top: 10px;}
 #titleBox:before {position: absolute; --tw-translate-y: .125rem; --tw-scale-x: 1.25; --tw-scale-y: 1.25; --tw-text-opacity: 1; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); content: "*"; display: inline-block; margin-left: 0.25rem; transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
 #titleBox {margin-left: 5px}
+.alert {display: block; font-weight: 600}
