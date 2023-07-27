@@ -124,7 +124,7 @@
         $('#configJS').replaceWith(data);
         config = window.config;
         const $body = $(document.body);
-        const classList = ($body.attr('class') || '').split(' ').filter(x => !x.startsWith('m-'));
+        const classList = ($body.attr('class') || '').split(' ').filter(x => x.length && !x.startsWith('m-'));
         classList.push(`m-${config.currentModule}-${config.currentMethod}`);
         $body.attr('class', classList.join(' '));
     }
