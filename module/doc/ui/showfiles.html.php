@@ -17,32 +17,6 @@ jsVar('+searchLink', createLink('doc', 'showFiles', "type={$type}&objectID={$obj
 $filesBody = null;
 if($viewType == 'list')
 {
-    foreach($files as $fileID => $file)
-    {
-        if(empty($file->pathname))
-        {
-            unset($files[$fileID]);
-            continue;
-        }
-
-        $file->fileIcon   = $fileIcon[$file->id] ;
-        $file->fileName   = str_replace('.' . $file->extension, '', $file->title);
-        $file->sourceName = isset($sourcePairs[$file->objectType][$file->objectID]) ? $sourcePairs[$file->objectType][$file->objectID] : '';
-        $file->sizeText   = number_format($file->size / 1024, 1) . 'K';
-
-        $imageSize = $this->file->getImageSize($file);
-        $file->imageWidth = isset($imageSize[0]) ? $imageSize[0] : 0;
-        if($file->objectType == 'requirement')
-        {
-            $file->objectName = $lang->URCommon . ' : ';
-        }
-        else
-        {
-            if(!isset($lang->{$file->objectType}->common)) $app->loadLang($file->objectType);
-            $file->objectName = $lang->{$file->objectType}->common . ' : ';
-        }
-    }
-
     if(!empty($files))
     {
         $tableData = initTableData($files, $config->doc->showfiles->dtable->fieldList);

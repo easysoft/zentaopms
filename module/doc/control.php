@@ -1009,13 +1009,16 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
-        $files = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $files       = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $fileIcon    = $this->doc->getFileIcon($files);
+        $sourcePairs = $this->doc->getFileSourcePairs($files);
 
-        $this->view->title      = $object->name;
-
+        $this->view->title          = $object->name;
         $this->view->type           = $type;
         $this->view->object         = $object;
-        $this->view->files          = $files;
+        $this->view->files          = $this->docZen->processFiles($files, $fileIcon, $sourcePairs);
+        $this->view->fileIcon       = $fileIcon;
+        $this->view->sourcePairs    = $sourcePairs;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager          = $pager;
         $this->view->viewType       = $viewType;
@@ -1023,8 +1026,6 @@ class doc extends control
         $this->view->objectID       = $objectID;
         $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
         $this->view->summary        = $this->doc->summary($files);
-        $this->view->sourcePairs    = $this->doc->getFileSourcePairs($files);
-        $this->view->fileIcon       = $this->doc->getFileIcon($files);
         $this->view->libTree        = $this->doc->getLibTree(0, $libs, $type, 0, $objectID);
         $this->view->objectDropdown = $objectDropdown;
         $this->view->searchTitle    = $searchTitle;
