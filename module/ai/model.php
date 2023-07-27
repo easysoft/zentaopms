@@ -1049,8 +1049,8 @@ class aiModel extends model
 
         list($m, $f) = explode('.', $targetForm);
         $targetFormConfig = $this->config->ai->targetForm[$m][$f];
-        $module = $targetFormConfig->m;
-        $method = $targetFormConfig->f;
+        $module = strtolower($targetFormConfig->m);
+        $method = strtolower($targetFormConfig->f);
 
         /* Try assemble link vars from both passed-in `$linkArgs` and object props. */
         $varsConfig = $this->config->ai->targetFormVars[$module][$method];
