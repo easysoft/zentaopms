@@ -24,21 +24,30 @@
  */
 class count_of_monthly_finished_task extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getTasks';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.closedDate');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = array();
 
     public function calculate($row)
     {
+        $closedDate = $row->closedDate;
+        if(empty($closedDate)) return false;
+
+        $year = substr($closedDate, 0, 4);
+        if($year == '0000') return false;
+        $month = substr($closedDate, 5, 2);
+
+        if(!isset($this->result[$year])) $this->result[$year] = array();
+        if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;
+
+        $this->result[$year][$month] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('year', 'month', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
