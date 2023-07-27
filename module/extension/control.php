@@ -418,16 +418,17 @@ class extension extends control
 
         if($_FILES)
         {
-            if($_FILES['file']['error'] == UPLOAD_ERR_NO_FILE) return print(js::alert($this->lang->extension->errorFileNotEmpty));
+            if($_FILES['files']['error'] == UPLOAD_ERR_NO_FILE) return $this->send(array('result' => 'fail', 'message' => $this->lang->extension->errorFileNotEmpty));
 
-            $tmpName   = $_FILES['file']['tmp_name'];
-            $fileName  = $_FILES['file']['name'];
+            $tmpName   = $_FILES['files']['tmp_name'][0];
+            $fileName  = $_FILES['files']['name'][0];
             $dest      = $this->app->getTmpRoot() . "extension/$fileName";
+
             if(!move_uploaded_file($tmpName, $dest))
             {
                 $downloadPath = $this->app->getTmpRoot() . 'extension/';
                 $errorMessage = strip_tags(sprintf($this->lang->extension->errorDownloadPathNotWritable, $downloadPath, $downloadPath));
-                return print(js::alert($errorMessage));
+                return $this->send(array('result' => 'fail', 'message' => $errorMessage));
             }
 
             $extension = basename($fileName, '.zip');
@@ -435,7 +436,7 @@ class extension extends control
             if($return->result != 'ok')
             {
                 unlink($dest);
-                return print(js::alert(str_replace("'", "\'", sprintf($this->lang->extension->errorExtracted, $fileName, $return->error))));
+                return $this->send(array('result' => 'fail', 'message' => str_replace("'", "\'", sprintf($this->lang->extension->errorExtracted, $fileName, $return->error))));
             }
 
             $info = $this->extension->parseExtensionCFG($extension);
@@ -450,7 +451,7 @@ class extension extends control
             $info = $this->extension->getInfoFromDB($extension);
             $type = (!empty($info) and ($info->status == 'installed' or $info->status == 'deactivated')) ? 'upgrade' : 'install';
             $link = $type == 'install' ? inlink('install', "extension=$extension") : inlink('upgrade', "extension=$extension");
-            return print(js::locate($link, 'parent'));
+            return $this->send(array('result' => 'success', 'callback' => array('name' => 'loadInModal', 'params' => $link)));
         }
 
         $this->display();
