@@ -138,11 +138,10 @@ formPanel
     ),
     formRow
     (
-
         formGroup
         (
             set::label($lang->testcase->steps),
-            printStepsTable()
+            stepsEditor()
         )
     ),
     formRow
@@ -165,79 +164,3 @@ formPanel
 );
 
 render();
-
-function printStepsTable()
-{
-    global $lang;
-
-    $stepsTR = array();
-    for($i = 1; $i <= 3; $i ++)
-    {
-        $stepsTR[] = h::tr
-        (
-            h::td
-            (
-                set::class('center'),
-                $i
-            ),
-            h::td
-            (
-                inputGroup
-                (
-                    textarea
-                    (
-                        set::rows(1),
-                        set::name("steps[$i]")
-                    ),
-                    span
-                    (
-                        set('class', 'input-group-addon'),
-                        checkbox
-                        (
-                            set::name("stepType[$i]"),
-                            set::text($lang->testcase->group),
-                        )
-                    )
-                )
-            ),
-            h::td
-            (
-                textarea
-                (
-                    set::rows(1),
-                    set::name("expects[$i]")
-                )
-            ),
-            h::td
-            (
-                set::class('center'),
-                btnGroup
-                (
-                    set::items(array(
-                        array('icon' => 'plus'),
-                        array('icon' => 'trash'),
-                        array('icon' => 'move')
-                    ))
-                )
-            )
-        );
-    }
-    return h::table
-    (
-        set::class('w-full'),
-        h::thead
-        (
-            h::tr
-            (
-                h::th($lang->testcase->stepID),
-                h::th($lang->testcase->stepDesc),
-                h::th($lang->testcase->stepExpect),
-                h::th($lang->actions)
-            )
-        ),
-        h::tbody
-        (
-            $stepsTR
-        )
-    );
-}
