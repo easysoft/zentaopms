@@ -1,0 +1,6 @@
+.sidebar .panel {padding: 0px 0px; margin-bottom: 0px;}
+.sidebar .panel .panel-heading {padding-bottom: 0px;}
+.sidebar .panel .panel-heading .panel-title {font-size: 14px;}
+.sidebar .panel .panel-body li {margin-bottom: 6px;}
+.sidebar .panel .toolbar {flex: none;}
+.sidebar .panel .toolbar .btn {min-width: auto;}

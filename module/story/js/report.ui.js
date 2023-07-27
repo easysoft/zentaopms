@@ -24,6 +24,10 @@ window.reportSubmit = function(btnEle)
     }
 
     $submitBtn.prop('disabled', true);
+    setTimeout(function()
+    {
+        $submitBtn.prop('disabled', false);
+    }, 3000);
 
     postAndLoadPage($(form).prop('action'), formData, ["#mainPanel"]);
 };

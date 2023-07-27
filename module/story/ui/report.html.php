@@ -38,7 +38,13 @@ $fnGenerateTabCharts = function(string $type) use($charts, $lang, $datas)
         (
             set::type($type),
             set::title($lang->story->report->charts[$chartType]),
-            set::datas($datas[$chartType])
+            set::datas($datas[$chartType]),
+            set::tableHeaders(array
+            (
+                'item'    => $lang->story->report->$chartType->item,
+                'value'   => $lang->story->report->value,
+                'percent' => $lang->report->percent
+            ))
         );
     }
 
@@ -70,11 +76,14 @@ $fnGenerateTabs = function() use($fnGenerateTabCharts, $lang, $chartType)
 /* Layout. */
 featureBar
 (
-    backBtn
-    (
-        set::icon('back'),
-        set::type('secondary'),
-        $lang->goback
+    to::before(
+        backBtn
+        (
+            set::icon('back'),
+            set::type('secondary'),
+            $lang->goback
+        ),
+        div(setClass('nav-divider'))
     ),
     div
     (
@@ -90,6 +99,7 @@ sidebar
     formPanel
     (
         set::title($lang->story->report->select),
+        setClass('shadow'),
         set::actions(array
         (
             array('text'=> $lang->selectAll,             'onclick' => 'window.reportSelectAllFields(this)', 'type' => 'button', 'class' => ''),
@@ -107,5 +117,3 @@ panel(
         $fnGenerateTabs()
     )
 );
-
-render();
