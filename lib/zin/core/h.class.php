@@ -251,6 +251,11 @@ class h extends wg
         return call_user_func_array('static::js', array_merge(array($code), $directives));
     }
 
+    public static function jsShare($name, $data): ?h
+    {
+        return h::js('$.share[' . json_encode($name) . ']=' . h::encodeJsonWithRawJs($data) . ';');
+    }
+
     public static function createJsCallCode(string $func, array $args): string
     {
         foreach($args as $index => $arg)

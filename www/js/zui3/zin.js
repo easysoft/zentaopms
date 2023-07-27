@@ -534,6 +534,7 @@
             {
                 options.selector = 'body>*,title>*,#configJS';
             }
+            $.share = {};
         }
 
         if(DEBUG) console.log('[APP] ', 'load:', options.url);
