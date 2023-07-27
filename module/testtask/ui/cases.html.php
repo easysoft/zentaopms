@@ -58,16 +58,6 @@ else
 featureBar
 (
     set::linkParams("taskID=$task->id&browseType={key}&param=0"),
-    $canGroupCase ? li
-    (
-        set::class('nav-item'),
-        a
-        (
-            set::href(inlink('groupCase', "taskID=$task->id&groupBy=story")),
-            set('data-app', $app->tab),
-            $lang->testcase->groupByStories
-        )
-    ) : null,
     dropdown
     (
         btn
@@ -80,19 +70,50 @@ featureBar
     li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
+$viewItems   = array();
+$viewItems[] = array('text' => $lang->testcase->listView,  'url' => inlink('cases',     "taskID={$task->id}"),               'active' => true);
+$viewItems[] = array('text' => $lang->testcase->groupView, 'url' => inlink('groupCase', "taskID={$task->id}&groupBy=story"), 'active' => false);
 toolbar
 (
-    set::items
+    dropdown
     (
-        array
+        btn
         (
-            $canLinkCase ? array('class' => 'ghost', 'icon' => 'link', 'text' => $lang->testtask->linkCase, 'url' => inlink('linkCase', "taskID=$task->id")) : null,
-            $canExport   ? array('class' => 'ghost', 'icon' => 'export', 'text' => $lang->export, 'url' => $this->createLink('testcase', 'export', "productID=$productID&orderBy=case_desc&taskID=$task->id"), 'data-toggle' => 'modal') : null,
-            $canReport   ? array('class' => 'ghost', 'icon' => 'bar-chart', 'text' => $lang->testtask->report->common, 'url' => inlink('report', "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID))) : null,
-            $canView     ? array('class' => 'ghost', 'icon' => 'list-alt', 'text' => $lang->testtask->view, 'url' => inlink('view', "taskID=$task->id")) : null,
-            array('class' => 'ghost', 'icon' => 'back', 'text' => $lang->goback, 'url' => $this->session->testtaskList)
-        )
-    )
+            setClass('btn ghost square'),
+            set::icon('kanban')
+        ),
+        set::items($viewItems),
+        set::placement('bottom-end'),
+    ),
+    $canLinkCase ? btn
+    (
+        set::class('ghost'),
+        set::icon('link'),
+        set::url(inlink('linkCase', "taskID=$task->id")),
+        $lang->testtask->linkCase,
+    ) : null,
+    $canExport ? btn
+    (
+        set::class('ghost'),
+        set::icon('export'),
+        set::url($this->createLink('testcase', 'export', "productID=$productID&orderBy=case_desc&taskID=$task->id")),
+        $lang->export
+    ) : null,
+    $canReport ? btn
+    (
+        set::class('ghost'),
+        set::icon('bar-chart'),
+        set::url(inlink('report', "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID))),
+        $lang->testtask->report->common
+    ) : null,
+    $canView ? btn
+    (
+        set::class('ghost'),
+        set::icon('list-alt'),
+        set::url(inlink('view', "taskID=$task->id")),
+        $lang->testtask->view
+    ) : null,
+    btn(set::icon('back'), set::class('ghost'), set::url($this->session->testtaskList), $lang->goback)
 );
 
 $footToolbar = null;
