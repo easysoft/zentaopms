@@ -1057,7 +1057,7 @@ class user extends control
 
         if($_POST)
         {
-            if($needCreateFile) return $this->send(array('result' => 'success', 'locate' => 'reload'));
+            if($needCreateFile) return $this->send(array('result' => 'success', 'load' => true));
 
             $result = $this->user->resetPassword();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
