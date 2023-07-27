@@ -13,8 +13,8 @@ $calc   = $metric->calcMetric(__FILE__);
 /**
 
 title=consume_of_task
+timeout=0
 cid=1
-pid=1
 
 */
 
