@@ -281,8 +281,10 @@ $config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['i
 $config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['hint'] = $lang->task->batchCreate;
 
 $app->loadLang('execution');
-$config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['icon'] = 'estimate';
-$config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['hint'] = $lang->execution->storyEstimate;
+$config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['icon']        = 'estimate';
+$config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['hint']        = $lang->execution->storyEstimate;
+$config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['data-size']   = 'sm';
+$config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['data-toggle'] = 'modal';
 
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['icon'] = 'unlink';
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['hint'] = $lang->execution->unlinkStory;
