@@ -46,7 +46,7 @@ $lang->admin->menuList->convert['order'] = 50;
 
 $lang->admin->menuList->platform['name']  = $lang->admin->menuSetting['platform']['name'];
 $lang->admin->menuList->platform['desc']  = $lang->admin->menuSetting['platform']['desc'];
-$lang->admin->menuList->platform['link']  = 'system|index';
+$lang->admin->menuList->platform['link']  = 'system|browsebackup';
 $lang->admin->menuList->platform['order'] = 55;
 
 $lang->admin->menuList->system['subMenu']['mode']        = array('link' => "{$lang->custom->mode}|custom|mode|");
@@ -182,7 +182,7 @@ $lang->admin->menuList->dev['menuOrder']['15'] = 'langItem';
 $lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
-$lang->admin->menuList->platform['subMenu']['dashboard']   = array('link' => "{$lang->dashboard}|system|dashboard|");
+//$lang->admin->menuList->platform['subMenu']['dashboard']   = array('link' => "{$lang->dashboard}|system|dashboard|");
 $lang->admin->menuList->platform['subMenu']['plat']        = array('link' => "{$lang->devops->platform}|system|browsebackup|", 'subModule' => 'system');
 $lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
 $lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops');
