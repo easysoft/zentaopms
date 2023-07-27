@@ -187,8 +187,10 @@ formPanel
     ),
     formRow
     (
+        setClass('title-row'),
         formGroup
         (
+            setClass('grow'),
             set::label($lang->testcase->title),
             set::required(true),
             inputControl
@@ -212,7 +214,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('150px'),
+            setClass('pl-4 grow-0'),
             set::label($lang->testcase->pri),
             priPicker
             (
@@ -224,7 +226,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('180px'),
+            setClass('pl-4 grow-0'),
             set::label($lang->testcase->isReviewed),
             picker
             (
