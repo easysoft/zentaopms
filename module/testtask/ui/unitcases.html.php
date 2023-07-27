@@ -27,6 +27,12 @@ toolbar
     )
 );
 
+$config->testcase->actionList['runResult']['url'] = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID={id}&caseID={case}');
+$config->testtask->unitgroup->dtable->fieldList['actions']['list']         = $config->testcase->actionList;
+$config->testtask->unitgroup->dtable->fieldList['id']['name']              = 'case';
+$config->testtask->unitgroup->dtable->fieldList['title']['link']['params'] = 'caseID={case}';
+$config->testtask->unitgroup->dtable->fieldList['bugs']['link']['params']  = 'runID={id}&caseID={case}';
+
 $runs = initTableData($runs, $config->testtask->unitgroup->dtable->fieldList);
 
 dtable

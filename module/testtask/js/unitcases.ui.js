@@ -15,7 +15,7 @@ $(function()
  */
 window.onRenderCell = function(result, {row, col})
 {
-    if(result && col.name == 'suite')
+    if(result && col.name == 'suiteTitle')
     {
         if(row.data.hidden)
         {
@@ -27,7 +27,7 @@ window.onRenderCell = function(result, {row, col})
             result.push({outer: false, style: {alignItems: 'start', 'padding-top': '8px'}})
         }
     }
-    if(result && col.name == 'id' && row.data.hidden)
+    if(result && col.name == 'case' && row.data.hidden)
     {
         result.push({outer: false, style: {alignItems: 'center', justifyContent: 'start'}})
     }
@@ -45,11 +45,11 @@ window.onRenderCell = function(result, {row, col})
  */
 window.getCellSpan = function(cell)
 {
-    if(cell.col.name == 'suite' && cell.row.data.rowspan)
+    if(cell.col.name == 'suiteTitle' && cell.row.data.rowspan)
     {
         return {rowSpan: cell.row.data.rowspan};
     }
-    if(cell.col.name == 'id' && cell.row.data.colspan)
+    if(cell.col.name == 'case' && cell.row.data.colspan)
     {
         return {colSpan: cell.row.data.colspan};
     }
@@ -95,7 +95,7 @@ window.deformation = function(event)
         {
             if(options.data[index] && options.data[index].suite == suite)
             {
-                options.data[index].id      = {html: '<span class="text-gray">' + allTestcases + ' ' + '<strong>' + options.data[index].rowspan + '</strong></span>'};
+                options.data[index].case    = {html: '<span class="text-gray">' + allTestcases + ' ' + '<strong>' + options.data[index].rowspan + '</strong></span>'};
                 options.data[index].rowspan = 1;
                 options.data[index].colspan = 12;
                 options.data[index].hidden  = 1;

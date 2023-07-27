@@ -407,8 +407,10 @@ class testtask extends control
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
-        $cases = array();
         $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
+
+        $cases = array();
+        foreach($runs as $run) $cases[$run->case] = $run;
 
         $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->in(array_keys($cases))->andWhere('run')->in(array_keys($runs))->fetchAll('run');
         foreach($results as $result)
@@ -418,12 +420,16 @@ class testtask extends control
             $runs[$result->run]->duration   = $result->duration;
         }
 
-        $suitecases = $this->dao->select('*')->from(TABLE_SUITECASE)->where('`case`')->in(array_keys($cases))->orderBy('`case`')->fetchAll('case');
+        $suitecases = $this->dao->select('t1.*,t2.name')->from(TABLE_SUITECASE)->alias('t1')
+            ->leftJoin(TABLE_TESTSUITE)->alias('t2')->on('t1.case=t2.id')
+            ->where('t1.case')->in(array_keys($cases))->orderBy('t1.case')
+            ->fetchAll('case');
 
-        $groupCases  = array();
+        $groupCases = array();
         foreach($runs as $run)
         {
-            $run->suite = !empty($suitecases[$run->case]) ? $suitecases[$run->case]->suite : '';
+            $run->suite      = !empty($suitecases[$run->case]) ? $suitecases[$run->case]->suite : '';
+            $run->suiteTitle = !empty($suitecases[$run->case]) ? $suitecases[$run->case]->name : '';
             $groupCases[$run->suite][] = $run;
         }
 
@@ -446,7 +452,6 @@ class testtask extends control
         $this->view->productName = $this->products[$productID];
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->runs        = $runs;
-        $this->view->suites      = $this->loadModel('testsuite')->getUnitSuites($productID);
         $this->view->taskID      = $taskID;
 
         $this->display();

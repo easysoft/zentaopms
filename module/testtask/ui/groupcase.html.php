@@ -91,6 +91,7 @@ $config->testcase->group->dtable->fieldList['actions']['list']         = $config
 $config->testcase->group->dtable->fieldList['id']['name']              = 'case';
 $config->testcase->group->dtable->fieldList['actions']['menu']         = array('runCase', 'edit', 'unlinkCase');
 $config->testcase->group->dtable->fieldList['title']['link']['params'] = 'caseID={case}';
+$config->testcase->group->dtable->fieldList['bugs']['link']['params']  = 'runID={id}&caseID={case}';
 
 $runs = initTableData($runs, $config->testcase->group->dtable->fieldList);
 

@@ -142,12 +142,12 @@ $config->testtask->browseUnits->dtable->fieldList['actions']['menu']     = array
 
 $config->testtask->unitgroup = new stdclass();
 $config->testtask->unitgroup->dtable = new stdclass();
-$config->testtask->unitgroup->dtable->fieldList['suite']['title']    = $lang->testcase->suite;
-$config->testtask->unitgroup->dtable->fieldList['suite']['width']    = 'auto';
-$config->testtask->unitgroup->dtable->fieldList['suite']['type']     = 'title';
-$config->testtask->unitgroup->dtable->fieldList['suite']['fixed']    = false;
-$config->testtask->unitgroup->dtable->fieldList['suite']['sortType'] = true;
-$config->testtask->unitgroup->dtable->fieldList['suite']['group']    = 'story';
+$config->testtask->unitgroup->dtable->fieldList['suiteTitle']['title']    = $lang->testcase->suite;
+$config->testtask->unitgroup->dtable->fieldList['suiteTitle']['width']    = 'auto';
+$config->testtask->unitgroup->dtable->fieldList['suiteTitle']['type']     = 'title';
+$config->testtask->unitgroup->dtable->fieldList['suiteTitle']['fixed']    = false;
+$config->testtask->unitgroup->dtable->fieldList['suiteTitle']['sortType'] = true;
+$config->testtask->unitgroup->dtable->fieldList['suiteTitle']['group']    = 'story';
 
 $config->testtask->unitgroup->dtable->fieldList['id'] = $config->testcase->dtable->fieldList['id'];
 $config->testtask->unitgroup->dtable->fieldList['id']['type']  = 'id';
