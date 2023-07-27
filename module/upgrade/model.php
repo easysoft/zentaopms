@@ -131,15 +131,6 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
                 $this->executeMax($maxVersion);
             }
-
-            /* Execute ipd. */
-            foreach($chargedVersions['ipd'] as $ipdVersion)
-            {
-                $ipdVersion = array_search($openVersion, $this->config->upgrade->ipdVersion);
-                $this->saveLogs("Execute $ipdVersion");
-                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $ipdVersion)));
-                $this->executeIpd($ipdVersion);
-            }
         }
 
         /* Means open source/pro upgrade to biz or max. */
@@ -605,6 +596,15 @@ class upgradeModel extends model
             case '17_8':
                 if(!$executedXuanxuan)
                 {
+                    $table  = $this->config->db->prefix . 'user';
+                    $clientStatusExists = $this->checkFieldsExists($table, 'clientStatus');
+                    $clientLangExists   = $this->checkFieldsExists($table, 'clientLang');
+                    $pinyinExists       = $this->checkFieldsExists($table, 'pinyin');
+
+                    if(!$clientStatusExists) $this->dbh->query("ALTER TABLE $table ADD `clientStatus` varchar(10) NOT NULL DEFAULT 'zh-cn' AFTER `deleted`");
+                    if(!$clientLangExists)   $this->dbh->query("ALTER TABLE $table ADD `clientLang` enum('0','1') enum('online','away','busy','offline','meeting') NOT NULL DEFAULT 'offline' AFTER `deleted`");
+                    if(!$pinyinExists)       $this->dbh->query("ALTER TABLE $table ADD `pinyin` varchar(255) NOT NULL DEFAULT '' AFTER `realname`");
+
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.5.sql';
                     $this->execSQL($xuanxuanSql);
                 }
