@@ -74,6 +74,10 @@ $lang->extension->byUpdatedTime = '最近更新';
 $lang->extension->bySearch      = '搜索';
 $lang->extension->byCategory    = '分类浏览';
 
+$lang->extension->featureBar['browse']['installed']   = $lang->extension->installed;
+$lang->extension->featureBar['browse']['deactivated'] = $lang->extension->deactivated;
+$lang->extension->featureBar['browse']['available']   = $lang->extension->available;
+
 $lang->extension->installFailed            = '%s失败，错误原因如下:';
 $lang->extension->uninstallFailed          = '卸载失败，错误原因如下:';
 $lang->extension->confirmUninstall         = '卸载插件会删除或修改相关的数据库，是否继续卸载？';
@@ -92,14 +96,14 @@ $lang->extension->viewInstalled            = '查看已安装插件';
 $lang->extension->viewAvailable            = '查看可安装插件';
 $lang->extension->viewDeactivated          = '查看已禁用插件';
 $lang->extension->backDBFile               = '插件相关数据已经备份到 %s 文件中！';
-$lang->extension->noticeOkFile             = "<h5><strong>为了安全起见，系统需要确认您的管理员身份</strong></h5>
-    <h5><strong>请登录禅道所在的服务器，创建%s文件。</strong></h5>
-    <p>可以执行命令：echo '' > %s</p>
-    <p>注意：</p>
-    <ol>
+$lang->extension->noticeOkFile             = "<p class='font-bold mb-2'>为了安全起见，系统需要确认您的管理员身份</p>
+    <p class='font-bold mb-2'>请登录禅道所在的服务器，创建%s文件。</p>
+    <p class='mb-2'>可以执行命令：echo '' > %s</p>
+    <p class='mb-2'>注意：</p>
+    <ul class='mb-2 pl-4' style='list-style: decimal'>
     <li>文件内容为空。</li>
     <li>如果之前文件存在，删除之后重新创建。</li>
-    </ol>";
+    </ul>";
 
 $lang->extension->upgradeExt     = '升级';
 $lang->extension->installExt     = '安装';
