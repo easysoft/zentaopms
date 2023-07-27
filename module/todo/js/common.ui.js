@@ -67,16 +67,14 @@ function changeAssignedTo()
  * @param  object switcher
  * @return void
  */
-function togglePending(e)
+function togglePending()
 {
-    if($(e.target).prop('checked'))
-    {
-        $("[name='date']").attr('disabled','disabled');
-    }
-    else
-    {
-        $("[name='date']").removeAttr('disabled');
-    }
+    $date   = $("[name='date']").zui('datePicker');
+    options = $date.options;
+    options.disabled = false;
+
+    if($('#switchDate').prop('checked')) options.disabled = true;
+    $date.render(options);
 }
 
 /**
@@ -144,9 +142,22 @@ function loadList(type, id, todoDefaultType, todoID)
  */
 function selectNext()
 {
-    if(!$('#begin ')[0] || !$('#end ')[0]) return;
-    $('#end ')[0].selectedIndex = $('#begin ')[0].selectedIndex + 3;
-    $('#end').trigger('chosen:updated');
+    if($('#begin').length == 0 || $('#end').length == 0) return;
+
+    $begin = $("[name='begin']").zui('picker');
+    $end   = $("[name='end']").zui('picker');
+
+    beginValue = $begin.$.value;
+    endValue   = $end.$.value;
+    $end.options.items.forEach(function(item, index)
+    {
+        if(item.value == beginValue)
+        {
+            endValue = $end.options.items[index + 3].value;
+            return;
+        }
+    })
+    $end.$.setValue(endValue);
 }
 
 /**
@@ -158,14 +169,18 @@ function selectNext()
  */
 function switchDateFeature(e)
 {
+    $begin = $("[name='begin']").zui('picker');
+    $end   = $("[name='end']").zui('picker');
+    $begin.options.disabled = false;
+    $end.options.disabled   = false;
+
     if($(e.target).prop('checked'))
     {
-        $("[name='begin'], [name='end']").attr('disabled','disabled').trigger('chosen:updated');
+        $begin.options.disabled = true;
+        $end.options.disabled   = true;
     }
-    else
-    {
-        $("[name='begin'], [name='end']").removeAttr('disabled').trigger('chosen:updated');
-    }
+    $begin.render($begin.options);
+    $end.render($end.options);
 }
 
 /**
@@ -222,9 +237,9 @@ function setDays(e)
  * @param  object dateInput
  * @return void
  */
-function changeDate(dateInput)
+function changeDate(event)
 {
-    $('#switchDate').prop('checked', !$(dateInput).val());
+    $('#switchDate').prop('checked', !$(event.target).val());
 }
 
 /**

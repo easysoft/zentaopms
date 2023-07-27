@@ -56,7 +56,6 @@ $config->todo->assignTo->form['assignedDate'] = array('required' => false, 'type
 $config->todo->assignTo->form['date']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->todo->assignTo->form['begin']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->todo->assignTo->form['end']          = array('required' => false, 'type' => 'int',    'default' => 0);
-
 $config->todo->assignTo->form['assignedTo']   = array('required' => true,  'type' => 'string');
 
 $config->todo->batchClose = new stdclass();

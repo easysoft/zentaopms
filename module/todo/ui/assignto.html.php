@@ -13,6 +13,8 @@ namespace zin;
 
 set::title($lang->todo->assignedTo);
 
+$todoDate = formatTime($todo->date, DT_DATE1);
+$isFuture = FUTURE_TIME == $todoDate;
 formPanel
 (
     setClass('bg-white', 'p-6'),
@@ -31,13 +33,13 @@ formPanel
         (
             set::label($lang->todo->date),
             set::width('1/2'),
-            input
+            datePicker
             (
                 setClass('date'),
                 set::name('date'),
-                set::type('date'),
-                set::value(date('Y-m-d')),
-                on::change('changeDate(this)')
+                set::disabled($isFuture),
+                set::value($isFuture ? null : $todoDate),
+                on::change('changeDate')
             )
         ),
         formGroup
@@ -47,6 +49,7 @@ formPanel
             (
                 setID('switchDate'),
                 set::name('future'),
+                set::checked($isFuture),
                 set::text($lang->todo->periods['future']),
                 on::change('togglePending')
             )
@@ -60,21 +63,22 @@ formPanel
             set::label($lang->todo->beginAndEnd),
             inputGroup
             (
-                select
+                picker
                 (
                     setID('begin'),
                     set::name('begin'),
                     set::items($times),
-                    set::value(date('Y-m-d') != $todo->date ? key($times) : $time),
+                    set::value(date('Y-m-d') != $todoDate ? key($times) : $todo->begin),
                     set::required(true),
                     on::change('selectNext')
                 ),
                 span($lang->todo->timespanTo, setClass('input-group-addon')),
-                select
+                picker
                 (
                     setID('end'),
                     set::name('end'),
                     set::items($times),
+                    set::value($todo->end),
                     set::required(true)
                 )
             )
@@ -85,7 +89,7 @@ formPanel
             checkbox
             (
                 set::name('lblDisableDate'),
-                set::text($lang->todo->periods['future']),
+                set::text($lang->todo->lblDisableDate),
                 on::change('switchDateFeature')
             )
         )
