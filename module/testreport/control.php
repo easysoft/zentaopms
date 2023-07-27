@@ -194,7 +194,7 @@ class testreport extends control
                 if($testTask->build == 'trunk') continue;
                 $taskPairs[$testTask->id] = $testTask->name;
             }
-            if(empty($taskPairs)) return print(js::alert($this->lang->testreport->noTestTask) . js::locate('back'));
+            if(empty($taskPairs)) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->noTestTask, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
 
             if(empty($objectID))
             {
@@ -208,29 +208,22 @@ class testreport extends control
             if($this->app->tab == 'project') $this->project->setMenu($task->project);
         }
 
-        if(empty($objectID)) return print(js::alert($this->lang->testreport->noObjectID) . js::locate('back'));
+        if(empty($objectID)) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->noObjectID, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
         if($objectType == 'testtask')
         {
-            if($productID != $task->product) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($productID != $task->product) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
+            if($task->build == 'trunk')      return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->errorTrunk, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
             $productIdList[$productID] = $productID;
 
             $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
             $end       = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
             $execution = $this->execution->getById($task->execution);
             $builds    = array();
-            if($task->build == 'trunk')
-            {
-                echo js::alert($this->lang->testreport->errorTrunk);
-                return print(js::locate('back'));
-            }
-            else
-            {
-                $build   = $this->build->getById($task->build);
-                $stories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
+            $build   = $this->build->getById($task->build);
+            $stories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
 
-                if(!empty($build->id)) $builds[$build->id] = $build;
-                $bugs = $this->testreport->getBugs4Test($builds, $productID, $begin, $end);
-            }
+            if(!empty($build->id)) $builds[$build->id] = $build;
+            $bugs = $this->testreport->getBugs4Test($builds, $productID, $begin, $end);
 
             $tasks = array($task->id => $task);
             $owner = $task->owner;
@@ -243,7 +236,7 @@ class testreport extends control
         elseif($objectType == 'execution' or $objectType == 'project')
         {
             $executionID = $this->commonAction($objectID, $objectType);
-            if($executionID != $objectID) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($executionID != $objectID) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
 
             $execution     = $this->execution->getById($executionID);
             $tasks         = $this->testtask->getExecutionTasks($executionID, $objectType);
@@ -264,11 +257,7 @@ class testreport extends control
                 $this->setChartDatas($task->id);
                 if($task->build != 'trunk') $buildIdList[$task->build] = $task->build;
             }
-            if(count($productIdList) > 1)
-            {
-                echo(js::alert($this->lang->testreport->moreProduct));
-                return print(js::locate('back'));
-            }
+            if(count($productIdList) > 1) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->moreProduct, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
 
             if($this->app->tab == 'qa')
             {
