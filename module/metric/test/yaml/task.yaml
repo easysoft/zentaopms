@@ -15,7 +15,11 @@ fields:
   range: "20100101 000000-20210101 230000:10D"
   type: timestamp
   format: YYYY-MM-DD hh:mm:ss
+- field: estimate
+  range: 1{10},2{9},4{8},5{7},6{5},8{4},10{1},
 - field: consumed
+  range: 1{10},2{9},4{8},5{7},6{5},8{4},10{1},
+- field: left
   range: 1{10},2{9},4{8},5{7},6{5},8{4},10{1},
 - field: status
   range: wait{1},doing{1},done{1},pause{1},cancel{1},closed{1}
