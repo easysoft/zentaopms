@@ -22,18 +22,6 @@ class extension extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-
-        $statusFile = $this->loadModel('common')->checkSafeFile();
-        if($statusFile)
-        {
-            $this->loadModel('admin')->setMenu();
-            $this->view->title      = $this->lang->extension->browse;
-
-            $statusFile = str_replace('\\', '/', $statusFile);
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
-            $this->display('extension', 'safe');
-            helper::end();
-        }
     }
 
     /**
@@ -45,6 +33,13 @@ class extension extends control
      */
     public function browse($status = 'installed')
     {
+        $statusFile = $this->loadModel('common')->checkSafeFile();
+        if($statusFile)
+        {
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
+            return $this->display();
+        }
+
         $extensions = $this->extension->getLocalExtensions($status);
         $versions   = array();
         if($extensions and $status == 'installed')
