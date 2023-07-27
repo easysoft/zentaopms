@@ -32,7 +32,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/3'),
             set::class($hiddenProduct ? 'hidden' : ''),
             set::label($lang->testcase->product),
             inputGroup
@@ -56,7 +56,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/3'),
             set::label($lang->testcase->module),
             inputGroup
             (
@@ -94,7 +94,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/3'),
             set::label($lang->testcase->scene),
             inputGroup
             (
@@ -114,26 +114,23 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/3'),
             set::label($lang->testcase->type),
-            inputGroup
+            picker
             (
-                picker
-                (
-                    set::id('type'),
-                    set::name('type'),
-                    set::items($lang->testcase->typeList),
-                    set::value($type)
-                ),
-                span
-                (
-                    set('class', 'input-group-addon'),
-                    checkbox
-                    (
-                        set::name('auto'),
-                        set::text($lang->testcase->automated),
-                    )
-                )
+                set::id('type'),
+                set::name('type'),
+                set::items($lang->testcase->typeList),
+                set::value($type)
+            ),
+        ),
+        formGroup
+        (
+            setClass('ml-2 items-center'),
+            checkbox
+            (
+                set::name('auto'),
+                set::text($lang->testcase->automated),
             )
         )
     ),
@@ -141,7 +138,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/3'),
             set::label($lang->testcase->stage),
             inputGroup
             (
@@ -217,17 +214,27 @@ formPanel
         (
             set::width('150px'),
             set::label($lang->testcase->pri),
-            priPicker(set::name('pri'), set::items($lang->testcase->priList), set::value($pri)),
+            priPicker
+            (
+                width('80px'),
+                set::name('pri'),
+                set::items($lang->testcase->priList),
+                set::value($pri)
+            ),
         ),
         formGroup
         (
             set::width('180px'),
             set::label($lang->testcase->isReviewed),
-            set::items($lang->testcase->reviewList),
-            set::id('forceNotReview'),
-            set::name('forceNotReview'),
-            set::value('1'),
-            set::required(true),
+            picker
+            (
+                width('80px'),
+                set::items($lang->testcase->reviewList),
+                set::id('forceNotReview'),
+                set::name('forceNotReview'),
+                set::value('1'),
+                set::required(true),
+            ),
         )
     ),
     formRow
