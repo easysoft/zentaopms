@@ -50,11 +50,11 @@ class count_of_annual_finished_productplan_in_product extends baseCalc
                 $records[] = (object)array(
                     'year'    => $year,
                     'product' => $product,
-                    'count'   => $count,
+                    'value'   => $count,
                 );
             }
         }
 
-        return $records;
+        return $this->filterByOptions($records, $options);
     }
 }
