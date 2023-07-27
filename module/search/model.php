@@ -1287,12 +1287,12 @@ class searchModel extends model
     /**
      * Build all search index.
      *
-     * @param  string    $type
-     * @param  int       $lastID
+     * @param  string $type
+     * @param  int    $lastID
      * @access public
-     * @return bool
+     * @return array
      */
-    public function buildAllIndex($type = '', $lastID = 0)
+    public function buildAllIndex(string $type = '', int $lastID = 0): array
     {
         $limit      = 100;
         $nextObject = false;
@@ -1305,12 +1305,12 @@ class searchModel extends model
                 $this->dbh->exec('ALTER TABLE ' . TABLE_SEARCHINDEX . ' auto_increment=1');
             }
             catch(Exception $e){}
-            $type = key($this->config->search->fields);
+            $type = key((array)$this->config->search->fields);
         }
 
         foreach($this->config->search->fields as $module => $field)
         {
-            if($module != $type and !$nextObject) continue;
+            if($module != $type && !$nextObject) continue;
             if($module == $type) $nextObject = true;
             if(!isset($this->config->objectTables[$module])) continue;
 

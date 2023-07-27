@@ -182,29 +182,24 @@ class search extends control
     /**
      * Build All index.
      *
+     * @param  string  $mode    show|build
      * @param  string  $type
      * @param  int     $lastID
      * @access public
      * @return void
      */
-    public function buildIndex($type = '', $lastID = 0)
+    public function buildIndex(string $mode = 'show', string $type = '', int $lastID = 0)
     {
-        if(helper::isAjaxRequest())
+        if($mode == 'build')
         {
             $result = $this->search->buildAllIndex($type, $lastID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if(isset($result['finished']) and $result['finished'])
-            {
-                return $this->send(array('result' => 'finished', 'message' => $this->lang->search->buildSuccessfully));
-            }
-            else
-            {
-                $type = zget($this->lang->search->modules, ($result['type'] == 'testcase' ? 'case' : $result['type']), $result['type']);
-                return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, $type, $type, $result['count']), 'type' => $type, 'count' => $result['count'], 'next' => inlink('buildIndex', "type={$result['type']}&lastID={$result['lastID']}") ));
-            }
-        }
 
-        $this->lang->navGroup->search  = 'admin';
+            if(!empty($result['finished'])) return $this->send(array('result' => 'finished', 'message' => $this->lang->search->buildSuccessfully));
+
+            $type = zget($this->lang->search->modules, ($result['type'] == 'testcase' ? 'case' : $result['type']), $result['type']);
+            return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, $type, $type, $result['count']), 'type' => $type, 'count' => $result['count'], 'next' => inlink('buildIndex', "mode=build&type={$result['type']}&lastID={$result['lastID']}")));
+        }
 
         $this->view->title = $this->lang->search->buildIndex;
         $this->display();
