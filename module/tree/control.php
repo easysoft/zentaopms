@@ -310,7 +310,7 @@ class tree extends control
             $title    = $this->lang->tree->manageHostChild;
             $position = array();
 
-            $this->lang->tree->common = $this->lang->tree->manageHostGroup;
+            $this->lang->tree->common = $this->lang->tree->groupMaintenance;
         }
 
         if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
