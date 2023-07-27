@@ -256,14 +256,14 @@ class cron extends control
                         }
                         elseif(isset($crons[$id]) and $crons[$id]->type == 'system')
                         {
-                            exec($cron['command'], $output, $return);
-                            if($output) $output = implode("\n", $output);
+                            exec($cron['command'], $out, $return);
+                            if($out) $output = implode(PHP_EOL, $out);
                         }
 
                         /* Save log. */
                         $log    = '';
                         $time   = $now->format('G:i:s');
-                        $output = "\n" . $output;
+                        $output = PHP_EOL . $output;
                         $log = "$time task " . $id . " executed,\ncommand: {$cron['command']}.\nreturn : $return.\noutput : $output\n";
                         $this->cron->logCron($log);
                         unset($log);
