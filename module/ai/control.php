@@ -61,7 +61,7 @@ class ai extends control
             {
                 $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
             }
-            if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode('<br>', $errors)));
+            if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode(' ', $errors)));
 
             $this->loadModel('setting')->setItems('system.ai', $modelConfig);
 
@@ -102,7 +102,7 @@ class ai extends control
         {
             $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
         }
-        if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode('<br>', $errors)));
+        if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode(' ', $errors)));
 
         $this->ai->setConfig($modelConfig);
 

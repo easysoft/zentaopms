@@ -98,7 +98,7 @@ $(function() {
                 }
                 else
                 {
-                    $.zui.messager.danger(data.message.replace('<br>', ' '));
+                    $.zui.messager.danger(data.message);
                 }
             },
             complete: function() {$.enableForm('#mainForm');}
