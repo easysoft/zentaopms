@@ -9,10 +9,12 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+$docContent = null;
 if(empty($docs))
 {
     if($browseType != 'bySearch' && $libID && (common::hasPriv('doc', 'create') || (common::hasPriv('api', 'create') && !$apiLibID))) include 'createbutton.html.php';
-    div
+    $docContent = div
     (
         setClass('table-empty-tip flex justify-center items-center'),
         span
@@ -42,7 +44,7 @@ else
 
     $params    = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
     $tableData = initTableData($docs, $cols);
-    dtable
+    $docContent = dtable
     (
         set::userMap($users),
         set::cols($cols),

@@ -30,20 +30,20 @@ foreach($lang->doc->createList as $typeKey => $typeName)
 }
 
 $createButton = btngroup
+(
+    btn
     (
-        btn
-        (
-            setClass('btn primary'),
-            set::icon('plus'),
-            set::url(createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html{$templateParam}")),
-            set('data-app', $app->tab),
-            $lang->doc->create
-        ),
-        dropdown
-        (
-            btn(setClass('btn primary dropdown-toggle'),
-            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-            set::placement('bottom-end'),
-            set::items($buttonItems),
-        )
-    );
+        setClass('btn primary ml-2'),
+        set::icon('plus'),
+        set::url(createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html{$templateParam}")),
+        set('data-app', $app->tab),
+        $lang->doc->create
+    ),
+    dropdown
+    (
+        btn(setClass('btn primary dropdown-toggle'),
+        setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+        set::placement('bottom-end'),
+        set::items($buttonItems),
+    )
+);

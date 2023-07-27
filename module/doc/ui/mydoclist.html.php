@@ -9,10 +9,12 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+$docContent = null;
 if(empty($docs))
 {
     if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
-    div
+    $docContent = div
     (
         setClass('table-empty-tip flex justify-center items-center'),
         span
@@ -51,7 +53,7 @@ else
 
     $params = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
     if($app->rawMethod == 'myspace') $params = "type={$type}&" . $params;
-    dtable
+    $docContent = dtable
     (
         set::userMap($users),
         set::cols($cols),

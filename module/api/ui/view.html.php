@@ -10,61 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-featureBar
-(
-    li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),
-);
-
-toolbar
-(
-    $libID && common::hasPriv('api', 'struct') ? item(set(array
-    (
-        'icon'  => 'treemap',
-        'class' => 'ghost',
-        'text'  => $lang->api->struct,
-        'url'   => createLink('api', 'struct', "libID={$libID}"),
-    ))) : null,
-    $libID && common::hasPriv('api', 'releases') ? item(set(array
-    (
-        'icon'        => 'version',
-        'class'       => 'ghost',
-        'text'        => $lang->api->releases,
-        'url'         => createLink('api', 'releases', "libID={$libID}"),
-        'data-toggle' => 'modal'
-    ))) : null,
-    $libID && common::hasPriv('api', 'createRelease') ? item(set(array
-    (
-        'icon'        => 'publish',
-        'class'       => 'ghost',
-        'text'        => $lang->api->createRelease,
-        'url'         => createLink('api', 'createRelease', "libID={$libID}"),
-        'data-toggle' => 'modal'
-    ))) : null,
-    $libID && common::hasPriv('api', 'export') && $config->edition != 'open' ? item(set(array
-    (
-        'icon'        => 'export',
-        'class'       => 'ghost export',
-        'text'        => $lang->export,
-        'url'         => createLink('api', 'export', "libID={$libID}&version={$version}&release={$release}&moduleID={$moduleID}"),
-        'data-toggle' => 'modal'
-    ))) : null,
-    common::hasPriv('api', 'createLib') ? item(set(array
-    (
-        'icon'        => 'plus',
-        'class'       => 'btn secondary',
-        'text'        => $lang->api->createLib,
-        'url'         => createLink('api', 'createLib', "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"),
-        'data-toggle' => 'modal'
-    ))) : null,
-    $libID && common::hasPriv('api', 'create') ? item(set(array
-    (
-        'icon'        => 'plus',
-        'class'       => 'btn primary',
-        'text'        => $lang->api->createApi,
-        'url'         => createLink('api', 'create', "libID={$libID}&moduleID={$moduleID}"),
-    ))) : null,
-);
-
 include '../../doc/ui/left.html.php';
 
 $versionList = array();
@@ -197,85 +142,148 @@ if($api->response)
     );
 }
 
-panel
+div
 (
-    div
+    setClass('flex flex-wrap'),
+    featureBar
     (
-        setClass('panel-heading'),
-        div
+        li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),
+    ),
+    toolbar
+    (
+        $libID && common::hasPriv('api', 'struct') ? item(set(array
         (
-            setClass('http-method label'),
-            $api->method
-        ),
-        div
+            'icon'  => 'treemap',
+            'class' => 'ghost',
+            'text'  => $lang->api->struct,
+            'url'   => createLink('api', 'struct', "libID={$libID}"),
+        ))) : null,
+        $libID && common::hasPriv('api', 'releases') ? item(set(array
         (
-            setClass('path'),
-            $api->path
-        ),
-        dropdown
+            'icon'        => 'version',
+            'class'       => 'ghost',
+            'text'        => $lang->api->releases,
+            'url'         => createLink('api', 'releases', "libID={$libID}"),
+            'data-toggle' => 'modal'
+        ))) : null,
+        $libID && common::hasPriv('api', 'createRelease') ? item(set(array
         (
-            btn
-            (
-                setClass('ghost btn square btn-default'),
-                'V' . ($version ? $version : $api->version)
-            ),
-            set::items($versionList)
-        ),
-        div
+            'icon'        => 'publish',
+            'class'       => 'ghost',
+            'text'        => $lang->api->createRelease,
+            'url'         => createLink('api', 'createRelease', "libID={$libID}"),
+            'data-toggle' => 'modal'
+        ))) : null,
+        $libID && common::hasPriv('api', 'export') && $config->edition != 'open' ? item(set(array
         (
-            setClass('panel-actions'),
-            div
-            (
-                setClass('toolbar'),
-                btn
-                (
-                    set::url('javascript:fullScreen()'),
-                    setClass('btn ghost'),
-                    icon('fullscreen'),
-                ),
-                (!$isRelease && common::hasPriv('api', 'edit')) ? btn
-                (
-                    set::url(createLink('api', 'edit', "apiID=$api->id")),
-                    setClass('btn ghost'),
-                    icon('edit'),
-                ) : null,
-                (!$isRelease && common::hasPriv('api', 'delete')) ? btn
-                (
-                    set::url(createLink('api', 'delete', "apiID=$api->id")),
-                    setClass('btn ghost ajax-submit'),
-                    set('data-confirm', $lang->api->confirmDelete),
-                    icon('trash'),
-                ) : null,
-                btn
-                (
-                    set::id('hisTrigger'),
-                    set::url('###)'),
-                    setClass('btn ghost'),
-                    icon('clock'),
-                ),
-            )
-        )
+            'icon'        => 'export',
+            'class'       => 'ghost export',
+            'text'        => $lang->export,
+            'url'         => createLink('api', 'export', "libID={$libID}&version={$version}&release={$release}&moduleID={$moduleID}"),
+            'data-toggle' => 'modal'
+        ))) : null,
+        common::hasPriv('api', 'createLib') ? item(set(array
+        (
+            'icon'        => 'plus',
+            'class'       => 'btn secondary',
+            'text'        => $lang->api->createLib,
+            'url'         => createLink('api', 'createLib', "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"),
+            'data-toggle' => 'modal'
+        ))) : null,
+        $libID && common::hasPriv('api', 'create') ? item(set(array
+        (
+            'icon'        => 'plus',
+            'class'       => 'btn primary ml-2',
+            'text'        => $lang->api->createApi,
+            'url'         => createLink('api', 'create', "libID={$libID}&moduleID={$moduleID}"),
+            'data-size'   => 'lg',
+            'data-toggle' => $spaceType != 'api' ? 'modal' : ''
+        ))) : null,
     ),
     div
     (
-        set::Class('panel-body'),
-        set::id('content'),
-        h2($api->title),
-        div(setClass('desc'), $api->desc),
-        $apiHeader,
-        $apiQuery,
-        $apiParams,
-        $api->paramsExample ? h3($lang->api->paramsExample) : null,
-        $api->paramsExample ? html("<pre><code>" . $api->paramsExample . "</code></pre>") : null,
-        $apiResponse,
-        $api->responseExample ? h3($lang->api->responseExample) : null,
-        $api->responseExample ? html("<pre><code>" . $api->responseExample . "</code></pre>") : null,
+        setClass('doc-content mt-2 flex-initial w-full flex'),
+        panel
+        (
+            setClass('flex-auto'),
+            div
+            (
+                setClass('panel-heading'),
+                div
+                (
+                    setClass('http-method label'),
+                    $api->method
+                ),
+                div
+                (
+                    setClass('path'),
+                    $api->path
+                ),
+                dropdown
+                (
+                    btn
+                    (
+                        setClass('ghost btn square btn-default'),
+                        'V' . ($version ? $version : $api->version)
+                    ),
+                    set::items($versionList)
+                ),
+                div
+                (
+                    setClass('panel-actions'),
+                    div
+                    (
+                        setClass('toolbar'),
+                        btn
+                        (
+                            set::url('javascript:fullScreen()'),
+                            setClass('btn ghost'),
+                            icon('fullscreen'),
+                        ),
+                        (!$isRelease && common::hasPriv('api', 'edit')) ? btn
+                        (
+                            set::url(createLink('api', 'edit', "apiID=$api->id")),
+                            setClass('btn ghost'),
+                            icon('edit'),
+                        ) : null,
+                        (!$isRelease && common::hasPriv('api', 'delete')) ? btn
+                        (
+                            set::url(createLink('api', 'delete', "apiID=$api->id")),
+                            setClass('btn ghost ajax-submit'),
+                            set('data-confirm', $lang->api->confirmDelete),
+                            icon('trash'),
+                        ) : null,
+                        btn
+                        (
+                            set::id('hisTrigger'),
+                            set::url('###)'),
+                            setClass('btn ghost'),
+                            icon('clock'),
+                        ),
+                    )
+                )
+            ),
+            div
+            (
+                set::Class('panel-body'),
+                set::id('content'),
+                h2($api->title),
+                div(setClass('desc'), $api->desc),
+                $apiHeader,
+                $apiQuery,
+                $apiParams,
+                $api->paramsExample ? h3($lang->api->paramsExample) : null,
+                $api->paramsExample ? html("<pre><code>" . $api->paramsExample . "</code></pre>") : null,
+                $apiResponse,
+                $api->responseExample ? h3($lang->api->responseExample) : null,
+                $api->responseExample ? html("<pre><code>" . $api->responseExample . "</code></pre>") : null,
+            )
+        ),
+        panel
+        (
+            set::id('history'),
+            setClass('hidden'),
+            history()
+        )
     )
-);
-
-panel
-(
-    set::id('history'),
-    setClass('hidden'),
-    history()
 );

@@ -9,7 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+include 'left.html.php';
 if($libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
+include 'mydoclist.html.php';
 
 jsVar('browseType', $browseType);
 jsVar('docLang', $lang->doc);
@@ -17,37 +19,39 @@ jsVar('confirmDelete', $lang->doc->confirmDelete);
 jsVar('appTab', $app->tab);
 jsVar('treeData', $libTree);
 
-/* zin: Define the set::module('doc') feature bar on main menu. */
-featureBar
+div
 (
-    set::current($browseType),
-    set::linkParams("type={$type}&libID={$libID}&moduleID={$moduleID}&browseType={key}"),
-    li(searchToggle(set::module($type . $libType . 'Doc')))
-);
-
-toolbar
-(
-    $canExport ? item(set(array
+    setClass('flex flex-wrap'),
+    /* zin: Define the set::module('doc') feature bar on main menu. */
+    featureBar
     (
-        'icon'        => 'export',
-        'class'       => 'ghost export',
-        'text'        => $lang->export,
-        'url'         => createLink('doc', 'mine2export', "libID={$libID}&moduleID={$moduleID}"),
-        'data-toggle' => 'modal'
-    ))) : null,
-    common::hasPriv('doc', 'createLib') ? item(set(array
+        set::current($browseType),
+        set::linkParams("type={$type}&libID={$libID}&moduleID={$moduleID}&browseType={key}"),
+        li(searchToggle(set::module($type . $libType . 'Doc')))
+    ),
+    toolbar
     (
-        'icon'        => 'plus',
-        'class'       => 'btn secondary',
-        'text'        => $lang->doc->createLib,
-        'url'         => createLink('doc', 'createLib', 'type=mine'),
-        'data-toggle' => 'modal'
-    ))) : null,
-    $libID && common::hasPriv('doc', 'create') ? $createButton : null
+        $canExport ? item(set(array
+        (
+            'icon'        => 'export',
+            'class'       => 'ghost export',
+            'text'        => $lang->export,
+            'url'         => createLink('doc', 'mine2export', "libID={$libID}&moduleID={$moduleID}"),
+            'data-toggle' => 'modal'
+        ))) : null,
+        common::hasPriv('doc', 'createLib') ? item(set(array
+        (
+            'icon'        => 'plus',
+            'class'       => 'btn secondary',
+            'text'        => $lang->doc->createLib,
+            'url'         => createLink('doc', 'createLib', 'type=mine'),
+            'data-toggle' => 'modal'
+        ))) : null,
+        $libID && common::hasPriv('doc', 'create') ? $createButton : null
+    ),
+    div
+    (
+        setClass('doc-content mt-2 flex-initial w-full'),
+        $docContent
+    )
 );
-
-include 'left.html.php';
-include 'mydoclist.html.php';
-
-/* ====== Render page ====== */
-render();
