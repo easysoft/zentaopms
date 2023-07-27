@@ -751,7 +751,7 @@ class aiModel extends model
                 break;
             case 'execution':
                 if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
-                if(isset($sourceGroups['tasks']))     $object->tasks     = $this->loadModel('task')->getExecutionTasks($objectId);
+                if(isset($sourceGroups['tasks']))     $object->tasks     = array_values($this->loadModel('task')->getExecutionTasks($objectId));
                 break;
             case 'product':
                 if(isset($sourceGroups['product'])) $object->product = $this->loadModel('product')->getById($objectId);
@@ -761,13 +761,13 @@ class aiModel extends model
                 break;
             case 'release':
                 if(isset($sourceGroups['release'])) $object->release = $this->loadModel('release')->getById($objectId);
-                if(isset($sourceGroups['stories'])) $object->stories = $this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories)));
-                if(isset($sourceGroups['bugs']))    $object->bugs    = $this->loadModel('bug')->getByList(array_filter(explode(',', $object->release->bugs)));
+                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
+                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByList(array_filter(explode(',', $object->release->bugs))));
                 break;
             case 'productplan':
                 if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
-                if(isset($sourceGroups['stories']))     $object->stories     = $this->loadModel('story')->getPlanStories($objectId);
-                if(isset($sourceGroups['bugs']))        $object->bugs        = $this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll();
+                if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
+                if(isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll());
                 break;
             case 'task':
                 if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
