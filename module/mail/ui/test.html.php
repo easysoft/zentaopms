@@ -46,4 +46,5 @@ formPanel
             'class' => 'btn-wide',
         )
     )),
+    div(setID('resultWin')),
 );
