@@ -214,7 +214,7 @@ formPanel
         ),
         formGroup
         (
-            setClass('pl-4 grow-0'),
+            setClass('grow-0'),
             set::label($lang->testcase->pri),
             priPicker
             (
@@ -226,7 +226,7 @@ formPanel
         ),
         formGroup
         (
-            setClass('pl-4 grow-0'),
+            setClass('grow-0'),
             set::label($lang->testcase->isReviewed),
             picker
             (
