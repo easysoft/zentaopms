@@ -1689,3 +1689,11 @@ function tableChart(): tableChart
 {
     return createWg('tableChart', func_get_args());
 }
+
+/**
+ * Password widget.
+ */
+function password(): password
+{
+    return createWg('password', func_get_args());
+}
