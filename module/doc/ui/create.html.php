@@ -46,202 +46,199 @@ else
     if($linkType == 'project')
     {
         $projectRow = formRow
+        (
+            formGroup
             (
-                formGroup
+                setClass('w-1/2'),
+                set::label($lang->doc->project),
+                picker
                 (
-                    setClass('w-1/2'),
-                    set::label($lang->doc->project),
-                    picker
-                    (
-                        set::name('project'),
-                        set::id('project'),
-                        set::items($objects),
-                        isset($execution) ? set::value($execution->project) : set::value($objectID),
-                        on::change('loadExecutions')
-                    )
+                    set::name('project'),
+                    set::id('project'),
+                    set::items($objects),
+                    isset($execution) ? set::value($execution->project) : set::value($objectID),
+                    on::change('loadExecutions')
+                )
+            ),
+            ($this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
+            (
+                setClass('w-1/2'),
+                set::label($lang->doc->execution),
+                picker
+                (
+                    set::name('execution'),
+                    set::id('execution'),
+                    set::items($executions),
+                    set::value(isset($execution) ? $objectID : ''),
+                )
+            ) : null,
+        );
+    }
+
+    form
+    (
+        set::actions(''),
+        div
+        (
+            setClass('flex titleBox'),
+            backBtn(setClass('btn secondary'), set::icon('back'), $lang->goback),
+            formGroup
+            (
+                set::id('titleBox'),
+                input
+                (
+                    set::name('title'),
+                    set::placeholder($lang->doc->titlePlaceholder),
                 ),
-                ($this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
+            ),
+            btn
+            (
+                set
                 (
-                    setClass('w-1/2'),
+                    array
+                    (
+                        'class' => 'btn secondary',
+                        'text'  => $lang->doc->saveDraft,
+                        'id'    => 'saveDraft',
+                        'btnType' => 'submit',
+                    )
+                )
+            ),
+            btn
+            (
+                set
+                (
+                    array
+                    (
+                        'class'       => 'btn primary',
+                        'text'        => $lang->doc->release,
+                        'data-toggle' => 'modal',
+                        'id'          => 'basicInfoLink',
+                        'url'         => '#modalBasicInfo'
+                    )
+                )
+            )
+        ),
+        editor
+        (
+            set::name('content'),
+            set::size('full'),
+        ),
+        formHidden('status', 'normal'),
+        formHidden('contentType', 'html'),
+        formHidden('type', 'text'),
+        modalTrigger
+        (
+            modal
+            (
+                set::id('modalBasicInfo'),
+                on::change('#product',   "loadObjectModules"),
+                on::change('#project',   "loadObjectModules"),
+                on::change('#execution', "loadObjectModules"),
+                $projectRow,
+                ($linkType == 'execution') ? formGroup
+                (
+                    set::width('1/2'),
                     set::label($lang->doc->execution),
                     picker
                     (
                         set::name('execution'),
                         set::id('execution'),
-                        set::items($executions),
-                        set::value(isset($execution) ? $objectID : ''),
+                        set::items($objects),
+                        set::value($objectID)
                     )
                 ) : null,
-            );
-    }
-
-    div
-    (
-        set::id('main'),
-        form
-        (
-            set::actions(''),
-            div
-            (
-                setClass('flex titleBox'),
-                backBtn(setClass('btn secondary'), set::icon('back'), $lang->goback),
+                ($linkType == 'product') ? formGroup
+                (
+                    set::width('1/2'),
+                    set::label($lang->doc->product),
+                    picker
+                    (
+                        set::name('product'),
+                        set::id('product'),
+                        set::items($objects),
+                        set::value($objectID)
+                    )
+                ) : null,
                 formGroup
                 (
-                    set::id('titleBox'),
+                    set::width('1/2'),
+                    set::label($lang->doc->lib),
+                    picker
+                    (
+                        set::name('module'),
+                        set::items($moduleOptionMenu),
+                        set::value($moduleID)
+                    )
+                ),
+                formGroup
+                (
+                    set::label($lang->doc->keywords),
                     input
                     (
-                        set::name('title'),
-                        set::placeholder($lang->doc->titlePlaceholder),
-                    ),
-                ),
-                btn
-                (
-                    set
-                    (
-                        array
-                        (
-                            'class' => 'btn secondary',
-                            'text'  => $lang->doc->saveDraft,
-                            'id'    => 'saveDraft',
-                            'btnType' => 'submit',
-                        )
+                        set::name('keywords'),
                     )
                 ),
-                btn
+                formGroup
                 (
-                    set
+                    set::label($lang->doc->files),
+                    upload()
+                ),
+                formGroup
+                (
+                    set::label($lang->doc->mailto),
+                    picker
                     (
-                        array
-                        (
-                            'class'       => 'btn primary',
-                            'text'        => $lang->doc->release,
-                            'data-toggle' => 'modal',
-                            'id'          => 'basicInfoLink',
-                            'url'         => '#modalBasicInfo'
-                        )
+                        set::multiple(true),
+                        set::name('mailto[]'),
+                        set::items($users),
                     )
-                )
-            ),
-            editor
-            (
-                set::name('content'),
-            ),
-            formHidden('status', 'normal'),
-            formHidden('contentType', 'html'),
-            formHidden('type', 'text'),
-            modalTrigger
-            (
-                modal
+                ),
+                formGroup
                 (
-                    set::id('modalBasicInfo'),
-                    on::change('#product',   "loadObjectModules"),
-                    on::change('#project',   "loadObjectModules"),
-                    on::change('#execution', "loadObjectModules"),
-                    $projectRow,
-                    ($linkType == 'execution') ? formGroup
+                    set::label($lang->doclib->control),
+                    radioList
                     (
-                        set::width('1/2'),
-                        set::label($lang->doc->execution),
-                        picker
-                        (
-                            set::name('execution'),
-                            set::id('execution'),
-                            set::items($objects),
-                            set::value($objectID)
-                        )
-                    ) : null,
-                    ($linkType == 'product') ? formGroup
+                        set::name('acl'),
+                        set::items($lang->doc->aclList),
+                        set::value($objectType == 'mine' ? 'private' : 'open'),
+                        on::change('toggleWhiteList')
+                    )
+                ),
+                formGroup
+                (
+                    setClass('hidden'),
+                    set::label($lang->doc->whiteList),
+                    set::id('whitelistBox'),
+                    picker
                     (
-                        set::width('1/2'),
-                        set::label($lang->doc->product),
-                        picker
-                        (
-                            set::name('product'),
-                            set::id('product'),
-                            set::items($objects),
-                            set::value($objectID)
-                        )
-                    ) : null,
-                    formGroup
-                    (
-                        set::width('1/2'),
-                        set::label($lang->doc->lib),
-                        picker
-                        (
-                            set::name('module'),
-                            set::items($moduleOptionMenu),
-                            set::value($moduleID)
-                        )
+                        set::name('groups[]'),
+                        set::items($groups),
+                        set::multiple(true),
                     ),
-                    formGroup
+                    picker
                     (
-                        set::label($lang->doc->keywords),
-                        input
-                        (
-                            set::name('keywords'),
-                        )
-                    ),
-                    formGroup
+                        set::name('users[]'),
+                        set::items($users),
+                        set::multiple(true),
+                    )
+                ),
+                formRow
+                (
+                    div
                     (
-                        set::label($lang->doc->files),
-                        upload()
-                    ),
-                    formGroup
-                    (
-                        set::label($lang->doc->mailto),
-                        picker
+                        setClass('form-actions form-group no-label'),
+                        btn
                         (
-                            set::multiple(true),
-                            set::name('mailto[]'),
-                            set::items($users),
-                        )
-                    ),
-                    formGroup
-                    (
-                        set::label($lang->doclib->control),
-                        radioList
-                        (
-                            set::name('acl'),
-                            set::items($lang->doc->aclList),
-                            set::value($objectType == 'mine' ? 'private' : 'open'),
-                            on::change('toggleWhiteList')
-                        )
-                    ),
-                    formGroup
-                    (
-                        setClass('hidden'),
-                        set::label($lang->doc->whiteList),
-                        set::id('whitelistBox'),
-                        picker
-                        (
-                            set::name('groups[]'),
-                            set::items($groups),
-                            set::multiple(true),
-                        ),
-                        picker
-                        (
-                            set::name('users[]'),
-                            set::items($users),
-                            set::multiple(true),
-                        )
-                    ),
-                    formRow
-                    (
-                        div
-                        (
-                            setClass('form-actions form-group no-label'),
-                            btn
+                            set
                             (
-                                set
+                                array
                                 (
-                                    array
-                                    (
-                                        'class'   => 'btn primary',
-                                        'btnType' => 'submit',
-                                    )
-                                ),
-                                $lang->doc->release
-                            )
+                                    'class'   => 'btn primary',
+                                    'btnType' => 'submit',
+                                )
+                            ),
+                            $lang->doc->release
                         )
                     )
                 )

@@ -12,5 +12,8 @@
 
 .m-doc-create #header,
 .m-doc-create #mainNavbar {display: none!important;}
+.m-doc-create #mainContent {padding-top: 0;}
 .m-doc-create #main {min-height: 0;}
 .m-doc-create #main > .container {max-width: initial!important; padding: 0!important}
+
+.m-doc-create .form {height: 800px}
