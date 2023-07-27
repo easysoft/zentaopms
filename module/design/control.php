@@ -49,6 +49,8 @@ class design extends control
         $this->lang->modulePageNav = $this->design->setMenu($projectID, $products, $productID);
         $this->project->setMenu($projectID);
         $this->view->products = $products;
+        $this->view->switcherParams = "projectID={$projectID}&productID={$productID}";
+        $this->view->switcherText   = zget($products, $productID);
 
         return $productID;
     }
@@ -426,7 +428,7 @@ class design extends control
     {
         $products = $this->loadModel('product')->getProducts($projectID);
 
-        $this->view->link      = helper::createLink('design', 'browse', "projectID=$projectID&productID=%s");
+        $this->view->link      = helper::createLink('design', 'browse', "projectID=$projectID&productID={id}");
         $this->view->productID = $productID;
         $this->view->products  = $products;
         $this->view->projectID = $projectID;
