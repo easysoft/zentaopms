@@ -126,6 +126,7 @@ panel
             setClass('title'),
             $doc->title
         ),
+        $doc->deleted ? span(setClass('label danger'), $lang->doc->deleted) : null,
         dropdown
         (
             btn
@@ -212,10 +213,10 @@ panel
         html($doc->content)
     ),
     h::hr(),
-    fileList
+    $doc->files ? fileList
     (
         set::files($doc->files)
-    )
+    ) : null
 );
 
 panel
