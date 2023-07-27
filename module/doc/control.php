@@ -1272,6 +1272,9 @@ class doc extends control
         $canExport = $libType == 'api' ? common::hasPriv('api', 'export') : common::hasPriv('doc', $type . '2export');
         if($this->config->edition == 'open') $canExport = false;
 
+        /* For product drop menu. */
+        if($type == 'product') $this->view->productID = $objectID;
+
         $this->view->title          = $title;
         $this->view->type           = $type;
         $this->view->objectType     = $type;
