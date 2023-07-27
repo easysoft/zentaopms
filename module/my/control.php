@@ -1324,7 +1324,10 @@ EOF;
         if(!empty($_POST))
         {
             $_POST['account'] = $this->app->user->account;
-            $_POST['groups']  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
+            $_POST['role']    = $this->app->user->role;
+            $_POST['visions'] = $this->app->user->visions;
+            $_POST['group']   = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
+
             $this->user->update($this->app->user->id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('my', 'profile'), 'closeModal' => true));
