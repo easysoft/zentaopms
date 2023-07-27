@@ -32,13 +32,77 @@ if(!empty($files))
     }
     else
     {
+        $cardsBox = null;
+        foreach($files as $file)
+        {
+            $url  = helper::createLink('file', 'download', "fileID={$file->id}");
+            $url .= strpos($url, '?') === false ? '?' : '&';
+            $url .= session_name() . '=' . session_id();
+
+            $downloadLink = $this->createLink('file', 'download', "fileID={$file->id}&mouse=left");
+            $cardsBox[] = div
+                (
+                    setClass('col'),
+                    div
+                    (
+                        setClass('lib-file'),
+                        div
+                        (
+                            setClass('file'),
+                            a
+                            (
+                                set::href($url),
+                                set::title($file->title),
+                                set::target('_blank'),
+                                set('onclick', "return downloadFile({$file->id}, '{$file->extension}', {$file->imageWidth})"),
+                                in_array($file->extension, $config->file->imageExtensions) ? div
+                                (
+                                    setClass('img-holder'),
+                                    set('style', "background-image: url({$file->webPath})"),
+                                    img
+                                    (
+                                        set('src', $file->webPath),
+                                    )
+                                ) : html($file->fileIcon),
+                            ),
+                            div
+                            (
+                                setClass('file-name'),
+                                set::title($file->title),
+                                $file->title
+                            ),
+                            div
+                            (
+                                setClass('file-name text-gray'),
+                                $file->objectName,
+                                a
+                                (
+                                    setClass('text-gray'),
+                                    set::href(createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID={$file->objectID}")),
+                                    set::title($file->sourceName),
+                                    $file->sourceName,
+                                    $file->objectType != 'doc' ? set('data-toggle', 'modal') : null,
+                                )
+                            )
+                        )
+                    )
+                );
+        }
+
         $filesBody = panel
-        (
-            pager(
-                setClass('flex justify-end items-center'),
-                set(usePager($linkTpl)),
-            )
-        );
+            (
+                setClass('block-files'),
+                div
+                (
+                    setClass('row row-grid files-grid'),
+                    set('data-size', 300),
+                    $cardsBox
+                ),
+                pager(
+                    setClass('flex justify-end items-center'),
+                    set(usePager($linkTpl)),
+                )
+            );
     }
 }
 else
