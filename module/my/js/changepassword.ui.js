@@ -6,9 +6,9 @@ let passwordStrength   = 0;
 function changePassword()
 {
     const id = $(event.target).attr('id');
-    if(id == 'originalEncrypted')  originalEncrypted  = false;
-    if(id == 'password1Encrypted') password1Encrypted = false;
-    if(id == 'password2Encrypted') password2Encrypted = false;
+    if(id == 'originalPassword') originalEncrypted  = false;
+    if(id == 'password1') password1Encrypted = false;
+    if(id == 'password2') password2Encrypted = false;
 };
 
 function clickSubmit()
@@ -23,13 +23,13 @@ function clickSubmit()
         $('#passwordLength').val(password1.length);
     }
 
-    if($('form input[name=passwordStrength]').length == 0) $('#submit').after("<input type='hidden' name='passwordStrength' value='0' />");
+    if($('form input[name=passwordStrength]').length == 0) $(event.target).after("<input type='hidden' name='passwordStrength' value='0' />");
     $('form input[name=passwordStrength]').val(passwordStrength);
 
     if(password  && !originalEncrypted)  $('#originalPassword').val(md5(md5(password) + rand));
     if(password1 && !password1Encrypted) $('#password1').val(md5(password1) + rand);
     if(password2 && !password2Encrypted) $('#password2').val(md5(password2) + rand);
-    originalEncrypted = true;
+    originalEncrypted  = true;
     password1Encrypted = true;
     password2Encrypted = true;
 }
