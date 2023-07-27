@@ -3027,7 +3027,7 @@ class projectModel extends model
      */
     public function recordFirstEnd(int $projectID): bool
     {
-        $project = $this->getByID($projectID);
+        $project = $this->dao->select('end')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
         $this->dao->update(TABLE_PROJECT)->set('firstEnd')->eq($project->end)->where('id')->eq($projectID)->exec();
         return !dao::isError();
     }

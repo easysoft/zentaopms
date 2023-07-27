@@ -175,6 +175,8 @@ class commonModel extends model
         if($execution->status == 'wait')
         {
             $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->set('realBegan')->eq($today)->where('id')->eq($execution->id)->exec();
+            $this->loadModel('project')->recordFirstEnd($execution->id);
+
             $this->loadModel('action')->create('execution', $execution->id, 'syncexecution');
             if($execution->parent)
             {
