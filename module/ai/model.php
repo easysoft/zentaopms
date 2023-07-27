@@ -712,7 +712,7 @@ class aiModel extends model
         $targetForm = $this->config->ai->targetForm[$formPath[0]][$formPath[1]];
         if(empty($targetForm)) return array();
 
-        $schema = $this->lang->ai->formSchema[$targetForm->m][$targetForm->f];
+        $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)];
 
         return empty($schema) ? array() : $schema;
     }
