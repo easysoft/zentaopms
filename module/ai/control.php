@@ -94,6 +94,16 @@ class ai extends control
     public function testConnection()
     {
         $modelConfig = fixer::input('post')->get();
+
+        $errors = array();
+        if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
+        if(empty($modelConfig->key))  $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->apiKey);
+        if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr))
+        {
+            $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
+        }
+        if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode('<br>', $errors)));
+
         $this->ai->setConfig($modelConfig);
 
         $result = $this->ai->complete('test', 1); // Test completing 'test' with length of 1.
