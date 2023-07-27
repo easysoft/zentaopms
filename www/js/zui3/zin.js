@@ -123,6 +123,10 @@
     {
         $('#configJS').replaceWith(data);
         config = window.config;
+        const $body = $(document.body);
+        const classList = ($body.attr('class') || '').split(' ').filter(x => !x.startsWith('m-'));
+        classList.push(`m-${config.currentModule}-${config.currentMethod}`);
+        $body.attr('class', classList.join(' '));
     }
 
     function updatePageJS(data)
