@@ -63,3 +63,9 @@ window.afterPageUpdate = function()
         });
     }, 5000);
 }
+
+window.onPageUnmount = function()
+{
+    if(timer == null) return;
+    clearInterval(timer);
+}

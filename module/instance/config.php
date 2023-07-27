@@ -34,10 +34,12 @@ $config->instance->actionList['stop']['text']         = $lang->instance->stop;
 $config->instance->actionList['stop']['data-confirm'] = $lang->instance->notices['confirmStop'];
 $config->instance->actionList['stop']['url']          = array('module' => 'instance', 'method' => 'ajaxStop', 'params' => 'id={id}');
 
-$config->instance->actionList['uninstall']['icon'] = 'trash';
-$config->instance->actionList['uninstall']['hint'] = $lang->instance->uninstall;
-$config->instance->actionList['uninstall']['text'] = $lang->instance->uninstall;
-$config->instance->actionList['uninstall']['url']  = array('module' => 'instance', 'method' => 'visit', 'params' => 'id={id}');
+$config->instance->actionList['uninstall']['icon']         = 'trash';
+$config->instance->actionList['uninstall']['hint']         = $lang->instance->uninstall;
+$config->instance->actionList['uninstall']['text']         = $lang->instance->uninstall;
+$config->instance->actionList['uninstall']['className']    = 'ajax-submit';
+$config->instance->actionList['uninstall']['data-confirm'] = $lang->instance->notices['confirmUninstall'];
+$config->instance->actionList['uninstall']['url']          = array('module' => 'instance', 'method' => 'ajaxUninstall', 'params' => 'id={id}');
 
 $config->instance->actionList['visit']['icon'] = 'menu-my';
 $config->instance->actionList['visit']['hint'] = $lang->instance->visit;

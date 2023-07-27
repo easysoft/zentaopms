@@ -16,6 +16,8 @@ formPanel
 (
     set::id('instanceSettingForm'),
     set::title($lang->instance->setting),
+    set::submitBtnText($lang->save),
+    set::actions(array('submit')),
     formRow
     (
         formGroup

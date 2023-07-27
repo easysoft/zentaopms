@@ -45,6 +45,8 @@ class instance extends control
         $instance = $this->instance->getByID($id);
         if(empty($instance)) return print(js::alert($this->lang->instance->instanceNotExists) . js::locate($this->createLink('space', 'browse')));
 
+        $instance->latestVersion = $this->store->appLatestVersion($instance->appID, $instance->version);
+
         $instance = $this->instance->freshStatus($instance);
 
         $instanceMetric = $this->cne->instancesMetrics(array($instance));
@@ -321,7 +323,7 @@ class instance extends control
             }
 
             $this->action->create('instance', $instance->id, 'upgrade', '', json_encode($logExtra));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['upgradeSuccess'], 'load' => $this->createLink('instance', 'view', "id=$id")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['upgradeSuccess'], 'load' => $this->createLink('instance', 'view', "id=$id"), 'closeModal' => true));
         }
 
         $this->view->title       = $this->lang->instance->upgrade . $instance->name;

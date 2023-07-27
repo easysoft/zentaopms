@@ -18,7 +18,6 @@ formPanel
     set::title(''),
     set::actions(array('submit')),
     set::submitBtnText($lang->instance->upgrade),
-    set::cancelBtnText($lang->cancel),
     span
     (
         setClass('p-5'),
