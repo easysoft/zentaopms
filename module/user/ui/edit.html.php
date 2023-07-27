@@ -188,28 +188,14 @@ formPanel
             on::change('password1Change'),
             set::width('1/2'),
             set::label($lang->user->password),
-            inputGroup
-            (
-                input
-                (
-                    on::keyup('checkPassword'),
-                    set::id('password1'),
-                    set::name('password1'),
-                    set::value(''),
-                    set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '')),
-                ),
-                span
-                (
-                    setClass('input-group-addon hidden'),
-                    set::id('passwordStrength'),
-                ),
-            ),
+            password(set::checkStrength(true)),
         ),
         formGroup
         (
             on::change('password2Change'),
             set::width('1/2'),
             set::label($lang->user->password2),
+            set::control('password'),
             set::name('password2'),
             set::value(''),
         )

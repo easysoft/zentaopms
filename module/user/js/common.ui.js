@@ -8,45 +8,6 @@ window.switchAccount = function(account)
     loadPage(link);
 };
 
-function computePasswordStrength(password)
-{
-    if(password.length == 0) return 0;
-
-    var strength = 0;
-    var length   = password.length;
-
-    var complexity  = new Array();
-    for(i = 0; i < length; i++)
-    {
-        letter = password.charAt(i);
-        var asc = letter.charCodeAt();
-        if(asc >= 48 && asc <= 57)
-        {
-            complexity[0] = 1;
-        }
-        else if((asc >= 65 && asc <= 90))
-        {
-            complexity[1] = 2;
-        }
-        else if(asc >= 97 && asc <= 122)
-        {
-            complexity[2] = 4;
-        }
-        else
-        {
-            complexity[3] = 8;
-        }
-    }
-
-    var sumComplexity = 0;
-    for(i in complexity) sumComplexity += complexity[i];
-
-    if((sumComplexity == 7 || sumComplexity == 15) && password.length >= 6) strength = 1;
-    if(sumComplexity == 15 && password.length >= 10) strength = 2;
-
-    return strength;
-}
-
 /**
  * Switch account
  *
@@ -67,27 +28,6 @@ $(document).ready(function()
         verifyEncrypted = true;
     });
 });
-
-/**
- * Check password strength.
- *
- * @param  event  $event
- * @access public
- * @return void
- */
-function checkPassword(event)
-{
-    let password = $(event.target).val();
-    $('#passwordStrength').html(password == '' ? '' : passwordStrengthList[computePasswordStrength(password)]);
-    if(password == '')
-    {
-        $('#passwordStrength').addClass('hidden');
-    }
-    else
-    {
-        $('#passwordStrength').removeClass('hidden');
-    }
-}
 
 /**
  * Update groups when visions change.

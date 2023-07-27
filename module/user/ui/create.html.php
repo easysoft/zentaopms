@@ -116,22 +116,7 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->password),
             set::required(true),
-            inputGroup
-            (
-                input
-                (
-                    on::keyup('checkPassword'),
-                    set::id('password1'),
-                    set::name('password1'),
-                    set::value(''),
-                    set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '')),
-                ),
-                span
-                (
-                    setClass('input-group-addon hidden'),
-                    set::id('passwordStrength'),
-                ),
-            ),
+            password(set::checkStrength(true)),
             set::tip($passwordStrength),
             set::tipClass('form-tip')
         )
