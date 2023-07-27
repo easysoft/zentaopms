@@ -123,6 +123,8 @@ else
         (
             set::name('content'),
             set::size('full'),
+            set::resizable(false),
+            set::placeholder($lang->noticePasteImg),
         ),
         formHidden('status', 'normal'),
         formHidden('contentType', 'html'),
@@ -131,6 +133,7 @@ else
         (
             modal
             (
+                set::title($lang->doc->release . $lang->doc->common),
                 set::id('modalBasicInfo'),
                 on::change('#product',   "loadObjectModules"),
                 on::change('#project',   "loadObjectModules"),
