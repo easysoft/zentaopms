@@ -1011,6 +1011,19 @@ class aiModel extends model
                 ->where('project')->in($this->app->user->view->projects)
                 ->orWhere('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
+            if(empty($docId))
+            {
+                $userDocLibs = $this->dao->select('id')->from(TABLE_DOCLIB)
+                    ->where('type')->eq('mine')
+                    ->andWhere('addedBy')->eq($this->app->user->account)
+                    ->fetchPairs();
+                if(!empty($userDocLibs))
+                {
+                    $docId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
+                        ->where('lib')->in($userDocLibs)
+                        ->fetch('maxId');
+                }
+            }
             if(!empty($docId)) return helper::createLink('doc', 'view', "docID=$docId");
         }
 
