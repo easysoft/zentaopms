@@ -418,7 +418,7 @@ class admin extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.resetPWDByMail', $this->post->resetPWDByMail);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->title = $this->lang->admin->resetPWDSetting;
