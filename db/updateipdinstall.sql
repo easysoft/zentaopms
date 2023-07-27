@@ -171,6 +171,7 @@ UPDATE `zt_priv` SET `vision` = ',rnd,or,' WHERE `module` = 'requirement' AND `m
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'mode', 'PLM');
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'custom', '', 'URAndSR', '1');
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', '', 'disabledFeatures', '');
+REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', '', 'closedFeatures', '');
 
 REPLACE INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('demand', 'export', '643', ',ipd,', ',or,', '1', '210');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2109, 'priv', 'de',    'demand-export', '', '');
