@@ -1063,9 +1063,9 @@ class aiModel extends model
             {
                 $vars[] = $linkArgs[$arg];
             }
-            elseif(!empty($object->$arg))
+            elseif(!empty($object->{$prompt->module}->$arg))
             {
-                $vars[] = is_object($object->$arg) && !empty($object->$arg->id) ? $object->$arg->id : $object->$arg;
+                $vars[] = is_object($object->{$prompt->module}->$arg) && !empty($object->{$prompt->module}->$arg->id) ? $object->{$prompt->module}->$arg->id : $object->{$prompt->module}->$arg;
             }
             else
             {
