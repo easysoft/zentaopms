@@ -249,7 +249,6 @@ formPanel
     ),
     formRow
     (
-
         formGroup
         (
             set::label($lang->testcase->steps),
