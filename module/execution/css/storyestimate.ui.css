@@ -1,0 +1,2 @@
+#storyEstimateTable input[disabled] {filter: none;}
+#storyEstimateTable > * > tr {border-bottom-width: 0;}
