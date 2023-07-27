@@ -20,7 +20,6 @@ modalHeader
 formPanel
 (
     set::actions(array('submit')),
-    set::actionsClass('w-1/2'),
     set::size('md'),
     set::submitBtnText($lang->cron->create),
     formRow
@@ -140,21 +139,21 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/2'),
+        set::width('full'),
         set::label($lang->cron->command),
         set::name('command'),
         set::value(str_replace("'", "&#039;", $cron->command)),
     ),
     formGroup
     (
-        set::width('1/2'),
+        set::width('full'),
         set::label($lang->cron->remark),
         set::name('remark'),
         set::value($cron->remark),
     ),
     formGroup
     (
-        set::width('1/4'),
+        set::width('1/2'),
         set::label($lang->cron->type),
         set::name('type'),
         set::items($lang->cron->typeList),

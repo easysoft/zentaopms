@@ -1,6 +1,7 @@
-$(document).on('click', '.ajaxRefresh', function()
+window.refreshURL = function(obj)
 {
-    $.get($(this).data('url'));
+    $this = $(obj);
+    $.get($this.data('href'));
     loadPage($.createLink('cron', 'index'));
-    return;
-})
+    return false;
+}

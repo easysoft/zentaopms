@@ -19,8 +19,7 @@ class cron extends control
      */
     public function index()
     {
-        $this->view->title      = $this->lang->cron->common;
-
+        $this->view->title = $this->lang->cron->common;
         $this->view->crons = $this->cron->getCrons();
         $this->display();
     }
@@ -61,10 +60,10 @@ class cron extends control
         {
             $this->cron->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->sendSuccess(array('load' => inlink('index')));
+            return $this->sendSuccess(array('load' => inlink('index'), 'closeModal' => true));
         }
-        $this->view->title      = $this->lang->cron->create . $this->lang->cron->common;
 
+        $this->view->title = $this->lang->cron->create . $this->lang->cron->common;
         $this->display();
     }
 
@@ -81,11 +80,11 @@ class cron extends control
         {
             $this->cron->update($cronID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->sendSuccess(array('load' => inlink('index')));
+            return $this->sendSuccess(array('load' => inlink('index'), 'closeModal' => true));
         }
-        $this->view->title      = $this->lang->cron->edit . $this->lang->cron->common;
 
-        $this->view->cron = $this->cron->getById($cronID);
+        $this->view->title = $this->lang->cron->edit . $this->lang->cron->common;
+        $this->view->cron  = $this->cron->getById($cronID);
         $this->display();
     }
 
