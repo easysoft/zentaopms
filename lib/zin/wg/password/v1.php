@@ -28,8 +28,8 @@ class password extends wg
         return array
         (
             h::jsCall('$.getScript', $jsRoot . 'md5.js'),
-            jsVar('strengthClass', $strengthClass),
-            jsVar('passwordStrengthList', $lang->user->passwordStrengthList),
+            jsVar('window.strengthClass', $strengthClass),
+            jsVar('window.passwordStrengthList', $lang->user->passwordStrengthList),
             inputGroup
             (
                 input
