@@ -15,7 +15,11 @@ include '../../doc/ui/left.html.php';
 $versionList = array();
 for($itemVersion = $api->version; $itemVersion > 0; $itemVersion--)
 {
-    $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('api', 'index', "libID={$libID}&moduleID=$moduleID&apiID={$apiID}&version={$itemVersion}"));
+    $link = createLink('api', 'index', "libID={$libID}&moduleID=$moduleID&apiID={$apiID}&version={$itemVersion}");
+    $versionList[] = array(
+        'text'     => "V$itemVersion",
+        'onClick'  => jsRaw("() => {loadPage('$link', '#docContent')}"),
+    );
 }
 
 $apiHeader = $apiQuery = $apiParams = $apiResponse = array();
@@ -144,6 +148,7 @@ if($api->response)
 
 div
 (
+    setID('docContent'),
     setClass('flex flex-wrap'),
     featureBar
     (
