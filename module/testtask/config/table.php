@@ -139,3 +139,34 @@ $config->testtask->browseUnits->dtable->fieldList['actions']['type']     = 'acti
 $config->testtask->browseUnits->dtable->fieldList['actions']['sortType'] = false;
 $config->testtask->browseUnits->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
 $config->testtask->browseUnits->dtable->fieldList['actions']['menu']     = array('unitCases', 'edit', 'delete');
+
+$config->testtask->unitgroup = new stdclass();
+$config->testtask->unitgroup->dtable = new stdclass();
+$config->testtask->unitgroup->dtable->fieldList['suite']['title']    = $lang->testcase->suite;
+$config->testtask->unitgroup->dtable->fieldList['suite']['width']    = 'auto';
+$config->testtask->unitgroup->dtable->fieldList['suite']['type']     = 'title';
+$config->testtask->unitgroup->dtable->fieldList['suite']['fixed']    = false;
+$config->testtask->unitgroup->dtable->fieldList['suite']['sortType'] = true;
+$config->testtask->unitgroup->dtable->fieldList['suite']['group']    = 'story';
+
+$config->testtask->unitgroup->dtable->fieldList['id'] = $config->testcase->dtable->fieldList['id'];
+$config->testtask->unitgroup->dtable->fieldList['id']['type']  = 'id';
+$config->testtask->unitgroup->dtable->fieldList['id']['fixed'] = false;
+
+$config->testtask->unitgroup->dtable->fieldList['title']  = $config->testcase->dtable->fieldList['title'];
+$config->testtask->unitgroup->dtable->fieldList['title']['width']        = 'auto';
+$config->testtask->unitgroup->dtable->fieldList['title']['nestedToggle'] = false;
+$config->testtask->unitgroup->dtable->fieldList['title']['fixed']        = false;
+
+$config->testtask->unitgroup->dtable->fieldList['pri']           = $config->testcase->dtable->fieldList['pri'];
+$config->testtask->unitgroup->dtable->fieldList['status']        = $config->testcase->dtable->fieldList['status'];
+$config->testtask->unitgroup->dtable->fieldList['lastRunResult'] = $config->testcase->dtable->fieldList['lastRunResult'];
+$config->testtask->unitgroup->dtable->fieldList['type']          = $config->testcase->dtable->fieldList['type'];
+$config->testtask->unitgroup->dtable->fieldList['bugs']          = $config->testcase->dtable->fieldList['bugs'];
+$config->testtask->unitgroup->dtable->fieldList['results']       = $config->testcase->dtable->fieldList['results'];
+$config->testtask->unitgroup->dtable->fieldList['stepNumber']    = $config->testcase->dtable->fieldList['stepNumber'];
+$config->testtask->unitgroup->dtable->fieldList['lastRunner']    = $config->testcase->dtable->fieldList['lastRunner'];
+$config->testtask->unitgroup->dtable->fieldList['lastRunDate']   = $config->testcase->dtable->fieldList['lastRunDate'];
+$config->testtask->unitgroup->dtable->fieldList['actions']       = $config->testcase->dtable->fieldList['actions'];
+$config->testtask->unitgroup->dtable->fieldList['actions']['fixed'] = false;
+$config->testtask->unitgroup->dtable->fieldList['actions']['menu']  = array('runResult');

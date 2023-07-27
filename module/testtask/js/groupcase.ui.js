@@ -65,7 +65,6 @@ window.deformation = function(event)
 
     if($(event.target).closest('a').find('span').hasClass('is-collapsed'))
     {
-        console.log(initialOptions.data);
         $.each(options.data, function(index)
         {
             if(!options.data[index]) return;

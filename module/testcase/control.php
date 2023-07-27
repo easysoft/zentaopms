@@ -325,7 +325,7 @@ class testcase extends control
             if($groupBy == 'story') $groupCases[$case->story][] = $case;
         }
 
-        $story = '';
+        $story = null;
         foreach($cases as $index => $case)
         {
             if($case->storyDeleted)

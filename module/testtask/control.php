@@ -409,7 +409,6 @@ class testtask extends control
 
         $cases = array();
         $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
-        foreach($runs as $run) $cases[$run->case] = $run;
 
         $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->in(array_keys($cases))->andWhere('run')->in(array_keys($runs))->fetchAll('run');
         foreach($results as $result)
@@ -419,38 +418,35 @@ class testtask extends control
             $runs[$result->run]->duration   = $result->duration;
         }
 
-        $groupCases = $this->dao->select('*')->from(TABLE_SUITECASE)->where('`case`')->in(array_keys($cases))->orderBy('case')->fetchGroup('suite', 'case');
-        $summary    = array();
-        if(empty($groupCases)) $groupCases[] = $cases;
-        foreach($groupCases as $suiteID => $groupCase)
+        $suitecases = $this->dao->select('*')->from(TABLE_SUITECASE)->where('`case`')->in(array_keys($cases))->orderBy('`case`')->fetchAll('case');
+
+        $groupCases  = array();
+        foreach($runs as $run)
         {
-            $caseCount = 0;
-            $failCount = 0;
-            $duration  = 0;
-            foreach($groupCase as $caseID => $suitecase)
-            {
-                $case = $cases[$caseID];
-                $groupCases[$suiteID][$caseID] = $case;
-                $duration += $case->duration;
-                $caseCount ++;
-                if($case->caseResult == 'fail') $failCount ++;
-            }
-            $summary[$suiteID] = sprintf($this->lang->testtask->summary, $caseCount, $failCount, $duration);
+            $run->suite = !empty($suitecases[$run->case]) ? $suitecases[$run->case]->suite : '';
+            $groupCases[$run->suite][] = $run;
         }
 
-        $suites = $this->loadModel('testsuite')->getUnitSuites($productID);
+        $suite = null;
+        foreach($runs as $run)
+        {
+            $run->rowspan = 0;
+            if($suite !== $run->suite)
+            {
+                $suite = $run->suite;
+                if(!empty($groupCases[$run->suite])) $run->rowspan = count($groupCases[$run->suite]);
+            }
+        }
 
         /* Assign. */
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->productID   = $productID;
         $this->view->task        = $task;
         $this->view->product     = $this->product->getById($productID);
         $this->view->productName = $this->products[$productID];
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->groupCases  = $groupCases;
-        $this->view->suites      = $suites;
-        $this->view->summary     = $summary;
+        $this->view->runs        = $runs;
+        $this->view->suites      = $this->loadModel('testsuite')->getUnitSuites($productID);
         $this->view->taskID      = $taskID;
 
         $this->display();
@@ -736,14 +732,14 @@ class testtask extends control
             }
         }
 
-        $story = '';
-        foreach($runs as $index => $case)
+        $story = null;
+        foreach($runs as $run)
         {
-            $case->rowspan = 0;
-            if($story !== $case->story)
+            $run->rowspan = 0;
+            if($story !== $run->story)
             {
-                $story = $case->story;
-                if(!empty($groupCases[$case->story])) $case->rowspan = count($groupCases[$case->story]);
+                $story = $run->story;
+                if(!empty($groupCases[$run->story])) $run->rowspan = count($groupCases[$run->story]);
             }
         }
 

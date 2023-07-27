@@ -6,7 +6,7 @@ $(function()
 
 /**
  * 需求列显示展开收起的图标。
- * Display show icon in the story column.
+ * Display show icon in the suite column.
  *
  * @param  object result
  * @param  object info
@@ -15,15 +15,15 @@ $(function()
  */
 window.onRenderCell = function(result, {row, col})
 {
-    if(result && col.name == 'storyTitle')
+    if(result && col.name == 'suite')
     {
         if(row.data.hidden)
         {
-            result.unshift({html: '<a class="dtable-nested-toggle state" data-on="click" data-story=' + row.data.story + ' data-call="deformation" data-params="event")><span class="toggle-icon is-collapsed"></span></a>'});
+            result.unshift({html: '<a class="dtable-nested-toggle state" data-on="click" data-suite="' + row.data.suite + '" data-call="deformation" data-params="event")><span class="toggle-icon is-collapsed"></span></a>'});
         }
         else
         {
-            result.unshift({html: '<a class="dtable-nested-toggle state" data-on="click" data-story=' + row.data.story + ' data-call="deformation" data-params="event")><span class="toggle-icon is-expanded"></span></a>'});
+            result.unshift({html: '<a class="dtable-nested-toggle state" data-on="click" data-suite="' + row.data.suite + '" data-call="deformation" data-params="event")><span class="toggle-icon is-expanded"></span></a>'});
             result.push({outer: false, style: {alignItems: 'start', 'padding-top': '8px'}})
         }
     }
@@ -37,7 +37,7 @@ window.onRenderCell = function(result, {row, col})
 
 /**
  * 需求列合并单元格。
- * cell span in the story column.
+ * cell span in the suite column.
  *
  * @param  object cell
  * @access public
@@ -45,7 +45,7 @@ window.onRenderCell = function(result, {row, col})
  */
 window.getCellSpan = function(cell)
 {
-    if(cell.col.name == 'storyTitle' && cell.row.data.rowspan)
+    if(cell.col.name == 'suite' && cell.row.data.rowspan)
     {
         return {rowSpan: cell.row.data.rowspan};
     }
@@ -59,7 +59,7 @@ window.deformation = function(event)
 {
     let newData      = [];
     const options    = zui.DTable.query().options;
-    const story      = $(event.target).closest('a').data('story');
+    const suite      = $(event.target).closest('a').data('suite');
     const oldOptions = $.extend(true, {}, initialOptions);
 
 
@@ -68,12 +68,12 @@ window.deformation = function(event)
         $.each(options.data, function(index)
         {
             if(!options.data[index]) return;
-            if(options.data[index].story == story)
+            if(options.data[index].suite == suite)
             {
                 $.each(oldOptions.data, function(key)
                 {
                     if(!oldOptions.data[key]) return;
-                    if(oldOptions.data[key].story == story) newData.push(oldOptions.data[key]);
+                    if(oldOptions.data[key].suite == suite) newData.push(oldOptions.data[key]);
                 });
             }
             else
@@ -89,11 +89,11 @@ window.deformation = function(event)
     {
         options.data = options.data.filter(function(option)
         {
-            return option.story != story || option.rowspan != 0;
+            return option.suite != suite || option.rowspan != 0;
         });
         $.each(options.data, function(index)
         {
-            if(options.data[index] && options.data[index].story == story)
+            if(options.data[index] && options.data[index].suite == suite)
             {
                 options.data[index].id      = {html: '<span class="text-gray">' + allTestcases + ' ' + '<strong>' + options.data[index].rowspan + '</strong></span>'};
                 options.data[index].rowspan = 1;
