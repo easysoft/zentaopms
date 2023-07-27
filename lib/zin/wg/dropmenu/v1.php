@@ -78,7 +78,7 @@ class dropmenu extends wg
         }
 
         $branchMenu = null;
-        if($tab == 'product')
+        if(($tab == 'product' || $tab == 'qa') and in_array($module, $app->config->hasBranchMenuModules))
         {
             if($objectID)
             {
@@ -89,7 +89,7 @@ class dropmenu extends wg
 
                     /* Get current branch name. */
                     $branchName = '';
-                    if($branchID == 'all' || $branchID == '')
+                    if($branchID == 'all' || $branchID === '')
                     {
                         $branchID   = 'all';
                         $branchName = $lang->branch->all;
