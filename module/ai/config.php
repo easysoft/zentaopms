@@ -56,8 +56,8 @@ $config->ai->dataSource['release']['stories'] = array('title', 'estimate');
 $config->ai->dataSource['release']['bugs']    = array('title');
 
 $config->ai->dataSource['project']['project'] = array('name', 'type', 'desc', 'begin', 'end', 'estimate');
-$config->ai->dataSource['project']['programplan'] = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'planDuration', 'progress', 'estimate', 'consumed', 'left');
-$config->ai->dataSource['project']['execution']  = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'estimate', 'consumed', 'progress');
+$config->ai->dataSource['project']['programplans'] = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'planDuration', 'progress', 'estimate', 'consumed', 'left');
+$config->ai->dataSource['project']['executions']  = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'estimate', 'consumed', 'progress');
 
 $config->ai->dataSource['story']['story']         = array('title', 'spec', 'verify', 'product', 'module', 'pri', 'category', 'estimate');
 $config->ai->dataSource['execution']['execution'] = array('name', 'desc', 'estimate');

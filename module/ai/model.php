@@ -758,6 +758,8 @@ class aiModel extends model
                 break;
             case 'project':
                 if(isset($sourceGroups['project'])) $object->project = $this->loadModel('project')->getById($objectId);
+                if($object->project->model == 'waterfall' && isset($sourceGroups['programplans'])) $object->programplans = array_values($this->loadModel('execution')->getByProject($object->project->id));
+                if($object->project->model != 'waterfall' && isset($sourceGroups['executions'])) $object->executions = array_values($this->loadModel('execution')->getByProject($object->project->id));
                 break;
             case 'release':
                 if(isset($sourceGroups['release'])) $object->release = $this->loadModel('release')->getById($objectId);
