@@ -10,7 +10,7 @@
  * 单位：h
  * 描述：按全局统计的年度日志记录的工时总数是指组织在某年度实际花费的总工时数。该度量项可以用来评估组织的工时投入情况和对资源的利用效率。较高的消耗工时数可能需要审查工作流程和资源分配，以提高工作效率和进度控制。
  * 定义：所有日志记录的工时之和
-记录时间在某年
+ *       记录时间在某年
  * 度量库：
  * 收集方式：realtime
  *
@@ -23,21 +23,29 @@
  */
 class hour_of_annual_effort extends baseCalc
 {
-    public $dataset = null;
+    public $result = array();
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public function getStatement()
+    {
+        return $this->dao->select("year(date) as year,sum(consumed) as consumed")
+            ->from(TABLE_EFFORT)
+            ->where('deleted')->eq('0')
+            ->andWhere('year(date)')->ne('0000')
+            ->groupBy('`year`')
+            ->query();
+    }
 
     public function calculate($row)
     {
+        $year         = $row->year;
+        $consumed     = $row->consumed;
+
+        $this->result[$year] = $consumed;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('year', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
