@@ -33,7 +33,8 @@ $(function()
     {
         var onlybody  = config.onlybody == 'yes';
         var productID = $('#product').val();
-        var link      = createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView, onlybody);
+        var storyType = currentVision == 'or' ? 'requirement' : 'story';
+        var link      = createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID + '&extra=&storyType=' + storyType, config.defaultView, onlybody);
 
         if(!onlybody) window.parent.$.apps.open(link, 'product');
         if(onlybody) location.href = link;
