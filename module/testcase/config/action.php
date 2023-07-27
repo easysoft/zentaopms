@@ -57,10 +57,12 @@ $config->testcase->actionList['unlinkCase']['text'] = $lang->testtask->unlinkCas
 $config->testcase->actionList['unlinkCase']['hint'] = $lang->testtask->unlinkCase;
 $config->testcase->actionList['unlinkCase']['url']  = array('module' => 'testtask', 'method' => 'unlinkCase', 'params' => 'runID={id}&confirm=yes');
 
-$config->testcase->actionList['showScript']['icon'] = 'file-code';
-$config->testcase->actionList['showScript']['text'] = $lang->testcase->showScript;
-$config->testcase->actionList['showScript']['hint'] = $lang->testcase->showScript;
-$config->testcase->actionList['showScript']['url']  = array('module' => 'testcase', 'method' => 'showScript', 'params' => 'caseID={id}');
+$config->testcase->actionList['showScript']['icon']        = 'file-code';
+$config->testcase->actionList['showScript']['text']        = $lang->testcase->showScript;
+$config->testcase->actionList['showScript']['hint']        = $lang->testcase->showScript;
+$config->testcase->actionList['showScript']['url']         = array('module' => 'testcase', 'method' => 'showScript', 'params' => 'caseID={id}');
+$config->testcase->actionList['showScript']['data-toggle'] = 'modal';
+$config->testcase->actionList['showScript']['data-size']   = 'lg';
 
 $config->testcase->actionList['editScene']['icon'] = 'edit';
 $config->testcase->actionList['editScene']['text'] = $lang->testcase->editScene;
