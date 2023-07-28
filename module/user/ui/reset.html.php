@@ -59,7 +59,8 @@ else
                 (
                     set::label($lang->user->account),
                     set::name('account'),
-                    set::value('')
+                    set::value(''),
+                    set::required(true),
                 ),
             ),
             formRow
@@ -68,6 +69,7 @@ else
                 (
                     set::label($lang->user->password),
                     password(set::checkStrength(true)),
+                    set::required(true),
                 ),
             ),
             formRow
@@ -78,6 +80,7 @@ else
                     set::control('password'),
                     set::name('password2'),
                     set::value(''),
+                    set::required(true),
                 )
             ),
             formRow
