@@ -36,7 +36,7 @@ jsVar('pageAllSummary', $lang->release->pageAllSummary);
 jsVar('pageSummary', $lang->release->pageSummary);
 jsVar('type', $type);
 
-$config->release->dtable->fieldList['branch']['map'] = $branchPairs;
+if($showBranch) $config->release->dtable->fieldList['branch']['map'] = $branchPairs;
 dtable
 (
     set::cols(array_values($config->release->dtable->fieldList)),
@@ -45,10 +45,10 @@ dtable
     set::sortLink(jsRaw('createSortLink')),
     set::footer([jsRaw('function(){return window.setStatistics.call(this);}'), 'flex', 'pager']),
     set::footPager(
-        usePager(),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}")),
+        usePager
+        (
+            array('linkCreator' => helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage),
+        ),
     ),
 );
 
