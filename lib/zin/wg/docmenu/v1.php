@@ -368,31 +368,34 @@ class docMenu extends wg
         $menuLink = $this->prop('menuLink', '');
 
         return div
-        (
-            setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
-            $title && empty($menuLink) ? h::header
             (
-                setClass('h-10 flex items-center pl-4 flex-none gap-3'),
-                span
+                $menuLink ? dropmenu
                 (
-                    setClass('module-title text-lg font-semibold'),
-                    html($title)
+                    set::id('docDropmenu'),
+                    set::menuID('docDropmenuMenu'),
+                    set::text($title),
+                    set::url($menuLink),
+                ) : null,
+                div
+                (
+                    setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
+                    $title && empty($menuLink) ? h::header
+                    (
+                        setClass('h-10 flex items-center pl-4 flex-none gap-3'),
+                        span
+                        (
+                            setClass('module-title text-lg font-semibold'),
+                            html($title)
+                        ),
+                    ) : null,
+                    h::main
+                    (
+                        setClass($menuLink ? 'pt-3' : ''),
+                        setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
+                        zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover'))))
+                    ),
+                    $this->buildBtns()
                 ),
-            ) : null,
-            $menuLink ? dropmenu
-            (
-                set::id('docDropmenu'),
-                set::menuID('docDropmenuMenu'),
-                set::text($title),
-                set::url($menuLink),
-            ) : null,
-            h::main
-            (
-                setClass($menuLink ? 'pt-3' : ''),
-                setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
-                zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover'))))
-            ),
-            $this->buildBtns()
         );
     }
 }
