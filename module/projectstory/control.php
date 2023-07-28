@@ -50,9 +50,6 @@ class projectStory extends control
 
         if(empty($this->products)) $this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID));
 
-        /* Make sure productID is set. */
-        if(empty($productID)) $productID = key($this->products);
-
         echo $this->fetch('product', 'browse', array
         (
             'productID'  => $productID,
