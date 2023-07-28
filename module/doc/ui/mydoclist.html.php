@@ -13,7 +13,6 @@ namespace zin;
 $docContent = null;
 if(empty($docs))
 {
-    if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
     $docContent = div
     (
         setClass('table-empty-tip flex justify-center items-center'),
