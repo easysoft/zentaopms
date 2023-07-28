@@ -1,5 +1,3 @@
-selectNext();
-
 /**
  * 切换周期类型，用于展示周期类型的交互。
  * Toggle cycle, used to display the interaction of cycle.
@@ -9,21 +7,22 @@ selectNext();
  */
 function toggleCycle(e)
 {
+    $date = $('#date').zui('datePicker');
     if(e.target.checked)
     {
-        $('.date').attr('disabled', 'disabled');
+        $date.render({disabled: true});
         $('.date').prop('value', '');
         $('.cycle-date').prop('value', defaultDate);
         $('.cycle-config:not(.type-week,.type-month,.type-year)').removeClass('hidden');
         $('#switchDate').prop('checked', false);
         $('#type').closest('.form-row').addClass('hidden');
-        $('#type').val('custom');
+        $('#type').zui('picker').$.setValue('custom');
         loadList('custom'); //Fix bug 3278.
     }
     else
     {
         $('.cycle-date').prop('value', '');
-        $('.date').removeAttr('disabled');
+        $date.render({disabled: false});
         $('.cycle-config').addClass('hidden');
         $('#type').closest('.form-row').removeClass('hidden');
     }
@@ -37,8 +36,8 @@ function toggleCycle(e)
  */
 function changeCreateDate(e)
 {
-    changeDate(e.target);
+    changeDate(e);
     var selectTime = $(e.target).val() != today ? start : nowTime;
-    $('#begin').val(selectTime);
+    zui.Picker.query('#begin').$.setValue(selectTime);
     selectNext();
 }

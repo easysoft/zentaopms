@@ -66,7 +66,7 @@ formPanel
                     set::name('date'),
                     set::class('date'),
                     set::value('today'),
-                    set::type('date'),
+                    set::type('datePicker'),
                     on::change('changeCreateDate')
                 ),
                 div(
@@ -182,13 +182,13 @@ formPanel
                     setClass('input-group-addon'),
                     $lang->todo->weekly
                 ),
-                select
+                picker
                 (
                     set
                     (
                         array(
                             'required' => true,
-                            'id'       => 'config[week]',
+                            'id'       => 'config_week',
                             'name'     => 'config[week]',
                             'items'    => $lang->todo->dayNames,
                             'value'    => 1
@@ -219,13 +219,13 @@ formPanel
                     setClass('input-group-addon'),
                     $lang->todo->monthly
                 ),
-                select
+                picker
                 (
                     set
                     (
                         array(
                             'required' => true,
-                            'id'       => 'config[month]',
+                            'id'       => 'config_month',
                             'name'     => 'config[month]',
                             'items'    => $days,
                             'value'    => 1
@@ -256,12 +256,12 @@ formPanel
                     setClass('input-group-addon'),
                     $lang->todo->specify
                 ),
-                select
+                picker
                 (
                     set
                     (
                         array(
-                            'id'       => 'config[specify][month]',
+                            'id'       => 'config_specify_month',
                             'name'     => 'config[specify][month]',
                             'items'    => $lang->datepicker->monthNames,
                             'multiple' => false,
@@ -271,7 +271,7 @@ formPanel
                     ),
                     on::change('setDays')
                 ),
-                select
+                picker
                 (
                     set
                     (
@@ -327,8 +327,7 @@ formPanel
         (
             set::label($lang->todo->deadline),
             set::width($isInModal ? '3/5' : '1/3'),
-            set::type('date'),
-            set::name('config[end]'),
+            datePicker(set::name('config[end]')),
         )
     ),
     formGroup
@@ -376,22 +375,22 @@ formPanel
     (
         formGroup
         (
-            set::id('nameBox'),
-            set::class('name-box'),
-            set::required(true),
-            set::label($lang->todo->name),
-            set::name('name')
+            set::width('4/5'),
+            set(array('id' => 'nameBox', 'required' => true, 'label' => $lang->todo->name, 'class' => 'name-box')),
+            div
+            (
+                setClass('w-full'),
+                setID('nameInputBox'),
+                input(set(array('id' => 'name', 'name' => 'name')))
+            )
         ),
         formGroup
         (
+            set::width('1/5'),
+            setClass('priBox'),
             set::label($lang->todo->pri),
-            set::labelWidth('80px'),
-            set::name('pri'),
-            set::width(40),
-            set::required(true),
-            set::value(3),
-            set::control('pri')
-        )
+            priPicker(setID('pri'), set::name('pri'), set::items($lang->todo->priList), set::value(3)),
+        ),
     ),
     formGroup
     (
@@ -422,7 +421,7 @@ formPanel
             set::width('1/2'),
             inputGroup
             (
-                select
+                picker
                 (
                     set
                     (
@@ -441,7 +440,7 @@ formPanel
                     setClass('input-group-addon ring-0'),
                     $lang->todo->timespanTo
                 ),
-                select
+                picker
                 (
                     set
                     (
@@ -452,7 +451,7 @@ formPanel
                             'items'    => $times
                         )
                     ),
-                    on::blur('verifyEndTime(this)')
+                    on::change('verifyEndTime')
                 )
             )
         ),
@@ -469,7 +468,7 @@ formPanel
                         'text' => $lang->todo->periods['future']
                     )
                 ),
-                on::change('switchDateFeature(this)')
+                on::change('switchDateFeature')
             )
         )
     )
