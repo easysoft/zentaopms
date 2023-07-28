@@ -55,14 +55,9 @@
             return state;
         },
         isOldPage: () => false,
-        reloadApp: function(_code, url)
-        {
-            loadPage(url);
-        },
-        openApp: function(url, options)
-        {
-            loadPage(url, options);
-        }
+        reloadApp: function(_code, url){loadPage(url);},
+        openApp: function(url, options){loadPage(url, options);},
+        goBack: function(){history.go(-1);}
     }, parent.window.$.apps);
 
     const renderMap =
@@ -706,7 +701,7 @@
     function goBack(target, url)
     {
         if(!target || target === 'APP' || target === true) target = currentCode;
-        else if(target === 'GLOBAL')    target = '';
+        else if(target === 'GLOBAL') target = '';
         $.apps.goBack(target, url, historyState);
     }
 
