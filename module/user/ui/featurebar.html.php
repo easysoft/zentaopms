@@ -7,15 +7,16 @@ jsVar('pageParams', $this->app->params);
 
 featureBar
 (
-    to::before(select
+    to::before
     (
-        setStyle(array('width' => '120px')),
-        set(array
+        picker
         (
-            'items' => $userList,
-            'value' => $user->id,
-            'onchange' => "window.switchAccount(this.value);"
-        ))
-    )),
+            width('120px'),
+            set::items($userList),
+            set::value($user->id),
+            set::required(true),
+            on::change('switchAccount'),
+        )
+    ),
     set::items($this->user->getFeatureBarMenus($user)),
 );
