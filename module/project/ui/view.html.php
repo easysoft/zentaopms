@@ -359,10 +359,10 @@ div
                 ),
                 !empty($config->setCode) ? label
                 (
-                    setClass('dark-outline text-dark mx-2'),
+                    setClass('dark-outline text-dark ml-2'),
                     $project->code
                 ) : null,
-                span(setClass('article-h2'), $project->name),
+                span(setClass('article-h2 ml-2'), $project->name),
             ),
             $project->desc ? div
             (

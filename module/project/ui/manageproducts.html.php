@@ -38,7 +38,7 @@ if($config->systemMode == 'ALM')
             (
                 set::label($lang->project->selectProduct),
                 set::required(true),
-                select
+                picker
                 (
                     set::name('otherProducts[]'),
                     set::multiple(true),
