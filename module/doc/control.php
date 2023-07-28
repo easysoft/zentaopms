@@ -720,6 +720,7 @@ class doc extends control
             $this->action->create('doc', $objectID, 'collected');
         }
 
+        if($this->viewType == 'json') $this->send(array('status' => $action ? 'no' : 'yes'));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'status' => $action ? 'no' : 'yes'));
     }
 

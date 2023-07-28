@@ -142,7 +142,7 @@ window.rendDocCell = function(result, {col, row})
         {
             const starIcon = row.data.collector.indexOf(',' + currentAccount + ',') >= 0 ? 'star' : 'star-empty';
 
-            docNameHtml += `<a class='ajaxCollect ajax-submit' href="` + $.createLink('doc', 'collect', `objectID=${row.data.id}&objectType=doc`) + `"><img src='static/svg/${starIcon}.svg' class='${starIcon} ml-1'></a>`;
+            docNameHtml += `<a class='ajaxCollect' href='###' data-link="` + $.createLink('doc', 'collect', `objectID=${row.data.id}&objectType=doc`) + `"><img src='static/svg/${starIcon}.svg' class='${starIcon} ml-1'></a>`;
         }
         docNameHtml +='</div>';
         result[0] = {html: docNameHtml};
@@ -215,3 +215,25 @@ window.toggleWhiteList = function(e)
     $('#whitelistBox').toggleClass('hidden', acl == 'open');
 }
 
+$(document).on('mousedown', '.ajaxCollect', function (event)
+{
+    if(event.button != 0) return;
+
+    var obj = $(this);
+    var url = obj.data('link');
+    $.get(url, function(response)
+    {
+        if(response.status == 'yes')
+        {
+            obj.children('img').attr('src', 'static/svg/star.svg');
+            obj.parent().prev().children('.file-name').children('i').remove('.icon');
+            obj.parent().prev().children('.file-name').prepend('<i class="icon icon-star text-yellow"></i> ');
+        }
+        else
+        {
+            obj.children('img').attr('src', 'static/svg/star-empty.svg');
+            obj.parent().prev().children('.file-name').children('i').remove(".icon");
+        }
+    }, 'json');
+    return false;
+});
