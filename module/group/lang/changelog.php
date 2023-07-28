@@ -688,3 +688,10 @@ $lang->changelog['18.4.alpha1'][] = 'chart-preview';
 $lang->changelog['18.4.alpha1'][] = 'api-addCatalog';
 $lang->changelog['18.4.alpha1'][] = 'api-editCatalog';
 $lang->changelog['18.4.alpha1'][] = 'api-deleteCatalog';
+
+$lang->changelog['18.7'][] = 'ai-models'; // TODO: change version to current version.
+$lang->changelog['18.7'][] = 'ai-editmodel';
+$lang->changelog['18.7'][] = 'ai-testconnection';
+$lang->changelog['18.7'][] = 'ai-promptpublish';
+$lang->changelog['18.7'][] = 'ai-promptunpublish';
+$lang->changelog['18.7'][] = 'ai-promptexecute';
