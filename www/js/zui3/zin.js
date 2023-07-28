@@ -7,16 +7,12 @@
     const currentMethod = config.currentMethod;
     const isIndexPage   = currentModule === 'index' && currentMethod === 'index';
 
+    const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban||traincourse-playvideo'.split('|'));
     const isAllowSelfOpen = isIndexPage
         || location.hash === '#_single'
         || /(\?|\&)_single/.test(location.search)
-        || currentModule === 'tutorial'
-        || currentModule === 'install'
-        || currentModule === 'upgrade'
-        || (currentModule === 'user'
-            && (currentMethod === 'login' || currentMethod === 'deny'))
-        || (currentModule === 'file' && currentMethod === 'download')
-        || (currentModule === 'my' && currentMethod === 'changepassword')
+        || selfOpenList.has(`${currentModule}-${currentMethod}`)
+        || selfOpenList.has(currentModule)
         || $('body').hasClass('allow-self-open');
 
     if (parent === window && !isAllowSelfOpen)
