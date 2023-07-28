@@ -20,6 +20,7 @@ $lang->instance->enableSMTP       = '启用SMTP';
 $lang->instance->customSetting    = '自定义配置';
 $lang->instance->upgradeToSenior  = '升级到高级版';
 $lang->instance->updateDomain     = '更新域名';
+$lang->instance->updateLog        = '更新日志';
 $lang->instance->start            = '启动';
 $lang->instance->restart          = '重启';
 $lang->instance->stop             = '关闭';

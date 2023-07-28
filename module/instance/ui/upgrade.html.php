@@ -16,13 +16,24 @@ formPanel
 (
     set::id('instanceSettingForm'),
     set::title(''),
-    set::actions(array('submit')),
-    set::submitBtnText($lang->instance->upgrade),
-    h::p($desc),
+    set::submitBtnText($lang->confirm),
+    set::actions(array('submit', array('text' => $lang->cancel, 'data-type' => 'submit', 'data-dismiss' => 'modal'))),
     span
     (
-        setClass('p-5'),
-        $lang->instance->notices['confirmUpgrade']
+        setClass('p-4 font-semibold'),
+        icon('exclamation-sign', setClass('text-warning icon-2x align-middle m-2')),
+        $lang->instance->notices['confirmUpgrade'],
+        empty($instance->latestVersion->change_log_url) ? null: a
+        (
+            setClass('ml-5'),
+            set::target('_blank'),
+            set::href($instance->latestVersion->change_log_url),
+            setStyle('color', 'initial'),
+            setStyle('font-weight', 'initial'),
+            setStyle('text-decoration', 'underline'),
+            $lang->instance->updateLog,
+        ),
     ),
+    div(setStyle('height', '20px')),
     input(set::type('hidden'), set::name('confirm'), set::value('yes'))
 );

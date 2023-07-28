@@ -327,7 +327,6 @@ class instance extends control
         }
 
         $this->view->title    = $this->lang->instance->upgrade . $instance->name;
-        $this->view->desc     = $this->instanceZen->getLastArticle($instance->appID);
         $this->view->instance = $instance;
 
         $this->display();
