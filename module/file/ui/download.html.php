@@ -43,28 +43,26 @@ else
         }
     }
 
-    panel
+    modalHeader
     (
-        modalHeader
+        set::title($lang->file->preview),
+        $fileType == 'txt' ? to::suffix
         (
-            set::title($lang->file->preview),
-            $fileType == 'txt' ? to::suffix
+            div
             (
-                div
-                (
-                    select(setID('charset'), set::name('charset'), set::items($config->file->charset), set::required(true), set::value($charset), set('onchange', 'setCharset(this)'), setClass('ml-2')),
-                )
-            ) : null,
-        ),
-        $fileType == 'image' ? div
-        (
-            setID('imageFile'),
-            h::img(set::src($this->createLink('file', 'read', "fileID={$file->id}")))
-        ) : div
-        (
-            setID('txtFile'),
-            h::pre(set::style(array('background-color' => 'rgb(var(--color-gray-200-rgb))')), $fileContent),
-        ),
+                select(setID('charset'), set::name('charset'), set::items($config->file->charset), set::required(true), set::value($charset), set('onchange', 'setCharset(this)'), setClass('ml-2')),
+            )
+        ) : null,
+    );
+
+    $fileType == 'image' ? div
+    (
+        setID('imageFile'),
+        h::img(set::src($this->createLink('file', 'read', "fileID={$file->id}")))
+    ) : div
+    (
+        setID('txtFile'),
+        h::pre(set::style(array('background-color' => 'rgb(var(--color-gray-200-rgb))')), $fileContent),
     );
 
 $isInModal = isInModal();

@@ -1,5 +1,4 @@
 #imageFile > img {margin: 0 auto;}
 .modal-body #errorMessage {padding: 80px 20px; text-align: center;}
-.m-file-download #header, .m-file-download #mainNavbar {display: none;}
 .m-file-download #mainContent .modal-header {margin-left: 0;}
 #txtFile > pre {display: block; padding: 10px; border: 1px solid rgb(var(--color-gray-300-rgb)); border-radius: 4px;}

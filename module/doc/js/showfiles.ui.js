@@ -58,13 +58,6 @@ window.downloadFile = function(fileID, extension, imageWidth)
     url    += `'${sessionString}'`;
 
     width = (windowWidth > imageWidth) ? ((imageWidth < windowWidth * 0.5) ? windowWidth * 0.5 : imageWidth) : windowWidth;
-    if(fileTypes.includes(extension))
-    {
-        loadModal(url);
-    }
-    else
-    {
-        loadPage(url);
-    }
+    loadModal(url);
     return false;
 }
