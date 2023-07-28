@@ -18,7 +18,7 @@ pid=1
 
 */
 
-r(count($calc->getResult())) && p('') && e('55'); // 测试分组数。
+r(count($calc->getResult())) && p('') && e('84'); // 测试分组数。
 
 r($calc->getResult(array('year' => '2014', 'month' => '10'))) && p('0:value') && e('2'); // 测试2014年10月。
 r($calc->getResult(array('year' => '2014', 'month' => '11'))) && p('0:value') && e('3'); // 测试2014年11月。

@@ -18,4 +18,4 @@ cid=1
 
 */
 
-r($calc->getResult()) && p('0:value') && e('640'); // 测试消耗工时
+r($calc->getResult()) && p('0:value') && e('986'); // 测试消耗工时

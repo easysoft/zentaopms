@@ -6,7 +6,7 @@ fields:
 - field: id
   range: 11-10000
 - field: project
-  range: 1-10{1}
+  range: 1-10{20}
 - field: type
   range: sprint
 - field: status
