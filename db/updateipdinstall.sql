@@ -194,18 +194,18 @@ REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `d
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2111, 'priv', 'zh-cn', 'demand-import', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2111, 'priv', 'zh-tw', 'demand-import', '', '');
 
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2109, 'depend',    2075);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2109, 'recommend', 2110);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2109, 'recommend', 2111);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2109, 'depend',    2075);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2109, 'recommend', 2110);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2109, 'recommend', 2111);
 
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2110, 'depend',    2075);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2110, 'recommend', 2109);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2110, 'depend',    2075);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2110, 'recommend', 2109);
 
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2111, 'depend',    2075);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2111, 'depend',    2110);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2111, 'recommend', 2109);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2111, 'recommend', 2076);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2111, 'recommend', 2077);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2111, 'depend',    2075);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2111, 'depend',    2110);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2111, 'recommend', 2109);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2111, 'recommend', 2076);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2111, 'recommend', 2077);
 
 REPLACE INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('requirement', 'batchChangeRoadmap', '32', ',ipd,', ',or,', '1', '125');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2112, 'priv', 'de',    'requirement-batchChangeRoadmap', '', '');
@@ -214,10 +214,10 @@ REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `d
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2112, 'priv', 'zh-cn', 'requirement-batchChangeRoadmap', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2112, 'priv', 'zh-tw', 'requirement-batchChangeRoadmap', '', '');
 
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2112, 'depend',    65);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2112, 'recommend', 121);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2112, 'recommend', 122);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2112, 'recommend', 123);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2112, 'depend',    65);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2112, 'recommend', 121);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2112, 'recommend', 122);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2112, 'recommend', 123);
 
 UPDATE `zt_privlang` SET `value` = '创建维护立项' WHERE `objectID` = 638 and `objectType` = 'manager';
 
@@ -235,20 +235,26 @@ REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `d
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2114, 'priv', 'zh-cn', 'charter-activate', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2114, 'priv', 'zh-tw', 'charter-activate', '', '');
 
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2113, 'depend',    2061);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2113, 'depend',    2064);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2113, 'recommend', 2062);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2113, 'recommend', 2063);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2113, 'recommend', 2114);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2113, 'depend',    2061);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2113, 'depend',    2064);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2113, 'recommend', 2062);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2113, 'recommend', 2063);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2113, 'recommend', 2114);
 
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2114, 'depend',    2061);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2114, 'depend',    2064);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2114, 'recommend', 2062);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2114, 'recommend', 2063);
-REPLACE INTO zt_privrelation (priv, `type`, relationPriv) VALUES(2114, 'recommend', 2113);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2114, 'depend',    2061);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2114, 'depend',    2064);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2114, 'recommend', 2062);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2114, 'recommend', 2063);
+REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2114, 'recommend', 2113);
+
+REPLACE INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('requirement', 'relation', '32', ',max,ipd,', ',rnd,', '1', '130');
+REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2115, 'priv', 'de',    'requirement-relation', '', '');
+REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2115, 'priv', 'en',    'requirement-relation', '', '');
+REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2115, 'priv', 'fr',    'requirement-relation', '', '');
+REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2115, 'priv', 'zh-cn', 'requirement-relation', '', '');
+REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2115, 'priv', 'zh-tw', 'requirement-relation', '', '');
 
 UPDATE `zt_priv` SET `vision` = ',rnd,or,' WHERE `module` = 'user' AND `method` = 'export';
 UPDATE `zt_priv` SET `vision` = ',rnd,or,' WHERE `module` = 'user' AND `method` = 'exportTemplate';
 UPDATE `zt_priv` SET `vision` = ',rnd,or,' WHERE `module` = 'user' AND `method` = 'import';
 UPDATE `zt_priv` SET `vision` = ',rnd,or,' WHERE `module` = 'user' AND `method` = 'importldap';
-
