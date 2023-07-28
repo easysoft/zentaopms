@@ -7,7 +7,7 @@
     const currentMethod = config.currentMethod;
     const isIndexPage   = currentModule === 'index' && currentMethod === 'index';
 
-    const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban||traincourse-playvideo'.split('|'));
+    const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban|traincourse-playvideo'.split('|'));
     const isAllowSelfOpen = isIndexPage
         || location.hash === '#_single'
         || /(\?|\&)_single/.test(location.search)
