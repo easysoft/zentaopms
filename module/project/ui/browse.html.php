@@ -20,7 +20,7 @@ featureBar
     set::linkParams("programID={$programID}&status={key}"),
     item(set(array
     (
-        'type' => "checkbox",
+        'type' => 'checkbox',
         'name' => 'involved',
         'text' => $lang->project->mine
     ))),
@@ -32,24 +32,24 @@ toolbar
 (
     item(set(array
     (
-        'type'  => "btnGroup",
+        'type'  => 'btnGroup',
         'items' => array(array
         (
-            'icon'  => "list",
-            'text'  => "",
-            'class' => "btn-icon primary"
+            'icon'  => 'list',
+            'text'  => '',
+            'class' => $projectType != 'bycard' ? 'btn-icon text-primary' : 'btn-icon',
         ), array
         (
-            'icon'  => "cards-view",
-            'text'  => "",
-            'class' => "btn-icon"
+            'icon'  => 'cards-view',
+            'text'  => '',
+            'class' => $projectType == 'bycard' ? 'btn-icon text-primary' : 'btn-icon',
         ))
     ))),
     item(set(array
     (
         'icon'        => 'export',
         'text'        => $lang->project->export,
-        'class'       => "ghost export",
+        'class'       => 'ghost export',
         'url'         => createLink('project', 'export', "status={$status}&orderBy={$orderBy}"),
         'data-toggle' => 'modal'
     ))),
@@ -57,7 +57,7 @@ toolbar
     (
         'icon'          => 'plus',
         'text'          => $lang->project->create,
-        'class'         => "primary create-project-btn",
+        'class'         => 'primary create-project-btn',
         'url'           => createLink('project', 'createGuide'),
         'data-toggle'   => 'modal',
         'data-position' => 'center'
