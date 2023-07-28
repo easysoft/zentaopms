@@ -10,52 +10,60 @@ declare(strict_types=1);
  */
 namespace zin;
 
-formPanel
+set::zui(true);
+div
 (
-    to::headingActions
+    set::id('main'),
+    div
     (
-        a
+        set::id('mainContent'),
+        formPanel
         (
-            set::href(inlink('reset')),
-            $lang->user->resetTitle,
-        ),
-    ),
-    set::title($lang->admin->resetPWDByMail),
-    setClass('forget-password'),
-    set::actions(array()),
-    formRow
-    (
-        formGroup
-        (
-            setClass('flex-wrap'),
-            set::label($lang->user->account),
-            set::name('account'),
-            set::value(''),
-            set::required(true),
-            set::placeholder($lang->user->placeholder->loginAccount)
-        ),
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::label($lang->user->email),
-            set::name('email'),
-            set::value(''),
-            set::required(true),
-            set::placeholder($lang->user->placeholder->email)
-        )
-    ),
-    formRow
-    (
-        setClass('form-actions'),
-        toolbar
-        (
-            btn(set(array('text' => $lang->user->submit, 'btnType' => 'submit', 'type' => 'primary', 'class' => 'mx-4'))),
-            btn(set(array('text' => $lang->goback, 'url' => createLink('user', 'login'), 'back' => true, 'class' => 'mx-4'))),
+            to::headingActions
+            (
+                a
+                (
+                    set::href(inlink('reset')),
+                    $lang->user->resetTitle,
+                ),
+            ),
+            set::title($lang->admin->resetPWDByMail),
+            setClass('forget-password'),
+            set::actions(array()),
+            formRow
+            (
+                formGroup
+                (
+                    setClass('flex-wrap'),
+                    set::label($lang->user->account),
+                    set::name('account'),
+                    set::value(''),
+                    set::required(true),
+                    set::placeholder($lang->user->placeholder->loginAccount)
+                ),
+            ),
+            formRow
+            (
+                formGroup
+                (
+                    set::label($lang->user->email),
+                    set::name('email'),
+                    set::value(''),
+                    set::required(true),
+                    set::placeholder($lang->user->placeholder->email)
+                )
+            ),
+            formRow
+            (
+                setClass('form-actions'),
+                toolbar
+                (
+                    btn(set(array('text' => $lang->user->submit, 'btnType' => 'submit', 'type' => 'primary', 'class' => 'mx-4'))),
+                    btn(set(array('text' => $lang->goback, 'url' => createLink('user', 'login'), 'back' => true, 'class' => 'mx-4'))),
+                ),
+            ),
         ),
     ),
 );
 
-render();
-
+render('pagebase');
