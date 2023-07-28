@@ -15,7 +15,7 @@ featureBar
             set::items($userList),
             set::value($user->id),
             set::required(true),
-            on::change('switchAccount'),
+            set::onChange(jsRaw("(value) => switchAccount(value)")),
         )
     ),
     set::items($this->user->getFeatureBarMenus($user)),

@@ -1,6 +1,5 @@
-window.switchAccount = function(event)
+window.switchAccount = function(account)
 {
-    var account = $(event.target).val();
     link = $.createLink('user', method, 'account=' + account);
     if(method == 'dynamic') link = $.createLink('user', method, 'account=' + account + '&period=' + pageParams.period);
     if(method == 'todo')    link = $.createLink('user', method, 'account=' + account + '&type=' + pageParams.type);
