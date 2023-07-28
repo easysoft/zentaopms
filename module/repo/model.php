@@ -2663,7 +2663,7 @@ class repoModel extends model
 
                 if($children)
                 {
-                    $treeList[$key]['items'] = $children;
+                    $treeList[$key]['children'] = $children;
                     $fileName[$key] = '';
                     $pathName[$key] = $file['path'];
                 }

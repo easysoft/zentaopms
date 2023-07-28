@@ -83,6 +83,7 @@ sidebar
     (
         set::id('monacoTree'),
         set::items($tree),
+        set::canSplit(false),
         set::collapsedIcon('folder'),
         set::expandedIcon('folder-open'),
         set::normalIcon('file-text-alt'),
@@ -92,3 +93,4 @@ sidebar
 );
 
 a(set::class('iframe'), setData('size', '1000px'), setData('toggle', 'modal'), set::id('linkObject'));
+\a($tree);

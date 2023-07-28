@@ -135,6 +135,7 @@ sidebar
     (
         set::id('storeTree'),
         set::items($tree),
+        set::canSplit(false),
         set::onClickItem(jsRaw('window.treeClick')),
     )
 );

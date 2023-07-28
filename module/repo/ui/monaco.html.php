@@ -98,6 +98,7 @@ sidebar
     (
         set::id('monacoTree'),
         set::items($tree),
+        set::canSplit(false),
         set::collapsedIcon('folder'),
         set::expandedIcon('folder-open'),
         set::normalIcon('file-text-alt'),

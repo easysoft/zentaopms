@@ -195,9 +195,9 @@ function findItemInTreeItems(list, key, level) {
 
         if (item.key === key) return item;
 
-        if (item.items && item.items.length > 0)
+        if (item.children && item.children.length > 0)
         {
-            const findedItem = findItemInTreeItems(item.items, key);
+            const findedItem = findItemInTreeItems(item.children, key);
             if (findedItem)
             {
                 parentTree.push(item.key);
