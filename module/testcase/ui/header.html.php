@@ -248,7 +248,7 @@ toolbar
     (
         btn
         (
-            setClass('btn btn-link ghost square'),
+            setClass('btn ghost square'),
             set::icon('kanban')
         ),
         set::items($viewItems),
@@ -258,15 +258,17 @@ toolbar
     (
         set
         (
-            array('icon' => 'wrench', 'hint' => $lang->testcase->automation, 'url' => inlink('automation', "productID=$productID"), 'class' => 'btn btn-link ghost square', 'data-toggle' => 'modal', 'data-width' => '50%')
-        )
+            array('icon' => 'wrench', 'hint' => $lang->testcase->automation, 'url' => inlink('automation', "productID=$productID"), 'class' => 'btn ghost square', 'data-toggle' => 'modal', 'data-width' => '50%')
+        ),
+        $lang->testcase->automation
     ) : null,
     $exportItems ? dropdown
     (
         btn
         (
-            setClass('btn btn-link ghost square'),
-            set::icon('export')
+            setClass('btn ghost square'),
+            set::icon('export'),
+            $lang->export
         ),
         set::items($exportItems),
         set::placement('bottom-end'),
@@ -275,8 +277,9 @@ toolbar
     (
         btn
         (
-            setClass('btn btn-link ghost square'),
-            set::icon('import')
+            setClass('btn ghost square'),
+            set::icon('import'),
+            $lang->import
         ),
         set::items($importItems),
         set::placement('bottom-end'),
