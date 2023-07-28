@@ -76,7 +76,19 @@ form
     (
         modal
         (
-            set::title($lang->doc->edit),
+            div
+            (
+                setClass('flex items-center'),
+                div($lang->doc->edit),
+                entityLabel
+                (
+                    set::entityID($doc->id),
+                    set::level(1),
+                    set::text($doc->title),
+                    set::reverse(true),
+                    setClass('pl-2'),
+                ),
+            ),
             set::id('modalBasicInfo'),
             on::change('#product',   "loadObjectModules"),
             on::change('#project',   "loadObjectModules"),
@@ -84,6 +96,7 @@ form
             (strpos('product|project|execution', $type) !== false) ? formGroup
             (
                 set::width('1/2'),
+                set::required(true),
                 set::label($lang->doc->{$type}),
                 picker
                 (
@@ -96,6 +109,7 @@ form
             formGroup
             (
                 set::width('1/2'),
+                set::required(true),
                 set::label($lang->doc->lib),
                 picker
                 (
