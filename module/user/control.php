@@ -1137,6 +1137,7 @@ class user extends control
         if(!empty($_POST))
         {
             if($expired) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->linkExpired));
+            $_POST['account'] = $user->account;
 
             $this->user->resetPassword();
             if(dao::isError())
@@ -1153,7 +1154,7 @@ class user extends control
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = inlink('login');
+            $response['load']    = inlink('login');
 
             return $this->send($response);
         }
