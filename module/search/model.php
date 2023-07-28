@@ -428,7 +428,7 @@ class searchModel extends model
             ->skipSpecial('sql,form')
             ->remove('onMenuBar')
             ->get();
-        if($this->post->onMenuBar) $query->shortcut = 1;
+        if($this->post->onMenuBar) $query->shortcut = '1';
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
 
         if(!dao::isError())
