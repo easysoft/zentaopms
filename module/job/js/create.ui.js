@@ -2,7 +2,14 @@ function changeEngine(event)
 {
     const engine = $(event.target).val();
 
-    $('.reference').hide();
+    if(engine == 'jenkins')
+    {
+        $('.reference').removeClass('hidden');
+    }
+    else
+    {
+        $('.reference').addClass('hidden');
+    }
 
     var repos     = engine == 'gitlab' ? gitlabRepos : repoPairs;
     var repoItems = [];
@@ -170,13 +177,6 @@ function changeTriggerType(event)
     $('.custom-fields').addClass('hidden');
     if(type == 'commit')   $('.comment-fields').removeClass('hidden');
     if(type == 'schedule') $('.custom-fields').removeClass('hidden');
-    if(type == 'tag')
-    {
-        var repoID = $('#repo').val();
-        var type   = 'Git';
-        if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
-        if(type == 'Subversion') $('.svn-fields').removeClass('hidden');
-    }
 }
 
 function changeSonarqubeServer(event)

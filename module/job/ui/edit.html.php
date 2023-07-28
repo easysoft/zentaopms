@@ -15,6 +15,8 @@ jsVar('repoPairs', $repoPairs);
 jsVar('gitlabRepos', $gitlabRepos);
 jsVar('engine', $job->engine);
 jsVar('job', $job);
+jsVar('dirChange', $lang->job->dirChange);
+jsVar('buildTag', $lang->job->buildTag);
 
 if($job->customParam)
 {
@@ -133,9 +135,9 @@ formPanel
         ),
         formGroup
         (
-            setClass('reference hidden'),
+            $job->engine == 'jenkins' ? setClass('reference') : setClass('reference hidden'),
             set::labelWidth('5em'),
-            set::label($lang->job->repo),
+            set::label($lang->job->branch),
             set::required(true),
             set::name('reference'),
             set::items($refList),

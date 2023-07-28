@@ -1,6 +1,6 @@
 function changeEngine(engine)
 {
-    $('.reference').hide();
+    engine == 'jenkins' ? $('.reference').show() : $('.reference').hide();
 
     var repos     = engine == 'gitlab' ? gitlabRepos : repoPairs;
     var repoItems = [];
@@ -74,7 +74,10 @@ function changeRepo(event)
         {
             if(data.type.indexOf('git') != -1)
             {
-                $('.reference').removeClass('hidden');
+                var engine = $('[name=engine]').val();
+                if(engine == 'jenkins') $('.reference').removeClass('hidden');
+                $('.reference').addClass('gitRepo');
+
                 $('.svn-fields').addClass('hidden');
                 $('#reference option').remove();
 
@@ -88,6 +91,7 @@ function changeRepo(event)
             }
             else
             {
+                $('.reference').removeClass('gitRepo');
                 if($('#triggerType').val() == 'tag') $('.svn-fields').removeClass('hidden');
 
                 $('#svnDir').remove();
@@ -167,13 +171,6 @@ function changeTriggerType(event)
     $('.custom-fields').addClass('hidden');
     if(type == 'commit')   $('.comment-fields').removeClass('hidden');
     if(type == 'schedule') $('.custom-fields').removeClass('hidden');
-    if(type == 'tag')
-    {
-        var repoID = $('#repo').val();
-        var type   = 'Git';
-        if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
-        if(type == 'Subversion') $('.svn-fields').removeClass('hidden');
-    }
 }
 
 function changeSonarqubeServer(event)
