@@ -577,9 +577,13 @@ $lang->ai->formSchema['task']['batchcreate']->title = '批量创建任务';
 $lang->ai->formSchema['task']['batchcreate']->type  = 'object';
 $lang->ai->formSchema['task']['batchcreate']->properties = new stdclass();
 $lang->ai->formSchema['task']['batchcreate']->properties->tasks  = new stdclass();
-$lang->ai->formSchema['task']['batchcreate']->properties->tasks->type         = 'array';
-$lang->ai->formSchema['task']['batchcreate']->properties->tasks->description  = '任务列表';
-$lang->ai->formSchema['task']['batchcreate']->properties->tasks->items        = $lang->ai->formSchema['task']['create'];
+$lang->ai->formSchema['task']['batchcreate']->properties->tasks->type                          = 'array';
+$lang->ai->formSchema['task']['batchcreate']->properties->tasks->description                   = '任务列表';
+$lang->ai->formSchema['task']['batchcreate']->properties->tasks->items                         = $lang->ai->formSchema['task']['create'];
+$lang->ai->formSchema['task']['batchcreate']->properties->tasks->items->properties->estStarted = clone $lang->ai->formSchema['task']['batchcreate']->properties->tasks->items->properties->begin;
+$lang->ai->formSchema['task']['batchcreate']->properties->tasks->items->properties->deadline   = clone $lang->ai->formSchema['task']['batchcreate']->properties->tasks->items->properties->end;
+unset($lang->ai->formSchema['task']['batchcreate']->properties->tasks->items->properties->begin);
+unset($lang->ai->formSchema['task']['batchcreate']->properties->tasks->items->properties->end);
 
 $lang->ai->formSchema['bug']['create'] = new stdclass();
 $lang->ai->formSchema['bug']['create']->title = 'Bug';
