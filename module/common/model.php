@@ -3300,6 +3300,7 @@ EOF;
 
         if($httpCode)
         {
+            curl_setopt($curl, CURLOPT_HEADER, true); /* true to include the header in the output. */
             $httpCode     = $info['http_code'] ?? curl_getinfo($curl, CURLINFO_HTTP_CODE);
             $headerSize   = $info['header_size'] ?? curl_getinfo($curl, CURLINFO_HEADER_SIZE);
             $headerString = substr($response, 0, $headerSize);
