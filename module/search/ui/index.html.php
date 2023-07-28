@@ -12,6 +12,8 @@ namespace zin;
 
 to::header();
 
+if(is_array($type)) $type = reset($type);
+
 $labels = array();
 foreach(array_slice($lang->search->modules, 0, 10) as $module => $moduleName)
 {

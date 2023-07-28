@@ -4,7 +4,7 @@ function searchWords()
     const $form = $target.closest('#mainContent').find('form');
     const type = $target.data('type') || $form.find('input[name=type]').val();
     const form = new FormData();
-    form.append('type', type);
+    form.append('type[]', type);
     form.append('words', $form.find('input[name=words]').val());
 
     postAndLoadPage($.createLink('search', 'index'), form);
