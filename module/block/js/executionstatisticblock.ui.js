@@ -12,14 +12,6 @@ function initNavTabs()
     })
 }
 
-window.switchProject = function(event)
-{
-    const block  = $(event.target).parent().data('block');
-    const params = $(event.target).parent().data('param');
-    const url    = $.createLink('block', 'printBlock', 'blockID=' + block + '&params=' + params);
-    loadPage({url, selector: '#executionstatistic-block-' + block, success: initNavTabs});
-}
-
 function switchNav(event)
 {
     var isPrev   = $(event.target).closest('.nav-item').hasClass('nav-prev');

@@ -383,10 +383,11 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
 };
 
 $projectItems = array();
-$projectItems[] = array('text' => $lang->block->executionstatistic->allProject, 'data-block' => $block->id, 'data-param' => helper::safe64Encode("project=0"), 'data-on' => 'click', 'data-call' => 'switchProject', 'data-params' => 'event');
+$projectItems[] = array('text' => $lang->block->executionstatistic->allProject, 'url' => createLink('block', 'printBlock', "blockID={$block->id}"), 'data-load' => 'target', 'data-selector' => "#executionstatistic-block-{$block->id}", 'data-partial' => true);
 foreach($projects as $projectID => $projectName)
 {
-    $projectItems[] = array('text' => $projectName, 'data-block' => $block->id, 'data-param' => helper::safe64Encode("project={$projectID}"), 'data-on' => 'click', 'data-call' => 'switchProject', 'data-params' => 'event');
+    $url = createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("project={$projectID}"));
+    $projectItems[] = array('text' => $projectName, 'url' => $url, 'data-load' => 'target', 'data-selector' => "#executionstatistic-block-{$block->id}", 'data-partial' => true);
 }
 
 $blockNavCode = 'nav-' . uniqid();
