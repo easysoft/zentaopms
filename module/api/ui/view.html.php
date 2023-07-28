@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include '../../doc/ui/left.html.php';
+include '../../doc/ui/lefttree.html.php';
 
 $versionList = array();
 for($itemVersion = $api->version; $itemVersion > 0; $itemVersion--)

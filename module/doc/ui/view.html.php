@@ -5,7 +5,7 @@ declare(strict_types=1);
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Sun Guangming<sunguangming@easycorp.ltd>
- * @package     doc 
+ * @package     doc
  * @link        https://www.zentao.net
  */
 namespace zin;
@@ -16,7 +16,7 @@ featureBar
 );
 
 if($libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
-include './left.html.php';
+include 'lefttree.html.php';
 
 toolbar
 (
@@ -56,8 +56,8 @@ if($config->vision == 'rnd' and $config->edition == 'max' and $app->tab == 'proj
     $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
     $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
 
-    if($canImportToPracticeLib)  $items[] = array('text' => $lang->doc->importToPracticeLib,  'url' => '#importToPracticeLib',  'data-toggle' => 'modal'); 
-    if($canImportToComponentLib) $items[] = array('text' => $lang->doc->importToComponentLib, 'url' => '#importToComponentLib', 'data-toggle' => 'modal'); 
+    if($canImportToPracticeLib)  $items[] = array('text' => $lang->doc->importToPracticeLib,  'url' => '#importToPracticeLib',  'data-toggle' => 'modal');
+    if($canImportToComponentLib) $items[] = array('text' => $lang->doc->importToComponentLib, 'url' => '#importToComponentLib', 'data-toggle' => 'modal');
 
     $importLibBtn = $items ? dropdown
     (

@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-include 'left.html.php';
+include 'lefttree.html.php';
 
 if($libType != 'api' && $libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
 

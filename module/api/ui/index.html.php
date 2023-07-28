@@ -68,7 +68,7 @@ if($app->rawModule == 'api')
         ))) : null,
     );
 
-    include '../../doc/ui/left.html.php';
+    include '../../doc/ui/lefttree.html.php';
 }
 
 $list = array();
