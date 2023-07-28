@@ -2360,9 +2360,11 @@ class taskModel extends model
         $datas  = array();
         foreach($tasks as $task)
         {
-            if(!isset($fields[$task->$field])) $fields[$task->$field] = 0;
-            $fields[$task->$field] ++;
+            $key = (string)$task->$field;
+            if(!isset($fields[$key])) $fields[$key] = 0;
+            $fields[$key] ++;
         }
+
         if($field != 'date' and $field != 'deadline') asort($fields);
         foreach($fields as $field => $count)
         {
@@ -2445,7 +2447,7 @@ class taskModel extends model
             if(!$this->session->taskOnlyCondition) return 'id in (' . preg_replace('/SELECT .* FROM/', 'SELECT t1.id FROM', $this->session->taskQueryCondition) . ')';
             return $this->session->taskQueryCondition;
         }
-        return true;
+        return '1=1';
     }
 
     /**
