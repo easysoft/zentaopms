@@ -328,7 +328,7 @@ $lang->ai->targetForm['execution']['createrisk']       = '创建风险';
 $lang->ai->targetForm['execution']['createissue']      = '创建问题';
 
 $lang->ai->targetForm['task']['edit']        = '编辑任务';
-$lang->ai->targetForm['task']['batchCreate'] = '批量创建子任务';
+$lang->ai->targetForm['task']['batchcreate'] = '批量创建子任务';
 
 $lang->ai->targetForm['testcase']['edit']         = '编辑用例';
 $lang->ai->targetForm['testcase']['createscript'] = '创建自动化脚本';

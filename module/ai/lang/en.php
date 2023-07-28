@@ -328,7 +328,7 @@ $lang->ai->targetForm['execution']['createrisk']       = 'Create Risk';
 $lang->ai->targetForm['execution']['createissue']      = 'Create Issue';
 
 $lang->ai->targetForm['task']['edit']        = 'Edit Task';
-$lang->ai->targetForm['task']['batchCreate'] = 'Batch Create Task';
+$lang->ai->targetForm['task']['batchcreate'] = 'Batch Create Task';
 
 $lang->ai->targetForm['testcase']['edit']         = 'Edit Test Case';
 $lang->ai->targetForm['testcase']['createscript'] = 'Create Script';
