@@ -1147,9 +1147,10 @@ class projectModel extends model
             $this->updateProducts($projectID);
             /* If $_POST has product name, create it. */
             $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
-            $needCreateProduct   = !$project->hasProduct || isset($postData->rawdata->newProduct) || (!$project->parent && empty($linkedProductsCount));
-            if($needCreateProduct && !$this->projectTao->createProduct($projectID, $project, $postData, $program)) return false;
         }
+
+        $needCreateProduct = !$project->hasProduct || isset($postData->rawdata->newProduct) || (!$project->parent && empty($linkedProductsCount));
+        if($needCreateProduct && !$this->projectTao->createProduct($projectID, $project, $postData, $program)) return false;
 
         /* Save order. */
         $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
