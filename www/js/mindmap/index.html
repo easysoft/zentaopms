@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mindmap - Zentao</title>
-  <link rel="stylesheet" href="../../theme/zui/css/min.css" />
-  <script src="../jquery/lib.js"></script>
-  <script src="../zui/min.js"></script>
-  <script src="./js/hotkey.min.js"></script>
-  <script src="./js/zui.mindmap.js"></script>
-  <link rel="stylesheet" href="./css/zui.mindmap.css" />
-  <style>#mindmap,body,html {width: 100%; height: 100%;}#mindmap{border: 1px solid rgba(0,0,0,.05)}</style>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mindmap - Zentao</title>
+<link rel="stylesheet" href="../../theme/zui/css/min.css" />
+<script src="../jquery/lib.js"></script>
+<script src="../zui/min.js"></script>
+<script src="./js/hotkey.min.js"></script>
+<script src="./js/zui.mindmap.js"></script>
+<link rel="stylesheet" href="./css/zui.mindmap.css" />
+<style>
+#mindmap,body,html {width: 100%; height: 100%;}#mindmap{border: 1px solid rgba(0,0,0,.05)}
+#mindmap {position: fixed; top: 0; right: 0; bottom: 0; left: 0;}
+#mindmap .icon-plus-sign::before {content: '\e974'}
+#mindmap .icon-minus-sign::before {content: '\e9b6'}
+#mindmap .icon-expand-full::before {content: '\e94e'}
+#mindmap .icon-dot-circle::before {content: '\e94c'}
+</style>
 </head>
 <body>
 <div id="mindmap"></div>
