@@ -8,7 +8,10 @@ class tableChart extends wg
         'type:string',
         'title:string',
         'tableHeaders?:array',
-        'datas?:array'
+        'datas?:array',
+        'tableWidth?:string',
+        'chartHeight?:int',
+        'overflow?:bool'
     );
 
     private function genTableHeaders(): wg
@@ -28,6 +31,7 @@ class tableChart extends wg
 
         return h::tr
         (
+            setClass('border-t'),
             h::th($tableHeaders['item']),
             h::th(set::width('100px'), $tableHeaders['value']),
             h::th(set::width('120px'), $tableHeaders['percent'])
@@ -57,13 +61,15 @@ class tableChart extends wg
             if(!next($colorList)) reset($colorList);
         }
 
+        $tableWdith  = $this->prop('tableWidth', '50%');
+        $chartHeight = $this->prop('chartHeight', 300);
+        $overflow    = $this->prop('overflow', true);
         return div
         (
-            set::class('flex border'),
+            set::class('flex border py-2'),
             cell
             (
-                set::width('50%'),
-                set::class('border-r chart'),
+                setClass('border-r chart flex-auto'),
                 div(set::class('center text-base font-bold py-2'), $title),
                 echarts
                 (
@@ -88,16 +94,21 @@ class tableChart extends wg
                             )
                         )
                     )
-                )->size('100%', 300),
+                )->size('100%', $chartHeight),
             ),
             cell
             (
-                set::width('50%'),
-                h::table
+                set::width($tableWdith),
+                div
                 (
-                    set::class('table'),
-                    $this->genTableHeaders(),
-                    $tableTR
+                    setClass('overflow-y-auto'),
+                    $overflow ? setStyle('max-height', ($chartHeight + 50) .'px') : null,
+                    h::table
+                    (
+                        set::class('table'),
+                        $this->genTableHeaders(),
+                        $tableTR
+                    )
                 )
             )
         );
