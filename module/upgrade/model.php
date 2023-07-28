@@ -1459,7 +1459,7 @@ class upgradeModel extends model
                     try
                     {
                         $tableExists = true;
-                        $stmt        = $this->dbh->query("show fields from `{$table}`");
+                        $stmt        = $this->dbh->query("show fields from `$table`");
                         while($row = $stmt->fetch()) $fields[$row->Field] = $row->Field;
                     }
                     catch(PDOException $e)
@@ -1485,11 +1485,11 @@ class upgradeModel extends model
                         if(stripos($line, 'auto_increment') !== false) $line .= ' primary key';
                         try
                         {
-                            $this->dbh->exec("ALTER TABLE `{$table}` ADD $line");
+                            $this->dbh->exec("ALTER TABLE `$table` ADD $line");
                         }
                         catch(PDOException $e)
                         {
-                            $alterSQL .= "ALTER TABLE `{$table}` ADD $line;\n";
+                            $alterSQL .= "ALTER TABLE `$table` ADD $line;\n";
                         }
                     }
                 }
