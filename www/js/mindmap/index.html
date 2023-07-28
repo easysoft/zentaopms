@@ -17,6 +17,8 @@
 <div id="mindmap"></div>
 <script>
 $('#mindmap').mindmap($.extend({minimap: false, toolbar: true}, window.parent[$.getSearchParam('options')]));
+const mindmap = $('#mindmap').data('zui.mindmap');
+parent.getMindmap = function() {return mindmap;};
 </script>
 </body>
 </html>

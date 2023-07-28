@@ -60,6 +60,7 @@ class mindmap extends wg
         (
             h::iframe
             (
+                set::class('mindmap-iframe'),
                 set::src($mindmapPath),
                 set::allowfullscreen(true),
                 set::allowtransparency(true),
