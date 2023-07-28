@@ -10,8 +10,8 @@
  * 单位：个
  * 描述：按全局统计的已关闭反馈数是指已经处理完毕并关闭的用户反馈的数量。这个度量项可以反映团队对用户反馈的关注度和处理效率。较高的已关闭反馈总数可能意味着团队能够及时响应用户反馈，并持续改进产品以解决用户问题。
  * 定义：所有的反馈个数求和
-状态为已关闭
-过滤已删除的反馈
+ *       状态为已关闭
+ *       过滤已删除的反馈
  * 度量库：
  * 收集方式：realtime
  *
@@ -24,20 +24,20 @@
  */
 class count_of_closed_feedback extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getFeedbacks';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.status');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = 0;
 
-    public function calculate($data)
+    public function calculate($row)
     {
+        if($row->status == 'closed') $this->result += 1;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = $this->getRecords(array('value'));
+        return $this->filterByOptions($records, $options);
     }
 }
