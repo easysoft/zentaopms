@@ -10,6 +10,65 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$extensionItems = array();
+foreach($extensions as $extension)
+{
+    $expiredDate = $this->extension->getExpireDate($extension);
+
+    $extensionInfo = array();
+    $extensionInfo[] = $lang->extension->version . ': ';
+    $extensionInfo[] = h::i($extension->version);
+    $extensionInfo[] = ' ' . $lang->extension->author . ': ';
+    $extensionInfo[] = h::i($extension->author);
+    if(!empty($expiredDate))
+    {
+        $extensionInfo[] = ' ' . $lang->extension->expiredDate . ': ';
+        $extensionInfo[] = $expiredDate != 'life' ? h::i($expiredDate) : h::i($lang->extension->life);
+    }
+
+    $btnItems = array();
+    if(isset($extension->viewLink))       $btnItems[] = array('text' => $lang->extension->view,  'url' => $extension->viewLink);
+    if($extension->status == 'installed') $btnItems[] = array('text' => $lang->extension->structure,  'url' => createLink('extension', 'structure', "extension={$extension->code}"),  'data-toggle' => 'modal');
+    if($extension->status == 'installed' && !empty($extension->upgradeLink)) $btnItems[] = array('text' => $lang->extension->upgrade,  'url' => $extension->upgradeLink, 'data-toggle' => 'modal');
+    if($extension->type != 'patch')
+    {
+        if($extension->status == 'installed')   $btnItems[] = array('text' => $lang->extension->deactivate, 'url' => createLink('extension', 'deactivate', "extension={$extension->code}"), 'data-toggle' => 'modal');
+        if($extension->status == 'deactivated') $btnItems[] = array('text' => $lang->extension->activate,   'url' => createLink('extension', 'activate', "extension={$extension->code}"),   'data-toggle' => 'modal');
+        if($extension->status == 'available')   $btnItems[] = array('text' => $lang->extension->install,    'url' => createLink('extension', 'install', "extension={$extension->code}"),    'data-toggle' => 'modal');
+        if($extension->status == 'available')   $btnItems[] = array('text' => $lang->extension->erase,      'url' => createLink('extension', 'erase', "extension={$extension->code}"),      'data-toggle' => 'modal');
+        if($extension->status == 'installed' || $extension->status == 'deactivated') $btnItems[] = array('text' => $lang->extension->uninstall,  'url' => createLink('extension', 'uninstall', "extension={$extension->code}"),  'data-toggle' => 'modal');
+    }
+    $btnItems[] = array('text' => $lang->extension->site, 'url' => $extension->site, 'target' => '_blank');
+
+    $extensionItems[] = div
+    (
+        set::class('mb-2'),
+        div
+        (
+            set::class('font-bold mb-2'),
+            $extension->name
+        ),
+        div
+        (
+            set::class('mb-2'),
+            $extension->desc
+        ),
+        div
+        (
+            $extensionInfo,
+            div
+            (
+                set::class('pull-right'),
+                btnGroup
+                (
+                    set::items($btnItems),
+                )
+            )
+        ),
+        hr()
+    );
+}
+
 if(!empty($error))
 {
     div
@@ -52,6 +111,12 @@ else
             'class' => 'primary',
             'url'   => createLink('extension', 'obtain')
         ))) : null,
+    );
+
+    div
+    (
+        set::class('flex col gap-y-1 p-5 bg-white'),
+        $extensionItems
     );
 }
 
