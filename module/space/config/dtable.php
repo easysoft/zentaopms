@@ -68,8 +68,8 @@ $config->space->dtable->fieldList['actions']['list']['upgrade']['url']         =
 
 $config->space->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->space->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->edit;
-$config->space->dtable->fieldList['actions']['list']['edit']['url']  = array('module' => 'space', 'method' => 'edit', 'params' => 'id={orgID}&type={type}');
+$config->space->dtable->fieldList['actions']['list']['edit']['url']  = 'javascript:editApp({orgID}, "{appName}")';
 
 $config->space->dtable->fieldList['actions']['list']['bindUser']['icon'] = 'lock';
 $config->space->dtable->fieldList['actions']['list']['bindUser']['hint'] = $lang->gitlab->bindUser;
-$config->space->dtable->fieldList['actions']['list']['bindUser']['url']  = array('module' => 'space', 'method' => 'bindUser', 'id={id}');
+$config->space->dtable->fieldList['actions']['list']['bindUser']['url']  = 'javascript:bindUser({orgID}, "{appName}")';

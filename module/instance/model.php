@@ -2045,13 +2045,13 @@ class InstanceModel extends model
      */
     public function isClickable(object $instance, string $action): bool
     {
-        if($action == 'start')     return empty($instance->type) ? $this->canDo('start', $instance) : false;
-        if($action == 'stop')      return empty($instance->type) ? $this->canDo('stop', $instance) : false;
-        if($action == 'uninstall') return empty($instance->solution) && $this->canDo('uninstall', $instance);
-        if($action == 'visit')     return empty($instance->type) ? ($instance->domain && $this->canDo('visit', $instance)) : true;
+        if($action == 'start')     return $instance->type == 'app' ? $this->canDo('start', $instance) : false;
+        if($action == 'stop')      return $instance->type == 'app' ? $this->canDo('stop', $instance) : false;
+        if($action == 'uninstall') return $instance->type == 'app' && $this->canDo('uninstall', $instance);
+        if($action == 'visit')     return $instance->type == 'app' ? ($instance->domain && $this->canDo('visit', $instance)) : true;
         if($action == 'upgrade')   return !empty($instance->latestVersion);
-        if($action == 'bindUser')  return empty($instance->type) ? false : true;
-        if($action == 'edit')      return empty($instance->type) ? false : true;
+        if($action == 'bindUser')  return ($instance->type == 'external' && in_array($instance->appName, array('Gitlab', 'Gitea', 'Gogs'))) ? true : false;
+        if($action == 'edit')      return $instance->type == 'app' ? false : true;
 
         return true;
     }

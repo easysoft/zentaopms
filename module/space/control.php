@@ -90,6 +90,13 @@ class space extends control
         $this->display();
     }
 
+    /**
+     * 创建一个应用。
+     * Create a application.
+     *
+     * @access public
+     * @return viod
+     */
     public function createApplication()
     {
         $this->app->loadLang('sonarqube');
@@ -112,7 +119,15 @@ class space extends control
         $this->display();
     }
 
-    public function getStoreAppInfo($appID)
+    /**
+     * 获取应用商店app信息。
+     * Get a store app info.
+     *
+     * @param  int    $appID
+     * @access public
+     * @return viod
+     */
+    public function getStoreAppInfo(int $appID)
     {
         $cloudApp = $this->loadModel('store')->getAppInfo($appID);
 
