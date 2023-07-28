@@ -78,7 +78,6 @@ if(!empty($files))
                                 $file->objectName,
                                 a
                                 (
-                                    setClass('text-gray'),
                                     set::href(createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID={$file->objectID}")),
                                     set::title($file->sourceName),
                                     $file->sourceName,
