@@ -73,6 +73,7 @@ $lang->search->buildIndex = '重建索引';
 $lang->search->preview    = '预览';
 
 $lang->search->result            = '搜索结果';
+$lang->search->resultCount       = '共计 <strong>%s</strong> 条';
 $lang->search->buildSuccessfully = '初始化搜索索引成功';
 $lang->search->executeInfo       = '为您找到相关结果%s个，耗时%s秒';
 $lang->search->buildResult       = "创建 %s 索引, 已创建  <strong class='%scount'>%s</strong> 条记录；";

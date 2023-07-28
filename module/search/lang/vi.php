@@ -73,6 +73,7 @@ $lang->search->buildIndex = 'Rebuild Index';
 $lang->search->preview    = 'Preview';
 
 $lang->search->result            = 'Kết quả tìm kiếm';
+$lang->search->resultCount       = '<strong>%s</strong> items';
 $lang->search->buildSuccessfully = 'Tìm kiếm khởi tạo chỉ mục.';
 $lang->search->executeInfo       = '%s kết quả tìm kiếm trong %s giây';
 $lang->search->buildResult       = "Create index %s and created <strong class='%scount'>%s</strong> records.";
