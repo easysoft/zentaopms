@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $extensionItems = array();
+$i = 1;
 foreach($extensions as $extension)
 {
     $expiredDate = $this->extension->getExpireDate($extension);
@@ -65,8 +66,10 @@ foreach($extensions as $extension)
                 )
             )
         ),
-        hr()
+        $i < count($extensions) ? hr() : null
     );
+
+    $i++;
 }
 
 if(!empty($error))
