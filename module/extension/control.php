@@ -396,8 +396,9 @@ class extension extends control
     public function deactivate($extension)
     {
         $this->extension->updateExtension($extension, array('status' => 'deactivated'));
+
+        $this->view->title          = $this->lang->extension->deactivateFinished;
         $this->view->removeCommands = $this->extension->removePackage($extension);
-        $this->view->title      = $this->lang->extension->deactivateFinished;
         $this->display();
     }
 
