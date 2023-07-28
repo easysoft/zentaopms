@@ -612,7 +612,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function report(int $productID, string $browseType, int $branchID, int $moduleID, string $chartType = 'default')
+    public function report(int $productID, string $browseType, int $branchID, int $moduleID, string $chartType = 'pie')
     {
         $this->loadModel('report');
         $this->view->charts = array();

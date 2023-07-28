@@ -4,188 +4,95 @@ declare(strict_types=1);
  * The report view file of bug module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Tingting Dai <daitingting@easycorp.ltd>
+ * @author      Yuting Wang <wangyuting@easycorp.ltd>
  * @package     bug
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('params', "productID={$productID}&browseType={$browseType}&branchID={$branchID}&moduleID={$moduleID}");
 
-toolbar
+detailHeader
 (
-    item(set(
-    [
-        'text'  => $lang->goback,
-        'icon'  => 'back',
-        'class' => 'ghost',
-        'url'   => createLink('bug', 'browse', "productID=$productID&branch=0&browseType=$browseType&moduleID=$moduleID")
-    ])),
-    item(set::type('divider')),
-    div
+    to::title
     (
-        $lang->bug->report->common,
-        set::class('font-semibold'),
-    )
-);
-
-$selectCharts = array();
-foreach($lang->bug->report->charts as $code => $name)
-{
-    $chart = array();
-    $chart['text']  = $name;
-    $chart['value'] = $code;
-
-    $selectCharts[] = $chart;
-}
-
-sidebar
-(
-    formPanel
-    (
-        set('title', $lang->bug->report->select),
-        set('actions', ''),
-        set('actions', array
+        entityLabel
         (
-            item
-            (
-                set::type('btn'),
-                set::text($lang->selectAll),
-                setClass('btn-select-all space'),
-                on::click(),
-            ),
-            'submit',
-        )),
-        set('submitBtnText', $lang->bug->report->create),
-        checkList
-        (
-            set::primary(true),
-            set::name('charts[]'),
-            set::value('code'),
-            set::inline(false),
-            set::items($selectCharts),
-        ),
-    ),
-);
-
-foreach($lang->report->typeList as $type => $name)
-{
-    $chartTypeList[] = item
-    (
-        set::text($name),
-        set::url('javascript:chageChartType(\"$type\")'),
-        set::icon($type == 'default' ? 'list-box' : "chart-{$type}"),
-        setClass('btn ghost' . ($type == $chartType ? ' btn-active-line' : ''))
-    );
-}
-
-$notice = str_replace('%tab%', $lang->bug->unclosed . $lang->bug->common, $lang->report->notice->help);
-$ths = array('item', 'value', 'percent');
-
-$chartContents = array();
-foreach($charts as $chartType => $chartOption)
-{
-    foreach($datas[$chartType] as $key => $data)
-    {
-        $trs[] = h::tr
-        (
-            h::td
-            (
-                icon('chart-color-dot'),
-                setClass('chart-color'),
-            ),
-            h::td
-            (
-                $data->name,
-                setClass('chart-label'),
-                set('align', 'left'),
-                set('title', zget($data, 'title', $data->name)),
-            ),
-            h::td
-            (
-                $data->value,
-                setClass('chart-value'),
-                set('align', 'right'),
-            ),
-            h::td
-            (
-                ($data->percent * 100) . $lang->percent,
-                set('align', 'right'),
-            )
-        );
-    }
-
-    $chartContents[] = div
-    (
-        setClass('flex items-center'),
-        cell
-        (
-            set::width('70%'),
-            div
-            (
-                setClass('chart-canvas'),
-                canvas
-                (
-                    setID("chart-{$chartType}"),
-                    set('width', $chartOption->width),
-                    set('height', $chartOption->height),
-                    set('data-responsive', true),
-                )
-            ),
-        ),
-        cell
-        (
-            h::table
-            (
-                setClass('table table-bordered table-condensed table-hover table-chart'),
-                set('data-chart', $chartOption->type),
-                set('data-target', '#chart-' . $chartType),
-                set('data-animation', false),
-
-                h::thead
-                (
-                    h::tr
-                    (
-                        h::th
-                        (
-                            $lang->report->item,
-                            setClass('chart-label'),
-                            set('colspan', 2),
-                        ),
-                        h::th
-                        (
-                            $lang->report->value,
-                            set('align', 'right'),
-                            set('width', 50),
-                        ),
-                        h::th
-                        (
-                            $lang->report->percent,
-                            set('align', 'right'),
-                            set('width', 60),
-                        ),
-                    )
-                ),
-                h::tbody($trs),
-            )
-        ),
-    );
-}
-
-panel
-(
-    toolbar
-    (
-        set::current($chartType),
-        $chartTypeList,
-        to::after
-        (
-            div
-            (
-                $notice,
-                setClass('text-gray')
-            )
+            set::level(1),
+            set::text($lang->bug->report->common)
         )
     ),
-    $chartContents
+);
+
+$reports = array();
+foreach($lang->bug->report->charts as $key => $label) $reports[] = array('text' => $label, 'value' => $key);
+
+$echarts   = array();
+foreach($charts as $type => $option)
+{
+    $chartData = $datas[$type];
+    $echarts[] = tableChart
+    (
+        set::type($option->type),
+        set::title($lang->bug->report->charts[$type]),
+        set::datas((array)$chartData)
+    );
+}
+
+$tabItems = array();
+unset($lang->report->typeList['default']);
+foreach($lang->report->typeList as $type => $typeName)
+{
+    $tabItems[] = tabPane
+    (
+        set::title($typeName),
+        set::active($type == $chartType),
+        set::param($type),
+        to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
+        div(set::class('pb-4 pt-2'), span(set::class('text-gray'), html(str_replace('%tab%', $lang->bug->unclosed . $lang->bug->common, $lang->report->notice->help)))),
+        div($echarts)
+    );
+}
+
+div
+(
+    set::class('flex items-start'),
+    cell
+    (
+        set::width('240'),
+        set::class('bg-white p-4 mr-5'),
+        div(set::class('pb-2'), span(set::class('font-bold'), $lang->bug->report->select)),
+        div
+        (
+            set::class('pb-2'),
+            control
+            (
+                set::type('checkList'),
+                set::name('charts'),
+                set::items($reports)
+            )
+        ),
+        btn
+        (
+            set('data-on', 'click'),
+            set('data-call', 'selectAll'),
+            $lang->selectAll
+        ),
+        btn
+        (
+            set::class('primary ml-4 inited'),
+            set('data-on', 'click'),
+            set('data-call', 'clickInit'),
+            set('data-params', 'event'),
+            $lang->bug->report->create
+        )
+    ),
+    cell
+    (
+        set::flex('1'),
+        set::class('bg-white px-4 py-2'),
+        set::id('report'),
+        tabs($tabItems)
+    )
 );
 
 render();
