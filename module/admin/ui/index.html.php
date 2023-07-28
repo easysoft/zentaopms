@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace zin;
 
+/* Get latest data from zentao.net if ZenTaoPMS has internet and the user is admin. */
+jsVar('hasInternet', $zentaoData->hasData || $hasInternet);
+jsVar('isAdminUser', $this->app->user->admin);
+
 $buildHeader = function(string $title, string $actionUrl = '', string $titleIcon = '', string $actionLang = '', string $actionIcon = ''): h
 {
     global $lang;

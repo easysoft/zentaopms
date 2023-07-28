@@ -8,3 +8,10 @@ function redirectSetting(event)
 
     openUrl($box.data('url'));
 }
+
+$(function()
+{
+    /* Update patch, plugin, news, mooc from zentao.net. */
+    if(isAdminUser && hasInternet) $.get($.createLink('admin', 'ajaxSetZentaoData'));
+
+});

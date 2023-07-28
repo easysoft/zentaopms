@@ -51,10 +51,11 @@ class admin extends control
             $this->view->ignore  = false;
         }
 
-        $this->view->title      = $this->lang->admin->common;
-        $this->view->zentaoData = $this->admin->getZentaoData();
-        $this->view->dateUsed   = $this->admin->genDateUsed();
-        $this->view->langNotCN  = common::checkNotCN();
+        $this->view->title       = $this->lang->admin->common;
+        $this->view->zentaoData  = $this->admin->getZentaoData();
+        $this->view->dateUsed    = $this->admin->genDateUsed();
+        $this->view->langNotCN   = common::checkNotCN();
+        $this->view->hasInternet = $this->admin->checkInternet();
         $this->display();
     }
 
