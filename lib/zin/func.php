@@ -1697,3 +1697,11 @@ function password(): password
 {
     return createWg('password', func_get_args());
 }
+
+/**
+ * Mindmap widget.
+ */
+function mindmap(): mindmap
+{
+    return createWg('mindmap', func_get_args());
+}
