@@ -37,6 +37,43 @@
 
           for(var inputName in data)
           {
+            if(Array.isArray(data[inputName]))
+            {
+              var arr = data[inputName];
+              for(var i = 0; i < arr.length; i++)
+              {
+                for(var key in arr[i])
+                {
+                  var $input = $('[name="' + key + '[' + (i+1) + ']' + '"]');
+                  if(!$input.length) continue;
+
+                  var inputType = $input.prop('nodeName');
+                  switch(inputType) // Contains case fallthroughs, on purpose.
+                  {
+                    case 'TEXTAREA':
+                      /* Textareas might be controlled by KindEditors. */
+                      if(typeof KindEditor !== 'undefined' && KindEditor.instances.length)
+                      {
+                        var editorInstance = KindEditor.instances.find(function(e)
+                        {
+                          return e.srcElement.attr('name') == key;
+                        });
+                        if(editorInstance)
+                        {
+                          editorInstance.html(arr[i][key]);
+                          editorInstance.sync();
+                          break;
+                        }
+                      }
+                    default:
+                      /* For normal inputs, just set the value is enough. */
+                      $input.val(arr[i][key]);
+                      break;
+                  }
+                }
+              }
+            }
+
             var $input = $('[name="' + inputName + '"]');
             if(!$input.length) continue;
 
@@ -45,7 +82,7 @@
             {
               case 'TEXTAREA':
                 /* Textareas might be controlled by KindEditors. */
-                if(KindEditor.instances.length)
+                if(typeof KindEditor !== 'undefined' && KindEditor.instances.length)
                 {
                   var editorInstance = KindEditor.instances.find(function(e)
                   {
