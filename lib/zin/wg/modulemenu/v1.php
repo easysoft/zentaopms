@@ -5,6 +5,7 @@ namespace zin;
 class moduleMenu extends wg
 {
     private array $modules = array();
+    private static array $filterMap = array();
 
     protected static array $defineProps = array(
         'modules: array',
@@ -41,12 +42,22 @@ class moduleMenu extends wg
             else unset($item['items']);
             $parentItems[] = $item;
         }
+
         return $parentItems;
     }
 
     private function getChildModule(int|string $id): array
     {
-        return array_filter($this->modules, fn($module) => $module->parent == $id);
+        return array_filter($this->modules, function($module) use($id)
+        {
+            /* Remove the rendered module. */
+            if(isset(static::$filterMap["$module->parent-$module->id"])) return false;
+
+            if($module->parent != $id) return false;
+
+            static::$filterMap["$module->parent-$module->id"] = true;
+            return true;
+        });
     }
 
     private function setMenuTreeProps(): void
