@@ -3689,7 +3689,8 @@ EOF;
     {
         $url .= (strpos($url, '?') !== false ? '&' : '?') . http_build_query($data, '', '&', PHP_QUERY_RFC3986);
 
-        $result = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'GET'), $headers, 'json', 20));
+        $result = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'GET'), $headers, 'json'));
+
         if($result && $result->code == 200) return $result;
 
         return static::apiError($result);
@@ -3706,7 +3707,7 @@ EOF;
      */
     public static function apiPost($url, $data, $headers = array())
     {
-        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $headers, 'json', 20));
+        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $headers, 'json'));
         if($result && $result->code == 200) return $result;
 
         return static::apiError($result);
@@ -3723,7 +3724,7 @@ EOF;
      */
     public static function apiPut($url, $data, $headers = array())
     {
-        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers, 'json', 20));
+        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers, 'json'));
         if($result && $result->code == 200) return $result;
 
         return static::apiError($result);
@@ -3740,7 +3741,7 @@ EOF;
      */
     public static function apiDelete($url, $data, $headers = array())
     {
-        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $headers, 'json', 20));
+        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $headers, 'json'));
         if($result && $result->code == 200) return $result;
 
         return static::apiError($result);
