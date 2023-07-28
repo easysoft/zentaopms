@@ -953,14 +953,19 @@ class task extends control
 
         $tasks          = $this->task->getUserTaskPairs($account, $status, array(), array($appendID));
         $suspendedTasks = $this->task->getUserSuspendedTasks($account);
-        foreach($tasks as $taskid => $task)
+        $items          = array();
+        foreach($tasks as $taskID => $taskName)
         {
-            if(isset($suspendedTasks[$taskid])) unset($tasks[$taskid]);
+            if(isset($suspendedTasks[$taskID]))
+            {
+                unset($tasks[$taskID]);
+                continue;
+            }
+            $items[] = array('text' => $taskName, 'value' => $taskID);
         }
 
-        $this->view->id = $id;
-        $this->view->tasks = $tasks;
-        $this->display();
+        $fieldName = $id ? "tasks[$id]" : 'task';
+        return print(json_encode(array('name' => $fieldName, 'items' => $items)));
     }
 
     /**

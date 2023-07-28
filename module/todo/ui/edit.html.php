@@ -69,12 +69,12 @@ $buildDateControl = function(object $todo): mixed
                     array(
                         'name'  => 'date',
                         'class' => 'date',
-                        'value' => $todo->date == '2030-01-01' ? '' : $todo->date,
-                        'type'  => 'date',
+                        'value' => $todo->date == FUTURE_TIME ? '' : $todo->date,
+                        'type'  => 'datepicker',
                         'width' => '1/4'
                     )
                 ),
-                on::change('changeDate(this)')
+                on::change('changeDate')
             )
         ),
         formGroup
@@ -89,10 +89,10 @@ $buildDateControl = function(object $todo): mixed
                         'name'    => 'switchDate',
                         'text'    => $lang->todo->periods['future'],
                         'width'   => '100px',
-                        'checked' => $todo->date == '2030-01-01'
+                        'checked' => $todo->date == FUTURE_TIME
                     )
                 ),
-                on::change('togglePending(this)')
+                on::change('togglePending')
             )
         )
     );
@@ -507,45 +507,21 @@ $buildTodoType = function(object $todo)
 
     return formGroup
     (
-        set
-        (
-            array(
-                'label' => $lang->todo->type,
-                'width' => '1/3',
-            )
-        ),
-        select
-        (
-            set
-            (
-                array(
-                    'required' => true,
-                    'name'     => 'type',
-                    'items'    => $lang->todo->typeList,
-                    'value'    => $todo->type
-                )
-            )
-        ),
-        on::change('changeType(this)')
+        set::width('1/3'),
+        set::label($lang->todo->type),
+        picker(set(array('required' => true, 'name' => 'type', 'items' => $lang->todo->typeList, 'value' => $todo->type, 'onchange' => 'changeType(this)'))),
     );
 };
 
 formPanel
 (
     set::title(''),
-    div(
+    div
+    (
         setClass('flex items-center pb-2.5'),
         span($lang->todo->edit),
-        span
-        (
-            setClass('text-lg font-bold ml-3'),
-            $todo->name,
-        ),
-        label
-        (
-            $todo->id,
-            setClass('circle ml-2 label-id px-2')
-        )
+        span(setClass('text-lg font-bold ml-3'), $todo->name),
+        label(setClass('circle ml-2 label-id px-2'), $todo->id),
     ),
     $buildDateControl($todo),
     $buildCycleConfig($todo),
@@ -554,14 +530,8 @@ formPanel
     (
         formGroup
         (
-            set
-            (
-                array(
-                    'width' => '1/3',
-                    'label' => $lang->todo->assignTo
-                )
-            ),
-            select
+            set(array('width' => '1/3', 'label' => $lang->todo->assignTo)),
+            picker
             (
                 set
                 (
@@ -592,7 +562,8 @@ formPanel
                         'checked' => $todo->private
                     )
                 ),
-                on::change('togglePrivate(this)')
+                set::disabled($todo->assignedTo != $app->user->account),
+                on::change('togglePrivate(e.target)')
             ),
             btn
             (
@@ -614,89 +585,36 @@ formPanel
     (
         formGroup
         (
-            set
+            set::width('4/5'),
+            set(array('id' => 'nameBox', 'required' => true, 'label' => (($todo->type == 'custom' || $config->vision == 'rnd') ? $lang->todo->name : $lang->todo->objectID), 'class' => 'name-box')),
+            div
             (
-                array(
-                    'id'       => 'nameBox',
-                    'required' => true,
-                    'label'    => $lang->todo->name,
-                    'class'    => 'name-box'
-                )
-            ),
-            inputGroup
-            (
-                setClass('title-group'),
-                div
-                (
-                    setID('nameInputBox'),
-                    input
-                    (
-                        set
-                        (
-                            array(
-                                'id'    => 'name',
-                                'name'  => 'name',
-                                'value' => $todo->name
-                            )
-                        )
-                    )
-                ),
-                div
-                (
-                    setClass('input-group-addon pl-4 bg-white fix-border br-0'),
-                    $lang->todo->pri
-                ),
-                select
-                (
-                    set
-                    (
-                        array(
-                            'required' => true,
-                            'class'    => 'w-20',
-                            'id'       => 'pri',
-                            'name'     => 'pri',
-                            'items'    => $lang->todo->priList,
-                            'value'    => $todo->pri
-                        )
-                    )
-                )
-            )
-        )
-    ),
-    formGroup
-    (
-        set
-        (
-            array(
-                'name'  => 'desc',
-                'type'  => 'editor',
-                'label' => $lang->todo->desc,
-                'value' => htmlSpecialString($todo->desc)
-            )
-        )
-    ),
-    formGroup
-    (
-        set
-        (
-            array(
-                'width' => '1/3',
-                'label' => $lang->todo->status,
+                setClass('w-full'),
+                setID('nameInputBox'),
+                input(set(array('id' => 'name', 'name' => 'name', 'value' => $todo->name)))
             )
         ),
-        select
+        formGroup
         (
-            set
-            (
-                array(
-                    'required' => true,
-                    'id'       => 'status',
-                    'name'     => 'status',
-                    'items'    => $lang->todo->statusList,
-                    'value'    => $todo->status
-                )
-            )
+            set::width('1/5'),
+            setClass('priBox'),
+            set::label($lang->todo->pri),
+            priPicker(setID('pri'), set::name('pri'), set::items($lang->todo->priList), set::value($todo->pri)),
         )
+    ),
+    formGroup
+    (
+        set::label($lang->todo->desc),
+        setID('desc'),
+        set::name('desc'),
+        set::control('editor'),
+        set::value(htmlSpecialString($todo->desc)),
+    ),
+    formGroup
+    (
+        set::width('1/3'),
+        set::label($lang->todo->status),
+        set::control(array('type' => 'picker', 'id' => 'status', 'name' => 'status', 'items' => $lang->todo->statusList, 'value' => $todo->status)),
     ),
     formRow
     (
@@ -704,10 +622,10 @@ formPanel
         formGroup
         (
             set::label($lang->todo->beginAndEnd),
-            set::width('1/3'),
+            set::width('2/3'),
             inputGroup
             (
-                select
+                picker
                 (
                     set
                     (
@@ -720,14 +638,14 @@ formPanel
                             'disabled' => $todo->begin == 2400
                         )
                     ),
-                    on::change('selectNext()')
+                    on::change('selectNext')
                 ),
                 span
                 (
                     setClass('input-group-addon ring-0'),
                     $lang->todo->timespanTo
                 ),
-                select
+                picker
                 (
                     set
                     (
@@ -740,7 +658,7 @@ formPanel
                             'disabled' => $todo->begin == 2400
                         )
                     ),
-                    on::blur('verifyEndTime(this)')
+                    on::change('verifyEndTime')
                 )
             ),
         ),
@@ -758,7 +676,7 @@ formPanel
                         'text'    => $lang->todo->periods['future']
                     )
                 ),
-                on::change('switchDateFeature(this)')
+                on::change('switchDateFeature')
             )
         )
     )

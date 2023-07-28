@@ -303,7 +303,7 @@ EOF;
         $doingCount = 0;
         foreach($todos as $key => $todo)
         {
-            if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
+            if($todo->type == 'task' and isset($tasks[$todo->objectID])) unset($todos[$key]);
             if($todo->status == 'wait')  $waitCount ++;
             if($todo->status == 'doing') $doingCount ++;
             if($todo->date == '2030-01-01') $todo->date = $this->lang->todo->future;

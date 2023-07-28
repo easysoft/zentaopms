@@ -2993,7 +2993,7 @@ class taskModel extends model
 
                 /* If the todo comes from a feedback, update the feedback information. */
                 $todo = $this->dao->findByID($todoID)->from(TABLE_TODO)->fetch();
-                if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+                if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done');
             }
 
             /* If the task comes from a design, update the task information. */

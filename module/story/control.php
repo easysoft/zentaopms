@@ -2099,8 +2099,11 @@ class story extends control
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $stories = $this->story->getUserStoryPairs($user->account, 10, 'story', '', $appendID);
 
-        if($id) return print(html::select("stories[$id]", $stories, '', 'class="form-control"'));
-        echo html::select('story', $stories, '', 'class=form-control');
+        $items = array();
+        foreach($stories as $storyID => $storyTitle) $items[] = array('text' => $storyTitle, 'value' => $storyID);
+
+        $fieldName = $id ? "stories[$id]" : 'story';
+        return print(json_encode(array('name' => $fieldName, 'items' => $items)));
     }
 
     /**

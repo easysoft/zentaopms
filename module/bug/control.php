@@ -1204,8 +1204,15 @@ class bug extends control
         $account = $user->account;
         $bugs    = $this->bug->getUserBugPairs($account, true, 0, array(), array(), $appendID);
 
-        if($id) return print(html::select("bugs[$id]", $bugs, '', 'class="form-control"'));
-        return print(html::select('bug', $bugs, '', 'class=form-control'));
+        $items = array();
+        foreach($bugs as $bugID => $bugTitle)
+        {
+            if(empty($bugID)) continue;
+            $items[] = array('text' => $bugTitle, 'value' => $bugID);
+        }
+
+        $fieldName = $id ? "bugs[$id]" : 'bug';
+        return print(json_encode(array('name' => $fieldName, 'items' => $items)));
     }
 
     /**

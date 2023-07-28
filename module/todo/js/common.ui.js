@@ -1,4 +1,4 @@
-var nameDefaultHtml = $('#nameInputBox').html();
+let nameDefaultHtml = $('#nameInputBox').html();
 
 /**
  * 切换周期类型。
@@ -36,7 +36,11 @@ function toggleCycleConfig(cycleType)
  */
 function togglePrivate(switcher)
 {
-    $('#assignedTo').prop('disabled', switcher.checked);
+    $assignedTo = $("[name='assignedTo']").zui('picker');
+    $assignedTo.options.disabled = false;
+
+    if($(switcher).prop('checked')) $assignedTo.options.disabled = true;
+    $assignedTo.render($assignedTo.options);
 }
 
 /**
@@ -47,7 +51,7 @@ function togglePrivate(switcher)
  */
 function changeAssignedTo()
 {
-    var assignedTo = $('#assignedTo').val();
+    var assignedTo = $('[name=assignedTo]').val();
     if(assignedTo !== userAccount)
     {
         $('#private').prop('disabled', true);
@@ -84,10 +88,10 @@ function togglePending()
  * @param  string type        Type of selected todo.
  * @param  string id          ID of selected todo.
  * @param  string defaultType Default type of selected todo.
- * @param  int    todoID      ID of the closed todo type.
+ * @param  int    objectID    ID of the closed todo type.
  * @return void
  */
-function loadList(type, id, todoDefaultType, todoID)
+function loadList(type, id, todoDefaultType, objectID)
 {
     if(id)
     {
@@ -104,23 +108,17 @@ function loadList(type, id, todoDefaultType, todoID)
     var param = 'userID=' + userID + '&id=' + id;
     if(type == 'task') param += '&status=wait,doing';
 
-    if(todoDefaultType && type == todoDefaultType && todoID != 0) param += '&objectID=' + todoID;
+    if(todoDefaultType && type == todoDefaultType && objectID != 0) param += '&objectID=' + objectID;
 
     if(moduleList.indexOf(type) !== -1)
     {
         link = $.createLink(type, objectsMethod[type], param);
-        $.get(link, function(data, status)
+        $.get(link, function(data)
         {
-            if(data.length != 0)
-            {
-                if($(nameBoxClass).find('#nameInputBox').html(data).find('select').chosen) $(nameBoxClass).find('#nameInputBox').html(data).find('select').chosen();
-                if(config.currentMethod == 'edit' || type == 'feedback') $(nameBoxClass).find('select').val(todoID);
-                if($(nameBoxClass + ' select').val() == null) $(nameBoxClass + ' select').attr('data-placeholder', noOptions);
-            }
-            else
-            {
-                if($(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen) $(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select');
-            }
+            data = JSON.parse(data);
+            data.defaultValue = objectID;
+            $(nameBoxClass).find('#nameInputBox').html("<div class='picker-box' id='" + type + "'></div>");
+            $('#nameInputBox #' + type).picker(data);
         });
     }
     else
@@ -130,7 +128,7 @@ function loadList(type, id, todoDefaultType, todoID)
 
     if(nameBoxLabel) return;
 
-    var formLabel = type == 'custom' ||(vision && vision == 'rnd') ?  nameBoxLabel.custom : nameBoxLabel.objectID;
+    var formLabel = type == 'custom' || (vision && vision == 'rnd') ?  nameBoxLabel.custom : nameBoxLabel.objectID;
     $('#nameBox .form-label').text(formLabel);
 }
 
@@ -273,7 +271,8 @@ function verifyCycleDate(dateInput)
  * @param  object time
  * @return void
  */
-function verifyEndTime(time)
+function verifyEndTime(event)
 {
-    if($(time).val() < $('#begin').val()) $(time).addClass('has-error');
+    let end = $(event.target).zui('picker').$.value;
+    if(end < $('#begin').zui('picker').$.value) $(event.target).closest('.picker-box').addClass('has-error');
 }

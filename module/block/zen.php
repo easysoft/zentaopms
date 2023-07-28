@@ -286,7 +286,7 @@ class blockZen extends block
         foreach($todos as $key => $todo)
         {
             /* '2030-01-01' means undetermined */
-            if($todo->date == '2030-01-01' || ($todo->type == 'task' && isset($suspendedTasks[$todo->idvalue])))
+            if($todo->date == FUTURE_TIME || ($todo->type == 'task' && isset($suspendedTasks[$todo->objectID])))
             {
                 unset($todos[$key]);
             }
@@ -1894,7 +1894,7 @@ class blockZen extends block
                         unset($objects[$key]);
                         continue;
                     }
-                    if($todo->type == 'task' && isset($tasks[$todo->idvalue]))
+                    if($todo->type == 'task' && isset($tasks[$todo->objectID]))
                     {
                         unset($objects[$key]);
                         continue;

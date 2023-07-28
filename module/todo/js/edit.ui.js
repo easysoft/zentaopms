@@ -1,4 +1,4 @@
-loadList($('#type').val(), '', defaultType, objectID);
+loadList(defaultType, '', defaultType, objectID);
 
 if(cycleType) toggleCycleConfig(cycleType);
 
@@ -9,7 +9,8 @@ if(cycleType) toggleCycleConfig(cycleType);
  * @param  object typeSelect
  * @return void
  */
-function changeType(typeSelect)
+window.changeType = function(obj)
 {
-    loadList($(typeSelect).find('select').val(), '', defaultType, objectID);
+    type = $(obj).zui('picker').$.value;
+    loadList(type, '', defaultType, objectID);
 }

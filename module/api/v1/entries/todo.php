@@ -47,7 +47,7 @@ class todoEntry extends entry
         $fields = 'date,type,name,pri,desc,status,begin,end,private';
         $this->batchSetPost($fields, $oldTodo);
 
-        $this->setPost('idvalue', 0);
+        $this->setPost('objectID', 0);
         $this->setPost('date', $this->request('date', date("Y-m-d", strtotime($oldTodo->date))));
         $this->setPost('begin', $this->request('begin') ? str_replace(':', '', $this->request('begin')) : $oldTodo->begin);
         $this->setPost('end', $this->request('end') ? str_replace(':', '', $this->request('end')) : $oldTodo->end);

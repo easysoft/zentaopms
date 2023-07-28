@@ -1827,8 +1827,8 @@ class bugZen extends bug
         $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
         if($this->config->edition == 'biz' || $this->config->edition == 'max')
         {
-            $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-            if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+            $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+            if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done');
         }
 
         return !dao::isError();
