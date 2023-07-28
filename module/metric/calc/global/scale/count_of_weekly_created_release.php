@@ -10,14 +10,14 @@
  * 单位：个
  * 描述：按全局统计的每周新增发布数表示每周新增加的发布数量。该度量项反映了组织每周增加的发布数量，可以用  于评估组织产品发布的速度和规模。
  * 定义：所有的发布个数求和
-发布时间为某周
-过滤已删除的发布
-过滤已删除的产品
+ *       发布时间为某周
+ *       过滤已删除的发布
+ *       过滤已删除的产品
  * 度量库：
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -25,21 +25,25 @@
  */
 class count_of_weekly_created_release extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getReleases';
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $fieldList = array('t1.createdDate');
 
     public function calculate($row)
     {
+        $year = $this->getYear($row->createdDate);
+        $week = $this->getWeek($row->createdDate);
+
+        if(!$year) return false;
+
+        if(!isset($this->result[$year])) $this->result[$year] = array();
+        if(!isset($this->result[$year][$week])) $this->result[$year][$week] = 0;
+        $this->result[$year][$week] ++;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('year', 'week', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
