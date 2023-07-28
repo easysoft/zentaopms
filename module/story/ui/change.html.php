@@ -140,7 +140,7 @@ foreach($fields as $field => $attr)
 $formItems['file'] = formGroup
 (
     set::width('full'),
-    set::label($lang->attatch),
+    set::label($lang->attach),
     input
     (
         set::type('file'),

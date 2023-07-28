@@ -179,7 +179,7 @@ $lang->testcase->lblStageValue  = '階段可選值列表';
 $lang->testcase->lblStatusValue = '狀態可選值列表';
 
 $lang->testcase->legendBasicInfo   = '基本信息';
-$lang->testcase->legendAttatch     = '附件';
+$lang->testcase->legendAttach      = '附件';
 $lang->testcase->legendLinkBugs    = '相關Bug';
 $lang->testcase->legendOpenAndEdit = '創建編輯';
 $lang->testcase->legendComment     = '備註';

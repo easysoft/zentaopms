@@ -91,7 +91,7 @@
           <?php $showFile = (strpos('draft,changing', $story->status) === false and empty($story->files)) ? false : true;?>
           <?php if($showFile):?>
           <div class='detail'>
-            <div class='detail-title'><?php echo $lang->attatch;?></div>
+            <div class='detail-title'><?php echo $lang->attach;?></div>
             <div class='form-group'>
               <?php $canChangeFile = strpos('draft,changing', $story->status) !== false ? true : false;?>
               <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'false', 'object' => $story, 'method' => 'edit', 'showDelete' => $canChangeFile));?>

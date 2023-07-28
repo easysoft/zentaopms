@@ -176,7 +176,7 @@ class backup extends control
             if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreSQL, $result->error)));
         }
 
-        /* Restore attatchments. */
+        /* Restore attachments. */
         if(file_exists("{$this->backupPath}{$fileName}.file.zip.php"))
         {
             $fileBackup = "{$this->backupPath}{$fileName}.file.zip.php";
@@ -246,7 +246,7 @@ class backup extends control
             return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql')));
         }
 
-        /* Delete attatchments file. */
+        /* Delete attachments file. */
         if(file_exists($this->backupPath . $fileName . '.file.zip.php') and !unlink($this->backupPath . $fileName . '.file.zip.php'))
         {
             return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip.php')));

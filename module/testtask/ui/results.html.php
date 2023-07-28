@@ -215,7 +215,7 @@ foreach($results as $i => $result)
                         (
                             width('56px'),
                             setClass('text-left'),
-                            $lang->attatch
+                            $lang->attach
                         ),
                     ),
                     div

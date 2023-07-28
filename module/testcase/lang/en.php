@@ -186,7 +186,7 @@ $lang->testcase->lblStageValue  = 'Phase Value';
 $lang->testcase->lblStatusValue = 'Status Value';
 
 $lang->testcase->legendBasicInfo   = 'Basic Information';
-$lang->testcase->legendAttatch     = 'Files';
+$lang->testcase->legendAttach      = 'Files';
 $lang->testcase->legendLinkBugs    = 'Bugs';
 $lang->testcase->legendOpenAndEdit = 'Create/Edit';
 $lang->testcase->legendComment     = 'Comment';

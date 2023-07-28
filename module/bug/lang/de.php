@@ -184,7 +184,7 @@ $lang->bug->createBuild   = 'Neu';
 global $config;
 /* Legend list. */
 $lang->bug->legendBasicInfo             = 'Basis Info';
-$lang->bug->legendAttatch               = 'Anlagen';
+$lang->bug->legendAttach                = 'Anlagen';
 $lang->bug->legendPRJExecStoryTask      = "{$lang->SRCommon}/{$lang->executionCommon}/Story/Task";
 $lang->bug->legendExecStoryTask         = "{$lang->SRCommon}/Story/Task";
 $lang->bug->lblTypeAndSeverity          = 'Typ/Schwere';

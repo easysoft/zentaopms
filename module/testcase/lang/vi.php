@@ -179,7 +179,7 @@ $lang->testcase->lblStageValue  = 'Giá trị giai đoạn';
 $lang->testcase->lblStatusValue = 'Giá trị trạng thái';
 
 $lang->testcase->legendBasicInfo   = 'Thông tin cơ bản';
-$lang->testcase->legendAttatch     = 'Files';
+$lang->testcase->legendAttach      = 'Files';
 $lang->testcase->legendLinkBugs    = 'Bugs';
 $lang->testcase->legendOpenAndEdit = 'Tạo/Sửa';
 $lang->testcase->legendComment     = 'Nhận xét';

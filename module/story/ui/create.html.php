@@ -360,7 +360,7 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->story->legendAttatch),
+        set::label($lang->story->legendAttach),
         upload()
     ),
     formGroup

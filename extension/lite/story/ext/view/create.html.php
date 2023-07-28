@@ -136,7 +136,7 @@
           </tr>
           <?php $this->printExtendFields('', 'table', 'columns=4');?>
           <tr>
-            <th><?php echo $lang->story->legendAttatch;?></th>
+            <th><?php echo $lang->story->legendAttach;?></th>
             <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>
           </tr>
           <tr>

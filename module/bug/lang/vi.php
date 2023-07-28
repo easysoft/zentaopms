@@ -162,7 +162,7 @@ $lang->bug->createBuild   = 'Mới';
 
 /* Legend list。*/
 $lang->bug->legendBasicInfo             = 'Thông tin cơ bản';
-$lang->bug->legendAttatch               = 'Files';
+$lang->bug->legendAttach                = 'Files';
 $lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
 $lang->bug->legendExecStoryTask         = 'Project/Câu chuyện/Nhiệm vụ';
 $lang->bug->lblTypeAndSeverity          = 'Loại/Mức độ';

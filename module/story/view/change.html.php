@@ -77,7 +77,7 @@
           <td><?php echo html::textarea('comment', '', 'rows=5 class="form-control"');?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->attatch;?></th>
+          <th><?php echo $lang->attach;?></th>
           <td>
           <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'false', 'object' => $story, 'method' => 'edit'));?>
           <?php echo $this->fetch('file', 'buildform');?>

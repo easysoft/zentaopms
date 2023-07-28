@@ -183,7 +183,7 @@ $lang->testcase->lblStageValue  = 'Stageliste';
 $lang->testcase->lblStatusValue = 'Statusliste';
 
 $lang->testcase->legendBasicInfo   = 'Basis Info';
-$lang->testcase->legendAttatch     = 'Datei';
+$lang->testcase->legendAttach      = 'Datei';
 $lang->testcase->legendLinkBugs    = 'Bug';
 $lang->testcase->legendOpenAndEdit = 'Erstellt/Bearbeitet';
 $lang->testcase->legendComment     = 'Bemerkung';
