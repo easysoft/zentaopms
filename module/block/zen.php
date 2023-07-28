@@ -1501,7 +1501,7 @@ class blockZen extends block
         $resolvedBugGroup = $this->metric->getResultByCode('count_of_daily_resolved_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
         $closedBugGroup   = $this->metric->getResultByCode('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
 
-        $bugFixRate   = $this->metric->getResultByCode('rate_of_fixed_bug_in_product', array('product' => join(',', $productIdList)));
+        $bugFixRate = $this->metric->getResultByCode('rate_of_fixed_bug_in_product', array('product' => join(',', $productIdList)));
         $bugFixRate = json_decode(json_encode($bugFixRate), true);
         if(!empty($bugFixRate)) $bugFixRate = array_column($bugFixRate, null, 'product');
 
@@ -1509,7 +1509,7 @@ class blockZen extends block
         $effectiveBug = json_decode(json_encode($effectiveBug), true);
         if(!empty($effectiveBug)) $effectiveBug = array_column($effectiveBug, null, 'product');
 
-        $restoredBug  = $this->metric->getResultByCode('count_of_restored_bug_in_product', array('product' => join(',', $productIdList)));
+        $restoredBug = $this->metric->getResultByCode('count_of_restored_bug_in_product', array('product' => join(',', $productIdList)));
         $restoredBug = json_decode(json_encode($restoredBug), true);
         if(!empty($restoredBug)) $restoredBug = array_column($restoredBug, null, 'product');
 
@@ -1555,10 +1555,10 @@ class blockZen extends block
                 }
             }
 
-            $product->closedBugRate = isset($bugFixRate[$productID]['value'])   ? $bugFixRate[$productID]['value']   : 0;
-            $product->totalBug      = isset($effectiveBug[$productID]['value']) ? $effectiveBug[$productID]['value'] : 0;
-            $product->closedBug     = isset($restoredBug[$productID]['value'])  ? $restoredBug[$productID]['value']  : 0;
-            $product->activatedBug  = isset($activatedBug[$productID]['value']) ? $activatedBug[$productID]['value'] : 0;
+            $product->closedBugRate = isset($bugFixRate[$productID]['value'])   ? $bugFixRate[$productID]['value'] * 100 : 0;
+            $product->totalBug      = isset($effectiveBug[$productID]['value']) ? $effectiveBug[$productID]['value']     : 0;
+            $product->closedBug     = isset($restoredBug[$productID]['value'])  ? $restoredBug[$productID]['value']      : 0;
+            $product->activatedBug  = isset($activatedBug[$productID]['value']) ? $activatedBug[$productID]['value']     : 0;
         }
 
         $this->view->products = $products;
