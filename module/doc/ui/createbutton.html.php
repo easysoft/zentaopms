@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+$createButton  = $emptyCreateBtn = null;
 $objectID      = zget($lib, $lib->type, 0);
 $templateParam = $this->config->edition == 'max' ? '&from=template' : '';
 $buttonItems   = array();
@@ -19,17 +21,36 @@ foreach($lang->doc->createList as $typeKey => $typeName)
     if($typeKey == 'template' and $config->edition == 'max') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID={$moduleID}&type=html&from=template";
 
     $buttonItems[] = array
-    (
-        'content'     => array('html' => "<img class='mr-2' src='static/svg/{$docType}.svg'/>{$typeName}", 'class' => 'flex w-full'),
-        'url'         => createLink('doc', 'create', $params),
-        'data-app'    => $app->tab,
-        'data-toggle' => strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'modal' : ''
-    );
+        (
+            'content'     => array('html' => "<img class='mr-2' src='static/svg/{$docType}.svg'/>{$typeName}", 'class' => 'flex w-full'),
+            'url'         => createLink('doc', 'create', $params),
+            'data-app'    => $app->tab,
+            'data-toggle' => strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'modal' : ''
+        );
 
     if($typeKey == 'template') $buttonItems[] = array('type' => 'divider');
 }
 
 $createButton = btngroup
+(
+    btn
+    (
+        setClass('btn primary ml-2'),
+        set::icon('plus'),
+        set::url(createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html{$templateParam}")),
+        set('data-app', $app->tab),
+        $lang->doc->create
+    ),
+    dropdown
+    (
+        btn(setClass('btn primary dropdown-toggle'),
+        setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+        set::placement('bottom-end'),
+        set::items($buttonItems),
+    )
+);
+
+$emptyCreateBtn = btngroup
 (
     btn
     (

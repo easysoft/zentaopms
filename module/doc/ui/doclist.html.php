@@ -21,7 +21,7 @@ if(empty($docs))
             setClass('text-gray'),
             $lang->doc->noDoc
         ),
-        $browseType != 'bySearch' && $libID && (common::hasPriv('doc', 'create') || (common::hasPriv('api', 'create') && !$apiLibID)) ? $createButton : null
+        $browseType != 'bySearch' && $libID && (common::hasPriv('doc', 'create') || (common::hasPriv('api', 'create') && !$apiLibID)) ? $emptyCreateBtn : null
     );
 }
 else
