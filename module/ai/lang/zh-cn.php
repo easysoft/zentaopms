@@ -29,6 +29,25 @@ $lang->prompt->editedBy         = '最后编辑';
 $lang->prompt->editedDate       = '编辑时间';
 $lang->prompt->deleted          = '是否已删除';
 
+/* Lang for privs, keys are paired with privlang items. */
+$lang->ai->modelBrowse            = '浏览语言模型';
+$lang->ai->modelEdit              = '编辑语言模型';
+$lang->ai->modelTestConnection    = '测试连接';
+$lang->ai->promptCreate           = '创建提词';
+$lang->ai->promptEdit             = '编辑提词';
+$lang->ai->promptDelete           = '删除提词';
+$lang->ai->promptAssignRole       = '指定角色';
+$lang->ai->promptSelectDataSource = '选择对象';
+$lang->ai->promptSetPurpose       = '确认操作';
+$lang->ai->promptSetTargetForm    = '结果处理';
+$lang->ai->promptFinalize         = '准备发布';
+$lang->ai->promptAudit            = '调试提词';
+$lang->ai->promptPublish          = '发布提词';
+$lang->ai->promptUnpublish        = '取消发布提词';
+$lang->ai->promptBrowse           = '浏览提词列表';
+$lang->ai->promptView             = '查看提词详情';
+$lang->ai->promptExecute          = '执行提词';
+
 $lang->ai->nextStep  = '下一步';
 $lang->ai->goTesting = '去调试';
 

@@ -1921,6 +1921,26 @@ $lang->resource->api->getModel     = 'getModel';
 $lang->resource->api->debug        = 'debug';
 $lang->resource->api->sql          = 'sql';
 
+/* AI methods. */
+$lang->resource->ai = new stdclass();
+$lang->resource->ai->models                 = '';
+$lang->resource->ai->editmodel              = '';
+$lang->resource->ai->testconnection         = '';
+$lang->resource->ai->createprompt           = '';
+$lang->resource->ai->promptedit             = '';
+$lang->resource->ai->promptdelete           = '';
+$lang->resource->ai->promptassignrole       = '';
+$lang->resource->ai->promptselectdatasource = '';
+$lang->resource->ai->promptsetpurpose       = '';
+$lang->resource->ai->promptsettargetform    = '';
+$lang->resource->ai->promptfinalize         = '';
+$lang->resource->ai->promptaudit            = '';
+$lang->resource->ai->promptpublish          = '';
+$lang->resource->ai->promptunpublish        = '';
+$lang->resource->ai->prompts                = '';
+$lang->resource->ai->promptview             = '';
+$lang->resource->ai->promptexecute          = '';
+
 $lang->api->methodOrder[0]   = 'index';
 $lang->api->methodOrder[5]   = 'createLib';
 $lang->api->methodOrder[10]  = 'editLib';

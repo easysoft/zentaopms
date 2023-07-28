@@ -29,6 +29,25 @@ $lang->prompt->editedBy         = 'Edited By';
 $lang->prompt->editedDate       = 'Edited Date';
 $lang->prompt->deleted          = 'Deleted';
 
+/* Lang for privs, keys are paired with privlang items. */
+$lang->ai->modelBrowse            = 'Browse Models';
+$lang->ai->modelEdit              = 'Edit Models';
+$lang->ai->modelTestConnection    = 'Test Model Connection';
+$lang->ai->promptCreate           = 'Create Prompt';
+$lang->ai->promptEdit             = 'Edit Prompt';
+$lang->ai->promptDelete           = 'Delete Prompt';
+$lang->ai->promptAssignRole       = 'Assign Prompt Role';
+$lang->ai->promptSelectDataSource = 'Select Prompt Data';
+$lang->ai->promptSetPurpose       = 'Set Prompt Purpose';
+$lang->ai->promptSetTargetForm    = 'Set Prompt Target Form';
+$lang->ai->promptFinalize         = 'Finalize Prompt';
+$lang->ai->promptAudit            = 'Audit Prompt';
+$lang->ai->promptPublish          = 'Publish Prompt';
+$lang->ai->promptUnpublish        = 'Unpublish Prompt';
+$lang->ai->promptBrowse           = 'Browse Prompts';
+$lang->ai->promptView             = 'View Prompt';
+$lang->ai->promptExecute          = 'Execute Prompt';
+
 $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';
 
