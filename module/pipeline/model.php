@@ -153,7 +153,7 @@ class pipelineModel extends model
             if($job) return false;
         }
         $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        $this->loadModel('action')->create($object, $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+        $this->loadModel('action')->create($object, $id, 'deleted', '');
 
         $actionID = $this->dao->lastInsertID();
         return $actionID;

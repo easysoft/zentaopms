@@ -46,9 +46,15 @@ class space extends control
         }
 
         $instances = $this->space->getSpaceInstances($space->id, $browseType, $search);
-        foreach($instances as $instance) $instance->externalID = 0;
+        foreach($instances as $instance)
+        {
+            $instance->externalID = 0;
+            $instance->orgID      = $instance->id;
+            $instance->type       = 'app';
+        }
         $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc');
-        $maxID     = max(array_keys($instances));
+        $maxID     = 0;
+        if(!empty($instances)) $maxID = max(array_keys($instances));
         foreach($pipelines as $pipeline)
         {
             $pipeline->createdAt  = $pipeline->createdDate;
@@ -56,7 +62,8 @@ class space extends control
             $pipeline->status     = '';
             $pipeline->type       = 'external';
             $pipeline->externalID = $pipeline->id;
-            $pipeline->id = ++ $maxID;
+            $pipeline->orgID      = $pipeline->id;
+            $pipeline->id         = ++ $maxID;
         }
         $allInstances = array_merge($instances, $pipelines);
 

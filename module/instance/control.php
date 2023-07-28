@@ -466,8 +466,15 @@ class instance extends control
      * @access public
      * @return void
      */
-    public function ajaxUninstall($instanceID)
+    public function ajaxUninstall($instanceID, $type = '')
     {
+        if($type == 'external')
+        {
+            $instance = $this->loadModel('pipeline')->getByID($instanceID);
+            if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success']));
+
+            return $this->send($this->fetch($instance->type, 'delete', array('id' => $instance->id)));
+        }
         $instance = $this->instance->getByID($instanceID);
         if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success']));
 

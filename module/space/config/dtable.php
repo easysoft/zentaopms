@@ -53,7 +53,7 @@ $config->space->dtable->fieldList['actions']['list']['uninstall']['icon']       
 $config->space->dtable->fieldList['actions']['list']['uninstall']['hint']         = $lang->instance->uninstall;
 $config->space->dtable->fieldList['actions']['list']['uninstall']['className']    = 'ajax-submit';
 $config->space->dtable->fieldList['actions']['list']['uninstall']['data-confirm'] = $lang->instance->notices['confirmUninstall'];
-$config->space->dtable->fieldList['actions']['list']['uninstall']['url']          = array('module' => 'instance', 'method' => 'ajaxUninstall', 'params' => 'id={id}');
+$config->space->dtable->fieldList['actions']['list']['uninstall']['url']          = array('module' => 'instance', 'method' => 'ajaxUninstall', 'params' => 'id={orgID}&type={type}');
 
 $config->space->dtable->fieldList['actions']['list']['visit']['icon']   = 'menu-my';
 $config->space->dtable->fieldList['actions']['list']['visit']['hint']   = $lang->instance->visit;
@@ -68,7 +68,7 @@ $config->space->dtable->fieldList['actions']['list']['upgrade']['url']         =
 
 $config->space->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->space->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->edit;
-$config->space->dtable->fieldList['actions']['list']['edit']['url']  = array('module' => 'space', 'method' => 'edit', 'id={id}&type={type}');
+$config->space->dtable->fieldList['actions']['list']['edit']['url']  = array('module' => 'space', 'method' => 'edit', 'params' => 'id={orgID}&type={type}');
 
 $config->space->dtable->fieldList['actions']['list']['bindUser']['icon'] = 'lock';
 $config->space->dtable->fieldList['actions']['list']['bindUser']['hint'] = $lang->gitlab->bindUser;
