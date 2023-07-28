@@ -55,7 +55,7 @@ sidebar
 
 dtable
 (
-    set::userMap($users),
+    set::userMap($accounts),
     set::cols(array_values($config->host->dtable->fieldList)),
     set::data($tableData),
     set::sortLink(jsRaw('createSortLink')),

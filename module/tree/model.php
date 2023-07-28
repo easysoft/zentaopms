@@ -1903,10 +1903,11 @@ class treeModel extends model
      * Update a module.
      *
      * @param  int    $moduleID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function update($moduleID)
+    public function update($moduleID, $type = '')
     {
         $module = fixer::input('post')->get();
         $self   = $this->getById($moduleID);
@@ -1915,6 +1916,7 @@ class treeModel extends model
 
         if($self)
         {
+            if($type == 'host') $module->root = 0;
             if($self->root and !isset($module->root)) $module->root = $self->root;
             if($self->parent != $module->parent or $self->root != $module->root)
             {

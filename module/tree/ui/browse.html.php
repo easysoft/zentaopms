@@ -42,7 +42,7 @@ foreach($sons as $son)
                     set::name("modules[id$son->id]"),
                     set::type('input'),
                     set::value($son->name),
-                    set::placeholder($lang->tree->name),
+                    set::placeholder($placeholder),
                 ),
                 input
                 (
@@ -79,7 +79,7 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     set::name("modules[$i]"),
                     set::type('input'),
                     set::value(''),
-                    set::placeholder($lang->tree->name),
+                    set::placeholder($placeholder),
                 ),
                 input
                 (
@@ -108,7 +108,7 @@ $parentPath[] = span
     a
     (
         setClass('tree-link'),
-        set('href', helper::createLink('tree', 'browse', "rootID=$root->id&productID=$productID")),
+        set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&productID=$productID")),
         $root->name,
     ),
     h::i
@@ -124,7 +124,7 @@ foreach($parentModules as $module)
         a
         (
             setClass('tree-link'),
-            set('href', helper::createLink('tree', 'browse', "rootID=$root->id&productID=$productID&module=$module->id")),
+            set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=$module->id&productID=$productID")),
             $module->name,
         ),
         h::i

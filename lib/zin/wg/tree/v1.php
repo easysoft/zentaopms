@@ -47,7 +47,7 @@ class tree extends wg
                 $treeItem['actions']['items'] = array();
 
                 if($canEdit)   $treeItem['actions']['items'][] = array('key' => 'edit',   'icon' => 'edit',  'id' => $item['id'], 'editType' => $editType, 'onClick' => jsRaw('(event, item) => window.editItem(item)'));
-                if($canDelete) $treeItem['actions']['items'][] = array('key' => 'delete', 'icon' => 'trash', 'id' => $item['id'], 'class' => 'btn ghost toolbar-item square size-sm rounded ajax-submit','url' => helper::createLink('tree', 'delete', 'module=' . $item['id']));
+                if($canDelete) $treeItem['actions']['items'][] = array('key' => 'delete', 'icon' => 'trash', 'id' => $item['id'], 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit','url' => helper::createLink('tree', 'delete', 'module=' . $item['id']));
                 $treeItem['actions']['items'][] = array('key' => 'view', 'icon' => 'split', 'url' => $item['url']);
             }
 

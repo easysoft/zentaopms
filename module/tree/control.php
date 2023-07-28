@@ -28,6 +28,7 @@ class tree extends control
     public function browse(int $rootID, string $viewType, int $currentModuleID = 0, string $branch = 'all', string $from = '')
     {
         $this->loadModel('product');
+        $placeholder = $this->lang->tree->name;
 
         if($this->app->tab == 'product' and strpos($viewType, 'doc') === false)
         {
@@ -307,10 +308,16 @@ class tree extends control
         }
         elseif(strpos($viewType, 'host') !== false)
         {
-            $title    = $this->lang->tree->manageHostChild;
             $position = array();
-
-            $this->lang->tree->common = $this->lang->tree->groupMaintenance;
+            $title       = $this->lang->tree->groupMaintenance;
+            $placeholder = $this->lang->tree->groupName;
+            
+            $root = new stdclass();
+            $root->id   = 0;
+            $root->name = $this->lang->tree->groupMaintenance;
+            
+            $this->view->productID = 0;
+            $this->view->root      = $root;
         }
 
         if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
@@ -323,6 +330,7 @@ class tree extends control
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;
+        $this->view->placeholder     = $placeholder;
         $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
         $this->view->currentModuleID = $currentModuleID;
         $this->view->parentModules   = $this->tree->getParents($currentModuleID);
@@ -397,7 +405,7 @@ class tree extends control
         if(!empty($_POST))
         {
 
-            $this->tree->update($moduleID);
+            $this->tree->update($moduleID, $type);
 
             $response = array();
             $response['result']     = 'success';
