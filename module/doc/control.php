@@ -1275,7 +1275,11 @@ class doc extends control
         if($this->config->edition == 'open') $canExport = false;
 
         /* For product drop menu. */
-        if($type == 'product') $this->view->productID = $objectID;
+        if(in_array($type, array('product', 'project', 'execution')))
+        {
+            $objectKey = $type . 'ID';
+            $this->view->$objectKey = $objectID;
+        }
 
         $this->view->title          = $title;
         $this->view->type           = $type;
