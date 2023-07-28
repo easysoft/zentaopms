@@ -24,17 +24,14 @@ foreach($products as $product)
     $item['active'] = $productID == $product->id;
     $item['type']   = 'product';
     $item['keys']   = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
-    if($product->status == 'normal' and $product->PO == $this->app->user->account)
-    {
-        $data['my'][] = $item;
-    }
-    else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
-    {
-        $data['other'][] = $item;
-    }
-    else if($product->status == 'closed')
+
+    if($product->status == 'closed')
     {
         $data['closed'][] = $item;
+    }
+    else
+    {
+        $data['normal'][] = $item;
     }
 }
 
@@ -42,21 +39,9 @@ foreach($products as $product)
  * 定义每个分组名称信息，包括可展开的已关闭分组。
  * Define every group name, include expanded group.
  */
-$tabs = array();
+$tabs   = array();
 $tabs[] = array('name' => 'closed', 'text' => $lang->product->closedProduct);
-if(!empty($data['other']) && !empty($data['my']))
-{
-    $tabs[] = array('name' => 'my',    'text' => $lang->product->mine);
-    $tabs[] = array('name' => 'other', 'text' => $lang->product->other);
-}
-elseif(!empty($data['other']))
-{
-    $tabs[] = array('name' => 'other', 'text' => '');
-}
-else
-{
-    $tabs[] = array('name' => 'my',    'text' => '');
-}
+$tabs[] = array('name' => 'normal', 'text' => '');
 
 $json = array();
 $json['data']       = $data;
