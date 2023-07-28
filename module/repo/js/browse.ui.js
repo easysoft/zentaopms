@@ -115,7 +115,8 @@ window.diffClick = function()
 window.canRowCheckable = function(rowID)
 {
     const dtable = zui.DTable.query('#repo-comments-table');
-    var   data   = dtable.$.props.data;
+    if(dtable == undefined) return;
+    var data = dtable.$.props.data;
 
     if(data.length == 0) return true;
 

@@ -34,7 +34,8 @@ window.checkedChange = function(changes)
 window.canRowCheckable = function(rowID)
 {
     const dtable = zui.DTable.query('#repo-logs-table');
-    var   data   = dtable.$.props.data;
+    if(dtable == undefined) return;
+    var data = dtable.$.props.data;
 
     if(data.length == 0) return true;
 
