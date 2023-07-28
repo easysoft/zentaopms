@@ -124,7 +124,8 @@ class file extends control
         if(empty($file))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => $this->lang->file->fileNotFound));
-            return print("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
+            $this->view->error = $this->lang->file->fileNotFound;
+            return $this->display();
         }
 
         if(!$this->file->checkPriv($file))
@@ -174,7 +175,8 @@ class file extends control
         else
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => $this->lang->file->fileNotFound));
-            return print("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
+            $this->view->error = $this->lang->file->fileNotFound;
+            return $this->display();
         }
     }
 
