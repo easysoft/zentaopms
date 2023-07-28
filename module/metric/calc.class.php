@@ -267,4 +267,40 @@ class baseCalc
 
         return $records;
     }
+
+    /**
+     * 获取日期的周数。
+     * Get week of date.
+     *
+     * @param  string $dateStr
+     * @access public
+     * @return string
+     */
+    public function getWeek($dateStr)
+    {
+        if(empty($dateStr)) return false;
+
+        if(strlen($dateStr) > 10) $dateStr = substr($dateStr, 0, 10);
+        $date = DateTime::createFromFormat('Y-m-d', $dateStr);
+
+        return $date->format('W');
+    }
+
+    /**
+     * 获取日期的年份。
+     * Get year of date.
+     *
+     * @param  string $dateStr
+     * @access public
+     * @return string|false
+     */
+    public function getYear($dateStr)
+    {
+        if(empty($dateStr)) return false;
+
+        if(strlen($dateStr) > 8) $dateStr = substr($dateStr, 0, 8);
+        $year = substr($dateStr, 0, 4);
+
+        return $year == '0000' ? false : $year;
+    }
 }
