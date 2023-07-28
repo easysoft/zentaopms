@@ -99,6 +99,7 @@ formPanel
         set::label($lang->release->files),
         upload()
     ),
+    formHidden('product', $release->product),
 );
 /* ====== Render page ====== */
 render();
