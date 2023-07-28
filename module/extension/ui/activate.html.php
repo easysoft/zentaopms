@@ -20,15 +20,23 @@ if(!empty($error))
 }
 else
 {
+    set::closeBtn(false);
+
     div
     (
         set::class('p-2'),
         div
         (
-            set::class('mb-3'),
-            span
+            set::class('flex mb-3'),
+            icon
             (
-                set::class('article-h1'),
+                'exclamation-sign',
+                set::size('2x'),
+                set::class('text-warning mr-4'),
+            ),
+            div
+            (
+                set::class('article-h2 leading-8 mb-2'),
                 $title,
             )
         ),
@@ -37,9 +45,15 @@ else
             set::class('text-center'),
             btn
             (
+                set::class('mr-4'),
                 set::type('primary'),
                 set::url(createLink('extension', 'browse', "status=installed")),
                 $lang->extension->viewInstalled
+            ),
+            btn
+            (
+                $lang->cancel,
+                set('data-dismiss', 'modal')
             )
         )
     );

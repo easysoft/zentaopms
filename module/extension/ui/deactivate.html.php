@@ -12,13 +12,25 @@ namespace zin;
 
 $removeCommands = implode('<br />', $removeCommands);
 
+set::closeBtn(false);
+
 div
 (
     set::class('p-2'),
     div
     (
-        set::class('article-h1 text-center mb-2'),
-        $title,
+        set::class('flex mb-3'),
+        icon
+        (
+            'exclamation-sign',
+            set::size('2x'),
+            set::class('text-warning mr-4'),
+        ),
+        div
+        (
+            set::class('article-h2 leading-8 mb-2'),
+            $title,
+        )
     ),
     $removeCommands ?  div
     (
@@ -30,11 +42,21 @@ div
         set::class('border bg-surface p-2'),
         html($removeCommands)
     ) : null,
-    hr(),
-    btn
+    div
     (
-        $lang->extension->viewDeactivated,
-        set::url(createLink('extension', 'browse', 'status=deactivated'))
+        set::class('text-center'),
+        btn
+        (
+            $lang->extension->viewDeactivated,
+            set::class('mr-4'),
+            set::type('primary'),
+            set::url(createLink('extension', 'browse', 'status=deactivated'))
+        ),
+        btn
+        (
+            $lang->cancel,
+            set('data-dismiss', 'modal')
+        )
     )
 );
 
