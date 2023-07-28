@@ -16,7 +16,6 @@ $steps = array();
 foreach($case->steps as $step)
 {
     $stepClass = $step->type == 'step' ? 'step-group' : "step-{$step->type}";
-    if(count($steps) > 0 && $step->grade == 1) $stepClass .= ' mt-1';
     $stepClass .= count($steps) > 0 && $step->grade == 1 ? ' mt-2' : ' border-t-0';
 
     $steps[] = cell
