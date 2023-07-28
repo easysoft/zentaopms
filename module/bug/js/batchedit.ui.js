@@ -3,47 +3,37 @@ window.renderRowData = function($row, index, row)
     /* If there are multiple branch products, show the branches. */
     if(isBranchProduct == 1)
     {
-        let $branch = $row.find('.form-batch-input[data-name="branch"]').empty();
+        let $branch = $row.find('[data-name="branch"] .picker').zui('picker');
 
         /* The product of current bug is multiple branch product, show branches in the select box. */
         if(products[row.product] != undefined && products[row.product].type != 'normal' && branchTagOption[row.product] != undefined)
         {
-            $branch.removeAttr('disabled');
-            let bugBranches = branchTagOption[row.product];
-            $.each(bugBranches, function(branchID, branchName)
-            {
-                $branch.append('<option value="' + branchID + '">' + branchName + '</option>');
-            });
+            $branch.render({items: branchTagOption[row.product], disabled: false});
         }
         /* The product of current bug isn't multiple branch product, disable the input box. */
         else
         {
-            $branch.attr('disabled', 'disabled');
+            $branch.render({disabled: true});
         }
+        $branch.$.changeState({value: ''});
     }
 
     /* Show the modules of current bug's product. */
     if(modules[row.product] != undefined && modules[row.product][row.branch] != undefined)
     {
         let bugModules = modules[row.product][row.branch];
-        let $module    = $row.find('.form-batch-input[data-name="module"]').empty();
-
-        $.each(bugModules, function(moduleID, moduleName)
-        {
-            $module.append('<option value="' + moduleID + '">' + moduleName + '</option>');
-        });
+        let $module    = $row.find('[data-name="module"] .picker').zui('picker');
+        $module.render({items: bugModules});
+        $module.$.changeState({value: ''});
     }
 
     /* Show the bugs of current bug's product. */
     if(productBugList[row.product] != undefined && productBugList[row.product][row.branch] != undefined)
     {
         let duplicateBugs = productBugList[row.product][row.branch];
-        let $duplicateBug = $row.find('.form-batch-input[data-name="duplicateBug"]').empty();
-
-        $.each(duplicateBugs, function(duplicateBugID, duplicateBugName)
-        {
-            if(duplicateBugID != row.id) $duplicateBug.append('<option value="' + duplicateBugID + '">' + duplicateBugName + '</option>');
-        });
+        let $duplicateBug = $row.find('[data-name="duplicateBug"] .picker').zui('picker');
+        $duplicateBug.render({items: duplicateBugs});
+        $duplicateBug.$.changeState({value: ''});
     }
 
     /* Change assigner. */

@@ -27,12 +27,9 @@ function setOpenedBuilds(link, $currentRow)
         let $row = $currentRow;
         while($row.length)
         {
-            const $build = $row.find('.form-batch-input[data-name="openedBuild"]').empty();
-
-            $.each(builds, function(index, build)
-            {
-                $build.append('<option value="' + build.value + '">' + build.text + '</option>');
-            });
+            const $build = $row.find('[data-name="openedBuild"] .picker').zui('picker');
+            $build.render({items: builds});
+            $build.$.changeState({value: ''});
 
             $row = $row.next('tr');
 
@@ -55,12 +52,9 @@ function setLane(event)
         let $row = $currentRow;
         while($row.length)
         {
-            const $lane = $row.find('.form-batch-input[data-name="laneID"]').empty();
-
-            $.each(lanes, function(index, lane)
-            {
-                $lane.append('<option value="' + lane.value + '">' + lane.text + '</option>');
-            });
+            const $lane = $row.find('[data-name="laneID"] .picker').zui('picker');
+            $lane.render({items: lanes});
+            $lane.$.changeState({value: ''});
 
             $row = $row.next('tr');
 
@@ -93,20 +87,9 @@ function loadProductExecutionsByProject(event)
         while($row.length)
         {
             /* Find execution form control and clear old options. */
-            const $execution = $row.find('.form-batch-input[data-name="execution"]').empty();
-
-            /* Set execution control disabled if there is no multiple execution ID. */
-            if(data.noMultipleExecutionID)
-            {
-                $execution.attr('disabled', 'disabled').append('<option selected value="' + data.noMultipleExecutionID + '"></option>');
-                continue;
-            }
-
-            /* Append all new executions options. */
-            $.each(data.executions, function(index, execution)
-            {
-                $execution.append('<option value="' + execution.value + '">' + execution.text + '</option>');
-            });
+            const $execution = $row.find('[data-name="execution"] .picker').zui('picker');
+            $execution.render({items: data.executions});
+            $execution.$.changeState({value: ''});
 
             /* Set next row to current row and continue the loop. */
             $row = $row.next('tr');
@@ -115,4 +98,7 @@ function loadProductExecutionsByProject(event)
             if(!$row.find('td[data-name="execution"][data-ditto="on"]').length) break;
         }
     });
+
+    var link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch);
+    setOpenedBuilds(link, $currentRow);
 }
