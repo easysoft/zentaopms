@@ -395,8 +395,9 @@ $lang->ai->models->edit           = 'Edit Parameters';
 $lang->ai->models->concealTip     = 'Visible when editing';
 
 $lang->ai->models->testConnectionResult = new stdclass();
-$lang->ai->models->testConnectionResult->success = 'Successfully connected';
-$lang->ai->models->testConnectionResult->fail    = 'Failed to connect';
+$lang->ai->models->testConnectionResult->success    = 'Successfully connected';
+$lang->ai->models->testConnectionResult->fail       = 'Failed to connect';
+$lang->ai->models->testConnectionResult->failFormat = 'Failed to connect: %s';
 
 $lang->ai->models->statusList = array();
 $lang->ai->models->statusList['on']  = 'Enable';

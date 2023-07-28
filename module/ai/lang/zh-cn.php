@@ -395,8 +395,9 @@ $lang->ai->models->edit           = '编辑模型参数';
 $lang->ai->models->concealTip     = '完整信息在编辑时可见';
 
 $lang->ai->models->testConnectionResult = new stdclass();
-$lang->ai->models->testConnectionResult->success = '连接成功';
-$lang->ai->models->testConnectionResult->fail    = '连接失败';
+$lang->ai->models->testConnectionResult->success    = '连接成功';
+$lang->ai->models->testConnectionResult->fail       = '连接失败';
+$lang->ai->models->testConnectionResult->failFormat = '连接失败：%s';
 
 $lang->ai->models->statusList = array();
 $lang->ai->models->statusList['on']  = '启用';
