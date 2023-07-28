@@ -968,6 +968,7 @@ class blockZen extends block
      * Print execution statistic block.
      *
      * @param  object    $block
+     * @param  array     $params
      * @access protected
      * @return void
      */
@@ -2117,11 +2118,15 @@ class blockZen extends block
      * Print product's document block.
      *
      * @param  object    $block
+     * @param  array     $params
      * @access protected
      * @return void
      */
-    protected function printProductDocBlock(object $block): void
+    protected function printProductDocBlock(object $block, array $params = array()): void
     {
+        $type = 'involved';
+        if(isset($params['type'])) $type = $params['type'];
+
         $this->loadModel('doc');
         $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
 
@@ -2154,21 +2159,25 @@ class blockZen extends block
             }
         }
 
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->products  = $hasDataProducts;
-        $this->view->involveds = $hasDataInvolveds;
-        $this->view->docGroup  = $docGroup;
+        $this->view->type     = $type;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->products = $type == 'involveds' ? $hasDataInvolveds : $hasDataProducts;
+        $this->view->docGroup = $docGroup;
     }
 
     /**
      * Print project's document block.
      *
      * @param  object    $block
+     * @param  array     $params
      * @access protected
      * @return void
      */
-    protected function printProjectDocBlock(object $block): void
+    protected function printProjectDocBlock(object $block, array $params = array()): void
     {
+        $type = 'involved';
+        if(isset($params['type'])) $type = $params['type'];
+
         $this->loadModel('doc');
         $this->app->loadLang('project');
         $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
@@ -2230,10 +2239,10 @@ class blockZen extends block
             }
         }
 
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects  = $hasDataProjects;
-        $this->view->involveds = $hasDataInvolveds;
-        $this->view->docGroup  = $docGroup;
+        $this->view->type     = $type;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projects = $type == 'involveds' ? $hasDataInvolveds : $hasDataProjects;
+        $this->view->docGroup = $docGroup;
     }
 
     /**

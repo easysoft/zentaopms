@@ -124,10 +124,13 @@ panel
                 a
                 (
                     setClass('text-gray ml-4'),
-                    $lang->product->involved,
+                    $type == 'involved' ? $lang->product->involved : $lang->product->all,
                     span(setClass('caret align-middle ml-1'))
                 ),
-                set::items(array(array('text' => $lang->product->involved), array('text' => $lang->product->all)))
+                set::items(array(
+                    array('text' => $lang->product->involved, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=involved")), 'data-load' => 'target', 'data-selector' => "#productdoc-block-{$block->id}", 'data-partial' => true),
+                    array('text' => $lang->product->all, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=all")), 'data-load' => 'target', 'data-selector' => "#productdoc-block-{$block->id}", 'data-partial' => true))
+                )
             ),
         )
     ),
