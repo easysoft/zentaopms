@@ -10,6 +10,18 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$moduleTitle = '';
+if($app->rawModule == 'doc' && $app->rawMethod == 'myspace')
+{
+    foreach($libTree as $lib)
+    {
+        if(strtolower($lib->type) == $type)
+        {
+            $moduleTitle = $lib->name;
+            break;
+        }
+    }
+}
 sidebar
 (
     docMenu
@@ -22,7 +34,7 @@ sidebar
         set::spaceType($spaceType),
         set::objectType(isset($type) ? $type : ''),
         set::objectID(isset($objectID) ? $objectID : 0),
-        set::title(isset($objectDropdown['text']) ? $objectDropdown['text'] : ''),
+        set::title(isset($objectDropdown['text']) ? $objectDropdown['text'] : $moduleTitle),
         set::menuLink(isset($objectDropdown['link']) ? $objectDropdown['link'] : ''),
         set::settingLink($app->rawModule == 'doc' && $app->rawMethod == 'view' && common::hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : ''),
         set::settingText($lang->doc->displaySetting),

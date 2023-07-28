@@ -156,7 +156,7 @@ window.rendDocCell = function(result, {col, row})
         const spaceMethod  = spaceMethodList[row.data.objectType];
 
         let moduleHtml = '';
-        if(eval(`${spaceMethod}Priv`))
+        if(spaceMethod && eval(`${spaceMethod}Priv`))
         {
             let spaceParams = `libID=${row.data.lib}&moduleID=${row.data.module}`;
             if(['product', 'project', 'execution', 'custom'].indexOf(row.data.objectType) !== -1) spaceParams = `objectID=${row.data.objectID}&${spaceParams}`;
