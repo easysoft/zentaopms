@@ -72,6 +72,7 @@ $lang->search->index      = 'Full Text Search';
 $lang->search->buildIndex = 'Rebuild Index';
 $lang->search->preview    = 'Preview';
 
+$lang->search->inputWords        = 'Please input search words';
 $lang->search->result            = 'Kết quả tìm kiếm';
 $lang->search->resultCount       = '<strong>%s</strong> items';
 $lang->search->buildSuccessfully = 'Tìm kiếm khởi tạo chỉ mục.';

@@ -72,6 +72,7 @@ $lang->search->index      = 'Full Text Search';
 $lang->search->buildIndex = 'Rebuild Index';
 $lang->search->preview    = 'Preview';
 
+$lang->search->inputWords        = 'Please input search words';
 $lang->search->result            = 'Search Results';
 $lang->search->resultCount       = '<strong>%s</strong> items';
 $lang->search->buildSuccessfully = 'Search index initialized.';

@@ -72,6 +72,7 @@ $lang->search->index      = '全文检索';
 $lang->search->buildIndex = '重建索引';
 $lang->search->preview    = '预览';
 
+$lang->search->inputWords        = '请输入检索内容';
 $lang->search->result            = '搜索结果';
 $lang->search->resultCount       = '共计 <strong>%s</strong> 条';
 $lang->search->buildSuccessfully = '初始化搜索索引成功';
