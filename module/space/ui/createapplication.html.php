@@ -20,12 +20,13 @@ jsVar('apps', $apps);
 jsVar('mysqlList', $mysqlList);
 jsVar('pgList', $pgList);
 
+$showVersion = getenv('ALLOW_SELECT_VERSION') && (strtolower(getenv('ALLOW_SELECT_VERSION')) == 'true' || strtolower(getenv('ALLOW_SELECT_VERSION')) == '1');
 $dbTypeItems = array();
 foreach($lang->instance->dbTypes as $type => $db) $dbTypeItems[] = array('text' => $db, 'value' => $type);
 
 formPanel
 (
-    setClass('externalPanel'),
+    setClass('externalPanel' . (!$appID ? '' : ' hidden')),
     set::id('createAppForm'),
     set::title($lang->space->install),
     set::url($this->createLink('gitlab', 'create')),
@@ -100,7 +101,7 @@ formPanel
 
 formPanel
 (
-    setClass('hidden storePanel'),
+    setClass('storePanel' . ($appID ? '' : ' hidden')),
     set::id('createStoreAppForm'),
     set::title($lang->space->install),
     formGroup
@@ -109,6 +110,8 @@ formPanel
         set::label($lang->app->common),
         set::name('storeAppType'),
         set::items($apps),
+        set::value($appID),
+        set::disabled(!!$appID),
         set::required(true),
         on::change('onChangeStoreAppType'),
     ),
@@ -116,7 +119,8 @@ formPanel
     (
         set::label($lang->space->addType),
         set::name('storetype'),
-        set::value('store'),
+        set::value($addType),
+        set::disabled(!!$appID),
         set::control('radioListInline'),
         set::items(array(array('text' => $lang->store->common, 'value' => 'store'), array('text' => $lang->space->handConfig, 'value' => 'external'))),
         set::required(true),
@@ -127,7 +131,7 @@ formPanel
         set::width('1/2'),
         set::label($lang->instance->version),
         set::name('app_version'),
-        set::readonly(true),
+        set::readonly(!$showVersion),
         set::required(true),
         input
         (
@@ -148,6 +152,7 @@ formPanel
                 (
                     setClass('form-control'),
                     set::name('customDomain'),
+                    set::value($thirdDomain),
                 ),
                 input
                 (

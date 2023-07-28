@@ -61,7 +61,7 @@ window.afterPageUpdate = function()
                 });
             }
         });
-    }, 5000);
+    }, 10000);
 }
 
 window.onPageUnmount = function()

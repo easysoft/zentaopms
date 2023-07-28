@@ -72,7 +72,7 @@ foreach ($cloudApps as $group)
                     setClass('primary btn size-sm install-btn'),
                     setData('prevent', true),
                     setData('toggle', 'modal'),
-                    setData('url', $this->createLink('instance', 'install', "id={$cloudApp->id}")),
+                    setData('url', $this->createLink('space', 'createApplication', "id={$cloudApp->id}")),
                     on::click('installApp', array('stop' => true)),
                 )
             )

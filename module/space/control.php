@@ -94,10 +94,11 @@ class space extends control
      * 创建一个应用。
      * Create a application.
      *
+     * @param int     $appID
      * @access public
      * @return viod
      */
-    public function createApplication()
+    public function createApplication($appID = 0)
     {
         $this->app->loadLang('sonarqube');
         $this->app->loadLang('jenkins');
@@ -113,9 +114,12 @@ class space extends control
         $mysqlList = $this->cne->sharedDBList('mysql');
         $pgList    = $this->cne->sharedDBList('postgresql');
 
-        $this->view->mysqlList = $mysqlList;
-        $this->view->pgList    = $pgList;
-        $this->view->apps      = $apps;
+        $this->view->apps        = $apps;
+        $this->view->appID       = $appID;
+        $this->view->pgList      = $pgList;
+        $this->view->mysqlList   = $mysqlList;
+        $this->view->addType     = empty($appID) ? 'external' : 'store';
+        $this->view->thirdDomain = $this->loadModel('instance')->randThirdDomain();
         $this->display();
     }
 

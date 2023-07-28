@@ -464,7 +464,7 @@ class InstanceModel extends model
      */
     public function canDo($action, $instance)
     {
-        $busy = in_array($instance->status, array('creating', 'initializing', 'starting', 'stopping', 'suspending', 'pulling', 'destroying'));
+        // $busy = in_array($instance->status, array('creating', 'initializing', 'starting', 'stopping', 'suspending', 'pulling', 'destroying'));
         switch($action)
         {
             case 'start':
@@ -2045,13 +2045,13 @@ class InstanceModel extends model
      */
     public function isClickable(object $instance, string $action): bool
     {
-        if($action == 'start')     return $instance->type == 'app' ? $this->canDo('start', $instance) : false;
-        if($action == 'stop')      return $instance->type == 'app' ? $this->canDo('stop', $instance) : false;
-        if($action == 'uninstall') return $instance->type == 'app' && $this->canDo('uninstall', $instance);
-        if($action == 'visit')     return $instance->type == 'app' ? ($instance->domain && $this->canDo('visit', $instance)) : true;
+        if($action == 'start')     return $instance->type != 'external' ? $this->canDo('start', $instance) : false;
+        if($action == 'stop')      return $instance->type != 'external' ? $this->canDo('stop', $instance) : false;
+        if($action == 'uninstall') return $instance->type != 'external' && $this->canDo('uninstall', $instance);
+        if($action == 'visit')     return $instance->type != 'external' ? ($instance->domain && $this->canDo('visit', $instance)) : true;
         if($action == 'upgrade')   return !empty($instance->latestVersion);
         if($action == 'bindUser')  return ($instance->type == 'external' && in_array($instance->appName, array('Gitlab', 'Gitea', 'Gogs'))) ? true : false;
-        if($action == 'edit')      return $instance->type == 'app' ? false : true;
+        if($action == 'edit')      return $instance->type != 'external' ? false : true;
 
         return true;
     }
