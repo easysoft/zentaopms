@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('inputWords', $lang->search->inputWords);
+
 to::header();
 
 if(is_array($type)) $type = reset($type);
@@ -112,7 +114,8 @@ form
             on::change('toggleClearWords'),
             setClass('shadow-none'),
             set::name('words'),
-            set::value($words)
+            set::value($words),
+            set::placeholder($lang->search->inputWords)
         ),
         input
         (
