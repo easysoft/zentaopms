@@ -139,6 +139,8 @@ class header extends wg
                 'href'      => createLink('my', 'profile', '', '', true),
                 'className' => 'items-center gap-2 px-2 py-1 row text-inherit',
                 'style'     => array('padding-left' => 0),
+                'data-toggle' => 'modal',
+                'data-size' => 700,
                 'renders'   => array(array('__html' => implode('', array
                 (
                     userAvatar(set::user($user), setClass('flex-none'))->render(),
@@ -159,7 +161,8 @@ class header extends wg
                 'icon' => 'account',
                 'text' => $lang->profile,
                 'class' => 'iframe',
-                'data-width' => 700
+                'data-toggle' => 'modal',
+                'data-size' => 700
             );
 
             if($app->config->vision === 'rnd')
