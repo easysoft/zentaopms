@@ -271,6 +271,12 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
 };
 
 /* Layout. */
+global $app;
+if($app->rawModule == 'projectstory' && !empty($project))
+{
+    dropmenu(set::text($project->name));
+}
+
 data('storyBrowseType', $storyBrowseType);
 
 jsVar('projectID',      $projectID);
