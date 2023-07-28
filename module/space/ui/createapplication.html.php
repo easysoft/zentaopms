@@ -110,7 +110,7 @@ formPanel
         set::name('storeAppType'),
         set::items($apps),
         set::required(true),
-        on::change('onChangeAppType'),
+        on::change('onChangeStoreAppType'),
     ),
     formGroup
     (

@@ -70,7 +70,7 @@ function onChangeAppType(event)
     }
 }
 
-function onChangeAppType()
+function onChangeStoreAppType()
 {
     var storeApp = $('[name=storeAppType]').val();
     if(!storeApp)
@@ -133,6 +133,6 @@ function onChangeDbType(event)
 
 $(function()
 {
-    onChangeAppType();
+    onChangeStoreAppType();
     $('div.dbService .form-label').removeClass('required');
 });
