@@ -57,7 +57,7 @@
     }
     ?>
   </div>
-  <button id="saveButton" type="submit" class="btn btn-primary" form="mainForm"><i class="icon icon-save icon-sm"></i> <?php echo $lang->save ?></button>
+  <button id="saveButton" type="submit" class="btn btn-primary visibility-hidden" form="mainForm"><i class="icon icon-save icon-sm"></i> <?php echo $lang->save ?></button>
   <div class="modal fade" id="returnConfirmModal">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">

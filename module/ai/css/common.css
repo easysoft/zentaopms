@@ -184,3 +184,5 @@
     display: flex;
     justify-content: space-between;
 }
+
+.visibility-hidden{visibility: hidden;}
