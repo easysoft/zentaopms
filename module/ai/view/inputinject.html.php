@@ -28,88 +28,86 @@
       $this->app->loadLang('ai');
     ?>
     <script>
-      $(function()
+      (function()
       {
-        try
+        function injectToInputElement(inputName, data, index)
         {
-          var data = JSON.parse(injectData);
-          if(!data) return;
-
-          for(var inputName in data)
+          if(typeof index !== 'undefined')
           {
-            if(Array.isArray(data[inputName]))
-            {
-              var arr = data[inputName];
-              for(var i = 0; i < arr.length; i++)
-              {
-                for(var key in arr[i])
-                {
-                  var $input = $('[name="' + key + '[' + (i+1) + ']' + '"]');
-                  if(!$input.length) continue;
+            inputName = inputName + '[' + (index + 1) + ']';
+          }
 
-                  var inputType = $input.prop('nodeName');
-                  switch(inputType) // Contains case fallthroughs, on purpose.
-                  {
-                    case 'TEXTAREA':
-                      /* Textareas might be controlled by KindEditors. */
-                      if(typeof KindEditor !== 'undefined' && KindEditor.instances.length)
-                      {
-                        var editorInstance = KindEditor.instances.find(function(e)
-                        {
-                          return e.srcElement.attr('name') == key;
-                        });
-                        if(editorInstance)
-                        {
-                          editorInstance.html(arr[i][key]);
-                          editorInstance.sync();
-                          break;
-                        }
-                      }
-                    default:
-                      /* For normal inputs, just set the value is enough. */
-                      $input.val(arr[i][key]);
-                      break;
-                  }
+          const $input = $('[name="' + inputName + '"]');
+          if(!$input.length) return;
+
+          const inputType = $input.prop('nodeName');
+          switch(inputType) // Contains case fallthroughs, on purpose.
+          {
+            case 'TEXTAREA':
+              /* Textareas might be controlled by KindEditors. */
+              if(typeof KindEditor !== 'undefined' && KindEditor.instances.length)
+              {
+                const editorInstance = KindEditor.instances.find(function(e)
+                {
+                  return e.srcElement.attr('name') == inputName;
+                });
+                if(editorInstance)
+                {
+                  editorInstance.html(data);
+                  editorInstance.sync();
+                  break;
+                }
+              }
+            default:
+              /* For normal inputs, just set the value is enough. */
+              $input.val(data);
+              break;
+          }
+        }
+        function inject(obj)
+        {
+          for(const key in obj)
+          {
+            if(Array.isArray(obj[key]))
+            {
+              const arr = obj[key];
+              for(let i = 0; i < arr.length; i++)
+              {
+                for(const key in arr[i])
+                {
+                  injectToInputElement(key, arr[i][key], i);
                 }
               }
             }
-
-            var $input = $('[name="' + inputName + '"]');
-            if(!$input.length) continue;
-
-            var inputType = $input.prop('nodeName');
-            switch(inputType) // Contains case fallthroughs, on purpose.
+            else if(typeof obj[key] === 'Object')
             {
-              case 'TEXTAREA':
-                /* Textareas might be controlled by KindEditors. */
-                if(typeof KindEditor !== 'undefined' && KindEditor.instances.length)
-                {
-                  var editorInstance = KindEditor.instances.find(function(e)
-                  {
-                    return e.srcElement.attr('name') == inputName;
-                  });
-                  if(editorInstance)
-                  {
-                    editorInstance.html(data[inputName]);
-                    editorInstance.sync();
-                    break;
-                  }
-                }
-              default:
-                /* For normal inputs, just set the value is enough. */
-                $input.val(data[inputName]);
-                break;
+              inject(obj[key]);
+            }
+            else
+            {
+              injectToInputElement(key, obj[key])
             }
           }
+        }
 
-          $.zui.messager.success('<?php echo $lang->ai->dataInject->success;?>');
-        }
-        catch(e)
+        document.addEventListener('DOMContentLoaded', function()
         {
-          $.zui.messager.danger('<?php echo $lang->ai->dataInject->fail;?>');
-          console.error(e);
-        }
-      });
+          try
+          {
+            const data = JSON.parse(injectData);
+            if(!data) return;
+
+            inject(data);
+
+            $.zui.messager.success('<?php echo $lang->ai->dataInject->success;?>');
+          }
+          catch(e)
+          {
+            $.zui.messager.danger('<?php echo $lang->ai->dataInject->fail;?>');
+            console.error(e);
+          }
+        });
+      })();
     </script>
   <?php endif;?>
     <script>
