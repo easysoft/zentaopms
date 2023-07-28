@@ -196,7 +196,7 @@ function setFileName(fileID)
               if($file->extension == 'txt')
               {
                   $extension = 'txt';
-                  if(($postion = strrpos($file->title, '.')) !== false) $extension = substr($file->title, $postion + 1);
+                  if(($position = strrpos($file->title, '.')) !== false) $extension = substr($file->title, $position + 1);
                   if($extension != 'txt') $mode = 'down';
                   $file->extension = $extension;
               }

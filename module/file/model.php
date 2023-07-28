@@ -1273,7 +1273,7 @@ class fileModel extends model
         if($file->extension == 'txt')
         {
             $extension = 'txt';
-            if(($postion = strrpos($file->title, '.')) !== false) $extension = substr($file->title, $postion + 1);
+            if(($position = strrpos($file->title, '.')) !== false) $extension = substr($file->title, $position + 1);
             $file->extension = $extension;
         }
 
