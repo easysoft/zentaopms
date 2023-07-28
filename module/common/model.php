@@ -227,7 +227,7 @@ class commonModel extends model
     }
 
     /**
-     * Set the commpany.
+     * Set the company.
      *
      * First, search company by the http host. If not found, search by the default domain. Last, use the first as the default.
      * After get the company, save it to session.
@@ -341,7 +341,7 @@ class commonModel extends model
         $this->config->system   = isset($config['system']) ? $config['system'] : array();
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
-        /* Overide the items defined in config/config.php and config/my.php. */
+        /* Override the items defined in config/config.php and config/my.php. */
         if(isset($this->config->system->common))   $this->app->mergeConfig($this->config->system->common, 'common');
         if(isset($this->config->personal->common)) $this->app->mergeConfig($this->config->personal->common, 'common');
 
@@ -1009,7 +1009,7 @@ class commonModel extends model
             }
 
             /**
-             * Judget the module display or not.
+             * Judge the module display or not.
              *
              */
             $display = false;
@@ -2559,7 +2559,7 @@ EOF;
     }
 
     /**
-     * Check the user has permisson of one method of one module.
+     * Check the user has permission of one method of one module.
      *
      * @param  string $module
      * @param  string $method
@@ -2583,7 +2583,7 @@ EOF;
         if($module == 'product' and $method == 'browse' and !empty($params['storyType']) and $params['storyType'] == 'requirement') $method = 'requirement';
         if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
 
-        /* If the user is doing a tutorial, have all tutorial privs. */
+        /* If the user is doing a tutorial, have all tutorial privileges. */
         if(commonModel::isTutorialMode())
         {
             $app->loadLang('tutorial');
@@ -2599,7 +2599,7 @@ EOF;
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) or strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
 
-        /* If is the program/project/product/execution admin, have all program privs. */
+        /* If is the program/project/product/execution admin, have all program privileges. */
         if($app->config->vision != 'lite')
         {
             $inProject = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project');
