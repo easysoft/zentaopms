@@ -16,4 +16,4 @@
 .m-doc-create #main {min-height: 0;}
 .m-doc-create #main > .container {max-width: initial!important; padding: 0!important}
 
-.m-doc-create .form {height: calc(100vh - 48px)}
+.form{display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; padding: 0px 2px 2px 2px}
