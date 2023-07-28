@@ -57,36 +57,37 @@ foreach($config->message->objectTypes as $objectType => $actions)
                 if(!isset($objectActions[$objectType][$action])) continue;
                 $availableActions[$action] = $objectActions[$objectType][$action];
             }
-        }
-        $selected = isset($messageSetting[$type]['setting'][$objectType]) ? join(',', $messageSetting[$type]['setting'][$objectType]) : '';
-        foreach($availableActions as $key => $value)
-        {
-            $cell[] = checkbox
-            (
-                set::rootClass('w-1/2'),
-                set::id("messageSetting{$type}{$objectType}{$key}"),
-                set::name("messageSetting[$type][setting][$objectType][]"),
-                set::title($value),
-                set::value($key),
-                set::checked(strpos(",{$selected},", ",{$key},") !== false),
-                set::text($value),
-            );
-        }
-        if(isset($config->message->condition[$type][$objectType]))
-        {
-            $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-            $this->app->loadLang($moduleName);
-            foreach(explode(',', $config->message->condition[$type][$objectType]) as $condition)
+
+            $selected = isset($messageSetting[$type]['setting'][$objectType]) ? join(',', $messageSetting[$type]['setting'][$objectType]) : '';
+            foreach($availableActions as $key => $value)
             {
-                $listKey = $condition . 'List';
-                $list = isset($this->lang->{$moduleName}->{$listKey}) ? $this->lang->{$moduleName}->{$listKey} : $users;
-                $cell[] = select
+                $cell[] = checkbox
                 (
-                    set::name("messageSetting[{$type}][condition][{$objectType}][{$condition}][]"),
-                    set::items($list),
-                    set::value(isset($messageSetting[$type]['condition'][$objectType][$condition]) ? join(',', $messageSetting[$type]['condition'][$objectType][$condition]) : ''),
-                    set::multiple(true),
+                    set::rootClass('w-1/2'),
+                    set::id("messageSetting{$type}{$objectType}{$key}"),
+                    set::name("messageSetting[$type][setting][$objectType][]"),
+                    set::title($value),
+                    set::value($key),
+                    set::checked(strpos(",{$selected},", ",{$key},") !== false),
+                    set::text($value),
                 );
+            }
+            if(isset($config->message->condition[$type][$objectType]))
+            {
+                $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
+                $this->app->loadLang($moduleName);
+                foreach(explode(',', $config->message->condition[$type][$objectType]) as $condition)
+                {
+                    $listKey = $condition . 'List';
+                    $list = isset($this->lang->{$moduleName}->{$listKey}) ? $this->lang->{$moduleName}->{$listKey} : $users;
+                    $cell[] = select
+                    (
+                        set::name("messageSetting[{$type}][condition][{$objectType}][{$condition}][]"),
+                        set::items($list),
+                        set::value(isset($messageSetting[$type]['condition'][$objectType][$condition]) ? join(',', $messageSetting[$type]['condition'][$objectType][$condition]) : ''),
+                        set::multiple(true),
+                    );
+                }
             }
         }
         $bodyTr[] = h::td
