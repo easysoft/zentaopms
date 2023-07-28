@@ -241,7 +241,7 @@ class instance extends control
                 $clusterResource = $this->cne->cneMetrics();
                 $freeMemory      = intval($clusterResource->metrics->memory->allocatable * 0.9); // Remain 10% memory for system.
                 if($memoryKb * 1024 > $freeMemory) $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->notEnoughResource));
-    
+
                 /* Request CNE to adjust memory size. */
                 if(!$this->instance->updateMemorySize($instance, $memoryKb * 1024))
                 {
@@ -406,7 +406,7 @@ class instance extends control
         {
             $customData = fixer::input('post')
                 ->trim('customName')->setDefault('customName', '')
-                ->trim('customDomain')->setDefault('customDomain', null)
+                ->trim('customDomain')->setDefault('customDomain', '')
                 ->trim('version')->setDefault('version', '')
                 ->trim('dbType')->setDefault('dbType', 'unsharedDB')
                 ->trim('dbService')

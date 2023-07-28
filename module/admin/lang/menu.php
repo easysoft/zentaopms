@@ -184,7 +184,7 @@ $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
 //$lang->admin->menuList->platform['subMenu']['dashboard']   = array('link' => "{$lang->dashboard}|system|dashboard|");
 $lang->admin->menuList->platform['subMenu']['plat']        = array('link' => "{$lang->devops->platform}|system|browsebackup|", 'subModule' => 'system');
-$lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
+//$lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
 $lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops,tree');
 $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
 
@@ -216,7 +216,7 @@ $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['35'] = 'os
 
 //$lang->admin->menuList->platform['menuOrder']['5']  = 'dashboard';
 $lang->admin->menuList->platform['menuOrder']['10'] = 'plat';
-$lang->admin->menuList->platform['menuOrder']['15'] = 'environment';
+//$lang->admin->menuList->platform['menuOrder']['15'] = 'environment';
 $lang->admin->menuList->platform['menuOrder']['20'] = 'resource';
 $lang->admin->menuList->platform['menuOrder']['25'] = 'setrules';
 

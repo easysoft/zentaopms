@@ -17,7 +17,7 @@ foreach($backups as $backup)
     $backup->type = $backup->sqlSummary['backupType'];
 }
 $backups = initTableData($backups, $config->system->dtable->backup->fieldList, $this->system);
-$backups = array();
+
 panel
 (
     set::size('lg'),

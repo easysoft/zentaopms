@@ -87,7 +87,28 @@ class space extends control
     {
         $this->app->loadLang('sonarqube');
         $this->app->loadLang('jenkins');
+        $this->loadModel('cne');
 
+        $pagedApps = $this->loadModel('store')->searchApps('', '', array(), 1, 10000);
+        $apps      = array();
+        foreach($pagedApps->apps as $app)
+        {
+            $apps[$app->id] = $app->alias;
+        }
+
+        $mysqlList = $this->cne->sharedDBList('mysql');
+        $pgList    = $this->cne->sharedDBList('postgresql');
+
+        $this->view->mysqlList = $mysqlList;
+        $this->view->pgList    = $pgList;
+        $this->view->apps      = $apps;
         $this->display();
+    }
+
+    public function getStoreAppInfo($appID)
+    {
+        $cloudApp = $this->loadModel('store')->getAppInfo($appID);
+
+        return print(json_encode($cloudApp));
     }
 }

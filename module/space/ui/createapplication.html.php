@@ -16,9 +16,16 @@ jsVar('sonarqubeUrlTips', $lang->sonarqube->placeholder->url);
 jsVar('sonarqubeAccountTips', $lang->sonarqube->placeholder->account);
 jsVar('jenkinsTokenTips', $lang->jenkins->tokenFirst);
 jsVar('jenkinsPasswordTips', $lang->jenkins->tips);
+jsVar('apps', $apps);
+jsVar('mysqlList', $mysqlList);
+jsVar('pgList', $pgList);
+
+$dbTypeItems = array();
+foreach($lang->instance->dbTypes as $type => $db) $dbTypeItems[] = array('text' => $db, 'value' => $type);
 
 formPanel
 (
+    setClass('externalPanel'),
     set::id('createAppForm'),
     set::title($lang->space->install),
     set::url($this->createLink('gitlab', 'create')),
@@ -43,12 +50,14 @@ formPanel
     ),
     formGroup
     (
+        set::width('1/2'),
         set::label($lang->gitlab->name),
         set::name('name'),
         set::required(true),
     ),
     formGroup
     (
+        set::width('2/3'),
         set::label($lang->gitlab->url),
         set::name('url'),
         set::required(true),
@@ -59,6 +68,7 @@ formPanel
         setClass('jenkins sonarqube hidden'),
         formGroup
         (
+            set::width('1/2'),
             set::label($lang->user->account),
             set::name('account'),
             set::required(true),
@@ -69,6 +79,7 @@ formPanel
         setClass('token'),
         formGroup
         (
+            set::width('1/2'),
             set::label($lang->gitlab->token),
             set::name('token'),
             set::placeholder($lang->gitlab->placeholder->token),
@@ -80,8 +91,105 @@ formPanel
         setClass('jenkins sonarqube password hidden'),
         formGroup
         (
+            set::width('1/2'),
             set::label($lang->user->password),
             set::name('password'),
+        ),
+    ),
+);
+
+formPanel
+(
+    setClass('hidden storePanel'),
+    set::id('createStoreAppForm'),
+    set::title($lang->space->install),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->app->common),
+        set::name('storeAppType'),
+        set::items($apps),
+        set::required(true),
+        on::change('onChangeAppType'),
+    ),
+    formGroup
+    (
+        set::label($lang->space->addType),
+        set::name('storetype'),
+        set::value('store'),
+        set::control('radioListInline'),
+        set::items(array(array('text' => $lang->store->common, 'value' => 'store'), array('text' => $lang->space->handConfig, 'value' => 'external'))),
+        set::required(true),
+        on::change('onChangeType'),
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->instance->version),
+        set::name('app_version'),
+        set::readonly(true),
+        set::required(true),
+        input
+        (
+            set::type('hidden'),
+            set::name('version'),
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->instance->domain),
+            set::required(true),
+            inputGroup
+            (
+                input
+                (
+                    setClass('form-control'),
+                    set::name('customDomain'),
+                ),
+                input
+                (
+                    set::type('hidden'),
+                    set::name('customName'),
+                ),
+                $this->cne->sysDomain(),
+            ),
+        ),
+    ),
+    formRow
+    (
+        setClass('dbType'),
+        formGroup
+        (
+            set::label($lang->instance->dbType),
+            set::control('radioListInline'),
+            set::name('dbType'),
+            set::items($dbTypeItems),
+            set::value('sharedDB'),
+            set::required(true),
+            on::change('onChangeDbType'),
+            h::a
+            (
+                setClass('leading-8 ml-4'),
+                set::href('https://www.qucheng.com/book/Installation-manual/app-install-33.html'),
+                set::target('_blank'),
+                $lang->instance->howToSelectDB
+            )
+        ),
+
+    ),
+    formRow
+    (
+        setClass('dbType dbService'),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->space->instanceType),
+            set::name('dbService'),
+            set::items(array()),
+            set::required(true),
         ),
     ),
 );
