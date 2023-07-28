@@ -26,7 +26,9 @@ jsVar('defaultType', '');
 jsVar('userAccount', $app->user->account);
 jsVar('defaultDate', date('Y-m-d'));
 
-$isInModal = isInModal();
+$timesKeys  = array_keys($times);
+$defaultEnd = $timesKeys[(array_search($time, $timesKeys) + 3)];
+$isInModal  = isInModal();
 $cycleTypeOptions = array(
     array('text' => $lang->todo->cycleDay,   'value' => 'day'),
     array('text' => $lang->todo->cycleWeek,  'value' => 'week'),
@@ -85,7 +87,7 @@ formPanel
                     checkbox
                     (
                         set::id('cycle'),
-                        set::id('cycle'),
+                        set::name('cycle'),
                         set::value('1'),
                         set::text($lang->todo->cycle),
                         on::change('toggleCycle')
@@ -430,7 +432,7 @@ formPanel
                             'name'     => 'begin',
                             'required' => true,
                             'items'    => $times,
-                            'value'    => date('Y-m-d') != $date ? key($times) : $time
+                            'value'    => date('Y-m-d') != $date ? $timesKeys[0] : $time
                         )
                     ),
                     on::change('selectNext()')
@@ -448,7 +450,8 @@ formPanel
                             'id'       => 'end',
                             'name'     => 'end',
                             'required' => true,
-                            'items'    => $times
+                            'items'    => $times,
+                            'value'    => date('Y-m-d') != $date ? $timesKeys[3] : $defaultEnd,
                         )
                     ),
                     on::change('verifyEndTime')
@@ -460,14 +463,7 @@ formPanel
             setClass('ml-4 flex items-center'),
             checkbox
             (
-                set
-                (
-                    array(
-                        'id'   => 'switchTime',
-                        'name' => 'switchTime',
-                        'text' => $lang->todo->periods['future']
-                    )
-                ),
+                set(array('id' => 'switchTime', 'name' => 'switchTime', 'text' => $lang->todo->periods['future'])),
                 on::change('switchDateFeature')
             )
         )

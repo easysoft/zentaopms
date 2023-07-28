@@ -364,7 +364,7 @@ class todoModel extends model
             $begin      = $todo->config->begin;
             $end        = $todo->config->end;
             $beforeDays = (int)$todo->config->beforeDays;
-            if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime("$begin -{$beforeDays} days"));
+            if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime($begin) - $beforeDays * 24 * 3600);
             if($today < $begin || (!empty($end) && $today > $end)) continue;
 
             if(empty($todo->id)) $todo->id = $todoID;

@@ -120,9 +120,9 @@ class todoZen extends todo
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end, private')
             ->setIF($hasObject && $objectType,  'objectID', (int)$objectID)
-            ->setIF(empty($rawData->date),  'date', '2030-01-01')
-            ->setIF(empty($rawData->begin), 'begin', '2400')
-            ->setIF(empty($rawData->begin) || empty($rawData->end), 'end', '2400')
+            ->setIF(empty($rawData->date) || $this->post->switchDate || $this->post->cycle, 'date', FUTURE_TIME)
+            ->setIF(empty($rawData->begin) || $this->post->switchTime, 'begin', '2400')
+            ->setIF(empty($rawData->begin) || empty($rawData->end) || $this->post->switchTime, 'end', '2400')
             ->setIF($rawData->status == 'done', 'finishedBy', $this->app->user->account)
             ->setIF($rawData->status == 'done', 'finishedDate', helper::now())
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
@@ -261,6 +261,7 @@ class todoZen extends todo
             ->setIF(empty($postData->date), 'date', '2030-01-01')
             ->setIF(empty($postData->begin) || $this->post->dateSwitcher, 'begin', '2400')
             ->setIF(empty($postData->end) || $this->post->dateSwitcher, 'end', '2400')
+            ->setDefault('assignedBy', $oldTodo->assignedTo != $this->post->assignedTo ? $this->app->user->account : $oldTodo->assignedBy)
             ->setDefault('type', $objectType)
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
@@ -284,7 +285,7 @@ class todoZen extends todo
 
         /* Handle cycle configuration item. */
         if(!empty($oldTodo->cycle)) $this->handleCycleConfig($todo);
-        else $todo->config = '';
+        if(empty($oldTodo->cycle))  $todo->config = '';
 
         return $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
     }

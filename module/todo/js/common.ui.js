@@ -237,7 +237,7 @@ function setDays(e)
  */
 function changeDate(event)
 {
-    $('#switchDate').prop('checked', !$(event.target).val());
+    $('#switchDate').prop('checked', !event.target.value);
 }
 
 /**
@@ -247,9 +247,9 @@ function changeDate(event)
  * @param  object spaceDay
  * @return void
  */
-function verifySpaceDay(spaceDay)
+function verifySpaceDay(event)
 {
-    if(!$(spaceDay).val()) $(spaceDay).closest('.input-control').addClass('has-error');
+    if(!event.target.value) $(event.target).closest('.input-control').addClass('has-error');
 }
 
 /**
@@ -259,9 +259,9 @@ function verifySpaceDay(spaceDay)
  * @param  object dateInput
  * @return void
  */
-function verifyCycleDate(dateInput)
+function verifyCycleDate(event)
 {
-    if(!$(dateInput).val()) $(dateInput).closest('.input-group').addClass('has-error');
+    if(!event.target.value) $(event.target).closest('.input-group').addClass('has-error');
 }
 
 /**
