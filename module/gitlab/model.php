@@ -536,7 +536,7 @@ class gitlabModel extends model
         {
             /* Also use `per_page=20` to fetch users in API. Fetch active users only. */
             $url      = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page={$perPage}&active=true";
-            $httpData = commonModel::httpWithHeader($url);
+            $httpData = commonModel::http($url, null, array(), array(), 'data', 'GET', 30, true, false);
             $result   = json_decode($httpData['body']);
             if(!empty($result))
             {
@@ -706,7 +706,7 @@ class gitlabModel extends model
         $order = explode('_', $orderBy);
 
         $keyword = urlencode($keyword);
-        $result  = commonModel::httpWithHeader($url . "&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
+        $result  = commonModel::http($url . "&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true", null, array(), array(), 'data', 'GET', 30, true, false);
 
         $header     = $result['header'];
         $recTotal   = $header['X-Total'];
@@ -1631,7 +1631,7 @@ class gitlabModel extends model
         {
             $apiRoot .= "&per_page={$pager->recPerPage}&page={$pager->pageID}";
             $url      = sprintf($apiRoot, "/projects/{$projectID}/repository/tags");
-            $result   = commonModel::httpWithHeader($url);
+            $result   = commonModel::http($url, null, array(), array(), 'data', 'GET', 30, true, false);
 
             $header = $result['header'];
             $pager->setRecTotal($header['X-Total']);
@@ -2891,8 +2891,8 @@ class gitlabModel extends model
     {
         $apiRoot  = rtrim($url, '/') . '/api/v4%s' . "?private_token={$token}";
         $url      = sprintf($apiRoot, "/users") . "&per_page=5&active=true";
-        $httpData = commonModel::httpWithHeader($url);
-        $users    = json_decode($httpData['body']);
+        $response = commonModel::http($url);
+        $users    = json_decode($response);
         if(empty($users)) return false;
         if(isset($users->message) or isset($users->error)) return null;
 

@@ -788,7 +788,7 @@ class gitlab
             $allResults = array();
             if($multi)
             {
-                $results = commonModel::httpWithHeader($api . "&page=1");
+                $results = commonModel::http($api . "&page=1", null, array(), array(), 'data', 'GET', 30, true, false);
                 if(empty($results['header']['X-Total-Pages'])) return array();
 
                 $totalPages = $results['header']['X-Total-Pages'];

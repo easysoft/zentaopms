@@ -192,9 +192,8 @@ class gogsModel extends model
     {
         $apiRoot  = rtrim($url, '/') . '/api/v1%s' . "?token={$token}";
         $url      = sprintf($apiRoot, "/user");
-        $httpData = commonModel::httpWithHeader($url);
-        $user     = json_decode($httpData['body']);
-        if(empty($httpData['header'])) return false;
+        $response = commonModel::http($url);
+        $user     = json_decode($response);
         if(empty($user)) return null;
 
         /* Check whether the token belongs to the administrator by edit user. */
