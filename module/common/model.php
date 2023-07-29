@@ -3241,16 +3241,16 @@ EOF;
             $fh = fopen($logFile, 'a');
             if($fh)
             {
-                fwrite($fh, date('Ymd H:i:s') . ': ' . $app->getURI() . '\n');
-                fwrite($fh, "{$requestType} url:    " . $url . '\n');
-                if(!empty($data)) fwrite($fh, 'data:   ' . print_r($data, true) . '\n');
-                fwrite($fh, 'results:' . print_r($response, true) . '\n');
+                fwrite($fh, date('Ymd H:i:s') . ': ' . $app->getURI() . "\n");
+                fwrite($fh, "{$requestType} url:    " . $url . "\n");
+                if(!empty($data)) fwrite($fh, 'data:   ' . print_r($data, true) . "\n");
+                fwrite($fh, 'results:' . print_r($response, true) . "\n");
 
                 if(!empty($errors))
                 {
-                    fwrite($fh, 'errno: ' . $errno . '\n');
-                    fwrite($fh, 'errors: ' . $errors . '\n');
-                    fwrite($fh, 'info: ' . print_r($info, true) . '\n');
+                    fwrite($fh, 'errno: ' . $errno . "\n");
+                    fwrite($fh, 'errors: ' . $errors . "\n");
+                    fwrite($fh, 'info: ' . print_r($info, true) . "\n");
                 }
 
                 fclose($fh);

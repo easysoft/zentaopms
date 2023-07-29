@@ -12,7 +12,6 @@ namespace zin;
 
 $config->system->dtable->dbList->fieldList['actions']['list']['management']['url'] = 'javascript:manageDb("{name}", "{db_type}", "{namespace}")';
 
-$dbList = array((object)array('name' => 'qucheng-mysql', 'db_type' => 'mysql', 'status' => 'running'));
 $dbList = initTableData($dbList, $config->system->dtable->dbList->fieldList, $this->system);
 
 panel
