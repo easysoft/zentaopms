@@ -428,6 +428,7 @@ class system extends control
     public function configDomain()
     {
         $domainSettings = $this->system->getDomainSettings();
+        if($domainSettings->customDomain) $this->locate($this->inLink('domainView'));
         if($domainSettings->customDomain) return print(js::locate($this->inLink('domainView')));
     }
 

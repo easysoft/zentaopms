@@ -1018,7 +1018,7 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function allDBList($global = true, $namespace = 'default')
+    public function allDBList($global = true, $namespace = 'quickon-system')
     {
         $apiUrl    = "/api/cne/component/dbservice";
         $apiParams =  array( 'global' => ($global ? 'true' : 'false'), 'namespace' => $namespace, 'channel' => $this->config->CNE->api->channel);

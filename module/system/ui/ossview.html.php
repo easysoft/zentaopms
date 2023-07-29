@@ -26,14 +26,17 @@ panel
             a
             (
                 set::id('ossVisitUrl'),
+                set::target('_blank'),
                 $lang->system->visit,
             ),
         ),
         item
         (
             set::name($lang->system->oss->user),
-            set::value(''),
-            set::id('ossAdmin'),
+            span
+            (
+                set::id('ossAdmin'),
+            ),
         ),
         item
         (
@@ -53,12 +56,12 @@ panel
         item
         (
             set::name($lang->system->oss->apiURL),
-            set::value($apiURL),
+            $apiURL,
         ),
         item
         (
             set::name($lang->system->oss->accessKey),
-            set::value($ossAccount->username),
+            $ossAccount->username,
         ),
         item
         (
