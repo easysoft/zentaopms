@@ -39,6 +39,11 @@
   .target-form-group .option label {cursor: pointer;}
   .target-form-group .option input {cursor: pointer;}
   #go-test-btn {margin-left: 16px;}
+
+  @media (max-width: 1366px)
+  {
+    .target-form-group .options {grid-template-columns: repeat(3, 1fr);}
+  }
 </style>
 
 <?php include 'promptdesignprogressbar.html.php';?>

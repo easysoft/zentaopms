@@ -47,6 +47,11 @@
   #selected-data-sorter .list-group-item::before {content: counter(list-item); counter-increment: list-item; display: inline-block; width: 2ch; padding-right: 28px;}
   #selected-data-sorter .list-group-item.drag-shadow::before {content: '';}
   #selected-data-sorter .list-group-item .remove-icon {cursor: pointer; padding: 2px;}
+
+  @media (max-width: 1366px)
+  {
+    .obj-view-body {grid-template-columns: repeat(3, 1fr);}
+  }
 </style>
 
 <script>
