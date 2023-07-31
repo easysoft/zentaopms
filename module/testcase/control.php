@@ -3239,7 +3239,7 @@ class testcase extends control
 
             $pId = $fetchResult['pId'];
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => $this->createLink('testcase', 'showXmindImport', "productID=$pId&branch=$branch")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => $this->createLink('testcase', 'showXmindImport', "productID=$pId&branch=$branch"), 'closeModal' => true));
         }
 
         $this->view->settings = $this->testcase->getXmindConfig();

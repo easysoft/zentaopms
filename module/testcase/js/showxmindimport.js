@@ -174,7 +174,7 @@ ztmindmap.SceneManager.prototype.refreshNodeDisplay = function($node, data)
 ztmindmap.SceneManager.prototype.getContextMenuList = function(data)
 {
     var parentNode = this.wraper.findParentNode(data);
-    if(parentNode.$.type == "scene" && (data.$.type != "testcase" && data.$.type != "scene")) 
+    if(parentNode.$.type == "scene" && (data.$.type != "testcase" && data.$.type != "scene"))
         return [{action:"addTestcase", label:jsLng.set2Testcase}];
 
     if(data.$.typeBy.import == true || data.$.type != "scene") return [];

@@ -9,16 +9,33 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('productID', $productID);
+jsVar('branch', $branch);
+jsVar('userConfig_module', $settings['module']);
+jsVar('userConfig_scene', $settings['scene']);
+jsVar('userConfig_case', $settings['case']);
+jsVar('userConfig_pri', $settings['pri']);
+jsVar('userConfig_group', $settings['group']);
+jsVar('jsLng',$jsLng);
+
+$nodeTemplate =
+"<div  data-toggle='tooltip' data-placement='bottom' id='node-{id}' class='mindmap-node' data-type='{type}' data-id='{id}' data-parent='{parent}'>" .
+"   <div class='scene-indicator' style='display:none;'><i class='icon icon-flag'></i></div>" .
+"   <a class='pri-level' style='display:none;'></a>" .
+"   <div class='wrapper'>" .
+"       <div class='text'>{text}</div>" .
+"       <div class='caption'>{caption}</div>" .
+"       <div class='btn-toggle'></div>" .
+"   </div>" .
+"   <div class='suffix'><span>[</span><span class='content'>M:10000</span><span>]</span></div>" .
+"</div>";
+
 panel
 (
     set::title("{$lang->testcase->xmindImportEdit}({$product->name})"),
     set::headingClass('p-6'),
     set::bodyClass('px-6 py-0'),
-    mindmap
-    (
-        set::data($scenes),
-        set::height('600px')
-    ),
+    mindmap(set::data($scenes), set::height('600px'), set::nodeTeamplate($nodeTemplate)),
     div
     (
         set::class('py-6 text-center'),
