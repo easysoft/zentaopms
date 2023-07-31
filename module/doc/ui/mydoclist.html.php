@@ -13,6 +13,7 @@ namespace zin;
 $docContent = null;
 if(empty($docs))
 {
+    $emptyCreateBtn = $buildCreateBtn($type, $objectID, $lib, $moduleID, $templateParam, $buttonItems);
     $docContent = div
     (
         setClass('table-empty-tip flex justify-center items-center'),
