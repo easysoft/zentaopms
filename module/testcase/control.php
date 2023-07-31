@@ -3393,11 +3393,31 @@ class testcase extends control
         $jsLng['removeGroup']  = $this->lang->testcase->removeGroup;
         $jsLng['set2Group']    = $this->lang->testcase->set2Group;
 
+        $folder = $this->session->xmindImport;
+        $type   = $this->session->xmindImportType;
+        $data   = array();
+        if($type == 'xml')
+        {
+            $xmlPath = "$folder/content.xml";
+            $results = $this->testcase->getXmindImport($xmlPath);
+            $results = json_decode($results, true);
+        }
+        else
+        {
+            $jsonPath = "$folder/content.json";
+            $jsonStr  = file_get_contents($jsonPath);
+            $results  = json_decode($jsonStr, true);
+        }
+
+        $scenes = array();
+        if(!empty($results[0]['rootTopic'])) $scenes = $this->testcaseZen->processScene($results[0]['rootTopic']);
+
         $this->view->title            = $this->lang->testcase->xmindImport;
         $this->view->settings         = $config;
         $this->view->productID        = $productID;
         $this->view->branch           = $branch;
         $this->view->product          = $product;
+        $this->view->scenes           = $scenes;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
         $this->view->gobackLink       = $this->createLink('testcase', 'browse', "productID=$productID");
         $this->view->jsLng            = $jsLng;

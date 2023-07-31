@@ -79,5 +79,47 @@ class testcaseZen extends testcase
         }
         return true;
     }
+
+    /**
+     * 处理xmind数据
+     * Process scene data.
+     *
+     * @param  array     $result
+     * @access protected
+     * @return array
+     */
+    protected function processScene(array $result): array
+    {
+        $scenes['id']   = $result['id'];
+        $scenes['text'] = $result['title'];
+        $scenes['type'] = 'root';
+        if(!empty($result['children'])) $scenes['children'] = $this->processChildScene($result['children']['attached'], $result['id'], 'sub');
+        return $scenes;
+    }
+
+    /**
+     * 处理xmind的节点数据
+     * process scene child data.
+     *
+     * @param  array     $results
+     * @param  string    $parent
+     * @param  string    $type
+     * @access protected
+     * @return void
+     */
+    protected function processChildScene(array $results, string $parent, string $type)
+    {
+        $scenes = array();
+        foreach($results as $result)
+        {
+            $scene['id']     = $result['id'];
+            $scene['text']   = $result['title'];
+            $scene['parent'] = $parent;
+            $scene['type']   = $type;
+            if(!empty($result['children'])) $scene['children'] = $this->processChildScene($result['children']['attached'], $result['id'], 'node');
+            $scenes[] = $scene;
+        }
+        return $scenes;
+    }
 }
 
