@@ -574,16 +574,14 @@ class productplanModel extends model
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
             ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
-            ->setIF($this->post->status == 'done', 'finishedDate', helper::now())
-            ->setIF($this->post->status == 'closed', 'closedDate', helper::now())
-            ->setIF($this->post->status == 'doing', 'finishedDate', '')
-            ->setIF($this->post->status == 'doing', 'closedDate', '')
             ->setDefault('branch', 0)
             ->cleanINT('parent')
             ->join('branch', ',')
             ->add('id', $planID)
             ->remove('delta,uid,future')
             ->get();
+
+        $plan = $this->buildPlanByStatus($this->post->status, '', $plan);
 
         $product = $this->loadModel('product')->getByID($oldPlan->product);
         if($product->type != 'normal')
@@ -689,7 +687,7 @@ class productplanModel extends model
         $oldPlan = $this->getByID($planID);
 
         $closedReason = $this->post->closedReason ? $this->post->closedReason : '';
-        $plan = $this->buildByStatus($status, $closedReason);
+        $plan = $this->buildPlanByStatus($status, $closedReason);
 
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
         if(dao::isError()) return false;
@@ -711,10 +709,11 @@ class productplanModel extends model
      *
      * @param  string $status doing|done|closed
      * @param  string $closedReason
+     * @param  object $plan
      * @access public
      * @return object
      */
-    public function buildByStatus(string $status, string $closedReason = '', object $plan = null): object
+    public function buildPlanByStatus(string $status, string $closedReason = '', object $plan = null): object
     {
         $now = helper::now();
 
@@ -723,13 +722,15 @@ class productplanModel extends model
 
         if($status == 'doing')
         {
-            $plan->finishedDate = '';
-            $plan->closedDate   = '';
+            $plan->finishedDate = null;
+            $plan->closedDate   = null;
             $plan->closedReason = '';
         }
         elseif($status == 'done')
         {
             $plan->finishedDate = $now;
+            $plan->closedDate   = null;
+            $plan->closedReason = '';
         }
         elseif($status == 'closed')
         {
@@ -788,7 +789,7 @@ class productplanModel extends model
 
         if(!empty($status))
         {
-            $plan = $this->buildByStatus($status);
+            $plan = $this->buildPlanByStatus($status);
             $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($parentID)->exec();
             $this->loadModel('action')->create('productplan', $parentID, $parentAction, '', $parentAction);
         }
@@ -883,7 +884,7 @@ class productplanModel extends model
         {
             if($status == $oldPlan->status) continue;
 
-            $plan = $this->buildByStatus($status, $closedReasons[$planID]);
+            $plan = $this->buildPlanByStatus($status, $closedReasons[$planID]);
 
             $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq((int)$planID)->exec();
             if(dao::isError()) return false;
