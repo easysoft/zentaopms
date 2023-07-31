@@ -16,19 +16,24 @@ class convertModel extends model
     /**
      * Connect to db.
      *
+     * @param  string $dbName
      * @access public
-     * @return void
+     * @return object|string
      */
-    public function connectDB($dbName = '')
+    public function connectDB(string $dbName = ''): object|string
     {
-        $dsn = "mysql:host={$this->config->db->host}; port={$this->config->db->port};dbname={$dbName}";
         try
         {
-            $dbh = new PDO($dsn, $this->config->db->user, $this->config->db->password);
+            $params = clone $this->config->db;
+            $params->name = $dbName;
+
+            $dbh = new dbh($params);
+            $dbh->exec("SET NAMES {$params->encoding}");
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $dbh->exec("SET NAMES {$this->config->db->encoding}");
+
             $this->sourceDBH = $dbh;
+
             return $dbh;
         }
         catch (PDOException $exception)
@@ -40,15 +45,15 @@ class convertModel extends model
     /**
      * Check database exits or not.
      *
+     * @param  string $dbName
      * @access public
      * @return object|false
      */
-    public function dbExists($dbName = '')
+    public function dbExists(string $dbName = ''): object|false
     {
-        if(!$this->checkDBName($dbName)) die('Invalid database name.');
-        $statement = $this->dbh->prepare('SHOW DATABASES like ?');
-        $statement->execute(array($dbName));
-        return $statement->fetch();
+        if(!$this->checkDBName($dbName)) return false;
+
+        return $this->dbh->execute('SHOW DATABASES like ?', array($dbName))->fetch();
     }
 
     /**
