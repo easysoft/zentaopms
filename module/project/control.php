@@ -1408,8 +1408,7 @@ class project extends control
         if(!empty($_POST))
         {
             $this->group->updateUser($groupID);
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
         $group      = $this->group->getById($groupID);
@@ -1436,18 +1435,12 @@ class project extends control
             }
         }
 
+        $this->view->title        = $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $this->view->group        = $group;
+        $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu(0, array('deptModel', 'createGroupManageMemberLink'), (int)$groupID);
+        $this->view->groupUsers   = $groupUsers;
+        $this->view->otherUsers   = $otherUsers;
         $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
-
-        $title      = $group->name . $this->lang->colon . $this->lang->group->manageMember;
-        $position[] = $group->name;
-        $position[] = $this->lang->group->manageMember;
-
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->group      = $group;
-        $this->view->deptTree   = $this->loadModel('dept')->getTreeMenu(0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
-        $this->view->groupUsers = $groupUsers;
-        $this->view->otherUsers = $otherUsers;
 
         $this->display('group', 'manageMember');
     }

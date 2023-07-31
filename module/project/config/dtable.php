@@ -296,10 +296,12 @@ $config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['text'
 $config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['hint'] = $lang->group->managePriv;
 $config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['url']  = helper::createLink('project', 'managePriv', "projectID={project}&type=bygroup&groupID={id}");
 
-$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['icon'] = 'persons';
-$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['text'] = $lang->group->manageMember;
-$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['hint'] = $lang->group->manageMember;
-$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['url']  = helper::createLink('project', 'manageGroupMember', "groupID={id}");
+$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['icon']        = 'persons';
+$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['text']        = $lang->group->manageMember;
+$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['hint']        = $lang->group->manageMember;
+$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['url']         = helper::createLink('project', 'manageGroupMember', "groupID={id}");
+$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['data-toggle'] = 'modal';
+$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['data-size']   = 'lg';
 
 $config->projectGroup->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->projectGroup->dtable->fieldList['actions']['list']['edit']['text'] = $lang->group->edit;

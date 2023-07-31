@@ -649,7 +649,7 @@ class groupModel extends model
         }
 
         /* Update whitelist. */
-        $acl = $this->dao->select('acl')->from(TABLE_GROUP)->where('id')->eq($groupID)->fetch('acl');
+        $acl = (string)$this->dao->select('acl')->from(TABLE_GROUP)->where('id')->eq($groupID)->fetch('acl');
         $acl = json_decode($acl);
 
         /* Adjust user view. */
