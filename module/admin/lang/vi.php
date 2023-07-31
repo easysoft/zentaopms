@@ -59,6 +59,7 @@ $lang->admin->registerNotice->success    = "Bạn đã đăng ký!";
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Liên kết tài khoản';
 $lang->admin->bind->success = "Tài khoản đã được kết nối!";
+$lang->admin->bind->submit  = "Trói buộc";
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common     = 'Chính sách bảo mật';

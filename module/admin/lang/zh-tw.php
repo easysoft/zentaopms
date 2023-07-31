@@ -51,6 +51,7 @@ $lang->admin->registerNotice->success    = "登記賬戶成功";
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = '關聯社區帳號';
 $lang->admin->bind->success = "關聯賬戶成功";
+$lang->admin->bind->submit  = "關聯";
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common       = '安全策略';
