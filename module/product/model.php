@@ -1778,7 +1778,7 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function refreshStats()
+    public function refreshStats($refreshAll = false)
     {
         $updateTime = zget($this->app->config->global, 'productStatsTime', '');
         $now        = helper::now();
@@ -1788,21 +1788,25 @@ class productModel extends model
          * Else only refresh the latest products in action table.
          */
         $productActions = array();
-        if($updateTime > date('Y-m-d', strtotime('-14 days')))
+        $products       = array();
+        if($updateTime < date('Y-m-d', strtotime('-14 days')) or $refreshAll)
+        {
+            $products = $this->dao->select('id')->from(TABLE_PRODUCT)->fetchPairs('id');
+        }
+        else
         {
             $productActions = $this->dao->select('distinct product')->from(TABLE_ACTION)
                 ->where('date')->ge($updateTime)
                 ->andWhere('product')->notin(array(',0,', ',,'))
                 ->fetchPairs('product');
             if(empty($productActions)) return;
-        }
 
-        $products = array();
-        foreach($productActions as $productAction)
-        {
-            foreach(explode(',', trim($productAction, ',')) as $product)
+            foreach($productActions as $productAction)
             {
-                $products[$product] = $product;
+                foreach(explode(',', trim($productAction, ',')) as $product)
+                {
+                    $products[$product] = $product;
+                }
             }
         }
 

@@ -4,7 +4,7 @@
 .side-col {width: 240px;}
 #sidebar> .cell {width: 220px;}
 
-#data {overflow: scroll;}
+#datas {overflow: scroll;}
 #data th, #data td, #schema td, #modules li > strong {overflow: hidden; text-overflow: unset; white-space: nowrap;}
 #dataContent {margin: 0px; padding: 0px;}
 #dataContent .detail {margin: 0px; padding: 0px;}

@@ -1301,7 +1301,7 @@ class programModel extends model
      * @access public
      * @return void
      */
-    public function refreshStats()
+    public function refreshStats($refreshAll = false)
     {
         $updateTime = zget($this->app->config->global, 'projectStatsTime', '');
         $now        = helper::now();
@@ -1311,7 +1311,11 @@ class programModel extends model
          * Else only refresh the latest executions in action table.
          */
         $projects = array();
-        if($updateTime > date('Y-m-d', strtotime('-14 days')))
+        if($updateTime < date('Y-m-d', strtotime('-14 days')) or $refreshAll)
+        {
+            $projects = $this->dao->select('id,project,model')->from(TABLE_PROJECT)->fetchAll('id');
+        }
+        else
         {
             $projects = $this->dao->select('distinct t1.project,t2.model')->from(TABLE_ACTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
@@ -1324,6 +1328,7 @@ class programModel extends model
         $summary = $this->dao->select('execution, SUM(t1.estimate) AS totalEstimate, SUM(t1.consumed) AS totalConsumed, SUM(t1.`left`) AS totalLeft')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->le(0) // Ignore child task.
             ->beginIF(!empty($projects))->andWhere('t1.project')->in(array_keys($projects))->fi()
             ->groupBy('execution')
             ->fetchAll();

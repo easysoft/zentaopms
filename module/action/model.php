@@ -812,7 +812,7 @@ class actionModel extends model
         $trashQuery = $this->session->trashQuery;
         $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
         $table      = $this->config->objectTables[$objectType];
-        $nameField  = isset($this->config->action->objectNameFields[$objectType]) ? 't2.' . "`{$this->config->action->objectNameFields[$objectType]}`" : '';
+        $nameField  = isset($this->config->action->objectNameFields[$objectType]) ? 't2.' . '`' . $this->config->action->objectNameFields[$objectType] . '`' : '';
 
         if($nameField) $trashQuery = preg_replace("/`objectName`/", $nameField, $trashQuery);
 
@@ -1513,7 +1513,7 @@ class actionModel extends model
                 elseif($objectType == 'stakeholder')
                 {
                     $objectName = $this->dao->select("t1.id, t2.realname")->from($table)->alias('t1')
-                        ->leftJoin(TABLE_USER)->alias('t2')->on("t1.`{$field}` = t2.account")
+                        ->leftJoin(TABLE_USER)->alias('t2')->on("t1.`$field` = t2.account")
                         ->where('t1.id')->in($objectIdList)
                         ->fetchPairs();
                 }

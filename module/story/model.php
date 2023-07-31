@@ -578,7 +578,7 @@ class storyModel extends model
         {
             if(empty($title)) continue;
 
-            $stories->reviewer[$i] = array_filter($stories->reviewer[$i]);
+            $stories->reviewer[$i] = is_array($stories->reviewer[$i]) ? array_filter($stories->reviewer[$i]) : array();
             if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
             $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];
             $stories->reviewer[$i] = $reviewers;

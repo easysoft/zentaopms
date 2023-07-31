@@ -2162,8 +2162,7 @@ class pivotModel extends model
      */
     public function buildPivotTable($data, $configs, $fields = array(), $sql = '')
     {
-        $clientLang  = $this->app->getClientLang();
-        $width       = 128;
+        $width = 128;
 
         /* Init table. */
         $table  = "<table class='reportData table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
@@ -2259,6 +2258,77 @@ class pivotModel extends model
         return $sql;
     }
 
+    /**
+     * replace defined table names.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function genOriginSheet($fields, $settings, $sql, $filters, $langs = array())
+    {
+        $sql = $this->initVarFilter($filters, $sql);
+
+        /* Create sql. */
+        $sql = str_replace(';', '', $sql);
+
+        if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
+        {
+            foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
+        }
+
+        /* Process rows. */
+        $connectSQL = '';
+        if(!empty($filters) && !isset($filters[0]['from']))
+        {
+            $wheres = array();
+            foreach($filters as $field => $filter)
+            {
+                $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
+            }
+
+            $whereStr    = implode(' and ', $wheres);
+            $connectSQL .= " where $whereStr";
+        }
+
+        $columnSQL = "select * from ($sql) tt" . $connectSQL;
+        $rows = $this->dao->query($columnSQL)->fetchAll();
+
+        $cols = array();
+        $clientLang = $this->app->getClientLang();
+        /* Build cols. */
+        foreach($fields as $field)
+        {
+            $key = $field['field'];
+
+            $col = new stdclass();
+            $col->name    = $key;
+            $col->isGroup = true;
+
+            $fieldObject  = $field['object'];
+            $relatedField = $field['field'];
+
+            $colLabel = $key;
+            if($fieldObject)
+            {
+                $this->app->loadLang($fieldObject);
+                if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
+            }
+
+            if(isset($langs[$key]) and !empty($langs[$key][$clientLang])) $colLabel = $langs[$key][$clientLang];
+            $col->label = $colLabel;
+
+            $cols[0][] = $col;
+        }
+
+        $data = new stdclass();
+        $data->cols = $cols;
+        $data->array = json_decode(json_encode($rows), true);
+
+        $configs = array_fill(0, count($rows), array_fill(0, count($fields), 1));
+
+        return array($data, $configs);
+    }
 }
 
 /**
