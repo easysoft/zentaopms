@@ -3101,7 +3101,7 @@ class docModel extends model
                 $libTree['execution'][$executionID]->children[] = $item;
             }
 
-            if($lib->type == 'apiLib') $apiLibIDList[] = $lib->id;
+            if($item->type == 'apiLib') $apiLibIDList[] = $lib->id;
         }
 
         if(in_array($type, array('product', 'project', 'execution')))
