@@ -53,6 +53,12 @@
                 });
                 if(editorInstance)
                 {
+                  if(data === null) data = '';
+
+                  /* Remove placeholder. */
+                  if(data !== '') editorInstance.$placeholder.each(function(_idx, ph) {ph.style.display = 'none';});
+
+                  /* Set editor content and sync with textarea. */
                   editorInstance.html(data);
                   editorInstance.sync();
                   break;
