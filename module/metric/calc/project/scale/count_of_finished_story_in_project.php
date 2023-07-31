@@ -22,21 +22,24 @@
  */
 class count_of_finished_story_in_project extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStoriesWithProject';
 
-    public $fieldList = array();
+    public $fieldList = array('t3.project', 't1.closedReason');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = array();
 
     public function calculate($row)
     {
+        $project      = $row->project;
+        $closedReason = $row->closedReason;
+
+        if(!isset($this->result[$project])) $this->result[$project] = 0;
+        if($closedReason == 'done') $this->result[$project] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('project', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
