@@ -12,12 +12,8 @@ window.renderCell = function(result, {col, row})
     if(col.name == 'build')
     {
         result[0] = '';
-        for(key in row.data.builds)
-        {
-            let moduleName  = row.data.builds[key].execution > 0 ? 'build' : 'projectbuild';
-            let branchLabel = showBranch ? "<span class='label label-outline label-badge'>" + row.data.builds[key].branchName + '</span> ' : '';
-            result[result.length] = {html: branchLabel + "<a href='" + $.createLink(moduleName, 'view', 'buildID=' + row.data.builds[key].id) + "' title='" + row.data.builds[key].name + "'>" + row.data.builds[key].name + '</a>'}
-        }
+        let branchLabel = showBranch ? "<span class='label label-outline label-badge mr-1'>" + row.data.build.branchName + '</span> ' : '';
+        result[result.length] = {html: branchLabel + "<a href='" + row.data.build.link + "' title='" + row.data.build.name + "'>" + row.data.build.name + '</a>'}
         return result;
     }
 
@@ -25,10 +21,8 @@ window.renderCell = function(result, {col, row})
     {
         result[0] = '';
         if(row.data.builds.length == 0) return result;
-        for(key in row.data.builds)
-        {
-            result[result.length] = {html: row.data.builds[key].projectName};
-        }
+
+        result[result.length] = {html: row.data.build.projectName};
         return result;
     }
 
@@ -73,4 +67,21 @@ window.setStatistics = function()
     }
 
     return {html: summary};
+}
+
+
+/**
+ * 合并单元格。
+ * cell span in the column.
+ *
+ * @param  object cell
+ * @access public
+ * @return object
+ */
+window.getCellSpan = function(cell)
+{
+    if(['id', 'name', 'branch', 'status', 'date', 'actions'].includes(cell.col.name) && cell.row.data.rowspan)
+    {
+        return {rowSpan: cell.row.data.rowspan};
+    }
 }

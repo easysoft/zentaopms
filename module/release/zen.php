@@ -21,12 +21,40 @@ class releaseZen extends release
      */
     protected function processReleaseListData(array $releaseList): array
     {
+        $releases = array();
+        $this->loadModel('project');
+        $this->loadModel('execution');
         foreach($releaseList as $release)
         {
+            $buildCount = count($release->builds);
+
+            $release->rowspan = $buildCount;
             $release->actions = $this->release->buildActionList($release);
+
+            if(!empty($release->builds))
+            {
+                foreach($release->builds as $build)
+                {
+                    $releaseInfo  = clone $release;
+                    $moduleName   = $build->execution ? 'build' : 'projectbuild';
+                    $canClickable = false;
+                    if($moduleName == 'projectbuild' && $this->project->checkPriv($build->project)) $canClickable = true;
+                    if($moduleName == 'build' && $this->execution->checkPriv($build->execution))    $canClickable = true;
+                    $build->link = $canClickable ? $this->createLink($moduleName, 'view', "buildID={$build->id}") : '';
+
+                    $releaseInfo->build = $build;
+
+                    $releases[] = $releaseInfo;
+                }
+            }
+            else
+            {
+                $releases[] = $release;
+            }
+
         }
 
-        return array_values($releaseList);
+        return $releases;
     }
 }
 

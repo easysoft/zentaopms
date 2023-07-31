@@ -41,7 +41,9 @@ dtable
 (
     set::cols(array_values($config->release->dtable->fieldList)),
     set::data(array_values($releases)),
+    set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.renderCell')),
+    set::getCellSpan(jsRaw('window.getCellSpan')),
     set::sortLink(jsRaw('createSortLink')),
     set::footer([jsRaw('function(){return window.setStatistics.call(this);}'), 'flex', 'pager']),
     set::footPager(
