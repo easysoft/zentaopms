@@ -681,9 +681,9 @@ class project extends control
         {
             $_POST['project'] = $projectID;
             $groupID = $this->group->create();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
-            return print(js::closeModal('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
