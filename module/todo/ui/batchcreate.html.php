@@ -21,42 +21,6 @@ jsVar('nameBoxLabel', array('custom' => $lang->todo->name, 'objectID' => $lang->
 
 div
 (
-    setID('dateCellData'),
-    setClass('hidden'),
-    inputGroup
-    (
-        setClass('inited'),
-        control
-        (
-            setClass('time-input begin'),
-            set::type('select'),
-            set::name('begin'),
-            set::required(true),
-            set::items($times)
-        ),
-        control
-        (
-            setClass('time-input end'),
-            set::type('select'),
-            set::name('end'),
-            set::required(true),
-            set::items($times)
-        ),
-        span
-        (
-            setClass('input-group-addon'),
-            checkBox
-            (
-                setClass('time-check'),
-                set::name('switchTime'),
-                $lang->todo->periods['future'],
-            )
-        )
-    ),
-);
-
-div
-(
     setID('nameInputBox'),
     setClass('hidden'),
     input
@@ -71,15 +35,15 @@ foreach(explode(',', $showFields) as $field)
 {
     if($field) $visibleFields[$field] = '';
 }
+
 formBatchPanel
 (
     set::id('batchCreateTodoForm'),
     set::title($lang->todo->batchCreate . $lang->todo->common),
-    set::onRenderRow(jsRaw('renderRowData')),
 
     on::change('[data-name="type"]', 'changeType'),
     on::change('.time-input', 'initTime'),
-    on::click('.time-check', "$(event.target).closest('.input-group').find('.time-input').prop('disabled', !!event.target.checked)"),
+    on::click('.time-check', "window.togglePending"),
     on::click('.form-batch-row-actions .btn', 'initTime'),
 
     set::headingClass('justify-start'),
@@ -121,18 +85,10 @@ formBatchPanel
     ),
     formBatchItem
     (
-        set::name('date'),
-        set::label(''),
-        set::control('hidden'),
-        set::value(date('Y-m-d')),
-        set::hidden(true)
-    ),
-    formBatchItem
-    (
         set::name('type'),
         set::label($lang->todo->type),
-        set::width('100px'),
-        set::control('select'),
+        set::width('120px'),
+        set::control('picker'),
         set::value('custom'),
         set::items($lang->todo->typeList),
     ),
@@ -140,8 +96,8 @@ formBatchPanel
     (
         set::name('pri'),
         set::label($lang->todo->pri),
-        set::width('60px'),
-        set::control('select'),
+        set::width('80px'),
+        set::control('priPicker'),
         set::value('3'),
         set::hidden(!isset($visibleFields['pri'])),
         set::items($lang->todo->priList),
@@ -171,7 +127,7 @@ formBatchPanel
     formBatchItem
     (
         set::label($lang->todo->beginAndEnd),
-        set::width('232px'),
+        set::width('260px'),
         set::control(false),
         set::name('beginAndEnd'),
         inputGroup
@@ -180,14 +136,14 @@ formBatchPanel
             control
             (
                 setClass('time-input'),
-                set::type('select'),
+                set::type('picker'),
                 set::name('begin'),
                 set::items($times)
             ),
             control
             (
                 setClass('time-input'),
-                set::type('select'),
+                set::type('picker'),
                 set::name('end'),
                 set::items($times)
             ),
@@ -203,6 +159,8 @@ formBatchPanel
             )
         )
     ),
+    input(set::type('hidden'), set::name('date'), set::value($date)),
+    input(set::type('hidden'), set::name('futureDate'), set::value(0)),
 );
 
 /* ====== Render page ====== */

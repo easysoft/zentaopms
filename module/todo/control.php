@@ -89,19 +89,19 @@ class todo extends control
 
         if(!empty($_POST))
         {
-            $form       = form::data($this->config->todo->batchCreate->form);
+            $form       = form::batchData($this->config->todo->batchCreate->form);
             $todosData  = $this->todoZen->beforeBatchCreate($form);
             $todoIdList = $this->todo->batchCreate($todosData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Locate the browser. */
-            $date = str_replace('-', '', $this->post->date[1]);
-            if($date == '') $date = 'future';
-            if($date == date('Ymd')) $date = 'today';
+            $date = str_replace('-', '', $this->post->date);
+            if($this->post->futureDate) $date = 'future';
+            if($date == date('Ymd'))    $date = 'today';
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIdList));
-            if(helper::isAjaxRequest('modal')) return send(array('result' => 'success', 'load' => true, 'closeModal' => true));
-            return $this->sendSuccess(array('load' => $this->createLink('my', 'todo', "type={$date}")));
+            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => $this->createLink('my', 'todo', "type={$date}")));
         }
 
         unset($this->lang->todo->typeList['cycle']);

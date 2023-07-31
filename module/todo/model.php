@@ -35,46 +35,18 @@ class todoModel extends model
      * @access public
      * @return array|false
      */
-    public function batchCreate(object $todos): array|false
+    public function batchCreate(array $todos): array|false
     {
-        $validTodos = array();
-        $assignedTo = $this->app->user->account;
-
-        foreach($this->post->name as $loop => $name)
-        {
-            $isExist    = false;
-            $assignedTo = $todos->assignedTo[$loop];
-            foreach($this->config->todo->objectList as $objects)
-            {
-                if(isset($todos->{$objects}[$loop + 1]))
-                {
-                    $isExist = true;
-                    break;
-                }
-            }
-
-            if($name != '' || $isExist)
-            {
-                $todo = $this->todoTao->getValidsOfBatchCreate($todos, $loop, $assignedTo);
-                if(dao::isError()) return false;
-
-                $validTodos[] = $todo;
-            }
-            else
-            {
-                unset($todos->type[$loop], $todos->pri[$loop], $name, $todos->desc[$loop], $todos->begin[$loop], $todos->end[$loop]);
-            }
-        }
-
-        $todoIdList = array();
-        foreach($validTodos as $todo)
+        $this->loadModel('action');
+        $this->loadModel('score');
+        foreach($todos as $todo)
         {
             $todoID = $this->todoTao->insert($todo);
             if(!$todoID) return false;
 
             $todoIdList[] = $todoID;
-            $this->loadModel('score')->create('todo', 'create', $todoID);
-            $this->loadModel('action')->create('todo', $todoID, 'opened');
+            $this->score->create('todo', 'create', $todoID);
+            $this->action->create('todo', $todoID, 'opened');
         }
 
         return $todoIdList;

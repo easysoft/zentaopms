@@ -1,31 +1,11 @@
 const timeIndex = times.findIndex(key => `${key}` === `${time}`);
-window.renderRowData = function($row, index, row)
-{
-    if($row.find('td[data-name="beginAndEnd"] .inited').length == 0)
-    {
-        $tdDom = $row.find('td[data-name="beginAndEnd"]');
-        $tdDom.empty().html($('#dateCellData').html());
-
-        const beginIndex = timeIndex + index * 3;
-        $tdDom.find('select[name="begin"]').attr('name', `begin[${index + 1}]`).val(times[beginIndex]);
-        $tdDom.find('select[name="end"]').attr('name', `end[${index + 1}]`).val(times[beginIndex + 3]);
-
-        $tdDom.find('input[name="switchTime"]').attr('name', `switchTime[${index + 1}]`).attr('id', `switchTime_${index}`);
-        $tdDom.find('label[for="switchTime_"]').attr('for', `switchTime_${index}`);
-    }
-
-    if($row.find('td[data-name="name"].inited').length == 0)
-    {
-        $row.find('td[data-name="name"]').addClass(`name-box${index} inited`).attr('id', `nameBox${index}`);
-    }
-}
 
 window.changeType = function(e)
 {
-    const type         = $(e.target).val();
-    const index        = $(e.target).closest('tr').data('index')
-    const nameBoxID    = '#nameBox'  + index;
-    const nameBoxClass = '.name-box' + index;
+    const type     = e.target.value;
+    const $tr      = $(e.target).closest('tr');
+    const index    = $tr.data('index')
+    const $nameBox = $tr.find('[data-name="name"]');
 
     let param = 'userID=' + userID + '&id=' + (+index + 1);
     if(type == 'task') param += '&status=wait,doing';
@@ -35,50 +15,84 @@ window.changeType = function(e)
         link = $.createLink(type, objectsMethod[type], param);
         $.get(link, function(data)
         {
-            $(nameBoxClass).html(data);
+            data = JSON.parse(data);
+            data.name = 'name';
+            $nameBox.html("<div class='picker-box' id='name'></div>");
+            $nameBox.find('#name').picker(data);
         })
     }
     else
     {
-        $(nameBoxClass).html($('#nameInputBox').html());
-        $(nameBoxClass).find('input[name=name]').attr('name', `name[${index}]`).attr('id', `name_${index}`)
+        $nameBox.html($('#nameInputBox').html());
+        $nameBox.find('input[name=name]').attr('name', `name[${index}]`).attr('id', `name_${index}`)
     }
 }
 
 window.changFuture = function()
 {
-    const isChecked = $('#futureDate').is(':checked');
-    $('#batchCreateTodoForm td[data-name="date"] .form-batch-input').val($('#todoDate').val());
-    if(isChecked) $('#batchCreateTodoForm td[data-name="date"] .form-batch-input').val(futureDate);
+    const isChecked = $('#futureDate[type="checkbox"]').prop('checked');
+    $todoDate = $('#todoDate').zui('datePicker');
 
-    $('#futureDate').closest('.input-group').find('input[name=date]').prop('disabled', isChecked);
+    $('#batchCreateTodoForm #date').val($todoDate.$.state.value);
+    $('#batchCreateTodoForm #futureDate').val(isChecked ? 1 : 0);
+    $todoDate.render({disabled: isChecked});
 }
 
 window.initTime = function(e)
 {
-    let   $this     = $(e.target);
-    const isBegin   = $this.hasClass('begin');
-    if(!isBegin && !$this.hasClass('end')) $this = $this.closest('tr').find('.end');
+    let   $this   = $(e.target);
+    let   $tr     = $this.closest('tr');
+    let   $picker = $this.zui('picker');
+    let   value   = $picker.$.value;
+    let   $end    = $tr.find('[data-name=end]');
+    const options = $picker.options;
+    const items   = options.items;
+    const isBegin = options.name.indexOf('begin') === 0;
 
-    const index     = parseInt($this.closest('tr').data('index'));
-    let   timeIndex = times.findIndex(key => `${key}` == $this.val());
+    const index = parseInt($tr.data('index'));
     if(isBegin)
     {
-        timeIndex += 3;
-        if(timeIndex > times.length - 1) timeIndex = 0;
-        $(`tr[data-index="${index}"]`).find('select.end').val(times[timeIndex]);
+        let endValue = '';
+        items.forEach(function(item, timeIndex)
+        {
+            if(item.value == value)
+            {
+                endIndex = timeIndex + 3;
+                endValue = items.length <= endIndex ? value : items[endIndex].value;
+                return;
+            }
+        });
+        $end.zui('picker').$.setValue(endValue);
+        value = endIndex;
     }
+    console.log(value);
 
     $('#batchCreateTodoForm tbody tr').each(function()
     {
         const trIndex = parseInt($(this).data('index'));
         if(trIndex > index)
         {
-            let beginIndex = timeIndex + (trIndex - index - 1) * 3;
-            if(beginIndex > times.length - 1) beginIndex = 0;
-
-            $(this).find('select.begin').val(times[beginIndex]);
-            $(this).find('select.end').val(times[beginIndex + 4 > times.length ? 0 : beginIndex + 3]);
+            let endValue = '';
+            items.forEach(function(item, timeIndex)
+            {
+                if(item.value == value)
+                {
+                    endIndex = timeIndex + 3;
+                    endValue = items.length <= endIndex ? value : items[endIndex].value;
+                    return;
+                }
+            });
+            $(this).find('[data-name="beginAndEnd"] [data-name="begin"]').zui('picker').$.setValue(value);
+            $(this).find('[data-name="beginAndEnd"] [data-name="end"]').zui('picker').$.setValue(endValue);
+            value = endIndex;
         }
+    });
+}
+
+window.togglePending = function(e)
+{
+    $(e.target).closest('.input-group').find('.time-input').each(function()
+    {
+        $(this).zui('picker').render({disabled: e.target.checked});
     });
 }

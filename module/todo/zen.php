@@ -226,9 +226,22 @@ class todoZen extends todo
      * @access protected
      * @return object
      */
-    protected function beforeBatchCreate(form $form): object
+    protected function beforeBatchCreate(form $form): array
     {
-        return $form->get();
+        $todos = $form->get();
+        foreach($todos as $todo)
+        {
+            $todo->date = $this->post->futureDate ? FUTURE_TIME : $this->post->date;
+            if(!empty($todo->switchTime))
+            {
+                $todo->begin = '2400';
+                $todo->end   = '2400';
+            }
+            if($todo->type != 'custom') $todo->objectID = (int)$todo->name;
+
+            unset($todo->switchTime);
+        }
+        return $todos;
     }
 
     /**
