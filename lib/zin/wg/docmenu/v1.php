@@ -33,7 +33,7 @@ class docMenu extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    private function buildLink($item): string
+    private function buildLink($item, $releaseID = 0): string
     {
         $url = $item->url;
         if(!empty($url)) return $url;
@@ -85,6 +85,19 @@ class docMenu extends wg
             if($item->type == 'module' && $item->object == 'api')
             {
                 $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$this->release}"), $linkParams);
+            }
+        }
+
+        if($releaseID)
+        {
+            if($this->currentModule == 'doc')
+            {
+                $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$releaseID}"), $linkParams);
+                if($this->rawMethod == 'view') $linkParams = "libID={$this->libID}&moduleID=0&browseType=byrelease&orderBy=&status,id_desc&param={$releaseID}";
+            }
+            else
+            {
+                $linkParams = "libID={$this->libID}&moduleID=0&apiID=0&version=0&release={$releaseID}";
             }
         }
         return helper::createLink($moduleName, $methodName, $linkParams);
@@ -193,24 +206,56 @@ class docMenu extends wg
 
     private function getActions($item): array|null
     {
-        if(isset($item->hasAction) && !$item->hasAction) return null;
-        if(in_array($item->type, array('mine', 'view', 'collect', 'createdBy', 'editedBy'))) return null;
-
-        $actions = $this->getOperateItems($item);
-        if(empty($actions)) return null;
-
-        return array(
-            array(
-                'key'      => 'more',
-                'icon'     => 'ellipsis-v',
+        $versionBtn = array();
+        if(isset($item->versions) && $item->versions)
+        {
+            global $lang;
+            $versionTitle = $lang->build->common;
+            $versionBtn = array(
+                'key'      => 'version',
+                'text'     => $versionTitle,
                 'type'     => 'dropdown',
-                'caret'    => false,
                 'dropdown' => array(
                     'placement' => 'bottom-end',
-                    'items'     => $actions,
+                    'items'     => array(),
                 )
-            )
-        );
+            );
+
+            foreach($item->versions as $version)
+            {
+                if($version->id == $this->release) $versionBtn['text'] = $version->version;
+
+                $versionBtn['dropdown']['items'][] = array(
+                    'text'   => $version->version,
+                    'href'   => $this->buildLink($item, $version->id),
+                    'active' => $version->id == $this->release,
+                );
+            }
+        }
+
+        $moreBtn = array();
+        if(!isset($item->hasAction) || $item->hasAction || in_array($item->type, array('mine', 'view', 'collect', 'createdBy', 'editedBy')))
+        {
+            $actions = $this->getOperateItems($item);
+            if($actions)
+            {
+                $moreBtn = array(
+                    'key'      => 'more',
+                    'icon'     => 'ellipsis-v',
+                    'type'     => 'dropdown',
+                    'caret'    => false,
+                    'dropdown' => array(
+                        'placement' => 'bottom-end',
+                        'items'     => $actions,
+                    )
+                );
+            }
+        }
+
+        $actions = array();
+        if($versionBtn) $actions[] = $versionBtn;
+        if($moreBtn)    $actions[] = $moreBtn;
+        return $actions ? $actions : null;
     }
 
     private function getOperateItems($item): array
