@@ -21,6 +21,7 @@ $lang->programplan->close         = 'Close Stage';
 $lang->programplan->activate      = 'Activate Stage';
 $lang->programplan->createSubPlan = 'Create Sub Plan';
 $lang->programplan->subPlanManage = 'Sub-stages management';
+$lang->programplan->submit        = 'Submit';
 
 $lang->programplan->parent           = 'Parent Stage';
 $lang->programplan->emptyParent      = 'N/A';
@@ -66,6 +67,7 @@ $lang->programplan->delayDays        = 'Delay days';
 $lang->programplan->settingGantt     = 'Gantt Setting';
 $lang->programplan->viewSetting      = 'Setting';
 $lang->programplan->desc             = 'Description';
+$lang->programplan->wait             = 'Wait';
 
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";
@@ -126,3 +128,8 @@ $lang->programplan->error->sameType        = 'Type of the stage must be as same 
 
 $lang->programplan->ganttBrowseType['gantt']       = 'Group by Stage';
 $lang->programplan->ganttBrowseType['assignedTo']  = 'Group by AssignedTo';
+
+$lang->programplan->reviewColorList['draft']     = '#FC913F';
+$lang->programplan->reviewColorList['reviewing'] = '#CD6F27';
+$lang->programplan->reviewColorList['pass']      = '#0DBB7D';
+$lang->programplan->reviewColorList['fail']      = '#FB2B2B';

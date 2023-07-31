@@ -187,7 +187,7 @@ $lang->custom->notice->forceReview         = "指定人提交的%s必须评审�
 $lang->custom->notice->forceNotReview      = "指定人提交的%s不需要评审。";
 $lang->custom->notice->longlife            = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
 $lang->custom->notice->invalidNumberKey    = '键值应为不大于255的数字';
-$lang->custom->notice->invalidStringKey    = '键值应当为小写英文字母、数字或下划线的组合';
+$lang->custom->notice->invalidStringKey    = '键值应当为大小写英文字母、数字或下划线的组合';
 $lang->custom->notice->cannotSetTimezone   = 'date_default_timezone_set方法不存在或禁用，不能设置时区。';
 $lang->custom->notice->noClosedBlock       = '没有永久关闭的区块';
 $lang->custom->notice->required            = '页面提交时，选中的字段必填';
@@ -254,6 +254,7 @@ $lang->custom->selectProgramTips = "切换到轻量管理模式后，为确保�
 
 $lang->custom->modeList['light'] = '轻量级管理模式';
 $lang->custom->modeList['ALM']   = '全生命周期管理模式';
+$lang->custom->modeList['PLM']   = 'IPD集成产品开发模式';
 
 $lang->custom->modeIntroductionList['light'] = "提供了{$lang->projectCommon}管理的核心功能，适用于小型研发团队";
 $lang->custom->modeIntroductionList['ALM']   = '概念更加完整、严谨，功能更加丰富，适用于中大型研发团队';

@@ -430,6 +430,7 @@ class treeModel extends model
 
         $this->loadModel('branch');
         $projectID        = zget($extra, 'projectID', 0);
+        $projectModel     = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch('model');
         $branches         = array($branch => '');
         $executionModules = array();
         if($branch and empty($projectID))
@@ -470,7 +471,7 @@ class treeModel extends model
             {
                 $this->buildTree($treeMenu, $module, $type, $userFunc, $extra, $branch);
             }
-            elseif(isset($executionModules[$module->id]) || !empty($product->shadow))
+            elseif(isset($executionModules[$module->id]) || !empty($product->shadow) || $projectModel == 'ipd')
             {
                 $this->buildTree($treeMenu, $module, $type, $userFunc, $extra, $branch);
             }

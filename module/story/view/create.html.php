@@ -17,6 +17,7 @@
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <?php js::set('storyType', $type);?>
 <?php js::set('requiredFields', $config->story->create->requiredFields);?>
+<?php js::set('systemMode', $config->systemMode);?>
 <?php if($type == 'requirement'): ?>
 <style>.input-group .control-branch + .chosen-container-single .chosen-single {border-radius: 0 2px 2px 0; border-left-width: 0px;}</style>
 <?php endif; ?>
@@ -187,6 +188,30 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
           </tr>
           <?php else:?>
+          <?php if($config->systemMode == 'PLM'):?>
+          <tr class='sourceBox <?php echo $hiddenSource;?>'>
+            <th><?php echo $lang->story->source;?></th>
+            <td colspan='2'>
+              <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
+            </td>
+            <td colspan="2" class="sourceTd">
+              <div class="input-group">
+                <div class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></div>
+                <?php echo html::input('sourceNote', $sourceNote, "class='form-control'");?>
+              </div>
+            </td>
+            <td colspan="2" id='feedbackBox' class='hidden'>
+              <div class="input-group">
+                <div class="input-group">
+                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->feedbackBy;?></div>
+                  <?php echo html::input('feedbackBy', '', "class='form-control'");?>
+                  <span class='input-group-addon'><?php echo $lang->story->notifyEmail;?></span>
+                  <?php echo html::input('notifyEmail', '', "class='form-control'");?>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <?php else:?>
           <tr>
             <th class='planTh'><?php echo $lang->story->assignedTo;?></th>
             <td colspan='2' id='assignedToBox'>
@@ -203,6 +228,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
@@ -226,6 +252,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 <span class='input-group-btn'><?php echo html::commonButton($lang->story->loadAllStories, "class='btn btn-default' onclick='loadURS()' data-toggle='tooltip'");?></span>
               </div>
             </td>
+            <?php if($app->tab == 'product'):?>
             <td colspan="2" <?php if($hiddenParent) echo 'hidden';?>>
               <div class='input-group' id='moduleIdBox'>
                 <?php if(!$hiddenURS):?>
@@ -234,6 +261,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 <?php echo html::select('parent', $stories, '', "class='form-control chosen'");?>
               </div>
             </td>
+            <?php endif;?>
           </tr>
           <?php else:?>
           <tr <?php if($hiddenParent) echo 'hidden';?>>

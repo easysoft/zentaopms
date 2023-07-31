@@ -10,7 +10,6 @@
 <?php if(!isset($branch)) $branch = 0;?>
 <?php if($config->global->flow == 'full'):?>
 <style>
-.btn-group a i.icon-plus {font-size: 16px;}
 .btn-group .icon-help {line-height: 30px;}
 .btn-group .popover {width:300px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}

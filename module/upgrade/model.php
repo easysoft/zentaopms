@@ -24,6 +24,7 @@ class upgradeModel extends model
     public function __construct()
     {
         parent::__construct();
+        if($this->config->edition == 'ipd') $this->config->vision = 'rnd';
         $this->loadModel('setting');
     }
 
@@ -43,7 +44,7 @@ class upgradeModel extends model
         {
             if(!is_numeric($version[0])) continue;
             if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
-            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array());
+            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array(), 'ipd' => array());
         }
         if($fromEdition == 'open') return $versions;
 
@@ -67,6 +68,11 @@ class upgradeModel extends model
             if(isset($versions[$open])) $versions[$open]['max'][] = $max;
         }
 
+        /* Update ipd sql only from ipd. */
+        foreach($this->config->upgrade->ipdVersion as $ipd => $open)
+        {
+            if(isset($versions[$open])) $versions[$open]['ipd'][] = $ipd;
+        }
         return $versions;
     }
 
@@ -591,6 +597,15 @@ class upgradeModel extends model
             case '17_8':
                 if(!$executedXuanxuan)
                 {
+                    $table  = $this->config->db->prefix . 'user';
+                    $clientStatusExists = $this->checkFieldsExists($table, 'clientStatus');
+                    $clientLangExists   = $this->checkFieldsExists($table, 'clientLang');
+                    $pinyinExists       = $this->checkFieldsExists($table, 'pinyin');
+
+                    if(!$clientStatusExists) $this->dbh->query("ALTER TABLE $table ADD `clientStatus` varchar(10) NOT NULL DEFAULT 'zh-cn' AFTER `deleted`");
+                    if(!$clientLangExists)   $this->dbh->query("ALTER TABLE $table ADD `clientLang` enum('0','1') enum('online','away','busy','offline','meeting') NOT NULL DEFAULT 'offline' AFTER `deleted`");
+                    if(!$pinyinExists)       $this->dbh->query("ALTER TABLE $table ADD `pinyin` varchar(255) NOT NULL DEFAULT '' AFTER `realname`");
+
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.5.sql';
                     $this->execSQL($xuanxuanSql);
                 }
@@ -657,9 +672,15 @@ class upgradeModel extends model
                 }
                 break;
             case '18_5':
+                $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
+                if(strpos($fromVersion, 'ipd') === false) $this->execSQL($this->getUpgradeFile('ipdinstall'));
+                if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));
+                if($this->config->edition == 'ipd' and strpos($fromVersion, 'ipd') === false) $this->addORPriv();
+
                 $this->loadModel('product')->refreshStats(true);
                 $this->loadModel('program')->refreshStats(true);
                 $this->updatePivotFieldsType();
+
                 break;
         }
 
@@ -817,6 +838,17 @@ class upgradeModel extends model
                 $this->addDefaultKanbanPri();
                 break;
         }
+    }
+
+    /**
+     * Process data for ipd.
+     *
+     * @param  int   $ipdVersion
+     * @access public
+     * @return void
+     */
+    public function executeIpd($ipdVersion)
+    {
     }
 
     /**
@@ -1137,7 +1169,9 @@ class upgradeModel extends model
              case '18_4_beta1':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.4.beta1'));
              case '18_4':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.4')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.4'));
+             case '18_5':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -1362,7 +1396,7 @@ class upgradeModel extends model
      */
     public function getEditionByVersion($version)
     {
-        $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
+        $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max', 'i' => 'ipd');
         return is_numeric($version[0]) ? 'open' : $editions[$version[0]];
     }
 
@@ -1421,7 +1455,7 @@ class upgradeModel extends model
     {
         if(empty($version)) $version = $this->config->installedVersion;
 
-        $editions     = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
+        $editions     = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion', 'i' => 'ipdVersion');
         $version      = str_replace('.', '_', $version);
         $fromEdition  = is_numeric($version[0]) ? 'open' : $editions[$version[0]];
         $openVersion  = is_numeric($version[0]) ? $version : $this->config->upgrade->{$fromEdition}[$version];
@@ -2337,6 +2371,49 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Add or view priv for adminer.
+     *
+     * @access public
+     * @return void
+     */
+    public function addORPriv()
+    {
+        $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchAll();
+
+        foreach($admins as $key => $admin) $admins[$key] = trim($admin->admins, ',');
+
+        $admins = implode(',', $admins);
+
+        $user = $this->dao->select('*')->from(TABLE_USER)
+            ->where('account')->in($admins)
+            ->fetchPairs('account', 'visions');
+
+        foreach($user as $account => $visions)
+        {
+            if(strpos($visions, 'or') === false)
+            {
+                $visions = 'or,' . $visions;
+                $this->dao->update(TABLE_USER)->set('visions')->eq($visions)->where('account')->eq($account)->exec();
+            }
+        }
+
+        include('priv.php');
+        foreach($orData as $role => $name)
+        {
+            $this->dao->insert(TABLE_GROUP)
+                ->set('vision')->eq('or')
+                ->set('name')->eq($name)
+                ->set('role')->eq($role)
+                ->set('desc')->eq($name)
+                ->exec();
+            if(dao::isError()) continue;
+            $groupID = $this->dao->lastInsertID();
+            $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
+            $this->dao->exec($sql);
+        }
     }
 
     /**
@@ -3341,6 +3418,7 @@ class upgradeModel extends model
     {
         $fromVersion = $this->config->installedVersion;
         $needProcess = array();
+        if(strpos($fromVersion, 'ipd') !== false) return $needProcess;
         if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = 'process';
         if(strpos($fromVersion, 'max') === false and $this->config->systemMode == 'new')
         {
@@ -7159,7 +7237,7 @@ class upgradeModel extends model
                 $fieldConfig = isset($upgradeConfig[$module][$code]) ? $upgradeConfig[$module][$code] : array();
                 foreach($fieldConfig as $key => $value) $field->$key = $value;
 
-                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
+                $this->dao->replace(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
             }
         }
 
@@ -7863,7 +7941,7 @@ class upgradeModel extends model
             /* User requriement */
             $requirementStory = $this->dao->select('count(1) as total')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->fetch('total');
             if($requirementStory > 0) $returnData['ur'] = true;
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 /* issue,risk,opportunity,process,QA,meeting */
                 $issue = $this->dao->select('count(1) as total')->from(TABLE_ISSUE)->alias('t1')
@@ -7937,7 +8015,7 @@ class upgradeModel extends model
                 ->fetch('total');
             if($waterfull > 0) $returnData['waterfall'] = true;
 
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 /* assetlib */
                 $assetlib = $this->dao->select('count(1) as total')->from(TABLE_ASSETLIB)
@@ -9138,7 +9216,7 @@ class upgradeModel extends model
                     $filter->field      = $varName;
                     $filter->name       = $vars->showName[$index];
                     $filter->type       = $vars->requestType[$index];
-                    $filter->typeOption = $filter->type == 'select' ? $vars->selectList[$index] : '';
+                    $filter->typeOption = $filter->type == 'select' ? zget($vars->selectList, $index, '') : '';
                     $filter->default    = isset($vars->default) ? zget($vars->default, $index, '') : '';
 
                     $filters[] = $filter;

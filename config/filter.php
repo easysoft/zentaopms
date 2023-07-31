@@ -303,6 +303,7 @@ $filter->project->task->cookie['windowWidth']            = 'int';
 $filter->project->export->cookie['checkedItem']          = 'reg::checked';
 $filter->project->execution->cookie['pagerExecutionAll'] = 'int';
 $filter->project->execution->cookie['showTask']          = 'code';
+$filter->project->execution->cookie['showStage']         = 'code';
 $filter->project->testcase->cookie['showAutoCase']       = 'int';
 $filter->project->testcase->cookie['onlyScene']          = 'code';
 

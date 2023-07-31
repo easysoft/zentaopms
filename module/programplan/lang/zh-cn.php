@@ -21,6 +21,7 @@ $lang->programplan->close         = '关闭阶段';
 $lang->programplan->activate      = '激活阶段';
 $lang->programplan->createSubPlan = '创建子阶段';
 $lang->programplan->subPlanManage = '子阶段的管理方法';
+$lang->programplan->submit        = '提交评审';
 
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';
@@ -66,6 +67,7 @@ $lang->programplan->delayDays        = '延期天数';
 $lang->programplan->settingGantt     = '设置甘特图';
 $lang->programplan->viewSetting      = '显示设置';
 $lang->programplan->desc             = '描述';
+$lang->programplan->wait             = '待提交';
 
 $lang->programplan->errorBegin       = "阶段的开始时间不能小于所属{$lang->projectCommon}的开始时间%s";
 $lang->programplan->errorEnd         = "阶段的结束时间不能大于所属{$lang->projectCommon}的结束时间%s";
@@ -126,3 +128,8 @@ $lang->programplan->error->sameType        = '父阶段类型为"%s"，阶段类
 
 $lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
 $lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';
+
+$lang->programplan->reviewColorList['draft']     = '#FC913F';
+$lang->programplan->reviewColorList['reviewing'] = '#CD6F27';
+$lang->programplan->reviewColorList['pass']      = '#0DBB7D';
+$lang->programplan->reviewColorList['fail']      = '#FB2B2B';

@@ -142,9 +142,10 @@ class program extends control
     {
         $programPairs = $this->program->getPairs();
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api' && !isset($programPairs[$programID]))
+        if(!isset($programPairs[$programID]))
         {
-            return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('program', 'browse')));
         }
 
         $programID = $this->program->saveState($programID, $programPairs);

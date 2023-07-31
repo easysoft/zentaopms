@@ -143,9 +143,10 @@ $lang->my->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
 $lang->my->featureBar['todo']['cycle']           = 'Recurrence';
 
 $lang->my->featureBar['audit']['all']      = 'All';
+$lang->my->featureBar['audit']['demand']   = 'Demand';
 $lang->my->featureBar['audit']['story']    = 'Story';
 $lang->my->featureBar['audit']['testcase'] = 'Test case';
-if($config->edition == 'max' and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
+if(($config->edition == 'max' or $config->edition == 'ipd') and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
 if($config->edition != 'open') $lang->my->featureBar['audit']['feedback'] = 'Feedback';
 if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBar['audit']['oa'] = 'OA';
 

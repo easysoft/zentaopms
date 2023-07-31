@@ -223,12 +223,9 @@ class productModel extends model
 
         echo(js::alert($tips));
 
-        if(!$this->server->http_referer) return print(js::locate(helper::createLink('product', 'index')));
-
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('product', 'index')));
 
-        echo js::locate('back');
+        echo js::locate(helper::createLink('product', 'all'));
     }
 
     /**
@@ -286,7 +283,7 @@ class productModel extends model
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
             ->beginIF(strpos($mode, 'feedback') === false && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->andWhere("CONCAT(',', t1.vision, ',')")->like("%,{$this->config->vision},%")->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(in_array($mode, array_keys($this->lang->story->statusList)))->andWhere('t1.status')->in($mode)->fi()
             ->beginIF($mode == 'involved')
@@ -344,7 +341,7 @@ class productModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
 
@@ -374,9 +371,9 @@ class productModel extends model
             ->where('t1.deleted')->eq(0)
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin && $this->config->vision == 'rnd' && strpos($mode, 'all') === false)->andWhere('t1.id')->in($views)->fi()
+            ->beginIF(!$this->app->user->admin && $this->config->vision != 'lite' && strpos($mode, 'all') === false)->andWhere('t1.id')->in($views)->fi()
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
             ->orderBy("$orderBy, t2.order_asc, t1.line_desc, t1.order_asc")
             ->fetchPairs('id', 'name');
     }
@@ -417,7 +414,7 @@ class productModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t3.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in($this->app->user->view->products)->fi()
-            ->andWhere('t3.vision')->eq($this->config->vision)->fi()
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t3.vision)")
             ->beginIF($model != 'all')->andWhere('t2.model')->eq($model)
             ->fetchPairs('id', 'name');
     }
@@ -453,8 +450,8 @@ class productModel extends model
             ->where('1=1')
             ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
             ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
-            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->beginIF(!$this->app->user->admin and $this->config->vision != 'lite')->andWhere('t2.id')->in($views)->fi()
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t2.vision)")
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')
             ->fetchAll();
@@ -565,7 +562,7 @@ class productModel extends model
             {
                 if($product->line == $id)
                 {
-                    if($this->config->systemMode == 'ALM') $product->name = $name . '/' . $product->name;
+                    if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $product->name = $name . '/' . $product->name;
                     $productList[] = $product;
                     unset($products[$key]);
                 }
@@ -627,7 +624,7 @@ class productModel extends model
         $products = $this->dao->select("t1.id, t1.name, t1.program, t2.name AS programName")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->andWhere('t1.shadow')->eq((int)0)
             ->andWhere('t1.status')->ne('closed')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($views)->fi()
@@ -727,11 +724,13 @@ class productModel extends model
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
+            ->setDefault('vision', $this->config->vision)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->join('whitelist', ',')
             ->join('reviewer', ',')
+            ->join('PMT', ',')
             ->remove('uid,newLine,lineName,contactListMenu')
             ->get();
 
@@ -768,7 +767,7 @@ class productModel extends model
                 $line->parent = 0;
                 $line->grade  = 1;
                 $line->name   = $this->post->lineName;
-                $line->root   = $this->config->systemMode == 'ALM' ? $product->program : 0;
+                $line->root   = in_array($this->config->systemMode, array('ALM', 'PLM')) ? $product->program : 0;
                 $line->order  = $maxOrder;
 
                 $lines = $this->dao->select('name')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch();
@@ -805,6 +804,7 @@ class productModel extends model
             $lib->type      = 'product';
             $lib->main      = '1';
             $lib->acl       = 'default';
+            $lib->vision    = $this->config->vision;
             $lib->addedBy   = $this->app->user->account;
             $lib->addedDate = helper::now();
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
@@ -838,8 +838,10 @@ class productModel extends model
             ->setDefault('line', 0)
             ->setDefault('whitelist', '')
             ->setDefault('reviewer', '')
+            ->setDefault('PMT', '')
             ->join('whitelist', ',')
             ->join('reviewer', ',')
+            ->join('PMT', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid,changeProjects,contactListMenu')
             ->get();
@@ -889,8 +891,8 @@ class productModel extends model
 
             $productID = (int)$productID;
             $products[$productID] = new stdClass();
-            if($this->config->systemMode == 'ALM' and isset($data->programs[$productID])) $products[$productID]->program = (int)$data->programs[$productID];
-            if($this->config->systemMode == 'ALM' and isset($data->lines[$productID]))    $products[$productID]->line    = (int)$data->lines[$productID];
+            if(in_array($this->config->systemMode, array('ALM', 'PLM')) and isset($data->programs[$productID])) $products[$productID]->program = (int)$data->programs[$productID];
+            if(in_array($this->config->systemMode, array('ALM', 'PLM')) and isset($data->lines[$productID]))    $products[$productID]->line    = (int)$data->lines[$productID];
             $products[$productID]->name    = $productName;
             $products[$productID]->PO      = $data->POs[$productID];
             $products[$productID]->QD      = $data->QDs[$productID];
@@ -917,13 +919,13 @@ class productModel extends model
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
-            if($this->config->systemMode == 'ALM') $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
+            if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
 
             $this->dao->update(TABLE_PRODUCT)
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF((!empty($product->name) and $this->config->systemMode == 'ALM'), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
+                ->checkIF((!empty($product->name) and in_array($this->config->systemMode, array('ALM', 'PLM'))), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($productID)
                 ->exec();
@@ -982,6 +984,7 @@ class productModel extends model
     {
         $oldProduct = $this->getById($productID);
         $product    = (object)array('status' => 'normal');
+        if($this->config->vision == 'or') $product->status = 'wait';
 
         $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq((int)$productID)->exec();
 
@@ -1002,7 +1005,7 @@ class productModel extends model
         $data     = fixer::input('post')->get();
 
         /* When there are products under the line, the program cannot be modified  */
-        if($this->config->systemMode == 'ALM')
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             foreach($oldLines as $oldLine)
             {
@@ -1027,7 +1030,7 @@ class productModel extends model
         foreach($data->modules as $id => $name)
         {
             if(empty($name)) continue;
-            if($this->config->systemMode == 'ALM' and empty($data->programs[$id]))
+            if(in_array($this->config->systemMode, array('ALM', 'PLM')) and empty($data->programs[$id]))
             {
                 dao::$errors[] = $this->lang->product->programEmpty;
                 return false;
@@ -1102,22 +1105,25 @@ class productModel extends model
             unset($unclosedStatus['closed']);
             $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, true, '', $pager);
         }
-        if($browseType == 'unplan')       $stories = $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
-        if($browseType == 'allstory')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
-        if($browseType == 'bymodule')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
-        if($browseType == 'bysearch')     $stories = $this->story->getBySearch($productID, $branch, $queryID, $sort, '', $type, '', $pager);
-        if($browseType == 'assignedtome') $stories = $this->story->getByAssignedTo($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
-        if($browseType == 'openedbyme')   $stories = $this->story->getByOpenedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
-        if($browseType == 'reviewedbyme') $stories = $this->story->getByReviewedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
-        if($browseType == 'reviewbyme')   $stories = $this->story->getByReviewBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
-        if($browseType == 'closedbyme')   $stories = $this->story->getByClosedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
-        if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, $modules, 'draft', $type, $sort, $pager);
-        if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'active', $type, $sort, $pager);
-        if($browseType == 'changingstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'changing', $type, $sort, $pager);
+        if($browseType == 'unplan')         $stories = $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
+        if($browseType == 'allstory')       $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
+        if($browseType == 'bymodule')       $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
+        if($browseType == 'bysearch')       $stories = $this->story->getBySearch($productID, $branch, $queryID, $sort, '', $type, '', $pager);
+        if($browseType == 'assignedtome')   $stories = $this->story->getByAssignedTo($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'openedbyme')     $stories = $this->story->getByOpenedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'reviewedbyme')   $stories = $this->story->getByReviewedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'reviewbyme')     $stories = $this->story->getByReviewBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'closedbyme')     $stories = $this->story->getByClosedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'draftstory')     $stories = $this->story->getByStatus($productID, $branch, $modules, 'draft', $type, $sort, $pager);
+        if($browseType == 'activestory')    $stories = $this->story->getByStatus($productID, $branch, $modules, 'active', $type, $sort, $pager);
+        if($browseType == 'changingstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'changing', $type, $sort, $pager);
         if($browseType == 'reviewingstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'reviewing', $type, $sort, $pager);
-        if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
-        if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $type, $sort, $pager);
-        if($browseType == 'assignedbyme') $stories = $this->story->getByAssignedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'launchedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'launched', $type, $sort, $pager);
+        if($browseType == 'developingstory')$stories = $this->story->getByStatus($productID, $branch, $modules, 'developing', $type, $sort, $pager);
+        if($browseType == 'willclose')      $stories = $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
+        if($browseType == 'closedstory')    $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $type, $sort, $pager);
+        if($browseType == 'assignedbyme')   $stories = $this->story->getByAssignedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'fromfeedback')   $stories = $this->story->getFeedbackStories($productID, $branch, $modules, $type, $sort, $pager);
 
         return $stories;
     }
@@ -1243,7 +1249,7 @@ class productModel extends model
         $this->config->product->all->search['queryID']   = $queryID;
         $this->config->product->all->search['actionURL'] = $actionURL;
 
-        if($this->config->systemMode == 'ALM')
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             $programPairs = $this->loadModel('program')->getTopPairs('', 'noclosed');
             $this->config->product->all->search['params']['program']['values'] = array('' => '') + $programPairs;
@@ -1965,7 +1971,20 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs('product', 'finish');
 
-        foreach($products as $productID => $product) $products[$productID]->finishClosedStories = isset($finishClosedStory[$productID]) ? $finishClosedStory[$productID] : 0;
+        $launchedStory = $this->dao->select('product, count(1) as launched')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('launched')
+            ->fetchPairs('product', 'launched');
+        $developingStory = $this->dao->select('product, count(1) as developing')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('developing')
+            ->fetchPairs('product', 'developing');
+        foreach($products as $productID => $product)
+        {
+            $products[$productID]->finishClosedStories = isset($finishClosedStory[$productID]) ? $finishClosedStory[$productID] : 0;
+            $products[$productID]->launchedStories     = isset($launchedStory[$productID]) ? $launchedStory[$productID] : 0;
+            $products[$productID]->developingStories   = isset($developingStory[$productID]) ? $developingStory[$productID] : 0;
+        }
 
         return $products;
     }
@@ -1994,7 +2013,7 @@ class productModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->fetchGroup('product', 'project');
 
-        if($this->config->systemMode == 'ALM' and !$this->config->product->showAllProjects)
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')) and !$this->config->product->showAllProjects)
         {
             foreach($projectProduct as $productID => $projects)
             {
@@ -2167,14 +2186,14 @@ class productModel extends model
         foreach($productStats as $product)
         {
             $productStructure[$product->program][$product->line]['products'][$product->id] = $product;
-            if($product->line)
+            if($product->line and $this->config->vision != 'or')
             {
                 /* Line name. */
                 $productStructure[$product->program][$product->line]['lineName'] = $product->lineName;
                 $productStructure[$product->program][$product->line] = $this->statisticData('line', $productStructure, $product);
             }
 
-            if($product->program)
+            if($product->program and $this->config->vision != 'or')
             {
                 /* Init vars. */
                 /* Program name. */
@@ -2248,13 +2267,20 @@ class productModel extends model
             $menu .= $this->buildFlowMenu('product', $product, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
+            if($product->status != 'closed') $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
+            if($product->status == 'closed') $menu .= $this->buildMenu('product', 'activate', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
             $menu .= "<div class='divider'></div>";
+
+            $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
+        }
+        elseif($type == 'browse')
+        {
+            $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
+            if($product->status != 'closed') $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
+            if($product->status == 'closed') $menu .= $this->buildMenu('product', 'activate', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
         }
 
-        $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
-
-        if($type == 'view') $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
+        $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
 
         return $menu;
     }
@@ -2272,7 +2298,7 @@ class productModel extends model
     public function getProductLink($module, $method, $extra, $branch = false)
     {
         $link = '';
-        if(strpos(',programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory,', ',' . $module . ',') !== false)
+        if(strpos(',programplan,product,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory,', ',' . $module . ',') !== false)
         {
             if($module == 'product' && $method == 'project')
             {
@@ -2306,6 +2332,10 @@ class productModel extends model
             elseif($module == 'story' && $method == 'report')
             {
                 $link = helper::createLink($module, 'report', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&extra=$extra");
+            }
+            elseif($module == 'story' and $this->config->vision == 'or')
+            {
+                $link = helper::createLink('story', 'create', "productID=%s&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID0&todoID=0&extra=&storyType=requirement");
             }
             elseif($module == 'testtask')
             {
@@ -2357,7 +2387,7 @@ class productModel extends model
                 $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . ($extra ? "&extras=$extra" : ''));
             }
         }
-        else if($module == 'productplan' || $module == 'release')
+        else if($module == 'productplan' || $module == 'release' || $module == 'roadmap')
         {
             if($method != 'browse' && $method != 'create') $method = 'browse';
             $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
@@ -2400,14 +2430,12 @@ class productModel extends model
         }
         elseif($module == 'feedback')
         {
-            if($this->config->vision == 'rnd')
-            {
-                return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
-            }
-            elseif($this->config->vision == 'lite')
+            if($this->config->vision == 'lite')
             {
                 return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
             }
+
+            return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
         }
         elseif($module == 'ticket')
         {

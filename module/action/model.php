@@ -406,12 +406,22 @@ class actionModel extends model
                 $productID = trim($action->product, ',');
                 $name      = $project->name;
                 $method    = $project->model == 'kanban' ? 'index' : 'view';
-                if($name) $action->extra = common::hasPriv('project', $method) ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name) : $name;
+                if($name) $action->extra = (common::hasPriv('project', $method) and $this->config->vision != 'or') ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name) : $name;
             }
             elseif($actionName == 'linked2plan')
             {
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), $title) : $title;
+            }
+            elseif($actionName == 'changedbycharter')
+            {
+                $name = $this->dao->select('name')->from(TABLE_CHARTER)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('charter', 'view') ? html::a(helper::createLink('charter', 'view', "charterID=$action->extra"), $name) : $name;
+            }
+            elseif($actionName == 'linked2roadmap' and $action->objectType == 'story')
+            {
+                $name = $this->dao->select('name')->from(TABLE_ROADMAP)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('roadmap', 'view') ? html::a(helper::createLink('roadmap', 'view', "roadmapID=$action->extra"), $name) : $name;
             }
             elseif($actionName == 'linked2build')
             {
@@ -477,6 +487,11 @@ class actionModel extends model
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
             }
+            elseif($actionName == 'unlinkedfromroadmap' and $action->objectType == 'story')
+            {
+                $name = $this->dao->select('name')->from(TABLE_ROADMAP)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('roadmap', 'view') ? html::a(helper::createLink('roadmap', 'view', "roadmapID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
+            }
             elseif($actionName == 'unlinkedfromtesttask')
             {
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->extra)->fetch('name');
@@ -533,6 +548,11 @@ class actionModel extends model
                 $name = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
                 if($name) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
+            elseif($actionName == 'deletechildrendemand')
+            {
+                $name = $this->dao->select('title')->from(TABLE_DEMAND)->where('id')->eq($action->extra)->fetch('title');
+                if($name) $action->extra = common::hasPriv('demand', 'view') ? html::a(helper::createLink('demand', 'view', "demandID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
+            }
             elseif($actionName == 'buildopened')
             {
                 $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->objectID)->fetch('name');
@@ -548,7 +568,7 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_TESTSUITE)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('caselib', 'browse') ? html::a(helper::createLink('caselib', 'browse', "libID=$action->extra"), $name) : $name;
             }
-            elseif(strpos(',importfromstorylib,importfromrisklib,importfromissuelib,importfromopportunitylib,', ",{$actionName},") !== false and $this->config->edition == 'max')
+            elseif(strpos(',importfromstorylib,importfromrisklib,importfromissuelib,importfromopportunitylib,', ",{$actionName},") !== false and ($this->config->edition == 'max' or $this->config->edition == 'ipd'))
             {
                 $name = $this->dao->select('name')->from(TABLE_ASSETLIB)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('assetlib', $action->objectType) ? html::a(helper::createLink('assetlib', $action->objectType, "libID=$action->extra"), $name) : $name;
@@ -565,6 +585,21 @@ class actionModel extends model
                     {
                         $table = $action->objectType == 'story' ? TABLE_STORY : TABLE_BUG;
                         $name  = $this->dao->select('title')->from($table)->where('id')->eq($id)->fetch('title');
+                        if($name) $action->appendLink = html::a(helper::createLink($action->objectType, 'view', "id=$id"), "#$id " . $name);
+                    }
+                }
+            }
+            elseif($actionName == 'closed' and $action->objectType == 'demand')
+            {
+                $action->appendLink = '';
+                if(strpos($action->extra, '|') !== false) $action->extra = substr($action->extra, 0, strpos($action->extra, '|'));
+                if(strpos($action->extra, ':') !== false)
+                {
+                    list($extra, $id) = explode(':', $action->extra);
+                    $action->extra    = $extra;
+                    if($id)
+                    {
+                        $name  = $this->dao->select('title')->from(TABLE_DEMAND)->where('id')->eq($id)->fetch('title');
                         if($name) $action->appendLink = html::a(helper::createLink($action->objectType, 'view', "id=$id"), "#$id " . $name);
                     }
                 }
@@ -613,7 +648,7 @@ class actionModel extends model
                     if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
                 }
             }
-            elseif(strpos(',linkstory,unlinkstory,createchildrenstory,', ",$actionName,") !== false)
+            elseif(strpos(',linkstory,unlinkstory,createchildrenstory,linkur,unlinkur,', ",$actionName,") !== false)
             {
                 $extra = '';
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id ") . ', ' : "#$id, ";
@@ -887,7 +922,7 @@ class actionModel extends model
          */
         if(empty($desc))
         {
-            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
+            if(($action->objectType == 'story' or $action->objectType == 'demand') and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
             {
                 $desc = $this->lang->$objectType->action->rejectreviewed;
             }
@@ -909,7 +944,7 @@ class actionModel extends model
                 $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->$mrAction, $mrDate, $mrActor, $mrLink);
             }
-            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
+            elseif(($this->config->edition == 'max' or $this->config->edition == 'ipd') and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
@@ -974,7 +1009,7 @@ class actionModel extends model
                 $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
             }
 
-            if($action->objectType == 'story' and $action->action == 'reviewed')
+            if(($action->objectType == 'story' or $action->objectType == 'demand') and $action->action == 'reviewed')
             {
                 if(strpos($action->extra, ',') !== false)
                 {
@@ -1555,7 +1590,7 @@ class actionModel extends model
             }
         }
 
-        if($this->config->edition == 'max' and $objectType == 'assetlib')
+        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $objectType == 'assetlib')
         {
             $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($objectID)->fetch('type');
             if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $actionObjectLabel = $this->lang->action->label->{$libType . 'assetlib'};
@@ -1599,7 +1634,7 @@ class actionModel extends model
                 if($objectDeleted) return $action;
             }
 
-            if($this->config->edition == 'max'
+            if(($this->config->edition == 'max' or $this->config->edition == 'ipd')
                and strpos($this->config->action->assetType, ",{$action->objectType},") !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {
@@ -2001,6 +2036,12 @@ class actionModel extends model
         if($action->objectType == 'execution' or $action->objectType == 'product')
         {
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
+        }
+
+        if($action->objectType == 'demand')
+        {
+            $demand = $this->dao->select('*')->from(TABLE_DEMAND)->where('id')->eq($action->objectID)->fetch();
+            if($demand->parent) $this->loadModel('demand')->updateParentStatus($action->objectID, $demand->parent);
         }
 
         /* Revert productplan parent status. */

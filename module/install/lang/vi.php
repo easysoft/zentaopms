@@ -175,6 +175,11 @@ $lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Tạo
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Đồng bộ Jenkins tình trạng';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Xử lý Jenkins';
 
+$lang->install->groupList['IPDPRODUCTPLAN']['name'] = 'PRODUCT PLANING';
+$lang->install->groupList['IPDDEMAND']['name']      = 'DEMAND ANALYSIS';
+$lang->install->groupList['IPDPMT']['name']         = 'IPDPMT';
+$lang->install->groupList['IPDADMIN']['name']       = 'IPDADMIN';
+
 $lang->install->success  = "Đã được cài đặt!";
 $lang->install->login    = 'Đăng nhập ZenTao';
 $lang->install->register = 'Đăng ký cộng đồng ZenTao';

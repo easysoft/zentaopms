@@ -237,7 +237,7 @@ class group extends control
             $changelogs = ',' . join(',', $changelog) . ',';
 
             $this->lang->custom->common = $this->lang->group->config;
-            if($this->config->edition == 'max' and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
+            if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
 
             $modules = $this->group->getPrivManagerPairs('module', $menu);
 

@@ -30,7 +30,6 @@
 <?php js::set('linkedTaskStories', $linkedTaskStories);?>
 <?php js::set('confirmStoryToTask', $lang->execution->confirmStoryToTask);?>
 <style>
-.btn-group a i.icon-plus, .btn-group a i.icon-link {font-size: 16px;}
 .btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .export {margin-left: 0px !important;}

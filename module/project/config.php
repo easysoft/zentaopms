@@ -144,6 +144,7 @@ $config->project->checkList->waterfall     = array('execution', 'design', 'doc',
 $config->project->checkList->kanban        = array('execution', 'build');
 $config->project->checkList->agileplus     = $config->project->checkList->scrum;
 $config->project->checkList->waterfallplus = $config->project->checkList->waterfall;
+$config->project->checkList->ipd           = $config->project->checkList->waterfall;
 
 $config->project->maxCheckList = new stdclass();
 $config->project->maxCheckList->scrum         = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case', 'issue', 'risk', 'meeting');
@@ -151,6 +152,7 @@ $config->project->maxCheckList->waterfall     = array('execution', 'design', 'do
 $config->project->maxCheckList->kanban        = array('execution', 'build');
 $config->project->maxCheckList->agileplus     = $config->project->maxCheckList->scrum;
 $config->project->maxCheckList->waterfallplus = $config->project->maxCheckList->waterfall;
+$config->project->maxCheckList->ipd           = $config->project->maxCheckList->waterfall;
 
 $config->project->search['module']                   = 'project';
 $config->project->search['fields']['name']           = $lang->project->name;

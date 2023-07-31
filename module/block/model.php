@@ -830,7 +830,7 @@ class blockModel extends model
         $params->bugCount['default'] = 20;
         $params->bugCount['control'] = 'input';
 
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             if(helper::hasFeature('risk'))
             {

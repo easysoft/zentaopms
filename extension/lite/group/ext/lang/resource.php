@@ -963,7 +963,7 @@ $lang->resource->projectreview      = new stdclass();
 $lang->resource->projecttrack       = new stdclass();
 $lang->resource->projectqa          = new stdclass();
 
-if($config->edition == 'biz' or $config->edition == 'max')
+if($config->edition != 'open')
 {
     /* My module. */
     $lang->resource->my->effort = 'effort';  // pro effort

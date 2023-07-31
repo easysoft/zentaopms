@@ -13,10 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('plan', $plan);?>
-<?php js::set('stageTypeList', $lang->stage->typeList);?>
+<?php js::set('stageTypeList', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);?>
 <?php js::set('changeAttrLang', $lang->programplan->confirmChangeAttr);?>
 <?php js::set('isTopStage', $isTopStage);?>
 <?php js::set('isLeafStage', $isLeafStage);?>
+<?php js::set('projectModel', $project->model);?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -60,10 +61,25 @@
           <tr id="attributeType">
             <th><?php echo $lang->programplan->attribute;?></th>
             <td colspan='2'>
-              <?php echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'") : zget($lang->stage->typeList, $plan->attribute);?>
+              <?php 
+              if($project->model == 'ipd')
+              {
+                  echo zget($lang->stage->ipdTypeList, $plan->attribute);
+              }
+              elseif($enableOptionalAttr)
+              {
+                  echo html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'");
+              }
+              else
+              {
+                  echo zget($lang->stage->typeList, $plan->attribute);
+              }
+            ?>
             </td>
             <td>
+              <?php if($project->model != 'ipd'):?>
               <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
+              <?php endif;?>
             </td>
           </tr>
           <?php if($plan->setMilestone):?>

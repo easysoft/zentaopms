@@ -15,7 +15,7 @@ $('#subNavbar li').not('[data-id=<?php echo $groupID;?>]').removeClass('active')
     <?php echo html::a(inlink('preview', "dimension=$dimension&group=$key"), "<span class='text'>$label</span>", '', "class='btn btn-link {$active}'");?>
     <?php endforeach;?>
   </div>
-  <?php if($this->config->edition == 'biz' or $this->config->edition == 'max'):?>
+  <?php if($this->config->edition != 'open'):?>
   <div class='btn-toolbar pull-right child-position'>
     <?php if(common::hasPriv('pivot', 'export')):?>
     <a href="#" class="btn btn-link btn-export hidden" data-toggle="modal" data-target="#export"><?php echo '<i class="icon-export muted"> </i>' . $lang->export;?></a>
@@ -24,7 +24,7 @@ $('#subNavbar li').not('[data-id=<?php echo $groupID;?>]').removeClass('active')
   </div>
   <?php endif;?>
 </div>
-<?php if($this->config->edition == 'biz' or $this->config->edition == 'max'):?>
+<?php if($this->config->edition != 'open'):?>
 <?php $pivotPath = $this->app->getModuleExtPath('', 'pivot', 'view');?>
 <?php include $pivotPath['common'] . 'exportdata.html.php';?>
 <?php endif;?>

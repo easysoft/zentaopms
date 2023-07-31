@@ -91,7 +91,7 @@ $(document).on('change', '[id^=visions]', function()
     }
 })
 
-var rndGroupSelect = liteGroupSelect = allGroupSelect = emptyGroupSelect = '';
+var rndGroupSelect = liteGroupSelect = orGroupSelect = rndliteGroupSelect = rndorGroupselect = liteorGroupSelect = allGroupSelect = emptyGroupSelect = '';
 $.post(createLink('user', 'ajaxGetGroup', "visions=rnd&i=2"), function(data)
 {
     rndGroupSelect = data;
@@ -104,7 +104,25 @@ $.post(createLink('user', 'ajaxGetGroup', "visions=lite&i=2"), function(data)
     var vision = $('#visions1 option:selected').val();
     if(vision == 'lite') initGroup(data);
 });
+$.post(createLink('user', 'ajaxGetGroup', "visions=or&i=2"), function(data)
+{
+    orGroupSelect = data;
+    var vision = $('#visions1 option:selected').val();
+    if(vision == 'or') initGroup(data);
+});
 $.post(createLink('user', 'ajaxGetGroup', "visions=rnd,lite&i=2"), function(data)
+{
+    rndliteGroupSelect = data;
+});
+$.post(createLink('user', 'ajaxGetGroup', "visions=rnd,or&i=2"), function(data)
+{
+    rndorGroupSelect = data;
+});
+$.post(createLink('user', 'ajaxGetGroup', "visions=lite,or&i=2"), function(data)
+{
+    liteorGroupSelect = data;
+});
+$.post(createLink('user', 'ajaxGetGroup', "visions=rnd,lite,or&i=2"), function(data)
 {
     allGroupSelect = data;
 });
@@ -142,6 +160,7 @@ function getGroupSelect(i)
 {
     if(i < 1) return '';
     var visions = $('select[id="visions' + i + '"]').val();
+    if(visions) visions = visions.sort();
 
     visions = visions ? visions.join() : '';
     switch(visions)
@@ -152,7 +171,19 @@ function getGroupSelect(i)
         case 'lite':
             var data = liteGroupSelect;
             break;
-        case 'rnd,lite':
+        case 'or':
+            var data = orGroupSelect;
+            break;
+        case 'lite,rnd':
+            var data = rndliteGroupSelect;
+            break;
+        case 'or,rnd':
+            var data = rndorGroupSelect;
+            break;
+        case 'lite,or':
+            var data = liteorGroupSelect;
+            break;
+        case 'lite,or,rnd':
             var data = allGroupSelect;
             break;
         case 'ditto':

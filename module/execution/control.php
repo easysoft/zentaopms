@@ -1896,7 +1896,7 @@ class execution extends control
         $this->view->code                = $code;
         $this->view->team                = $team;
         $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
-        $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed,multiple');
+        $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel("scrum,agileplus,waterfall,waterfallplus,kanban", 0, 'noclosed,multiple');
         $this->view->copyProjects        = $copyProjects;
         $this->view->copyExecutions      = array('' => '') + $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
         $this->view->executionID         = $executionID;
@@ -1916,7 +1916,7 @@ class execution extends control
         $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
         $this->view->from                = $this->app->tab;
-        $this->view->isStage             = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
+        $this->view->isStage             = (isset($project->model) and (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))));
         $this->view->project             = $project;
         $this->view->division            = !empty($project) ? $project->division : 1;
         $this->view->type                = $type;
@@ -2101,7 +2101,7 @@ class execution extends control
         $project = $this->project->getById($execution->project);
         if(!$project->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
-        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
+        if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
         {
             $parentStage = $this->project->getByID($execution->parent, 'stage');
 
@@ -2182,6 +2182,7 @@ class execution extends control
             $this->project->setMenu($projectID);
             $this->view->project = $project;
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->lang->execution->common = $this->lang->execution->stage;
+            if($project->model == 'ipd') $this->config->execution->customBatchEditFields = 'days,teamname,desc,PO,QD,PM,RD';
         }
         else
         {
@@ -2490,7 +2491,7 @@ class execution extends control
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
-            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'close');
+            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->loadModel('programplan')->computeProgress($executionID, 'close');
 
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
@@ -3404,10 +3405,11 @@ class execution extends control
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @param  string $extra
+     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1, $extra = '')
+    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1, $extra = '', $storyType = 'story')
     {
         $this->loadModel('story');
         $this->loadModel('product');
@@ -3420,7 +3422,7 @@ class execution extends control
         /* Transfer object id when version lite */
         if($this->config->vision == 'lite')
         {
-            $kanban  = $this->project->getByID($objectID, 'kanban');
+            $kanban   = $this->project->getByID($objectID, 'kanban');
             $objectID = $kanban->project;
         }
 
@@ -3429,7 +3431,7 @@ class execution extends control
         $products   = $this->product->getProducts($objectID);
         $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
         $browseLink = $this->session->executionStoryList;
-        if($this->app->tab == 'project' and $object->multiple) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
+        if($this->app->tab == 'project' and $object->multiple and !$browseLink) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID&productID=0&branch=0&browseType=&param=0&storyType=$storyType");
         if($object->type == 'kanban' && !$object->hasProduct) $this->lang->productCommon = $this->lang->project->common;
 
         $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
@@ -3443,8 +3445,8 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
-            $this->execution->linkStory($objectID, array(), array(), $extra);
+            if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project, array(), array(), '', array(), $storyType);
+            $this->execution->linkStory($objectID, array(), array(), $extra, array(), $storyType);
 
             if(isonlybody())
             {
@@ -3515,21 +3517,29 @@ class execution extends control
             }
         }
 
+        if($storyType == 'requirement')
+        {
+            $this->lang->story->title               = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+            $this->lang->projectstory->whyNoStories = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->projectstory->whyNoStories);
+            $this->lang->execution->linkStory       = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->linkStory);
+        }
+
         /* Build the search form. */
-        $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID");
+        $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&storyType=$storyType");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
+        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object, $storyType);
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch('', '', $queryID, 'id', $objectID);
+            $allStories = $this->story->getBySearch('', '', $queryID, 'id', $objectID, $storyType);
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), $branchIDList, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
+            $status = $storyType == 'story' ? 'active' : 'launched';
+            $allStories = $this->story->getProductStories(array_keys($products), $branchIDList, $moduleID = '0', $status, $storyType, 'id_desc', $hasParent = false, '', $pager = null);
         }
 
-        $linkedStories = $this->story->getExecutionStoryPairs($objectID);
+        $linkedStories = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
         foreach($allStories as $id => $story)
         {
             if(isset($linkedStories[$story->id])) unset($allStories[$id]);
@@ -3568,6 +3578,8 @@ class execution extends control
         $this->view->branchGroups = $branchGroups;
         $this->view->browseLink   = $browseLink;
         $this->view->project      = $project;
+        $this->view->storyType    = $storyType;
+        if($this->config->edition == 'ipd') $this->view->roadmaps = $this->loadModel('roadmap')->getPairs(array_keys($products));
 
         $this->display();
     }
@@ -3589,6 +3601,10 @@ class execution extends control
         if($confirm == 'no')
         {
             $tip = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
+
+            $story = $this->loadModel('story')->getByID($storyID);
+            if($story->type == 'requirement') $tip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $tip);
+
             return print(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes&from=$from&laneID=$laneID&columnID=$columnID")));
         }
         else

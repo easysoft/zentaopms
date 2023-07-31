@@ -271,6 +271,11 @@ $lang->install->groupList['LITEPROJECT']['desc']  = '运营管理界面用户分
 $lang->install->groupList['LITETEAM']['name']     = '团队成员';
 $lang->install->groupList['LITETEAM']['desc']     = '运营管理界面用户分组';
 
+$lang->install->groupList['IPDPRODUCTPLAN']['name'] = '产品规划人员';
+$lang->install->groupList['IPDDEMAND']['name']      = '需求分析人员';
+$lang->install->groupList['IPDPMT']['name']         = 'PMT团队人员';
+$lang->install->groupList['IPDADMIN']['name']       = '管理人员';
+
 $lang->install->cronList[''] = '监控定时任务';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = '更新燃尽图';
 $lang->install->cronList['moduleName=report&methodName=remind']         = '每日任务提醒';

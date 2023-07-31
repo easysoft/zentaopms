@@ -452,6 +452,9 @@ class story extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->story->custom->createFields;
 
+        $requirementStatus = strpos($product->vision, 'or') !== false ? 'launched' : 'changing,active,reviewing';
+
+        $this->view->URS              = $storyType == 'story' ? $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, $requirementStatus, 'id_desc', 0, '', 'requirement') : '';
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
@@ -481,7 +484,6 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->blockID          = $blockID;
-        $this->view->URS              = $storyType == 'story' ? $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement') : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
         $this->view->type             = $storyType;
         $this->view->category         = !empty($category) ? $category : 'feature';
@@ -520,7 +522,7 @@ class story extends control
             $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
             if($execution->type == 'project')
             {
-                $model = $execution->model == 'waterfallplus' ? 'waterfall' : $execution->model;
+                $model = in_array($execution->model, array('waterfallplus', 'ipd')) ? 'waterfall' : $execution->model;
                 $model = $execution->model == 'agileplus' ? 'scrum' : $model;
                 $this->project->setMenu($executionID);
                 $this->lang->navGroup->story = 'project';
@@ -581,7 +583,7 @@ class story extends control
         if($storyID)
         {
             $story = $this->story->getById($storyID);
-            if(($story->status != 'active' or (empty($product->shadow) && $story->stage != 'wait') or (!empty($product->shadow) && $story->stage != 'projected') or $story->parent > 0) and $this->config->vision != 'lite') return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
+            if(($story->status != 'active' or (empty($product->shadow) && $story->stage != 'wait') or (!empty($product->shadow) && $story->stage != 'projected') or $story->parent > 0) and $this->config->vision != 'lite' and !in_array($story->status, array('launched', 'developing'))) return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
         }
 
         if(!empty($_POST))
@@ -903,8 +905,8 @@ class story extends control
 
         foreach($products as $product)
         {
-            if($product->status == 'normal' and $product->PO == $this->app->user->account) $myProducts[$product->id] = $product->name;
-            if($product->status == 'normal' and !($product->PO == $this->app->user->account)) $othersProducts[$product->id] = $product->name;
+            if($product->status != 'closed' and $product->PO == $this->app->user->account) $myProducts[$product->id] = $product->name;
+            if($product->status != 'closed' and !($product->PO == $this->app->user->account)) $othersProducts[$product->id] = $product->name;
             if($product->status == 'closed') continue;
         }
         $products = $myProducts + $othersProducts;
@@ -1403,11 +1405,16 @@ class story extends control
      */
     public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
     {
+        $story = $this->story->getById($storyID, $version, true);
+
+        $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
+        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'all')));
+
         $uri     = $this->app->getURI(true);
         $tab     = $this->app->tab;
         $storyID = (int)$storyID;
-        $story   = $this->story->getById($storyID, $version, true);
         $product = $this->product->getByID($story->product);
+
         if($tab == 'product' and !empty($product->shadow))
         {
             $backLink = $this->session->productList ? $this->session->productList : inlink('product', 'all');
@@ -1422,9 +1429,6 @@ class story extends control
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
         if(!isonlybody()) $this->session->set('buildList', $uri, $buildApp);
         $this->app->loadLang('bug');
-
-        $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
-        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
 
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
         if(!empty($story->fromBug)) $this->session->set('bugList', $uri, 'qa');
@@ -1498,6 +1502,11 @@ class story extends control
         $reviewedBy = trim($story->reviewedBy, ',');
 
         $this->executeHooks($storyID);
+
+        if($this->config->edition == 'ipd')
+        {
+            $this->view->roadmaps = $this->loadModel('roadmap')->getPairs($story->product);
+        }
 
         $title      = "STORY #$story->id $story->title - $product->name";
         $position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);

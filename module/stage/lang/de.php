@@ -34,6 +34,13 @@ $lang->stage->typeList['release'] = 'Release';
 $lang->stage->typeList['review']  = 'Review';
 $lang->stage->typeList['other']   = 'Other';
 
+$lang->stage->ipdTypeList['concept']   = 'Concept';
+$lang->stage->ipdTypeList['plan']      = 'Plan';
+$lang->stage->ipdTypeList['develop']   = 'Develop';
+$lang->stage->ipdTypeList['qualify']   = 'Qualify';
+$lang->stage->ipdTypeList['launch']    = 'Launch';
+$lang->stage->ipdTypeList['lifecycle'] = 'Lifecycel';
+
 $lang->stage->viewList      = 'Stage List';
 $lang->stage->noStage       = 'No stage yet';
 $lang->stage->confirmDelete = 'Do you want to delete it?';
