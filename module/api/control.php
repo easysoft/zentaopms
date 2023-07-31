@@ -148,6 +148,7 @@ class api extends control
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->objectDropdown = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
         $this->view->spaceType      = 'api';
+        $this->view->linkParams     = '%s';
 
         $this->display();
     }
@@ -230,6 +231,7 @@ class api extends control
         $this->view->libTree        = $libTree;
         $this->view->objectDropdown = $objectDropdown;
         $this->view->spaceType      = $spaceType;
+        $this->view->linkParams     = $linkParams;
 
         $this->display();
     }
