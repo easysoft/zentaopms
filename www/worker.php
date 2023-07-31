@@ -14,46 +14,60 @@ if($_SERVER['RR_MODE'] === 'jobs')
     /* Jobs. */
     while($task = $app->consumer->waitTask())
     {
-        if($task->getQueue() == 'crons')
-        {
-            $id   = $task->getValue('id');
-            $type = $task->getValue('type');
-            $cmd  = $task->getValue('command');
-
-            if(!$id || !$type || !$cmd) continue;
-
-            $output = '';
-            $return = '';
-
-            if($type == 'zentao')
+            if($task->getQueue() == 'crons')
             {
-                ob_start();
+                $id   = $task->getValue('id');
+                $type = $task->getValue('type');
+                $cmd  = $task->getValue('command');
 
-                parse_str($cmd, $params);
-                if(!isset($params['moduleName']) || !isset($params['methodName'])) continue;
+                if(!$id || !$type || !$cmd) continue;
 
-                $app->initRequest();
-                $common->setUserConfig();
+                $output = '';
+                $return = 0;
 
-                $app->moduleName = $params['moduleName'];
-                $app->methodName = $params['methodName'];
-                $app->rawModule  = $params['moduleName'];
-                $app->rawMethod  = $params['methodName'];
-                $app->setControlFile();
-                $app->loadModule();
-                $output = ob_get_clean();
+                if($type == 'zentao')
+                {
+                    try
+                    {
+                        ob_start();
 
-                $app->closeRequest();
+                        parse_str($cmd, $params);
+                        if(!isset($params['moduleName']) || !isset($params['methodName'])) continue;
+
+                        $app->initRequest();
+                        $common->setUserConfig();
+
+                        $app->moduleName = $params['moduleName'];
+                        $app->methodName = $params['methodName'];
+                        $app->rawModule  = $params['moduleName'];
+                        $app->rawMethod  = $params['methodName'];
+                        $app->setControlFile();
+                        $app->loadModule();
+                        $output = ob_get_clean();
+
+                        $app->closeRequest();
+                    }
+                    catch(EndResponseException $e)
+                    {
+                        $output  = helper::removeUTF8Bom(ob_get_clean());
+                        $output .= $e->getContent();
+                    }
+                    catch(Exception $e)
+                    {
+                        $return  = 1;
+                        $output  = helper::removeUTF8Bom(ob_get_clean());
+                        $output .= $e->getMessage();
+                    }
+                }
+                elseif($type == 'system')
+                {
+                    exec($cmd, $output, $return);
+                    if($output) $output = implode("\n", $output);
+                }
+
+                $log = date('H:m:s') . "task " . $id . " executed,\ncommand: $cmd.\nreturn : $return.\noutput : $output\n";
+                logCron($app->getLogRoot(), $log);
             }
-            elseif($type == 'system')
-            {
-                exec($cmd, $output, $return);
-                if($output) $output = implode("\n", $output);
-            }
-
-            $log = date('H:m:s') . "task " . $id . " executed,\ncommand: $cmd.\nreturn : $return.\noutput : $output\n";
-            logCron($app->getLogRoot(), $log);
-        }
 
         $task->complete();
     }
