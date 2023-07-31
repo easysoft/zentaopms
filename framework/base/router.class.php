@@ -1600,7 +1600,21 @@ class baseRouter
                     $default = $param->getDefaultValue();
                 }
 
-                $defaultParams[$name] = $default;
+                $type = 'string';
+                if(isset($paramDefaultType[$appName][$className][$methodName][$name]))
+                {
+                    $type = $paramDefaultType[$appName][$className][$methodName][$name];
+                }
+                elseif(isset($paramDefaultType[$className][$methodName][$name]))
+                {
+                    $type = $paramDefaultType[$className][$methodName][$name];
+                }
+                elseif(!$isEncrypted && method_exists($param, 'hasType') && $param->hasType())
+                {
+                    $type = $param->getType()->getName();
+                }
+
+                $defaultParams[$name] = array('default' => $default, 'type' => $type);
             }
 
             /**
@@ -2471,15 +2485,17 @@ class baseRouter
 
         $passedParams = array_values($passedParams);
         $i = 0;
-        foreach($defaultParams as $key => $defaultValue)
+        foreach($defaultParams as $key => $defaultItem)
         {
             if(isset($passedParams[$i]))
             {
-                $defaultParams[$key] = strip_tags($passedParams[$i]);
+                $defaultParams[$key] = helper::convertType(strip_tags((string) $passedParams[$i]), $defaultItem['type']);
             }
             else
             {
-                if($defaultValue === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+                if($defaultItem['default'] === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+
+                $defaultParams[$key] = $defaultItem['default'];
             }
             $i ++;
         }

@@ -359,6 +359,39 @@ class helper extends baseHelper
     {
         return !defined('USE_INTRANET') ? false : USE_INTRANET;
     }
+
+    /**
+     * 转换类型。
+     * Convert the type.
+     *
+     * @param mixed  $value
+     * @param string $type
+     * @static
+     * @access public
+     * @return array|bool|float|int|object|string
+     */
+    public static function convertType($value, $type)
+    {
+        switch($type)
+        {
+            case 'int':
+                return (int)$value;
+            case 'float':
+                return (float)$value;
+            case 'bool':
+                return (bool)$value;
+            case 'array':
+                return (array)$value;
+            case 'object':
+                return (object)$value;
+            case 'datetime':
+            case 'date':
+                return $value ? (string)$value : null;
+            case 'string':
+            default:
+                return (string)$value;
+        }
+    }
 }
 
 /**
