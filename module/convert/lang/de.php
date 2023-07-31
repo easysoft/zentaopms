@@ -121,6 +121,7 @@ $lang->convert->jira->next             = 'Next';
 $lang->convert->jira->importFromDB     = 'Import From Database';
 $lang->convert->jira->importFromFile   = 'Import From File';
 $lang->convert->jira->mapJira2Zentao   = 'Map Jira To Zentao';
+$lang->convert->jira->database         = 'Jira Database';
 $lang->convert->jira->dbNameNotice     = "Please enter the Jira database name.";
 $lang->convert->jira->importNotice     = 'Notice: Importing data is risky! Make sure to complete the following steps in sequence before merging.';
 $lang->convert->jira->dbDesc           = 'If your Jira uses MySQL database, please choose this way.';
