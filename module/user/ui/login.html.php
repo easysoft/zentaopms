@@ -160,7 +160,7 @@ div
             empty($demoUsers) ? null : div
             (
                 span($lang->user->loginWithDemoUser),
-                demoUserItems,
+                $demoUserItems,
             ),
         ),
         div

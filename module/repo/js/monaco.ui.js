@@ -34,7 +34,7 @@ window.afterPageUpdate = function()
         
         /* Select default tree item. */
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);
-        $('#' + currentElement.id).parent().addClass('selected');
+        if(currentElement != undefined) $('#' + currentElement.id).parent().addClass('selected');
 
         if(['Git', 'Gitlab', 'Gogs', 'Gitea'].indexOf(repo.SCM) == -1)
         {
