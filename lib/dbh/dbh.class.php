@@ -28,6 +28,14 @@ class dbh
     private $pdo;
 
     /**
+     * PDO Statement.
+     *
+     * @var object
+     * @access private
+     */
+    private $statement;
+
+    /**
      * Database config.
      *
      * @var object
@@ -93,6 +101,35 @@ class dbh
     {
         $sql = $this->formatSQL($sql);
         return $this->pdo->query($sql);
+    }
+
+    /**
+     * Prepare a PDO statement.
+     *
+     * @param  string $sql
+     * @access public
+     * @return PDOStatement|false
+     */
+    public function prepare($sql)
+    {
+        $this->statement = $this->pdo->prepare($sql);
+        return $this->statement;
+    }
+
+    /**
+     * Prepare and execute a PDO statement.
+     *
+     * @param  string $sql
+     * @param  array  $params
+     * @access public
+     * @return PDOStatement|false
+     */
+    public function execute($sql, $params)
+    {
+        $this->statement = $this->prepare($sql);
+        $this->statement->execute($params);
+
+        return $this->statement;
     }
 
     /**
