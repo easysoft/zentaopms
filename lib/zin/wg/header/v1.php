@@ -105,7 +105,7 @@ class header extends wg
         (
             btn
             (
-                setClass('bg-white ring-0 rounded bg-opacity-30'),
+                setClass('secondary ring-0 rounded'),
                 set::text($lang->visionList[$currentVision]),
                 set::caret(false)
             ),
@@ -427,7 +427,7 @@ class header extends wg
             btn
             (
                 icon('plus', set::size('lg')),
-                setClass('bg-white ring-0 rounded bg-opacity-20'),
+                setClass('secondary ring-0 rounded'),
                 set::square(true),
                 set::size('sm'),
                 set::caret(false)
