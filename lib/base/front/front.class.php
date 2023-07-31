@@ -786,7 +786,7 @@ EOT;
      * @static
      * @access public
      */
-    public static function printStars($stars): void
+    public static function printStars($stars, $print = true)
     {
         $redStars   = 0;
         $halfStars  = 0;
@@ -800,11 +800,16 @@ EOT;
             $halfStars = $stars - $redStars ? 1 : 0;
             $whiteStars = 5 - ceil($stars);
         }
-        echo "<span class='stars-list'>";
-        for($i = 1; $i <= $redStars;   $i ++) echo "<i class='icon-star'></i>";
-        for($i = 1; $i <= $halfStars;  $i ++) echo "<i class='icon-star-half-full'></i>";
-        for($i = 1; $i <= $whiteStars; $i ++) echo "<i class='icon-star-empty'></i>";
-        echo '</span>';
+
+        $starsHtml = "<span class='stars-list'>";
+        for($i = 1; $i <= $redStars;   $i ++) $starsHtml .= "<i class='icon-star'></i>";
+        for($i = 1; $i <= $halfStars;  $i ++) $starsHtml .= "<i class='icon-star-half-full'></i>";
+        for($i = 1; $i <= $whiteStars; $i ++) $starsHtml .= "<i class='icon-star-empty'></i>";
+        $starsHtml .= '</span>';
+
+        if(!$print) return $starsHtml;
+
+        echo $starsHtml;
     }
 }
 
