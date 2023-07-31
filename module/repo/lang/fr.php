@@ -28,7 +28,7 @@ $lang->repo->branch          = 'Branch';
 $lang->repo->tag             = 'Tag';
 $lang->repo->addWebHook      = 'Add Webhook';
 $lang->repo->apiGetRepoByUrl = 'API: Get repo by URL';
-$lang->repo->blameTmpl       = 'Code for line <strong>%line</strong>, <span class="tip-circular"></span> %name commited at %time, %version %comment';
+$lang->repo->blameTmpl       = 'Code for line <strong>%line</strong>: %name commited at %time, %version %comment';
 $lang->repo->notRelated      = 'There is currently no related ZenTao object';
 
 $lang->repo->browseAction    = 'Browse Repo';
@@ -51,6 +51,7 @@ $lang->repo->import          = 'Import';
 $lang->repo->importName      = 'Name after import';
 $lang->repo->importServer    = 'Please select a server';
 $lang->repo->gitlabList      = 'Gitlab Repo';
+$lang->repo->batchCreate     = 'Batch create repo';
 
 $lang->repo->submit     = 'Soumettre';
 $lang->repo->cancel     = 'Annuler';
@@ -101,7 +102,7 @@ $lang->repo->diff               = 'Diff';
 $lang->repo->diffAB             = 'Diff';
 $lang->repo->diffAll            = 'Toutes Diff';
 $lang->repo->viewDiff           = 'Voir diff';
-$lang->repo->allLog             = 'Toutes Révisions';
+$lang->repo->allLog             = 'All Commits';
 $lang->repo->location           = 'Localisation';
 $lang->repo->file               = 'Fichier';
 $lang->repo->action             = 'Action';
@@ -120,6 +121,7 @@ $lang->repo->linkBug            = 'Link Bug';
 $lang->repo->linkTask           = 'Link Task';
 $lang->repo->unlink             = 'Unlink';
 $lang->repo->viewBugs           = 'View Bugs';
+$lang->repo->lastSubmitTime     = 'Final submission time';
 
 $lang->repo->title      = 'Titre';
 $lang->repo->status     = 'Statut';
@@ -239,3 +241,5 @@ $lang->repo->typeList['performance'] = 'Performance';
 $lang->repo->typeList['security']    = 'Securité';
 $lang->repo->typeList['redundancy']  = 'Redondance';
 $lang->repo->typeList['logicError']  = 'Erreur Logique';
+
+$lang->repo->featureBar['maintain']['all'] = 'All';

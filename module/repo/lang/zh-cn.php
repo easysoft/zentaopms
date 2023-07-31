@@ -28,7 +28,7 @@ $lang->repo->branch          = '分支';
 $lang->repo->tag             = '标签';
 $lang->repo->addWebHook      = '添加Webhook';
 $lang->repo->apiGetRepoByUrl = '接口：通过URL获取代码库';
-$lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息，<span class="tip-circular"></span> %name 于 %time 提交 %version %comment';
+$lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息： %name 于 %time 提交 %version %comment';
 $lang->repo->notRelated      = '暂时没有关联禅道对象';
 
 $lang->repo->browseAction    = '浏览代码库';
@@ -51,6 +51,7 @@ $lang->repo->import          = '导入';
 $lang->repo->importName      = '导入后的名称';
 $lang->repo->importServer    = '请选择服务器';
 $lang->repo->gitlabList      = 'Gitlab代码库';
+$lang->repo->batchCreate     = '批量添加代码库';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
@@ -101,7 +102,7 @@ $lang->repo->diff               = '比较差异';
 $lang->repo->diffAB             = '比较';
 $lang->repo->diffAll            = '全部比较';
 $lang->repo->viewDiff           = '查看差异';
-$lang->repo->allLog             = '所有版本';
+$lang->repo->allLog             = '所有提交';
 $lang->repo->location           = '位置';
 $lang->repo->file               = '文件';
 $lang->repo->action             = '操作';
@@ -120,6 +121,7 @@ $lang->repo->linkBug            = '关联Bug';
 $lang->repo->linkTask           = '关联任务';
 $lang->repo->unlink             = '取消关联';
 $lang->repo->viewBugs           = '查看Bug';
+$lang->repo->lastSubmitTime     = '最后提交时间';
 
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';
@@ -239,3 +241,5 @@ $lang->repo->typeList['performance'] = '性能';
 $lang->repo->typeList['security']    = '安全';
 $lang->repo->typeList['redundancy']  = '冗余';
 $lang->repo->typeList['logicError']  = '逻辑错误';
+
+$lang->repo->featureBar['maintain']['all'] = '全部';

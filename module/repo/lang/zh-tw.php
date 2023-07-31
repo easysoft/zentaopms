@@ -214,3 +214,5 @@ $lang->repo->typeList['performance'] = '性能';
 $lang->repo->typeList['security']    = '安全';
 $lang->repo->typeList['redundancy']  = '冗餘';
 $lang->repo->typeList['logicError']  = '邏輯錯誤';
+
+$lang->repo->featureBar['maintain']['all'] = '全部';

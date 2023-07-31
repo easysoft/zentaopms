@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The create view file of repo module of ZenTaoPMS.
+ * The edit view file of repo module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Zeng Gang<zenggang@easycorp.ltd>
@@ -22,7 +22,7 @@ formPanel
     on::change('#SCM', 'onScmChange'),
     on::change('#serviceHost', 'onHostChange'),
     on::change('#serviceProject', 'onProjectChange'),
-    set::title($lang->repo->createAction),
+    set::title($lang->repo->edit),
     set::back('repo-maintain'),
     formGroup
     (
@@ -31,27 +31,26 @@ formPanel
         set::required(true),
         set::control(array("type" => "picker","multiple" => true)),
         set::items($products),
-        set::value(empty($objectID) ? '' : array_keys($products))
+        set::value($repo->product)
     ),
     formGroup
     (
         set::name("projects[]"),
         set::label($lang->repo->projects),
         set::control(array("type" => "picker","multiple" => true)),
-        set::items($projects),
-        set::value($relatedProjects)
+        set::items($relatedProjects),
+        set::value($repo->projects)
     ),
     formRow
     (
         formGroup
         (
             set::width('1/2'),
-            set::id('SCM'),
-            set::name('SCM'),
+            set::name("SCM"),
             set::label($lang->product->typeAB),
             set::required(true),
-            set::value('Gitlab'),
-            set::control('picker'),
+            set::value($repo->SCM),
+            set::control("picker"),
             set::items($lang->repo->scmList)
         ),
         h::span
@@ -69,7 +68,7 @@ formPanel
             set::name("serviceHost"),
             set::label($lang->repo->serviceHost),
             set::required(true),
-            set::value(""),
+            set::value(isset($repo->gitService) ? $repo->gitService : ''),
             set::control("picker"),
             set::items($serviceHosts)
         ),
@@ -84,6 +83,8 @@ formPanel
             set::label($lang->repo->serviceProject),
             set::required(true),
             set::control("picker"),
+            set::items($projects),
+            set::value(isset($repo->project) ? $repo->project : ''),
         ),
     ),
     formGroup
@@ -92,7 +93,8 @@ formPanel
         set::name("name"),
         set::label($lang->user->name),
         set::required(true),
-        set::control("text")
+        set::control("text"),
+        set::value($repo->name),
     ),
     formRow
     (
@@ -104,6 +106,7 @@ formPanel
             set::required(true),
             set::control("text"),
             set::placeholder($lang->repo->example->path->git),
+            set::value($repo->path),
         ),
     ),
     formGroup
@@ -112,7 +115,7 @@ formPanel
         set::name("encoding"),
         set::label($lang->repo->encoding),
         set::required(true),
-        set::value("utf-8"),
+        set::value($repo->encoding),
         set::control("text"),
         set::placeholder($lang->repo->encodingsTips),
     ),
@@ -124,7 +127,8 @@ formPanel
             set::name("client"),
             set::label($lang->repo->client),
             set::required(true),
-            set::control("text")
+            set::control("text"),
+            set::value($repo->client),
         ),
     ),
     formRow
@@ -134,7 +138,8 @@ formPanel
         (
             set::name("account"),
             set::label($lang->user->account),
-            set::control("text")
+            set::control("text"),
+            set::value($repo->account),
         ),
     ),
     formRow
@@ -149,14 +154,14 @@ formPanel
                 (
                     'name' => "password",
                     'id' => "password",
-                    'value' => "",
+                    'value' => $repo->password,
                     'type' => "password"
                 ))),
                 control(set(array
                 (
                     'name' => "encrypt",
                     'id' => "encrypt",
-                    'value' => "base64",
+                    'value' => $repo->encrypt,
                     'type' => "picker",
                     'items' => $lang->repo->encryptList
                 )))
@@ -174,7 +179,7 @@ formPanel
             (
                 'name' => "acl[groups][]",
                 'id' => "aclgroups",
-                'value' => NULL,
+                'value' => empty($repo->acl->groups) ? '' : implode(',', $repo->acl->groups),
                 'type' => "picker",
                 'items' => $groups,
                 'multiple' => true
@@ -187,7 +192,7 @@ formPanel
             (
                 'name' => "acl[users][]",
                 'id' => "aclusers",
-                'value' => NULL,
+                'value' => empty($repo->acl->users) ? '' : implode(',', $repo->acl->users),
                 'type' => "picker",
                 'items' => $users,
                 'multiple' => true
@@ -199,7 +204,8 @@ formPanel
     (
         set::name("desc"),
         set::label($lang->story->spec),
-        set::control("editor")
+        set::control("editor"),
+        set::value($repo->desc),
     )
 );
 
