@@ -203,12 +203,18 @@ if(!isAjaxRequest('modal'))
     );
 }
 
+$customFieldConfig = array();
+$showFields    = ",{$config->task->custom->createFields},";
+$defaultFields = explode(',', $config->story->list->customCreateFields);
+foreach($customFields as $name => $text) $customFieldConfig[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
+
 /* ====== Define the page structure with zin widgets ====== */
 
 formPanel
 (
     set::id('taskCreateForm'),
     set::title($lang->task->create),
+    set::customFields(array('items' => $customFieldConfig, 'urlParams' => 'module=task&section=custom&key=createFields')),
     formRow
     (
         $executionBox,
