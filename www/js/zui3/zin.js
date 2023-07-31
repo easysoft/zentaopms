@@ -910,6 +910,11 @@
         oldPath.pop();
         oldPath.push(theme + '.css');
         $theme.attr('href', oldPath.join('/'));
+        const userMenu = $('#userMenu-toggle').zui();
+        if(!userMenu) return;
+        const themeItem = userMenu.options.menu.items.find(x => x.key === 'theme');
+        themeItem.items.forEach(item => {item.active = item['data-value'] === theme;});
+        userMenu.render({menu: userMenu.options.menu});
     }
 
     /**

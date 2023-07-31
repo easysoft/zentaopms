@@ -219,6 +219,7 @@ class header extends wg
         (
             'text' => $lang->theme,
             'icon' => 'theme',
+            'key'  => 'theme',
             'items' => $themeItems
         );
 
