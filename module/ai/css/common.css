@@ -26,6 +26,7 @@
 
 .step > a
 {
+    padding: 0 10px;
     position: relative;
     left: 5px;
     cursor: pointer;
