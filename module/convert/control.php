@@ -258,64 +258,32 @@ class convert extends control
      * @access public
      * @return void
      */
-    public function importNotice($method = 'db')
+    public function importNotice(string $method = 'db')
     {
         if($this->server->request_method == 'POST')
         {
             if($method == 'db')
             {
                 $dbName = $this->post->dbName;
-                if(!$this->convert->checkDBName($dbName)) die('Invalid database name.');
-                if(!$dbName)
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = $this->lang->convert->jira->dbNameEmpty;
-                    return print($this->send($response));
-                }
-
-                if(!$this->convert->dbExists($dbName))
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = $this->lang->convert->jira->invalidDB;
-                    return print($this->send($response));
-                }
-
-                if(!$this->convert->tableExistsOfJira($dbName, 'nodeassociation'))
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = $this->lang->convert->jira->invalidTable;
-                    return print($this->send($response));
-                }
+                if(!$dbName) return $this->send(array('result' => 'fail', 'message' => $this->lang->convert->jira->dbNameEmpty));
+                if(!$this->convert->dbExists($dbName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->convert->jira->invalidDB));
+                if(!$this->convert->tableExistsOfJira($dbName, 'nodeassociation')) return $this->send(array('result' => 'fail', 'message' => $this->lang->convert->jira->invalidTable));
 
                 $this->session->set('jiraDB', $dbName);
                 $link = $this->createLink('convert', 'mapJira2Zentao', "method=db&dbName={$this->post->dbName}");
-            }
-            else
-            {
-                $this->convert->deleteJiraFile();
-                $jiraFilePath = $this->app->getTmpRoot() . 'jirafile/';
-                if(!is_readable($jiraFilePath) or !is_writable($jiraFilePath))
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = sprintf($this->lang->convert->jira->notReadAndWrite, $jiraFilePath);
-                    return print($this->send($response));
-                }
 
-                if(!file_exists($jiraFilePath . 'entities.xml'))
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = sprintf($this->lang->convert->jira->notExistEntities, $jiraFilePath . 'entities.xml');
-                    return print($this->send($response));
-                }
-
-                $this->convert->splitFile();
-                $link = $this->createLink('convert', 'mapJira2Zentao', "method=file");
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
             }
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = $link;
-            return print($this->send($response));
+            $this->convert->deleteJiraFile();
+            $jiraFilePath = $this->app->getTmpRoot() . 'jirafile/';
+            if(!is_readable($jiraFilePath) || !is_writable($jiraFilePath)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->convert->jira->notReadAndWrite, $jiraFilePath)));
+            if(!file_exists($jiraFilePath . 'entities.xml')) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->convert->jira->notExistEntities, $jiraFilePath . 'entities.xml')));
+
+            $this->convert->splitFile();
+            $link = $this->createLink('convert', 'mapJira2Zentao', "method=file");
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
         $this->view->title  = $this->lang->convert->jira->method;
