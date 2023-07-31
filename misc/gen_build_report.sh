@@ -14,14 +14,40 @@ outputLine() {
   echo "$1"
 }
 
-outputLine "构建日期 **$finishTime**"
+renderGitWebUrl() {
+  if [ -z "$GIT_URL" ];then
+    return
+  fi
+
+  echo $GIT_URL | sed -r -e 's/^.+@/https:\/\//' -e 's/\.git$//'
+}
+
+renderTagUrl() {
+  GIT_WEB_BASE=$(renderGitWebUrl)
+  if [ -n "$GIT_WEB_BASE" ];then
+    echo "[${TAG_NAME}](${GIT_WEB_BASE}/src/tag/${TAG_NAME})"
+  else
+    echo ${TAG_NAME}
+  fi
+}
+
+renderCommitUrl() {
+  GIT_WEB_BASE=$(renderGitWebUrl)
+  if [ -n "$GIT_WEB_BASE" ];then
+    echo "[${GIT_COMMIT:0:7}](${GIT_WEB_BASE}/commit/${GIT_COMMIT}) ([提交历史](${GIT_WEB_BASE}/commits/tag/${TAG_NAME}))"
+  else
+    echo ${GIT_COMMIT:0:7}
+  fi
+}
+
+outputLine "完成时间 **$finishTime**"
 blankLine
 
 outputLine "#### Git 信息"
 
-outputLine "* 触发 Tag: $TAG_NAME"
+outputLine "* 触发 Tag: $(renderTagUrl)"
 
-outputLine "* CommitId: ${GIT_COMMIT:0:7}"
+outputLine "* CommitId: $(renderCommitUrl)"
 
 outputLine "* 触发人: ${GIT_TAGGER_NAME}"
 

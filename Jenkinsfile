@@ -19,6 +19,8 @@ pipeline {
 
     SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
 
+    QINIU_BUCKET = "download"
+
     MIRROR = "true"
   }
 
@@ -110,7 +112,7 @@ pipeline {
               steps {
                 container('xuanimbot') {
                   sh 'git config --global --add safe.directory $(pwd)'
-                  sh '/usr/local/bin/xuanimbot --groups 84be4c6e-02e3-4fdc-b081-318c0c1eca02 --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "Start build zentaopms" --url "${BUILD_URL}" --content "Build by Tag ${TAG_NAME}" --debug --custom'
+                  sh '/usr/local/bin/xuanimbot --groups 84be4c6e-02e3-4fdc-b081-318c0c1eca02 --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "`echo -n 5byA5aeL5p6E5bu656aF6YGT | base64 --decode`" --url "${BUILD_URL}" --content "Build by Tag ${TAG_NAME}" --debug --custom'
                 }
                 withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http',gitToolName: 'git-tool')]) {
                   container('package') {
@@ -152,6 +154,11 @@ pipeline {
             MAX_VERSION = """${sh(
                                 returnStdout: true,
                                 script: 'cat ${SRC_ZENTAOEXT_PATH}/MAXVERSION'
+            ).trim()}"""
+
+            GIT_URL = """${sh(
+                            returnStdout: true,
+                            script: 'git config --get remote.origin.url'
             ).trim()}"""
 
             GIT_COMMIT = """${sh(
@@ -347,7 +354,6 @@ pipeline {
                         }
 
                         environment {
-                          QINIU_BUCKET = "download"
                           OBJECT_KEY_PREFIX = "zentao/"
                           QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
                           QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
@@ -376,7 +382,8 @@ pipeline {
                   sh 'env | grep GIT'
                   sh 'git config --global --add safe.directory $(pwd)'
                   sh './misc/gen_build_report.sh > /tmp/success.md'
-                  sh '/usr/local/bin/xuanimbot --groups 84be4c6e-02e3-4fdc-b081-318c0c1eca02 --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "zentaopms package success" --url "${RUN_DISPLAY_URL}" --content-file /tmp/success.md --debug --custom'
+                  sh '/usr/local/bin/xuanimbot --users "qishiyao" --groups 84be4c6e-02e3-4fdc-b081-318c0c1eca02 --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "`echo -n 56aF6YGT5rqQ56CB5YyF5p6E5bu65oiQ5Yqf | base64 --decode`" --url "${RUN_DISPLAY_URL}" --content-file /tmp/success.md --debug --custom'
+                  // sh '/usr/local/bin/xuanimbot --groups "84be4c6e-02e3-4fdc-b081-318c0c1eca02" --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "zentaopms build success" --url "${RUN_DISPLAY_URL}" --content-file /tmp/success.md --debug --custom'
                 }
               }
             }
@@ -456,7 +463,7 @@ pipeline {
                     }
                     container('xuanimbot') {
                       sh 'git config --global --add safe.directory $(pwd)'
-                      sh '/usr/local/bin/xuanimbot --groups 84be4c6e-02e3-4fdc-b081-318c0c1eca02  --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "zentaopms build image success" --url "${RUN_DISPLAY_URL}" --content-file ./report.md --debug --custom'
+                      sh '/usr/local/bin/xuanimbot --users "qishiyao" --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "`echo -n 56aF6YGT6ZWc5YOP5p6E5bu65oiQ5Yqf | base64 --decode`" --url "${RUN_DISPLAY_URL}" --content-file ./report.md --debug --custom'
                     }
                   }
                 }
@@ -573,7 +580,7 @@ pipeline {
                     sh 'script/lib/gen_report.sh > zbox-success.md'
                     container('xuanimbot') {
                       sh 'git config --global --add safe.directory $(pwd)'
-                      sh '/usr/local/bin/xuanimbot --groups 84be4c6e-02e3-4fdc-b081-318c0c1eca02 --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "zentaopms build zbox success" --url "${RUN_DISPLAY_URL}" --content-file zbox-success.md --debug --custom'
+                      sh '/usr/local/bin/xuanimbot --users "qishiyao" --groups 84be4c6e-02e3-4fdc-b081-318c0c1eca02 --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "`echo -n 56aF6YGT5LiA6ZSu5a6J6KOF5YyF5p6E5bu65oiQ5Yqf | base64 --decode`" --url "${RUN_DISPLAY_URL}" --content-file zbox-success.md --debug --custom'
                     }
                   }
                 }
@@ -584,7 +591,6 @@ pipeline {
                   }
 
                   environment {
-                    QINIU_BUCKET = "download"
                     OBJECT_KEY_PREFIX = "zentao/"
                     QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
                     QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
@@ -608,6 +614,7 @@ pipeline {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
                 sh '/usr/local/bin/xuanimbot --users "${GIT_TAGGER_NAME}" --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "zentaopms build failed" --url "${BUILD_URL}" --content "" --debug --custom'
+                // sh '/usr/local/bin/xuanimbot --users ${GIT_TAGGER_NAME} --groups 31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4 --title "zentaopms build failed" --url "${BUILD_URL}" --content "" --debug --custom'
               }
             }
           }
