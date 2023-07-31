@@ -27,7 +27,7 @@ div
             ),
             div
             (
-                setClass('text-primary mb-4'),
+                setClass('text-gray mb-4'),
                 $lang->convert->jira->dbDesc
             )
         ),
@@ -42,7 +42,7 @@ div
             ),
             div
             (
-                setClass('text-primary mb-4'),
+                setClass('text-gray mb-4'),
                 $lang->convert->jira->fileDesc
             )
         )
