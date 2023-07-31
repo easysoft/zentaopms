@@ -12,14 +12,14 @@ $config->ai->openai->params->chat       = new stdclass();
 $config->ai->openai->params->function   = new stdclass();
 $config->ai->openai->params->completion = new stdclass();
 $config->ai->openai->params->edit       = new stdclass();
-$config->ai->openai->params->chat->required = array('messages');
-$config->ai->openai->params->chat->optional = array('max_tokens', 'temperature', 'top_p', 'n', 'stream', 'stop', 'presence_penalty', 'frequency_penalty', 'logit_bias', 'user');
-$config->ai->openai->params->function->required = array('messages', 'functions', 'function_call');
-$config->ai->openai->params->function->optional = array('max_tokens', 'temperature', 'top_p', 'n', 'stream', 'stop', 'presence_penalty', 'frequency_penalty', 'logit_bias', 'user');
+$config->ai->openai->params->chat->required       = array('messages');
+$config->ai->openai->params->chat->optional       = array('max_tokens', 'temperature', 'top_p', 'n', 'stream', 'stop', 'presence_penalty', 'frequency_penalty', 'logit_bias', 'user');
+$config->ai->openai->params->function->required   = array('messages', 'functions', 'function_call');
+$config->ai->openai->params->function->optional   = array('max_tokens', 'temperature', 'top_p', 'n', 'stream', 'stop', 'presence_penalty', 'frequency_penalty', 'logit_bias', 'user');
 $config->ai->openai->params->completion->required = array('prompt', 'max_tokens');
 $config->ai->openai->params->completion->optional = array('suffix', 'temperature', 'top_p', 'n', 'stream', 'logprobs', 'echo', 'stop', 'presence_penalty', 'frequency_penalty', 'best_of', 'logit_bias', 'user');
-$config->ai->openai->params->edit->required = array('input', 'instruction');
-$config->ai->openai->params->edit->optional = array('temperature', 'top_p', 'n');
+$config->ai->openai->params->edit->required       = array('input', 'instruction');
+$config->ai->openai->params->edit->optional       = array('temperature', 'top_p', 'n');
 
 $config->ai->openai->model = new stdclass();
 $config->ai->openai->model->chat       = 'gpt-3.5-turbo';
@@ -34,43 +34,34 @@ foreach($config->ai->openai->contentTypeMapping as $contentType => $apis)
     foreach($apis as $api) $config->ai->openai->contentType[$api] = $contentType;
 }
 
+/* Required fields of forms. */
 $config->ai->createprompt = new stdclass();
+$config->ai->testPrompt   = new stdclass();
 $config->ai->createprompt->requiredFields = 'name';
-
-$config->ai->testPrompt = new stdclass();
-$config->ai->testPrompt->requiredFields = 'name,module,source,purpose,targetForm';
+$config->ai->testPrompt->requiredFields   = 'name,module,source,purpose,targetForm';
 
 /* Data source object props definations, commented out ones are not supported for now. */
 $config->ai->dataSource = array();
-//$config->ai->dataSource['my']['efforts'] = array('date', 'work', 'account', 'consumed', 'left', 'objectID', 'product', 'project', 'execution');
-
-$config->ai->dataSource['product']['product'] = array('name', 'desc');
-// $config->ai->dataSource['product']['modules'] = array('name', 'modules');
-
+// $config->ai->dataSource['my']['efforts']              = array('date', 'work', 'account', 'consumed', 'left', 'objectID', 'product', 'project', 'execution');
+$config->ai->dataSource['product']['product']         = array('name', 'desc');
+// $config->ai->dataSource['product']['modules']         = array('name', 'modules');
 $config->ai->dataSource['productplan']['productplan'] = array('title', 'desc', 'begin', 'end');
 $config->ai->dataSource['productplan']['stories']     = array('title', 'module', 'pri', 'estimate', 'status', 'stage');
 $config->ai->dataSource['productplan']['bugs']        = array('title', 'pri', 'status');
-
-$config->ai->dataSource['release']['release'] = array('product', 'name', 'desc', 'date');
-$config->ai->dataSource['release']['stories'] = array('title', 'estimate');
-$config->ai->dataSource['release']['bugs']    = array('title');
-
-$config->ai->dataSource['project']['project'] = array('name', 'type', 'desc', 'begin', 'end', 'estimate');
-$config->ai->dataSource['project']['programplans'] = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'planDuration', 'progress', 'estimate', 'consumed', 'left');
-$config->ai->dataSource['project']['executions']  = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'estimate', 'consumed', 'progress');
-
-$config->ai->dataSource['story']['story']         = array('title', 'spec', 'verify', 'product', 'module', 'pri', 'category', 'estimate');
-$config->ai->dataSource['execution']['execution'] = array('name', 'desc', 'estimate');
-$config->ai->dataSource['execution']['tasks']     = array('name', 'pri', 'status', 'estimate', 'consumed', 'left', 'progress', 'estStarted', 'realStarted', 'finishedDate', 'closedReason');
-
-$config->ai->dataSource['task']['task'] = array('name', 'desc', 'pri', 'status', 'estimate', 'consumed', 'left', 'progress', 'estStarted', 'realStarted');
-
-$config->ai->dataSource['case']['case']  = array('title', 'precondition', 'scene', 'product', 'module', 'pri', 'type', 'lastRunResult', 'status');
-$config->ai->dataSource['case']['steps'] = array('desc', 'expect');
-
-$config->ai->dataSource['bug']['bug'] = array('title', 'steps', 'severity','pri', 'status', 'confirmed', 'type');
-
-$config->ai->dataSource['doc']['doc'] = array('title', 'addedBy', 'addedDate', 'editedBy', 'editedDate', 'content');
+$config->ai->dataSource['release']['release']         = array('product', 'name', 'desc', 'date');
+$config->ai->dataSource['release']['stories']         = array('title', 'estimate');
+$config->ai->dataSource['release']['bugs']            = array('title');
+$config->ai->dataSource['project']['project']         = array('name', 'type', 'desc', 'begin', 'end', 'estimate');
+$config->ai->dataSource['project']['programplans']    = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'planDuration', 'progress', 'estimate', 'consumed', 'left');
+$config->ai->dataSource['project']['executions']      = array('name', 'desc', 'status', 'begin', 'end', 'realBegan', 'realEnd', 'estimate', 'consumed', 'progress');
+$config->ai->dataSource['story']['story']             = array('title', 'spec', 'verify', 'product', 'module', 'pri', 'category', 'estimate');
+$config->ai->dataSource['execution']['execution']     = array('name', 'desc', 'estimate');
+$config->ai->dataSource['execution']['tasks']         = array('name', 'pri', 'status', 'estimate', 'consumed', 'left', 'progress', 'estStarted', 'realStarted', 'finishedDate', 'closedReason');
+$config->ai->dataSource['task']['task']               = array('name', 'desc', 'pri', 'status', 'estimate', 'consumed', 'left', 'progress', 'estStarted', 'realStarted');
+$config->ai->dataSource['case']['case']               = array('title', 'precondition', 'scene', 'product', 'module', 'pri', 'type', 'lastRunResult', 'status');
+$config->ai->dataSource['case']['steps']              = array('desc', 'expect');
+$config->ai->dataSource['bug']['bug']                 = array('title', 'steps', 'severity','pri', 'status', 'confirmed', 'type');
+$config->ai->dataSource['doc']['doc']                 = array('title', 'addedBy', 'addedDate', 'editedBy', 'editedDate', 'content');
 
 /* Available target form definations. Please also update `$lang->ai->targetForm` upon changes! Some are commented out, these need extra work. */
 $config->ai->targetForm = array();
@@ -120,7 +111,7 @@ $config->ai->targetFormVars = array();
 $config->ai->targetFormVars['story']['create']         = (object)array('format' => 'product=%d', 'args' => array('product'));
 $config->ai->targetFormVars['story']['batchcreate']    = (object)array('format' => 'productID=%d', 'args' => array('product'));
 $config->ai->targetFormVars['story']['change']         = (object)array('format' => 'storyID=%d', 'args' => array('story'));
-$config->ai->targetFormVars['productplan']['create']   = (object)array('format' => 'productID=%d', 'args' => array('product', 'branch'));
+$config->ai->targetFormVars['productplan']['create']   = (object)array('format' => 'productID=%d,branch=%s', 'args' => array('product', 'branch'));
 $config->ai->targetFormVars['productplan']['edit']     = (object)array('format' => 'planID=%d', 'args' => array('productplan'));
 $config->ai->targetFormVars['task']['create']          = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution', 'story'));
 $config->ai->targetFormVars['task']['batchcreate']     = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution', 'story'));
@@ -179,7 +170,7 @@ $config->ai->menuPrint->locations['project']['view']->module = 'project';
 $config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
 $config->ai->menuPrint->locations['project']['view']->module = 'project';
 
-$config->ai->menuPrint->locations['product']['view']        = (object)array(
+$config->ai->menuPrint->locations['product']['view'] = (object)array(
     'module'          => 'product',
     'injectMethod'    => 'append',
     'targetContainer' => '#mainContent.main-row > .col-8.main-col .detail:first-child > .detail-title',
