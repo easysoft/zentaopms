@@ -69,7 +69,6 @@ window.setStatistics = function()
     return {html: summary};
 }
 
-
 /**
  * 合并单元格。
  * cell span in the column.

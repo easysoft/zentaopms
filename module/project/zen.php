@@ -989,23 +989,25 @@ class projectZen extends project
      * 处理版本列表展示数据。
      * Process build list display data.
      *
-     * @param  array     $builds
+     * @param  array     $buildList
      * @param  int       $projectID
      * @access protected
      * @return object[]
      */
-    protected function processBuildListData(array $builds, int $projectID): array
+    protected function processBuildListData(array $buildList, int $projectID): array
     {
         $this->loadModel('build');
         $this->loadModel('branch');
 
         $showBranch    = false;
         $productIdList = array();
-        foreach($builds as $build) $productIdList[$build->product] = $build->product;
+        foreach($buildList as $build) $productIdList[$build->product] = $build->product;
 
         /* Get branch name. */
         $branchGroups = $this->branch->getByProducts($productIdList);
-        foreach($builds as $build)
+        $builds       = array();
+        $project      = $this->project->getByID($projectID);
+        foreach($buildList as $build)
         {
             $build->branchName = '';
             if(isset($branchGroups[$build->product]))
@@ -1021,17 +1023,104 @@ class projectZen extends project
                 if(empty($build->branchName) and empty($build->builds)) $build->branchName = $this->lang->branch->main;
             }
             $build->actions = $this->build->buildActionList($build, 0, 'projectbuild');
+
+            if($project->multiple && empty($build->execution))
+            {
+                $rowspan     = $build->scmPath && $build->filePath ? 2 : 1;
+                $buildCount  = count($build->builds);
+                $rowspan     = $buildCount > $rowspan ? $buildCount : $rowspan;
+                $pathRowspan = $build->scmPath && $build->filePath ? floor($rowspan/2) : $rowspan;
+
+                if($buildCount >= 2)
+                {
+                    $i = 1;
+                    foreach($build->builds as $childBuild)
+                    {
+                        $buildInfo = clone $build;
+                        $buildInfo->executionName = $childBuild->executionName;
+                        $buildInfo->rowspan       = $rowspan;
+                        if($i <= $pathRowspan)
+                        {
+                            $buildInfo->pathRowspan = $pathRowspan;
+                            $buildInfo->pathType    = empty($build->scmPath) ? 'filePath' : 'scmPath';
+                            $buildInfo->path        = empty($build->scmPath) ? $build->filePath : $build->scmPath;
+                        }
+                        elseif($i > $pathRowspan)
+                        {
+                            $buildInfo->pathRowspan = $rowspan - $pathRowspan;
+                            $buildInfo->pathType    = 'filePath';
+                            $buildInfo->path        = $build->filePath;
+                        }
+                        $builds[] = $buildInfo;
+
+                        $i ++;
+                    }
+                }
+                else
+                {
+                    $childBuild = !empty($build->builds) ? current($build->builds) : array();
+                    $build->executionName    = !empty($childBuild) ? $childBuild->executionName : '';
+
+                    if($build->scmPath && $build->filePath)
+                    {
+                        $build->rowspan          = 2;
+                        $build->executionRowspan = 2;
+
+                        $buildInfo = clone $build;
+                        $buildInfo->pathType = 'scmPath';
+                        $buildInfo->path     = $build->scmPath;
+                        $builds[]  = $buildInfo;
+
+                        $buildInfo = clone $build;
+                        $buildInfo->pathType = 'filePath';
+                        $buildInfo->path     = $build->filePath;
+                        $builds[]  = $buildInfo;
+                    }
+                    else
+                    {
+                        $build->pathType = empty($build->scmPath) ? 'filePath' : 'scmPath';
+                        $build->path     = empty($build->scmPath) ? $build->filePath : $build->scmPath;
+
+                        $builds[] = $build;
+                    }
+                }
+
+            }
+            else
+            {
+                if($build->scmPath && $build->filePath)
+                {
+                    $build->rowspan          = 2;
+                    $build->executionRowspan = 2;
+
+                    $buildInfo = clone $build;
+                    $buildInfo->pathType = 'scmPath';
+                    $buildInfo->path     = $build->scmPath;
+                    $builds[]  = $buildInfo;
+
+                    $buildInfo = clone $build;
+                    $buildInfo->pathType = 'filePath';
+                    $buildInfo->path     = $build->filePath;
+                    $builds[]  = $buildInfo;
+                }
+                else
+                {
+                    $build->pathType = empty($build->scmPath) ? 'filePath' : 'scmPath';
+                    $build->path     = empty($build->scmPath) ? $build->filePath : $build->scmPath;
+
+                    $builds[] = $build;
+                }
+            }
         }
 
         /* Set data table column. */
-        $project = $this->project->getByID($projectID);
         if(!$project->hasProduct) unset($this->config->build->dtable->fieldList['product']);
         if(!$showBranch || !$project->hasProduct) unset($this->config->build->dtable->fieldList['branch']);
         if(!$project->multiple) unset($this->config->build->dtable->fieldList['execution']);
         $this->config->build->dtable->fieldList['name']['link'] = helper::createLink('projectbuild', 'view', 'buildID={id}');
         $this->config->build->dtable->fieldList['execution']['title'] = zget($this->lang->project->executionList, $project->model);
 
-        return array_values($builds);
+        return $builds;
     }
 
     /**

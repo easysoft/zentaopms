@@ -30,6 +30,7 @@ class executionZen extends execution
         /* Get branch name. */
         $showBranch   = false;
         $branchGroups = $this->loadModel('branch')->getByProducts($productIdList);
+        $builds       = array();
         foreach($buildList as $build)
         {
             $build->branchName = '';
@@ -44,12 +45,34 @@ class executionZen extends execution
                 $build->branchName = trim($build->branchName, ',');
             }
             $build->actions = $this->build->buildActionList($build, $executionID, 'execution');
+
+            if($build->scmPath && $build->filePath)
+            {
+                $build->rowspan = 2;
+
+                $buildInfo = clone $build;
+                $buildInfo->pathType = 'scmPath';
+                $buildInfo->path     = $build->scmPath;
+                $builds[]  = $buildInfo;
+
+                $buildInfo = clone $build;
+                $buildInfo->pathType = 'filePath';
+                $buildInfo->path     = $build->filePath;
+                $builds[]  = $buildInfo;
+            }
+            else
+            {
+                $build->pathType = empty($build->scmPath) ? 'filePath' : 'scmPath';
+                $build->path     = empty($build->scmPath) ? $build->filePath : $build->scmPath;
+
+                $builds[] = $build;
+            }
         }
 
         if(!$showBranch) unset($this->config->build->dtable->fieldList['branch']);
         unset($this->config->build->dtable->fieldList['execution']);
 
-        return array_values($buildList);
+        return $builds;
     }
 
     /**

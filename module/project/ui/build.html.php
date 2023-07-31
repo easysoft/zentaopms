@@ -54,14 +54,16 @@ jsVar('deletedTip', $lang->build->deleted);
 dtable
 (
     set::userMap($users),
-    set::cols(array_values($config->build->dtable->fieldList)),
-    set::data(array_values($builds)),
+    set::cols($config->build->dtable->fieldList),
+    set::data($builds),
+    set::plugins(array('cellspan')),
     set::sortLink(jsRaw('createSortLink')),
     set::onRenderCell(jsRaw('window.renderCell')),
+    set::getCellSpan(jsRaw('window.getCellSpan')),
     set::footPager(
         usePager
         (
-            array('linkCreator' => helper::createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={pageID}")),
+            array('linkCreator' => helper::createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage),
         ),
     ),
 );

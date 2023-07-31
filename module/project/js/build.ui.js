@@ -3,7 +3,7 @@ window.renderCell = function(result, {col, row})
     if(col.name == 'path')
     {
         result[0] = '';
-        if(row.data.scmPath)
+        if(row.data.pathType == 'scmPath' && row.data.scmPath)
         {
             const colorStyle = row.data.scmPath.indexOf('http') === 0 ? "style='color:#2463c7;'" : '';
             let scmPathHtml  = '';
@@ -15,7 +15,7 @@ window.renderCell = function(result, {col, row})
             result[result.length] = {html: scmPathHtml};
         }
 
-        if(row.data.filePath)
+        if(row.data.pathType == 'filePath' && row.data.filePath)
         {
             const colorStyle = row.data.filePath.indexOf('http') === 0 ? "style='color:#2463c7;'" : '';
             let filePathHtml  = '';
@@ -37,25 +37,9 @@ window.renderCell = function(result, {col, row})
 
     if(col.name == 'execution')
     {
-        if(row.data.execution == 0)
-        {
-            result[0] = '';
-            let executionIdList = [];
-            for(key in row.data.builds)
-            {
-                const build = row.data.builds[key];
-                if(executionIdList.indexOf(build.execution) !== -1) continue;
-
-                result[result.length] = {html: "<span title='" + build.executionName + "'>" + build.executionName + "</span>"};
-                executionIdList.push(build.execution);
-            }
-        }
-        else
-        {
-            let executionHtml = "<span title='" + row.data.executionName + "'>" + row.data.executionName + '</span>';
-            if(row.data.executionDeleted == 1) executionHtml += " <span class='label label-danger'>" + deletedTip + '</span>';
-            result[0] = {html: executionHtml};
-        }
+        let executionHtml = "<span title='" + row.data.executionName + "'>" + row.data.executionName + '</span>';
+        if(row.data.executionDeleted == 1) executionHtml += " <span class='label label-danger'>" + deletedTip + '</span>';
+        result[0] = {html: executionHtml};
         return result;
     }
 
@@ -72,4 +56,30 @@ window.changeProduct = function()
 {
     const link = changeProductLink.replace('{productID}', $(this).val());
     loadPage(link);
+}
+
+/**
+ * 合并单元格。
+ * cell span in the column.
+ *
+ * @param  object cell
+ * @access public
+ * @return object
+ */
+window.getCellSpan = function(cell)
+{
+    if(['id', 'name', 'productName', 'branchName', 'builder', 'date', 'actions'].includes(cell.col.name) && cell.row.data.rowspan)
+    {
+        return {rowSpan: cell.row.data.rowspan};
+    }
+
+    if(cell.col.name == 'path' && cell.row.data.pathRowspan)
+    {
+        return {rowSpan: cell.row.data.pathRowspan};
+    }
+
+    if(cell.col.name == 'execution' && cell.row.data.executionRowspan)
+    {
+        return {rowSpan: cell.row.data.executionRowspan};
+    }
 }

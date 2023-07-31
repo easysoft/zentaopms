@@ -3,7 +3,7 @@ window.renderCell = function(result, {col, row})
     if(col.name == 'path')
     {
         result[0] = '';
-        if(row.data.scmPath)
+        if(row.data.pathType == 'scmPath' && row.data.scmPath)
         {
             const colorStyle = row.data.scmPath.indexOf('http') === 0 ? "style='color:#2463c7;'" : '';
             let scmPathHtml  = '';
@@ -15,7 +15,7 @@ window.renderCell = function(result, {col, row})
             result[result.length] = {html: scmPathHtml};
         }
 
-        if(row.data.filePath)
+        if(row.data.pathType == 'filePath' && row.data.filePath)
         {
             const colorStyle = row.data.filePath.indexOf('http') === 0 ? "style='color:#2463c7;'" : '';
             let filePathHtml  = '';
@@ -41,4 +41,20 @@ window.changeProduct = function()
 {
     const link = changeProductLink.replace('{productID}', $(this).val());
     loadPage(link);
+}
+
+/**
+ * 合并单元格。
+ * cell span in the column.
+ *
+ * @param  object cell
+ * @access public
+ * @return object
+ */
+window.getCellSpan = function(cell)
+{
+    if(['id', 'name', 'productName', 'branchName', 'builder', 'date', 'actions'].includes(cell.col.name) && cell.row.data.rowspan)
+    {
+        return {rowSpan: cell.row.data.rowspan};
+    }
 }
