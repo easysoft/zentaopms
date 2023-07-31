@@ -134,6 +134,7 @@ class doc extends control
         $this->view->libType        = 'lib';
         $this->view->objectDropdown = $objectDropdown;
         $this->view->spaceType      = 'mine';
+        $this->view->linkParams     = "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0";
 
         $this->display();
     }
@@ -1302,6 +1303,7 @@ class doc extends control
         $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->apiLibID       = key($apiLibs);
         $this->view->spaceType      = $type;
+        $this->view->linkParams     = "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0";
 
         $this->display();
     }
