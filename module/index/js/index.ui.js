@@ -269,7 +269,7 @@ function getLastApp(onlyShowed)
 {
     let lastShowIndex = 0;
     let lastApp = null;
-    Object.values(apps.openedMap).forEach(app =>
+    $.each(apps.openedMap, function(_code, app)
     {
         if((!onlyShowed || app.show) && lastShowIndex < app.zIndex && !app.closed)
         {
@@ -648,6 +648,15 @@ function initAppsMenu(items)
         url:        '/index.php?m=search&f=index',
         vars:       ''
     };
+
+    $('#appTabs').find('.nav-item').each(function()
+    {
+        const $item = $(this);
+        const code = $item.data('app');
+        const app = apps.map[code];
+        if(!app) return;
+        $item.find('.text').text(app.text);
+    });
 }
 
 /** Update apps menu. */
@@ -666,6 +675,19 @@ function updateAppsMenu()
             return true;
         }
     });
+}
+
+function changeAppsLang(lang)
+{
+    $('html').attr('lang', lang);
+    $.each(apps.openedMap, function(_code, app)
+    {
+        if(app.iframe && app.iframe.contentWindow && app.iframe.contentWindow.changeAppLang)
+        {
+            app.iframe.contentWindow.changeAppLang(lang);
+        }
+    });
+    updateAppsMenu();
 }
 
 initAppsMenu();
@@ -735,5 +757,6 @@ $.apps = $.extend(apps,
     goBack:         goBack,
     isOldPage:      isOldPage,
     getAppCode:     getAppCode,
-    updateAppsMenu: updateAppsMenu
+    updateAppsMenu: updateAppsMenu,
+    changeAppsLang: changeAppsLang
 });
