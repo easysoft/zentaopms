@@ -1637,9 +1637,23 @@ class bugZen extends bug
             $bug->plans = isset($productPlanList[$bug->product]) && isset($productPlanList[$bug->product][$bug->branch]) ? $productPlanList[$bug->product][$bug->branch] : array();
         }
 
+        $bugModules = array();
+        foreach($modules as $productID => $productModules)
+        {
+            $bugModules[$productID] = array();
+            foreach($productModules as $branchID => $branchModules)
+            {
+                $bugModules[$productID][$branchID] = array();
+                foreach($branchModules as $moduleID => $module)
+                {
+                    $bugModules[$productID][$branchID][] = array('text' => $module, 'value' => $moduleID);
+                }
+            }
+        }
+
         $this->view->bugs            = $bugs;
         $this->view->branchProduct   = $branchProduct;
-        $this->view->modules         = $modules;
+        $this->view->modules         = $bugModules;
         $this->view->productBugList  = $productBugList;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->products        = $products;

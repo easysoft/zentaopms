@@ -21,19 +21,23 @@ window.renderRowData = function($row, index, row)
     /* Show the modules of current bug's product. */
     if(modules[row.product] != undefined && modules[row.product][row.branch] != undefined)
     {
-        let bugModules = modules[row.product][row.branch];
-        let $module    = $row.find('[data-name="module"] .picker').zui('picker');
-        $module.render({items: bugModules});
-        $module.$.changeState({value: ''});
+        $row.find('[data-name="module"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let bugModules = modules[row.product][row.branch];
+            let $module    = info[0];
+            $module.render({items: bugModules});
+        });
     }
 
     /* Show the bugs of current bug's product. */
     if(productBugList[row.product] != undefined && productBugList[row.product][row.branch] != undefined)
     {
         let duplicateBugs = productBugList[row.product][row.branch];
-        let $duplicateBug = $row.find('[data-name="duplicateBug"] .picker').zui('picker');
-        $duplicateBug.render({items: duplicateBugs});
-        $duplicateBug.$.changeState({value: ''});
+        $row.find('[data-name="duplicateBug"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $duplicateBug = info[0];
+            $duplicateBug.render({items: duplicateBugs});
+        });
     }
 
     /* Change assigner. */
