@@ -58,7 +58,8 @@
         reloadApp:      function(_code, url){loadPage(url);},
         openApp:        function(url, options){loadPage(url, options);},
         goBack:         function(){history.go(-1);},
-        changeAppsLang: changeAppLang
+        changeAppsLang: changeAppLang,
+        changeAppsTheme: changeAppTheme
     }, parent.window.$.apps);
 
     const renderMap =
@@ -896,6 +897,22 @@
     }
 
     /**
+     * Change current app theme.
+     * @param {string} lang
+     */
+    function changeAppTheme(theme)
+    {
+        const classList = $('html').attr('class').split(' ').filter(x => x.length && !x.startsWith('theme-'));
+        classList.push('theme-' + theme);
+        $('html').attr('class', classList.join(' '));
+        const $theme = $('#zuiTheme');
+        const oldPath = $theme.attr('href').split('/');
+        oldPath.pop();
+        oldPath.push(theme + '.css');
+        $theme.attr('href', oldPath.join('/'));
+    }
+
+    /**
      * Select UI language.
      * @param {string} lang
      */
@@ -906,7 +923,18 @@
         $.apps.changeAppsLang(lang);
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, changeAppLang});
+    /**
+     * Select UI theme.
+     * @param {string} lang
+     */
+    function selectTheme(theme)
+    {
+        $.cookie.set('theme', theme, {expires: config.cookieLife, path: config.webRoot});
+        $.ajaxSendScore('selectTheme');
+        $.apps.changeAppsTheme(theme);
+    }
+
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
