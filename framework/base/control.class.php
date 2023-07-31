@@ -949,7 +949,7 @@ class baseControl
             if(empty($methodName)) $methodName = $this->methodName;
             $modulePath   = $this->app->getModulePath($this->appName, $moduleName);
             $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
-            $mainViewFile = $modulePath . 'ui' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
+            $mainViewFile = $modulePath . 'ui' . DS . $this->devicePrefix . strtolower($methodName) . '.' . $viewType . '.php';
             if(file_exists($mainViewFile)) return $this->render($moduleName, $methodName);
         }
 
