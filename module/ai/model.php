@@ -1073,7 +1073,7 @@ class aiModel extends model
             }
             else
             {
-                $vars[] = 0;
+                $vars[] = '';
             }
         }
         $linkVars = vsprintf($varsConfig->format, $vars);
