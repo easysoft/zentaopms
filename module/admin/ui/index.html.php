@@ -1,0 +1,381 @@
+<?php
+declare(strict_types=1);
+/**
+ * The index view file of admin module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Gang Liu <liugang@easycorp.ltd>
+ * @package     admin
+ * @link        https://www.zentao.net
+ */
+
+namespace zin;
+
+/* Get latest data from zentao.net if ZenTaoPMS has internet and the user is admin. */
+jsVar('hasInternet', $zentaoData->hasData || $hasInternet);
+jsVar('isAdminUser', $this->app->user->admin);
+
+$buildHeader = function(string $title, string $actionUrl = '', string $titleIcon = '', string $actionLang = '', string $actionIcon = ''): h
+{
+    global $lang;
+
+    return div
+    (
+        setClass('flex justify-between items-center pl-4 h-10'),
+        div
+        (
+            setClass('panel-title'),
+            $titleIcon ? icon
+            (
+                setClass('text-lg text-primary pr-1'),
+                $titleIcon
+            ) : null,
+            $title
+        ),
+        $actionUrl ? a
+        (
+            setClass('text-gray pr-3'),
+            set::target('_blank'),
+            set::href($actionUrl),
+            $actionLang ? $actionLang : $lang->more,
+            icon($actionIcon ? $actionIcon : 'caret-right')
+        ) : null
+    );
+};
+
+$buildPluginHeader = function($name, $url): h
+{
+    return div
+    (
+        setClass('flex justify-between items-center'),
+        div
+        (
+            setClass('panel-title py-2.5'),
+            $name,
+        ),
+        a
+        (
+            //setClass('flex items-center'),
+            set::href($url),
+            set::target('_blank'),
+            icon
+            (
+                setClass('text-primary bg-primary-100 p-1'),
+                'download-alt'
+            )
+        )
+    );
+};
+
+$buildUsed = function(int $amount, string $unit = ''): array
+{
+    return array
+    (
+        $amount ? span
+        (
+            setClass('bg-lighter rounded-md text-lg mx-1 px-1 py-0.5'),
+            $amount
+        ) : null,
+        $amount ? $unit : ''
+    );
+};
+
+$settingItems = array();
+foreach($lang->admin->menuList as $menuKey => $menu)
+{
+    if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;
+
+    $link = '';
+    if(!empty($menu['link'])) $link = $menu['link'];
+    if(!empty($menu['subMenu']))
+    {
+        foreach($menu['subMenu'] as $subMenu)
+        {
+            if(!empty($subMenu['link']))
+            {
+                $link = $subMenu['link'];
+                break;
+            }
+        }
+    }
+
+    $params = explode('|', $link);
+    if(count($params) == 2) list($module, $method) = $params;
+    if(count($params) > 2)  list($label, $module, $method) = $params;
+
+    $url = $module && $method ? createLink($module, $method) : '';
+
+    $settingItems[] = div
+    (
+        setClass('pb-4 pr-4 w-1/5 h-32'),
+        col
+        (
+            setClass('setting-box cursor-pointer border border-hover rounded-md px-2 py-1 h-full'),
+            set(array('data-id' => $menuKey, 'data-url' => $url)),
+            !empty($menu['disabled']) ? set::title($lang->admin->noPriv) : null,
+            h4
+            (
+                setClass('flex my-2.5 w-full'),
+                div
+                (
+                    setClass('flex gap-1 font-bold text-md'),
+                    img(set::src("static/svg/admin-{$menuKey}.svg")),
+                    $menu['name'],
+                    a
+                    (
+                        setClass('text-gray'),
+                        set::href($config->admin->helpURL[$menuKey]),
+                        set::title($lang->help),
+                        set::target('_blank'),
+                        icon('help'),
+                    )
+                ),
+            ),
+            p
+            (
+                setClass('overflow-hidden text-left text-gray pb-4 h-12 leading-6'),
+                set::title($menu['desc']),
+                $menu['desc']
+            )
+        )
+    );
+}
+
+$pluginItems = array();
+if($zentaoData->plugins)
+{
+    foreach($zentaoData->plugins as $plugin)
+    {
+        $pluginDesc = preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->abstract));
+
+        $pluginItems[] = div
+        (
+            setClass('pr-4 pb-4 w-1/3 h-32'),
+            div
+            (
+                setClass('border rounded-md px-3 py-2'),
+                $buildPluginHeader($plugin->name, $plugin->viewLink),
+                div
+                (
+                    setClass('overflow-hidden text-gray h-12 leading-6'),
+                    set::title($pluginDesc),
+                    $pluginDesc
+                )
+            )
+        );
+    }
+}
+
+$classItems = array();
+if($zentaoData->classes)
+{
+    foreach($zentaoData->classes as $class)
+    {
+        $classItems[] = a
+        (
+            setClass('border border-hover rounded-md mr-4 mb-4 p-1 w-1/3'),
+            set::href($class->viewLink),
+            set::target('_blank'),
+            img
+            (
+                set::src($class->image)
+            ),
+            div
+            (
+                setClass('overflow-hidden text-md text-center font-bold text-black mb-1.5 p-1 h-6'),
+                $class->name
+            )
+        );
+    }
+}
+
+$dynamicItems = array();
+foreach($zentaoData->dynamics as $dynamic)
+{
+    $dynamicItems[] = div
+    (
+        setClass('relative flex justify-between border-t px-4 py-3 h-18'),
+        div
+        (
+            setClass('overflow-hidden h-12 leading-normal'),
+            set::title($dynamic->title),
+            icon
+            (
+                setClass('text-lg text-primary pr-1'),
+                'horn'
+            ),
+            a
+            (
+                setClass('text-black'),
+                set::href($dynamic->link),
+                set::target('_blank'),
+                $dynamic->title
+            )
+        ),
+        div
+        (
+            setClass('absolute nowrap right-3 bottom-3 pl-2.5 pr-3'),
+            substr($dynamic->addedDate, 0, 10)
+        )
+    );
+}
+
+$patchItems = array();
+foreach($zentaoData->patches as $patch)
+{
+    $patchItems[] = div
+    (
+        setClass('border-t pt-2.5 pb-3 px-4'),
+        $buildPluginHeader($patch->name, $patch->viewLink),
+        div
+        (
+            setClass('overflow-hidden h-10'),
+            $patch->desc
+        )
+    );
+}
+
+$upgradeItems = array();
+foreach(array('biz', 'max') as $edition)
+{
+    $featureItems = array();
+    foreach($lang->admin->productFeature[$edition] as $feature)
+    {
+        $featureItems[] = div
+        (
+            setClass('flex items-center my-1 pl-5 h-5'),
+            div
+            (
+                setClass('rounded-full light mr-2 w-2 h-2')
+            ),
+            $feature
+        );
+    }
+
+    $upgradeItems[] = div
+    (
+        setClass('border-t py-1.5'),
+        $buildHeader($lang->admin->{$edition . 'Tag'} , $config->admin->apiRoot, 'zentao', $lang->admin->productDetail),
+        $featureItems
+    );
+}
+
+div
+(
+    set::style(array('width' => '70%')),
+    div
+    (
+        setID('settings'),
+        setClass('bg-white rounded-md mb-4'),
+        $buildHeader($lang->admin->setting),
+        div
+        (
+            setClass('flex flex-wrap pl-4'),
+            on::click('redirectSetting'),
+            $settingItems
+        )
+    ),
+    $pluginItems ? div
+    (
+        setID('plugin'),
+        setClass('bg-white rounded-md mb-4'),
+        $buildHeader($lang->admin->pluginRecommendation, $config->admin->extensionURL),
+        div
+        (
+            setClass('flex flex-wrap pl-4'),
+            $pluginItems
+        )
+    ) : null,
+    div
+    (
+        setClass('flex'),
+        div
+        (
+            setClass('bg-white rounded-md mb-4 w-1/3'),
+            $buildHeader($lang->admin->officialAccount),
+            div
+            (
+                setClass('flex px-4'),
+                img
+                (
+                    setClass('w-1/3'),
+                    set::src('static/images/wechat.jpg')
+                ),
+                div
+                (
+                    setClass('pl-2 w-2/3'),
+                    $lang->admin->followUs,
+                    div
+                    (
+                        setClass('text-gray'),
+                        $lang->admin->followUsContent
+                    )
+                )
+            ),
+            div
+            (
+                setClass('px-4 pb-4'),
+                substr($lang->admin->notice->register, 0, strpos($lang->admin->notice->register, '%s')),
+                a
+                (
+                    set::href(inlink('register')),
+                    $lang->admin->registerNotice->submitHere
+                ),
+                substr($lang->admin->notice->register, strpos($lang->admin->notice->register, '%s') + 2),
+            )
+        ),
+        div
+        (
+            setClass('bg-white rounded-md ml-4 mb-4 w-2/3'),
+            $buildHeader($lang->admin->publicClass, $config->admin->classURL),
+            div
+            (
+                setClass('flex pl-4'),
+                $classItems
+            )
+        )
+    )
+);
+
+div
+(
+    setClass('bg-white rounded-md ml-4 px-4'),
+    set::style(array('width' => '30%')),
+    div
+    (
+        setClass('flex justify-between items-center h-14'),
+        div
+        (
+            setClass('panel-title text-md py-2.5'),
+            $lang->admin->zentaoInfo
+        ),
+        div
+        (
+            setStyle(array('letter-spacing' => '1px')),
+            $lang->admin->zentaoUsed,
+            $buildUsed((int)$dateUsed->year, $lang->year),
+            $buildUsed((int)$dateUsed->month, $lang->admin->mon),
+            $buildUsed((int)$dateUsed->day, $lang->admin->day)
+        )
+    ),
+    div
+    (
+        setClass('border rounded-md mb-4'),
+        $buildHeader($lang->admin->updateDynamics, $config->admin->dynamicURL),
+        $dynamicItems,
+    ),
+    div
+    (
+        setClass('border rounded-md mb-4'),
+        $buildHeader($lang->admin->updatePatch, $config->admin->patchURL),
+        $patchItems
+    ),
+    div
+    (
+        setClass('border rounded-md mb-4'),
+        $buildHeader($lang->admin->upgradeRecommend),
+        $upgradeItems
+    )
+);
+
+render();
