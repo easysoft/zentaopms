@@ -947,7 +947,7 @@ class storyModel extends model
                 ->where('t1.product')->eq($oldStory->product)
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetch();
-            $_POST['product'] = !$storyProjectID->hasProduct ? $oldStory->product : $this->post->product;
+            $_POST['product'] = ($storyProjectID and !$storyProjectID->hasProduct) ? $oldStory->product : $this->post->product;
         }
 
         $story = fixer::input('post')
