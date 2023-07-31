@@ -83,6 +83,17 @@ function onChangeStoreAppType()
     }
     $('#createStoreAppForm').attr('action', $.createLink('instance', 'install', 'appID=' + storeApp));
 
+    var externalApps = ['GitLab', 'Gitea', 'Gogs', 'Jenkins', 'SonarQube'];
+    var storeAppName = apps[storeApp];
+    if(externalApps.indexOf(storeAppName) !== -1)
+    {
+        $('#storetypeexternal').prop('disabled', false);
+    }
+    else
+    {
+        $('#storetypeexternal').prop('disabled', true);
+    }
+
     toggleLoading('#app_version', true);
     toggleLoading('#dbService', true);
     $.get($.createLink('space', 'getStoreAppInfo', 'appID=' + storeApp), function(response)
@@ -121,12 +132,12 @@ function onChangeDbType(event)
     const dbType = $(event.target).val();
     if(dbType == 'sharedDB')
     {
-        $('#dbService').removeClass('hidden');
+        $('div.dbService').removeClass('hidden');
         $('[name=dbService]').prop('disabled', false);
     }
     else
     {
-        $('#dbService').addClass('hidden');
+        $('div.dbService').addClass('hidden');
         $('[name=dbService]').prop('disabled', true);
     }
 }
