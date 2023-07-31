@@ -23,16 +23,13 @@
     <div class='center-wrapper'>
       <div class='center-content'>
         <div>
-          <h4><?php echo $lang->ai->prompts->assignModel;?></h4>
+          <h4><?php echo $lang->ai->prompts->assignRole;?></h4>
           <div class='content-row'>
             <div class='input-label'><span><?php echo $lang->ai->prompts->model;?></span></div>
             <div class='input mw-400px'>
               <?php echo html::select('model', $lang->ai->models->typeList, current(array_keys($lang->ai->models->typeList)), "class='form-control chosen' required");?>
             </div>
           </div>
-        </div>
-        <div>
-          <h4><?php echo $lang->ai->prompts->assignRole;?></h4>
           <div class='content-row'>
             <div class='input-label'><span><?php echo $lang->ai->prompts->role;?></span></div>
             <div class='input mw-400px'><?php echo html::input('role', $prompt->role, "class='form-control' placeholder='{$lang->ai->prompts->rolePlaceholder}'");?></div>

@@ -100,7 +100,6 @@ $lang->ai->prompts->setTargetForm    = 'Set Target Form';
 $lang->ai->prompts->finalize         = 'Finalize';
 
 /* Role assigning. */
-$lang->ai->prompts->assignModel      = 'Select Model';
 $lang->ai->prompts->model            = 'Model';
 $lang->ai->prompts->role             = 'Role';
 $lang->ai->prompts->characterization = 'Characterization';

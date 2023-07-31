@@ -100,7 +100,6 @@ $lang->ai->prompts->setTargetForm    = '结果处理';
 $lang->ai->prompts->finalize         = '准备发布';
 
 /* Role assigning. */
-$lang->ai->prompts->assignModel      = '指定语言模型';
 $lang->ai->prompts->model            = '语言模型';
 $lang->ai->prompts->role             = '角色';
 $lang->ai->prompts->characterization = '角色描述';
