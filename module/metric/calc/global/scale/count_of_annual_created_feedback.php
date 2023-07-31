@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增反馈数。
- * count_of_annual_created_feedback.
+ * Count of annual created feedback.
  *
  * 范围：global
  * 对象：feedback

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的一级项目集总数。
- * count_of_top_program.
+ * Count of top program.
  *
  * 范围：global
  * 对象：program

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已修复Bug数。
- * count of fixed bug.
+ * Count of fixed bug.
  *
  * 范围：global
  * 对象：bug

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的进行中执行数。
- * count_of_doing_execution.
+ * Count of doing execution.
  *
  * 范围：global
  * 对象：execution

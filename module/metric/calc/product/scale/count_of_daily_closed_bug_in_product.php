@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的每日关闭Bug数。
- *
+ * Count of daily closed bug in product.
  * 范围：product
  * 对象：Bug
  * 目的：scale

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的研发需求交付率。
- * rate_of_delivered_story.
+ * Rate of delivered story.
  *
  * 范围：global
  * 对象：story

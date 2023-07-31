@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度投入总人天。
- * day_of_annual_effort.
+ * Day of annual effort.
  *
  * 范围：global
  * 对象：effort

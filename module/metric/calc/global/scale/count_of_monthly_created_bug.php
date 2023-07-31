@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的月度新增Bug数。
- * count_of_monthly_created_bug.
+ * Count of monthly created bug.
  *
  * 范围：global
  * 对象：bug

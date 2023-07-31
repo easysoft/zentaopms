@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的未开始项目数。
- * count_of_wait_project.
+ * Count of wait project.
  *
  * 范围：global
  * 对象：project

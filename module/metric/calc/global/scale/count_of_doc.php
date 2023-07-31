@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的文档总数。
- * count_of_doc.
+ * Count of doc.
  *
  * 范围：global
  * 对象：doc

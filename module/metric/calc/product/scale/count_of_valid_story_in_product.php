@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的有效研发需求数。
- * count_of_valid_story_in_product.
+ * Count of valid story in product.
  *
  * 范围：product
  * 对象：story

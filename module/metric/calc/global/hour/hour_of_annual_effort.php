@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度日志记录的工时总数。
- * hour_of_annual_effort.
+ * Hour of annual effort.
  *
  * 范围：global
  * 对象：effort

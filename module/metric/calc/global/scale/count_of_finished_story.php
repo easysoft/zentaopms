@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已完成研发需求数。
- * count_of_finished_story.
+ * Count of finished story.
  *
  * 范围：global
  * 对象：story

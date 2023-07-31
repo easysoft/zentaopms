@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的未关闭Bug数。
- * count_of_unclosed_bug.
+ * Count of unclosed bug.
  *
  * 范围：global
  * 对象：bug

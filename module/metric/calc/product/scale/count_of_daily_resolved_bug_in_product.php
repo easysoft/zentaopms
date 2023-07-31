@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的每日解决Bug数。
- *
+ * Count of daily resolved bug in product.
  * 范围：product
  * 对象：Bug
  * 目的：scale

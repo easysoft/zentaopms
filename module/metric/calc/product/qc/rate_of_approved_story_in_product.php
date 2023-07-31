@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的研发需求评审通过率。
- * rate_of_approved_story_in_product.
+ * Rate of approved story in product.
  *
  * 范围：product
  * 对象：story

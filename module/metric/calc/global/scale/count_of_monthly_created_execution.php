@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的月度新增执行数。
- * count_of_monthly_created_execution.
+ * Count of monthly created execution.
  *
  * 范围：global
  * 对象：execution

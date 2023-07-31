@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增执行数。
- * count_of_annual_created_execution.
+ * Count of annual created execution.
  *
  * 范围：global
  * 对象：execution

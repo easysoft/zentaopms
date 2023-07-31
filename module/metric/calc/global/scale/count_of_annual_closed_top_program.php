@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度关闭一级项目集数。
- * count_of_annual_closed_top_program.
+ * Count of annual closed top program.
  *
  * 范围：global
  * 对象：program

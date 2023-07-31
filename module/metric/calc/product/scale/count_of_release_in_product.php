@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的发布总数。
- *
+ * Count of release in product.
  * 范围：product
  * 对象：release
  * 目的：scale

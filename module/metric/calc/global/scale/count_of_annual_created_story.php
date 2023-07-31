@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增研发需求数。
- * count_of_annual_created_story.
+ * Count of annual created story.
  *
  * 范围：global
  * 对象：story

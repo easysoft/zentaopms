@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已完成计划数。
- * count_of_finished_productplan.
+ * Count of finished productplan.
  *
  * 范围：global
  * 对象：productplan

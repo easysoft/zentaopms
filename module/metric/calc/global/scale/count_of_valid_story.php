@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的有效研发需求数。
- * count_of_valid_story.
+ * Count of valid story.
  *
  * 范围：global
  * 对象：story

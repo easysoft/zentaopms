@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已关闭项目数。
- * count_of_closed_project.
+ * Count of closed project.
  *
  * 范围：global
  * 对象：project

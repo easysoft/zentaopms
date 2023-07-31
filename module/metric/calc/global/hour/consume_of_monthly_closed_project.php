@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的月度关闭项目的任务消耗工时数。
- * consume_of_monthly_closed_project.
+ * Consume of monthly closed project.
  *
  * 范围：global
  * 对象：project

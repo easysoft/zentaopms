@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的已关闭研发需求数。
- * .
+ * Count of closed story in product.
  *
  * 范围：product
  * 对象：story

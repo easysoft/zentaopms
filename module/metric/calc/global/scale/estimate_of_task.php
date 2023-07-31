@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的任务预计工时数。
- * estimate_of_task.
+ * Estimate of task.
  *
  * 范围：global
  * 对象：task

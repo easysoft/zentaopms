@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的Bug总数。
- * count_of_bug.
+ * Count of bug.
  *
  * 范围：global
  * 对象：bug

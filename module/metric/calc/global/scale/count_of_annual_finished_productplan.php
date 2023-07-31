@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度完成计划数。
- * count_of_annual_finished_productplan.
+ * Count of annual finished productplan.
  *
  * 范围：global
  * 对象：productplan

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已关闭研发需求数。
- * count_of_closed_story.
+ * Count of closed story.
  *
  * 范围：global
  * 对象：story

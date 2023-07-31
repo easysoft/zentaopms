@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已关闭任务数。
- * count_of_closed_task.
+ * Count of closed task.
  *
  * 范围：global
  * 对象：task

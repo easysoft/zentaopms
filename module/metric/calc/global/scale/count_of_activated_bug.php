@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的激活Bug数。
- * count_of_activated_bug.
+ * Count of activated bug.
  *
  * 范围：global
  * 对象：bug

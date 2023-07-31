@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的任务总数。
- * count_of_task.
+ * Count of task.
  *
  * 范围：global
  * 对象：task

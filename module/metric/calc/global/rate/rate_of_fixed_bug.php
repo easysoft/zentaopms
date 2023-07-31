@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的Bug修复率。
- * rate of fixed bug.
+ * Rate of fixed bug.
  *
  * 范围：global
  * 对象：bug

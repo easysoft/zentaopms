@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的已修复Bug数。
- * count of fixed bug in product.
+ * Count of fixed bug in product.
  *
  * 范围：product
  * 对象：bug

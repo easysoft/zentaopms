@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度完成研发需求数。
- * .
+ * Count of annual finished story in product.
  *
  * 范围：product
  * 对象：story

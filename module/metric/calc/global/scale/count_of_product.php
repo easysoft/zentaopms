@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的产品总数。
- * count_of_product.
+ * Count of product.
  *
  * 范围：global
  * 对象：product

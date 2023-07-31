@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的进行中项目数。
- * count_of_doing_project.
+ * Count of doing project.
  *
  * 范围：global
  * 对象：project

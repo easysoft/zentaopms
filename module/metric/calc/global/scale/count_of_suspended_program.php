@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的所有层级已挂起项目集数。
- * count_of_suspended_program.
+ * Count of suspended program.
  *
  * 范围：global
  * 对象：program

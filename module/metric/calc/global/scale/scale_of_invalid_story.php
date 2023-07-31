@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的无效研发需求规模数。
- * scale_of_invalid_story.
+ * Scale of invalid story.
  *
  * 范围：global
  * 对象：story

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度已关闭项目投入总人天。
- * day of annual closed project.
+ * Day of annual closed project.
  *
  * 范围：global
  * 对象：project

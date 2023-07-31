@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已交付研发需求数。
- * count_of_delivered_story.
+ * Count of delivered story.
  *
  * 范围：global
  * 对象：story

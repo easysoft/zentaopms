@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度关闭项目数。
- * count_of_annual_closed_project.
+ * Count of annual closed project.
  *
  * 范围：global
  * 对象：project

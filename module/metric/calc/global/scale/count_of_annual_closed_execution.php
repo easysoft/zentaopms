@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度关闭执行数。
- * count_of_annual_closed_execution.
+ * Count of annual closed execution.
  *
  * 范围：global
  * 对象：execution

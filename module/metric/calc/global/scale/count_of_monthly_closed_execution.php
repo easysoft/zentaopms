@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的月度关闭执行数。
- * count_of_monthly_closed_execution.
+ * Count of monthly closed execution.
  *
  * 范围：global
  * 对象：execution

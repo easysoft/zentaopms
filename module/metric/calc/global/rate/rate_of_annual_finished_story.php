@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度研发需求完成率。
- * rate_of_annual_finished_story.
+ * Rate of annual finished story.
  *
  * 范围：global
  * 对象：story

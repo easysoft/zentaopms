@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的所有层级已关闭项目集数。
- * count_of_closed_program.
+ * Count of closed program.
  *
  * 范围：global
  * 对象：program

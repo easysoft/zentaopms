@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的正常的产品数。
- * count_of_normal_product.
+ * Count of normal product.
  *
  * 范围：global
  * 对象：product

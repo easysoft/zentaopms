@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度修复Bug数。
- * count of annual fixed bug in product.
+ * Count of annual fixed bug in product.
  *
  * 范围：product
  * 对象：Bug

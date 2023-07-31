@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度关闭项目的任务预计工时数。
- * estimate_of_annual_closed_project.
+ * Estimate of annual closed project.
  *
  * 范围：global
  * 对象：project

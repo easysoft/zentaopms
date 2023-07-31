@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的月度已交付研发需求数。
- * .
+ * Count of monthly delivered story in product.
  *
  * 范围：product
  * 对象：story

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度新增发布数。
- * .
+ * Count of annual created release in product.
  *
  * 范围：product
  * 对象：release

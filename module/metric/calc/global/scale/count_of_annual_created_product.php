@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增产品数。
- * count_of_annual_created_product.
+ * Count of annual created product.
  *
  * 范围：global
  * 对象：product

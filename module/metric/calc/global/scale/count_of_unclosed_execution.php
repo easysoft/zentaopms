@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的未关闭执行数。
- * count_of_unclosed_execution.
+ * Count of unclosed execution.
  *
  * 范围：global
  * 对象：execution

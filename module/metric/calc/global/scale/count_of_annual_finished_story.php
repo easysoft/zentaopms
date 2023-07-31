@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度完成研发需求数。
- * count_of_annual_finished_story.
+ * Count of annual finished story.
  *
  * 范围：global
  * 对象：story

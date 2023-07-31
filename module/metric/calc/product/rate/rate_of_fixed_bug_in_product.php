@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的Bug修复率。
- * rate of fixed bug in product.
+ * Rate of fixed bug in product.
  *
  * 范围：product
  * 对象：Bug

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的所有研发需求规模数。
- * scale_of_story.
+ * Scale of story.
  *
  * 范围：global
  * 对象：story

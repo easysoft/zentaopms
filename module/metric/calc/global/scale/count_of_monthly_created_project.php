@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的月度新增项目数。
- * count_of_monthly_created_project.
+ * Count of monthly created project.
  *
  * 范围：global
  * 对象：project

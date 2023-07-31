@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度完成执行中执行的延期关闭率。
- * rate of delayed closed execution which annual finished.
+ * Rate of delayed closed execution which annual finished.
  *
  * 范围：global
  * 对象：execution

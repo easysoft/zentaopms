@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度交付研发需求数。
- * count_of_annual_delivered_story.
+ * Count of annual delivered story.
  *
  * 范围：global
  * 对象：story

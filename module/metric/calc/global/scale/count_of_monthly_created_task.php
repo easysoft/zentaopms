@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的月度新增任务数。
- * count_of_monthly_created_task.
+ * Count of monthly created task.
  *
  * 范围：global
  * 对象：task

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的月度完成任务数。
- * count_of_monthly_finished_task.
+ * Count of monthly finished task.
  *
  * 范围：global
  * 对象：task

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的月度新增发布数。
- * count_of_monthly_created_release.
+ * Count of monthly created release.
  *
  * 范围：global
  * 对象：release

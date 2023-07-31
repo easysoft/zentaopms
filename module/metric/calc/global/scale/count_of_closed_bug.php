@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已关闭Bug总数。
- * count_of_closed_bug.
+ * Count of closed bug.
  *
  * 范围：global
  * 对象：bug

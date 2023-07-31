@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的计划总数。
- * count_of_productplan.
+ * Count of productplan.
  *
  * 范围：global
  * 对象：productplan

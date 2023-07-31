@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的激活Bug数。
- * Count of active bug in product.
+ * Count of activated bug in product.
  *
  * 范围：product
  * 对象：bug

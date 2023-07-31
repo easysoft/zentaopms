@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增项目数。
- * count_of_annual_created_project.
+ * Count of annual created project.
  *
  * 范围：global
  * 对象：project

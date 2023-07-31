@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的所有层级进行中项目集数。
- * count_of_doing_program.
+ * Count of doing program.
  *
  * 范围：global
  * 对象：program

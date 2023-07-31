@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度启动项目中按期完成项目数。
- * count of undelayed finished project which annual started.
+ * Count of undelayed finished project which annual started.
  *
  * 范围：global
  * 对象：project

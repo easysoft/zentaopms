@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的所有层级未开始项目集数。
- * count_of_wait_program.
+ * Count of wait program.
  *
  * 范围：global
  * 对象：program

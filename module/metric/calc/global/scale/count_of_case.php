@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的用例总数。
- * count_of_case.
+ * Count of case.
  *
  * 范围：global
  * 对象：testcase

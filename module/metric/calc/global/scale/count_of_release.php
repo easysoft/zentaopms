@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的发布总数。
- * count_of_release.
+ * Count of release.
  *
  * 范围：global
  * 对象：release

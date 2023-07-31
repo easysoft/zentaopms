@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的项目总数。
- * count_of_project.
+ * Count of project.
  *
  * 范围：global
  * 对象：project

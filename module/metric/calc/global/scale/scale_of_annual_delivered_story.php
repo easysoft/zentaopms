@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度交付研发需求规模数。
- * scale_of_annual_delivered_story.
+ * Scale of annual delivered story.
  *
  * 范围：global
  * 对象：story

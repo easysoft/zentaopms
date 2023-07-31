@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的研发需求总数。
- * count_of_story.
+ * Count of story.
  *
  * 范围：global
  * 对象：story

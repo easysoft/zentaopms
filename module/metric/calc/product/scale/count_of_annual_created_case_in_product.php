@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度新增用例数。
- * .
+ * Count of annual created case in product.
  *
  * 范围：product
  * 对象：testcase

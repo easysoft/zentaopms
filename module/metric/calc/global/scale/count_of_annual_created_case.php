@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增用例数。
- * count_of_annual_created_case.
+ * Count of annual created case.
  *
  * 范围：global
  * 对象：testcase

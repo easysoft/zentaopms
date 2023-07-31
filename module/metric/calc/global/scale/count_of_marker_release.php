@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的里程碑发布总数。
- * count_of_marker_release.
+ * Count of marker release.
  *
  * 范围：global
  * 对象：release

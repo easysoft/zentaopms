@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增发布数。
- * count_of_annual_created_release.
+ * Count of annual created release.
  *
  * 范围：global
  * 对象：release

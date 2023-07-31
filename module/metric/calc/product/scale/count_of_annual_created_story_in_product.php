@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度新增研发需求数。
- * .
+ * Count of annual created story in product.
  *
  * 范围：product
  * 对象：story

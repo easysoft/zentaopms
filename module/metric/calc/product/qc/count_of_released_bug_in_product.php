@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的发布上线后的Bug数。
- * .
+ * Count of released bug in product.
  *
  * 范围：product
  * 对象：release

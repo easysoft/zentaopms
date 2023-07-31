@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度修复Bug数。
- * count of annual fixed bug.
+ * Count of annual fixed bug.
  *
  * 范围：global
  * 对象：bug

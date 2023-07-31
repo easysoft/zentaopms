@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的月度关闭研发需求规模数。
- * scale_of_monthly_closed_story.
+ * Scale of monthly closed story.
  *
  * 范围：global
  * 对象：story

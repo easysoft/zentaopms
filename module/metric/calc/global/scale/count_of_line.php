@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的产品线总数。
- * count_of_line.
+ * Count of line.
  *
  * 范围：global
  * 对象：line

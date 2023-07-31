@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已挂起项目数。
- * count_of_suspended_project.
+ * Count of suspended project.
  *
  * 范围：global
  * 对象：project

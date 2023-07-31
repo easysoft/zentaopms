@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度完成任务数。
- * count_of_annual_finished_task.
+ * Count of annual finished task.
  *
  * 范围：global
  * 对象：task

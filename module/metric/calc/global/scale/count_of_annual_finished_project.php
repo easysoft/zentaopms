@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度完成项目数。
- * count_of_annual_finished_project.
+ * Count of annual finished project.
  *
  * 范围：global
  * 对象：project

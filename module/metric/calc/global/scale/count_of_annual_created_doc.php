@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增文档个数。
- * count_of_annual_created_doc.
+ * Count of annual created doc.
  *
  * 范围：global
  * 对象：doc

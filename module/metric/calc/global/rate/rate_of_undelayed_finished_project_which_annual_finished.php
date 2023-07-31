@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度完成项目中项目的按期完成率。
- * rate of undelayed finished project which annual finished.
+ * Rate of undelayed finished project which annual finished.
  *
  * 范围：global
  * 对象：project

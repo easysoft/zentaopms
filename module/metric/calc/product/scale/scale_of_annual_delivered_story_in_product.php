@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度已交付研发需求规模数。
- * .
+ * Scale of annual delivered story in product.
  *
  * 范围：product
  * 对象：story

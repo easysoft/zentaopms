@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的研发需求交付率。
- * .
+ * Rate of delivery story in product.
  *
  * 范围：product
  * 对象：story

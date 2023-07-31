@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已完成执行中延期完成执行数。
- * count of delayed finished execution which finished.
+ * Count of delayed finished execution which finished.
  *
  * 范围：global
  * 对象：execution

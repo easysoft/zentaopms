@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度新增有效Bug数。
- * .
+ * Count of annual created effective bug in product.
  *
  * 范围：product
  * 对象：Bug

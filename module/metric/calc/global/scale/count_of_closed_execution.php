@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已关闭执行数。
- * count_of_closed_execution.
+ * Count of closed execution.
  *
  * 范围：global
  * 对象：execution

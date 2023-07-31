@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的未完成计划数。
- * count_of_unfinished_productplan.
+ * Count of unfinished productplan.
  *
  * 范围：global
  * 对象：productplan

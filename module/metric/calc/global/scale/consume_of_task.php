@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的任务消耗工时数。
- * consume_of_task.
+ * Consume of task.
  *
  * 范围：global
  * 对象：task

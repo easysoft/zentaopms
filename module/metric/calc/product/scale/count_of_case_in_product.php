@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的用例总数。
- *
+ * Count of case in product.
  * 范围：product
  * 对象：testcase
  * 目的：scale

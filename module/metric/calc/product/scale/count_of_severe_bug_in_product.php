@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的严重程度为1、2级的Bug数。
- * .
+ * Count of severe bug in product.
  *
  * 范围：product
  * 对象：Bug

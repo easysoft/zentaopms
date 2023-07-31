@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的反馈总数。
- * count_of_feedback.
+ * Count of feedback.
  *
  * 范围：global
  * 对象：feedback

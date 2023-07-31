@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的完成项目中延期完成项目数。
- * count of delayed finished project which finished.
+ * Count of delayed finished project which finished.
  *
  * 范围：global
  * 对象：project

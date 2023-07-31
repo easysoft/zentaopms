@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增任务数。
- * count_of_annual_created_task.
+ * Count of annual created task.
  *
  * 范围：global
  * 对象：task

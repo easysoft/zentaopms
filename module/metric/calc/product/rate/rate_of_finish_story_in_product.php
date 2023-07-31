@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的研发需求完成率。
- * .
+ * Rate of finish story in product.
  *
  * 范围：product
  * 对象：story

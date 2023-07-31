@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度关闭研发需求规模数。
- * scale_of_annual_closed_story.
+ * Scale of annual closed story.
  *
  * 范围：global
  * 对象：story

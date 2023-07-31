@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度完成计划数。
- * count of annual finished productplan in product.
+ * Count of annual finished productplan in product.
  * 范围：product
  * 对象：productplan
  * 目的：scale

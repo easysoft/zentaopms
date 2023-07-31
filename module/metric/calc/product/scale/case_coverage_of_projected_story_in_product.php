@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的已立项研发需求的用例覆盖率
- * case coverage of projected story in product.
+ * Case coverage of projected story in product.
  *
  * 范围：product
  * 对象：story

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度添加用户数。
- * count_of_annual_created_user.
+ * Count of annual created user.
  *
  * 范围：global
  * 对象：user

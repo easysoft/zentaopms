@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度关闭计划数。
- * count_of_annual_closed_productplan.
+ * Count of annual closed productplan.
  *
  * 范围：global
  * 对象：productplan

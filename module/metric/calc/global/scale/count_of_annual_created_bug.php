@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增Bug数。
- * count_of_annual_created_bug.
+ * Count of annual created bug.
  *
  * 范围：global
  * 对象：bug

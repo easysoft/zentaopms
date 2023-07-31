@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的年度新增计划数。
- * count of annual created productplan in product.
+ * Count of annual created productplan in product.
  *
  * 范围：product
  * 对象：productplan
@@ -11,6 +11,7 @@
  * 描述：产品中创建时间为某年的计划个数求和
  * 过滤已删除的计划
  * 过滤已删除的产品
+ * 度量库：
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)

@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的计划总数。
- * count of productplan in product.
+ * Count of productplan in product.
  *
  * 范围：产品
  * 对象：计划

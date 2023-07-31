@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度结束产品数。
- * count_of_annual_closed_product.
+ * Count of annual closed product.
  *
  * 范围：global
  * 对象：product

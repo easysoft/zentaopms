@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的月度修复Bug数。
- * count of monthly fixed bug.
+ * Count of monthly fixed bug.
  *
  * 范围：global
  * 对象：bug

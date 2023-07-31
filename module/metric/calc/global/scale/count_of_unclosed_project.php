@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的未关闭项目数。
- * count_of_unclosed_project.
+ * Count of unclosed project.
  *
  * 范围：global
  * 对象：project

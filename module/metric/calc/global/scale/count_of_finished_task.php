@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的已完成任务数。
- * count_of_finished_task.
+ * Count of finished task.
  *
  * 范围：global
  * 对象：task

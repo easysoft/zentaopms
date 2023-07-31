@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的未开始执行数。
- * count_of_wait_execution.
+ * Count of wait execution.
  *
  * 范围：global
  * 对象：execution

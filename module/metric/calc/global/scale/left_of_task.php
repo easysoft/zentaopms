@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的任务剩余工时数。
- * left_of_task.
+ * Left of task.
  *
  * 范围：global
  * 对象：task

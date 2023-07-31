@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的研发完成需求的Bug密度。
- * .
+ * Bug concentration of developed story in product.
  *
  * 范围：product
  * 对象：bug

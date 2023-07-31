@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的结束的产品数。
- * count_of_closed_product.
+ * Count of closed product.
  *
  * 范围：global
  * 对象：product

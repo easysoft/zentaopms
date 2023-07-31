@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的未完成任务数。
- * count_of_unfinished_task.
+ * Count of unfinished task.
  *
  * 范围：global
  * 对象：task

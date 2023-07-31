@@ -1,7 +1,7 @@
 <?php
 /**
  * 按产品统计的研发完成的研发需求数。
- * .
+ * Count of developed story in product.
  *
  * 范围：product
  * 对象：story

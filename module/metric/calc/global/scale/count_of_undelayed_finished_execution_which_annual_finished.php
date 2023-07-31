@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度完成执行中按期完成执行数。
- * count of undelayed finished execution which annual finished.
+ * Count of undelayed finished execution which annual finished.
  *
  * 范围：global
  * 对象：execution

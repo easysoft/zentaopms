@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的年度新增计划数。
- * count_of_annual_created_productplan.
+ * Count of annual created productplan.
  *
  * 范围：global
  * 对象：productplan

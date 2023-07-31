@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的未关闭一级项目集数。
- * count_of_unclosed_top_program.
+ * Count of unclosed top program.
  *
  * 范围：global
  * 对象：program

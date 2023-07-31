@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的用户总数。
- * count_of_user.
+ * Count of user.
  *
  * 范围：global
  * 对象：user
