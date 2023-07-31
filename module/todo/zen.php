@@ -443,40 +443,29 @@ class todoZen extends todo
      * 处理批量编辑待办数据。
      * Build batch edit view.
      *
-     * @param  form      $form
+     * @param  array      $todos
      * @access protected
      * @return array
      */
-    protected function beforeBatchEdit(array $formData): array
+    protected function beforeBatchEdit(array $todos): array
     {
-        $todos      = array();
-        $todoIdList = array_keys($formData);
+        if(empty($todos)) return array();
 
-        if(!empty($todoIdList))
+        /* Initialize todos from the post data. */
+        foreach($todos as $todoID => $todo)
         {
-            /* Initialize todos from the post data. */
-            foreach($todoIdList as $todoID)
+            $todo->begin = (empty($todo->begin) || $this->post->switchTime) ? 2400 : $todo->begin;
+            $todo->end   = (empty($todo->end) || $this->post->switchTime)   ? 2400 : $todo->end;
+            if(in_array($todo->type, $this->config->todo->moduleList))
             {
-                $todo = zget($formData, $todoID, array());
-                if(empty($todo)) continue;
+                $todo->objectID = $todo->name;
+                $todo->name     = '';
+            }
 
-                if($todo->end < $todo->begin)
-                {
-                    dao::$errors["begin[{$todoID}]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
-                    continue;
-                }
-
-                $todo->name  = !in_array($todo->type, $this->config->todo->moduleList) ? $todo->name : '';
-                $todo->begin = empty($todo->begin) ? 2400 : (int)str_replace(':', '', $todo->begin);
-                $todo->end   = empty($todo->end)   ? 2400 : (int)str_replace(':', '', $todo->end);
-
-                foreach($this->config->todo->moduleList as $module)
-                {
-                    if($todo->type == $module) $todo->objectID = $todo->{$todo->type};
-                    unset($todo->$module);
-                }
-
-                $todos[$todoID] = $todo;
+            if($todo->end < $todo->begin)
+            {
+                dao::$errors["begin[{$todoID}]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+                continue;
             }
         }
 

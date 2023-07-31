@@ -10,52 +10,27 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$nameCellData = array();
+$nameItems = array();
 foreach($lang->todo->typeList as $type => $typeName)
 {
     $itemName = $type == 'story' ? 'stories' : $type . 's';
     if(empty($$itemName)) continue;
 
-    $nameCellData[] = div
-    (
-        setClass($type . '-data'),
-        control
-        (
-            setClass('inited'),
-            set::type('select'),
-            set::name($type),
-            set::items($$itemName),
-        )
-    );
+    foreach($$itemName as $key => $value) $nameItems[$type][] = array('text' => $value, 'value' => $key);
 }
 
-div
-(
-    setID('nameCellData'),
-    setClass('hidden'),
-    div
-    (
-        setClass('custom-data'),
-        control
-        (
-            setClass('inited'),
-            set::name('name'),
-        )
-    ),
-    $nameCellData,
-);
+$timeItems = array();
+foreach($times as $key => $value) $timeItems[] = array('text' => $value, 'value' => $key);
+
+jsVar('nameItems', $nameItems);
+jsVar('timeItems', $timeItems);
 
 div
 (
     setID('cycleCellData'),
     setClass('hidden'),
-    control
-    (
-        set::type('hidden'),
-        set::name('type'),
-        set::value('cycle')
-    ),
-    span($lang->todo->cycle)
+    control(set::type('hidden'), set::name('type'), set::value('cycle')),
+    div(setClass('form-control-static'), $lang->todo->cycle)
 );
 
 div
@@ -64,21 +39,8 @@ div
     setClass('hidden'),
     inputGroup
     (
-        setClass('inited'),
-        control
-        (
-            setClass('time-input'),
-            set::type('select'),
-            set::name('begin'),
-            set::items($times)
-        ),
-        control
-        (
-            setClass('time-input'),
-            set::type('select'),
-            set::name('end'),
-            set::items($times)
-        ),
+        div(setID('begin'), setClass('picker-box form-group-wrapper time-input')),
+        div(setID('end'), setClass('picker-box form-group-wrapper time-input')),
         span
         (
             setClass('input-group-addon'),
@@ -99,11 +61,13 @@ foreach(explode(',', $showFields) as $field)
 }
 formBatchPanel
 (
+    set::title($lang->todo->batchEdit),
     set::url(createLink('todo', 'batchEdit', "from=todoBatchEdit&type={$type}&userID={$userID}&status={$status}")),
     set::mode('edit'),
     set::data(array_values($editedTodos)),
     set::onRenderRow(jsRaw('renderRowData')),
     on::change('[data-name="type"]', 'setNameCell'),
+    on::click('.time-check', "window.togglePending"),
     formBatchItem
     (
         set::name('id'),
@@ -123,14 +87,14 @@ formBatchPanel
         set::name('date'),
         set::label($lang->todo->date),
         set::width('120px'),
-        set::control('date'),
+        set::control('datePicker'),
     ),
     formBatchItem
     (
         set::name('type'),
         set::label($lang->todo->type),
         set::width('100px'),
-        set::control('select'),
+        set::control('picker'),
         set::items($lang->todo->typeList),
     ),
     formBatchItem
@@ -138,7 +102,7 @@ formBatchPanel
         set::name('pri'),
         set::label($lang->todo->pri),
         set::width('60px'),
-        set::control('select'),
+        set::control('priPicker'),
         set::hidden(!isset($visibleFields['pri'])),
         set::items($lang->todo->priList),
     ),
@@ -159,7 +123,7 @@ formBatchPanel
     (
         set::name('beginAndEnd'),
         set::label($lang->todo->beginAndEnd),
-        set::width('232px'),
+        set::width('260px'),
         set::hidden(!isset($visibleFields['beginAndEnd'])),
     ),
     formBatchItem
@@ -167,7 +131,7 @@ formBatchPanel
         set::name('status'),
         set::label($lang->todo->status),
         set::width('100px'),
-        set::control('select'),
+        set::control('picker'),
         set::hidden(!isset($visibleFields['status'])),
         set::items($lang->todo->statusList)
     ),

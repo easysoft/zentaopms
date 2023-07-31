@@ -72,10 +72,6 @@ $config->todo->batchEdit->form['assignedTo'] = array('required' => false, 'type'
 $config->todo->batchEdit->form['begin']      = array('required' => false, 'type' => 'string', 'default' => '');
 $config->todo->batchEdit->form['end']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->todo->batchEdit->form['status']     = array('required' => true,  'type' => 'string');
-foreach($config->todo->moduleList as $module)
-{
-    $config->todo->batchEdit->form[$module] = array('required' => false, 'type' => 'int', 'default' => 0);
-}
 
 $config->todo->batchFinish = new stdclass();
 $config->todo->batchFinish->form = array();
