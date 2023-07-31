@@ -1705,3 +1705,11 @@ function mindmap(): mindmap
 {
     return createWg('mindmap', func_get_args());
 }
+
+/**
+ * Image cutter widget.
+ */
+function imgCutter(): imgCutter
+{
+    return createWg('imgCutter', func_get_args());
+}
