@@ -891,6 +891,34 @@ class treeModel extends model
     }
 
     /**
+     * Get project story tree menu.
+     *
+     * @access public
+     * @return array
+     */
+    public function getHostTreeMenu(): array
+    {
+        $menu = array();
+        /* tree menu. */
+        $treeMenu = array();
+        $stmt = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('type')->eq('host')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('grade_desc,id_asc')
+            ->query();
+
+        while($module = $stmt->fetch())
+        {
+            $treeMenu = $this->buildTree($module, '', 0, array('treeModel', 'createHostLink'));
+            if($module->parent == 0) $treeMenu->parent = $module->root;
+
+            $menu[] = $treeMenu;
+        }
+
+        return $menu;
+    }
+
+    /**
      * Build tree.
      *
      * @param  & $&treeMenu

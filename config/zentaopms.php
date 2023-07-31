@@ -341,6 +341,9 @@ define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
 define('TABLE_MRAPPROVAL',    '`' . $config->db->prefix . 'mrapproval`');
 
+define('TABLE_SERVERROOM',   '`' . $config->db->prefix . 'serverroom`');
+define('TABLE_ACCOUNT',      '`' . $config->db->prefix . 'account`');
+define('TABLE_HOST',         '`' . $config->db->prefix . 'host`');
 define('TABLE_REPO',         '`' . $config->db->prefix . 'repo`');
 define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY',  '`' . $config->db->prefix . 'repohistory`');
@@ -377,6 +380,10 @@ define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
 define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
 define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
 define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
+
+define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
+define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
+define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
