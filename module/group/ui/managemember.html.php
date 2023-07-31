@@ -66,7 +66,7 @@ div
                 ),
             ) : null,
             $groupUsers ? h::hr() : null,
-            formRow
+            !empty($otherUsers) ? formRow
             (
                 set::class('group-user-row'),
                 formGroup
@@ -92,9 +92,9 @@ div
                     ),
                     formHidden('foo', ''),
                 ),
-            ),
+            ) : null,
             $outsideUsers ? h::hr() : null,
-            formRow
+            !empty($outsideUsers) ? formRow
             (
                 set::class('group-user-row'),
                 formGroup
@@ -119,7 +119,7 @@ div
                         set::inline(true),
                     )
                 ),
-            ),
+            ) : null,
         )
     )
 );
