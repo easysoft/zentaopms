@@ -160,7 +160,8 @@ class formPanel extends panel
     {
         return div
         (
-            setClass('panel-body'),
+            setClass('panel-body ' . $this->prop('bodyClass')),
+            set($this->prop('bodyProps')),
             $this->buildForm()
         );
     }
