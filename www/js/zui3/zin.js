@@ -1020,6 +1020,8 @@
             if(frameElement && parent.window.$) parent.window.$(frameElement).trigger('ready.app');
         }
 
+        if(is18version && window.afterPageUpdate) window.afterPageUpdate($('body'));
+
         if(DEBUG)
         {
             if(window.zinDebug)
