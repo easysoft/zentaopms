@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的每周新增发布数。
- * count_of_weekly_created_release.
+ * Count of weekly created release.
  *
  * 范围：global
  * 对象：release

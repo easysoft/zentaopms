@@ -1,7 +1,7 @@
 <?php
 /**
  * 按全局统计的每周完成研发需求规模数。
- * scale_of_weekly_finished_story.
+ * Scale of weekly finished story.
  *
  * 范围：global
  * 对象：story

@@ -1,7 +1,7 @@
 <?php
 /**
  *  按全局统计的每周完成需求数。
- * count_of_weekly_finished_story.
+ * Count of weekly finished story.
  *
  * 范围：global
  * 对象：story
