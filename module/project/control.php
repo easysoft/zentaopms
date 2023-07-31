@@ -1190,9 +1190,10 @@ class project extends control
 
         if(!empty($_POST))
         {
+            if($type == 'byGroup') $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$group->project")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('group', "projectID={$group->project}")));
         }
 
         $this->project->setMenu($projectID);
