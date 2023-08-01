@@ -240,3 +240,5 @@ $lang->repo->typeList['performance'] = 'Performance';
 $lang->repo->typeList['security']    = 'Security';
 $lang->repo->typeList['redundancy']  = 'Redundancy';
 $lang->repo->typeList['logicError']  = 'Logic Error';
+
+$lang->repo->featureBar['maintain']['all'] = 'All';

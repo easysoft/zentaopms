@@ -20,6 +20,7 @@ formPanel
         (
             set::label($lang->system->domain->oldDomain),
             set::control('static'),
+            set::name(''),
             set::value($this->loadModel('cne')->sysDomain()),
             h::span
             (

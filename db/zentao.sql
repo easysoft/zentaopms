@@ -14010,6 +14010,8 @@ REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `typ
 ('1','0','*','*','*','moduleName=measurement&methodName=initCrontabQueue','初始化度量队列','zentao',0,'normal','2020-07-07 14:51:48'),
 ('*/5','*','*','*','*','moduleName=measurement&methodName=execCrontabQueue','执行度量队列','zentao',0,'running','2020-07-10 13:10:58');
 
+REPLACE INTO `zt_space` (`id`, `name`,`k8space`,`owner`,`default`,`createdAt`) VALUES (1, 'default space', 'quickon-app', 'qadmin', 1, current_date());
+
 -- DROP TABLE IF EXISTS `zt_pivot`;
 CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

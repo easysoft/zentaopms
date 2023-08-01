@@ -429,7 +429,7 @@ class system extends control
     {
         $domainSettings = $this->system->getDomainSettings();
         if($domainSettings->customDomain) $this->locate($this->inLink('domainView'));
-        if($domainSettings->customDomain) return print(js::locate($this->inLink('domainView')));
+        $this->locate($this->inLink('editDomain'));
     }
 
     /**

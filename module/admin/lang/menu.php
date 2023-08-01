@@ -190,7 +190,7 @@ $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$
 
 $lang->admin->menuList->platform['tabMenu']['plat']['backup'] = array('link' => "{$lang->backup->common}|system|browsebackup|");
 $lang->admin->menuList->platform['tabMenu']['plat']['dblist'] = array('link' => "{$lang->devops->dblist}|system|dblist|");
-$lang->admin->menuList->platform['tabMenu']['plat']['domain'] = array('link' => "{$lang->devops->domain}|system|configdomain|");
+$lang->admin->menuList->platform['tabMenu']['plat']['domain'] = array('link' => "{$lang->devops->domain}|system|configdomain|", 'alias' => 'editdomain,domainview');
 $lang->admin->menuList->platform['tabMenu']['plat']['oss']    = array('link' => "{$lang->devops->oss}|system|ossview|");
 
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['5']  = 'backup';
