@@ -51,6 +51,12 @@ class search extends control
         $this->view->queryID      = $queryID;
         $this->view->style        = empty($style) ? 'full' : $style;
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
+
+        if(!in_array($module, array('repo', 'mr', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'host')))
+        {
+            $_GET['zin'] = 0;
+            $this->view->formSession = $_SESSION[$module . 'Form'];
+        }
         $this->display();
     }
 

@@ -260,7 +260,6 @@ class gitlab
         if(empty($results) or isset($results->message)) return array();
 
         $blames   = array();
-        $revLine  = 0;
         $revision = '';
 
         $lineNumber = 1;
@@ -306,7 +305,7 @@ class gitlab
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
         $api    = "compare";
-        $params = array('from' => $fromRevision, 'to' => $toRevision);
+        $params = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => true);
         if($fromProject) $params['from_project_id'] = $fromProject;
 
         if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
@@ -789,7 +788,7 @@ class gitlab
             $allResults = array();
             if($multi)
             {
-                $results = commonModel::httpWithHeader($api . "&page=1");
+                $results = commonModel::http($api . "&page=1", null, array(), array(), 'data', 'GET', 30, true, false);
                 if(empty($results['header']['X-Total-Pages'])) return array();
 
                 $totalPages = $results['header']['X-Total-Pages'];
@@ -867,7 +866,6 @@ class gitlab
     public function parseLog($logs)
     {
         $parsedLogs = array();
-        $i          = 0;
         foreach($logs as $commit)
         {
             if(!isset($commit->id)) continue;
