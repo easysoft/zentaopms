@@ -22,6 +22,17 @@ CREATE TABLE IF NOT EXISTS `zt_prompt` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `zt_promptrole` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL,
+  `desc` text DEFAULT NULL,
+  `model` mediumint(8) unsigned DEFAULT NULL,
+  `role` text DEFAULT NULL,
+  `characterization` text DEFAULT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -----------------------------------------------------------------------------
 -- Privs of AI module, will need to be updated when merged with 18.x branch.
 -- TODO: Update ids of items below.

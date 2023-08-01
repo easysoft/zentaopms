@@ -378,6 +378,8 @@ define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
 define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 
 define('TABLE_PROMPT', '`' . $config->db->prefix . 'prompt`');
+define('TABLE_PROMPTROLE', '`' . $config->db->prefix . 'promptrole`');
+
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
