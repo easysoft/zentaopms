@@ -575,11 +575,11 @@ class fileModel extends model
     /**
      * Check file priv.
      *
-     * @param  int    $file
+     * @param  object  $file
      * @access public
      * @return bool
      */
-    public function checkPriv($file)
+    public function checkPriv($file): bool
     {
         if($this->app->user->admin) return true;
 
