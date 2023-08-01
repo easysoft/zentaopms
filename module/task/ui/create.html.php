@@ -14,7 +14,22 @@ namespace zin;
 
 /* ====== Preparing and processing page data ====== */
 
+$requiredFields = array();
+foreach(explode(',', $config->task->create->requiredFields) as $field)
+{
+    if($field) $requiredFields[$field] = '';
+    if($field && strpos($showFields, $field) === false) $showFields .= ',' . $field;
+}
+$hiddenStory      = (strpos(",$showFields,", ',story,') !== false and $features['story']) ? '' : 'hidden';
+$hiddenPri        = strpos(",$showFields,", ',pri,') !== false ? '' : 'hidden';
+$hiddenEstimate   = strpos(",$showFields,", ',estimate,') !== false ? '' : 'hidden';
+$hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false ? 'hidden' : '';
+$hiddenDeadline   = strpos(",$showFields,", ',deadline,')   === false ? 'hidden' : '';
+$hiddenDatePlan   = (!$hiddenEstStarted || !$hiddenDeadline) ? '' : 'hidden';
+$hiddenMailto     = strpos(",$showFields,", ',mailto,') !== false ? '' : 'hidden';
+
 /* zin: Set variables to define picker options for form. */
+jsVar('showFields', $showFields);
 jsVar('toTaskList', !empty($task->id));
 jsVar('blockID', $blockID);
 jsVar('executionID', $execution->id);
@@ -30,14 +45,6 @@ jsVar('window.lifetimeList', $lifetimeList);
 jsVar('window.attributeList', $attributeList);
 jsVar('hasProduct', $execution->hasProduct);
 jsVar('hideStory', $hideStory);
-
-$requiredFields = array();
-foreach(explode(',', $config->task->create->requiredFields) as $field)
-{
-    if($field) $requiredFields[$field] = '';
-    if($field && strpos($showFields, $field) === false) $showFields .= ',' . $field;
-}
-jsVar('showFields', $showFields);
 
 $executionBox = '';
 /* Cannot show execution field in kanban. */
@@ -204,8 +211,7 @@ if(!isAjaxRequest('modal'))
 }
 
 $customFieldConfig = array();
-$showFields    = ",{$config->task->custom->createFields},";
-$defaultFields = explode(',', $config->story->list->customCreateFields);
+$defaultFields     = explode(',', $config->story->list->customCreateFields);
 foreach($customFields as $name => $text) $customFieldConfig[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
 
 /* ====== Define the page structure with zin widgets ====== */
@@ -314,7 +320,7 @@ formPanel
     ),
     formRow
     (
-        setClass($hideStory ? 'hidden' : ''),
+        setClass($hiddenStory || $hideStory ? 'hidden' : ''),
         formGroup
         (
             set::label($lang->task->story),
@@ -393,18 +399,31 @@ formPanel
             setClass('no-background'),
             inputGroup
             (
-                $lang->task->pri,
+                span
+                (
+                    setClass("input-group-addon {$hiddenPri}"),
+                    $lang->task->pri,
+                ),
                 priPicker
                 (
+                    setClass($hiddenPri),
                     set::name('pri'),
                     set::value('3'),
                     set::items(array_filter($lang->task->priList)),
                 ),
-                $lang->task->estimateAB,
+                span
+                (
+                    setClass("input-group-addon {$hiddenEstimate}"),
+                    $lang->task->estimateAB
+                ),
                 inputControl
                 (
+                    set::class($hiddenEstimate),
                     input(set::name('estimate')),
-                    to::suffix($lang->task->suffixHour),
+                    to::suffix
+                    (
+                        $lang->task->suffixHour
+                    ),
                     set::suffixWidth(20),
                 ),
             ),
@@ -428,18 +447,26 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->task->datePlan),
+        setClass($hiddenDatePlan),
         inputGroup
         (
             datepicker
             (
+                setClass($hiddenEstStarted),
                 set::control('date'),
                 set::name('estStarted'),
                 set::value($task->estStarted),
                 set::placeholder($lang->task->estStarted),
             ),
-            $lang->task->to,
+            span
+            (
+                setClass('input-group-addon'),
+                setClass($hiddenEstStarted || $hiddenDeadline ? 'hidden' : ''),
+                $lang->task->to,
+            ),
             datepicker
             (
+                setClass($hiddenDeadline),
                 set::control('date'),
                 set::name('deadline'),
                 set::value($task->deadline),
@@ -449,6 +476,7 @@ formPanel
     ),
     formGroup
     (
+        setClass($hiddenMailto),
         set::label($lang->product->mailto),
         picker
         (
