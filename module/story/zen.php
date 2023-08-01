@@ -64,10 +64,11 @@ class storyZen extends story
      * @param  int       $productID
      * @param  string    $branch
      * @param  int       $executionID
+     * @param  string    $extra
      * @access protected
      * @return void
      */
-    protected function setMenuForBatchCreate(int $productID, string $branch = '', int $executionID = 0): void
+    protected function setMenuForBatchCreate(int $productID, string $branch = '', int $executionID = 0, string $extra = ''): void
     {
         $this->view->hiddenProduct = false;
         $this->view->hiddenPlan    = false;

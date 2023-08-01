@@ -166,7 +166,7 @@ class story extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
-        $this->storyZen->setMenuForBatchCreate($productID, $branch, $executionID);
+        $this->storyZen->setMenuForBatchCreate($productID, $branch, $executionID, $extra);
 
         /* Check can subdivide or not. */
         $product = $this->product->getByID($productID);
