@@ -213,7 +213,7 @@ function checkAllChange()
 function changeParentChecked($item, moduleName, packageID)
 {
     var moduleAllPrivs    = $item.closest('tbody').find('.group-item[data-module=' + moduleName + ']:not(.menus-browse)').length;
-    var moduleSelectPrivs = $item.closest('tbody').find('.group-item[data-module=' + moduleName + ']:not(.menus-browse)').find('input[type=checkbox][checked=true]').length;
+    var moduleSelectPrivs = $item.closest('tbody').find('.group-item[data-module=' + moduleName + ']:not(.menus-browse)').find('input[type=checkbox]:checked').length;
     var $moduleItem       = $item.closest('tbody').find('.module[data-module=' + moduleName + ']');
     if($item.closest('tbody').find('.menus.' + moduleName).length > 0)
     {
