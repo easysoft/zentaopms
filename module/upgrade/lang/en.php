@@ -21,9 +21,9 @@ $lang->upgrade->warnning        = 'Warning!';
 $lang->upgrade->checkExtension  = 'Check Extensions';
 $lang->upgrade->consistency     = 'Check Consistency';
 $lang->upgrade->warnningContent = <<<EOT
-<p>The upgrade requires high database privileges, please use the root user.<br>
-   Please backup your database before updating ZenTao!</p>
-<pre>
+<p>The upgrade requires high database privileges, please use the root user.</p>
+<p>Please backup your database before updating ZenTao!</p>
+<pre class='bg-white space-y-2 p-3'>
 1. Use phpMyAdmin to backup.
 2. Use mysqlCommand to backup.
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
