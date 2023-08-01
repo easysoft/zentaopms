@@ -1713,3 +1713,14 @@ function imgCutter(): imgCutter
 {
     return createWg('imgCutter', func_get_args());
 }
+
+/**
+ * Next step modal widget.
+ *
+ * string tip
+ * array  items
+ */
+function modalNextStep(): modalNextStep
+{
+    return createWg('modalNextStep', func_get_args());
+}
