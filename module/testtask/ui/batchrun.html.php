@@ -135,7 +135,7 @@ foreach($cases as $caseID => $case)
         ),
         h::td
         (
-            set::class(empty($steps[$caseID]) ? 'hidden reals' : ''),
+            set::class(empty($steps[$caseID]) ? 'hidden reals' : 'stepsAndExpect'),
             !empty($steps[$caseID]) ? h::table
             (
                 set::class('table bordered'),
