@@ -1724,3 +1724,11 @@ function modalNextStep(): modalNextStep
 {
     return createWg('modalNextStep', func_get_args());
 }
+
+/**
+ * Navigator widget.
+ */
+function navigator(): navigator
+{
+    return createWg('navigator', func_get_args());
+}
