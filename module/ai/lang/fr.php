@@ -728,6 +728,7 @@ $lang->ai->dataInject->success = 'Prompt execution results are filled in.';
 $lang->ai->dataInject->fail    = 'Failed to fill in prompt execution results.';
 
 $lang->ai->execute = new stdclass();
+$lang->ai->execute->loading    = 'Prompt executing...';
 $lang->ai->execute->success    = 'Prompt executed.';
 $lang->ai->execute->fail       = 'Prompt execution failed.';
 $lang->ai->execute->failFormat = 'Prompt execution failed: %s.';

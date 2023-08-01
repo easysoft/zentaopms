@@ -98,6 +98,8 @@
 
         document.addEventListener('DOMContentLoaded', function()
         {
+          /* Set injected in oreder to cancel loading class on object view (see promptmenu.html.php). */
+          sessionStorage.setItem('ai-prompt-data-injected', true);
           try
           {
             const data = JSON.parse(injectData);

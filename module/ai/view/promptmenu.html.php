@@ -50,27 +50,23 @@
       {
         $(`<?php echo $menuOptions->targetContainer;?>`).<?php echo isset($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append';?>(`<?php echo $html;?>`);
         $('[data-toggle="popover"]').popover({template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
-      });
 
-      window.addEventListener('load', function()
-      {
-        const promptButton = document.querySelector('.prompt');
-        if(promptButton)
+        $('<?php echo count($prompts) > 1 ? '.prompts.dropdown ul.dropdown-menu' : '.prompt';?>').on('click', <?php if(count($prompts) > 1) echo "'button',";?> function(e)
         {
-          promptButton.addEventListener('click', function(){
-            const container = promptButton.ownerDocument.defaultView.parent.document.querySelector('.load-indicator');
-            if(container) container.classList.toggle('loading', true);
-          });
-        }
+          $('body').attr('data-loading', '<?php echo $lang->ai->execute->loading;?>');
+          $('body').addClass('load-indicator loading');
 
-        const promptDropdown = document.querySelector('.prompts .dropdown-menu');
-        if(promptDropdown)
-        {
-          promptDropdown.addEventListener('click', function(){
-            const container = promptDropdown.ownerDocument.defaultView.parent.document.querySelector('.load-indicator');
-            if(container) container.classList.toggle('loading', true);
-          });
-        }
+          /* Checks for session storage to cancel loading status (see inputinject.html.php). */
+          const loadCheckInterval = setInterval(function()
+          {
+            if(sessionStorage.getItem('ai-prompt-data-injected'))
+            {
+              $('body').removeClass('loading');
+              sessionStorage.removeItem('ai-prompt-data-injected');
+              clearInterval(loadCheckInterval);
+            }
+          }, 200);
+        });
       });
     </script>
 
