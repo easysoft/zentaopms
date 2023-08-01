@@ -40,7 +40,19 @@ adjustMenuWidth();
             <h4>
               <?php
               $objectType = $object->objectType == 'case' ? 'testcase' : $object->objectType;
-              echo html::a($object->url, $object->title, '', 'title="' . strip_tags($object->title) . '"');
+
+              if($objectType == 'task')
+              {
+                  $isMultiProject = $this->dao->select('multiple')->from(TABLE_PROJECT)->alias('t1')
+                      ->leftJoin(TABLE_TASK)->alias('t2')->on('t2.execution=t1.id')
+                      ->where('t2.id')->eq($object->objectID)
+                      ->fetch('multiple');
+                  if(!$isMultiProject) echo html::a($object->url, $object->title, '', 'data-app="project" title="' . strip_tags($object->title) . '"');
+              }
+              else
+              {
+                  echo html::a($object->url, $object->title, '', 'title="' . strip_tags($object->title) . '"');
+              }
               if(($objectType == 'story' || $objectType == 'requirement' || $objectType == 'execution' || $objectType == 'issue') and !empty($object->extraType))
               {
                   echo "<small class=''>[{$lang->search->objectTypeList[$object->extraType]} #{$object->objectID}]</small> ";

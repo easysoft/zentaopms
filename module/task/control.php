@@ -538,6 +538,8 @@ class task extends control
 
         /* Set menu. */
         $this->execution->setMenu($this->view->execution->id);
+        if(!$this->view->execution->multiple) $this->loadModel('project')->setMenu($this->view->task->project);
+
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
     }
 
