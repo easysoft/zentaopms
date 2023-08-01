@@ -1134,4 +1134,17 @@ class aiModel extends model
 
         $_SESSION['aiInjectData'][$targetForm->m][$targetForm->f] = is_string($data) ? $data : json_encode($data);
     }
+
+    /**
+     * Get role templates from db.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRoleTemplates()
+    {
+        return $this->dao->select('*')->from(TABLE_PROMPTROLE)
+            ->where('deleted')->eq(0)
+            ->fetchAll();
+    }
 }

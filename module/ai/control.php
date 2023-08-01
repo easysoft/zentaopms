@@ -271,6 +271,7 @@ class ai extends control
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->colon} " . $this->lang->ai->prompts->assignRole . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->roleTemplates  = $this->ai->getRoleTemplates();
         $this->display();
     }
 
