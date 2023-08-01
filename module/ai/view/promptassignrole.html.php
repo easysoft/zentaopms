@@ -17,6 +17,8 @@
   .input-label {width: 120px; padding: 6px 12px; text-align: right;}
   .input {flex-grow: 1;}
   .v-top > * {vertical-align: top; display: inline-block;}
+  .role-template-card p {margin: 0;}
+  .clip {overflow: hidden; white-space: nowrap; text-overflow: clip;}
 </style>
 <?php include 'promptdesignprogressbar.html.php';?>
 <div id='mainContent' class='main-content' style='height: calc(100vh - 120px); padding: 0;'>
@@ -48,10 +50,26 @@
             <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->nextStep, 'disabled name="jumpToNext" value="1"');?></div>
           </div>
         </div>
-        <div id="roleTemplate" style="display: none; flex-basis: 370px; flex-grow: 0; padding: 20px 24px; border-left: 1px solid #E6EAF1; background-color: #FCFDFE; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
+        <div id="roleTemplate" style="display: none; width: 370px; flex-grow: 0; padding: 20px 24px; border-left: 1px solid #E6EAF1; background-color: #FCFDFE; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
           <h4 class="v-top"">
-            <?php echo "<span style='padding-right: 4px;'>{$lang->ai->prompts->roleTemplate}</span>" . " <i class='icon icon-help' data-toggle='tooltip' data-placement='top' title='{$lang->ai->prompts->roleTemplateTip}'></i>";?>
+            <?php echo "<span style='margin-right: 4px;'>{$lang->ai->prompts->roleTemplate}</span>" . " <i class='icon icon-help' data-toggle='tooltip' data-placement='top' title='{$lang->ai->prompts->roleTemplateTip}'></i>";?>
           </h4>
+          <div style="display: flex; flex-direction: column; gap:8px;">
+            <?php foreach($roleTemplates as $role)
+            { ?>
+              <div class="role-template-card" style="border: 1px solid #D8DBDE; border-radius: 4px; padding: 12px; width: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+                  <p class="clip"><?php echo $role->role; ?></p>
+                  <div style="display: flex; gap: 2px;">
+                    <?php echo html::commonButton("<span class='text-primary'>{$lang->app->common}</span>", '', 'btn btn-link'); ?>
+                    <?php echo html::commonButton("<i class='icon icon-edit icon-sm text-primary'></i>", '', 'btn btn-link'); ?>
+                    <?php echo html::commonButton("<i class='icon icon-trash icon-sm text-primary'></i>", '', 'btn btn-link'); ?>
+                  </div>
+                </div>
+                <p class="text-gray clip"><?php echo $role->characterization; ?></p>
+              </div>
+            <?php } ?>
+          </div>
         </div>
       </div>
     </div>
