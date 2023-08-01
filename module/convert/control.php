@@ -265,9 +265,9 @@ class convert extends control
             if($method == 'db')
             {
                 $dbName = $this->post->dbName;
-                if(!$dbName) return $this->send(array('result' => 'fail', 'message' => array('dbName' => sprintf($this->lang->error->notempty, $this->lang->convert->jira->database))));
-                if(!$this->convert->dbExists($dbName)) return $this->send(array('result' => 'fail', 'message' => array('dbName' => $this->lang->convert->jira->invalidDB)));
-                if(!$this->convert->tableExistsOfJira($dbName, 'nodeassociation')) return $this->send(array('result' => 'fail', 'message' => array('dbName' => $this->lang->convert->jira->invalidTable)));
+                if(!$dbName) return $this->send(array('result' => 'fail', 'message' => $this->lang->convert->jira->dbNameEmpty));
+                if(!$this->convert->dbExists($dbName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->convert->jira->invalidDB));
+                if(!$this->convert->tableExistsOfJira($dbName, 'nodeassociation')) return $this->send(array('result' => 'fail', 'message' => $this->lang->convert->jira->invalidTable));
 
                 $this->session->set('jiraDB', $dbName);
                 $link = $this->createLink('convert', 'mapJira2Zentao', "method=db&dbName={$this->post->dbName}");
@@ -281,8 +281,8 @@ class convert extends control
             if(!file_exists($jiraFilePath . 'entities.xml')) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->convert->jira->notExistEntities, $jiraFilePath . 'entities.xml')));
 
             $this->convert->splitFile();
+            $link = $this->createLink('convert', 'mapJira2Zentao', "method=file");
 
-            $link = $this->createLink('convert', 'mapJira2Zentao', 'method=file');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
@@ -359,18 +359,35 @@ class convert extends control
 
         if($_POST)
         {
-            $errors = array();
-            if(!$this->post->password1) $errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
-            if(!$this->post->password2) $errors['password2'][] = sprintf($this->lang->error->notempty, $this->lang->user->password2AB);
-            if($this->post->password1 && strlen(trim($this->post->password1)) < 6) $errors['password1'][] = $this->lang->convert->jira->passwordLess;
-            if($this->post->password1 && $this->post->password2 && $this->post->password1 != $this->post->password2) $errors['password2'][] = $this->lang->convert->jira->passwordDifferent;
-            if($errors) return $this->send(array('result' => 'fail', 'message' => $errors));
+            if(!$this->post->password1 || !$this->post->password2)
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->passwordEmpty;
+                return print($this->send($response));
+            }
+
+            if(strlen(trim($this->post->password1)) < 6)
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->passwordLess;
+                return print($this->send($response));
+            }
+
+            if($this->post->password1 != $this->post->password2)
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->passwordDifferent;
+                return print($this->send($response));
+            }
 
             $jiraUser['password'] = md5($this->post->password1);
             $jiraUser['group']    = $this->post->group;
             $this->session->set('jiraUser', $jiraUser);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('importJira', "method={$method}")));
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = $this->createLink('convert', 'importJira', "method=$method");
+            return print($this->send($response));
         }
 
         $this->view->title  = $this->lang->convert->jira->initJiraUser;
@@ -383,39 +400,39 @@ class convert extends control
      * Import jira main logic.
      *
      * @param  string $method db|file
-     * @param  string $mode   show|import
-     * @param  string $type   user|issue|project|attachment
+     * @param  string $type user|issue|project|attachment
      * @param  int    $lastID
-     * @param  bool   $createTable
      * @access public
      * @return void
      */
-    public function importJira($method = 'db', $mode = 'show', $type = 'user', $lastID = 0, $createTable = false)
+    public function importJira($method = 'db', $type = 'user', $lastID = 0, $createTable = false)
     {
         set_time_limit(0);
 
-        if($mode == 'import')
+        if(helper::isAjaxRequest())
         {
-            $importFunc = 'importJiraFrom' . $method;
-            $result     = $this->convert->$importFunc($type, $lastID, $createTable);
+            $result = $method == 'db' ? $this->convert->importJiraFromDB($type, $lastID, $createTable) : $this->convert->importJiraFromFile($type, $lastID, $createTable);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(isset($result['finished']) and $result['finished'])
+            {
+                return print $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
+            }
+            else
+            {
+                $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);
 
-            if(!empty($result['finished'])) return $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
-
-            $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);
-
-            $response['result']  = 'unfinished';
-            $response['type']    = $type;
-            $response['count']   = $result['count'];
-            $response['message'] = sprintf($this->lang->convert->jira->importResult, $type, $type, $result['count']);
-            $response['next']    = inlink('importJira', "method={$method}&mode={$mode}&type={$result['type']}&lastID={$result['lastID']}");
-            return $this->send($response);
+                $response['result']  = 'unfinished';
+                $response['message'] = sprintf($this->lang->convert->jira->importResult, $type, $type, $result['count']);
+                $response['type']    = $type;
+                $response['count']   = $result['count'];
+                $response['next']    = inlink('importJira', "method=$method&type={$result['type']}&lastID={$result['lastID']}");
+                return print $this->send($response);
+            }
         }
 
-        $this->view->title  = $this->lang->convert->jira->importJira;
-        $this->view->mode   = $mode;
-        $this->view->method = $method;
         $this->view->type   = $type;
+        $this->view->method = $method;
+        $this->view->title  = $this->lang->convert->jira->importJira;
         $this->display();
     }
 }

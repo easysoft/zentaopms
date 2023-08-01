@@ -117,7 +117,6 @@ $lang->convert->issue->goto    = '转换为';
 
 $lang->convert->jira = new stdclass();
 $lang->convert->jira->method           = '选择导入方式';
-$lang->convert->jira->prev             = '上一步';
 $lang->convert->jira->next             = '下一步';
 $lang->convert->jira->importFromDB     = '从数据库导入';
 $lang->convert->jira->importFromFile   = '从文件导入';
