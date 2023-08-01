@@ -409,9 +409,7 @@ class convert extends control
         }
 
         $this->view->title  = $this->lang->convert->jira->importJira;
-        $this->view->mode   = $mode;
         $this->view->method = $method;
-        $this->view->type   = $type;
         $this->display();
     }
 }
