@@ -29,9 +29,11 @@ $('.vision-switch .block.state').on('click', '.vision-block', function()
     switchVision(vision);
 })
 
-$('.theme-switch .block.state').on('click', '.theme-block', function()
+$('.theme-switch .block').on('click', '.theme-block', function()
 {
+    $('.block').removeClass('active');
     selectTheme($(this).attr('data-theme'));
+    $(this).parent().addClass('active');
 })
 
 $('.guide-block').on('click', '.guide-tab', function()
