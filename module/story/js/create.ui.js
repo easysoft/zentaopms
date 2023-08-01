@@ -13,6 +13,7 @@ window.toggleReviewer = function(obj)
         $reviewer.render(options);
         $('#reviewerBox').closest('.form-row').addClass('hidden');
         $('#needNotReview').val(1);
+        $('input[name=needNotReview]').val(1);
     }
     else
     {
@@ -20,6 +21,7 @@ window.toggleReviewer = function(obj)
         $reviewer.render(options);
         $('#reviewerBox').closest('.form-row').removeClass('hidden');
         $('#needNotReview').val(0);
+        $('input[name=needNotReview]').val(0);
     }
 }
 

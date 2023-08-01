@@ -259,8 +259,8 @@ formPanel
                     set::value($fields['reviewer']['default']),
                 ),
             ),
-            $forceReview ? null : formHidden('needNotReview', 1),
-        ),
+            formHidden('needNotReview', 1),
+        )
     ),
     isset($fields['URS']) ? formRow
     (
