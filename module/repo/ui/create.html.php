@@ -83,6 +83,7 @@ formPanel
             set::name("serviceProject"),
             set::label($lang->repo->serviceProject),
             set::required(true),
+            set::items(array()),
             set::control("picker"),
         ),
     ),

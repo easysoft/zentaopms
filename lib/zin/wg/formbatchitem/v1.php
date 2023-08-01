@@ -30,7 +30,7 @@ class formBatchItem extends wg
      */
     protected static array $defineProps = array(
         'name: string',                 // 表单项名称，无需包含 `[]`。
-        'label: string|bool',           // 列标题。
+        'label?: string|bool',           // 列标题。
         'labelClass?: string',          // 列标题类名。
         'labelProps?: string',          // 列标题属性，例如 `array('data-toggle' => 'tooltip', 'data-title' 。=> 'This is a tip')`
         'required?:bool|string="auto"', // 是否必填，如果设置为 `"auto"`，则自动从当前模块 config 中查询。

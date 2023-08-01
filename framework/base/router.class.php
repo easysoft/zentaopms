@@ -407,6 +407,7 @@ class baseRouter
 
         $this->loadClass('front',  $static = true);
         $this->loadClass('filter', $static = true);
+        $this->loadClass('form',   $static = true);
         $this->loadClass('dbh',    $static = true);
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);

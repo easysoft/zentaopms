@@ -2465,6 +2465,7 @@ class repoModel extends model
 
         $paths = array();
         $files = $scm->engine->tree($path, 0);
+        if(empty($files)) $files = array();
         foreach($files as $file)
         {
             $paths[] = $file->path;

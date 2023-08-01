@@ -73,6 +73,9 @@ $lang->user->projects         = '項目';
 $lang->user->sprints          = $lang->execution->common;
 $lang->user->identity         = '身份';
 
+$lang->user->abbr = new stdclass();
+$lang->user->abbr->id = '序号';
+
 $lang->user->legendBasic        = '基本資料';
 $lang->user->legendContribution = '個人貢獻';
 
