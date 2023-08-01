@@ -1604,7 +1604,7 @@ class baseRouter
      * Get the default valve and param type of the method calling.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getDefaultParams()
     {
@@ -1825,7 +1825,7 @@ class baseRouter
      * @param   string $moduleName     the module name
      * @param   string $ext            the extension type, can be control|model|view|lang|config|zen|tao
      * @access  public
-     * @return  string the extension path.
+     * @return  array  the extension path.
      */
     public function getModuleExtPath(string $moduleName, string $ext)
     {
@@ -2091,7 +2091,7 @@ class baseRouter
      * @param  string    $mergedTargetDir
      * @param  string    $class             model | zen | tao
      * @access public
-     * @return void
+     * @return string
      */
     public function mergeTargetExtFiles(string $moduleName, array $extFiles, string $mergedTargetDir, string $class = 'model')
     {
