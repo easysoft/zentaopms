@@ -178,8 +178,8 @@ class executionModel extends model
         if(isset($this->lang->execution->menu->storyGroup)) unset($this->lang->execution->menu->storyGroup);
         if(isset($this->lang->execution->menu->story['dropMenu']) and $methodName == 'storykanban')
         {
-            unset($this->lang->execution->menu->story['dropMenu']);
-            $this->lang->execution->menu->story['link'] = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
+            $this->lang->execution->menu->story['link']            = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
+            $this->lang->execution->menu->story['dropMenu']->story = str_replace('execution|story', 'execution|storykanban', $this->lang->execution->menu->story['dropMenu']->story);
         }
     }
 
