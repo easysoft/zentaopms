@@ -1313,7 +1313,7 @@ class story extends control
 
         $this->commonAction($storyID);
         $story = $this->view->story;
-        if($story->status != 'active') return print(js::locate($this->session->storyList, 'parent'));
+        if(!in_array($story->status, array('active', 'launched', 'developing'))) return print(js::locate($this->session->storyList, 'parent'));
         $this->story->getAffectedScope($story);
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
