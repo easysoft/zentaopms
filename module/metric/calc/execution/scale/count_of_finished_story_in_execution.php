@@ -1,7 +1,7 @@
 <?php
 /**
  * 按执行统计的已完成研发需求数。
- * count_of_finished_story_in_execution.
+ * Count of finished story in execution.
  *
  * 范围：execution
  * 对象：story
@@ -9,7 +9,7 @@
  * 度量名称：按执行统计的已完成研发需求数
  * 单位：个
  * 描述：按执行统计的已完成研发需求数是指状态为已关闭且关闭原因为已完成的研发需求的数量。这个度量项可以反映执行团队在开发过程中的进展和交付能力。已完成研发需求数越多，说明执行团队在该时间段内取得了更多的开发成果。
- * 定义：执行中研发需求的个数求和;状态为已关闭;关闭原因为已完成;过滤已删除的研发需求;过滤已删除的执行;过滤已删除的项目
+ * 定义：执行中研发需求的个数求和;状态为已关闭;关闭原因为已完成;过滤已删除的研发需求;过滤已删除的执行;过滤已删除的项目;
  * 度量库：
  * 收集方式：realtime
  *
@@ -22,21 +22,22 @@
  */
 class count_of_finished_story_in_execution extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStoriesWithExecution';
 
-    public $fieldList = array();
+    public $fieldList = array('t3.project', 't1.closedReason');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = array();
 
     public function calculate($row)
     {
+        $project = $row->project;
+        if(!isset($this->result[$project])) $this->result[$project] = 0;
+        if($row->closedReason == 'done') $this->result[$project] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('project', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
