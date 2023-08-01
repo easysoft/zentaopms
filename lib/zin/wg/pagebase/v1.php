@@ -60,18 +60,6 @@ class pageBase extends wg
         $css        = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
         $js         = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
         $imports    = context::current()->getImportList();
-        $webRoot    = $app->getWebRoot();
-        $themeName  = $app->cookie->theme;
-
-        $headImports = array();
-        if($zui)
-        {
-            $headImports[] = h::importCss($config->zin->zuiPath . 'zui.zentao.css', set::id('zuiCSS'));
-            $headImports[] = h::importCss($config->zin->zuiPath . 'themes/' . $themeName . '.css', set::id('zuiTheme'));
-            $headImports[] = h::importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs', set::id('zuiJS'));
-        }
-        $headImports[] = h::jsVar('window.config', $jsConfig, setID('configJS'));
-        $headImports[] = h::importJs($webRoot . 'js/zui3/zin.js', set::id('zinJS'));
 
         $jsConfig->zin = true;
         if($config->debug)
@@ -92,14 +80,16 @@ class pageBase extends wg
         (
             before(html('<!DOCTYPE html>')),
             set($attrs),
-            set::class("theme-$themeName"),
             set::lang($currentLang),
             h::head
             (
                 html($metas),
                 h::title($title),
                 $this->block('headBefore'),
-                $headImports,
+                $zui ? h::importCss($config->zin->zuiPath . 'zui.zentao.css', set::id('zuiCSS')) : null,
+                $zui ? h::importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs', set::id('zuiJS')) : null,
+                h::jsVar('window.config', $jsConfig, setID('configJS')),
+                $zui ? h::importJs($app->getWebRoot() . 'js/zui3/zin.js', set::id('zinJS')) : null,
                 $head,
             ),
             h::body

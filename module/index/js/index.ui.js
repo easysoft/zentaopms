@@ -51,8 +51,7 @@ function triggerAppEvent(code, event, args)
     event = event + '.apps';
     if(!Array.isArray(args)) args = [args];
     if(app.$app) app.$app.trigger(event, args);
-    const iframeWindow = app.iframe && app.iframe.contentWindow;
-    if(iframeWindow) return iframeWindow.$(iframeWindow.document).trigger(event, args);
+    if(app.iframe && app.iframe.contentWindow.$) return app.iframe.contentWindow.$(app.iframe.contentWindow.document).trigger(event, args);
 }
 
 function isOldPage(url)
@@ -691,18 +690,6 @@ function changeAppsLang(lang)
     updateAppsMenu();
 }
 
-function changeAppsTheme(theme)
-{
-    changeAppTheme(theme);
-    $.each(apps.openedMap, function(_code, app)
-    {
-        if(app.iframe && app.iframe.contentWindow && app.iframe.contentWindow.changeAppTheme)
-        {
-            app.iframe.contentWindow.changeAppTheme(theme);
-        }
-    });
-}
-
 initAppsMenu();
 /* Refresh more menu on window resize */
 $(window).on('resize', refreshMenu);
@@ -771,6 +758,5 @@ $.apps = $.extend(apps,
     isOldPage:      isOldPage,
     getAppCode:     getAppCode,
     updateAppsMenu: updateAppsMenu,
-    changeAppsLang: changeAppsLang,
-    changeAppsTheme: changeAppsTheme
+    changeAppsLang: changeAppsLang
 });
