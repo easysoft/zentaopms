@@ -155,7 +155,7 @@ $lang->install->setConfig          = 'Konfigurationsdatei erstellen';
 $lang->install->key                = 'Eintrag';
 $lang->install->value              = 'Wert';
 $lang->install->saveConfig         = 'Konfiguration speichern';
-$lang->install->save2File          = '<div class="alert alert-warning">Kopieren Sie den Inhalt aus der Textbox und speichern Sie diesen als "<strong> %s </strong>". Sie können die Konfiguration später ändern.</div>';
+$lang->install->save2File          = '<div class="text-warning">Kopieren Sie den Inhalt aus der Textbox und speichern Sie diesen als "<strong> %s </strong>". Sie können die Konfiguration später ändern.</div>';
 $lang->install->saved2File         = 'Die Konfigurationsdatei wurde gespeichert unter " <strong>%s</strong> ". Sie können die Konfiguration später ändern.';
 $lang->install->errorNotSaveConfig = 'Die Konfigurationsdatei wurde nicht gespeichert.';
 

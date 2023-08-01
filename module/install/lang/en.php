@@ -155,7 +155,7 @@ $lang->install->setConfig          = 'Create config file';
 $lang->install->key                = 'Item';
 $lang->install->value              = 'Value';
 $lang->install->saveConfig         = 'Save config file';
-$lang->install->save2File          = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this configuration file later.</div>';
+$lang->install->save2File          = '<div class="text-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this configuration file later.</div>';
 $lang->install->saved2File         = 'The configuration file has been saved to " <strong>%s</strong> ". You can change this file later.';
 $lang->install->errorNotSaveConfig = 'The configuration file is not saved.';
 

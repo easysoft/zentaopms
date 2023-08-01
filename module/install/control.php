@@ -151,55 +151,37 @@ class install extends control
      */
     public function step3()
     {
-        if(!empty($_POST))
+        /* Set the session save path when the session save path is null. */
+        $customSession = false;
+        $checkSession  = ini_get('session.save_handler') == 'files';
+        if($checkSession)
         {
-            $return = $this->install->checkConfig();
-            if($return->result == 'ok')
+            if(!session_save_path())
             {
-                /* Set the session save path when the session save path is null. */
-                $customSession = false;
-                $checkSession  = ini_get('session.save_handler') == 'files';
-                if($checkSession)
-                {
-                    if(!session_save_path())
-                    {
-                        /* Restart the session because the session save path is null when start the session last time. */
-                        session_write_close();
+                /* Restart the session because the session save path is null when start the session last time. */
+                session_write_close();
 
-                        $tmpRootInfo     = $this->install->getTmpRoot();
-                        $sessionSavePath = $tmpRootInfo['path'] . 'session';
-                        if(!is_dir($sessionSavePath)) mkdir($sessionSavePath, 0777, true);
+                $tmpRootInfo     = $this->install->getTmpRoot();
+                $sessionSavePath = $tmpRootInfo['path'] . 'session';
+                if(!is_dir($sessionSavePath)) mkdir($sessionSavePath, 0777, true);
 
-                        session_save_path($sessionSavePath);
-                        $customSession = true;
+                session_save_path($sessionSavePath);
+                $customSession = true;
 
-                        $sessionResult = $this->install->checkSessionSavePath();
-                        if($sessionResult == 'fail') chmod($sessionSavePath, 0777);
+                $sessionResult = $this->install->checkSessionSavePath();
+                if($sessionResult == 'fail') chmod($sessionSavePath, 0777);
 
-                        session_start();
-                        $this->session->set('installing', true);
-                    }
-                }
-
-                $this->view = (object)$_POST;
-                $this->view->app           = $this->app;
-                $this->view->lang          = $this->lang;
-                $this->view->config        = $this->config;
-                $this->view->title         = $this->lang->install->saveConfig;
-                $this->view->customSession = $customSession;
-                $this->display();
-            }
-            else
-            {
-                $this->view->title = $this->lang->install->saveConfig;
-                $this->view->error = $return->error;
-                $this->display();
+                session_start();
+                $this->session->set('installing', true);
             }
         }
-        else
-        {
-            $this->locate($this->createLink('install'));
-        }
+
+        $this->view->app           = $this->app;
+        $this->view->lang          = $this->lang;
+        $this->view->config        = $this->config;
+        $this->view->title         = $this->lang->install->saveConfig;
+        $this->view->customSession = $customSession;
+        $this->display();
     }
 
     /**
