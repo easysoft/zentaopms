@@ -18,6 +18,7 @@ formPanel
     set::headingClass('justify-start'),
     set::bodyClass('px-0'),
     set::submitBtnText($lang->convert->jira->next),
+    set::backUrl(inlink('convertJira')),
     to::heading
     (
         span
