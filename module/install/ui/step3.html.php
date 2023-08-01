@@ -15,18 +15,18 @@ $configContent = <<<EOT
 <?php
 \$config->installed       = true;
 \$config->debug           = false;
-\$config->requestType     = '$requestType';
-\$config->timezone        = '$timezone';
-\$config->db->driver      = '$dbDriver';
-\$config->db->host        = '$dbHost';
-\$config->db->port        = '$dbPort';
-\$config->db->name        = '$dbName';
-\$config->db->user        = '$dbUser';
-\$config->db->encoding    = '$dbEncoding';
-\$config->db->password    = '$dbPassword';
-\$config->db->prefix      = '$dbPrefix';
+\$config->requestType     = '$config->requestType';
+\$config->timezone        = '$config->timezone';
+\$config->db->driver      = '{$myConfig['dbDriver']}';
+\$config->db->host        = '{$myConfig['dbHost']}';
+\$config->db->port        = '{$myConfig['dbPort']}';
+\$config->db->name        = '{$myConfig['dbName']}';
+\$config->db->user        = '{$myConfig['dbUser']}';
+\$config->db->encoding    = '{$myConfig['dbEncoding']}';
+\$config->db->password    = '{$myConfig['dbPassword']}';
+\$config->db->prefix      = '{$myConfig['dbPrefix']}';
 \$config->webRoot         = getWebRoot();
-\$config->default->lang   = '$defaultLang';
+\$config->default->lang   = '{$myConfig['defaultLang']}';
 EOT;
 if($customSession) $configContent .= "\n\$config->customSession = true;";
 

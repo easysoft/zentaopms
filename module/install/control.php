@@ -120,9 +120,13 @@ class install extends control
     {
         if(!empty($_POST))
         {
+
+            $myConfig = '';
+            foreach($_POST as $key => $value) $myConfig .= ",{$key}={$value}";
+            $myConfig = urlencode(trim($myConfig, ','));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('step3', "myConfig={$myConfig}")));
             $return = $this->install->checkConfig();
-            if($return->result == 'ok') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('step3')));
-            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: 'sm', iconClass: 'text-4xl text-warning',  message: '" . str_replace("'", '"', $return->error) . "'})"));
+            if($return->result != 'ok') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: 'sm', iconClass: 'text-4xl text-warning',  message: '" . str_replace("'", '"', $return->error) . "'})"));
         }
         $dbHost = $dbPort = $dbName = $dbUser = $dbPassword = '';
 
@@ -149,8 +153,12 @@ class install extends control
      * @access public
      * @return void
      */
-    public function step3()
+    public function step3($myConfig = '')
     {
+        $myConfig = urldecode($myConfig);
+        $myConfig = str_replace(array(',', ' '), array('&', ''), $myConfig);
+        parse_str($myConfig, $myConfigOutput);
+
         /* Set the session save path when the session save path is null. */
         $customSession = false;
         $checkSession  = ini_get('session.save_handler') == 'files';
@@ -181,6 +189,7 @@ class install extends control
         $this->view->config        = $this->config;
         $this->view->title         = $this->lang->install->saveConfig;
         $this->view->customSession = $customSession;
+        $this->view->myConfig      = $myConfigOutput;
         $this->display();
     }
 
@@ -196,7 +205,7 @@ class install extends control
         {
             $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // Update mode.
             $this->loadModel('custom')->disableFeaturesByMode($this->post->mode);
-            return print(js::locate(inlink('step5'), 'parent'));
+            return $this->send(array('load' => inlink('step5')));
         }
 
         if(!isset($this->config->installed) or !$this->config->installed)
