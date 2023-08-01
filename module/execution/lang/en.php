@@ -518,6 +518,8 @@ $lang->execution->typeList['stage']  = 'Stage';
 $lang->execution->typeList['sprint'] = $lang->executionCommon;
 $lang->execution->typeList['kanban'] = 'Kanban';
 
+$lang->execution->featureBar['tree']['all'] = 'All';
+
 $lang->execution->featureBar['task']['all']          = $lang->execution->allTasks;
 $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclosed;
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;

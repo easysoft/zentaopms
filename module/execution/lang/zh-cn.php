@@ -518,6 +518,8 @@ $lang->execution->typeList['stage']  = '阶段';
 $lang->execution->typeList['sprint'] = $lang->executionCommon;
 $lang->execution->typeList['kanban'] = '看板';
 
+$lang->execution->featureBar['tree']['all'] = '全部';
+
 $lang->execution->featureBar['task']['all']          = '全部';
 $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclosed;
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;
