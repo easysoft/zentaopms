@@ -168,6 +168,25 @@ class dataset
     }
 
     /**
+     * 获取项目bug数据。
+     * Get project bug list.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getProjectBugs($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->query();
+    }
+
+    /**
      * 获取反馈数据。
      * Get feedback list.
      *

@@ -14,7 +14,7 @@
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -22,21 +22,19 @@
  */
 class count_of_bug_in_project extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getProjectBugs';
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $fieldList = array('t1.project');
 
     public function calculate($row)
     {
+        if(!isset($this->result[$row->project])) $this->result[$row->project] = 0;
+        $this->result[$row->project] ++;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('project', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
