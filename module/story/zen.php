@@ -583,7 +583,8 @@ class storyZen extends story
             if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->story, $field);
         }
 
-        $reviewer = $this->story->getReviewerPairs($storyID, $story->version);
+        $reviewerAndResultPairs = $this->story->getReviewerPairs($storyID, $story->version);
+        $reviewer = array_keys($reviewerAndResultPairs);
         $fields['reviewer']['options'] = $this->story->getProductReviewers($story->product, $reviewer);
 
         $fields['reviewer']['default'] = $reviewer;
