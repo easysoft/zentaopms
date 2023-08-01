@@ -19,7 +19,7 @@ $instances = initTableData($instances, $config->space->dtable->fieldList, $this-
 
 featureBar
 (
-    set::current($type),
+    set::current($browseType),
     set::linkParams("spaceID=&browseType={key}"),
 );
 

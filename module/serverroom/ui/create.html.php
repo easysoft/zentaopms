@@ -22,7 +22,6 @@ formPanel
         (
             set::name('name'),
             set::label($lang->serverroom->name),
-            set::value($serverroom->name),
         )
     ),
     formRow
@@ -31,7 +30,6 @@ formPanel
         (
             set::name('bandwidth'),
             set::label($lang->serverroom->bandwidth),
-            set::value($serverroom->bandwidth),
         )
     ),
     formRow
@@ -43,7 +41,6 @@ formPanel
             set::control('picker'),
             set::name('city'),
             set::items($lang->serverroom->cityList),
-            set::value($serverroom->city)
         )
     ),
     formRow
@@ -55,7 +52,6 @@ formPanel
             set::control('picker'),
             set::name('line'),
             set::items($lang->serverroom->lineList),
-            set::value($serverroom->line)
         )
     ),
     formRow
@@ -67,7 +63,6 @@ formPanel
             set::control('picker'),
             set::name('provider'),
             set::items($lang->serverroom->providerList),
-            set::value($serverroom->provider)
         )
     ),
     formRow
@@ -79,7 +74,6 @@ formPanel
             set::control('picker'),
             set::name('owner'),
             set::items($users),
-            set::value($serverroom->owner)
         )
     ),
 );

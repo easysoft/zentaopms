@@ -190,6 +190,9 @@ $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
 $lang->app->common        = '應用';
 $lang->app->serverLink    = '服務器鏈接';
+$lang->space->common      = '服务管理';
+$lang->store->common      = '应用市场';
+$lang->instance->common   = '应用';
 
 $lang->personnel->common     = '人員';
 $lang->personnel->invest     = '投入人員';

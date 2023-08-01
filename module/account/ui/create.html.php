@@ -22,7 +22,6 @@ formPanel
         (
             set::name('name'),
             set::label($lang->account->name),
-            set::value($account->name),
         )
     ),
     formRow
@@ -34,7 +33,6 @@ formPanel
             set::control('picker'),
             set::name('provider'),
             set::items($lang->serverroom->providerList),
-            set::value($account->provider)
         )
     ),
     formRow
@@ -43,7 +41,6 @@ formPanel
         (
             set::name('adminURI'),
             set::label($lang->account->adminURI),
-            set::value($account->adminURI),
         )
     ),
     formRow
@@ -52,7 +49,6 @@ formPanel
         (
             set::name('account'),
             set::label($lang->account->account),
-            set::value($account->account),
         )
     ),
     formRow
@@ -61,7 +57,6 @@ formPanel
         (
             set::name('password'),
             set::label($lang->account->password),
-            set::value($account->password),
         )
     ),
     formRow
@@ -70,7 +65,6 @@ formPanel
         (
             set::name('email'),
             set::label($lang->account->email),
-            set::value($account->email),
         )
     ),
     formRow
@@ -79,7 +73,6 @@ formPanel
         (
             set::name('mobile'),
             set::label($lang->account->mobile),
-            set::value($account->mobile),
         )
     ),
 );

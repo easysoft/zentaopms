@@ -923,7 +923,7 @@ class mr extends control
             if($result['result'] == 'fail') return print(json_encode($result));
 
             $objectID = $result['id'];
-            $repo     = $this->repo->getRepoById($repoID);
+            $repo     = $this->repo->getByID($repoID);
             /* Handle the exception that when $repo is empty. */
             if(empty($repo) or empty($result)) $this->send(json_encode(array()));
 

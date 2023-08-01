@@ -382,7 +382,7 @@ class compileModel extends model
         if(!$job) return false;
 
         $compileID = $compile->id;
-        $repo      = $this->loadModel('repo')->getRepoById($job->repo);
+        $repo      = $this->loadModel('repo')->getByID($job->repo);
 
         if($job->triggerType == 'tag')
         {

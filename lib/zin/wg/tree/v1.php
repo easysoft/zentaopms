@@ -5,8 +5,8 @@ namespace zin;
 class tree extends wg
 {
     protected static array $defineProps = array(
-        'type: string',
         'items: array',
+        'type?: string',
         'id?: string',
         'icon?: string',
         'class?: string',
@@ -39,6 +39,8 @@ class tree extends wg
         {
             $item = (array)$item;
             if(!isset($item['text'])) $item['text'] = $item['name'];
+            if(!isset($item['url']))  $item['url'] = '';
+            if(!isset($item['type'])) $item['type'] = '';
 
             if($item['type'] == 'product')
             {

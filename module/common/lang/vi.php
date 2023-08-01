@@ -134,11 +134,14 @@ $lang->typeAB       = 'Loại';
 $lang->nameAB       = 'Name';
 
 $lang->common = new stdclass();
-$lang->common->common  = 'Module chung';
-$lang->devops->common  = 'DevOps';
-$lang->repo->codeRepo  = 'Code Repo';
-$lang->app->common     = 'APP';
-$lang->app->serverLink = 'Server Link';
+$lang->common->common   = 'Module chung';
+$lang->devops->common   = 'DevOps';
+$lang->repo->codeRepo   = 'Code Repo';
+$lang->app->common      = 'APP';
+$lang->app->serverLink  = 'Server Link';
+$lang->space->common    = 'Service';
+$lang->store->common    = 'Store';
+$lang->instance->common = 'Instance';
 
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);

@@ -180,7 +180,7 @@ formPanel
             set::control('picker'),
             set::name('vsoft'),
             set::items($lang->host->tagsList),
-            set::value($host->tags ? $host->tags : 'vm')
+            set::value($host->vsoft ? $host->vsoft : 'vm')
         )
     ),
     formRow
