@@ -198,6 +198,10 @@ div
     div
     (
         setClass('basis-auto'),
-        history()
+        history
+        (
+            set::commentBtn(true),
+            set::commentUrl(createLink('action', 'comment', array('objectType' => 'instance', 'objectID' => $instance->id))),
+        )
     )
 );

@@ -347,6 +347,10 @@ class action extends control
         {
             return $this->send(array('status' => 'success', 'data' => $actionID));
         }
+        elseif(in_array($objectType, $this->config->action->newPageModule))
+        {
+            return $this->send(array('status' => 'success', 'closeModal' => true, 'load' => true));
+        }
         else
         {
             echo js::reload('parent');

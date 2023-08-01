@@ -52,9 +52,11 @@ class search extends control
         $this->view->style        = empty($style) ? 'full' : $style;
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
 
-        if(!in_array($module, array('repo', 'mr', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'host')))
+        $this->app->loadModuleConfig('action');
+        $_GET['zin'] = 0;
+        if(in_array($module, $this->config->action->newPageModule))
         {
-            $_GET['zin'] = 0;
+            $_GET['zin'] = 1;
             $this->view->formSession = $_SESSION[$module . 'Form'];
         }
         $this->display();
