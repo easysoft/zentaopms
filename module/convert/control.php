@@ -379,39 +379,39 @@ class convert extends control
      * Import jira main logic.
      *
      * @param  string $method db|file
-     * @param  string $type user|issue|project|attachment
+     * @param  string $mode   show|import
+     * @param  string $type   user|issue|project|attachment
      * @param  int    $lastID
+     * @param  bool   $createTable
      * @access public
      * @return void
      */
-    public function importJira($method = 'db', $type = 'user', $lastID = 0, $createTable = false)
+    public function importJira($method = 'db', $mode = 'show', $type = 'user', $lastID = 0, $createTable = false)
     {
         set_time_limit(0);
 
-        if(helper::isAjaxRequest())
+        if($mode == 'import')
         {
-            $result = $method == 'db' ? $this->convert->importJiraFromDB($type, $lastID, $createTable) : $this->convert->importJiraFromFile($type, $lastID, $createTable);
+            $importFunc = 'importJiraFrom' . $method;
+            $result     = $this->convert->$importFunc($type, $lastID, $createTable);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if(isset($result['finished']) and $result['finished'])
-            {
-                return print $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
-            }
-            else
-            {
-                $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);
 
-                $response['result']  = 'unfinished';
-                $response['message'] = sprintf($this->lang->convert->jira->importResult, $type, $type, $result['count']);
-                $response['type']    = $type;
-                $response['count']   = $result['count'];
-                $response['next']    = inlink('importJira', "method=$method&type={$result['type']}&lastID={$result['lastID']}");
-                return print $this->send($response);
-            }
+            if(!empty($result['finished'])) return $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
+
+            $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);
+
+            $response['result']  = 'unfinished';
+            $response['type']    = $type;
+            $response['count']   = $result['count'];
+            $response['message'] = sprintf($this->lang->convert->jira->importResult, $type, $type, $result['count']);
+            $response['next']    = inlink('importJira', "method={$method}&mode={$mode}&type={$result['type']}&lastID={$result['lastID']}");
+            return $this->send($response);
         }
 
-        $this->view->type   = $type;
-        $this->view->method = $method;
         $this->view->title  = $this->lang->convert->jira->importJira;
+        $this->view->mode   = $mode;
+        $this->view->method = $method;
+        $this->view->type   = $type;
         $this->display();
     }
 }
