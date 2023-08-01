@@ -90,7 +90,7 @@ $(function () {
     {
       const roleTemplate = document.getElementById('roleTemplate');
       const isPanelExpanded = roleTemplate.style.display === 'block';
-      expandRoleTemplatePanel.querySelector('icon').className = isPanelExpanded ? 'icon icon-chevron-right' : 'icon icon-chevron-left';
+      expandRoleTemplatePanel.querySelector('icon').className = isPanelExpanded ? 'icon icon-chevron-left' : 'icon icon-chevron-right';
       if(roleTemplate)
       {
         roleTemplate.style.display = isPanelExpanded ? 'none' : 'block';
