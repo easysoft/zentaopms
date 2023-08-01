@@ -9,16 +9,12 @@
     const isInAppTab    = parent.window !== window;
     const is18version   = config.version.split('.')[0] === '18';
 
+    const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban|traincourse-playvideo'.split('|'));
     const isAllowSelfOpen = isIndexPage
         || location.hash === '#_single'
         || /(\?|\&)_single/.test(location.search)
-        || currentModule === 'tutorial'
-        || currentModule === 'install'
-        || currentModule === 'upgrade'
-        || (currentModule === 'user'
-            && (currentMethod === 'login' || currentMethod === 'deny'))
-        || (currentModule === 'file' && currentMethod === 'download')
-        || (currentModule === 'my' && currentMethod === 'changepassword')
+        || selfOpenList.has(`${currentModule}-${currentMethod}`)
+        || selfOpenList.has(currentModule)
         || $('body').hasClass('allow-self-open');
 
     if(!isInAppTab && !isAllowSelfOpen)
@@ -50,7 +46,7 @@
     if(isIndexPage) return;
 
     const DEBUG       = config.debug;
-    const is18version = config.version.split('.')[0] === '18';
+    const is18version = config.version.split('.')[0] === '18'; // 18+zin.
     const currentCode = window.name.substring(4);
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
@@ -77,15 +73,12 @@
             if(DEBUG) console.log('[APP]', 'update:', {code, url, title});
             return state;
         },
-        isOldPage: () => false,
-        reloadApp: function(_code, url)
-        {
-            loadPage(url);
-        },
-        openApp: function(url, options)
-        {
-            loadPage(url, options);
-        }
+        isOldPage:      () => false,
+        reloadApp:      function(_code, url){loadPage(url);},
+        openApp:        function(url, options){loadPage(url, options);},
+        goBack:         function(){history.go(-1);},
+        changeAppsLang: changeAppLang,
+        changeAppsTheme: changeAppTheme
     }, parent.window.$.apps);
 
     const renderMap =
@@ -142,6 +135,10 @@
     {
         $('#configJS').replaceWith(data);
         config = window.config;
+        const $body = $(document.body);
+        const classList = ($body.attr('class') || '').split(' ').filter(x => x.length && !x.startsWith('m-'));
+        classList.push(`m-${config.currentModule}-${config.currentMethod}`);
+        $body.attr('class', classList.join(' '));
     }
 
     function updatePageJS(data)
@@ -259,9 +256,10 @@
 
     function renderPartial(info, options)
     {
-        if(window.onPageRender && window.onPageRender(info)) return;
+        if(window.onPageRender && window.onPageRender(info, options)) return;
+        if(options.onRender && options.onRender(info, options)) return;
 
-        const render   = renderMap[info.name];
+        const render   = (options.renders ? options.renders[info.name] : null) || renderMap[info.name];
         const isHtml   = info.type === 'html';
         const selector = parseSelector(info.selector);
         const $target  = selector ? $(selector.select) : $target;
@@ -371,7 +369,7 @@
                 catch(e)
                 {
                     if(!isInAppTab && config.zin) return;
-                    hasFatal = data.includes('Fatal error');
+                    hasFatal = data.includes('Fatal error') || data.includes('Uncaught TypeError:');
                     data = [{name: hasFatal ? 'fatal' : 'html', data: data}];
                 }
                 if(!options.partial && !hasFatal) currentAppUrl = url;
@@ -548,6 +546,7 @@
             {
                 options.selector = 'body>*,title>*,#configJS';
             }
+            $.share = {};
         }
 
         if(DEBUG) console.log('[APP] ', 'load:', options.url);
@@ -702,6 +701,11 @@
         return loadPage(options);
     }
 
+    function reloadPage()
+    {
+        loadPage({url: currentAppUrl, selector: 'body>*,title>*,#configJS'});
+    }
+
     function openPage(url, appCode, options)
     {
         if(DEBUG) console.log('[APP] ', 'open:', url, appCode);
@@ -723,7 +727,7 @@
     function goBack(target, url)
     {
         if(!target || target === 'APP' || target === true) target = currentCode;
-        else if(target === 'GLOBAL')    target = '';
+        else if(target === 'GLOBAL') target = '';
         $.apps.goBack(target, url, historyState);
     }
 
@@ -750,7 +754,7 @@
             options.url = url;
         }
 
-        if(is18version) return $.apps.open(options.url, options.app);
+        if(is18version) return $.apps.open(options.url, options.app); // 18+zin.
 
         if(DEBUG) console.log('[APP] open url', url, options);
 
@@ -793,7 +797,7 @@
     }
 
     /**
-     * Parse wg selector
+     * Parse wg selector.
      * @param {string} selector
      * @return {object|null}
      */
@@ -893,41 +897,50 @@
         return result;
     }
 
-    function handleClickLinkIn18(event)
+    function handleClickLinkIn18(e) // 18+zin.
     {
-        var $link = $(this).closest('a,.open-url');
+        var $link = $(e.target).closest('a,.open-url');
         if(!$link.length) return;
 
-        if($link.is('[data-toggle]') || $link.zui('modalTrigger')) return;
-        var url = $link.hasClass('show-in-app') ? '' : ($link.attr('href') || (!$link.is('a') ? $link.data('url') : ''));
+        if(!$link.length || $link.hasClass('ajax-submit') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
+
+        const options = $link.dataset();
+        if(options.toggle) return;
+
+        const url = options.url || $link.attr('href');
         var thisAppCode = $link.data('app')
-        if (url) {
-            if (url.indexOf('javascript:') === 0 || url[0] === '#') return;
+        if(url)
+        {
+            if(url.indexOf('javascript:') === 0 || url[0] === '#') return;
             var urlInfo = $.parseLink(url);
-            if (urlInfo.external || (urlInfo.moduleName === 'file' && urlInfo.methodName === 'download')) return;
-            if (urlInfo.moduleName === 'index' && urlInfo.methodName === 'index') {
+            if(urlInfo.external || (urlInfo.moduleName === 'file' && urlInfo.methodName === 'download')) return;
+            if(urlInfo.moduleName === 'index' && urlInfo.methodName === 'index')
+            {
                 window.location.reload();
                 e.preventDefault();
                 return;
             }
-        } else {
-            if (!thisAppCode) return;
         }
-        if (!thisAppCode) {
-            thisAppCode = $.apps.getAppCode(url);
+        else
+        {
+            if(!thisAppCode) return;
         }
-        if (!thisAppCode) return;
-        if (thisAppCode === 'help') {
+        if(!thisAppCode) thisAppCode = $.apps.getAppCode(url);
+        if(!thisAppCode) return;
+        if(thisAppCode === 'help')
+        {
             $.apps.appsMap.help.text = $link.text();
-            if (!$.apps.appsMap.help.url) {
+            if(!$.apps.appsMap.help.url)
+            {
                 $.apps.appsMap.help.url = url;
             }
         }
-        $.apps.openUrl(url, thisAppCode);
+
+        $.apps.openUrl(url, {app: thisAppCode});
         e.preventDefault();
     }
 
-    function handleClickIn18(event)
+    function handleClickIn18(event) // 18+zin.
     {
         handleClickLinkIn18(event);
 
@@ -946,13 +959,77 @@
         iframeContainer.dispatchEvent(customEvent);
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial});
+    /**
+     * Ajax send score to server.
+     * @param {string} method
+     */
+    function ajaxSendScore(method)
+    {
+        $.get($.createLink('score', 'ajax', 'method=' + method));
+    }
+
+    /**
+     * Change current app language.
+     * @param {string} lang
+     */
+    function changeAppLang(lang)
+    {
+        if($('html').attr('lang') === lang) return;
+        reloadPage();
+        $('html').attr('lang', lang);
+    }
+
+    /**
+     * Change current app theme.
+     * @param {string} lang
+     */
+    function changeAppTheme(theme)
+    {
+        const classList = $('html').attr('class').split(' ').filter(x => x.length && !x.startsWith('theme-'));
+        classList.push('theme-' + theme);
+        $('html').attr('class', classList.join(' '));
+        const $theme = $('#zuiTheme');
+        const oldPath = $theme.attr('href').split('/');
+        oldPath.pop();
+        oldPath.push(theme + '.css');
+        $theme.attr('href', oldPath.join('/'));
+        const userMenu = $('#userMenu-toggle').zui();
+        if(!userMenu) return;
+        const themeItem = userMenu.options.menu.items.find(x => x.key === 'theme');
+        themeItem.items.forEach(item => {item.active = item['data-value'] === theme;});
+        userMenu.render({menu: userMenu.options.menu});
+    }
+
+    /**
+     * Select UI language.
+     * @param {string} lang
+     */
+    function selectLang(lang)
+    {
+        $.cookie.set('lang', lang, {expires: config.cookieLife, path: config.webRoot});
+        ajaxSendScore('selectLang');
+        $.apps.changeAppsLang(lang);
+    }
+
+    /**
+     * Select UI theme.
+     * @param {string} lang
+     */
+    function selectTheme(theme)
+    {
+        $.cookie.set('theme', theme, {expires: config.cookieLife, path: config.webRoot});
+        $.ajaxSendScore('selectTheme');
+        $.apps.changeAppsTheme(theme);
+    }
+
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme});
     $.extend($.apps, {openUrl: openUrl});
+    $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
     {
-        if(is18version) return handleClickIn18(e);
+        if(is18version) return handleClickIn18(e); // 18+zin.
 
         if(isInAppTab) window.parent.$('body').trigger('click');
 
@@ -1041,14 +1118,14 @@
         {
             if(window.afterPageUpdate) window.afterPageUpdate($('body'));
 
-            if (isInAppTab && parent.$.apps) {
+            if(isInAppTab && parent.$.apps)
+            {
                 var windowName = window.name;
-                if (windowName && windowName.indexOf('app-') === 0) {
+                if(windowName && windowName.startsWith('app-'))
+                {
                     var appCode = windowName.substring(4);
                     var currentApp = parent.$.apps.openedApps[appCode];
-                    if (currentApp) {
-                        currentApp.$app.removeClass('loading');
-                    }
+                    if(currentApp) currentApp.$app.removeClass('loading');
                 }
             }
         }

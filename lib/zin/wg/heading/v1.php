@@ -80,7 +80,7 @@ class heading extends wg
         return new toolbar
         (
             $showAppName ? $this->buildAppName() : null,
-            set::btnClass('primary'),
+            set::btnClass('ghost'),
             set::items($this->prop('items')),
             $this->children()
         );
