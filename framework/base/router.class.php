@@ -1142,6 +1142,7 @@ class baseRouter
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
+        /* Keep session if 'zentaosid'(session id) in $_GET. */
         if(isset($_GET[$this->config->sessionVar]))
         {
             helper::restartSession($_GET[$this->config->sessionVar]);
