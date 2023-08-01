@@ -283,6 +283,18 @@ class storyModel extends model
             }
         }
 
+        if(strpos($requiredFields, ',plan,') !== false)
+        {
+            /* Create a project with no execution, remove plan required check. */
+            $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
+            if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
+
+            if(empty($project->hasProduct))
+            {
+                if($project->model !== 'scrum' or !$project->multiple) $requiredFields = str_replace(',plan,', ',', $requiredFields);
+            }
+        }
+
         $storyIds    = array();
         $storyFile   = array();
         $mainStoryID = 0;
