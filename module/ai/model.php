@@ -1169,4 +1169,45 @@ class aiModel extends model
 
         return $this->dao->lastInsertID();
     }
+
+    /**
+     * Delete a role template.
+     *
+     * @param  int     $id
+     * @access public
+     * @return false|int
+     */
+    public function deleteRoleTemplate($id)
+    {
+        $this->dao->update(TABLE_PROMPTROLE)
+            ->set('deleted')->eq(1)
+            ->where('id')->eq($id)
+            ->exec();
+        if(dao::isError()) return false;
+
+        return true;
+    }
+
+    /**
+     * Update a role template.
+     *
+     * @param  string    $role
+     * @param  string    $characterization
+     * @access public
+     * @return bool
+     */
+    public function updateRoleTemplate($id, $role, $characterization)
+    {
+        $roleTemplate = new stdclass();
+        $roleTemplate->role = $role;
+        $roleTemplate->characterization = $characterization;
+
+        $this->dao->update(TABLE_PROMPTROLE)
+            ->data($roleTemplate)
+            ->where('id')->eq($id)
+            ->exec();
+        if(dao::isError()) return false;
+
+        return true;
+    }
 }
