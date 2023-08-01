@@ -1,7 +1,7 @@
 <?php
 /**
  * 按执行统计的日完成任务数。
- * count_of_daily_finished_task.
+ * count_of_daily_finished_task_in_execution.
  *
  * 范围：execution
  * 对象：task
@@ -20,7 +20,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_daily_finished_task extends baseCalc
+class count_of_daily_finished_task_in_execution extends baseCalc
 {
     public $dataset = null;
 
