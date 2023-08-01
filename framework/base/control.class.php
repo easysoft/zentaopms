@@ -1090,7 +1090,7 @@ class baseControl
 
             $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
             $this->app->outputXhprof();
-            return helper::end($response);
+            return print($response);
         }
 
         /**
