@@ -36,10 +36,12 @@ class formSettingBtn extends wg
         global $lang;
 
         $customLink = createLink('custom', 'ajaxSaveCustomFields', $this->prop('urlParams', ''));
+        $cancelLink = createLink('custom', 'ajaxGetCustomFields', $this->prop('urlParams', ''));
         return dropdown
         (
             set::arrow('false'),
             set::placement('bottom-end'),
+            set::id('formSettingBtn'),
             to::trigger(btn(set::icon('cog-outline'), setClass('ghost'), set::caret(false))),
             to::menu(menu
             (
@@ -53,10 +55,9 @@ class formSettingBtn extends wg
                     set::actions(array
                     (
                         btn(set::text($lang->save), setClass('primary'), on::click('onSubmitFormtSetting')),
-                        btn(set::text($lang->cancel), set::btnType('reset'), on::click('closeCustomPopupMenu')),
-                        btn(set::text($lang->restore), setClass('text-primary ghost font-bold'), set::href('#'), set('data-url', $customLink), on::click('revertDefaultFields')),
+                        btn(set::text($lang->cancel), set::btnType('button'), on::click('cancelFormSetting'), set('data-url', $cancelLink)),
+                        btn(set::text($lang->restore), setClass('text-primary ghost'), set::href('#'), set('data-url', $customLink), on::click('revertDefaultFields')),
                     )),
-                    to::headingActions(array(btn(set::icon('close'), setClass('ghost'), set::size('sm'), on::click('closeCustomPopupMenu')))),
                     array_map(function($field)
                     {
                         return checkbox
