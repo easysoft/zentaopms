@@ -55,6 +55,15 @@ $lang->tree->repeatName           = '模块名“%s”已经存在！';
 $lang->tree->repeatDirName        = '目录名“%s”已经存在！';
 $lang->tree->shouldNotBlank       = '模块名不能为空格！';
 $lang->tree->syncProductModule    = "同步{$lang->productCommon}模块";
+$lang->tree->host                 = '主机';
+$lang->tree->editHost             = '编辑主机分组';
+$lang->tree->deleteHost           = '删除主机分组';
+$lang->tree->manageHostChild      = '维护主机子分组';
+$lang->tree->groupMaintenance     = '维护主机分组';
+$lang->tree->groupName            = '分组名称';
+$lang->tree->parentGroup          = '上级分组';
+$lang->tree->childGroup           = '子分组';
+$lang->tree->confirmDeleteHost    = '该分组及子分组都会被删除，您确定删除吗？';
 
 $lang->tree->module       = '模块';
 $lang->tree->name         = '模块名称';

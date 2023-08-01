@@ -909,7 +909,7 @@ class treeModel extends model
 
         while($module = $stmt->fetch())
         {
-            $treeMenu = $this->buildTree($module, '', 0, array('treeModel', 'createHostLink'));
+            $treeMenu = $this->build20Tree($module, '', 0, array('treeModel', 'createHostLink'));
             if($module->parent == 0) $treeMenu->parent = $module->root;
 
             $menu[] = $treeMenu;
@@ -995,6 +995,73 @@ class treeModel extends model
             $treeMenu[$module->parent] .= "<li>$linkHtml\n";
         }
         $treeMenu[$module->parent] .= "</li>\n";
+    }
+
+    /**
+     * Build tree of version 20.
+     *
+     * @param  object     $module
+     * @param  string     $type
+     * @param  int|string $parent
+     * @param  array      $userFunc
+     * @param  array      $extra
+     * @param  int        $branch
+     * @access public
+     * @return object|false
+     */
+    public function build20Tree(object $module, string $type, int|string $parent = 0, array $userFunc = array(), array|string $extra = array(), string $branch = 'all'): object|false
+    {
+        /* Add for task #1945. check the module has case or no. */
+        if((isset($extra['rootID']) and isset($extra['branch']) and $branch === 'null') or ($type == 'case' and is_numeric($extra)))
+        {
+            static $objects = array();
+            if(empty($objects))
+            {
+                if(is_array($extra))
+                {
+                    $table   = $this->config->objectTables[$type];
+                    $objects = $this->dao->select('module')->from($table)->where('product')->eq((int)$extra['rootID'])->andWhere('branch')->eq($extra['branch'])->fetchAll('module');
+                }
+                else
+                {
+                    $objects = $this->dao->select('t1.*,t2.module')->from(TABLE_TESTRUN)->alias('t1')
+                        ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                        ->where('t1.task')->eq((int)$extra)
+                        ->fetchAll('module');
+                }
+            }
+            static $modules = array();
+            if(empty($modules))
+            {
+                $typeCondition = "type='story'";
+                if($type != 'story') $typeCondition .= " or type='{$type}'";
+                $modules = $this->dao->select('id,path')->from(TABLE_MODULE)->where('root')->eq($module->root)->andWhere("({$typeCondition})")->fetchPairs('id', 'path');
+            }
+            $childModules = array();
+            foreach($modules as $moduleID => $modulePath)
+            {
+                if(strpos($modulePath, $module->path) === 0) $childModules[$moduleID] = $moduleID;
+            }
+            $hasObjects = false;
+            foreach($childModules as $moduleID)
+            {
+                if(isset($objects[$moduleID]))
+                {
+                    $hasObjects = true;
+                    break;
+                }
+            }
+            if(!$hasObjects) return false;
+        }
+
+        if(is_array($extra)) $extra['branchID'] = $branch;
+        if(empty($extra))
+        {
+            $extra = array();
+            $extra['branchID'] = $branch;
+        }
+
+        return call_user_func($userFunc, $type, $module, $parent, $extra);
     }
 
     /**
@@ -1452,6 +1519,28 @@ class treeModel extends model
     {
         $dimension = zget($extra, 'dimension', 0);
         return html::a(helper::createLink('report', 'browsereport', "dimension={$dimension}&module={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
+    }
+
+    /**
+     * Create link of a host.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  int    $parent
+     * @param  array  $extra
+     * @access public
+     * @return object
+     */
+    public function createHostLink(string $type, object $module, int $parent = 0, array $extra = array()): object
+    {
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : $module->id;
+        $data->parent = $parent ? $parent : $module->parent;
+        $data->name   = $module->name;
+
+        $data->url = helper::createLink('host', 'browse', "browseType=bymodule&param={$module->id}");
+
+        return $data;
     }
 
     /**
