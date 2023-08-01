@@ -98,7 +98,7 @@ class extension extends control
         {
             $this->app->loadClass('pager', $static = true);
             $pager      = new pager($results->dbPager->recTotal, $results->dbPager->recPerPage, $results->dbPager->pageID);
-            $extensions = $results->extensions;
+            $extensions = (array)$results->extensions;
         }
 
         $this->view->title      = $this->lang->extension->obtain;

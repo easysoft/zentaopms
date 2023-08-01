@@ -10,32 +10,27 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$searchForm = form
+$searchForm = div
 (
     set::class('mb-5'),
-    set('action', createLink('extension', 'obtain', "type=bySearch")),
-    formGroup
+    inputGroup
     (
-        inputGroup
+        input
         (
-            input
+            set::name('key'),
+            set::value($this->post->key ? $this->post->key : ''),
+            set::placeholder($lang->extension->bySearch)
+        ),
+        span
+        (
+            set::class('input-group-btn'),
+            btn
             (
-                set::name('key'),
-                set::value($this->post->key ? $this->post->key : ''),
-                set::placeholder($lang->extension->bySearch)
-            ),
-            span
-            (
-                set::class('input-group-btn'),
-                btn
-                (
-                    set::type('submit'),
-                    icon('search')
-                )
+                icon('search'),
+                on::click('searchExtension')
             )
         )
-    ),
-    set::actions(array())
+    )
 );
 
 $menuItems = array();
@@ -54,15 +49,69 @@ foreach(array('byUpdatedTime', 'byAddedTime', 'byDownloads') as $listType)
     );
 }
 
+$menuTree = array();
+foreach(array('byUpdatedTime', 'byAddedTime', 'byDownloads') as $listType)
+{
+    $data = new stdclass();
+    $data->id     = $listType;
+    $data->parent = 0;
+    $data->name   = $lang->extension->$listType;
+    $data->url    = helper::createLink('extension', 'obtain', "type=$listType");
+
+    $menuTree[] = $data;
+}
+
+$featureItems = array();
+foreach($lang->extension->featureBar['browse'] as $browseType => $browseLabel)
+{
+    $featureItems[] = li
+    (
+        set::class('nav-item'),
+        a
+        (
+            set('href', createLink('extension', 'browse', "type=$browseType")),
+            set('data-id', $browseType),
+            $browseLabel,
+        )
+    );
+}
+
+featurebar($featureItems);
+
+toolbar
+(
+    hasPriv('extension', 'upload') ? item(set(array
+    (
+        'icon' => 'cog',
+        'text' => $lang->extension->upload,
+        'class' => 'ghost',
+        'url' => createLink('extension', 'upload'),
+        'data-toggle' => 'modal'
+    ))) : null,
+    hasPriv('extension', 'obtain') ? item(set(array
+    (
+        'icon'  => 'download-alt',
+        'text'  => $lang->extension->obtain,
+        'class' => 'primary',
+        'url'   => createLink('extension', 'obtain')
+    ))) : null,
+);
+
 sidebar
 (
     set::class('bg-white p-4'),
     $searchForm,
-    menu($menuItems),
+    menu
+    (
+        set::class('p-0'),
+        $menuItems
+    ),
     html($moduleTree)
 );
 
 $extensionItems = array();
+$extensionCount = count($extensions);
+
 $i = 1;
 foreach($extensions as $extension)
 {
@@ -156,12 +205,12 @@ foreach($extensions as $extension)
                 )
             )
         ),
-        //$i < count($extensions) ? hr() : null
+        $i < $extensionCount ? hr() : null
     );
     $i ++;
 }
 
-if($pager)
+if($pager->recTotal)
 {
     $extensionItems[] = pager
     (
@@ -178,10 +227,10 @@ div
     set::class('flex col gap-y-1 p-5 bg-white'),
     !empty($extensions) ?  $extensionItems : div
     (
-        set::class('alert danger flex items-center'),
+        set::class('alert ghost text-danger flex items-center'),
         icon
         (
-            'info-sign',
+            'exclamation-sign',
             set::size('2x'),
             set('class', 'alert-icon')
         ),
@@ -194,7 +243,7 @@ div
             ),
             p
             (
-                $lang->extension->errorGetExtensions,                
+                html($lang->extension->errorGetExtensions),
             )
         )
     ),
