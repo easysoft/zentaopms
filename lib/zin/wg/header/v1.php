@@ -251,7 +251,7 @@ class header extends wg
         }
         else
         {
-            $items[] = array('text' => $lang->logout, 'url' => createLink('user', 'logout'), 'target' => '_top', 'icon' => 'exit');
+            $items[] = array('text' => $lang->logout, 'url' => "javascript:$.apps.logout()", 'icon' => 'exit');
         }
 
         return dropdown

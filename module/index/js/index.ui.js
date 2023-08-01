@@ -494,6 +494,27 @@ function goBack(target, url, startState)
 }
 
 /**
+ * Logout current user.
+ *
+ * @param {string} url
+ */
+function logout(url)
+{
+    if(!url) url = getLastApp().currentUrl;
+    $.get($.createLink('user', 'logout', 'referer=' + btoa(url)), function(data)
+    {
+        let load = $.createLink('user', 'login');
+        try
+        {
+            data = JSON.parse(data);
+            if(data.load) load = data.load;
+        }
+        catch (error) {}
+        location.href = load;
+    });
+}
+
+/**
  * Toggle left menu
  * @param {boolean} [toggle]
  * @returns {boolean}
@@ -768,6 +789,7 @@ $.apps = $.extend(apps,
     updateApp:      updateApp,
     getLastApp:     getLastApp,
     goBack:         goBack,
+    logout:         logout,
     isOldPage:      isOldPage,
     getAppCode:     getAppCode,
     updateAppsMenu: updateAppsMenu,
