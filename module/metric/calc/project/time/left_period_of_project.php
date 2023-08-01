@@ -14,7 +14,7 @@
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -22,21 +22,25 @@
  */
 class left_period_of_project extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getAllProjects';
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $fieldList = array('id', 'status', 'end');
 
     public function calculate($row)
     {
+        if($row->status == 'closed')
+        {
+            $this->result[$row->id] = 0;
+        }
+        else
+        {
+            $this->result[$row->id] = $row->end - date('Y-m-d');
+        }
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('project', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
