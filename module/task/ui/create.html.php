@@ -214,7 +214,7 @@ formPanel
 (
     set::id('taskCreateForm'),
     set::title($lang->task->create),
-    set::customFields(array('items' => $customFieldConfig, 'urlParams' => 'module=task&section=custom&key=createFields')),
+    $from == 'task' ? set::customFields(array('items' => $customFieldConfig, 'urlParams' => 'module=task&section=custom&key=createFields')) : null,
     formRow
     (
         $executionBox,
@@ -504,7 +504,6 @@ formPanel
         )
     )
 );
-
 
 /* ====== Render page ====== */
 render();

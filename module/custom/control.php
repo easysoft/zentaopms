@@ -659,6 +659,20 @@ class custom extends control
     }
 
     /**
+     * Ajax get custom fields.
+     *
+     * @param  string $module
+     * @param  string $section
+     * @param  string $key
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCustomFields($module, $section, $key)
+    {
+        return print($this->loadModel('setting')->getItem("owner={$this->app->user->account}&module={$module}&section={$section}&key={$key}"));
+    }
+
+    /**
      * Custom menu view
      *
      * @param  string $module

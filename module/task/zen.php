@@ -63,6 +63,7 @@ class taskZen extends task
         $this->view->storyID       = $storyID;
         $this->view->blockID       = isonlybody() ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assingtome', 'assingtome') : 0;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
+        $this->view->from          = $storyID || $todoID || $bugID  ? 'other' : 'task';
 
         $this->display();
     }
