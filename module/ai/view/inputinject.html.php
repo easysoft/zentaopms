@@ -14,6 +14,7 @@
 ?>
 <?php
   $this->app->loadConfig('ai');
+  $this->app->loadLang('ai');
   $module = $this->app->getModuleName();
   $method = $this->app->getMethodName();
   if(isset($config->ai->availableForms[$module]) && in_array($method, $config->ai->availableForms[$module])):
@@ -144,8 +145,8 @@
         {
           regenerateButton.addEventListener('click', function()
           {
-            const container = regenerateButton.ownerDocument.defaultView.parent.document.querySelector('.load-indicator');
-            if(container) container.classList.toggle('loading', true);
+            $('body').attr('data-loading', '<?php echo $lang->ai->execute->loading;?>');
+            $('body').addClass('load-indicator loading');
           });
         }
       });
