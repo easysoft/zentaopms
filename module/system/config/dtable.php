@@ -1,6 +1,7 @@
 <?php
 global $lang, $app;
 $app->loadLang('instance');
+$app->loadLang('backup');
 
 $config->system->dtable = new stdclass();
 
@@ -27,7 +28,7 @@ $config->system->dtable->dbList->fieldList['actions']['list']['management']['hin
 
 $config->system->dtable->backup = new stdclass();
 
-$config->system->dtable->backup->fieldList['time']['title'] = $lang->system->backup->time;
+$config->system->dtable->backup->fieldList['time']['title'] = $lang->backup->time;
 $config->system->dtable->backup->fieldList['time']['type']  = 'datetime';
 
 $config->system->dtable->backup->fieldList['backupPerson']['title'] = $lang->system->backup->backupPerson;
@@ -40,7 +41,7 @@ $config->system->dtable->backup->fieldList['actions']['type']  = 'actions';
 $config->system->dtable->backup->fieldList['actions']['menu']  = array('restore', 'delete');
 
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['icon'] = 'history';
-$config->system->dtable->backup->fieldList['actions']['list']['restore']['hint'] = $lang->system->backup->restore;
+$config->system->dtable->backup->fieldList['actions']['list']['restore']['hint'] = $lang->backup->restore;
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['url']  = array('module' => 'backup', 'method' => 'restore', 'params' => 'time={time}');
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['data-confirm'] = $lang->system->backup->confirmDelete;
 

@@ -178,7 +178,6 @@ $lang->system->backup->index        = '备份首页';
 $lang->system->backup->history      = '备份记录';
 $lang->system->backup->delete       = '删除备份';
 $lang->system->backup->backup       = '备份';
-$lang->system->backup->restore      = '回滚';
 $lang->system->backup->change       = '保留时间';
 $lang->system->backup->changeAB     = '修改';
 $lang->system->backup->rmPHPHeader  = '去除安全设置';
@@ -192,7 +191,6 @@ $lang->system->backup->name           = '名称';
 $lang->system->backup->currentVersion = '当前版本';
 $lang->system->backup->latestVersion  = '最新版本';
 
-$lang->system->backup->time     = '备份时间';
 $lang->system->backup->files    = '备份文件';
 $lang->system->backup->allCount = '总文件数';
 $lang->system->backup->count    = '备份文件数';
@@ -214,19 +212,12 @@ $lang->system->backup->rollback = '回滚';
 $lang->system->backup->restart  = '重启';
 $lang->system->backup->delete   = '删除';
 
-$lang->system->backup->statusList['success'] = '成功';
-$lang->system->backup->statusList['fail']    = '失败';
-
 $lang->system->backup->restoreProgress['doing'] = '进行中';
 $lang->system->backup->restoreProgress['done']  = '完成';
 
 $lang->system->backup->typeList['manual']  = '手动备份';
 $lang->system->backup->typeList['upgrade'] = '升级前自动备份';
 $lang->system->backup->typeList['restore'] = '回滚前自动备份';
-
-$lang->system->backup->settingDir = '备份目录';
-$lang->system->backup->settingList['nofile'] = '不备份附件和代码';
-$lang->system->backup->settingList['nosafe'] = '不需要防下载PHP文件头';
 
 $lang->system->backup->waitting        = '<span id="backupType"></span>正在进行中，请稍候...';
 $lang->system->backup->progressSQL     = '备份中，已备份%s';
@@ -246,23 +237,13 @@ $lang->system->backup->backingUp       = '进行中';
 $lang->system->backup->restoring       = '进行中';
 
 $lang->system->backup->success = new stdclass();
-$lang->system->backup->success->backup  = '备份成功！';
-$lang->system->backup->success->restore = '还原成功！';
 $lang->system->backup->success->upgrade = '升级成功！';
 $lang->system->backup->success->degrade = '降级成功！';
 
 $lang->system->backup->error = new stdclass();
-$lang->system->backup->error->noCreateDir = '备份目录不存在，也无法创建该目录';
-$lang->system->backup->error->noWritable  = "<code>%s</code> 不可写！请检查该目录权限，否则无法备份。";
-$lang->system->backup->error->noDelete    = "文件 %s 无法删除，修改权限或手工删除。";
-$lang->system->backup->error->restoreSQL  = "数据库还原失败，错误：%s";
-$lang->system->backup->error->restoreFile = "附件还原失败，错误：%s";
-$lang->system->backup->error->backupFile  = "附件备份失败，错误：%s";
-$lang->system->backup->error->backupCode  = "代码备份失败，错误：%s";
 
 $lang->system->backup->error->upgradeFail       = "升级失败!";
 $lang->system->backup->error->upgradeOvertime   = "升级超时!";
 $lang->system->backup->error->degradeFail       = "降级失败!";
 $lang->system->backup->error->beenLatestVersion = "已经是最新版，无需升级!";
 $lang->system->backup->error->requireVersion    = "必须上传版本号!";
-
