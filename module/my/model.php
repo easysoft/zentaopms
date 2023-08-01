@@ -1055,7 +1055,7 @@ class myModel extends model
     public function getReviewingList($browseType, $orderBy = 'time_desc', $pager = null)
     {
         $reviewList = array();
-        if($browseType == 'all' or $browseType == 'demand')   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
+        if($this->config->edition == 'ipd' and ($browseType == 'all' or $browseType == 'demand'))   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
         if($browseType == 'all' or $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
         if($browseType == 'all' or $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($browseType == 'all' or $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
