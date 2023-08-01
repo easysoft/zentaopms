@@ -36,7 +36,7 @@ $config->sessionVar  = 'zentaosid';               // 请求类型为GET：sessio
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
 $config->visions     = ',rnd,lite,';              // 支持的界面类型。                       Supported vision formats.
 
-/* 支持的主题和语言。Supported thems and languages. */
+/* 支持的主题和语言。Supported themes and languages. */
 $config->themes['default'] = 'default';
 $config->langs['zh-cn']    = '简体';
 $config->langs['zh-tw']    = '繁體';
@@ -61,13 +61,13 @@ $config->default->method = 'index';       //默认方法。 Default method.
 /* 数据库设置。Database settings. */
 $config->db = new stdclass();
 $config->slaveDB = new stdclass();
-$config->db->persistant      = false;     // 是否为持续连接。       Pconnect or not.
+$config->db->persistent      = false;     // 是否为持续连接。       Pconnect or not.
 $config->db->driver          = 'mysql';   // 目前只支持MySQL数据库。Must be MySQL. Don't support other database server yet.
 $config->db->encoding        = 'UTF8';    // 数据库编码。           Encoding of database.
 $config->db->strictMode      = true;      // 默认开启MySQL的严格模式。  Turn on the strict mode of MySQL.
 $config->db->prefix          = 'zt_';     // 数据库表名前缀。       The prefix of the table name.
 $config->db->enableSqlite    = false;      // 是否启用SQLite         Enable SQLite or not.
-$config->slaveDB->persistant = false;
+$config->slaveDB->persistent = false;
 $config->slaveDB->driver     = 'mysql';
 $config->slaveDB->encoding   = 'UTF8';
 $config->slaveDB->strictMode = true;
@@ -106,7 +106,7 @@ $config->maxColWidth = 384;
 /* 系统框架配置。Framework settings. */
 $config->framework = new stdclass();
 $config->framework->autoConnectDB   = true;  // 是否自动连接数据库。              Whether auto connect database or not.
-$config->framework->multiLanguage   = true; // 是否启用多语言功能。              Whether enable multi lanuage or not.
+$config->framework->multiLanguage   = true; // 是否启用多语言功能。              Whether enable multi language or not.
 $config->framework->multiTheme      = true; // 是否启用多风格功能。              Whether enable multi theme or not.
 $config->framework->multiSite       = false; // 是否启用多站点模式。              Whether enable multi site mode or not.
 $config->framework->extensionLevel  = 1;     // 0=>无扩展,1=>公共扩展,2=>站点扩展 0=>no extension, 1=> common extension, 2=> every site has it's extension.

@@ -83,7 +83,7 @@ else
     try
     {
         $dsn = "mysql:host={$config->db->host}; port={$config->db->port}; dbname={$config->db->name}";
-        $dbh = new PDO($dsn, $config->db->user, $config->db->password, array(PDO::ATTR_PERSISTENT => $config->db->persistant));
+        $dbh = new PDO($dsn, $config->db->user, $config->db->password, array(PDO::ATTR_PERSISTENT => $config->db->persistent));
         $dbh->exec("SET NAMES {$config->db->encoding}");
 
         $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
@@ -114,7 +114,7 @@ else
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <meta name="renderer" content="webkit"> 
+  <meta name="renderer" content="webkit">
   <link rel='stylesheet' href='<?php echo $themeRoot . 'zui/css/min.css'?>' type='text/css' media='screen' />
 </head>
 <body>
