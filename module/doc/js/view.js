@@ -46,7 +46,7 @@ function ajaxDeleteDoc(link, replaceID, notice)
 function deleteFile(fileID)
 {
     if(!fileID) return;
-    hiddenwin.location.href = createLink('file', 'delete', 'fileID=' + fileID);
+    hiddenwin.location.href = createLink('doc', 'deleteFile', 'docID=' + docID + '&fileID=' + fileID);
 }
 
 /**

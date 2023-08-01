@@ -734,17 +734,17 @@ class doc extends control
         else
         {
             $docContent = $this->dao->select('t1.*')->from(TABLE_DOCCONTENT)->alias('t1')
-                                    ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
-                                    ->where('t2.id')->eq($docID)
-                                    ->fetch();
+                ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
+                ->where('t2.id')->eq($docID)
+                ->fetch();
             unset($docContent->id);
-            $docContent->files   = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
+            $docContent->files    = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
             $docContent->version += 1;
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
 
             $file = $this->file->getById($fileID);
-            $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra = $file->title);
+            if(in_array($file->extension, $this->config->file->imageExtensions)) $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra = $file->title);
             return print(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
         }
     }
