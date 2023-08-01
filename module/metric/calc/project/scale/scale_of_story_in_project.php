@@ -22,21 +22,23 @@
  */
 class scale_of_story_in_project extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStoriesWithProject';
 
-    public $fieldList = array();
+    public $fieldList = array('t3.project', 't1.estimate');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = array();
 
     public function calculate($row)
     {
+        $project  = $row->project;
+        $estimate = $row->estimate;
+        if(!isset($this->result[$project])) $this->result[$project] = 0;
+        $this->result[$project] += $estimate;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('project', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
