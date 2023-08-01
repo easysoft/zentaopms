@@ -428,13 +428,13 @@ else
                     setClass('btn-group'),
                     a
                     (
-                        setClass('btn switchBtn'),
+                        setClass('btn switchBtn text-primary'),
                         set::href(inlink('managePriv', "type=byPackage&param=$groupID&menu=$menu&version=$version")),
                         html("<i class='icon-has-authority-pack'></i>"),
                     ),
                     a
                     (
-                        setClass('btn switchBtn text-gray'),
+                        setClass('btn switchBtn'),
                         set::href(inlink('managePriv', "type=byGroup&param=$groupID&menu=$menu&version=$version")),
                         html("<i class='icon-without-authority-pack'></i>"),
                     ),

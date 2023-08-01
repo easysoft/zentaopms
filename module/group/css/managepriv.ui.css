@@ -85,5 +85,5 @@
 #privList .check-all > label {padding-left: 0; font-weight: 600;}
 #privList .text-middle.text-left {padding-left: 24px;}
 #privList tbody > tr > td {padding: 4px 20px 20px 20px;}
-#privList .group-item {margin-top: 16px;}
+#privList .group-item {margin-top: 16px; display: inline-block; width: 20%;}
 #privList .group-item .checkbox-inline label {padding-left: 3px;}
