@@ -32,7 +32,7 @@ class count_of_invalid_story_in_project extends baseCalc
     {
         $project = $row->project;
         if(!isset($this->result[$project])) $this->result[$project] = 0;
-        if(in_array($row->closedReason, array('duplicate','willnotdo','budesign'))) $this->result[$project] += 1;
+        if(in_array($row->closedReason, array('duplicate','willnotdo','bydesign'))) $this->result[$project] += 1;
     }
 
     public function getResult($options = array())
