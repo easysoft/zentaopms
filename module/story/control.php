@@ -1312,13 +1312,14 @@ class story extends control
         }
 
         $this->commonAction($storyID);
-        $this->story->getAffectedScope($this->view->story);
+        $story = $this->view->story;
+        if($story->status != 'active') return print(js::locate($this->session->storyList, 'parent'));
+        $this->story->getAffectedScope($story);
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->app->loadLang('testcase');
         $this->app->loadLang('execution');
 
-        $story    = $this->view->story;
         $reviewer = $this->story->getReviewerPairs($storyID, $story->version);
         $product  = $this->loadModel('product')->getByID($story->product);
 
