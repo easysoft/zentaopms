@@ -94,7 +94,7 @@ $lang->ai->prompts->action->publishSuccess  = '发布成功';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = '指定角色';
-$lang->ai->prompts->selectDataSource = '选择字段';
+$lang->ai->prompts->selectDataSource = '选择对象';
 $lang->ai->prompts->setPurpose       = '确认操作';
 $lang->ai->prompts->setTargetForm    = '结果处理';
 $lang->ai->prompts->finalize         = '准备发布';
