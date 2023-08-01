@@ -22,8 +22,7 @@ class html extends \html
 {
 }
 
-global $config;
-if($config->installed)
+if(!$_SESSION['installing'])
 {
     class commonModel extends \commonModel
     {
