@@ -105,6 +105,8 @@ $lang->ai->prompts->role             = 'Role';
 $lang->ai->prompts->characterization = 'Characterization';
 $lang->ai->prompts->rolePlaceholder  = '"Act as a <role>"';
 $lang->ai->prompts->charPlaceholder  = 'Detailed characterization of this role';
+$lang->ai->prompts->roleTemplate     = 'Role Template';
+$lang->ai->prompts->roleTemplateTip  = 'After a template is referenced, modifying the role or role description does not affect the template.';
 
 /* Data source selecting. */
 $lang->ai->prompts->selectData       = 'Select data';

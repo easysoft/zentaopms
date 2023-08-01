@@ -105,6 +105,8 @@ $lang->ai->prompts->role             = '角色';
 $lang->ai->prompts->characterization = '角色描述';
 $lang->ai->prompts->rolePlaceholder  = '“你来扮演 <一个什么角色>”';
 $lang->ai->prompts->charPlaceholder  = '该角色的具体描述信息';
+$lang->ai->prompts->roleTemplate     = '角色模版';
+$lang->ai->prompts->roleTemplateTip  = '引用模板后，修改角色、角色描述不会对模板造成影响。';
 
 /* Data source selecting. */
 $lang->ai->prompts->selectData       = '选择数据';
