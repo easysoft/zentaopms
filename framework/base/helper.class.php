@@ -1040,7 +1040,7 @@ function getWebRoot($full = false)
  * @access public
  * @return mixed
  */
-function zget($var, string|int $key, $valueWhenNone = false, $valueWhenExists = false)
+function zget($var, $key, $valueWhenNone = false, $valueWhenExists = false)
 {
     if(!is_array($var) and !is_object($var)) return false;
 

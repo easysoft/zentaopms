@@ -1089,15 +1089,21 @@ class devModel extends model
         $tree = array();
         if(!in_array($type, array('module', 'table'))) return $tree;
 
-        $objects = $type == 'module' ? $this->getModules() : $this->getTables();
+        $currentModule    = $this->app->getModuleName();
+        $currentMethod    = $this->app->getMethodName();
+        $currentParamName = $type == 'module' ? 'module' : 'table';
+
+        $objects   = $type == 'module' ? $this->getModules() : $this->getTables();
         $groupList = array_merge($this->lang->dev->groupList, $this->lang->dev->endGroupList);
         foreach($groupList as $moduleKey => $moduleName)
         {
             if(empty($objects[$moduleKey])) continue;
 
             $module = new stdclass();
+            $module->id       = $moduleKey;
             $module->key      = $moduleKey;
-            $module->title    = $moduleName;
+            $module->name     = $moduleName;
+            $module->url      = '';
             $module->active   = 0;
             $module->children = array();
             foreach($objects[$moduleKey] as $objectKey => $objectName)
@@ -1105,8 +1111,10 @@ class devModel extends model
                 if($type == 'table' and !isset($this->lang->dev->tableList[$objectKey])) continue;
 
                 $object         = new stdclass();
+                $object->id     = $objectName;
                 $object->key    = $objectName;
-                $object->title  = zget($this->lang->dev->tableList, $objectKey, $objectName);
+                $object->name   = zget($this->lang->dev->tableList, $objectKey, $objectName);
+                $object->url    = helper::createLink($currentModule, $currentMethod, "{$currentParamName}={$objectKey}");
                 $object->active = $objectName == $currentObject ? 1 : 0;
                 if($object->active) $module->active = 1;
 
@@ -1127,7 +1135,7 @@ class devModel extends model
      */
     public function getAPIData($apiID = 0, $version = '16.0')
     {
-        $modules     = $this->loadModel('api')->getDemoData('module', $version);
+        $modules = $this->loadModel('api')->getDemoData('module', $version);
         foreach($modules as $index => $module)
         {
             $modules[$module->order] = $module;
@@ -1162,9 +1170,28 @@ class devModel extends model
 
         $this->loadModel('doc');
         $treeMenu = array();
-        foreach($modules as $module) $this->doc->buildTree($treeMenu, 'restapi', 0, 853, $module, $moduleAPIs, $apiID, 0);
+        foreach($modules as $module)
+        {
+            $treeNode = new stdclass();
+            $treeNode->id       = $module->id;
+            $treeNode->name     = $module->name;
+            $treeNode->url      = '';
+            $treeNode->active   = 0;
+            $treeNode->children = array();
+            foreach($moduleAPIs[$module->id] as $moduleAPI)
+            {
+                $child         = new stdclass();
+                $child->id     = $moduleAPI->id;
+                $child->name   = $moduleAPI->title;
+                $child->url    = helper::createLink('dev', 'api', "module=restapi&apiID={$moduleAPI->id}");
+                $child->active = $apiID == $moduleAPI->id ? 1 : 0;
+                if($child->active) $treeNode->active = 1;
 
-        $menu = "<ul id='modules' class='tree menu-active-primary menu-hover-primary' data-ride='tree' data-name='tree-lib'>" . $treeMenu[0] . '</ul>';
-        return array($restApi, $typeList, $menu);
+                $treeNode->children[] = $child;
+            }
+            $treeMenu[] = $treeNode;
+        }
+
+        return array($restApi, $typeList, $treeMenu);
     }
 }

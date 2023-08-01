@@ -53,7 +53,7 @@ function inLink(string $methodName = 'index', string|array $vars = '', string $v
     return \inlink($methodName, $vars, $viewType, $onlybody);
 }
 
-function zget(array|object $var, string|int $key, mixed $valueWhenNone = false, mixed $valueWhenExists = false): mixed
+function zget(array|object $var, string|int|bool $key, mixed $valueWhenNone = false, mixed $valueWhenExists = false): mixed
 {
     return \zget($var, $key, $valueWhenNone, $valueWhenExists);
 }

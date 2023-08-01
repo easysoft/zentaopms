@@ -26,7 +26,6 @@ class dev extends control
 
         $this->view->title          = $this->lang->dev->api;
 
-        $this->view->tables         = $this->dev->getTables();
         $this->view->tab            = 'api';
         $this->view->selectedModule = $module;
         $this->view->apis           = $module ? $this->dev->getAPIs($module) : array();

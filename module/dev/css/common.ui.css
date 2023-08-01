@@ -1,0 +1,3 @@
+.detail+.detail {padding-top: 25px;}
+.sidebar .tree {padding-left: 1rem;}
+.sidebar .tree .tree-item-content {cursor: pointer;}

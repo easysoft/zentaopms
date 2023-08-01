@@ -40,7 +40,6 @@ $config->index->oldPages[] = 'kanban-close';
 $config->index->oldPages[] = 'kanban-setting';
 $config->index->oldPages[] = 'webhook-browse';
 $config->index->oldPages[] = 'webhook-create';
-$config->index->oldPages[] = 'dev-api';
 $config->index->oldPages[] = 'dev-db';
 $config->index->oldPages[] = 'dev-langitem';
 $config->index->oldPages[] = 'dev-editor';
