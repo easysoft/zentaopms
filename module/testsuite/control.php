@@ -71,7 +71,7 @@ class testsuite extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
@@ -183,7 +183,7 @@ class testsuite extends control
         /* Save session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         /* Load pager. */

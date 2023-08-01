@@ -627,7 +627,7 @@ class baseHelper
 
     /**
      * 切换目录。第一次调用的时候记录当前的路径，再次调用的时候切换回之前的路径。
-     * Change directory: first call, save the $cwd, secend call, change to $cwd.
+     * Change directory: first call, save the $cwd, second call, change to $cwd.
      *
      * @param  string $path
      * @static

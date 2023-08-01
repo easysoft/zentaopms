@@ -62,7 +62,7 @@ class company extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         /* Build the search form. */
@@ -211,7 +211,7 @@ class company extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         if($direction == 'next') $orderBy = 'date_desc';
         if($direction == 'pre')  $orderBy = 'date_asc';
 

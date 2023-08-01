@@ -76,7 +76,7 @@ class product extends control
         if(!$orderBy) $orderBy = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
         setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         /* Load pager. */

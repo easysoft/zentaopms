@@ -176,7 +176,7 @@ class caselib extends control
         $actionURL = $this->createLink('caselib', 'browse', "libID=$libID&browseType=bySearch&queryID=myQueryID");
         $this->caselib->buildSearchForm($libID, $libraries, $queryID, $actionURL);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         /* save session .*/

@@ -403,7 +403,7 @@ class testcase extends control
             $this->qa->setMenu($products, $productID, $branchID);
         }
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort    = common::appendOrder($orderBy);
         $stories = $this->story->getZeroCase($productID, $branchID, $sort);
 

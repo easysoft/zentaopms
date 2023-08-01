@@ -95,7 +95,7 @@ class action extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort           = common::appendOrder($orderBy);
         $trashes        = $byQuery ? $this->action->getTrashesBySearch($browseType, $type, $queryID, $sort, $pager) : $this->action->getTrashes($browseType, $type, $sort, $pager);
         $objectTypeList = $this->action->getTrashObjectTypes($type);

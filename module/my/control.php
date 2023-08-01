@@ -349,7 +349,7 @@ EOF;
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
@@ -410,7 +410,7 @@ EOF;
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
@@ -475,7 +475,7 @@ EOF;
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* append id for secend sort. */
+        /* append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         /* Get tasks. */
@@ -558,7 +558,7 @@ EOF;
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         if(strpos($sort, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
@@ -623,7 +623,7 @@ EOF;
         $this->app->loadLang('testcase');
         $this->app->loadLang('project');
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         $waitCount    = 0;
@@ -676,7 +676,7 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
@@ -758,7 +758,7 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         $docs = $this->doc->getDocsByBrowseType($type, $queryID, 0, $sort, $pager);
@@ -1291,7 +1291,7 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         /* Get users by dept. */
@@ -1550,7 +1550,7 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
         /* The header and position. */

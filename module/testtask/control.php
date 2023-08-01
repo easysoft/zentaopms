@@ -108,7 +108,7 @@ class testtask extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         /* Get tasks. */
@@ -198,7 +198,7 @@ class testtask extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         $this->lang->testcase->featureBar['browseunits'] = $this->lang->testtask->unitTag;
@@ -539,7 +539,7 @@ class testtask extends control
             $assignedToList = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted|qafirst');
         }
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy, 't2.id');
 
         /* Get test cases. */

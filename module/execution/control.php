@@ -176,7 +176,7 @@ class execution extends control
         if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_desc';
         helper::setcookie('executionTaskOrder', $orderBy);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         /* Header and position. */
@@ -766,7 +766,7 @@ class execution extends control
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';
         helper::setcookie('executionStoryOrder', $orderBy);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
 
@@ -3519,7 +3519,7 @@ class execution extends control
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */

@@ -728,7 +728,7 @@ class project extends control
             $this->session->set('issueList', $uri, 'project');
         }
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
         /* Set the pager. */

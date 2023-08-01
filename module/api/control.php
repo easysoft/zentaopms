@@ -251,7 +251,7 @@ class api extends control
         $this->app->loadClass('pager', $static = true);
         $this->lang->modulePageNav = $this->generateLibsDropMenu($libs[$libID]);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort     = common::appendOrder($orderBy);
         $releases = $this->api->getReleaseByQuery($libID, '', $sort);
 
@@ -326,7 +326,7 @@ class api extends control
     {
         $this->setMenu($libID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);

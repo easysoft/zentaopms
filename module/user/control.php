@@ -72,7 +72,7 @@ class user extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         /* Get user, totos. */
@@ -258,7 +258,7 @@ class user extends control
 
         $this->app->loadLang('testcase');
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
@@ -300,7 +300,7 @@ class user extends control
         $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
         $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
         $cases = array();
@@ -1206,7 +1206,7 @@ class user extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage = 50, $pageID = 1);
 
-        /* Append id for secend sort. */
+        /* Append id for second sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
         $date    = empty($date) ? '' : date('Y-m-d', $date);
 
