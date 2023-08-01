@@ -6,6 +6,8 @@
     const currentModule = config.currentModule;
     const currentMethod = config.currentMethod;
     const isIndexPage   = currentModule === 'index' && currentMethod === 'index';
+    const isInAppTab    = parent.window !== window;
+    const is18version   = config.version.split('.')[0] === '18';
 
     const isAllowSelfOpen = isIndexPage
         || location.hash === '#_single'
@@ -19,11 +21,25 @@
         || (currentModule === 'my' && currentMethod === 'changepassword')
         || $('body').hasClass('allow-self-open');
 
-    if (parent === window && !isAllowSelfOpen)
+    if(!isInAppTab && !isAllowSelfOpen)
     {
         const shortUrl = location.pathname + location.search + location.hash;
         location.href = $.createLink('index', 'index', `open=${btoa(shortUrl)}`);
         return;
+    }
+
+    if(is18version && isInAppTab && parent.$.apps) // 18+zin.
+    {
+        if(isIndexPage) parent.location.reload();
+
+        var name = window.name;
+        if(name.indexOf('app-') === 0)
+        {
+            $.apps = window.apps = parent.$.apps;
+            var appCode = name.substring(4);
+            $.appCode = appCode;
+            $.apps.updateUrl(appCode, location.href, document.title);
+        }
     }
 }());
 
@@ -49,6 +65,7 @@
         currentCode: currentCode,
         updateApp: function(code, url, title)
         {
+            if(is18version) return;
             const state    = typeof code === 'object' ? code : {url: url, title: title};
             const oldState = window.history.state;
 
@@ -1020,7 +1037,21 @@
             if(frameElement && parent.window.$) parent.window.$(frameElement).trigger('ready.app');
         }
 
-        if(is18version && window.afterPageUpdate) window.afterPageUpdate($('body'));
+        if(is18version) // 18+zin.
+        {
+            if(window.afterPageUpdate) window.afterPageUpdate($('body'));
+
+            if (isInAppTab && parent.$.apps) {
+                var windowName = window.name;
+                if (windowName && windowName.indexOf('app-') === 0) {
+                    var appCode = windowName.substring(4);
+                    var currentApp = parent.$.apps.openedApps[appCode];
+                    if (currentApp) {
+                        currentApp.$app.removeClass('loading');
+                    }
+                }
+            }
+        }
 
         if(DEBUG)
         {
