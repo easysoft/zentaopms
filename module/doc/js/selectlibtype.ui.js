@@ -81,7 +81,7 @@ window.changeApiType = function()
     if(apiType == 'nolink')  loadDocLibs('api', 'api');
     if(apiType == '')
     {
-        const $modulePicker = $('input[name^=module]').zui('picker');
+        const $modulePicker = $('#moduleBox').zui('picker');
         $modulePicker.render({items: []});
     }
 }
@@ -100,7 +100,7 @@ window.loadDocLibs = function(space, type)
         if(data)
         {
             data = JSON.parse(data);
-            const $modulePicker = $('input[name^=module]').zui('picker');
+            const $modulePicker = $('#moduleBox').zui('picker');
             $modulePicker.render({items: data});
             $modulePicker.$.setValue('');
         }
@@ -123,7 +123,7 @@ window.loadExecutions = function()
         if(data)
         {
             data = JSON.parse(data);
-            const $executionPicker = $('input[name^=execution]').zui('picker');
+            const $executionPicker = $('.modal-body input[name^=execution]').zui('picker');
             $executionPicker.render({items: data});
         }
     });
@@ -142,8 +142,31 @@ window.loadObjectModules = function(objectType, docType, objectID)
     $.get(link, function(data)
     {
         data = JSON.parse(data);
-        const $modulePicker = $('input[name^=module]').zui('picker');
+        const $modulePicker = $('#moduleBox').zui('picker');
         $modulePicker.render({items: data});
         $modulePicker.$.setValue('');
     });
+}
+
+/**
+ * Redirect the parent window.
+ *
+ * @param  string objectType
+ * @param  int    libID
+ * @param  string docType
+ * @access public
+ * @return void
+ */
+window.redirectParentWindow = function(objectType, libID, moduleID, docType)
+{
+    let link = '';
+    if(docType == 'api')
+    {
+        link = $.createLink('api', 'create', 'libID=' + libID + '&moduleID=' + moduleID + '&space=' + objectType);
+    }
+    else
+    {
+        link = $.createLink('doc', 'create', 'objectType=' + objectType + '&objectID=0&libID=' + libID + '&moduleID=' + moduleID + '&docType=' + docType) + '#app=doc';
+    }
+    loadPage(link);
 }

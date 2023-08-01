@@ -90,6 +90,7 @@ form
             set::labelClass('executionTH'),
             picker
             (
+                setID('executionBox'),
                 set::name('execution'),
                 set::items(array()),
                 set::value(''),
@@ -135,7 +136,7 @@ form
         set::required(true),
         picker
         (
-            setID('module'),
+            setID('moduleBox'),
             set::name('module'),
             set::items(array()),
             set::value(''),

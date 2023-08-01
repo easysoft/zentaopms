@@ -1400,7 +1400,6 @@ class doc extends control
             }
 
             if(strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
-            $response['message']    = $this->lang->saveSuccess;
             $response['result']     = 'success';
             $response['closeModal'] = true;
             $response['callback']   = "redirectParentWindow(\"{$this->post->space}\", {$libID}, {$moduleID}, \"{$this->post->type}\")";
