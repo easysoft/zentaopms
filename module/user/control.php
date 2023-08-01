@@ -1243,7 +1243,7 @@ class user extends control
             $this->app->user->avatar = $image->webPath;
             $this->session->set('user', $this->app->user);
             $this->dao->update(TABLE_USER)->set('avatar')->eq($image->webPath)->where('account')->eq($this->app->user->account)->exec();
-            exit('success');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('" . helper::createLink('my', 'profile') . "', 'profile');"));
         }
 
         $this->view->user  = $this->user->getById($this->app->user->account);

@@ -1433,7 +1433,7 @@ class userModel extends model
         $fileIdList = array_keys($uploadResult);
         $file       = $this->file->getByID($fileIdList[0]);
 
-        return array('result' => 'success', 'message' => '', 'locate' => helper::createLink('user', 'cropavatar', "image={$file->id}"));
+        return array('result' => 'success', 'message' => '', 'fileID' => $file->id, 'locate' => helper::createLink('user', 'cropavatar', "image={$file->id}"));
     }
 
     /**

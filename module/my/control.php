@@ -1582,7 +1582,7 @@ EOF;
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $result = $this->loadModel('user')->uploadAvatar();
-            $this->send($result);
+            return $this->send(array('result' => 'success', 'callback' => "loadModal('" . helper::createLink('user', 'cropavatar', "image={$result['fileID']}") . "', 'profile');"));
         }
     }
 

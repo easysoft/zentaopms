@@ -141,6 +141,7 @@ class header extends wg
                 'style'     => array('padding-left' => 0),
                 'data-toggle' => 'modal',
                 'data-size' => 700,
+                'data-id'   => 'profile',
                 'renders'   => array(array('__html' => implode('', array
                 (
                     userAvatar(set::user($user), setClass('flex-none'))->render(),
@@ -162,7 +163,8 @@ class header extends wg
                 'text' => $lang->profile,
                 'class' => 'iframe',
                 'data-toggle' => 'modal',
-                'data-size' => 700
+                'data-size' => 700,
+                'data-id'   => 'profile',
             );
 
             if($app->config->vision === 'rnd')

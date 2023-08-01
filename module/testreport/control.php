@@ -194,7 +194,7 @@ class testreport extends control
                 if($testTask->build == 'trunk') continue;
                 $taskPairs[$testTask->id] = $testTask->name;
             }
-            if(empty($taskPairs)) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->noTestTask, 'confirmed' => inlink('browse', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
+            if(empty($taskPairs)) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->noTestTask, 'confirmed' => $this->createLink('testtask', 'create', "proudctID=$productID"), 'canceled' => inlink('browse', "proudctID=$productID"))));
 
             if(empty($objectID))
             {
