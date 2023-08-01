@@ -633,6 +633,63 @@ class blockZen extends block
     }
 
     /**
+     * 打印产品统计区块数据。
+     * Print product release statistic block.
+     *
+     * @param  object    $block
+     * @access protected
+     * @return void
+     */
+    protected function printReleaseStatisticBlock(object $block): void
+    {
+
+
+        $years  = array();
+        $months = array();
+        $groups = array();
+        for($i = 5; $i >= 0; $i --)
+        {
+            $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
+            $months[date('m', strtotime("first day of -{$i} month"))] = date('m', strtotime("first day of -{$i} month"));
+            $groups[date('Y-m', strtotime("first day of -{$i} month"))] = date('Y-m', strtotime("first day of -{$i} month"));
+        }
+        $monthRelease = $this->loadModel('metric')->getResultByCode('count_of_monthly_created_release', array('year' => join(',', $years), 'month' => join(',', $months)));
+
+        $products      = $this->loadModel('product')->getOrderedProducts('all');
+        $productIdList = array_keys($products);
+        $releaseGroup  = $this->metric->getResultByCode('count_of_annual_created_release_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
+
+        foreach($groups as $group)
+        {
+            $releaseData[$group]  = 0;
+            if(!empty($monthRelease))
+            {
+                foreach($monthRelease as $release)
+                {
+                    if($group == "{$release->year}-{$release->month}") $releaseData[$group] = $release->value;
+                }
+            }
+        }
+
+        $releases = array();
+        foreach($products as $product)
+        {
+            $releases[$product->name] = 0;
+            if(!empty($releaseGroup))
+            {
+                foreach($releaseGroup as $release)
+                {
+                    if($product->id == $release->product) $releases[$product->name] = $release->value;
+                }
+            }
+        }
+        arsort($releases);
+
+        $this->view->releaseData = $releaseData;
+        $this->view->releases    = $releases;
+    }
+
+    /**
      * Print Build block.
      *
      * @param  object    $block
@@ -889,6 +946,7 @@ class blockZen extends block
 
         $years  = array();
         $months = array();
+        $groups = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
@@ -2280,6 +2338,7 @@ class blockZen extends block
     {
         $years  = array();
         $months = array();
+        $groups = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
@@ -2525,6 +2584,7 @@ class blockZen extends block
 
         $years  = array();
         $months = array();
+        $groups = array();
         for($i = 5; $i >= 5; $i --)
         {
             $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));

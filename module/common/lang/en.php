@@ -77,6 +77,7 @@ $lang->moreLink           = 'MORE';
 $lang->day                = ' Day';
 $lang->today              = 'Today';
 $lang->yesterday          = 'Yesterday';
+$lang->number             = 'Number';
 $lang->customConfig       = 'Custom Config';
 $lang->public             = 'Public';
 $lang->trunk              = 'Trunk';

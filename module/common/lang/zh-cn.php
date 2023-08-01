@@ -77,6 +77,7 @@ $lang->moreLink           = 'More';
 $lang->day                = '天';
 $lang->today              = '今日';
 $lang->yesterday          = '昨日';
+$lang->number             = '个';
 $lang->customConfig       = '自定义';
 $lang->public             = '公共';
 $lang->trunk              = '主干';
