@@ -14,6 +14,7 @@ formPanel
 (
     set::title($lang->convert->jira->initJiraUser),
     set::submitBtnText($lang->convert->jira->next),
+    set::backUrl(inlink('mapJira2Zentao', "method={$method}&dbName={$this->session->jiraDB}&step=4")),
     formRow
     (
         formGroup
