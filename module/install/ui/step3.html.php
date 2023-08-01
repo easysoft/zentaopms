@@ -11,6 +11,14 @@ declare(strict_types=1);
 namespace zin;
 
 set::zui(true);
+
+if(empty($myConfig))
+{
+    h::js("zui.Modal.alert('{$lang->install->errorNotInitConfig}').then((res) => {openUrl('" . inlink('step2') . "')});");
+    render('pagebase');
+    return;
+}
+
 $configContent = <<<EOT
 <?php
 \$config->installed       = true;
@@ -73,13 +81,22 @@ div
             cell
             (
                 setClass('text-center'),
-                btn
+                form
                 (
-                    setClass('px-6'),
-                    set::url(inlink('step4')),
-                    set::type('primary'),
-                    $lang->install->next,
-                ),
+                    set::actions(array()),
+                    input
+                    (
+                        set::name('hidden'),
+                        set::type('hidden'),
+                    ),
+                    btn
+                    (
+                        setClass('px-6'),
+                        set::type('primary'),
+                        set::btnType('submit'),
+                        $lang->install->next,
+                    ),
+                )
             ),
         ),
     ),

@@ -158,6 +158,7 @@ $lang->install->saveConfig         = '保存配置文件';
 $lang->install->save2File          = '<div class="text-warning">拷贝上面文本框中的内容，将其保存到 "<strong> %s </strong>"中。您以后还可继续修改此配置文件。</div>';
 $lang->install->saved2File         = '配置信息已经成功保存到" <strong>%s</strong> "中。您后面还可继续修改此文件。';
 $lang->install->errorNotSaveConfig = '还没有保存配置文件';
+$lang->install->errorNotInitConfig = '还没有生成配置文件';
 
 global $app;
 $lang->install->CSRFNotice = "系统已开启了CSRF的防御，如需关闭，请联系管理员到{$app->basePath}config/config.php文件中手动关闭。";

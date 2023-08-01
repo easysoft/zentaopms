@@ -120,13 +120,13 @@ class install extends control
     {
         if(!empty($_POST))
         {
-
-            $myConfig = '';
-            foreach($_POST as $key => $value) $myConfig .= ",{$key}={$value}";
-            $myConfig = urlencode(trim($myConfig, ','));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('step3', "myConfig={$myConfig}")));
             $return = $this->install->checkConfig();
             if($return->result != 'ok') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: 'sm', iconClass: 'text-4xl text-warning',  message: '" . str_replace("'", '"', $return->error) . "'})"));
+
+            $myConfig = array();
+            foreach($_POST as $key => $value) $myConfig[$key] = $value;
+            $this->session->set('myConfig', $myConfig);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('step3')));
         }
         $dbHost = $dbPort = $dbName = $dbUser = $dbPassword = '';
 
@@ -153,12 +153,13 @@ class install extends control
      * @access public
      * @return void
      */
-    public function step3($myConfig = '')
+    public function step3()
     {
-        $myConfig = urldecode($myConfig);
-        $myConfig = str_replace(array(',', ' '), array('&', ''), $myConfig);
-        parse_str($myConfig, $myConfigOutput);
-
+        if(!empty($_POST))
+        {
+            if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig));
+            return $this->send(array('result' => 'success', 'message' => '', 'load' => inlink('step4')));
+        }
         /* Set the session save path when the session save path is null. */
         $customSession = false;
         $checkSession  = ini_get('session.save_handler') == 'files';
@@ -189,7 +190,7 @@ class install extends control
         $this->view->config        = $this->config;
         $this->view->title         = $this->lang->install->saveConfig;
         $this->view->customSession = $customSession;
-        $this->view->myConfig      = $myConfigOutput;
+        $this->view->myConfig      = $this->session->myConfig;
         $this->display();
     }
 
@@ -205,10 +206,11 @@ class install extends control
         {
             $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // Update mode.
             $this->loadModel('custom')->disableFeaturesByMode($this->post->mode);
-            return $this->send(array('load' => inlink('step5')));
+            return $this->send(array('result' => 'success', 'load' => inlink('step5')));
         }
 
-        if(!isset($this->config->installed) or !$this->config->installed)
+        $this->view->title = $this->lang->install->selectMode;
+        if(!isset($this->config->installed) || !$this->config->installed)
         {
             $this->view->error = $this->lang->install->errorNotSaveConfig;
             $this->display();
@@ -219,7 +221,6 @@ class install extends control
 
             list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->loadModel('custom')->computeFeatures();
 
-            $this->view->title                 = $this->lang->install->selectMode;
             $this->view->edition               = $this->config->edition;
             $this->view->disabledFeatures      = $disabledFeatures;
             $this->view->enabledScrumFeatures  = $enabledScrumFeatures;

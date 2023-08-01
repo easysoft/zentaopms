@@ -10,6 +10,15 @@ declare(strict_types=1);
  */
 namespace zin;
 
+set::zui(true);
+
+if(isset($error))
+{
+    h::js("zui.Modal.alert('{$lang->install->errorNotSaveConfig}').then((res) => {openUrl('" . inlink('step3') . "')});");
+    render('pagebase');
+    return;
+}
+
 $trs = array();
 foreach($disabledFeatures as $feature)
 {
@@ -68,7 +77,6 @@ foreach($config->custom->allFeatures as $feature)
     );
 }
 
-set::zui(true);
 div
 (
     set::id('main'),

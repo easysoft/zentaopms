@@ -158,6 +158,7 @@ $lang->install->saveConfig         = 'Konfiguration speichern';
 $lang->install->save2File          = '<div class="text-warning">Kopieren Sie den Inhalt aus der Textbox und speichern Sie diesen als "<strong> %s </strong>". Sie können die Konfiguration später ändern.</div>';
 $lang->install->saved2File         = 'Die Konfigurationsdatei wurde gespeichert unter " <strong>%s</strong> ". Sie können die Konfiguration später ändern.';
 $lang->install->errorNotSaveConfig = 'Die Konfigurationsdatei wurde nicht gespeichert.';
+$lang->install->errorNotInitConfig = 'The configuration has not been created.';
 
 global $app;
 $lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->basePath}config/config.php file.";

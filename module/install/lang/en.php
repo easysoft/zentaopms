@@ -158,6 +158,7 @@ $lang->install->saveConfig         = 'Save config file';
 $lang->install->save2File          = '<div class="text-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this configuration file later.</div>';
 $lang->install->saved2File         = 'The configuration file has been saved to " <strong>%s</strong> ". You can change this file later.';
 $lang->install->errorNotSaveConfig = 'The configuration file is not saved.';
+$lang->install->errorNotInitConfig = 'The configuration has not been created.';
 
 global $app;
 $lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->basePath}config/config.php file.";
