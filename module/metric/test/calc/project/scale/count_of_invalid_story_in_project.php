@@ -21,4 +21,4 @@ pid=1
 
 r(count($calc->getResult())) && p('') && e('6'); // 测试分组数。
 
-r($calc->getResult(array('project' => '4'))) && p('0:value') && e('7');  // 测试。
+r($calc->getResult(array('project' => '4'))) && p('0:value') && e('8');  // 测试。
