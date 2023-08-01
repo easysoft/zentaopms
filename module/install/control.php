@@ -118,6 +118,12 @@ class install extends control
      */
     public function step2()
     {
+        if(!empty($_POST))
+        {
+            $return = $this->install->checkConfig();
+            if($return->result == 'ok') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('step3')));
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: 'sm', iconClass: 'text-4xl text-warning',  message: '" . str_replace("'", '"', $return->error) . "'})"));
+        }
         $dbHost = $dbPort = $dbName = $dbUser = $dbPassword = '';
 
         /* Get mysql env in docker container. */
