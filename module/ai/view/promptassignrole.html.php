@@ -27,7 +27,7 @@
           <div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <h4><?php echo $lang->ai->prompts->assignRole;?></h4>
-              <?php echo html::commonButton("<span>{$lang->ai->prompts->roleTemplate}</span> " . "<icon class='icon icon-chevron-left'></icon> ", 'id="expandRoleTemplatePanel"', 'btn btn-info');?>
+              <?php echo html::commonButton("<span>{$lang->ai->prompts->roleTemplate}</span> " . "<icon class='icon icon-first-page'></icon> ", 'id="expandRoleTemplatePanel"', 'btn btn-info');?>
             </div>
             <div class='content-row'>
               <div class='input-label'><span><?php echo $lang->ai->prompts->model;?></span></div>
@@ -90,7 +90,7 @@ $(function () {
     {
       const roleTemplate = document.getElementById('roleTemplate');
       const isPanelExpanded = roleTemplate.style.display === 'block';
-      expandRoleTemplatePanel.querySelector('icon').className = isPanelExpanded ? 'icon icon-chevron-left' : 'icon icon-chevron-right';
+      expandRoleTemplatePanel.querySelector('icon').className = isPanelExpanded ? 'icon icon-first-page' : 'icon icon-last-page';
       if(roleTemplate)
       {
         roleTemplate.style.display = isPanelExpanded ? 'none' : 'block';
