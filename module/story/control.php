@@ -588,6 +588,24 @@ class story extends control
 
         if(!empty($_POST))
         {
+            if($executionID)
+            {
+                $requiredFields = ',' . $this->config->story->create->requiredFields . ',';
+                if(strpos($requiredFields, ',plan,') !== false)
+                {
+                    /* Create a project with no execution, remove plan required check. */
+                    $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
+                    if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
+
+                    if(empty($project->hasProduct))
+                    {
+                        if($project->model !== 'scrum' or !$project->multiple) $requiredFields = str_replace(',plan,', ',', $requiredFields);
+                    }
+                }
+
+                $this->config->story->create->requiredFields = trim($requiredFields, ',');
+            }
+
             $mails = $this->story->batchCreate($productID, $branch, $storyType);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
