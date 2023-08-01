@@ -730,6 +730,10 @@ $lang->navGroup->doctemplate   = 'admin';
 $lang->navGroup->notifysetting = 'admin';
 $lang->navGroup->holidayseason = 'admin';
 $lang->navGroup->system        = 'admin';
+$lang->navGroup->serverroom    = 'admin';
+$lang->navGroup->account       = 'admin';
+$lang->navGroup->host          = 'admin';
+$lang->navGroup->ops           = 'admin';
 
 $lang->navGroup->index   = 'index';
 $lang->navGroup->misc    = 'misc';
