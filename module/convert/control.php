@@ -265,9 +265,9 @@ class convert extends control
             if($method == 'db')
             {
                 $dbName = $this->post->dbName;
-                if(!$dbName) return $this->send(array('result' => 'fail', 'message' => $this->lang->convert->jira->dbNameEmpty));
-                if(!$this->convert->dbExists($dbName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->convert->jira->invalidDB));
-                if(!$this->convert->tableExistsOfJira($dbName, 'nodeassociation')) return $this->send(array('result' => 'fail', 'message' => $this->lang->convert->jira->invalidTable));
+                if(!$dbName) return $this->send(array('result' => 'fail', 'message' => array('dbName' => sprintf($this->lang->error->notempty, $this->lang->convert->jira->database))));
+                if(!$this->convert->dbExists($dbName)) return $this->send(array('result' => 'fail', 'message' => array('dbName' => $this->lang->convert->jira->invalidDB)));
+                if(!$this->convert->tableExistsOfJira($dbName, 'nodeassociation')) return $this->send(array('result' => 'fail', 'message' => array('dbName' => $this->lang->convert->jira->invalidTable)));
 
                 $this->session->set('jiraDB', $dbName);
                 $link = $this->createLink('convert', 'mapJira2Zentao', "method=db&dbName={$this->post->dbName}");
@@ -281,8 +281,8 @@ class convert extends control
             if(!file_exists($jiraFilePath . 'entities.xml')) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->convert->jira->notExistEntities, $jiraFilePath . 'entities.xml')));
 
             $this->convert->splitFile();
-            $link = $this->createLink('convert', 'mapJira2Zentao', "method=file");
 
+            $link = $this->createLink('convert', 'mapJira2Zentao', 'method=file');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
