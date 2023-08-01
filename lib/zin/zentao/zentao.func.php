@@ -22,6 +22,7 @@ class html extends \html
 {
 }
 
+global $config;
 if($config->installed)
 {
     class commonModel extends \commonModel
