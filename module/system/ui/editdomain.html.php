@@ -19,6 +19,7 @@ formPanel
         formGroup
         (
             set::label($lang->system->domain->oldDomain),
+            set::name(''),
             set::control('static'),
             set::value($this->loadModel('cne')->sysDomain()),
             h::span
