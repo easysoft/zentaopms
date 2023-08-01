@@ -886,7 +886,14 @@ class doc extends control
         }
 
         $moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs, $docType);
-        return print(html::select('module', $moduleOptionMenu, '', "class='form-control'"));
+
+        $items = array();
+        foreach($moduleOptionMenu as $id => $name)
+        {
+            if(empty($id)) continue;
+            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+        }
+        return print(json_encode($items));
     }
 
     /**

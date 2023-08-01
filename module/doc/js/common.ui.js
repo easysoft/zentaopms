@@ -197,6 +197,7 @@ window.loadObjectModules = function(e)
 
     if(!objectID || !objectType) return false;
 
+    let docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
     if(typeof docType == 'undefined') docType = 'doc';
     const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
 

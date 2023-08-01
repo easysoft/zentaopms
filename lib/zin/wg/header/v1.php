@@ -339,11 +339,9 @@ class header extends wg
             switch($objectType)
             {
                 case 'doc':
-                    $params             = "objectType=&objectID=0&libID=0";
-                    $createMethod       = 'selectLibType';
-                    $isOnlyBody         = true;
-                    $item['class']      = 'iframe';
-                    $item['data-width'] = '700px';
+                    $params              = "objectType=&objectID=0&libID=0";
+                    $createMethod        = 'selectLibType';
+                    $item['data-toggle'] = 'modal';
                     break;
                 case 'project':
                     if($config->vision == 'lite')
