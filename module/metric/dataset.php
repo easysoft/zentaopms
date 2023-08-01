@@ -205,6 +205,32 @@ class dataset
     }
 
     /**
+     * 获取执行的研发需求数据。
+     * Get story list, with execution and type is story.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getDevStoriesWithExecution($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t1.id=t3.story')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project=t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t4.project=t5.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('story')
+            ->andWhere('t2.shadow')->eq(0)
+            ->andWhere('t4.deleted')->eq(0) // 已删除的执行
+            ->andWhere('t4.type')->in('sprint,stage,kanban')
+            ->andWhere('t5.deleted')->eq(0) // 已删除的项目
+            ->query();
+    }
+
+    /**
      * 获取项目的研发需求数据。
      * Get story list, with project and type is story.
      *
@@ -224,6 +250,7 @@ class dataset
             ->andWhere('t1.type')->eq('story')
             ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t4.deleted')->eq(0)
+            ->andWhere('t4.type')->eq('project')
             ->query();
     }
 

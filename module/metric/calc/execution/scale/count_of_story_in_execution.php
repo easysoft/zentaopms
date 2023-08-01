@@ -1,7 +1,7 @@
 <?php
 /**
  * 按执行统计的研发需求总数。
- * count_of_story_in_execution.
+ * Count of story in execution.
  *
  * 范围：execution
  * 对象：story
@@ -9,7 +9,7 @@
  * 度量名称：按执行统计的研发需求总数
  * 单位：个
  * 描述：按执行统计的研发需求总数是指执行中创建和关联的所有研发需求的数量。该度量项反映了执行的规模和复杂度，为执行计划和资源分配提供了参考。
- * 定义：执行中研发需求个数求和;过滤已删除的研发需求;过滤已删除的执行;过滤已删除的项目
+ * 定义：执行中研发需求个数求和;过滤已删除的研发需求;过滤已删除的执行;过滤已删除的项目;
  * 度量库：
  * 收集方式：realtime
  *
@@ -22,21 +22,22 @@
  */
 class count_of_story_in_execution extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getDevStoriesWithExecution';
 
-    public $fieldList = array();
+    public $fieldList = array('t3.project');
 
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $result = array();
 
     public function calculate($row)
     {
+        $project = $row->project;
+        if(!isset($this->result[$project])) $this->result[$project] = 0;
+        $this->result[$project] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('project', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
