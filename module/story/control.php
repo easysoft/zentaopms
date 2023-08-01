@@ -62,6 +62,8 @@ class story extends control
 
             /* Get story data from post. */
             $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID);
+            if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $response  = $this->storyZen->checkRepeatStory($storyData, $objectID);
             if($response) return $this->send($response);
 
