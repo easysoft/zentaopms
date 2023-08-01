@@ -130,7 +130,7 @@ $lang->ai->prompts->promptPreview  = '操作提词预览';
 /* Target form selecting. */
 $lang->ai->prompts->selectTargetForm    = '选择表单';
 $lang->ai->prompts->selectTargetFormTip = '选择后，可以将大语言模型返回的结果直接录入到禅道对应的表单中。';
-$lang->ai->prompts->goingTesting        = '正在跳转';
+$lang->ai->prompts->goingTesting        = '即将跳转至调试页面';
 $lang->ai->prompts->goingTestingFail    = '无法去调试，找不到合适的对象';
 
 /* Finalize page. */

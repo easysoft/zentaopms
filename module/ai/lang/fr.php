@@ -129,7 +129,7 @@ $lang->ai->prompts->promptPreview  = 'Purpose Prompt Preview';
 /* Target form selecting. */
 $lang->ai->prompts->selectTargetForm    = 'Select Target Form';
 $lang->ai->prompts->selectTargetFormTip = 'Results returned from LLMs can be directly inputed into forms within ZenTao.';
-$lang->ai->prompts->goingTesting        = 'Redirecting';
+$lang->ai->prompts->goingTesting        = 'Redirecting to testing page';
 $lang->ai->prompts->goingTestingFail    = 'Unable to go testing, no suitable object found.';
 
 /* Finalize page. */
