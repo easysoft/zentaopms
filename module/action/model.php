@@ -1048,6 +1048,57 @@ class actionModel extends model
     }
 
     /**
+     * Print changes of every action.
+     *
+     * @param  string    $objectType
+     * @param  array     $histories
+     * @param  bool      $canChangeTag
+     * @access public
+     * @return void
+     */
+    public function renderChanges($objectType, $histories, $canChangeTag = true)
+    {
+        if(empty($histories)) return;
+
+        $maxLength            = 0;          // The max length of fields names.
+        $historiesWithDiff    = array();    // To save histories without diff info.
+        $historiesWithoutDiff = array();    // To save histories with diff info.
+
+        /* Diff histories by hasing diff info or not. Thus we can to make sure the field with diff show at last. */
+        foreach($histories as $history)
+        {
+            $fieldName = $history->field;
+            $history->fieldLabel = (isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName)) ? $this->lang->$objectType->$fieldName : $fieldName;
+            if($objectType == 'module') $history->fieldLabel = $this->lang->tree->$fieldName;
+            if($fieldName == 'fileName') $history->fieldLabel = $this->lang->file->$fieldName;
+            if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
+            $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
+        }
+        $histories = array_merge($historiesWithoutDiff, $historiesWithDiff);
+
+        $content = '';
+
+        foreach($histories as $history)
+        {
+            $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
+            if($history->diff != '')
+            {
+                $history->diff      = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
+                $history->diff      = ($history->field != 'subversion' && $history->field != 'git') ? htmlSpecialString($history->diff) : $history->diff;   // Keep the diff link.
+                $history->diff      = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
+                $history->diff      = nl2br($history->diff);
+                $history->noTagDiff = $canChangeTag ? preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff) : '';
+                $content .= sprintf($this->lang->action->desc->diff2, $history->fieldLabel, $history->noTagDiff, $history->diff);
+            }
+            else
+            {
+                $content .= sprintf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
+            }
+        }
+        return $content;
+    }
+
+    /**
      * Print actions of an object.
      *
      * @param  object    $action

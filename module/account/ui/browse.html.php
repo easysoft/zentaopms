@@ -31,7 +31,7 @@ jsVar('sortLink', helper::createLink('account', 'browse', "browseType=$browseTyp
 
 dtable
 (
-    set::userMap($users),
+    set::userMap($accountList),
     set::cols(array_values($config->account->dtable->fieldList)),
     set::data($tableData),
     set::sortLink(jsRaw('createSortLink')),
