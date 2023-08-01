@@ -1006,20 +1006,16 @@
      */
     function selectLang(lang)
     {
-        $.cookie.set('lang', lang, {expires: config.cookieLife, path: config.webRoot});
-        ajaxSendScore('selectLang');
-        $.apps.changeAppsLang(lang);
+        parent.selectLang(lang);
     }
 
     /**
      * Select UI theme.
-     * @param {string} lang
+     * @param {string} theme
      */
     function selectTheme(theme)
     {
-        $.cookie.set('theme', theme, {expires: config.cookieLife, path: config.webRoot});
-        $.ajaxSendScore('selectTheme');
-        $.apps.changeAppsTheme(theme);
+        parent.selectTheme(theme);
     }
 
     $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme});
