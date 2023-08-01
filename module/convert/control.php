@@ -355,35 +355,18 @@ class convert extends control
 
         if($_POST)
         {
-            if(!$this->post->password1 || !$this->post->password2)
-            {
-                $response['result']  = 'fail';
-                $response['message'] = $this->lang->convert->jira->passwordEmpty;
-                return print($this->send($response));
-            }
-
-            if(strlen(trim($this->post->password1)) < 6)
-            {
-                $response['result']  = 'fail';
-                $response['message'] = $this->lang->convert->jira->passwordLess;
-                return print($this->send($response));
-            }
-
-            if($this->post->password1 != $this->post->password2)
-            {
-                $response['result']  = 'fail';
-                $response['message'] = $this->lang->convert->jira->passwordDifferent;
-                return print($this->send($response));
-            }
+            $errors = array();
+            if(!$this->post->password1) $errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+            if(!$this->post->password2) $errors['password2'][] = sprintf($this->lang->error->notempty, $this->lang->user->password2AB);
+            if($this->post->password1 && strlen(trim($this->post->password1)) < 6) $errors['password1'][] = $this->lang->convert->jira->passwordLess;
+            if($this->post->password1 && $this->post->password2 && $this->post->password1 != $this->post->password2) $errors['password2'][] = $this->lang->convert->jira->passwordDifferent;
+            if($errors) return $this->send(array('result' => 'fail', 'message' => $errors));
 
             $jiraUser['password'] = md5($this->post->password1);
             $jiraUser['group']    = $this->post->group;
             $this->session->set('jiraUser', $jiraUser);
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = $this->createLink('convert', 'importJira', "method=$method");
-            return print($this->send($response));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('importJira', "method={$method}")));
         }
 
         $this->view->title  = $this->lang->convert->jira->initJiraUser;
