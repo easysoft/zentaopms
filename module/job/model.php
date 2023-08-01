@@ -30,6 +30,14 @@ class jobModel extends model
             $job->project   = $pipeline->project;
             $job->reference = $pipeline->reference;
         }
+        elseif($job->engine == 'jenkins')
+        {
+            if(strpos($job->pipeline, '/job/') !== false)
+            {
+                $job->rawPipeline = $job->pipeline;
+                $job->pipeline    = trim(str_replace('/job/', '/', $job->pipeline), '/');
+            }
+        }
         return $job;
     }
 
@@ -176,6 +184,7 @@ class jobModel extends model
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->remove('repoType,reference')
+            ->cleanInt('product')
             ->get();
 
         if($job->engine == 'jenkins')
@@ -188,7 +197,7 @@ class jobModel extends model
         {
             $repo    = $this->loadModel('repo')->getByID($job->repo);
             $project = zget($repo, 'project');
-            if(!empty($repo))
+            if($job->repo && !empty($repo))
             {
                 $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, $this->post->reference);
                 if(!is_array($pipeline) or empty($pipeline))
@@ -235,7 +244,7 @@ class jobModel extends model
             }
         }
 
-        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
+        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
         $job->svnDir = '';
         if($job->triggerType == 'tag' and $this->post->repoType == 'Subversion')
@@ -362,7 +371,7 @@ class jobModel extends model
             }
         }
 
-        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
+        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
         $job->svnDir = '';
         if($job->triggerType == 'tag' and $this->post->repoType == 'Subversion')
@@ -671,6 +680,25 @@ class jobModel extends model
             ->beginIF(!$showDeleted)->andWhere('deleted')->eq('0')->fi()
             ->beginIF(!empty($projectKeys) or !$emptyShowAll)->andWhere('projectKey')->in($projectKeys)->fi()
             ->fetchPairs();
+    }
+
+    /**
+     * 判断按钮是否可点击。
+     * Adjust the action is clickable.
+     *
+     * @param  object $object
+     * @param  string $action
+     * @param  string $module
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($object, $action, $module = 'job')
+    {
+        $action = strtolower($action);
+
+        if($module == 'job' && $action == 'exec') return $object->canExec;
+
+        return true;
     }
 
     /**

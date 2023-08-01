@@ -274,6 +274,8 @@ class compileModel extends model
      */
     public function syncJenkinsBuildList($jenkins, $job)
     {
+        if(empty($jenkins->account)) return;
+
         $jenkinsUser     = $jenkins->account;
         $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
 
@@ -287,10 +289,12 @@ class compileModel extends model
             $url = sprintf('%s/job/%s/api/json?tree=builds[id,number,result,queueId,timestamp]', $jenkins->url, $job->pipeline);
         }
         $response = common::http($url, '', array(CURLOPT_USERPWD => "$jenkinsUser:$jenkinsPassword"));
-        if(!$response) return false;
+        if(!$response) return;
 
         $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->gt(0)->fetchPairs();
         $jobInfo      = json_decode($response);
+        if(empty($jobInfo)) return;
+
         foreach($jobInfo->builds as $build)
         {
             $lastSyncTime = strtotime($job->lastSyncDate);
@@ -323,6 +327,8 @@ class compileModel extends model
      */
     public function syncGitlabBuildList($gitlab, $job)
     {
+        if(empty($gitlab->id)) return;
+
         $pipeline  = json_decode($job->pipeline);
         $projectID = isset($pipeline->project) ? $pipeline->project : '';
         $ref       = isset($pipeline->reference) ? $pipeline->reference : '';
