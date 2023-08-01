@@ -703,7 +703,7 @@ class groupModel extends model
                 }
             }
 
-            if($executionAll[$lineID] or $projectAll[$lineID]) $products[$lineID] = array_merge($products[$lineID], $shadowProductIDList);
+            if(isset($executionAll[$lineID]) or isset($projectAll[$lineID])) $products[$lineID] = array_merge($products[$lineID], $shadowProductIDList);
 
             if(empty($accounts)) continue;
             foreach($accounts as $account)

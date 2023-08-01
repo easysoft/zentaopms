@@ -240,7 +240,7 @@ class deptModel extends model
      */
     public function createManageProjectAdminLink($dept, $groupID)
     {
-        return html::a(helper::createLink('group', 'manageProjectAdmin', "groupID=$groupID&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
+        return helper::createLink('group', 'manageProjectAdmin', "groupID=$groupID&deptID={$dept->id}");
     }
 
     /**

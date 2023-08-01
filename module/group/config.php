@@ -58,7 +58,6 @@ $config->group->actionList['manageProjectAdmin']['icon']        = 'persons';
 $config->group->actionList['manageProjectAdmin']['text']        = $lang->group->manageProjectAdmin;
 $config->group->actionList['manageProjectAdmin']['hint']        = $lang->group->manageProjectAdmin;
 $config->group->actionList['manageProjectAdmin']['url']         = helper::createLink('group', 'manageProjectAdmin', 'groupID={id}');
-$config->group->actionList['manageProjectAdmin']['data-toggle'] = 'modal';
 
 $config->group->actionList['manageMember']['icon']        = 'persons';
 $config->group->actionList['manageMember']['text']        = $lang->group->manageMember;
