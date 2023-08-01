@@ -19,6 +19,14 @@ fields:
   range: "20110101 000000-20210101 230000:10D"
   type: timestamp
   format: YYYY-MM-DD hh:mm:ss
+- field: begin
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: end
+  range: "20110101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
 - field: deleted
   range: 0{100},1{100}
 ---

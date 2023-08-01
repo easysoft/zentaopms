@@ -34,7 +34,7 @@ class left_period_of_project extends baseCalc
         }
         else
         {
-            $this->result[$row->id] = $row->end - date('Y-m-d');
+            $this->result[$row->id] = strtotime($row->end) - strtotime(date('Y-m-d'));
         }
     }
 
