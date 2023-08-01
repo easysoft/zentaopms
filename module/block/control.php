@@ -2194,7 +2194,7 @@ class block extends control
         $involveds     = $this->product->getOrderedProducts('involved');
         $productIdList = array_merge(array_keys($products), array_keys($involveds));
 
-        $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,status,acl,groups,users,deleted')->from(TABLE_DOC)->alias('t1')
+        $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,`status`,acl,`groups`,`users`,deleted')->from(TABLE_DOC)->alias('t1')
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
             ->orderBy('product,status,editedDate_desc')
