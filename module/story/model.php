@@ -473,9 +473,9 @@ class storyModel extends model
      * @param  int    $bugID
      * @param  string $extra
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function createTwins(object $storyData, int $objectID, int $bugID, string $extra = ''): int
+    public function createTwins(object $storyData, int $objectID, int $bugID, string $extra = ''): int|false
     {
         if(empty($storyData->branches)) return $this->create($storyData, $objectID, $bugID, $extra);
 
