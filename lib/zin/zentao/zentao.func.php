@@ -22,12 +22,15 @@ class html extends \html
 {
 }
 
-class commonModel extends \commonModel
+if($config->installed)
 {
-}
+    class commonModel extends \commonModel
+    {
+    }
 
-class common extends \commonModel
-{
+    class common extends \commonModel
+    {
+    }
 }
 
 /**
