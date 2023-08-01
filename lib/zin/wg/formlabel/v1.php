@@ -27,7 +27,7 @@ class formLabel extends wg
             setClass('form-label', $required ? 'required' : null),
             set('for', $for),
             set($this->getRestProps()),
-            $text,
+            html($text),
             $this->children(),
         );
     }
