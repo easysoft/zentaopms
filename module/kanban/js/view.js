@@ -1605,7 +1605,7 @@ $(function()
         initRegionTabs();
     });
 
-    resetLaneHeight();
+    if(displayCards == 0) resetLaneHeight();
 
     /* Hide contextmenu when page scroll */
     $(window).on('scroll', function()
