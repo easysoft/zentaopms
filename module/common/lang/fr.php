@@ -147,6 +147,10 @@ $lang->selectedItems = '<strong>{0}</strong> items sélectionnés';
 
 $lang->future      = 'En Attente';
 $lang->year        = 'Année';
+$lang->month       = 'Month';
+$lang->hour        = 'Hour';
+$lang->minute      = 'Minute';
+$lang->second      = 'Second';
 $lang->workingHour = 'Heures';
 
 $lang->idAB         = 'ID';
@@ -225,6 +229,9 @@ $lang->zahost->common     = 'ZAhost';
 $lang->zanode->common     = 'ZAnode';
 $lang->dimension->common  = 'Dimension';
 $lang->contact->common    = 'Contacts';
+$lang->space->common      = 'Service';
+$lang->store->common      = 'Store';
+$lang->instance->common   = 'Instance';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';

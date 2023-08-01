@@ -3648,6 +3648,26 @@ EOF;
     }
 
     /**
+     * Get method of API.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $headers example: array("key1:value1", "key2:value2")
+     * @access public
+     * @return object
+     */
+    public static function apiGet($url, $data = array(), $headers = array())
+    {
+        $url .= (strpos($url, '?') !== false ? '&' : '?') . http_build_query($data, '', '&', PHP_QUERY_RFC3986);
+
+        $result = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'GET'), $headers, 'json'));
+
+        if($result && $result->code == 200) return $result;
+
+        return static::apiError($result);
+    }
+
+    /**
      * Check object priv.
      *
      * @param  string   $objectType program|project|product|execution
@@ -3709,7 +3729,7 @@ EOF;
                     if(!common::hasPriv($moduleName, $action)) continue;
                 }
 
-                if(isset($this->{$moduleName}->isClickable) && false === $this->{$moduleName}->isClickable($data, $action)) continue;
+                if(method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) continue;
 
                 if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
 
@@ -3718,6 +3738,67 @@ EOF;
             $actionsMenu[$menu] = $actions;
         }
         return $actionsMenu;
+    }
+
+    /**
+     * 计算应用运行时间。
+     * Print duration of a instance.
+     *
+     * @param  int    $seconds
+     * @param  string $format  y-m-d-h-i-s, case insensitive
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function printDuration(int $seconds, string $format = 'y-m-d-h-i-s'): string
+    {
+        global $lang;
+
+        $duration = '';
+        $format = strtolower($format);
+
+        if(strpos($format, 'y') !== false)
+        {
+            $years       = intval($seconds / (3600 * 24 * 365));
+            $leftSeconds = intval($seconds % (3600 * 24 * 365));
+            if($years) $duration .= $years . $lang->year;
+        }
+
+        if(strpos($format, 'm') !== false)
+        {
+            $months      = intval($leftSeconds / (3600 * 24 * 30));
+            $leftSeconds = intval($leftSeconds % (3600 * 24 * 30));
+            if($months) $duration .= $months . $lang->month;
+        }
+
+        if(strpos($format, 'd') !== false)
+        {
+            $days        = intval($leftSeconds / (3600 * 24));
+            $leftSeconds = intval($leftSeconds % (3600 * 24));
+            if($days) $duration .= $days . trim($lang->day);
+        }
+
+        if(strpos($format, 'h') !== false)
+        {
+            $hours = intval($leftSeconds / 3600);
+            $leftSeconds = intval($leftSeconds % 3600);
+            if($hours) $duration .= $hours . $lang->hour;
+        }
+
+        if(strpos($format, 'i') !== false)
+        {
+            $minutes = intval($leftSeconds / 60);
+            $leftSeconds = intval($leftSeconds % 60);
+            if($minutes) $duration .= $minutes . $lang->minute;
+        }
+
+        if(strpos($format, 's') !== false)
+        {
+            $seconds = intval($leftSeconds % 3600);
+            if($seconds) $duration .= $seconds . $lang->second;
+        }
+
+        return $duration;
     }
 }
 

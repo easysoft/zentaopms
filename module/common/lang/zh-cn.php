@@ -147,6 +147,10 @@ $lang->selectedItems = '已选择 <strong>{0}</strong> 项';
 
 $lang->future      = '未来';
 $lang->year        = '年';
+$lang->month       = '月';
+$lang->hour        = '小时';
+$lang->minute      = '分';
+$lang->second      = '秒';
 $lang->workingHour = '工时';
 
 $lang->idAB         = 'ID';
@@ -225,6 +229,9 @@ $lang->zahost->common     = '宿主机';
 $lang->zanode->common     = '执行节点';
 $lang->dimension->common  = '维度';
 $lang->contact->common    = '联系人';
+$lang->space->common      = '服务管理';
+$lang->store->common      = '应用市场';
+$lang->instance->common   = '应用';
 
 $lang->programstakeholder->common = '干系人';
 $lang->featureswitch->common      = '功能开关';

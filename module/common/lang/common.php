@@ -90,6 +90,7 @@ $lang->acl         = new stdclass();
 $lang->curd        = new stdclass();
 $lang->sonarqube   = new stdclass();
 $lang->app         = new stdclass();
+$lang->host        = new stdclass();
 $lang->zahost      = new stdclass();
 $lang->zanode      = new stdclass();
 $lang->holiday     = new stdclass();
@@ -102,6 +103,7 @@ $lang->CNE         = new stdclass();
 $lang->account     = new stdclass();
 $lang->ops         = new stdclass();
 
+$lang->serverroom         = new stdclass();
 $lang->programstakeholder = new stdclass();
 $lang->researchplan       = new stdclass();
 $lang->workestimation     = new stdclass();

@@ -116,6 +116,10 @@ $lang->selectedItems = 'Đã chọn <strong>{0}</strong> mục';
 
 $lang->future      = 'Đang đợi';
 $lang->year        = 'Năm';
+$lang->month       = 'Month';
+$lang->hour        = 'Hour';
+$lang->minute      = 'Minute';
+$lang->second      = 'Second';
 $lang->workingHour = 'giờ';
 
 $lang->idAB         = 'ID';
@@ -127,11 +131,14 @@ $lang->typeAB       = 'Loại';
 $lang->nameAB       = 'Name';
 
 $lang->common = new stdclass();
-$lang->common->common  = 'Module chung';
-$lang->devops->common  = 'DevOps';
-$lang->repo->codeRepo  = 'Code Repo';
-$lang->app->common     = 'APP';
-$lang->app->serverLink = 'Server Link';
+$lang->common->common   = 'Module chung';
+$lang->devops->common   = 'DevOps';
+$lang->repo->codeRepo   = 'Code Repo';
+$lang->app->common      = 'APP';
+$lang->app->serverLink  = 'Server Link';
+$lang->space->common    = 'Service';
+$lang->store->common    = 'Store';
+$lang->instance->common = 'Instance';
 
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);

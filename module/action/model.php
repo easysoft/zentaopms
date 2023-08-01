@@ -928,6 +928,7 @@ class actionModel extends model
                 }
                 if(!empty($extra))
                 {
+                    if(empty($extra->data)) $extra->data = new stdclass();
                     $action->oldName    = zget($extra->data, 'oldName', '');
                     $action->newName    = zget($extra->data, 'newName', '');
                     $action->oldVersion = zget($extra->data, 'oldVersion', '');

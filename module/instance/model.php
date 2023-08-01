@@ -2045,6 +2045,7 @@ class InstanceModel extends model
      */
     public function isClickable(object $instance, string $action): bool
     {
+        if(!isset($instance->type)) $instance->type = 'store';
         if($action == 'start')     return $instance->type != 'external' ? $this->canDo('start', $instance) : false;
         if($action == 'stop')      return $instance->type != 'external' ? $this->canDo('stop', $instance) : false;
         if($action == 'uninstall') return $instance->type != 'external' && $this->canDo('uninstall', $instance);

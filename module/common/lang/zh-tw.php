@@ -131,6 +131,10 @@ $lang->selectedItems = '已選擇 <strong>{0}</strong> 項';
 
 $lang->future      = '未來';
 $lang->year        = '年';
+$lang->month       = '月';
+$lang->hour        = '小时';
+$lang->minute      = '分';
+$lang->second      = '秒';
 $lang->workingHour = '工時';
 
 $lang->idAB         = 'ID';
@@ -185,6 +189,9 @@ $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
 $lang->app->common        = '應用';
 $lang->app->serverLink    = '服務器鏈接';
+$lang->space->common      = '服务管理';
+$lang->store->common      = '应用市场';
+$lang->instance->common   = '应用';
 
 $lang->personnel->common     = '人員';
 $lang->personnel->invest     = '投入人員';
