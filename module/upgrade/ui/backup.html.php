@@ -34,8 +34,20 @@ div
         div
         (
             set::style(array('background-color' => 'var(--color-gray-100)')),
-            set::class('p-5 space-y-2'),
+            set::class('p-5 mb-4 space-y-2'),
             html($lang->upgrade->warnningContent),
+        ),
+        div
+        (
+            set::class('text-center'),
+            btn
+            (
+                on::click("self.location.href='" . createLink('upgrade', 'consistency') . "'"),
+                set::type('primary'),
+                set::class('px-10'),
+                set('disabled', 'disabled'),
+                $lang->upgrade->common,
+            )
         )
     )
 );
