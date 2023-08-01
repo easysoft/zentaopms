@@ -25,128 +25,96 @@ if($deptPath)
     $deptName = implode($lang->arrow, $deptName);
 };
 
+$getItems = function($datas)
+{
+    $cells = array();
+    foreach($datas as $label => $value)
+    {
+        $cells[] = cell
+        (
+            set::width('50%'),
+            set::class('flex'),
+            cell
+            (
+                set::width('70px'),
+                set::class('text-right'),
+                span(set::class('text-gray'), $label),
+            ),
+            cell
+            (
+                set::flex('1'),
+                set::class('ml-2'),
+                $value
+            )
+        );
+    }
+
+    return div
+    (
+        set::class('flex py-2'),
+        $cells
+    );
+};
+
+
 div
 (
-    setClass('bg-white m-auto p-5'),
     div
     (
-        setClass('flex items-center pb-5'),
-        cell
+        set::class('center'),
+        div
         (
-            set::width('50%'),
-            setClass('text-right pr-3'),
-            userAvatar(set::user($user)),
+            userAvatar(set::user($user), set::size('lg')),
             formbase(set::id('avatarForm'), set::class('hidden'), set::url(createLink('my', 'uploadAvatar')), upload())
         ),
-        cell
+        div
         (
-            set::width('50%'),
-            div(setClass('user-name text-md font-bold'), $user->realname),
-            zget($lang->user->roleList, $user->role, '') == '' ? null : div
+            span(setClass('text-md text-black'), $user->realname),
+            zget($lang->user->roleList, $user->role, '') == '' ? null : span
             (
-                setClass('user-role text-gray'),
-                zget($lang->user->roleList, $user->role)
-            ),
+                setClass('text-base text-gray ml-1'),
+                '(' . zget($lang->user->roleList, $user->role) . ')'
+            )
         ),
     ),
-    h::table
+    formRowGroup(set::title($lang->my->form->lblBasic)),
+    div
     (
-        h::tr
-        (
-            h::th($lang->user->realname),
-            h::td($user->realname),
-            h::th($lang->user->gender),
-            h::td(zget($lang->user->genderList, $user->gender)),
-        ),
-        h::tr
-        (
-            h::th($lang->user->account),
-            h::td($user->account),
-            h::th($lang->user->email),
-            h::td(set::title($user->email), $user->email ? a(set::href("mailto:{$user->email}"), $user->email) : null),
-        ),
-        h::tr
-        (
-            h::th($lang->user->dept),
-            h::td($deptName),
-            h::th($lang->user->role),
-            h::td(zget($lang->user->roleList, $user->role, '')),
-        ),
-        h::tr
-        (
-            h::th($lang->user->joinAB),
-            h::td(formatTime($user->join)),
-            h::th($lang->user->priv),
-            h::td(trim($groupName)),
-        ),
+        set::class('py-2'),
+        $getItems(array($lang->user->realname => $user->realname,         $lang->user->gender => zget($lang->user->genderList, $user->gender))),
+        $getItems(array($lang->user->account  => $user->account,          $lang->user->email  => $user->email ? a(set::href("mailto:{$user->email}"), $user->email) : '')),
+        $getItems(array($lang->user->dept     => $deptName,               $lang->user->role   => zget($lang->user->roleList, $user->role, ''))),
+        $getItems(array($lang->user->joinAB   => formatTime($user->join), $lang->user->priv   => trim($groupName))),
     ),
-    h::hr(),
-    h::table
+    formRowGroup(set::title($lang->my->form->lblContact)),
+    div
     (
-        h::tr
-        (
-            h::th($lang->user->mobile),
-            h::td($user->mobile),
-            h::th($lang->user->weixin),
-            h::td($user->weixin),
-        ),
-        h::tr
-        (
-            h::th($lang->user->phone),
-            h::td($user->phone),
-            h::th($lang->user->qq),
-            h::td($user->qq),
-        ),
-        h::tr
-        (
-            h::th($lang->user->zipcode),
-            h::td($user->zipcode),
-            h::th($lang->user->addressAB),
-            h::td(set::title($user->address), $user->address),
-        ),
+        set::class('py-2'),
+        $getItems(array($lang->user->mobile  => $user->mobile,  $lang->user->weixin    => $user->weixin)),
+        $getItems(array($lang->user->phone   => $user->phone,   $lang->user->qq        => $user->qq)),
+        $getItems(array($lang->user->zipcode => $user->zipcode, $lang->user->addressAB => $user->address)),
     ),
-    isInModal() ? null : h::hr(),
-    isInModal() ? null : h::table
+    formRowGroup(set::title($lang->my->form->lblAccount)),
+    div
     (
-        h::tr
-        (
-            h::th($lang->user->commiter),
-            h::td($user->commiter),
-            h::th($lang->user->skype),
-            h::td($user->skype ? a(set::href("callto://{$user->skype}"), $user->skype) : null),
-        ),
-        h::tr
-        (
-            h::th($lang->user->visits),
-            h::td($user->visits),
-            h::th($lang->user->whatsapp),
-            h::td($user->whatsapp),
-        ),
-        h::tr
-        (
-            h::th($lang->user->last),
-            h::td($user->last),
-            h::th($lang->user->slack),
-            h::td($user->slack),
-        ),
-        h::tr
-        (
-            h::th($lang->user->ip),
-            h::td($user->ip),
-            h::th($lang->user->dingding),
-            h::td($user->dingding),
-        ),
+        set::class('py-2'),
+        $getItems(array($lang->user->commiter => $user->commiter, $lang->user->skype    => $user->skype ? a(set::href("callto://{$user->skype}"), $user->skype) : '')),
+        $getItems(array($lang->user->visits   => $user->visits,   $lang->user->whatsapp => $user->whatsapp)),
+        $getItems(array($lang->user->last     => $user->last,     $lang->user->whatsapp => $user->whatsapp)),
+        $getItems(array($lang->user->ip       => $user->ip,       $lang->user->dingding => $user->dingding)),
     ),
-    center(
-    floatToolbar
+    center
     (
-        set::object($user),
-        set::main(array(
-            common::hasPriv('my', 'changepassword') ? array('text' => $lang->changePassword, 'url' => createLink('my', 'changepassword')) : null,
-            common::hasPriv('my', 'editprofile')    ? array('text' => $lang->user->editProfile, 'url' => createLink('my', 'editprofile')) : null,
-            common::hasPriv('my', 'uploadAvatar')   ? array('text' => $lang->my->uploadAvatar, 'data-on' => 'click', 'data-call' => 'uploadAvatar') : null
-        )),
-    ))
+        floatToolbar
+        (
+            set::object($user),
+            set::main(array(
+                common::hasPriv('my', 'changepassword') ? array('text' => $lang->changePassword,    'url' => createLink('my', 'changepassword')) : null,
+                common::hasPriv('my', 'editprofile')    ? array('text' => $lang->user->editProfile, 'url' => createLink('my', 'editprofile')) : null,
+                common::hasPriv('my', 'uploadAvatar')   ? array('text' => $lang->my->uploadAvatar,  'data-on' => 'click', 'data-call' => 'uploadAvatar') : null
+            )),
+        )
+    )
 );
 
 render();
