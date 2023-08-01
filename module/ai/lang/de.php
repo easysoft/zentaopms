@@ -94,7 +94,7 @@ $lang->ai->prompts->action->publishSuccess  = 'Publish Success';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';
-$lang->ai->prompts->selectDataSource = 'Select Data Source';
+$lang->ai->prompts->selectDataSource = 'Select Data Fields';
 $lang->ai->prompts->setPurpose       = 'Set Purpose';
 $lang->ai->prompts->setTargetForm    = 'Set Target Form';
 $lang->ai->prompts->finalize         = 'Finalize';
@@ -108,13 +108,13 @@ $lang->ai->prompts->rolePlaceholder  = '"Act as a <role>"';
 $lang->ai->prompts->charPlaceholder  = 'Detailed characterization of this role';
 
 /* Data source selecting. */
-$lang->ai->prompts->selectData       = 'Select data';
+$lang->ai->prompts->selectData       = 'Select fields';
 $lang->ai->prompts->selectDataTip    = 'Select an object and its fields will be shown below.';
 $lang->ai->prompts->selectedFormat   = 'Selecting data from {0}, {1} fields selected.';
-$lang->ai->prompts->nonSelected      = 'No data selected.';
+$lang->ai->prompts->nonSelected      = 'No field selected.';
 $lang->ai->prompts->sortTip          = 'Sorting fields by priority is suggested.';
-$lang->ai->prompts->object           = 'object';
-$lang->ai->prompts->field            = 'field';
+$lang->ai->prompts->object           = 'Object';
+$lang->ai->prompts->field            = 'Field';
 
 /* Purpose setting. */
 $lang->ai->prompts->purpose        = 'Purpose';
@@ -141,13 +141,13 @@ $lang->ai->dataSource = array();
 $lang->ai->dataSource['my']['common']          = 'My';
 $lang->ai->dataSource['product']['common']     = 'Product';
 $lang->ai->dataSource['story']['common']       = 'Story';
-$lang->ai->dataSource['execution']['common']   = 'Execution';
 $lang->ai->dataSource['productplan']['common'] = 'Product Plan';
 $lang->ai->dataSource['release']['common']     = 'Release';
 $lang->ai->dataSource['project']['common']     = 'Project';
+$lang->ai->dataSource['execution']['common']   = 'Execution';
 $lang->ai->dataSource['task']['common']        = 'Task';
-$lang->ai->dataSource['case']['common']        = 'Test Case';
 $lang->ai->dataSource['bug']['common']         = 'Bug';
+$lang->ai->dataSource['case']['common']        = 'Test Case';
 $lang->ai->dataSource['doc']['common']         = 'Document';
 
 $lang->ai->dataSource['my']['efforts']['common']    = 'Efforts';

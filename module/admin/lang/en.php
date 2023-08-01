@@ -181,7 +181,7 @@ $lang->admin->menuSetting['dev']['desc']       = 'Support for secondary developm
 $lang->admin->menuSetting['convert']['name']   = 'Data Import';
 $lang->admin->menuSetting['convert']['desc']   = 'Data import from third-party systems.';
 $lang->admin->menuSetting['ai']['name']        = 'AI Configurations';
-$lang->admin->menuSetting['ai']['desc']        = 'Customize prompts and language models.';
+$lang->admin->menuSetting['ai']['desc']        = 'Manage prompts and language models.';
 
 $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';

@@ -181,7 +181,7 @@ $lang->admin->menuSetting['dev']['desc']       = '支持对系统进行二次开
 $lang->admin->menuSetting['convert']['name']   = '数据导入';
 $lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入。';
 $lang->admin->menuSetting['ai']['name']        = 'AI 配置';
-$lang->admin->menuSetting['ai']['desc']        = '自定义 AI 提词、配置语言模型。';
+$lang->admin->menuSetting['ai']['desc']        = '管理 AI 提词应用、配置语言模型。';
 
 $lang->admin->updateDynamics   = '更新动态';
 $lang->admin->updatePatch      = '补丁更新';

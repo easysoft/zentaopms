@@ -94,7 +94,7 @@ $lang->ai->prompts->action->publishSuccess  = '发布成功';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = '指定角色';
-$lang->ai->prompts->selectDataSource = '选择对象';
+$lang->ai->prompts->selectDataSource = '选择字段';
 $lang->ai->prompts->setPurpose       = '确认操作';
 $lang->ai->prompts->setTargetForm    = '结果处理';
 $lang->ai->prompts->finalize         = '准备发布';
@@ -109,13 +109,13 @@ $lang->ai->prompts->roleTemplate     = '角色模版';
 $lang->ai->prompts->roleTemplateTip  = '引用模板后，修改角色、角色描述不会对模板造成影响。';
 
 /* Data source selecting. */
-$lang->ai->prompts->selectData       = '选择数据';
-$lang->ai->prompts->selectDataTip    = '选择对象后，此处会展示已选对象的数据。';
-$lang->ai->prompts->selectedFormat   = '已选对象为{0}，已选 {1} 条数据';
-$lang->ai->prompts->nonSelected      = '暂无所选数据。';
+$lang->ai->prompts->selectData       = '选择字段';
+$lang->ai->prompts->selectDataTip    = '选择对象后，此处会展示已选对象的字段。';
+$lang->ai->prompts->selectedFormat   = '已选对象为{0}，已选 {1} 条字段';
+$lang->ai->prompts->nonSelected      = '暂无所选字段。';
 $lang->ai->prompts->sortTip          = '可根据重要性给数据字段排序。';
 $lang->ai->prompts->object           = '对象';
-$lang->ai->prompts->field            = '数据';
+$lang->ai->prompts->field            = '字段';
 
 /* Purpose setting. */
 $lang->ai->prompts->purpose        = '操作';
@@ -142,13 +142,13 @@ $lang->ai->dataSource = array();
 $lang->ai->dataSource['my']['common']          = '地盘';
 $lang->ai->dataSource['product']['common']     = '产品';
 $lang->ai->dataSource['story']['common']       = '需求';
-$lang->ai->dataSource['execution']['common']   = '执行';
 $lang->ai->dataSource['productplan']['common'] = '计划';
 $lang->ai->dataSource['release']['common']     = '发布';
 $lang->ai->dataSource['project']['common']     = '项目';
+$lang->ai->dataSource['execution']['common']   = '执行';
 $lang->ai->dataSource['task']['common']        = '任务';
-$lang->ai->dataSource['case']['common']        = '用例';
 $lang->ai->dataSource['bug']['common']         = 'Bug';
+$lang->ai->dataSource['case']['common']        = '用例';
 $lang->ai->dataSource['doc']['common']         = '文档';
 
 $lang->ai->dataSource['my']['efforts']['common']    = '日志列表';
