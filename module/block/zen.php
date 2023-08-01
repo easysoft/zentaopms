@@ -889,7 +889,7 @@ class blockZen extends block
 
         $years  = array();
         $months = array();
-        for($i = 0; $i <= 5; $i ++)
+        for($i = 5; $i >= 0; $i --)
         {
             $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
             $months[date('m', strtotime("first day of -{$i} month"))] = date('m', strtotime("first day of -{$i} month"));
@@ -2278,36 +2278,68 @@ class blockZen extends block
      */
     protected function printMonthlyProgressBlock()
     {
-        $months            = array();
-        $doneStoryEstimate = array();
-        $doneStoryCount    = array();
-        $createStoryCount  = array();
-        $fixedBugCount     = array();
-        $createBugCount    = array();
-
-        $today = strtotime(helper::today());
-        $begin = strtotime(date('Y-m', strtotime('+2 month', $today)));
-        $end   = strtotime(date('Y-m', $today));
-        $begin = strtotime('2023-09');
-        $end   = strtotime('2024-02');
-        for($date = $begin; $date <= $end; $date = strtotime('+1 month', $date))
+        $years  = array();
+        $months = array();
+        for($i = 5; $i >= 0; $i --)
         {
-            $month = date('Y-m', $date);
-            $doneStoryEstimate[$month] = rand(100, 400);
-            $doneStoryCount[$month]    = rand(100, 400);
-            $createStoryCount[$month]  = rand(100, 400);
-            $fixedBugCount[$month]     = rand(100, 400);
-            $createBugCount[$month]    = rand(100, 400);
-
-            $month = (int)ltrim(date('m', $date), '0');
-
-            $monthName = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? "{$month}{$this->lang->block->month}" : zget($this->lang->datepicker->monthNames, $month - 1, '');
-            if($month == 1) $monthName .= "\n" . date('Y', $date) . (in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $this->lang->year : '');
-
-            $months[] = $monthName;
+            $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
+            $months[date('m', strtotime("first day of -{$i} month"))] = date('m', strtotime("first day of -{$i} month"));
+            $groups[date('Y-m', strtotime("first day of -{$i} month"))] = date('Y-m', strtotime("first day of -{$i} month"));
         }
+        $monthFinishedScale = $this->loadModel('metric')->getResultByCode('scale_of_monthly_finished_story', array('year' => join(',', $years), 'month' => join(',', $months)));
+        $monthCreatedStory  = $this->metric->getResultByCode('count_of_monthly_created_story',  array('year' => join(',', $years), 'month' => join(',', $months)));
+        $monthFinishedStory = $this->metric->getResultByCode('count_of_monthly_finished_story', array('year' => join(',', $years), 'month' => join(',', $months)));
+        $monthCreatedBug    = $this->metric->getResultByCode('count_of_monthly_created_bug',    array('year' => join(',', $years), 'month' => join(',', $months)));
+        $monthFinishedBug   = $this->metric->getResultByCode('count_of_monthly_fixed_bug',      array('year' => join(',', $years), 'month' => join(',', $months)));
 
-        $this->view->months            = $months;
+        foreach($groups as $group)
+        {
+            $doneStoryEstimate[$group] = 0;
+            $doneStoryCount[$group]    = 0;
+            $createStoryCount[$group]  = 0;
+            $fixedBugCount[$group]     = 0;
+            $createBugCount[$group]    = 0;
+
+            if(!empty($monthFinishedScale))
+            {
+                foreach($monthFinishedScale as $scale)
+                {
+                    if($group == "{$scale->year}-{$scale->month}") $doneStoryEstimate[$group] = $scale->value;
+                }
+            }
+
+            if(!empty($monthCreatedStory))
+            {
+                foreach($monthCreatedStory as $story)
+                {
+                    if($group == "{$story->year}-{$story->month}") $doneStoryCount[$group] = $story->value;
+                }
+            }
+
+            if(!empty($monthFinishedStory))
+            {
+                foreach($monthFinishedStory as $story)
+                {
+                    if($group == "{$story->year}-{$story->month}") $createStoryCount[$group] = $story->value;
+                }
+            }
+
+            if(!empty($monthCreatedBug))
+            {
+                foreach($monthCreatedBug as $bug)
+                {
+                    if($group == "{$bug->year}-{$bug->month}") $fixedBugCount[$group] = $bug->value;
+                }
+            }
+
+            if(!empty($monthFinishedBug))
+            {
+                foreach($monthFinishedBug as $bug)
+                {
+                    if($group == "{$bug->year}-{$bug->month}") $createBugCount[$group] = $bug->value;
+                }
+            }
+        }
         $this->view->doneStoryEstimate = $doneStoryEstimate;
         $this->view->doneStoryCount    = $doneStoryCount;
         $this->view->createStoryCount  = $createStoryCount;
@@ -2493,7 +2525,7 @@ class blockZen extends block
 
         $years  = array();
         $months = array();
-        for($i = 0; $i <= 5; $i ++)
+        for($i = 5; $i >= 5; $i --)
         {
             $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
             $months[date('m', strtotime("first day of -{$i} month"))] = date('m', strtotime("first day of -{$i} month"));
