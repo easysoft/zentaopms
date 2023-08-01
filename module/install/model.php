@@ -451,10 +451,10 @@ class installModel extends model
         {
             if(empty($data->{$field}))
             {
-                dao::$errors[] = $this->lang->install->errorEmpty[$field];
-                return false;
+                dao::$errors[$field][] = $this->lang->install->errorEmpty[$field];
             }
         }
+        if(dao::isError()) return false;
 
         $this->loadModel('user');
         $this->app->loadConfig('admin');

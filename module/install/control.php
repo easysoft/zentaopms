@@ -204,6 +204,8 @@ class install extends control
     {
         if(!empty($_POST))
         {
+            if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig));
+
             $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // Update mode.
             $this->loadModel('custom')->disableFeaturesByMode($this->post->mode);
             return $this->send(array('result' => 'success', 'load' => inlink('step5')));
@@ -239,11 +241,14 @@ class install extends control
     {
         if(!empty($_POST))
         {
+            if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig));
+
+            $this->loadModel('common');
             $this->install->grantPriv();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->install->updateLang();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->importDemoData) $this->install->importDemoData();
 
@@ -256,7 +261,7 @@ class install extends control
                 $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
             }
 
-            if(dao::isError()) return print(js::alert($this->lang->install->errorImportDemoData));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('setting');
             $this->setting->updateVersion($this->config->version);
@@ -273,13 +278,13 @@ class install extends control
 
             if($this->config->edition != 'open') $this->loadModel('upgrade')->processDataset();
 
-            return print(js::locate(inlink('step6'), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('step6')));
         }
 
         $this->app->loadLang('upgrade');
 
         $this->view->title = $this->lang->install->getPriv;
-        if(!isset($this->config->installed) or !$this->config->installed)
+        if(!isset($this->config->installed) || !$this->config->installed)
         {
             $this->view->error = $this->lang->install->errorNotSaveConfig;
             $this->display();
@@ -305,6 +310,7 @@ class install extends control
 
         if($canDelFile and file_exists($upgradeFile)) unlink($upgradeFile);
         unset($_SESSION['installing']);
+        unset($_SESSION['myConfig']);
         session_destroy();
 
         $this->view->installFileDeleted = $installFileDeleted;
