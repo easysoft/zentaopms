@@ -1077,7 +1077,7 @@ class gitlab extends control
         }
         else
         {
-            $repo = $this->loadModel('repo')->getRepoByID($repoID);
+            $repo = $this->loadModel('repo')->getByID($repoID);
             $res  = $this->gitlab->addPushWebhook($repo);
 
             if($res or is_array($res))
@@ -1107,7 +1107,7 @@ class gitlab extends control
             $accounts = array_filter($data->accounts);
             if(count($accounts) != count(array_unique($accounts))) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->repeatError));
 
-            $repo        = $this->loadModel('repo')->getRepoByID($repoID);
+            $repo        = $this->loadModel('repo')->getByID($repoID);
             $users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
             $bindedUsers = $this->dao->select('account,openID')
                 ->from(TABLE_OAUTH)
@@ -1209,7 +1209,7 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('repo', 'maintain')));
         }
 
-        $repo           = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo           = $this->loadModel('repo')->getByID($repoID);
         $users          = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $projectMembers = $this->gitlab->apiGetProjectMembers($repo->gitService, $repo->project);
         if(!is_array($projectMembers)) $projectMembers = array();
