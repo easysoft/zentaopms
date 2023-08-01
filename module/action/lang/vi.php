@@ -309,6 +309,7 @@ $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
 $lang->action->label->syncprogram           = 'start';
 $lang->action->label->syncproject           = 'start';
+$lang->action->label->syncmultipleproject   = 'start';
 $lang->action->label->syncexecution         = 'start';
 $lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
 $lang->action->label->submitreview          = 'submitted';

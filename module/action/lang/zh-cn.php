@@ -389,6 +389,7 @@ $lang->action->label->updatetrainee         = '更新了培训人员';
 $lang->action->label->setdefaultbranch      = '设置了默认分支';
 $lang->action->label->syncprogram           = '开始了';
 $lang->action->label->syncproject           = '开始了';
+$lang->action->label->syncmultipleproject   = '开始了';
 $lang->action->label->syncexecution         = '开始了';
 $lang->action->label->syncexecutionbychild  = '开始了';
 $lang->action->label->startProgram          = "（因{$lang->projectCommon}开始而启动项目集）";
