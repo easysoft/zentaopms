@@ -8,7 +8,6 @@ function buildIndex(event, url)
 
     $.getJSON(url, function(response)
     {
-        console.log(response);
         if(response.result == 'finished')
         {
             $('#buildResult').append("<div class='flex items-center text-success my-1 pl-5 h-5'><div class='rounded-full success mr-2 w-1 h-1'></div>" + response.message + '</div>');
