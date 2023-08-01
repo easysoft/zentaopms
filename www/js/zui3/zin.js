@@ -350,7 +350,7 @@
                 catch(e)
                 {
                     if(!isInAppTab && config.zin) return;
-                    hasFatal = data.includes('Fatal error');
+                    hasFatal = data.includes('Fatal error') || data.includes('Uncaught TypeError:');
                     data = [{name: hasFatal ? 'fatal' : 'html', data: data}];
                 }
                 if(!options.partial && !hasFatal) currentAppUrl = url;
