@@ -310,12 +310,8 @@ class convert extends control
         {
             foreach($_POST as $key => $value) $_SESSION['jiraRelation'][$key] = $value;
 
-            $step = $step + 1;
-            $link = $step == 5 ? $this->createLink('convert', 'initJiraUser', "method=$method") : inlink('mapJira2Zentao', "method=$method&dbName=$dbName&step=$step");
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = $link;
-            return print($this->send($response));
+            $link = $step == 4 ? inlink('initJiraUser', "method={$method}") : inlink('mapJira2Zentao', "method={$method}&dbName={$dbName}&step=" . ++$step);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
         if($method == 'db')
