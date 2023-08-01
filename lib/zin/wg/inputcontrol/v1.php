@@ -11,6 +11,7 @@ class inputControl extends wg
         'suffix?: mixed',
         'prefixWidth?: string|int',
         'suffixWidth?: string|int',
+        'class?: string',
     );
 
     protected static array $defineBlocks = array(
@@ -20,27 +21,27 @@ class inputControl extends wg
 
     protected function build(): wg
     {
-        list($prefix, $suffix, $prefixWidth, $suffixWidth) = $this->prop(['prefix', 'suffix', 'prefixWidth', 'suffixWidth']);
+        list($prefix, $suffix, $prefixWidth, $suffixWidth, $class) = $this->prop(['prefix', 'suffix', 'prefixWidth', 'suffixWidth', 'class']);
 
         if(empty($prefix)) $prefix = $this->block('prefix');
         if(empty($suffix)) $suffix = $this->block('suffix');
 
-        $class = array('input-control');
+        $class = "input-control {$class}";
         $vars  = array();
         if(!empty($prefix))
         {
             if(is_numeric($prefixWidth))
             {
                 $vars['input-control-prefix'] = $prefixWidth . 'px';
-                $class[] = 'has-prefix';
+                $class .= ' has-prefix';
             }
             elseif(!empty($prefixWidth))
             {
-                $class[] = "has-prefix-$prefixWidth";
+                $class .= " has-prefix-$prefixWidth";
             }
             else
             {
-                $class[] = 'has-prefix';
+                $class .= ' has-prefix';
             }
         }
         if(!empty($suffix))
@@ -48,15 +49,15 @@ class inputControl extends wg
             if(is_numeric($suffixWidth))
             {
                 $vars['input-control-suffix'] = $suffixWidth . 'px';
-                $class[] = 'has-suffix';
+                $class .= ' has-suffix';
             }
             elseif(!empty($suffixWidth))
             {
-                $class[] = "has-suffix-$suffixWidth";
+                $class .= " has-suffix-$suffixWidth";
             }
             else
             {
-                $class[] = 'has-suffix';
+                $class .= ' has-suffix';
             }
         }
 
