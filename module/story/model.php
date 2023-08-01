@@ -648,8 +648,8 @@ class storyModel extends model
             ->setIF($specChanged, 'changedDate', $now)
             ->setIF($specChanged, 'closedBy', '')
             ->setIF($specChanged, 'closedReason', '')
-            ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate', '0000-00-00')
-            ->setIF($specChanged and $oldStory->closedBy, 'closedDate', '0000-00-00')
+            ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate', null)
+            ->setIF($specChanged and $oldStory->closedBy, 'closedDate', null)
             ->setIF(!$specChanged, 'status', $oldStory->status)
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
             ->remove('files,labels,reviewer,comment,needNotReview,uid')
@@ -1142,9 +1142,9 @@ class storyModel extends model
                 $story->assignedDate = $now;
                 $story->closedBy     = '';
                 $story->closedReason = '';
-                $story->closedDate   = '0000-00-00';
+                $story->closedDate   = null;
                 $story->reviewedBy   = '';
-                $story->reviewedDate = '0000-00-00';
+                $story->reviewedDate = null;
             }
 
             if($status == 'closed')
@@ -2073,8 +2073,8 @@ class storyModel extends model
         $module         = 0;
         $type           = '';
         $assignedTo     = '';
-        $estStarted     = '0000-00-00';
-        $deadline       = '0000-00-00';
+        $estStarted     = null;
+        $deadline       = null;
         $data           = array();
         $requiredFields = "," . $this->config->task->create->requiredFields . ",";
         foreach($tasks->name as $i => $task)
