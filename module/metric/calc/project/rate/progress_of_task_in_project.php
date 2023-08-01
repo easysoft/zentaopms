@@ -14,7 +14,7 @@
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -22,21 +22,29 @@
  */
 class progress_of_task_in_project extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getTasks';
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $fieldList = array('t1.consumed', 't1.left', 't1.project');
 
     public function calculate($row)
     {
+        $consumed = !empty($row->consumed) ? $row->consumed : 0;
+        $left     = !empty($row->left)     ? $row->left : 0;
+
+        if(!isset($this->result[$row->project])) $this->result[$row->project] = array('consumed' => 0, 'left' => 0);
+        $this->result[$row->project]['consumed'] += $consumed;
+        $this->result[$row->project]['left']     += $left;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = array();
+        foreach($this->result as $project => $taskInfo)
+        {
+            $total = $taskInfo['consumed'] + $taskInfo['left'];
+            $progress = $total ? round($taskInfo['consumed'] / $total, 4) : 0;
+            $records[] = array('project' => $project, 'value' => $progress);
+        }
         return $this->filterByOptions($records, $options);
     }
 }
