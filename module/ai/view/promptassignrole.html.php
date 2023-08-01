@@ -51,30 +51,46 @@
           </div>
         </div>
         <div id="roleTemplate" style="display: none; width: 370px; flex-grow: 0; padding: 20px 24px; border-left: 1px solid #E6EAF1; background-color: #FCFDFE; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
-          <h4 class="v-top"">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <h4 class="v-top"">
             <?php echo "<span style='margin-right: 4px;'>{$lang->ai->prompts->roleTemplate}</span>" . " <i class='icon icon-help' data-toggle='tooltip' data-placement='top' title='{$lang->ai->prompts->roleTemplateTip}'></i>";?>
-          </h4>
-          <div style="display: flex; flex-direction: column; gap:8px;">
-            <?php foreach($roleTemplates as $role)
-            { ?>
-              <div class="role-template-card" style="border: 1px solid #D8DBDE; border-radius: 4px; padding: 12px; width: 100%;">
-                <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
-                  <p class="clip"><?php echo $role->role; ?></p>
-                  <div style="display: flex; gap: 2px;">
-                    <?php echo html::commonButton("<span class='text-primary'>{$lang->app->common}</span>", '', 'btn btn-link'); ?>
-                    <?php echo html::commonButton("<i class='icon icon-edit icon-sm text-primary'></i>", '', 'btn btn-link'); ?>
-                    <?php echo html::commonButton("<i class='icon icon-trash icon-sm text-primary'></i>", '', 'btn btn-link'); ?>
-                  </div>
-                </div>
-                <p class="text-gray clip"><?php echo $role->characterization; ?></p>
-              </div>
-            <?php } ?>
+            </h4>
+            <?php echo html::commonButton("<i class='icon icon-plus icon-sm text-primary'></i>", 'data-toggle="modal" data-target="#createRoleTemplateModal"', 'btn btn-link'); ?>
           </div>
+          <?php include './roletemplates.html.php';?>
         </div>
       </div>
     </div>
   </form>
 </div>
+
+<div class="modal fade" id="createRoleTemplateModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only"><?php echo $lang->close; ?></span></button>
+        <h4 class="modal-title"><?php echo $lang->ai->prompts->addRoleTemplate; ?></h4>
+      </div>
+      <div class="modal-body">
+        <form id="createRoleForm">
+          <div class='content-row'>
+            <div class='input-label'><span><?php echo $lang->ai->prompts->role;?></span></div>
+            <div class='input mw-400px'><?php echo html::input('role', '', "class='form-control' placeholder='{$lang->ai->prompts->rolePlaceholder}'");?></div>
+          </div>
+          <div class='content-row'>
+            <div class='input-label'><span><?php echo $lang->ai->prompts->characterization;?></span></div>
+            <div class='input'><?php echo html::textarea('characterization',
+                '', "class='form-control' rows='4' placeholder='{$lang->ai->prompts->charPlaceholder}'");?></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="createRoleButton" type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $lang->save; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 function validateForm()
 {
@@ -99,6 +115,22 @@ $(function () {
   $('select[name="model"]').trigger('change');
 });
 
+$('#createRoleButton').on('click', function(e)
+{
+  e.preventDefault();
+  const formData = new FormData(document.getElementById('createRoleForm'));
+  $.ajax({
+    url: createLink('ai', 'roleTemplates'),
+    type: 'POST',
+    data: {method: 'create', role: formData.get('role'), characterization: formData.get('characterization')},
+    dataType: 'html',
+    success: function(response)
+    {
+      $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
+    }
+  });
+});
+
 (function()
 {
   const expandRoleTemplatePanel = document.getElementById('expandRoleTemplatePanel');
@@ -116,6 +148,5 @@ $(function () {
     });
   }
 })();
-
 </script>
 <?php include '../../common/view/footer.html.php';?>

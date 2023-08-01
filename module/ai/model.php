@@ -1147,4 +1147,26 @@ class aiModel extends model
             ->where('deleted')->eq(0)
             ->fetchAll();
     }
+
+    /**
+     * add role template.
+     *
+     * @param  string    $role
+     * @param  string    $characterization
+     * @access public
+     * @return false|int
+     */
+    public function createRoleTemplate($role, $characterization)
+    {
+        $roleTemplate = new stdclass();
+        $roleTemplate->role = $role;
+        $roleTemplate->characterization = $characterization;
+
+        $this->dao->insert(TABLE_PROMPTROLE)
+            ->data($roleTemplate)
+            ->exec();
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertID();
+    }
 }

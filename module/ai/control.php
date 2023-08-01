@@ -548,4 +548,30 @@ class ai extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success'));
     }
+
+    /**
+     * Return html element for the role template list.
+     * This is used in prompt designing step 2.
+     * Return html will deserialize in the front end js and replace the original role template list.
+     *
+     * @access public
+     * @return void
+     */
+    public function roleTemplates()
+    {
+        if($_POST)
+        {
+            $data   = fixer::input('post')->get();
+            $method = $data->method;
+            switch($method)
+            {
+                case 'create':
+                    $this->ai->createRoleTemplate($data->role, $data->characterization);
+                    break;
+            }
+        }
+
+        $this->view->roleTemplates = $this->ai->getRoleTemplates();
+        $this->display();
+    }
 }
