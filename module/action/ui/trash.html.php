@@ -55,6 +55,10 @@ toolbar
     ))) : null,
 );
 
+if($currentObjectType != 'execution')                               unset($config->action->dtable->fieldList['project']);
+if(strpos(',story,requirement,', ",$currentObjectType,") === false) unset($config->action->dtable->fieldList['product']);
+if($currentObjectType != 'task')                                    unset($config->action->dtable->fieldList['execution']);
+
 $trashes = initTableData($trashes, $config->action->dtable->fieldList, $this->action);
 dtable
 (

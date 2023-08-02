@@ -17,20 +17,21 @@ $config->action->dtable->fieldList['id']['type']  = 'id';
 
 $config->action->dtable->fieldList['objectName']['name']  = 'objectName';
 $config->action->dtable->fieldList['objectName']['title'] = $lang->action->objectName;
-$config->action->dtable->fieldList['objectName']['type']  = 'title';
+$config->action->dtable->fieldList['objectName']['type']  = 'html';
 $config->action->dtable->fieldList['objectName']['fixed'] = 'left';
+$config->action->dtable->fieldList['objectName']['flex']  = true;
 
 $config->action->dtable->fieldList['project']['name']  = 'project';
 $config->action->dtable->fieldList['project']['title'] = $lang->project->project;
-$config->action->dtable->fieldList['project']['type']  = 'category';
+$config->action->dtable->fieldList['project']['type']  = 'html';
 
 $config->action->dtable->fieldList['product']['name']  = 'product';
 $config->action->dtable->fieldList['product']['title'] = $lang->story->product;
-$config->action->dtable->fieldList['product']['type']  = 'category';
+$config->action->dtable->fieldList['product']['type']  = 'html';
 
 $config->action->dtable->fieldList['execution']['name']  = 'execution';
 $config->action->dtable->fieldList['execution']['title'] = $lang->task->execution;
-$config->action->dtable->fieldList['execution']['type']  = 'category';
+$config->action->dtable->fieldList['execution']['type']  = 'html';
 
 $config->action->dtable->fieldList['actor']['name']  = 'actor';
 $config->action->dtable->fieldList['actor']['title'] = $lang->action->actor;

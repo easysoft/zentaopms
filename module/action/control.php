@@ -122,7 +122,8 @@ class action extends control
             $this->loadModel('project');
             $projectIdList = array();
             foreach($trashes as $trash) $projectIdList[] = $trash->project;
-            $this->view->projectList = $this->project->getByIdList($projectIdList, 'all');
+            $projectList = $this->project->getByIdList($projectIdList, 'all');
+            $this->view->projectList = $projectList;
         }
 
         /* Get the products name of story. */
@@ -131,7 +132,8 @@ class action extends control
             $this->loadModel('story');
             $storyIdList = array();
             foreach($trashes as $trash) $storyIdList[] = $trash->objectID;
-            $this->view->productList = $this->story->getByList($storyIdList, 'all');
+            $productList = $this->story->getByList($storyIdList, 'all');
+            $this->view->productList = $productList;
         }
 
         /* Get the executions name of task. */
@@ -141,22 +143,67 @@ class action extends control
             $this->loadModel('execution');
             $executionIdList = array();
             foreach($trashes as $trash) $executionIdList[] = $trash->execution;
-            $this->view->executionList = $this->execution->getByIdList($executionIdList, 'all');
+            $executionList = $this->execution->getByIdList($executionIdList, 'all');
+            $this->view->executionList = $executionList;
         }
 
         /* Process pivot name. */
-        foreach($trashes as $trash)
+        foreach($trashes as $action)
         {
-            if($trash->objectType == 'pivot')
+            if($action->objectType == 'pivot')
             {
-                $pivotNames = json_decode($trash->objectName, true);
-                $trash->objectName = zget($pivotNames, $this->app->getClientLang(), '');
+                $pivotNames = json_decode($action->objectName, true);
+                $action->objectName = zget($pivotNames, $this->app->getClientLang(), '');
                 if(empty($trash->objectName))
                 {
                     $pivotNames = array_filter($pivotNames);
-                    $trash->objectName = reset($pivotNames);
+                    $action->objectName = reset($pivotNames);
                 }
             }
+            else
+            {
+                $module     = $action->objectType == 'case' ? 'testcase' : $action->objectType;
+                $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
+                $methodName = 'view';
+                if($module == 'caselib')
+                {
+                    $methodName = 'view';
+                    $module     = 'caselib';
+                }
+                if($module == 'basicmeas')
+                {
+                    $module     = 'measurement';
+                    $methodName = 'setSQL';
+                    $params     = "id={$action->objectID}";
+                }
+                if($action->objectType == 'api')
+                {
+                    $params     = "libID=0&moduelID=0&apiID={$action->objectID}";
+                    $methodName = 'index';
+                }
+                if(strpos('traincourse,traincontents', $module) !== false)
+                {
+                    $methodName = $module == 'traincourse' ? 'viewcourse' : 'viewchapter';
+                    $module     = 'traincourse';
+                }
+                if(isset($this->config->action->customFlows[$action->objectType]))
+                {
+                    $flow   = $this->config->action->customFlows[$action->objectType];
+                    $module = $flow->module;
+                }
+                if(strpos($this->config->action->noLinkModules, ",{$module},") === false)
+                {
+                    $tab     = '';
+                    $canView = common::hasPriv($module, $methodName);
+                    if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";
+                    if($module == 'requirement') $module = 'story';
+                    $action->objectName = $canView ? html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title='{$action->objectName}' $tab") : "<span title='$action->objectName'>$action->objectName</span>";
+                }
+            }
+
+            if(!empty($projectList[$action->project]))     $action->project   = $projectList[$action->project]->name          . ($projectList[$action->project]->deleted         ? "<span class='label danger ml-2'>{$this->lang->project->deleted}</span>" : '');
+            if(!empty($productList[$action->objectID]))    $action->product   = $productList[$action->objectID]->productTitle . ($productList[$action->objectID]->productDeleted ? "<span class='label danger ml-2'>{$this->lang->story->deleted}</span>" : '');
+            if(!empty($executionList[$action->execution])) $action->execution = $executionList[$action->execution]->name      . ($executionList[$action->execution]->deleted     ? "<span class='label danger ml-2'>{$this->lang->execution->deleted}</span>" : '');
         }
 
         /* Title and position. */
@@ -274,7 +321,7 @@ class action extends control
         $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, $extra, 'id_desc', null);
         $browseType      = ($sameTypeObjects and $browseType != 'all') ? $oldAction->objectType : 'all';
 
-        return print(js::locate($this->createLink('action', 'trash', "browseType=$browseType&type=$extra"), 'parent'));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('action', 'trash', "browseType=$browseType&type=$extra")));
     }
 
     /**
@@ -294,7 +341,7 @@ class action extends control
         $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, 'all', 'id_desc', null);
         $browseType      = ($sameTypeObjects and $browseType != 'all') ? $oldAction->objectType : 'all';
 
-        return print(js::locate($this->createLink('action', 'trash', "browseType=$browseType"), 'parent'));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('action', 'trash', "browseType=$browseType")));
     }
 
     /**
