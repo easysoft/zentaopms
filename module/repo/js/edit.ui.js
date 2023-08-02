@@ -36,8 +36,17 @@ function onHostChange()
 
 function onProjectChange()
 {
-    $option = $('#serviceProject option').eq($('#serviceProject').prop('selectedIndex'));
-    $('#name').val($option.data('name'));
+    var serviceProject = $('#serviceProject').zui('picker').$.state.value;
+    var items          = $('#serviceProject').zui('picker').$.state.items;
+    for(i in items)
+    {
+        if(items[i].value == serviceProject)
+        {
+            var projectName = items[i].text.split('/');
+            $('#name').val(projectName[1].trim());
+            break;
+        }
+    }
 }
 
 /**
@@ -47,7 +56,7 @@ function onProjectChange()
  * @access public
  * @return void
  */
-function onScmChange(isFirstRequest = false)
+function onScmChange(event)
 {
     var scm = $('[name=SCM]').val();
     if(!scm)
@@ -94,7 +103,7 @@ function onScmChange(isFirstRequest = false)
             $('.hide-service').toggle(false);
         }
 
-        if(!isFirstRequset)
+        if(typeof(event) == 'object')
         {
             var url = $.createLink('repo', 'ajaxGetHosts', "scm=" + scm);
             $.get(url, function(response)
@@ -103,7 +112,6 @@ function onScmChange(isFirstRequest = false)
                 var $hostPicker = $('#serviceHost').zui('picker');
                 $hostPicker.render({items: data});
                 $hostPicker.$.clear();
-                onHostChange();
             });
         }
     }

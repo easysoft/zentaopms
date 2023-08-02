@@ -36,8 +36,17 @@ function onHostChange()
 
 function onProjectChange()
 {
-    $option = $('#serviceProject option').eq($('#serviceProject').prop('selectedIndex'));
-    $('#name').val($option.data('name'));
+    var serviceProject = $('#serviceProject').zui('picker').$.state.value;
+    var items          = $('#serviceProject').zui('picker').$.state.items;
+    for(i in items)
+    {
+        if(items[i].value == serviceProject)
+        {
+            var projectName = items[i].text.split('/');
+            $('#name').val(projectName[1].trim());
+            break;
+        }
+    }
 }
 
 /**
@@ -101,7 +110,6 @@ function onScmChange()
             var $hostPicker = $('#serviceHost').zui('picker');
             $hostPicker.render({items: data});
             $hostPicker.$.clear();
-            onHostChange();
         });
     }
 }
