@@ -111,6 +111,10 @@ $lang->ai->prompts->addRoleTemplate  = 'Add Role Template';
 $lang->ai->prompts->editRoleTemplate = 'Edit Role Template';
 $lang->ai->prompts->roleAddedSuccess = 'Role added successfully.';
 $lang->ai->prompts->roleDelConfirm   = 'Deleting the role does not affect the role that is already in the prompt. Do you want to delete it?';
+$lang->ai->prompts->roleTemplateSave = 'Save Role Template';
+$lang->ai->prompts->roleTemplateSaveList = array();
+$lang->ai->prompts->roleTemplateSaveList['save']    = 'Save';
+$lang->ai->prompts->roleTemplateSaveList['discard'] = 'Discard';
 
 /* Data source selecting. */
 $lang->ai->prompts->selectData       = 'Select fields';

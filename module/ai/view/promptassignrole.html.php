@@ -44,6 +44,10 @@
               <div class='input-label'><span><?php echo $lang->ai->prompts->characterization;?></span></div>
               <div class='input'><?php echo html::textarea('characterization', $prompt->characterization, "class='form-control' rows='4' placeholder='{$lang->ai->prompts->charPlaceholder}'");?></div>
             </div>
+            <div class='content-row'>
+              <div class='input-label'><span><?php echo $lang->ai->prompts->roleTemplateSave;?></span></div>
+              <div class='input' style="display: flex; align-items: center;"><?php echo html::radio('saveTemplate', $lang->ai->prompts->roleTemplateSaveList, 'discard');?></div>
+            </div>
           </div>
           <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
             <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->nextStep, 'disabled name="jumpToNext" value="1"');?></div>
@@ -131,116 +135,141 @@ function validateForm()
   return pass;
 }
 
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip();
-
-  $('select[name="model"]').change(function () {
-    var model = $(this).val();
-    if (model) $('button[type="submit"]').removeAttr('disabled');
-    if (!model) $('button[type="submit"]').attr('disabled', 'disabled');
-  });
-  $('select[name="model"]').trigger('change');
-});
-
-$('#createRoleButton').on('click', function(e)
+(function ()
 {
-  e.preventDefault();
-  const formData = new FormData(document.getElementById('createRoleForm'));
-  $.ajax({
-    url: createLink('ai', 'roleTemplates'),
-    type: 'POST',
-    data: {method: 'create', role: formData.get('role'), characterization: formData.get('characterization')},
-    dataType: 'html',
-    success: function(response)
+  let roleId = null;
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $('select[name="model"]').change(function ()
     {
-      new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
-      $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
-    }
+      var model = $(this).val();
+      if (model) $('button[type="submit"]').removeAttr('disabled');
+      if (!model) $('button[type="submit"]').attr('disabled', 'disabled');
+    });
+    $('select[name="model"]').trigger('change');
   });
-});
 
-$('#editRoleButton').on('click', function(e)
-{
-  e.preventDefault();
-  const formData = new FormData(document.getElementById('editRoleForm'));
-  $.ajax({
-    url: createLink('ai', 'roleTemplates'),
-    type: 'POST',
-    data: {method: 'edit', id: formData.get('id'), role: formData.get('role'), characterization: formData.get('characterization')},
-    dataType: 'html',
-    success: function(response)
-    {
-      new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
-      $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
-    }
-  });
-});
-
-$('#roleListContainer').on('click', function (e)
-{
-  const button = e.target.closest('#roleListContainer button');
-  if(!button) return;
-  const card = button.closest('.role-template-card');
-  if(!card) return;
-  if(!'id' in card.dataset || !'action' in button.dataset) return;
-  e.preventDefault();
-
-  const id = card.dataset.id;
-
-  switch (button.dataset.action)
+  $('#createRoleButton').on('click', function (e)
   {
-    case 'apply':
-    {
-      $('#mainForm input[name="role"]').val(card.querySelector('#role').innerText).toggleClass('focus', true);
-      $('#mainForm textarea[name="characterization"]').val(card.querySelector('#characterization').innerText).toggleClass('focus', true);
-      setTimeout(() =>
-      {
-        $('#mainForm input[name="role"]').toggleClass('focus', false);
-        $('#mainForm textarea[name="characterization"]').toggleClass('focus', false);
-      }, 1000);
-      break;
-    }
-    case 'edit':
-    {
-      const model = $('#editRoleTemplateModal');
-      model.find('input[name="id"]').val(id);
-      model.find('#role').val(card.querySelector('#role').innerText);
-      model.find('#characterization').val(card.querySelector('#characterization').innerText);
-      model.modal('toggle');
-      break;
-    }
-    case 'del':
-    {
-      if (window.confirm('<?php echo $lang->ai->prompts->roleDelConfirm; ?>')) {
-        $.ajax({
-          url: createLink('ai', 'roleTemplates'),
-          type: 'POST',
-          data: {method: 'delete', id: id},
-          dataType: 'html',
-          success: function(response)
-          {
-            new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
-            $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
-          }
-        });
+    e.preventDefault();
+    const formData = new FormData(document.getElementById('createRoleForm'));
+    $.ajax({
+      url: createLink('ai', 'roleTemplates'),
+      type: 'POST',
+      data: {method: 'create', role: formData.get('role'), characterization: formData.get('characterization')},
+      dataType: 'html',
+      success: function (response) {
+        new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
+        $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
       }
-      break;
-    }
-  }
-});
+    });
+  });
 
-(function()
-{
+  $('#editRoleButton').on('click', function (e)
+  {
+    e.preventDefault();
+    const formData = new FormData(document.getElementById('editRoleForm'));
+    $.ajax({
+      url: createLink('ai', 'roleTemplates'),
+      type: 'POST',
+      data: {
+        method: 'edit',
+        id: formData.get('id'),
+        role: formData.get('role'),
+        characterization: formData.get('characterization')
+      },
+      dataType: 'html',
+      success: function (response) {
+        new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
+        $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
+      }
+    });
+  });
+
+  $('#roleListContainer').on('click', function (e)
+  {
+    const button = e.target.closest('#roleListContainer button');
+    if (!button) return;
+    const card = button.closest('.role-template-card');
+    if (!card) return;
+    if (!'id' in card.dataset || !'action' in button.dataset) return;
+    e.preventDefault();
+
+    const id = card.dataset.id;
+
+    switch (button.dataset.action)
+    {
+      case 'apply':
+      {
+        $('#mainForm input[name="role"]').val(card.querySelector('#role').innerText).toggleClass('focus', true);
+        $('#mainForm textarea[name="characterization"]').val(card.querySelector('#characterization').innerText).toggleClass('focus', true);
+        setTimeout(() => {
+          $('#mainForm input[name="role"]').toggleClass('focus', false);
+          $('#mainForm textarea[name="characterization"]').toggleClass('focus', false);
+        }, 1000);
+        roleId = id;
+        break;
+      }
+      case 'edit':
+      {
+        const model = $('#editRoleTemplateModal');
+        model.find('input[name="id"]').val(id);
+        model.find('#role').val(card.querySelector('#role').innerText);
+        model.find('#characterization').val(card.querySelector('#characterization').innerText);
+        model.modal('toggle');
+        break;
+      }
+      case 'del':
+      {
+        if (window.confirm('<?php echo $lang->ai->prompts->roleDelConfirm; ?>')) {
+          $.ajax({
+            url: createLink('ai', 'roleTemplates'),
+            type: 'POST',
+            data: {method: 'delete', id: id},
+            dataType: 'html',
+            success: function (response) {
+              new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
+              $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
+            }
+          });
+        }
+        break;
+      }
+    }
+  });
+
+  $('#mainForm').on('submit', function()
+  {
+    if($('#mainForm input[name="saveTemplate"]:checked').val() === 'discard') return true;
+    const card = $('#roleListContainer .role-template-card[data-id="' + roleId + '"]');
+    if (!card)
+    {
+      $('#mainForm input[name="saveTemplate"]#saveTemplatediscard').prop('checked', true);
+      return true;
+    }
+    const role = card.find('#role').text();
+    const characterization = card.find('#characterization').text();
+    if (
+      $('#mainForm input[name="role"]').val() === role
+      && $('#mainForm textarea[name="characterization"]').val() === characterization
+    )
+    {
+      $('#mainForm input[name="saveTemplate"]#saveTemplatediscard').prop('checked', true);
+      return true;
+    }
+    return true;
+  });
+
   const expandRoleTemplatePanel = document.getElementById('expandRoleTemplatePanel');
   if(expandRoleTemplatePanel)
   {
-    expandRoleTemplatePanel.addEventListener('click', function(e)
-    {
+    expandRoleTemplatePanel.addEventListener('click', function (e) {
       const roleTemplate = document.getElementById('roleTemplate');
       const isPanelExpanded = roleTemplate.style.display === 'block';
       expandRoleTemplatePanel.querySelector('icon').className = isPanelExpanded ? 'icon icon-first-page' : 'icon icon-last-page';
-      if(roleTemplate)
-      {
+      if (roleTemplate) {
         roleTemplate.style.display = isPanelExpanded ? 'none' : 'block';
       }
     });
