@@ -1176,22 +1176,23 @@ class storyZen extends story
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
         helper::setcookie('preProductID', (string)$productID);
 
-        $initStory = array('title' => '', 'spec' => '', 'module' => $moduleID, 'plan' => $planID, 'pri' => 3, 'estimate' => 0, 'branch' => $this->view->branchID);
-        $stories   = array();
-        for($i = 0; $i < $this->config->story->batchCreate; $i++) $stories[] = $initStory;
+        $defaultStory = array('title' => '', 'spec' => '', 'module' => $moduleID, 'plan' => $planID, 'pri' => 3, 'estimate' => 0, 'branch' => $this->view->branchID);
+        $batchStories = array();
+        $count        = $this->config->story->batchCreate;
+        for($batchIndex = 0; $batchIndex < $count; $batchIndex++) $batchStories[] = $defaultStory;
 
-        if(empty($_SESSION['storyImagesFile'])) return $stories;
+        if(empty($_SESSION['storyImagesFile'])) return $batchStories;
 
-        $files   = $this->session->storyImagesFile;
-        $stories = array();
+        $files        = $this->session->storyImagesFile;
+        $batchStories = array();
         foreach($files as $fileName => $file)
         {
-            $initStory['title']       = $file['title'];
-            $initStory['uploadImage'] = $fileName;
+            $defaultStory['title']       = $file['title'];
+            $defaultStory['uploadImage'] = $fileName;
 
-            $stories[] = $initStory;
+            $batchStories[] = $defaultStory;
         }
-        return $stories;
+        return $batchStories;
     }
 
     /**
