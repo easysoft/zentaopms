@@ -35,7 +35,7 @@ class count_of_normal_product extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = array(array('value' => $this->result));
+        $records = $this->getRecords(array('value'));
         return $this->filterByOptions($records, $options);
     }
 }
