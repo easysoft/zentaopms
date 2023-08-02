@@ -30,7 +30,7 @@ class editor extends wg
         // global $app;
         // $jsFile = $app->getWebRoot() . 'js/zeneditor/tiptap-component.esm.js';
         $jsFile = 'https://zui-dist.oop.cc/zeneditor/tiptap-component.esm.js';
-        return '$.getScript("' . $jsFile . '", {type: "module"}, () => {document.body.dataset.loadedEditor = true;});';
+        return '$.getLib("' . $jsFile . '", {type: "module"}, () => {document.body.dataset.loadedEditor = true;});';
     }
 
     protected function build(): wg
