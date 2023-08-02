@@ -26,6 +26,8 @@ class count_of_line extends baseCalc
 
     public $fieldList = array('t1.id');
 
+    public $result = 0;
+
     public function calculate($row)
     {
         $this->result ++;
@@ -33,7 +35,7 @@ class count_of_line extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = array(array('value' => $this->result));
+        $records = $this->getRecords(array('value'));
         return $this->filterByOptions($records, $options);
     }
 }
