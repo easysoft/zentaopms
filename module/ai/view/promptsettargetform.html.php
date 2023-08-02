@@ -30,8 +30,10 @@
   #prompt-preview .prompt-text-part + .prompt-text-part {margin-top: 4px;}
   #prompt-previewer {font-weight: bold;}
   #form-selector .header > * {display: inline-block;}
-  #form-selector .content {margin: 6px 0; height: calc(100% - 48px); overflow-y: auto;}
+  #form-selector .content {margin: 6px 0; height: calc(100% - 48px); overflow-y: auto; border: 1px solid #ccc; border-left: none;}
   .target-form-group {display: grid; grid-template-columns: 120px 1fr; grid-gap: 8px; border: 1px solid #ccc;}
+  .target-form-group:first-of-type {border-top: none;}
+  .target-form-group:last-of-type {border-bottom: none;}
   .target-form-group + .target-form-group {border-top: unset;}
   .target-form-group .header {display: flex; align-items: center; padding: 0 12px; background-color: #f8f8f8;}
   .target-form-group .options {display: grid; padding: 12px 16px; grid-template-columns: repeat(4, 1fr);}
