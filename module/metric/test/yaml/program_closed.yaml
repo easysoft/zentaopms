@@ -10,7 +10,7 @@ fields:
 - field: grade
   range: 1{1},2{1},3{1},4{1}
 - field: status
-  range: wait{1},doing{1},suspended{1},closed{1}
+  range: closed
 - field: openedDate
   range: "20100101 000000-20210101 230000:10D"
   type: timestamp

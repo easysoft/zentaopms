@@ -3,7 +3,7 @@
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
-zdTable('project')->config('program', $useCommon = true, $levels = 4)->gen(356, true, false);
+zdTable('project')->config('program_closed', $useCommon = true, $levels = 4)->gen(356, true, false);
 
 $metric = new metricTest();
 $calc = $metric->calcMetric(__FILE__);

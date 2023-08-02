@@ -13,14 +13,14 @@ cid=1
 
 */
 
-zdTable('project')->config('program', $useCommon = true, $levels = 4)->gen(356, true, false);
+zdTable('project')->config('program_closed', $useCommon = true, $levels = 4)->gen(356, true, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('180'); // 测试356条项目集数。
 
-zdTable('project')->config('program', $useCommon = true, $levels = 4)->gen(652, true, false);
+zdTable('project')->config('program_closed', $useCommon = true, $levels = 4)->gen(652, true, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('328'); // 测试652条项目集数。
 
-zdTable('project')->config('program', $useCommon = true, $levels = 4)->gen(1265, true, false);
+zdTable('project')->config('program_closed', $useCommon = true, $levels = 4)->gen(1265, true, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('633'); // 测试1265条项目集数。
