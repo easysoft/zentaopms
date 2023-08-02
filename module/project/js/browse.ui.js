@@ -44,3 +44,10 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 
     $.cookie.set('checkedItem', checkedList);
 });
+
+$(document).off('click', '.switchButton').on('click', '.switchButton', function()
+{
+    var projectType = $(this).attr('data-type');
+    $.cookie.set('projectType', projectType);
+    loadCurrentPage();
+});

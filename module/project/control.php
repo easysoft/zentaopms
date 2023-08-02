@@ -355,6 +355,11 @@ class project extends control
         $this->view->param         = $param;
         $this->view->orderBy       = $orderBy;
         $this->view->showBatchEdit = $this->cookie->showProjectBatchEdit;
+        $this->view->projectType   = $this->cookie->projectType ? $this->cookie->projectType : 'bylist';
+        $this->view->programs      = array(0 => $this->lang->program->all) + $this->program->getParentPairs();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->userIdPairs   = $this->loadModel('user')->getPairs('nodeleted|showid');
+        $this->view->usersAvatar   = $this->user->getAvatarPairs();
 
         $this->display();
     }

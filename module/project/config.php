@@ -363,3 +363,9 @@ $config->project->actionList['delete']['url']  = 'javascript:confirmDelete("{id}
 $config->project->view = new stdclass();
 $config->project->view->operateList['main']   = array('start', 'activate', 'suspend', 'close');
 $config->project->view->operateList['common'] = array('edit', 'delete');
+
+$config->project->statusLabelList['wait']      = 'wait lighter rounded-full';
+$config->project->statusLabelList['doing']     = 'doing primary-pale rounded-full';
+$config->project->statusLabelList['suspended'] = 'suspended gray text-white rounded-full';
+$config->project->statusLabelList['closed']    = 'closed success-pale rounded-full';
+$config->project->statusLabelList['delay']     = 'delay danger rounded-full';

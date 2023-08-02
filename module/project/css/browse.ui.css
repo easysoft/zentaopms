@@ -1,1 +1,27 @@
 input[name="realEnd"] {width: 150px;}
+
+.table-empty-tip {padding: 80px 10px; text-align: center; background: #fff;}
+.table-empty-tip .btn {background-color: rgba(var(--color-primary-50-rgb),var(--tw-bg-opacity)); color: var(--nav-active-color); --tw-ring-color: rgba(var(--color-primary-50-rgb),var(--tw-bg-opacity));}
+#cards {margin: 0 0; flex-wrap: wrap; padding: 10px;}
+#cards > .col {width: 25%; padding-left: 10px; padding-right: 10px;}
+@media screen and (max-width: 1500px) {#cards > .col {width: 33.3333333%;}}
+#cards .panel {margin: 10px 0; border: 1px solid rgb(var(--color-gray-300-rgb)); border-radius: 4px; box-shadow: none; cursor: pointer; height: 175px; background: #FFF;}
+#cards .panel:hover {border-color: rgb(var(--color-primary-500-rgb)); box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
+#cards .panel .panel-heading {justify-content: start; padding: 12px 24px 10px 16px;}
+#cards .panel .panel-heading .project-name {margin: 0 -8px; overflow: hidden; white-space: nowrap;}
+#cards .panel .panel-heading .project-status {min-width: 45px;}
+#cards .panel .panel-heading .label.wait {background: rgba(var(--color-gray-200-rgb),var(--tw-bg-opacity));}
+#cards .panel-body {padding: 0 16px 16px;}
+
+#cards .project-infos {font-size: 12px;}
+#cards .project-infos > span + span {margin-left: 15px;}
+#cards .project-infos > .budget {max-width: 75px; overflow: hidden; white-space: nowrap;}
+
+#cards .project-detail {margin-top: 10px;}
+#cards .project-detail .statistics-title {color: #5B606E;}
+#cards .project-detail .leftTasks, .totalLeft {display:block; font-size: 18px; font-weight: bold; color: #3C4353;}
+#cards .project-team {display:inline-block;}
+#cards .project-actions {display:inline-block; float: right; margin-bottom: 8px;}
+.m-project-browse .project-menu-actions > .menu-item > a:hover {background: none; color: var(--menu-hover-bg);}
+
+#cards #cardsFooter {width: 100%; display: flex; justify-content: end;}
