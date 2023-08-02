@@ -21,7 +21,7 @@ class globalSearch extends wg
         global $lang;
         $this->setDefaultProps(array(
             'commonSearchText' => $lang->searchAB,
-            'commonSearchUrl' => 'all',
+            'commonSearchKey' => 'all',
             'searchFunc' => jsRaw('window.globalSearch'),
         ));
 
