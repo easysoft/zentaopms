@@ -15,6 +15,7 @@ namespace zin;
 
 $setting       = usePager('dynamicPager');
 $screenshots   = array_filter($cloudApp->screenshot_urls);
+if(!empty($screenshots) && count($screenshots)%3) $screenshots = array_merge($screenshots, array_fill(0, count($screenshots)%3, ''));
 $screenshotsWg = array();
 foreach($screenshots as $screenshot)
 {

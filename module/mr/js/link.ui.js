@@ -38,7 +38,6 @@ window.showLink = function(obj)
     let link        = $(obj).data('url');
     let $tabContent = $(obj);
 
-    console.log(1111, link, $tabContent, $(obj));
     if($(obj).hasClass('link'))
     {
         $tabContent = $(obj).closest('.tab-pane');

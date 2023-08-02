@@ -39,7 +39,6 @@ window.installApp = function()
 
 $('#mainContent').on('keydown', '#name', function(event)
 {
-    console.log(1111, event.key);
     if (event.key === 'Enter')
     {
         const form = new FormData();

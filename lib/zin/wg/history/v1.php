@@ -132,6 +132,7 @@ class history extends wg
         (
             setClass('comment-edit-form hidden mt-2 ml-6'),
             set::method('post'),
+            set::submitBtnText($lang->save),
             set::action(createLink('action', 'editComment', "actionID=$action->id")),
             editor
             (

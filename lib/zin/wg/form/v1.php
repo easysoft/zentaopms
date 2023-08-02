@@ -16,7 +16,8 @@ class form extends formBase
         'items?: array',    // 使用一个列定义对象数组来定义表单项。
         'grid?: bool=true', // 是否启用网格部件，禅道中所有表单都是网格布局，除非有特殊目的，无需设置此项。
         'labelWidth?: int', // 标签宽度，单位为像素。
-        'actionsClass?: string="form-group no-label"' // 操作按钮栏的 CSS 类。
+        'actionsClass?: string="form-group no-label"', // 操作按钮栏的 CSS 类。
+        'submitBtnText?: string' // 提交按钮文本。
     );
 
     protected function created()
