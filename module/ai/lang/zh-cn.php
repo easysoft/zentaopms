@@ -112,6 +112,7 @@ $lang->ai->prompts->addRoleTemplate  = '添加角色模板';
 $lang->ai->prompts->editRoleTemplate = '编辑角色模板';
 $lang->ai->prompts->roleAddedSuccess = '角色模版保存成功';
 $lang->ai->prompts->roleDelConfirm   = '删除不会影响已用角色模版的提词，是否删除？';
+$lang->ai->prompts->roleDelSuccess   = '角色模板已删除';
 $lang->ai->prompts->roleTemplateSave = '存为角色模板';
 $lang->ai->prompts->roleTemplateSaveList = array();
 $lang->ai->prompts->roleTemplateSaveList['save']    = '保存';
