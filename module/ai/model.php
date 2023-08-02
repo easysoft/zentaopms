@@ -505,7 +505,7 @@ class aiModel extends model
             }
             else
             {
-                $changes = common::createChanges($originalPrompt, $prompt);
+                $changes = commonModel::createChanges($originalPrompt, $prompt);
             }
 
         }
@@ -1112,10 +1112,50 @@ class aiModel extends model
         return $this->dao->select('*')->from(TABLE_PROMPT)
             ->where('deleted')->eq(0)
             ->andWhere('module')->eq($module)
-            ->beginIF(!common::hasPriv('ai', 'promptaudit'))->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
-            ->beginIF(common::hasPriv('ai', 'promptaudit'))->andWhere('status', true)->eq('active')->orWhere('createdBy')->eq($this->app->user->account)->markRight(1)->fi()
+            ->beginIF(!commonModel::hasPriv('ai', 'promptaudit'))->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
+            ->beginIF(commonModel::hasPriv('ai', 'promptaudit'))->andWhere('status', true)->eq('active')->orWhere('createdBy')->eq($this->app->user->account)->markRight(1)->fi()
             ->orderBy('id_desc')
             ->fetchAll();
+    }
+
+    /**
+     * Filter prompts by user's privilege and executable state.
+     *
+     * @param  array   $prompts
+     * @param  bool    $keepUnauthorized  optional, whether to keep unauthorized prompts but set their `unauthorized` property to true.
+     * @access public
+     * @return array   filtered prompts, those unauthorized will be removed if `$keepUnauthorized` is false, unexecutable ones will always be removed.
+     */
+    public function filterPromptsForExecution($prompts, $keepUnauthorized = false)
+    {
+        if(empty($prompts)) return array();
+
+        /* Remove the unexecutable ones. */
+        $prompts = array_filter($prompts, array($this, 'isExecutable'));
+
+        /* Check user's priv to targetForm. */
+        foreach($prompts as $idx => $prompt)
+        {
+            list($m, $f) = explode('.', $prompt->targetForm);
+            $targetFormConfig = $this->config->ai->targetForm[$m][$f];
+            if(empty($targetFormConfig))
+            {
+                unset($prompts[$idx]);
+                continue;
+            }
+            if(!commonModel::hasPriv($targetFormConfig->m, $targetFormConfig->f))
+            {
+                if($keepUnauthorized)
+                {
+                    $prompts[$idx]->unauthorized = true;
+                }
+                else
+                {
+                    unset($prompts[$idx]);
+                }
+            }
+        }
+        return array_values($prompts);
     }
 
     /**
