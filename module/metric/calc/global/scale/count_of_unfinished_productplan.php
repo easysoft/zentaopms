@@ -24,13 +24,14 @@ class count_of_unfinished_productplan extends baseCalc
 {
     public $dataset = 'getPlans';
 
-    public $fieldList = array('t1.status');
+    public $fieldList = array('t1.status', 't1.closedReason');
 
     public $result = 0;
 
     public function calculate($row)
     {
-        if($row->status != 'done') $this->result ++;
+        if($row->status == 'done' || ($row->status == 'closed' && $row->closedReason == 'done')) return false;
+        $this->result ++;
     }
 
     public function getResult($options = array())
