@@ -196,8 +196,8 @@ VALUES
 REPLACE INTO
     `zt_privrelation` (`priv`, `type`, `relationPriv`)
 VALUES
-    (2108, 'depend', 2107),
-    (2109, 'depend', 2108),
+    (2108, 'depend', 2107), (2108, 'depend', 2109),
+    (2109, 'depend', 2107), (2109, 'depend', 2108),
     (2122, 'depend', 2121),
     (2110, 'depend', 2121), (2110, 'depend', 2122),
     (2111, 'depend', 2121), (2111, 'depend', 2122),
@@ -213,11 +213,10 @@ VALUES
     (2111, 'depend', 2110), (2113, 'depend', 2110), (2114, 'depend', 2110), (2115, 'depend', 2110), (2116, 'depend', 2110), (2117, 'depend', 2110), (2118, 'depend', 2110),
     (2110, 'recommend', 2111),
     (2110, 'recommend', 2112),
-    (2122, 'depend', 2121),
-    (2118, 'depend', 2123),
-    (2113, 'depend', 2114), (2113, 'depend', 2115), (2113, 'depend', 2116), (2113, 'depend', 2117), (2113, 'depend', 2118),
-    (2114, 'depend', 2113), (2114, 'depend', 2115), (2114, 'depend', 2116), (2114, 'depend', 2117), (2114, 'depend', 2118),
-    (2115, 'depend', 2113), (2115, 'depend', 2114), (2115, 'depend', 2116), (2115, 'depend', 2117), (2115, 'depend', 2118),
-    (2116, 'depend', 2113), (2116, 'depend', 2114), (2116, 'depend', 2115), (2116, 'depend', 2117), (2116, 'depend', 2118),
-    (2117, 'depend', 2113), (2117, 'depend', 2114), (2117, 'depend', 2115), (2117, 'depend', 2116), (2117, 'depend', 2118),
-    (2118, 'depend', 2113), (2118, 'depend', 2114), (2118, 'depend', 2115), (2118, 'depend', 2116), (2118, 'depend', 2117);
+    (2110, 'recommend', 2113), (2110, 'recommend', 2114), (2110, 'recommend', 2115), (2110, 'recommend', 2116), (2110, 'recommend', 2117), (2110, 'recommend', 2118),
+    (2113, 'depend', 2114), (2113, 'depend', 2115), (2113, 'depend', 2116), (2113, 'depend', 2117), (2113, 'depend', 2118), (2113, 'depend', 2123),
+    (2114, 'depend', 2113), (2114, 'depend', 2115), (2114, 'depend', 2116), (2114, 'depend', 2117), (2114, 'depend', 2118), (2114, 'depend', 2123),
+    (2115, 'depend', 2113), (2115, 'depend', 2114), (2115, 'depend', 2116), (2115, 'depend', 2117), (2115, 'depend', 2118), (2115, 'depend', 2123),
+    (2116, 'depend', 2113), (2116, 'depend', 2114), (2116, 'depend', 2115), (2116, 'depend', 2117), (2116, 'depend', 2118), (2116, 'depend', 2123),
+    (2117, 'depend', 2113), (2117, 'depend', 2114), (2117, 'depend', 2115), (2117, 'depend', 2116), (2117, 'depend', 2118), (2117, 'depend', 2123),
+    (2118, 'depend', 2113), (2118, 'depend', 2114), (2118, 'depend', 2115), (2118, 'depend', 2116), (2118, 'depend', 2117), (2118, 'depend', 2123);
