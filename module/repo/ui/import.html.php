@@ -48,6 +48,12 @@ featureBar
 
 formBatchPanel
 (
+    h::input
+    (
+        set::type('hidden'),
+        set::name('serviceHost'),
+        set::value($gitlab->id),
+    ),
     set::id('repoList'),
     set::back('repo-maintain'),
     set::mode(count($repoList) == 0 ? 'edit' : 'add'),

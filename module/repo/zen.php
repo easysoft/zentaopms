@@ -267,17 +267,22 @@ class repoZen extends repo
      */
     protected function prepareBatchCreate(): array|false
     {
+        $this->app->loadLang('testcase');
+
         $data = array();
-        foreach($_POST as $key => $val)
+        foreach($_POST as $key => $vals)
         {
             if(strpos($key, 'serviceProject') === 0)
             {
-                $i = substr($key, 14);
-                if($this->post->{'product' . $i} == '') dao::$errors['product' . $i][] = sprintf($this->lang->error->notempty, $this->lang->repo->product);
-                if($this->post->{'name' . $i} == '')    dao::$errors['name' . $i][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
-                if(dao::isError()) continue;
+                foreach($vals as $i => $project)
+                {
+                    $products = array_filter($this->post->product[$i]);
+                    if(empty($products)) dao::$errors['product'][] = sprintf($this->lang->testcase->whichLine . $this->lang->error->notempty, $i, $this->lang->repo->product);
+                    if($this->post->name[$i] == '')    dao::$errors['name'][] = sprintf($this->lang->testcase->whichLine . $this->lang->error->notempty, $i, $this->lang->repo->name);
+                    if(dao::isError()) continue;
 
-                $data[] = array('serviceProject' => $this->post->{'serviceProject' . $i}, 'product' => implode(',', $this->post->{'product' . $i}), 'name' => $this->post->{'name' . $i}, 'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
+                    $data[] = array('serviceProject' => $project, 'product' => implode(',', $this->post->product[$i]), 'name' => $this->post->name[$i], 'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
+                }
             }
         }
         if(dao::isError()) return false;
