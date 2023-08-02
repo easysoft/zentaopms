@@ -47,6 +47,7 @@ $lang->ai->promptUnpublish        = 'Unpublish Prompt';
 $lang->ai->promptBrowse           = 'Browse Prompts';
 $lang->ai->promptView             = 'View Prompt';
 $lang->ai->promptExecute          = 'Execute Prompt';
+$lang->ai->roleTemplates          = 'Manage Role Templates';
 
 $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';

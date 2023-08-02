@@ -56,7 +56,8 @@ VALUES
     (2120, 'ai', 'promptunpublish', 655, ',open,biz,max,', ',rnd,', '1', 70),
     (2121, 'ai', 'prompts', 653, ',open,biz,max,', ',rnd,', '1', 75),
     (2122, 'ai', 'promptview', 653, ',open,biz,max,', ',rnd,', '1', 80),
-    (2123, 'ai', 'promptexecute', 651, ',open,biz,max,', ',rnd,', '1', 85);
+    (2123, 'ai', 'promptexecute', 651, ',open,biz,max,', ',rnd,', '1', 85),
+    (2124, 'ai', 'roletemplates', 654, ',open,biz,max,', ',rnd,', '1', 86);
 
 REPLACE INTO
     `zt_privmanager` (`id`, `parent`, `code`, `type`, `edition`, `vision`, `order`)
@@ -124,6 +125,7 @@ VALUES
     (2121, 'priv', 'zh-cn', 'ai-promptBrowse', '', ''),
     (2122, 'priv', 'zh-cn', 'ai-promptView', '', ''),
     (2123, 'priv', 'zh-cn', 'ai-promptExecute', '', ''),
+    (2124, 'priv', 'zh-cn', 'ai-roleTemplates', '', ''),
     (2107, 'priv', 'zh-tw', 'ai-modelBrowse', '', ''),
     (2108, 'priv', 'zh-tw', 'ai-modelEdit', '', ''),
     (2109, 'priv', 'zh-tw', 'ai-modelTestConnection', '', ''),
@@ -141,6 +143,7 @@ VALUES
     (2121, 'priv', 'zh-tw', 'ai-promptBrowse', '', ''),
     (2122, 'priv', 'zh-tw', 'ai-promptView', '', ''),
     (2123, 'priv', 'zh-tw', 'ai-promptExecute', '', ''),
+    (2124, 'priv', 'zh-tw', 'ai-roleTemplates', '', ''),
     (2107, 'priv', 'en', 'ai-modelBrowse', '', ''),
     (2108, 'priv', 'en', 'ai-modelEdit', '', ''),
     (2109, 'priv', 'en', 'ai-modelTestConnection', '', ''),
@@ -158,6 +161,7 @@ VALUES
     (2121, 'priv', 'en', 'ai-promptBrowse', '', ''),
     (2122, 'priv', 'en', 'ai-promptView', '', ''),
     (2123, 'priv', 'en', 'ai-promptExecute', '', ''),
+    (2124, 'priv', 'en', 'ai-roleTemplates', '', ''),
     (2107, 'priv', 'de', 'ai-modelBrowse', '', ''),
     (2108, 'priv', 'de', 'ai-modelEdit', '', ''),
     (2109, 'priv', 'de', 'ai-modelTestConnection', '', ''),
@@ -175,6 +179,7 @@ VALUES
     (2121, 'priv', 'de', 'ai-promptBrowse', '', ''),
     (2122, 'priv', 'de', 'ai-promptView', '', ''),
     (2123, 'priv', 'de', 'ai-promptExecute', '', ''),
+    (2124, 'priv', 'de', 'ai-roleTemplates', '', ''),
     (2107, 'priv', 'fr', 'ai-modelBrowse', '', ''),
     (2108, 'priv', 'fr', 'ai-modelEdit', '', ''),
     (2109, 'priv', 'fr', 'ai-modelTestConnection', '', ''),
@@ -191,7 +196,8 @@ VALUES
     (2120, 'priv', 'fr', 'ai-promptUnpublish', '', ''),
     (2121, 'priv', 'fr', 'ai-promptBrowse', '', ''),
     (2122, 'priv', 'fr', 'ai-promptView', '', ''),
-    (2123, 'priv', 'fr', 'ai-promptExecute', '', '');
+    (2123, 'priv', 'fr', 'ai-promptExecute', '', ''),
+    (2124, 'priv', 'fr', 'ai-roleTemplates', '', '');
 
 REPLACE INTO
     `zt_privrelation` (`priv`, `type`, `relationPriv`)
@@ -219,4 +225,5 @@ VALUES
     (2115, 'depend', 2113), (2115, 'depend', 2114), (2115, 'depend', 2116), (2115, 'depend', 2117), (2115, 'depend', 2118), (2115, 'depend', 2123),
     (2116, 'depend', 2113), (2116, 'depend', 2114), (2116, 'depend', 2115), (2116, 'depend', 2117), (2116, 'depend', 2118), (2116, 'depend', 2123),
     (2117, 'depend', 2113), (2117, 'depend', 2114), (2117, 'depend', 2115), (2117, 'depend', 2116), (2117, 'depend', 2118), (2117, 'depend', 2123),
-    (2118, 'depend', 2113), (2118, 'depend', 2114), (2118, 'depend', 2115), (2118, 'depend', 2116), (2118, 'depend', 2117), (2118, 'depend', 2123);
+    (2118, 'depend', 2113), (2118, 'depend', 2114), (2118, 'depend', 2115), (2118, 'depend', 2116), (2118, 'depend', 2117), (2118, 'depend', 2123),
+    (2124, 'depend', 2113), (2113, 'depend', 2124);

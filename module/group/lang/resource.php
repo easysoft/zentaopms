@@ -1940,6 +1940,7 @@ $lang->resource->ai->promptunpublish        = 'promptUnpublish';
 $lang->resource->ai->prompts                = 'promptBrowse';
 $lang->resource->ai->promptview             = 'promptView';
 $lang->resource->ai->promptexecute          = 'promptExecute';
+$lang->resource->ai->roletemplates          = 'roleTemplates';
 
 $lang->api->methodOrder[0]   = 'index';
 $lang->api->methodOrder[5]   = 'createLib';
