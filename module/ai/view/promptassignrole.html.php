@@ -57,7 +57,9 @@
             </h4>
             <?php echo html::commonButton("<i class='icon icon-plus icon-sm text-primary'></i>", 'data-toggle="modal" data-target="#createRoleTemplateModal"', 'btn btn-link'); ?>
           </div>
-          <?php include './roletemplates.html.php';?>
+          <div id="roleListContainer">
+            <?php include './roletemplates.html.php';?>
+          </div>
         </div>
       </div>
     </div>
@@ -130,6 +132,32 @@ $('#createRoleButton').on('click', function(e)
       $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
     }
   });
+});
+
+$('#roleListContainer').on('click', function (e)
+{
+  const button = e.target.closest('#roleListContainer button');
+  if(!button) return;
+  if(!'id' in button.dataset || !'action' in button.dataset) return;
+  e.preventDefault();
+  const id = button.dataset.id;
+
+  if(button.dataset.action === 'del')
+  {
+    if (window.confirm('<?php echo $lang->ai->prompts->roleDelConfirm; ?>')) {
+      $.ajax({
+        url: createLink('ai', 'roleTemplates'),
+        type: 'POST',
+        data: {method: 'delete', id: id},
+        dataType: 'html',
+        success: function(response)
+        {
+          new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
+          $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
+        }
+      });
+    }
+  }
 });
 
 (function()

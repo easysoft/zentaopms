@@ -109,6 +109,7 @@ $lang->ai->prompts->roleTemplate     = 'Role Template';
 $lang->ai->prompts->roleTemplateTip  = 'After a template is referenced, modifying the role or role description does not affect the template.';
 $lang->ai->prompts->addRoleTemplate  = 'Add Role Template';
 $lang->ai->prompts->roleAddedSuccess = 'Role added successfully.';
+$lang->ai->prompts->roleDelConfirm   = 'Deleting the role does not affect the role that is already in the prompt. Do you want to delete it?';
 
 /* Data source selecting. */
 $lang->ai->prompts->selectData       = 'Select fields';

@@ -109,6 +109,7 @@ $lang->ai->prompts->roleTemplate     = '角色模版';
 $lang->ai->prompts->roleTemplateTip  = '引用模板后，修改角色、角色描述不会对模板造成影响。';
 $lang->ai->prompts->addRoleTemplate  = '添加角色模板';
 $lang->ai->prompts->roleAddedSuccess = '角色模版保存成功';
+$lang->ai->prompts->roleDelConfirm   = '删除不会影响已用角色模版的提词，是否删除？';
 
 /* Data source selecting. */
 $lang->ai->prompts->selectData       = '选择字段';
