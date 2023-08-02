@@ -59,6 +59,8 @@ if($currentObjectType != 'execution')                               unset($confi
 if(strpos(',story,requirement,', ",$currentObjectType,") === false) unset($config->action->dtable->fieldList['product']);
 if($currentObjectType != 'task')                                    unset($config->action->dtable->fieldList['execution']);
 
+if($type == 'all') $config->action->dtable->fieldList['actions']['menu'][] = 'hideone';
+
 $trashes = initTableData($trashes, $config->action->dtable->fieldList, $this->action);
 dtable
 (

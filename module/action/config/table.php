@@ -46,4 +46,4 @@ $config->action->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->action->dtable->fieldList['actions']['type']     = 'actions';
 $config->action->dtable->fieldList['actions']['sortType'] = false;
 $config->action->dtable->fieldList['actions']['list']     = $config->action->actionList;
-$config->action->dtable->fieldList['actions']['menu']     = array('undelete', 'hideone');
+$config->action->dtable->fieldList['actions']['menu']     = array('undelete');
