@@ -26,6 +26,8 @@ class count_of_task extends baseCalc
 
     public $fieldList = array('t1.id');
 
+    public $result = 0;
+
     public function calculate($row)
     {
         $this->result ++;
