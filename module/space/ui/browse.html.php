@@ -42,5 +42,7 @@ dtable
     set::footPager(usePager()),
 );
 
+a(setStyle('display', 'none'), setID('editLinkContainer'), setData('toggle', 'modal'));
+
 render();
 

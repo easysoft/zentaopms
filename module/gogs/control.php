@@ -37,7 +37,6 @@ class gogs extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -121,7 +120,8 @@ class gogs extends control
 
         if($_POST)
         {
-            $this->checkToken();
+            $gogs = fixer::input('post')->trim('url,token')->get();
+            $this->checkToken($gogs);
             $this->gogs->update($gogsID);
             $gogs = $this->gogs->getByID($gogsID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -130,7 +130,7 @@ class gogs extends control
             $actionID = $this->action->create('gogs', $gogsID, 'edited');
             $changes  = common::createChanges($oldGogs, $gogs);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->edit;

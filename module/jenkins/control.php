@@ -92,7 +92,7 @@ class jenkins extends control
         {
             $this->jenkins->update($id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->edit;

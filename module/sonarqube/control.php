@@ -156,11 +156,11 @@ class sonarqube extends control
     /**
      * Check post info.
      *
-     * @param  object    $sonarqube
+     * @param  int       $sonarqubeID
      * @access protected
      * @return void
      */
-    protected function checkToken(object $sonarqube)
+    protected function checkToken(int $sonarqubeID)
     {
         $sonarqube = fixer::input('post')->trim('url,token,account,password')->get();
         $this->dao->update('sonarqube')->data($sonarqube)
@@ -207,7 +207,7 @@ class sonarqube extends control
             $actionID = $this->action->create('sonarqube', $sonarqubeID, 'edited');
             $changes  = common::createChanges($oldSonarQube, $sonarqube);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title     = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->editServer;
