@@ -31,7 +31,7 @@
       $currentObjectId = !empty($this->view->$objectVarName) ? $this->view->$objectVarName->id : 0;
       if(count($prompts) > 1)
       {
-        $html .= '<div class="prompts dropdown' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->dropdownClass) ? ' ' . $menuOptions->dropdownClass : '')) . '"><button class="btn btn-link' . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '') . '" type="button" data-toggle="dropdown">' . $lang->ai->promptMenu->dropdownTitle . ' <i class="icon-caret-down"></i></button><ul class="dropdown-menu">';
+        $html .= '<div class="prompts dropdown' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->dropdownClass) ? ' ' . $menuOptions->dropdownClass : '')) . '"><button class="btn btn-link' . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '') . '" type="button" data-toggle="dropdown">' . $lang->ai->promptMenu->dropdownTitle . ' <i class="icon-caret-down"></i></button><ul class="dropdown-menu pull-right">';
         foreach($prompts as $prompt) $html .= '<li>' . html::linkButton($prompt->name . ($prompt->status != 'active' ? '<span class="label label-info label-badge">' . $lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''), helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId"), 'self', "style='width: 100%;'" . (empty($prompt->desc) ? '' : " data-toggle='popover' data-container='body' data-trigger='hover' data-content='$prompt->desc' data-title='$prompt->name' data-placement='left'"), 'btn btn-link text-left') . '</li>';
         $html .= '</ul></div>';
       }
