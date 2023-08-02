@@ -246,6 +246,8 @@ class upgrade extends control
             $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=$mode"));
         }
 
+        $this->app->loadLang('install');
+
         list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->loadModel('custom')->computeFeatures();
 
         $this->view->title                 = $this->lang->custom->selectUsage;

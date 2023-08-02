@@ -86,7 +86,7 @@ div
         formPanel
         (
             setClass('bg-canvas'),
-            set::title($lang->install->setConfig),
+            set::title($lang->install->selectMode),
             set::titleClass('text-xl'),
             set::actions(array()),
             to::heading
