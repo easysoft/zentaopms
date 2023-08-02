@@ -67,8 +67,17 @@ class gogs extends control
     {
         if($_POST)
         {
-            $this->checkToken();
-            $gogsID = $this->gogs->create();
+            $gogs = form::data($this->config->gogs->form->create)
+                ->add('type', 'gogs')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,token')
+                ->skipSpecial('url,token')
+                ->remove('account,password,appType')
+                ->get();
+            $this->checkToken($gogs);
+            $gogsID = $this->loadModel('pipeline')->create($gogs);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $actionID = $this->loadModel('action')->create('gogs', $gogsID, 'created');
@@ -130,24 +139,32 @@ class gogs extends control
     }
 
     /**
+     * 删除一条gogs数据。
      * Delete a gogs.
      *
      * @param  int    $gogsID
      * @access public
      * @return void
      */
-    public function delete($gogsID, $confirm = 'no')
+    public function delete($gogsID)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gogs->confirmDelete, inlink('delete', "id=$gogsID&confirm=yes")));
-
         $oldGogs  = $this->loadModel('pipeline')->getByID($gogsID);
         $actionID = $this->pipeline->delete($gogsID, 'gogs');
-        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+
+            return $this->send($response);
+        }
 
         $gogs    = $this->pipeline->getByID($gogsID);
         $changes = common::createChanges($oldGogs, $gogs);
         $this->loadModel('action')->logHistory($actionID, $changes);
-        return print(js::reload('parent'));
+
+        $response['load']   = true;
+        $response['result'] = 'success';
+        return $this->send($response);
     }
 
     /**
@@ -156,9 +173,8 @@ class gogs extends control
      * @access protected
      * @return void
      */
-    protected function checkToken()
+    protected function checkToken(object $gogs)
     {
-        $gogs = fixer::input('post')->trim('url,token')->get();
         $this->dao->update('gogs')->data($gogs)->batchCheck($this->config->gogs->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

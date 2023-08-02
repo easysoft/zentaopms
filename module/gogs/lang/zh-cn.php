@@ -21,7 +21,7 @@ $lang->gogs->browseAction = 'Gogs列表';
 $lang->gogs->deleteAction = '删除Gogs';
 
 $lang->gogs->id    = 'ID';
-$lang->gogs->name  = "服务器名称";
+$lang->gogs->name  = "应用名称";
 $lang->gogs->url   = '服务器地址';
 $lang->gogs->token = 'Token';
 

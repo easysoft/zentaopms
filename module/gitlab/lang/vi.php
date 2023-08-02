@@ -236,3 +236,7 @@ $lang->gitlab->tag->accessLevel        = 'Allow creation';
 $lang->gitlab->tag->protectConfirmDel  = 'Do you want to delete this GitLab tag protected?';
 $lang->gitlab->tag->emptyPrivNameError = 'Tag cannot be empty.';
 $lang->gitlab->tag->issetPrivNameError = 'The protection tag already exists.';
+
+$lang->gitlab->featureBar['binduser']['all']     = $lang->gitlab->all;
+$lang->gitlab->featureBar['binduser']['notBind'] = $lang->gitlab->notBind;
+$lang->gitlab->featureBar['binduser']['binded']  = $lang->gitlab->binded;

@@ -299,6 +299,38 @@ class commonModel extends model
     }
 
     /**
+     * 获取表单的配置项。
+     * Obtain the config for the form.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function formConfig(string $module, string $method): array
+    {
+        global $config, $app, $dbh;
+        if($config->edition == 'open') return array();
+
+        $required   = $dbh->query("SELECT * FROM " . TABLE_WORKFLOWRULE . " WHERE `type` = 'system' and `rule` = 'notempty'")->fetch();
+        $fields     = $app->control->loadModel('flow')->getExtendFields($module, $method);
+        $formConfig = array();
+        $type       = 'string';
+        foreach($fields as $fieldObject)
+        {
+            if(strpos($fieldObject->type, 'int') !== false) $type = 'int';
+            if(strpos($fieldObject->type, 'date') !== false) $type = 'date';
+            if(in_array($fieldObject->type, array('float', 'decimal'))) $type = 'float';
+
+            $formConfig[$fieldObject->field] = array('type' => $type, 'default' => $fieldObject->default, 'control' => $fieldObject->control, 'rules' => $fieldObject->rules);
+            $formConfig[$fieldObject->field]['required'] = strpos(",{$fieldObject->rules},", ",{$required->id},") !== false;
+            if(in_array($fieldObject->control, array('multi-select', 'checkbox'))) $formConfig[$fieldObject->field]['filter'] = 'join';
+        }
+        return $formConfig;
+    }
+
+    /**
      * Load configs from database and save it to config->system and config->personal.
      *
      * @access public

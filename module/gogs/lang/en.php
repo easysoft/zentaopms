@@ -21,7 +21,7 @@ $lang->gogs->browseAction = 'Gogs List';
 $lang->gogs->deleteAction = 'Delete Gogs';
 
 $lang->gogs->id    = 'ID';
-$lang->gogs->name  = "Server Name";
+$lang->gogs->name  = "Application Name";
 $lang->gogs->url   = 'Server URL';
 $lang->gogs->token = 'Token';
 

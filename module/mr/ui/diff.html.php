@@ -135,6 +135,7 @@ panel
             tree
             (
                 set::id('monacoTree'),
+                set::canSplit(false),
                 set::items($tree),
                 set::collapsedIcon('folder'),
                 set::expandedIcon('folder-open'),

@@ -21,7 +21,7 @@ $lang->gitea->browseAction = 'Gitea列表';
 $lang->gitea->deleteAction = '删除Gitea';
 
 $lang->gitea->id    = 'ID';
-$lang->gitea->name  = "服务器名称";
+$lang->gitea->name  = "应用名称";
 $lang->gitea->url   = '服务器地址';
 $lang->gitea->token = 'Token';
 

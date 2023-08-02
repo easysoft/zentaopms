@@ -82,17 +82,6 @@ class giteaModel extends model
     }
 
     /**
-     * Create a gitea.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-        return $this->loadModel('pipeline')->create('gitea');
-    }
-
-    /**
      * Update a gitea.
      *
      * @param  int $id
@@ -258,8 +247,8 @@ class giteaModel extends model
     {
         $apiRoot  = rtrim($url, '/') . '/api/v1%s' . "?token={$token}";
         $url      = sprintf($apiRoot, "/admin/users") . "&limit=1";
-        $httpData = commonModel::httpWithHeader($url);
-        $users    = json_decode($httpData['body']);
+        $response = commonModel::http($url);
+        $users    = json_decode($response);
         if(empty($users)) return false;
         if(isset($users->message) or isset($users->error)) return null;
         return true;

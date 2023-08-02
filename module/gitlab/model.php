@@ -405,7 +405,6 @@ class gitlabModel extends model
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
         $comments = $scm->engine->getCommitsByPath($entry, '', '', isset($pager->recPerPage) ? $pager->recPerPage : 10, isset($pager->pageID) ? $pager->pageID : 1);
-        if(empty($comments)) $comments = array();
 
         if(isset($pager->recTotal)) $pager->recTotal = count($comments) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 

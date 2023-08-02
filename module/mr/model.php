@@ -635,7 +635,7 @@ class mrModel extends model
                 {
                     $todoDesc = $this->dao->select('*')
                         ->from(TABLE_TODO)
-                        ->where('objectID')->eq($rawTodo->id)
+                        ->where('idvalue')->eq($rawTodo->id)
                         ->fetch();
                     if(empty($todoDesc))
                     {
@@ -651,7 +651,7 @@ class mrModel extends model
                         $todo->begin        = '2400'; /* 2400 means begin is 'undefined'. */
                         $todo->end          = '2400'; /* 2400 means end is 'undefined'. */
                         $todo->type         = 'custom';
-                        $todo->objectID     = $rawTodo->id;
+                        $todo->idvalue      = $rawTodo->id;
                         $todo->pri          = 3;
                         $todo->name         = $this->lang->mr->common . ": " . $rawTodo->target->title;
                         $todo->desc         = $author . '&nbsp;' . $this->lang->mr->at . '&nbsp;' . '<a href="' . $this->gitlab->apiGetSingleProject($hostID, $projectID)->web_url . '" target="_blank">' . $rawTodo->project->path .'</a>' . '&nbsp;' . $this->lang->mr->todomessage . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . '&nbsp;' . $this->lang->mr->common .'</a>' . '。';

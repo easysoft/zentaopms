@@ -57,6 +57,7 @@ class mr extends control
         }
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => array($repo->serviceProject => $repo->serviceProject));
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $pager, $filterProjects, $repoID);
+
         if($repo->SCM == 'Gitlab')
         {
             $projectIds = array();

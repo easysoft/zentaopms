@@ -68,8 +68,17 @@ class gitea extends control
     {
         if($_POST)
         {
-            $this->checkToken();
-            $giteaID = $this->gitea->create();
+            $gitea = form::data($this->config->gitea->form->create)
+                ->add('type', 'gitea')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,token')
+                ->skipSpecial('url,token')
+                ->remove('account,password,appType')
+                ->get();
+            $this->checkToken($gitea);
+            $giteaID = $this->loadModel('pipeline')->create($gitea);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $actionID = $this->loadModel('action')->create('gitea', $giteaID, 'created');
@@ -131,24 +140,32 @@ class gitea extends control
     }
 
     /**
+     * 删除一条gitea记录
      * Delete a gitea.
      *
      * @param  int    $giteaID
      * @access public
      * @return void
      */
-    public function delete($giteaID, $confirm = 'no')
+    public function delete($giteaID)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gitea->confirmDelete, inlink('delete', "id=$giteaID&confirm=yes")));
-
         $oldGitea = $this->loadModel('pipeline')->getByID($giteaID);
         $actionID = $this->pipeline->delete($giteaID, 'gitea');
-        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+            return $this->send($response);
+        }
 
         $gitea   = $this->pipeline->getByID($giteaID);
         $changes = common::createChanges($oldGitea, $gitea);
         $this->loadModel('action')->logHistory($actionID, $changes);
-        return print(js::reload('parent'));
+
+        $response['load']   = true;
+        $response['result'] = 'success';
+
+        return $this->send($response);
     }
 
     /**
@@ -157,9 +174,8 @@ class gitea extends control
      * @access protected
      * @return void
      */
-    protected function checkToken()
+    protected function checkToken(object $gitea)
     {
-        $gitea = fixer::input('post')->trim('url,token')->get();
         $this->dao->update('gitea')->data($gitea)->batchCheck($this->config->gitea->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
