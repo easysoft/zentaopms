@@ -188,29 +188,45 @@ $('#roleListContainer').on('click', function (e)
 
   const id = card.dataset.id;
 
-  if(button.dataset.action === 'del')
+  switch (button.dataset.action)
   {
-    if (window.confirm('<?php echo $lang->ai->prompts->roleDelConfirm; ?>')) {
-      $.ajax({
-        url: createLink('ai', 'roleTemplates'),
-        type: 'POST',
-        data: {method: 'delete', id: id},
-        dataType: 'html',
-        success: function(response)
-        {
-          new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
-          $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
-        }
-      });
+    case 'apply':
+    {
+      $('#mainForm input[name="role"]').val(card.querySelector('#role').innerText).toggleClass('focus', true);
+      $('#mainForm textarea[name="characterization"]').val(card.querySelector('#characterization').innerText).toggleClass('focus', true);
+      setTimeout(() =>
+      {
+        $('#mainForm input[name="role"]').toggleClass('focus', false);
+        $('#mainForm textarea[name="characterization"]').toggleClass('focus', false);
+      }, 1000);
+      break;
     }
-  }
-  else if(button.dataset.action === 'edit')
-  {
-    const model = $('#editRoleTemplateModal');
-    model.find('input[name="id"]').val(id);
-    model.find('#role').val(card.querySelector('#role').innerText);
-    model.find('#characterization').val(card.querySelector('#characterization').innerText);
-    model.modal('toggle');
+    case 'edit':
+    {
+      const model = $('#editRoleTemplateModal');
+      model.find('input[name="id"]').val(id);
+      model.find('#role').val(card.querySelector('#role').innerText);
+      model.find('#characterization').val(card.querySelector('#characterization').innerText);
+      model.modal('toggle');
+      break;
+    }
+    case 'del':
+    {
+      if (window.confirm('<?php echo $lang->ai->prompts->roleDelConfirm; ?>')) {
+        $.ajax({
+          url: createLink('ai', 'roleTemplates'),
+          type: 'POST',
+          data: {method: 'delete', id: id},
+          dataType: 'html',
+          success: function(response)
+          {
+            new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
+            $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
+          }
+        });
+      }
+      break;
+    }
   }
 });
 
