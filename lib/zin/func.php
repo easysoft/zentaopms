@@ -1057,14 +1057,6 @@ function toolbar(): toolbar
 }
 
 /**
- * Zentao search form widget.
- */
-function searchForm(): searchForm
-{
-    return createWg('searchForm', func_get_args());
-}
-
-/**
  * Zentao search toggle widget.
  *
  * ?bool open
