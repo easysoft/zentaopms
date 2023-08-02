@@ -40,7 +40,7 @@
     </tr>
     <tr>
       <td colspan='2' class='text-center'>
-        <?php echo html::linkButton($lang->ai->models->edit, inlink('editmodel') . '#app=admin', 'self', '', 'btn btn-primary btn-wide');?>
+        <?php if(commonModel::hasPriv('ai', 'editmodel')) echo html::linkButton($lang->ai->models->edit, inlink('editmodel') . '#app=admin', 'self', '', 'btn btn-primary btn-wide');?>
       </td>
     </tr>
   </table>
