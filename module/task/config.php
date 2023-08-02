@@ -62,7 +62,7 @@ $config->task->custom->createFields      = $config->task->customCreateFields;
 $config->task->custom->batchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
 $config->task->custom->batchEditFields   = 'module,assignedTo,status,pri,estimate,record,left';
 
-$config->task->excludeCheckFileds = ',pri,estStartedDitto,deadlineDitto,parent,regions,lanes,vision,region,';
+$config->task->excludeCheckFields = ',pri,estStartedDitto,deadlineDitto,parent,regions,lanes,vision,region,';
 
 $config->task->create->template = new stdclass();
 $config->task->create->template->module     = 0;

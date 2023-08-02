@@ -38,7 +38,7 @@ $config->testcase->custom->createFields      = $config->testcase->customCreateFi
 $config->testcase->custom->batchCreateFields = 'module,story,%s';
 $config->testcase->custom->batchEditFields   = 'branch,module,stage,status,pri,story';
 
-$config->testcase->excludeCheckFileds = ',pri,type,stage,needReview,story,branch,';
+$config->testcase->excludeCheckFields = ',pri,type,stage,needReview,story,branch,';
 
 $config->testcase->scriptAcceptFileTypes = '.php,.py,.js,.go,.sh,.bat,.lua,.rb,.tcl,.pl';
 

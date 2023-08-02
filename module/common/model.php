@@ -3615,7 +3615,7 @@ EOF;
 
         foreach($postData as $key => $value)
         {
-            if(!is_array($value) or strpos($this->config->$objectType->excludeCheckFileds, ",$key,") !== false) continue;
+            if(!is_array($value) or strpos($this->config->$objectType->excludeCheckFields, ",$key,") !== false) continue;
             if(isset($value[$index]) and !empty($value[$index]) and $value[$index] != 'ditto') return true;
         }
 
