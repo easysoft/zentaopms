@@ -232,6 +232,7 @@
 
     function afterUpdate($target, info, options)
     {
+        $target.zuiInit();
         if(window.afterPageUpdate) window.afterPageUpdate($target, info, options);
     }
 
@@ -641,6 +642,7 @@
                     if(options.selector) $content = $('<div>').append($content).find(options.selector);
                     if(options.replace) $target.replaceWith($content);
                     else $target.empty().append($content);
+                    $target.zuiInit();
                 }
                 else
                 {
