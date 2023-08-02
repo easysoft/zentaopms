@@ -2194,6 +2194,18 @@ class testcaseModel extends model
             if($id == 'actions') $class .= ' c-actions';
             if($id == 'lastRunResult') $class .= " {$case->lastRunResult}";
             if(strpos(',stage,precondition,keywords,story,', ",{$id},") !== false) $class .= ' text-ellipsis';
+            if($id == 'reviewedBy')
+            {
+                $reviewed = '';
+                $reviewedBy = explode(',', $case->reviewedBy);
+                foreach($reviewedBy as $account)
+                {
+                    $account = trim($account);
+                    if(empty($account)) continue;
+                    $reviewed .= zget($users, $account) . " &nbsp;";
+                }
+                $title = "title='{$reviewed}'";
+            }
 
             if($id == 'title')
             {
@@ -2210,6 +2222,7 @@ class testcaseModel extends model
             {
                 echo "<td class='{$class}' {$title}>";
             }
+
             if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('testcase', $case, $id);
             switch($id)
             {
@@ -2321,7 +2334,7 @@ class testcaseModel extends model
                 echo substr($case->openedDate, 5, 11);
                 break;
             case 'reviewedBy':
-                echo zget($users, $case->reviewedBy);
+                echo $reviewed;
                 break;
             case 'reviewedDate':
                  echo helper::isZeroDate($case->reviewedDate) ? '' : substr($case->reviewedDate, 5, 11);
