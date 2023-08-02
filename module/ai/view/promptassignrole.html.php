@@ -81,13 +81,39 @@
           </div>
           <div class='content-row'>
             <div class='input-label'><span><?php echo $lang->ai->prompts->characterization;?></span></div>
-            <div class='input'><?php echo html::textarea('characterization',
-                '', "class='form-control' rows='4' placeholder='{$lang->ai->prompts->charPlaceholder}'");?></div>
+            <div class='input'><?php echo html::textarea('characterization', '', "class='form-control' rows='4' placeholder='{$lang->ai->prompts->charPlaceholder}'");?></div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button id="createRoleButton" type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $lang->save; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editRoleTemplateModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only"><?php echo $lang->close; ?></span></button>
+        <h4 class="modal-title"><?php echo $lang->ai->prompts->editRoleTemplate; ?> <i class='icon icon-help'></i> <span class="text-gray">本次编辑不会影响已用模版的提词</span></h4>
+      </div>
+      <div class="modal-body">
+        <form id="editRoleForm">
+          <div class='content-row'>
+            <div class='input-label'><span><?php echo $lang->ai->prompts->role;?></span></div>
+            <div class='input mw-400px'><?php echo html::input('role', '', "class='form-control' placeholder='{$lang->ai->prompts->rolePlaceholder}'");?></div>
+          </div>
+          <div class='content-row'>
+            <div class='input-label'><span><?php echo $lang->ai->prompts->characterization;?></span></div>
+            <div class='input'><?php echo html::textarea('characterization','', "class='form-control' rows='4' placeholder='{$lang->ai->prompts->charPlaceholder}'");?></div>
+          </div>
+          <input type="hidden" name="id">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="editRoleButton" type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $lang->save; ?></button>
       </div>
     </div>
   </div>
@@ -134,13 +160,33 @@ $('#createRoleButton').on('click', function(e)
   });
 });
 
+$('#editRoleButton').on('click', function(e)
+{
+  e.preventDefault();
+  const formData = new FormData(document.getElementById('editRoleForm'));
+  $.ajax({
+    url: createLink('ai', 'roleTemplates'),
+    type: 'POST',
+    data: {method: 'edit', id: formData.get('id'), role: formData.get('role'), characterization: formData.get('characterization')},
+    dataType: 'html',
+    success: function(response)
+    {
+      new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
+      $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
+    }
+  });
+});
+
 $('#roleListContainer').on('click', function (e)
 {
   const button = e.target.closest('#roleListContainer button');
   if(!button) return;
-  if(!'id' in button.dataset || !'action' in button.dataset) return;
+  const card = button.closest('.role-template-card');
+  if(!card) return;
+  if(!'id' in card.dataset || !'action' in button.dataset) return;
   e.preventDefault();
-  const id = button.dataset.id;
+
+  const id = card.dataset.id;
 
   if(button.dataset.action === 'del')
   {
@@ -157,6 +203,14 @@ $('#roleListContainer').on('click', function (e)
         }
       });
     }
+  }
+  else if(button.dataset.action === 'edit')
+  {
+    const model = $('#editRoleTemplateModal');
+    model.find('input[name="id"]').val(id);
+    model.find('#role').val(card.querySelector('#role').innerText);
+    model.find('#characterization').val(card.querySelector('#characterization').innerText);
+    model.modal('toggle');
   }
 });
 

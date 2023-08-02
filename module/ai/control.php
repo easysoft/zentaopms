@@ -571,6 +571,9 @@ class ai extends control
                 case 'delete':
                     $this->ai->deleteRoleTemplate($data->id);
                     break;
+                case 'edit':
+                    $this->ai->updateRoleTemplate($data->id, $data->role, $data->characterization);
+                    break;
             }
         }
 
