@@ -13,6 +13,7 @@ class fileList extends wg
         'showDelete?:bool=true',
         'showEdit?:bool=true',
         'object?:object',
+        'padding?:bool=true',
     );
 
     public static function getPageCSS(): string|false
@@ -77,7 +78,8 @@ class fileList extends wg
 
         return $fieldset ? new section
         (
-            setClass('files', 'pt-4', $px, $pb, 'canvas'),
+            setClass('files', 'pt-4', 'canvas'),
+            $this->prop('padding') ? setClass($px, $pb) : null,
             set::title($lang->files),
             to::actions
             (
