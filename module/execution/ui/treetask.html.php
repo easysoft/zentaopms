@@ -166,6 +166,7 @@ div
             set::hint($lang->task->edit),
             set::url(createLink('task', 'edit', array('taskID' => $task->id))),
             set::disabled(!$this->task->isClickable($task, 'edit')),
+            set('data-app', $app->tab),
         ) : null,
         ((empty($task->team) || empty($task->children)) && hasPriv('task', 'batchCreate')) ? btn
         (
@@ -174,6 +175,7 @@ div
             set::hint($lang->task->batchCreate),
             set::url(createLink('task', 'batchCreate', "execution={$task->execution}&storyID={$task->story}&moduleID={$task->module}&askID={$task->id}&ifame=0")),
             set::disabled(!$this->task->isClickable($task, 'batchCreate')),
+            set('data-app', $app->tab),
         ) : null,
     ),
     section
