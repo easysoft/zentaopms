@@ -52,7 +52,7 @@ div
             span
             (
                 setClass('ml-2 article-h3'),
-                $task->estimate . ' ' . $lang->workingHour
+                $task->estimate . ' ' . $lang->execution->workHourUnit
             ),
         ),
         div
@@ -62,7 +62,7 @@ div
             span
             (
                 setClass('ml-2 article-h3'),
-                round($task->consumed, 2) . ' ' . $lang->workingHour
+                round($task->consumed, 2) . ' ' . $lang->execution->workHourUnit
             ),
         ),
         div
@@ -72,7 +72,7 @@ div
             span
             (
                 setClass('ml-2 article-h3'),
-                $task->left . ' ' . $lang->workingHour
+                $task->left . ' ' . $lang->execution->workHourUnit
             ),
         ),
         div
