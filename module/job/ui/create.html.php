@@ -202,7 +202,7 @@ formPanel
                     setStyle('width', '200px'),
                     set::id('pipelineDropmenu'),
                     set::text($lang->job->selectPipeline),
-                    set::data(array('' => '')),
+                    set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks')),
                 ),
             ),
         ),

@@ -6,13 +6,13 @@ function onChangeType(event)
     {
         $('.externalPanel').removeClass('hidden');
         $('.storePanel').addClass('hidden');
-        $('#typeexternal').prop('checked', true);
+        $('#type_external').prop('checked', true);
     }
     else
     {
         $('.storePanel').removeClass('hidden');
         $('.externalPanel').addClass('hidden');
-        $('#storetypestore').prop('checked', true);
+        $('#storetype_store').prop('checked', true);
     }
 }
 
