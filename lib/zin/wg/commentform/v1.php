@@ -22,6 +22,7 @@ class commentForm extends wg
         (
             set::url($url),
             set::method($method),
+            set::submitBtnText($lang->save),
             setClass('comment-form'),
             editor
             (

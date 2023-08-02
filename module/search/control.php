@@ -53,13 +53,27 @@ class search extends control
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
 
         $this->app->loadModuleConfig('action');
-        $_GET['zin'] = 0;
-        if(in_array($module, $this->config->action->newPageModule))
-        {
-            $_GET['zin'] = 1;
-            $this->view->formSession = $_SESSION[$module . 'Form'];
-        }
         $this->display();
+    }
+
+    /**
+     * Build search form of 20 version.
+     *
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $params
+     * @param  string $actionURL
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildZinForm($module = '', $fields = '', $params = '', $actionURL = '', $queryID = 0)
+    {
+        if(!commonModel::hasPriv('search', 'buildForm')) $this->loadModel('common')->deny('search', 'buildForm', false);
+
+        $module = empty($module) ? $this->session->searchParams['module'] : $module;
+        $this->view->formSession = $_SESSION[$module . 'Form'];
+        $this->buildForm($module, $fields, $params, $actionURL, $queryID);
     }
 
     /**

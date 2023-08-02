@@ -33,7 +33,6 @@ window.afterPageUpdate = function()
         /* Select default tree item. */
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);
 
-        console.log(1111, $('#' + currentElement.id))
         expandTree();
         if(currentElement != undefined) setTimeout(() => 
         {

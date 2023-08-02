@@ -74,7 +74,10 @@ detailBody
             )
         ),
     ),
-    history(),
+    history
+    (
+        set::commentUrl(createLink('action', 'comment', array('objectType' => 'serverroom', 'objectID' => $serverRoom->id))),
+    ),
     floatToolbar
     (
         set::object($serverRoom),

@@ -379,7 +379,7 @@ class action extends control
             dao::$errors['submit'][] = $this->lang->action->historyEdit;
             return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
-        return $this->send(array('result' => 'success', 'locate' => 'reload', 'load' => true));
+        return $this->send(array('result' => 'success', 'locate' => 'reload', 'load' => true, 'closeModal' => true));
     }
 
     /**
