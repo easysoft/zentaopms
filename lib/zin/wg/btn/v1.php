@@ -33,7 +33,7 @@ class btn extends wg
 
     protected function getProps()
     {
-        $url    = $this->prop('url');
+        $url    = $this->prop('disabled') ? $this->prop('url') : null;
         $target = $this->prop('target');
         $props  = array_merge($this->getRestProps(), array('title' => $this->prop('hint')));
 
