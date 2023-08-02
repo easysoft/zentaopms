@@ -26,7 +26,7 @@ class cv_in_waterfall extends baseCalc
 
     public function getStatement()
     {
-        $ev = $this->dao->select('project, SUM(estimate) as estimate')
+        $ev = $this->dao->select('project, SUM(estimate) as estimate, SUM(consumed) as consumed, SUM(`left`) as `left`')
             ->from(TABLE_TASK)
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
@@ -43,7 +43,7 @@ class cv_in_waterfall extends baseCalc
             ->groupBy('t3.id')
             ->get();
 
-        return $this->dao->select('t1.id as project, t2.estimate as ev, t3.consumed as ac')
+        return $this->dao->select('t1.id as project, t2.estimate, t2.consumed, t2.`left`, t3.consumed as ac')
             ->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin("($ev)")->alias('t2')->on('t1.id=t2.project')
             ->leftJoin("($ac)")->alias('t3')->on('t1.id=t3.project')
@@ -56,8 +56,14 @@ class cv_in_waterfall extends baseCalc
     public function calculate($row)
     {
         $project = $row->project;
-        $ev      = $row->ev;
         $ac      = $row->ac;
+
+        $estimate = $row->estimate;
+        $consumed = $row->consumed;
+        $left     = $row->left;
+        $total    = $consumed + $left;
+
+        $ev = $total == 0 ? 0 : round($consumed / $total * $estimate, 2);
 
         if(!isset($this->result[$project]))
         {
