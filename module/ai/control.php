@@ -258,6 +258,11 @@ class ai extends control
             $prompt->role             = $data->role;
             $prompt->characterization = $data->characterization;
 
+            if(!empty($data->saveTemplate) && $data->saveTemplate == 'save')
+            {
+                $this->ai->createRoleTemplate($prompt->role, $prompt->characterization);
+            }
+
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
