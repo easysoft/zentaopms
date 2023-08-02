@@ -26,9 +26,11 @@ class count_of_closed_task extends baseCalc
 
     public $fieldList = array('t1.status');
 
+    public $result = 0;
+
     public function calculate($row)
     {
-        if($this->status == 'closed') $this->result ++;
+        if($row->status == 'closed') $this->result ++;
     }
 
     public function getResult($options = array())
