@@ -14,35 +14,6 @@ jsVar('inputWords', $lang->search->inputWords);
 
 to::header();
 
-if(is_array($type)) $type = reset($type);
-
-$labels = array();
-foreach(array_slice($lang->search->modules, 0, 10) as $module => $moduleName)
-{
-    $labels[] = btn
-    (
-        setClass('light-pale mr-3' . ($type == $module ? ' primary' : '')),
-        set(array('data-type' => $module)),
-        on::click('searchWords'),
-        $moduleName
-    );
-}
-
-$moreItems = array();
-foreach(array_slice($lang->search->modules, 10) as $module => $moduleName)
-{
-    $moreItems[$module] = array('text' => $moduleName, 'url' => $url . "&type={$module}");
-}
-$labels[] = dropdown
-(
-    btn
-    (
-        setClass('light-pale' . (isset($moreItems[$type]) ? ' primary' : '')),
-        $lang->other,
-    ),
-    set::items($moreItems)
-);
-
 $items = array();
 foreach($results as $object)
 {
@@ -117,12 +88,6 @@ form
             set::value($words),
             set::placeholder($lang->search->inputWords)
         ),
-        input
-        (
-            set::type('hidden'),
-            set::name('type'),
-            set::value($type)
-        ),
         span
         (
             setClass('input-group-btn'),
@@ -133,6 +98,14 @@ form
                 setClass('shadow-none' . (empty($words) ? ' hidden' : '')),
                 icon('close')
             )
+        ),
+        picker
+        (
+            set::className('shadow-none border-l'),
+            set::name('type[]'),
+            set::value($type),
+            set::items($lang->searchObjects),
+            set::multiple(true)
         ),
         span
         (
@@ -146,15 +119,11 @@ form
         )
     )
 );
-div
-(
-    setClass('py-4'),
-    $labels,
-);
+
 panel
 (
     setID('searchResult'),
-    setClass('shadow-none'),
+    setClass('shadow-none mt-4'),
     set::title($lang->search->result . ' :'),
     set::titleClass('text-md font-normal'),
     set::titleProps(array('style' => array('line-height' => '22px'))),

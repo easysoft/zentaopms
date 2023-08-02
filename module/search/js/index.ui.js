@@ -9,10 +9,11 @@ function searchWords()
         return false;
     }
 
-    const type = $target.data('type') || $form.find('input[name=type]').val();
     const form = new FormData();
-    form.append('type[]', type);
     form.append('words', words);
+
+    const types = $form.find('select[name^=type]').val();
+    types.forEach(type => form.append('type[]', type));
 
     postAndLoadPage($.createLink('search', 'index'), form);
 }
