@@ -13,6 +13,7 @@
  * @link        https://www.zentao.net
  */
 ?>
+<?php if(commonModel::hasPriv('ai', 'executePrompt')):?>
 <?php
   $this->app->loadConfig('ai');
   $module = $this->app->getModuleName();
@@ -70,4 +71,4 @@
       });
     </script>
 
-<?php endif; endif;?>
+<?php endif; endif; endif;?>
