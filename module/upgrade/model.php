@@ -6278,7 +6278,7 @@ class upgradeModel extends model
         $customRoot = $this->app->appRoot . 'extension' . DS . 'custom';
         $response   = array('result' => 'success');
 
-        foreach($data->files as $file)
+        foreach($data->files as $file => $check)
         {
             $dirRoot  = $customRoot . DS . dirname($file);
             $fileName = basename($file);
