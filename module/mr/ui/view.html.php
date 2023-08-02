@@ -220,7 +220,11 @@ panel
                 cell
                 (
                     setClass('cell cell-history'),
-                    history(),
+                    history
+                    (
+                        set::commentBtn(true),
+                        set::commentUrl(createLink('action', 'comment', array('objectType' => 'mr', 'objectID' => $MR->id))),
+                    )
                 ),
             ),
             cell
