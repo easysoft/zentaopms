@@ -183,8 +183,8 @@ function setFileName(fileID)
           }
 
           $downloadLink  = $this->createLink('file', 'download', "fileID=$file->id");
-          $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
-          $downloadLink .= $sessionString;
+          //$downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
+          //$downloadLink .= $sessionString;
           echo "<li class='file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
 
           $objectType = zget($this->config->file->objectType, $file->objectType);
