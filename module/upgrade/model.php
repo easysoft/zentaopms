@@ -9662,6 +9662,12 @@ class upgradeModel extends model
         }
     }
 
+    /**
+     * Update priv and relationPriv fields value type from id to module-method.
+     *
+     * @access public
+     * @return void
+     */
     public function updatePrivRelation()
     {
         $allPrivs     = $this->dao->select('*')->from(TABLE_PRIV)->fetchAll('id');
