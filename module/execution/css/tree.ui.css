@@ -1,1 +1,3 @@
 #actionButtons.btn-group > .btn.disabled {z-index: 0;}
+#taskTree .tree-item-content.active {background: var(--menu-active-bg); color: var(--menu-active-color);}
+#taskTree .tree-item-content.active .title {font-weight: 700;}
