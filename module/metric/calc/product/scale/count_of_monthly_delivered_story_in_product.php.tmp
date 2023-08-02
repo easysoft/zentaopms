@@ -26,17 +26,11 @@ class count_of_monthly_delivered_story_in_product extends baseCalc
 
     public $fieldList = array();
 
-    public $result = array();
+    public function calculate($row)
+    {
+    }
 
-    //public function getStatement()
-    //{
-    //}
-
-    //public function calculate($data)
-    //{
-    //}
-
-    //public function getResult()
-    //{
-    //}
+    public function getResult($option = array())
+    {
+    }
 }
