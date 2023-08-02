@@ -13,7 +13,7 @@
  * @link        https://www.zentao.net
  */
 ?>
-<?php if(commonModel::hasPriv('ai', 'executePrompt')):?>
+<?php if(commonModel::hasPriv('ai', 'promptExecute')):?>
 <?php
   $this->app->loadConfig('ai');
   $module = $this->app->getModuleName();
