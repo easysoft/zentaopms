@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-$opts = $this->search->buildSearchFormOptions($module, $fieldParams, $fields, $queries);
+$opts = $this->search->buildSearchFormOptions($module, $fieldParams, $fields, $queries, $actionURL);
 
 $opts->groupName       = array($lang->search->group1, $lang->search->group2);
 $opts->savedQueryTitle = $lang->search->savedQuery;

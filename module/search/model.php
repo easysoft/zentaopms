@@ -58,17 +58,13 @@ class searchModel extends model
                 $formName    = $module . 'Form';
                 if($this->session->$formName)
                 {
-                    foreach($this->session->$formName as $formKey => $formField)
+                    foreach($this->session->$formName as $formField)
                     {
-                        if(strpos($formKey, 'field') !== false)
-                        {
-                            $fieldNO      = substr($formKey, 5);
-                            $fieldNO      = "value" . $fieldNO;
-                            $formNameList = $this->session->$formName;
-                            $fieldValue   = zget($formNameList, $fieldNO, '');
+                        $field = zget($formField, 'field', '');
+                        $value = zget($formField, 'value', '');
 
-                            if($fieldValue) $fieldValues[$formField][$fieldValue] = $fieldValue;
-                        }
+                        if(empty($field)) continue;
+                        if($value) $fieldValues[$formField->field][$value] = $value;
                     }
                 }
 
@@ -113,10 +109,14 @@ class searchModel extends model
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         $module       = $this->session->searchParams['module'];
         $searchParams = $module . 'searchParams';
+        $searchFields = json_decode($_SESSION[$searchParams]['searchFields']);
         $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
         $scoreNum     = 0;
 
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
+
+        $queryForm    = $this->initSession($module, $searchFields, $fieldParams);
+        $queryForm[6] = array('groupAndOr' => $groupAndOr);
 
         for($i = 1; $i <= $groupItems * 2; $i ++)
         {
@@ -136,6 +136,7 @@ class searchModel extends model
             if($field == 'id' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
 
             /* Skip empty values. */
+            if(empty($field)) continue;
             if($this->post->$valueName == false) continue;
             if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
             if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
@@ -150,6 +151,8 @@ class searchModel extends model
             $value    = addcslashes(trim($this->post->$valueName), '%');
             $operator = $this->post->$operatorName;
             if(!isset($this->lang->search->operators[$operator])) $operator = '=';
+
+            $queryForm[$i - 1] = array('field' => $field, 'andOr' => $andOr, 'operator' => $operator, 'value' => $value);
 
             /* Set condition. */
             $condition = '';
@@ -247,7 +250,7 @@ class searchModel extends model
         $querySessionName = $this->post->module . 'Query';
         $formSessionName  = $this->post->module . 'Form';
         $this->session->set($querySessionName, $where);
-        $this->session->set($formSessionName,  $_POST);
+        $this->session->set($formSessionName,  $queryForm);
         if($scoreNum > 2 && !dao::isError()) $this->loadModel('score')->create('search', 'saveQueryAdvanced');
     }
 
@@ -262,29 +265,22 @@ class searchModel extends model
      */
     public function initSession($module, $fields, $fieldParams)
     {
-        $formSessionName  = $module . 'Form';
-        if(isset($_SESSION[$formSessionName]) and $_SESSION[$formSessionName] != false) return;
-
+        if(is_object($fields)) $fields = get_object_vars($fields);
+        $formSessionName = $module . 'Form';
+        $queryForm       = array();
         for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
         {
-            /* Var names. */
-            $fieldName    = "field$i";
-            $andOrName    = "andOr$i";
-            $operatorName = "operator$i";
-            $valueName    = "value$i";
-
-            $currentField = key($fields);
-            $operator     = isset($fieldParams[$currentField]['operator']) ? $fieldParams[$currentField]['operator'] : '=';
-
-            $queryForm[$fieldName]    = key($fields);
-            $queryForm[$andOrName]    = 'and';
-            $queryForm[$operatorName] = $operator;
-            $queryForm[$valueName]    =  '';
+            $currentField  = key($fields);
+            $currentParams = zget($fieldParams, $currentField, array());
+            $operator      = zget($currentParams, 'operator', '=');
+            $queryForm[]   = array('field' => $currentField, 'andOr' => 'and', 'operator' => $operator, 'value' => '');
 
             if(!next($fields)) reset($fields);
         }
-        $queryForm['groupAndOr'] = 'and';
+        $queryForm[] = array('groupAndOr' => 'and');
         $this->session->set($formSessionName, $queryForm);
+
+        return $queryForm;
     }
 
     /**
@@ -308,12 +304,12 @@ class searchModel extends model
         {
             for($i = 1; $i <= $this->config->search->groupItems; $i ++)
             {
-                $fieldName = 'field' . $i;
-                $valueName = 'value' . $i;
-                $fieldName = $_SESSION[$formSessionName][$fieldName];
+                if(!isset($_SESSION[$formSessionName][$i - 1])) continue;
+
+                $fieldName = $_SESSION[$formSessionName][$i - 1]['field'];
                 if(isset($params[$fieldName]) and $params[$fieldName]['values'] == 'users')
                 {
-                    if($_SESSION[$formSessionName][$valueName]) $appendUsers[] = $_SESSION[$formSessionName][$valueName];
+                    if($_SESSION[$formSessionName][$i - 1]['value']) $appendUsers[] = $_SESSION[$formSessionName][$i - 1]['value'];
                 }
             }
         }
@@ -391,6 +387,23 @@ class searchModel extends model
             $querySessionName = $query->form['module'] . 'Query';
             $query->sql = $_SESSION[$querySessionName];
         }
+
+        $queryForm = array();
+        foreach($query->form as $field => $value)
+        {
+            $index = substr($field, -1);
+            if(is_numeric($index))
+            {
+                $field = substr($field, 0, strlen($field) - 1);
+                $queryForm[$index][$field] = $value;
+            }
+            elseif($field == 'groupAndOr')
+            {
+                $queryForm[$field][$field] = $value;
+            }
+        }
+        $query->form = array_values($queryForm);
+
         return $query;
     }
 
@@ -526,8 +539,8 @@ class searchModel extends model
             ->markRight(1)
             ->orderBy('id_desc')
             ->fetchAll();
-        if(!$queries) return array('' => $this->lang->search->myQuery);
-        $queries = array('' => $this->lang->search->myQuery) + $queries;
+
+        if(!$queries) return array();
         return $queries;
     }
 
@@ -1523,7 +1536,7 @@ class searchModel extends model
      * @access public
      * @return object
      */
-    public function buildSearchFormOptions($module, $fieldParams, $fields, $queries)
+    public function buildSearchFormOptions($module, $fieldParams, $fields, $queries, $actionURL = '')
     {
         $opts = new stdClass();
         $opts->formConfig = static::buildFormConfig();
@@ -1531,7 +1544,7 @@ class searchModel extends model
         $opts->operators  = static::buildFormOperators($this->lang->search->operators);
         $opts->andOr      = static::buildFormAndOrs($this->lang->search->andor);
         $opts->saveSearch = static::buildFormSaveSearch($module);
-        $opts->savedQuery = static::buildFormSavedQuery($queries, $this->app->user->account);
+        $opts->searchConditions = static::buildFormSavedQuery($queries, $actionURL);
 
         return $opts;
     }
@@ -1658,7 +1671,7 @@ class searchModel extends model
      * @access public
      * @return array
      */
-    public static function buildFormSavedQuery($queries, $account)
+    public static function buildFormSavedQuery($queries, $actionURL)
     {
         $result = array();
         if(empty($queries)) return $result;
@@ -1669,10 +1682,9 @@ class searchModel extends model
             if(!is_object($query)) continue;
 
             $item = new stdClass();
-            $item->id      = $query->id;
-            $item->title   = $query->title;
-            $item->account = $query->account;
-            $item->hasPriv = ($hasPriv && $account == $query->account);
+            $item->text     = $query->title;
+            $item->applyURL = str_replace('myQueryID', $query->id, $actionURL);
+            if($hasPriv) $item->deleteURL = helper::createLink('search', 'deleteQuery', "queryID={$query->id}");
 
             $result[] = $item;
         }
