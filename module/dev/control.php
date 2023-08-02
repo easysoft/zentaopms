@@ -63,8 +63,9 @@ class dev extends control
      */
     public function db($table = '')
     {
-        $this->view->title         = $this->lang->dev->db;
+        if(empty($table)) $table = 'zt_todo';
 
+        $this->view->title         = $this->lang->dev->db;
         $this->view->tableTree     = $this->dev->getTree($table, 'table');
         $this->view->selectedTable = $table;
         $this->view->tab           = 'db';

@@ -42,9 +42,8 @@ class tree extends wg
             {
                 if(!isset($item['text'])) $item['text'] = $item['name'];
                 if(!isset($item['url']))  $item['url']  = '';
-                if(!isset($item['type'])) $item['type'] = '';
 
-                if($item['type'] == 'product')
+                if(isset($item['type']) && $item['type'] == 'product')
                 {
                     $item['icon'] = 'product';
                 }

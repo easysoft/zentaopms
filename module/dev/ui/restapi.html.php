@@ -236,7 +236,7 @@ sidebar
     h::header
     (
         setClass('h-10 flex items-center pl-4 flex-none gap-3'),
-        span(setClass('text-lg font-semibold'), $lang->dev->moduleList),
+        span(setClass('text-lg font-semibold'), icon('list'), $lang->dev->moduleList),
     ),
     tree(set(array('className' => 'pl-3', 'items' => $moduleTree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
 );

@@ -1114,7 +1114,7 @@ class devModel extends model
                 $object->id     = $objectName;
                 $object->key    = $objectName;
                 $object->name   = zget($this->lang->dev->tableList, $objectKey, $objectName);
-                $object->url    = helper::createLink($currentModule, $currentMethod, "{$currentParamName}={$objectKey}");
+                $object->url    = helper::createLink($currentModule, $currentMethod, "{$currentParamName}={$objectName}");
                 $object->active = $objectName == $currentObject ? 1 : 0;
                 if($object->active) $module->active = 1;
 
