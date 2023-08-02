@@ -49,18 +49,6 @@ foreach(array('byUpdatedTime', 'byAddedTime', 'byDownloads') as $listType)
     );
 }
 
-$menuTree = array();
-foreach(array('byUpdatedTime', 'byAddedTime', 'byDownloads') as $listType)
-{
-    $data = new stdclass();
-    $data->id     = $listType;
-    $data->parent = 0;
-    $data->name   = $lang->extension->$listType;
-    $data->url    = helper::createLink('extension', 'obtain', "type=$listType");
-
-    $menuTree[] = $data;
-}
-
 $featureItems = array();
 foreach($lang->extension->featureBar['browse'] as $browseType => $browseLabel)
 {
@@ -97,16 +85,30 @@ toolbar
     ))) : null,
 );
 
+foreach($moduleTree as $module) $module->url = createLink('extension', 'obtain', "type=bymodule&param=" . base64_encode($module->id));
+
 sidebar
 (
-    set::class('bg-white p-4'),
-    $searchForm,
-    menu
+    div
     (
-        set::class('p-0'),
-        $menuItems
+        set::class('fast-menu bg-white p-4 shadow-sm rounded rounded-sm'),
+        $searchForm,
+        menu
+        (
+            set::class('p-0'),
+            $menuItems
+        ),
     ),
-    html($moduleTree)
+    moduleMenu
+    (
+        set::class('module-menu'),
+        set::title($lang->extension->byCategory),
+        set::modules($moduleTree),
+        set::activeKey($moduleID),
+        set::closeLink(null),
+        set::settingLink(null),
+        set::showDisplay(false)
+    )
 );
 
 $extensionItems = array();

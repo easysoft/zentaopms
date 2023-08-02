@@ -13,7 +13,8 @@ class moduleMenu extends wg
         'settingLink?: string',
         'closeLink: string',
         'showDisplay?: bool=true',
-        'allText?: string'
+        'allText?: string',
+        'title?: string'
     );
 
     public static function getPageCSS(): string|false
@@ -68,6 +69,8 @@ class moduleMenu extends wg
 
     private function getTitle(): string
     {
+        if($this->prop('title')) return $this->prop('title');
+
         global $lang;
         $activeKey = $this->prop('activeKey');
 
@@ -128,14 +131,17 @@ class moduleMenu extends wg
         );
     }
 
-    private function buildCloseBtn(): ?wg
+    private function buildCloseBtn(): wg|null
     {
+        $closeLink = $this->prop('closeLink');
+        if(!$closeLink) return null;
+
         $activeKey = $this->prop('activeKey');
         if(empty($activeKey)) return null;
 
         return a
         (
-            set('href', $this->prop('closeLink')),
+            set('href', $closeLink),
             icon('close', setStyle('color', 'var(--color-slate-600)'))
         );
     }
