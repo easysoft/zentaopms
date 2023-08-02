@@ -29,10 +29,11 @@ $lang->sso->bindUser = 'Liaison Utilisateur';
 $lang->sso->bindTypeList['bind'] = 'Se lier à un utilisateur existant';
 $lang->sso->bindTypeList['add']  = 'Ajouter User';
 
-$lang->sso->help = <<<EOD
-<p>1. Zdoo address is required. If use PATH_INFO, it is http://YOUR ZDOO ADDRESS/sys/sso-check.html If GET, it is http://YOUR ZDOO ADDRESS/sys/index.php?m=sso&f=check</p>
-<p>2. Code and Secret Key must be the same as set in Zdoo.</p>
-EOD;
+$lang->sso->help = new stdclass();
+$lang->sso->help->addr = 'Zdoo address is required. If use PATH_INFO, it is http://YOUR ZDOO ADDRESS/sys/sso-check.html If GET, it is http://YOUR ZDOO ADDRESS/sys/index.php?m=sso&f=check';
+$lang->sso->help->code = 'Code must be the same as set in Zdoo';
+$lang->sso->help->key  = 'Secret Key must be the same as set in Zdoo';
+
 $lang->sso->deny           = 'Access Limited';
 $lang->sso->bindNotice     = "Un utilisateur qui a été récemment ajouté n'a pas de permission. Vous devez demander à l'administrateur ZenTao d'accorder des droits à cet utilisateur.";
 $lang->sso->bindNoPassword = 'Password ne devrait pas être vide.';

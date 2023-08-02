@@ -242,8 +242,8 @@ class admin extends control
 
             if(!$ssoConfig->turnon) $ssoConfig->redirect = $ssoConfig->turnon;
             $this->loadModel('setting')->setItems('system.sso', $ssoConfig);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print($this->locate(inlink('sso')));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('sso')));
         }
 
         $this->loadModel('sso');
