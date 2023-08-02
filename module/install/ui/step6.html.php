@@ -56,7 +56,8 @@ div
                 btn
                 (
                     setClass('px-4'),
-                    set::url(createLink('index', 'index')),
+                    set::target('_self'),
+                    set::url('index.php'),
                     set::type('primary'),
                     $lang->install->login,
                 ),
