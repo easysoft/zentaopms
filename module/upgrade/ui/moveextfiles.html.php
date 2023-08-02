@@ -42,6 +42,7 @@ div
             width('1000px'),
             set::title($lang->upgrade->compatibleEXT),
             set::actions(array()),
+            set::target('_self'),
             $result == 'success' ? cell
             (
                 setClass('move-extfile-tip text-secondary p-4 flex flex-wrap gap-3'),
