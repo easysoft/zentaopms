@@ -116,7 +116,8 @@ class gitlab extends control
 
         if($_POST)
         {
-            $this->checkToken();
+            $gitlab = fixer::input('post')->trim('url,token')->get();
+            $this->checkToken($gitlab, $id);
             $this->gitlab->update($id);
             $gitLab = $this->gitlab->getByID($id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -125,7 +126,7 @@ class gitlab extends control
             $actionID = $this->action->create('gitlab', $id, 'edited');
             $changes  = common::createChanges($oldGitLab, $gitLab);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title  = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->edit;
@@ -292,9 +293,9 @@ class gitlab extends control
      * @access protected
      * @return void
      */
-    protected function checkToken(object $gitlab)
+    protected function checkToken(object $gitlab, int $gitlabID = 0)
     {
-        $this->dao->update('gitlab')->data($gitlab)->batchCheck($this->config->gitlab->create->requiredFields, 'notempty');
+        $this->dao->update('gitlab')->data($gitlab)->batchCheck($gitlabID ? $this->config->gitlab->edit->requiredFields : $this->config->gitlab->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         if(strpos($gitlab->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitlab->hostError, $this->config->gitlab->minCompatibleVersion)))));

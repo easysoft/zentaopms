@@ -121,7 +121,8 @@ class gitea extends control
 
         if($_POST)
         {
-            $this->checkToken();
+            $gitea = fixer::input('post')->trim('url,token')->get();
+            $this->checkToken($gitea);
             $this->gitea->update($giteaID);
             $gitea = $this->gitea->getByID($giteaID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -130,7 +131,7 @@ class gitea extends control
             $actionID = $this->action->create('gitea', $giteaID, 'edited');
             $changes  = common::createChanges($oldGitea, $gitea);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->edit;

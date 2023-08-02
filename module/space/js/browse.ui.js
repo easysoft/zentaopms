@@ -77,5 +77,6 @@ window.bindUser = function(externalID, appName)
 
 window.editApp = function(externalID, appName)
 {
-    openUrl($.createLink(appName.toLowerCase(), 'edit', 'id=' + externalID));
+    $('#editLinkContainer').attr('href', $.createLink(appName.toLowerCase(), 'edit', 'id=' + externalID));
+    $('#editLinkContainer').trigger('click');
 }
