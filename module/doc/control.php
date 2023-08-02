@@ -1186,12 +1186,13 @@ class doc extends control
 
             /* Get the two elements with the highest rank. */
             sort($includeHeadElement);
-            $includeHeadElement = array_slice($includeHeadElement, 0, 2);
 
             if($includeHeadElement)
             {
-                $outline    = '<ul class="tree tree-angles" data-ride="tree" id="outline">';
-                $preElement = '';
+                $outline      = '<ul class="tree tree-angles" data-ride="tree" id="outline"><li>';
+                $preElement   = '';
+                $currentLevel = 0;
+                $preLevel     = 0;
                 foreach($content as $index => $element)
                 {
                     preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
@@ -1199,34 +1200,30 @@ class doc extends control
                     /* The current element is existed, the element is in the includeHeadElement, and the text in the element is not null. */
                     if(isset($headElement[1]) and in_array($headElement[1], $includeHeadElement) and strip_tags($headElement[3]) != '')
                     {
-                        /* The element is the first level. */
-                        if(array_search($headElement[1], $includeHeadElement) == 0)
+                        $currentLevel = (int)ltrim($headElement[1], 'h');
+
+                        if($currentLevel > $preLevel)
                         {
-                            /* The second level is existed, and previous element is the second level element. */
-                            if(isset($includeHeadElement[1]) and $preElement == $includeHeadElement[1]) $outline .= '</ul></li>';
-                            if($preElement == $includeHeadElement[0]) $outline .= '</li>';
-
-                            /* Add the anchor to the element. */
-                            $content[$index] = str_replace('<' . $includeHeadElement[0] . $headElement[2] . '>', '<' . $includeHeadElement[0] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
-                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'");
-
-                            $preElement = $headElement[1];
+                            $outline .= str_repeat('<ul><li>', $currentLevel - $preLevel);
                         }
-                        elseif(array_search($headElement[1], $includeHeadElement) == 1)
+                        elseif($currentLevel < $preLevel)
                         {
-                            if($preElement == '') $outline .= '<li><ul>';
-                            if($preElement == $includeHeadElement[0]) $outline .= '<ul>';
-
-                            /* Add the anchor to the element. */
-                            $content[$index] = str_replace('<' . $includeHeadElement[1] . $headElement[2] . '>', '<' . $includeHeadElement[1] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
-                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'") . '</li>';
-
-                            $preElement = $includeHeadElement[1];
+                            $outline .= str_repeat('</li></ul>', $preLevel - $currentLevel) . '</li><li class="text-ellipsis">';
                         }
+                        else
+                        {
+                            $outline .= '</li><li class="text-ellipsis">';
+                        }
+
+                        /* Add the anchor to the element. */
+                        $content[$index] = str_replace('<' . $headElement[1] . $headElement[2] . '>', '<' . $headElement[1] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
+                        $outline        .= html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'");
+
+                        $preElement = $headElement[1];
+                        $preLevel   = $currentLevel;
                     }
-                    if(isset($includeHeadElement[1]) and $preElement == $includeHeadElement[1] and !isset($content[$index + 1])) $outline .= '</ul></li>';
                 }
-                $outline .= '</ul>';
+                $outline .= str_repeat('</li></ul>', $preLevel) . '</li></ul>';
 
                 $doc->content = implode("\n", $content);
 
