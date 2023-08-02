@@ -27,15 +27,18 @@ $lang->backup->settingDir = 'Backup Directory';
 $lang->backup->settingList['nofile'] = 'Do not back up files or codes.';
 $lang->backup->settingList['nosafe'] = 'Do not prevent downloading PHP file header.';
 
-$lang->backup->waitting       = '<span id="backupType"></span> In Arbeit. Bitte warten...';
-$lang->backup->progressSQL    = '<p>SQL backup: %s is backed up.</p>';
-$lang->backup->progressAttach = '<p>SQL backup is completed.</p><p>Attachment backing up.</p>';
-$lang->backup->progressCode   = '<p>SQL backup is completed.</p><p>Attachment backup is completed.</p><p>Code backing up.</p>';
-$lang->backup->confirmDelete  = 'Möchten Sie das Backup löschen？';
-$lang->backup->confirmRestore = 'Möchten Sie das Backup wiederherstellen?';
-$lang->backup->holdDays       = 'Behalten der letzen %s Tage der Backups';
-$lang->backup->copiedFail     = 'Copy failed files: ';
-$lang->backup->restoreTip     = 'Nur Dateien und Datenbanken können wiederhergestellt werden. Code kann manuell wieder hergestellt werden.';
+$lang->backup->waitting         = '<span id="backupType"></span> In Arbeit. Bitte warten...';
+$lang->backup->progressSQL      = '<p>SQL backup: %s is backed up.</p>';
+$lang->backup->progressAttach   = '<p>SQL backup is completed.</p><p>Attachment backing up.</p>';
+$lang->backup->progressCode     = '<p>SQL backup is completed.</p><p>Attachment backup is completed.</p><p>Code backing up.</p>';
+$lang->backup->confirmDelete    = 'Möchten Sie das Backup löschen？';
+$lang->backup->confirmRestore   = 'Möchten Sie das Backup wiederherstellen?';
+$lang->backup->holdDays         = 'Behalten der letzen %s Tage der Backups';
+$lang->backup->copiedFail       = 'Copy failed files: ';
+$lang->backup->restoreTip       = 'Nur Dateien und Datenbanken können wiederhergestellt werden. Code kann manuell wieder hergestellt werden.';
+$lang->backup->insufficientDisk = 'Disk space less than%.2fG, it may cause insufficient backup space or affect the use, please process it and try again.';
+$lang->backup->ongoBackup       = 'ongoing backup';
+$lang->backup->cancelBackup     = 'cancel backup';
 
 $lang->backup->success = new stdclass();
 $lang->backup->success->backup  = 'Erledigt!';

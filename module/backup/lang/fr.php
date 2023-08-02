@@ -27,15 +27,18 @@ $lang->backup->settingDir = 'Répertoire Backup';
 $lang->backup->settingList['nofile'] = 'Ne pas archiver fichiers et codes.';
 $lang->backup->settingList['nosafe'] = 'Ne pas prévenir du téléchargement par PHP file header.';
 
-$lang->backup->waitting       = '<span id="backupType"></span> est en cours. Patientez s´il vous plait...';
-$lang->backup->progressSQL    = '<p>SQL backup: %s est sauvegardé.</p>';
-$lang->backup->progressAttach = '<p>SQL backup est terminé.</p><p>Les fichiers sont en cours de sauvegarde.</p>';
-$lang->backup->progressCode   = '<p>SQL backup est terminé.</p><p>Sauvegarde des fichiers terminée.</p><p>Sauvegarde du code en cours.</p>';
-$lang->backup->confirmDelete  = 'Voulez-vous supprimer la sauvegarde ?';
-$lang->backup->confirmRestore = 'Voulez-vous restaurer la sauvegarde ?';
-$lang->backup->holdDays       = 'conserver les derniers %s jours de backup';
-$lang->backup->copiedFail     = 'Fichiers en échec de copie : ';
-$lang->backup->restoreTip     = 'Seulement les fichiers et les bases peuvent être restaurées en cliquant sur Restaurer. Le code doit être restauré manuellement.';
+$lang->backup->waitting         = '<span id="backupType"></span> est en cours. Patientez s´il vous plait...';
+$lang->backup->progressSQL      = '<p>SQL backup: %s est sauvegardé.</p>';
+$lang->backup->progressAttach   = '<p>SQL backup est terminé.</p><p>Les fichiers sont en cours de sauvegarde.</p>';
+$lang->backup->progressCode     = '<p>SQL backup est terminé.</p><p>Sauvegarde des fichiers terminée.</p><p>Sauvegarde du code en cours.</p>';
+$lang->backup->confirmDelete    = 'Voulez-vous supprimer la sauvegarde ?';
+$lang->backup->confirmRestore   = 'Voulez-vous restaurer la sauvegarde ?';
+$lang->backup->holdDays         = 'conserver les derniers %s jours de backup';
+$lang->backup->copiedFail       = 'Fichiers en échec de copie : ';
+$lang->backup->restoreTip       = 'Seulement les fichiers et les bases peuvent être restaurées en cliquant sur Restaurer. Le code doit être restauré manuellement.';
+$lang->backup->insufficientDisk = 'Disk space less than%.2fG, it may cause insufficient backup space or affect the use, please process it and try again.';
+$lang->backup->ongoBackup       = 'ongoing backup';
+$lang->backup->cancelBackup     = 'cancel backup';
 
 $lang->backup->success = new stdclass();
 $lang->backup->success->backup  = 'Terminé avec succès !';
