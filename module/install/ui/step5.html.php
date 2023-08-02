@@ -35,7 +35,7 @@ div
             ),
         ) : formPanel
         (
-            setClass('bg-canvas'),
+            setClass('bg-canvas m-auto mw-auto'),
             set::title($lang->install->getPriv),
             set::formClass('w-96 m-auto'),
             formRow

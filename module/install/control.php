@@ -204,7 +204,7 @@ class install extends control
     {
         if(!empty($_POST))
         {
-            if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig));
+            if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig, 'load' => 'step3'));
 
             $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // Update mode.
             $this->loadModel('custom')->disableFeaturesByMode($this->post->mode);
@@ -241,7 +241,7 @@ class install extends control
     {
         if(!empty($_POST))
         {
-            if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig));
+            if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig, 'load' => 'step3'));
 
             $this->loadModel('common');
             $this->install->grantPriv();
@@ -303,6 +303,9 @@ class install extends control
      */
     public function step6()
     {
+        $this->loadModel('common');
+        if(!isset($this->config->installed) or !$this->config->installed) $this->session->set('installing', true);
+
         $canDelFile  = is_writable($this->app->getAppRoot() . 'www');
         $installFile = $this->app->getAppRoot() . 'www/install.php';
         $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
