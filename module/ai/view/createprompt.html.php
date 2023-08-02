@@ -54,7 +54,7 @@ $(function() {
 
 function gotoPrompt(id)
 {
-    parent.location.href = createLink('ai', 'promptassignrole', 'prompt=' + id);
+    parent.location.href = <?php echo commonModel::hasPriv('ai', 'promptassignrole') ? "createLink('ai', 'promptassignrole', 'prompt='" : "createLink('ai', 'promptview', 'id='";?> + id);
 }
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>
