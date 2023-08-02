@@ -136,12 +136,13 @@ class jenkins extends control
      * @access public
      * @return void
      */
-    public function ajaxGetJenkinsTasks($id)
+    public function ajaxGetJenkinsTasks($id = 0)
     {
-        if(empty($id)) return print('');
-
         $this->app->loadLang('job');
-        $tasks = $this->jenkins->getTasks($id, 3);
+
+        $tasks = array();
+        if($id) $tasks = $this->jenkins->getTasks($id, 3);
+
         $this->view->tasks = $this->jenkinsZen->buildTree($tasks);
         $this->display();
     }
