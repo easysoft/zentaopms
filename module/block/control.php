@@ -1838,6 +1838,7 @@ class block extends control
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id', 'name');
         $projectID    = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
 
+        $this->loadModel('program')->refreshStats();
         $this->view->executionStats = $this->execution->getStatData($projectID, $status, 0, 0, false, 'skipParent', 'id_asc', $pager);
     }
 
