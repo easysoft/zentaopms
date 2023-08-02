@@ -26,9 +26,11 @@ class count_of_unfinished_task extends baseCalc
 
     public $fieldList = array('t1.status');
 
+    public $result = 0;
+
     public function calculate($row)
     {
-        if($this->status != 'done') $this->result ++;
+        if($row->status != 'done') $this->result ++;
     }
 
     public function getResult($options = array())
