@@ -3411,7 +3411,7 @@ class storyModel extends model
 
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
             {
-                $storyQuery .= " AND `status` NOT IN ('draft')"; // Fix bug #990.
+                $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing', 'changing')"; // Fix bug #990.
             }
             else
             {
