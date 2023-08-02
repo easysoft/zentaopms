@@ -28,9 +28,9 @@ class estimate_of_annual_closed_project extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status != 'closed' or empty($row->closedDate) or $row->parent = -1) return false;
+        if($row->status != 'closed' || empty($row->closedDate) || $row->parent == -1) return false;
 
-        $year = substr($row->closedDate, 0, 4);
+        $year = $this->getYear($row->closedDate);
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
         $this->result[$year] += $row->estimate;
@@ -38,8 +38,7 @@ class estimate_of_annual_closed_project extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $estimate) $records[] = array('year' => $year, 'value' => $estimate);
+        $records = $this->getRecords(array('year', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
