@@ -77,6 +77,18 @@ div
     setID('apps'),
 );
 
+$canSearch = hasPriv('search', 'index');
+if($canSearch)
+{
+    $searchUrl   = createLink('search', 'index') . ($config->requestType == 'GET' ? '&' : '?') . 'words={searchValue}';
+    $searchItems = array();
+    foreach($lang->searchObjects as $key => $module)
+    {
+        if($key == 'all') continue;
+        $searchItems[] = array('key' => $key, 'text' => $module, 'url' => $searchUrl . "&type={$key}");
+    }
+}
+
 div
 (
     setID('appsBar'),
@@ -88,16 +100,11 @@ div
     toolbar
     (
         setID('appsToolbar'),
-        globalSearch
+        $canSearch ? globalSearch
         (
-            set::commonSearchUrl(''),
-            set::searchItems
-            (
-                array(
-                   // array('key' => '', 'text' => '', 'url' => ''),
-                )
-            ),
-        ),
+            set::commonSearchUrl($searchUrl),
+            set::searchItems($searchItems)
+        ) : null,
         item
         (
             set::class('ghost btn-zentao'),
