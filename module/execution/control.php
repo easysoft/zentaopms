@@ -246,12 +246,6 @@ class execution extends control
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
-        /* Save session. */
-        $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
-
-        /* Header and session. */
-        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->task;
-
         /* Get tasks and group them. */
         if(empty($groupBy))$groupBy = 'story';
         if($groupBy == 'story' and $execution->lifetime == 'ops')
@@ -433,6 +427,8 @@ class execution extends control
 
         /* Assign. */
         $this->app->loadLang('tree');
+
+        $this->view->title       = $execution->name . $this->lang->colon . $this->lang->execution->task;
         $this->view->members     = $this->execution->getTeamMembers($executionID);
         $this->view->tasks       = $groupTasks;
         $this->view->tabID       = 'task';
