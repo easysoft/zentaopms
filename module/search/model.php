@@ -1533,6 +1533,7 @@ class searchModel extends model
      * @param  array $fieldParams
      * @param  array $fieldsMap
      * @param  array $queries
+     * @param  string $actionURL
      * @access public
      * @return object
      */
