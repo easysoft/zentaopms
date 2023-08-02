@@ -5052,6 +5052,8 @@ class executionModel extends model
                     $node->tasksCount += count($taskItems);
                     foreach($taskItems as $taskItem)
                     {
+                        if($taskItem->story > 0) continue; // If a story link to task, display task in story tree.
+
                         $node->children[$taskItem->id] = $taskItem;
                         if(!empty($tasks[$taskItem->id]->children))
                         {
@@ -5099,6 +5101,7 @@ class executionModel extends model
             $taskItem->pri          = (int)$task->pri;
             $taskItem->status       = $task->status;
             $taskItem->parent       = $task->parent;
+            $taskItem->story        = $task->story;
             $taskItem->estimate     = $task->estimate;
             $taskItem->consumed     = $task->consumed;
             $taskItem->left         = $task->left;
