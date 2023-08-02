@@ -1,6 +1,6 @@
 window.changeDisplay = function()
 {
-    //console.log($(this).is(':checked'))
+    $('#taskTree .tree-item-content.task').toggleClass('hidden', $(this).is(':checked'));
 }
 
 window.loadObject = function({event, item})
