@@ -5123,49 +5123,68 @@ class executionModel extends model
      */
     public function printTree($trees, $hasProduct = true)
     {
-        $html = '';
-        foreach($trees as $tree)
+        $treeData = array();
+        foreach($trees as $index => $tree)
         {
-            if(is_array($tree)) $tree = (object)$tree;
+            if(is_array($tree))
+            {
+                $treeData[$index] = $this->printTree($tree, $hasProduct);
+                continue;
+            }
+
+            $treeData[$index] = array('className' => 'py-2 cursor-pointer');
             switch($tree->type)
             {
                 case 'task':
-                    $link = helper::createLink('execution', 'treeTask', "taskID={$tree->id}");
-                    $html .= '<li class="item-task">';
-                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-type">' . ($tree->parent > 0 ? $this->lang->task->children : $this->lang->task->common) . "</span><span class='title' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span><span class="label label-id">' . $tree->id . '</span></a>';
+                    $label = $tree->parent > 0 ? $this->lang->task->children : $this->lang->task->common;
+                    $treeData[$index]['content'] = array(
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$label}</span><span class='ml-4'>{$tree->id}</span><span class='title ml-4 text-primary' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span></div>',
+                        'link' => helper::createLink('execution', 'treeTask', "taskID={$tree->id}"),
+                    );
                     break;
                 case 'product':
                     $this->app->loadLang('product');
                     $productName = $hasProduct ? $this->lang->productCommon : $this->lang->projectCommon;
-                    $html .= '<li class="item-product">';
-                    $html .= '<a class="tree-toggle"><span class="label label-type">' . $productName . "</span><span class='title' title='{$tree->name}'>" . $tree->name . '</span></a>';
+
+                    $treeData[$index] = array(
+                        'content' => array(
+                            'html' => '<div class="tree-toggle"><span class="label gray-pale rounded-full">' . $productName . "</span><span class='title ml-4' title='{$tree->name}'>" . $tree->name . '</span></div>'
+                        )
+                    );
                     break;
                 case 'story':
                     $this->app->loadLang('story');
-                    $link = helper::createLink('execution', 'treeStory', "storyID={$tree->storyId}");
-                    $html .= '<li class="item-story">';
-                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-type">' . $this->lang->story->common . "</span><span class='title' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span><span class="label label-id">' . $tree->storyId . '</span></a>';
+                    $treeData[$index] = array(
+                        'content' => array(
+                            'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$this->lang->story->common}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span> <span class='user'><i class='icon icon-person'></i> " . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . "</span><span class='label label-id ml-4'>{$tree->storyId}</span></div>",
+                            'link' => helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}"),
+                        )
+                    );
                     break;
                 case 'branch':
                     $this->app->loadLang('branch');
-                    $html .= "<li class='item-module'>";
-                    $html .= "<a class='tree-toggle'><span class='label label-type'>{$this->lang->branch->common}</span><span class='title' title='{$tree->name}'>{$tree->name}</span></a>";
+                    $treeData[$index] = array(
+                        'content' => array(
+                            'html' => "<div class='tree-toggle'><span class='label gray-pale rounded-full'>{$this->lang->branch->common}</span><span class='title ml-4' title='{$tree->name}'>{$tree->name}</span></div>"
+                        )
+                    );
                     break;
                 default:
                     $this->app->loadLang('tree');
-                    $html .= "<li class='item-module'>";
-                    $html .= "<a class='tree-toggle'><span class='title' title='{$tree->name}'>" . $tree->name . '</span></a>';
+                    $treeData[$index] = array(
+                        'content' => array(
+                            'html' => "<span class='title label white ring-dark rounded-full' title='{$tree->name}'>" . $tree->name . '</span>'
+                        )
+                    );
                     break;
             }
             if(isset($tree->children))
             {
-                $html .= '<ul>';
-                $html .= $this->printTree($tree->children, $hasProduct);
-                $html .= '</ul>';
+                if(in_array($tree->type, array('task', 'story'))) $treeData[$index]['content']['html'] = "<div class='tree-toggle'><span class='title' title='{$tree->title}'>{$tree->title}</span></div>";
+                $treeData[$index]['children'] = $this->printTree($tree->children, $hasProduct);
             }
-            $html .= '</li>';
         }
-        return $html;
+        return $treeData;
     }
 
     /**
