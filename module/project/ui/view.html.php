@@ -45,6 +45,61 @@ elseif($totalEstimate > 0)
 
 $status = $this->processStatus('project', $project);
 
+$relatedProducts = null;
+if($project->hasProduct)
+{
+    foreach($products as $productID => $product)
+    {
+        $productDom = null;
+        foreach($product->branches as $branchID)
+        {
+            $branchName = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';
+            $productDom = h::td
+            (
+                icon('product mr-2'),
+                a
+                (
+                    hasPriv('product', 'browse') ? set::href(createLink('product', 'browse', "productID={$productID}&branch={$branchID}")) : null,
+                    span($product->name . $branchName)
+                )
+            );
+        }
+
+        $plans   = array();
+        $planDom = null;
+        foreach($product->plans as $planIDList)
+        {
+            $planIDList = explode(',', $planIDList);
+            foreach($planIDList as $planID)
+            {
+                if(!isset($planGroup[$productID][$planID])) continue;
+
+                $planClass  = count($plans) > 2 ? 'mt-2' : '';
+                $planClass .= count($plans) % 3 != 0 ? 'pl-4' : '';
+                $plans[] = div
+                    (
+                        setClass("flex-none w-1/3 clip {$planClass}"),
+                        icon('calendar mr-2 '),
+                        a
+                        (
+                            hasPriv('productplan', 'view') ? set::href(createLink('productplan', 'view', "planID={$planID}")) : null,
+                            span($planGroup[$productID][$planID])
+                        )
+                    );
+            }
+        }
+        $planDom[] = h::td
+            (
+                div
+                (
+                    setClass('flex flex-wrap'),
+                    $plans
+                )
+            );
+        $relatedProducts[] = h::tr(setClass('border-r'), $productDom, $planDom);
+    }
+}
+
 div
 (
     setClass('main'),
@@ -216,7 +271,53 @@ div
     ),
     div
     (
-        setClass('flex-auto canvas flex p-4 mt-4'),
+        setClass('flex flex-auto p-4 mt-4'),
+        div
+        (
+            setClass('w-full'),
+            /* Linked product and plan.  */
+            h::table
+            (
+                setClass('table condensed bordered'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        $project->hasProduct ? h::th
+                        (
+                            setClass('w-1/3'),
+                            div
+                            (
+                                setClass('flex items-center justify-between'),
+                                span
+                                (
+                                    setClass('leading-8 flex'),
+                                    img(set('src', 'static/svg/product.svg'), setClass('mr-2')),
+                                    $lang->project->manageProducts
+                                ),
+                                common::hasPriv('project', 'manageproducts') ? btn
+                                (
+                                    setClass('ghost text-gray'),
+                                    set::url(createLink('project', 'manageproducts', "projectID={$project->id}")),
+                                    icon('link', setClass('text-primary')),
+                                    span($lang->more, setClass('font-normal'))
+                                ) : null,
+                            )
+                        ) : null,
+                        h::th
+                        (
+                            span
+                            (
+                                setClass('flex'),
+                                img(set('src', 'static/svg/productplan.svg'), setClass('mr-2')),
+                                $lang->execution->linkPlan
+                            )
+                        )
+                    )
+                ),
+                h::tbody($relatedProducts)
+            )
+        ),
     )
 );
 
@@ -245,6 +346,12 @@ div
         ),
         set::bodyClass('pt-0'),
         dynamic()
+    ),
+    div
+    (
+        setID('historyBlock'),
+        setClass('mt-4'),
+        history()
     )
 );
 
@@ -268,6 +375,7 @@ foreach($config->project->view->operateList['common'] as $operate)
 
     $settings = $config->project->actionList[$operate];
     $settings['text'] = '';
+    if($operate == 'edit') $settings['url'] = createLink('project', 'edit', "projectID={$project->id}");
 
     $commonActions[] = $settings;
 }

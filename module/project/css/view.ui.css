@@ -6,6 +6,7 @@
 .pie-chart .pie-chart-title {position: absolute; top: 50%; left: 50%; margin-top: -20px; margin-left: -16px}
 .m-project-view #mainContent {display: flex;}
 .m-project-view #mainContent .main {flex: 1 0 65%;}
-.m-project-view #mainContent .side {flex: 1 1 35%; overflow-x: hidden;}
+.m-project-view #mainContent .side {flex: 1 1 35%; overflow: hidden;}
 #dynamicBlock {height: 50vh; display: flex; flex-direction: column; box-shadow: none;}
 #dynamicBlock .panel-body {flex: 1 1 auto; overflow-y: auto;}
+#historyBlock {height: 30vh; overflow-y: auto;}

@@ -75,7 +75,7 @@ toolbar
 $projectCards = null;
 if(!empty($projectStats))
 {
-    foreach ($projectStats as $projectID => $project)
+    foreach($projectStats as $project)
     {
         $status        = isset($project->delay) ? 'delay' : $project->status;
         $statusLabel   = $config->project->statusLabelList[$status];
@@ -133,7 +133,7 @@ if(!empty($projectStats))
         $projectCards[] = div
             (
                 setClass('col'),
-                set('data-id', $projectID),
+                set('data-id', $project->id),
                 div
                 (
                     setClass('panel'),
@@ -149,7 +149,7 @@ if(!empty($projectStats))
                         a
                         (
                             setClass('project-name'),
-                            set::href(createLink('project', 'index', "projectID={$projectID}")),
+                            set::href(createLink('project', 'index', "projectID={$project->id}")),
                             set::title($project->name),
                             h::strong($project->name)
                         ),
@@ -263,7 +263,7 @@ if(!empty($projectStats))
                                     a
                                     (
                                         setClass('project-members-total pl-2 mt-1'),
-                                        set::href(createLink('project', 'team', "projectID={$projectID}")),
+                                        set::href(createLink('project', 'team', "projectID={$project->id}")),
                                         sprintf($lang->project->teamSumCount, $project->teamCount),
                                     )
                                 ),
