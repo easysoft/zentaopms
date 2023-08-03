@@ -27,6 +27,8 @@ fields:
   range: 1{10},2{9},4{8},5{7},6{5},8{4},10{1},
 - field: status
   range: wait{1},doing{1},done{1},pause{1},cancel{1},closed{1}
+- field: assignedTo
+  range: admin,user{5},test{3},dev{10},pm{10},po{8},closed{20},[]{40}
 - field: deleted
   range: 0{6},1{6}
 ...
