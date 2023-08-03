@@ -209,5 +209,5 @@
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>
 <?php js::set('relatedPrivData', json_encode($relatedPrivData));?>
-<?php js::set('selectedPrivIdList', $selectedPrivIdList);?>
-<?php js::set('excludeIdList', $excludePrivsIdList);?>
+<?php js::set('selectedPrivList', $selectedPrivList);?>
+<?php js::set('excludePrivList', $excludePrivList);?>

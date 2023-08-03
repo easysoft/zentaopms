@@ -193,7 +193,10 @@ class group extends control
     /**
      * Manage privleges of a group.
      *
-     * @param  int    $groupID
+     * @param  string $type     byPackage|byGroup|byModule
+     * @param  int    $param
+     * @param  string $menu
+     * @param  string $version
      * @access public
      * @return void
      */
@@ -254,14 +257,14 @@ class group extends control
             $privList           = $modules;
             $privMethods        = array();
             $selectPrivs        = array();
-            $selectedPrivIdList = array();
-            $relatedIdList      = array();
-            $groupPrivsIdList   = $this->group->getPrivsIdListByGroup($groupID);
+            $selectedPrivList   = array();
+            $relatedList        = array();
+            $groupPrivList      = $this->group->getPrivListByGroup($groupID);
             foreach($privs as $priv)
             {
                 if(!empty($version) and strpos($changelogs, ",{$priv->module}-{$priv->method},") === false)
                 {
-                    unset($groupPrivsIdList[$priv->id]);
+                    unset($groupPrivList["{$priv->module}-{$priv->method}"]);
                     continue;
                 }
 
@@ -280,10 +283,10 @@ class group extends control
                     $selectPrivs[$priv->parentCode][$priv->parent] ++;
                     if(isset($priv->id))
                     {
-                        $selectedPrivIdList[$priv->id] = $priv->id;
+                        $selectedPrivList["{$priv->module}-{$priv->method}"] = "{$priv->module}-{$priv->method}";
 
                         /* New permissions for secondary development are excluded. */
-                        if(is_numeric($priv->id)) $relatedIdList[$priv->id] = $priv->id;
+                        if(is_numeric($priv->id)) $relatedList["{$priv->module}-{$priv->method}"] = "{$priv->module}-{$priv->method}";
                     }
                 }
             }
@@ -317,18 +320,18 @@ class group extends control
                 }
             }
 
-            $excludePrivsIdList = array_diff(array_keys($groupPrivsIdList), $selectedPrivIdList);
-            $relatedPrivData    = $this->group->getRelatedPrivs($relatedIdList, '', $excludePrivsIdList);
+            $excludePrivList = array_diff(array_keys($groupPrivList), $selectedPrivList);
+            $relatedPrivData = $this->group->getRelatedPrivs($relatedList, '', $excludePrivList);
 
             unset($privList['index']);
 
-            $this->view->privList           = $privList;
-            $this->view->privMethods        = $privMethods;
-            $this->view->selectPrivs        = $selectPrivs;
-            $this->view->privPackages       = $this->group->getPrivManagerPairs('package');
-            $this->view->selectedPrivIdList = $selectedPrivIdList;
-            $this->view->relatedPrivData    = $relatedPrivData;
-            $this->view->excludePrivsIdList = $excludePrivsIdList;
+            $this->view->privList         = $privList;
+            $this->view->privMethods      = $privMethods;
+            $this->view->selectPrivs      = $selectPrivs;
+            $this->view->privPackages     = $this->group->getPrivManagerPairs('package');
+            $this->view->selectedPrivList = $selectedPrivList;
+            $this->view->relatedPrivData  = $relatedPrivData;
+            $this->view->excludePrivList  = $excludePrivList;
         }
         elseif($type == 'byModule')
         {
@@ -1094,18 +1097,17 @@ class group extends control
     }
 
     /**
-     * AJAX: Get priv's dependent priv list.
+     * AJAX: Get priv's related priv list.
      *
-     * @param  string  $privIdList
      * @access public
-     * @return bool
+     * @return int
      */
     public function ajaxGetRelatedPrivs()
     {
-        $privIdList     = zget($_POST, 'privList');
-        $recommedSelect = zget($_POST, 'recommedSelect');
-        $excludeIdList  = zget($_POST, 'excludeIdList');
-        $privList       = $this->group->getRelatedPrivs($privIdList, '', $excludeIdList, $recommedSelect);
+        $privList        = zget($_POST, 'privList');
+        $recommedSelect  = zget($_POST, 'recommedSelect');
+        $excludePrivList = zget($_POST, 'excludePrivList');
+        $privList        = $this->group->getRelatedPrivs($privList, '', $excludePrivList, $recommedSelect);
         return print(json_encode($privList));
     }
 }

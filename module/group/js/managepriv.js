@@ -179,10 +179,10 @@ function updatePrivTree(privList)
         privList = new Array();
         $('tbody .group-item input:checked').each(function()
         {
-            var privID = $(this).closest('.group-item').attr('data-id');
-            if($(this).closest('popover-content').length == 0 && privList.indexOf(privID) < 0) privList.push(privID);
+            var priv = $(this).attr('data-id');
+            if($(this).closest('popover-content').length == 0 && privList.indexOf(priv) < 0) privList.push(priv);
         });
-        selectedPrivIdList = privList;
+        selectedPrivList = privList;
     }
 
     $.ajax(
@@ -190,7 +190,7 @@ function updatePrivTree(privList)
         url: createLink('group', 'ajaxGetRelatedPrivs'),
         dataType: 'json',
         method: 'post',
-        data: {"privList" : privList.toString(), "recommedSelect": recommedSelect.toString(), "excludeIdList": Object.values(excludeIdList).toString()},
+        data: {"privList" : privList.toString(), "recommedSelect": recommedSelect.toString(), "excludePrivList": Object.values(excludePrivList).toString()},
         success: function(data)
         {
             if(data.depend == undefined || data.depend.length == 0)
@@ -318,15 +318,15 @@ function groupItemChange()
     var packageID  = $(this).closest('.group-item').attr('data-package');
     changeParentChecked($(this), moduleName, packageID);
 
-    var privID = $(this).closest('.group-item').attr('data-id');
-    if(privID != 0)
+    var priv = $(this).attr('data-id');
+    if(priv != '')
     {
-        var index = selectedPrivIdList.indexOf(privID);
+        var index = selectedPrivList.indexOf(priv);
 
-        if(privID > 0 && index < 0 && checked) selectedPrivIdList.push(privID);
-        if(privID > 0 && index > -1 && !checked) selectedPrivIdList.splice(index, 1);
+        if(priv && index < 0 && checked) selectedPrivList.push(priv);
+        if(priv && index > -1 && !checked) selectedPrivList.splice(index, 1);
 
-        updatePrivTree(selectedPrivIdList);
+        updatePrivTree(selectedPrivList);
     }
 }
 
@@ -377,18 +377,18 @@ function recommendChange($item, checked)
         $parentItem.closest('.checkbox-primary').find('label').addClass('checkbox-indeterminate-block');
     }
 
-    var privID = $item.attr('data-relationpriv');
-    if(privID != 0)
+    var priv = $item.attr('data-module') + '-' + $item.attr('data-method');
+    if(priv != '-')
     {
-        var index = selectedPrivIdList.indexOf(privID);
+        var index = selectedPrivList.indexOf(priv);
 
-        if(privID > 0 && index < 0 && checked) selectedPrivIdList.push(privID);
-        if(privID > 0 && index > -1 && !checked) selectedPrivIdList.splice(index, 1);
+        if(priv && index < 0 && checked) selectedPrivList.push(priv);
+        if(priv && index > -1 && !checked) selectedPrivList.splice(index, 1);
 
-        index = recommedSelect.indexOf(privID);
+        index = recommedSelect.indexOf(priv);
 
-        if(privID > 0 && index < 0 && checked) recommedSelect.push(privID);
-        if(privID > 0 && index > -1 && !checked) recommedSelect.splice(index, 1);
+        if(priv && index < 0 && checked) recommedSelect.push(priv);
+        if(priv && index > -1 && !checked) recommedSelect.splice(index, 1);
     }
 }
 
@@ -411,7 +411,7 @@ $(function()
     positionBtn();
     $('.main.main-content').resize(positionBtn);
 
-    selectedPrivIdList = Object.values(selectedPrivIdList);
+    selectedPrivList = Object.values(selectedPrivList);
 
     recommedSelect = new Array();
 
@@ -441,7 +441,7 @@ $(function()
         {
             recommendChange($(this), checked);
         }
-        updatePrivTree(selectedPrivIdList);
+        updatePrivTree(selectedPrivList);
     }));
 
     $('#privPackageList .package > .priv-toggle.icon').click(function()
