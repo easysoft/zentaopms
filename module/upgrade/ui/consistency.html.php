@@ -18,38 +18,37 @@ div
     div
     (
         set::id('mainContent'),
-        set::style(array('margin' => '50px auto 0', 'width' => '800px')),
-        set::class('bg-white p-4'),
-        div
+        panel
         (
-            set::class('article-h1 mb-4'),
-            $lang->upgrade->consistency
-        ),
-        div
-        (
-            set::class('border p-4 mb-4'),
-            set::style(array('background-color' => 'var(--color-gray-100)')),
+            set::style(array('margin' => '0 auto')),
+            zui::width('800px'),
+            set::title($lang->upgrade->consistency),
             div
             (
-                set::class('article-h3 mb-2'),
-                $lang->upgrade->noticeSQL
+                set::class('border p-4 mb-4'),
+                set::style(array('background-color' => 'var(--color-gray-100)')),
+                div
+                (
+                    set::class('article-h3 mb-2'),
+                    $lang->upgrade->noticeSQL
+                ),
+                div
+                (
+                    set::class('text-danger leading-loose'),
+                    html("SET @@sql_mode= '';<br />"),
+                    html(nl2br($alterSQL)),
+                )
             ),
             div
             (
-                set::class('text-danger leading-loose'),
-                html("SET @@sql_mode= '';<br />"),
-                html(nl2br($alterSQL)),
-            )
-        ),
-        div
-        (
-            set::class('text-center'),
-            btn
-            (
-                on::click('loadCurrentPage'),
-                set::type('primary'),
-                set::class('px-10'),
-                $lang->refresh,
+                set::class('text-center'),
+                btn
+                (
+                    on::click('loadCurrentPage'),
+                    set::type('primary'),
+                    set::class('px-10'),
+                    $lang->refresh,
+                )
             )
         )
     )
