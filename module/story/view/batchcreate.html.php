@@ -20,18 +20,6 @@
   <div class="main-header">
     <h2><?php echo $storyID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate;?></h2>
     <div class="pull-right btn-toolbar">
-      <?php if(isset($_SESSION['aiInjectData'])): ?>
-        <?php
-        $this->app->loadLang('ai');
-        $prompt   = $_SESSION['aiPrompt']['prompt'];
-        $objectId = $_SESSION['aiPrompt']['objectId'];
-        $isAudit  = isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60;
-        ?>
-        <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"'); ?>
-        <?php if($isAudit): ?>
-          <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"'); ?>
-        <?php endif; ?>
-      <?php endif; ?>
       <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
       <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-primary"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchCreateFields')?>
@@ -149,13 +137,9 @@
         <tfoot>
           <tr>
             <td colspan="<?php echo count($visibleFields) + 3?>" class="text-center form-actions">
-              <?php if($isAudit && $prompt->status == 'draft'): ?>
-                <?php echo html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide'); ?>
-              <?php else: ?>
-                <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide'); ?>
-                <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide'); ?>
-                <?php echo html::backButton(); ?>
-              <?php endif; ?>
+              <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');?>
+              <?php echo html::backButton();?>
             </td>
           </tr>
         </tfoot>

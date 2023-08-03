@@ -35,18 +35,6 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
     <div class='main-header'>
       <h2><?php echo $lang->testcase->create;?></h2>
       <div class="pull-right btn-toolbar">
-        <?php if(isset($_SESSION['aiInjectData'])): ?>
-          <?php
-          $this->app->loadLang('ai');
-          $prompt   = $_SESSION['aiPrompt']['prompt'];
-          $objectId = $_SESSION['aiPrompt']['objectId'];
-          $isAudit  = isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60;
-          ?>
-          <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"'); ?>
-          <?php if($isAudit): ?>
-            <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"'); ?>
-          <?php endif; ?>
-        <?php endif; ?>
         <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=createFields');?>
         <?php include '../../common/view/customfield.html.php';?>
       </div>
@@ -273,12 +261,8 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
         <tfoot>
           <tr>
             <td colspan='3' class='text-center form-actions'>
-              <?php if($isAudit && $prompt->status == 'draft'): ?>
-                <?php echo html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide'); ?>
-              <?php else: ?>
-                <?php echo html::submitButton(); ?>
-                <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton(); ?>
-              <?php endif; ?>
+              <?php echo html::submitButton();?>
+              <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();?>
             </td>
           </tr>
         </tfoot>

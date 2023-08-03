@@ -45,20 +45,6 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
         <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', "class='bug-title' title='$bug->title'");?>
         <small><?php echo $lang->arrow . ' ' . $lang->bug->edit;?></small>
       </h2>
-      <?php if(isset($_SESSION['aiInjectData'])): ?>
-        <?php
-        $this->app->loadLang('ai');
-        $prompt   = $_SESSION['aiPrompt']['prompt'];
-        $objectId = $_SESSION['aiPrompt']['objectId'];
-        $isAudit  = isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60;
-        ?>
-        <div class="pull-right btn-toolbar">
-          <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');?>
-          <?php if($isAudit): ?>
-            <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"'); ?>
-          <?php endif;?>
-        </div>
-      <?php endif;?>
     </div>
     <div class='main-row'>
       <div class='main-col col-8'>
@@ -97,15 +83,11 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
           </div>
 
           <div class='actions form-actions text-center'>
-            <?php if($isAudit && $prompt->status == 'draft'): ?>
-              <?php echo html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide'); ?>
-            <?php else: ?>
-              <?php
-              echo html::hidden('lastEditedDate', $bug->lastEditedDate);
-              echo html::submitButton();
-              echo html::backButton();
-              ?>
-            <?php endif; ?>
+            <?php
+            echo html::hidden('lastEditedDate', $bug->lastEditedDate);
+            echo html::submitButton();
+            echo html::backButton();
+            ?>
           </div>
           <hr class='small' />
           <?php include '../../common/view/action.html.php';?>

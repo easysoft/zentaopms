@@ -21,20 +21,6 @@
         <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '', 'class="story-title"');?>
         <small><?php echo $lang->arrow . ' ' . $lang->story->change;?></small>
       </h2>
-      <?php if(isset($_SESSION['aiInjectData'])): ?>
-        <?php
-        $this->app->loadLang('ai');
-        $prompt   = $_SESSION['aiPrompt']['prompt'];
-        $objectId = $_SESSION['aiPrompt']['objectId'];
-        $isAudit  = isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60;
-        ?>
-        <div class="pull-right btn-toolbar">
-          <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');?>
-          <?php if($isAudit): ?>
-            <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"'); ?>
-          <?php endif;?>
-        </div>
-      <?php endif;?>
     </div>
     <form class="main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
@@ -105,15 +91,12 @@
         <tr>
           <td></td>
           <td class='text-center form-actions'>
-            <?php if($isAudit && $prompt->status == 'draft'): ?>
-            <?php echo html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id" ,'btn btn-primary btn-wide');?>
-            <?php else:
+            <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');
             echo html::commonButton($lang->story->doNotSubmit, "id='saveDraftButton'", 'btn btn-secondary btn-wide');
             if(!isonlybody()) echo html::backButton();
             ?>
-            <?php endif;?>
           </td>
         </tr>
       </table>

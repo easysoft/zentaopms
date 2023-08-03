@@ -25,18 +25,6 @@
       <?php endif;?>
     </h2>
     <div class="pull-right btn-toolbar">
-      <?php if(isset($_SESSION['aiInjectData'])): ?>
-        <?php
-        $this->app->loadLang('ai');
-        $prompt   = $_SESSION['aiPrompt']['prompt'];
-        $objectId = $_SESSION['aiPrompt']['objectId'];
-        $isAudit  = isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60;
-        ?>
-        <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"'); ?>
-        <?php if($isAudit): ?>
-          <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"'); ?>
-        <?php endif; ?>
-      <?php endif; ?>
       <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-primary"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
@@ -140,12 +128,8 @@
         <tfoot>
           <tr>
             <td colspan='<?php echo $colspan?>' class='text-center form-actions'>
-              <?php if($isAudit && $prompt->status == 'draft'): ?>
-                <?php echo html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide'); ?>
-              <?php else: ?>
-                <?php echo html::submitButton('', '', 'form-stash-clear btn btn-wide btn-primary'); ?>
-                <?php echo html::backButton(); ?>
-              <?php endif; ?>
+              <?php echo html::submitButton('', '', 'form-stash-clear btn btn-wide btn-primary');?>
+              <?php echo html::backButton();?>
             </td>
           </tr>
         </tfoot>

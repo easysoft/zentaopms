@@ -44,18 +44,6 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
       </div>
       <?php endif;?>
       <div class="pull-right btn-toolbar">
-        <?php if(isset($_SESSION['aiInjectData'])): ?>
-          <?php
-          $this->app->loadLang('ai');
-          $prompt   = $_SESSION['aiPrompt']['prompt'];
-          $objectId = $_SESSION['aiPrompt']['objectId'];
-          $isAudit  = isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60;
-          ?>
-          <?php echo html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"'); ?>
-          <?php if($isAudit): ?>
-            <?php echo html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"'); ?>
-          <?php endif; ?>
-        <?php endif; ?>
         <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=createFields')?>
         <?php include '../../common/view/customfield.html.php';?>
       </div>
@@ -372,18 +360,14 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
         <tfoot>
           <tr>
             <td colspan="5" class="text-center form-actions">
-              <?php if($isAudit && $prompt->status == 'draft'): ?>
-                <?php echo html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide'); ?>
-              <?php else: ?>
-                <?php echo html::hidden('type', $type); ?>
-                <?php if(defined('TUTORIAL')): ?>
-                  <?php echo html::submitButton(); ?>
-                <?php else: ?>
-                  <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide'); ?>
-                  <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide'); ?>
-                <?php endif; ?>
-                <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton('', $source == 'bug' ? 'data-app=qa' : ''); ?>
-              <?php endif; ?>
+              <?php echo html::hidden('type', $type);?>
+              <?php if(defined('TUTORIAL')):?>
+              <?php echo html::submitButton();?>
+              <?php else:?>
+              <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');?>
+              <?php endif;?>
+              <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton('', $source == 'bug' ? 'data-app=qa' : '');?>
             </td>
           </tr>
         </tfoot>
