@@ -28,7 +28,7 @@ class count_of_delayed_finished_execution_which_annual_finished extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->closedDate) or empty($row->firstEnd)) return false;
+        if(empty($row->closedDate) || empty($row->firstEnd)) return false;
 
         $year = substr($row->closedDate, 0, 4);
         if($year == '0000') return false;
@@ -42,8 +42,7 @@ class count_of_delayed_finished_execution_which_annual_finished extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $value) $records[] = array('year' => $year, 'value' => $value);
+        $records = $this->getRecords(array('year', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
