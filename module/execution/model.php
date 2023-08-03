@@ -4387,7 +4387,17 @@ class executionModel extends model
 
         foreach($tasks as $task)
         {
-            if(!isset($tasks[$task->parent]) or $task->parent <= 0)
+            if(isset($task->children))
+            {
+                foreach($task->children as $child)
+                {
+                    $totalEstimate  += $child->estimate;
+                    $totalConsumed  += $child->consumed;
+
+                    if($child->status != 'cancel' and $child->status != 'closed') $totalLeft += $child->left;
+                }
+            }
+            else
             {
                 $totalEstimate  += $task->estimate;
                 $totalConsumed  += $task->consumed;
