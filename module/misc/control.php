@@ -60,12 +60,26 @@ class misc extends control
      * Check current version is latest or not.
      *
      * @param  string    $sn
+     * @param  string    $force
      * @access public
      * @return void
      */
-    public function checkUpdate($sn = '')
+    public function checkUpdate($sn = '', $force = '')
     {
-        session_write_close();
+        $hasInternet = $this->session->hasInternet;
+        if(empty($hasInternet))
+        {
+            $hasInternet = $this->loadModel('admin')->checkInternet();
+            $this->session->set('hasInternet', $hasInternet);
+            if(!$hasInternet) return;
+        }
+        if($this->session->isSlowNetwork) return;
+
+        $startTime = microtime(true);
+        if(empty($force) && !empty($this->config->checkUpdate->lastTime) &&  $startTime - (float)$this->config->checkUpdate->lastTime < 3600) return;
+        $this->loadModel('setting')->setItem('system.common.checkUpdate.lastTime',  $startTime);
+
+        if(empty($sn)) $sn = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=sn');
 
         $website = $this->config->misc->api;
 
@@ -82,6 +96,8 @@ class misc extends control
         {
             $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
         }
+
+        if(microtime(true) - $startTime > $this->config->timeout / 1000) $this->session->set('isSlowNetwork', true);
     }
 
     /**
