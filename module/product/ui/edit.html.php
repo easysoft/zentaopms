@@ -54,7 +54,7 @@ foreach($fields as $field => $attr)
             set::id(zget($attr, 'name', $field)),
             set::width($attr['width']),
             set::name($fieldName),
-            set::label($attr['title']),
+            set::label($attr['title'] ?? null),
             set::control($control),
             set::value($attr['default']),
             set::required($attr['required'])
