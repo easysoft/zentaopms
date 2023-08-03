@@ -72,55 +72,35 @@ foreach($extensions as $extension)
     $i++;
 }
 
-if(!empty($error))
-{
-    div
-    (
-        p
-        (
-            set::class('text-danger mb-3'),
-            html($error),
-        ),
-        btn
-        (
-            on::click('loadCurrentPage'),
-            set::type('primary'),
-            $lang->extension->refreshPage,
-        )
-    );
-}
-else
-{
-    featurebar
-    (
-        set::current($tab),
-        set::linkParams("status={key}")
-    );
-    
-    toolbar
-    (
-        hasPriv('extension', 'upload') ? item(set(array
-        (
-            'icon' => 'cog',
-            'text' => $lang->extension->upload,
-            'class' => 'ghost',
-            'url' => createLink('extension', 'upload'),
-            'data-toggle' => 'modal'
-        ))) : null,
-        hasPriv('extension', 'obtain') ? item(set(array
-        (
-            'icon'  => 'download-alt',
-            'text'  => $lang->extension->obtain,
-            'class' => 'primary',
-            'url'   => createLink('extension', 'obtain')
-        ))) : null,
-    );
+featurebar
+(
+    set::current($tab),
+    set::linkParams("status={key}")
+);
 
-    div
+toolbar
+(
+    hasPriv('extension', 'upload') ? item(set(array
     (
-        set::class('flex col gap-y-1 p-5 bg-white'),
-        $extensionItems
-    );
-}
+        'icon' => 'cog',
+        'text' => $lang->extension->upload,
+        'class' => 'ghost',
+        'url' => createLink('extension', 'upload'),
+        'data-toggle' => 'modal'
+    ))) : null,
+    hasPriv('extension', 'obtain') ? item(set(array
+    (
+        'icon'  => 'download-alt',
+        'text'  => $lang->extension->obtain,
+        'class' => 'primary',
+        'url'   => createLink('extension', 'obtain')
+    ))) : null,
+);
+
+div
+(
+    set::class('flex col gap-y-1 p-5 bg-white'),
+    $extensionItems
+);
 
 render();
