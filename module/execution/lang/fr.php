@@ -117,6 +117,7 @@ $lang->execution->reestimate          = 'Reestimate';
 $lang->execution->selectRound         = 'Select Round';
 $lang->execution->average             = 'Average';
 $lang->execution->relatedMember       = 'Equipe';
+$lang->execution->member              = 'Member';
 $lang->execution->watermark           = 'Exporté par ZenTao';
 $lang->execution->burnXUnit           = '(Date)';
 $lang->execution->burnYUnit           = '(Hours)';
