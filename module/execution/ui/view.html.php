@@ -12,7 +12,7 @@ namespace zin;
 
 $progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;
 $isKanban = isset($execution->type) && $execution->type == 'kanban';
-$chartURL = createLink('execution', 'ajaxGetBurn', "executionID={$execution->id}");
+$chartURL = createLink('execution', $isKanban ? 'ajaxGetCFD' : 'ajaxGetBurn', "executionID={$execution->id}");
 
 $programDom = null;
 if($config->systemMode == 'ALM' && $execution->projectInfo->grade > 1)
@@ -79,10 +79,10 @@ div
                         span
                         (
                             setClass('text-sm text-gray'),
-                            $lang->execution->progress . '%',
+                            $lang->allProgress,
                             icon
                             (
-                                'help',
+                                'help ml-1',
                                 toggle::tooltip(array('title' => $lang->execution->lblStats)),
                                 setClass('text-light')
                             )
@@ -98,7 +98,7 @@ div
                     setClass('w-1/3'),
                     div
                     (
-                        setClass('article-h3'),
+                        setClass('article-h1'),
                         $statData->storyCount
                     ),
                     $lang->story->common
@@ -108,7 +108,7 @@ div
                     setClass('w-1/3'),
                     div
                     (
-                        setClass('article-h3'),
+                        setClass('article-h1'),
                         $statData->taskCount
                     ),
                     $lang->task->common
@@ -118,7 +118,7 @@ div
                     setClass('w-1/3'),
                     div
                     (
-                        setClass('article-h3'),
+                        setClass('article-h1'),
                         $statData->bugCount
                     ),
                     $lang->bug->common
@@ -130,7 +130,7 @@ div
             setClass('flex-none w-2/3'),
             div
             (
-                setClass('flex'),
+                setClass('flex items-center'),
                 label
                 (
                     setClass('rounded-full'),
@@ -138,27 +138,41 @@ div
                 ),
                 span
                 (
-                    setClass('article-h2 ml-2'),
+                    setClass('article-h2 ml-2 clip'),
                     $execution->name
                 ),
                 !empty($config->setCode) ? label
                 (
-                    setClass('dark-outline text-dark mx-2 mr-2'),
+                    setClass('light-outline mx-2 flex-none'),
                     $execution->code
                 ) : null,
                 $execution->deleted ? label
                 (
-                    setClass('danger-outline text-danger'),
+                    setClass('danger-outline text-dange flex-noner'),
                     $lang->execution->deleted
                 ) : null,
                 isset($execution->delay) ? label
                 (
-                    setClass('danger-pale ring-danger ml-2'),
+                    setClass('danger-pale ring-danger ml-2 flex-none'),
                     $lang->execution->delayed
                 ) : label
                 (
-                    setClass("success-pale ring-success ml-2"),
+                    setClass("status-{$execution->status} ml-2 flex-none"),
                     $this->processStatus('execution', $execution)
+                ),
+                span
+                (
+                    setClass('ml-2'),
+                    $lang->execution->kanbanAclList[$execution->acl],
+                    icon
+                    (
+                        'help',
+                        toggle::tooltip(array('title' => $lang->execution->aclList[$execution->acl])),
+                        set('data-placement', 'right'),
+                        set('data-type', 'white'),
+                        set('data-class-name', 'text-gray border border-light'),
+                        setClass('ml-2 mt-2 text-gray'),
+                    )
                 ),
             ),
             div
@@ -185,14 +199,14 @@ div
                     ),
                 ),
             ),
-        ),
-        div
-        (
-            set::class('detail-content mt-4'),
-            html($execution->desc),
+            div
+            (
+                set::class('detail-content mt-4'),
+                html($execution->desc),
+            ),
         ),
     ),
-    panel
+    div
     (
         setClass('flex-none w-1/3 canvas ml-4'),
         $isKanban ? to::heading
@@ -200,7 +214,7 @@ div
             div
             (
                 set('class', 'panel-title'),
-                $execution->name . ($isKanban ? $lang->execution->CFD : $lang->execution->burn),
+                $execution->name . $lang->execution->CFD,
             )
         ) : null,
         $isKanban ? to::headingActions
@@ -208,7 +222,7 @@ div
             common::hasPriv('execution', $isKanban ? 'cfd' : 'burn') ? btn
             (
                 setClass('ghost text-gray'),
-                set::url(createLink('execution', $isKanban ? 'cfd' : 'burn', "executionID={$execution->id}")),
+                set::url(createLink('execution', cfd, "executionID={$execution->id}")),
                 $lang->more
             ) : null
         ) : null,
@@ -218,6 +232,534 @@ div
             h::js("$('#chartLine').load('{$chartURL}')")
         )
     )
+);
+
+$relatedProducts = null;
+if($execution->projectInfo->hasProduct || $features['plan'])
+{
+    foreach($products as $productID => $product)
+    {
+        $productDom = null;
+        $planDom    = null;
+        if($execution->projectInfo->hasProduct)
+        {
+            foreach($product->branches as $branchID)
+            {
+                $branchName = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';
+                $productDom = h::td
+                (
+                    icon('product mr-2'),
+                    a
+                    (
+                        hasPriv('product', 'browse') ? set::href(createLink('product', 'browse', "productID={$productID}&branch={$branchID}")) : null,
+                        span($product->name . $branchName)
+                    )
+                );
+            }
+        }
+
+        if($features['plan'])
+        {
+            $plans = array();
+            foreach($product->plans as $planIDList)
+            {
+                $planIDList = explode(',', $planIDList);
+                foreach($planIDList as $planID)
+                {
+                    if(!isset($planGroups[$productID][$planID])) continue;
+
+                    $plans[] = div
+                    (
+                        setClass('flex-none w-1/4 ml-4'),
+                        icon('calendar mr-2 '),
+                        a
+                        (
+                            hasPriv('productplan', 'view') ? set::href(createLink('productplan', 'view', "planID={$planID}")) : null,
+                            span($product->name . '/' . $planGroups[$productID][$planID])
+                        )
+                    );
+                }
+            }
+
+            $planDom[] = h::td
+            (
+                div
+                (
+                    setClass('flex flex-wrap'),
+                    $plans
+                )
+            );
+        }
+
+        $relatedProducts[] = h::tr(setClass('border-r'), $productDom, $planDom);
+    }
+}
+
+$membersDom = array();
+foreach(array('PM', 'PO', 'QD', 'RD') as $field)
+{
+    if(empty($execution->$field)) continue;
+
+    $user = isset($userList[$execution->$field]) ? $userList[$execution->$field] : null;
+    if($user)
+    {
+        $membersDom[] = div
+        (
+            setClass('w-1/8 center-y'),
+            avatar
+            (
+                set::text($user->realname),
+                set::src($user->avatar),
+            ),
+            span
+            (
+                setClass('my-2'),
+                $user->realname
+            ),
+            span
+            (
+                setClass('text-gray'),
+                $lang->execution->$field
+            ),
+        );
+    }
+
+    unset($teamMembers[$execution->$field]);
+}
+
+$memberCount = count($membersDom);
+foreach($teamMembers as $teamMember)
+{
+    if($memberCount >= 7) break;
+
+    $user = isset($userList[$teamMember->account]) ? $userList[$teamMember->account] : null;
+    if(!$user) continue;
+
+    $membersDom[] = div
+    (
+        setClass('w-1/8 center-y'),
+        avatar
+        (
+            set::text($user->realname),
+            set::src($user->avatar),
+        ),
+        span
+        (
+            setClass('my-2'),
+            $user->realname
+        ),
+        span
+        (
+            setClass('text-gray'),
+            $lang->execution->team
+        ),
+    );
+    $memberCount ++;
+}
+
+if(common::hasPriv('execution', 'manageMembers'))
+{
+    $membersDom[] = div
+    (
+        setClass('w-1/8 center-y cursor-pointer'),
+        avatar
+        (
+            setClass('mb-2'),
+            set::foreColor('var(--color-primary-500-rgb)'),
+            set::background('var(--menu-active-bg)'),
+            set::text('+'),
+        ),
+        $lang->execution->manageMembers
+    );
+}
+
+$docLibDom = array();
+if(common::hasPriv('execution', 'doc'))
+{
+    $docLibCount = 0;
+    foreach($docLibs as $libID => $docLib)
+    {
+        if($docLibCount > 4) break;
+
+        $docLibDom[] = div
+            (
+                setClass('flex-none w-1/5 py-1'),
+                icon('wiki-lib mr-2'),
+                a
+                (
+                    $docLib->name,
+                    set('data-app', $app->tab),
+                    set::href($libID == 'files' ? $this->createLink('doc', 'showFiles', "type=execution&objectID={$execution->id}") : $this->createLink('execution', 'doc', "objectID={$execution->id}&libID={$libID}")),
+                )
+            );
+
+        $docLibCount ++;
+    }
+}
+
+if($canBeChanged && common::hasPriv('doc', 'createLib'))
+{
+    $docLibDom[] = div
+    (
+        setClass('flex-none w-1/5 py-1'),
+        a
+        (
+            setClass('ghost text-gray'),
+            icon('plus', setClass('bg-primary-50 text-primary mr-2')),
+            span($lang->doc->createLib),
+            set::href(createLink('doc', 'createLib', "type=execution&objectID={$execution->id}")),
+            set('data-toggle', 'modal'),
+            set('data-app', $app->tab),
+        )
+    );
+}
+
+div
+(
+    setClass('my-4 flex w-full'),
+    ($execution->projectInfo->hasProduct || $features['plan']) ? div
+    (
+        setClass('w-2/3 canvas p-4 flex-auto'),
+        div
+        (
+            /* Linked product and plan.  */
+            h::table
+            (
+                setClass('table condensed bordered'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        $execution->projectInfo->hasProduct ? h::th
+                        (
+                            setClass('w-1/3'),
+                            div
+                            (
+                                setClass('flex items-center justify-between'),
+                                span($lang->execution->manageProducts),
+                                common::hasPriv('execution', 'manageproducts') && $execution->type != 'stage' && $project->model != 'waterfallplus' ? btn
+                                (
+                                    setClass('ghost text-gray'),
+                                    set::icon('link text-primary'),
+                                    set::url(createLink('execution', 'manageproducts', "projectID={$execution->id}")),
+                                    $lang->more
+                                ) : null,
+                            )
+                        ) : null,
+                        $features['plan'] ? h::th($lang->execution->linkPlan) : null
+                    )
+                ),
+                h::tbody($relatedProducts)
+            ),
+
+            /* Execution team. */
+            h::table
+            (
+                setClass('table condensed bordered mt-4'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        h::th
+                        (
+                            div
+                            (
+                                setClass('flex items-center justify-between'),
+                                span($lang->execution->relatedMember),
+                                hasPriv('execution', 'team') ? btn
+                                (
+                                    setClass('ghost text-gray'),
+                                    set::trailingIcon('caret-right pb-0.5'),
+                                    set::url(createLink('execution', 'team', "executionID={$execution->id}")),
+                                    $lang->more
+                                ) : null,
+                            )
+                        ),
+                    )
+                ),
+                h::tbody
+                (
+                    h::tr
+                    (
+                        h::td
+                        (
+                            div
+                            (
+                                setClass('flex flex-wrap member-list pt-2'),
+                                $membersDom,
+                            )
+                        )
+                    )
+                )
+            ),
+
+            /* Estimate statistics. */
+            h::table
+            (
+                setClass('table condensed bordered mt-4'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        h::th
+                        (
+                            div
+                            (
+                                setClass('flex items-center justify-between'),
+                                span($lang->execution->DurationStats),
+                            )
+                        ),
+                    )
+                ),
+                h::tbody
+                (
+                    h::tr
+                    (
+                        h::td
+                        (
+                            div
+                            (
+                                setClass('flex flex-wrap pt-2 mx-4'),
+                                div
+                                (
+                                    setClass('w-1/4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->begin,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        $execution->begin
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->end,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        $execution->end
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->realBeganAB,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->realEndAB,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        helper::isZeroDate($execution->realEnd) ? '' : $execution->realEnd
+                                    )
+                                ),
+                            )
+                        )
+                    )
+                )
+            ),
+            h::table
+            (
+                setClass('table condensed bordered mt-4'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        h::th
+                        (
+                            div
+                            (
+                                setClass('flex items-center justify-between'),
+                                span($lang->execution->lblStats),
+                            )
+                        ),
+                    )
+                ),
+                h::tbody
+                (
+                    h::tr
+                    (
+                        h::td
+                        (
+                            div
+                            (
+                                setClass('flex flex-wrap pt-2 mx-4'),
+                                div
+                                (
+                                    setClass('w-1/3'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->totalEstimate,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        $execution->totalEstimate . $lang->execution->workHourUnit
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/3'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->totalConsumed,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        $execution->totalConsumed . $lang->execution->workHourUnit
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/3'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->totalLeft,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        $execution->totalLeft . $lang->execution->workHourUnit
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/3 mt-4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->totalDays,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        $execution->days . $lang->execution->workHourUnit
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/3 mt-4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->totalHours,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        $execution->totalHours . $lang->execution->workHourUnit
+                                    )
+                                ),
+                            )
+                        )
+                    )
+                )
+            ),
+
+            /* Execution doc lib. */
+            hasPriv('execution', 'doc') ? h::table
+            (
+                setClass('table condensed bordered mt-4'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        h::th
+                        (
+                            div
+                            (
+                                setClass('flex items-center justify-between'),
+                                span($lang->execution->doclib),
+                                hasPriv('execution', 'doc') ? btn
+                                (
+                                    setClass('ghost text-gray'),
+                                    set::trailingIcon('caret-right pb-0.5'),
+                                    set::url(createLink('execution', 'doc', "executionID={$execution->id}")),
+                                    $lang->more
+                                ) : null,
+                            )
+                        ),
+                    )
+                ),
+                h::tbody
+                (
+                    h::tr
+                    (
+                        h::td
+                        (
+                            div
+                            (
+                                setClass('flex flex-nowrap pt-2'),
+                                $docLibDom,
+                            )
+                        )
+                    )
+                )
+            ) : null,
+        ),
+    ) : null,
+    div
+    (
+        setClass('ml-4 w-1/3 flex-none'),
+        div
+        (
+            setClass('overflow-y-auto canvas'),
+            panel
+            (
+                to::heading
+                (
+                    div
+                    (
+                        set('class', 'panel-title'),
+                        $lang->execution->latestDynamic,
+                    )
+                ),
+                to::headingActions
+                (
+                    common::hasPriv('execution', 'dynamic') ? btn
+                    (
+                        setClass('ghost text-gray'),
+                        set::url(createLink('execution', 'dynamic', "executionID={$execution->id}&type=all")),
+                        $lang->more
+                    ) : null
+                ),
+                set::bodyClass('pt-0'),
+                dynamic()
+            )
+        ),
+        div
+        (
+            setClass('mt-4 overflow-y-auto canvas'),
+            history()
+        ),
+    ),
 );
 
 /* Construct suitable actions for the current execution. */
