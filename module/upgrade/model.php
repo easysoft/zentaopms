@@ -5327,7 +5327,7 @@ class upgradeModel extends model
             ->join('products', ',')
             ->get();
 
-        foreach($data->repoes as $repoID) $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
+        foreach($data->repoes as $repoID => $status) $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
     }
 
     /**

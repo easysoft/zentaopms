@@ -751,17 +751,17 @@ class upgrade extends control
         if($_POST)
         {
             $this->upgrade->mergeRepo();
-            return print(js::locate($this->createLink('upgrade', 'mergeRepo'), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => inlink('mergeRepo')));
         }
 
         $repoes   = $this->dao->select('id, name')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('product')->eq('')->fetchPairs();
         $products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
-        if(empty($repoes) or empty($products))
+        if(empty($repoes) || empty($products))
         {
             $this->dao->delete()->from(TABLE_BLOCK)->exec();
             $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('blockInited')->exec();
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
-            return print(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
+            return $this->send(array('result' => 'success', 'load' => inlink('afterExec', 'fromVersion=&processed=no')));
         }
 
         $this->view->title    = $this->lang->upgrade->mergeRepo;
