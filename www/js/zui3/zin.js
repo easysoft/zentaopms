@@ -383,6 +383,14 @@
                                 loadPage(result ? data.load.confirmed : data.load.canceled);
                             }});
                         }
+                        else if('alert' in data.load)
+                        {
+                            zui.Modal.alert(data.load.alert);
+                            if(data.load.locate)
+                            {
+                                setTimeout(function(){loadPage(data.load.locate);}, 1500);
+                            }
+                        }
                         else
                         {
                             loadPage(data.load);
