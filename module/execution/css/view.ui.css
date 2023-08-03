@@ -4,3 +4,5 @@
 .chart > div {margin: auto;}
 .pie-chart {position: relative;}
 .pie-chart .pie-chart-title {position: absolute; top: 50%; left: 50%; margin-top: -20px; margin-left: -16px}
+
+.member-list > .center-y {width: 12.5%}
