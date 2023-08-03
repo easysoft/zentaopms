@@ -904,22 +904,9 @@ class upgrade extends control
             $extensionsName[$extension] = $extensions[$extension]->name;
         }
 
-        $data = '';
-        if($extensionsName)
-        {
-            $data .= "<h3>{$this->lang->upgrade->forbiddenExt}</h3>";
-            $data .= '<ul>';
-            foreach($extensionsName as $extension => $extensionName)
-            {
-                $data .= "<li>$extensionName";
-                if($removeCommands[$extension]) $data .= '<p>'. $this->lang->extension->unremovedFiles . '</p> <p>' . join('<br />', $removeCommands[$extension]) . '</p>';
-                $data .= '</li>';
-            }
-            $data .= '</ul>';
-        }
-
-        $this->view->title = $this->lang->upgrade->checkExtension;
-        $this->view->data  = $data;
+        $this->view->title          = $this->lang->upgrade->checkExtension;
+        $this->view->extensionsName = $extensionsName;
+        $this->view->removeCommands = $removeCommands;
         $this->display();
     }
 
