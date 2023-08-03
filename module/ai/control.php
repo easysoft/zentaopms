@@ -17,6 +17,33 @@ class ai extends control
     }
 
     /**
+     * Check for user's privs and model configs, redirect to most relevant page.
+     *
+     * @access public
+     * @return void
+     */
+    public function adminIndex()
+    {
+        $modelConfig     = new stdclass();
+        $modelConfigData = $this->loadModel('setting')->getItems('owner=system&module=ai');
+        foreach($modelConfigData as $item) $modelConfig->{$item->key} = $item->value;
+
+        $modelConfigured = !empty($modelConfig->key) && !empty($modelConfig->type) && (empty($modelConfig->proxyType) || !empty($modelConfig->proxyAddr));
+
+        /* Redirect to model edit if user has priv and model is unconfigured. */
+        if(commonModel::hasPriv('ai', 'editModel') && !$modelConfigured) return $this->locate($this->createLink('ai', 'editModel'));
+
+        /* Redirect to prompts if user has priv. */
+        if(commonModel::hasPriv('ai', 'prompts')) return $this->locate($this->createLink('ai', 'prompts'));
+
+        /* Redirect to models if user has priv. */
+        if(commonModel::hasPriv('ai', 'models')) return $this->locate($this->createLink('ai', 'models'));
+
+        /* User has no priv, deny access. */
+        return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'locate' => $this->createLink('admin', 'index')));
+    }
+
+    /**
      * List models.
      *
      * TODO: not fully implemented yet, currently shows the only model config.
