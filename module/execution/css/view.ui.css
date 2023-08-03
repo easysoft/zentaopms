@@ -1,7 +1,6 @@
-.linked-products > .items-center {justify-content: space-between;}
-.execution-statitic-hours .table-data-body, .execution-basic-info .table-data-body {display: flex; flex-wrap: wrap;}
-.execution-statitic-hours .table-data-body .table-data-tr {flex: 0 1 50%;}
-.execution-statitic-hours .table-data .table-data-th {min-width: 60px; text-align: right;}
-.execution-basic-info .table-data-body .table-data-tr {flex: 0 1 33%;}
-.execution-basic-info .table-data .table-data-th {min-width: 36px;}
 .actions-menu {bottom: 12px;}
+
+.flex-col {flex-direction: column;}
+.chart > div {margin: auto;}
+.pie-chart {position: relative;}
+.pie-chart .pie-chart-title {position: absolute; top: 50%; left: 50%; margin-top: -20px; margin-left: -16px}
