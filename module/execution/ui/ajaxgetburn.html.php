@@ -11,8 +11,9 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('workHour', $lang->execution->workHour);
-panel
+div
 (
+    setClass('px-4 py-3'),
     div
     (
         set::class('flex flex-nowrap justify-between'),
