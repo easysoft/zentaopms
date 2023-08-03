@@ -777,7 +777,6 @@ $lang->ai->audit = new stdclass();
 $lang->ai->audit->designPrompt = '提词设计';
 $lang->ai->audit->afterSave    = '保存后';
 $lang->ai->audit->regenerate   = '重新生成';
-$lang->ai->audit->exit         = '退出调试';
 
 $lang->ai->audit->backLocationList = array();
 $lang->ai->audit->backLocationList[0] = '返回调试页面';

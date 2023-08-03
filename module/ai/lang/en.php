@@ -778,7 +778,6 @@ $lang->ai->audit = new stdclass();
 $lang->ai->audit->designPrompt = 'Prompt Design';
 $lang->ai->audit->afterSave    = 'After saving,';
 $lang->ai->audit->regenerate   = 'Regenerate';
-$lang->ai->audit->exit         = 'Exit Audit';
 
 $lang->ai->audit->backLocationList = array();
 $lang->ai->audit->backLocationList[0] = 'back to audit page.';
