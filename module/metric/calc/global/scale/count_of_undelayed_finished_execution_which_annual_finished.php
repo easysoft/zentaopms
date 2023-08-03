@@ -28,12 +28,12 @@ class count_of_undelayed_finished_execution_which_annual_finished extends baseCa
 
     public function calculate($row)
     {
-        if(empty($row->closedDate) or empty($row->firstEnd)) return false;
+        if(empty($row->closedDate) || empty($row->firstEnd)) return false;
 
         $year = substr($row->closedDate, 0, 4);
         if($year == '0000') return false;
 
-        if($row->status == 'closed' and $row->closedDate <= $row->firstEnd)
+        if($row->status == 'closed' && $row->closedDate <= $row->firstEnd)
         {
             if(!isset($this->result[$year])) $this->result[$year] = 0;
             $this->result[$year] ++;
@@ -42,8 +42,7 @@ class count_of_undelayed_finished_execution_which_annual_finished extends baseCa
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $value) $records[] = array('year' => $year, 'value' => $value);
+        $records = $this->getRecords(array('year', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
