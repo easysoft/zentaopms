@@ -244,7 +244,7 @@ class yaml
      *
      * @param  string $tableName
      * @access public
-     * @return viod
+     * @return void
      */
     public function buildYamlFile($tableName)
     {

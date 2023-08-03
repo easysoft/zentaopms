@@ -3,7 +3,7 @@
  *
  * @param  string $mode
  * @access public
- * @return viod
+ * @return void
  */
 window.changeMode = function(e)
 {

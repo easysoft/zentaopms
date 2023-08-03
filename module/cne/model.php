@@ -477,7 +477,7 @@ class cneModel extends model
      * @param  object    $metrics
      * @static
      * @access public
-     * @return viod
+     * @return void
      */
     public static function printCpuUsage($metrics)
     {
@@ -493,7 +493,7 @@ class cneModel extends model
      * @param  object    $metrics
      * @static
      * @access public
-     * @return viod
+     * @return void
      */
     public static function printMemUsage($metrics)
     {

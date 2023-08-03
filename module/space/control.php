@@ -96,7 +96,7 @@ class space extends control
      *
      * @param int     $appID
      * @access public
-     * @return viod
+     * @return void
      */
     public function createApplication($appID = 0)
     {
@@ -133,7 +133,7 @@ class space extends control
      *
      * @param  int    $appID
      * @access public
-     * @return viod
+     * @return void
      */
     public function getStoreAppInfo(int $appID)
     {

@@ -1128,7 +1128,7 @@ class bug extends control
      * @param  int    $productID
      * @param  string $branch
      * @access public
-     * @return viod
+     * @return void
      */
     public function batchActivate(int $productID, string $branch = '0')
     {

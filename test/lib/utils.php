@@ -97,7 +97,7 @@ function ztfExtract($dir)
  * Get to the directory of test cases.
  *
  * @access public
- * @return viod
+ * @return void
  */
 function getCaseModelDir()
 {
@@ -266,7 +266,7 @@ function zdRun($isDev = false)
  *
  * @param  string $dbName
  * @access public
- * @return viod
+ * @return void
  */
 function initDB($dbName)
 {
@@ -306,7 +306,7 @@ function initDB($dbName)
  *
  * @param  int    $dbCount
  * @access public
- * @return viod
+ * @return void
  */
 function batchInitDB($dbCount)
 {
