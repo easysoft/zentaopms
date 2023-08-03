@@ -15,38 +15,40 @@ set::zui(true);
 div
 (
     set::id('main'),
-    set::class('bg-white'),
     div
     (
         set::id('mainContent'),
-        set::style(array('margin' => '0 auto', 'width' => '600px')),
-        div
+        panel
         (
-            set::class('article-h1 mb-4'),
-            icon
+            set::style(array('margin' => '0 auto', 'width' => '600px')),
+            div
             (
-                'exclamation-sign',
-                set::size('2x'),
-                set::class('text-danger mr-2')
+                set::class('article-h1 mb-4'),
+                icon
+                (
+                    'exclamation-sign',
+                    set::size('2x'),
+                    set::class('text-danger mr-2')
+                ),
+                $lang->upgrade->warnning
             ),
-            $lang->upgrade->warnning
-        ),
-        div
-        (
-            set::style(array('background-color' => 'var(--color-gray-100)')),
-            set::class('p-5 mb-4 space-y-2'),
-            html($lang->upgrade->warnningContent),
-        ),
-        div
-        (
-            set::class('text-center'),
-            btn
+            div
             (
-                on::click("self.location.href='" . createLink('upgrade', 'consistency') . "'"),
-                set::type('primary'),
-                set::class('px-10'),
-                set('disabled', 'disabled'),
-                $lang->upgrade->common,
+                set::style(array('background-color' => 'var(--color-gray-100)')),
+                set::class('p-5 mb-4 space-y-2'),
+                html($lang->upgrade->warnningContent),
+            ),
+            div
+            (
+                set::class('text-center'),
+                btn
+                (
+                    on::click("self.location.href='" . createLink('upgrade', 'consistency') . "'"),
+                    set::type('primary'),
+                    set::class('px-10'),
+                    set('disabled', 'disabled'),
+                    $lang->upgrade->common,
+                )
             )
         )
     )
