@@ -8,6 +8,11 @@ class label extends wg
         'text?:string'
     );
 
+    public static function getPageCSS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     public function onAddChild($child)
     {
         if(is_string($child) && !$this->props->has('text'))
