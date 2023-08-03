@@ -3,7 +3,7 @@
 .flex-col {flex-direction: column;}
 .chart > div {margin: auto;}
 .pie-chart {position: relative;}
-.pie-chart .pie-chart-title {position: absolute; top: 50%; left: 50%; margin-top: -20px; margin-left: -16px}
+.pie-chart .pie-chart-title {position: relative; top: -60%; left: 2%; height: 1rem;}
 .m-project-view #mainContent {display: flex;}
 .m-project-view #mainContent .main {flex: 1 0 65%;}
 .m-project-view #mainContent .side {flex: 1 1 35%; overflow: hidden;}

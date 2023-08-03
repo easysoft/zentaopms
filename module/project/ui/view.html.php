@@ -101,11 +101,9 @@ if($project->hasProduct)
 }
 
 $membersDom = array();
-foreach(array('PM', 'PO', 'QD', 'RD') as $field)
+if(!empty($project->PM))
 {
-    if(empty($project->$field)) continue;
-
-    $user = isset($userList[$execution->$field]) ? $userList[$execution->$field] : null;
+    $user = isset($userList[$project->PM]) ? $userList[$project->PM] : null;
     if($user)
     {
         $membersDom[] = div
@@ -113,6 +111,7 @@ foreach(array('PM', 'PO', 'QD', 'RD') as $field)
                 setClass('w-1/8 center-y'),
                 avatar
                 (
+                    setClass('primary-outline'),
                     set::text($user->realname),
                     set::src($user->avatar),
                 ),
@@ -124,12 +123,12 @@ foreach(array('PM', 'PO', 'QD', 'RD') as $field)
                 span
                 (
                     setClass('text-gray'),
-                    $lang->project->$field
+                    $lang->project->PM
                 ),
             );
     }
 
-    unset($teamMembers[$project->$field]);
+    unset($teamMembers[$project->PM]);
 }
 
 
@@ -140,25 +139,25 @@ foreach($teamMembers as $teamMember)
 
     $user = isset($userList[$teamMember->account]) ? $userList[$teamMember->account] : null;
     if(!$user) continue;
-        $membersDom[] = div
-    (
-        setClass('w-1/8 center-y'),
-        avatar
+    $membersDom[] = div
         (
-            set::text($user->realname),
-            set::src($user->avatar),
-        ),
-        span
-        (
-            setClass('my-2'),
-            $user->realname
-        ),
-        span
-        (
-            setClass('text-gray'),
-            $lang->project->member
-        ),
-    );
+            setClass('w-1/8 center-y'),
+            avatar
+            (
+                set::text($user->realname),
+                set::src($user->avatar),
+            ),
+            span
+            (
+                setClass('my-2'),
+                $user->realname
+            ),
+            span
+            (
+                setClass('text-gray'),
+                $lang->project->member
+            ),
+        );
     $memberCount ++;
 }
 
@@ -173,7 +172,7 @@ if(common::hasPriv('project', 'manageMembers'))
             setClass('mb-2'),
             set::foreColor('var(--color-primary-500-rgb)'),
             set::background('var(--menu-active-bg)'),
-            set::text('+'),
+            icon('plus')
         ),
         $lang->project->manage
     );
@@ -415,7 +414,7 @@ div
                                     setClass('ghost text-gray'),
                                     set::trailingIcon('caret-right pb-0.5'),
                                     set::url(createLink('project', 'team', "projectID={$project->id}")),
-                                    $lang->more
+                                    span($lang->more, setClass('font-normal'))
                                 ) : null,
                             )
                         )
