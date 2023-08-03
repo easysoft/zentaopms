@@ -62,15 +62,17 @@ class pageBase extends wg
         $imports    = context::current()->getImportList();
         $webRoot    = $app->getWebRoot();
         $themeName  = $app->cookie->theme;
+        $zuiPath    = $config->zin->zuiPath;
 
-        $jsConfig->zin = true;
+        $jsConfig->zin     = true;
 
         $headImports = array();
         if($zui)
         {
-            $headImports[] = h::importCss($config->zin->zuiPath . 'zui.zentao.css', setID('zuiCSS'));
-            $headImports[] = h::importCss($config->zin->zuiPath . 'themes/' . $themeName . '.css', setID('zuiTheme'));
-            $headImports[] = h::importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs', setID('zuiJS'));
+            $headImports[] = h::importCss($zuiPath . 'zui.zentao.css', setID('zuiCSS'));
+            $headImports[] = h::importCss($zuiPath . 'themes/' . $themeName . '.css', setID('zuiTheme'));
+            $headImports[] = h::importJs($zuiPath . 'zui.zentao.umd.cjs', setID('zuiJS'));
+            $headImports[] = h::jsCall('$.setLibRoot', $zuiPath);
         }
         $headImports[] = h::jsVar('window.config', $jsConfig, setID('configJS'));
         if($zui) $headImports[] = h::importJs($webRoot . 'js/zui3/zin.js', setID('zinJS'));
