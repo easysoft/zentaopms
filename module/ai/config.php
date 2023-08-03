@@ -194,3 +194,15 @@ $config->ai->menuPrint->locations['doc']['view'] = (object)array(
     'injectMethod'    => 'prepend',
     'targetContainer' => '#mainMenu>.btn-toolbar.pull-right',
 );
+
+$config->ai->injectAuditButton = new stdclass();
+$config->ai->injectAuditButton->locations = array();
+$config->ai->injectAuditButton->locations['task']['edit']['toolbar'] = (object)array(
+    'targetContainer' => '#mainContent .main-header',
+    'injectMethod'    => 'append',
+    'class'           => 'pull-right btn-toolbar',
+);
+$config->ai->injectAuditButton->locations['task']['edit']['action'] = (object)array(
+    'targetContainer' => '#mainContent .form-actions',
+    'injectMethod'    => 'html',
+);
