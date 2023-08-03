@@ -27,6 +27,7 @@ class navigator extends wg
                 !empty($item->url) ? set::href($item->url) : null,
                 a
                 (
+                    setClass('btn shadow-none' . (!empty($item->active) ? ' secondary' : '')),
                     $item->text
                 )
             );
@@ -38,6 +39,7 @@ class navigator extends wg
     {
         return ul
         (
+            setID('navigator'),
             setClass('nav nav-primary'),
             $this->buildSteps()
         );
