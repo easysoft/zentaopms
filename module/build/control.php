@@ -670,7 +670,7 @@ class build extends control
         }
         else
         {
-            $allStories = $this->story->getExecutionStories($executionID, $build->product, 0, 't1.`order`_desc', 'byBranch', $build->branch, 'story', $build->allStories, $pager);
+            $allStories = $this->story->getExecutionStories($executionID, $build->product, 0, 't1.`order`_desc', 'byBranch', $build->branch, 'story', $build->allStories, 'draft,reviewing,changing', $pager);
         }
 
         $this->view->allStories   = $allStories;

@@ -3526,11 +3526,12 @@ class storyModel extends model
      * @param  int    $param
      * @param  string $storyType
      * @param  string $excludeStories
+     * @param  string $excludeStatus
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getExecutionStories($executionID = 0, $productID = 0, $branch = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null)
+    public function getExecutionStories($executionID = 0, $productID = 0, $branch = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $excludeStatus = '', $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStories();
 
@@ -3649,6 +3650,7 @@ class storyModel extends model
                 ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
                 ->beginIF(strpos('draft|reviewing|changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF($excludeStatus)->andWhere('t2.status')->notIN($excludeStatus)->fi()
                 ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()
                 ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn($storyIdList)->fi()
                 ->fi()
@@ -5575,7 +5577,7 @@ class storyModel extends model
         {
             if($projectID)
             {
-                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories, $pager);
+                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories, '', $pager);
             }
             else
             {

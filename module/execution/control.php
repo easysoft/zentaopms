@@ -837,7 +837,7 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, $storyType, '', $pager);
+        $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, $storyType, '', '', $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
