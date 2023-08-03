@@ -94,38 +94,33 @@ featureBar(set::items($fnGetFeatureBarItems()));
 
 if(in_array($type, $config->dev->navTypes))
 {
-    $activeGroup = '';
-    $activeChild = '';
-    foreach($menuTree as $menu)
+    $active = array();
+    $fnProcessTreeData = function($menuTree, $level = 0, $parent = null) use (&$fnProcessTreeData, $type, $language, &$active)
     {
-        $menu->id   = "{$menu->module}_{$menu->method}";
-        $menu->text = $menu->title;
-        $menu->url  = helper::createLink('dev', 'langItem', "type={$type}&module={$menu->module}&method={$menu->method}&language={$language}");
-        if($menu->active) $activeGroup = $menu->id;
-        if(!empty($menu->children))
+        foreach($menuTree as $menu)
         {
-            unset($menu->url);
-            foreach($menu->children as $subMenu)
+            $menu->id   = "{$menu->module}_{$menu->method}";
+            $menu->text = $menu->title;
+            $menu->url  = helper::createLink('dev', 'langItem', "type={$type}&module={$menu->module}&method={$menu->method}&language={$language}");
+            if(!empty($menu->children))
             {
-                $subMenu->id   = "{$subMenu->module}_{$subMenu->method}";
-                $subMenu->text = $subMenu->title;
-                $subMenu->url  = helper::createLink('dev', 'langItem', "type={$type}&module={$subMenu->module}&method={$subMenu->method}&language={$language}");
-                if($subMenu->active)
-                {
-                    $activeChild = $subMenu->id;
-                    $activeGroup = $menu->id;
-                }
-                if(empty($subMenu->children)) unset($subMenu->children);
-                $menu->items[] = $subMenu;
+                unset($menu->url);
+                $menu->items = $fnProcessTreeData($menu->children, $level + 1, $menu);
             }
+            if($menu->active)
+            {
+                $active[$level] = $menu->id;
+                if($parent) $parent->active = 1;
+            }
+            unset($menu->children);
         }
-        unset($menu->children);
-    }
+        return $menuTree;
+    };
+    $menuTree = $fnProcessTreeData($menuTree);
 
-    if($activeGroup) h::css(" .sidebar .tree [data-level=\"0\"][id=\"{$activeGroup}\"] {color: var(--color-primary-600); font-weight:bolder}");
-    if($activeChild) h::css(" .sidebar .tree [data-level=\"1\"][id=\"{$activeChild}\"] {color: var(--color-primary-600); font-weight:bolder}");
-
+    foreach($active as $level => $name) h::css(".sidebar .tree [data-level=\"{$level}\"][id=\"{$name}\"] {color: var(--color-primary-600); font-weight:bolder}");
     jsVar('menuTree', $menuTree);
+
     sidebar
     (
         setClass('bg-white'),
