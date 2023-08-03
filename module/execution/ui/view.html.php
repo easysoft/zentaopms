@@ -311,7 +311,8 @@ foreach(array('PM', 'PO', 'QD', 'RD') as $field)
             setClass('w-1/8 center-y'),
             avatar
             (
-                setClass('border border-primary'),
+                setClass('primary-outline'),
+                set::size('36'),
                 set::text($user->realname),
                 set::src($user->avatar),
             ),
