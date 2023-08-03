@@ -32,7 +32,6 @@ window.treeClick = function(info)
 window.installApp = function()
 {
     var confirm = $(this).data('confirm');
-    console.log(confirm);
     if(confirm)
     {
         zui.Modal.confirm(confirm).then(result =>

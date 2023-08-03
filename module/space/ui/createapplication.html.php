@@ -104,6 +104,8 @@ formPanel
     setClass('storePanel' . ($appID ? '' : ' hidden')),
     set::id('createStoreAppForm'),
     set::title($lang->space->install),
+    $appID ? set::submitBtnText($lang->instance->install) : null,
+    $appID ? set::actions(array('submit', array('text' => $lang->instance->stop, 'data-type' => 'submit', 'data-dismiss' => 'modal'))) : null,
     formRow
     (
         setStyle('display', $appID ? 'block' : 'none'),
