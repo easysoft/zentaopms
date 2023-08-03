@@ -97,6 +97,13 @@ class upgradeModel extends model
         /* Execute. */
         $fromOpenVersion = $this->getOpenVersion($fromVersion);
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
+
+        /* Get total sqls and write in tmp file. */
+        file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', '0-0');
+        $confirm        = $this->getConfirm($fromVersion);
+        $updateTotalSql = count(explode(';', $confirm));
+        file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
+
         foreach($versions as $openVersion => $chargedVersions)
         {
             $executedXuanxuan = false;
@@ -2082,18 +2089,7 @@ class upgradeModel extends model
         $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
         $ignoreCode   = '|1050|1054|1060|1091|1061|';
 
-        /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
-        $sqls = explode("\n", file_get_contents($sqlFile));
-        foreach($sqls as $key => $line)
-        {
-            $line       = trim($line);
-            $sqls[$key] = $line;
-
-            /* Skip sql that is note. */
-            if(preg_match('/^--|^#|^\/\*/', $line) or empty($line)) unset($sqls[$key]);
-        }
-        $sqls = explode(';', join("\n", $sqls));
-
+        $sqls = $this->parseToSqls($sqlFile);
         foreach($sqls as $sql)
         {
             if(empty($sql)) continue;
@@ -2116,6 +2112,14 @@ class upgradeModel extends model
             try
             {
                 $this->saveLogs($sql);
+
+                /* Calculate the number of sql runs completed. */
+                $sqlLines    = file_get_contents($this->app->getTmpRoot() . 'upgradeSqlLines');
+                $sqlLines    = explode('-', $sqlLines);
+                $executeLine = $sqlLines[1];
+                $executeLine ++;
+                file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $sqlLines[0] . '-' . $executeLine);
+
                 $this->dbh->exec($sql);
             }
             catch(PDOException $e)
@@ -2127,6 +2131,30 @@ class upgradeModel extends model
             }
         }
     }
+
+    /**
+     * Parse sql file to sqls.
+     *
+     * @param  string $sqlFile
+     * @access public
+     * @return array
+     */
+    public function parseToSqls($sqlFile)
+    {
+        /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
+        $sqls = explode("\n", file_get_contents($sqlFile));
+        $sqlList = array();
+        foreach($sqls as $key => $line)
+        {
+            $line = trim($line);
+            if(!$line) continue;
+            /* Skip sql that is note. */
+            if(!preg_match('/^--|^#|^\/\*/', $line)) $sqlList[] = $line;
+        }
+
+        return array_filter(explode(';', join("\n", $sqlList)));
+    }
+
 
     /**
      * Add priv for version 4.0.1

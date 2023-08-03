@@ -26,4 +26,18 @@
     </div>
   </form>
 </div>
+<div class="modal fade" id='progress'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <h1 class='title'>1%</h1>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" style="width: 1%">
+          </div>
+        </div>
+        <span><?php echo $lang->upgrade->upgradingTips;?></span>
+      </div>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

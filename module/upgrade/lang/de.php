@@ -142,3 +142,5 @@ $lang->upgrade->recoveryActions->review = 'Review';
 
 $lang->upgrade->remark           = 'Remark';
 $lang->upgrade->remarkDesc       = 'You can also switch the mode in the Admin-System-Mode page of the system.';
+
+$lang->upgrade->upgradingTips = 'The system is being upgraded, please wait patiently...';

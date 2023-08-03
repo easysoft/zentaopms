@@ -118,6 +118,7 @@ class upgrade extends control
         if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
         if(strpos($fromVersion, 'ipd') !== false)  $fromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
 
+        if(file_exists($this->app->getTmpRoot() . 'upgradeSqlLines')) @unlink($this->app->getTmpRoot() . 'upgradeSqlLines');
         $confirmSql = $this->upgrade->getConfirm($fromVersion);
         $confirmSql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $confirmSql);
 
@@ -142,6 +143,7 @@ class upgrade extends control
      */
     public function execute($fromVersion = '')
     {
+        session_write_close();
         $this->session->set('step', '');
 
         $this->view->title      = $this->lang->upgrade->result;
@@ -794,6 +796,26 @@ class upgrade extends control
         $this->view->programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->andWhere('type')->eq('program')->fetchPairs();
 
         $this->display();
+    }
+
+    /**
+     * Ajax get progress.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProgress()
+    {
+        $tmpProgressFile = $this->app->getTmpRoot() . 'upgradeSqlLines';
+        if(!file_exists($tmpProgressFile)) return print(1);
+        $sqlLines = file_get_contents($tmpProgressFile);
+        if(empty($sqlLines)) return print(1);
+        if($sqlLines == 'completed') return print(100);
+
+        $sqlLines = explode('-', $sqlLines);
+        $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
+        if($progress > 95) $progress = 100;
+        return print($progress);
     }
 
     /**
