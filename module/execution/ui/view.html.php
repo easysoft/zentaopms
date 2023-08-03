@@ -345,6 +345,7 @@ foreach($teamMembers as $teamMember)
         setClass('w-1/8 center-y'),
         avatar
         (
+            set::size('36'),
             set::text($user->realname),
             set::src($user->avatar),
         ),
@@ -371,9 +372,10 @@ if(common::hasPriv('execution', 'manageMembers'))
         avatar
         (
             setClass('mb-2'),
+            set::size('36'),
             set::foreColor('var(--color-primary-500-rgb)'),
             set::background('var(--menu-active-bg)'),
-            set::text('+'),
+            icon('plus'),
         ),
         $lang->execution->manageMembers
     );
