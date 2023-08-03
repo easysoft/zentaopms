@@ -339,6 +339,7 @@ $lang->execution->batchCreateStoryTips = "Please select the {$lang->productCommo
 $lang->execution->selectExecution      = "Sélectionner {$lang->executionCommon}";
 $lang->execution->beginAndEnd          = 'Durée';
 $lang->execution->lblStats             = 'Efforts';
+$lang->execution->DurationStats        = 'Duration information';
 $lang->execution->stats                = 'Disponible: <strong>%s</strong>(h). Estimé: <strong>%s</strong>(h). Coût: <strong>%s</strong>(h). Reste: <strong>%s</strong>(h).';
 $lang->execution->taskSummary          = "Total des tâches de cette page :<strong>%s</strong>. A Faire: <strong>%s</strong>. En cours: <strong>%s</strong>. &nbsp;&nbsp;&nbsp; Estimé: <strong>%s</strong>(h). Coût: <strong>%s</strong>(h). Reste: <strong>%s</strong>(h).";
 $lang->execution->pageSummary          = "Total des tâches de cette page: <strong>%total%</strong>. A Faire: <strong>%wait%</strong>. En cours: <strong>%doing%</strong>. &nbsp;&nbsp;&nbsp; Estimé: <strong>%estimate%</strong>(h). Coût: <strong>%consumed%</strong>(h). Reste: <strong>%left%</strong>(h).";

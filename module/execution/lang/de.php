@@ -339,6 +339,7 @@ $lang->execution->batchCreateStoryTips = "Please select the {$lang->productCommo
 $lang->execution->selectExecution      = "Auswahl {$lang->executionCommon}";
 $lang->execution->beginAndEnd          = 'Dauer';
 $lang->execution->lblStats             = 'Mannstunden Summe(h) : ';
+$lang->execution->DurationStats        = 'Duration information';
 $lang->execution->stats                = '<strong>%s</strong> Verfügbar, <strong>%s</strong> geplant, <strong>%s</strong> genutzt, <strong>%s</strong> Rest.';
 $lang->execution->taskSummary          = "Aufgaben auf dieser Seite: <strong>%s</strong> Total, <strong>%s</strong> Wartend, <strong>%s</strong> In Arbeit;  &nbsp;&nbsp;&nbsp;  Stunden : <strong>%s</strong> geplant., <strong>%s</strong> genutzt, <strong>%s</strong> Rest.";
 $lang->execution->pageSummary          = "Aufgaben auf dieser Seite:  <strong>%total%</strong>, <strong>%wait%</strong> Wartend, <strong>%doing%</strong> In Arbeit;    Stunden: <strong>%estimate%</strong>  geplant, <strong>%consumed%</strong> genutzt, <strong>%left%</strong> Rest.";
