@@ -135,6 +135,7 @@ $lang->project->estimate           = 'Estimates';
 $lang->project->consume            = 'Cost';
 $lang->project->surplus            = 'Left';
 $lang->project->progress           = 'Progress';
+$lang->project->allProgress        = 'All Progress';
 $lang->project->weekProgress       = 'This Week Progress';
 $lang->project->dateRange          = 'Plan Duration';
 $lang->project->to                 = ' to ';

@@ -135,6 +135,7 @@ $lang->tutorialConfirm = 'Vous utilisez le didacticiel ZenTao. Voulez-vous quitt
 $lang->levelExceeded   = 'The level has exceeded the display range. For more information, please go to the web page or view it through search.';
 $lang->noticeOkFile    = 'For security reasons, your Admin account has to be confirmed. \n Please login ZenTao server and create %s File.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
+$lang->allProgress     = 'All Progress';
 
 $lang->serviceAgreement = "Service Agreement";
 $lang->privacyPolicy    = "Privacy Policy";

@@ -155,7 +155,7 @@ if(!empty($projectStats))
                         ),
                         span
                         (
-                            setClass("project-status label {$statusLabel}"),
+                            setClass("project-status label rounded-full {$statusLabel}"),
                             $lang->project->statusList[$status]
                         )
                     ),

@@ -1,7 +1,9 @@
-.linked-products > .items-center {justify-content: space-between;}
-#projectDashBoard .progress > .progress-bar {border-radius: 4px;}
-.project-info .table-data-body {display: flex; flex-wrap: wrap;}
-.project-info .table-data-body .table-data-tr {flex: 0 1 50%;}
-.project-info .table-data .table-data-th {min-width: 36px;}
-.project-statitic-hours .table-data .table-data-th {min-width: 60px; text-align: right;}
 .actions-menu {bottom: 12px;}
+
+.flex-col {flex-direction: column;}
+.chart > div {margin: auto;}
+.pie-chart {position: relative;}
+.pie-chart .pie-chart-title {position: absolute; top: 50%; left: 50%; margin-top: -20px; margin-left: -16px}
+.m-project-view #mainContent {display: flex; align-items: flex-start;}
+#dynamicBlock {height: 50vh; display: flex; flex-direction: column; box-shadow: none;}
+#dynamicBlock .panel-body {flex: 1 1 auto; overflow-y: auto;}

@@ -135,6 +135,7 @@ $lang->project->estimate           = '预计';
 $lang->project->consume            = '消耗';
 $lang->project->surplus            = '剩余';
 $lang->project->progress           = '进度';
+$lang->project->allProgress        = '总进度';
 $lang->project->weekProgress       = '本周进度';
 $lang->project->dateRange          = '计划起止日期';
 $lang->project->to                 = '至';
@@ -337,6 +338,10 @@ $lang->project->multipleList['0'] = '否';
 
 $lang->project->acls['private'] = '私有';
 $lang->project->acls['open']    = '公开';
+
+$lang->project->shortAclList['private'] = '私有';
+$lang->project->shortAclList['open']    = '公开';
+$lang->project->shortAclList['program'] = '项目集内公开';
 
 $lang->project->subAclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员和干系人可访问)";
 $lang->project->subAclList['open']    = "公开 (有{$lang->projectCommon}视图权限即可访问)";

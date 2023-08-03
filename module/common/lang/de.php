@@ -135,6 +135,7 @@ $lang->tutorialConfirm = 'Sie benutzen die Anleitung. Möchten Sie diese jetzt v
 $lang->levelExceeded   = 'The level has exceeded the display range. For more information, please go to the web page or view it through search.';
 $lang->noticeOkFile    = 'Aus Sicherheitsgrü nden muss Ihr Adminkonto bestätigt werden. \n Bitte melden Sie sich an und erstellen Sie die Datei %s File.\n Hinweis:\n 1. Die Datei ist leer.\n 2. Wenn die Datei bereits existiert, löschen Sie sie und erstellen Sie eine neue Datei.';
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
+$lang->allProgress     = 'All Progress';
 
 $lang->serviceAgreement = "Service Agreement";
 $lang->privacyPolicy    = "Privacy Policy";

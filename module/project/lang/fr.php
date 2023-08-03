@@ -160,6 +160,7 @@ $lang->project->leftHours          = 'Left Hours';
 $lang->project->children           = "Child {$lang->projectCommon}";
 $lang->project->parent             = 'Parent Program';
 $lang->project->allStories         = 'All Stories';
+$lang->project->allProgress        = 'All Progress';
 $lang->project->doneStories        = 'Finished Stories';
 $lang->project->doneProjects       = 'Finished';
 $lang->project->allInput           = 'Total Input';
