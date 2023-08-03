@@ -12,15 +12,14 @@ else
     $versionName = $lang->pmsName . $config->version;
 }
 
-jsVar('vision',        $config->vision);
-jsVar('navGroup',      $lang->navGroup);
-jsVar('oldPages',      $config->index->oldPages);
-jsVar('appsItems',     $appsItems);
-jsVar('defaultOpen',   (isset($open) and !empty($open)) ? $open : '');
-jsVar('manualText',    $lang->manual);
-jsVar('manualUrl',     ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
-jsVar('searchObjectList', array_keys($lang->searchObjects));
-jsVar('lang',          array_merge(array('search' => $lang->index->search, 'searchAB' => $lang->searchAB), (array)$lang->index->dock));
+jsVar('vision',      $config->vision);
+jsVar('navGroup',    $lang->navGroup);
+jsVar('oldPages',    $config->index->oldPages);
+jsVar('appsItems',   $appsItems);
+jsVar('defaultOpen', (isset($open) and !empty($open)) ? $open : '');
+jsVar('manualText',  $lang->manual);
+jsVar('manualUrl',   ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
+jsVar('lang',        array_merge(array('search' => $lang->index->search, 'searchAB' => $lang->searchAB), (array)$lang->index->dock));
 
 set::zui(true);
 set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');
@@ -77,19 +76,6 @@ div
     setID('apps'),
 );
 
-$canSearch = hasPriv('search', 'index');
-if($canSearch)
-{
-    $searchUrl = createLink('search', 'index') . ($config->requestType == 'GET' ? '&' : '?') . 'words=';
-    jsVar('window.globalSearchUrl', $searchUrl);
-    $searchItems = array();
-    foreach($lang->searchObjects as $key => $module)
-    {
-        if($key == 'all') continue;
-        $searchItems[] = array('key' => $key, 'text' => $module);
-    }
-}
-
 div
 (
     setID('appsBar'),
@@ -101,7 +87,7 @@ div
     toolbar
     (
         setID('appsToolbar'),
-        $canSearch ? globalSearch(set::searchItems($searchItems)) : null,
+        hasPriv('search', 'index') ? globalSearch() : null,
         item
         (
             set::class('ghost btn-zentao'),
