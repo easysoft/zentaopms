@@ -26,12 +26,12 @@ class rate_of_annual_delivered_story extends baseCalc
 
     public $fieldList = array('t1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate');
 
-    public function calculate($data)
+    public function calculate($row)
     {
-        $stage        = $data->stage;
-        $closedReason = $data->closedReason;
-        $releasedDate = $data->releasedDate;
-        $closedDate   = $data->closedDate;
+        $stage        = $row->stage;
+        $closedReason = $row->closedReason;
+        $releasedDate = $row->releasedDate;
+        $closedDate   = $row->closedDate;
 
         $date = null;
         if($closedReason == 'done') $date = $closedDate;
