@@ -10,18 +10,17 @@
  */
 ?>
 <div id="roleList" style="display: flex; flex-direction: column; gap:8px;">
-  <?php foreach($roleTemplates as $role)
-  { ?>
+  <?php foreach($roleTemplates as $role):?>
     <div class="role-template-card" data-id="<?php echo $role->id; ?>" style="border: 1px solid #D8DBDE; border-radius: 4px; padding: 12px; width: 100%;">
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
-        <p id="role" style="overflow: hidden; white-space: nowrap; text-overflow: clip;" title="<?php echo $role->role; ?>"><?php echo $role->role; ?></p>
+        <p id="role-<?php echo $role->id;?>" class="role" style="overflow: hidden; white-space: nowrap; text-overflow: clip;" title="<?php echo $role->role; ?>"><?php echo $role->role; ?></p>
         <div style="display: flex; gap: 2px;">
           <?php echo html::commonButton("<span class='text-primary'>{$lang->app->common}</span>", "data-action='apply'", 'btn btn-link'); ?>
           <?php echo html::commonButton("<i class='icon icon-edit icon-sm text-primary'></i>", "data-action='edit'", 'btn btn-link'); ?>
           <?php echo html::commonButton("<i class='icon icon-trash icon-sm text-primary'></i>", "data-action='del'", 'btn btn-link'); ?>
         </div>
       </div>
-      <p id="characterization" class="text-gray" style="overflow: hidden; white-space: nowrap; text-overflow: clip;" title="<?php echo $role->characterization;?>"><?php echo $role->characterization; ?></p>
+      <p id="characterization-<?php echo $role->id;?>" class="characterization text-gray" style="overflow: hidden; white-space: nowrap; text-overflow: clip; padding: 4px 0;" title="<?php echo $role->characterization;?>"><?php echo $role->characterization; ?></p>
     </div>
-  <?php } ?>
+  <?php endforeach;?>
 </div>
