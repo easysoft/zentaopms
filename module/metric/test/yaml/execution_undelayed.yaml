@@ -21,4 +21,8 @@ fields:
   range: "20110101 000000-20210101 000000:10D"
   type: timestamp
   format: YYYY-MM-DD
+- field: firstEnd
+  range: "20210101 000000-20131101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
 ...

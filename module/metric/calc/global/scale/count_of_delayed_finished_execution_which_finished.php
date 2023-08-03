@@ -30,9 +30,9 @@ class count_of_delayed_finished_execution_which_finished extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->closedDate) or empty($row->firstEnd)) return false;
+        if(empty($row->closedDate) || empty($row->firstEnd)) return false;
 
-        if($row->status == 'closed' and $row->closedDate <= $row->firstEnd) $this->result ++;
+        if($row->status == 'closed' and $row->closedDate > $row->firstEnd) $this->result ++;
     }
 
     public function getResult($options = array())
