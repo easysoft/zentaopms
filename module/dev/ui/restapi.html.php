@@ -21,8 +21,6 @@ foreach($lang->dev->featureBar['api'] as $key => $label)
     );
 }
 
-jsVar('confirmDelete', $lang->api->confirmDelete);
-
 $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
 {
     global $lang;

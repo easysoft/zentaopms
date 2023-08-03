@@ -58,7 +58,7 @@ class tree extends wg
                 }
             }
 
-            if(isset($item['children']))
+            if(!empty($item['children']))
             {
                 $item['items'] = $this->buildTree($item['children']);
                 unset($item['children']);

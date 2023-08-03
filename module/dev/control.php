@@ -134,7 +134,7 @@ class dev extends control
         if($this->server->request_method == 'POST')
         {
             $this->dev->saveCustomedLang($type, $moduleName, $method, $language);
-            return $this->send(array('result' => 'success', 'locate' => 'top', 'message' => $this->lang->saveSuccess));
+            return $this->send(array('result' => 'success', 'load' => true, 'message' => $this->lang->saveSuccess));
         }
 
         if($clientLang != $language)
@@ -172,16 +172,13 @@ class dev extends control
      * @param  string $module
      * @param  string $method
      * @param  string $language   zh_cn|en|fr|de|zh_tw
-     * @param  string $confirm    no|yes
      * @access public
      * @return void
      */
-    public function resetLang($type = 'common', $module = '', $method = '', $language = 'zh_cn', $confirm = 'no')
+    public function resetLang($type = 'common', $module = '', $method = '', $language = 'zh_cn')
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->dev->confirmRestore, inlink('resetLang', "type={$type}&module={$module}&method={$method}&language={$language}&confirm=yes")));
-
-        $language = str_replace('_', '-', $language);
         $section  = '';
+        $language = str_replace('_', '-', $language);
         if($type == 'common') $section = '&section=';
         if($type == 'first')  $section = '&section=mainNav';
         if($type == 'tag')
@@ -208,6 +205,6 @@ class dev extends control
             }
         }
 
-        return print(js::reload('parent.parent'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 }
