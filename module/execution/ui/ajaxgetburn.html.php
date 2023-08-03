@@ -13,10 +13,10 @@ namespace zin;
 jsVar('workHour', $lang->execution->workHour);
 div
 (
-    setClass('px-4 py-3'),
+    setClass('pl-4 pr-2 py-3'),
     div
     (
-        set::class('flex flex-nowrap justify-between'),
+        set::class('flex flex-nowrap justify-between mb-2'),
         div
         (
             set('class', 'panel-title'),
