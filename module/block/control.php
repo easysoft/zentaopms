@@ -1461,6 +1461,7 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $count, 1);
         $this->loadModel('execution');
+        $this->loadModel('program')->refreshStats();
         $this->view->executionStats = !defined('TUTORIAL') ? $this->execution->getStatData($this->session->project, $type, 0, 0, false, '', 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
     }
 
