@@ -18,18 +18,13 @@ div
     div
     (
         set::id('mainContent'),
-        set::class('bg-white p-4'),
-        set::style(array('margin' => '50px auto 0', 'width' => '800px')),
-        div
+        formPanel
         (
-            set::class('article-h1 mb-4'),
-            $lang->upgrade->confirm
-        ),
-        form
-        (
-            set::url(inlink('execute')),
+            set::width('800px'),
             set::target('_self'),
+            set::url(inlink('execute')),
             on::submit('submit.disabled=1'),
+            set::title($lang->upgrade->confirm),
             div
             (
                 set::class('border p-4 mb-4'),
@@ -45,14 +40,8 @@ div
                 set::name('fromVersion'),
                 set::value($fromVersion),
             ),
-            set::actions(array('submit')),
+            set::actions(array('submit', 'upgradingTips' => array('text' => $lang->upgrade->upgradingTips, 'class' => 'text-danger ghost hidden', 'id' => 'upgradingTips'))),
             set::submitBtnText($lang->upgrade->sureExecute),
-            div
-            (
-                set::id('upgradeingTips'),
-                set::class('text-danger hidden mt-2'),
-                $lang->upgrade->upgradingTips
-            )
         )
     )
 );
