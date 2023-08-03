@@ -378,9 +378,10 @@
                         }
                         else if('confirm' in data.load)
                         {
-                            const confirmed = confirm(data.load.confirm);
-                            if(confirmed) loadPage(data.load.confirmed);
-                            else          loadPage(data.load.canceled);
+                            zui.Modal.confirm({message: data.load.confirm, onResult: function(result)
+                            {
+                                loadPage(result ? data.load.confirmed : data.load.canceled);
+                            }});
                         }
                         else
                         {
