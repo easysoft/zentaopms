@@ -221,7 +221,7 @@ div
         (
             common::hasPriv('execution', $isKanban ? 'cfd' : 'burn') ? btn
             (
-                setClass('ghost text-gray'),
+                setClass('ghost text-gray font-normal'),
                 set::url(createLink('execution', cfd, "executionID={$execution->id}")),
                 $lang->more
             ) : null
@@ -268,9 +268,12 @@ if($execution->projectInfo->hasProduct || $features['plan'])
                 {
                     if(!isset($planGroups[$productID][$planID])) continue;
 
+                    $class = '';
+                    if(count($plans) > 2)      $class .= ' mt-2';
+                    if(count($plans) % 3 != 0) $class .= ' pl-4';
                     $plans[] = div
                     (
-                        setClass('flex-none w-1/3 pl-4 clip' . (count($plans) > 2 ? ' mt-2' : '')),
+                        setClass("flex-none w-1/3 clip {$class}"),
                         icon('calendar mr-2'),
                         a
                         (
@@ -351,7 +354,7 @@ foreach($teamMembers as $teamMember)
         span
         (
             setClass('text-gray'),
-            $lang->execution->team
+            $lang->execution->member
         ),
     );
     $memberCount ++;
@@ -359,9 +362,10 @@ foreach($teamMembers as $teamMember)
 
 if(common::hasPriv('execution', 'manageMembers'))
 {
-    $membersDom[] = div
+    $membersDom[] = a
     (
-        setClass('w-1/8 center-y cursor-pointer'),
+        set::href(createLink('execution', 'manageMembers', "executionID={$execution->id}")),
+        setClass('w-1/8 center-y'),
         avatar
         (
             setClass('mb-2'),
@@ -382,16 +386,16 @@ if(common::hasPriv('execution', 'doc'))
         if($docLibCount > 4) break;
 
         $docLibDom[] = div
+        (
+            setClass('flex-none w-1/5 py-1 clip'),
+            icon('wiki-lib mr-2'),
+            a
             (
-                setClass('flex-none w-1/5 py-1'),
-                icon('wiki-lib mr-2'),
-                a
-                (
-                    $docLib->name,
-                    set('data-app', $app->tab),
-                    set::href($libID == 'files' ? $this->createLink('doc', 'showFiles', "type=execution&objectID={$execution->id}") : $this->createLink('execution', 'doc', "objectID={$execution->id}&libID={$libID}")),
-                )
-            );
+                $docLib->name,
+                set('data-app', $app->tab),
+                set::href($libID == 'files' ? $this->createLink('doc', 'showFiles', "type=execution&objectID={$execution->id}") : $this->createLink('execution', 'doc', "objectID={$execution->id}&libID={$libID}")),
+            )
+        );
 
         $docLibCount ++;
     }
@@ -416,7 +420,7 @@ if($canBeChanged && common::hasPriv('doc', 'createLib'))
 
 div
 (
-    setClass('my-4 flex w-full'),
+    setClass('my-4 flex w-full items-start'),
     ($execution->projectInfo->hasProduct || $features['plan']) ? div
     (
         setClass('w-2/3 canvas p-4 flex-auto'),
@@ -444,7 +448,7 @@ div
                                 ),
                                 common::hasPriv('execution', 'manageproducts') && $execution->type != 'stage' && $project->model != 'waterfallplus' ? btn
                                 (
-                                    setClass('ghost text-gray'),
+                                    setClass('ghost text-gray font-normal'),
                                     set::icon('link text-primary'),
                                     set::url(createLink('execution', 'manageproducts', "projectID={$execution->id}")),
                                     $lang->more
@@ -478,10 +482,10 @@ div
                             div
                             (
                                 setClass('flex items-center justify-between'),
-                                span($lang->execution->relatedMember),
+                                span($lang->execution->team),
                                 hasPriv('execution', 'team') ? btn
                                 (
-                                    setClass('ghost text-gray'),
+                                    setClass('ghost text-gray font-normal'),
                                     set::trailingIcon('caret-right pb-0.5'),
                                     set::url(createLink('execution', 'team', "executionID={$execution->id}")),
                                     $lang->more
@@ -626,7 +630,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->totalEstimate,
+                                        $lang->execution->estimateHours,
                                     ),
                                     span
                                     (
@@ -640,7 +644,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->totalConsumed,
+                                        $lang->execution->consumedHours,
                                     ),
                                     span
                                     (
@@ -654,7 +658,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->totalLeft,
+                                        $lang->execution->leftHours,
                                     ),
                                     span
                                     (
@@ -712,7 +716,7 @@ div
                                 span($lang->execution->doclib),
                                 hasPriv('execution', 'doc') ? btn
                                 (
-                                    setClass('ghost text-gray'),
+                                    setClass('ghost text-gray font-normal'),
                                     set::trailingIcon('caret-right pb-0.5'),
                                     set::url(createLink('execution', 'doc', "executionID={$execution->id}")),
                                     $lang->more
@@ -743,7 +747,7 @@ div
         setClass('ml-4 w-1/3 flex-none'),
         div
         (
-            setClass('overflow-y-auto canvas'),
+            setClass('h-2/3 overflow-y-auto canvas'),
             panel
             (
                 to::heading
@@ -758,7 +762,7 @@ div
                 (
                     common::hasPriv('execution', 'dynamic') ? btn
                     (
-                        setClass('ghost text-gray'),
+                        setClass('ghost text-gray font-normal'),
                         set::url(createLink('execution', 'dynamic', "executionID={$execution->id}&type=all")),
                         $lang->more
                     ) : null
@@ -769,7 +773,7 @@ div
         ),
         div
         (
-            setClass('mt-4 overflow-y-auto canvas'),
+            setClass('mt-4 h-1/3 overflow-y-auto canvas'),
             history()
         ),
     ),
