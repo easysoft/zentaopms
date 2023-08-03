@@ -11,7 +11,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<?php include '../../ai/view/inputinject.html.php';?>
 <?php js::set('page', 'create');?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>
@@ -426,4 +425,5 @@ setTimeout(() => {
 }, 600);
 
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php include '../../ai/view/inputinject.html.php';?>
 <?php js::set('taskConsumed', $taskConsumed);?>
 <?php js::set('addChildTask', $lang->task->addChildTask);?>
 <?php js::set('isonlybody', isonlybody())?>
@@ -345,4 +344,5 @@ $(function()
 </script>
 <?php endif;?>
 <?php include '../../common/view/pastetext.html.php';?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

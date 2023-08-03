@@ -14,7 +14,6 @@
 include '../../common/view/header.html.php';
 include '../../common/view/datepicker.html.php';
 include '../../common/view/kindeditor.html.php';
-include '../../ai/view/inputinject.html.php';
 js::set('page'                   , 'edit');
 js::set('changeProductConfirmed' , false);
 js::set('changeExecutionConfirmed' , false);
@@ -329,4 +328,5 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
     </div>
   </form>
 </div>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php include '../../ai/view/inputinject.html.php';?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('today', helper::today());?>
@@ -90,4 +89,5 @@
     </form>
   </div>
 </div>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

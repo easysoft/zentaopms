@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../ai/view/inputinject.html.php';?>
 
 <?php if($viewType != 'story'):?>
 <style>
@@ -371,3 +370,4 @@ else
     include '../../common/view/footer.html.php';
 }
 ?>
+<?php include '../../ai/view/inputinject.html.php';?>

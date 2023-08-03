@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
-<?php include '../../ai/view/inputinject.html.php';?>
 <?php js::set('browseType', $type);?>
 <style>.icon-help{margin-left: 3px;}</style>
 <div id='mainMenu' class='clearfix'>
@@ -284,4 +283,5 @@ var options = {
 }
 $('#planForm tbody.sortable').sortable(options);
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

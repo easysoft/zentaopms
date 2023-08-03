@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../ai/view/inputinject.html.php';?>
 <?php if($doc->contentType == 'html')     include '../../common/view/kindeditor.html.php';?>
 <?php if($doc->contentType == 'markdown') include '../../common/view/markdown.html.php';?>
 <style>
@@ -150,4 +149,5 @@ $(function()
 <?php js::set('draft', $doc->draft);?>
 <?php js::set('type', 'doc');?>
 <?php js::set('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

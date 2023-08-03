@@ -197,12 +197,50 @@ $config->ai->menuPrint->locations['doc']['view'] = (object)array(
 
 $config->ai->injectAuditButton = new stdclass();
 $config->ai->injectAuditButton->locations = array();
-$config->ai->injectAuditButton->locations['task']['edit']['toolbar'] = (object)array(
-    'targetContainer' => '#mainContent .main-header',
-    'injectMethod'    => 'append',
-    'class'           => 'pull-right btn-toolbar',
+$config->ai->injectAuditButton->locations['task']['edit'] = array(
+    'toolbar' => (object)array(
+        'targetContainer' => '#mainContent .main-header',
+        'injectMethod'    => 'append',
+        'class'           => 'pull-right btn-toolbar',
+    ),
+    'action' => (object)array(
+        'targetContainer' => '#mainContent .form-actions',
+        'injectMethod'    => 'html',
+    )
 );
-$config->ai->injectAuditButton->locations['task']['edit']['action'] = (object)array(
-    'targetContainer' => '#mainContent .form-actions',
-    'injectMethod'    => 'html',
+
+$config->ai->injectAuditButton->locations['bug']['create'] = array(
+    'toolbar' => (object)array(
+        'targetContainer' => '#mainContent .main-header .btn-toolbar',
+        'injectMethod'    => 'prepend',
+    ),
+    'action' => (object)array(
+        'targetContainer' => '#mainContent .form-actions',
+        'injectMethod'    => 'html',
+    )
 );
+
+$config->ai->injectAuditButton->locations['doc']['edit'] = array(
+    'toolbar' => (object)array(
+        'targetContainer' => '#mainContent #headerBox .btn-tools',
+        'injectMethod'    => 'prepend',
+    ),
+    'action' => (object)array(
+        'targetContainer' => '#mainContent #headerBox .btn-tools',
+        'injectMethod'    => 'html',
+    )
+);
+
+$config->ai->injectAuditButton->locations['productplan']['create'] = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['productplan']['edit']   = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['programplan']['create'] = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['bug']['edit']           = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['story']['change']       = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['testcase']['edit']      = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['testreport']['create']  = $config->ai->injectAuditButton->locations['task']['edit'];
+
+$config->ai->injectAuditButton->locations['story']['batchcreate'] = $config->ai->injectAuditButton->locations['bug']['create'];
+$config->ai->injectAuditButton->locations['story']['create']      = $config->ai->injectAuditButton->locations['bug']['create'];
+$config->ai->injectAuditButton->locations['task']['batchcreate']  = $config->ai->injectAuditButton->locations['bug']['create'];
+$config->ai->injectAuditButton->locations['task']['create']       = $config->ai->injectAuditButton->locations['bug']['create'];
+$config->ai->injectAuditButton->locations['testcase']['create']   = $config->ai->injectAuditButton->locations['bug']['create'];

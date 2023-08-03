@@ -11,7 +11,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<?php include '../../ai/view/inputinject.html.php';?>
 <?php js::set('lastReviewer', explode(',', $lastReviewer))?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -115,4 +114,5 @@
 <?php js::set('storyType', $story->type);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php js::set('page', $this->app->rawMethod);?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

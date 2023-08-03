@@ -14,7 +14,6 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/chart.html.php';?>
-<?php include '../../ai/view/inputinject.html.php';?>
 <?php js::set('objectType', $objectType);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -148,4 +147,5 @@ objectType = $("#objectType").val();
 extra      = '<?php echo $extra;?>';
 method     = 'create';
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
