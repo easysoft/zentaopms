@@ -265,7 +265,7 @@ class mailModel extends model
     /**
      * Send email
      *
-     * @param  array   $toList
+     * @param  string  $toList
      * @param  string  $subject
      * @param  string  $body
      * @param  array   $ccList
@@ -366,7 +366,7 @@ class mailModel extends model
     /**
      * Set to address
      *
-     * @param  array    $toList
+     * @param  string   $toList
      * @param  array    $emails
      * @access public
      * @return void
@@ -385,7 +385,7 @@ class mailModel extends model
     /**
      * Set cc.
      *
-     * @param  array    $ccList
+     * @param  string   $ccList
      * @param  array    $emails
      * @access public
      * @return void
@@ -489,7 +489,7 @@ class mailModel extends model
      * Get errors.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getError()
     {
