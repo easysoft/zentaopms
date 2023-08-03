@@ -104,6 +104,8 @@ formPanel
     setClass('storePanel' . ($appID ? '' : ' hidden')),
     set::id('createStoreAppForm'),
     set::title($lang->space->install),
+    $appID ? set::submitBtnText($lang->instance->install) : null,
+    $appID ? set::actions(array('submit', array('text' => $lang->instance->stop, 'data-type' => 'submit', 'data-dismiss' => 'modal'))) : null,
     formRow
     (
         setStyle('display', $appID ? 'block' : 'none'),
@@ -113,7 +115,7 @@ formPanel
             set::label($lang->instance->name),
             set::name('customName'),
             set::control('input'),
-            set::value($apps[$appID]),
+            set::value($appID ? $apps[$appID] : ''),
             set::required(true),
         )
     ),
@@ -138,8 +140,8 @@ formPanel
         formGroup
         (
             set::label($lang->space->addType),
-            set::name('storetype'),
-            set::value($addType),
+            set::name('type'),
+            set::value('store'),
             set::disabled(!!$appID),
             set::control('radioListInline'),
             set::items(array(array('text' => $lang->store->common, 'value' => 'store'), array('text' => $lang->space->handConfig, 'value' => 'external'))),
@@ -224,4 +226,3 @@ formPanel
 );
 
 render();
-

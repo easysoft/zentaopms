@@ -16,6 +16,8 @@ formPanel
 (
     set::id('gitlabCreateForm'),
     set::title($lang->gitlab->edit),
+    set::submitBtnText($lang->save),
+    set::actions(array('submit', array('text' => $lang->cancel, 'data-type' => 'submit', 'data-dismiss' => 'modal'))),
     formRow
     (
         formGroup

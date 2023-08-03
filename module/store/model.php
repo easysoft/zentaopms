@@ -142,7 +142,7 @@ class storeModel extends model
         $apiUrl  = $this->config->cloud->api->host;
         $apiUrl .= '/api/market/app/version';
         $result  = commonModel::apiGet($apiUrl, $apiParams, $this->config->cloud->api->headers);
-        if(!isset($result->code) || $result->code != 200) return null;
+        if(!isset($result->code) || $result->code != 200) return array();
 
         return array_combine(array_column($result->data, 'version'), $result->data);
     }
