@@ -94,7 +94,7 @@ class search extends control
             if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
         }
 
-        echo js::locate($actionURL);
+        return print(json_encode(array('load' => $actionURL)));
     }
 
     /**
@@ -138,8 +138,8 @@ class search extends control
     public function deleteQuery($queryID)
     {
         $this->search->deleteQuery($queryID);
-        if(dao::isError()) return print(js::error(dao::getError()));
-        echo 'success';
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**

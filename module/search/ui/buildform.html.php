@@ -11,8 +11,7 @@ $opts->formSession     = $formSession;
 $opts->module          = $module;
 $opts->actionURL       = $actionURL;
 $opts->groupItems      = $groupItems;
-$opts->onApplyQuery    = jsRaw('window.onApplyQuery');
-$opts->onDeleteQuery   = jsRaw('window.onDeleteQuery');
+$opts->onSubmit        = jsRaw('window.onSubmit');
 
 if(empty($opts->savedQuery)) unset($opts->savedQuery);
 

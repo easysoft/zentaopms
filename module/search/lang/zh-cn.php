@@ -79,6 +79,7 @@ $lang->search->buildSuccessfully = '初始化搜索索引成功';
 $lang->search->executeInfo       = '为您找到相关结果%s个，耗时%s秒';
 $lang->search->buildResult       = "创建 %s 索引, 已创建  <strong class='%scount'>%s</strong> 条记录；";
 $lang->search->queryTips         = "多个id可用英文逗号分隔";
+$lang->search->confirmDelete     = '是否确认删除该记录';
 
 $lang->search->modules['all']         = '全部';
 $lang->search->modules['task']        = '任务';

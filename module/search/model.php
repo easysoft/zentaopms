@@ -1677,6 +1677,7 @@ class searchModel extends model
         $result = array();
         if(empty($queries)) return $result;
 
+        global $lang;
         $hasPriv = common::hasPriv('search', 'deleteQuery');
         foreach($queries as $query)
         {
@@ -1685,7 +1686,7 @@ class searchModel extends model
             $item = new stdClass();
             $item->text     = $query->title;
             $item->applyURL = str_replace('myQueryID', $query->id, $actionURL);
-            if($hasPriv) $item->deleteURL = helper::createLink('search', 'deleteQuery', "queryID={$query->id}");
+            if($hasPriv) $item->deleteProps = array('className' => 'ajax-submit', 'data-confirm' => $lang->search->confirmDelete, 'href' => helper::createLink('search', 'deleteQuery', "queryID={$query->id}"));
 
             $result[] = $item;
         }
