@@ -293,16 +293,17 @@ div
                 span
                 (
                     setClass('article-h2 ml-2 clip'),
+                    set::title($project->name),
                     $project->name
                 ),
                 !empty($config->setCode) ? label
                 (
-                    setClass('label lighter-pale ml-2'),
+                    setClass('label lighter-pale ml-2 flex-none'),
                     $project->code
                 ) : null,
                 label
                 (
-                    setClass('label warning-pale ring-warning rounded-full ml-2'),
+                    setClass('label warning-pale ring-warning rounded-full ml-2 flex-none'),
                     $lang->project->projectTypeList[$project->hasProduct]
                 ),
                 $project->deleted ? label
@@ -321,7 +322,7 @@ div
                 ),
                 span
                 (
-                    setClass('ml-2 text-gray'),
+                    setClass('ml-2 text-gray flex-none'),
                     $lang->project->shortAclList[$project->acl],
                     icon
                     (
@@ -340,7 +341,7 @@ div
                 setClass('flex mt-4'),
                 div
                 (
-                    setClass('clip w-1/2 text-secondary'),
+                    setClass('clip text-secondary'),
                     $programDom
                 ),
             ),
