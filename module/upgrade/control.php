@@ -724,7 +724,7 @@ class upgrade extends control
                 $this->dao->update(TABLE_PROJECT)->set('name')->eq($projectName)->where('id')->eq($projectID)->exec();
             }
 
-            return print(js::reload('parent.parent', ''));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $objectGroup = array();
@@ -732,7 +732,8 @@ class upgrade extends control
         {
             $objectGroup = $this->dao->select('id,name')->from(TABLE_PROJECT)
                 ->where('id')->in($duplicateList)
-                ->fetchGroup('name');
+                ->orderBy('name')
+                ->fetchAll();
         }
 
         $this->view->type        = $type;
