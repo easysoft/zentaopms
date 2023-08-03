@@ -47,194 +47,205 @@ $status = $this->processStatus('project', $project);
 
 div
 (
-    setClass('flex-auto canvas flex p-4 w-2/3'),
+    setClass('main'),
     div
     (
-        setClass('text-center w-1/3 flex flex-col justify-center items-center'),
+        setClass('flex-auto canvas flex p-4'),
         div
         (
-            set('class', 'chart pie-chart'),
-            echarts
+            setClass('text-center w-1/3 flex flex-col justify-center items-center'),
+            div
             (
-                set::color(array('#2B80FF', '#E3E4E9')),
-                set::series
+                set('class', 'chart pie-chart'),
+                echarts
                 (
-                    array
+                    set::color(array('#2B80FF', '#E3E4E9')),
+                    set::series
                     (
                         array
                         (
-                            'type'      => 'pie',
-                            'radius'    => array('80%', '90%'),
-                            'itemStyle' => array('borderRadius' => '40'),
-                            'label'     => array('show' => false),
-                            'data'      => array($progress, 100 - $progress)
+                            array
+                            (
+                                'type'      => 'pie',
+                                'radius'    => array('80%', '90%'),
+                                'itemStyle' => array('borderRadius' => '40'),
+                                'label'     => array('show' => false),
+                                'data'      => array($progress, 100 - $progress)
+                            )
                         )
                     )
-                )
-            )->size(120, 120),
-            div
-            (
-                set::class('pie-chart-title text-center'),
-                div(span(set::class('text-2xl font-bold'), $progress . '%')),
+                )->size(120, 120),
                 div
                 (
-                    span
+                    set::class('pie-chart-title text-center'),
+                    div(span(set::class('text-2xl font-bold'), $progress . '%')),
+                    div
                     (
-                        setClass('text-sm text-gray'),
-                        $lang->allProgress,
-                        icon
+                        span
                         (
-                            'help ml-1',
-                            toggle::tooltip(array('title' => '')),
-                            setClass('text-light')
+                            setClass('text-sm text-gray'),
+                            $lang->allProgress,
+                            icon
+                            (
+                                'help ml-1',
+                                toggle::tooltip(array('title' => '')),
+                                setClass('text-light')
+                            )
                         )
                     )
                 )
+            ),
+            div
+            (
+                setClass('border w-3/4 flex justify-center items-center pl-4 py-2'),
+                div
+                (
+                    setClass('w-1/3'),
+                    div
+                    (
+                        setClass('article-h1'),
+                        $statData->storyCount
+                    ),
+                    span
+                    (
+                        setClass('text-gray'),
+                        $lang->story->common
+                    )
+                ),
+                div
+                (
+                    setClass('w-1/3'),
+                    div
+                    (
+                        setClass('article-h1'),
+                        $statData->taskCount
+                    ),
+                    span
+                    (
+                        setClass('text-gray'),
+                        $lang->task->common
+                    )
+                ),
+                div
+                (
+                    setClass('w-1/3'),
+                    div
+                    (
+                        setClass('article-h1'),
+                        $statData->bugCount
+                    ),
+                    span
+                    (
+                        setClass('text-gray'),
+                        $lang->bug->common
+                    )
+                ),
             )
         ),
         div
         (
-            setClass('border w-3/4 flex justify-center items-center pl-4 py-2'),
+            setClass('flex-none w-2/3'),
             div
             (
-                setClass('w-1/3'),
-                div
+                setClass('flex items-center'),
+                label
                 (
-                    setClass('article-h1'),
-                    $statData->storyCount
+                    setClass('rounded-full'),
+                    $project->id
                 ),
                 span
                 (
-                    setClass('text-gray'),
-                    $lang->story->common
+                    setClass('article-h2 ml-2 clip'),
+                    $project->name
+                ),
+                !empty($config->setCode) ? label
+                (
+                    setClass('label lighter-pale ml-2'),
+                    $project->code
+                ) : null,
+                label
+                (
+                    setClass('label warning-pale ring-warning rounded-full ml-2'),
+                    $lang->project->projectTypeList[$project->hasProduct]
+                ),
+                $project->deleted ? label
+                (
+                    setClass('danger-outline text-danger flex-none ml-2'),
+                    $lang->project->deleted
+                ) : null,
+                isset($project->delay) ? label
+                (
+                    setClass("label ml-2 flex-none {$config->project->statusLabelList['delay']}"),
+                    $lang->project->delayed
+                ) : label
+                (
+                    setClass("ml-2 flex-none {$config->project->statusLabelList[$project->status]}"),
+                    $status
+                ),
+                span
+                (
+                    setClass('ml-2 text-gray'),
+                    $lang->project->shortAclList[$project->acl],
+                    icon
+                    (
+                        'help',
+                        set('data-toggle', 'tooltip'),
+                        set('data-title', $lang->project->subAclList[$project->acl]),
+                        set('data-placement', 'right'),
+                        set('data-type', 'white'),
+                        set('data-class-name', 'text-gray border border-light'),
+                        setClass('ml-2 text-gray'),
+                    )
                 )
             ),
             div
             (
-                setClass('w-1/3'),
+                setClass('flex mt-4'),
                 div
                 (
-                    setClass('article-h1'),
-                    $statData->taskCount
+                    setClass('clip w-1/2 text-secondary'),
+                    $programDom
                 ),
-                span
-                (
-                    setClass('text-gray'),
-                    $lang->task->common
-                )
             ),
             div
             (
-                setClass('w-1/3'),
-                div
-                (
-                    setClass('article-h1'),
-                    $statData->bugCount
-                ),
-                span
-                (
-                    setClass('text-gray'),
-                    $lang->bug->common
-                )
+                set::class('detail-content mt-4'),
+                html($project->desc),
             ),
-        )
+        ),
     ),
     div
     (
-        setClass('flex-none w-2/3'),
-        div
-        (
-            setClass('flex items-center'),
-            label
-            (
-                setClass('rounded-full'),
-                $project->id
-            ),
-            span
-            (
-                setClass('article-h2 ml-2 clip'),
-                $project->name
-            ),
-            !empty($config->setCode) ? label
-            (
-                setClass('label lighter-pale ml-2'),
-                $project->code
-            ) : null,
-            label
-            (
-                setClass('label warning-pale ring-warning rounded-full ml-2'),
-                $lang->project->projectTypeList[$project->hasProduct]
-            ),
-            $project->deleted ? label
-            (
-                setClass('danger-outline text-danger flex-none ml-2'),
-                $lang->project->deleted
-            ) : null,
-            isset($project->delay) ? label
-            (
-                setClass("label ml-2 flex-none {$config->project->statusLabelList['delay']}"),
-                $lang->project->delayed
-            ) : label
-            (
-                setClass("ml-2 flex-none {$config->project->statusLabelList[$project->status]}"),
-                $status
-            ),
-            span
-            (
-                setClass('ml-2 text-gray'),
-                $lang->project->shortAclList[$project->acl],
-                icon
-                (
-                    'help',
-                    set('data-toggle', 'tooltip'),
-                    set('data-title', $lang->project->subAclList[$project->acl]),
-                    set('data-placement', 'right'),
-                    set('data-type', 'white'),
-                    set('data-class-name', 'text-gray border border-light'),
-                    setClass('ml-2 text-gray'),
-                )
-            )
-        ),
-        div
-        (
-            setClass('flex mt-4'),
-            div
-            (
-                setClass('clip w-1/2 text-secondary'),
-                $programDom
-            ),
-        ),
-        div
-        (
-            set::class('detail-content mt-4'),
-            html($project->desc),
-        ),
-    ),
+        setClass('flex-auto canvas flex p-4 mt-4'),
+    )
 );
 
-panel
+div
 (
-    setClass('canvas w-1/3 ml-4'),
-    setID('dynamicBlock'),
-    to::heading
+    setClass('side ml-4'),
+    panel
     (
-        div
+        setID('dynamicBlock'),
+        to::heading
         (
-            set('class', 'panel-title'),
-            $lang->execution->latestDynamic,
-        )
-    ),
-    to::headingActions
-    (
-        common::hasPriv('project', 'dynamic') ? btn
+            div
+            (
+                set('class', 'panel-title'),
+                $lang->execution->latestDynamic,
+            )
+        ),
+        to::headingActions
         (
-            setClass('ghost text-gray'),
-            set::url(createLink('project', 'dynamic', "projectID={$projectID}&type=all")),
-            $lang->more
-        ) : null
-    ),
-    set::bodyClass('pt-0'),
-    dynamic()
+            common::hasPriv('project', 'dynamic') ? btn
+            (
+                setClass('ghost text-gray'),
+                set::url(createLink('project', 'dynamic', "projectID={$projectID}&type=all")),
+                $lang->more
+            ) : null
+        ),
+        set::bodyClass('pt-0'),
+        dynamic()
+    )
 );
 
 /* Construct suitable actions for the current project. */
