@@ -424,7 +424,7 @@ class group extends control
         if(!empty($_POST))
         {
             $this->group->updateProjectAdmin($groupID);
-            return print($this->sendSuccess(array('load' => true)));
+            return $this->sendSuccess(array('load' => true));
         }
 
         list($programs, $projects, $products, $executions) = $this->group->getObject4AdminGroup();

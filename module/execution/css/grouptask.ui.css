@@ -1,9 +1,8 @@
-.table-group-btns {width: 200px;}
 .group-menu {padding: 1px 5px !important;}
 .group-menu .btn {font-size: 14px; color: #3C4353;}
-.fixed-header-copy .group-menu .btn {background-color: transparent; color: #fff;}
-.fixed-header-copy .group-menu .btn .icon {background: transparent !important; color: #fff; opacity: .5;}
 .icon-caret-right.text-muted {color: #CBD0DB;}
+.table-row {display: table; width: 100%}
+.table-col {display: table-cell}
 .segments-list {max-width: 700px; margin: 10px;}
 .segments-list .table-col {vertical-align: middle;}
 .segments-list .segments {width: 150px; margin: 0 auto;}
@@ -14,19 +13,30 @@
 .segment-value {font-weight: bold;}
 
 .table {background: #fff}
+.table thead{background: #fff}
 .table .divider {border-bottom: 10px solid #efefef;}
 .table .c-side {border-right: 10px solid #efefef !important;}
 .table .divider-top {border-top: 10px solid #efefef;}
 
+.table .c-id{width: 60px}
+.table .c-pri{width: 70px}
 .table .c-user{width: 100px}
+.table .c-actions{width: 100px}
 .table .c-progress {width: 60px;}
-.table th{text-align: center}
+.table .c-type{width: 60px;}
+.table .c-date{width: 100px;}
+.table .c-hours{width: 60px;}
+.table .c-status{width: 100px;}
 .table .text-center {text-align: center}
 .table .text-right {text-align: right}
+.table th{text-align: center}
 
 .group-menu > .dropdown > .dropdown-menu {right: 0; width: 100%;}
-
+.summaryBtn, .groupBtn {color: #2e7fff;}
+.text-red {color: #ff0000;}
 .c-side {padding: 0 !important; position: relative; min-height: 100px; width: 200px}
+.group-header { padding: 8px; position: relative; }
+.small { font-size: 85%; }
 .group-header > a {line-height: 20px; display: block; max-height: 40px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;}
 .group-header > .groupSummary {margin-top: 10px; line-height: 24px;}
 .main-table > .table {box-shadow: none;}

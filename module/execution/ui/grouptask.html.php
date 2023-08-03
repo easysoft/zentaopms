@@ -223,7 +223,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users)
                 h::td
                 (
                     setClass('text-center'),
-                    \zget($users, $task->finishedBy)
+                    zget($users, $task->finishedBy)
                 ),
                 h::td
                 (
@@ -248,13 +248,13 @@ $tbody = function() use($tasks, $lang, $groupBy, $users)
                 h::td
                 (
                     setClass('text-center'),
-                    \zget($lang->task->typeList, $task->type)
+                    zget($lang->task->typeList, $task->type)
                 ),
                 h::td
                 (
                     setClass('text-center'),
                     isset($task->delay) ? setClass('delayed') : null,
-                    (substr($task->deadline, 0, 4) > 0) ? substr($task->deadline, 5, 6) : null
+                    (substr((string)$task->deadline, 0, 4) > 0) ? substr((string)$task->deadline, 5, 6) : null
                 ),
                 common::canModify('execution', $execution) ? h::td
                 (
@@ -324,27 +324,31 @@ $tbody = function() use($tasks, $lang, $groupBy, $users)
                 h::td
                 (
                     set::colspan(13),
-                    ($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) ? html(sprintf($lang->execution->memberHours, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours)) : null,
-                    ($groupBy == 'assignedTo' and $task->assignedTo and !isset($members[$task->assignedTo])) ? html(sprintf($lang->execution->memberHours, zget($users, $task->assignedTo), '0.0')) : null,
-                    ($groupBy == 'assignedTo' and empty($task->assignedTo)) ? div
+                    div
                     (
-                        setClass('table-col'),
-                        div
+                        setClass('table-row segments-list'),
+                        ($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) ? html(sprintf($lang->execution->memberHours, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours)) : null,
+                        ($groupBy == 'assignedTo' and $task->assignedTo and !isset($members[$task->assignedTo])) ? html(sprintf($lang->execution->memberHours, zget($users, $task->assignedTo), '0.0')) : null,
+                        ($groupBy == 'assignedTo' and empty($task->assignedTo)) ? div
                         (
-                            setClass('segments'),
+                            setClass('table-col'),
                             div
                             (
-                                setClass('segment'),
+                                setClass('segments'),
                                 div
                                 (
-                                    setClass('segment-title'),
-                                    $groupName
+                                    setClass('segment'),
+                                    div
+                                    (
+                                        setClass('segment-title'),
+                                        $groupName
+                                    )
                                 )
                             )
-                        )
-                    ) : null,
-                    html(sprintf($lang->execution->countSummary, $groupSum, $groupDoing, $groupWait)),
-                    html(sprintf($lang->execution->timeSummary, $groupEstimate . $lang->execution->workHourUnit, $groupConsumed . $lang->execution->workHourUnit, $groupLeft . $lang->execution->workHourUnit)),
+                        ) : null,
+                        html(sprintf($lang->execution->countSummary, $groupSum, $groupDoing, $groupWait)),
+                        html(sprintf($lang->execution->timeSummary, $groupEstimate . $lang->execution->workHourUnit, $groupConsumed . $lang->execution->workHourUnit, $groupLeft . $lang->execution->workHourUnit)),
+                    )
                 )
             );
         }
@@ -363,8 +367,8 @@ if($tasks)
         h::table
         (
             setClass('table condensed'),
-            $thead(),
-            $tbody(),
+            h::thead($thead()),
+            h::tbody($tbody()),
         )
     );
 }
