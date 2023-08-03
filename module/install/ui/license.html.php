@@ -11,6 +11,9 @@ declare(strict_types=1);
 namespace zin;
 
 set::zui(true);
+
+jsVar('nextLink', inlink('step1'));
+
 div
 (
     set::id('main'),
@@ -32,7 +35,7 @@ div
                 setClass('mt-2'),
                 checkbox
                 (
-                    on::change(''),
+                    on::change('agreeChange'),
                     set::checked(true),
                     html($lang->agreement),
                 ),
@@ -42,7 +45,7 @@ div
                 setClass('text-center'),
                 btn
                 (
-                    setClass('px-6'),
+                    setClass('px-6 btn-install'),
                     set::url(inlink('step1')),
                     set::type('primary'),
                     $lang->install->next,
