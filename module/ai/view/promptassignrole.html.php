@@ -156,6 +156,11 @@ function validateForm()
   {
     e.preventDefault();
     const formData = new FormData(document.getElementById('createRoleForm'));
+    if(!formData.get('role'))
+    {
+      $.zui.messager.danger('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->role);?>');
+      return false;
+    }
     $.ajax({
       url: createLink('ai', 'roleTemplates'),
       type: 'POST',
@@ -174,6 +179,11 @@ function validateForm()
   {
     e.preventDefault();
     const formData = new FormData(document.getElementById('editRoleForm'));
+    if(!formData.get('role'))
+    {
+      $.zui.messager.danger('<?php echo sprintf($lang->ai->validate->noEmpty, $lang->ai->prompts->role);?>');
+      return false;
+    }
     $.ajax({
       url: createLink('ai', 'roleTemplates'),
       type: 'POST',
