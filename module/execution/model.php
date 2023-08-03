@@ -5073,7 +5073,7 @@ class executionModel extends model
                         }
                     }
                 }
-                $node->children = array_values($node->children);
+                $node->children = isset($node->children) ? array_values($node->children) : array();
             }
         }
         elseif($node->type == 'product')
