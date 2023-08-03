@@ -26,16 +26,11 @@ class scale_of_monthly_delivered_story extends baseCalc
 
     public $fieldList = array('t1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate', 't1.estimate');
 
-    public function calculate($data)
-    {
-        $stage        = $data->stage;
-        $closedReason = $data->closedReason;
-        $releasedDate = $data->releasedDate;
-        $closedDate   = $data->closedDate;
-
+    public function calculate($row)
+     {
         $date = null;
-        if($closedReason == 'done') $date = $closedDate;
-        if($stage == 'released' && !empty($closedDate)) $date = $releasedDate;
+        if($row->closedReason == 'done') $date = $row->closedDate;
+        if($row->stage == 'released' && !empty($row->closedDate)) $date = $row->releasedDate;
 
         if($date === null) return false;
 
@@ -45,20 +40,12 @@ class scale_of_monthly_delivered_story extends baseCalc
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;
-
-        $this->result[$year][$month] += $data->estimate;
+        $this->result[$year][$month] += $row->estimate;
     }
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $months)
-        {
-            foreach($months as $month => $value)
-            {
-                $records[] = array('year' => $year, 'month' => $month, 'value' => $value);
-            }
-        }
+        $records = $this->getRecords(array('year', 'month', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
