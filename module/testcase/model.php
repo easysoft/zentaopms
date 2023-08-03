@@ -1811,8 +1811,8 @@ class testcaseModel extends model
      */
     public function getImportFields($productID = 0)
     {
-        $product    = $this->loadModel('product')->getById($productID);
-        if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
+        $product = $this->loadModel('product')->getById($productID);
+        if($product && $product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
 
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;

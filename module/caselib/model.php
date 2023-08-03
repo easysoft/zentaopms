@@ -376,7 +376,6 @@ class caselibModel extends model
             $caseData->title        = $data->title[$key];
             $caseData->pri          = (int)$data->pri[$key];
             $caseData->type         = $data->type[$key];
-            $caseData->status       = $data->status[$key];
             $caseData->stage        = join(',', $data->stage[$key]);
             $caseData->keywords     = $data->keywords[$key];
             $caseData->frequency    = 1;
@@ -518,7 +517,7 @@ class caselibModel extends model
 
         if($this->post->isEndPage)
         {
-            unlink($this->session->fileImport);
+            if($this->session->fileImport) @unlink($this->session->fileImport);
             unset($_SESSION['fileImport']);
         }
     }

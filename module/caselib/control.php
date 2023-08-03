@@ -482,7 +482,7 @@ class caselib extends control
             move_uploaded_file($file['tmpname'], $fileName);
 
             $rows     = $this->file->parseCSV($fileName);
-            $fields   = $this->testcase->getImportFields($productID);
+            $fields   = $this->testcase->getImportFields();
             $fields   = array_flip($fields);
             $header   = array();
             foreach($rows[0] as $i => $rowValue)
@@ -520,12 +520,11 @@ class caselib extends control
                     if(!isset($fields[$title])) continue;
                     $columnKey[] = $fields[$title];
                 }
-                if(count($columnKey) != count($header)) return print(js::alert($this->lang->testcase->errorEncode));
+                if(count($columnKey) != count($header))  return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorEncode));
             }
 
             $this->session->set('fileImport', $fileName);
-
-            return print(js::locate(inlink('showImport', "libID=$libID"), 'parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('showImport', "libID={$libID}"), 'closeModal' => true));
         }
         $this->display();
     }
@@ -553,12 +552,12 @@ class caselib extends control
             $this->caselib->createFromImport($libID);
             if($this->post->isEndPage)
             {
-                unlink($tmpFile);
-                return print(js::locate(inlink('browse', "libID=$libID"), 'parent'));
+                @unlink($tmpFile);
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', "libID=$libID")));
             }
             else
             {
-                return print(js::locate(inlink('showImport', "libID=$libID&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('showImport', "libID=$libID&pagerID=" . ((int)$this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', ''))));
             }
         }
 
@@ -668,7 +667,11 @@ class caselib extends control
                                 $sign    = $out[3];
                                 $signbit = $sign == '.' ? 1 : 3;
                                 $step    = trim(substr($step, strlen($num) + $signbit));
-                                if(!empty($step)) $caseStep[$num]['content'] = $step;
+                                if(!empty($step))
+                                {
+                                    $caseStep[$num]['content'] = $step;
+                                    $caseStep[$num]['number']  = $num;
+                                }
                                 $caseStep[$num]['type']    = 'item';
                                 $caseStep[$parent]['type'] = 'group';
                             }
@@ -678,7 +681,11 @@ class caselib extends control
                                 $sign    = $out[2];
                                 $signbit = $sign == '.' ? 1 : 3;
                                 $step    = trim(substr($step, strlen($num) + $signbit));
-                                if(!empty($step)) $caseStep[$num]['content'] = $step;
+                                if(!empty($step))
+                                {
+                                    $caseStep[$num]['content'] = $step;
+                                    $caseStep[$num]['number']  = $num;
+                                }
                                 $caseStep[$num]['type'] = 'step';
                             }
                             elseif(isset($num))
@@ -693,19 +700,21 @@ class caselib extends control
                                     $num = 1;
                                     $caseStep[$num]['content'] = $step;
                                     $caseStep[$num]['type']    = 'step';
+                                    $caseStep[$num]['number']  = $num;
                                 }
                                 if($field == 'stepExpect' and isset($stepData[$row]['desc']))
                                 {
                                     end($stepData[$row]['desc']);
                                     $num = key($stepData[$row]['desc']);
                                     $caseStep[$num]['content'] = $step;
+                                    $caseStep[$num]['number']  = $num;
                                 }
                             }
                         }
                         unset($num);
                         unset($sign);
                         $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
-                        $stepData[$row][$stepKey] = $caseStep;
+                        $stepData[$row][$stepKey] = array_values($caseStep);
                     }
                 }
 
