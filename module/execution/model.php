@@ -693,7 +693,7 @@ class executionModel extends model
             ->exec();
         if(isset($execution->project) and $execution->project) $this->addProjectMembers($execution->project, $teamMembers);
 
-        $whitelist = explode(',', $execution->whitelist);
+        $whitelist = $execution->whitelist;
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
 
         /* Fix bug#3074, Update views for team members. */
