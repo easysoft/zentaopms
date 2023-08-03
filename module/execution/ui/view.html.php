@@ -83,8 +83,12 @@ div
                             icon
                             (
                                 'help ml-1',
-                                toggle::tooltip(array('title' => $lang->execution->lblStats)),
-                                setClass('text-light')
+                                toggle::tooltip(array('title' => $lang->execution->progressTip)),
+                                set('data-trigger', 'click'),
+                                set('data-placement', 'right'),
+                                set('data-type', 'white'),
+                                set('data-class-name', 'text-gray border border-light'),
+                                setClass('text-gray '),
                             )
                         )
                     )
