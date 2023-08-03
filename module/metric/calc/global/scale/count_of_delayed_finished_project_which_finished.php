@@ -24,19 +24,20 @@ class count_of_delayed_finished_project_which_finished extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('status', 'closedDate', 'firstEnd');
+    public $fieldList = array('status', 'firstEnd', 'realEnd');
 
     public $result = 0;
 
     public function calculate($row)
     {
-        if(empty($row->closedDate) or empty($row->firstEnd)) return false;
+        if(empty($row->realEnd) || empty($row->firstEnd)) return false;
 
-        if($row->status == 'closed' and $row->closedDate <= $row->firstEnd) $this->result ++;
+        if($row->status == 'closed' && $row->realEnd > $row->firstEnd) $this->result ++;
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = $this->getRecords(array('value'));
+        return $this->filterByOptions($records, $options);
     }
 }
