@@ -30,7 +30,7 @@ class scale_of_annual_closed_story extends baseCalc
     {
         if(empty($row->closedDate) or !isset($row->estimate)) return false;
 
-        $year = substr($row->closedDate, 0, 4);
+        $year = $this->getYear($row->closedDate);
         if($year == '0000') return false;
 
         if($row->status == 'closed')
@@ -42,8 +42,7 @@ class scale_of_annual_closed_story extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $value) $records[] = array('year' => $year, 'value' => $value);
-        return $this->filterByOptions($this->result, $records);
+        $records = $this->getRecords(array('year', 'value'));
+        return $this->filterByOptions($records, $options);
     }
 }
