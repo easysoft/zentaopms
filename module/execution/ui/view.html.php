@@ -270,8 +270,8 @@ if($execution->projectInfo->hasProduct || $features['plan'])
 
                     $plans[] = div
                     (
-                        setClass('flex-none w-1/4 ml-4'),
-                        icon('calendar mr-2 '),
+                        setClass('flex-none w-1/3 pl-4 clip' . (count($plans) > 2 ? ' mt-2' : '')),
+                        icon('calendar mr-2'),
                         a
                         (
                             hasPriv('productplan', 'view') ? set::href(createLink('productplan', 'view', "planID={$planID}")) : null,
@@ -436,7 +436,12 @@ div
                             div
                             (
                                 setClass('flex items-center justify-between'),
-                                span($lang->execution->manageProducts),
+                                div
+                                (
+                                    setClass('flex'),
+                                    h::img(set::src('static/svg/product.svg'), setClass('mr-2')),
+                                    $lang->execution->manageProducts
+                                ),
                                 common::hasPriv('execution', 'manageproducts') && $execution->type != 'stage' && $project->model != 'waterfallplus' ? btn
                                 (
                                     setClass('ghost text-gray'),
@@ -446,7 +451,15 @@ div
                                 ) : null,
                             )
                         ) : null,
-                        $features['plan'] ? h::th($lang->execution->linkPlan) : null
+                        $features['plan'] ? h::th
+                        (
+                            div
+                            (
+                                setClass('flex'),
+                                h::img(set::src('static/svg/productplan.svg'), setClass('mr-2')),
+                                $lang->execution->linkPlan
+                            )
+                        ) : null
                     )
                 ),
                 h::tbody($relatedProducts)
