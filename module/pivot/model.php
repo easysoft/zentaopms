@@ -2259,9 +2259,13 @@ class pivotModel extends model
     }
 
     /**
-     * replace defined table names.
+     * Gen sheet by origin sql.
      *
+     * @param  array  $fields
+     * @param  array  $settings
      * @param  string $sql
+     * @param  array  $filters
+     * @param  array  $langs
      * @access public
      * @return string
      */

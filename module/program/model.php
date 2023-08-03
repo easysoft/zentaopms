@@ -1298,6 +1298,7 @@ class programModel extends model
     /**
      * Refresh stats fields(estimate,consumed,left,progress) of program, project, execution.
      *
+     * @param  bool $refreshAll
      * @access public
      * @return void
      */

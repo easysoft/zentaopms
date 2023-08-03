@@ -129,7 +129,6 @@ function refreshPivot(pivotInfo, isOrigin = false)
     });
 }
 
-
 function calcPreviewGrowFilter()
 {
     if(pivot.filters.length <= 0) return;

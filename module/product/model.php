@@ -1775,6 +1775,7 @@ class productModel extends model
     /**
      * Refresh stats info of products.
      *
+     * @param  bool $refreshAll
      * @access public
      * @return void
      */
