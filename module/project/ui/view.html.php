@@ -79,7 +79,7 @@ if($project->hasProduct)
                 $plans[] = div
                     (
                         setClass("flex-none w-1/3 clip {$planClass}"),
-                        icon('calendar mr-2 '),
+                        icon('productplan mr-2 '),
                         a
                         (
                             hasPriv('productplan', 'view') ? set::href(createLink('productplan', 'view', "planID={$planID}")) : null,
@@ -308,11 +308,11 @@ div
                 ) : null,
                 isset($project->delay) ? label
                 (
-                    setClass("label ml-2 flex-none {$config->project->statusLabelList['delay']}"),
-                    $lang->project->delayed
+                    setClass("ml-2 flex-none danger-pale"),
+                    $lang->execution->delayed
                 ) : label
                 (
-                    setClass("ml-2 flex-none {$config->project->statusLabelList[$project->status]}"),
+                    setClass("ml-2 flex-none status-{$project->status}"),
                     $status
                 ),
                 span
@@ -652,7 +652,7 @@ div
         (
             div
             (
-                set('class', 'panel-title'),
+                set('class', 'panel-title article-h2'),
                 $lang->execution->latestDynamic,
             )
         ),
