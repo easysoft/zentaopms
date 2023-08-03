@@ -18,38 +18,42 @@ div
     div
     (
         set::id('mainContent'),
-        set::class('bg-white p-4'),
-        set::style(array('margin' => '50px auto 0', 'width' => '800px')),
-        div
+        panel
         (
-            set::class('article-h1 mb-4'),
-            $lang->upgrade->result
-        ),
-        in_array($result, array('fail', 'sqlFail')) ? div
-        (
-            set::class('alert danger-pale mb-2 article-h2'),
-            $lang->upgrade->fail
-        ) : null,
-        in_array($result, array('fail', 'sqlFail')) ? div
-        (
-            textarea
+            set::style(array('margin' => '0 auto')),
+            zui::width('800px'),
+            div
             (
-                set::name('errors'),
-                set::rows(10),
-                set('readonly', 'readonly'),
-                implode("\n", $errors)
-            )
-        ) : null,
-        in_array($result, array('fail', 'sqlFail')) ? div
-        (
-            set::class('mt-4'),
-            $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted,
-            btn
+                set::class('article-h1 mb-4'),
+                icon
+                (
+                    'close',
+                    setStyle('font-size', '16px'),
+                    setClass('danger circle p-1.5 mr-2')
+                ),
+                in_array($result, array('fail', 'sqlFail')) ?  $lang->upgrade->fail : $lang->upgrade->result
+            ),
+            in_array($result, array('fail', 'sqlFail')) ? div
             (
-                on::click('loadCurrentPage'),
-                $lang->refresh
-            )
-        ) : null
+                textarea
+                (
+                    set::name('errors'),
+                    set::rows(10),
+                    set('readonly', 'readonly'),
+                    implode("\n", $errors)
+                )
+            ) : null,
+            in_array($result, array('fail', 'sqlFail')) ? div
+            (
+                set::class('mt-4'),
+                $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted,
+                btn
+                (
+                    on::click('loadCurrentPage'),
+                    $lang->refresh
+                )
+            ) : null
+        )
     )
 );
 
