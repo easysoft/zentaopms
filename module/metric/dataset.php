@@ -437,4 +437,14 @@ class dataset
             ->where('t1.deleted')->eq('0')
             ->query();
     }
+
+    public function getRisks($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_RISK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('project')
+            ->query();
+    }
 }
