@@ -16,6 +16,8 @@ formPanel
 (
     set::id('giteaCreateForm'),
     set::title($lang->gitea->edit),
+    set::submitBtnText($lang->save),
+    set::actions(array('submit', array('text' => $lang->cancel, 'data-type' => 'submit', 'data-dismiss' => 'modal'))),
     formRow
     (
         formGroup

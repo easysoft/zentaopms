@@ -438,7 +438,7 @@ class instance extends control
             if(!$instance) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->notices['installFail']));
 
             unset($_GET['onlybody']);
-            $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['installSuccess'], 'load' => $this->createLink('instance', 'view', "id=$instance->id"), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['installSuccess'], 'load' => $this->createLink('instance', 'view', "id=$instance->id"), 'closeModal' => true));
         }
 
         $this->lang->switcherMenu = $this->instance->getInstallSwitcher($cloudApp);

@@ -100,6 +100,8 @@ class space extends control
      */
     public function createApplication($appID = 0)
     {
+        if(!commonModel::hasPriv('instance', 'create')) $this->loadModel('common')->deny('instance', 'create', false);
+
         $this->app->loadLang('sonarqube');
         $this->app->loadLang('jenkins');
         $this->loadModel('cne');
@@ -111,13 +113,15 @@ class space extends control
             $apps[$app->id] = $app->alias;
         }
 
-        $mysqlList = $this->cne->sharedDBList('mysql');
-        $pgList    = $this->cne->sharedDBList('postgresql');
+        $mysqlList   = $this->cne->sharedDBList('mysql');
+        $pgList      = $this->cne->sharedDBList('postgresql');
+        $versionList = $this->store->getVersionPairs($appID);
 
         $this->view->apps        = $apps;
         $this->view->appID       = $appID;
         $this->view->pgList      = $pgList;
         $this->view->mysqlList   = $mysqlList;
+        $this->view->versionList = $versionList;
         $this->view->addType     = empty($appID) ? 'external' : 'store';
         $this->view->thirdDomain = $this->loadModel('instance')->randThirdDomain();
         $this->display();

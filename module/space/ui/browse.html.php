@@ -10,7 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$statusMap = array();
+$statusMap  = array();
+$canInstall = hasPriv('instance', 'create');
+
 foreach($instances as $instance) if(!$instance->externalID) $statusMap[$instance->id] = $instance->status;
 jsVar('statusMap', $statusMap);
 jsVar('idList',    array_keys($statusMap));
@@ -25,7 +27,14 @@ featureBar
 
 toolBar
 (
-    hasPriv('instance', 'create') ? item(set(array
+    $canInstall ? item(set(array
+    (
+        'text'  => $lang->store->cloudStore,
+        'icon'  => 'program',
+        'class' => 'btn ghost',
+        'url'   => createLink('store', 'browse'),
+    ))) : null,
+    $canInstall ? item(set(array
     (
         'text'  => $lang->space->install,
         'icon'  => 'plus',

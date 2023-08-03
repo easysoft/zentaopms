@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-$setting       = usePager('dynamicPager');
-$screenshots   = array_filter($cloudApp->screenshot_urls);
+$screenshots = array_filter($cloudApp->screenshot_urls);
 if(!empty($screenshots) && count($screenshots)%3) $screenshots = array_merge($screenshots, array_fill(0, count($screenshots)%3, ''));
 $screenshotsWg = array();
 foreach($screenshots as $screenshot)
@@ -22,12 +21,12 @@ foreach($screenshots as $screenshot)
     $screenshotsWg[] = div
     (
         setClass('flex-1 img-thumbnail'),
-        !$screenshot ? '' : img
+        $screenshot ? img
         (
             set::src($screenshot),
             setClass('state'),
             on::click('window.open("' . $screenshot . '")')
-        )
+        ) : null,
     );
 }
 
@@ -72,7 +71,7 @@ detailHeader(
             backBtn
             (
                 $lang->store->install,
-                setClass('primary btn size-sm install-btn'),
+                setClass('primary btn install-btn w-20'),
                 set::type('primary'),
                 set::url($this->createLink('instance', 'install', "id={$cloudApp->id}")),
                 setData('toggle', 'modal'),
@@ -141,15 +140,7 @@ detailBody
                     setClass('table borderless table-hover mb-3'),
                     ...$dynamicArticlesWd,
                 ),
-                pager(
-                    setID('dynamicPager'),
-                    set::page($setting['page']),
-                    set::recTotal($setting['recTotal']),
-                    set::recPerPage($setting['recPerPage']),
-                    set::linkCreator($setting['linkCreator']),
-                    set::items($setting['items']),
-                    set::gap($setting['gap']),
-                ),
+                pager(setID('dynamicPager')),
             )
         )
     )

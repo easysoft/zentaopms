@@ -12,7 +12,7 @@ function onChangeType(event)
     {
         $('.storePanel').removeClass('hidden');
         $('.externalPanel').addClass('hidden');
-        $('#storetype_store').prop('checked', true);
+        $('#type_store').prop('checked', true);
     }
 }
 

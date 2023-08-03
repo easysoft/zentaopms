@@ -104,35 +104,64 @@ formPanel
     setClass('storePanel' . ($appID ? '' : ' hidden')),
     set::id('createStoreAppForm'),
     set::title($lang->space->install),
-    formGroup
+    formRow
+    (
+        setStyle('display', $appID ? 'block' : 'none'),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->instance->name),
+            set::name('customName'),
+            set::control('input'),
+            set::value($appID ? $apps[$appID] : ''),
+            set::required(true),
+        )
+    ),
+    formRow
+    (
+        setStyle('display', $appID ? 'none' : 'block'),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->app->common),
+            set::name('storeAppType'),
+            set::items($apps),
+            set::value($appID),
+            set::disabled(!!$appID),
+            set::required(true),
+            on::change('onChangeStoreAppType'),
+        )
+    ),
+    formRow
+    (
+        setStyle('display', $appID ? 'none' : 'block'),
+        formGroup
+        (
+            set::label($lang->space->addType),
+            set::name('type'),
+            set::value('store'),
+            set::disabled(!!$appID),
+            set::control('radioListInline'),
+            set::items(array(array('text' => $lang->store->common, 'value' => 'store'), array('text' => $lang->space->handConfig, 'value' => 'external'))),
+            set::required(true),
+            on::change('onChangeType'),
+        )
+    ),
+    $showVersion ? formGroup
     (
         set::width('1/2'),
-        set::label($lang->app->common),
-        set::name('storeAppType'),
-        set::items($apps),
-        set::value($appID),
-        set::disabled(!!$appID),
+        set::label($lang->instance->version),
+        set::name('version'),
         set::required(true),
-        on::change('onChangeStoreAppType'),
-    ),
-    formGroup
-    (
-        set::label($lang->space->addType),
-        set::name('storetype'),
-        set::value($addType),
-        set::disabled(!!$appID),
-        set::control('radioListInline'),
-        set::items(array(array('text' => $lang->store->common, 'value' => 'store'), array('text' => $lang->space->handConfig, 'value' => 'external'))),
-        set::required(true),
-        on::change('onChangeType'),
-    ),
-    formGroup
+        set::control('picker'),
+        set::items($versionList)
+    ) : formGroup
     (
         set::width('1/2'),
         set::label($lang->instance->version),
         set::name('app_version'),
-        set::readonly(!$showVersion),
         set::required(true),
+        set::readonly(true),
         input
         (
             set::type('hidden'),
@@ -153,11 +182,6 @@ formPanel
                     setClass('form-control'),
                     set::name('customDomain'),
                     set::value($thirdDomain),
-                ),
-                input
-                (
-                    set::type('hidden'),
-                    set::name('customName'),
                 ),
                 $this->cne->sysDomain(),
             ),

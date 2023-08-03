@@ -20,6 +20,7 @@ $lang->store->support          = '支持';
 $lang->store->gitUrl           = '应用源码';
 $lang->store->dockerfileUrl    = 'Dockerfile';
 $lang->store->forumUrl         = '论坛';
+$lang->store->alreadyInstalled = '平台已安装过该应用，确定要继续安装么？';
 
 $lang->store->featureBar['browse']['id']          = '默认';
 $lang->store->featureBar['browse']['create_time'] = '最新上架';

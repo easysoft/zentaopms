@@ -240,7 +240,8 @@ $config->openMethods[] = 'custom.index';
 $config->openMethods[] = 'testcase.getxmindimport';
 $config->openMethods[] = 'testcase.showxmindimport';
 $config->openMethods[] = 'testcase.savexmindimport';
-$config->openMethods[] = 'search.buildZinForm';
+$config->openMethods[] = 'search.buildzinform';
+$config->openMethods[] = 'space.createapplication';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

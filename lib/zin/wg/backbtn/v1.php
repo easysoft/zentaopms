@@ -60,6 +60,8 @@ class backBtn extends btn
             'mr'             => 'mr-browse',
             'repo'           => 'repo-log,repo-browse',
             'compile'        => 'compile-browse',
+            'store'          => 'store-browse',
+            'space'          => 'store-browse',
         );
 
         $props = parent::getProps();

@@ -49,7 +49,7 @@ foreach ($cloudApps as $group)
             div
             (
                 setStyle('height', '100px'),
-                setClass('flex border-b border-light'),
+                setClass('flex border-b border-lighter'),
                 img(set::src($cloudApp->logo), setStyle(array('width' => '80px', 'height' => '80px'))),
                 div
                 (
@@ -72,6 +72,7 @@ foreach ($cloudApps as $group)
                     setClass('primary btn size-sm install-btn'),
                     setData('prevent', true),
                     setData('toggle', 'modal'),
+                    in_array($cloudApp->id, $installedApps) ? setData('confirm', $lang->store->alreadyInstalled) : null,
                     setData('url', $this->createLink('space', 'createApplication', "id={$cloudApp->id}")),
                     on::click('installApp', array('stop' => true)),
                 )

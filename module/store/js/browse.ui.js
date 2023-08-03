@@ -31,6 +31,21 @@ window.treeClick = function(info)
  */
 window.installApp = function()
 {
+    var confirm = $(this).data('confirm');
+    console.log(confirm);
+    if(confirm)
+    {
+        zui.Modal.confirm(confirm).then(result =>
+            {
+                if(!result) return;
+                zui.Modal.open({
+                    url: $(this).data('url'),
+                    id: 'installModal'
+                });
+            });
+        return;
+    }
+
     zui.Modal.open({
         url: $(this).data('url'),
         id: 'installModal'

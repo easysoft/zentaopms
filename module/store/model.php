@@ -102,6 +102,23 @@ class storeModel extends model
     }
 
     /**
+     * Get app version pairs by id.
+     *
+     * @param  int    $id
+     * @access public
+     * @return array
+     */
+    public function getVersionPairs(int $id): array
+    {
+        $pairs    = array();
+        $versions = $this->appVersionList($id);
+
+        foreach($versions as $version) $pairs[$version->version] = $version->app_version . '-' . $version->version;
+
+        return $pairs;
+    }
+
+    /**
      * Get app version list to install.
      *
      * @param  int    $id
@@ -125,7 +142,7 @@ class storeModel extends model
         $apiUrl  = $this->config->cloud->api->host;
         $apiUrl .= '/api/market/app/version';
         $result  = commonModel::apiGet($apiUrl, $apiParams, $this->config->cloud->api->headers);
-        if(!isset($result->code) || $result->code != 200) return null;
+        if(!isset($result->code) || $result->code != 200) return array();
 
         return array_combine(array_column($result->data, 'version'), $result->data);
     }
