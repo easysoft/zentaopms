@@ -97,30 +97,78 @@
           }
         }
 
-        document.addEventListener('DOMContentLoaded', function()
+        /* Set injected in oreder to cancel loading class on object view (see promptmenu.html.php). */
+        sessionStorage.setItem('ai-prompt-data-injected', true);
+        try
         {
-          /* Set injected in oreder to cancel loading class on object view (see promptmenu.html.php). */
-          sessionStorage.setItem('ai-prompt-data-injected', true);
-          try
-          {
-            const data = JSON.parse(injectData);
-            if(!data) return;
+          const data = JSON.parse(injectData);
+          if(!data) return;
 
-            inject(data);
+          inject(data);
 
-            $.zui.messager.success('<?php echo $lang->ai->dataInject->success;?>');
-          }
-          catch(e)
-          {
-            $.zui.messager.danger('<?php echo $lang->ai->dataInject->fail;?>');
-            console.error(e);
-          }
-        });
+          $.zui.messager.success('<?php echo $lang->ai->dataInject->success;?>');
+        }
+        catch(e)
+        {
+          $.zui.messager.danger('<?php echo $lang->ai->dataInject->fail;?>');
+          console.error(e);
+        }
       })();
     </script>
   <?php endif;?>
+  <?php
+    $prompt   = $_SESSION['aiPrompt']['prompt'];
+    $objectId = $_SESSION['aiPrompt']['objectId'];
+    $isAudit  = isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60;
+    ?>
     <script>
-      $(function() {
+      (function() {
+        const isAudit = <?php echo $isAudit ? 'true' : 'false';?>;
+
+        <?php if(isset($config->ai->injectAuditButton->locations[$module][$method])) :?>
+        function injectAuditAction()
+        {
+          console.log('injectAuditAction');
+          <?php
+          $htmlStr = html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide');
+          $htmlStr = $htmlStr . html::commonButton($lang->ai->audit->exit, "id='promptAuditExit'", 'btn btn-wide');
+          $targetContainer = $config->ai->injectAuditButton->locations[$module][$method]['action']->targetContainer;
+          $injectMethod    = $config->ai->injectAuditButton->locations[$module][$method]['action']->injectMethod;
+          ?>
+          const htmlStr = `<?php echo $htmlStr;?>`;
+          $('<?php echo $targetContainer;?>')['<?php echo $injectMethod;?>'](htmlStr);
+        }
+
+        function injectAuditToolbar()
+        {
+          console.log('injectAuditToolbar');
+          <?php
+          $htmlStr = html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');
+          if($isAudit)
+          {
+            $htmlStr = $htmlStr . html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"');
+          }
+          $targetContainer = $config->ai->injectAuditButton->locations[$module][$method]['toolbar']->targetContainer;
+          $injectMethod    = $config->ai->injectAuditButton->locations[$module][$method]['toolbar']->injectMethod;
+          if(!empty($config->ai->injectAuditButton->locations[$module][$method]['toolbar']->class)) $htmlStr = '<div class="' . $config->ai->injectAuditButton->locations[$module][$method]['toolbar']->class . '">' . $htmlStr . '</div>';
+          ?>
+          const targetContainer = `<?php echo $targetContainer;?>`;
+          const injectMethod    = `<?php echo $injectMethod;?>`;
+          const htmlStr = `<?php echo $htmlStr;?>`;
+          console.log(htmlStr);
+          $(targetContainer)[injectMethod](htmlStr);
+        }
+
+        if(isAudit)
+        {
+          injectAuditAction();
+        }
+        if(typeof injectData !== 'undefined')
+        {
+          injectAuditToolbar();
+        }
+        <?php endif;?>
+
         const publishButton = document.getElementById('promptPublish');
         if(publishButton)
         {
@@ -149,6 +197,6 @@
             $('body').addClass('load-indicator loading');
           });
         }
-      });
+      })();
     </script>
 <?php endif;?>
