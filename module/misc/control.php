@@ -93,7 +93,6 @@ class misc extends control
     public function checkExtension()
     {
         echo $this->misc->hello();
-        echo $this->misc->hello2();
     }
 
     /**
