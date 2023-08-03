@@ -122,6 +122,7 @@ class tree extends control
             $this->view->allProduct     = $products;
             $this->view->currentProduct = $currentProduct;
             $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');
+            $this->view->productID      = $rootID;
 
             $title      = $this->lang->tree->manageProduct;
             $position[] = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
@@ -311,11 +312,11 @@ class tree extends control
             $position = array();
             $title       = $this->lang->tree->groupMaintenance;
             $placeholder = $this->lang->tree->groupName;
-            
+
             $root = new stdclass();
             $root->id   = 0;
             $root->name = $this->lang->tree->groupMaintenance;
-            
+
             $this->view->productID = 0;
             $this->view->root      = $root;
         }
