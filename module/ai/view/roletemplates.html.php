@@ -11,7 +11,7 @@
 ?>
 <div id="roleList" style="display: flex; flex-direction: column; gap:8px;">
   <?php foreach($roleTemplates as $role):?>
-    <div class="role-template-card" data-id="<?php echo $role->id; ?>" style="border: 1px solid #D8DBDE; border-radius: 4px; padding: 12px; width: 100%;">
+    <div id="role-template-<?php echo $role->id;?>"  data-id="<?php echo $role->id;?>" class="role-template-card" style="border: 1px solid #D8DBDE; border-radius: 4px; padding: 12px; width: 100%;">
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
         <p id="role-<?php echo $role->id;?>" class="role" style="overflow: hidden; white-space: nowrap; text-overflow: clip;" title="<?php echo $role->role; ?>"><?php echo $role->role; ?></p>
         <div style="display: flex; gap: 2px;">

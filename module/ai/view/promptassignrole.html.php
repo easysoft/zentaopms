@@ -143,7 +143,7 @@ function validateForm()
   $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    $('select[name="model"]').change(function ()
+    $('select[name="model"]').change(function()
     {
       var model = $(this).val();
       if (model) $('button[type="submit"]').removeAttr('disabled');
@@ -152,7 +152,7 @@ function validateForm()
     $('select[name="model"]').trigger('change');
   });
 
-  $('#createRoleButton').on('click', function (e)
+  $('#createRoleButton').on('click', function(e)
   {
     e.preventDefault();
     const formData = new FormData(document.getElementById('createRoleForm'));
@@ -168,7 +168,7 @@ function validateForm()
     });
   });
 
-  $('#editRoleButton').on('click', function (e)
+  $('#editRoleButton').on('click', function(e)
   {
     e.preventDefault();
     const formData = new FormData(document.getElementById('editRoleForm'));
@@ -189,13 +189,12 @@ function validateForm()
     });
   });
 
-  $('#roleListContainer').on('click', function (e)
+  $('#roleListContainer').on('click', function(e)
   {
     const button = e.target.closest('#roleListContainer button');
-    if (!button) return;
+    if(!button) return;
     const card = button.closest('.role-template-card');
-    if (!card) return;
-    if (!'id' in card.dataset || !'action' in button.dataset) return;
+    if(!card) return;
     e.preventDefault();
 
     const id = card.dataset.id;
@@ -204,8 +203,8 @@ function validateForm()
     {
       case 'apply':
       {
-        $('#mainForm input[name="role"]').val(card.querySelector('#role').innerText).toggleClass('focus', true);
-        $('#mainForm textarea[name="characterization"]').val(card.querySelector('#characterization').innerText).toggleClass('focus', true);
+        $('#mainForm input[name="role"]').val(card.querySelector('.role').innerText).toggleClass('focus', true);
+        $('#mainForm textarea[name="characterization"]').val(card.querySelector('.characterization').innerText).toggleClass('focus', true);
         setTimeout(() => {
           $('#mainForm input[name="role"]').toggleClass('focus', false);
           $('#mainForm textarea[name="characterization"]').toggleClass('focus', false);
@@ -217,8 +216,8 @@ function validateForm()
       {
         const model = $('#editRoleTemplateModal');
         model.find('input[name="id"]').val(id);
-        model.find('#role').val(card.querySelector('#role').innerText);
-        model.find('#characterization').val(card.querySelector('#characterization').innerText);
+        model.find('.role').val(card.querySelector('.role').innerText);
+        model.find('.characterization').val(card.querySelector('.characterization').innerText);
         model.modal('toggle');
         break;
       }
@@ -244,21 +243,9 @@ function validateForm()
   $('#mainForm').on('submit', function()
   {
     if($('#mainForm input[name="saveTemplate"]:checked').val() === 'discard') return true;
-    const card = $('#roleListContainer .role-template-card[data-id="' + roleId + '"]');
-    if (!card)
+    if(!$(`#role-template-${roleId}`).length || ($('#mainForm input[name="role"]').val() === $(`role-${roleId}`).text() && $('#mainForm textarea[name="characterization"]').val() === $(`characterization-${roleId}`).text()))
     {
       $('#mainForm input[name="saveTemplate"]#saveTemplatediscard').prop('checked', true);
-      return true;
-    }
-    const role = card.find('#role').text();
-    const characterization = card.find('#characterization').text();
-    if (
-      $('#mainForm input[name="role"]').val() === role
-      && $('#mainForm textarea[name="characterization"]').val() === characterization
-    )
-    {
-      $('#mainForm input[name="saveTemplate"]#saveTemplatediscard').prop('checked', true);
-      return true;
     }
     return true;
   });
