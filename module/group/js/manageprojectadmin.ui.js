@@ -65,6 +65,8 @@ function addItem(e)
 
 function deleteItem(e)
 {
+    if($("table tr").length == 5) return false;
+
     let currentClass = $(e.target).closest('tr').attr('class');
     $(e.target).closest('table').find('tr.' + currentClass).remove();
 }

@@ -101,7 +101,7 @@ if($projectAdmins)
                 set::rowspan($rowspan),
                 btnGroup
                 (
-                    $i > 1 ?  set::items
+                    set::items
                     (
                         array
                         (
@@ -109,8 +109,6 @@ if($projectAdmins)
                           array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
                         )
                     )
-                    :
-                    set::items(array(array('icon' => 'plus',  'class' => 'btn ghost btn-add'))),
                 )
             )
         );
@@ -281,7 +279,14 @@ else
             set::rowspan($rowspan),
             btnGroup
             (
-                set::items(array(array('icon' => 'plus',  'class' => 'btn ghost btn-add')))
+                set::items
+                (
+                    array
+                    (
+                        array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
+                        array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
+                    )
+                )
             )
         )
     );
