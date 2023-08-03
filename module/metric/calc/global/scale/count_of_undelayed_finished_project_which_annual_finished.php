@@ -28,13 +28,13 @@ class count_of_undelayed_finished_project_which_annual_finished extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->closedDate) or empty($row->firstEnd) or empty($row->realEnd)) return false;
+        if(empty($row->closedDate) || empty($row->firstEnd) || empty($row->realEnd)) return false;
 
         $finishedYear = substr($row->realEnd, 0, 4);
         $firstEndYear = substr($row->firstEnd, 0, 4);
-        if($finishedYear == '0000' or $firstEndYear == '0000') return false;
+        if($finishedYear == '0000' || $firstEndYear == '0000') return false;
 
-        if($row->status == 'closed' and $row->realEnd <= $row->firstEnd)
+        if($row->status == 'closed' && $row->realEnd <= $row->firstEnd)
         {
             if(!isset($this->result[$finishedYear])) $this->result[$finishedYear] = 0;
             $this->result[$finishedYear] ++;
@@ -43,8 +43,7 @@ class count_of_undelayed_finished_project_which_annual_finished extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $value) $records[] = array('year' => $year, 'value' => $value);
+        $records = $this->getRecords(array('year', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
