@@ -37,6 +37,7 @@
 .text-red {color: #ff0000;}
 .c-side {padding: 0 !important; position: relative; min-height: 100px; width: 200px}
 .group-header { padding: 8px; position: relative; }
+.summary-header {padding: 8px}
 .small { font-size: 85%; }
 .group-header > a {line-height: 20px; display: block; max-height: 40px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;}
 .group-header > .groupSummary {margin-top: 10px; line-height: 24px;}

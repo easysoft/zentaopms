@@ -421,12 +421,16 @@ $tbody = function() use($tasks, $lang, $groupBy, $users)
                 h::td
                 (
                     setClass('c-side'),
-                    a
+                    div
                     (
-                        setClass('summaryBtn'),
-                        set::href('###'),
-                        icon('caret-right'),
-                        $groupName,
+                        setClass('summary-header'),
+                        a
+                        (
+                            setClass('summaryBtn'),
+                            set::href('###'),
+                            icon('caret-right'),
+                            $groupName,
+                        )
                     ),
                 ),
                 h::td
