@@ -18,6 +18,7 @@
   .input {flex-grow: 1;}
   .v-top > * {vertical-align: top; display: inline-block;}
   .role-template-card p {margin: 0;}
+  #roleListContainer .btn-link:focus {background: unset;}
 </style>
 <?php include 'promptdesignprogressbar.html.php';?>
 <div id='mainContent' class='main-content' style='height: calc(100vh - 120px); padding: 0;'>
