@@ -146,10 +146,13 @@ $lang->execution->sameAsParent        = "同父阶段";
 $lang->execution->selectStoryPlan     = '选择计划';
 
 /* Fields of zt_team. */
-$lang->execution->root     = '源ID';
-$lang->execution->estimate = '预计';
-$lang->execution->consumed = '消耗';
-$lang->execution->left     = '剩余';
+$lang->execution->root          = '源ID';
+$lang->execution->estimate      = '预计';
+$lang->execution->estimateHours = '预计工时';
+$lang->execution->consumed      = '消耗';
+$lang->execution->consumedHours = '消耗工时';
+$lang->execution->left          = '剩余';
+$lang->execution->leftHours     = '预计剩余';
 
 $lang->execution->copyTeamTip        = "可以选择复制{$lang->projectCommon}或{$lang->execution->common}团队的成员";
 $lang->execution->daysGreaterProject = '可用工日不能大于执行的可用工日『%s』';

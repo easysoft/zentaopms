@@ -146,10 +146,13 @@ $lang->execution->sameAsParent        = "Same as parent";
 $lang->execution->selectStoryPlan     = 'Select Plan';
 
 /* Fields of zt_team. */
-$lang->execution->root     = 'Root';
-$lang->execution->estimate = 'estimate';
-$lang->execution->consumed = 'consumed';
-$lang->execution->left     = 'Left';
+$lang->execution->root          = 'Root';
+$lang->execution->estimate      = 'Estimate';
+$lang->execution->estimateHours = 'Estimate';
+$lang->execution->consumed      = 'Consumed';
+$lang->execution->consumedHours = 'Consumed';
+$lang->execution->left          = 'Left';
+$lang->execution->leftHours     = 'Left';
 
 $lang->execution->copyTeamTip        = "copy {$lang->projectCommon}/{$lang->execution->common} team members";
 $lang->execution->daysGreaterProject = 'Days cannot be greater than days of execution 『%s』';

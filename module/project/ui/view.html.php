@@ -409,7 +409,7 @@ div
                             div
                             (
                                 setClass('flex items-center justify-between'),
-                                span($lang->execution->relatedMember),
+                                span($lang->projectCommon . $lang->project->team),
                                 hasPriv('project', 'team') ? btn
                                 (
                                     setClass('ghost text-gray'),
@@ -435,7 +435,210 @@ div
                         )
                     )
                 )
-            )
+            ),
+            /* Estimate statistics. */
+            h::table
+            (
+                setClass('table condensed bordered mt-4'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        h::th
+                        (
+                            div
+                            (
+                                setClass('flex items-center justify-between'),
+                                span($lang->execution->DurationStats),
+                            )
+                        ),
+                    )
+                ),
+                h::tbody
+                (
+                    h::tr
+                    (
+                        h::td
+                        (
+                            div
+                            (
+                                setClass('flex flex-wrap pt-2 mx-4'),
+                                div
+                                (
+                                    setClass('w-1/4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->project->begin,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        $project->begin
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->project->end,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->project->realBeganAB,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        helper::isZeroDate($project->realBegan) ? '' : $project->realBegan
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->project->realEndAB,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        helper::isZeroDate($project->realEnd) ? '' : $project->realEnd
+                                    )
+                                ),
+                            )
+                        )
+                    )
+                )
+            ),
+            h::table
+            (
+                setClass('table condensed bordered mt-4'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        h::th
+                        (
+                            div
+                            (
+                                setClass('flex items-center justify-between'),
+                                span($lang->execution->lblStats),
+                            )
+                        ),
+                    )
+                ),
+                h::tbody
+                (
+                    h::tr
+                    (
+                        h::td
+                        (
+                            div
+                            (
+                                setClass('flex flex-wrap pt-2 mx-4'),
+                                div
+                                (
+                                    setClass('w-1/3'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->estimateHours,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        (float)$workhour->totalEstimate . 'h'
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/3'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->consumedHours,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        (float)$workhour->totalConsumed . 'h'
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/3'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->leftHours,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        (float)$workhour->totalLeft . 'h'
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/3 mt-4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->totalDays,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        (float)$project->days . $lang->execution->day
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/3 mt-4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->execution->totalHours,
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        (float)$workhour->totalLeft . 'h'
+                                    )
+                                ),
+                                div
+                                (
+                                    setClass('w-1/3 mt-4'),
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        $lang->project->budget
+                                    ),
+                                    span
+                                    (
+                                        setClass('ml-2'),
+                                        $project->budget ? '￥' . $project->budget : $lang->project->future
+                                    )
+                                ),
+                            )
+                        )
+                    )
+                )
+            ),
         ),
     )
 );
