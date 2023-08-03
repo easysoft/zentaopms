@@ -105,7 +105,8 @@ if($linkedProducts)
                     (
                         set::name("plans[$product->id][]"),
                         set::items($plans),
-                        set::value($product->plans)
+                        set::value($product->plans),
+                        set::multiple(true)
                     )
                 )
             ),

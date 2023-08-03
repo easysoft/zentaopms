@@ -14,7 +14,6 @@ $config->execution->dtable->fieldList['rawID']['required'] = true;
 $config->execution->dtable->fieldList['name']['title']        = $lang->execution->name;
 $config->execution->dtable->fieldList['name']['name']         = 'nameCol';
 $config->execution->dtable->fieldList['name']['fixed']        = 'left';
-$config->execution->dtable->fieldList['name']['flex']         = 1;
 $config->execution->dtable->fieldList['name']['type']         = 'nestedTitle';
 $config->execution->dtable->fieldList['name']['sortType']     = true;
 $config->execution->dtable->fieldList['name']['minWidth']     = '356';
@@ -25,9 +24,9 @@ if(isset($config->setCode) and $config->setCode == 1)
 {
     $config->execution->dtable->fieldList['code']['title']    = $lang->execution->code;
     $config->execution->dtable->fieldList['code']['name']     = 'code';
-    $config->execution->dtable->fieldList['code']['fixed']    = 'left';
     $config->execution->dtable->fieldList['code']['type']     = 'text';
     $config->execution->dtable->fieldList['code']['sortType'] = true;
+    $config->execution->dtable->fieldList['code']['group']    = '1';
     $config->execution->dtable->fieldList['code']['width']    = '136';
     $config->execution->dtable->fieldList['code']['show']     = 'true';
 }

@@ -262,11 +262,10 @@ class productModel extends model
             {
                 $products[$product->id] = $product;
                 $products[$product->id]->branches = array();
-                $products[$product->id]->plans    = array();
             }
 
             $products[$product->id]->branches[$product->branch] = $product->branch;
-            if($product->plan) $products[$product->id]->plans[$product->plan] = $product->plan;
+            if($product->plan) $products[$product->id]->plans   = $product->plan;
             unset($product->branch, $product->plan);
         }
 
