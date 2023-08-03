@@ -18,13 +18,16 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: program
+  - field: project
     note: "所属项目"
-    range: 1-10000
+    range: 1-100
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
+  - field: execution
+    note: "所属执行"
+    range: 101-700
   - field: title
     note: "标题"
     range: 1-10000
@@ -69,12 +72,9 @@ fields:
     format: ""
   - field: deadline
     note: "计划解决日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: resolution
     note: "解决方式"
     range: resolved,totask,tobug,tostory,torisk
@@ -98,12 +98,9 @@ fields:
     format: ""
   - field: resolvedDate
     note: "实际解决日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: status
     note: "结果"
     range: unconfirmed,confirmed,unresolved,resolved,canceled,closed
@@ -128,12 +125,9 @@ fields:
     format: ""
   - field: createdDate
     note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: editedBy
     note: "由谁编辑"
     from: common.user.v1.yaml
@@ -144,12 +138,9 @@ fields:
     format: ""
   - field: editedDate
     note: "编辑日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: activateBy
     note: "由谁激活"
     from: common.user.v1.yaml
@@ -160,13 +151,10 @@ fields:
     format: ""
   - field: activateDate
     note: "激活日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: closeBy
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: closedBy
     note: "由谁关闭"
     from: common.user.v1.yaml
     use: user
@@ -176,12 +164,9 @@ fields:
     format: ""
   - field: closedDate
     note: "关闭日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: assignedTo
     note: "指派给"
     from: common.user.v1.yaml
@@ -200,12 +185,9 @@ fields:
     format: ""
   - field: assignedDate
     note: "指派日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: deleted
     note: "是否删除"
     range: 0

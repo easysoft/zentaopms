@@ -438,9 +438,35 @@ class dataset
             ->query();
     }
 
+    /**
+     * 获取风险数据。
+     * Get risks.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
     public function getRisks($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_RISK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('project')
+            ->query();
+    }
+
+    /**
+     * 获取问题数据。
+     * Get issues.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getIssues($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_ISSUE)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
