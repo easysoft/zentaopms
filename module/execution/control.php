@@ -2469,6 +2469,15 @@ class execution extends control
         $this->executeHooks($executionID);
         if(!$execution->projectInfo->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
+        $userPairs = array();
+        $userList  = array();
+        $users     = $this->loadModel('user')->getList('all');
+        foreach($users as $user)
+        {
+            $userList[$user->account]  = $user;
+            $userPairs[$user->account] = $user->realname;
+        }
+
         $this->view->title      = $this->lang->execution->view;
 
         $this->view->execution    = $execution;
@@ -2477,7 +2486,8 @@ class execution extends control
         $this->view->planGroups   = $this->execution->getPlans($products);
         $this->view->actions      = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', 'all', $executionID);
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users        = $userPairs;
+        $this->view->userList     = $userList;
         $this->view->teamMembers  = $this->execution->getTeamMembers($executionID);
         $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('execution', $executionID);
         $this->view->statData     = $this->execution->statRelatedData($executionID);
