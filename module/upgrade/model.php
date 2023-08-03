@@ -687,7 +687,6 @@ class upgradeModel extends model
                 $this->loadModel('product')->refreshStats(true);
                 $this->loadModel('program')->refreshStats(true);
                 $this->updatePivotFieldsType();
-                $this->updatePrivRelation();
                 break;
         }
 
@@ -9688,46 +9687,5 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_PIVOT)->data($data)->where('id')->eq($pivot->id)->exec();
         }
-    }
-
-    /**
-     * Update priv and relationPriv fields value type from id to module-method.
-     *
-     * @access public
-     * @return void
-     */
-    public function updatePrivRelation()
-    {
-        $allPrivs     = $this->dao->select('*')->from(TABLE_PRIV)->fetchAll('id');
-        $allRelations = $this->dao->select('*')->from(TABLE_PRIVRELATION)->fetchAll();
-
-        foreach($allRelations as $relation)
-        {
-            if(!isset($allPrivs[$relation->priv]) or !isset($allPrivs[$relation->relationPriv]))
-            {
-                $this->dao->delete()->from(TABLE_PRIVRELATION)
-                    ->where('priv')->eq($relation->priv)
-                    ->andWhere('type')->eq($relation->type)
-                    ->andWhere('relationPriv')->eq($relation->relationPriv)
-                    ->exec();
-
-                continue;
-            }
-
-            $privModuleMethod         = $allPrivs[$relation->priv]->module . '-' . $allPrivs[$relation->priv]->method;
-            $relationPrivModuleMethod = $allPrivs[$relation->relationPriv]->module . '-' . $allPrivs[$relation->relationPriv]->method;
-
-            $relationPriv = new stdclass();
-            $relationPriv->priv         = $privModuleMethod;
-            $relationPriv->relationPriv = $relationPrivModuleMethod;
-
-            $this->dao->update(TABLE_PRIVRELATION)->data($relationPriv)
-                ->where('priv')->eq($relation->priv)
-                ->andWhere('type')->eq($relation->type)
-                ->andWhere('relationPriv')->eq($relation->relationPriv)
-                ->exec();
-        }
-
-        return true;
     }
 }
