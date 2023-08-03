@@ -18,17 +18,12 @@ div
     div
     (
         set::id('mainContent'),
-        set::class('bg-white p-4'),
-        set::style(array('margin' => '50px auto 0', 'width' => '800px')),
-        div
+        formpanel
         (
-            set::class('article-h1 mb-4 ml-5'),
-            $lang->upgrade->selectVersion
-        ),
-        form
-        (
+            zui::width('800px'),
             set::url(inlink('confirm')),
             set::target('_self'),
+            set::title($lang->upgrade->selectVersion),
             formRow
             (
                 formGroup
@@ -43,10 +38,10 @@ div
                 ),
                 formGroup
                 (
-                    set::class('ml-3'),
+                    setClass('ml-3'),
                     div
                     (
-                        set::class('h-8 flex text-danger items-center'),
+                        setClass('h-8 flex text-danger items-center'),
                         $lang->upgrade->noteVersion
                     )
                 )
@@ -56,7 +51,7 @@ div
                 set::label($lang->upgrade->toVersion),
                 div
                 (
-                    set::class('h-8 flex items-center'),
+                    setClass('h-8 flex items-center'),
                     ucfirst($config->version)
                 )
             ),
