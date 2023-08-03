@@ -126,7 +126,7 @@ class install extends control
             $myConfig = array();
             foreach($_POST as $key => $value) $myConfig[$key] = $value;
             $this->session->set('myConfig', $myConfig);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('step3')));
+            return $this->send(array('result' => 'success', 'load' => inlink('step3')));
         }
         $dbHost = $dbPort = $dbName = $dbUser = $dbPassword = '';
 
@@ -278,7 +278,7 @@ class install extends control
 
             if($this->config->edition != 'open') $this->loadModel('upgrade')->processDataset();
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('step6')));
+            return $this->send(array('result' => 'success', 'load' => inlink('step6')));
         }
 
         $this->app->loadLang('upgrade');
