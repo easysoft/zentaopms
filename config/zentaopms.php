@@ -239,6 +239,7 @@ $config->openMethods[] = 'custom.index';
 $config->openMethods[] = 'testcase.getxmindimport';
 $config->openMethods[] = 'testcase.showxmindimport';
 $config->openMethods[] = 'testcase.savexmindimport';
+$config->openMethods[] = 'space.createapplication';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

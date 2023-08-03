@@ -70,6 +70,7 @@ class store extends control
         }
 
         $pagedApps = $this->store->searchApps($sortType, $keyword, $postCategories, $pageID, $recPerPage);
+
         $this->app->loadClass('pager', true);
         $pager = pager::init($pagedApps->total, $recPerPage, $pageID);
 
@@ -81,6 +82,7 @@ class store extends control
         $this->view->title          = $this->lang->store->common;
         $this->view->position[]     = $this->lang->store->common;
         $this->view->cloudApps      = $pagedApps->apps;
+        $this->view->installedApps  = $this->storeZen->getInstalledApps();
         $this->view->categories     = $categories;
         $this->view->postCategories = $postCategories;
         $this->view->keyword        = $keyword;
@@ -116,7 +118,7 @@ class store extends control
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($totalArticle, $recPerPage, $pageID);
-        $this->view->dynamicPager = $pager;
+        $this->view->pager = $pager;
 
         $this->view->title        = $appInfo->alias;
         $this->view->position[]   = $appInfo->alias;
