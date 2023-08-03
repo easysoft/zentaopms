@@ -160,6 +160,7 @@ $lang->execution->errorHours         = 'Hours/Day cannot be greater than『24』
 $lang->execution->agileplusMethodTip = "When creating executions in an Agile Plus {$lang->projectCommon}, both {$lang->executionCommon} and Kanban management methods are supported.";
 $lang->execution->typeTip            = "The sub-stages of other types can be created under the parent stage of the 'mix' type, while the type of other parent-child levels is consistent.";
 $lang->execution->waterfallTip       = "In the Waterfall {$lang->projectCommon} or in the Waterfall + {$lang->projectCommon},";
+$lang->execution->progressTip        = 'All Progress = Consumed / (Consumed + Left)';
 
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Aktivieren';

@@ -221,7 +221,11 @@ div
                             icon
                             (
                                 'help ml-1',
-                                toggle::tooltip(array('title' => '')),
+                                set('data-toggle', 'tooltip'),
+                                set('data-title', $lang->execution->progressTip),
+                                set('data-placement', 'bottom'),
+                                set('data-type', 'white'),
+                                set('data-class-name', 'text-gray border border-light'),
                                 setClass('text-light')
                             )
                         )
@@ -602,7 +606,7 @@ div
                                     span
                                     (
                                         setClass('ml-2'),
-                                        (float)$project->days . $lang->execution->day
+                                        $project->days
                                     )
                                 ),
                                 div

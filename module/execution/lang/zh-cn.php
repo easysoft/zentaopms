@@ -160,6 +160,7 @@ $lang->execution->errorHours         = '可用工时/天不能大于『24』';
 $lang->execution->agileplusMethodTip = "融合敏捷{$lang->projectCommon}创建执行时，支持{$lang->executionCommon}和看板两种管理方法。";
 $lang->execution->typeTip            = '“综合”类型的父阶段可以创建其它类型的子级，其它父子层级的类型均一致。';
 $lang->execution->waterfallTip       = "瀑布{$lang->projectCommon}和融合瀑布{$lang->projectCommon}中，";
+$lang->execution->progressTip        = '总进度=已消耗工时/（已消耗工时+剩余工时）';
 
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";
