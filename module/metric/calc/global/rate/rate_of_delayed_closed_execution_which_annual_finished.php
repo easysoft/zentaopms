@@ -37,7 +37,7 @@ class rate_of_delayed_closed_execution_which_annual_finished extends baseCalc
 
         if(!isset($this->result[$year])) $this->result[$year] = array('closed' => 0, 'delayed' => 0);
         if($row->status == 'closed') $this->result[$year]['closed'] ++;
-        if($row->status == 'closed' and $row->closedDate > $row->firstEnd) $this->result[$year]['delayed'] ++;
+        if($row->status == 'closed' && $row->closedDate > $row->firstEnd) $this->result[$year]['delayed'] ++;
     }
 
     public function getResult($options = array())
