@@ -14,7 +14,7 @@ $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Result';
 $lang->upgrade->fail            = 'Failed';
 $lang->upgrade->successTip      = 'Successed';
-$lang->upgrade->success         = "<p><i class='icon icon-check-circle'></i></p><p>Congratulations! Your ZenTao is updated.</p>";
+$lang->upgrade->success         = "<p>Congratulations! Your ZenTao is updated.</p>";
 $lang->upgrade->tohome          = 'Visit ZenTao';
 $lang->upgrade->license         = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2.';
 $lang->upgrade->warnning        = 'Warning!';
