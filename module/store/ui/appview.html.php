@@ -73,7 +73,7 @@ detailHeader(
                 $lang->store->install,
                 setClass('primary btn install-btn w-20'),
                 set::type('primary'),
-                set::url($this->createLink('instance', 'install', "id={$cloudApp->id}")),
+                set::url($this->createLink('space', 'createApplication', "id={$cloudApp->id}")),
                 setData('toggle', 'modal'),
             )
         )
