@@ -77,6 +77,8 @@ $lang->project->unlinkedRepo        = '未关联代码库';
 $lang->project->executionCount      = '执行数';
 $lang->project->storyCount          = '需求规模';
 $lang->project->invested            = '已投入';
+$lang->project->member              = '成员';
+$lang->project->manage              = '管理';
 
 /* Fields. */
 $lang->project->common             = "{$lang->projectCommon}";

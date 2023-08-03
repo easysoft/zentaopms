@@ -10,3 +10,5 @@
 #dynamicBlock {height: 50vh; display: flex; flex-direction: column; box-shadow: none;}
 #dynamicBlock .panel-body {flex: 1 1 auto; overflow-y: auto;}
 #historyBlock {height: 30vh; overflow-y: auto;}
+
+.member-list > .center-y {width: 12.5%}

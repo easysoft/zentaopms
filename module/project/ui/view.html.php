@@ -100,6 +100,85 @@ if($project->hasProduct)
     }
 }
 
+$membersDom = array();
+foreach(array('PM', 'PO', 'QD', 'RD') as $field)
+{
+    if(empty($project->$field)) continue;
+
+    $user = isset($userList[$execution->$field]) ? $userList[$execution->$field] : null;
+    if($user)
+    {
+        $membersDom[] = div
+            (
+                setClass('w-1/8 center-y'),
+                avatar
+                (
+                    set::text($user->realname),
+                    set::src($user->avatar),
+                ),
+                span
+                (
+                    setClass('my-2'),
+                    $user->realname
+                ),
+                span
+                (
+                    setClass('text-gray'),
+                    $lang->project->$field
+                ),
+            );
+    }
+
+    unset($teamMembers[$project->$field]);
+}
+
+
+$memberCount = count($membersDom);
+foreach($teamMembers as $teamMember)
+{
+    if($memberCount >= 7) break;
+
+    $user = isset($userList[$teamMember->account]) ? $userList[$teamMember->account] : null;
+    if(!$user) continue;
+        $membersDom[] = div
+    (
+        setClass('w-1/8 center-y'),
+        avatar
+        (
+            set::text($user->realname),
+            set::src($user->avatar),
+        ),
+        span
+        (
+            setClass('my-2'),
+            $user->realname
+        ),
+        span
+        (
+            setClass('text-gray'),
+            $lang->project->member
+        ),
+    );
+    $memberCount ++;
+}
+
+if(common::hasPriv('project', 'manageMembers'))
+{
+    $membersDom[] = a
+    (
+        setClass('w-1/8 center-y cursor-pointer'),
+        set::href(createLink('project', 'manageMembers', "projectID={$project->id}")),
+        avatar
+        (
+            setClass('mb-2'),
+            set::foreColor('var(--color-primary-500-rgb)'),
+            set::background('var(--menu-active-bg)'),
+            set::text('+'),
+        ),
+        $lang->project->manage
+    );
+}
+
 div
 (
     setClass('main'),
@@ -271,7 +350,7 @@ div
     ),
     div
     (
-        setClass('flex flex-auto p-4 mt-4'),
+        setClass('flex flex-auto p-4 mt-4 canvas'),
         div
         (
             setClass('w-full'),
@@ -316,6 +395,46 @@ div
                     )
                 ),
                 h::tbody($relatedProducts)
+            ),
+            /* Project team. */
+            h::table
+            (
+                setClass('table condensed bordered mt-4'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        h::th
+                        (
+                            div
+                            (
+                                setClass('flex items-center justify-between'),
+                                span($lang->execution->relatedMember),
+                                hasPriv('project', 'team') ? btn
+                                (
+                                    setClass('ghost text-gray'),
+                                    set::trailingIcon('caret-right pb-0.5'),
+                                    set::url(createLink('project', 'team', "projectID={$project->id}")),
+                                    $lang->more
+                                ) : null,
+                            )
+                        )
+                    )
+                ),
+                h::tbody
+                (
+                    h::tr
+                    (
+                        h::td
+                        (
+                            div
+                            (
+                                setClass('flex flex-wrap member-list pt-2'),
+                                $membersDom,
+                            )
+                        )
+                    )
+                )
             )
         ),
     )

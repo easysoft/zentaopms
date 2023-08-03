@@ -620,13 +620,22 @@ class project extends control
 
         $this->executeHooks($projectID);
 
+        $userList  = array();
+        $userPairs = array();
+        $users     = $this->loadModel('user')->getList('all');
+        foreach($users as $user)
+        {
+            $userList[$user->account]  = $user;
+            $userPairs[$user->account] = $user->realname;
+        }
+
         $this->view->title        = $this->lang->project->view;
         $this->view->position     = $this->lang->project->view;
         $this->view->projectID    = $projectID;
         $this->view->project      = $project;
         $this->view->products     = $products;
         $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users        = $userPairs;
         $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
         $this->view->statData     = $this->project->getStatData($projectID);
         $this->view->workhour     = $this->project->getWorkhour($projectID);
@@ -634,6 +643,7 @@ class project extends control
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
         $this->view->isExtended   = $isExtended;
+        $this->view->userList     = $userList;
 
         $this->display();
     }

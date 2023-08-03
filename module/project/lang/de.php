@@ -77,6 +77,8 @@ $lang->project->unlinkedRepo        = 'Unlink Repo';
 $lang->project->executionCount      = 'Total Executions';
 $lang->project->storyCount          = 'Story Points';
 $lang->project->invested            = 'Invested';
+$lang->project->member              = 'Member';
+$lang->project->manage              = 'Manage';
 
 /* Fields. */
 $lang->project->common             = $lang->projectCommon;
