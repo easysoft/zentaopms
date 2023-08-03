@@ -162,7 +162,7 @@ function validateForm()
       data: {method: 'create', role: formData.get('role'), characterization: formData.get('characterization')},
       dataType: 'html',
       success: function (response) {
-        new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
+        new $.zui.messager.success('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>');
         $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
       }
     });
@@ -183,7 +183,7 @@ function validateForm()
       },
       dataType: 'html',
       success: function (response) {
-        new $.zui.Messager('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>', {type: 'success'}).show();
+        new $.zui.messager.success('<?php echo $lang->ai->prompts->roleAddedSuccess; ?>');
         $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
       }
     });
@@ -230,7 +230,7 @@ function validateForm()
             data: {method: 'delete', id: id},
             dataType: 'html',
             success: function (response) {
-              new $.zui.Messager('<?php echo $lang->ai->prompts->roleDelSuccess; ?>', {type: 'success'}).show();
+              new $.zui.messager.success('<?php echo $lang->ai->prompts->roleDelSuccess; ?>');
               $('#roleList').html($($.parseHTML(response)).filter('#roleList').html());
             }
           });
