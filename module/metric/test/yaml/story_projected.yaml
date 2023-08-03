@@ -15,6 +15,8 @@ fields:
   range: "20110101 000000-20210101 230000:10D"
   type: timestamp
   format: YYYY-MM-DD hh:mm:ss
+- field: assignedTo
+  range: admin,user{5},test{3},dev{10},pm{10},po{8},closed{20},[]{40}
 - field: estimate
   range: 1-10{10}
 - field: stage
