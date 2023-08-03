@@ -318,9 +318,37 @@ detailBody
         section
         (
             set::title($lang->testcase->steps),
+            to::actions
+            (
+                row
+                (
+                    setClass('step-change-view ml-2 py-1 border'),
+                    width('fit'),
+                    cell
+                    (
+                        setClass('px-1.5 leading-4 border-r text-primary step-change-view-btn'),
+                        icon
+                        (
+                            on::click('toggleStepsView'),
+                            set::size('9'),
+                            'table-large',
+                        ),
+                    ),
+                    cell
+                    (
+                        setClass('px-1.5 leading-4 step-change-view-btn'),
+                        icon
+                        (
+                            on::click('toggleStepsView'),
+                            set::size('9'),
+                            'tree'
+                        ),
+                    ),
+                ),
+            ),
             div
             (
-                set::id('steps'),
+                set::id('stepsTable'),
                 div
                 (
                     setClass('steps-header'),
@@ -342,6 +370,16 @@ detailBody
                     setClass('steps-body'),
                     $steps,
                 )
+            ),
+            div
+            (
+                setClass('hidden'),
+                set::id('stepsView'),
+                mindmap
+                (
+                    set::data($steps),
+                    set::height('600px'),
+                ),
             ),
             set::useHtml(true),
         ),
