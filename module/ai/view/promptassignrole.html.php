@@ -100,7 +100,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only"><?php echo $lang->close; ?></span></button>
-        <h4 class="modal-title"><?php echo $lang->ai->prompts->editRoleTemplate; ?> <i class='icon icon-help'></i> <span class="text-gray">本次编辑不会影响已用模版的提词</span></h4>
+        <h4 class="modal-title"><?php echo $lang->ai->prompts->editRoleTemplate; ?> <i class='icon icon-help'></i> <span class="text-gray"><?php echo $lang->ai->prompts->editRoleTemplateTip;?></span></h4>
       </div>
       <div class="modal-body">
         <form id="editRoleForm">
