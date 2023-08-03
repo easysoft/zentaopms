@@ -95,7 +95,7 @@ class store extends control
      *
      * @param  int $id
      * @access public
-     * @return viod
+     * @return void
      */
     public function appView($id, $pageID = 1, $recPerPage = 20)
     {

@@ -157,7 +157,7 @@ class misc extends control
     /**
      * Show version changelog
      * @access public
-     * @return viod
+     * @return void
      */
     public function changeLog($version = '')
     {
