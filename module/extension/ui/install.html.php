@@ -30,13 +30,13 @@ foreach($files as $fileName => $md5)
 (
     div
     (
-        set::class('mb-2'),
+        setClass('mb-2'),
         sprintf($lang->extension->installFailed, $installType)
     ),
     p
     (
-        set::class('text-danger mb-3'),
-        $error,
+        setClass('text-danger mb-3'),
+        html($error),
     ),
     btn
     (
@@ -50,12 +50,12 @@ empty($error) && isset($license) ? div
 (
     div
     (
-        set::class('font-bold mb-2'),
+        setClass('font-bold mb-2'),
         $lang->extension->license
     ),
     p
     (
-        set::class('mb-2'),
+        setClass('mb-2'),
         textarea
         (
             set::rows(15),
@@ -76,7 +76,7 @@ empty($error) && !isset($license) ? div
 (
     div
     (
-        set::class('mb-2'),
+        setClass('mb-2'),
         sprintf($lang->extension->installFinished, $installType)
     ),
     btn
@@ -87,10 +87,10 @@ empty($error) && !isset($license) ? div
     ),
     div
     (
-        set::class('alert success-outline mt-3'),
+        setClass('alert success-outline mt-3'),
         div
         (
-            set::class('alert-content'),
+            setClass('alert-content'),
             p 
             (
                 $lang->extension->successDownloadedPackage,
