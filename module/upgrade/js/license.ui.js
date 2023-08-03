@@ -1,4 +1,3 @@
-
 /**
  * When agree checkbox change.
  *
