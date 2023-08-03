@@ -37,6 +37,7 @@ class count_of_delayed_finished_execution_which_finished extends baseCalc
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = $this->getRecords(array('value'));
+        return $this->filterByOptions($records, $options);
     }
 }
