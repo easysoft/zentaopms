@@ -18,10 +18,23 @@ class globalSearch extends wg
 
     protected function build(): array
     {
-        global $lang;
+        global $config, $lang;
+
+        jsVar('searchObjectList', array_keys($lang->searchObjects));
+
+        if($config->systemMode == 'light') unset($lang->searchObjects['program']);
+        unset($lang->searchObjects['all']);
+
+        $searchItems = array();
+        foreach($lang->searchObjects as $key => $module)
+        {
+            $searchItems[] = array('key' => $key, 'text' => $module);
+        }
+
         $this->setDefaultProps(array(
             'commonSearchText' => $lang->searchAB,
             'commonSearchKey' => 'all',
+            'searchItems' => $searchItems,
             'searchFunc' => jsRaw('window.globalSearch'),
         ));
 
