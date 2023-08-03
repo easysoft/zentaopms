@@ -26,34 +26,24 @@ class scale_of_annual_delivered_story extends baseCalc
 
     public $fieldList = array('t1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate', 't1.estimate');
 
-    public function calculate($data)
+    public function calculate($row)
     {
-        $stage        = $data->stage;
-        $closedReason = $data->closedReason;
-        $releasedDate = $data->releasedDate;
-        $closedDate   = $data->closedDate;
-
         $date = null;
-        if($closedReason == 'done') $date = $closedDate;
-        if($stage == 'released' && !empty($closedDate)) $date = $releasedDate;
+        if($row->closedReason == 'done') $date = $row->closedDate;
+        if($row->stage == 'released' && !empty($row->closedDate)) $date = $row->releasedDate;
 
         if($date === null) return false;
 
-        $year = substr($date, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($date);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
-
         $this->result[$year] += $row->estimate;
     }
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $value)
-        {
-            $records[] = array('year' => $year, 'value' => $value);
-        }
+        $records = $this->getRecords(array('year', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
