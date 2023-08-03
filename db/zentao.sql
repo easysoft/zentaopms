@@ -15874,7 +15874,7 @@ REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`
 
 -- DROP TABLE IF EXISTS `zt_roadmap`;
 CREATE TABLE `zt_roadmap` (
-  `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `product` mediumint(8) NOT NULL,
   `branch` mediumint(8) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -15888,15 +15888,16 @@ CREATE TABLE `zt_roadmap` (
   `closedDate` datetime NOT NULL,
   `closedReason` enum('done','canceled') DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_roadmapstory`;
 CREATE TABLE `zt_roadmapstory` (
   `roadmap` mediumint(8) unsigned NOT NULL,
   `story` mediumint(8) unsigned NOT NULL,
-  `order` MEDIUMINT  UNSIGNED  NOT NULL,
-  UNIQUE KEY `roadmap_story` (`roadmap`,`story`)
+  `order` MEDIUMINT  UNSIGNED  NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `roadmap_story` ON `zt_roadmapstory`(`roadmap`,`story`);
 
 REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `projectType`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
 ('概念',        '10',   'concept',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
