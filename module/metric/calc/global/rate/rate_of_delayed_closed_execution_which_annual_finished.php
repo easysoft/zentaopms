@@ -43,7 +43,11 @@ class rate_of_delayed_closed_execution_which_annual_finished extends baseCalc
     public function getResult($options = array())
     {
         $records = array();
-        foreach($this->result as $year => $result) $this->result[$year] = $result['closed'] ? round($result['delayed'] / $result['closed'], 4) : 0;
+        foreach($this->result as $year => $result)
+        {
+            $rate = $result['closed'] ? round($result['delayed'] / $result['closed'], 4) : 0;
+            $records[] = array('year' => $year, 'value' => $rate);
+        }
         return $this->filterByOptions($records, $options);
     }
 }
