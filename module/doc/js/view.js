@@ -14,6 +14,19 @@ $(function()
             location.reload();
         }
     })
+
+    $('#mainContent').on('mouseover', 'li.file', function()
+    {
+        $(this).children('span.right-icon').removeClass("hidden");
+        $(this).addClass('backgroundColor');
+    });
+
+    $('#mainContent').on('mouseout', 'li.file', function()
+    {
+        $(this).children('span.right-icon').addClass("hidden");
+        $(this).removeClass('backgroundColor');
+    });
+
 })
 
 /**
