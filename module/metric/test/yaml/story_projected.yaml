@@ -23,6 +23,12 @@ fields:
   range: projected
 - field: type
   range: story
+- field: reviewedDate
+  range: "20180101 000000-20210101 230000:3h"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: reviewedBy
+  range: admin,user{5},test{3},dev{10},pm{10},po{8},closed{20},[]{40}
 - field: deleted
   range: 0{10},1{10}
 ...
