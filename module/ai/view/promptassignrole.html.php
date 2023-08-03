@@ -78,7 +78,7 @@
         <h4 class="modal-title"><?php echo $lang->ai->prompts->addRoleTemplate; ?></h4>
       </div>
       <div class="modal-body">
-        <form id="createRoleForm">
+        <form id="createRoleForm" class="not-watch">
           <div class='content-row'>
             <div class='input-label'><span><?php echo $lang->ai->prompts->role;?></span></div>
             <div class='input mw-400px'><?php echo html::input('role', '', "class='form-control' placeholder='{$lang->ai->prompts->rolePlaceholder}'");?></div>
@@ -104,7 +104,7 @@
         <h4 class="modal-title"><?php echo $lang->ai->prompts->editRoleTemplate; ?> <i class='icon icon-help'></i> <span class="text-gray"><?php echo $lang->ai->prompts->editRoleTemplateTip;?></span></h4>
       </div>
       <div class="modal-body">
-        <form id="editRoleForm">
+        <form id="editRoleForm" class="not-watch">
           <div class='content-row'>
             <div class='input-label'><span><?php echo $lang->ai->prompts->role;?></span></div>
             <div class='input mw-400px'><?php echo html::input('role', '', "class='form-control' placeholder='{$lang->ai->prompts->rolePlaceholder}'");?></div>
