@@ -377,7 +377,7 @@ if(common::hasPriv('execution', 'manageMembers'))
             set::background('var(--menu-active-bg)'),
             icon('plus'),
         ),
-        $lang->execution->manageMembers
+        $lang->project->manage
     );
 }
 
@@ -681,7 +681,7 @@ div
                                     span
                                     (
                                         setClass('ml-2'),
-                                        $execution->days . $lang->execution->workHourUnit
+                                        $execution->days
                                     )
                                 ),
                                 div
