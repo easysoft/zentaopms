@@ -974,11 +974,7 @@
         }
         if($modal.length)
         {
-            if(!options.load)
-            {
-                if(!url) return;
-                options.load = 'modal';
-            }
+            if(!options.load && !url) return;
             if(options.load === 'modal' && !options.target) options.target = $modal.attr('id');
             if(options.load === 'table')
             {
