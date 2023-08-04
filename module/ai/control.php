@@ -526,7 +526,7 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->backLocation))
+            if(empty($data->backLocation))
             {
                 $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true);
             }
