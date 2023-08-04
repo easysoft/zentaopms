@@ -56,7 +56,7 @@ class editorModel extends model
         $extensionList = array();
         foreach($this->config->editor->extSort as $ext)
         {
-            $extModulePaths = $this->app->getModuleExtPath('', $moduleName, $ext);
+            $extModulePaths = $this->app->getModuleExtPath($moduleName, $ext);
             foreach($extModulePaths as $extType => $extensionFullDir)
             {
                 if(empty($extensionFullDir) or !is_dir($extensionFullDir)) continue;
@@ -159,7 +159,7 @@ class editorModel extends model
     {
         if(empty($files) or !is_array($files)) return false;
 
-        $tree = $isRoot ? "<ul id='extendTree' class='tree tree-lines' data-ride='tree'>\n" : "<ul>\n";
+        $tree = array();
         if($isRoot)
         {
             $module   = basename(dirname(key($files)));
@@ -178,19 +178,17 @@ class editorModel extends model
 
         foreach($files as $key => $file)
         {
-            $tree .= "<li>\n";
             if(is_array($file))
             {
-                $tree .= $this->addLink4Dir($key);
-                $tree .= $this->printTree($file, false);
+                $dirTree = $this->addLink4Dir($key);
+                $dirTree->items = $this->printTree($file, false);
+                $tree[] = $dirTree;
             }
             else
             {
-                $tree .= $this->addLink4File($key, $file);
+                $tree[] = $this->addLink4File($key, $file);
             }
-            $tree .= "</li>\n";
         }
-        $tree .= "</ul>\n";
         return $tree;
     }
 
@@ -203,49 +201,44 @@ class editorModel extends model
      */
     public function addLink4Dir($filePath)
     {
-        $tree     = '';
-        $fileName = basename($filePath);
+        $tree        = new stdclass();
+        $fileName    = basename($filePath);
+        $tree->id    = md5($filePath);
+        $tree->title = $fileName;
+        $tree->actions['items'] = array();
         if(isset($this->lang->editor->translate[$fileName]))
         {
-            $file = "<span title='$fileName'>" . $this->lang->editor->translate[$fileName] . '</span>';
+            $tree->text = $this->lang->editor->translate[$fileName];
         }
         else
         {
             $moduleName = zget($this->lang->editor->modules, $fileName, isset($this->lang->{$fileName}->common) ? $this->lang->{$fileName}->common : $fileName);
-            $file = "<span title='{$fileName}'>{$moduleName}</span>";
+            $tree->text = $moduleName;
         }
 
-        if(strpos($filePath, DS . 'ext' . DS) !== false)
+        if(strpos($filePath, DS . 'ext' . DS) !== false && $fileName != 'lang' && $fileName != 'js' && $fileName != 'css')
         {
             $parentName = basename(dirname($filePath));
-            if($fileName == 'lang' or $fileName == 'js' or $fileName == 'css')
+            if($parentName == 'js')
             {
-                $tree .= $file;
-            }
-            elseif($parentName == 'js')
-            {
-                $tree .= "$file " . html::a($this->getExtendLink($filePath, "newJS"), $this->lang->editor->newExtend, 'editWin');
+                $tree->actions['items'][] = array('key' => 'edit', 'text' => $this->lang->editor->newExtend, 'id' => $tree->id, 'data-url' => $this->getExtendLink($filePath, "newJS"), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
             }
             elseif($parentName == 'css')
             {
-                $tree .= "$file " . html::a($this->getExtendLink($filePath, "newCSS"), $this->lang->editor->newExtend, 'editWin');
+                $tree->actions['items'][] = array('key' => 'edit', 'text' => $this->lang->editor->newExtend, 'id' => $tree->id, 'data-url' => $this->getExtendLink($filePath, "newCSS"), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
             }
             else
             {
-                $tree .= "$file " . html::a($this->getExtendLink($filePath, "newExtend"), $this->lang->editor->newExtend, 'editWin');
+                $tree->actions['items'][] = array('key' => 'edit', 'text' => $this->lang->editor->newExtend, 'id' => $tree->id, 'data-url' => $this->getExtendLink($filePath, "newExtend"), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
             }
         }
         elseif($fileName == 'model.php')
         {
-            $tree .= "$file " . html::a($this->getExtendLink($filePath, 'newMethod'), $this->lang->editor->newMethod, 'editWin');
+            $tree->actions['items'][] = array('key' => 'edit', 'text' => $this->lang->editor->newMethod, 'id' => $tree->id, 'data-url' => $this->getExtendLink($filePath, "newMethod"), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
         }
         elseif($fileName == 'control.php')
         {
-            $tree .= "$file " . html::a(inlink('newPage', "filePath=" . helper::safe64Encode($filePath)), $this->lang->editor->newPage, 'editWin');
-        }
-        else
-        {
-            $tree .= $file;
+            $tree->actions['items'][] = array('key' => 'edit', 'text' => $this->lang->editor->newPage, 'id' => $tree->id, 'data-url' => inlink('newPage', "filePath=" . helper::safe64Encode($filePath)), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
         }
         return $tree;
     }
@@ -260,17 +253,20 @@ class editorModel extends model
      */
     public function addLink4File($filePath, $file)
     {
-        $tree = '';
-        $file = "<span title='$file'>$file</span>";
+        $tree = new stdClass();
+        $tree->id   = md5($file);
+        $tree->name = $file;
+        $tree->text = $file;
+        $tree->actions['items'] = array();
         if(strpos($filePath, DS . 'ext' . DS) !== false)
         {
-            $tree .= "$file " . html::a($this->getExtendLink($filePath, "edit"), $this->lang->edit, 'editWin');
-            $tree .= html::a(inlink('delete', 'path=' . helper::safe64Encode($filePath)), $this->lang->delete, 'hiddenwin') . "\n";
+            $tree->actions['items'][] = array('key' => 'edit', 'text' => $this->lang->editor->edit, 'id' => $tree->id, 'data-url' => $this->getExtendLink($filePath, "edit"), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
+            $tree->actions['items'][] = array('key' => 'delete', 'text' => $this->lang->delete, 'id' => $tree->id, 'className' => 'ajax-submit', 'url' => inlink('delete', 'path=' . helper::safe64Encode($filePath)), 'data-confirm' => $this->lang->editor->deleteConfirm);
         }
         elseif(basename(dirname($filePath))== 'view')
         {
-            $tree .= "$file " . html::a($this->getExtendLink($filePath, "override"), $this->lang->editor->override, 'editWin');
-            $tree .= html::a($this->getExtendLink($filePath, "newHook"), $this->lang->editor->newHook, 'editWin') . "\n";
+            $tree->actions['items'][] = array('key' => 'edit', 'text' => $this->lang->editor->override, 'id' => $tree->id,  'data-url' => $this->getExtendLink($filePath, "override"), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
+            $tree->actions['items'][] = array('key' => 'create', 'text' => $this->lang->editor->newHook, 'id' => $tree->id, 'data-url' => $this->getExtendLink($filePath, "newHook"), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
         }
         else
         {
@@ -279,10 +275,10 @@ class editorModel extends model
             if($parentDir == 'control.php') $action = 'extendControl';
             if($parentDir == 'model.php')   $action = 'extendModel';
 
-            $tree .= "$file " . html::a($this->getExtendLink($filePath, $action), $this->lang->editor->extend, 'editWin');
-            if($action != 'extendOther') $tree .= html::a($this->getAPILink($filePath, $action), $this->lang->editor->api, 'editWin');
-            if($parentDir == 'lang')     $tree .= html::a($this->getExtendLink($filePath, "new" . str_replace('-', '_', basename($filePath, '.php'))), $this->lang->editor->newLang, 'editWin');
-            if(basename($filePath) == 'config.php') $tree .= html::a($this->getExtendLink($filePath, "newConfig"), $this->lang->editor->newConfig, 'editWin');
+            $tree->actions['items'][] = array('key' => 'edit', 'text' => $this->lang->editor->extend, 'id' => $tree->id, 'data-url' => $this->getExtendLink($filePath, $action), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
+            if($action != 'extendOther') $tree->actions['items'][] = array('key' => 'api', 'text' => $this->lang->editor->api, 'id' => $tree->id, 'data-url' => $this->getAPILink($filePath, $action), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
+            if($parentDir == 'lang')     $tree->actions['items'][] = array('key' => 'newLang', 'text' => $this->lang->editor->newLang, 'id' => $tree->id, 'data-url' => $this->getExtendLink($filePath, "new" . str_replace('-', '_', basename($filePath, '.php'))), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
+            if(basename($filePath) == 'config.php') $tree->actions['items'][] = array('key' => 'newConfig', 'text' => $this->lang->editor->newConfig, 'id' => $tree->id, 'data-url' => $this->getExtendLink($filePath, "newConfig"), 'data-on' => 'click', 'data-call' => 'openInEditWin', 'data-params' => 'event');
         }
         return $tree;
     }
@@ -344,7 +340,7 @@ class editorModel extends model
         $evils       = array('eval', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system', '$$', 'include', 'require', 'assert', 'javascript', 'onclick');
         $gibbedEvils = array('e v a l', 'e x e c', ' p a s s t h r u', ' p r o c _ o p e n', 's h e l l _ e x e c', 's y s t e m', '$ $', 'i n c l u d e', 'r e q u i r e', 'a s s e r t', 'j a v a s c r i p t', 'o n c l i c k');
         $fileContent = str_ireplace($gibbedEvils, $evils, $fileContent);
-        if(get_magic_quotes_gpc()) $fileContent = stripslashes($fileContent);
+        if(function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc()) $fileContent = stripslashes($fileContent);
 
         file_put_contents($filePath, $fileContent);
         return true;

@@ -139,8 +139,8 @@ class editor extends control
         {
             $saveFilePath = $this->editor->getSavePath($filePath, 'newMethod');
             $extendLink   = $this->editor->getExtendLink($saveFilePath, 'newPage');
-            if(file_exists($saveFilePath) and !$this->post->override) return print(js::confirm($this->lang->editor->repeatPage, $extendLink, '', 'parent'));
-            return print(js::locate($extendLink, 'parent'));
+            if(file_exists($saveFilePath) and !$this->post->override) return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm('{$this->lang->editor->repeatPage}').then((res) => {if(res) loadPage('{$extendLink}');});"));
+            return $this->send(array('result' => 'success', 'load' => $extendLink));
         }
         $this->view->filePath = $filePath;
         $this->display();
@@ -158,19 +158,18 @@ class editor extends control
         if($filePath and $_POST)
         {
             $filePath = helper::safe64Decode($filePath);
-            if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return print($this->lang->editor->editFileError);
+            if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->editFileError));
 
             $fileName = empty($_POST['fileName']) ? '' : trim($this->post->fileName);
-            if($action != 'newPage' and empty($fileName)) return print(js::error($this->lang->editor->emptyFileName));
+            if($action != 'newPage' and empty($fileName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->emptyFileName));
 
             if($action != 'edit' and $action != 'newPage') $filePath = $this->editor->getSavePath($filePath, $action);
-            if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) return print(js::error($this->lang->editor->repeatFile));
+            if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->repeatFile));
 
             $result = $this->editor->save($filePath);
-            if(is_string($result)) return print(js::alert($result));
+            if(is_string($result)) return $this->send(array('result' => 'fail', 'message' => $result));
 
-            echo js::reload('parent.parent.extendWin');
-            return print(js::locate(inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'callback' => 'reloadExtendWin()'));
         }
     }
 
@@ -178,21 +177,15 @@ class editor extends control
      * Delete extension file.
      *
      * @param  string $filePath
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($filePath = '', $confirm = 'no')
+    public function delete($filePath = '')
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->editor->deleteConfirm, inlink('delete', "filePath=$filePath&confirm=yes")));
-
         $filePath = helper::safe64Decode($filePath);
-        if(file_exists($filePath) and unlink($filePath))
-        {
-            echo js::locate(inlink('edit'), 'parent.parent.editWin');
-            return print(js::reload('parent'));
-        }
-        return print(js::alert($this->lang->editor->notDelete));
+
+        if(file_exists($filePath) and unlink($filePath)) return $this->send(array('load' => true));
+        return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->notDelete));
 
     }
 
@@ -208,6 +201,6 @@ class editor extends control
         $this->loadModel('setting')->setItem('system.common.global.editor', $status);
 
         $link = empty($status) ? $this->createLink('dev', 'editor') : $this->createLink('editor', 'index');
-        return print(js::locate($link));
+        return $this->send(array('result' => 'success', 'load' => $link));
     }
 }
