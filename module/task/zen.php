@@ -61,7 +61,7 @@ class taskZen extends task
         $this->view->gobackLink    = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID={$executionID}") : '';
         $this->view->execution     = $execution;
         $this->view->storyID       = $storyID;
-        $this->view->blockID       = isonlybody() ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assingtome', 'assingtome') : 0;
+        $this->view->blockID       = helper::isAjaxRequest('modal') ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assingtome', 'assingtome') : 0;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
         $this->view->from          = $storyID || $todoID || $bugID  ? 'other' : 'task';
 
@@ -1269,7 +1269,7 @@ class taskZen extends task
             }
         }
 
-        if(isonlybody()) return $this->responseModal($task, $from);
+        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
 
         $response['load'] = $this->createLink('task', 'view', "taskID=$taskID");
         return $response;
@@ -1323,7 +1323,7 @@ class taskZen extends task
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
 
         $task = $this->task->getById($taskID);
-        if(isonlybody()) return $this->responseModal($task, $from);
+        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
 
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID"));
     }
@@ -1389,7 +1389,7 @@ class taskZen extends task
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $task->id);
 
         /* Processing the return information of pop-up windows. */
-        if(isonlybody())
+        if(helper::isAjaxRequest('modal'))
         {
             /* If it is Kanban execution, refresh the Kanban statically through callback. */
             if($this->app->tab == 'execution' || $this->config->vision == 'lite')
@@ -1433,7 +1433,7 @@ class taskZen extends task
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
 
-        if(isonlybody() && $this->app->tab == 'execution' || $this->config->vision == 'lite')
+        if(helper::isAjaxRequest('modal') && $this->app->tab == 'execution' || $this->config->vision == 'lite')
         {
             $response['closeModal'] = true;
             $kanbanData = $this->getKanbanData($execution);
@@ -1518,7 +1518,7 @@ class taskZen extends task
             if($response) return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $response['confirmed'], $response['canceled'], 'parent', 'parent.parent'));
         }
 
-        if(isonlybody()) return $this->responseModal($task, $from);
+        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
 
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;

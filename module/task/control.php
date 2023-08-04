@@ -327,7 +327,7 @@ class task extends control
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         $execution = $this->execution->getById($task->execution);
-        if(!isonlybody() and $execution->type == 'kanban')
+        if(!helper::isAjaxRequest('modal') and $execution->type == 'kanban')
         {
             helper::setcookie('taskToOpen', $taskID);
             return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
@@ -836,7 +836,7 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) return $this->taskZen->responseModal($oldTask, $from);
+            if(helper::isAjaxRequest('modal')) return $this->taskZen->responseModal($oldTask, $from);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID")));
         }
 
