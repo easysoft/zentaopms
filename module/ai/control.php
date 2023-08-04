@@ -495,13 +495,20 @@ class ai extends control
     /**
      * Audit prompt modal.
      *
-     * @param  int    $promptId
-     * @param  int    $objectId
+     * @param  int      $promptId
+     * @param  int      $objectId
+     * @param  bool     $exit
      * @access public
-     * @return void
+     * @return void|int
      */
-    public function promptAudit($promptId, $objectId)
+    public function promptAudit($promptId, $objectId, $exit)
     {
+        if(!empty($exit))
+        {
+            unset($_SESSION['auditPrompt']);
+            return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptview', "promptID=$promptId")));
+        }
+
         $prompt = $this->ai->getPromptByID($promptId);
 
         if($_POST)

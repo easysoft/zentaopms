@@ -124,6 +124,7 @@
     <script>
       (function() {
         const isAudit = <?php echo $isAudit ? 'true' : 'false';?>;
+        const promptId = '<?php echo $prompt->id;?>';
 
         <?php if(isset($config->ai->injectAuditButton->locations[$module][$method])) :?>
         function injectAuditAction()
@@ -179,6 +180,24 @@
             const promptId = publishButton.dataset.promptid;
             const aTag = document.createElement('a');
             aTag.href = createLink('ai', 'promptPublish', 'promptId=' + promptId + '&backToTestingLocation=true');
+            aTag.style.display = 'none';
+            document.body.appendChild(aTag);
+            aTag.click();
+          });
+        }
+
+        const auditExitButton = document.getElementById('promptAuditExit');
+        if(auditExitButton)
+        {
+          auditExitButton.addEventListener('click', function(e)
+          {
+            e.preventDefault();
+
+            const container = auditExitButton.ownerDocument.defaultView.parent.document.querySelector('.load-indicator');
+            if(container) container.classList.toggle('loading', true);
+
+            const aTag = document.createElement('a');
+            aTag.href = createLink('ai', 'promptAudit', 'promptId=' + promptId + '&objectId=0' + '&exit=true');
             aTag.style.display = 'none';
             document.body.appendChild(aTag);
             aTag.click();
