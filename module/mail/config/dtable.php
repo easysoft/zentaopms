@@ -1,5 +1,6 @@
 <?php
-global $lang;
+global $lang, $app;
+if(!isset($lang->mail)) $app->loadLang('mail');
 
 $config->mail->browse = new stdclass();
 $config->mail->browse->dtable = new stdclass();
