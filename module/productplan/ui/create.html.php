@@ -133,7 +133,7 @@ formPanel
         )
     ),
     formHidden('product', $product->id),
-    $parent ? formHidden('parent', $parent) : null
+    formHidden('parent', $parent)
 );
 
 /* ====== Render page ====== */
