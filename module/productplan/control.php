@@ -78,8 +78,7 @@ class productplan extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $planID));
-            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => 'true'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($this->app->rawModule, 'browse', "productID=$productID")));
+            return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse', "productID=$productID"), 'closeModal' => true));
         }
 
         $this->commonAction($productID, $branchID);
