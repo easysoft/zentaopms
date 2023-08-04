@@ -2987,7 +2987,7 @@ class storyModel extends model
 
         if($browseType == 'bySearch')
         {
-            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', '', $tmpStoryType, $storyIDList, $pager);
+            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', '', $tmpStoryType, $storyIDList, '', $pager);
         }
         elseif($type != 'linkRelateSR' and $type != 'linkRelateUR')
         {
@@ -3336,11 +3336,12 @@ class storyModel extends model
      * @param  string      $executionID
      * @param  string      $type requirement|story
      * @param  string      $excludeStories
+     * @param  string      $excludeStatus
      * @param  object      $pager
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $branch = '', $queryID = 0, $orderBy = '', $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
+    public function getBySearch($productID, $branch = '', $queryID = 0, $orderBy = '', $executionID = '', $type = 'story', $excludeStories = '', $excludeStatus = '', $pager = null)
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
@@ -3368,6 +3369,7 @@ class storyModel extends model
         $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
 
         if($excludeStories) $storyQuery = $storyQuery . ' AND `id` NOT ' . helper::dbIN($excludeStories);
+        if($excludeStatus)  $storyQuery = $storyQuery . ' AND `status` NOT ' . helper::dbIN($excludeStatus);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
         $allBranch = "`branch` = 'all'";
         if(!empty($executionID))
@@ -3411,7 +3413,7 @@ class storyModel extends model
 
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
             {
-                $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing', 'changing')"; // Fix bug #990.
+                $storyQuery .= " AND `status` NOT IN ('draft')"; // Fix bug #990.
             }
             else
             {
@@ -3428,6 +3430,7 @@ class storyModel extends model
         {
             if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` " . helper::dbIN($branch);
         }
+
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
 
