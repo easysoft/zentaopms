@@ -116,11 +116,12 @@ class searchModel extends model
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
 
         $queryForm    = $this->initSession($module, $searchFields, $fieldParams);
-        $queryForm[6] = array('groupAndOr' => $groupAndOr);
+        $queryForm[6] = array('groupAndOr' => strtolower($groupAndOr));
 
         for($i = 1; $i <= $groupItems * 2; $i ++)
         {
             /* The and or between two groups. */
+            $formIndex = $i - 1;
             if($i == 1) $where .= '(( 1  ';
             if($i == $groupItems + 1) $where .= " ) $groupAndOr ( 1 ";
 
@@ -134,25 +135,27 @@ class searchModel extends model
             $field = $this->post->$fieldName;
             if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
             if($field == 'id' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
-
-            /* Skip empty values. */
-            if(empty($field)) continue;
-            if($this->post->$valueName == false) continue;
-            if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
-            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
-
-            $scoreNum += 1;
+            $queryForm[$formIndex]['field'] = $field;
 
             /* Set and or. */
             $andOr = strtoupper($this->post->$andOrName);
             if($andOr != 'AND' and $andOr != 'OR') $andOr = 'AND';
+            $queryForm[$formIndex]['andOr'] = strtolower($andOr);
 
             /* Set operator. */
-            $value    = addcslashes(trim($this->post->$valueName), '%');
             $operator = $this->post->$operatorName;
             if(!isset($this->lang->search->operators[$operator])) $operator = '=';
+            $queryForm[$formIndex]['operator'] = $operator;
 
-            $queryForm[$i - 1] = array('field' => $field, 'andOr' => $andOr, 'operator' => $operator, 'value' => $value);
+            /* Skip empty values. */
+            if($this->post->$valueName == false) continue;
+            if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
+            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
+            $value = addcslashes(trim($this->post->$valueName), '%');
+            $queryForm[$formIndex]['value'] = $value;
+
+            $scoreNum += 1;
+
 
             /* Set condition. */
             $condition = '';
@@ -267,6 +270,7 @@ class searchModel extends model
     {
         if(is_object($fields)) $fields = get_object_vars($fields);
         $formSessionName = $module . 'Form';
+
         $queryForm       = array();
         for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
         {
@@ -1540,11 +1544,11 @@ class searchModel extends model
     public function buildSearchFormOptions($module, $fieldParams, $fields, $queries, $actionURL = '')
     {
         $opts = new stdClass();
-        $opts->formConfig = static::buildFormConfig();
-        $opts->fields     = static::buildFormFields($fieldParams, $fields);
-        $opts->operators  = static::buildFormOperators($this->lang->search->operators);
-        $opts->andOr      = static::buildFormAndOrs($this->lang->search->andor);
-        $opts->saveSearch = static::buildFormSaveSearch($module);
+        $opts->formConfig       = static::buildFormConfig();
+        $opts->fields           = static::buildFormFields($fieldParams, $fields);
+        $opts->operators        = static::buildFormOperators($this->lang->search->operators);
+        $opts->andOr            = static::buildFormAndOrs($this->lang->search->andor);
+        $opts->saveSearch       = static::buildFormSaveSearch($module);
         $opts->searchConditions = static::buildFormSavedQuery($queries, $actionURL);
 
         return $opts;

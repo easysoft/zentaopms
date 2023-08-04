@@ -28,6 +28,7 @@ class search extends control
     {
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';
+        $searchForm   = $module . 'Form';
         $queryID      = (empty($module) and empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
         $fields       = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
         $params       = empty($params) ?  json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
@@ -36,7 +37,7 @@ class search extends control
         $onMenuBar    = isset($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : '';
 
         $_SESSION['searchParams']['module'] = $module;
-        $this->search->initSession($module, $fields, $params);
+        if(empty($_SESSION[$searchForm])) $this->search->initSession($module, $fields, $params);
 
         if(in_array($module, $this->config->search->searchObject) and $this->session->objectName)
         {
