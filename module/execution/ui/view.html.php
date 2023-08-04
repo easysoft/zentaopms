@@ -777,7 +777,11 @@ div
         div
         (
             setClass('mt-4'),
-            history(set::bodyClass('h-72 overflow-y-auto'))
+            history
+            (
+                set::commentUrl(createLink('action', 'comment', array('objectType' => 'execution', 'objectID' => $execution->id))),
+                set::bodyClass('h-72 overflow-y-auto')
+            )
         ),
     ),
 );

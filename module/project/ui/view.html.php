@@ -670,14 +670,18 @@ div
                 $lang->more
             ) : null
         ),
-        set::bodyClass('pt-0'),
+        set::bodyClass('pt-0 h-80 overflow-y-auto'),
         dynamic()
     ),
     div
     (
         setID('historyBlock'),
         setClass('mt-4'),
-        history()
+        history
+        (
+            set::commentUrl(createLink('action', 'comment', array('objectType' => 'project', 'objectID' => $project->id))),
+            set::bodyClass('h-80 overflow-y-auto')
+        )
     )
 );
 
