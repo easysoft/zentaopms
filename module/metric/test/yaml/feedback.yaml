@@ -7,6 +7,8 @@ fields:
   range: 1-10000
 - field: product
   range: 1-10{2}
+- field: status
+  range: noreview{1},wait{1},clarify{1},replied{1},commenting{1},closed{1}
 - field: assignedTo
   range: admin,user{5},test{4},dev{10},pm{8},po{2},closed{10},[]{10}
 - field: openedDate
