@@ -14,7 +14,7 @@
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -22,21 +22,30 @@
  */
 class count_of_assigned_case_in_user extends baseCalc
 {
-    public $dataset = null;
-
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public function getStatement()
+    {
+        return $this->dao->select('t1.assignedTo')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
+            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.status')->ne('done')
+            ->query();
+    }
 
     public function calculate($row)
     {
+        $assignedTo = $row->assignedTo;
+
+        if(empty($assignedTo) || $assignedTo == 'closed') return false;
+
+        if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = 0;
+        $this->result[$assignedTo] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('user', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
