@@ -225,7 +225,8 @@ class search extends control
         if(empty($type)) $type = $this->get->type;
         if(empty($type)) $type = $this->post->type;
         if(empty($type) and ($recTotal != 0 or $pageID != 1)) $type = $this->session->searchIngType;
-        $type = (empty($type) or $type[0] == 'all') ? 'all' : $type;
+        if(is_array($type)) $type = array_filter(array_unique($type));
+        $type = (empty($type) or in_array('all', $type)) ? 'all' : $type;
 
         $this->app->loadClass('pager', $static = true);
         $begin   = time();
