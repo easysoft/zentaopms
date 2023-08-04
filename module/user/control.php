@@ -37,7 +37,6 @@ class user extends control
      */
     public function view($userID)
     {
-        $userID = (int)$userID;
         $this->locate($this->createLink('user', 'todo', "userID=$userID&type=all"));
     }
 
@@ -56,12 +55,11 @@ class user extends control
      */
     public function todo($userID, $type = 'today', $status = 'all', $orderBy = 'date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $userID = (int)$userID;
-        $user   = $this->user->getById($userID, 'id');
+        $user = $this->user->getById($userID, 'id');
         if(empty($user)) return print(js::error($this->lang->notFound) . js::locate($this->createLink('my', 'team')));
         if($user->deleted == 1) return print(js::error($this->lang->user->noticeHasDeleted) . js::locate('back'));
 
-        /* Set thie url to session. */
+        /* Set this url to session. */
         $uri = $this->app->getURI(true);
         $this->session->set('todoList', $uri, 'my');
         $this->session->set('bugList',  $uri, 'qa');
@@ -773,23 +771,23 @@ class user extends control
         if($this->user->checkTmp() === false)
         {
             $canModifyDIR = false;
-            $floderPath   = $this->app->tmpRoot;
+            $folderPath   = $this->app->tmpRoot;
         }
         elseif(!is_dir($this->app->dataRoot) or substr(base_convert(@fileperms($this->app->dataRoot), 10, 8), -4) != '0777')
         {
             $canModifyDIR = false;
-            $floderPath   = $this->app->dataRoot;
+            $folderPath   = $this->app->dataRoot;
         }
 
         if(!$canModifyDIR)
         {
             if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
             {
-                return print(sprintf($this->lang->user->mkdirWin, $floderPath, $floderPath));
+                return print(sprintf($this->lang->user->mkdirWin, $folderPath, $folderPath));
             }
             else
             {
-                return print(sprintf($this->lang->user->mkdirLinux, $floderPath, $floderPath, $floderPath, $floderPath));
+                return print(sprintf($this->lang->user->mkdirLinux, $folderPath, $folderPath, $folderPath, $folderPath));
             }
         }
 
@@ -862,7 +860,7 @@ class user extends control
 
             if($user)
             {
-                /* Set user group, rights, view and aword login score. */
+                /* Set user group, rights, view and award login score. */
                 $user = $this->user->login($user);
 
                 /* Go to the referer. */
