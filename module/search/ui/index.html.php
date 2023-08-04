@@ -104,7 +104,7 @@ form
             set::className('shadow-none border-l'),
             set::name('type[]'),
             set::value($type),
-            set::items($lang->searchObjects),
+            set::items($typeList),
             set::multiple(true)
         ),
         span
