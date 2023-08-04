@@ -5,9 +5,12 @@ $(function()
         $(this).addClass('disabled');
         $(this).css('pointer-events', 'none');
         $('#upgradingTips').removeClass('hidden');
-        $('#progress').modal('show');
-        updateProgressInterval();
-        updateProgress();
+        if(writable)
+        {
+            $('#progress').modal('show');
+            updateProgressInterval();
+            updateProgress();
+        }
     });
 })
 

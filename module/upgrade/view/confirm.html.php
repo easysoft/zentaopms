@@ -10,6 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php js::set('writable', $writable);?>
 <div class='container'>
   <form method='post' onsubmit="submit.disabled=1">
     <div class='modal-dialog'>

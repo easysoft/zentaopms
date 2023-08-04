@@ -118,6 +118,8 @@ class upgrade extends control
         if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
         if(strpos($fromVersion, 'ipd') !== false)  $fromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
 
+        $writable = true;
+        if (!is_writable($this->app->getTmpRoot())) $writable = false;
         if(file_exists($this->app->getTmpRoot() . 'upgradeSqlLines')) @unlink($this->app->getTmpRoot() . 'upgradeSqlLines');
         $confirmSql = $this->upgrade->getConfirm($fromVersion);
         $confirmSql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $confirmSql);
@@ -126,6 +128,7 @@ class upgrade extends control
         $this->view->title       = $this->lang->upgrade->confirm;
         $this->view->position[]  = $this->lang->upgrade->common;
         $this->view->confirm     = $confirmSql;
+        $this->view->writable    = $writable;
 
         /* When sql is empty then skip it. */
         if(empty($this->view->confirm)) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
@@ -809,12 +812,13 @@ class upgrade extends control
         $tmpProgressFile = $this->app->getTmpRoot() . 'upgradeSqlLines';
         if(!file_exists($tmpProgressFile)) return print(1);
         $sqlLines = file_get_contents($tmpProgressFile);
-        if(empty($sqlLines)) return print(1);
+        if(empty($sqlLines)) return print($this->session->upgradeProgress ? $this->session->upgradeProgress : 1);
         if($sqlLines == 'completed') return print(100);
 
         $sqlLines = explode('-', $sqlLines);
         $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
         if($progress > 95) $progress = 100;
+        $this->session->set('upgradeProgress', $progress);
         return print($progress);
     }
 

@@ -99,10 +99,13 @@ class upgradeModel extends model
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
 
         /* Get total sqls and write in tmp file. */
-        file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', '0-0');
-        $confirm        = $this->getConfirm($fromVersion);
-        $updateTotalSql = count(explode(';', $confirm));
-        file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
+        if(is_writable($this->app->getTmpRoot()))
+        {
+            file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', '0-0');
+            $confirm        = $this->getConfirm($fromVersion);
+            $updateTotalSql = count(explode(';', $confirm));
+            file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
+        }
 
         foreach($versions as $openVersion => $chargedVersions)
         {
@@ -2113,11 +2116,14 @@ class upgradeModel extends model
                 $this->saveLogs($sql);
 
                 /* Calculate the number of sql runs completed. */
-                $sqlLines    = file_get_contents($this->app->getTmpRoot() . 'upgradeSqlLines');
-                $sqlLines    = explode('-', $sqlLines);
-                $executeLine = $sqlLines[1];
-                $executeLine ++;
-                file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $sqlLines[0] . '-' . $executeLine);
+                if(is_writable($this->app->getTmpRoot()))
+                {
+                    $sqlLines    = file_get_contents($this->app->getTmpRoot() . 'upgradeSqlLines');
+                    $sqlLines    = explode('-', $sqlLines);
+                    $executeLine = $sqlLines[1];
+                    $executeLine ++;
+                    file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $sqlLines[0] . '-' . $executeLine);
+                }
 
                 $this->dbh->exec($sql);
             }
