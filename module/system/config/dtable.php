@@ -31,9 +31,13 @@ $config->system->dtable->backup = new stdclass();
 $config->system->dtable->backup->fieldList['time']['title'] = $lang->backup->time;
 $config->system->dtable->backup->fieldList['time']['type']  = 'datetime';
 
-$config->system->dtable->backup->fieldList['backupPerson']['title'] = $lang->system->backup->backupPerson;
-
 $config->system->dtable->backup->fieldList['type']['title'] = $lang->system->backup->type;
+$config->system->dtable->backup->fieldList['type']['map']   = $lang->system->backup->typeList;
+
+$config->system->dtable->backup->fieldList['status']['title'] = $lang->backup->status;
+
+$config->system->dtable->backup->fieldList['comment']['title'] = $lang->comment;
+$config->system->dtable->backup->fieldList['comment']['type']  = 'html';
 
 $config->system->dtable->backup->fieldList['actions']['name']  = 'actions';
 $config->system->dtable->backup->fieldList['actions']['title'] = $lang->actions;
@@ -42,10 +46,10 @@ $config->system->dtable->backup->fieldList['actions']['menu']  = array('restore'
 
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['icon'] = 'history';
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['hint'] = $lang->backup->restore;
-$config->system->dtable->backup->fieldList['actions']['list']['restore']['url']  = array('module' => 'backup', 'method' => 'restore', 'params' => 'time={time}');
-$config->system->dtable->backup->fieldList['actions']['list']['restore']['data-confirm'] = $lang->system->backup->confirmDelete;
+$config->system->dtable->backup->fieldList['actions']['list']['restore']['url']  = array('module' => 'system', 'method' => 'restoreBackup', 'params' => 'name={name}');
+$config->system->dtable->backup->fieldList['actions']['list']['restore']['data-confirm'] = $lang->system->backup->confirmRestore;
 
 $config->system->dtable->backup->fieldList['actions']['list']['delete']['icon'] = 'trash';
 $config->system->dtable->backup->fieldList['actions']['list']['delete']['hint'] = $lang->delete;
-$config->system->dtable->backup->fieldList['actions']['list']['delete']['url']  = array('module' => 'backup', 'method' => 'delete', 'params' => 'time={time}');
-$config->system->dtable->backup->fieldList['actions']['list']['delete']['data-confirm'] = $lang->system->backup->confirmRestore;
+$config->system->dtable->backup->fieldList['actions']['list']['delete']['url']  = array('module' => 'system', 'method' => 'deleteBackup', 'params' => 'name={name}');
+$config->system->dtable->backup->fieldList['actions']['list']['delete']['data-confirm'] = $lang->system->backup->confirmDelete;

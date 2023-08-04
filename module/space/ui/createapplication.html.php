@@ -19,6 +19,7 @@ jsVar('jenkinsPasswordTips', $lang->jenkins->tips);
 jsVar('apps', $apps);
 jsVar('mysqlList', $mysqlList);
 jsVar('pgList', $pgList);
+jsVar('defaultApp', $defaultApp);
 
 $showVersion = getenv('ALLOW_SELECT_VERSION') && (strtolower(getenv('ALLOW_SELECT_VERSION')) == 'true' || strtolower(getenv('ALLOW_SELECT_VERSION')) == '1');
 $dbTypeItems = array();
@@ -26,82 +27,7 @@ foreach($lang->instance->dbTypes as $type => $db) $dbTypeItems[] = array('text' 
 
 formPanel
 (
-    setClass('externalPanel' . (!$appID ? '' : ' hidden')),
-    set::id('createAppForm'),
-    set::title($lang->space->install),
-    set::url($this->createLink('gitlab', 'create')),
-    formGroup
-    (
-        set::width('1/2'),
-        set::label($lang->app->common),
-        set::name('appType'),
-        set::items($lang->space->appType),
-        set::required(true),
-        on::change('onChangeAppType'),
-    ),
-    formGroup
-    (
-        set::label($lang->space->addType),
-        set::name('type'),
-        set::value('external'),
-        set::control('radioListInline'),
-        set::items(array(array('text' => $lang->store->common, 'value' => 'store'), array('text' => $lang->space->handConfig, 'value' => 'external'))),
-        set::required(true),
-        on::change('onChangeType'),
-    ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::label($lang->gitlab->name),
-        set::name('name'),
-        set::required(true),
-    ),
-    formGroup
-    (
-        set::width('2/3'),
-        set::label($lang->gitlab->url),
-        set::name('url'),
-        set::required(true),
-        set::placeholder($lang->gitlab->placeholder->url)
-    ),
-    formRow
-    (
-        setClass('jenkins sonarqube hidden'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->user->account),
-            set::name('account'),
-            set::required(true),
-        ),
-    ),
-    formRow
-    (
-        setClass('token'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->gitlab->token),
-            set::name('token'),
-            set::placeholder($lang->gitlab->placeholder->token),
-            set::required(true),
-        ),
-    ),
-    formRow
-    (
-        setClass('jenkins sonarqube password hidden'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->user->password),
-            set::name('password'),
-        ),
-    ),
-);
-
-formPanel
-(
-    setClass('storePanel' . ($appID ? '' : ' hidden')),
+    setClass('storePanel'),
     set::id('createStoreAppForm'),
     set::title($lang->space->install),
     $appID ? set::submitBtnText($lang->instance->install) : null,
@@ -111,7 +37,7 @@ formPanel
         setStyle('display', $appID ? 'block' : 'none'),
         formGroup
         (
-            set::width('1/2'),
+            set::width('2/3'),
             set::label($lang->instance->name),
             set::name('customName'),
             set::control('input'),
@@ -124,11 +50,11 @@ formPanel
         setStyle('display', $appID ? 'none' : 'block'),
         formGroup
         (
-            set::width('1/2'),
+            set::width('2/3'),
             set::label($lang->app->common),
             set::name('storeAppType'),
             set::items($apps),
-            set::value($appID),
+            set::value($appID ? $appID : $defaultApp),
             set::disabled(!!$appID),
             set::required(true),
             on::change('onChangeStoreAppType'),
@@ -151,7 +77,7 @@ formPanel
     ),
     $showVersion ? formGroup
     (
-        set::width('1/2'),
+        set::width('2/3'),
         set::label($lang->instance->version),
         set::name('version'),
         set::required(true),
@@ -159,7 +85,7 @@ formPanel
         set::items($versionList)
     ) : formGroup
     (
-        set::width('1/2'),
+        set::width('2/3'),
         set::label($lang->instance->version),
         set::name('app_version'),
         set::required(true),
@@ -174,7 +100,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('2/3'),
             set::label($lang->instance->domain),
             set::required(true),
             inputGroup
@@ -216,11 +142,86 @@ formPanel
         setClass('dbType dbService'),
         formGroup
         (
-            set::width('1/2'),
+            set::width('2/3'),
             set::label($lang->space->instanceType),
             set::name('dbService'),
             set::items(array()),
             set::required(true),
+        ),
+    ),
+);
+
+formPanel
+(
+    setClass('externalPanel hidden'),
+    set::id('createAppForm'),
+    set::title($lang->space->install),
+    set::url($this->createLink('gitlab', 'create')),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->app->common),
+        set::name('appType'),
+        set::items($lang->space->appType),
+        set::required(true),
+        on::change('onChangeAppType'),
+    ),
+    formGroup
+    (
+        set::label($lang->space->addType),
+        set::name('type'),
+        set::value('external'),
+        set::control('radioListInline'),
+        set::items(array(array('text' => $lang->store->common, 'value' => 'store'), array('text' => $lang->space->handConfig, 'value' => 'external'))),
+        set::required(true),
+        on::change('onChangeType'),
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->gitlab->name),
+        set::name('name'),
+        set::required(true),
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->gitlab->url),
+        set::name('url'),
+        set::required(true),
+        set::placeholder($lang->gitlab->placeholder->url)
+    ),
+    formRow
+    (
+        setClass('jenkins sonarqube hidden'),
+        formGroup
+        (
+            set::width('2/3'),
+            set::label($lang->user->account),
+            set::name('account'),
+            set::required(true),
+        ),
+    ),
+    formRow
+    (
+        setClass('token'),
+        formGroup
+        (
+            set::width('2/3'),
+            set::label($lang->gitlab->token),
+            set::name('token'),
+            set::placeholder($lang->gitlab->placeholder->token),
+            set::required(true),
+        ),
+    ),
+    formRow
+    (
+        setClass('jenkins sonarqube password hidden'),
+        formGroup
+        (
+            set::width('2/3'),
+            set::label($lang->user->password),
+            set::name('password'),
         ),
     ),
 );

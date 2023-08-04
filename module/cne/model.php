@@ -1202,4 +1202,85 @@ class cneModel extends model
 
         return $this->error;
     }
+
+    /**
+     * 获取备份平台列表。
+     * Get backup platform list.
+     *
+     * @access public
+     * @return object
+     */
+    public function getBackupPlatformList(): object
+    {
+        $apiUrl = "/api/cne/platform/backups";
+        return $this->apiGet($apiUrl, array(), $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 备份平台和应用。
+     * Backup platform and apps.
+     *
+     * @param  array $apps
+     * @access public
+     * @return object
+     */
+    public function backupPlatform(array $apps = array()): object
+    {
+        $apiParams = new stdclass();
+        $apiParams->apps = $apps;
+
+        $apiUrl = "/api/cne/platform/backup";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取备份平台状态。
+     * Get backup platfrom status.
+     *
+     * @param  string $name
+     * @access public
+     * @return object
+     */
+    public function backupPlatformStatus(string $name): object
+    {
+        $apiParams = new stdclass();
+        $apiParams->name = $name;
+
+        $apiUrl = "/api/cne/platform/backup/status";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 还原平台和应用。
+     * Restroe platform and apps.
+     *
+     * @param  array $apps
+     * @access public
+     * @return object
+     */
+    public function restorePlatform(string $name): object
+    {
+        $apiParams = new stdclass();
+        $apiParams->backup_set_name = $name;
+
+        $apiUrl = "/api/cne/platform/restore";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取备份平台状态。
+     * Get backup platfrom status.
+     *
+     * @param  string $name
+     * @access public
+     * @return object
+     */
+    public function restorePlatformStatus(string $name): object
+    {
+        $apiParams = new stdclass();
+        $apiParams->name = $name;
+
+        $apiUrl = "/api/cne/platform/restore/status";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
 }

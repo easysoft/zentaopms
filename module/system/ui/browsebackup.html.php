@@ -10,18 +10,24 @@ declare(strict_types=1);
  */
 namespace zin;
 
-foreach($backups as $backup)
-{
-    $backup->backupPerson = isset($backup->sqlSummary['account']) ? $backup->sqlSummary['account'] : '';
-    if(empty($backup->sqlSummary['backupType'])) $backup->sqlSummary['backupType'] = '';
-    $backup->type = $backup->sqlSummary['backupType'];
-}
 $backups = initTableData($backups, $config->system->dtable->backup->fieldList, $this->system);
 
 panel
 (
     set::size('lg'),
-    set::title($lang->system->backup->systemInfo),
+    set::title($lang->backup->history),
+    to::headingActions
+    (
+        a
+        (
+            setClass('btn primary'),
+            icon('copy'),
+            set::href($this->createLink('system', 'backupPlatform')),
+            set::target('hiddenwin'),
+            $lang->backup->backup,
+            set('data-toggle', 'modal'),
+        ),
+    ),
     div
     (
         setStyle('width', '66.6%'),

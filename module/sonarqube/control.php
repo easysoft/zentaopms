@@ -140,7 +140,7 @@ class sonarqube extends control
                 ->skipSpecial('url,token,account,password')
                 ->remove('token,appType')
                 ->get();
-            $this->checkToken($sonarqube);
+            $this->checkToken($sonarqube, 0);
             $sonarqubeID = $this->loadModel('pipeline')->create($sonarqube);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -160,9 +160,8 @@ class sonarqube extends control
      * @access protected
      * @return void
      */
-    protected function checkToken(int $sonarqubeID)
+    protected function checkToken(object $sonarqube, int $sonarqubeID = 0)
     {
-        $sonarqube = fixer::input('post')->trim('url,token,account,password')->get();
         $this->dao->update('sonarqube')->data($sonarqube)
             ->batchCheck(empty($sonarqubeID) ? $this->config->sonarqube->create->requiredFields : $this->config->sonarqube->edit->requiredFields, 'notempty')
             ->batchCheck("url", 'URL');
