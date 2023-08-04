@@ -29,6 +29,3 @@ formPanel(
     set::actionsClass('w-1/2'),
     set::submitBtnText($lang->mail->nextStep)
 );
-
-render();
-

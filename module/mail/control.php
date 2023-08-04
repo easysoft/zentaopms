@@ -143,7 +143,7 @@ class mail extends control
             $mailConfig->smtp->debug    = $this->post->debug;
             $mailConfig->smtp->charset  = $this->post->charset;
 
-            if(empty($mailConfig->fromName)) return $this->sendError(array('fromName' => sprintf($this->lang->error->notempty, $this->lang->mail->fromName)));
+            if($mailConfig->turnon && empty($mailConfig->fromName)) return $this->sendError(array('fromName' => sprintf($this->lang->error->notempty, $this->lang->mail->fromName)));
 
             /* The mail need openssl and curl extension when secure is tls. */
             if($mailConfig->smtp->secure == 'tls')
@@ -158,11 +158,21 @@ class mail extends control
                 }
             }
 
+            $this->session->set('mailConfig', $mailConfig->turnon);
             $this->loadModel('setting')->setItems('system.mail', $mailConfig);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $mailExist = !empty($this->mail->mailExist());
-            return $this->send(array('result' => 'success', 'callback' => "window.mailTips({$mailExist});"));
+            $result = array('result' => 'success');
+            if($mailConfig->turnon)
+            {
+                $mailExist = !empty($this->mail->mailExist());
+                $result['callback'] = "window.mailTips({$mailExist});";
+            }
+            else
+            {
+                $result['load'] = inlink('detect');
+            }
+            return $this->send($result);
         }
     }
 
