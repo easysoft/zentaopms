@@ -259,7 +259,7 @@ function validateForm()
   $('#mainForm').on('submit', function()
   {
     if($('#mainForm input[name="saveTemplate"]:checked').val() === 'discard') return true;
-    if(!$(`#role-template-${roleId}`).length || ($('#mainForm input[name="role"]').val() === $(`role-${roleId}`).text() && $('#mainForm textarea[name="characterization"]').val() === $(`characterization-${roleId}`).text()))
+    if((roleId && !$(`#role-template-${roleId}`).length) || ($('#mainForm input[name="role"]').val() === $(`role-${roleId}`).text() && $('#mainForm textarea[name="characterization"]').val() === $(`characterization-${roleId}`).text()))
     {
       $('#mainForm input[name="saveTemplate"]#saveTemplatediscard').prop('checked', true);
     }
