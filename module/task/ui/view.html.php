@@ -340,4 +340,11 @@ detailBody
     )
 );
 
-render();
+if(!isInModal())
+{
+    floatPreNextBtn
+    (
+        !empty($preAndNext->pre)  ? set::preLink(createLink('task', 'view', "taskID={$preAndNext->pre->id}"))   : null,
+        !empty($preAndNext->next) ? set::nextLink(createLink('task', 'view', "taskID={$preAndNext->next->id}")) : null
+    );
+}
