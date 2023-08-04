@@ -87,10 +87,10 @@ class history extends wg
         global $app;
         return li
         (
-            setClass('mb-2'),
+            setClass('mb-2 flex'),
             set::value($i),
             $this->marker($i),
-            html($app->loadTarget('action')->renderAction($action))
+            div(html($app->loadTarget('action')->renderAction($action)))
         );
     }
 
