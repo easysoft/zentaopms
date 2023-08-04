@@ -318,7 +318,7 @@ $lang->user->mkdirLinux = <<<EOT
     <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
     <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod 777 -R %s</strong>。</div>
     <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
-    <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod 777 -R %s</strong>.</div>
+    <div style='margin-bottom:8px;'>Command: <strong style='color:#ed980f'>chmod 777 -R %s</strong>.</div>
     </td></tr></table></body></html>
 EOT;
 
