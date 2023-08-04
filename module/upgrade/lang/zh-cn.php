@@ -143,4 +143,4 @@ $lang->upgrade->recoveryActions->review = '评审';
 $lang->upgrade->remark     = '备注';
 $lang->upgrade->remarkDesc = '后续您还可以在禅道的后台-系统设置-模式中进行切换。';
 
-$lang->upgrade->upgradingTips = '系统正在升级中，请耐心等待...';
+$lang->upgrade->upgradingTip = '系统正在升级中，请耐心等待...';

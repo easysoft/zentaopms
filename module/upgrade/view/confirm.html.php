@@ -35,7 +35,7 @@
           <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" style="width: 1%">
           </div>
         </div>
-        <span><?php echo $lang->upgrade->upgradingTips;?></span>
+        <span><?php echo $lang->upgrade->upgradingTip;?></span>
       </div>
     </div>
   </div>
