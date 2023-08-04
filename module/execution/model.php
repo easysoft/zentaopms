@@ -4310,8 +4310,6 @@ class executionModel extends model
              ->orderBy($orderBy)
              ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
-
         if(empty($tasks)) return array();
 
         $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
