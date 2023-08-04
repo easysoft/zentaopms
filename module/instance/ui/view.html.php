@@ -123,7 +123,15 @@ div
                                 ),
                             ),
                         ),
-                        btn($lang->instance->setting, setClass('btn ghost'), set::icon('backend'), setData('toggle', 'modal'), setData('size', 'sm'), set::url(createLink('instance', 'setting', "id={$instance->id}")))
+                        btn
+                        (
+                            $lang->instance->setting,
+                            setClass('btn ghost'),
+                            set::disabled($instance->status != 'running'),
+                            set::icon('backend'),
+                            setData('toggle', 'modal'),
+                            setData('size', 'sm'),
+                            set::url(createLink('instance', 'setting', "id={$instance->id}")))
                     ),
                 ),
                 /* 基本信息区块 */

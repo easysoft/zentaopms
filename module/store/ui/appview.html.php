@@ -48,6 +48,7 @@ detailHeader(
         (
             set::icon('back'),
             set::type('secondary'),
+            set::url(inLink('browse')),
             $lang->goback
         )
     ),
