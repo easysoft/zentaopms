@@ -10,6 +10,124 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$items = array();
+if(isset($lang->execution->groupFilter[$groupBy]))
+{
+    foreach($lang->execution->groupFilter[$groupBy] as $filterKey => $name)
+    {
+        $items[] = li
+        (
+            setClass('nav-item'),
+            a
+            (
+                ($filterKey == $filter) ? set('class', 'active') : null,
+                span(setClass('text'), $name),
+                ($filterKey == $filter) ? span(setClass('label size-sm rounded-full white'), $allCount) : null,
+                set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}&filter={$filterKey}"))
+            )
+        );
+    }
+}
+else
+{
+    $items[] = li
+    (
+        setClass('nav-item'),
+        a
+        (
+            set('class', 'active'),
+            span(setClass('text'), $lang->all),
+            span(setClass('label size-sm rounded-full white'), $allCount),
+            set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}"))
+        )
+    );
+}
+
+featureBar
+(
+    li
+    (
+        setClass('nav-item feature-actions'),
+        a
+        (
+            setClass('btn ghost group-collapse-all'),
+            span(setClass('text'), $lang->execution->treeLevel['root']),
+            icon('fold-all'),
+        )
+    ),
+    li
+    (
+        setClass('nav-item hidden feature-actions'),
+        a
+        (
+            setClass('btn ghost group-expand-all'),
+            span(setClass('text'), $lang->execution->treeLevel['all']),
+            icon('unfold-all'),
+        )
+    ),
+    $items
+);
+
+$canCreate      = hasPriv('task', 'create');
+$canImportTask  = hasPriv('task', 'importTask');
+$canImportBug   = hasPriv('task', 'importBug');
+if(common::canModify('execution', $execution))
+{
+    $createLink      = $this->createLink('task', 'create', "executionID={$execution->id}");
+    if(commonModel::isTutorialMode())
+    {
+        $wizardParams   = helper::safe64Encode("executionID={$execution->id}");
+        $taskCreateLink = $this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams");
+    }
+
+    $createItem = array('text' => $lang->task->create, 'url' => $createLink);
+
+    if($canImportTask && $execution->multiple) $importTaskItem = array('text' => $lang->execution->importTask, 'url' => $this->createLink('execution', 'importTask', "execution={$execution->id}"));
+    if($canImportBug && $execution->lifetime != 'ops' && !in_array($execution->attribute, array('request', 'review')))
+    {
+        $importBugItem = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"));
+    }
+}
+
+toolbar
+(
+    hasPriv('task', 'report') ? item(set(array
+    (
+        'text'  => $lang->task->report->common,
+        'icon'  => 'bar-chart',
+        'class' => 'ghost',
+        'url'   => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
+    ))) : null,
+    hasPriv('task', 'export') ? item(set(array
+    (
+        'text'        => $lang->export,
+        'icon'        => 'export',
+        'class'       => 'ghost export',
+        'url'         => createLink('task', 'export', "execution={$execution->id}&orderBy={$orderBy}&type={$browseType}"),
+        'data-toggle' => 'modal'
+    ))) : null,
+    (!empty($importTaskItem) || !empty($importBugItem)) ? dropdown(
+        btn(
+            setClass('ghost btn square btn-default'),
+            set::icon('import'),
+            set::text($lang->import),
+        ),
+        set::items(array_filter(array($importTaskItem, $importBugItem))),
+        set::placement('bottom-end'),
+    ) : null,
+    $canCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+);
+
+$groupList = array();
+foreach($lang->execution->groups as $key => $value)
+{
+    $link = createLink('executon', 'grouptask', "executionID={$executionID}&groupBy={$key}");
+    $groupList[] = array(
+        'text' => $value,
+        'url'  => $link,
+    );
+}
+
 $thead = function() use($lang, $groupList, $groupBy, $allCount)
 {
     return h::tr
@@ -355,124 +473,6 @@ $tbody = function() use($tasks, $lang, $groupBy, $users)
 
 if($tasks)
 {
-    $items = array();
-    if(isset($lang->execution->groupFilter[$groupBy]))
-    {
-        foreach($lang->execution->groupFilter[$groupBy] as $filterKey => $name)
-        {
-            $items[] = li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    ($filterKey == $filter) ? set('class', 'active') : null,
-                    span(setClass('text'), $name),
-                    ($filterKey == $filter) ? span(setClass('label size-sm rounded-full white'), $allCount) : null,
-                    set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}&filter={$filterKey}"))
-                )
-            );
-        }
-    }
-    else
-    {
-        $items[] = li
-        (
-            setClass('nav-item'),
-            a
-            (
-                set('class', 'active'),
-                span(setClass('text'), $lang->all),
-                span(setClass('label size-sm rounded-full white'), $allCount),
-                set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}"))
-            )
-        );
-    }
-    
-    featureBar
-    (
-        li
-        (
-            setClass('nav-item feature-actions'),
-            a
-            (
-                setClass('btn ghost group-collapse-all'),
-                span(setClass('text'), $lang->execution->treeLevel['root']),
-                icon('fold-all'),
-            )
-        ),
-        li
-        (
-            setClass('nav-item hidden feature-actions'),
-            a
-            (
-                setClass('btn ghost group-expand-all'),
-                span(setClass('text'), $lang->execution->treeLevel['all']),
-                icon('unfold-all'),
-            )
-        ),
-        $items
-    );
-    
-    $canCreate      = hasPriv('task', 'create');
-    $canImportTask  = hasPriv('task', 'importTask');
-    $canImportBug   = hasPriv('task', 'importBug');
-    if(common::canModify('execution', $execution))
-    {
-        $createLink      = $this->createLink('task', 'create', "executionID={$execution->id}");
-        if(commonModel::isTutorialMode())
-        {
-            $wizardParams   = helper::safe64Encode("executionID={$execution->id}");
-            $taskCreateLink = $this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams");
-        }
-    
-        $createItem = array('text' => $lang->task->create, 'url' => $createLink);
-    
-        if($canImportTask && $execution->multiple) $importTaskItem = array('text' => $lang->execution->importTask, 'url' => $this->createLink('execution', 'importTask', "execution={$execution->id}"));
-        if($canImportBug && $execution->lifetime != 'ops' && !in_array($execution->attribute, array('request', 'review')))
-        {
-            $importBugItem = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"));
-        }
-    }
-    
-    toolbar
-    (
-        hasPriv('task', 'report') ? item(set(array
-        (
-            'text'  => $lang->task->report->common,
-            'icon'  => 'bar-chart',
-            'class' => 'ghost',
-            'url'   => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
-        ))) : null,
-        hasPriv('task', 'export') ? item(set(array
-        (
-            'text'        => $lang->export,
-            'icon'        => 'export',
-            'class'       => 'ghost export',
-            'url'         => createLink('task', 'export', "execution={$execution->id}&orderBy={$orderBy}&type={$browseType}"),
-            'data-toggle' => 'modal'
-        ))) : null,
-        (!empty($importTaskItem) || !empty($importBugItem)) ? dropdown(
-            btn(
-                setClass('ghost btn square btn-default'),
-                set::icon('import'),
-                set::text($lang->import),
-            ),
-            set::items(array_filter(array($importTaskItem, $importBugItem))),
-            set::placement('bottom-end'),
-        ) : null,
-        $canCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
-    );
-    
-    $groupList = array();
-    foreach($lang->execution->groups as $key => $value)
-    {
-        $link = createLink('executon', 'grouptask', "executionID={$executionID}&groupBy={$key}");
-        $groupList[] = array(
-            'text' => $value,
-            'url'  => $link,
-        );
-    }
-
     div
     (
         set::id('tasksTable'),
