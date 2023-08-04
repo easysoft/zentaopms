@@ -189,8 +189,8 @@ $config->repo->taskDtable->fieldList['assignedTo'] = $config->task->dtable->fiel
 $config->repo->taskDtable->fieldList['status']     = $config->task->dtable->fieldList['status'];
 
 $config->repo->taskDtable->fieldList['pri']['fixed']         = 'left';
-$config->repo->taskDtable->fieldList['name']['data-toggle']  = 'modal';
-$config->repo->taskDtable->fieldList['name']['data-size']    = 'lg';
 $config->repo->taskDtable->fieldList['name']['nestedToggle'] = false;
 $config->repo->taskDtable->fieldList['name']['title']        = $lang->task->name;
+$config->repo->taskDtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}', 'target' => '_blank');
 $config->repo->taskDtable->fieldList['assignedTo']['title']  = $lang->task->assignedTo;
+
