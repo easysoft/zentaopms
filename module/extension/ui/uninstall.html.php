@@ -16,11 +16,11 @@ if(isset($confirm) && $confirm == 'no')
 {
     div
     (
-        set::class('alert bg-white text-warning'),
+        setClass('alert bg-white text-warning'),
         icon
         (
             'exclamation-sign',
-            set::class('alert-icon')
+            setClass('alert-icon')
         ),
         $lang->extension->confirmUninstall,
         a
@@ -34,23 +34,23 @@ elseif(!empty($error))
 {
     div
     (
-        set::class('alert bg-white text-warning'),
+        setClass('alert bg-white text-warning'),
         icon
         (
             'exclamation-sign',
             set::size('2x'),
-            set::class('alert-icon')
+            setClass('alert-icon')
         ),
         div
         (
             div 
             (
-                set::class('alert-heading'),
+                setClass('alert-heading'),
                 $lang->extension->uninstallFailed
             ),
             p
             (
-                set::class('alert-content py-4'),
+                setClass('alert-content py-4'),
                 html($error)
             )
         )
@@ -61,40 +61,40 @@ else
     set::closeBtn(false);
     div
     (
-        set::class('p-2'),
+        setClass('p-2'),
         div
         (
-            set::class('flex mb-3'),
+            setClass('flex mb-3'),
             icon
             (
                 'exclamation-sign',
                 set::size('2x'),
-                set::class('text-warning mr-4'),
+                setClass('text-warning mr-4'),
             ),
             div
             (
-                set::class('article-h2 leading-8 mb-2'),
+                setClass('article-h2 leading-8 mb-2'),
                 $title,
             )
         ),
         (!empty($backupFile) || !empty($removeCommands)) ? div
         (
-            set::class('alert'),
+            setClass('alert'),
             icon
             (
                 'check-circle',
-                set::class('alert-icon')
+                setClass('alert-icon')
             ),
             div
             (
-                set::class('alert-content'),
+                setClass('alert-content'),
                 !empty($backupFile) ? p
                 (
                     sprintf($lang->extension->backDBFile, $backupFile)
                 ) : null,
                 $removeCommands ? p
                 (
-                    set::class('font-bold'),
+                    setClass('font-bold'),
                     $lang->extension->unremovedFiles,
                 ) : null,
                 $removeCommands ? html($removeCommands) : null,
@@ -102,12 +102,13 @@ else
         ) : null,
         div
         (
-            set::class('text-center'),
+            setClass('text-center'),
             btn
             (
-                set::class('mr-4'),
+                setClass('mr-4'),
                 set::type('primary'),
                 set::url(createLink('extension', 'browse', "status=available")),
+                set('data-dismiss', 'modal'),
                 $lang->extension->viewAvailable
             ),
             btn

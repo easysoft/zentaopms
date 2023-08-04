@@ -16,40 +16,41 @@ set::closeBtn(false);
 
 div
 (
-    set::class('p-2'),
+    setClass('p-2'),
     div
     (
-        set::class('flex mb-3'),
+        setClass('flex mb-3'),
         icon
         (
             'exclamation-sign',
             set::size('2x'),
-            set::class('text-warning mr-4'),
+            setClass('text-warning mr-4'),
         ),
         div
         (
-            set::class('article-h2 leading-8 mb-2'),
+            setClass('article-h2 leading-8 mb-2'),
             $title,
         )
     ),
     $removeCommands ?  div
     (
-        set::class('font-bold mb-2'),
+        setClass('font-bold mb-2'),
         $lang->extension->unremovedFiles,
     ) : null,
     $removeCommands ?  div
     (
-        set::class('border bg-surface p-2'),
+        setClass('border bg-surface p-2'),
         html($removeCommands)
     ) : null,
     div
     (
-        set::class('text-center'),
+        setClass('text-center'),
         btn
         (
             $lang->extension->viewDeactivated,
-            set::class('mr-4'),
+            setClass('mr-4'),
             set::type('primary'),
+            set('data-dismiss', 'modal'),
             set::url(createLink('extension', 'browse', 'status=deactivated'))
         ),
         btn

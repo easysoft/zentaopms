@@ -83,6 +83,7 @@ empty($error) && !isset($license) ? div
     (
         set::type('success'),
         set::url(createLink('extension', 'browse')),
+        set('data-dismiss', 'modal'),
         $lang->extension->viewInstalled,
     ),
     div

@@ -14,7 +14,7 @@ panel
 (
     p
     (
-        set::class('text-danger mb-3'),
+        setClass('text-danger mb-3'),
         html($error),
     ),
     btn

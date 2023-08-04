@@ -12,7 +12,7 @@ namespace zin;
 
 $searchForm = div
 (
-    set::class('mb-5'),
+    setClass('mb-5'),
     inputGroup
     (
         input
@@ -23,7 +23,7 @@ $searchForm = div
         ),
         span
         (
-            set::class('input-group-btn'),
+            setClass('input-group-btn'),
             btn
             (
                 icon('search'),
@@ -54,7 +54,7 @@ foreach($lang->extension->featureBar['browse'] as $browseType => $browseLabel)
 {
     $featureItems[] = li
     (
-        set::class('nav-item'),
+        setClass('nav-item'),
         a
         (
             set('href', createLink('extension', 'browse', "type=$browseType")),
@@ -92,17 +92,17 @@ sidebar
     setClass('pb-5'),
     div
     (
-        set::class('fast-menu bg-white p-4 shadow-sm rounded rounded-sm'),
+        setClass('fast-menu bg-white p-4 shadow-sm rounded rounded-sm'),
         $searchForm,
         menu
         (
-            set::class('p-0'),
+            setClass('p-0'),
             $menuItems
         ),
     ),
     moduleMenu
     (
-        set::class('module-menu'),
+        setClass('module-menu'),
         set::title($lang->extension->byCategory),
         set::modules($moduleTree),
         set::activeKey($moduleID),
@@ -169,25 +169,25 @@ foreach($extensions as $extension)
 
     $extensionItems[] = div
     (
-        set::class('pb-2' . ($i < $extensionCount ? ' border-b' : '') . ($i > 1 ? ' mt-5' : '')),
+        setClass('pb-2' . ($i < $extensionCount ? ' border-b' : '') . ($i > 1 ? ' mt-5' : '')),
         div
         (
-            set::class('font-bold mb-2'),
+            setClass('font-bold mb-2'),
             $extension->name . "($currentRelease->releaseVersion)",
             span
             (
-                set::class("label $labelClass size-sm font-medium ml-2"),
+                setClass("label $labelClass size-sm font-medium ml-2"),
                 $lang->extension->obtainOfficial[$extension->offcial]
             ),
             $latestRelease && $latestRelease->releaseVersion != $currentRelease->releaseVersion ? div
             (
-                set::class('pull-right text-sm text-warning'),
+                setClass('pull-right text-sm text-warning'),
                 html(sprintf($lang->extension->latest, $latestRelease->viewLink, $latestRelease->releaseVersion, $latestRelease->zentaoCompatible))
             ) : null,
         ),
         div
         (
-            set::class('mb-2'),
+            setClass('mb-2'),
             $extension->abstract
         ),
         div
@@ -204,7 +204,7 @@ foreach($extensions as $extension)
             ),
             div
             (
-                set::class('pull-right'),
+                setClass('pull-right'),
                 btnGroup
                 (
                     set::items($btnItems),
@@ -229,10 +229,10 @@ if($pager->recTotal)
 
 div
 (
-    set::class('flex col gap-y-1 p-5 bg-white'),
+    setClass('flex col gap-y-1 p-5 bg-white'),
     $extensions ? $extensionItems : div
     (
-        set::class('alert ghost text-danger flex items-center'),
+        setClass('alert ghost text-danger flex items-center'),
         icon
         (
             'exclamation-sign',
@@ -243,7 +243,7 @@ div
         (
             div
             (
-                set::class('font-bold, text-lg'),
+                setClass('font-bold text-lg'),
                 $lang->extension->errorOccurs,
             ),
             p

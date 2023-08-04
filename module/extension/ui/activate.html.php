@@ -14,7 +14,7 @@ if(!empty($error))
 {
     div
     (
-        set::class('text-danger'),
+        setClass('text-danger'),
         html($error)
     );
 }
@@ -24,30 +24,31 @@ else
 
     div
     (
-        set::class('p-2'),
+        setClass('p-2'),
         div
         (
-            set::class('flex mb-3'),
+            setClass('flex mb-3'),
             icon
             (
                 'exclamation-sign',
                 set::size('2x'),
-                set::class('text-warning mr-4'),
+                setClass('text-warning mr-4'),
             ),
             div
             (
-                set::class('article-h2 leading-8 mb-2'),
+                setClass('article-h2 leading-8 mb-2'),
                 $title,
             )
         ),
         div
         (
-            set::class('text-center'),
+            setClass('text-center'),
             btn
             (
-                set::class('mr-4'),
+                setClass('mr-4'),
                 set::type('primary'),
                 set::url(createLink('extension', 'browse', "status=installed")),
+                set('data-dismiss', 'modal'),
                 $lang->extension->viewInstalled
             ),
             btn

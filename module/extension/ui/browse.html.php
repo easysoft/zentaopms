@@ -43,15 +43,15 @@ foreach($extensions as $extension)
 
     $extensionItems[] = div
     (
-        set::class('mb-2'),
+        setClass('mb-2'),
         div
         (
-            set::class('font-bold mb-2'),
+            setClass('font-bold mb-2'),
             $extension->name
         ),
         div
         (
-            set::class('mb-2'),
+            setClass('mb-2'),
             $extension->desc
         ),
         div
@@ -59,7 +59,7 @@ foreach($extensions as $extension)
             $extensionInfo,
             div
             (
-                set::class('pull-right'),
+                setClass('pull-right'),
                 btnGroup
                 (
                     set::items($btnItems),
@@ -99,7 +99,7 @@ toolbar
 
 div
 (
-    set::class('flex col gap-y-1 p-5 bg-white'),
+    setClass('flex col gap-y-1 p-5 bg-white'),
     $extensionItems
 );
 

@@ -19,7 +19,7 @@ set::title($extension->name . '[' . $extension->code . ']' . $lang->extension->s
 
 div
 (
-    set::class('border bg-surface p-2'),
+    setClass('border bg-surface p-2'),
     $fileItems
 );
 

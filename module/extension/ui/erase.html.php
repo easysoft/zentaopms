@@ -14,40 +14,41 @@ set::closeBtn(false);
 
 div
 (
-    set::class('p-2'),
+    setClass('p-2'),
     div
     (
-        set::class('flex mb-3'),
+        setClass('flex mb-3'),
         icon
         (
             'check-circle',
             set::size('2x'),
-            set::class('text-success mr-4'),
+            setClass('text-success mr-4'),
         ),
         div
         (
-            set::class('article-h2 leading-8 mb-2 text-success'),
+            setClass('article-h2 leading-8 mb-2 text-success'),
             $title,
         )
     ),
     $removeCommands ? div
     (
-        set::class('mb-3'),
+        setClass('mb-3'),
         div
         (
-            set::class('font-bold'),
+            setClass('font-bold'),
             $lang->extension->unremovedFiles
         ),
         html(\implode('<br />', $removeCommands)),
     ) : null,
     div
     (
-        set::class('text-center'),
+        setClass('text-center'),
         btn
         (
-            set::class('mr-4'),
+            setClass('mr-4'),
             set::type('primary'),
             set::url(createLink('extension', 'browse', "status=available")),
+            set('data-dismiss', 'modal'),
             $lang->extension->viewAvailable
         ),
         btn
