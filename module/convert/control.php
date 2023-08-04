@@ -283,7 +283,7 @@ class convert extends control
             $this->convert->splitFile();
 
             $link = $this->createLink('convert', 'mapJira2Zentao', 'method=file');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+            return $this->send(array('result' => 'success', 'load' => $link));
         }
 
         $this->view->title  = $this->lang->convert->jira->method;
@@ -311,7 +311,7 @@ class convert extends control
             foreach($_POST as $key => $value) $_SESSION['jiraRelation'][$key] = $value;
 
             $link = $step == 4 ? inlink('initJiraUser', "method={$method}") : inlink('mapJira2Zentao', "method={$method}&dbName={$dbName}&step=" . ++$step);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+            return $this->send(array('result' => 'success', 'load' => $link));
         }
 
         if($method == 'db')
@@ -366,7 +366,7 @@ class convert extends control
             $jiraUser['group']    = $this->post->group;
             $this->session->set('jiraUser', $jiraUser);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('importJira', "method={$method}")));
+            return $this->send(array('result' => 'success', 'load' => inlink('importJira', "method={$method}")));
         }
 
         $this->view->title  = $this->lang->convert->jira->initJiraUser;
