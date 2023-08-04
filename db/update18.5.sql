@@ -12,3 +12,5 @@ REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `d
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2116, 'priv', 'fr',    'file-preview', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2116, 'priv', 'zh-cn', 'file-preview', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2116, 'priv', 'zh-tw', 'file-preview', '', '');
+
+REPLACE INTO `zt_grouppriv` (SELECT `group`,'file','preview' FROM zt_grouppriv WHERE module = 'file' AND method = 'download');
