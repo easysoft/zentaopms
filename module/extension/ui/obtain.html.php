@@ -89,6 +89,7 @@ foreach($moduleTree as $module) $module->url = createLink('extension', 'obtain',
 
 sidebar
 (
+    setClass('pb-5'),
     div
     (
         set::class('fast-menu bg-white p-4 shadow-sm rounded rounded-sm'),
@@ -142,7 +143,7 @@ foreach($extensions as $extension)
     }
 
     $btnItems = array();
-    $btnItems[] = array('text' => $lang->extension->view,  'url' => $extension->viewLink, 'data-toggle' => 'modal');
+    $btnItems[] = array('text' => $lang->extension->view, 'data-url' => $extension->viewLink, 'data-toggle' => 'modal', 'data-type' => 'iframe', 'data-size' => array('width' => 1024, 'height' => 600));
     if($currentRelease->public)
     {
         if($extension->type != 'computer' && $extension->type != 'mobile')
@@ -168,7 +169,7 @@ foreach($extensions as $extension)
 
     $extensionItems[] = div
     (
-        set::class('mb-2'),
+        set::class('pb-2' . ($i < $extensionCount ? ' border-b' : '') . ($i > 1 ? ' mt-5' : '')),
         div
         (
             set::class('font-bold mb-2'),
@@ -191,10 +192,13 @@ foreach($extensions as $extension)
         ),
         div
         (
-            $extensionInfo,
-            div 
+            div
             (
-                set::class('mt-2'),
+                setclass('mb-2'),
+                $extensionInfo
+            ),
+            span
+            (
                 $lang->extension->grade . ': ',
                 html($stars)
             ),
@@ -205,9 +209,8 @@ foreach($extensions as $extension)
                 (
                     set::items($btnItems),
                 )
-            )
+            ),
         ),
-        $i < $extensionCount ? hr() : null
     );
     $i ++;
 }
@@ -227,7 +230,7 @@ if($pager->recTotal)
 div
 (
     set::class('flex col gap-y-1 p-5 bg-white'),
-    !empty($extensions) ?  $extensionItems : div
+    $extensions ? $extensionItems : div
     (
         set::class('alert ghost text-danger flex items-center'),
         icon

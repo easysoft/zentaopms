@@ -1,2 +1,2 @@
-.fast-menu{border-bottom-left-radius: none; border-bottom-right-radius: none;}
-.module-menu{border-top-left-radius: none; border-top-right-radius: none;}
+.fast-menu{border-bottom-left-radius: unset; border-bottom-right-radius: unset;}
+.module-menu{border-top-left-radius: unset; border-top-right-radius: unset; padding-bottom: 20px;}
