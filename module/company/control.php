@@ -139,7 +139,7 @@ class company extends control
             $company = $this->loadModel('company')->getFirst();
             $this->session->set('company', $company);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
         /* Set menu. */
