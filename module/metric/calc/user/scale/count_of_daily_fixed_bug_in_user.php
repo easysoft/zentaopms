@@ -15,7 +15,7 @@
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -23,21 +23,31 @@
  */
 class count_of_daily_fixed_bug_in_user extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getProjectBugs';
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $fieldList = array('t1.resolvedBy', 't1.resolvedDate');
 
     public function calculate($row)
     {
+        $resolvedDate = $row->resolvedDate;
+        $resolvedBy   = $row->resolvedBy;
+
+        if(empty($resolvedDate) || empty($resolvedBy)) return false;
+
+        $date = date('Y-m-d', strtotime($resolvedDate));
+        list($year, $month, $day) = explode('-', $date);
+
+        if(!isset($this->result[$resolvedBy]))                      $this->result[$resolvedBy] = array();
+        if(!isset($this->result[$resolvedBy][$year]))               $this->result[$resolvedBy][$year] = array();
+        if(!isset($this->result[$resolvedBy][$year][$month]))       $this->result[$resolvedBy][$year][$month] = array();
+        if(!isset($this->result[$resolvedBy][$year][$month][$day])) $this->result[$resolvedBy][$year][$month][$day] = 0;
+
+        $this->result[$resolvedBy][$year][$month][$day] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('user', 'year', 'month', 'day', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
