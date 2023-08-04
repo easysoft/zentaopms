@@ -85,7 +85,11 @@ class history extends wg
     private function actionItem(object $action, int $i): wg
     {
         global $app;
-        $actionItemView = div(html($app->loadTarget('action')->renderAction($action)));
+        $actionItemView = div
+        (
+            setClass('w-full'),
+            html($app->loadTarget('action')->renderAction($action))
+        );
         if(!empty($action->history))
         {
             $actionItemView->add($this->expandBtn());
