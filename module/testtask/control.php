@@ -1033,7 +1033,7 @@ class testtask extends control
         if($this->app->tab == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
 
-        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->app->methodName == 'view' ? $browseList : true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->app->methodName == 'view' ? $browseList : true));
     }
 
     /**
@@ -1054,7 +1054,7 @@ class testtask extends control
         {
             $this->testtask->linkCase($taskID, $type);
             if(dao::isError()) return $this->send(array('result' => 'success', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('cases', "taskID={$taskID}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('cases', "taskID={$taskID}")));
         }
 
         /* Save session. */
@@ -1197,7 +1197,7 @@ class testtask extends control
             foreach($_POST['caseIdList'] as $caseID) $this->action->create('case', $caseID, 'unlinkedfromtesttask', '', $taskID);
         }
 
-        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('testtask', 'cases', "taskID=$taskID")));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('testtask', 'cases', "taskID=$taskID")));
     }
 
     /**
@@ -1239,7 +1239,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $caseResult = $this->testtask->createResult($runID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $taskID = empty($run->task) ? 0 : $run->task;
             $this->loadModel('action')->create('case', $caseID, 'run', '', $taskID);
@@ -1482,7 +1482,7 @@ class testtask extends control
         $this->loadModel('action');
         foreach($this->post->caseIdList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $account);
 
-        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
@@ -1646,6 +1646,6 @@ class testtask extends control
     public function ajaxGetResult($resultID)
     {
         $result = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq((int)$resultID)->fetch();
-        $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
     }
 }
