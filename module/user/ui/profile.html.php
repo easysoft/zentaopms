@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-include './featurebar.html.php';
+if(!isonlybody()) include 'featurebar.html.php';
 
 if(!$user->avatar) $user->avatar = strtoupper($user->account[0]);
 
