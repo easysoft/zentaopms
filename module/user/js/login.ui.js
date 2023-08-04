@@ -5,7 +5,7 @@ window.adjustPanelPos = function()
     $login.css('margin-top', bestTop);
 };
 
-window.refreshCapcha = function(obj)
+window.refreshCaptcha = function(obj)
 {
     let $this = $(obj)
     let captchaLink = $.createLink('misc', 'captcha', "sessionVar=captcha");
@@ -75,7 +75,7 @@ window.safeSubmit = function(e)
             if(data.result == 'fail')
             {
                 zui.Modal.alert(data.message);
-                if($('.captchaBox').length == 1) refreshCapcha($('.captchaBox .input-group .input-group-addon img'));
+                if($('.captchaBox').length == 1) refreshCaptcha($('.captchaBox .input-group .input-group-addon img'));
                 return false;
             }
 
