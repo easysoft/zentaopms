@@ -12,8 +12,9 @@ function searchWords()
     const form = new FormData();
     form.append('words', words);
 
-    const types = $form.find('select[name^=type]').val();
-    types.forEach(type => form.append('type[]', type));
+    const types = $form.find('[name^=type]').val();
+    if(typeof types == 'object') types.forEach(type => form.append('type[]', type));
+    if(typeof types == 'string') form.append('type[]', types);
 
     postAndLoadPage($.createLink('search', 'index'), form);
 }
