@@ -20,7 +20,7 @@ function onChangeAppType(event)
 {
     const appType = $(event.target).val();
 
-    if(appType == 'Jenkins' || appType == 'Sonarqube')
+    if(appType == 'Jenkins' || appType == 'SonarQube')
     {
         $('div.jenkins').removeClass('hidden');
         if(appType == 'Jenkins')
@@ -46,7 +46,7 @@ function onChangeAppType(event)
     $('#password').attr('placeholder', '');
     switch(appType)
     {
-        case 'Gitlab':
+        case 'GitLab':
             $('#createAppForm').attr('action', $.createLink('gitlab', 'create'));
             $('#url').attr('placeholder', gitlabUrlTips);
             $('#token').attr('placeholder', gitlabTokenTips);
@@ -62,7 +62,7 @@ function onChangeAppType(event)
             $('#token').attr('placeholder', jenkinsTokenTips);
             $('#password').attr('placeholder', jenkinsPasswordTips);
             break;
-        case 'Sonarqube':
+        case 'SonarQube':
             $('#createAppForm').attr('action', $.createLink('sonarqube', 'create'));
             $('#url').attr('placeholder', sonarqubeUrlTips);
             $('#account').attr('placeholder', sonarqubeAccountTips);
