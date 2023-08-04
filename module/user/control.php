@@ -480,7 +480,7 @@ class user extends control
     }
 
     /**
-     * Set the rerferer.
+     * Set the referer.
      *
      * @param  string   $referer
      * @access public
@@ -806,7 +806,7 @@ class user extends control
             $this->app->loadLang('user');
         }
 
-        /* If user is logon, back to the rerferer. */
+        /* If user is logon, back to the referer. */
         if($this->user->isLogon())
         {
             if($this->app->getViewType() == 'json')
