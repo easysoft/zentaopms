@@ -1,0 +1,11 @@
+.date-block {max-height: 60px;}
+.date-block .btn-link {background-color: var(--nav-active-bg); width: 28px; height: 28px;}
+.date-block:after {content: ' '; display: block; position: relative; right: -1.6rem; top: 0px; height: 2px; width: 1rem; background-color: rgb(var(--color-gray-200-rgb));}
+.date-block.border-secondary:after {background-color: rgba(var(--color-secondary-500-rgb),var(--tw-border-opacity));}
+
+.timeline .collapsed .icon {transform: rotate(270deg);}
+.timeline .collapsed .alert {display: none;}
+
+.timeline > li + li:after {position: absolute; top: 90px; bottom: 20px; left: 40px; z-index: 1; display: block; content: ' '; border-left: 2px solid #eee;}
+
+.actions-box {background-color: var(--color-slate-100);}
