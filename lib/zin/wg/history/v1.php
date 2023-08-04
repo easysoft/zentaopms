@@ -11,7 +11,8 @@ class history extends wg
         'users?: array',
         'methodName?: string',
         'commentUrl?: string',
-        'commentBtn?: bool'
+        'commentBtn?: bool',
+        'bodyClass?: string',
     );
 
     public static function getPageCSS(): string|false
@@ -224,16 +225,15 @@ class history extends wg
     {
         global $lang;
 
-        $commentUrl = $this->prop('commentUrl');
-        $isInModal  = isAjaxRequest('modal');
-        $px = $isInModal ? 'px-3' : 'px-6';
-        $pb = $isInModal ? 'pb-3' : 'pb-6';
+        $isInModal = isAjaxRequest('modal');
+        $padding   = $isInModal ? 'px-3 pd-3' : 'px-6 pb-6';
 
+        list($commentUrl, $bodyClass) = $this->prop(array('commentUrl', 'bodyClass'));
         return panel
         (
-            setClass('history', 'pt-4', 'h-full', $px, $pb),
+            setClass('history', 'pt-4', 'h-full', $padding),
             set::headingClass('p-0'),
-            set::bodyClass('p-0'),
+            set::bodyClass("p-0 {$bodyClass}"),
             set::shadow(false),
             to::heading
             (
