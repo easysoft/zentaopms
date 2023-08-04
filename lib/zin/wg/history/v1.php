@@ -229,18 +229,29 @@ class history extends wg
         $px = $isInModal ? 'px-3' : 'px-6';
         $pb = $isInModal ? 'pb-3' : 'pb-6';
 
-        return new section
+        return panel
         (
-            setClass('history', 'pt-4', $px, $pb, 'canvas'),
-            set::title($lang->history),
-            to::actions
+            setClass('history', 'pt-4', 'h-full', $px, $pb),
+            set::headingClass('p-0'),
+            set::bodyClass('p-0'),
+            set::shadow(false),
+            to::heading
             (
                 div
                 (
-                    setClass('flex items-center'),
-                    $this->reverseBtn(),
-                    $this->expandAllBtn(),
-                    $this->commentBtn(),
+                    setClass('flex'),
+                    div
+                    (
+                        set('class', 'panel-title'),
+                        $lang->history,
+                    ),
+                    div
+                    (
+                        setClass('flex items-center'),
+                        $this->reverseBtn(),
+                        $this->expandAllBtn(),
+                        $this->commentBtn(),
+                    )
                 )
             ),
             div(setClass('mt-3'), $this->historyList()),
