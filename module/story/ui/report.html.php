@@ -38,7 +38,7 @@ $fnGenerateTabCharts = function(string $type) use($charts, $lang, $datas)
         (
             set::type($type),
             set::title($lang->story->report->charts[$chartType]),
-            set::datas($datas[$chartType]),
+            set::datas($datas[$chartType] ?? null),
             set::tableHeaders(array
             (
                 'item'    => $lang->story->report->$chartType->item,

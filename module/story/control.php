@@ -1947,6 +1947,7 @@ class story extends control
     {
         $this->loadModel('report');
         $this->view->charts = array();
+        $this->view->datas  = array();
 
         if(!empty($_POST))
         {
