@@ -478,7 +478,7 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  int    $productID
      * @param  int    $startModule
-     * @param  string $userFunc
+     * @param  array  $userFunc
      * @param  string $extra
      * @access public
      * @return void
@@ -1243,7 +1243,7 @@ class treeModel extends model
      * Create the task manage link of a module.
      *
      * @param  int    $productID
-     * @param  int    $module
+     * @param  object $module
      * @access public
      * @return void
      */
@@ -1353,7 +1353,7 @@ class treeModel extends model
      * Create case lib link
      *
      * @param  string $type
-     * @param  string $module
+     * @param  object $module
      * @access public
      * @return object
      */
@@ -1546,7 +1546,7 @@ class treeModel extends model
             ->where('root')->eq((int)$rootID)
             ->andWhere('parent')->eq((int)$moduleID)
             ->andWhere('type')->in($type)
-            ->andWhere()
+            ->andWhere('')
             ->markLeft(1)
             ->where("branch")->eq(0)
             ->beginIF($branch != 0)->orWhere("branch")->eq((int)$branch)->fi()
