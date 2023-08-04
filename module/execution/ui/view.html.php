@@ -40,12 +40,76 @@ if($config->systemMode == 'ALM' && $execution->projectInfo->grade > 1)
     );
 }
 
+$relatedProducts = null;
+if($execution->projectInfo->hasProduct || $features['plan'])
+{
+    foreach($products as $productID => $product)
+    {
+        $productDom = null;
+        $planDom    = null;
+        if($execution->projectInfo->hasProduct)
+        {
+            foreach($product->branches as $branchID)
+            {
+                $branchName = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';
+                $productDom = h::td
+                (
+                    icon('product mr-2'),
+                    a
+                    (
+                        hasPriv('product', 'browse') ? set::href(createLink('product', 'browse', "productID={$productID}&branch={$branchID}")) : null,
+                        span($product->name . $branchName)
+                    )
+                );
+            }
+        }
+
+        if($features['plan'])
+        {
+            $plans = array();
+            foreach($product->plans as $planIDList)
+            {
+                $planIDList = explode(',', $planIDList);
+                foreach($planIDList as $planID)
+                {
+                    if(!isset($planGroups[$productID][$planID])) continue;
+
+                    $class = '';
+                    if(count($plans) > 2)      $class .= ' mt-2';
+                    if(count($plans) % 3 != 0) $class .= ' pl-4';
+                    $plans[] = div
+                    (
+                        setClass("flex-none w-1/3 clip {$class}"),
+                        icon('calendar mr-2'),
+                        a
+                        (
+                            hasPriv('productplan', 'view') ? set::href(createLink('productplan', 'view', "planID={$planID}")) : null,
+                            span($product->name . '/' . $planGroups[$productID][$planID])
+                        )
+                    );
+                }
+            }
+
+            $planDom[] = h::td
+            (
+                div
+                (
+                    setClass('flex flex-wrap'),
+                    $plans
+                )
+            );
+        }
+
+        $relatedProducts[] = h::tr(setClass('border-r'), $productDom, $planDom);
+    }
+}
+
 div
 (
-    setClass('flex clip'),
+    setClass('flex w-full'),
     div
     (
-        setClass('flex-auto canvas flex p-4 w-2/3'),
+        setClass('flex-auto canvas flex p-4 w-1/2'),
         div
         (
             setClass('text-center w-1/3 flex flex-col justify-center items-center'),
@@ -139,7 +203,7 @@ div
                     setClass('rounded-full'),
                     $execution->id
                 ),
-                span
+                div
                 (
                     setClass('article-h2 ml-2 clip'),
                     $execution->name
@@ -165,7 +229,7 @@ div
                 ),
                 span
                 (
-                    setClass('ml-2'),
+                    setClass('ml-2 flex-none'),
                     $lang->execution->kanbanAclList[$execution->acl],
                     icon
                     (
@@ -236,70 +300,6 @@ div
         )
     )
 );
-
-$relatedProducts = null;
-if($execution->projectInfo->hasProduct || $features['plan'])
-{
-    foreach($products as $productID => $product)
-    {
-        $productDom = null;
-        $planDom    = null;
-        if($execution->projectInfo->hasProduct)
-        {
-            foreach($product->branches as $branchID)
-            {
-                $branchName = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';
-                $productDom = h::td
-                (
-                    icon('product mr-2'),
-                    a
-                    (
-                        hasPriv('product', 'browse') ? set::href(createLink('product', 'browse', "productID={$productID}&branch={$branchID}")) : null,
-                        span($product->name . $branchName)
-                    )
-                );
-            }
-        }
-
-        if($features['plan'])
-        {
-            $plans = array();
-            foreach($product->plans as $planIDList)
-            {
-                $planIDList = explode(',', $planIDList);
-                foreach($planIDList as $planID)
-                {
-                    if(!isset($planGroups[$productID][$planID])) continue;
-
-                    $class = '';
-                    if(count($plans) > 2)      $class .= ' mt-2';
-                    if(count($plans) % 3 != 0) $class .= ' pl-4';
-                    $plans[] = div
-                    (
-                        setClass("flex-none w-1/3 clip {$class}"),
-                        icon('calendar mr-2'),
-                        a
-                        (
-                            hasPriv('productplan', 'view') ? set::href(createLink('productplan', 'view', "planID={$planID}")) : null,
-                            span($product->name . '/' . $planGroups[$productID][$planID])
-                        )
-                    );
-                }
-            }
-
-            $planDom[] = h::td
-            (
-                div
-                (
-                    setClass('flex flex-wrap'),
-                    $plans
-                )
-            );
-        }
-
-        $relatedProducts[] = h::tr(setClass('border-r'), $productDom, $planDom);
-    }
-}
 
 $membersDom = array();
 foreach(array('PM', 'PO', 'QD', 'RD') as $field)
@@ -752,36 +752,32 @@ div
     div
     (
         setClass('ml-4 w-1/3 flex-none'),
-        div
+        panel
         (
-            setClass('h-2/3 overflow-y-auto canvas'),
-            panel
+            to::heading
             (
-                to::heading
+                div
                 (
-                    div
-                    (
-                        set('class', 'panel-title'),
-                        $lang->execution->latestDynamic,
-                    )
-                ),
-                to::headingActions
+                    set('class', 'panel-title'),
+                    $lang->execution->latestDynamic,
+                )
+            ),
+            to::headingActions
+            (
+                common::hasPriv('execution', 'dynamic') ? btn
                 (
-                    common::hasPriv('execution', 'dynamic') ? btn
-                    (
-                        setClass('ghost text-gray font-normal'),
-                        set::url(createLink('execution', 'dynamic', "executionID={$execution->id}&type=all")),
-                        $lang->more
-                    ) : null
-                ),
-                set::bodyClass('pt-0'),
-                dynamic()
-            )
+                    setClass('ghost text-gray font-normal'),
+                    set::url(createLink('execution', 'dynamic', "executionID={$execution->id}&type=all")),
+                    $lang->more
+                ) : null
+            ),
+            set::bodyClass('h-80 overflow-y-auto pt-0'),
+            dynamic()
         ),
         div
         (
-            setClass('mt-4 h-1/3 overflow-y-auto canvas'),
-            history()
+            setClass('mt-4'),
+            history(set::bodyClass('h-72 overflow-y-auto'))
         ),
     ),
 );
