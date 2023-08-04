@@ -170,7 +170,7 @@ $lang->admin->menuList->message['menuOrder']['20'] = 'browser';
 $lang->admin->menuList->message['menuOrder']['25'] = 'setting';
 
 $lang->admin->menuList->dev['subMenu']['api']      = array('link' => "{$lang->api->doc}|dev|api|module=restapi");
-$lang->admin->menuList->dev['subMenu']['db']       = array('link' => "{$lang->database}|dev|db|table=" . trim(TABLE_EFFORT, '`'));
+$lang->admin->menuList->dev['subMenu']['db']       = array('link' => "{$lang->database}|dev|db|table=zt_todo");
 $lang->admin->menuList->dev['subMenu']['langItem'] = array('link' => "{$lang->langItem}|dev|langitem|");
 $lang->admin->menuList->dev['subMenu']['editor']   = array('link' => "{$lang->editor->common}|dev|editor|", 'subModule' => 'editor');
 $lang->admin->menuList->dev['subMenu']['entry']    = array('link' => "{$lang->admin->entry}|entry|browse|", 'subModule' => 'entry');
@@ -182,17 +182,17 @@ $lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
 //$lang->admin->menuList->platform['subMenu']['dashboard']   = array('link' => "{$lang->dashboard}|system|dashboard|");
-$lang->admin->menuList->platform['subMenu']['plat']        = array('link' => "{$lang->devops->platform}|system|browsebackup|", 'subModule' => 'system');
+$lang->admin->menuList->platform['subMenu']['plat']        = array('link' => "{$lang->devops->platform}|system|dblist|", 'subModule' => 'system');
 //$lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
 $lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops,tree');
 $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
 
-$lang->admin->menuList->platform['tabMenu']['plat']['backup'] = array('link' => "{$lang->backup->common}|system|browsebackup|");
+//$lang->admin->menuList->platform['tabMenu']['plat']['backup'] = array('link' => "{$lang->backup->common}|system|browsebackup|");
 $lang->admin->menuList->platform['tabMenu']['plat']['dblist'] = array('link' => "{$lang->devops->dblist}|system|dblist|");
 $lang->admin->menuList->platform['tabMenu']['plat']['domain'] = array('link' => "{$lang->devops->domain}|system|configdomain|", 'alias' => 'editdomain,domainview');
 $lang->admin->menuList->platform['tabMenu']['plat']['oss']    = array('link' => "{$lang->devops->oss}|system|ossview|");
 
-$lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['5']  = 'backup';
+//$lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['5']  = 'backup';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['10'] = 'dblist';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['15'] = 'domain';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['20'] = 'oss';
@@ -283,4 +283,9 @@ if($config->vision == 'lite')
     $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['15'] = 'story';
 
     $lang->admin->menuList->feature['menuOrder']['15'] = 'project';
+}
+
+if($config->inQuickon)
+{
+    $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|system|browsebackup|", 'alias' => 'restorebackup');
 }

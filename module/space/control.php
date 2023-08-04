@@ -96,7 +96,7 @@ class space extends control
      *
      * @param int     $appID
      * @access public
-     * @return viod
+     * @return void
      */
     public function createApplication($appID = 0)
     {
@@ -106,10 +106,13 @@ class space extends control
         $this->app->loadLang('jenkins');
         $this->loadModel('cne');
 
-        $pagedApps = $this->loadModel('store')->searchApps('', '', array(), 1, 10000);
-        $apps      = array();
+        $pagedApps  = $this->loadModel('store')->searchApps('', '', array(), 1, 10000);
+        $apps       = array();
+        $defaultApp = '';
         foreach($pagedApps->apps as $app)
         {
+            if(!$appID and $app->alias == 'GitLab') $defaultApp = $app->id;
+
             $apps[$app->id] = $app->alias;
         }
 
@@ -119,6 +122,7 @@ class space extends control
 
         $this->view->apps        = $apps;
         $this->view->appID       = $appID;
+        $this->view->defaultApp  = $defaultApp;
         $this->view->pgList      = $pgList;
         $this->view->mysqlList   = $mysqlList;
         $this->view->versionList = $versionList;
@@ -133,7 +137,7 @@ class space extends control
      *
      * @param  int    $appID
      * @access public
-     * @return viod
+     * @return void
      */
     public function getStoreAppInfo(int $appID)
     {

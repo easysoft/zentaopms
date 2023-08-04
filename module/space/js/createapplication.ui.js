@@ -70,28 +70,29 @@ function onChangeAppType(event)
     }
 }
 
-function onChangeStoreAppType()
+function onChangeStoreAppType(event)
 {
-    var storeApp = $('[name=storeAppType]').val();
-    if(!storeApp)
+    if(typeof(event) == 'undefined')
     {
-        for(id in apps)
-        {
-            storeApp = id;
-            break;
-        }
+        var storeApp = defaultApp;
     }
+    else
+    {
+        var storeApp = $('[name=storeAppType]').val();
+    }
+
     $('#createStoreAppForm').attr('action', $.createLink('instance', 'install', 'appID=' + storeApp));
 
     var externalApps = ['GitLab', 'Gitea', 'Gogs', 'Jenkins', 'SonarQube'];
     var storeAppName = apps[storeApp];
+
     if(externalApps.indexOf(storeAppName) !== -1)
     {
-        $('#storetypeexternal').prop('disabled', false);
+        $('#createStoreAppForm input[name=type][value=external]').prop('disabled', false);
     }
     else
     {
-        $('#storetypeexternal').prop('disabled', true);
+        $('#createStoreAppForm input[name=type][value=external]').prop('disabled', true);
     }
 
     toggleLoading('#app_version', true);

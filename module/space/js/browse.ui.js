@@ -20,7 +20,7 @@ window.renderInstanceList = function (result, {col, row, value})
     {
         if(row.data.externalID)
         {
-            if(row.data.appName == 'Gitea' || row.data.appName == 'Gitlab') result[0] = {html: '<a href="' + $.createLink(row.data.appName, 'view', 'id=' + row.data.externalID) + '" data-toggle="modal">' + result[0] + '</a>'};
+            if(row.data.appName == 'Gitea' || row.data.appName == 'Gitlab' || row.data.appName == 'Gogs') result[0] = {html: '<a href="' + $.createLink(row.data.appName, 'view', 'id=' + row.data.externalID) + '" data-toggle="modal">' + result[0] + '</a>'};
         }
         else
         {

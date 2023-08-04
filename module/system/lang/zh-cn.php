@@ -212,6 +212,11 @@ $lang->system->backup->rollback = '回滚';
 $lang->system->backup->restart  = '重启';
 $lang->system->backup->delete   = '删除';
 
+$lang->system->backup->statusList['pending']    = '等待中';
+$lang->system->backup->statusList['inprogress'] = '进行中';
+$lang->system->backup->statusList['completed']  = '完成';
+$lang->system->backup->statusList['failed']     = '失败';
+
 $lang->system->backup->restoreProgress['doing'] = '进行中';
 $lang->system->backup->restoreProgress['done']  = '完成';
 
@@ -219,12 +224,15 @@ $lang->system->backup->typeList['manual']  = '手动备份';
 $lang->system->backup->typeList['upgrade'] = '升级前自动备份';
 $lang->system->backup->typeList['restore'] = '回滚前自动备份';
 
-$lang->system->backup->waitting        = '<span id="backupType"></span>正在进行中，请稍候...';
+$lang->system->backup->waitting        = '备份正在进行中，请稍候...';
+$lang->system->backup->waittingStore   = '正在还原应用数据，请稍候...';
+$lang->system->backup->progress        = '备份中，进度（%d/%d）';
+$lang->system->backup->progressStore   = '还原中，进度（%d/%d）';
 $lang->system->backup->progressSQL     = '备份中，已备份%s';
 $lang->system->backup->progressAttach  = '备份中，共有%s个文件，已经备份%s个';
 $lang->system->backup->progressCode    = '代码备份中，共有%s个文件，已经备份%s个';
 $lang->system->backup->confirmDelete   = '是否删除该备份？';
-$lang->system->backup->confirmRestore  = '请确认是否回滚？';
+$lang->system->backup->confirmRestore  = '平台还原过程中需要重启，这将导致您当前的所有操作中断并且无法恢复，您确定要继续吗？';
 $lang->system->backup->holdDays        = '备份保留最近 %s 天';
 $lang->system->backup->copiedFail      = '复制失败的文件：';
 $lang->system->backup->restoreTip      = '还原功能只还原数据库。';
@@ -242,6 +250,8 @@ $lang->system->backup->success->degrade = '降级成功！';
 
 $lang->system->backup->error = new stdclass();
 
+$lang->system->backup->error->backupFail        = "备份失败!";
+$lang->system->backup->error->restoreFail       = "还原失败!";
 $lang->system->backup->error->upgradeFail       = "升级失败!";
 $lang->system->backup->error->upgradeOvertime   = "升级超时!";
 $lang->system->backup->error->degradeFail       = "降级失败!";

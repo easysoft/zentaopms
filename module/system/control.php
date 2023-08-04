@@ -572,31 +572,44 @@ class system extends control
         $this->display();
     }
 
+    /**
+     * 平台备份列表。
+     * Browse platform backup.
+     *
+     * @access public
+     * @return viod
+     */
     public function browseBackup()
     {
+        $this->loadModel('repo');
         $backups = array();
-        if(empty($this->view->error))
+
+        $actions = $this->loadModel('action')->getList('platformbackup', 0);
+        foreach($actions as $id => $action)
         {
-            $sqlFiles = glob("{$this->backupPath}*.sql*");
-            if(!empty($sqlFiles))
+            if($action->action != 'backupcommented')
             {
-                foreach($sqlFiles as $file)
-                {
-                    $fileName   = basename($file);
-                    $backupFile = new stdclass();
-                    $backupFile->time  = filemtime($file);
-                    $backupFile->name  = substr($fileName, 0, strpos($fileName, '.'));
-                    $backupFile->sqlSummary   = $this->system->getSQLSummary($file);
-                    $backupFile->files[$file] = $this->backup->getBackupSummary($file);
+                unset($actions[$id]);
+                continue;
+            }
 
-                    $fileBackup = $this->backup->getBackupFile($backupFile->name, 'file');
-                    if($fileBackup) $backupFile->files[$fileBackup] = $this->backup->getBackupSummary($fileBackup);
+            $actions[$action->extra] = $action;
+            unset($actions[$id]);
+        }
 
-                    $codeBackup = $this->backup->getBackupFile($backupFile->name, 'code');
-                    if($codeBackup) $backupFile->files[$codeBackup] = $this->backup->getBackupSummary($codeBackup);
+        $result = $this->loadModel('cne')->getBackupPlatformList();
+        if($result && $result->data)
+        {
+            foreach($result->data as $data)
+            {
+                $backup = new stdclass();
+                $backup->time    = date("Y-m-d H:i:s", $data->create_time);
+                $backup->status  = zget($this->lang->system->backup->statusList, $data->status);
+                $backup->name    = $this->repo->encodePath($data->name);
+                $backup->type    = (!empty($actions[$data->name]) && $actions[$data->name]->objectType == 'platformbackup') ? 'manual' : '';
+                $backup->comment = !empty($actions[$data->name]) ? nl2br($actions[$data->name]->comment) : '';
 
-                    $backups[$backupFile->name] = $backupFile;
-                }
+                $backups[$data->create_time] = $backup;
             }
         }
         krsort($backups);
@@ -605,6 +618,124 @@ class system extends control
         $this->view->position[] = $this->lang->backup->common;
         $this->view->backups    = $backups;
         $this->display();
+    }
+
+    /**
+     * Backup platform and apps.
+     *
+     * @access public
+     * @return viod
+     */
+    public function backupPlatform()
+    {
+        if($_POST)
+        {
+            session_write_close();
+
+            $space     = $this->loadModel('space')->defaultSpace($this->app->user->account);
+            $instances = $this->space->getSpaceInstances($space->id);
+            $apps = array();
+            foreach($instances as $instance)
+            {
+                $app = new stdclass();
+                $app->name = $instance->k8name;
+                $app->namespace = $space->k8space;
+
+                $apps[] = $app;
+            }
+
+            $result = $this->loadModel('cne')->backupPlatform($apps);
+            if($result && $result->code == 200)
+            {
+                $this->loadModel('action')->create('platformBackup', '0', 'backupCommented', $this->post->comment, $result->data->name);
+                return $this->send(array('result' => 'success', 'name' => $result->data->name));
+            }
+            else
+            {
+                return $this->send(array('result' => 'failed', 'message' => $result->message));
+            }
+        }
+
+        $this->display();
+    }
+
+    /**
+     * 还原平台备份。
+     * Restore platform backup.
+     *
+     * @param  string    $backupName
+     * @access public
+     * @return viod
+     */
+    public function restoreBackup(string $backupName)
+    {
+        $backupName = $this->loadModel('repo')->decodePath($backupName);
+
+        $error  = '';
+        $result = $this->loadModel('cne')->restorePlatform($backupName);
+        if($result && $result->code == 200)
+        {
+            $restoreName = $result->data->name;
+            $this->loadModel('action')->create('platformBackup', '0', 'restore', '', $restoreName);
+        }
+        else
+        {
+            $error = $result->message;
+        }
+
+        $this->view->error      = $error;
+        $this->view->restoreName = $restoreName;
+        $this->display();
+    }
+
+    /**
+     * Ajax 获取备份进度。
+     * Ajax get backup progress.
+     *
+     * @access public
+     * @return viod
+     */
+    public function ajaxGetBackupProgress()
+    {
+        session_write_close();
+
+        $result = $this->loadModel('cne')->backupPlatformStatus($this->post->name);
+        if($result && $result->code == 200)
+        {
+            $status = $result->data->status;
+            if($status == 'completed') return $this->send(array('result' => 'success', 'message' => $this->lang->backup->success->backup, 'closeModal' => true, 'load' => inlink('browseBackup')));
+            if($status == 'pending' || $status == 'inprogress') return $this->send(array('result' => 'progress', 'text' => sprintf($this->lang->system->backup->progress, $result->data->completed, $result->data->total)));
+            if($status == 'failed') return $this->send(array('result' => 'failed', 'message' => $this->lang->system->backup->error->backupFail, 'closeModal' => true));
+        }
+        else
+        {
+            return $this->send(array('result' => 'failed', 'message' => $result->message, 'closeModal' => true));
+        }
+    }
+
+    /**
+     * Ajax 获取还原进度。
+     * Ajax get restore progress.
+     *
+     * @access public
+     * @return viod
+     */
+    public function ajaxGetRestoreProgress()
+    {
+        session_write_close();
+
+        $result = $this->loadModel('cne')->restorePlatformStatus($this->post->name);
+        if($result && $result->code == 200)
+        {
+            $status = $result->data->status;
+            if($status == 'completed') return $this->send(array('result' => 'success', 'message' => $this->lang->backup->success->restore, 'load' => inlink('browseBackup')));
+            if($status == 'pending' || $status == 'inprogress') return $this->send(array('result' => 'progress', 'text' => sprintf($this->lang->system->backup->progressStore, $result->data->completed, $result->data->total)));
+            if($status == 'failed') return $this->send(array('result' => 'failed', 'message' => $this->lang->system->backup->error->backupFail, 'load' => inlink('browseBackup')));
+        }
+        else
+        {
+            return $this->send(array('result' => 'failed', 'message' => $result->message, 'load' => inlink('browseBackup')));
+        }
     }
 
     /**
