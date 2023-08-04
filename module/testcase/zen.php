@@ -42,6 +42,7 @@ class testcaseZen extends testcase
             }
         }
         $case = $this->testcase->appendCaseFails($case, $from, $taskID);
+        $case = $this->processStepsForMindMap($case);
 
         $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
         $this->view->case       = $case;
@@ -120,6 +121,47 @@ class testcaseZen extends testcase
             $scenes[] = $scene;
         }
         return $scenes;
+    }
+
+    /**
+     * 为展示脑图计算步骤数据。
+     * Process steps for mindmap.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return object
+     */
+    protected function processStepsForMindMap(object $case): object
+    {
+        $mindMapSteps = array();
+        $mindMapSteps['id']   = $case->id;
+        $mindMapSteps['text'] = $case->title;
+        $mindMapSteps['type'] = 'root';
+
+        $reverseSteps = array_reverse($case->steps);
+
+        $parentSteps = array();
+        foreach($reverseSteps as $step)
+        {
+            $stepItem = array();
+            $stepItem['id']   = $step->id;
+            $stepItem['text'] = $step->step;
+            $stepItem['type'] = $step->grade == 1 ? 'sub' : 'node';
+            $stepItem['parent'] = $step->parent > 0 ? $step->parent : $case->id;
+            if(isset($parentSteps[$step->id])) $stepItem['children'] = array_reverse($parentSteps[$step->id]);
+
+            if($step->parent > 0)
+            {
+                $parentSteps[$step->parent][] = $stepItem;
+            }
+            else
+            {
+                $stepList[] = $stepItem;
+            }
+        }
+        $mindMapSteps['children'] = array_reverse($stepList);
+        $case->mindMapSteps = $mindMapSteps;
+        return $case;
     }
 }
 

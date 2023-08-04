@@ -377,8 +377,9 @@ detailBody
                 set::id('stepsView'),
                 mindmap
                 (
-                    set::data($steps),
+                    set::data($case->mindMapSteps),
                     set::height('600px'),
+                    set::width('600px'),
                 ),
             ),
             set::useHtml(true),
