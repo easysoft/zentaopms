@@ -14,6 +14,7 @@ $('#monacoTabs').on('click', '.monaco-close', function()
     $(eleId).remove();
     $('#' + eleId.substring(5)).parent().removeClass('selected');
     if(isActive) tabsEle.children().last().find('a').trigger('click');
+    if(!tabsEle.children().length) $('.monaco-dropmenu').addClass('hidden');
 });
 
 window.afterPageUpdate = function()
@@ -167,6 +168,7 @@ function openTab(entry, name)
     var height = getIframeHeight();
     $('#monacoTabs .tab-content').append("<div id='" + eleId + "' class='tab-pane active in'><iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetDiffEditorContent', urlParams.replace('%s', entry)) + "' width='100%' height='" + height + "' scrolling='no'></iframe></div>")
 
+    if($('.monaco-dropmenu').attr('class').indexOf('hidden')) $('.monaco-dropmenu').removeClass('hidden');
     setTimeout(() => {
         $("a[href='" + '#' + eleId + "']").trigger('click');
         updateEditorInline('#' + eleId);
