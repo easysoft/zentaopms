@@ -1017,18 +1017,6 @@ class product extends control
             $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
 
-        if($branch == 0 and strpos($param, 'edit') and (strpos($param, 'forstory') === false)) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
-
-        if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
-        {
-            $output .= "<div class='input-group-btn'>";
-            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
-            $output .= '</div>';
-            $output .= "<div class='input-group-btn'>";
-            $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
-            $output .= '</div>';
-        }
-
         return print(json_encode($items));
     }
 
