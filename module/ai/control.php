@@ -501,7 +501,7 @@ class ai extends control
      * @access public
      * @return void|int
      */
-    public function promptAudit($promptId, $objectId, $exit)
+    public function promptAudit($promptId, $objectId, $exit = false)
     {
         if(!empty($exit))
         {
