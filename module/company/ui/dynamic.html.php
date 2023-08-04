@@ -130,7 +130,7 @@ else
                 div
                 (
                     setClass('flex-auto px-4 alert actions-box'),
-                    setClass($type == 'today' ? 'border-secondary' : ''),
+                    setClass($browseType == 'today' ? 'border-secondary' : ''),
                     dynamic
                     (
                         set::dynamics($actions),
