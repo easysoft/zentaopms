@@ -13,7 +13,7 @@ namespace zin;
 if(empty($config->notMd5Pwd)) h::import($config->webRoot . 'js/md5.js', 'js');
 
 $resetLink     = (isset($this->config->resetPWDByMail) and $this->config->resetPWDByMail) ? inlink('forgetPassword') : inlink('reset');
-$zentaodirName = basename($this->app->getBasePath());
+$zentaoDirName = basename($this->app->getBasePath());
 $clientLang    = $app->getClientLang();
 $langItems     = array();
 foreach($config->langs as $key => $value) $langItems[] = array('text' => $value, 'data-on' => 'click', 'data-call' => 'switchLang', 'data-params' => $key);
@@ -46,7 +46,7 @@ if(!empty($this->config->global->showDemoUsers))
     }
 }
 
-if($unsafeSites and !empty($unsafeSites[$zentaodirName]))
+if($unsafeSites and !empty($unsafeSites[$zentaoDirName]))
 {
     $paths     = array();
     $databases = array();
@@ -169,7 +169,7 @@ div
             div
             (
                 setID('poweredby'),
-                ($unsafeSites && !empty($unsafeSites[$zentaodirName])) ? div(a(setClass('showNotice'), set::href('###'), on::click('showNotice'), $lang->user->notice4Safe)) : null,
+                ($unsafeSites && !empty($unsafeSites[$zentaoDirName])) ? div(a(setClass('showNotice'), set::href('###'), on::click('showNotice'), $lang->user->notice4Safe)) : null,
             ),
         )
     )
