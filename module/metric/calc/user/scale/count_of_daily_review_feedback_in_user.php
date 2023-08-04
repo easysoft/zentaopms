@@ -14,7 +14,7 @@
  * 收集方式：realtime
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -22,21 +22,35 @@
  */
 class count_of_daily_review_feedback_in_user extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getFeedbacks';
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public $fieldList = array('t1.reviewedBy', 't1.reviewedDate');
 
     public function calculate($row)
     {
+        $reviewedDate = $row->reviewedDate;
+        $reviewedBy   = $row->reviewedBy;
+
+        if(empty($reviewedDate) || empty($reviewedBy)) return false;
+
+        $year = substr($reviewedDate, 0, 4);
+        if($year == '0000') return false;
+
+        $date = date("Y-m-d", strtotime($reviewedDate));
+        list($year, $month, $day) = explode('-', $date);
+
+        if(!isset($this->result[$reviewedBy]))                      $this->result[$reviewedBy] = array();
+        if(!isset($this->result[$reviewedBy][$year]))               $this->result[$reviewedBy][$year] = array();
+        if(!isset($this->result[$reviewedBy][$year][$month]))       $this->result[$reviewedBy][$year][$month] = array();
+        if(!isset($this->result[$reviewedBy][$year][$month][$day])) $this->result[$reviewedBy][$year][$month][$day] = 0;
+
+        $this->result[$reviewedBy][$year][$month][$day] += 1;
+
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('user', 'year', 'month', 'day', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
