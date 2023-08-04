@@ -7,6 +7,8 @@ fields:
   range: 1-10000
 - field: product
   range: 1-10{2}
+- field: assignedTo
+  range: admin,user{5},test{4},dev{10},pm{8},po{2},closed{10},[]{10}
 - field: openedDate
   range: "20100101 000000-20210101 230000:10D"
   type: timestamp
