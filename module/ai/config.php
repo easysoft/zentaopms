@@ -65,7 +65,7 @@ $config->ai->dataSource['doc']['doc']                 = array('title', 'addedBy'
 
 /* Available target form definations. Please also update `$lang->ai->targetForm` upon changes! Some are commented out, these need extra work. */
 $config->ai->targetForm = array();
-$config->ai->targetForm['product']['tree/managechild']   = (object)array('m' => 'tree', 'f' => 'browse');
+// $config->ai->targetForm['product']['tree/managechild']   = (object)array('m' => 'tree', 'f' => 'browse');
 $config->ai->targetForm['product']['doc/create']         = (object)array('m' => 'doc', 'f' => 'create');
 $config->ai->targetForm['story']['create']               = (object)array('m' => 'story', 'f' => 'create');
 $config->ai->targetForm['story']['batchcreate']          = (object)array('m' => 'story', 'f' => 'batchcreate');
