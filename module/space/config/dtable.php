@@ -12,7 +12,6 @@ $config->space->dtable->fieldList['name']['type']  = 'title';
 
 $config->space->dtable->fieldList['appName']['title'] = $lang->instance->appName;
 $config->space->dtable->fieldList['appName']['type']  = 'text';
-$config->space->dtable->fieldList['appName']['link']  = helper::createLink('store', 'appview', "id={appID}");
 $config->space->dtable->fieldList['appName']['width'] = '90';
 
 $config->space->dtable->fieldList['status']['name']  = 'status';
