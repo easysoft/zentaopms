@@ -1,4 +1,5 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
+<?php js::set('latestVersion', $doc->version);?>
 <?php $sessionString = session_name() . '=' . session_id();?>
 <div style="height:100%" id="h-full">
   <div class="main-col col-8 flex-content">
@@ -29,7 +30,7 @@
                   <li class="drop-title flex-between dropdown-header not-clear-menu"><div><?php echo $lang->doc->allVersion?></div></li>
                   <div class="drop-body menu-active-primary menu-hover-primary">
                   <?php for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--):?>
-                    <li class="li-item <?php if($itemVersion == $version) echo 'active';?>"><div class="checkbox-primary"><input type="checkbox" <?php echo "data-id=".$doc->id." data-version=".$itemVersion;?> ></input><label for=""></label></div><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'view', "docID=$doc->id&version=$itemVersion"); ?>'>V<?php echo $itemVersion;?></a></li>
+                    <li class="li-item <?php if($itemVersion == $version) echo 'active';?>"><div class="checkbox-primary"><input type="checkbox" <?php echo "data-id=".$doc->id." data-version=".$itemVersion;?> ></input><label for=""></label></div><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'view', "docID=$doc->id&version=$itemVersion"); ?>' data-version='<?php echo $itemVersion;?>'>V<?php echo $itemVersion;?></a></li>
                   <?php endfor;?>
                   </div>
                   <li class="drop-bottom"><button data-id="confirm" class="btn btn-primary"><?php echo $lang->confirm?></button><button data-id="cancel" class="btn"><?php echo $lang->doc->cancelDiff?></button></li>
