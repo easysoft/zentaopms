@@ -815,7 +815,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function view(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0)
+    public function view(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0, $stepsType = 'table')
     {
         $this->session->set('bugList', $this->app->getURI(true), $this->app->tab);
 
@@ -858,6 +858,7 @@ class testcase extends control
 
         $this->view->from       = $from;
         $this->view->taskID     = $taskID;
+        $this->view->stepsType   = $stepsType;
         $this->view->version    = $version ? $version : $case->version;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('case', $caseID);

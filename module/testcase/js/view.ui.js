@@ -1,7 +1,5 @@
 function toggleStepsView(event)
 {
-    $('.step-change-view .icon-table-large').parent().toggleClass('text-primary');
-    $('.step-change-view .icon-tree').parent().toggleClass('text-primary');
-    $('#stepsTable').toggleClass('hidden');
-    $('#stepsView').toggleClass('hidden');
+    var isTable = $(event.target).hasClass('icon-table-large');
+    loadPage($.createLink('testcase', 'view', viewParams + (isTable ? 'table' : 'mindmap')), '.steps-section');
 }

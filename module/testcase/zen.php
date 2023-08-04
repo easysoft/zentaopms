@@ -134,9 +134,10 @@ class testcaseZen extends testcase
     protected function processStepsForMindMap(object $case): object
     {
         $mindMapSteps = array();
-        $mindMapSteps['id']   = $case->id;
-        $mindMapSteps['text'] = $case->title;
-        $mindMapSteps['type'] = 'root';
+        $mindMapSteps['id']      = $case->id;
+        $mindMapSteps['text']    = $case->title;
+        $mindMapSteps['type']    = 'root';
+            $stepItem['subSide'] = 'right';
 
         $reverseSteps = array_reverse($case->steps);
 
@@ -144,10 +145,11 @@ class testcaseZen extends testcase
         foreach($reverseSteps as $step)
         {
             $stepItem = array();
-            $stepItem['id']   = $step->id;
-            $stepItem['text'] = $step->step;
-            $stepItem['type'] = $step->grade == 1 ? 'sub' : 'node';
-            $stepItem['parent'] = $step->parent > 0 ? $step->parent : $case->id;
+            $stepItem['id']      = $step->id;
+            $stepItem['text']    = $step->step;
+            $stepItem['type']    = $step->grade                                   =  = 1 ? 'sub' : 'node';
+            $stepItem['parent']  = $step->parent > 0 ? $step->parent : $case->id;
+            $stepItem['subSide'] = 'right';
             if(isset($parentSteps[$step->id])) $stepItem['children'] = array_reverse($parentSteps[$step->id]);
 
             if($step->parent > 0)

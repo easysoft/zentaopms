@@ -12,33 +12,38 @@ namespace zin;
 
 $canCreateCase = hasPriv('testcase', 'create');
 
-$steps = array();
-foreach($case->steps as $step)
-{
-    $stepClass = $step->type == 'step' ? 'step-group' : "step-{$step->type}";
-    $stepClass .= count($steps) > 0 && $step->grade == 1 ? ' mt-2' : ' border-t-0';
+jsVar('viewParams', "caseID={$case->id}&version={$version}&from={$from}&taskID={$taskID}&stepsType=");
 
-    $steps[] = cell
-    (
-        setClass("step {$stepClass} border align-top flex"),
-        cell
-        (
-            setClass('text-left flex border-r step-id'),
-            width('1/2'),
-            span
+$steps = array();
+if($stepsType == 'table')
+{
+    foreach($case->steps as $step)
+    {
+        $stepClass = $step->type == 'step' ? 'step-group' : "step-{$step->type}";
+        $stepClass .= count($steps) > 0 && $step->grade == 1 ? ' mt-2' : ' border-t-0';
+
+        $steps[] = cell
             (
-                setClass('pr-2 pl-' . (($step->grade - 1) * 2)),
-                $step->name,
-            ),
-            html(nl2br(str_replace(' ', '&nbsp;', $step->desc))),
-        ),
-        cell
-        (
-            setClass('text-left flex'),
-            width('1/2'),
-            html(nl2br(str_replace(' ', '&nbsp;', $step->expect))),
-        ),
-    );
+                setClass("step {$stepClass} border align-top flex"),
+                cell
+                (
+                    setClass('text-left flex border-r step-id'),
+                    width('1/2'),
+                    span
+                    (
+                        setClass('pr-2 pl-' . (($step->grade - 1) * 2)),
+                        $step->name,
+                    ),
+                    html(nl2br(str_replace(' ', '&nbsp;', $step->desc))),
+                ),
+                cell
+                (
+                    setClass('text-left flex'),
+                    width('1/2'),
+                    html(nl2br(str_replace(' ', '&nbsp;', $step->expect))),
+                ),
+            );
+    }
 }
 
 $files = '';
@@ -306,6 +311,7 @@ detailHeader
 $actions = $this->loadModel('common')->buildOperateMenu($case);
 detailBody
 (
+    on::click('.steps-section . step-change-view icon', 'toggleStepsView'),
     sectionList
     (
         section
@@ -317,6 +323,7 @@ detailBody
         ),
         section
         (
+            setClass('steps-section'),
             set::title($lang->testcase->steps),
             to::actions
             (
@@ -326,7 +333,8 @@ detailBody
                     width('fit'),
                     cell
                     (
-                        setClass('px-1.5 leading-4 border-r text-primary step-change-view-btn'),
+                        setClass('px-1.5 leading-4 border-r step-change-view-btn'),
+                        $stepsType == 'table' ? setClass('text-primary') : '',
                         icon
                         (
                             on::click('toggleStepsView'),
@@ -337,6 +345,7 @@ detailBody
                     cell
                     (
                         setClass('px-1.5 leading-4 step-change-view-btn'),
+                        $stepsType != 'table' ? setClass('text-primary') : '',
                         icon
                         (
                             on::click('toggleStepsView'),
@@ -346,7 +355,7 @@ detailBody
                     ),
                 ),
             ),
-            div
+            $stepsType == 'table' ? div
             (
                 set::id('stepsTable'),
                 div
@@ -370,16 +379,15 @@ detailBody
                     setClass('steps-body'),
                     $steps,
                 )
-            ),
-            div
+            ) : div
             (
-                setClass('hidden'),
                 set::id('stepsView'),
                 mindmap
                 (
                     set::data($case->mindMapSteps),
                     set::height('600px'),
-                    set::width('600px'),
+                    set::width('100%'),
+                    set::readonly(true),
                 ),
             ),
             set::useHtml(true),
