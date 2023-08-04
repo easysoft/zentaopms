@@ -11,7 +11,8 @@ class history extends wg
         'users?: array',
         'methodName?: string',
         'commentUrl?: string',
-        'commentBtn?: bool'
+        'commentBtn?: bool',
+        'bodyClass?: string',
     );
 
     public static function getPageCSS(): string|false
@@ -76,7 +77,7 @@ class history extends wg
         global $app;
         return div
         (
-            setClass('history-changes ml-7 mt-2'),
+            setClass('history-changes ml-1 mt-2'),
             html($app->loadTarget('action')->renderChanges($action->objectType, $action->history)),
         );
     }
@@ -84,12 +85,25 @@ class history extends wg
     private function actionItem(object $action, int $i): wg
     {
         global $app;
+        $actionItemView = div(html($app->loadTarget('action')->renderAction($action)));
+        if(!empty($action->history))
+        {
+            $actionItemView->add($this->expandBtn());
+            $actionItemView->add($this->historyChanges($action));
+        }
+        if(strlen(trim(($action->comment))) !== 0)
+        {
+            $actionItemView->add($this->comment($action));
+
+            $canEditComment = $this->checkEditCommentPriv($action);
+            if($canEditComment) $actionItemView->add($this->commentEditForm($action));
+        }
         return li
         (
             setClass('mb-2 flex'),
             set::value($i),
             $this->marker($i),
-            div(html($app->loadTarget('action')->renderAction($action)))
+            $actionItemView
         );
     }
 
@@ -118,7 +132,7 @@ class history extends wg
             $canEdit ? $this->editCommentBtn() : null,
             div
             (
-                setClass('comment-content mt-2 ml-6 p-2.5'),
+                setClass('comment-content mt-2 p-2.5'),
                 isHTML($comment) ? html($comment) : $comment,
             ),
         );
@@ -160,21 +174,7 @@ class history extends wg
             if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
 
             $i++;
-            $actionItemView = $this->actionItem($action, $i);
-
-            if(!empty($action->history))
-            {
-                $actionItemView->add($this->expandBtn());
-                $actionItemView->add($this->historyChanges($action));
-            }
-            if(strlen(trim(($action->comment))) !== 0)
-            {
-                $actionItemView->add($this->comment($action));
-
-                $canEditComment = $this->checkEditCommentPriv($action);
-                if($canEditComment) $actionItemView->add($this->commentEditForm($action));
-            }
-            $historiesListView->add($actionItemView);
+            $historiesListView->add($this->actionItem($action, $i));
         }
 
         return $historiesListView;
@@ -224,23 +224,33 @@ class history extends wg
     {
         global $lang;
 
-        $commentUrl = $this->prop('commentUrl');
-        $isInModal  = isAjaxRequest('modal');
-        $px = $isInModal ? 'px-3' : 'px-6';
-        $pb = $isInModal ? 'pb-3' : 'pb-6';
+        $isInModal = isAjaxRequest('modal');
+        $padding   = $isInModal ? 'px-3 pd-3' : 'px-6 pb-6';
 
-        return new section
+        list($commentUrl, $bodyClass) = $this->prop(array('commentUrl', 'bodyClass'));
+        return panel
         (
-            setClass('history', 'pt-4', $px, $pb, 'canvas'),
-            set::title($lang->history),
-            to::actions
+            setClass('history', 'pt-4', 'h-full', $padding),
+            set::headingClass('p-0'),
+            set::bodyClass("p-0 {$bodyClass}"),
+            set::shadow(false),
+            to::heading
             (
                 div
                 (
-                    setClass('flex items-center'),
-                    $this->reverseBtn(),
-                    $this->expandAllBtn(),
-                    $this->commentBtn(),
+                    setClass('flex'),
+                    div
+                    (
+                        set('class', 'panel-title'),
+                        $lang->history,
+                    ),
+                    div
+                    (
+                        setClass('flex items-center'),
+                        $this->reverseBtn(),
+                        $this->expandAllBtn(),
+                        $this->commentBtn(),
+                    )
                 )
             ),
             div(setClass('mt-3'), $this->historyList()),
