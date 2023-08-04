@@ -1,4 +1,4 @@
-window.toggleCollapse = function()
+function toggleCollapse()
 {
     $(this).parent().toggleClass('collapsed');
 }
