@@ -242,7 +242,8 @@ $(function()
     /* Update doc content silently on switch doc version, story #40503 */
     $(document).on('click', '.doc-version-menu a, #mainActions .container a', function(event)
     {
-        var $tmpDiv = $('<div>');
+        var $tmpDiv      = $('<div>');
+        var $versionLink = $(this);
         $tmpDiv.load($(this).data('url') + ' #mainContent', function()
         {
             $('#content').html($tmpDiv.find('#content').html());
@@ -282,7 +283,7 @@ $(function()
             if($('.files-list').length) $('#content .detail-content.article-content').css('height', 'calc(100vh - 300px)');
             adjustPageTitleWidth();
 
-            if($(this).data('version') != latestVersion)
+            if($versionLink.data('version') != latestVersion)
             {
                 $("a[id^=renameFile]").addClass('hidden');
                 $('ul.files-list .icon.icon-trash').parent().addClass('hidden');
