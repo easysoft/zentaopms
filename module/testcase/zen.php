@@ -147,7 +147,7 @@ class testcaseZen extends testcase
             $stepItem = array();
             $stepItem['id']      = $step->id;
             $stepItem['text']    = $step->step;
-            $stepItem['type']    = $step->grade                                   =  = 1 ? 'sub' : 'node';
+            $stepItem['type']    = $step->grade == 1 ? 'sub' : 'node';
             $stepItem['parent']  = $step->parent > 0 ? $step->parent : $case->id;
             $stepItem['subSide'] = 'right';
             if(isset($parentSteps[$step->id])) $stepItem['children'] = array_reverse($parentSteps[$step->id]);
