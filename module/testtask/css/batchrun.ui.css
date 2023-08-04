@@ -1,2 +1,10 @@
 .panel-form{padding: 8px!important;}
 .panel-form .panel-body{padding-top: 0!important;}
+
+.stepsAndExpect{padding: 0!important; border: none;}
+.stepsAndExpect table{min-height: 131px;}
+.stepsAndExpect table tr:first-child td{border-top: none;}
+.stepsAndExpect table tr td:first-child{border-left: none;}
+.stepsAndExpect table tr td:last-child{border-right: none;}
+.stepsAndExpect table tr:last-child {border-bottom: none;}
+.stepsAndExpect table tr:last-child td {border-bottom: none;}
