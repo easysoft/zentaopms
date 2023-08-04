@@ -110,6 +110,19 @@ class file extends control
     }
 
     /**
+     * Preview a file.
+     *
+     * @param  int    $fileID
+     * @param  string $mouse
+     * @access public
+     * @return void
+     */
+    public function preview($fileID, $mouse = '')
+    {
+        return print($this->fetch('file', 'download', "fileID=$fileID&mouse=$mouse"));
+    }
+
+    /**
      * Down a file.
      *
      * @param  int    $fileID
