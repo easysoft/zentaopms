@@ -1356,7 +1356,7 @@ class repoModel extends model
      */
     public function setRepoBranch($branch)
     {
-        helper::setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure);
+        helper::setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         $_COOKIE['repoBranch'] = $branch;
     }
 
@@ -2523,8 +2523,7 @@ class repoModel extends model
                     $scm->setEngine($repo);
 
                     $this->app->loadClass('requests', true);
-                    $files = $scm->engine->tree('', 1, true);
-
+                    $files    = $scm->engine->tree('', 1, true);
                     $allFiles = array();
                     foreach($files as $file)
                     {

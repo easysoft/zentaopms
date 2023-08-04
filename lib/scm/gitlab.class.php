@@ -373,7 +373,7 @@ class gitlab
             $list = $this->tree($parent, 0);
             $file = new stdclass();
 
-            foreach($list as $node) if($node->path == $entry) $file = $node;
+            if(!empty($list)) foreach($list as $node) if($node->path == $entry) $file = $node;
 
             $commits = $this->getCommitsByPath($entry);
 
@@ -828,15 +828,15 @@ class gitlab
         }
         else
         {
-            list($response, $httpCode) = commonModel::http($api, null, array(), array(), 'data', 'POST', 30, true, false);
+            $response = commonModel::http($api, null, array(), array(), 'data', 'POST', 30, true, false);
             if(!empty(commonModel::$requestErrors))
             {
                 commonModel::$requestErrors = array();
                 return array();
             }
 
-            if($httpCode == 500 or $httpCode == 404) return array();
-            return json_decode($response);
+            if($response[1] == 500 or $response[1] == 404) return array();
+            return json_decode($response['body']);
         }
     }
 
