@@ -3305,7 +3305,7 @@ EOF;
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_HEADER, $httpCode ? true : false);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 2);
         curl_setopt($curl, CURLINFO_HEADER_OUT, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -3329,14 +3329,13 @@ EOF;
 
         if($httpCode)
         {
-            curl_setopt($curl, CURLOPT_HEADER, true); /* true to include the header in the output. */
             $httpCode     = $info['http_code'] ?? curl_getinfo($curl, CURLINFO_HTTP_CODE);
             $headerSize   = $info['header_size'] ?? curl_getinfo($curl, CURLINFO_HEADER_SIZE);
             $headerString = substr($response, 0, $headerSize);
             $body         = substr($response, $headerSize);
 
             /* Parse header. */
-            $header    = explode('\n', $headerString);
+            $header    = explode("\n", $headerString);
             $newHeader = array();
             foreach($header as $item)
             {
