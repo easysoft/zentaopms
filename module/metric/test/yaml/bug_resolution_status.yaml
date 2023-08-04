@@ -9,6 +9,8 @@ fields:
   range: 1-10{48}
 - field: project
   range: 1-10{48}
+- field: assignedTo
+  range: admin,user{2},test{5},dev{8},pm{7},po{10},closed{5},[]{10}
 - field: openedDate
   range: "20100101 000000-20210101 230000:10D"
   type: timestamp
