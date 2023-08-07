@@ -82,7 +82,7 @@ class gitea extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $actionID = $this->loadModel('action')->create('gitea', $giteaID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
         $this->view->title = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->lblCreate;

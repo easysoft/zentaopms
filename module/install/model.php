@@ -334,12 +334,23 @@ class installModel extends model
     public function setDBParam()
     {
         $this->config->db->driver   = $this->post->dbDriver;
-        $this->config->db->host     = $this->post->dbHost;
+        if($this->config->inQuickon)
+        {
+            $this->config->db->host     = getenv('ZT_MYSQL_HOST');
+            $this->config->db->user     = getenv('ZT_MYSQL_USER');
+            $this->config->db->encoding = 'UTF8';
+            $this->config->db->password = getenv('ZT_MYSQL_PASSWORD');
+            $this->config->db->port     = getenv('ZT_MYSQL_PORT');
+        }
+        else
+        {
+            $this->config->db->host     = $this->post->dbHost;
+            $this->config->db->user     = $this->post->dbUser;
+            $this->config->db->encoding = $this->post->dbEncoding;
+            $this->config->db->password = $this->post->dbPassword;
+            $this->config->db->port     = $this->post->dbPort;
+        }
         $this->config->db->name     = $this->post->dbName;
-        $this->config->db->user     = $this->post->dbUser;
-        $this->config->db->encoding = $this->post->dbEncoding;
-        $this->config->db->password = $this->post->dbPassword;
-        $this->config->db->port     = $this->post->dbPort;
         $this->config->db->prefix   = $this->post->dbPrefix;
     }
 
