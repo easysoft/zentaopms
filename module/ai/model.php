@@ -963,9 +963,20 @@ class aiModel extends model
         }
         elseif($module == 'project')
         {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
-                ->where('id')->in($this->app->user->view->projects)
-                ->fetch('maxId');
+            /* programplan/create only exist in the waterfall model project. */
+            if(strpos($prompt->targetForm, 'programplan/create'))
+            {
+                $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
+                                      ->where('id')->in($this->app->user->view->projects)
+                                      ->andWhere('model')->eq('waterfall')
+                                      ->fetch('maxId');
+            }
+            else
+            {
+                $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
+                                      ->where('id')->in($this->app->user->view->projects)
+                                      ->fetch('maxId');
+            }
         }
         elseif($module == 'story')
         {
