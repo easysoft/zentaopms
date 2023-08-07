@@ -942,63 +942,63 @@ class aiModel extends model
         {
             return helper::createLink('my', 'effort', "type=all");
         }
-        else if($module == 'product')
+        elseif($module == 'product')
         {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCT)
                 ->where('id')->in($this->app->user->view->products)
                 ->fetch('maxId');
         }
-        else if($module == 'productplan')
+        elseif($module == 'productplan')
         {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCTPLAN)
                 ->where('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
         }
-        else if($module == 'release')
+        elseif($module == 'release')
         {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_RELEASE)
                 ->where('project')->in($this->app->user->view->projects)
                 ->orWhere('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
         }
-        else if($module == 'project')
+        elseif($module == 'project')
         {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
                 ->where('id')->in($this->app->user->view->projects)
                 ->fetch('maxId');
         }
-        else if($module == 'story')
+        elseif($module == 'story')
         {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_STORY)
                 ->where('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
         }
-        else if($module == 'execution')
+        elseif($module == 'execution')
         {
             $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
             $objectId  = max($executionIds);
         }
-        else if($module == 'task')
+        elseif($module == 'task')
         {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)
                 ->where('project')->in($this->app->user->view->projects)
                 ->fetch('maxId');
         }
-        else if($module == 'case')
+        elseif($module == 'case')
         {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)
                 ->where('project')->in($this->app->user->view->projects)
                 ->orWhere('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
         }
-        else if($module == 'bug')
+        elseif($module == 'bug')
         {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)
                 ->where('project')->in($this->app->user->view->projects)
                 ->orWhere('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
         }
-        else if($module == 'doc')
+        elseif($module == 'doc')
         {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
                 ->where('project')->in($this->app->user->view->projects)
