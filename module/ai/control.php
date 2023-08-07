@@ -566,8 +566,7 @@ class ai extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         if($backToTestingLocation)
         {
-            $prompt = $this->ai->getPromptByID($id);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'locate' => $this->inlink('promptview', "promptID=$promptId")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'locate' => $this->inlink('promptview', "id=$id")));
         }
 
         return $this->send(array('result' => 'success'));
