@@ -806,14 +806,14 @@ class fileModel extends model
     /**
      * Remove interference for parse csv.
      *
-     * @param  array    $matchs
+     * @param  array    $matches
      * @access private
      * @return string
      */
-    private function removeInterference($matchs)
+    private function removeInterference($matches)
     {
-        if(strlen($matchs[1]) % 2 == 1) return $matchs[1] . $matchs[2];
-        return str_replace('""', '"', $matchs[1]) . str_replace(',', '&comma;', $matchs[2]);
+        if(strlen($matches[1]) % 2 == 1) return $matches[1] . $matches[2];
+        return str_replace('""', '"', $matches[1]) . str_replace(',', '&comma;', $matches[2]);
     }
 
     /**
@@ -844,10 +844,10 @@ class fileModel extends model
             $data->$editorID = preg_replace("/ src=\"$readLinkReg\" /", ' src="' . $imgURL . '" ', $data->$editorID);
             $data->$editorID = preg_replace("/ src=\"" . htmlSpecialString($readLinkReg) . "\" /", ' src="' . $imgURL . '" ', $data->$editorID);
 
-            preg_match_all('/ src="{([0-9]+)\.\w+}"/', $data->$editorID, $matchs);
-            if($matchs[1])
+            preg_match_all('/ src="{([0-9]+)\.\w+}"/', $data->$editorID, $matches);
+            if($matches[1])
             {
-                foreach($matchs[1] as $imageID) $imageIdList[$imageID] = $imageID;
+                foreach($matches[1] as $imageID) $imageIdList[$imageID] = $imageID;
             }
         }
 

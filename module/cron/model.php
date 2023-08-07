@@ -57,14 +57,14 @@ class cronModel extends model
         foreach($crons as $cron)
         {
             $row = "{$cron->m} {$cron->h} {$cron->dom} {$cron->mon} {$cron->dow} {$cron->command}";
-            preg_match_all('/(\S+\s+){5}|.*/', $row, $matchs);
-            if($matchs[0])
+            preg_match_all('/(\S+\s+){5}|.*/', $row, $matches);
+            if($matches[0])
             {
                 try
                 {
                     $parsedCron = array();
-                    $parsedCron['schema']   = trim($matchs[0][0]);
-                    $parsedCron['command']  = trim($matchs[0][1]);
+                    $parsedCron['schema']   = trim($matches[0][0]);
+                    $parsedCron['command']  = trim($matches[0][1]);
                     $parsedCron['cron']     = CronExpression::factory($parsedCron['schema']);
                     $parsedCron['time']     = $parsedCron['cron']->getNextRunDate();
                     $parsedCrons[$cron->id] = $parsedCron;

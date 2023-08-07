@@ -536,7 +536,7 @@ function findVarName(val, vars, preName = '')
 }
 
 /**
- * Get var name matchs the given value
+ * Get var name matches the given value
  */
 function getVarName(val)
 {

@@ -1390,8 +1390,8 @@ class bugModel extends model
         $products = $this->session->product;
         if($this->reportCondition() !== true)
         {
-            preg_match('/`product` IN \((?P<productIdList>.+)\)/', $this->reportCondition(), $matchs);
-            if(!empty($matchs) && isset($matchs['productIdList'])) $products = str_replace('\'', '', $matchs['productIdList']);
+            preg_match('/`product` IN \((?P<productIdList>.+)\)/', $this->reportCondition(), $matches);
+            if(!empty($matches) && isset($matches['productIdList'])) $products = str_replace('\'', '', $matches['productIdList']);
         }
 
         $builds = $this->loadModel('build')->getBuildPairs($products, $branch = 0, $params = 'hasdeleted');

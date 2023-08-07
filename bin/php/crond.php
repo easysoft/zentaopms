@@ -35,9 +35,9 @@ while(true)
     }
 
     $now = new datetime('now');
-    foreach($crons as $key => $cron) 
+    foreach($crons as $key => $cron)
     {
-        if($now > $cron['time']) 
+        if($now > $cron['time'])
         {
             $crons[$key]['time'] = $cron['cron']->getNextRunDate();
 
@@ -46,7 +46,7 @@ while(true)
             exec($cron['command'], $output, $return);
 
             $time = $now->format('G:i:s');
-            foreach($output as $out) $log .= $out . "\n"; 
+            foreach($output as $out) $log .= $out . "\n";
             $log = "$time task " .  ($key + 1) . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $log\n";
             echo $log;
             logCron($log);
@@ -71,12 +71,12 @@ function parseCron($path)
             $row = preg_replace("/#.*/", '', $row);
             if($row)
             {
-                preg_match_all('/(\S+\s+){5}|.*/', $row, $matchs);
-                if($matchs[0])
+                preg_match_all('/(\S+\s+){5}|.*/', $row, $matches);
+                if($matches[0])
                 {
                     $cron = array();
-                    $cron['schema']  = trim($matchs[0][0]);
-                    $cron['command'] = trim($matchs[0][1]);
+                    $cron['schema']  = trim($matches[0][0]);
+                    $cron['command'] = trim($matches[0][1]);
                     $cron['cron']    = CronExpression::factory($cron['schema']);
                     $cron['time']    = $cron['cron']->getNextRunDate();
                     $crons[]         = $cron;
