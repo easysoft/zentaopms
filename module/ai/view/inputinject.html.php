@@ -189,7 +189,7 @@
 
             const promptId = publishButton.dataset.promptid;
             const aTag = document.createElement('a');
-            aTag.href = createLink('ai', 'promptPublish', 'promptId=' + promptId + '&backToTestingLocation=true');
+            aTag.href = createLink('ai', 'promptPublish', 'promptId=' + promptId + '&backToTestingLocation=true') + '#app=admin';
             aTag.style.display = 'none';
             document.body.appendChild(aTag);
             aTag.click();
@@ -207,7 +207,7 @@
             if(container) container.classList.toggle('loading', true);
 
             const aTag = document.createElement('a');
-            aTag.href = createLink('ai', 'promptAudit', 'promptId=' + promptId + '&objectId=0' + '&exit=true');
+            aTag.href = createLink('ai', 'promptAudit', 'promptId=' + promptId + '&objectId=0' + '&exit=true') + '#app=admin';
             aTag.style.display = 'none';
             document.body.appendChild(aTag);
             aTag.click();
