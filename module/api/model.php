@@ -173,6 +173,7 @@ class apiModel extends model
             ->add('lib', $old->lib)
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', $now)
+            ->remove('undefined')
             ->get();
 
         unset($data->addedBy);
