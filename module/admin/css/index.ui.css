@@ -1,2 +1,4 @@
 #mainContent {display: flex;}
 .border-hover:hover {border-color: var(--color-primary-500)}
+
+div.setting-box[data-id=platform] div.text-md {white-space: nowrap;}
