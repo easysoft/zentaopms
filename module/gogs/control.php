@@ -81,7 +81,7 @@ class gogs extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $actionID = $this->loadModel('action')->create('gogs', $gogsID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
         $this->view->title = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->lblCreate;
