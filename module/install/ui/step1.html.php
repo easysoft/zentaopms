@@ -55,18 +55,18 @@ foreach($dirItems as $dirItem)
         h::td
         (
             setClass('text-left'),
-            !$info['exists'] ? printf
+            !$info['exists'] ? html(sprintf
             (
                 strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->install->mkdirWin : $lang->install->mkdirLinux,
                 $info['path'],
                 $info['path']
-            ) : '',
-            !$info['writable'] ? printf
+            )) : '',
+            !$info['writable'] ? html(sprintf
             (
                 strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->install->chmodWin : $lang->install->chmodLinux,
                 $info['path'],
                 $info['path']
-            ) : '',
+            )) : '',
         ),
     );
 }
@@ -81,6 +81,19 @@ div
         (
             setClass('py-2'),
             set::title($lang->install->checking),
+            $notice ? to::heading
+            (
+                span
+                (
+                    setClass('text-gray'),
+                    icon
+                    (
+                        setClass('text-warning px-1'),
+                        'help',
+                    ),
+                    $notice,
+                ),
+            ) : '',
             h::table
             (
                 setClass('table bordered'),
@@ -126,11 +139,6 @@ div
                     $checkTrs,
                 ),
             ),
-            $notice ? div
-            (
-                setClass('text-notice text-danger my-2'),
-                $notice,
-            ) : '',
             cell
             (
                 setClass('text-center mt-4'),
