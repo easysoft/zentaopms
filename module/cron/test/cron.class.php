@@ -121,14 +121,14 @@ class cronTest
     }
 
     /**
-     * Runable cron test.
+     * runnable cron test.
      *
      * @access public
      * @return bool
      */
     public function runableTest()
     {
-        $objects = $this->objectModel->runable();
+        $objects = $this->objectModel->runnable();
 
         if(dao::isError()) return dao::getError();
 
@@ -206,9 +206,9 @@ class cronTest
 
     /**
      * Mark cron status test.
-     * 
-     * @param mixed $status 
-     * @param int $configID 
+     *
+     * @param mixed $status
+     * @param int $configID
      * @access public
      * @return void
      */
@@ -223,7 +223,7 @@ class cronTest
 
     /**
      * Get config id test.
-     * 
+     *
      * @access public
      * @return void
      */

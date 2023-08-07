@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 cronModel->runable();
+title=测试 cronModel->runnable();
 cid=1
 pid=1
 

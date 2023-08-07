@@ -134,7 +134,7 @@ class cronModel extends model
     }
 
     /**
-     * Get last execed time.
+     * Get last executed time.
      *
      * @access public
      * @return string
@@ -146,12 +146,12 @@ class cronModel extends model
     }
 
     /**
-     * Runable cron.
+     * Runnable cron.
      *
      * @access public
      * @return bool
      */
-    public function runable()
+    public function runnable()
     {
         if(empty($this->config->global->cron)) return false;
 

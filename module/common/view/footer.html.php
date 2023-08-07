@@ -57,7 +57,7 @@ $(function(){ redirect('<?php echo $ranzhiURL?>', '<?php echo $config->sso->code
 
 <?php endif;?>
 <?php
-if($this->loadModel('cron')->runable()) js::execute('startCron()');
+if($this->loadModel('cron')->runnable()) js::execute('startCron()');
 if(isset($pageJS)) js::execute($pageJS);  // load the js for current page.
 
 /* Load hook files for current page. */
