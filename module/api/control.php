@@ -365,16 +365,13 @@ class api extends control
 
         if(!empty($_POST))
         {
-            $now    = helper::now();
-            $userId = $this->app->user->account;
-            $data   = fixer::input('post')
+            $data = fixer::input('post')
                 ->trim('name')
                 ->add('lib', $libID)
+                ->add('addedBy', $this->app->user->account)
+                ->add('addedDate', helper::now())
                 ->skipSpecial('attribute')
-                ->add('addedBy', $userId)
-                ->add('addedDate', $now)
-                ->add('editedBy', $userId)
-                ->add('editedDate', $now)
+                ->remove('undefined')
                 ->get();
 
 
