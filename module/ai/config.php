@@ -228,6 +228,7 @@ $config->ai->injectAuditButton->locations['doc']['edit'] = array(
     'action' => (object)array(
         'targetContainer' => '#mainContent #headerBox .btn-tools',
         'injectMethod'    => 'html',
+        'containerStyles' => '{"width": "600px"}'
     )
 );
 

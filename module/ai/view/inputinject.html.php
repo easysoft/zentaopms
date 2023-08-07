@@ -140,9 +140,13 @@
           $htmlStr = $htmlStr . html::commonButton($lang->ai->audit->exit, "id='promptAuditExit'", 'btn btn-wide');
           $targetContainer = $config->ai->injectAuditButton->locations[$module][$method]['action']->targetContainer;
           $injectMethod    = $config->ai->injectAuditButton->locations[$module][$method]['action']->injectMethod;
+          $containerStyles = empty($config->ai->injectAuditButton->locations[$module][$method]['action']->containerStyles) ? '{}' : $config->ai->injectAuditButton->locations[$module][$method]['action']->containerStyles;
           ?>
+          const containerStyles = JSON.parse('<?php echo $containerStyles;?>');
+
           const htmlStr = `<?php echo $htmlStr;?>`;
           $('<?php echo $targetContainer;?>')['<?php echo $injectMethod;?>'](htmlStr);
+          $('<?php echo $targetContainer;?>').css(containerStyles);
         }
 
         function injectAuditToolbar()
