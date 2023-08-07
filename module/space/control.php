@@ -55,8 +55,9 @@ class space extends control
         $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc');
         $maxID     = 0;
         if(!empty($instances)) $maxID = max(array_keys($instances));
-        foreach($pipelines as $pipeline)
+        foreach($pipelines as $key => $pipeline)
         {
+            if($pipeline->createdBy == 'system') unset($pipelines[$key]);
             $pipeline->createdAt  = $pipeline->createdDate;
             $pipeline->appName    = ucfirst($pipeline->type);
             $pipeline->status     = '';

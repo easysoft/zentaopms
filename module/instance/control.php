@@ -77,12 +77,11 @@ class instance extends control
             }
         }
 
-        $dbList          = new stdclass;
-        $currentResource = new stdclass;
-        $customItems     = array();
         $dbList          = $this->cne->appDBList($instance);
         $currentResource = $this->cne->getAppConfig($instance);
         $customItems     = $this->cne->getCustomItems($instance);
+
+        $this->instanceZen->saveAuthInfo($instance);
 
         $this->view->title           = $instance->appName;
         $this->view->instance        = $instance;

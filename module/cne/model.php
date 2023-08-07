@@ -823,8 +823,26 @@ class cneModel extends model
      * @access public
      * @return object|null
      */
-    public function getSettingsMapping($instance, $mappings)
+    public function getSettingsMapping($instance, $mappings = array())
     {
+        if(empty($mappings)) $mappings = array(
+            array(
+                "key" => "admin_username",
+                "type" => "helm",
+                "path" => "auth.username"
+            ),
+            array(
+                "key" => "admin_password",
+                "type" => "helm",
+                "path" => "auth.password"
+            ),
+            array(
+                "key" => "admin_token",
+                "type" => "secret",
+                "path" => "api_token"
+            ),
+        );
+ 
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;

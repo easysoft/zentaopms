@@ -575,6 +575,12 @@ class InstanceModel extends model
             $settingsMap->global->ingress->host    = $settingsMap->ingress->host;
         }
 
+        if(!empty($this->config->instance->devopsApps[$instance->appID]))
+        {
+            $settingsMap->ci = new stdclass();
+            $settingsMap->ci->enabled = true;
+        }
+
         if(empty($customData->dbType) || $customData->dbType == 'unsharedDB' || empty($customData->dbService)) return $settingsMap;
 
         /* Set DB settings. */

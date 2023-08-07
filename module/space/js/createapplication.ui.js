@@ -72,13 +72,17 @@ function onChangeAppType(event)
 
 function onChangeStoreAppType(event)
 {
-    if(typeof(event) == 'undefined')
+    var storeApp = appID;
+    if(!storeApp)
     {
-        var storeApp = defaultApp;
-    }
-    else
-    {
-        var storeApp = $('[name=storeAppType]').val();
+        if(typeof(event) == 'undefined')
+        {
+            storeApp = defaultApp;
+        }
+        else
+        {
+            storeApp = $('[name=storeAppType]').val();
+        }
     }
 
     $('#createStoreAppForm').attr('action', $.createLink('instance', 'install', 'appID=' + storeApp));
