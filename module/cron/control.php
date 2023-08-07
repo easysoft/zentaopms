@@ -221,11 +221,10 @@ class cron extends control
                         }
 
                         /* Save log. */
-                        $log    = '\n';
                         $time   = $now->format('Y-m-d H:i:s');
                         $output = $output;
 
-                        $log .= "$time task " . $id . " executed,\ncommand: $cron[command]\nreturn : $return\noutput : $output\n";
+                        $log = "\n$time task " . $id . " executed,\ncommand: $cron[command]\nreturn : $return\noutput : $output\n";
                         $this->cron->logCron($log);
                         unset($log);
                     }
