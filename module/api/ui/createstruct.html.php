@@ -24,11 +24,8 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->api->structName),
-        input
-        (
-            set::name('name'),
-            set::required(true)
-        )
+        set::name('name'),
+        set::required(true)
     ),
     formGroup
     (

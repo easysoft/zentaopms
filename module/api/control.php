@@ -414,8 +414,12 @@ class api extends control
         {
             $changes = $this->api->updateStruct($structID);
             if(dao::isError()) return $this->sendError(dao::getError());
-            $actionID = $this->action->create('apistruct', $structID, 'Edited');
-            $this->action->logHistory($actionID, $changes);
+
+            if($changes)
+            {
+                $actionID = $this->action->create('apistruct', $structID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID={$struct->lib}")));
         }
 
