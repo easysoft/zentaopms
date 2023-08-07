@@ -22,8 +22,8 @@ $template = <<<EOT
         <input class="form-control" type="text" autocomplete="off" name="values[]" value="" id="values">
     </div>
     <div class="ops-actions">
-        <i class="icon icon-plus ml-2" onClick="window.addItem"></i>
-        <i class="icon icon-close ml-2" onClick="window.removeItem"></i>
+        <i class="icon icon-plus ml-2"></i>
+        <i class="icon icon-close ml-2"></i>
     </div>
 </div>
 EOT;
@@ -58,8 +58,8 @@ foreach($lang->$module->$fieldList as $key => $value)
         div
         (
             setClass('ops-actions'),
-            icon('plus', setClass('ml-2'), on::click('addItem')),
-            icon('close', setClass('ml-2'), on::click('removeItem')),
+            icon('plus', setClass('ml-2')),
+            icon('close', setClass('ml-2')),
         )
     );
 }

@@ -1,11 +1,9 @@
-window.removeItem = function()
+$('#opsForm').on('click', '.icon-plus', function(e)
+{
+    $(this).parent().parent().after(template);
+});
+
+$('#opsForm').on('click', '.icon-close', function(e)
 {
     $(this).parent().parent().remove();
-}
-
-window.addItem = function(e)
-{
-
-    console.log(111, e);
-    $(this).parent().parent().after(template);
-}
+});
