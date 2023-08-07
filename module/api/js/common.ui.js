@@ -108,21 +108,21 @@ $('.params-group').on('change', 'input[type=radio]', function()
 
 /**
  * 更改请求参数、请求头、请求体时，将表单值放到隐藏域中.
- * 
- * @param  obj $obj 
+ *
+ * @param  object $obj
  * @access public
  * @return void
  */
-function generateParams(obj)
+function generateParams($obj)
 {
     let params    = $('input[name=params]').val();
-    let groupID   = $(obj).closest('.params-group').attr('id');
+    let groupID   = $obj.closest('.params-group').attr('id');
     let groupName = groupID.replace('form-', '');
     let group     = [];
 
     if(groupName != 'params')
     {
-        $(obj).closest('.params-group').find('.input-row').each(function()
+        $obj.closest('.params-group').find('.input-row').each(function()
         {
             let values = {};
             $(this).find('input,textarea,select').each(function()
@@ -136,7 +136,7 @@ function generateParams(obj)
     else
     {
         /* 请求体是无限级的. */
-        group = buildNestedParams(obj);
+        group = buildNestedParams($obj);
     }
 
     params = JSON.parse(params);
@@ -145,23 +145,23 @@ function generateParams(obj)
     $('input[name=params]').val(JSON.stringify(params));
 }
 
-function generateResponse(obj)
+function generateResponse($obj)
 {
-    let group = buildNestedParams(obj);
+    let group = buildNestedParams($obj);
 
     $('input[name=response]').val(JSON.stringify(group));
 }
 
 /**
- * 将params构造成无限级的树状结构. 
- * 
- * @param  object obj 
+ * 将params构造成无限级的树状结构.
+ *
+ * @param  object $obj
  * @access public
  * @return void
  */
-function buildNestedParams(obj)
+function buildNestedParams($obj)
 {
-    const rows = Array.from($(obj).closest('.form-group').find('.input-row'));
+    const rows = Array.from($obj.closest('.form-group').find('.input-row'));
 
     const group = [];
 
@@ -174,9 +174,9 @@ function buildNestedParams(obj)
 }
 
 /**
- * 处理每一行的数据. 
- * 
- * @param  object row 
+ * 处理每一行的数据.
+ *
+ * @param  object row
  * @access public
  * @return void
  */
@@ -210,9 +210,9 @@ function processRow(row)
 
 /**
  * 获取各个表单的值.
- * 
- * @param  object $obj 
- * @param  object $values 
+ *
+ * @param  object $obj
+ * @param  object $values
  * @access public
  * @return void
  */
