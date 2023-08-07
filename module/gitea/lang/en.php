@@ -13,6 +13,7 @@ $lang->gitea->giteaAccount  = 'Gitea Account';
 $lang->gitea->giteaEmail    = 'Email';
 $lang->gitea->zentaoAccount = 'Zentao Account';
 $lang->gitea->bindingStatus = 'Binding Status';
+$lang->gitea->all           = 'All';
 $lang->gitea->notBind       = 'Not bind';
 $lang->gitea->binded        = 'Binded';
 $lang->gitea->bindDynamic   = '%s and Zentao user %s';
