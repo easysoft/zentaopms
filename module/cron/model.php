@@ -43,7 +43,7 @@ class cronModel extends model
         {
             if(strpos($params, 'nostop') !== false and $cron->status == 'stop') unset($validCrons[$id]);
 
-            if(in_array($cron->command, $commandInMaxEdition)) unset($validCrons[$id]);
+            if($this->config->edition != 'max' and in_array($cron->command, $commandInMaxEdition)) unset($validCrons[$id]);
         }
 
         return $validCrons;
