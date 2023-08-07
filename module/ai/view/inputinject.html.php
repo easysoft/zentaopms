@@ -97,22 +97,28 @@
           }
         }
 
-        /* Set injected in oreder to cancel loading class on object view (see promptmenu.html.php). */
-        sessionStorage.setItem('ai-prompt-data-injected', true);
-        try
+        document.addEventListener("DOMContentLoaded", function()
         {
-          const data = JSON.parse(injectData);
-          if(!data) return;
+          try
+          {
+            const data = JSON.parse(injectData);
+            if(!data) return;
 
-          inject(data);
+            inject(data);
 
-          $.zui.messager.success('<?php echo $lang->ai->dataInject->success;?>');
-        }
-        catch(e)
-        {
-          $.zui.messager.danger('<?php echo $lang->ai->dataInject->fail;?>');
-          console.error(e);
-        }
+            $.zui.messager.success('<?php echo $lang->ai->dataInject->success;?>');
+          }
+          catch(e)
+          {
+            $.zui.messager.danger('<?php echo $lang->ai->dataInject->fail;?>');
+            console.error(e);
+          }
+          finally
+          {
+            /* Set injected in oreder to cancel loading class on object view (see promptmenu.html.php). */
+            sessionStorage.setItem('ai-prompt-data-injected', true);
+          }
+        });
       })();
     </script>
   <?php endif;?>
