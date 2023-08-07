@@ -32,14 +32,21 @@ class cronModel extends model
      */
     public function getCrons($params = '')
     {
-        return $this->dao->select('*')->from(TABLE_CRON)
-            ->where('1=1')
-            ->beginIF(strpos($params, 'nostop') !== false)->andWhere('status')->ne('stop')->fi()
-            ->beginIF($this->config->edition != 'max')
-            ->andWhere('command')->ne('moduleName=measurement&methodName=initCrontabQueue')
-            ->andWhere('command')->ne('moduleName=measurement&methodName=execCrontabQueue')
-            ->fi()
-            ->fetchAll('id');
+        $validCrons = $this->dao->select('*')->from(TABLE_CRON)->fetchAll('id');
+
+        $commandInMaxEdition = array(
+            'moduleName=measurement&methodName=initCrontabQueue',
+            'moduleName=measurement&methodName=execCrontabQueue',
+            'moduleName=weekly&methodName=computeWeekly',
+        );
+        foreach($validCrons as $id => $cron)
+        {
+            if(strpos($params, 'nostop') !== false and $cron->status == 'stop') unset($validCrons[$id]);
+
+            if(in_array($cron->command, $commandInMaxEdition)) unset($validCrons[$id]);
+        }
+
+        return $validCrons;
     }
 
     /**
