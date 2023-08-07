@@ -15887,7 +15887,7 @@ CREATE TABLE `zt_roadmap` (
   `closedBy` char(30) NOT NULL,
   `closedDate` datetime NOT NULL,
   `closedReason` enum('done','canceled') DEFAULT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0'
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
