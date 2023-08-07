@@ -112,7 +112,7 @@
 .user-time .icon-star {font-size: 12px; line-height: 1.8;}
 .user-time .icon-star:before {vertical-align: top;}
 .btn-limit {position: relative;}
-.btn-group {display: flex; align-items: center;}
+#main .btn-group {display: flex; align-items: center;}
 #exchangeDiffBtn {font-size: 24px;}
 .exchangeDiffGroup .right-dom {display: none;}
 .exchangeDiffGroup.show-diff .right-dom {display: unset;}
