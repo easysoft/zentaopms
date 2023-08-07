@@ -71,6 +71,7 @@ div
                     ),
                     $config->edition != 'open' ? h::tr
                     (
+                        $config->inQuickon ? setClass('hidden') : null,
                         h::th($lang->install->dbDriver),
                         h::td
                         (
@@ -90,6 +91,7 @@ div
                     ),
                     h::tr
                     (
+                        $config->inQuickon ? setClass('hidden') : null,
                         h::th($lang->install->dbHost),
                         h::td
                         (
@@ -103,6 +105,7 @@ div
                     ),
                     h::tr
                     (
+                        $config->inQuickon ? setClass('hidden') : null,
                         h::th($lang->install->dbPort),
                         h::td
                         (
@@ -115,6 +118,7 @@ div
                     ),
                     h::tr
                     (
+                        $config->inQuickon ? setClass('hidden') : null,
                         h::th($lang->install->dbEncoding),
                         h::td
                         (
@@ -128,6 +132,7 @@ div
                     ),
                     h::tr
                     (
+                        $config->inQuickon ? setClass('hidden') : null,
                         h::th($lang->install->dbUser),
                         h::td
                         (
@@ -141,6 +146,7 @@ div
                     ),
                     h::tr
                     (
+                        $config->inQuickon ? setClass('hidden') : null,
                         h::th($lang->install->dbPassword),
                         h::td
                         (
