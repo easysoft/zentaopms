@@ -191,28 +191,39 @@ class gitlab extends control
         $gitlabUsers   = $this->gitlab->apiGetUsers($gitlabID);
         $bindedUsers   = $this->gitlab->getUserAccountIdPairs($gitlabID);
         $matchedResult = $this->gitlab->getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers);
-        $matchedResult = array_column(json_decode(json_encode($matchedResult), true), null, "email");
 
-        $gitlabUsers = array_filter($gitlabUsers, function($item) use($bindedUsers, $userPairs, $type)
+        foreach($gitlabUsers as $userID => &$user)
         {
-            if($type == 'all') return true;
-
-            if(in_array($item->id, $bindedUsers))
+            $user->binded        = 0;
+            $user->zentaoUsers   = array('' => '');
+            $user->zentaoAccount = isset($matchedResult[$user->id]) ? $matchedResult[$user->id]->zentaoAccount : '';
+            if($user->zentaoAccount)
             {
-                $zentaoAccount = isset($item->zentaoAccount) ? zget($userPairs, $item->zentaoAccount, '') : '';
-                return $type == 'binded' ? !empty($zentaoAccount) : empty($zentaoAccount);
+                $user->zentaoUsers  += array($user->zentaoAccount => zget($userPairs, $user->zentaoAccount));
+                if(isset($bindedUsers[$user->zentaoAccount]) && $bindedUsers[$user->zentaoAccount] == $user->id)
+                {
+                    $user->binded = 1;
+                    if(!isset($bindedUsers[$user->zentaoAccount])) $user->binded = 2;
+                }
             }
-            return $type == 'binded' ? false : true;
-        });
 
-        $this->view->title         = $this->lang->gitlab->bindUser;
-        $this->view->zentaoUsers   = $zentaoUsers;
-        $this->view->userPairs     = $userPairs;
-        $this->view->type          = $type;
-        $this->view->gitlabID      = $gitlabID;
-        $this->view->gitlabUsers   = $gitlabUsers;
-        $this->view->bindedUsers   = $bindedUsers;
-        $this->view->matchedResult = $matchedResult;
+            if($type == 'notBind' && $user->binded > 0)
+            {
+                unset($gitlabUsers[$userID]);
+            }
+            elseif($type == 'binded' && $user->binded == 0)
+            {
+                unset($gitlabUsers[$userID]);
+            }
+
+        }
+
+        $this->view->title       = $this->lang->gitlab->bindUser;
+        $this->view->userPairs   = array('' => '') + $userPairs;
+        $this->view->gitlabUsers = $gitlabUsers;
+        $this->view->gitlabID    = $gitlabID;
+        $this->view->type        = $type;
+        $this->view->zentaoUsers = $zentaoUsers;
 
         $this->display();
     }
