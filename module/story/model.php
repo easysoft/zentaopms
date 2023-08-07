@@ -954,12 +954,12 @@ class storyModel extends model
         if($this->config->vision != 'or')
         {
             /* Unchanged product when editing requirements on site. */
-            $storyProjectID = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $hasProduct = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.product')->eq($oldStory->product)
                 ->andWhere('t2.deleted')->eq(0)
-                ->fetch();
-            $_POST['product'] = ($storyProjectID and !$storyProjectID->hasProduct) ? $oldStory->product : $this->post->product;
+                ->fetch('hasProduct');
+            $_POST['product'] = (!empty($hasProduct) && !$hasProduct) ? $oldStory->product : $this->post->product;
         }
 
         $story = fixer::input('post')
@@ -5069,7 +5069,7 @@ class storyModel extends model
         $tab         = $this->app->tab;
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
         $account     = $this->app->user->account;
-        $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=&storyType=$story->type");
+        $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=&storyType=$story->type") . "#app=$tab";
         $canView     = common::hasPriv($story->type, 'view', null, "storyType=$story->type");
         if($this->config->vision == 'or') $this->app->loadLang('demand');
 
