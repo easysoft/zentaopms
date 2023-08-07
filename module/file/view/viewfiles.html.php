@@ -208,7 +208,7 @@ function setFileName(fileID)
               }
 
               /* For the max version of the file judgment. */
-              if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1 and common::hasPriv('file', 'preview'))
+              if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1 and !($this->config->file->convertType == 'collabora' and $this->config->requestType == 'GET') and common::hasPriv('file', 'preview'))
               {
                   $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
                   if(stripos($officeTypes, $file->extension) !== false)
