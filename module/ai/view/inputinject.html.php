@@ -136,7 +136,7 @@
         function injectAuditAction()
         {
           <?php
-          $htmlStr = html::commonButton($lang->ai->prompts->action->publish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide');
+          $htmlStr = html::commonButton($lang->ai->promptPublish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide');
           $htmlStr = $htmlStr . html::commonButton($lang->ai->audit->exit, "id='promptAuditExit'", 'btn btn-wide');
           $targetContainer = $config->ai->injectAuditButton->locations[$module][$method]['action']->targetContainer;
           $injectMethod    = $config->ai->injectAuditButton->locations[$module][$method]['action']->injectMethod;
