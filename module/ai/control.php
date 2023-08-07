@@ -506,7 +506,7 @@ class ai extends control
         if(!empty($exit))
         {
             unset($_SESSION['auditPrompt']);
-            return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptview', "promptID=$promptId")));
+            return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptview', "promptID=$promptId") . '#app=admin'));
         }
 
         $prompt = $this->ai->getPromptByID($promptId);
@@ -566,7 +566,7 @@ class ai extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         if($backToTestingLocation)
         {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'locate' => $this->inlink('promptview', "id=$id")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'locate' => $this->inlink('promptview', "id=$id") . '#app=admin'));
         }
 
         return $this->send(array('result' => 'success'));
