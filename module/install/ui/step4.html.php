@@ -14,7 +14,7 @@ set::zui(true);
 
 if(isset($error))
 {
-    h::js("zui.Modal.alert('{$lang->install->errorNotSaveConfig}').then((res) => {openUrl('" . inlink('step3') . "')});");
+    h::js("zui.Modal.alert({size: '480', message: '{$error}'}).then((res) => {openUrl('" . inlink('step3') . "')});");
     render('pagebase');
     return;
 }

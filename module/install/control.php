@@ -121,7 +121,7 @@ class install extends control
         if(!empty($_POST))
         {
             $return = $this->install->checkConfig();
-            if($return->result != 'ok') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: 'sm', iconClass: 'text-4xl text-warning',  message: '" . str_replace("'", '"', $return->error) . "'})"));
+            if($return->result != 'ok') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: '480', iconClass: 'text-4xl text-warning',  message: '" . str_replace("'", '"', $return->error) . "'})"));
 
             $myConfig = array();
             foreach($_POST as $key => $value) $myConfig[$key] = $value;

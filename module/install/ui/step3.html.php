@@ -14,7 +14,7 @@ set::zui(true);
 
 if(empty($myConfig))
 {
-    h::js("zui.Modal.alert('{$lang->install->errorNotInitConfig}').then((res) => {openUrl('" . inlink('step2') . "')});");
+    h::js("zui.Modal.alert({size: '480', message: '{$lang->install->errorNotInitConfig}'}).then((res) => {openUrl('" . inlink('step2') . "')});");
     render('pagebase');
     return;
 }
