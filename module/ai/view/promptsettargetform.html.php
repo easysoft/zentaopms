@@ -173,11 +173,16 @@ $(function()
           setTimeout(function() {$targetSubmitBtn.popover('destroy');}, 2000);
         }
       }
-      if(location) setTimeout(function() {$.apps.open(location);}, 1200);
     },
     finish: function(response, _, $form)
     {
-      if(response.locate) setTimeout(function() {$.apps.open(response.locate);}, 1200);
+      if(response.locate) setTimeout(function()
+      {
+        var $a = $('<a href="' + response.locate + '" target="_self"></a>');
+        $a.appendTo('body');
+        if($a.length) $a[0].click();
+        $a.remove();
+      }, 1200);
       $form.enableForm();
     }
   });
