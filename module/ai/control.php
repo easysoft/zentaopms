@@ -489,7 +489,7 @@ class ai extends control
 
         if($prompt->status == 'draft') $_SESSION['auditPrompt']['time'] = time();
 
-        return $this->send(array('result' => 'success', 'locate' => $location));
+        return header("location: $location", true, 302);
     }
 
     /**
