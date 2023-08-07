@@ -148,6 +148,7 @@
       if(!modalSaveButton) return;
       modalSaveButton.addEventListener('click', function()
       {
+        if(validateForm() === false) return;
         const submitButton = document.getElementById('saveButton');
         if(!submitButton) return;
         submitButton.click();
