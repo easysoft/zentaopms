@@ -91,10 +91,14 @@ $('#form-response').on('change', 'select', function(){generateResponse($(this))}
 /* 更改请求体类型. */
 $('.params-group').on('change', 'input[type=radio]', function()
 {
-    let params = $('input[name=params]').val();
-    params = JSON.parse(params);
-    params['paramsType'] = $(this).val();
-    $('input[name=params]').val(JSON.stringify(params));
+    const isStruct = $(this).closest('div.form-group').hasClass('struct');
+    if(!isStruct)
+    {
+        let params = $('input[name=params]').val();
+        params = JSON.parse(params);
+        params['paramsType'] = $(this).val();
+        $('input[name=params]').val(JSON.stringify(params));
+    }
 
     if($(this).val() != 'formData')
     {
@@ -115,10 +119,9 @@ $('.params-group').on('change', 'input[type=radio]', function()
  */
 function generateParams($obj)
 {
-    let params    = $('input[name=params]').val();
-    let groupID   = $obj.closest('.params-group').attr('id');
-    let groupName = groupID.replace('form-', '');
-    let group     = [];
+    const groupID   = $obj.closest('.params-group').attr('id');
+    const groupName = groupID.replace('form-', '');
+    let   group     = [];
 
     if(groupName != 'params')
     {
@@ -139,10 +142,16 @@ function generateParams($obj)
         group = buildNestedParams($obj);
     }
 
-    params = JSON.parse(params);
-    params[groupName] = group;
-
-    $('input[name=params]').val(JSON.stringify(params));
+    if($obj.closest('div.form-group').hasClass('struct'))
+    {
+        $('input[name=attribute]').val(JSON.stringify(group));
+    }
+    else
+    {
+        params = JSON.parse($('input[name=params]').val());
+        params[groupName] = group;
+        $('input[name=params]').val(JSON.stringify(params));
+    }
 }
 
 function generateResponse($obj)
