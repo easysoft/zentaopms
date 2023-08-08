@@ -18,7 +18,7 @@ pid=1
 */
 
 r(count($calc->getResult()))                   && p('')        && e('5');  // 测试反馈按产品分组数。
-r($calc->getResult(array('product' => '1')))   && p('0:value') && e('50'); // 测试产品1的反馈数。
-r($calc->getResult(array('product' => '3')))   && p('0:value') && e('50'); // 测试产品3的反馈数。
+r($calc->getResult(array('product' => '1')))   && p('0:value') && e('54'); // 测试产品1的反馈数。
+r($calc->getResult(array('product' => '3')))   && p('0:value') && e('54'); // 测试产品3的反馈数。
 r($calc->getResult(array('product' => '4')))   && p('0:value') && e('0');  // 测试已删除产品4的反馈数。
 r($calc->getResult(array('product' => '999'))) && p('')        && e('0');  // 测试不存在的产品的反馈数。

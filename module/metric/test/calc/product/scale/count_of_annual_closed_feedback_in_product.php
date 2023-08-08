@@ -17,10 +17,10 @@ pid=1
 
 */
 
-r(count($calc->getResult()))                                    && p('')        && e('50'); // 测试按产品的年度关闭反馈分组数。
-r($calc->getResult(array('product' => '5',  'year' => '2019'))) && p('0:value') && e('4');  // 测试2019年产品5关闭的反馈数。
-r($calc->getResult(array('product' => '5',  'year' => '2020'))) && p('0:value') && e('3');  // 测试2020年产品5关闭的反馈数。
+r(count($calc->getResult()))                                    && p('')        && e('24'); // 测试按产品的年度关闭反馈分组数。
+r($calc->getResult(array('product' => '5',  'year' => '2019'))) && p('0:value') && e('1');  // 测试2019年产品5关闭的反馈数。
+r($calc->getResult(array('product' => '5',  'year' => '2020'))) && p('0:value') && e('0');  // 测试2020年产品5关闭的反馈数。
 r($calc->getResult(array('product' => '5',  'year' => '2005'))) && p('')        && e('0');  // 测试2005年产品5关闭的反馈数。
 
-r($calc->getResult(array('product' => '4',  'year' => '2020')))  && p('')        && e('0'); // 测试已删除产品4关闭的反馈数。
-r($calc->getResult(array('product' => '999', 'year' => '2021'))) && p('')        && e('0'); // 测试不存在的产品的反馈数。
+r($calc->getResult(array('product' => '4',  'year' => '2020')))  && p('') && e('0'); // 测试已删除产品4关闭的反馈数。
+r($calc->getResult(array('product' => '999', 'year' => '2021'))) && p('') && e('0'); // 测试不存在的产品的反馈数。

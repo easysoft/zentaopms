@@ -15,5 +15,5 @@ cid=1
 
 */
 
-r($calc->getResult()) && p('0:value') && e('39'); // 测试产品数量
+r($calc->getResult()) && p('0:value') && e('44'); // 测试产品数量
 

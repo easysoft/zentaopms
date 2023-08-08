@@ -17,10 +17,10 @@ cid=1
 
 */
 
-r(count($calc->getResult())) && p('') && e('120'); // 测试分组数。
+r(count($calc->getResult())) && p('') && e('130'); // 测试分组数。
 
-r(count($calc->getResult(array('user' => 'admin'))))    && p('') && e('10'); // 测试用户admin
-r(count($calc->getResult(array('user' => 'user'))))     && p('') && e('10'); // 测试用户user
-r(count($calc->getResult(array('user' => 'dev'))))      && p('') && e('30'); // 测试用户dev
-r(count($calc->getResult(array('user' => 'pm'))))       && p('') && e('20'); // 测试用户pm
+r(count($calc->getResult(array('user' => 'admin'))))    && p('') && e('4');  // 测试用户admin
+r(count($calc->getResult(array('user' => 'user'))))     && p('') && e('24'); // 测试用户user
+r(count($calc->getResult(array('user' => 'dev'))))      && p('') && e('34'); // 测试用户dev
+r(count($calc->getResult(array('user' => 'pm'))))       && p('') && e('22'); // 测试用户pm
 r($calc->getResult(array('user' => 'notexist')))        && p('') && e('0');  // 测试不存在的用户

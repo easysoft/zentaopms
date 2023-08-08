@@ -183,7 +183,7 @@ class baseCalc
         if(!empty($this->dataset))
         {
             $dataSource = $this->dataset;
-            include_once dirname(__FILE__) . '/dataset.class.php';
+            include_once dirname(__FILE__) . '/dataset.php';
             $dataset = new dataset($dao);
 
             $statement = $dataset->$dataSource(implode(',', $this->fieldList));
@@ -203,6 +203,7 @@ class baseCalc
      */
     public function printSQL($dao)
     {
+        a($dao);
         echo $this->getSQL($dao);
     }
 
@@ -219,7 +220,7 @@ class baseCalc
         if(!empty($this->dataset))
         {
             $dataSource = $this->dataset;
-            include_once dirname(__FILE__) . '/dataset.class.php';
+            include_once dirname(__FILE__) . '/dataset.php';
             $dataset = new dataset($dao);
 
             $statement = $dataset->$dataSource(implode(',', $this->fieldList));

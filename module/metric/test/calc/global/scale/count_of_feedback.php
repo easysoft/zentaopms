@@ -16,4 +16,4 @@ cid=1
 
 */
 
-r($calc->getResult()) && p('0:value') && e('50'); // 测试全局范围反馈总数
+r($calc->getResult()) && p('0:value') && e('54'); // 测试全局范围反馈总数

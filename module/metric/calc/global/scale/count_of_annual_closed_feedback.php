@@ -26,6 +26,8 @@ class count_of_annual_closed_feedback extends baseCalc
 
     public $fieldList = array('t1.status', 't1.closedDate');
 
+    public $result = array();
+
     public function calculate($row)
     {
         if(empty($row->closedDate) || $row->status != 'closed') return false;

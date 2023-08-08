@@ -28,7 +28,7 @@ class rate_of_delivered_story extends baseCalc
 
     public function calculate($row)
     {
-        if(!isset($this->result['finished'])) $this->result['finished'] = 0;
+        if(!isset($this->result['delivered'])) $this->result['delivered'] = 0;
         if(!isset($this->result['valid']))    $this->result['valid'] = 0;
 
         if($row->stage == 'released' || $row->closedReason == 'done')                            $this->result['delivered'] ++;
