@@ -31,7 +31,7 @@
   #prompt-previewer {font-weight: bold;}
   #form-selector .header > * {display: inline-block;}
   #form-selector .content {margin: 6px 0; max-height: calc(100% - 47px); overflow-y: auto; border: 1px solid #ccc; border-left: none;}
-  .target-form-group {display: grid; grid-template-columns: 120px 1fr; grid-gap: 8px; border: 1px solid #ccc;}
+  .target-form-group {display: grid; grid-template-columns: 120px 1fr; grid-gap: 8px; border: 1px solid #ccc; border-right: 0;}
   .target-form-group:first-of-type {border-top: none;}
   .target-form-group:last-of-type {border-bottom: none;}
   .target-form-group + .target-form-group {border-top: unset;}
