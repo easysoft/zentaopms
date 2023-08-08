@@ -19,6 +19,15 @@ jsVar('moduleList', $config->todo->moduleList);
 jsVar('objectsMethod', $config->todo->getUserObjectsMethod);
 jsVar('nameBoxLabel', array('custom' => $lang->todo->name, 'objectID' => $lang->todo->objectID));
 
+$fnGenerateCustomizedFields = function() use ($showFields, $customFields)
+{
+    $showFields    = ",{$showFields},";
+    $fields        = array();
+    $defaultFields = explode(',', 'pri,desc,beginAndEnd,type');
+    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
+    return $fields;
+};
+
 div
 (
     setID('nameInputBox'),
@@ -30,49 +39,48 @@ div
     )
 );
 
-$visibleFields = array();
-foreach(explode(',', $showFields) as $field)
-{
-    if($field) $visibleFields[$field] = '';
-}
-
 formBatchPanel
 (
     set::id('batchCreateTodoForm'),
-    set::title($lang->todo->batchCreate . $lang->todo->common),
+    set::customFields(array('items' => $fnGenerateCustomizedFields(), 'urlParams' => 'module=todo&section=custom&key=batchCreateFields')),
 
     on::change('[data-name="type"]', 'changeType'),
     on::change('.time-input', 'initTime'),
     on::click('.time-check', "window.togglePending"),
     on::click('.form-batch-row-actions .btn', 'initTime'),
 
-    set::headingClass('justify-start'),
-    to::headingActions
+    to::heading
     (
-        inputGroup
+        div
         (
-            span
+            setClass("panel-title text-lg"), 
+            $lang->todo->batchCreate . $lang->todo->common,
+            inputGroup
             (
-                setClass('input-group-addon'),
-                $lang->todo->date
-            ),
-            datePicker
-            (
-                setID('todoDate'),
-                set::name('date'),
-                set::value($date),
-                on::change('window.changFuture')
-            ),
-            span
-            (
-                setClass('input-group-addon'),
-                checkBox
+                setClass('text-base font-medium'),
+                span
                 (
-                    setID('futureDate'),
-                    set::name('futureDate'),
-                    $lang->todo->periods['future'],
-                    on::click('window.changFuture')
-                )
+                    setClass('input-group-addon'),
+                    $lang->todo->date
+                ),
+                datePicker
+                (
+                    setID('todoDate'),
+                    set::name('date'),
+                    set::value($date),
+                    on::change('window.changFuture')
+                ),
+                span
+                (
+                    setClass('input-group-addon'),
+                    checkBox
+                    (
+                        setID('futureDate'),
+                        set::name('futureDate'),
+                        $lang->todo->periods['future'],
+                        on::click('window.changFuture')
+                    )
+                ),
             ),
         ),
     ),
@@ -99,7 +107,6 @@ formBatchPanel
         set::width('80px'),
         set::control('priPicker'),
         set::value('3'),
-        set::hidden(!isset($visibleFields['pri'])),
         set::items($lang->todo->priList),
     ),
     formBatchItem
