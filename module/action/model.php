@@ -2179,8 +2179,9 @@ class actionModel extends model
 
         /* Remove date condition for direction. */
         $condition = preg_replace("/AND +[`]?date[`]?[ ]*[\<\>][ |=]*'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
-        $actions   = $this->dao->select('id')->from(TABLE_ACTION)->where($condition)
-            ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
+        $actions   = $this->dao->select('id')->from(TABLE_ACTION)
+            ->where('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
+            ->andWhere($condition)
             ->limit(1)
             ->fetch('id');
         return !empty($actions);
