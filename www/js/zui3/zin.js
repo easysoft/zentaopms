@@ -80,6 +80,7 @@
         changeAppsLang: changeAppLang,
         changeAppsTheme: changeAppTheme
     }, parent.window.$.apps);
+    $.apps.openedMap = $.apps.openedApps;
 
     const renderMap =
     {
@@ -720,15 +721,27 @@
     /**
      * Search history and go back to specified path.
      *
-     * @param {string} target Back target, can be app name or module-method path.
-     * @param {string} url    Fallback url.
+     * @param {string} target     Back target, can be app name or module-method path.
+     * @param {string} url        Fallback url.
      * @returns {void}
      */
     function goBack(target, url)
     {
         if(!target || target === 'APP' || target === true) target = currentCode;
         else if(target === 'GLOBAL') target = '';
-        $.apps.goBack(target, url, historyState);
+
+        if(target)
+        {
+            if($.apps.openedMap[target]) return loadPage(target);
+            if(target.includes('-'))
+            {
+                const parts = target.split('-');
+                return loadPage($.createLink(parts[0], parts[1]));
+            }
+        }
+        if(url) return loadPage(url);
+
+        window.history.back();
     }
 
     /**
@@ -908,6 +921,9 @@
         if(options.toggle) return;
 
         const url = options.url || $link.attr('href');
+
+        if(typeof options.back === 'string') return goBack(options.back, url);
+
         var thisAppCode = $link.data('app')
         if(url)
         {
