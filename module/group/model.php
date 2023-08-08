@@ -457,12 +457,9 @@ class groupModel extends model
             foreach($this->post->actions as $moduleName => $moduleActions)
             {
                 if(empty($moduleName) or empty($moduleActions)) continue;
-                $privList = $this->dao->select('module,method')->from(TABLE_PRIV)->where('module')->eq($moduleName)->andWhere('method')->in($moduleActions)->fetchAll();
-                foreach($privList as $index => $priv)
-                {
-                    $privList["{$priv->module}-{$priv->method}"] = "{$priv->module}-{$priv->method}";
-                    unset($privList[$index]);
-                }
+
+                $privList = array();
+                foreach($moduleActions as $actionName) $privList["{$moduleName}-{$actionName}"] = "{$moduleName}-{$actionName}";
 
                 $relationPrivs = $this->getPrivRelationsByIdList($privList, 'depend', 'idGroup');
                 $depentedPrivs = array_merge($depentedPrivs, array_keys(zget($relationPrivs, 'depend', array())));
@@ -475,7 +472,9 @@ class groupModel extends model
                     $privs[]      = $data;
                 }
             }
+
             $this->insertPrivs($privs);
+
             foreach($depentedPrivs as $index => $priv)
             {
                 list($module, $method) = explode('-', $priv);
@@ -491,6 +490,7 @@ class groupModel extends model
                 $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             }
+            
             $recommendPrivs = zget($_POST, 'recommendPrivs', array());
             foreach($recommendPrivs as $moduleMethod => $priv)
             {
