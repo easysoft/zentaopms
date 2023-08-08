@@ -959,6 +959,7 @@ class docModel extends model
             ->setDefault('mailto', '')
             ->add('editedBy', $account)
             ->add('editedDate', $now)
+            ->setIF(strpos(",$oldDoc->editedList,", ",$account,") === false, 'editedList', $oldDoc->editedList . ",$account")
             ->cleanInt('project,product,execution,lib,module')
             ->join('groups', ',')
             ->join('users', ',')
@@ -2198,15 +2199,11 @@ class docModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.type')->in('text,word,ppt,excel,url,article')
             ->fetch('count');
-        $statistic->myEditedDocs = $this->dao->select('count(DISTINCT t1.objectID) as count')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
-            ->where('t1.objectType')->eq('doc')
-            ->andWhere('t1.action')->eq('edited')
-            ->andWhere('t1.actor')->eq($this->app->user->account)
-            ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t2.lib')->ne('')
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.type')->in('text,word,ppt,excel,url,article')
+        $statistic->myEditedDocs = $this->dao->select('count(*) as count')->from(TABLE_DOC)
+            ->where("CONCAT(',', editedList, ',')")->like("%,{$this->app->user->account},%")
+            ->andWhere('lib')->ne('')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->in('text,word,ppt,excel,url,article')
             ->fetch('count');
 
         $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)

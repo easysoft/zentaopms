@@ -715,6 +715,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   `editingDate` text NULL,
+  `editedList` text NULL,
   `mailto` text NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
   `groups` varchar(255) NOT NULL DEFAULT '',
