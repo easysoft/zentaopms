@@ -71,6 +71,7 @@ class actionModel extends model
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dao->lastInsertID();
 
+        $this->dao->insert(TABLE_ACTIONLATEST)->data($action)->autoCheck()->exec();
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
         /* Call the message notification function. */
@@ -1162,7 +1163,9 @@ class actionModel extends model
         $condition  = "($condition)";
 
         /* Get actions. */
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+        $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONLATEST : TABLE_ACTION;
+
+        $actions = $this->dao->select('*')->from($actionTable)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
