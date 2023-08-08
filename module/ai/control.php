@@ -474,15 +474,17 @@ class ai extends control
         $object = $this->ai->getObjectForPromptById($prompt, $objectId);
         if(empty($object)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noObjectData'])));
 
+        list($objectData, $rawObject) = $object;
+
+        list($location, $stop) = $this->ai->getTargetFormLocation($prompt, $rawObject);
+        if(empty($location)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm'])));
+        if(!empty($stop))    return header("location: $location", true, 302);
+
         $response = $this->ai->executePrompt($prompt, $object);
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors[$response]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        list($objectData, $rawObject) = $object;
-
         $this->ai->setInjectData($prompt->targetForm, $response);
-        $location = $this->ai->getTargetFormLocation($prompt, $rawObject);
-        if(empty($location)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm'])));
 
         $_SESSION['aiPrompt']['prompt']   = $prompt;
         $_SESSION['aiPrompt']['objectId'] = $objectId;

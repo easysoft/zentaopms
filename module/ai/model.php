@@ -1043,15 +1043,15 @@ class aiModel extends model
      * @param  object       $object
      * @param  array        $linkArgs  optional, link arguments, as defined in `->args` of items of `$config->ai->targetFormVars`, e.g. array('story' => 1). If not provided, will try to get from object.
      * @access public
-     * @return string|false returns either link or false.
+     * @return array        array(link|false, bool), link to target form, and whether should stop execution and return link.
      */
     public function getTargetFormLocation($prompt, $object, $linkArgs = array())
     {
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
-        if(empty($prompt)) return false;
+        if(empty($prompt)) return array(false, true);
 
         $targetForm = $prompt->targetForm;
-        if(empty($targetForm)) return false;
+        if(empty($targetForm)) return array(false, true);
 
         list($m, $f) = explode('.', $targetForm);
         $targetFormConfig = $this->config->ai->targetForm[$m][$f];
@@ -1082,12 +1082,12 @@ class aiModel extends model
                 $relatedObj = $this->tryGetRelatedObjects($prompt, $object, array($arg));
                 $var = !empty($relatedObj) ? current($relatedObj) : '';
             }
-            if(!empty($isRequired) && empty($var)) return helper::createLink('ai', 'promptExecutionReset', 'failed=1');
+            if(!empty($isRequired) && empty($var)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
             $vars[] = $var;
         }
         $linkVars = vsprintf($varsConfig->format, $vars);
 
-        return helper::createLink($module, $method, $linkVars);
+        return array(helper::createLink($module, $method, $linkVars), false);
     }
 
     /**
