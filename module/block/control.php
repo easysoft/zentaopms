@@ -2011,7 +2011,10 @@ class block extends control
         $reviews = $this->loadModel('my')->getReviewingList('all', 'time_desc', $pager);
         if($reviews)
         {
-            $hasViewPriv['review'] = true;
+            $todoPriv = $hasViewPriv['todo'];
+            unset($hasViewPriv['todo']);
+            $hasViewPriv = array_merge(array('todo' => $todoPriv, 'review' => true), $hasViewPriv);
+
             $count['review']       = count($reviews);
             $this->view->reviews   = $reviews;
             if($this->config->edition == 'max' or $this->config->edition == 'ipd')
