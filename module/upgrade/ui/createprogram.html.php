@@ -17,49 +17,75 @@ $createProgram = function($data)
 
     return div
     (
-        formRowGroup(set::title($lang->upgrade->dataMethod)),
+        formRowGroup(set::title($lang->upgrade->dataMethod), set::items('')),
         div
         (
             set::class('programParams py-4'),
-            radioList(set::class('my-2'), set::name('projectType'), set::inline('true'), set::items($this->lang->upgrade->projectType, set::value($data->projectType))),
+            radioList(set::class('my-2'), set::name('projectType'), set::inline('true'), set::items($this->lang->upgrade->projectType), set::value($data->projectType)),
             div(set::class('createProjectTip text-gray ' . ($data->projectType == 'project' ? '' : 'hidden')), html($lang->upgrade->createProjectTip)),
             div(set::class('createExecutionTip text-gray ' . ($data->projectType == 'execution' ? '' : 'hidden')), html($lang->upgrade->createExecutionTip))
         ),
-        formRowGroup(set::title($data->systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram,)),
+        formRowGroup(set::title($data->systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram), set::items('')),
         div
         (
-            set::class('programForm'),
-            div
+            set::class('programForm form-grid'),
+            formGroup
             (
-                formGroup
+                set::class('hidden'),
+                set::label($lang->upgrade->existProject),
+                inputGroup
                 (
-                    inputGroup
+                    picker(set::name('programs'), set::items($data->programs), set::value($data->programID)),
+                    span
                     (
-                        span(set::class('form-label w-24'), html("<span class='prj-exist hidden'>{$lang->upgrade->existProject}</span><span class='prj-no-exist'>{$lang->upgrade->programName}</span>")),
-                        picker(set::className('hidden'), set::name('programs'), set::items($data->programs), set::value($data->programID)),
-                        input(set::name('programName')),
-                        span
-                        (
-                            set('class', 'input-group-addon'),
-                            checkbox(set::name('newProgram'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true))
-                        ),
-                        input(set::class('hidden'), set::name('programID'))
-                    )
+                        set('class', 'input-group-addon'),
+                        checkbox(set::name('newProgram'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true))
+                    ),
                 )
             ),
-            div
+            formGroup
             (
-                set::class($systemMode == 'light' ? 'hidden' : ''),
-                span(set::class('form-label w-24'), $lang->program->common . $lang->program->status),
-                div(picker(set::name('programStatus'), set::items($lang->program->statusList)))
+                set::label($lang->upgrade->programName),
+                set::required(true),
+                inputGroup
+                (
+                    input(set::name('programName')),
+                    span
+                    (
+                        set('class', 'input-group-addon'),
+                        checkbox(set::name('newProgram'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true))
+                    ),
+                    input(set::class('hidden'), set::name('programID'))
+                )
             ),
-            div
+            formGroup
             (
-                set::class('projectName'),
-                div($lang->upgrade->existProject . $lang->upgrade->projectName),
+                set::class($data->systemMode == 'light' ? 'hidden' : ''),
+                set::label($lang->program->common . $lang->program->status),
+                inputGroup
+                (
+                    picker(set::name('programStatus'), set::items($lang->program->statusList))
+                )
+            ),
+            formGroup
+            (
+                set::class('hidden'),
+                set::label($lang->upgrade->existProject),
                 inputGroup
                 (
                     picker(set::name('projects'), set::items($data->projects)),
+                    span
+                    (
+                        set('class', 'input-group-addon'),
+                        checkbox(set::name('newProject'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true))
+                    )
+                )
+            ),
+            formGroup
+            (
+                set::label($lang->upgrade->projectName),
+                inputGroup
+                (
                     input(set::name('projectName'), set::value(isset($data->sprintName) ? $data->sprintName : '')),
                     span
                     (
@@ -68,19 +94,34 @@ $createProgram = function($data)
                     )
                 )
             ),
-            div
+            formGroup
             (
                 set::class('programParams projectStatus'),
-                div($lang->project->status),
-                div(picker(set::name('projectStatus'), set::items($lang->project->statusList)))
+                set::label($lang->project->status),
+                inputGroup
+                (
+                    picker(set::name('projectStatus'), set::items($lang->project->statusList))
+                )
             ),
-            div
+            formGroup
             (
-                set::class('lineName'),
-                div($lang->upgrade->existLine . $lang->upgrade->line),
+                set::class('hidden'),
+                set::label($lang->upgrade->existLine),
                 inputGroup
                 (
                     picker(set::name('lines'), set::items($data->lines)),
+                    span
+                    (
+                        set('class', 'input-group-addon'),
+                        checkbox(set::name('newLine'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true))
+                    )
+                )
+            ),
+            formGroup
+            (
+                set::label($lang->upgrade->line),
+                inputGroup
+                (
                     input(set::name('lineName'), set::value(isset($data->lineName) ? $data->lineName : '')),
                     span
                     (
@@ -89,16 +130,20 @@ $createProgram = function($data)
                     )
                 )
             ),
-            div
+            formGroup
             (
                 set::class('programParams'),
-                div($lang->project->PM),
-                div(picker(set::name('PM'), set::items($data->users)))
+                set::label($lang->project->PM),
+                inputGroup
+                (
+                    picker(set::name('PM'), set::items($data->users))
+                )
             ),
-            div
+            formGroup
             (
                 set::class('programParams'),
-                div($lang->project->dateRange),
+                set::label($lang->project->dateRange),
+                set::required(true),
                 inputGroup
                 (
                     datePicker(set::name('begin'), set::value(date('Y-m-d'))),
@@ -107,14 +152,14 @@ $createProgram = function($data)
                     span(set::class('input-group-addon'), checkbox(set::name('longTime'), set::value('1'), set::text($lang->project->longTime))),
                 )
             ),
-            div
+            formGroup
             (
                 set::class('programParams'),
-                div($lang->project->acl),
-                div(radioList(set::name('programAcl'), set::items($lang->program->aclList), set::value('open'))),
-                div(radioList(set::name('projectAcl'), set::items($lang->project->subAclList), set::value('open'))),
-            ),
+                set::label($lang->project->acl),
+                radioList(set::name('programAcl'), set::items($lang->program->aclList), set::value('open')),
+                radioList(set::name('projectAcl'), set::class('hidden'), set::items($lang->project->subAclList), set::value('open')),
+            )
         ),
-        center(set::class('form-actions'), btn(set::type('submit'), set::class('primary'), $lang->save))
+        center(set::class('form-actions mt-4'), btn(set::type('submit'), set::class('primary'), $lang->save))
     );
 };
