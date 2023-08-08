@@ -39,6 +39,7 @@ class compile extends control
      */
     public function browse($repoID = 0, $jobID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('ci');
         if($jobID)
         {
             $job    = $this->loadModel('job')->getById($jobID);
@@ -50,7 +51,7 @@ class compile extends control
         $this->compile->syncCompile($repoID, $jobID);
 
         $this->app->loadLang('job');
-        if($repoID) $this->loadModel('ci')->setMenu($repoID);
+        if($repoID) $this->ci->setMenu($repoID);
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
