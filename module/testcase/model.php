@@ -3337,61 +3337,47 @@ class testcaseModel extends model
      * Create scene.
      *
      * @access public
-     * @return array
+     * @return false|int
      */
     public function createScene()
     {
-        $now   = helper::now();
         $scene = fixer::input('post')
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', $now)
-            ->setDefault('parent', $this->post->scene === false ? 0 : $this->post->scene)
-            ->cleanInt('product,module,branch')
-            ->remove('scene')
+            ->add('openedBy', $this->app->user->account)
+            ->add('openedDate', helper::now())
+            ->cleanInt('product,module,branch,parent')
             ->get();
 
         $this->dao->insert(TABLE_SCENE)->data($scene)
             ->autoCheck()
             ->batchCheck($this->config->testcase->createscene->requiredFields, 'notempty')
-            ->check('title', 'unique')
+            ->check('title', 'unique', "product = {$scene->product}")
             ->checkFlow()
             ->exec();
+        if($this->dao->isError()) return false;
 
-        if(!$this->dao->isError())
+        $sceneID = $this->dao->lastInsertID();
+        if($scene->parent)
         {
-            $sceneID     = $this->dao->lastInsertID();
-            $childPath   = "";
-            $grade       = "";
-            $viewSceneID = intval($sceneID) + CHANGEVALUE;
+            $parent = $this->getSceneByID($scene->parent);
 
-            if($scene->parent)
-            {
-                $resultScene = $this->dao->findById((int)$scene->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
-                $childPath   = $resultScene->path . $viewSceneID . ',';
-                $grade       = $resultScene->grade + 1;
-                $this->dao->update(TABLE_SCENE)
-                    ->set('path')->eq($childPath)
-                    ->set('grade')->eq($grade)
-                    ->set('product')->eq($resultScene->product)
-                    ->set('module')->eq($resultScene->module)
-                    ->set('sort')->eq(intval($sceneID) + CHANGEVALUE)
-                    ->where('id')->eq($sceneID)->limit(1)
-                    ->exec();
-            }
-            else
-            {
-                $childPath = ",$viewSceneID,";
-                $grade     = 1;
-                $this->dao->update(TABLE_SCENE)
-                    ->set('path')->eq($childPath)
-                    ->set('grade')->eq($grade)
-                    ->set('sort')->eq(intval($sceneID) + CHANGEVALUE)
-                    ->where('id')->eq($sceneID)->limit(1)
-                    ->exec();
-            }
-
-            return array('status' => 'created', 'id' => $sceneID);
+            $scene->path    = $parent->path . $sceneID . ',';
+            $scene->grade   = ++$parent->grade;
+            $scene->product = $parent->product;
+            $scene->branch  = $parent->branch;
+            $scene->module  = $parent->module;
         }
+        else
+        {
+            $scene->path  = ',' . $sceneID . ',';
+            $scene->grade = 1;
+        }
+
+        $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq($sceneID)->exec();
+        if($this->dao->isError()) return false;
+
+        $this->loadModel('action')->create('scene', $sceneID, 'Opened');
+
+        return $sceneID;
     }
 
     /**
