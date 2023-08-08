@@ -2613,14 +2613,14 @@ class testcase extends control
             $branches = (isset($product->type) && $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
-        $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
-        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
-        $this->view->currentModuleID  = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
-        $this->view->currentParentID  = (int)$this->cookie->lastCaseScene;
-        $this->view->product          = $product;
-        $this->view->branch           = $branch;
-        $this->view->branches         = $branches;
+        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
+        $this->view->modules  = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->scenes   = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+        $this->view->parent   = (int)$this->cookie->lastCaseScene;
+        $this->view->product  = $product;
+        $this->view->branch   = $branch;
+        $this->view->branches = $branches;
         $this->display();
     }
 
