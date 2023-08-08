@@ -21,9 +21,10 @@ $mainActions = array();
 foreach($config->mr->view->operateList as $operate)
 {
     if(!common::hasPriv('mr', $operate == 'reject' ? 'approval' : $operate)) continue;
+    $action = $config->mr->actionList[$operate];
 
-    if($operate == 'accept' && ($MR->approvalStatus != 'approved' || $compileNotSuccess)) continue;
-    if($operate == 'accept' && ($rawMR->state != 'opened' || $rawMR->has_conflicts)) continue;
+    if($operate == 'accept' && ($MR->approvalStatus != 'approved' || $compileNotSuccess)) $action['disabled'] = true;
+    if($operate == 'accept' && ($rawMR->state != 'opened' || $rawMR->has_conflicts)) $action['disabled'] = true;
 
     if(in_array($operate, array('approval', 'reject', 'close', 'edit')))
     {
@@ -32,12 +33,12 @@ foreach($config->mr->view->operateList as $operate)
 
         if($operate == 'approval')
         {
-            if($rawMR->has_conflicts || $compileNotSuccess || $MR->approvalStatus == 'approved') continue;
+            if($rawMR->has_conflicts || $compileNotSuccess || $MR->approvalStatus == 'approved') $action['disabled'] = true;
         }
     }
     if($operate == 'reopen' && (!$MR->synced || $rawMR->state != 'closed')) continue;
 
-    $mainActions[] = $config->mr->actionList[$operate];
+    $mainActions[] = $action;
 }
 
 if($MR->compileID)
@@ -241,11 +242,15 @@ panel
         ),
 );
 
-floatToolbar
+div
 (
-    set::object($MR),
-    isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-    set::main($mainActions),
+    setClass('flex justify-center items-center pt-6'),
+    floatToolbar
+    (
+        set::object($MR),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        set::main($mainActions),
+    ),
 );
 
 render();
