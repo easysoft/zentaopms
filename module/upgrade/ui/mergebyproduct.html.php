@@ -26,7 +26,7 @@ $getMergeData = function($data)
                 $productGroups[] = div
                 (
                     set::class('sprintItem mb-2'),
-                    checkbox(set::id("sprints[{$productID}]"), set::name("sprints[{$productID}]"), set::text($sprint->name), set::value($sprint->id)),
+                    checkbox(set::name("sprints[{$productID}]"), set::text($sprint->name), set::value($sprint->id)),
                     input(set::class('hidden'), set::name("sprintIdList[{$productID}][{$sprint->id}]"), set::value($sprint->id))
                 );
             }
@@ -39,7 +39,7 @@ $getMergeData = function($data)
             (
                 set::width('1/2'),
                 set::class('productList px-4 flex items-center overflow-hidden'),
-                checkbox(set::id('products'), set::text($product->name), set::value($product->id))
+                checkbox(set::name('products[]'), set::text($product->name), set::value($product->id))
             ),
             cell
             (

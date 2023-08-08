@@ -77,7 +77,7 @@ $createProgram = function($data)
                     span
                     (
                         set('class', 'input-group-addon'),
-                        checkbox(set::name('newProject'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true))
+                        checkbox(set::name('newProject'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true))
                     )
                 )
             ),
@@ -113,7 +113,7 @@ $createProgram = function($data)
                     span
                     (
                         set('class', 'input-group-addon'),
-                        checkbox(set::name('newLine'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true))
+                        checkbox(set::name('newLine'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true))
                     )
                 )
             ),

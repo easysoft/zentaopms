@@ -29,7 +29,7 @@ $getMergeData = function($data)
                     $productGroups[] = div
                     (
                         set::class('sprintItem mb-2'),
-                        checkbox(set::id("sprints[$line->id][$productID]"), set::name("sprints[$line->id][$productID]"), set::text($sprint->name), set::value($sprint->id)),
+                        checkbox(set::name("sprints[$line->id][$productID]"), set::text($sprint->name), set::value($sprint->id)),
                         input(set::class('hidden'), set::name("sprintIdList[$line->id][$productID][$sprint->id]"), set::value($sprint->id))
                     );
                 }
@@ -42,7 +42,7 @@ $getMergeData = function($data)
                     set::width('1/2'),
                     set::class('productItem p-4 overflow-hidden'),
                     set::style(array('background-color' => 'var(--color-gray-50)')),
-                    checkbox(set::id("products[{$line->id}]"), set::name("products[{$line->id}]"), set::text($product->name), set::value($productID)),
+                    checkbox(set::name("products[{$line->id}]"), set::text($product->name), set::value($productID)),
                     input(set::class('hidden'), set::name("productIdList[$line->id][$productID]"), set::value($productID))
                 ),
                 cell
@@ -62,7 +62,7 @@ $getMergeData = function($data)
                 set::width('1/3'),
                 set::class('productList px-4 flex items-center border-t mr-2 overflow-hidden'),
                 set::style(array('background-color' => 'var(--color-gray-50)')),
-                checkbox(set::id('products'), set::text($product->name), set::value($product->id))
+                checkbox(set::name('products[]'), set::text($product->name), set::value($product->id))
             ),
             cell
             (
