@@ -1715,7 +1715,7 @@ class executionModel extends model
     }
 
     /**
-     * Get an array of task id:name.
+     * Get an array of execution id:name.
      *
      * @param  int    $projectID
      * @access public
