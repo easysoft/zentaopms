@@ -316,6 +316,8 @@ class custom extends control
         {
             $this->custom->deleteItems("module=$module&section=$field");
         }
+
+        if(in_array($module, array('serverroom', 'host'))) return $this->send(array('result' => 'success', 'load' => true));
         return print(js::reload('parent'));
     }
 

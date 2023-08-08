@@ -80,7 +80,7 @@ $formRows[] = formRow
 
 $hasSideBar = !empty($lang->{$module}->osNameList) && array_key_exists($field, $lang->{$module}->osNameList);
 $actions    = array('submit');
-if(common::hasPriv('custom', 'restore')) $actions[] = array('class' => 'ajax-submit', 'text' => $lang->custom->restore, 'data-confirm' => $lang->custom->confirmRestore, 'url' => $this->createLink('custom', 'restore', "module=$module&field=$fieldList"));
+if(common::hasPriv('custom', 'restore')) $actions[] = array('class' => 'ajax-submit', 'text' => $lang->custom->restore, 'data-confirm' => $lang->custom->confirmRestore, 'url' => $this->createLink('custom', 'restore', "module=$module&field=$fieldList&confirm=yes"));
 formPanel
 (
     setID('opsForm'),
