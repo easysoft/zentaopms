@@ -1064,7 +1064,7 @@ class actionModel extends model
      * @param  string $account
      * @param  string $period
      * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $limit
      * @param  string|int $productID   all|int(like 123)|notzero   all => include zero, notzero, greater than 0
      * @param  string|int $projectID   same as productID
      * @param  string|int $executionID same as productID
@@ -1073,7 +1073,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $productID = 'all', $projectID = 'all', $executionID = 'all', $date = '', $direction = 'next')
+    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $limit = 50, $productID = 'all', $projectID = 'all', $executionID = 'all', $date = '', $direction = 'next')
     {
         /* Computer the begin and end date of a period. */
         $beginAndEnd = $this->computeBeginAndEnd($period);
@@ -1185,7 +1185,7 @@ class actionModel extends model
             ->andWhere($condition)
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
-            ->page($pager)
+            ->limit($limit)
             ->fetchAll();
 
         if(!$actions) return array();
@@ -1226,13 +1226,13 @@ class actionModel extends model
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $limit
      * @param  string $date
      * @param  string $direction
      * @access public
      * @return array
      */
-    public function getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next')
+    public function getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $limit = 50, $date = '', $direction = 'next')
     {
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
@@ -1281,7 +1281,7 @@ class actionModel extends model
         if($this->config->vision == 'lite') $actionQuery .= " AND objectType != 'product'";
 
         $actionQuery .= " AND vision = '" . $this->config->vision . "'";
-        $actions      = $this->getBySQL($actionQuery, $orderBy, $pager);
+        $actions      = $this->getBySQL($actionQuery, $orderBy, $limit);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
         if(!$actions) return array();
@@ -1293,11 +1293,11 @@ class actionModel extends model
      *
      * @param  string $sql
      * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $limit
      * @access public
      * @return array
      */
-    public function getBySQL($sql, $orderBy, $pager = null)
+    public function getBySQL($sql, $orderBy, $limit = 50)
     {
         $actionCondition = $this->getActionCondition();
         if(is_array($actionCondition)) return array();
@@ -1306,7 +1306,7 @@ class actionModel extends model
             ->where($sql)
             ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
-            ->page($pager)
+            ->limit($limit)
             ->fetchAll();
     }
 
@@ -2174,11 +2174,12 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
 
         /* Remove date condition for direction. */
-        $condition = preg_replace("/AND +date[\<\>]'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
-        $count     = $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where($condition)
+        $condition = preg_replace("/AND +[`]?date[`]?[ ]*[\<\>][ |=]*'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
+        $count     = $this->dao->select('id')->from(TABLE_ACTION)->where($condition)
             ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
-            ->fetch('count');
-        return $count > 0;
+            ->limit(1)
+            ->fetch();
+        return !empty($count);
     }
 
     /**

@@ -3445,11 +3445,11 @@ class docModel extends model
     /**
      * Get document dynamic.
      *
-     * @param  object $pager
+     * @param  int    $limit
      * @access public
      * @return array
      */
-    public function getDynamic($pager = null)
+    public function getDynamic($limit = 30)
     {
         $allLibs          = $this->getLibs('hasApi');
         $hasPrivDocIdList = $this->getPrivDocs('', 0, 'all');
@@ -3467,7 +3467,7 @@ class docModel extends model
             ->andWhere('objectID')->in(array_keys($apiList))
             ->markRight(2)
             ->orderBy('date_desc')
-            ->page($pager)
+            ->limit($limit)
             ->fetchAll();
 
         return $this->loadModel('action')->transformActions($actions);

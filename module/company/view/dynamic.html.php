@@ -21,8 +21,7 @@
     if($period == $browseType)
     {
         $active = 'btn-active-text';
-        $pager->recTotal = $recTotal ? $recTotal : $pager->recTotal;
-        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        $label .= " <span class='label label-light label-badge'>{$recTotal}</span>";
     }
     echo html::a(inlink('dynamic', "browseType=$period&param=&recTotal=0&date=&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
@@ -116,8 +115,8 @@ $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
 $lastDate  = substr($action->originalDate, 0, 10);
 $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
 $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-$preLink   = $hasPre ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . "&direction=pre&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
-$nextLink  = $hasNext ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . "&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
+$preLink   = $hasPre ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal=0&date=" . strtotime($firstDate) . "&direction=pre&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
+$nextLink  = $hasNext ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal=0&date=" . strtotime($lastDate) . "&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
 ?>
 <?php if($hasPre or $hasNext):?>
 <div id="mainActions" class='main-actions'>

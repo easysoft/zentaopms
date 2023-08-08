@@ -866,10 +866,6 @@ class product extends control
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Set the user and type. */
         $account = 'all';
         if($type == 'account')
@@ -877,30 +873,24 @@ class product extends control
             $user = $this->loadModel('user')->getById((int)$param, 'id');
             if($user) $account = $user->account;
         }
-        $period  = $type == 'account' ? 'all'  : $type;
-        $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $productID, 'all', 'all', $date, $direction);
-        if(empty($recTotal)) $recTotal = count($actions);
-
-        /* The header and position. */
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
-        $this->view->position[] = $this->lang->product->dynamic;
-
-        $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
-        $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
+        $period     = $type == 'account' ? 'all'  : $type;
+        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, $productID, 'all', 'all', $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
 
         /* Assign. */
-        $this->view->productID  = $productID;
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->account    = $account;
-        $this->view->user       = isset($user) ? $user : '';
-        $this->view->param      = $param;
-        $this->view->pager      = $pager;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction  = $direction;
-        $this->view->recTotal   = $recTotal;
+        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
+        $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
+        $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
+        $this->view->productID    = $productID;
+        $this->view->type         = $type;
+        $this->view->orderBy      = $orderBy;
+        $this->view->account      = $account;
+        $this->view->user         = isset($user) ? $user : '';
+        $this->view->param        = $param;
+        $this->view->dateGroups   = $dateGroups;
+        $this->view->direction    = $direction;
+        $this->view->recTotal     = count($dateGroups, 1) - count($dateGroups);
         $this->display();
     }
 
@@ -924,19 +914,12 @@ class product extends control
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($productID);
 
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
-
-        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[] = $this->lang->product->view;
-
+        $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->product  = $product;
         $this->view->actions  = $this->loadModel('action')->getList('product', $productID);
         $this->view->users    = $this->user->getPairs('noletter');
         $this->view->lines    = array('') + $this->product->getLinePairs();
-        $this->view->dynamics = $this->action->getDynamic('all', 'all', 'date_desc', $pager, $productID);
+        $this->view->dynamics = $this->action->getDynamic('all', 'all', 'date_desc', 30, $productID);
         $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
 
         $this->display();

@@ -286,10 +286,7 @@ class myModel extends model
      */
     public function getActions()
     {
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 50, 1);
-
-        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager);
+        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50);
         $users   = $this->loadModel('user')->getList();
 
         $simplifyUsers = array();

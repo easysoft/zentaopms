@@ -360,11 +360,7 @@ class block extends control
      */
     public function dynamic()
     {
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
-
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'id_desc', $pager);
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'id_desc', 30);
         $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all', '', 0, array_unique(array_column($this->view->actions, 'actor')));
 
         $this->display();
@@ -1563,11 +1559,7 @@ class block extends control
     {
         $projectID = $this->session->project;
 
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
-
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'all', 'id_desc', $pager, 'all', $projectID);
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'all', 'id_desc', 30, 'all', $projectID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(array_column($this->view->actions, 'actor')));
     }
 
@@ -2103,11 +2095,7 @@ class block extends control
      */
     public function printDocDynamicBlock()
     {
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
-
-        $this->view->actions = $this->loadModel('doc')->getDynamic($pager);
+        $this->view->actions = $this->loadModel('doc')->getDynamic(30);
         $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all', '', 0, array_unique(array_column($this->view->actions, 'actor')));
     }
 

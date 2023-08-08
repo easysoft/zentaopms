@@ -2590,23 +2590,17 @@ class execution extends control
             $chartData    = $this->execution->buildBurnData($executionID, $dateList, $type, 'left', $executionEnd);
         }
 
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
-
         $this->executeHooks($executionID);
         if(!$execution->projectInfo->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
         $this->view->title      = $this->lang->execution->view;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->view->title;
 
         $this->view->execution    = $execution;
         $this->view->products     = $products;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->planGroups   = $this->execution->getPlans($products);
         $this->view->actions      = $this->loadModel('action')->getList($this->objectType, $executionID);
-        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', 'all', $executionID);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 30, 'all', 'all', $executionID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->teamMembers  = $this->execution->getTeamMembers($executionID);
         $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('execution', $executionID);
@@ -3723,10 +3717,6 @@ class execution extends control
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Set the user and type. */
         $account = 'all';
         if($type == 'account')
@@ -3734,30 +3724,25 @@ class execution extends control
             $user = $this->loadModel('user')->getById((int)$param, 'id');
             if($user) $account = $user->account;
         }
-        $period  = $type == 'account' ? 'all'  : $type;
-        $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', 'all', $executionID, $date, $direction);
-        if(empty($recTotal)) $recTotal = count($actions);
+        $period     = $type == 'account' ? 'all'  : $type;
+        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', $executionID, $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
 
-        /* The header and position. */
         $execution = $this->execution->getByID($executionID);
-        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->dynamic;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->lang->execution->dynamic;
-
-        $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');
-        $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         /* Assign. */
-        $this->view->executionID = $executionID;
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->account     = $account;
-        $this->view->param       = $param;
-        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction   = $direction;
-        $this->view->recTotal    = $recTotal;
+        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->dynamic;
+        $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');
+        $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->executionID  = $executionID;
+        $this->view->type         = $type;
+        $this->view->orderBy      = $orderBy;
+        $this->view->account      = $account;
+        $this->view->param        = $param;
+        $this->view->dateGroups   = $dateGroups;
+        $this->view->direction    = $direction;
+        $this->view->recTotal     = count($dateGroups, 1) - count($dateGroups);
         $this->display();
     }
 

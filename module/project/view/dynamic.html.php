@@ -106,8 +106,8 @@ $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
 $lastDate  = substr($action->originalDate, 0, 10);
 $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
 $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-$preLink   = $hasPre ? inlink('dynamic', "projectID=$projectID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
-$nextLink  = $hasNext ? inlink('dynamic', "projectID=$projectID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+$preLink   = $hasPre ? inlink('dynamic', "projectID=$projectID&type=$type&param=$param&recTotal=0&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
+$nextLink  = $hasNext ? inlink('dynamic', "projectID=$projectID&type=$type&param=$param&recTotal=0&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
 ?>
 <?php if($hasPre or $hasNext):?>
 <div id="mainActions" class='main-actions'>

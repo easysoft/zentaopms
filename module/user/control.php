@@ -1233,25 +1233,20 @@ class user extends control
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
         $date    = empty($date) ? '' : date('Y-m-d', $date);
 
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);
-
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
-        $this->view->position[] = $this->lang->user->dynamic;
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
 
         /* Assign. */
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
         $this->view->type       = $period;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager      = $pager;
+        $this->view->recTotal   = count($dateGroups, 1) - count($dateGroups);
         $this->view->user       = $user;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
+        $this->view->dateGroups = $dateGroups;
         $this->view->direction  = $direction;
         $this->display();
     }
