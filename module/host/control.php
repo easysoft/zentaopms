@@ -36,7 +36,7 @@ class host extends control
 
         $hostList = $this->host->getList($browseType, $param, $orderBy, $pager);
         $rooms    = $this->loadModel('serverroom')->getPairs();
-        $accounts = $this->loadModel('account')->getPairs();
+        $accounts = array(0 => '') + $this->loadModel('account')->getPairs();
         $groups   = array('', '') + $this->loadModel('tree')->getOptionMenu(0, 'host');
 
         /* Build the search form. */
