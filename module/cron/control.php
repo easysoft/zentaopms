@@ -155,6 +155,8 @@ class cron extends control
         $crons       = $this->cron->getCrons('nostop');
         $parsedCrons = $this->cron->parseCron($crons);
 
+        /* Update last time. */
+        $this->cron->changeStatus(key($parsedCrons), 'normal', true);
         $this->cron->logCron("The cron process created.\n");
         $this->loadModel('common');
         $startedTime = time();

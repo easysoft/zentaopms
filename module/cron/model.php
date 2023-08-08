@@ -84,6 +84,7 @@ class cronModel extends model
             }
         }
 
+        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('lastTime')->notZeroDate()->andWhere('status')->ne('stop')->exec();
         return $parsedCrons;
     }
 
