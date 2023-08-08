@@ -730,14 +730,10 @@
         if(!target || target === 'APP' || target === true) target = currentCode;
         else if(target === 'GLOBAL') target = '';
 
-        if(target)
+        if(target && target.includes('-'))
         {
-            if($.apps.openedMap[target]) return loadPage(target);
-            if(target.includes('-'))
-            {
-                const parts = target.split('-');
-                return loadPage($.createLink(parts[0], parts[1]));
-            }
+            const parts = target.split('-');
+            return loadPage($.createLink(parts[0], parts[1]));
         }
         if(url) return loadPage(url);
 
