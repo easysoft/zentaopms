@@ -52,12 +52,12 @@ $config->repo->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->rep
 
 $config->repo->dtable->fieldList['actions']['list']['execJob']['icon']        = 'sonarqube';
 $config->repo->dtable->fieldList['actions']['list']['execJob']['hint']        = $lang->sonarqube->execJob;
-$config->repo->dtable->fieldList['actions']['list']['execJob']['url']         = helper::createLink('sonarqube', 'execJob', "jobID={jobID}");
+$config->repo->dtable->fieldList['actions']['list']['execJob']['url']         = helper::createLink('sonarqube', 'execJob', "jobID={job}");
 $config->repo->dtable->fieldList['actions']['list']['execJob']['data-toggle'] = 'modal';
 
 $config->repo->dtable->fieldList['actions']['list']['reportView']['icon']        = 'audit';
 $config->repo->dtable->fieldList['actions']['list']['reportView']['hint']        = $lang->sonarqube->reportView;
-$config->repo->dtable->fieldList['actions']['list']['reportView']['url']         = helper::createLink('sonarqube', 'reportView', "jobID={jobID}");
+$config->repo->dtable->fieldList['actions']['list']['reportView']['url']         = helper::createLink('sonarqube', 'reportView', "jobID={job}");
 $config->repo->dtable->fieldList['actions']['list']['reportView']['data-toggle'] = 'modal';
 
 $config->repo->dtable->fieldList['actions']['list']['delete']['icon']        = 'trash';
@@ -182,39 +182,15 @@ $config->repo->taskDtable->fieldList['id']['title']    = $lang->idAB;
 $config->repo->taskDtable->fieldList['id']['type']     = 'id';
 $config->repo->taskDtable->fieldList['id']['checkbox'] = true;
 
-$config->repo->taskDtable->fieldList['pri']['title']    = $lang->priAB;
-$config->repo->taskDtable->fieldList['pri']['type']     = 'pri';
-$config->repo->taskDtable->fieldList['pri']['sortType'] = true;
-$config->repo->taskDtable->fieldList['pri']['show']     = true;
-$config->repo->taskDtable->fieldList['pri']['group']    = 1;
-$config->repo->taskDtable->fieldList['pri']['fixed']    = 'left';
+$config->repo->taskDtable->fieldList['pri']        = $config->task->dtable->fieldList['pri'];
+$config->repo->taskDtable->fieldList['name']       = $config->task->dtable->fieldList['name'];
+$config->repo->taskDtable->fieldList['finishedBy'] = $config->task->dtable->fieldList['finishedBy'];
+$config->repo->taskDtable->fieldList['assignedTo'] = $config->task->dtable->fieldList['assignedTo'];
+$config->repo->taskDtable->fieldList['status']     = $config->task->dtable->fieldList['status'];
 
-$config->repo->taskDtable->fieldList['name']['flex']         = 1;
+$config->repo->taskDtable->fieldList['pri']['fixed']         = 'left';
 $config->repo->taskDtable->fieldList['name']['nestedToggle'] = false;
-$config->repo->taskDtable->fieldList['name']['sortType']     = true;
-$config->repo->taskDtable->fieldList['name']['required']     = true;
-$config->repo->taskDtable->fieldList['name']['fixed']        = 'left';
-$config->repo->taskDtable->fieldList['name']['type']         = 'nestedTitle';
 $config->repo->taskDtable->fieldList['name']['title']        = $lang->task->name;
 $config->repo->taskDtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}', 'target' => '_blank');
+$config->repo->taskDtable->fieldList['assignedTo']['title']  = $lang->task->assignedTo;
 
-$config->repo->taskDtable->fieldList['finishedBy']['title']    = $lang->task->finishedByAB;
-$config->repo->taskDtable->fieldList['finishedBy']['type']     = 'user';
-$config->repo->taskDtable->fieldList['finishedBy']['sortType'] = true;
-$config->repo->taskDtable->fieldList['finishedBy']['show']     = true;
-$config->repo->taskDtable->fieldList['finishedBy']['group']    = 4;
-
-$config->repo->taskDtable->fieldList['assignedTo']['type']        = 'assign';
-$config->repo->taskDtable->fieldList['assignedTo']['sortType']    = true;
-$config->repo->taskDtable->fieldList['assignedTo']['show']        = true;
-$config->repo->taskDtable->fieldList['assignedTo']['group']       = 3;
-$config->repo->taskDtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
-$config->repo->taskDtable->fieldList['assignedTo']['title']   = $lang->task->assignedTo;
-$config->repo->taskDtable->fieldList['assignedTo']['assignLink']  = array('module' => 'task', 'method' => 'assignTo', 'params' => 'executionID={execution}&taskID={id}');
-
-$config->repo->taskDtable->fieldList['status']['title']     = $lang->statusAB;
-$config->repo->taskDtable->fieldList['status']['type']      = 'status';
-$config->repo->taskDtable->fieldList['status']['statusMap'] = $lang->task->statusList;
-$config->repo->taskDtable->fieldList['status']['sortType']  = true;
-$config->repo->taskDtable->fieldList['status']['show']      = true;
-$config->repo->taskDtable->fieldList['status']['group']     = 1;
