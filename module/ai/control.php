@@ -493,6 +493,23 @@ class ai extends control
     }
 
     /**
+     * Reset prompt execution.
+     *
+     * @param  bool   $failed  Whether the execution failed, triggers error message.
+     * @access public
+     * @return void
+     */
+    public function promptExecutionReset($failed = false)
+    {
+        /* Reset session. */
+        unset($_SESSION['aiPrompt']);
+        unset($_SESSION['auditPrompt']);
+
+        if($failed) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm']), 'locate' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''));
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
      * Audit prompt modal.
      *
      * @param  int      $promptId

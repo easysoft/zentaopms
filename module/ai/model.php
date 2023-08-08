@@ -1061,26 +1061,29 @@ class aiModel extends model
         /* Try assemble link vars from both passed-in `$linkArgs` and object props. */
         $varsConfig = $this->config->ai->targetFormVars[$module][$method];
         $vars = array();
-        foreach($varsConfig->args as $arg)
+        foreach($varsConfig->args as $arg => $isRequired)
         {
+            $var = '';
             if(!empty($linkArgs[$arg])) // Use provided link args.
             {
-                $vars[] = $linkArgs[$arg];
+                $var = $linkArgs[$arg];
             }
             elseif(!empty($object->$arg) && is_object($object->$arg) && !empty($object->$arg->id)) // If corresponding object exists, use its id.
             {
-                $vars[] = $object->$arg->id;
+                $var = $object->$arg->id;
             }
             elseif(!empty($object->{$prompt->module}->$arg)) // If object has the prop, use it.
             {
-                $vars[] = $object->{$prompt->module}->$arg;
+                $var = $object->{$prompt->module}->$arg;
             }
             else
             {
                 /* Try get related object, we are sorry if it could not find any. */
                 $relatedObj = $this->tryGetRelatedObjects($prompt, $object, array($arg));
-                $vars[] = !empty($relatedObj) ? current($relatedObj) : '';
+                $var = !empty($relatedObj) ? current($relatedObj) : '';
             }
+            if(!empty($isRequired) && empty($var)) return helper::createLink('ai', 'promptExecutionReset', 'failed=1');
+            $vars[] = $var;
         }
         $linkVars = vsprintf($varsConfig->format, $vars);
 
