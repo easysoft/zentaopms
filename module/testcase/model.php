@@ -3322,6 +3322,18 @@ class testcaseModel extends model
     }
 
     /**
+     * Get a scene by id.
+     *
+     * @param  int    $sceneID
+     * @access public
+     * @return object
+     */
+    public function getSceneByID($sceneID)
+    {
+        return $this->dao->select('*')->from(TABLE_SCENE)->where('id')->eq($sceneID)->fetch();
+    }
+
+    /**
      * Create scene.
      *
      * @access public
