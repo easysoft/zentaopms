@@ -2628,15 +2628,6 @@ class testcase extends control
         $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         $currentParentID = (int)$this->cookie->lastCaseScene;
 
-        $modules = array();
-        if($currentModuleID)
-        {
-            $productModules = $this->tree->getOptionMenu($productID, 'story');
-            $storyModuleID  = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
-            $modules        = $this->loadModel('tree')->getStoryModule($storyModuleID);
-            $modules        = $this->tree->getAllChildID($modules);
-        }
-
         $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->currentParentID  = $currentParentID;
