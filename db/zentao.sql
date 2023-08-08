@@ -37,6 +37,30 @@ CREATE INDEX `project`  ON `zt_action`(`project`);
 CREATE INDEX `action`   ON `zt_action`(`action`);
 CREATE INDEX `objectID` ON `zt_action`(`objectID`);
 
+-- DROP TABLE IF EXISTS `zt_actionlatest`;
+CREATE TABLE IF NOT EXISTS `zt_actionlatest` (
+  `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
+  `objectType` varchar(30) NOT NULL DEFAULT '',
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product` text NULL,
+  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `actor` varchar(100) NOT NULL DEFAULT '',
+  `action` varchar(80) NOT NULL DEFAULT '',
+  `date` datetime NULL,
+  `comment` text NULL,
+  `extra` text NULL,
+  `read` enum('0','1') NOT NULL DEFAULT '0',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `efforted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `date`     ON `zt_actionlatest`(`date`);
+CREATE INDEX `actor`    ON `zt_actionlatest`(`actor`);
+CREATE INDEX `project`  ON `zt_actionlatest`(`project`);
+CREATE INDEX `action`   ON `zt_actionlatest`(`action`);
+CREATE INDEX `objectID` ON `zt_actionlatest`(`objectID`);
+
 -- DROP TABLE IF EXISTS `zt_api_lib_release`;
 CREATE TABLE IF NOT EXISTS `zt_api_lib_release` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -2241,7 +2265,8 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行DevOps构建任务', 'zentao', 1, 'normal'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=mr&methodName=syncMR', '定时同步GitLab合并数据到禅道数据库', 'zentao', 1, 'normal'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=compile&methodName=syncCompile', '定时同步构建记录', 'zentao', 1, 'normal'),
-('0',    '*',    '*',    '*',    '*',    'moduleName=misc&methodName=cleanCache', '清理缓存文件',    'zentao', 1, 'normal');
+('0',    '*',    '*',    '*',    '*',    'moduleName=misc&methodName=cleanCache', '清理缓存文件',    'zentao', 1, 'normal'),
+('15',   '0',    '*',    '*',     '*',   'moduleName=action&methodName=cleanActions', '清除超过一个月的动态',    'zentao', 1, 'normal');
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 ('rnd', 'ADMIN', 'admin', 'for administrator'),
