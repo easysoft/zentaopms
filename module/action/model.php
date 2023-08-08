@@ -1104,7 +1104,7 @@ class actionModel extends model
             elseif($productID == 'all' and is_numeric($projectID))
             {
                 $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-                $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
+                $executions = $this->loadModel('execution')->fetchPairs($projectID) + array(0 => 0);
 
                 $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
 

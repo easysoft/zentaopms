@@ -1715,6 +1715,26 @@ class executionModel extends model
     }
 
     /**
+     * Get an array of task id:name.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function fetchPairs($projectID = 0, $type = 'all', $filterMulti = true)
+    {
+        return $this->dao->select('id,name')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
+            ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
+            ->beginIF($filterMulti)->andWhere('multiple')->eq('1')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->fetchPairs();
+    }
+
+    /**
      * Get execution by idList.
      *
      * @param  array  $executionIdList
