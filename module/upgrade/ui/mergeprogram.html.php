@@ -15,6 +15,11 @@ if($type == 'productline')                   include_once('mergebyline.html.php'
 if($type == 'product')                       include_once('mergebyproduct.html.php');
 if($type == 'sprint' || $type == 'moreLink') include_once('mergebysprint.html.php');
 
+$content = '';
+if($noMergedProductCount) $content .= sprintf($lang->upgrade->productCount, $noMergedProductCount) . ',';
+if($noMergedSprintCount)  $content .= sprintf($lang->upgrade->projectCount, $noMergedSprintCount) . ',';
+$content = rtrim($content, ',');
+
 div
 (
     set::id('main'),
@@ -31,7 +36,16 @@ div
         form
         (
             set::actions(''),
-            $getMergeData($this->view)
+            div
+            (
+                div
+                (
+                    set::style(array('background-color' => 'var(--color-secondary-50)')),
+                    set::class('p-4'),
+                    div(set::class('text-secondary'), sprintf($lang->upgrade->mergeSummary, $content)), div(set::class('text-secondary'), html($lang->upgrade->mergeByProject))
+                ),
+                div($getMergeData($this->view))
+            )
         )
     )
 );

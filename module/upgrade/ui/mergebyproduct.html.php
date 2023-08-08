@@ -26,7 +26,7 @@ $getMergeData = function($data)
                 $productGroups[] = div
                 (
                     set::class('sprintItem mb-2'),
-                    checkbox(set::name("sprints[{$productID}]"), set::text($sprint->name), set::value($sprint->id)),
+                    checkbox(set::id("sprints-{$productID}-{$sprint->id}"), set::name("sprints[{$productID}][]"), set::text($sprint->name), set::value($sprint->id), set('data-on', 'change'), set('data-call', 'changeSprints'), set('data-params', 'event'), set('data-product', $productID)),
                     input(set::class('hidden'), set::name("sprintIdList[{$productID}][{$sprint->id}]"), set::value($sprint->id))
                 );
             }
@@ -39,7 +39,7 @@ $getMergeData = function($data)
             (
                 set::width('1/2'),
                 set::class('productList px-4 flex items-center overflow-hidden'),
-                checkbox(set::name('products[]'), set::text($product->name), set::value($product->id))
+                checkbox(set::id("products{$productID}"), set::name('products[]'), set::text($product->name), set::value($product->id), set('data-on', 'change'), set('data-call', 'changeProducts'), set('data-params', 'event'))
             ),
             cell
             (
@@ -54,53 +54,40 @@ $getMergeData = function($data)
         );
     }
 
-    $content = '';
-    if($data->noMergedProductCount) $content .= sprintf($lang->upgrade->productCount, $data->noMergedProductCount) . ',';
-    if($data->noMergedSprintCount)  $content .= sprintf($lang->upgrade->projectCount, $data->noMergedSprintCount) . ',';
-    $content = rtrim(',', $content);
     return div
     (
-        div
+        set::class('flex mt-4'),
+        cell
         (
-            set::style(array('background-color' => 'var(--color-secondary-50)')),
-            set::class('p-4'),
-            div(set::class('text-secondary'), sprintf($lang->upgrade->mergeSummary, $content)), div(set::class('text-secondary'), html($lang->upgrade->mergeByProject))
-        ),
-        div
-        (
-            set::class('flex mt-4'),
-            cell
+            set::id('source'),
+            set::width('1/2'),
+            set::class('border p-4 overflow-hidden'),
+            div
             (
-                set::id('source'),
-                set::width('1/2'),
-                set::class('border p-4 overflow-hidden'),
-                div
+                set::class('flex'),
+                cell
                 (
-                    set::class('flex'),
-                    cell
-                    (
-                        set::width('1/2'),
-                        set::class('item checkbox-primary px-4 overflow-hidden'),
-                        checkbox(set::id('checkAllProducts'), set::text($lang->productCommon))
-                    ),
-                    cell
-                    (
-                        set::width('1/2'),
-                        set::class('item checkbox-primary px-4'),
-                        checkbox(set::id('checkAllProjects'), set::text($lang->projectCommon))
-                    )
+                    set::width('1/2'),
+                    set::class('item checkbox-primary px-4 overflow-hidden'),
+                    checkbox(set::id('checkAllProducts'), set::text($lang->productCommon), set('data-on', 'change'), set('data-call', 'changeAllProducts'))
                 ),
-                div
+                cell
                 (
-                    $checkBoxGroup
+                    set::width('1/2'),
+                    set::class('item checkbox-primary px-4'),
+                    checkbox(set::id('checkAllSprints'), set::text($lang->projectCommon), set('data-on', 'change'), set('data-call', 'changeAllSprints'))
                 )
             ),
-            cell
+            div
             (
-                set::width('1/2'),
-                set::class('border ml-4 p-4'),
-                set::id('programBox'), $createProgram($data)
+                $checkBoxGroup
             )
+        ),
+        cell
+        (
+            set::width('1/2'),
+            set::class('border ml-4 p-4'),
+            set::id('programBox'), $createProgram($data)
         )
     );
 };
