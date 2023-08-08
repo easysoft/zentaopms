@@ -1628,7 +1628,7 @@ class testcase extends control
     {
         $case = $this->testcase->getById($caseID);
         $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($caseID)->exec();
-        echo js::reload('parent');
+        return $this->send(array('load' => true));
     }
 
     /**
@@ -1647,7 +1647,7 @@ class testcase extends control
             $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($case->latestStoryVersion)->where('id')->eq($caseID)->exec();
             $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
         }
-        if($reload) return print(js::reload('parent'));
+        if($reload) return $this->send(array('load' => true));
     }
 
     /**
