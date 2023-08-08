@@ -2000,6 +2000,7 @@ class block extends control
                 ->fetchAll();
 
             $count['meeting'] = count($meetings);
+            $objectList += array('meeting' => 'meetings');
             $this->view->meetings = $meetings;
             $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
             $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
@@ -2015,6 +2016,8 @@ class block extends control
             unset($hasViewPriv['todo']);
             $hasViewPriv = array_merge(array('todo' => $todoPriv, 'review' => true), $hasViewPriv);
 
+            $objectList += array('review' => 'reviews');
+
             $count['review']       = count($reviews);
             $this->view->reviews   = $reviews;
             if($this->config->edition == 'max' or $this->config->edition == 'ipd')
@@ -2022,6 +2025,12 @@ class block extends control
                 $this->app->loadLang('approval');
                 $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
             }
+        }
+
+        foreach($objectList as $objectType => $object)
+        {
+            if($objectType == 'todo') continue;
+            if(empty($this->view->$object)) $hasViewPriv[$objectType] = false;
         }
 
         $this->view->selfCall    = $this->selfCall;
