@@ -1,6 +1,5 @@
 $(function()
 {
-
 });
 
 window.changeAllLines = function()

@@ -17,10 +17,10 @@ $createProgram = function($data)
 
     return div
     (
-        formRowGroup(set::title($lang->upgrade->dataMethod), set::items('')),
+        formRowGroup(set::class('programParams hidden'), set::title($lang->upgrade->dataMethod), set::items('')),
         div
         (
-            set::class('programParams py-4'),
+            set::class('programParams hidden py-4'),
             radioList(set::class('my-2'), set::name('projectType'), set::inline('true'), set::items($this->lang->upgrade->projectType), set::value($data->projectType)),
             div(set::class('createProjectTip text-gray ' . ($data->projectType == 'project' ? '' : 'hidden')), html($lang->upgrade->createProjectTip)),
             div(set::class('createExecutionTip text-gray ' . ($data->projectType == 'execution' ? '' : 'hidden')), html($lang->upgrade->createExecutionTip))
@@ -69,7 +69,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                set::class('hidden'),
+                set::class('projectName hidden'),
                 set::label($lang->upgrade->existProject),
                 inputGroup
                 (
@@ -83,6 +83,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
+                set::class('projectName hidden'),
                 set::label($lang->upgrade->projectName),
                 inputGroup
                 (
@@ -96,7 +97,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                set::class('programParams projectStatus'),
+                set::class('programParams hidden projectStatus'),
                 set::label($lang->project->status),
                 inputGroup
                 (
@@ -132,7 +133,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                set::class('programParams'),
+                set::class('programParams hidden'),
                 set::label($lang->project->PM),
                 inputGroup
                 (
@@ -141,7 +142,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                set::class('programParams'),
+                set::class('programParams hidden'),
                 set::label($lang->project->dateRange),
                 set::required(true),
                 inputGroup
@@ -154,7 +155,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                set::class('programParams'),
+                set::class('programParams hidden'),
                 set::label($lang->project->acl),
                 radioList(set::name('programAcl'), set::items($lang->program->aclList), set::value('open')),
                 radioList(set::name('projectAcl'), set::class('hidden'), set::items($lang->project->subAclList), set::value('open')),
