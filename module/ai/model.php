@@ -1156,7 +1156,7 @@ class aiModel extends model
                         if($objectName == 'execution')
                         {
                             $vars[] = $this->dao->select('tps.project')->from(TABLE_PROJECTSTORY)->alias('tps')
-                                ->lectJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tps.project')
+                                ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tps.project')
                                 ->where('tps.story')->eq($objectId)
                                 ->andWhere('tp.project')->ne(0)
                                 ->andWhere('tp.deleted')->eq(0)
@@ -1165,7 +1165,7 @@ class aiModel extends model
                         if($objectName == 'project')
                         {
                             $vars[] = $this->dao->select('tps.project')->from(TABLE_PROJECTSTORY)->alias('tps')
-                                ->lectJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tps.project')
+                                ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tps.project')
                                 ->where('tps.story')->eq($objectId)
                                 ->andWhere('tp.type')->eq('project')
                                 ->andWhere('tp.deleted')->eq(0)
