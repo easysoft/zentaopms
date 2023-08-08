@@ -372,8 +372,9 @@ class stakeholder extends control
         $this->commonAction($userID, 'stakeholder');
         if(!empty($_POST))
         {
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            $this->stakeholder->communicate($userID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'closeModal' => true));
         }
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
@@ -395,10 +396,9 @@ class stakeholder extends control
 
         if(!empty($_POST))
         {
-            $expectID = $this->stakeholder->expect($user->id);
-            if(dao::isError()) return print(js::error(dao::getError()));
-
-            return print(js::closeModal('parent.parent', 'this'));
+            $this->stakeholder->expect($user->id);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'closeModal' => true));
         }
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;

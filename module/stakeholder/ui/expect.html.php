@@ -1,0 +1,29 @@
+<?php
+declare(strict_types=1);
+/**
+ * The expect file of stakeholder module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Wang Yidong <yidong@cnezsoft.com>
+ * @package     stakeholder
+ * @link        http://www.zentao.net
+ */
+namespace zin;
+
+modalHeader(set::entityID($user->id), set::entityText($user->name));
+formPanel
+(
+    formGroup
+    (
+        set::label($lang->stakeholder->expect),
+        set::name('expect'),
+        set::control('editor'),
+    ),
+    formGroup
+    (
+        set::label($lang->stakeholder->progress),
+        set::name('progress'),
+        set::control('editor'),
+    ),
+);

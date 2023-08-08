@@ -14,7 +14,7 @@ $config->stakeholder->actionList['communicate']['data-toggle'] = 'modal';
 $config->stakeholder->actionList['expect']['icon']        = 'flag';
 $config->stakeholder->actionList['expect']['text']        = $lang->stakeholder->expect;
 $config->stakeholder->actionList['expect']['hint']        = $lang->stakeholder->expect;
-$config->stakeholder->actionList['expect']['url']         = array('module' => 'stakeholder', 'method' => 'communicate', 'params' => 'id={id}');
+$config->stakeholder->actionList['expect']['url']         = array('module' => 'stakeholder', 'method' => 'expect', 'params' => 'id={id}');
 $config->stakeholder->actionList['expect']['data-toggle'] = 'modal';
 
 $config->stakeholder->actionList['edit']['icon'] = 'edit';
