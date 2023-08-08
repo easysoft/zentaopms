@@ -157,6 +157,7 @@ class cron extends control
 
         /* Update last time. */
         $this->cron->changeStatus(key($parsedCrons), 'normal', true);
+        $this->cron->logCron("The cron process created.\n");
         $this->loadModel('common');
         $startedTime = time();
         while(true)
@@ -169,7 +170,11 @@ class cron extends control
             if(!$this->cron->getTurnon()) break;
 
             /* Die old process when restart. */
-            if(file_exists($restartTag) and !$restart) return unlink($restartTag);
+            if(file_exists($restartTag) and !$restart)
+            {
+                $this->cron->logCron("The cron process restarted.\n");
+                return unlink($restartTag);
+            }
             $restart = false;
 
             /* Run crons. */
@@ -248,7 +253,14 @@ class cron extends control
             sleep($sleepTime);
 
             /* Break while. */
-            if('cli' !== PHP_SAPI && connection_status() != CONNECTION_NORMAL) break;
+            echo "Check connection to the client by send this msg.";
+            ob_flush();
+            flush();
+            if('cli' !== PHP_SAPI && (connection_status() != CONNECTION_NORMAL || connection_aborted()))
+            {
+                $this->cron->logCron("The cron process ended.\n");
+                break;
+            }
             if(((time() - $startedTime) / 3600 / 24) >= $this->config->cron->maxRunDays) break;
         }
 
