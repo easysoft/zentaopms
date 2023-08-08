@@ -4,7 +4,7 @@ function changeEngine(event)
 
     if(engine == 'jenkins')
     {
-        $('.reference').removeClass('hidden');
+        $('.reference').addClass('hidden');
     }
     else
     {
@@ -82,7 +82,7 @@ function changeRepo(event)
             if(data.type.indexOf('git') != -1)
             {
                 var engine = $('[name=engine]').val();
-                if(engine == 'jenkins') $('.reference').removeClass('hidden');
+                //if(engine == 'jenkins') $('.reference').removeClass('hidden');
                 $('.reference').addClass('gitRepo');
 
                 $('.svn-fields').addClass('hidden');

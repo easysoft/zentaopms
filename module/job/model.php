@@ -700,4 +700,19 @@ class jobModel extends model
 
         return true;
     }
+
+    /**
+     * Check if jenkins has enabled parameterized build.
+     *
+     * @param  string    $url
+     * @param  string    $userPWD
+     * @access public
+     * @return bool
+     */
+    public function checkParameterizedBuild($url, $userPWD)
+    {
+        $response = common::http($url, null, array(CURLOPT_HEADER => true, CURLOPT_USERPWD => $userPWD));
+
+        return strpos($response, 'hudson.model.ParametersDefinitionProperty') !== false;
+    }
 }

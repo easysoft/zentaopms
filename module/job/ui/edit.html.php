@@ -135,7 +135,7 @@ formPanel
         ),
         formGroup
         (
-            $job->engine == 'jenkins' ? setClass('reference') : setClass('reference hidden'),
+            $job->engine == 'jenkins' ? setClass('reference hidden') : setClass('reference hidden'),
             set::labelWidth('5em'),
             set::label($lang->job->branch),
             set::required(true),
