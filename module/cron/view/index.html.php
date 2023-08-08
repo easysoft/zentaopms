@@ -49,7 +49,7 @@
         <td><?php echo $cron->dow;?></td>
         <td class='text-left' title='<?php echo $cron->command?>'><?php echo $cron->command;?></td>
         <td class='text-left' title='<?php echo $cron->remark?>'><?php echo $cron->remark;?></td>
-        <td><?php echo substr($cron->lastTime, 2, 17);?></td>
+        <td><?php echo $cron->lastTime ? substr($cron->lastTime, 2, 17) : '';?></td>
         <td><?php echo zget($lang->cron->statusList, $cron->status, '');?></td>
         <td class='text-center'>
           <?php
