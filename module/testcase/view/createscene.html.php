@@ -32,20 +32,20 @@
             <th><?php echo $lang->testcase->product;?></th>
             <td>
               <div class='input-group'>
-                <?php echo html::select('product', $products, $product->id, "onchange='loadAllNew(this.value);' class='form-control chosen'");?>
-                <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranchNew();' class='form-control' style='width:120px'");?>
+                <?php echo html::select('product', $products, $product->id, "onchange='loadAll(this.value);' class='form-control chosen'");?>
+                <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:120px'");?>
               </div>
             </td>
             <td style='padding-left:15px;'>
               <div class='input-group' id='moduleIdBox'>
                 <span class="input-group-addon w-80px"><?php echo $lang->testcase->module?></span>
                 <?php
-                echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelatedNew();' class='form-control chosen'");
-                if(count($moduleOptionMenu) == 1)
+                echo html::select('module', $modules, $moduleID, "onchange='loadModuleRelated();' class='form-control chosen'");
+                if(count($modules) == 1)
                 {
                     echo "<span class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID={$product->id}&view=case&currentModuleID=0&branch={$branch}", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModulesNew({$product->id})'");
+                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules({$product->id})'");
                     echo '</span>';
                 }
                 ?>
@@ -56,14 +56,14 @@
             <th><?php echo $lang->testcase->parentScene;?></th>
             <td colspan='2'>
               <div class='input-group' id='sceneIdBox'>
-                <?php echo html::select('parent', $sceneOptionMenu, $currentParentID, "class='form-control chosen'");?>
+                <?php echo html::select('parent', $scenes, $parent, "class='form-control chosen'");?>
               </div>
             </td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->sceneTitle;?></th>
             <td class="required" colspan='2'>
-                  <?php echo html::input('title', '', "class='form-control'");?>
+              <?php echo html::input('title', '', "class='form-control'");?>
             </td>
           </tr>
         </tbody>
