@@ -113,7 +113,7 @@ class stakeholder extends control
         {
             $stakeholderList = $this->stakeholder->batchCreate($projectID);
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stakeholderList));
-            return print(js::locate($this->createLink('stakeholder', 'browse', "projectID=$projectID"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('stakeholder', 'browse', "projectID=$projectID")));
         }
 
         if($this->app->tab == 'program')
