@@ -2653,7 +2653,7 @@ class repoModel extends model
 
         foreach($files as $key => $file)
         {
-            if ($file['parent'] == $parent)
+            if ($file['parent'] === $parent)
             {
                 $treeList[$key] = $file;
                 $fileName[$key] = $file['name'];
