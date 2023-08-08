@@ -14,3 +14,5 @@ REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `d
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2116, 'priv', 'zh-tw', 'file-previewFile', '', '');
 
 REPLACE INTO `zt_grouppriv` (SELECT `group`,'file','preview' FROM zt_grouppriv WHERE module = 'file' AND method = 'download');
+
+UPDATE `zt_cron` SET `type` = 'zentao' WHERE `command` = 'moduleName=weekly&methodName=computeWeekly' AND `type` = 'system';
