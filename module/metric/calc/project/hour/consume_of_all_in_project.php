@@ -1,7 +1,7 @@
 <?php
 /**
  * 按项目统计的项目内所有消耗工时数。
- * consume_of_all_in_project.
+ * Consume of all in project.
  *
  * 范围：project
  * 对象：effort
@@ -9,7 +9,7 @@
  * 度量名称：按项目统计的项目内所有消耗工时数
  * 单位：h
  * 描述：按项目统计的项目内所有消耗工时数是指项目实际花费的总工时数。该度量项可以用来评估项目的工时投入情况和对资源的利用效率。较高的消耗工时数可能需要审查工作流程和资源分配，以提高工作效率和进度控制。
- * 定义：项目中所有日志记录的工时之和;记录时间在某年;过滤已删除的项目
+ * 定义：项目中所有日志记录的工时之和;记录时间在某年;过滤已删除的项目;
  * 度量库：
  * 收集方式：realtime
  *
@@ -22,21 +22,31 @@
  */
 class consume_of_all_in_project extends baseCalc
 {
-    public $dataset = null;
+    public $result = array();
 
-    public $fieldList = array();
-
-    //public funtion getStatement($dao)
-    //{
-    //}
+    public function getStatement()
+    {
+        return $this->dao->select('t3.id as project, SUM(t1.consumed) as consumed')
+            ->from(TABLE_EFFORT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+            ->where('t3.deleted')->eq('0')
+            ->andWhere('t3.type')->eq('project')
+            ->groupBy('t3.id')
+            ->query();
+    }
 
     public function calculate($row)
     {
+        $project  = $row->project;
+        $consumed = $row->consumed;
+
+        if(!isset($this->result[$project])) $this->result[$project] = $consumed;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->getRecords(array('project', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
