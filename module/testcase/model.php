@@ -461,7 +461,7 @@ class testcaseModel extends model
     {
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         if(!$case) return false;
-        foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $case->$key = '';
+        foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr(is_null($value) ? '' : $value, 0, 4)) $case->$key = '';
 
         /* Get project and execution. */
         if($this->app->tab == 'project')

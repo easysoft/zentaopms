@@ -23,17 +23,25 @@ $actionMenu['list']['unlink']['hint']      = $lang->productplan->unlinkStory;
 $actionMenu['list']['unlink']['className'] = 'ajax-submit';
 
 $storyCols = $config->release->dtable->story->fieldList;
-$storyCols['actions']    = $actionMenu;
+$storyCols['actions']               = $actionMenu;
+$storyCols['id']['checkbox']        = false;
+$storyCols['title']['data-toggle']  = '';
+$storyCols['title']['nestedToggle'] = false;
+$storyCols['title']['link']         = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}', 'target' => '_blank');
+
 $storyCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkStory;
 $storyCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=story&linkID={id}&confirm=yes");
-$storyCols['id']['checkbox'] = false;
+
 $stories = initTableData($stories, $storyCols);
 
 $bugCols = $config->release->dtable->bug->fieldList;
 $bugCols['actions'] = $actionMenu;
 $bugCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkBug;
 $bugCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=bug&linkID={id}&confirm=yes");
-$bugCols['id']['checkbox'] = false;
+
+$bugCols['id']['checkbox']       = false;
+$bugCols['title']['data-toggle'] = '';
+$bugCols['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}', 'target' => '_blank');
 $bugs = initTableData($bugs, $bugCols);
 
 $taskCols = $config->mr->taskDtable->fieldList;

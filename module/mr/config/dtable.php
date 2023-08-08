@@ -62,7 +62,7 @@ $config->mr->taskDtable->fieldList['name']['flex']         = '';
 $config->mr->taskDtable->fieldList['name']['type']         = 'nestedTitle';
 $config->mr->taskDtable->fieldList['name']['nestedToggle'] = true;
 $config->mr->taskDtable->fieldList['name']['sortType']     = true;
-$config->mr->taskDtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
+$config->mr->taskDtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}', 'target' => '_blank');
 $config->mr->taskDtable->fieldList['name']['required']     = true;
 
 $config->mr->taskDtable->fieldList['pri']['title']    = $lang->priAB;
