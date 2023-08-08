@@ -270,7 +270,10 @@ $config->testcase->search['fields']['scene'] = $lang->testcase->iScene;
 $config->testcase->search['params']['scene'] = array('operator' => 'belong',  'control' => 'select', 'values' => '');
 
 $config->testcase->createscene = new stdclass();
-$config->testcase->createscene->requiredFields = 'title';
+$config->testcase->createscene->requiredFields = 'product,title';
+
+$config->testcase->editscene = new stdclass();
+$config->testcase->editscene->requiredFields = 'product,title';
 
 $config->testcase->customBatchCreateFields   = 'module,scene,stage,story,pri,precondition,keywords,review';
 $config->testcase->customBatchEditFields     = 'module,scene,story,stage,precondition,status,pri,keywords';
