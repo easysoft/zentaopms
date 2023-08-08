@@ -106,12 +106,17 @@ foreach($config->ai->targetForm as $forms)
     }
 }
 
-/* Used to format form redirection links, useful if method requires additional arguments. */
+/**
+ * Target form variables definations, defines format and arguments of target form redirection links,
+ * useful when method requires additional arguments.
+ *
+ * Args are names of objects, usually the same as object name. It will be used to get object ID and sprintf to format.
+ */
 $config->ai->targetFormVars = array();
 $config->ai->targetFormVars['story']['create']         = (object)array('format' => 'product=%d', 'args' => array('product'));
 $config->ai->targetFormVars['story']['batchcreate']    = (object)array('format' => 'productID=%d', 'args' => array('product'));
 $config->ai->targetFormVars['story']['change']         = (object)array('format' => 'storyID=%d', 'args' => array('story'));
-$config->ai->targetFormVars['productplan']['create']   = (object)array('format' => 'productID=%d&branch=%d&parent=%d', 'args' => array('product', 'branch', 'id'));
+$config->ai->targetFormVars['productplan']['create']   = (object)array('format' => 'productID=%d&branch=%d&parent=%d', 'args' => array('product', 'branch', 'productplan'));
 $config->ai->targetFormVars['productplan']['edit']     = (object)array('format' => 'planID=%d', 'args' => array('productplan'));
 $config->ai->targetFormVars['task']['create']          = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution', 'story'));
 $config->ai->targetFormVars['task']['batchcreate']     = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution', 'story'));
@@ -122,7 +127,7 @@ $config->ai->targetFormVars['testcase']['create']      = (object)array('format' 
 $config->ai->targetFormVars['testcase']['edit']        = (object)array('format' => 'caseID=%d', 'args' => array('case'));
 $config->ai->targetFormVars['testreport']['create']    = (object)array('format' => 'productID=%d', 'args' => array('product'));
 $config->ai->targetFormVars['execution']['testreport'] = (object)array('format' => '', 'args' => array());
-$config->ai->targetFormVars['tree']['browse']          = (object)array('format' => 'rootID=%d&view=%s', 'args' => array('root', 'view'));
+// $config->ai->targetFormVars['tree']['browse']          = (object)array('format' => 'rootID=%d&view=%s', 'args' => array('root', 'view'));
 $config->ai->targetFormVars['programplan']['create']   = (object)array('format' => 'projectID=%d', 'args' => array('project'));
 $config->ai->targetFormVars['doc']['edit']             = (object)array('format' => 'docID=%d', 'args' => array('doc'));
 

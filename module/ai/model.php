@@ -745,7 +745,8 @@ class aiModel extends model
         $objectData = new stdclass();
 
         /* Query necessary object data from zentao. */
-        switch($module){
+        switch($module)
+        {
             case 'story':
                 if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
                 break;
@@ -1062,26 +1063,325 @@ class aiModel extends model
         $vars = array();
         foreach($varsConfig->args as $arg)
         {
-            if(!empty($linkArgs[$arg]))
+            if(!empty($linkArgs[$arg])) // Use provided link args.
             {
                 $vars[] = $linkArgs[$arg];
             }
-            elseif(!empty($object->$arg) && is_object($object->$arg) && !empty($object->$arg->id))
+            elseif(!empty($object->$arg) && is_object($object->$arg) && !empty($object->$arg->id)) // If corresponding object exists, use its id.
             {
                 $vars[] = $object->$arg->id;
             }
-            elseif(!empty($object->{$prompt->module}->$arg))
+            elseif(!empty($object->{$prompt->module}->$arg)) // If object has the prop, use it.
             {
                 $vars[] = $object->{$prompt->module}->$arg;
             }
             else
             {
-                $vars[] = '';
+                /* Try get related object, we are sorry if it could not find any. */
+                $relatedObj = $this->tryGetRelatedObjects($prompt, $object, array($arg));
+                $vars[] = !empty($relatedObj) ? current($relatedObj) : '';
             }
         }
         $linkVars = vsprintf($varsConfig->format, $vars);
 
         return helper::createLink($module, $method, $linkVars);
+    }
+
+    /**
+     * Get related objects for prompt and object, using object's id.
+     *
+     * @param  object|int   $prompt      prompt object or prompt id
+     * @param  object|int   $object      object or object id
+     * @param  array        $objectNames object names to get, e.g. array('story', 'tasks'),
+     *                                   values in: product, story, branch, productplan, execution, task, bug, case, project, doc
+     * @access public
+     * @return array|false  returns array of required object values, or false if error.
+     */
+    public function tryGetRelatedObjects($prompt, $object, $objectNames = array())
+    {
+        if(empty($objectNames)) return array();
+
+        if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
+        if(empty($prompt)) return false;
+
+        if(is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
+        if(empty($object)) return false;
+
+        $vars = array();
+
+        /* If native object of module exists, try getting stuff related to its id. */
+        if(!empty($object->{$prompt->module}) && is_object($object->{$prompt->module}) && !empty($object->{$prompt->module}->id))
+        {
+            $objectId = $object->{$prompt->module}->id;
+            foreach($objectNames as $objectName)
+            {
+                /* Note that modules are within (product, story, productplan, release, project, execution, task, bug, case, doc). */
+                switch($prompt->module)
+                {
+                    case 'product': // story, branch, productplan, execution, task, bug, case, project, doc
+                        if(in_array($objectName, array('story', 'branch', 'productplan', 'task', 'bug', 'case', 'doc')))
+                        {
+                            $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))
+                                ->where('product')->eq($objectId)
+                                ->andWhere('deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        elseif($objectName == 'project')
+                        {
+                            $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
+                                ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
+                                ->where('tpp.product')->eq($objectId)
+                                ->andWhere('tp.type')->eq('project')
+                                ->andWhere('tp.deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        elseif($objectName == 'execution')
+                        {
+                            $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
+                                ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
+                                ->where('tpp.product')->eq($objectId)
+                                ->andWhere('tp.project')->ne(0)
+                                ->andWhere('tp.deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        break;
+                    case 'story': // product, branch, productplan, execution, task, bug, case, project, doc
+                        if($objectName == 'product') $vars[] = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($objectId)->fetch('product');
+                        if($objectName == 'branch')  $vars[] = $this->dao->select('branch')->from(TABLE_STORY)->where('id')->eq($objectId)->fetch('branch');
+                        if($objectName == 'productplan') $vars[] = $this->dao->select('plan')->from(TABLE_STORY)->where('id')->eq($objectId)->fetch('plan');
+                        if(in_array($objectName, array('task', 'bug', 'case', 'doc')))
+                        {
+                            $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))->where('story')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        }
+                        if($objectName == 'execution')
+                        {
+                            $vars[] = $this->dao->select('tps.project')->from(TABLE_PROJECTSTORY)->alias('tps')
+                                ->lectJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tps.project')
+                                ->where('tps.story')->eq($objectId)
+                                ->andWhere('tp.project')->ne(0)
+                                ->andWhere('tp.deleted')->eq(0)
+                                ->fetch('tps.project');
+                        }
+                        if($objectName == 'project')
+                        {
+                            $vars[] = $this->dao->select('tps.project')->from(TABLE_PROJECTSTORY)->alias('tps')
+                                ->lectJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tps.project')
+                                ->where('tps.story')->eq($objectId)
+                                ->andWhere('tp.type')->eq('project')
+                                ->andWhere('tp.deleted')->eq(0)
+                                ->fetch('tps.project');
+                        }
+                        break;
+                    case 'productplan': // product, story, branch, execution, task, bug, case, project, doc
+                        if($objectName == 'product') $vars[] = $this->dao->select('product')->from(TABLE_PRODUCTPLAN)->where('id')->eq($objectId)->fetch('product');
+                        if($objectName == 'branch')  $vars[] = $this->dao->select('branch')->from(TABLE_PRODUCTPLAN)->where('id')->eq($objectId)->fetch('branch');
+                        if(in_array($objectName, array('story', 'bug')))
+                        {
+                            $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        }
+                        if($objectName == 'execution')
+                        {
+                            $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
+                                ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
+                                ->where('tpp.plan')->eq($objectId)
+                                ->andWhere('tp.project')->ne(0)
+                                ->andWhere('tp.deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        if($objectName == 'project')
+                        {
+                            $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
+                                ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
+                                ->where('tpp.plan')->eq($objectId)
+                                ->andWhere('tp.type')->eq('project')
+                                ->andWhere('tp.deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        if($objectName == 'task') $vars[] = '';
+                        if($objectName == 'case') $vars[] = '';
+                        if($objectName == 'doc')  $vars[] = '';
+                        break;
+                    case 'release': // product, story, branch, productplan, execution, task, bug, case, project, doc
+                        if(in_array($objectName, array('product', 'branch', 'project')))
+                        {
+                            $this->dao->select($objectName)->from(TABLE_RELEASE)->where('id')->eq($objectId)->fetch($objectName);
+                        }
+                        if($objectName == 'story')
+                        {
+                            $stories = $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($objectId)->fetch('stories');
+                            $stories = explode(',', $stories);
+                            $vars[] = empty($stories) ? '' : max($stories);
+                        }
+                        if($objectName == 'productplan')
+                        {
+                            $execution = $this->dao->select('tb.execution')->from(TABLE_BUILD)->alias('tb')
+                                ->leftJoin(TABLE_RELEASE)->alias('tr')->on('tr.build = tb.id')
+                                ->where('tr.id')->eq($objectId)
+                                ->fetch('tb.execution');
+                            $vars[] = empty($execution) ? '' : $this->dao->select('max(tpp.plan) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
+                                ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
+                                ->where('tp.id')->eq($execution)
+                                ->andWhere('tp.deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        if($objectName == 'execution')
+                        {
+                            $vars[] = $this->dao->select('tb.execution')->from(TABLE_BUILD)->alias('tb')
+                                ->leftJoin(TABLE_RELEASE)->alias('tr')->on('tr.build = tb.id')
+                                ->where('tr.id')->eq($objectId)
+                                ->fetch('tb.execution');
+                        }
+                        if($objectName == 'bug')
+                        {
+                            $bugs = $this->dao->select('bugs')->from(TABLE_RELEASE)->where('id')->eq($objectId)->fetch('bugs');
+                            $bugs = explode(',', $bugs);
+                            $vars[] = empty($bugs) ? '' : max($bugs);
+                        }
+                        if($objectName == 'task') $vars[] = '';
+                        if($objectName == 'case') $vars[] = '';
+                        if($objectName == 'doc')  $vars[] = '';
+                        break;
+                    case 'project': // product, story, branch, productplan, execution, task, bug, case, doc
+                        if(in_array($objectName, array('product', 'branch', 'productplan')))
+                        {
+                            if($objectName == 'productplan') $objectName = 'plan';
+                            $vars[] = $this->dao->select($objectName)->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectId)->fetch($objectName);
+                        }
+                        if(in_array($objectName, array('execution', 'bug', 'task', 'case', 'doc')))
+                        {
+                            $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        }
+                        if($objectName == 'story')
+                        {
+                            $vars[] = $this->dao->select('max(tps.story) as maxId')->from(TABLE_PROJECTSTORY)->alias('tps')
+                                ->leftJoin(TABLE_STORY)->alias('ts')->on('ts.id = tps.story')
+                                ->where('tps.project')->eq($objectId)
+                                ->andWhere('ts.deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        break;
+                    case 'execution': // product, story, branch, productplan, task, bug, case, project, doc
+                        if($objectName == 'project')     $vars[] = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectId)->fetch('project');
+                        if($objectName == 'product')     $vars[] = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectId)->fetch('product');
+                        if($objectName == 'story')       $vars[] = $this->dao->select('max(story) as maxId')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectId)->fetch('maxId');
+                        if($objectName == 'branch')      $vars[] = $this->dao->select('max(branch) as maxId')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectId)->fetch('maxId');
+                        if($objectName == 'productplan') $vars[] = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectId)->fetch('plan');
+                        if($objectName == 'task')        $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)->where('execution')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'bug')         $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'case')        $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'doc')         $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        break;
+                    case 'task': // product, story, branch, productplan, execution, bug, case, project, doc
+                        if($objectName == 'product')
+                        {
+                            $vars[] = $this->dao->select('tpp.product')->from(TABLE_TASK)->alias('tt')
+                                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tt.project')
+                                ->where('tt.id')->eq($objectId)
+                                ->fetch('tpp.product');
+                        }
+                        if($objectName == 'story')     $vars[] = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($objectId)->fetch('story');
+                        if($objectName == 'branch')
+                        {
+                            $vars[] = $this->dao->select('tpp.branch')->from(TABLE_TASK)->alias('tt')
+                                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tt.project')
+                                ->where('tt.id')->eq($objectId)
+                                ->fetch('tpp.branch');
+                        }
+                        if($objectName == 'productplan')
+                        {
+                            $vars[] = $this->dao->select('tpp.plan')->from(TABLE_TASK)->alias('tt')
+                                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tt.project')
+                                ->where('tt.id')->eq($objectId)
+                                ->fetch('tpp.plan');
+                        }
+                        if($objectName == 'execution') $vars[] = $this->dao->select('execution')->from(TABLE_TASK)->where('id')->eq($objectId)->fetch('execution');
+                        if($objectName == 'bug')       $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('task')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'case')      $vars[] = '';
+                        if($objectName == 'doc')       $vars[] = '';
+                        break;
+                    case 'bug': // product, story, branch, productplan, execution, task, case, project, doc
+                        if(in_array($objectName, array('product', 'branch', 'productplan', 'execution', 'task', 'case', 'story', 'project')))
+                        {
+                            if($objectName == 'productplan') $objectName = 'plan';
+                            $vars[] = $this->dao->select($objectName)->from(TABLE_BUG)->where('id')->eq($objectId)->fetch($objectName);
+                        }
+                        if($objectName == 'doc') $vars[] = '';
+                        break;
+                    case 'case': // product, story, branch, productplan, execution, task, bug, project, doc
+                        if(in_array($objectName, array('product', 'story', 'branch', 'execution', 'project')))
+                        {
+                            $vars[] = $this->dao->select($objectName)->from(TABLE_CASE)->where('id')->eq($objectId)->fetch($objectName);
+                        }
+                        if($objectName == 'productplan')
+                        {
+                            $vars[] = $this->dao->select('tpp.plan')->from(TABLE_CASE)->alias('tc')
+                                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tc.project')
+                                ->where('tc.id')->eq($objectId)
+                                ->fetch('tpp.plan');
+                        }
+                        if($objectName == 'task') $vars[] = $this->dao->select('max(task) as maxId')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'bug')  $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'doc')  $vars[] = '';
+                        break;
+                    case 'doc': // product, story, branch, productplan, execution, task, bug, case, project
+                        if(in_array($objectName, array('product', 'execution', 'project')))
+                        {
+                            $vars[] = $this->dao->select($objectName)->from(TABLE_DOC)->where('id')->eq($objectId)->fetch($objectName);
+                        }
+                        if($objectName == 'story')
+                        {
+                            $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_STORY)->alias('ts')
+                                ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = ts.product')
+                                ->where('td.id')->eq($objectId)
+                                ->andWhere('ts.deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        if($objectName == 'branch')
+                        {
+                            $vars[] = $this->dao->select('branch')->from(TABLE_STORY)->alias('ts')
+                                ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = ts.product')
+                                ->where('td.id')->eq($objectId)
+                                ->andWhere('ts.deleted')->eq(0)
+                                ->fetch('branch');
+                        }
+                        if($objectName == 'productplan')
+                        {
+                            $vars[] = $this->dao->select('plan')->from(TABLE_STORY)->alias('ts')
+                                ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = ts.product')
+                                ->where('td.id')->eq($objectId)
+                                ->andWhere('ts.deleted')->eq(0)
+                                ->fetch('plan');
+                        }
+                        if($objectName == 'task')
+                        {
+                            $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)->alias('tt')
+                                ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = tt.product')
+                                ->where('td.id')->eq($objectId)
+                                ->andWhere('tt.deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        if($objectName == 'bug')
+                        {
+                            $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->alias('tb')
+                                ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = tb.product')
+                                ->where('td.id')->eq($objectId)
+                                ->andWhere('tb.deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        if($objectName == 'case')
+                        {
+                            $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)->alias('tc')
+                                ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = tc.product')
+                                ->where('td.id')->eq($objectId)
+                                ->andWhere('tc.deleted')->eq(0)
+                                ->fetch('maxId');
+                        }
+                        break;
+                    default: $vars[] = '';
+                }
+            }
+        }
+        return $vars;
     }
 
     /**
