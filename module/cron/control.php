@@ -208,6 +208,11 @@ class cron extends control
                     $return = '';
                     if($cron['command'])
                     {
+                        /* Save log of executing cron. */
+                        $time = $now->format('Y-m-d H:i:s');
+                        $log  = "\n$time task " . $id . " executing,\ncommand: $cron[command]\n";
+                        $this->cron->logCron($log);
+
                         if(isset($crons[$id]) and $crons[$id]->type == 'zentao')
                         {
                             parse_str($cron['command'], $params);
@@ -223,7 +228,7 @@ class cron extends control
                             if($output) $output = join("\n", $output);
                         }
 
-                        /* Save log. */
+                        /* Save log of executed cron. */
                         $time   = $now->format('Y-m-d H:i:s');
                         $output = $output;
 
