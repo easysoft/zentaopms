@@ -59,6 +59,7 @@
           $('body').addClass('load-indicator loading');
 
           /* Checks for session storage to cancel loading status (see inputinject.html.php). */
+          sessionStorage.removeItem('ai-prompt-data-injected');
           const loadCheckInterval = setInterval(function()
           {
             if(sessionStorage.getItem('ai-prompt-data-injected'))

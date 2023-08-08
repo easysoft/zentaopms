@@ -67,7 +67,7 @@
         <?php if(!$prompt->deleted):?>
           <?php if(($prompt->status == 'draft' && (common::hasPriv('ai', 'promptassignrole') || common::hasPriv('ai', 'promptaudit') || common::hasPriv('ai', 'publish'))) || ($prompt->status != 'draft' && common::hasPriv('ai', 'unpublish'))):?><div class='divider'></div><?php endif;?>
           <?php if(common::hasPriv('ai', 'promptassignrole') && $prompt->status == 'draft') echo html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon icon-design icon-sm"></i> ' . $lang->ai->prompts->action->design, '', "class='btn'");?>
-          <?php if(common::hasPriv('ai', 'promptaudit') && $prompt->status == 'draft' && $this->ai->isExecutable($prompt)) echo html::a($this->ai->getTestingLocation($prompt), '<i class="icon icon-bug icon-sm"></i> ' . $lang->ai->prompts->action->test, '', "class='btn'");?>
+          <?php if(common::hasPriv('ai', 'promptaudit') && $prompt->status == 'draft' && $this->ai->isExecutable($prompt)) echo html::a($this->ai->getTestingLocation($prompt), '<i class="icon icon-bug icon-sm"></i> ' . $lang->ai->prompts->action->test, '', "class='btn prompt-audit-btn'");?>
           <?php if(common::hasPriv('ai', 'promptpublish') && $prompt->status == 'draft' && $this->ai->isExecutable($prompt)) echo html::a(helper::createLink('ai', 'promptpublish', "id={$prompt->id}"), '<i class="icon icon-publish icon-sm"></i> ' . $lang->ai->prompts->action->publish, '', "class='btn'");?>
           <?php if(common::hasPriv('ai', 'promptunpublish') && $prompt->status == 'active') echo html::a(helper::createLink('ai', 'promptunpublish', "id={$prompt->id}"), '<i class="icon icon-ban icon-sm"></i> ' . $lang->ai->prompts->action->unpublish, '', "class='btn' id='unpublish-btn'");?>
           <?php if(common::hasPriv('ai', 'promptedit') || common::hasPriv('ai', 'promptdelete')):?><div class='divider'></div><?php endif;?>
@@ -166,6 +166,7 @@
       }
       return false;
     });
+
     $('#unpublish-btn').click(function()
     {
       if(confirm('<?php echo $lang->ai->prompts->action->draftConfirm;?>'))
@@ -177,6 +178,24 @@
         });
       }
       return false;
+    });
+
+    $('.prompt-audit-btn').click(function()
+    {
+      $('body').attr('data-loading', '<?php echo $lang->ai->execute->loading;?>');
+      $('body').addClass('load-indicator loading');
+
+      /* Checks for session storage to cancel loading status (see inputinject.html.php). */
+      sessionStorage.removeItem('ai-prompt-data-injected');
+      const loadCheckInterval = setInterval(function()
+      {
+        if(sessionStorage.getItem('ai-prompt-data-injected'))
+        {
+          $('body').removeClass('loading');
+          sessionStorage.removeItem('ai-prompt-data-injected');
+          clearInterval(loadCheckInterval);
+        }
+      }, 200);
     });
   });
 </script>
