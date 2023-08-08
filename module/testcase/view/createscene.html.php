@@ -11,7 +11,6 @@
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
-<?php include $app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
 <?php js::set('page',       'createscene');?>
 <?php js::set('lblDelete',  $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore',  $lang->testcase->insertBefore);?>
@@ -26,12 +25,6 @@
     <div class='main-header'>
       <h2><?php echo $lang->testcase->newScene;?></h2>
     </div>
-    <?php
-    foreach(explode(',', $config->testcase->createscene->requiredFields) as $field)
-    {
-        if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
-    }
-    ?>
     <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
       <table class='table table-form'>
         <tbody>
@@ -39,7 +32,7 @@
             <th><?php echo $lang->testcase->product;?></th>
             <td>
               <div class='input-group'>
-                <?php echo html::select('product', $products, $productID, "onchange='loadAllNew(this.value);' class='form-control chosen'");?>
+                <?php echo html::select('product', $products, $product->id, "onchange='loadAllNew(this.value);' class='form-control chosen'");?>
                 <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranchNew();' class='form-control' style='width:120px'");?>
               </div>
             </td>
@@ -51,8 +44,8 @@
                 if(count($moduleOptionMenu) == 1)
                 {
                     echo "<span class='input-group-addon'>";
-                    echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModulesNew($productID)'");
+                    echo html::a($this->createLink('tree', 'browse', "rootID={$product->id}&view=case&currentModuleID=0&branch={$branch}", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
+                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModulesNew({$product->id})'");
                     echo '</span>';
                 }
                 ?>
@@ -78,7 +71,7 @@
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();?>
+              <?php echo html::backButton();?>
             </td>
           </tr>
         </tfoot>

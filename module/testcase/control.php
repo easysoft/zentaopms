@@ -2565,19 +2565,15 @@ class testcase extends control
     }
 
     /**
-     * Create scene.
+     * Create a scene.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch
      * @param  int    $moduleID
-     * @param  string $from
-     * @param  string $param
-     * @param  int    $storyID
-     * @param  string $extras
      * @access public
      * @return void
      */
-    public function createScene($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
+    public function createScene($productID, $branch = '', $moduleID = 0)
     {
         if(!empty($_POST))
         {
@@ -2642,16 +2638,12 @@ class testcase extends control
         }
 
         $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
-        $this->view->productID        = $productID;
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->currentParentID  = $currentParentID;
-        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
-        $this->view->showFields       = $this->config->testcase->custom->createFields;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
         $this->view->branch           = $branch;
         $this->view->product          = $product;
         $this->view->branches         = $branches;
-        $this->view->sceneTitle       = '';
         $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
 
         $this->display();
