@@ -30,6 +30,33 @@ class pipelineModel extends model
     }
 
     /**
+     * 根据名称及类型获取一条流水线记录
+     * Get a pipeline by name and type.
+     *
+     * @param  string $name
+     * @param  string $type
+     * @access public
+     * @return object
+     */
+    public function getByNameAndType(string $name, string $type)
+    {
+        return $this->dao->select('id')->from(TABLE_PIPELINE)->where('name')->eq($name)->andWhere('type')->eq($type)->fetch();
+    }
+
+    /**
+     * 根据url获取渠成创建的代码库。
+     * Get a pipeline by url which created by quickon.
+     *
+     * @param  string $url
+     * @access public
+     * @return object
+     */
+    public function getByUrl(string $url)
+    {
+        return $this->dao->select('id')->from(TABLE_PIPELINE)->where('url')->eq($url)->andWhere('createdBy')->eq('system')->fetch();
+    }
+
+    /**
      * Get pipeline list.
      *
      * @param  string $type jenkins|gitlab

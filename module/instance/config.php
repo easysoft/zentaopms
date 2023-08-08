@@ -58,3 +58,5 @@ $config->instance->actions = new stdclass();
 $config->instance->actions->view = array();
 $config->instance->actions->view['mainActions']   = array('visit', 'start', 'stop', 'upgrade');
 $config->instance->actions->view['suffixActions'] = array('uninstall');
+
+$config->instance->devopsApps = array(89 => 'gitea', 58 => 'gitlab', 57 => 'gogs', 59 => 'jenkins', 60 => 'sonarqube');
