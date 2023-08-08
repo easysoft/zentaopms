@@ -113,6 +113,7 @@ $lang->testcase->stepVersion        = '版本';
 $lang->testcase->stepSameLevel      = '同级';
 $lang->testcase->stepSubLevel       = '子级';
 $lang->testcase->expectDisabledTip  = '分层级后不可填写预期';
+$lang->testcase->dragNestedTip      = '最多支持三层嵌套，无法拖拽到此处';
 
 $lang->testcase->index                   = "用例管理首页";
 $lang->testcase->create                  = "建用例";
