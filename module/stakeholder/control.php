@@ -159,20 +159,14 @@ class stakeholder extends control
         if($_POST)
         {
             $changes = $this->stakeholder->edit($stakeholderID);
-
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $response['locate'] = $this->createLink('stakeholder', 'browse', "projectID=$stakeholder->objectID");
+
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['load']    = $this->createLink('stakeholder', 'browse', "projectID=$stakeholder->objectID");
             return $this->send($response);
         }
 
@@ -325,7 +319,8 @@ class stakeholder extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->stakeholder->confirmDelete, inLink('delete', "userID=$userID&confirm=yes")));
+            $confirmURL = inLink('delete', "userID=$userID&confirm=yes");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->stakeholder->confirmDelete}').then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
         else
         {
@@ -336,9 +331,9 @@ class stakeholder extends control
             /* Update linked products view. */
             if($stakeholder->objectType == 'project' and $stakeholder->objectID)
             {
-                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
+                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, array($stakeholder->user));
             }
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'load' => true));
         }
     }
 
