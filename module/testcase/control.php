@@ -2577,26 +2577,16 @@ class testcase extends control
     {
         if(!empty($_POST))
         {
-            $response['result'] = 'success';
             setcookie('lastCaseScene', (int)$this->post->parent, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-            $sceneResult = $this->testcase->createScene();
-            if(!$sceneResult or dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            $sceneID = $this->testcase->createScene();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $sceneID = $sceneResult['id'];
-            $this->loadModel('action');
-            $this->action->create('scene', $sceneID, 'Opened');
+            $this->loadModel('action')->create('scene', $sceneID, 'Opened');
 
-            $useSession          = $this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false;
-            $response['locate']  = $useSession ? $this->session->caseList : $this->createLink('testcase', 'browse', "root={$this->post->product}&branch=$branch&type=byModule&param=" . $this->post->module);
-            $response['message'] = $this->lang->saveSuccess;
-
-            return $this->send($response);
+            $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;
+            $locate     = $useSession ? $this->session->caseList : inlink('browse', "root={$this->post->product}&branch={$this->post->branch}&type=byModule&param={$this->post->module}");
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         /* Set menu. */
@@ -2613,30 +2603,26 @@ class testcase extends control
         /* Set branch. */
         $product = $this->product->getById($productID);
         if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
-        if($this->app->tab == 'execution' or $this->app->tab == 'project')
+        if($this->app->tab == 'execution' || $this->app->tab == 'project')
         {
             $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
-            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
+            $productBranches = (isset($product->type) && $product->type != 'normal') ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
         }
         else
         {
-            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+            $branches = (isset($product->type) && $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
-        $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
-        $currentParentID = (int)$this->cookie->lastCaseScene;
-
         $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
-        $this->view->currentModuleID  = $currentModuleID;
-        $this->view->currentParentID  = $currentParentID;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
-        $this->view->branch           = $branch;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->currentModuleID  = $$moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+        $this->view->currentParentID  = (int)$this->cookie->lastCaseScene;
         $this->view->product          = $product;
+        $this->view->branch           = $branch;
         $this->view->branches         = $branches;
-        $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
-
         $this->display();
     }
 
