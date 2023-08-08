@@ -22,7 +22,17 @@ class job extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if($this->app->methodName != 'browse') $this->loadModel('ci')->setMenu();
+        if($this->app->methodName != 'browse')
+        {
+            if(in_array($this->app->methodName, array('create', 'edit')))
+            {
+                if($this->session->repoID) $this->loadModel('ci')->setMenu();
+            }
+            else
+            {
+                $this->loadModel('ci')->setMenu();
+            }
+        }
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
     }
 
@@ -48,6 +58,10 @@ class job extends control
 
             /* Set session. */
             $this->ci->setMenu($repoID);
+        }
+        else
+        {
+            $this->session->set('repoID', '');
         }
 
         $this->app->loadClass('pager', true);
@@ -134,6 +148,7 @@ class job extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
+        $this->loadModel('ci');
         $this->app->loadLang('action');
         $repoList    = $this->loadModel('repo')->getList($this->projectID, false);
         $repoPairs   = array(0 => '');
@@ -144,9 +159,9 @@ class job extends control
         foreach($repoList as $repo)
         {
             if(empty($repo->synced)) continue;
-            $repoPairs[$repo->id] = $repo->name;
+            $repoPairs[$repo->id] = "[{$repo->SCM}] " . $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = $repo->name;
+            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = "[{$repo->SCM}] " . $repo->name;
         }
 
         $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
@@ -203,6 +218,7 @@ class job extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', "repoID={$job->repo}")));
         }
 
+        $this->loadModel('ci');
         $repo = $this->loadModel('repo')->getByID($job->repo);
         $this->view->repo = $this->loadModel('repo')->getByID($job->repo);
 
@@ -217,7 +233,7 @@ class job extends control
             if(empty($repo->synced)) continue;
             $repoPairs[$repo->id] = "[{$repo->SCM}] {$repo->name}";
             $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = $repo->name;
+            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = "[{$repo->SCM}] {$repo->name}";
         }
 
         $products = $this->repo->getProductsByRepo($job->repo);
