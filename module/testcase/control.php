@@ -2616,7 +2616,7 @@ class testcase extends control
         $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
         $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
-        $this->view->currentModuleID  = $$moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+        $this->view->currentModuleID  = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         $this->view->currentParentID  = (int)$this->cookie->lastCaseScene;
         $this->view->product          = $product;
         $this->view->branch           = $branch;
