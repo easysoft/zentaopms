@@ -579,7 +579,7 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
                 }
                 $item->actions[] = 'other:' . $otherAction;
             }
-            elseif($actionKey == 'more')
+            elseif($actionKey === 'more')
             {
                 $moreAction = '';
                 foreach($actionMenu as $moreActionName)
