@@ -192,9 +192,6 @@
           {
             e.preventDefault();
 
-            const container = publishButton.ownerDocument.defaultView.parent.document.querySelector('.load-indicator');
-            if(container) container.classList.toggle('loading', true);
-
             const promptId = publishButton.dataset.promptid;
             const aTag = document.createElement('a');
             aTag.href = createLink('ai', 'promptPublish', 'promptId=' + promptId + '&backToTestingLocation=true') + '#app=admin';
@@ -210,9 +207,6 @@
           auditExitButton.addEventListener('click', function(e)
           {
             e.preventDefault();
-
-            const container = auditExitButton.ownerDocument.defaultView.parent.document.querySelector('.load-indicator');
-            if(container) container.classList.toggle('loading', true);
 
             const aTag = document.createElement('a');
             aTag.href = createLink('ai', 'promptAudit', 'promptId=' + promptId + '&objectId=0' + '&exit=true') + '#app=admin';

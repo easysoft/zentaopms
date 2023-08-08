@@ -128,9 +128,6 @@
 
   function reloadPrompt(promptId, objectId)
   {
-    const container = parent.parent.document.querySelector('.load-indicator');
-    if(container) container.classList.toggle('loading', true);
-
     parent.$.zui.closeModal();
 
     let link = createLink('ai', 'promptexecute', 'promptId=' + promptId + '&objectId=' + objectId);
