@@ -22,6 +22,15 @@ foreach($lang->todo->typeList as $type => $typeName)
 $timeItems = array();
 foreach($times as $key => $value) $timeItems[] = array('text' => $value, 'value' => $key);
 
+$fnGenerateCustomizedFields = function() use ($showFields, $customFields)
+{
+    $showFields    = ",{$showFields},";
+    $fields        = array();
+    $defaultFields = explode(',', 'pri,beginAndEnd,status');
+    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
+    return $fields;
+};
+
 jsVar('nameItems', $nameItems);
 jsVar('timeItems', $timeItems);
 
@@ -54,15 +63,11 @@ div
     ),
 );
 
-$visibleFields = array();
-foreach(explode(',', $showFields) as $field)
-{
-    if($field) $visibleFields[$field] = '';
-}
 formBatchPanel
 (
     set::title($lang->todo->batchEdit),
     set::url(createLink('todo', 'batchEdit', "from=todoBatchEdit&type={$type}&userID={$userID}&status={$status}")),
+    set::customFields(array('items' => $fnGenerateCustomizedFields(), 'urlParams' => 'module=todo&section=custom&key=batchEditFields')),
     set::mode('edit'),
     set::data(array_values($editedTodos)),
     set::onRenderRow(jsRaw('renderRowData')),
@@ -103,7 +108,6 @@ formBatchPanel
         set::label($lang->todo->pri),
         set::width('60px'),
         set::control('priPicker'),
-        set::hidden(!isset($visibleFields['pri'])),
         set::items($lang->todo->priList),
     ),
     formBatchItem
@@ -124,7 +128,6 @@ formBatchPanel
         set::name('beginAndEnd'),
         set::label($lang->todo->beginAndEnd),
         set::width('260px'),
-        set::hidden(!isset($visibleFields['beginAndEnd'])),
     ),
     formBatchItem
     (
@@ -132,7 +135,6 @@ formBatchPanel
         set::label($lang->todo->status),
         set::width('100px'),
         set::control('picker'),
-        set::hidden(!isset($visibleFields['status'])),
         set::items($lang->todo->statusList)
     ),
 );
