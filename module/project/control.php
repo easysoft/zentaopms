@@ -408,10 +408,9 @@ class project extends control
         $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
 
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
-        $projectStats = $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
         $this->view->title          = $this->lang->project->browse;
-        $this->view->projectStats   = $projectStats;
+        $this->view->projectStats   = $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
         $this->view->pager          = $pager;
         $this->view->programID      = $programID;
         $this->view->program        = $this->program->getByID($programID);
@@ -428,7 +427,6 @@ class project extends control
         $this->view->recPerPage     = $recPerPage;
         $this->view->pageID         = $pageID;
         $this->view->showBatchEdit  = $this->cookie->showProjectBatchEdit;
-        $this->view->allProjectsNum = $this->loadModel('program')->getProjectStats($programID, 'all');
 
         $this->display();
     }
