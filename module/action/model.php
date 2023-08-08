@@ -1184,8 +1184,6 @@ class actionModel extends model
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
             ->andWhere($condition)
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
-            /* Filter out client login/logout actions. */
-            ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
