@@ -1509,7 +1509,7 @@ class groupModel extends model
 
     /**
      * Super Model: Init views, modules and privileges for IPD.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -2323,7 +2323,7 @@ class groupModel extends model
      */
     public function getCustomPrivs($menu, $privs = array())
     {
-        $allPrivs = $this->dao->select('module,method')->from(TABLE_PRIV)->fetchGroup('module', 'method');
+        $allPrivs = $this->dao->select('module,method')->from(TABLE_PRIV)->where('edition')->like("%,{$this->config->edition},%")->andWhere('vision')->like("%,{$this->config->vision},%")->fetchGroup('module', 'method');
         foreach($this->lang->resource as $module => $methods)
         {
             if(isset($this->lang->$module->menus) and (empty($menu) or $menu == 'general'))
