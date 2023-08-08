@@ -453,4 +453,15 @@ class action extends control
 
         return true;
     }
+
+    /**
+     * Clear dynamic records older than one month.
+     *
+     * @access public
+     * @return void
+     */
+    public function cleanActions()
+    {
+        $this->action->cleanActions();
+    }
 }

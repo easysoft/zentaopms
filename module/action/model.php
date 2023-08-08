@@ -2394,4 +2394,17 @@ class actionModel extends model
             $this->create($deletedAction->objectType, $deletedAction->objectID, 'undeleted');
         }
     }
+
+    /**
+     * Clear dynamic records older than one month.
+     *
+     * @access public
+     * @return void
+     */
+    public function cleanActions()
+    {
+        $lastMonth = date('Y-m-d', strtotime('-1 month'));
+        $this->dao->delete()->from(TABLE_ACTIONLATEST)->where('date')->lt($lastMonth)->exec();
+        return !dao::isError();
+    }
 }
