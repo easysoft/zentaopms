@@ -2933,123 +2933,58 @@ class testcase extends control
     /**
      * Edit scene.
      *
-     * @param  int $sceneId
-     * @param  int $executionID
+     * @param  int    $sceneID
      * @access public
      * @return void
      */
-    public function editScene($sceneID, $executionID = 0)
+    public function editScene($sceneID)
     {
-        $this->loadModel('story');
+        $scene = $this->testcase->getSceneByID($sceneID);
+        if(!$scene) return print(js::error($this->lang->notFound) . js::locate('back'));
 
-        /* Update scene. */
-        if(!empty($_POST))
+        if($_POST)
         {
-            $changes = array();
-            $files   = array();
-
-            $sceneResult = $this->testcase->updateScene($sceneID);
-            if(!$sceneResult or dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-
-            $this->loadModel('action');
-            $sceneID = $sceneResult['id'];
-
-            $this->action->create('scene', $sceneID - CHANGEVALUE, 'Edited');
-            $this->executeHooks($sceneID);
+            $this->testcase->updateScene($sceneID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $sceneID));
 
-            $scene   = $this->dao->findById((int)$sceneID - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
-            $product = $scene->product;
-            $this->executeHooks($product);
-
-            setcookie('caseModule', $scene->module, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-
-            if(!$scene->module) return print(js::locate($this->createLink('testcase', 'browse', "productID=$product"), 'parent'));
-
-            return print(js::locate($this->createLink('testcase', 'browse', "root=$product&branch=0&type=byModule&param={$scene->module}"), 'parent'));
+            $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;
+            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=byModule&param={$this->post->module}");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        /* Get scene. */
-        $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($sceneID)->andWhere('isCase')->eq(2)->fetch();
-
-        if(!$scene) return print(js::error($this->lang->notFound) . js::locate('back'));
-
         $productID = $scene->product;
-        $product   = $this->product->getById($productID);
+        $product   = $this->product->getByID($productID);
         if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
-
-        $title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->editScene;
-        $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
         /* Set menu. */
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu(null);
         if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $scene->branch);
 
         /* Display status of branch. */
-        $branches = $this->loadModel('branch')->getList($productID, isset($objectID) ? $objectID : 0, 'all');
-        $branchTagOption = array();
-        foreach($branches as $branchInfo)
+        $branches   = array();
+        $branchList = $this->loadModel('branch')->getList($productID, 0, 'all');
+        foreach($branchList as $branch) $branches[$branch->id] = $branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        if(!isset($branches[$scene->branch]))
         {
-            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            $caseBranch = $this->branch->getByID($scene->branch, $scene->product, '');
+            if($caseBranch) $branches[$scene->branch] = $caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
-        if(!isset($branchTagOption[$scene->branch]))
-        {
-            $caseBranch = $this->branch->getById($scene->branch, $scene->product, '');
-            $branchTagOption[$scene->branch] = $scene->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
-        }
+        $modules = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $scene->branch);
+        if(!isset($modules[$scene->module])) $modules += $this->tree->getModulesName($scene->module);
 
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $scene->branch);
+        $scenes = $this->testcase->getSceneMenu($productID, $scene->module, $viewType = 'case', $startSceneID = 0,  $scene->branch, $sceneID);
+        if(!isset($scenes[$scene->parent])) $scenes += $this->testcase->getScenesName($scene->parent);
 
-        if(!isset($moduleOptionMenu[$scene->module])) $moduleOptionMenu += $this->tree->getModulesName($scene->module);
-
-        if($scene->module)
-        {
-            $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $scene->module, $viewType = 'case', $startSceneID = 0,  $scene->branch, $sceneID);
-        }
-        else
-        {
-            $sceneOptionMenu = $this->testcase->getSceneMenu($productID, 0, $viewType = 'case', $startSceneID = 0,  $scene->branch, $sceneID);
-        }
-
-        if(!isset($sceneOptionMenu[$scene->parent])) $sceneOptionMenu += $this->testcase->getScenesName($scene->parent);
-
-        /* Get product and branches. */
-        if($this->app->tab == 'execution' or $this->app->tab == 'project')
-        {
-            $objectID = $this->app->tab == 'project' ? $scene->project : $executionID;
-        }
-
-        $this->view->productID        = $productID;
-        $this->view->product          = $product;
-        $this->view->products         = $this->products;
-        $this->view->branchTagOption  = $branchTagOption;
-        $this->view->productName      = $this->products[$productID];
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->sceneOptionMenu  = $sceneOptionMenu;
-        $this->view->stories          = $this->story->getProductStoryPairs($productID, $scene->branch, 0, 'all','id_desc', 0, 'full', 'story', false);
-
-        $forceNotReview = $this->testcase->forceNotReview();
-        if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
-
-        $this->view->title           = $title;
-        $this->view->branch          = 0;
-        $this->view->currentModuleID = $scene->module;
-        $this->view->currentParentID = $scene->parent;
-        $this->view->users           = $this->user->getPairs('noletter');
-
-        $this->view->actions         = $this->loadModel('action')->getList('case', $sceneID);
-        $this->view->gobackLink      = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
-        $this->view->forceNotReview  = $forceNotReview;
-        $this->view->scene           = $scene;
-        $this->view->executionID     = $executionID;
-
+        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->editScene;
+        $this->view->products = $this->products;
+        $this->view->product  = $product;
+        $this->view->branches = $branches;
+        $this->view->modules  = $modules;
+        $this->view->scenes   = $scenes;
+        $this->view->scene    = $scene;
         $this->display();
     }
 
