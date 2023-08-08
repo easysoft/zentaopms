@@ -22,21 +22,43 @@
  */
 class count_of_annual_delivered_story_in_product extends baseCalc
 {
-    public $dataset = '';
+    public $dataset = 'getDevStories';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.product', 't1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate');
 
-    public $result = array();
+    public function calculate($row)
+    {
+        $product      = $row->product;
+        $stage        = $row->stage;
+        $releasedDate = $row->releasedDate;
+        $closedReason = $row->closedReason;
+        $closedDate   = $row->closedDate;
 
-    //public function getStatement()
-    //{
-    //}
+        $year = null;
+        if($stage == 'released')
+        {
+            if(empty($releasedDate)) return false;
+            $year = substr($releasedDate, 0, 4);
+            if($year == '0000') return false;
+        }
 
-    //public function calculate($data)
-    //{
-    //}
+        if($closedReason == 'done')
+        {
+            if(empty($closedDate)) return false;
+            $year = substr($closedDate, 0, 4);
+            if($year == '0000') return false;
+        }
 
-    //public function getResult()
-    //{
-    //}
+        if(empty($year)) return false;
+
+        if(!isset($this->result[$product])) $this->result[$product] = array();
+        if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;
+        $this->result[$product][$year] += 1;
+    }
+
+    public function getResult($options = array())
+    {
+        $records = $this->getRecords(array('product', 'year', 'value'));
+        return $this->filterByOptions($records, $options);
+    }
 }
