@@ -137,16 +137,24 @@
         {
           <?php
           $htmlStr = html::commonButton($lang->ai->promptPublish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide');
-          $htmlStr = $htmlStr . html::commonButton($lang->ai->audit->exit, "id='promptAuditExit'", 'btn btn-wide');
           $targetContainer = $config->ai->injectAuditButton->locations[$module][$method]['action']->targetContainer;
           $injectMethod    = $config->ai->injectAuditButton->locations[$module][$method]['action']->injectMethod;
+          if($module == 'doc'):
           $containerStyles = empty($config->ai->injectAuditButton->locations[$module][$method]['action']->containerStyles) ? '{}' : $config->ai->injectAuditButton->locations[$module][$method]['action']->containerStyles;
+          $exitAuditButton = html::commonButton($lang->ai->audit->exit, "id='promptAuditExit'", 'btn');
           ?>
           const containerStyles = JSON.parse('<?php echo $containerStyles;?>');
-
           const htmlStr = `<?php echo $htmlStr;?>`;
           $('<?php echo $targetContainer;?>')['<?php echo $injectMethod;?>'](htmlStr);
           $('<?php echo $targetContainer;?>').css(containerStyles);
+
+          $('#mainContent #headerBox td:first-child').html(`<?php echo $exitAuditButton;?>`);
+        <?php else:
+          $htmlStr = $htmlStr . html::commonButton($lang->ai->audit->exit, "id='promptAuditExit'", 'btn btn-wide');
+          ?>
+          const htmlStr = `<?php echo $htmlStr;?>`;
+          $('<?php echo $targetContainer;?>')['<?php echo $injectMethod;?>'](htmlStr);
+          <?php endif;?>
         }
 
         function injectAuditToolbar()
