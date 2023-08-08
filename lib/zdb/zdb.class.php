@@ -383,8 +383,12 @@ class zdb
             $result = array();
             foreach($data as $item)
             {
-                if(is_string($item)) $result[] = addslashes($item);
-                if(is_null($item)) $result[] = null;
+                if(is_string($item))
+                    $result[] = addslashes($item);
+                elseif(is_null($item))
+                    $result[] = null;
+                else
+                    $result[] = $item;
             }
             return $result;
         }
