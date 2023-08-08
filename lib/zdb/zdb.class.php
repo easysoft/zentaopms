@@ -257,7 +257,7 @@ class zdb
 
                 /* Create a value sql. */
                 $value = array_values($row);
-                $value = array_map('addslashes', $value);
+                $value = $this->addslashes($value);
                 $value = join("','", $value);
                 $value = "'" . $value . "'";
                 $sql   = "INSERT INTO `$table`($keys) VALUES (" . $value . ");\n";
@@ -366,5 +366,28 @@ class zdb
             $return->error  = $e->getMessage();
             return $return;
         }
+    }
+
+
+    /**
+     * Add slashes for string or string list.
+     *
+     * @param  string|string[] $data
+     * @return string|string[]
+     */
+    public function addslashes($data)
+    {
+        if(is_string($data)) return addslashes($data);
+        if(array_is_list($data))
+        {
+            $result = array();
+            foreach($data as $item)
+            {
+                if(is_string($item)) $result[] = addslashes($item);
+                if(is_null($item)) $result[] = null;
+            }
+            return $result;
+        }
+        return $data;
     }
 }
