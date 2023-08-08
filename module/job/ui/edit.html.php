@@ -21,6 +21,7 @@ jsVar('buildTag', $lang->job->buildTag);
 if($job->customParam)
 {
     $customParam = array();
+    $i = 1;
     foreach(json_decode($job->customParam) as $paramName => $paramValue)
     {
         $isCustom = zget($lang->job->paramValueList, $paramValue, '') ? false : true;
@@ -31,6 +32,7 @@ if($job->customParam)
             (
                 setStyle('width', '50%'),
                 setClass('form-control'),
+                set::id("paramName{$i}"),
                 set::name('paramName[]'),
                 set::value($paramName),
             ),
@@ -39,6 +41,7 @@ if($job->customParam)
             (
                 setStyle('width', '25%'),
                 setClass('paramValue ' . ($isCustom ? 'hidden' : '')),
+                set::id("paramValue{$i}"),
                 set::name('paramValue[]'),
                 !$isCustom ? set::value($paramValue) : null,
                 set::items($lang->job->paramValueList),
@@ -48,6 +51,7 @@ if($job->customParam)
             (
                 setStyle('width', '25%'),
                 setClass('form-control paramValue ' . (!$isCustom ? 'hidden' : '')),
+                set::id("paramValueInput{$i}"),
                 set::name('paramValue[]'),
                 $isCustom ? set::value($paramValue) : null,
                 !$isCustom ? set::disabled(true) : null,
@@ -58,6 +62,7 @@ if($job->customParam)
                 checkbox
                 (
                     setClass('custom'),
+                    set::id("custom{$i}"),
                     set::name('custom'),
                     set::text($lang->job->custom),
                     set::checked($isCustom),
@@ -84,6 +89,7 @@ if($job->customParam)
                 ),
             ),
         );
+        $i++;
     }
 }
 
@@ -165,6 +171,7 @@ formPanel
             set::name('triggerType'),
             set::label($lang->job->triggerType),
             set::items($lang->job->triggerTypeList),
+            set::value($job->triggerType),
             on::change('changeTriggerType'),
         ),
     ),

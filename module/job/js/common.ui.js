@@ -6,8 +6,8 @@ function addItem(event)
     const newName    = window.customCount + 'custom';
     window.customCount ++;
 
-    $(inputGroup).find('input.custom').attr('id', newName).attr('name', newName);
-    $(inputGroup).find('input[name="' + newName + '"]').next().attr('for', newName);
+    $(inputGroup).find('input.custom').attr('id', newName);
+    $(inputGroup).find('input[id="' + newName + '"]').next().attr('for', newName);
     obj.closest('.form-group').append($(inputGroup));
 }
 
