@@ -2575,7 +2575,7 @@ class testcase extends control
      */
     public function createScene($productID, $branch = '', $moduleID = 0)
     {
-        if(!empty($_POST))
+        if($_POST)
         {
             setcookie('lastCaseScene', (int)$this->post->parent, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
@@ -2583,8 +2583,8 @@ class testcase extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;
-            $locate     = $useSession ? $this->session->caseList : inlink('browse', "root={$this->post->product}&branch={$this->post->branch}&type=byModule&param={$this->post->module}");
-            return $this->send(array('result' => 'fail', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=byModule&param={$this->post->module}");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         /* Set menu. */
