@@ -2133,7 +2133,8 @@ class actionModel extends model
 
         if($dateGroup)
         {
-            $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where($this->session->actionQueryCondition)->andWhere("(LEFT(`date`, 10) = '" . substr($action->originalDate, 0, 10) . "')")->orderBy($this->session->actionOrderBy)->fetchAll('id');
+            $lastDate        = date(DT_DATE1, $timeStamp);
+            $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where('`date`')->ge($lastDate)->andWhere('`date`')->le("{$lastDate} 23:59:59")->andWhere($this->session->actionQueryCondition)->orderBy($this->session->actionOrderBy)->fetchAll('id');
             if(count($dateGroup[$date]) < count($lastDateActions))
             {
                 unset($dateGroup[$date]);
