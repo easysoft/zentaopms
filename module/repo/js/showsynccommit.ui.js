@@ -2,7 +2,7 @@ function syncComments()
 {
     $.get(link, function(data)
     {
-        if(data == 'finish') return openUrl(browseLink);
+        if(data == 'finish') return loadPage(browseLink);
 
         var count = parseInt(data);
         if(isNaN(count)) count = 0;
