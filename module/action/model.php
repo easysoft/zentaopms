@@ -1083,14 +1083,13 @@ class actionModel extends model
         /* Build has priv condition. */
         $condition  = '1=1';
         $executions = array();
+
         if(!$this->app->user->admin)
         {
             $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-            if($productID == 'all')   $authedProducts   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['product'])))   ? $this->app->user->view->products : '0';
-            if($projectID == 'all')   $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? $this->app->user->view->projects : '0';
-            if($executionID == 'all') $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? $this->app->user->view->sprints : '0';
-
-            if(empty($authedProducts)) $authedProducts = '0';
+            if($productID == 'all')   $authedProducts   = !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
+            if($projectID == 'all')   $authedProjects   = !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
+            if($executionID == 'all') $authedExecutions = !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
 
             if($productID == 'all' and $projectID == 'all')
             {
@@ -1149,16 +1148,23 @@ class actionModel extends model
             if($this->app->getMethodName() == 'dynamic') $beginDate = $year - 1 . '-01-01';
         }
 
+        if(is_numeric($projectID))
+        {
+            $project   = $this->dao->select('COALESCE(realBegan, begin) AS begin, COALESCE(realEnd, end) AS end')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+            $beginDate = $project->begin;
+            $endDate   = $project->end > helper::today() ? helper::today() : $project->end;
+        }
+
+        $condition = "(($condition) OR `objectType` IN ('doc', 'doclib')) AND `objectType` NOT IN ('program', 'effort', 'execution')";
+
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
+        if($noMultipleExecutions) $condition .= " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
+
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
+        $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
 
         $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
         $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
-
-        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
-
-        $condition = "(`objectType` IN ('doc', 'doclib') OR ($condition)) AND `objectType` NOT IN ('program', 'effort', 'execution')";
-        if($noMultipleExecutions) $condition .= " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
-        $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
         $condition .= " OR (`objectID` in ($efforts) AND `objectType` = 'effort')";
         $condition  = "($condition)";
 
@@ -1173,6 +1179,7 @@ class actionModel extends model
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
+            ->beginIF($endDate)->andWhere('date')->le($endDate)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->andWhere('1=1', true)
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
