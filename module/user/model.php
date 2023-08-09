@@ -2811,7 +2811,7 @@ class userModel extends model
         $action = strtolower($action);
 
         if($action == 'unbind' and empty($user->ranzhi)) return false;
-        if($action == 'unlock' and (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) >= $config->user->lockMinutes * 60) return false;
+        if($action == 'unlock' and (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked ? $user->locked : '0000-00-00 00:00:00')) >= $config->user->lockMinutes * 60) return false;
 
         return true;
     }
