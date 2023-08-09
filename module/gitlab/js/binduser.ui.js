@@ -1,5 +1,16 @@
-$('table').on('change', '.pick-value', function()
+window.setUserEmail = function()
 {
-    var user = zentaoUsers[$(this).val()];
-    $('#' + $(this).attr('id').replace('users', 'zentaoEmail')).text(user.email);
-})
+    let   email   = '';
+    const account = $(this).val();
+    if(account && zentaoUsers[account]) email = zentaoUsers[account].email;
+
+    $(this).closest('.dtable-cell').prev().find('.dtable-cell-content').text(email);
+}
+
+window.renderGitlabUser = function(result, {row})
+{
+    const gitlabID = row.data.gitlabID;
+    result.push({html: `<input type="hidden" name='gitlabUserNames[]' value='${gitlabID}'>`});
+
+    return result;
+}
