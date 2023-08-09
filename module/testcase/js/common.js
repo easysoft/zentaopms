@@ -278,7 +278,8 @@ function setScenes()
     branch    = $('#branch').val();
     moduleID  = $('#module').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1');
+    element = (config.currentMethod == 'createscene' || config.currentMethod == 'editscene') ? 'parent' : 'scene';
+    link = createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&element=' + element + '&sceneID=' + sceneID);
 
     $('#sceneIdBox').load(link, function()
     {
