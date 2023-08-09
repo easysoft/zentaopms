@@ -130,7 +130,7 @@ class executionModel extends model
 
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) return print(js::error($this->lang->execution->accessDenied) . js::locate('back'));
 
-        $executions = $this->getPairs(0, 'all', 'nocode');
+        $executions = $this->fetchPairs(0, 'all');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
         $this->session->set('execution', $executionID, $this->app->tab);
@@ -6117,10 +6117,10 @@ class executionModel extends model
         {
             $execution        = current($executions);
             $parentExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
-                ->where('deleted')->eq(0)
+                ->where('parent')->eq($execution->project)
+                ->andWhere('deleted')->eq('0')
                 ->andWhere('type')->in('kanban,sprint,stage')
                 ->andWhere('grade')->eq(1)
-                ->andWhere('project')->eq($execution->project)
                 ->orderBy('order_asc')
                 ->fetchAll('id');
         }

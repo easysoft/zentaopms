@@ -414,6 +414,7 @@ class block extends control
      */
     public function contribute()
     {
+        session_write_close();
         $cacheKey = $this->config->cacheKeys->block->contribute;
         if(helper::isCacheEnabled() && $this->cache->has($cacheKey))
         {
