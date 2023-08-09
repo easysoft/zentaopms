@@ -122,7 +122,7 @@
       })();
     </script>
   <?php endif;?>
-  <?php
+  <?php if(isset($_SESSION['aiPrompt']['prompt']) && $_SESSION['aiPrompt']['objectId']):
     $prompt   = $_SESSION['aiPrompt']['prompt'];
     $objectId = $_SESSION['aiPrompt']['objectId'];
     $isAudit  = isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60;
@@ -227,4 +227,5 @@
         }
       })();
     </script>
+  <?php endif;?>
 <?php endif;?>
