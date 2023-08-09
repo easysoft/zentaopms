@@ -499,6 +499,7 @@ class block extends control
      */
     public function main($module = '', $id = 0)
     {
+        session_write_close(); // Avoid session blocking.
         if(!$this->selfCall)
         {
             $lang = str_replace('_', '-', $this->get->lang);
@@ -1000,25 +1001,20 @@ class block extends control
         {
             $today  = helper::today();
             $monday = date('Ymd', strtotime($this->weekly->getThisMonday($today)));
-            $tasks  = $this->dao->select("project,
-                sum(consumed) as totalConsumed,
-                sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
-                ->from(TABLE_TASK)
-                ->where('project')->in(array_keys($projects))
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('parent')->lt(1)
-                ->groupBy('project')
-                ->fetchAll('project');
 
-            $this->app->loadClass('pager', $static = true);
+            $projectExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('project')->in(array_keys($projects))
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('type')->in('sprint,stage,kanban')
+                ->groupBy('project')
+                ->orderBy('id_desc')
+                ->fetchAll('project');
 
             foreach($projects as $projectID => $project)
             {
                 if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
                 {
-                    $pager = pager::init(0, 1, 1);
-                    $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
-                    $project->executions = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
+                    $project->execution = zget($projectExecutions, $projectID, array());
                 }
                 elseif(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
                 {
@@ -1034,10 +1030,7 @@ class block extends control
                     $project->sv = $this->weekly->getSV($project->ev, $project->pv);
                     $project->cv = $this->weekly->getCV($project->ev, $project->ac);
 
-                    $progress = isset($tasks[$projectID]) ? (($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft)) ? round($tasks[$projectID]->totalConsumed / ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft), 3) * 100 : 0 : 0;
-
                     $project->current  = $current;
-                    $project->progress = $progress;
                 }
             }
 
