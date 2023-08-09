@@ -25,6 +25,8 @@ class searchToggle extends wg
         global $lang;
         $module   = $this->prop('module');
         $formName = $this->prop('formName');
+        $open     = $this->prop('open');
+        if(is_null($open) && !empty($_GET['browseType'])) $open = $_GET['browseType'] === 'bySearch';
         return btn
         (
             set::class('ghost search-form-toggle'),
@@ -33,7 +35,7 @@ class searchToggle extends wg
             set('data-module', $this->prop('module')),
             set('data-on', 'click'),
             set('data-do', "window.toggleSearchForm('$module', '$formName');"),
-            $this->prop('open') ? h::jsCall('~window.toggleSearchForm', $module, $formName, true) : null
+            $open ? h::jsCall('~window.toggleSearchForm', $module, $formName, true) : null
         );
     }
 }

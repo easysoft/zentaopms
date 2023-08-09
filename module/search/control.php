@@ -121,7 +121,7 @@ class search extends control
                 echo 'success';
                 return;
             }
-            return print(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID, $shortcut, '{$data->title}')}"));
+            return $this->send(array('closeModal' => true, 'callback' => '$(\'#searchFormPanel form button[type="submit"]\').trigger("click")'));
         }
 
         $this->view->module    = $module;
