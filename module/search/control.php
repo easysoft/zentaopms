@@ -151,7 +151,7 @@ class search extends control
      */
     public function buildZinQuery()
     {
-        if(!commonModel::hasPriv('search', 'buildForm')) $this->loadModel('common')->deny('search', 'buildForm', false);
+        if(!commonModel::hasPriv('search', 'buildQuery')) $this->loadModel('common')->deny('search', 'buildQuery', false);
 
         $this->search->buildZinQuery();
 
@@ -210,12 +210,12 @@ class search extends control
      */
     public function saveZinQuery($module, $onMenuBar = 'no')
     {
-        if(!commonModel::hasPriv('search', 'saveQuery')) $this->loadModel('common')->deny('search', 'buildForm', false);
+        if(!commonModel::hasPriv('search', 'saveQuery')) $this->loadModel('common')->deny('search', 'saveQuery', false);
 
         if($_POST)
         {
             $queryID = $this->search->saveZinQuery();
-            if(!$queryID) return print(js::error(dao::getError()));
+            if(!$queryID) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $data     = fixer::input('post')->get();
             $shortcut = empty($data->onMenuBar) ? 0 : 1;
@@ -225,7 +225,7 @@ class search extends control
                 echo 'success';
                 return;
             }
-            return print(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID, $shortcut, '{$data->title}')}"));
+            return $this->send(array('closeModal' => true, 'callback' => '$(\'#searchFormPanel form button[type="submit"]\').trigger("click")'));
         }
 
         $this->view->module    = $module;
@@ -245,6 +245,21 @@ class search extends control
         $this->search->deleteQuery($queryID);
         if(dao::isError()) return print(js::error(dao::getError()));
         echo 'success';
+    }
+
+    /**
+     * Delete current search query.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function deleteZinQuery($queryID)
+    {
+        if(!commonModel::hasPriv('search', 'deleteQuery')) $this->loadModel('common')->deny('search', 'deleteQuery', false);
+        $this->search->deleteQuery($queryID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        echo $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**

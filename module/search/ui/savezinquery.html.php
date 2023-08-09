@@ -3,7 +3,7 @@ namespace zin;
 
 form
 (
-    set::actions(null),
+    set::actions(array()),
     set::action($_SERVER['REQUEST_URI']),
     set::method('post'),
     div
@@ -34,7 +34,7 @@ form
         ),
         btn(
             setClass('w-1/12 primary'),
-            set::type('submit'),
+            set::btnType('submit'),
             set('data-type', 'submit'),
             $lang->save
         ),

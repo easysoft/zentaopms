@@ -21,7 +21,7 @@ $config->host->featureBar[0]['badge']  = $pager->recTotal != '' ? array('text' =
 featureBar
 (
     set::items($config->host->featureBar),
-    li(searchToggle())
+    li(searchToggle(set::open($browseType==='bySearch')))
 );
 
 /* zin: Define the toolbar on main menu. */

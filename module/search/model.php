@@ -289,6 +289,7 @@ class searchModel extends model
 
             /* Fix bug #2704. */
             $field = $this->post->$fieldName;
+            if(empty($field)) continue;
             if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
             if($field == 'id' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
             $queryForm[$formIndex]['field'] = $field;
@@ -1852,7 +1853,7 @@ class searchModel extends model
             'data-toggle'    => 'modal',
             'data-type'      => 'ajax',
             'data-data-type' => 'html',
-            'data-url'       => helper::createLink('search', 'saveQuery', array('module' => $module)),
+            'data-url'       => helper::createLink('search', 'saveZinQuery', array('module' => $module)),
         );
 
         return $result;
@@ -1866,21 +1867,21 @@ class searchModel extends model
      * @access public
      * @return array
      */
-    public static function buildFormSavedQuery($queries, $account)
+    public static function buildFormSavedQuery($queries, $actionURL)
     {
         $result = array();
         if(empty($queries)) return $result;
 
+        global $lang;
         $hasPriv = common::hasPriv('search', 'deleteQuery');
         foreach($queries as $query)
         {
             if(!is_object($query)) continue;
 
             $item = new stdClass();
-            $item->id      = $query->id;
-            $item->title   = $query->title;
-            $item->account = $query->account;
-            $item->hasPriv = ($hasPriv && $account == $query->account);
+            $item->text     = $query->title;
+            $item->applyURL = str_replace('myQueryID', $query->id, $actionURL);
+            if($hasPriv) $item->deleteProps = array('className' => 'ajax-submit', 'data-confirm' => $lang->search->confirmDelete, 'href' => helper::createLink('search', 'deleteZinQuery', "queryID={$query->id}"));
 
             $result[] = $item;
         }
