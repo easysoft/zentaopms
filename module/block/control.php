@@ -437,6 +437,7 @@ class block extends control
      */
     public function printBlock($id, $module = 'my')
     {
+        session_write_close(); // Avoid session blocking.
         $block = $this->block->getByID($id);
 
         if(empty($block)) return false;
