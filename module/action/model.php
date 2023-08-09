@@ -1155,7 +1155,7 @@ class actionModel extends model
             $endDate   = $project->end > helper::today() ? helper::today() : $project->end;
         }
 
-        $condition = "(($condition) OR `objectType` IN ('doc', 'doclib')) AND `objectType` NOT IN ('program', 'effort', 'execution')";
+        $condition = "(($condition) OR `objectType` IN ('doc', 'doclib'))";
 
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
         if($noMultipleExecutions) $condition .= " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
@@ -1163,7 +1163,15 @@ class actionModel extends model
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
         $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
 
-        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
+        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)
+            ->where($condition)
+            ->beginIF($period != 'all')
+            ->andWhere('date')->gt($begin)
+            ->andWhere('date')->lt($end)
+            ->fi()
+            ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
+            ->beginIF($endDate)->andWhere('date')->le($endDate)->fi()
+            ->fetchPairs();
         $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
         $condition .= " OR (`objectID` in ($efforts) AND `objectType` = 'effort')";
         $condition  = "($condition)";
