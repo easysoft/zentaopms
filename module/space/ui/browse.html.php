@@ -27,7 +27,7 @@ featureBar
 
 toolBar
 (
-    $canInstall ? item(set(array
+    $config->inQuickon && $canInstall ? item(set(array
     (
         'text'  => $lang->store->cloudStore,
         'icon'  => 'program',
