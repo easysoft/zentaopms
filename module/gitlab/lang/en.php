@@ -29,6 +29,10 @@ $lang->gitlab->addWebhookSuccess = 'Webhook created successfully';
 $lang->gitlab->failCreateWebhook = 'Failed to create Webhook, please view the log';
 $lang->gitlab->placeholderSearch = 'Enter name';
 
+$lang->gitlab->bindStatus['binded']      = $lang->gitlab->binded;
+$lang->gitlab->bindStatus['notBind']     = "<span class='text-danger'>{$lang->gitlab->notBind}</span>";
+$lang->gitlab->bindStatus['bindedError'] = "<span class='text-danger'>{$lang->gitlab->bindedError}</span>";
+
 $lang->gitlab->browseAction         = 'GitLab List';
 $lang->gitlab->deleteAction         = 'Delete GitLab';
 $lang->gitlab->gitlabProject        = "GitLab Project";
