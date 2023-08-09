@@ -198,63 +198,44 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('gitlab', 'browse')));
         }
 
+        $userList      = array();
         $gitlabUsers   = $this->gitlab->apiGetUsers($gitlabID);
         $bindedUsers   = $this->gitlab->getUserAccountIdPairs($gitlabID);
         $matchedResult = $this->gitlab->getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers);
-        $matchedResult = array_column(json_decode(json_encode($matchedResult), true), null, "email");
 
-        $gitlabUsers = array_filter($gitlabUsers, function($item) use($bindedUsers, $userPairs, $type)
+        foreach($gitlabUsers as $gitlabUserID => $gitlabUser)
         {
-            if($type == 'all') return true;
+            $user = new stdclass();
+            $user->email            = '';
+            $user->status           = 'notBind';
+            $user->gitlabID         = $gitlabUser->id;
+            $user->gitlabEmail      = $gitlabUser->email;
+            $user->gitlabUser       = $gitlabUser->realname . '@' . $gitlabUser->account;
+            $user->gitlabUserAvatar = $gitlabUser->avatar;
 
-            if(in_array($item->id, $bindedUsers))
+            $user->zentaoUsers = isset($matchedResult[$gitlabUser->id]) ? $matchedResult[$gitlabUser->id]->zentaoAccount : '';
+            if($user->zentaoUsers)
             {
-                $zentaoAccount = isset($item->zentaoAccount) ? $item->zentaoAccount : '';
-                return $type == 'binded' ? !empty($zentaoAccount) : empty($zentaoAccount);
-            }
-            return $type == 'binded' ? false : true;
-        });
+                if(isset($zentaoUsers[$user->zentaoUsers])) $user->email = $zentaoUsers[$user->zentaoUsers]->email;
 
-        $bindedGitlabUsers = $unBindGitlabUsers = array();
-
-        foreach($gitlabUsers as $user)
-        {
-            $user->zentaoEmail = !empty($matchedResult[$user->email]) ? $matchedResult[$user->email]['email'] : '';
-            $user->status      = 'notBind';
-            $user->realname    = $user->realname . '@' . $user->account;
-
-            $user->zentaoAccount = isset($user->zentaoAccount) ? $user->zentaoAccount : '';
-            if(in_array($user->id, $bindedUsers))
-            {
-                $user->status = 'bindedError';
-                if(!empty($user->zentaoAccount)) $user->status = 'binded';
+                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $gitlabUser->id)
+                {
+                    $user->status = 'binded';
+                    if(!isset($bindedUsers[$user->zentaoUsers])) $user->status = 'bindedError';
+                }
             }
 
-            if(!empty($user->zentaoAccount))
-            {
-                $bindedGitlabUsers[] = $user;
-            }
-            else
-            {
-                $unBindGitlabUsers[] = $user;
-            }
+            if($type != 'all' && $user->status != $type) continue;
+            $userList[] = $user;
         }
 
-        $gitlabUsers = array_merge($unBindGitlabUsers, $bindedGitlabUsers);
-
-        $this->app->loadClass('pager', true);
-        $pager = new pager(count($gitlabUsers), 10000, 1);
-
-        $this->view->pager         = $pager;
-        $this->view->title         = $this->lang->gitlab->bindUser;
-        $this->view->zentaoUsers   = $zentaoUsers;
-        $this->view->userPairs     = $userPairs;
-        $this->view->type          = $type;
-        $this->view->gitlabID      = $gitlabID;
-        $this->view->gitlabUsers   = $gitlabUsers;
-        $this->view->bindedUsers   = $bindedUsers;
-        $this->view->matchedResult = $matchedResult;
-
+        $this->view->title       = $this->lang->gitlab->bindUser;
+        $this->view->type        = $type;
+        $this->view->gitlabID    = $gitlabID;
+        $this->view->recTotal    = count($userList);
+        $this->view->userList    = $userList;
+        $this->view->userPairs   = $userPairs;
+        $this->view->zentaoUsers = $zentaoUsers;
         $this->display();
     }
 
