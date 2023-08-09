@@ -1233,18 +1233,19 @@ CREATE TABLE IF NOT EXISTS `zt_notify` (
   `objectType` varchar(50) NOT NULL DEFAULT '',
   `objectID` mediumint unsigned NOT NULL DEFAULT '0',
   `action` mediumint NOT NULL DEFAULT '0',
-  `toList` varchar(255) NOT NULL DEFAULT '',
+  `toList` text NOT NULL,
   `ccList` text NULL,
-  `subject` varchar(255) NOT NULL DEFAULT '',
+  `subject` text NOT NULL,
   `data` text NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `sendTime` datetime NULL,
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `failReason` text NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `objectType` (`objectType`),
+  KEY `status` (`status`)
 ) ENGINE='InnoDB' COLLATE 'utf8_general_ci';
-CREATE INDEX `objectType_toList_status` ON `zt_notify`(`objectType`,`toList`,`status`);
 
 -- DROP TABLE IF EXISTS `zt_oauth`;
 CREATE TABLE IF NOT EXISTS `zt_oauth` (

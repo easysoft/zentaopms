@@ -29,3 +29,10 @@ SELECT `objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,
 WHERE `date` >= DATE(DATE_SUB(NOW(), INTERVAL 1 MONTH));
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('15', '0', '*', '*', '*', 'moduleName=action&methodName=cleanActions', '清除超过一个月的动态',    'zentao', 1, 'normal');
+
+ALTER TABLE `zt_notify`
+MODIFY COLUMN `toList` text NOT NULL AFTER `action`,
+MODIFY COLUMN `subject` text NOT NULL AFTER `ccList`,
+DROP INDEX `objectType_toList_status`,
+ADD INDEX `objectType`(`objectType` ASC),
+ADD INDEX `status`(`status` ASC);
