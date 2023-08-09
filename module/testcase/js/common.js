@@ -228,6 +228,8 @@ function setModules(productID, branchID, num)
  */
 function setStories()
 {
+    if($('#story').length == 0) return false;
+
     productID = $('#product').val();
     branch    = $('#branch').val();
     moduleID  = $('#module').val();
@@ -270,6 +272,8 @@ function setPreview()
 
 function setScenes()
 {
+    if($('#sceneIdBox').length == 0) return false;
+
     productID = $('#product').val();
     branch    = $('#branch').val();
     moduleID  = $('#module').val();
