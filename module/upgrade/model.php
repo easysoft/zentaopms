@@ -690,6 +690,7 @@ class upgradeModel extends model
                 $this->loadModel('product')->refreshStats(true);
                 $this->loadModel('program')->refreshStats(true);
                 $this->updatePivotFieldsType();
+                $this->adjustApprovalNotifySetting();
                 break;
         }
 
@@ -9693,5 +9694,22 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_PIVOT)->data($data)->where('id')->eq($pivot->id)->exec();
         }
+    }
+
+    /**
+     * Update approval flow actions in notify setting.
+     *
+     * @access public
+     * @return void
+     */
+    public function adjustApprovalNotifySetting()
+    {
+        $settings = $this->loadModel('setting')->getItem('owner=system&module=message&key=setting');
+
+        $settings = str_replace(array("\"submit\"", "\"cancel\"", "\"review\""), array("\"approvalsubmit\"", "\"approvalcancel\"", "\"approvalreview\""), $settings);
+
+        $this->setting->setItem('system.message.setting', $settings);
+
+        return true;
     }
 }
