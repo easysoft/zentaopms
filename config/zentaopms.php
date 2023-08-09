@@ -241,6 +241,8 @@ $config->openMethods[] = 'testcase.getxmindimport';
 $config->openMethods[] = 'testcase.showxmindimport';
 $config->openMethods[] = 'testcase.savexmindimport';
 $config->openMethods[] = 'search.buildzinform';
+$config->openMethods[] = 'search.buildzinquery';
+$config->openMethods[] = 'search.savezinquery';
 $config->openMethods[] = 'space.createapplication';
 
 $config->openModules = array();

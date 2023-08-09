@@ -288,6 +288,36 @@ class searchModel extends model
     }
 
     /**
+     * Init the search session for the first time search.
+     *
+     * @param  string   $module
+     * @param  array    $fields
+     * @param  array    $fieldParams
+     * @access public
+     * @return array
+     */
+    public function initZinSession($module, $fields, $fieldParams)
+    {
+        if(is_object($fields)) $fields = get_object_vars($fields);
+        $formSessionName = $module . 'Form';
+
+        $queryForm       = array();
+        for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
+        {
+            $currentField  = key($fields);
+            $currentParams = zget($fieldParams, $currentField, array());
+            $operator      = zget($currentParams, 'operator', '=');
+            $queryForm[]   = array('field' => $currentField, 'andOr' => 'and', 'operator' => $operator, 'value' => '');
+
+            if(!next($fields)) reset($fields);
+        }
+        $queryForm[] = array('groupAndOr' => 'and');
+        $this->session->set($formSessionName, $queryForm);
+
+        return $queryForm;
+    }
+
+    /**
      * Set default params for selection.
      *
      * @param  array  $fields
@@ -334,6 +364,85 @@ class searchModel extends model
         }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->project);
         if($hasExecution) $executions = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project);
+
+        foreach($fields as $fieldName)
+        {
+            if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
+            if($params[$fieldName]['values'] == 'users')
+            {
+                if(!empty($this->config->user->moreLink)) $this->config->moreLinks["field{$fieldName}"] = $this->config->user->moreLink;
+                $params[$fieldName]['values'] = $users;
+            }
+            if($params[$fieldName]['values'] == 'products')   $params[$fieldName]['values'] = $products;
+            if($params[$fieldName]['values'] == 'executions') $params[$fieldName]['values'] = $executions;
+            if(is_array($params[$fieldName]['values']))
+            {
+                /* For build right sql when key is 0 and is not null.  e.g. confirmed field. */
+                if(isset($params[$fieldName]['values'][0]) and $params[$fieldName]['values'][0] !== '')
+                {
+                    $params[$fieldName]['values'] = array('ZERO' => $params[$fieldName]['values'][0]) + $params[$fieldName]['values'];
+                    unset($params[$fieldName]['values'][0]);
+                }
+                elseif(empty($params[$fieldName]['values']))
+                {
+                    $params[$fieldName]['values'] = array('' => '', 'null' => $this->lang->search->null);
+                }
+                elseif(empty($params[$fieldName]['nonull']))
+                {
+                    $params[$fieldName]['values'] = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
+                }
+            }
+        }
+        return $params;
+    }
+
+    /**
+     * Set default params for selection.
+     *
+     * @param  array  $fields
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
+    public function setZinDefaultParams($fields, $params)
+    {
+        $hasProduct   = false;
+        $hasExecution = false;
+        $hasUser      = false;
+
+        $appendUsers     = array();
+        $module          = $_SESSION['searchParams']['module'];
+        $formSessionName = $module . 'Form';
+        if(isset($_SESSION[$formSessionName]))
+        {
+            for($i = 1; $i <= $this->config->search->groupItems; $i ++)
+            {
+                if(!isset($_SESSION[$formSessionName][$i - 1])) continue;
+
+                $fieldName = $_SESSION[$formSessionName][$i - 1]['field'];
+                if(isset($params[$fieldName]) and $params[$fieldName]['values'] == 'users')
+                {
+                    if($_SESSION[$formSessionName][$i - 1]['value']) $appendUsers[] = $_SESSION[$formSessionName][$i - 1]['value'];
+                }
+            }
+        }
+
+        $fields = array_keys($fields);
+        foreach($fields as $fieldName)
+        {
+            if(empty($params[$fieldName])) continue;
+            if($params[$fieldName]['values'] == 'products')   $hasProduct   = true;
+            if($params[$fieldName]['values'] == 'users')      $hasUser      = true;
+            if($params[$fieldName]['values'] == 'executions') $hasExecution = true;
+        }
+
+        if($hasUser)
+        {
+            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
+            $users['$@me'] = $this->lang->search->me;
+        }
+        if($hasProduct) $products = $this->loadModel('product')->getPairs('', $this->session->project);
+        if($hasExecution) $executions = $this->loadModel('execution')->getPairs($this->session->project);
 
         foreach($fields as $fieldName)
         {
@@ -429,6 +538,38 @@ class searchModel extends model
             ->remove('onMenuBar')
             ->get();
         if($this->post->onMenuBar) $query->shortcut = 1;
+        $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
+
+        if(!dao::isError())
+        {
+            $queryID = $this->dao->lastInsertID();
+            if(!dao::isError()) $this->loadModel('score')->create('search', 'saveQuery', $queryID);
+            return $queryID;
+        }
+        return false;
+    }
+
+    /**
+     * Save current query to db of zin ui.
+     *
+     * @access public
+     * @return void
+     */
+    public function saveZinQuery()
+    {
+        $sqlVar  = $this->post->module  . 'Query';
+        $formVar = $this->post->module  . 'Form';
+        $sql     = $_SESSION[$sqlVar];
+        if(!$sql) $sql = ' 1 = 1 ';
+
+        $query = fixer::input('post')
+            ->add('account', $this->app->user->account)
+            ->add('form', serialize($_SESSION[$formVar]))
+            ->add('sql',  $sql)
+            ->skipSpecial('sql,form')
+            ->remove('onMenuBar')
+            ->get();
+        if($this->post->onMenuBar) $query->shortcut = '1';
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
 
         if(!dao::isError())
@@ -1431,12 +1572,12 @@ class searchModel extends model
     public function buildSearchFormOptions($module, $fieldParams, $fields, $queries)
     {
         $opts = new stdClass();
-        $opts->formConfig = static::buildFormConfig();
-        $opts->fields     = static::buildFormFields($fieldParams, $fields);
-        $opts->operators  = static::buildFormOperators($this->lang->search->operators);
-        $opts->andOr      = static::buildFormAndOrs($this->lang->search->andor);
-        $opts->saveSearch = static::buildFormSaveSearch($module);
-        $opts->savedQuery = static::buildFormSavedQuery($queries, $this->app->user->account);
+        $opts->formConfig       = static::buildFormConfig();
+        $opts->fields           = static::buildFormFields($fieldParams, $fields);
+        $opts->operators        = static::buildFormOperators($this->lang->search->operators);
+        $opts->andOr            = static::buildFormAndOrs($this->lang->search->andor);
+        $opts->saveSearch       = static::buildFormSaveSearch($module);
+        $opts->searchConditions = static::buildFormSavedQuery($queries, $actionURL);
 
         return $opts;
     }
@@ -1450,7 +1591,7 @@ class searchModel extends model
     public static function buildFormConfig()
     {
         $config = new stdClass();
-        $config->action = helper::createLink('search', 'buildQuery');
+        $config->action = helper::createLink('search', 'buildZinQuery');
         $config->method = 'post';
 
         return $config;
