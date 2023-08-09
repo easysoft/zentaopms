@@ -244,6 +244,7 @@ class block extends control
     public function dashboard($module, $type = '', $projectID = 0)
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
+        session_write_close();
         $blocks = $this->block->getBlockList($module, $type);
         $vision = $this->config->vision;
 
@@ -655,6 +656,7 @@ class block extends control
         $this->session->set('taskList',     $uri, 'execution');
         $this->session->set('storyList',    $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
+        session_write_close();
 
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
         foreach($todos as $key => $todo)
@@ -679,6 +681,7 @@ class block extends control
     public function printTaskBlock()
     {
         $this->session->set('taskList',  $this->createLink('my', 'index'), 'execution');
+        session_write_close();
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $account = $this->app->user->account;
@@ -697,6 +700,7 @@ class block extends control
     public function printBugBlock()
     {
         $this->session->set('bugList', $this->createLink('my', 'index'), 'qa');
+        session_write_close();
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
@@ -713,6 +717,7 @@ class block extends control
     public function printCaseBlock()
     {
         $this->session->set('caseList', $this->createLink('my', 'index'), 'qa');
+        session_write_close();
         $this->app->loadLang('testcase');
         $this->app->loadLang('testtask');
 
@@ -761,6 +766,7 @@ class block extends control
         $this->session->set('productList',  $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
         $this->session->set('buildList',    $uri, 'execution');
+        session_write_close();
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->view->projects  = $this->loadModel('project')->getPairsByProgram();
@@ -788,6 +794,7 @@ class block extends control
     public function printStoryBlock()
     {
         $this->session->set('storyList', $this->createLink('my', 'index'), 'product');
+        session_write_close();
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->app->loadClass('pager', $static = true);
@@ -810,6 +817,7 @@ class block extends control
         $uri = $this->createLink('my', 'index');
         $this->session->set('productList', $uri, 'product');
         $this->session->set('productPlanList', $uri, 'product');
+        session_write_close();
 
         $this->app->loadLang('productplan');
         $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
@@ -833,6 +841,7 @@ class block extends control
         $uri = $this->createLink('my', 'index');
         $this->session->set('releaseList', $uri, 'product');
         $this->session->set('buildList', $uri, 'execution');
+        session_write_close();
 
         $this->app->loadLang('release');
         $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
@@ -856,6 +865,7 @@ class block extends control
     public function printBuildBlock()
     {
         $this->session->set('buildList', $this->createLink('my', 'index'), 'execution');
+        session_write_close();
         $this->app->loadLang('build');
 
         $builds = $this->dao->select('t1.*, t2.name AS productName, t2.shadow, t3.name AS projectName')->from(TABLE_BUILD)->alias('t1')
@@ -1348,6 +1358,7 @@ class block extends control
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('issueList', $uri, 'project');
+        session_write_close();
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
         $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
@@ -1363,6 +1374,7 @@ class block extends control
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('riskList', $uri, 'project');
+        session_write_close();
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
     }
@@ -1501,6 +1513,7 @@ class block extends control
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('issueList', $uri, 'project');
+        session_write_close();
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
         $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
@@ -1516,6 +1529,7 @@ class block extends control
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('riskList', $uri, 'project');
+        session_write_close();
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
     }
@@ -1577,6 +1591,7 @@ class block extends control
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('releaseList',     $uri, 'product');
         $this->session->set('productPlanList', $uri, 'product');
+        session_write_close();
 
         $products  = $this->loadModel('product')->getPairs('', $this->session->project);
         if(!is_numeric($productID)) $productID = key($products);
@@ -1607,6 +1622,7 @@ class block extends control
         $this->session->set('productList',  $uri, 'product');
         $this->session->set('projectList',  $uri, 'project');
         $this->session->set('buildList',    $uri, 'execution');
+        session_write_close();
         $this->app->loadLang('testtask');
 
         $count  = zget($this->params, 'count', 10);
@@ -2190,6 +2206,7 @@ class block extends control
     {
         $this->loadModel('doc');
         $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
+        session_write_close();
 
         /* Set project status and count. */
         $count         = isset($this->params->count) ? (int)$this->params->count : 15;
@@ -2237,6 +2254,7 @@ class block extends control
         $this->loadModel('doc');
         $this->app->loadLang('project');
         $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
+        session_write_close();
 
         /* Set project status and count. */
         $count    = isset($this->params->count) ? (int)$this->params->count : 15;
