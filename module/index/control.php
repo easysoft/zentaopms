@@ -39,8 +39,16 @@ class index extends control
         $latestVersionList = array();
         if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList);
 
+        $showFeatures = false;
+        foreach($this->config->newFeatures as $feature)
+        {
+            $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
+            if(strpos(",$accounts,", $this->app->user->account) === false) $showFeatures = true;
+        }
+
         $this->view->title             = $this->lang->index->common;
         $this->view->open              = helper::safe64Decode($open);
+        $this->view->showFeatures      = $showFeatures;
         $this->view->latestVersionList = $latestVersionList;
 
         $this->display();

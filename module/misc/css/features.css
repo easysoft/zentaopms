@@ -20,3 +20,4 @@
 #features .btn-close-modal {display: none;}
 #features.is-last-item .btn-slide-next {display: none;}
 #features.is-last-item .btn-close-modal {display: inline-block;}
+#features.is-first-item .btn-slide-prev {display: none;}

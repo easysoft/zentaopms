@@ -114,7 +114,6 @@ body.menu-hide {padding-left: 0;}
 .version-detail {color: #8a8a8a;}
 .upgrade-now {float: right;}
 .color-primary {color: #3280fc;}
-.showFeatures .modal-body{max-height: 550px !important;}
 
 @media screen and (max-height: 768px)
 {
