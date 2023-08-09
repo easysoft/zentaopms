@@ -72,9 +72,10 @@ class screen extends control
      * @access public
      * @return void
      */
-    public function view($screenID, $year = 0, $dept = 0, $account = '')
+    public function view($screenID, $year = 0, $month = 0, $dept = 0, $account = '')
     {
-        if(empty($year)) $year = date('Y');
+        if(empty($year))  $year  = date('Y');
+        if(empty($month)) $month = date('n');
 
         if($screenID == 3)
         {
@@ -82,7 +83,7 @@ class screen extends control
             return;
         }
 
-        $screen = $this->screen->getByID($screenID, $year, $dept, $account);
+        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account);
 
         $this->view->title  = $screen->name;
         $this->view->screen = $screen;
@@ -97,6 +98,7 @@ class screen extends control
         else
         {
             $this->view->year    = $year;
+            $this->view->month   = $month;
             $this->view->dept    = $dept;
             $this->view->account = $account;
             $this->display();

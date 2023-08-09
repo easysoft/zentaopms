@@ -34,6 +34,7 @@ class screenModel extends model
         $this->filter = new stdclass();
         $this->filter->screen  = '';
         $this->filter->year    = '';
+        $this->filter->month   = '';
         $this->filter->dept    = '';
         $this->filter->account = '';
         $this->filter->charts  = array();
@@ -61,11 +62,11 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getByID($screenID, $year = '', $dept = '', $account = '')
+    public function getByID($screenID, $year = '', $month = '', $dept = '', $account = '')
     {
         $screen = $this->dao->select('*')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
         if(!isset($screen->scheme) or empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
-        $screen->chartData = $this->genChartData($screen, $year, $dept, $account);
+        $screen->chartData = $this->genChartData($screen, $year, $month, $dept, $account);
 
         return $screen;
     }
@@ -80,16 +81,17 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function genChartData($screen, $year, $dept, $account)
+    public function genChartData($screen, $year, $month, $dept, $account)
     {
         $this->filter = new stdclass();
         $this->filter->screen  = $screen->id;
         $this->filter->year    = $year;
+        $this->filter->month   = $month;
         $this->filter->dept    = $dept;
         $this->filter->account = $account;
         $this->filter->charts  = array();
 
-        if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $dept, $account);
+        if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $month, $dept, $account);
 
         $config = new stdclass();
         $config->width            = 1300;
@@ -142,7 +144,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function genNewChartData($screen, $year, $dept, $account)
+    public function genNewChartData($screen, $year, $month, $dept, $account)
     {
         $this->loadModel('pivot');
         $scheme = json_decode($screen->scheme);
@@ -881,7 +883,17 @@ class screenModel extends model
                 for($year = date('Y'); $year >= $begin; $year--) $options[] = array('label' => $year, 'value' => $year);
                 $component->option->dataset = $options;
 
-                $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=' + value + '&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
+                $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=' + value + '&month=" . $this->filter->month . "&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
+                $component->option->onChange = "window.location.href = $url";
+                break;
+            case 'month':
+                $component->option->value = $this->filter->month;
+
+                $options = array();
+                for($month = 12; $month > 1; $month--) $options[] = array('label' => $month, 'value' => $month);
+                $component->option->dataset = $options;
+
+                $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=" . $this->filter->year . "&month=' + value + '&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
                 $component->option->onChange = "window.location.href = $url";
                 break;
             case 'dept':
@@ -987,6 +999,9 @@ class screenModel extends model
                 switch($key)
                 {
                     case 'year':
+                        $conditions[] = $field . " = '" . $this->filter->$key . "'";
+                        break;
+                    case 'month':
                         $conditions[] = $field . " = '" . $this->filter->$key . "'";
                         break;
                     case 'dept':
