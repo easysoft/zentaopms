@@ -33,19 +33,6 @@ function setParentProgram(parentProgram)
     location.href = createLink('product', 'create', 'programID=' + parentProgram);
 }
 
-$('#program').change(function()
-{
-    var programID = $(this).val();
-    if(programID > 0) $("#line").closest('tr').removeClass('hidden');
-
-    $.get(createLink('product', 'ajaxGetLine', 'programID=' + programID), function(data)
-    {
-        $('#line').replaceWith(data);
-        $('#line').siblings('.picker').remove();
-        $('#line').picker();
-    })
-})
-
 /**
  * Toggle line.
  *
