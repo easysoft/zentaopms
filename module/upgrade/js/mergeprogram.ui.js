@@ -1,5 +1,6 @@
 $(function()
 {
+    initFormData();
 });
 
 window.changeAllLines = function()
@@ -9,6 +10,8 @@ window.changeAllLines = function()
     changeAllProducts();
     $('#checkAllSprints').prop('checked', $('#checkAllLines').prop('checked'));
     changeAllSprints();
+
+    buildForm();
 }
 
 window.changeAllProducts = function()
@@ -23,6 +26,8 @@ window.changeAllProducts = function()
 
     $('#checkAllSprints').prop('checked', $('#checkAllProducts').prop('checked'));
     changeAllSprints();
+
+    buildForm();
 }
 
 window.changeAllSprints = function()
@@ -36,6 +41,8 @@ window.changeAllSprints = function()
         checkGroupProducts(lineID, productID);
         if(lineID) checkGroupLines(lineID);
     });
+
+    buildForm();
 }
 
 window.changeLines = function(event)
@@ -47,6 +54,8 @@ window.changeLines = function(event)
     checkAllProducts();
     $('input[id^=sprints-' + lineID + '-]').prop('checked', $(event.target).prop('checked'));
     checkAllSprints();
+
+    buildForm();
 }
 
 window.changeProducts = function(event)
@@ -65,6 +74,8 @@ window.changeProducts = function(event)
         $('input[id^=sprints-' + productID + '-]').prop('checked', $(event.target).prop('checked'));
     }
     checkAllSprints();
+
+    buildForm();
 }
 
 window.changeSprints = function(event)
@@ -75,6 +86,109 @@ window.changeSprints = function(event)
     const lineID    = $(event.target).data('line');
     checkGroupProducts(lineID, productID);
     if(lineID) checkGroupLines(lineID);
+
+    buildForm();
+}
+
+window.changeProjectType = function()
+{
+    const projectType = $('input[name=projectType]:checked').val();
+
+    $('.programForm').toggleClass('hidden', projectType == 'project' && mode == 'light');
+    $('.createProjectTip').toggleClass('hidden');
+    $('.createExecutionTip').toggleClass('hidden');
+    $('.projectName').toggleClass('hidden');
+    $('[name=projectAcl]').closest('.check-list').toggleClass('hidden');
+    $('[name=programAcl]').closest('.check-list').toggleClass('hidden');
+    $('.projectStatus').toggleClass('hidden');
+
+    if(projectType == 'project')
+    {
+        $('[name=projectAcl]').attr('disabled', 'disabled');
+        $('[name=programAcl]').removeAttr('disabled');
+    }
+
+    if(projectType == 'execution')
+    {
+        $('[name=programAcl]').attr('disabled', 'disabled');
+        $('[name=projectAcl]').removeAttr('disabled');
+    }
+
+    changeNewProject();
+}
+
+window.changeNewProgram = function()
+{
+    const checkedNewProgram = $('.programName').not('.hidden').find('input[name=newProgram]').prop('checked');
+
+    $('input[name=newProgram]').prop('checked', checkedNewProgram);
+    $('form .program-no-exist').toggleClass('hidden', !checkedNewProgram);
+    $('form .program-exist').toggleClass('hidden', checkedNewProgram);
+    if(checkedNewProgram)
+    {
+        $('#programs').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('#programs').removeAttr('disabled');
+    }
+}
+
+window.changeNewProject = function()
+{
+    const checkedNewProject = $('.projectName').not('.hidden').find('input[name=newProject]').prop('checked');
+
+    $('input[name=newProject]').prop('checked', checkedNewProject);
+    $('form .project-no-exist').toggleClass('hidden', !checkedNewProject);
+    $('form .project-exist').toggleClass('hidden', checkedNewProject);
+
+    if(checkedNewProject)
+    {
+        $('#projects').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('#projects').removeAttr('disabled');
+    }
+}
+
+window.changeNewLine = function()
+{
+    const checkedNewLine = $('.lineName').not('.hidden').find('input[name=newLine]').prop('checked');
+
+    $('input[name=newLine]').prop('checked', checkedNewLine);
+    $('form .line-no-exist').toggleClass('hidden', !checkedNewLine);
+    $('form .line-exist').toggleClass('hidden', checkedNewLine);
+    if($obj.prop('checked'))
+    {
+        $('#lines').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('#lines').removeAttr('disabled');
+    }
+}
+
+window.changePrograms = function()
+{
+    const programID = $('#programs').zui('picker').$.state.value;
+
+    setStatus('program', programID);
+    getProjectByProgram(programID);
+    getLineByProgram(programID);
+}
+
+window.changeLongTime = function()
+{
+    const checkedLongTime = $('input[name=longTime]').prop('checked');
+    if(checkedLongTime)
+    {
+        $('#end').datePicker({disabled: true});
+    }
+    else
+    {
+        $('#end').datePicker({disabled: false});
+    }
 }
 
 window.checkAllLines = function()
@@ -115,6 +229,7 @@ window.checkGroupLines = function(lineID)
         if(!$(this).prop('checked')) allChecked = false;
     });
     $('#productLines' + lineID).prop('checked', allChecked);
+    checkAllLines();
 }
 
 window.checkGroupProducts = function(lineID, productID)
@@ -136,4 +251,156 @@ window.checkGroupProducts = function(lineID, productID)
         });
         $('#products' + productID).prop('checked', allChecked);
     }
+    checkAllProducts();
+}
+
+window.buildForm = function()
+{
+    initFormData();
+    setProgramBegin();
+    setProgramEnd();
+    setProjectStatus();
+    setProjectPM();
+}
+
+window.setProgramBegin = function()
+{
+    let minBegin = today;
+    $('input[type=checkbox][data-begin]:checked').each(function()
+    {
+        begin = $(this).attr('data-begin').substr(0, 10);
+        if(begin == '0000-00-00') return;
+        if(begin < minBegin) minBegin = begin;
+    });
+    $('#begin').zui('datePicker').$.changeState({value: minBegin});
+
+}
+
+window.setProgramEnd = function()
+{
+    let minEnd = '';
+    $('input[type=checkbox][data-end]:checked').each(function()
+    {
+        end = $(this).attr('data-end').substr(0, 10);
+        if(end == '0000-00-00') return true;
+        if(end > minEnd) minEnd = end;
+    });
+    $('#end').zui('datePicker').$.changeState({value: minEnd});
+}
+
+window.setProjectStatus = function()
+{
+    var projectStatus = 'wait';
+    $('input[type=checkbox][data-status]:checked').each(function()
+    {
+        var status = $(this).attr('data-status');
+        if(status == 'doing' || status == 'suspended')
+        {
+            projectStatus = 'doing';
+            return false;
+        }
+    });
+
+    $('#projectStatus').zui('picker').$.changeState({value: projectStatus})
+
+    setProgramStatus(projectStatus);
+}
+
+window.setProjectPM = function()
+{
+    let PM = [];
+    $('input[type=checkbox][data-pm]:checked').each(function()
+    {
+        let PMName = $(this).attr('data-pm');
+        PM[PMName] = PM[PMName] == undefined ? 0 : PM[PMName];
+        PM[PMName] = PM[PMName] + 1;
+    });
+    PM.sort(function(el1, el2){return el2 - el1;});
+    PMNameList = Object.keys(PM);
+    PMNameList = PMNameList.filter(Boolean);
+
+    $('#PM').zui('picker').$.changeState({value: PMNameList[0]});
+}
+
+window.setProgramStatus = function(projectStatus)
+{
+    var programStatus = 'wait';
+    if(projectStatus != 'wait')   programStatus = 'doing';
+    if(projectStatus == 'closed') programStatus = 'closed';
+
+    $('#programStatus').zui('picker').$.changeState({value: programStatus});
+}
+
+window.initFormData = function()
+{
+    $('#programBox').toggleClass('hidden', mode == 'light');
+    $('.programParams').toggleClass('hidden', $('[name^=sprints]:checked').length == 0);
+    $('.projectName').toggleClass('hidden', $('[name^=sprints]:checked').length == 0 || projectType == 'project');
+    $('.programForm').toggleClass('hidden', $('[name^=sprints]:checked').length != 0 && projectType == 'project' && mode == 'light');
+
+    if($('[name^=sprints]:checked').length == 0)
+    {
+        $(".programParams input").attr('disabled' ,'disabled');
+        $(".programParams .picker-field").zui('picker').render({disabled: true});
+
+        $(".projectName input").attr('disabled' ,'disabled');
+        $(".projectName .picker-field").zui('picker').render({disabled: true});
+    }
+    else
+    {
+        $(".programParams input").removeAttr('disabled');
+        $(".programParams .picker-field").zui('picker').render({disabled: false});
+
+        $(".projectName input").removeAttr('disabled');
+        $(".projectName .picker-field").zui('picker').render({disabled: false});
+
+        if($('#newProject0').is(':checked')) $('#projects').attr('disabled', 'disabled');
+
+        $('[name=projectAcl]').closest('.check-list').toggleClass('hidden', projectType == 'project');
+        $('[name=programAcl]').closest('.check-list').toggleClass('hidden', projectType == 'execution');
+        $('.projectStatus').toggleClass('hidden', projectType == 'project');
+        if(projectType == 'project')
+        {
+            $('[name=projectAcl]').attr('disabled', 'disabled');
+            $('[name=programAcl]').removeAttr('disabled');
+        }
+        if(projectType == 'execution')
+        {
+            $('[name=programAcl]').attr('disabled', 'disabled');
+            $('[name=projectAcl]').removeAttr('disabled');
+        }
+        if(mode == 'light')
+        {
+            $('form #newProgram0').prop('checked', false);
+            toggleProgram($('form #newProgram0'));
+        }
+    }
+}
+
+window.setStatus = function(objectType, objectID)
+{
+    const link = $.createLink('upgrade', 'ajaxGetProgramStatus', 'objectID=' + objectID);
+    $.post(link, function(data)
+    {
+        if(objectType == 'program') $('#programStatus').zui('picker').$.changeState({value: data});
+        if(objectType == 'project') $('#projectStatus').zui('picker').$.changeState({value: data});
+    })
+}
+
+window.getProjectByProgram = function(programID)
+{
+    const link = $.createLink('upgrade', 'ajaxGetProjectPairsByProgram', 'programID=' + programID);
+    $.post(link, function(data)
+    {
+        $('#projects').zui('picker').render({});
+    })
+}
+
+window.getLineByProgram = function(programID)
+{
+    const link = $.createLink('upgrade', 'ajaxGetLinesPairsByProgram', 'programID=' + programID);
+    $.post(link, function(data)
+    {
+        $('#lines').zui('picker').render({});
+    })
 }

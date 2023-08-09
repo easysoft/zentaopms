@@ -26,7 +26,7 @@ $getMergeData = function($data)
                 $productGroups[] = div
                 (
                     set::class('sprintItem mb-2'),
-                    checkbox(set::id("sprints-{$productID}-{$sprint->id}"), set::name("sprints[{$productID}][]"), set::text($sprint->name), set::value($sprint->id), set('data-on', 'change'), set('data-call', 'changeSprints'), set('data-params', 'event'), set('data-product', $productID)),
+                    checkbox(set::id("sprints-{$productID}-{$sprint->id}"), set::name("sprints[{$productID}][]"), set::text($sprint->name), set::value($sprint->id), set('data-on', 'change'), set('data-call', 'changeSprints'), set('data-params', 'event'), set('data-product', $productID), set('data-begin', $product->createdDate), set('data-end', $sprint->end), set('data-status', $sprint->status), set('data-pm', $sprint->PM)),
                     input(set::class('hidden'), set::name("sprintIdList[{$productID}][{$sprint->id}]"), set::value($sprint->id))
                 );
             }
@@ -39,7 +39,7 @@ $getMergeData = function($data)
             (
                 set::width('1/2'),
                 set::class('productList px-4 flex items-center overflow-hidden'),
-                checkbox(set::id("products{$productID}"), set::name('products[]'), set::text($product->name), set::value($product->id), set('data-on', 'change'), set('data-call', 'changeProducts'), set('data-params', 'event'))
+                checkbox(set::id("products{$productID}"), set::name('products[]'), set::text($product->name), set::value($product->id), set('data-on', 'change'), set('data-call', 'changeProducts'), set('data-params', 'event'), set('data-begin', $sprint->begin), set('data-programid', $product->program), set('data-productid', $productID))
             ),
             cell
             (
@@ -87,7 +87,8 @@ $getMergeData = function($data)
         (
             set::width('1/2'),
             set::class('border ml-4 p-4'),
-            set::id('programBox'), $createProgram($data)
+            set::id('programBox'),
+            $createProgram($data)
         )
     );
 };

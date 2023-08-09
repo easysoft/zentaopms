@@ -29,7 +29,7 @@ $getMergeData = function($data)
                     $productGroups[] = div
                     (
                         set::class('sprintItem mb-2'),
-                        checkbox(set::id("sprints-{$line->id}-{$productID}-{$sprint->id}"), set::name("sprints[$line->id][$productID][]"), set::text($sprint->name), set::value($sprint->id), set('data-on', 'change'), set('data-call', 'changeSprints'), set('data-params', 'event'), set('data-line', $line->id), set('data-product', $productID)),
+                        checkbox(set::id("sprints-{$line->id}-{$productID}-{$sprint->id}"), set::name("sprints[$line->id][$productID][]"), set::text($sprint->name), set::value($sprint->id), set('data-on', 'change'), set('data-call', 'changeSprints'), set('data-params', 'event'), set('data-line', $line->id), set('data-product', $productID), set('data-begin', $sprint->begin), set('data-end', $sprint->end), set('data-status', $sprint->status), set('data-pm', $sprint->PM)),
                         input(set::class('hidden'), set::name("sprintIdList[$line->id][$productID][$sprint->id]"), set::value($sprint->id))
                     );
                 }
@@ -42,7 +42,7 @@ $getMergeData = function($data)
                     set::width('1/2'),
                     set::class('productItem p-4 overflow-hidden'),
                     set::style(array('background-color' => 'var(--color-gray-50)')),
-                    checkbox(set::id("products-{$line->id}-{$productID}"), set::name("products[{$line->id}][]"), set::text($product->name), set::value($productID), set('data-on', 'change'), set('data-call', 'changeProducts'), set('data-params', 'event'), set('data-line', $line->id)),
+                    checkbox(set::id("products-{$line->id}-{$productID}"), set::name("products[{$line->id}][]"), set::text($product->name), set::value($productID), set('data-on', 'change'), set('data-call', 'changeProducts'), set('data-params', 'event'), set('data-line', $line->id), set('data-productid', $productID), set('data-begin', $product->createdDate), set('data-programid', $product->program)),
                     input(set::class('hidden'), set::name("productIdList[$line->id][$productID]"), set::value($productID))
                 ),
                 cell

@@ -21,30 +21,32 @@ $createProgram = function($data)
         div
         (
             set::class('programParams hidden py-4'),
-            radioList(set::class('my-2'), set::name('projectType'), set::inline('true'), set::items($this->lang->upgrade->projectType), set::value($data->projectType)),
+            radioList(set::class('my-2'), set::name('projectType'), set::inline('true'), set::items($this->lang->upgrade->projectType), set::value($data->projectType), set('data-on', 'change'), set('data-call', 'changeProjectType')),
             div(set::class('createProjectTip text-gray ' . ($data->projectType == 'project' ? '' : 'hidden')), html($lang->upgrade->createProjectTip)),
             div(set::class('createExecutionTip text-gray ' . ($data->projectType == 'execution' ? '' : 'hidden')), html($lang->upgrade->createExecutionTip))
         ),
         formRowGroup(set::title($data->systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram), set::items('')),
         div
         (
-            set::class('programForm form-grid'),
+            set::class('programForm mt-4 form-grid'),
             formGroup
             (
-                set::class('hidden'),
-                set::label($lang->upgrade->existProject),
+                set::class('programName hidden program-exist'),
+                set::label($lang->upgrade->existProgram),
+                set::required(true),
                 inputGroup
                 (
-                    picker(set::name('programs'), set::items($data->programs), set::value($data->programID)),
+                    picker(set::id('programs'), set::name('programs'), set::items($data->programs), set::value($data->programID), set('data-on', 'change'), set('data-call', 'changePrograms')),
                     span
                     (
                         set('class', 'input-group-addon'),
-                        checkbox(set::name('newProgram'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true))
+                        checkbox(set::name('newProgram'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewProgram'))
                     ),
                 )
             ),
             formGroup
             (
+                set::class('programName program-no-exist'),
                 set::label($lang->upgrade->programName),
                 set::required(true),
                 inputGroup
@@ -53,37 +55,37 @@ $createProgram = function($data)
                     span
                     (
                         set('class', 'input-group-addon'),
-                        checkbox(set::name('newProgram'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true))
+                        checkbox(set::name('newProgram'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewProgram'))
                     ),
                     input(set::class('hidden'), set::name('programID'))
                 )
             ),
             formGroup
             (
-                set::class($data->systemMode == 'light' ? 'hidden' : ''),
+                set::class($data->systemMode == 'light' ? 'programStatus hidden' : 'programStatus'),
                 set::label($lang->program->common . $lang->program->status),
                 inputGroup
                 (
-                    picker(set::name('programStatus'), set::items($lang->program->statusList))
+                    picker(set::id('programStatus'), set::name('programStatus'), set::items($lang->program->statusList), set::value('wait'))
                 )
             ),
             formGroup
             (
-                set::class('projectName hidden'),
+                set::class('projectName hidden project-exist'),
                 set::label($lang->upgrade->existProject),
                 inputGroup
                 (
-                    picker(set::name('projects'), set::items($data->projects)),
+                    picker(set::id('projects'), set::name('projects'), set::items($data->projects), set::class('picker-field')),
                     span
                     (
                         set('class', 'input-group-addon'),
-                        checkbox(set::name('newProject'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true))
+                        checkbox(set::name('newProject'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewProject'))
                     )
                 )
             ),
             formGroup
             (
-                set::class('projectName hidden'),
+                set::class('projectName hidden project-no-exist'),
                 set::label($lang->upgrade->projectName),
                 inputGroup
                 (
@@ -91,7 +93,7 @@ $createProgram = function($data)
                     span
                     (
                         set('class', 'input-group-addon'),
-                        checkbox(set::name('newProject'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true))
+                        checkbox(set::name('newProject'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewProject'))
                     )
                 )
             ),
@@ -101,25 +103,26 @@ $createProgram = function($data)
                 set::label($lang->project->status),
                 inputGroup
                 (
-                    picker(set::name('projectStatus'), set::items($lang->project->statusList))
+                    picker(set::id('projectStatus'), set::name('projectStatus'), set::items($lang->project->statusList), set::class('picker-field'))
                 )
             ),
             formGroup
             (
-                set::class('hidden'),
+                set::class('lineName hidden line-exist'),
                 set::label($lang->upgrade->existLine),
                 inputGroup
                 (
-                    picker(set::name('lines'), set::items($data->lines)),
+                    picker(set::id('lines'), set::name('lines'), set::items($data->lines)),
                     span
                     (
                         set('class', 'input-group-addon'),
-                        checkbox(set::name('newLine'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true))
+                        checkbox(set::name('newLine'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewLine'))
                     )
                 )
             ),
             formGroup
             (
+                set::class('lineName line-no-exist'),
                 set::label($lang->upgrade->line),
                 inputGroup
                 (
@@ -127,7 +130,7 @@ $createProgram = function($data)
                     span
                     (
                         set('class', 'input-group-addon'),
-                        checkbox(set::name('newLine'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true))
+                        checkbox(set::name('newLine'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewLine'))
                     )
                 )
             ),
@@ -137,7 +140,7 @@ $createProgram = function($data)
                 set::label($lang->project->PM),
                 inputGroup
                 (
-                    picker(set::name('PM'), set::items($data->users))
+                    picker(set::id('PM'), set::name('PM'), set::items($data->users), set::class('picker-field'))
                 )
             ),
             formGroup
@@ -147,10 +150,10 @@ $createProgram = function($data)
                 set::required(true),
                 inputGroup
                 (
-                    datePicker(set::name('begin'), set::value(date('Y-m-d'))),
+                    datePicker(set::id('begin'), set::name('begin'), set::value(date('Y-m-d'))),
                     span(set::class('input-group-addon'), $lang->project->to),
-                    datePicker(set::name('end')),
-                    span(set::class('input-group-addon'), checkbox(set::name('longTime'), set::value('1'), set::text($lang->project->longTime))),
+                    datePicker(set::id('end'), set::name('end')),
+                    span(set::class('input-group-addon'), checkbox(set::name('longTime'), set::value('1'), set::text($lang->project->longTime), set('data-on', 'change'), set('data-call', 'changeLongTime'))),
                 )
             ),
             formGroup

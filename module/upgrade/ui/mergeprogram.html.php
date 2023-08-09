@@ -9,6 +9,13 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('today', date('Y-m-d'));
+jsVar('weekend', $config->execution->weekend);
+jsVar('type', $type);
+jsVar('mode', $systemMode);
+jsVar('projectType', $projectType);
+jsVar('errorNoProduct', $lang->upgrade->errorNoProduct);
+jsVar('errorNoExecution', $lang->upgrade->errorNoExecution);
 
 set::zui(true);
 if($type == 'productline')                   include_once('mergebyline.html.php');
