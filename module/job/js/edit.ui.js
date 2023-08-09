@@ -62,7 +62,6 @@ function changeRepo(event)
             $productPicker.render({items: data});
             $productPicker.$.clear();
             if(data[1]) $productPicker.$.setValue(data[1].value);
-            console.log($productPicker.options);
         }
     });
 
