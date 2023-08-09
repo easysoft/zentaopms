@@ -164,6 +164,6 @@ $createProgram = function($data)
                 radioList(set::name('projectAcl'), set::class('hidden'), set::items($lang->project->subAclList), set::value('open')),
             )
         ),
-        center(set::class('form-actions mt-4'), btn(set::type('submit'), set::class('primary'), $lang->save))
+        center(set::class('form-actions mt-4'), btn(set::btnType('submit'), set::class('primary'), $lang->save))
     );
 };

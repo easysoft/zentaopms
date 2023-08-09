@@ -783,7 +783,13 @@ class upgrade extends control
     public function ajaxGetProjectPairsByProgram($programID = 0)
     {
         $projects = $this->upgrade->getProjectPairsByProgram($programID);
-        echo html::select('projects', $projects, '', 'class="form-control prj-exist" onchange="getProgramStatus(\'project\', this.value)"');
+
+        $result = array();
+        foreach($projects as $projectID => $projectName)
+        {
+            $result[] = array('text' => $projectName, 'value' => $projectID);
+        }
+        return $this->send(array('result' => 'success', 'projects' => $result));
     }
 
     /**
@@ -795,9 +801,15 @@ class upgrade extends control
      */
     public function ajaxGetLinesPairsByProgram($programID = 0)
     {
-        $lines = array('' => '');
-        if((int)$programID) $lines += $this->loadModel('product')->getLinePairs($programID);
-        echo html::select('lines', $lines, '', 'class="form-control line-exist"');
+        $lines = $this->loadModel('product')->getLinePairs((int)$programID);
+
+        $result = array();
+        foreach($lines as $lineID => $lineName)
+        {
+            $result[] = array('text' => $lineName, 'value' => $lineID);
+        }
+
+        return $this->send(array('result' => 'success', 'lines' => $result));
     }
 
     /**
