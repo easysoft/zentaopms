@@ -1,26 +1,16 @@
 <?php
 declare(strict_types=1);
 /**
- * The binduser view file of gitlab module of ZenTaoPMS.
+ * The bind user file of gitlab module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Ke Zhao<zhaoke@easycorp.ltd>
+ * @author      Yanyi Cao<caoyanyi@easycorp.ltd>
  * @package     gitlab
  * @link        http://www.zentao.net
  */
 
 namespace zin;
-
-$userItems = array();
-foreach($userPairs as $enName => $name)
-{
-    $userItems[] = array('text' => $name, 'value' => $enName);
-}
-jsVar('userItems', $userItems);
-jsVar('zentaoUsers', $zentaoUsers);
-jsVar('gitlabUsers', $gitlabUsers);
-jsVar('accountDesc',  $lang->gitlab->accountDesc);
 
 /* zin: Define the set::module('compile') feature bar on main menu. */
 featureBar
@@ -33,81 +23,38 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 toolbar();
 
-
-$tbody = array();
-foreach($gitlabUsers as $index => $user)
-{
-    $tbody[] = h::tr
-    (
-        h::td
-        (
-            avatar($user->avatar, set::size(20), setClass('mr-2')),
-            $user->realname,
-            input(set::value($user->realname), set::name("gitlabUserNames[$user->id]"), set::type('hidden'))
-        ),
-        h::td
-        (
-            $user->email
-        ),
-        h::td
-        (
-            setID('zentaoEmail-' . $user->id),
-            $user->zentaoEmail
-        ),
-        h::td
-        (
-            picker
-            (
-                setID('users-' . $user->id),
-                set::required(false),
-                set::name("zentaoUsers[$user->id]"),
-                set::value($user->zentaoAccount),
-                set::items($userPairs)
-            ),
-        ),
-        h::td
-        (
-            span
-            (
-                setClass($user->status),
-                $lang->gitlab->{$user->status}
-            )
-        ),
-    );
-}
-
+jsVar('zentaoUsers', $zentaoUsers);
+$config->gitlab->dtable->bindUser->fieldList['gitlabEmail']['onRenderCell'] = jsRaw('renderGitlabUser');
+$config->gitlab->dtable->bindUser->fieldList['zentaoUsers']['controlItems'] = $userPairs;
 form
 (
-    setClass('mb-4'),
-    h::table
+    setID('bindForm'),
+    setClass('mb-4 h-full'),
+    set::action(createLink('gitlab', 'bindUser', "gitlabID={$gitlabID}")),
+    set::actions(array()),
+    on::change('input[name^="zentaoUsers"]', 'setUserEmail'),
+    dtable
     (
-        setClass('table table-fixed canvas'),
-        h::tr
-        (
-            h::th
-            (
-                $lang->gitlab->gitlabAccount
-            ),
-            h::th
-            (
-                $lang->gitlab->gitlabEmail
-            ),
-            h::th
-            (
-                $lang->gitlab->zentaoEmail
-            ),
-            h::th
-            (
-                set::width('300px'),
-                $lang->gitlab->zentaoAccount,
-                span(setClass('gitlab-account-desc'), $lang->gitlab->accountDesc)
-            ),
-            h::th
-            (
-                set::width('100px'),
-                $lang->gitlab->bindingStatus
-            ),
-        ),
-        $tbody
+        set::cols($config->gitlab->dtable->bindUser->fieldList),
+        set::data($userList),
+        set::plugins(array('form')),
+        set::rowHeight(50),
+        set::showToolbarOnChecked(false),
+        set::footer(array('toolbar')),
+        set::footToolbar(array(
+            'className' => 'w-full form-actions form-group no-label',
+            'items'     => array(
+                array(
+                    'text'    => $lang->save,
+                    'btnType' => 'primary',
+                    'onClick' => jsRaw("() => {\$('#bindForm').trigger('submit')}")
+                ),
+                array(
+                    'text'    => $lang->goback,
+                    'btnType' => 'info',
+                    'onClick' => jsRaw('() => {goBack()}'),
+                )
+            )
+        )),
     )
 );
