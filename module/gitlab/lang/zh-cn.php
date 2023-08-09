@@ -29,6 +29,10 @@ $lang->gitlab->addWebhookSuccess = 'Webhook创建成功';
 $lang->gitlab->failCreateWebhook = 'Webhook创建失败，请查看日志';
 $lang->gitlab->placeholderSearch = '请输入名称';
 
+$lang->gitlab->bindStatus['binded']      = $lang->gitlab->binded;
+$lang->gitlab->bindStatus['notBind']     = "<span class='text-danger'>{$lang->gitlab->notBind}</span>";
+$lang->gitlab->bindStatus['bindedError'] = "<span class='text-danger'>{$lang->gitlab->bindedError}</span>";
+
 $lang->gitlab->browseAction         = 'GitLab列表';
 $lang->gitlab->deleteAction         = '删除GitLab';
 $lang->gitlab->gitlabProject        = "{$lang->gitlab->common}项目";

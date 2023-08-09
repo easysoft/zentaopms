@@ -213,8 +213,8 @@ class gitlabModel extends model
         {
             if(isset($bindedUsers[$gitlabUser->id]))
             {
-                $gitlabUser->zentaoAccount = $bindedUsers[$gitlabUser->id];
-                $matchedUsers[]            = $gitlabUser;
+                $gitlabUser->zentaoAccount     = $bindedUsers[$gitlabUser->id];
+                $matchedUsers[$gitlabUser->id] = $gitlabUser;
                 continue;
             }
 
@@ -226,8 +226,8 @@ class gitlabModel extends model
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
             {
-                $gitlabUser->zentaoAccount = current($matchedZentaoUsers);
-                $matchedUsers[]            = $gitlabUser;
+                $gitlabUser->zentaoAccount     = current($matchedZentaoUsers);
+                $matchedUsers[$gitlabUser->id] = $gitlabUser;
             }
         }
 

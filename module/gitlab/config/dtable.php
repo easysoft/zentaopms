@@ -50,3 +50,27 @@ $config->gitlab->dtable->fieldList['actions']['sortType'] = false;
 $config->gitlab->dtable->fieldList['actions']['fixed']    = 'right';
 $config->gitlab->dtable->fieldList['actions']['menu']     = array('edit', 'bindUser', 'delete');
 $config->gitlab->dtable->fieldList['actions']['list']     = $config->gitlab->actionList;
+
+$config->gitlab->dtable->bindUser = new stdclass();
+$config->gitlab->dtable->bindUser->fieldList['gitlabUser']['title']    = $lang->gitlab->gitlabAccount;
+$config->gitlab->dtable->bindUser->fieldList['gitlabUser']['type']     = 'avatarName';
+$config->gitlab->dtable->bindUser->fieldList['gitlabUser']['sortType'] = false;
+$config->gitlab->dtable->bindUser->fieldList['gitlabUser']['width']    = 300;
+
+$config->gitlab->dtable->bindUser->fieldList['gitlabEmail']['title'] = $lang->gitlab->gitlabEmail;
+$config->gitlab->dtable->bindUser->fieldList['gitlabEmail']['type']  = 'text';
+$config->gitlab->dtable->bindUser->fieldList['gitlabEmail']['width'] = 200;
+
+$config->gitlab->dtable->bindUser->fieldList['email']['title'] = $lang->gitlab->zentaoEmail;
+$config->gitlab->dtable->bindUser->fieldList['email']['type']  = 'text';
+$config->gitlab->dtable->bindUser->fieldList['email']['width'] = 200;
+
+$config->gitlab->dtable->bindUser->fieldList['zentaoUsers']['title']   = array('html' => $lang->gitlab->zentaoAccount . "<span class='text-gray'>{$lang->gitlab->accountDesc}</span>");
+$config->gitlab->dtable->bindUser->fieldList['zentaoUsers']['type']    = 'control';
+$config->gitlab->dtable->bindUser->fieldList['zentaoUsers']['control'] = 'picker';
+$config->gitlab->dtable->bindUser->fieldList['zentaoUsers']['width']   = 300;
+
+$config->gitlab->dtable->bindUser->fieldList['status']['title'] = $lang->gitlab->bindingStatus;
+$config->gitlab->dtable->bindUser->fieldList['status']['type']  = 'html';
+$config->gitlab->dtable->bindUser->fieldList['status']['width'] = 100;
+$config->gitlab->dtable->bindUser->fieldList['status']['map']   = $lang->gitlab->bindStatus;
