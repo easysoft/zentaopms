@@ -45,4 +45,9 @@
     </tr>
   </table>
 </div>
+<?php if($config->edition == 'open'):?>
+<p style="padding-top: 10px;">
+  <?php echo $lang->ai->models->upgradeBiz;?>
+</p>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

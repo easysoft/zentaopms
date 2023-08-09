@@ -405,6 +405,7 @@ $lang->ai->models->testConnection = '测试连接';
 $lang->ai->models->unconfigured   = '未配置';
 $lang->ai->models->edit           = '编辑模型参数';
 $lang->ai->models->concealTip     = '完整信息在编辑时可见';
+$lang->ai->models->upgradeBiz     = '更多AI功能，尽在<a href="https://www.zentao.net/page/enterprise.html" class="text-blue">企业版</a>！';
 
 $lang->ai->models->testConnectionResult = new stdclass();
 $lang->ai->models->testConnectionResult->success    = '连接成功';
