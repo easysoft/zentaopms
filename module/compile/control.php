@@ -37,7 +37,7 @@ class compile extends control
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $jobID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($repoID = 0, $jobID = 0, $orderBy = 'createdDate_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('ci');
         if($jobID)
@@ -48,7 +48,7 @@ class compile extends control
             $this->view->job = $job;
         }
 
-        $this->compile->syncCompile($repoID, $jobID);
+        if($repoID || $jobID) $this->compile->syncCompile($repoID, $jobID);
 
         $this->app->loadLang('job');
         if($repoID) $this->ci->setMenu($repoID);

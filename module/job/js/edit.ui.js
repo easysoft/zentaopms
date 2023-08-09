@@ -164,7 +164,14 @@ function changeJenkinsServer(event)
 
 function changeTriggerType(event)
 {
-    var type = $(event.target).val();
+    if(typeof(event) == 'object')
+    {
+        var type = $(event.target).val();
+    }
+    else
+    {
+        var type = event;
+    }
     $('.svn-fields').addClass('hidden');
     $('.comment-fields').addClass('hidden');
     $('.custom-fields').addClass('hidden');
@@ -188,7 +195,7 @@ function changeSonarqubeServer(event)
 $(document).ready(function()
 {
     changeEngine(engine);
-    $('[name=triggerType]').val(job.triggerType).trigger('change');
+    changeTriggerType(job.triggerType);
 
     $(document).on('click', '.dropmenu-list li.tree-item', function()
     {
