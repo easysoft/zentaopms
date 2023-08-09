@@ -153,7 +153,7 @@ class search extends control
     {
         if(!commonModel::hasPriv('search', 'buildForm')) $this->loadModel('common')->deny('search', 'buildForm', false);
 
-        $this->search->buildQuery();
+        $this->search->buildZinQuery();
 
         $actionURL = $this->post->actionURL;
         $parsedURL = parse_url($actionURL);
