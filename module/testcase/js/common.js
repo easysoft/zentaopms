@@ -53,12 +53,7 @@ function loadBranch()
         }
     }
 
-    if(result)
-    {
-        loadProductModules($('#product').val(), branch);
-        setStories();
-        setScenes();
-    }
+    if(result) loadProductModules($('#product').val(), branch);
 }
 
 /**
