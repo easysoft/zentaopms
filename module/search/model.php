@@ -394,20 +394,23 @@ class searchModel extends model
         }
 
         $queryForm = array();
-        foreach($query->form as $field => $value)
+        if(isset($query->form['field1']))
         {
-            $index = substr($field, -1);
-            if(is_numeric($index))
+            foreach($query->form as $field => $value)
             {
-                $field = substr($field, 0, strlen($field) - 1);
-                $queryForm[$index][$field] = $value;
+                $index = substr($field, -1);
+                if(is_numeric($index))
+                {
+                    $field = substr($field, 0, strlen($field) - 1);
+                    $queryForm[$index][$field] = $value;
+                }
+                elseif($field == 'groupAndOr')
+                {
+                    $queryForm[$field][$field] = $value;
+                }
             }
-            elseif($field == 'groupAndOr')
-            {
-                $queryForm[$field][$field] = $value;
-            }
+            $query->form = array_values($queryForm);
         }
-        $query->form = array_values($queryForm);
 
         return $query;
     }
