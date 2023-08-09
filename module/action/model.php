@@ -1083,7 +1083,6 @@ class actionModel extends model
         /* Build has priv condition. */
         $condition  = '1=1';
         $executions = array();
-
         if(!$this->app->user->admin)
         {
             $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
@@ -1139,6 +1138,7 @@ class actionModel extends model
 
         /* Restrict query data in this year when no limit for big data. */
         $beginDate = '';
+        $endDate   = '';
         if($period == 'all')
         {
             $year = date('Y');
