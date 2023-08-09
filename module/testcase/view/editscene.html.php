@@ -15,7 +15,7 @@
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
-<?php js::set('sceneId',   $scene->id);?>
+<?php js::set('sceneID',   $scene->id);?>
 <?php js::set('caseBranch', $scene->branch);?>
 <?php js::set('caseModule', $lang->testcase->module)?>
 <?php js::set('tab', $this->app->tab);?>
