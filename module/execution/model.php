@@ -4626,17 +4626,16 @@ class executionModel extends model
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  array  $modules
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm($executionID, $executions, $queryID, $actionURL)
+    public function buildTaskSearchForm($executionID, $executions, $queryID, $actionURL, $modules)
     {
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
         $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
-
-        $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $this->config->execution->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $this->config->execution->search['params']['module']['values']    = $modules;
 
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
     }

@@ -216,12 +216,6 @@ class execution extends control
         /* Display of branch label. */
         $showBranch = $this->loadModel('branch')->showBranch($productID, $moduleID, $executionID);
 
-        /* Build the search form. */
-        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
-        $this->config->execution->search['onMenuBar'] = 'yes';
-        if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
-        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
-
         /* team member pairs. */
         $memberPairs = array();
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
@@ -231,6 +225,13 @@ class execution extends control
         $extra         = (isset($this->config->execution->task->allModule) && $this->config->execution->task->allModule == 1) ? 'allModule' : '';
         $showModule    = !empty($this->config->datatable->executionTask->showModule) ? $this->config->datatable->executionTask->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($executionID, 'task', $showModule) : array();
+
+        /* Build the search form. */
+        $modules   = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
+        $this->config->execution->search['onMenuBar'] = 'yes';
+        if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
+        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL, $modules);
 
         /* Assign. */
         $this->view->tasks        = $tasks;
@@ -249,7 +250,7 @@ class execution extends control
         $this->view->execution    = $execution;
         $this->view->productID    = $productID;
         $this->view->product      = $product;
-        $this->view->modules      = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $this->view->modules      = $modules;
         $this->view->moduleID     = $moduleID;
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
