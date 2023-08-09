@@ -3182,17 +3182,16 @@ class testcaseModel extends model
         $startScenePath = '';
         if($startScene > 0)
         {
-            $startScene = $this->dao->findById((int)$startScene)->from(VIEW_SCENECASE)->fetch();
+            $startScene = $this->getSceneByID($startScene);
             if($startScene) $startScenePath = $startScene->path . '%';
         }
 
-        return $this->dao->select('*')->from(VIEW_SCENECASE)
+        return $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq(0)
             ->beginIF($rootID)->andWhere('product')->eq((int)$rootID)->fi()
             ->beginIF(intval($moduleID) > 0)->andWhere('module')->eq((int)$moduleID)->fi()
             ->beginIF($startScenePath)->andWhere('path')->like($startScenePath)->fi()
             ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)->andWhere('branch')->eq((int)$branch)->fi()
-            ->andWhere('isCase')->eq(2)
             ->orderBy('grade desc, sort')
             ->get();
     }
@@ -3391,10 +3390,10 @@ class testcaseModel extends model
     {
         if($sceneID == 0) return array();
 
-        $scene = $this->dao->findById((int)$sceneID)->from(VIEW_SCENECASE)->fetch();
+        $scene = $this->getSceneByID($sceneID);
         if(empty($scene)) return array();
 
-        return $this->dao->select('id')->from(VIEW_SCENECASE)
+        return $this->dao->select('id')->from(TABLE_SCENE)
             ->where('path')->like($scene->path . '%')
             ->andWhere('deleted')->eq(0)
             ->fetchPairs();
