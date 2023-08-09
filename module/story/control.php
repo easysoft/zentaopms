@@ -650,7 +650,7 @@ class story extends control
                         $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                         $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
                         $kanbanData    = json_encode($kanbanData);
-                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.updateKanban($kanbanData)"));
+                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
                     }
                     else
                     {
@@ -703,7 +703,7 @@ class story extends control
         {
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            $branch          = key($branches);
+            $branch          = (int)key($branches);
         }
         else
         {
