@@ -6125,12 +6125,18 @@ class executionModel extends model
                 ->fetchAll('id');
         }
 
+        $childExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('parent')->in(array_keys($parentExecutions))
+            ->orderBy('order_asc')
+            ->fetchGroup('parent', 'id');
+
         $sortedExecutions = array();
         foreach($parentExecutions as $executionID => $execution)
         {
             if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
 
-            $children = $this->getChildExecutions($executionID, 'order_asc');
+            $children = zget($childExecutions, $executionID, array());
             if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
         }
         return $sortedExecutions;
