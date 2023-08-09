@@ -33,5 +33,12 @@
     </div>
   </div>
 </div>
-</body>
-</html>
+<script>
+$(function()
+{
+    parent.$('#triggerModal .modal-content .modal-header .close').on('click', function()
+    {
+        parent.location.reload();
+    });
+});
+</script>
