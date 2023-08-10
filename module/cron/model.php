@@ -84,7 +84,6 @@ class cronModel extends model
             }
         }
 
-        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('lastTime')->notZeroDate()->andWhere('status')->ne('stop')->exec();
         return $parsedCrons;
     }
 
@@ -142,15 +141,16 @@ class cronModel extends model
     }
 
     /**
-     * Get last execed time.
+     * Get the last executed time of cron process.
      *
      * @access public
-     * @return string
+     * @return string|null
      */
     public function getLastTime()
     {
-        $cron = $this->dao->select('*')->from(TABLE_CRON)->orderBy('lastTime desc')->limit(1)->fetch();
-        return isset($cron->lastTime) ? $cron->lastTime : null;
+        $lastTime =  $this->dao->select('lastTime')->from(TABLE_CRON)->where('id')->eq(1)->fetch('lastTime');
+        if(!dao::isError()) return $lastTime;
+        return null;
     }
 
     /**
