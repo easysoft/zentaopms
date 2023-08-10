@@ -2595,6 +2595,7 @@ class bug extends control
      *
      * @param  int     $productID
      * @param  int     $bugID
+     * @param  string  $type
      * @access public
      * @return string
      */

@@ -2052,19 +2052,28 @@ class bugModel extends model
      */
     public function getProductBugPairs($productID, $branch = '', $search = '', $limit = 0)
     {
-        $bugs = array('' => '');
-        $data = $this->dao->select('id, title')->from(TABLE_BUG)
+        $bugs = $this->dao->select("id, CONCAT(id, ':', title) AS title")->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
-            ->beginIF(strlen(trim($search)))->andWhere('title')->like('%' . $search . '%')->fi()
+            ->beginIF(strlen(trim($search)))
+            ->andWhere('id', true)->like('%' . $search . '%')
+            ->orWhere('title')->like('%' . $search . '%')
+            ->markRight(1)
+            ->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->beginIF($limit)->limit($limit)->fi()
+<<<<<<< Updated upstream
             ->fetchAll();
 
         foreach($data as $bug) $bugs[$bug->id] = $bug->id . ':' . $bug->title;
         return $bugs;
+=======
+            ->fetchPairs();
+
+        return array('' => '') + $bugs;
+>>>>>>> Stashed changes
     }
 
     /**

@@ -3,14 +3,19 @@ function setDuplicate(resolution)
     if(resolution == 'duplicate')
     {
         $.ajaxSettings.async = false;
-        $.get(createLink('bug', 'ajaxGetProductBugs', 'projectID=' + productID + '&bugID=' + bugID),function(data)
+        link = createLink('bug', 'ajaxGetProductBugs', 'projectID=' + productID + '&bugID=' + bugID);
+        link = link + (link.indexOf('?') !== -1 ? '&' : '?') + 'limit=200';
+        remoteLink = createLink('bug', 'ajaxGetProductBugs', 'productID=' + productID + '&bugID=' + bugID + '&type=json');
+        remoteLink = remoteLink + (remoteLink.indexOf('?') !== -1 ? '&' : '?') + 'search={search}';
+        $.get(link, function(data)
         {
             $('#duplicateBug').replaceWith(data);
             $('#pk_duplicateBug-search').parent().parent().remove();
             $('#duplicateBug').picker(
             {
                 disableEmptySearch : true,
-                dropWidth : 'auto'
+                dropWidth : 'auto',
+                remote: remoteLink
             });
         });
         $.ajaxSettings.async = true;
