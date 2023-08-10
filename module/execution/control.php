@@ -3854,16 +3854,6 @@ class execution extends control
         }
 
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
-        /*
-        $executionGroups = $this->dao->select('id,parent,project,grade,status,name,type,PM')->from(TABLE_EXECUTION)
-            ->where('deleted')->eq(0)
-            ->andWhere('multiple')->eq('1')
-            ->andWhere('type')->in('sprint,stage,kanban')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('project')->in(array_keys($projects))
-            ->orderBy('order_asc')
-            ->fetchGroup('project', 'id');
-         */
 
         $childExecutions = $this->dao->select('id,parent,project,grade,status,name,type,PM')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
