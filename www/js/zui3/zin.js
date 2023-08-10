@@ -75,7 +75,7 @@
         },
         isOldPage:      () => false,
         reloadApp:      function(_code, url){loadPage(url);},
-        openApp:        function(url, options){loadPage(url, options);},
+        openApp:        function(url, options){location.href = url;},
         goBack:         function(){history.go(-1);},
         changeAppsLang: changeAppLang,
         changeAppsTheme: changeAppTheme
@@ -524,7 +524,7 @@
         if(typeof options === 'string') options = {url: options};
         options = options || {};
 
-        if(is18version && !options.partial) return $.apps.openApp(options.url, options);
+        if(is18version && !options.partial) return $.apps.openUrl(options.url, options);
 
         if ($.apps.isOldPage(options.url)) return loadOldPage(options.url);
         else hideOldPage();
@@ -765,7 +765,7 @@
             options.url = url;
         }
 
-        if(is18version) return $.apps.open(options.url, options.app); // 18+zin.
+        if(is18version) return $.apps.openApp(options.url, options.app); // 18+zin.
 
         if(DEBUG) console.log('[APP] open url', url, options);
 
@@ -950,7 +950,7 @@
             }
         }
 
-        $.apps.openUrl(url, {app: thisAppCode});
+        $.apps.openApp(url, {app: thisAppCode});
         e.preventDefault();
     }
 
