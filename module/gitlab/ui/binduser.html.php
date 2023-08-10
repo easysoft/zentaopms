@@ -41,6 +41,7 @@ form
         set::rowHeight(50),
         set::showToolbarOnChecked(false),
         set::footer(array('toolbar')),
+        set::rowKey('gitlabID'),
         set::footToolbar(array(
             'className' => 'w-full form-actions form-group no-label',
             'items'     => array(
