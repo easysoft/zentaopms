@@ -789,7 +789,7 @@ class webhookModel extends model
         $log->url         = $webhook->url;
         $log->contentType = $webhook->contentType;
         $log->data        = $data;
-        $log->result      = $result;
+        $log->result      = (string)$result;
 
         $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();

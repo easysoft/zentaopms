@@ -350,14 +350,12 @@ class webhook extends control
         if(empty($webhooks))
         {
             echo "NO WEBHOOK EXIST.\n";
-            return false;
         }
 
         $dataList = $this->webhook->getDataList();
         if(empty($dataList))
         {
             echo "OK\n";
-            return true;
         }
 
         $this->webhook->setSentStatus(array_keys($dataList), 'senting');
@@ -385,6 +383,5 @@ class webhook extends control
         $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->exec();
 
         echo "OK\n";
-        return true;
     }
 }
