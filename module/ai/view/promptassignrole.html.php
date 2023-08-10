@@ -232,8 +232,8 @@ function validateForm()
       {
         const model = $('#editRoleTemplateModal');
         model.find('input[name="id"]').val(id);
-        model.find('.role').val(card.querySelector('.role').innerText);
-        model.find('.characterization').val(card.querySelector('.characterization').innerText);
+        model.find('input[name="role"]').val(card.querySelector('.role').innerText);
+        model.find('textarea[name="characterization"]').val(card.querySelector('.characterization').innerText);
         model.modal('toggle');
         break;
       }
