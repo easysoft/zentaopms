@@ -58,34 +58,40 @@ js::set('langNormal',       $lang->testcase->normal);
   </div>
   <div class='main-col'>
     <div id='queryBox' data-module='testcase' class='cell<?php if($browseType == 'bysearch') echo ' show';?>'></div>
-    <?php if(empty($scenes)):?>
-    <?php $useDatatable = '';?>
+    <?php if(empty($cases)):?>
+    <?php $useDatatable = false;?>
     <div class="table-empty-tip">
       <p>
-        <?php if($this->cookie->onlyScene): ?>
-          <span class="text-muted"><?php echo $lang->testcase->noScene;?></span>
-          <?php if((empty($productID) or common::canModify('product', $product)) and common::hasPriv('testcase', 'createScene') and $browseType != 'bysuite'):?>
-          <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
-          <?php  if($productID) echo html::a($this->createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->newScene, '', "class='btn btn-info' data-app='{$this->app->tab}'");?>
-           <?php endif;?>
-        <?php else: ?>
-          <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
-          <?php if((empty($productID) or common::canModify('product', $product)) and common::hasPriv('testcase', 'create') and $browseType != 'bysuite'):?>
-          <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
-          <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info' data-app='{$this->app->tab}'");?>
-          <?php endif;?>
+        <?php
+        if($this->cookie->onlyScene)
+        {
+            echo "<span class='text-muted'>{$lang->testcase->noScene}</span>";
+            if((empty($productID) || common::canModify('product', $product)) && common::hasPriv('testcase', 'createScene') && $browseType != 'bysuite')
+            {
+                $initModule = isset($moduleID) ? (int)$moduleID : 0;
+                if($productID) echo html::a($this->createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->newScene, '', "class='btn btn-info' data-app='{$this->app->tab}'");
+            }
+        }
+        else
+        {
+            echo "<span class='text-muted'>{$lang->testcase->noCase}</span>";
+            if((empty($productID) || common::canModify('product', $product)) && common::hasPriv('testcase', 'create') && $browseType != 'bysuite')
+            {
+                $initModule = isset($moduleID) ? (int)$moduleID : 0;
+                echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info' data-app='{$this->app->tab}'");
+            }
 
-          <?php if(common::hasPriv('testsuite', 'linkCase') and $browseType == 'bysuite'):?>
-          <?php echo html::a($this->createLink('testsuite', 'linkCase', "suiteID=$param"), "<i class='icon icon-plus'></i> " . $lang->testsuite->linkCase, '', "class='btn btn-info' data-app='{$this->app->tab}'");?>
-          <?php endif;?>
-        <?php endif ?>
+            if(common::hasPriv('testsuite', 'linkCase') && $browseType == 'bysuite')
+            {
+                echo html::a($this->createLink('testsuite', 'linkCase', "suiteID=$param"), "<i class='icon icon-plus'></i> " . $lang->testsuite->linkCase, '', "class='btn btn-info' data-app='{$this->app->tab}'");
+            }
+        }
+        ?>
       </p>
     </div>
     <?php else:?>
-    <?php
-    $datatableId  = $this->moduleName . ucfirst($this->methodName);
-    $useDatatable = (!empty($config->testcase->useDatatable) and isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-    ?>
+    <?php $datatableId  = $this->moduleName . ucfirst($this->methodName);?>
+    <?php $useDatatable = (!empty($config->testcase->useDatatable) && isset($config->datatable->$datatableId->mode) && $config->datatable->$datatableId->mode == 'datatable');?>
     <form class='main-table table-case' data-nested='true' data-expand-nest-child='false' data-checkable='true' data-enable-empty-nested-row='true' data-replace-id='caseTableList' data-preserve-nested='true'
     id='caseForm' method='post' <?php if(!$useDatatable) echo "data-ride='table'";?>>
       <div class="table-header fixed-right">
@@ -97,7 +103,7 @@ js::set('langNormal',       $lang->testcase->normal);
       if($useDatatable)  include '../../common/view/datatable.html.php';
       else               include '../../common/view/tablesorter.html.php';
 
-      if($config->testcase->needReview or !empty($config->testcase->forceReview)) $config->testcase->datatable->fieldList['actions']['width'] = '190';
+      if($config->testcase->needReview || !empty($config->testcase->forceReview)) $config->testcase->datatable->fieldList['actions']['width'] = '190';
       $setting = $this->datatable->getSetting('testcase');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
@@ -109,7 +115,7 @@ js::set('langNormal',       $lang->testcase->normal);
       $canBatchConfirmStoryChange = common::hasPriv('testcase', 'batchConfirmStoryChange');
       $canBatchChangeModule       = common::hasPriv('testcase', 'batchChangeModule');
       $canImportToLib             = common::hasPriv('testcase', 'importToLib');
-      $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule or $canImportToLib);
+      $canBatchAction             = ($canBatchRun || $canBatchEdit || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange || $canBatchChangeModule || $canImportToLib);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head table-fixed table-nested table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='caseList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-checkbox-name='caseIDList[]'>
@@ -128,35 +134,51 @@ js::set('langNormal',       $lang->testcase->normal);
           </tr>
         </thead>
         <tbody id='caseTableList'>
-            <?php $originOrders = array(); ?>
-            <?php foreach($scenes as $kk => $scene):?>
-            <?php
-            $trClass = '';
-            $trAttrs = "data-id='$scene->id' data-auto='$scene->auto' data-order='$scene->sort' data-parent='$scene->parent' data-product='$scene->product'";
-            if($scene->isCase == 2)
-            {
-                $trAttrs .= " data-nested='true'";
-                $trClass .= $scene->parent == '0' ? ' is-top-level table-nest-child-hide' : ' table-nest-hide';
-            }
+          <?php
+          function printRow($index, $testcase, $cases, $setting, $users, $branchOption, $modulePairs, $browseType, $mode)
+          {
+              foreach($cases as $case)
+              {
+                  $case->index = $index;
 
-            if($scene->parent and isset($scenes[$scene->parent]))
-            {
-                if($scene->isCase != 2) $trClass .= ' is-nest-child';
-                if(empty($scene->path)) $scene->path = $scenes[$scene->parent]->path . "$scene->id,";
-                $trClass .= ' table-nest-hide';
-                $trAttrs .= " data-nest-parent='$scene->parent' data-nest-path='$scene->path'";
-            }
-            elseif($scene->isCase != 2)
-            {
-                $trClass .= ' no-nest';
-            }
-            $trAttrs .= " class='row-case $trClass'";
-            $originOrders[] = $scene->id;
-            ?>
-            <tr data-itype='<?php echo $scene->isCase; ?>' <?php echo $trAttrs;?>>
-              <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $scene, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table',$scene->isCase);?>
-            </tr>
-            <?php endforeach;?>
+                  $trClass = '';
+                  $trAttrs = "data-id='{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
+                  if($case->isCase == 2)
+                  {
+                      $trAttrs .= " data-nested='true'";
+                      $trClass .= $case->parent == '0' ? ' is-top-level table-nest-child-hide' : ' table-nest-hide';
+                  }
+
+                  if($case->parent)
+                  {
+                      if($case->isCase != 2) $trClass .= ' is-nest-child';
+                      $trClass .= ' table-nest-hide';
+                      $trAttrs .= " data-nest-parent='{$case->parent}' data-nest-path='{$case->path}'";
+                  }
+                  elseif($case->isCase != 2)
+                  {
+                      $trClass .= ' no-nest';
+                  }
+                  $trAttrs .= " class='row-case $trClass'";
+
+                  echo "<tr data-itype='{$case->isCase}' {$trAttrs}>";
+                  foreach($setting as $key => $value) $testcase->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $mode, $case->isCase);
+                  echo '</tr>';
+
+                  $index++;
+
+                  if(!empty($case->children) || !empty($case->cases))
+                  {
+                      if(!empty($case->children)) $index = printRow($index, $testcase, $case->children, $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
+                      if(!empty($case->cases))    $index = printRow($index, $testcase, $case->cases,    $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
+                  }
+              }
+
+              return $index;
+          }
+
+          printRow(1, $this->testcase, $cases, $setting, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');
+          ?>
         </tbody>
       </table>
       <?php if(!$useDatatable) echo '</div>';?>
@@ -292,7 +314,7 @@ js::set('langNormal',       $lang->testcase->normal);
 
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->testcase->sceneb;?> <span class="caret"></span></button>
-            <?php $withSearch = count($iscenes) > 6;?>
+            <?php $withSearch = count($scenes) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -300,13 +322,13 @@ js::set('langNormal',       $lang->testcase->normal);
                 <label for="userSearchBox2" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
-              <?php $scenesPinYin = common::convert2Pinyin($iscenes);?>
+              <?php $scenesPinYin = common::convert2Pinyin($scenes);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
               <div class="list-group">
                 <?php
-                foreach($iscenes as $sceneId => $scene)
+                foreach($scenes as $sceneId => $scene)
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($scenesPinYin, $scene, '') . '"') : '';
                     $actionLink = $this->createLink('testcase', 'batchChangeScene', "sceneId=$sceneId");
@@ -380,8 +402,6 @@ js::set('langNormal',       $lang->testcase->normal);
 #caseTableList .icon-waterfall:before {content: '\e9a4';}
 #caseTableList .icon-kanban:before {content: '\e983';}
 </style>
-<?php js::set('originOrders', isset($originOrders) ? $originOrders : '');?>
-
 <script>
 $('#module' + moduleID).closest('li').addClass('active');
 $('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
