@@ -103,18 +103,19 @@ function getStatus(method, params)
  */
 function loadURS()
 {
+    var $URS = $('#URS');
+    if($URS.length == 0) return;
+
     var productID       = $('#product').val();
     var branchID        = $('#branch').val() ? $('#branch').val() : 0;
-    var requirementList = $('#URS').val();
+    var requirementList = $URS.val();
     requirementList     = requirementList ? requirementList.join(',') : '';
 
     var link = createLink('story', 'ajaxGetProductUserStories', 'productID=' + productID + '&branchID=' + branchID + '&requirementList=' + requirementList);
-
     $.post(link, function(data)
     {
-        $('#URS').replaceWith(data);
-        $('#URS_chosen').remove();
-        $('#URS').chosen();
+        $('.URSBox').html(data);
+        $('.URSBox #URS').picker();
     });
 }
 
