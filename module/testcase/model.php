@@ -3595,6 +3595,88 @@ class testcaseModel extends model
     }
 
     /**
+     * Get scene list include sub scenes and cases.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getSceneGroups($productID, $branch = 0, $moduleID = 0, $orderBy = 'id_desc', $pager = null)
+    {
+        $scenes = $this->dao->select('*')->from(TABLE_SCENE)
+            ->where('product')->eq($productID)
+            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
+            ->orderBy('grade_desc, id_asc')
+            ->fetchAll('id');
+        if(!$scenes) return array();
+
+        $cases = array();
+        if($scenes && !$this->cookie->onlyScene)
+        {
+            $caseList = $this->dao->select('*')->from(TABLE_CASE)
+                ->where('deleted')->eq('0')
+                ->andWhere('scene')->ne(0)
+                ->andWhere('product')->eq($productID)
+                ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+                ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
+                ->orderBy($orderBy)
+                ->fetchAll('id');
+            $caseList = $this->appendData($caseList);
+            foreach($caseList as $case) $cases[$case->scene][$case->id] = $case;
+        }
+
+        $this->dao->setTable(TABLE_CASE);
+        $fieldTypes = $this->dao->getFieldsType();
+
+        foreach($scenes as $id => $scene)
+        {
+            /* Set default value for the fields exist in TABLE_CASE but not in TABLE_SCENE. */
+            foreach($fieldTypes as $field => $type)
+            {
+                if(isset($scene->$field)) continue;
+                $scene->$field = $type['rule'] == 'int' ? '0' : '';
+            }
+
+            $scene->bugs       = 0;
+            $scene->results    = 0;
+            $scene->caseFails  = 0;
+            $scene->stepNumber = 0;
+            $scene->isCase     = 2;
+
+            if(isset($cases[$id]))
+            {
+                foreach($cases[$id] as $case)
+                {
+                    $case->id     = $id . '_' . $case->id;
+                    $case->parent = $id;
+                    $case->grade  = $scene->grade + 1;
+                    $case->path   = $scene->path . $case->id . ',';
+                    $case->isCase = 1;
+
+                    $scene->cases[$case->id] = $case;
+                }
+            }
+
+            if(!isset($scenes[$scene->parent])) continue;
+
+            $parent = $scenes[$scene->parent];
+            $parent->children[$id] = $scene;
+
+            unset($scenes[$id]);
+        }
+
+        $pager->recTotal  = count($scenes);
+        $pager->pageTotal = ceil($pager->recTotal / $pager->recPerPage);
+
+        return array_slice($scenes, $pager->recPerPage * ($pager->pageID - 1), $pager->recPerPage);
+    }
+
+    /**
      * Get scene menu.
      *
      * @param  int    $rootID
