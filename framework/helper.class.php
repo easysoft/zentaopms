@@ -391,6 +391,31 @@ function formatTime($time, $format = '')
 }
 
 /**
+ * Display time consuming.
+ *
+ * @param  string $tag
+ * @access public
+ * @return void
+ */
+function t($tag = '')
+{
+    global $last;
+    $time = microtime();
+
+    if($last)
+    {
+        list($lms, $ls) = explode(' ', $last);
+        list($ms, $s)   = explode(' ', $time);
+        a("$tag: time consuming=" . ($s - $ls + round($ms - $lms, 3)) . 's');
+    }
+    else
+    {
+        a("$tag: current time={$time}");
+    }
+    $last = $time;
+}
+
+/**
  * Fix for session error.
  *
  * @param  int    $class
