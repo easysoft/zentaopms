@@ -1416,6 +1416,10 @@ class bug extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->batchEditFields;
 
+        /* Set users. */
+        $users = $this->loadModel('user')->getPairs('devfirst', '', $this->config->batchMaxCount);
+        $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
+
         $branchIdList    = array();
         $projectIdList   = array();
         $executionIdList = array();
@@ -1441,6 +1445,11 @@ class bug extends control
             }
 
             $this->config->moreLinks["duplicateBugs[{$bug->id}]"] = inlink('ajaxGetProductBugs', "productID={$bug->product}&bugID={$bug->id}&type=json");
+            if(!empty($this->config->user->moreLink))
+            {
+                $this->config->moreLinks["resolvedBys[$bug->id]"] = $this->config->user->moreLink;
+                $this->config->moreLinks["assignedTos[$bug->id]"] = $this->config->user->moreLink;
+            }
         }
 
         /* Get assigned to member. */
@@ -1502,10 +1511,6 @@ class bug extends control
             $this->view->projectMembers   = $projectMembers;
             $this->view->executionMembers = $executionMembers;
         }
-
-        /* Set users. */
-        $users = $this->user->getPairs('devfirst');
-        $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */
         $this->view->productID        = $productID;

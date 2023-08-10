@@ -161,6 +161,7 @@ $config->wideSize      = 1400;
 $config->timeout       = 30000;
 $config->duplicateTime = 30;
 $config->maxCount      = 500;
+$config->batchMaxCount = 20;
 $config->moreLinks     = array();
 
 /* 配置参数过滤。Filter param settings. */
