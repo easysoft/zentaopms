@@ -147,60 +147,73 @@ class testcase extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
-        /* Get test cases. */
-        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, null);
 
-        $caseIdList = array();
-        if(!empty($cases))
+        $cases  = array();
+        $scenes = array();
+        if($browseType == 'all')
         {
-            foreach($cases as $case) $caseIdList[] = $case->id;
-        }
-        /* Get top level cases and scenes.*/
-        $productParam = $productID;
-        if(intval($productID) <= 0)
-        {
-            $productParam = array_keys($this->products);
-            if(count($productParam) > 1) unset($productParam[0]);
-        }
+            $pager->pageID = $pageID;   // 场景和用例混排，$pageID 可能大于场景分页后的总页数。在 pager 构造函数中会被设为 1，这里要重新赋值。
 
-        $queryCondition = '';
-        $topObjects     = $this->testcase->getList($productParam,$branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
+            $scenes = $this->testcase->getSceneGroups($productID, $branch, $moduleID, $sort, $pager);   // 获取包含子场景和用例的顶级场景树。
 
-        /* Get children cases and scenes.*/
-        $scenes = $this->testcase->getList($productParam, $branch,$moduleID, $caseIdList, null, 'child', array_keys($topObjects), $browseType, $queryCondition);
-        if(empty($topObjects) and $pageID > 1)
-        {
-            $pager      = pager::init(0, $recPerPage, 1);
-            $topObjects = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, $pager, 'top', array(),$browseType);
-            $scenes     = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, null, 'child', array_keys($topObjects), $browseType, $queryCondition);
-        }
+            if(!$this->cookie->onlyScene)
+            {
+                $sceneTotal = $pager->recTotal;
+                $sceneCount = count($scenes);
 
-        /* save session .*/
-        $this->loadModel('common')->saveQueryCondition($queryCondition, 'testcase', false);
+                /* 场景条数小于每页记录数，继续获取用例。 */
+                if($sceneCount < $recPerPage)
+                {
+                    /* 重置 $pager 属性，只获取需要的用例条数。*/
+                    $pager->recTotal   = 0;
+                    $pager->pageID     = 1; // 查询用例时的分页起始偏移量单独计算，每次查询的页码都设为 1 即可，后面会重新设置页码。
+                    $pager->recPerPage = $recPerPage - $sceneCount; // 可能存在场景没排满一页，需要用例补全的情况。这里只查询需要补全的记录数。
 
-        /* Get summary. */
-        $indCount   = 0;
-        $topCount   = 0;
-        $casesCount = 0;
-        foreach($scenes as $scene)
-        {
-            if($scene->isCase == '2' and $scene->parent == 0) $topCount ++;
-            if($scene->isCase == '1' and $scene->parent == 0) $indCount ++;
-            if($scene->isCase == '1') $casesCount ++;
-        }
+                    if($sceneCount == 0) $pager->offset = $recPerPage * ($pageID - 1) - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始偏移量。
 
-        if($this->cookie->onlyScene)
-        {
-            $summary = sprintf($this->lang->testcase->summaryScene, $topCount);
+                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
+                    foreach($cases as $case)
+                    {
+                        $case->parent = 0;
+                        $case->grade  = 1;
+                        $case->path   = ',' . $case->id . ',';
+                        $case->isCase = 1;
+                    }
+                    $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+                }
+                else
+                {
+                    /* 场景和用例混排，总记录数需要合并后显示，这里是为了获取用例的总记录数。*/
+                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
+                    $cases = array();
+                }
+
+                /* 合并场景和用例的总记录数，并重新计算总页数和当前页码。*/
+                $pager->recTotal  += $sceneTotal;
+                $pager->recPerPage = $recPerPage;
+                $pager->pageTotal  = ceil($pager->recTotal / $recPerPage);
+                $pager->pageID     = $pageID;
+            }
         }
         else
         {
-            $summary = sprintf($this->lang->testcase->summary, $topCount, $indCount);
+            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
+        }
+
+        $sceneCount = count($scenes);
+        $caseCount  = count($cases);
+        if($this->cookie->onlyScene)
+        {
+            $summary = sprintf($this->lang->testcase->summaryScene, $sceneCount);
+        }
+        else
+        {
+            $summary = sprintf($this->lang->testcase->summary, $sceneCount, $caseCount);
         }
 
         /* Process case for check story changed. */
-        $scenes = $this->loadModel('story')->checkNeedConfirm($scenes);
-        $scenes = $this->testcase->appendData($scenes);
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->testcase->appendData($cases);
 
         /* Build the search form. */
         $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
@@ -253,7 +266,7 @@ class testcase extends control
         $this->view->product         = $product;
         $this->view->productName     = $this->products[$productID];
         $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch == 'all' ? '0' : $branch);
-        $this->view->iscenes         = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0,  0);
+        $this->view->scenes          = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0,  0);
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->moduleID        = $moduleID;
@@ -265,7 +278,7 @@ class testcase extends control
         $this->view->browseType      = $browseType;
         $this->view->param           = $param;
         $this->view->caseType        = $caseType;
-        $this->view->cases           = $cases;
+        $this->view->cases           = array_merge($scenes, $cases);
         $this->view->branch          = (!empty($product) and $product->type != 'normal') ? $branch : 0;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
@@ -276,8 +289,6 @@ class testcase extends control
         $this->view->showBranch      = $showBranch;
         $this->view->libraries       = $this->loadModel('caselib')->getLibraries();
         $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
-        $this->view->scenes          = $scenes;
-        $this->view->casesCount      = $casesCount;
 
         $this->display();
     }
@@ -3296,5 +3307,44 @@ class testcase extends control
         $this->view->jsLng            = $jsLng;
 
         $this->display();
+    }
+
+    public function printRow($cases)
+    {
+        foreach($cases as $case)
+        {
+            $trClass = '';
+            $trAttrs = "data-id='{$index}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$parent}' data-product='{$case->product}'";
+
+            if($case->isCase == 2)
+            {
+                $trAttrs .= " data-nested='true'";
+                $trClass .= $parent == '0' ? ' is-top-level table-nest-child-hide' : ' table-nest-hide';
+            }
+
+            if($parent)
+            {
+                if($case->isCase == 1) $trClass .= ' is-nest-child';
+
+                $trClass .= ' table-nest-hide';
+                $trAttrs .= " data-nest-parent='$case->parent' data-nest-path='$case->path'";
+            }
+            elseif($case->isCase == 1)
+            {
+                $trClass .= ' no-nest';
+            }
+            $trAttrs .= " class='row-case $trClass'";
+
+            echo "<tr data-itype='{$case->isCase}' {$trAttrs}>";
+            foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table', $case->isCase);
+            echo '</tr>';
+
+            if(!empty($case->children) || !empty($case->cases))
+            {
+                $newParent = $index;
+                if(!empty($case->children)) $this->printRow($case->children);
+                if(!empty($case->cases))    $this->printRow($case->cases);
+            }
+        }
     }
 }
