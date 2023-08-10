@@ -172,7 +172,7 @@ class bug extends control
         }
         else
         {
-            $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
+            $executions = $this->loadModel('execution')->fetchPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
             if($this->config->cache->enable) $this->cache->set($cacheKey, $executions);
         }
 
@@ -234,7 +234,6 @@ class bug extends control
         $this->view->position[]      = $this->lang->bug->common;
         $this->view->productID       = $productID;
         $this->view->product         = $product;
-        $this->view->projectProducts = $this->product->getProducts($this->projectID);
         $this->view->productName     = $productName;
         $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch);
         $this->view->releasedBuilds  = $this->loadModel('release')->getReleasedBuilds($productID, $branch);

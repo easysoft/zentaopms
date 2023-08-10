@@ -2861,7 +2861,8 @@ class bugModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)
+            ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll();
     }
 
