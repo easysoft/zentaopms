@@ -476,6 +476,13 @@ class instance extends control
         $instance = $this->instance->getByID($instanceID);
         if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success']));
 
+        $externalApp = $this->loadModel('space')->getExternalAppByApp($instance);
+        if($externalApp)
+        {
+            $actionID = $this->loadModel('pipeline')->delete($externalApp->id, strtolower($instance->appName));
+            if(!$actionID) return $this->send(array('result' => 'fail', 'message' => $this->lang->pipeline->delError));
+        }
+
         $success = $this->instance->uninstall($instance);
         $this->action->create('instance', $instance->id, 'uninstall', '', json_encode(array('result' => $success, 'app' => array('alias' => $instance->appName, 'app_version' => $instance->version))));
         if($success) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'uninstallSuccess'), 'locate' => $this->createLink('space', 'browse')));

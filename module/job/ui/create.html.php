@@ -167,9 +167,8 @@ formPanel
             inputGroup
             (
                 $lang->job->atTime,
-                h::input
+                timePicker
                 (
-                    setClass('form-control'),
                     set::name('atTime'),
                 ),
             ),
