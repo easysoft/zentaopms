@@ -75,7 +75,7 @@
         },
         isOldPage:      () => false,
         reloadApp:      function(_code, url){loadPage(url);},
-        openApp:        function(url, options){location.href = url;},
+        openApp:        function(url, options){loadPage(url, options);},
         goBack:         function(){history.go(-1);},
         changeAppsLang: changeAppLang,
         changeAppsTheme: changeAppTheme
@@ -765,7 +765,7 @@
             options.url = url;
         }
 
-        if(is18version) return $.apps.openApp(options.url, options.app); // 18+zin.
+        if(is18version) return $.apps.open(options.url, options.app); // 18+zin.
 
         if(DEBUG) console.log('[APP] open url', url, options);
 
@@ -950,7 +950,7 @@
             }
         }
 
-        $.apps.openApp(url, {app: thisAppCode});
+        $.apps.openUrl(url, {app: thisAppCode});
         e.preventDefault();
     }
 
