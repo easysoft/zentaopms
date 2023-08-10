@@ -52,7 +52,7 @@
     const fetchTasks  = new Map();
     const startTime   = performance.now();
     const timers      = {timeout: [], interval: []};
-    let currentAppUrl = isInAppTab ? '' : location.href;
+    let currentAppUrl = (isInAppTab && !is18version) ? '' : location.href;
     let zinbar        = null;
 
     $.apps = $.extend(
