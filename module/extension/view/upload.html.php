@@ -36,3 +36,12 @@
   </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
+<script>
+$(function()
+{
+    parent.$('#triggerModal .modal-content .modal-header .close').on('click', function()
+    {
+        parent.location.reload();
+    });
+});
+</script>
