@@ -6107,16 +6107,17 @@ class executionModel extends model
      *
      * @param  array  $executions
      * @param  array  $parentExecutions
+     * @param  array  $childExecutions
      * @access public
      * @return array
      */
-    public function resetExecutionSorts($executions, $parentExecutions = array())
+    public function resetExecutionSorts($executions, $parentExecutions = array(), $childExecutions = array())
     {
         if(empty($executions)) return array();
         if(empty($parentExecutions))
         {
             $execution        = current($executions);
-            $parentExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
+            $parentExecutions = $this->dao->select('id,parent,project,grade,status,name,type,PM')->from(TABLE_EXECUTION)
                 ->where('parent')->eq($execution->project)
                 ->andWhere('deleted')->eq('0')
                 ->andWhere('type')->in('kanban,sprint,stage')
@@ -6125,11 +6126,14 @@ class executionModel extends model
                 ->fetchAll('id');
         }
 
-        $childExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('deleted')->eq(0)
-            ->andWhere('parent')->in(array_keys($parentExecutions))
-            ->orderBy('order_asc')
-            ->fetchGroup('parent', 'id');
+        if(empty($childExecutions))
+        {
+            $childExecutions = $this->dao->select('id,parent,project,grade,status,name,type,PM')->from(TABLE_EXECUTION)
+                ->where('deleted')->eq(0)
+                ->andWhere('parent')->in(array_keys($parentExecutions))
+                ->orderBy('order_asc')
+                ->fetchGroup('parent', 'id');
+        }
 
         $sortedExecutions = array();
         foreach($parentExecutions as $executionID => $execution)
@@ -6137,7 +6141,7 @@ class executionModel extends model
             if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
 
             $children = zget($childExecutions, $executionID, array());
-            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
+            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children, $childExecutions);
         }
         return $sortedExecutions;
     }

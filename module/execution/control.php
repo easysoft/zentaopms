@@ -3854,7 +3854,8 @@ class execution extends control
         }
 
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
-        $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
+        /*
+        $executionGroups = $this->dao->select('id,parent,project,grade,status,name,type,PM')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('multiple')->eq('1')
             ->andWhere('type')->in('sprint,stage,kanban')
@@ -3862,6 +3863,23 @@ class execution extends control
             ->andWhere('project')->in(array_keys($projects))
             ->orderBy('order_asc')
             ->fetchGroup('project', 'id');
+         */
+
+        $childExecutions = $this->dao->select('id,parent,project,grade,status,name,type,PM')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('multiple')->eq('1')
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('project')->in(array_keys($projects))
+            ->orderBy('order_asc')
+            ->fetchAll('id');
+
+        $executionGroups = array();
+        foreach($childExecutions as $executionID => $execution)
+        {
+            if(!isset($executionGroups[$execution->project])) $executionGroups[$execution->project] = array();
+            $executionGroups[$execution->project][$executionID] = $execution;
+        }
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('root')->in($this->app->user->view->sprints)
@@ -3883,7 +3901,7 @@ class execution extends control
                 if($execution->grade == 1) $firstGradeExecs[$execution->id] = $execution->id;
             }
 
-            $executions = $this->execution->resetExecutionSorts($executions, $firstGradeExecs);
+            $executions = $this->execution->resetExecutionSorts($executions, $firstGradeExecs, $childExecutions);
             foreach($executions as $execution)
             {
                 /* Only show leaf executions. */

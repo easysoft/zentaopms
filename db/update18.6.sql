@@ -41,3 +41,5 @@ CREATE INDEX deleted ON zt_bug (deleted);
 CREATE INDEX product_status_deleted ON zt_bug (product,status,deleted);
 
 UPDATE `zt_cron` SET `m` = '*/1' WHERE `command` in ('moduleName=mail&methodName=asyncSend', 'moduleName=webhook&methodName=asyncSend') and `type` = 'zentao';
+
+ALTER TABLE `zt_project` ADD INDEX `type_order` (`type`, `order`);
