@@ -140,7 +140,7 @@ window.canRowCheckable = function(rowID)
  */
 function initRevisionMap(data)
 {
-    if(revisionMap[data[data.length - 1].id] !== undefined) return;
+    if(revisionMap[data[data.length - 1].id] !== undefined && revisionMap[data[0].id] !== undefined) return;
 
     revisionMap = {};
     for (var i = 0; i < data.length; i++) revisionMap[data[i].id] = data[i].revision;
