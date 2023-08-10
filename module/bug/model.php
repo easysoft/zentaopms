@@ -2064,16 +2064,11 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->beginIF($limit)->limit($limit)->fi()
-<<<<<<< Updated upstream
             ->fetchAll();
 
         foreach($data as $bug) $bugs[$bug->id] = $bug->id . ':' . $bug->title;
-        return $bugs;
-=======
-            ->fetchPairs();
 
-        return array('' => '') + $bugs;
->>>>>>> Stashed changes
+        return $bugs;
     }
 
     /**
