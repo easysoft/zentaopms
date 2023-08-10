@@ -57,7 +57,7 @@ $repos = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo)
 featureBar
  (
     set::current('all'),
-    li(searchToggle()),
+    li(searchToggle(set::open($type == 'bySearch'))),
 );
 
 toolBar
