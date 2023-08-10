@@ -21,6 +21,7 @@ jsVar('mysqlList', $mysqlList);
 jsVar('pgList', $pgList);
 jsVar('defaultApp', $defaultApp);
 jsVar('appID', $appID);
+jsVar('externalApps', $config->space->zentaoApps);
 
 $showVersion = getenv('ALLOW_SELECT_VERSION') && (strtolower(getenv('ALLOW_SELECT_VERSION')) == 'true' || strtolower(getenv('ALLOW_SELECT_VERSION')) == '1');
 $dbTypeItems = array();

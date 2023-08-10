@@ -2057,7 +2057,7 @@ class InstanceModel extends model
         if($action == 'uninstall') return $instance->type != 'external' && $this->canDo('uninstall', $instance);
         if($action == 'visit')     return $instance->type != 'external' ? ($instance->domain && $this->canDo('visit', $instance)) : true;
         if($action == 'upgrade')   return !empty($instance->latestVersion);
-        if($action == 'bindUser')  return ($instance->type == 'external' && in_array($instance->appName, array('Gitlab', 'Gitea', 'Gogs'))) ? true : false;
+        if($action == 'bindUser')  return ($instance->externalID && in_array($instance->appName, array('Gitlab', 'Gitea', 'Gogs'))) ? true : false;
         if($action == 'edit')      return $instance->type != 'external' ? false : true;
 
         return true;

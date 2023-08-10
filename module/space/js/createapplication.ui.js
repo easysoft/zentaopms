@@ -20,10 +20,10 @@ function onChangeAppType(event)
 {
     const appType = $(event.target).val();
 
-    if(appType == 'Jenkins' || appType == 'SonarQube')
+    if(appType == 'jenkins' || appType == 'sonarqube')
     {
         $('div.jenkins').removeClass('hidden');
-        if(appType == 'Jenkins')
+        if(appType == 'jenkins')
         {
             $('div.token').removeClass('hidden');
             $('div.password .form-label').removeClass('required');
@@ -46,23 +46,23 @@ function onChangeAppType(event)
     $('#password').attr('placeholder', '');
     switch(appType)
     {
-        case 'GitLab':
+        case 'gitlab':
             $('#createAppForm').attr('action', $.createLink('gitlab', 'create'));
             $('#url').attr('placeholder', gitlabUrlTips);
             $('#token').attr('placeholder', gitlabTokenTips);
             break;
-        case 'Gitea':
+        case 'gitea':
             $('#createAppForm').attr('action', $.createLink('gitea', 'create'));
             break;
-        case 'Gogs':
+        case 'gogs':
             $('#createAppForm').attr('action', $.createLink('gogs', 'create'));
             break;
-        case 'Jenkins':
+        case 'jenkins':
             $('#createAppForm').attr('action', $.createLink('jenkins', 'create'));
             $('#token').attr('placeholder', jenkinsTokenTips);
             $('#password').attr('placeholder', jenkinsPasswordTips);
             break;
-        case 'SonarQube':
+        case 'sonarqube':
             $('#createAppForm').attr('action', $.createLink('sonarqube', 'create'));
             $('#url').attr('placeholder', sonarqubeUrlTips);
             $('#account').attr('placeholder', sonarqubeAccountTips);
@@ -87,7 +87,6 @@ function onChangeStoreAppType(event)
 
     $('#createStoreAppForm').attr('action', $.createLink('instance', 'install', 'appID=' + storeApp));
 
-    var externalApps = ['GitLab', 'Gitea', 'Gogs', 'Jenkins', 'SonarQube'];
     var storeAppName = apps[storeApp];
 
     if(externalApps.indexOf(storeAppName) !== -1)

@@ -129,4 +129,21 @@ class spaceModel extends model
             ->andWhere('owner')->eq($this->app->user->account)
             ->fetch();
     }
+
+    /**
+     * 获取应用市场应用对应的外部应用。
+     * Get External app By store app.
+     *
+     * @param  object $instance
+     * @access public
+     * @return object|false
+     */
+    public function getExternalAppByApp(object $instance): object|false
+    {
+        return $this->dao->select('*')->from(TABLE_PIPELINE)
+            ->where('deleted')->eq('0')
+            ->andWhere('createdBy')->eq('system')
+            ->andWhere('url')->like("%{$instance->domain}%")
+            ->fetch();
+    }
 }

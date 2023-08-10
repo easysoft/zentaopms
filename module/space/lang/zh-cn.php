@@ -23,8 +23,8 @@ $lang->space->featureBar['browse']['running']  = '运行中';
 $lang->space->featureBar['browse']['stopped']  = '已停止';
 $lang->space->featureBar['browse']['abnormal'] = '异常';
 
-$lang->space->appType['GitLab']    = 'GitLab';
-$lang->space->appType['Gitea']     = 'Gitea';
-$lang->space->appType['Gogs']      = 'Gogs';
-$lang->space->appType['Jenkins']   = 'Jenkins';
-$lang->space->appType['SonarQube'] = 'SonarQube';
+$lang->space->appType['gitlab']    = 'GitLab';
+$lang->space->appType['gitea']     = 'Gitea';
+$lang->space->appType['gogs']      = 'Gogs';
+$lang->space->appType['jenkins']   = 'Jenkins';
+$lang->space->appType['sonarqube'] = 'SonarQube';
