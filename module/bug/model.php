@@ -2052,7 +2052,7 @@ class bugModel extends model
      */
     public function getProductBugPairs($productID, $branch = '', $search = '', $limit = 0)
     {
-        $bugs = $this->dao->select("id, CONCAT(id, ':', title) AS title")->from(TABLE_BUG)
+        $data = $this->dao->select("id, CONCAT(id, ':', title) AS title")->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
@@ -2068,7 +2068,7 @@ class bugModel extends model
 
         foreach($data as $bug) $bugs[$bug->id] = $bug->id . ':' . $bug->title;
 
-        return $bugs;
+        return array('' => '') + $bugs;
     }
 
     /**
