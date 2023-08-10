@@ -61,7 +61,7 @@ class hostModel extends model
             /* Concatenate the conditions for the query. */
             if($param)
             {
-                $query = $this->loadModel('search')->getQuery($param);
+                $query = $this->loadModel('search')->getZinQuery($param);
                 if($query)
                 {
                     $this->session->set('hostQuery', $query->sql);

@@ -673,6 +673,54 @@ class searchModel extends model
      * @access public
      * @return object
      */
+    public function getZinQuery($queryID)
+    {
+        $query = $this->dao->findByID((int)$queryID)->from(TABLE_USERQUERY)->fetch();
+        if(!$query) return false;
+
+        /* Decode html encode. */
+        $query->form = htmlspecialchars_decode($query->form, ENT_QUOTES);
+        $query->sql  = htmlspecialchars_decode($query->sql, ENT_QUOTES);
+
+        $hasDynamic  = strpos($query->form, '$') !== false;
+        $query->form = unserialize($query->form);
+        if($hasDynamic)
+        {
+            $_POST = $query->form;
+            $this->buildQuery();
+            $querySessionName = $query->form['module'] . 'Query';
+            $query->sql = $_SESSION[$querySessionName];
+        }
+
+        $queryForm = array();
+        if(isset($query->form['field1']))
+        {
+            foreach($query->form as $field => $value)
+            {
+                $index = substr($field, -1);
+                if(is_numeric($index))
+                {
+                    $field = substr($field, 0, strlen($field) - 1);
+                    $queryForm[$index][$field] = $value;
+                }
+                elseif($field == 'groupAndOr')
+                {
+                    $queryForm[$field][$field] = $value;
+                }
+            }
+            $query->form = array_values($queryForm);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Get a query.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return object
+     */
     public function getByID($queryID)
     {
         $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
@@ -1732,7 +1780,7 @@ class searchModel extends model
      * @access public
      * @return object
      */
-    public function buildSearchFormOptions($module, $fieldParams, $fields, $queries)
+    public function buildSearchFormOptions($module, $fieldParams, $fields, $queries, $actionURL = '')
     {
         $opts = new stdClass();
         $opts->formConfig       = static::buildFormConfig();

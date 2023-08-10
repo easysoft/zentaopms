@@ -251,3 +251,4 @@ h3 {font-size: 16px;}
 li.selected .doc-title .icon, li.selected .doc-title a {color: #438EFF !important;}
 
 .btn-left, .btn-right {display: none;}
+.m-repo-ajaxgetrelationinfo{padding-bottom: 0;}

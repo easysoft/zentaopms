@@ -40,7 +40,7 @@ class serverroomModel extends model
         {
             if($param)
             {
-                $query = $this->loadModel('search')->getQuery($param);
+                $query = $this->loadModel('search')->getZinQuery($param);
                 if($query)
                 {
                     $this->session->set('serverroomQuery', $query->sql);

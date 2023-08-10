@@ -107,4 +107,4 @@ sidebar
     )
 );
 
-a(set::class('iframe'), setData('size', '1000px'), setData('toggle', 'modal'), set::id('linkObject'));
+a(set::class('iframe'), setData('size', 'lg'), setData('toggle', 'modal'), set::id('linkObject'));

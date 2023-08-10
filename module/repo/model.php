@@ -121,7 +121,7 @@ class repoModel extends model
 
             if($queryID && $queryID != 'myQueryID')
             {
-                $query = $this->loadModel('search')->getQuery($queryID);
+                $query = $this->loadModel('search')->getZinQuery($queryID);
                 if($query)
                 {
                     $this->session->set($queryName, $query->sql);

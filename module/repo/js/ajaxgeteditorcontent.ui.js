@@ -56,6 +56,11 @@ window.getRelation = function(commit)
     $('#codeContainer').css('height', codeHeight / 5 * 3);
     var relatedHeight = codeHeight / 5 * 2 - $('#log').height() - 10;
     $('#related').css('height', relatedHeight);
+    setTimeout(() => {
+        var tabsHeight = $('#relationTabs .nav-tabs').height();
+        if(!tabsHeight) tabsHeight = 32;
+        $('#relationTabs .tab-content').css('height', relatedHeight - tabsHeight - 8);
+    }, 500);
     $('#relationTabs ul li').remove();
     $('#relationTabs .tab-content .tab-pane').remove();
 
@@ -116,7 +121,7 @@ function openTab(titleObj)
 
     var height = getRelationTabHeight();
 
-    $('#relationTabs .tab-content').append("<div id='related-" + eleId + "' class='tab-pane active in'><iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetRelationInfo', 'objectID=' + titleObj.id + '&objectType=' + titleObj.type) + "' width='100%' height='" + height + "' scrolling='no'></iframe></div>")
+    $('#relationTabs .tab-content').append("<div id='related-" + eleId + "' class='tab-pane active in'><iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetRelationInfo', 'objectID=' + titleObj.id + '&objectType=' + titleObj.type) + "' width='100%' height='" + height + "'></iframe></div>")
 }
 
 /**
@@ -130,12 +135,9 @@ function openTab(titleObj)
 function getRelationTabHeight()
 {
     var relatedHeight = $('#related').height();
-    var tabHeight     = $('#related #relationTabs>ul').height();
+    relatedHeight     = parseInt(relatedHeight) ? parseInt(relatedHeight) : 0;
 
-    relatedHeight = parseInt(relatedHeight) ? parseInt(relatedHeight) : 0;
-    tabHeight     = parseInt(tabHeight) ? parseInt(tabHeight) : 0;
-
-    return relatedHeight - tabHeight;
+    return relatedHeight - 52;
 }
 
 /**

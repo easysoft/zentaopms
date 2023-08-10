@@ -53,7 +53,7 @@ class accountModel extends model
             /* Concatenate the conditions for the query. */
             if($param)
             {
-                $query = $this->loadModel('search')->getQuery($param);
+                $query = $this->loadModel('search')->getZinQuery($param);
                 if($query)
                 {
                     $this->session->set('accountQuery', $query->sql);
