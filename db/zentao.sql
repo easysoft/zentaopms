@@ -353,15 +353,18 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX `product`    ON `zt_bug`(`product`);
-CREATE INDEX `execution`  ON `zt_bug`(`execution`);
-CREATE INDEX `status`     ON `zt_bug`(`status`);
-CREATE INDEX `plan`       ON `zt_bug`(`plan`);
-CREATE INDEX `story`      ON `zt_bug`(`story`);
-CREATE INDEX `case`       ON `zt_bug`(`case`);
-CREATE INDEX `toStory`    ON `zt_bug`(`toStory`);
-CREATE INDEX `result`     ON `zt_bug`(`result`);
-CREATE INDEX `assignedTo` ON `zt_bug`(`assignedTo`);
+CREATE INDEX `product`                ON `zt_bug`(`product`);
+CREATE INDEX `execution`              ON `zt_bug`(`execution`);
+CREATE INDEX `status`                 ON `zt_bug`(`status`);
+CREATE INDEX `plan`                   ON `zt_bug`(`plan`);
+CREATE INDEX `story`                  ON `zt_bug`(`story`);
+CREATE INDEX `case`                   ON `zt_bug`(`case`);
+CREATE INDEX `toStory`                ON `zt_bug`(`toStory`);
+CREATE INDEX `result`                 ON `zt_bug`(`result`);
+CREATE INDEX `assignedTo`             ON `zt_bug`(`assignedTo`);
+CREATE INDEX `deleted`                ON `zt_bug`(`deleted`);
+CREATE INDEX `project`                ON `zt_bug`(`project`);
+CREATE INDEX `product_status_deleted` ON `zt_bug` (`product`,`status`,`deleted`);
 
 -- DROP TABLE IF EXISTS `zt_build`;
 CREATE TABLE IF NOT EXISTS `zt_build` (
