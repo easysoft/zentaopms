@@ -460,24 +460,24 @@ $(function(){$('#caseForm').table();})
 </script>
 
 <script>
-function toChange(sourceId, targetId)
+function toChange(sourceID, targetID)
 {
-  if(!checkProduct(sourceId, targetId)) return;
-  $.post(createLink('testcase', 'changeScene'), {'sourceId' : sourceId,'targetId' : targetId}, function(data){
-    toOrder(sourceId, targetId);
+  if(!checkProduct(sourceID, targetID)) return;
+  $.post(createLink('testcase', 'changeScene'), {'sourceID' : sourceID,'targetID' : targetID}, function(data){
+    toOrder(sourceID, targetID);
   });
 }
 
-function toOrder(sourceId,targetId)
+function toOrder(sourceID,targetID)
 {
-  if(!checkProduct(sourceId, targetId)) return;
+  if(!checkProduct(sourceID, targetID)) return;
 
   var origOrders = [];
   var newOrders  = [];
   var productID  = 0;
 
   $('#caseTableList > tr').each(function(i, elem){
-    if($(elem).data('id') == sourceId) productID = $(elem).data('product');
+    if($(elem).data('id') == sourceID) productID = $(elem).data('product');
   });
 
   $('#caseTableList > tr').each(function(i, elem){
@@ -487,12 +487,12 @@ function toOrder(sourceId,targetId)
 
   for(var i=0; i<origOrders.length;i++)
   {
-    if(origOrders[i] == targetId)
+    if(origOrders[i] == targetID)
     {
-      newOrders.push(sourceId);
-      newOrders.push(targetId);
+      newOrders.push(sourceID);
+      newOrders.push(targetID);
     }
-    else if(origOrders[i] == sourceId)
+    else if(origOrders[i] == sourceID)
     {
       continue;
     }
@@ -511,35 +511,35 @@ function toOrder(sourceId,targetId)
 
 function runToChange()
 {
-  var sourceId = $("#sceneDragModal").attr("sourceId");
-  var targetId = $("#sceneDragModal").attr("targetId");
+  var sourceID = $("#sceneDragModal").attr("sourceID");
+  var targetID = $("#sceneDragModal").attr("targetID");
 
   $("#sceneDragModal").modal("hide");
 
-  toChange(sourceId, targetId);
+  toChange(sourceID, targetID);
 }
 
 function runToOrder()
 {
-  var sourceId = $("#sceneDragModal").attr("sourceId");
-  var targetId = $("#sceneDragModal").attr("targetId");
+  var sourceID = $("#sceneDragModal").attr("sourceID");
+  var targetID = $("#sceneDragModal").attr("targetID");
 
   $("#sceneDragModal").modal("hide");
 
-  toOrder(sourceId, targetId);
+  toOrder(sourceID, targetID);
 }
 
-function checkProduct(sourceId, targetId)
+function checkProduct(sourceID, targetID)
 {
   /* Check source and target ID if belong to the same product. */
   var sourceElem = null;
   var targetElem = null;
   $('#caseTableList > tr').each(function(i, elem){
-    if($(elem).data('id') == sourceId) sourceElem = elem;
-    if($(elem).data('id') == targetId) targetElem = elem;
+    if($(elem).data('id') == sourceID) sourceElem = elem;
+    if($(elem).data('id') == targetID) targetElem = elem;
   });
 
-  if(sourceId == targetId) return false;
+  if(sourceID == targetID) return false;
   if($(sourceElem).data('product') !== $(targetElem).data('product'))
   {
     bootbox.alert(differentProduct);
@@ -583,8 +583,8 @@ $(function()
       if(sameLevel == true) {
         if(target.dataNested == "true"){
           //同级别拖拽到场景下面，需要弹框询问是排序还是切换场景
-          $("#sceneDragModal").attr("sourceId",source.id);
-          $("#sceneDragModal").attr("targetId",target.id);
+          $("#sceneDragModal").attr("sourceID",source.id);
+          $("#sceneDragModal").attr("targetID",target.id);
           $("#sceneDragModal").modal("show");
         } else {
           //同级别拖拽到测试用例上，只能是调整顺序

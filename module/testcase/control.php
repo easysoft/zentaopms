@@ -2736,10 +2736,10 @@ class testcase extends control
     public function changeScene()
     {
         $now       = helper::now();
-        $currentID = $this->post->sourceId;
-        $targetId  = $this->post->targetId;
+        $currentID = $this->post->sourceID;
+        $targetID  = $this->post->targetID;
 
-        $targetScene  = $this->dao->findById((int)$targetId)->from(VIEW_SCENECASE)->fetch();
+        $targetScene  = $this->dao->findById((int)$targetID)->from(VIEW_SCENECASE)->fetch();
         $currentScene = $this->dao->findById((int)$currentID)->from(VIEW_SCENECASE)->fetch();
 
         $product = $targetScene->product;
@@ -2751,7 +2751,7 @@ class testcase extends control
                 $childPath = $targetScene->path . "$currentID,";
                 $grade     = $targetScene->grade + 1;
 
-                $this->dao->update(TABLE_SCENE)->set('parent')->eq($targetId)
+                $this->dao->update(TABLE_SCENE)->set('parent')->eq($targetID)
                     ->set('path')->eq($childPath)
                     ->set('grade')->eq($grade)
                     ->set('product')->eq($product)
@@ -2807,7 +2807,7 @@ class testcase extends control
             }
             else
             {
-                $this->dao->update(TABLE_CASE)->set('scene')->eq($targetId)
+                $this->dao->update(TABLE_CASE)->set('scene')->eq($targetID)
                     ->set('product')->eq($product)
                     ->set('module')->eq($module)
                     ->set('lastEditedBy')->eq($this->app->user->account)
