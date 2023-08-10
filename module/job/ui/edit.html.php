@@ -232,7 +232,7 @@ formPanel
         formGroup
         (
             set::label(''),
-            set::name('atDay'),
+            set::name('atDay[]'),
             set::control('checkListInline'),
             set::items($lang->datepicker->dayNames),
             set::value($job->atDay),
