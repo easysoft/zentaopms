@@ -120,7 +120,7 @@ $config->repo->commentDtable->fieldList['revision']['hint']     = true;
 $config->repo->commentDtable->fieldList['commit']['name']     = 'commit';
 $config->repo->commentDtable->fieldList['commit']['title']    = $lang->repo->commit;
 $config->repo->commentDtable->fieldList['commit']['sortType'] = false;
-$config->repo->commentDtable->fieldList['commit']['width']    = '40';
+$config->repo->commentDtable->fieldList['commit']['width']    = '50';
 $config->repo->commentDtable->fieldList ['commit']['hint']    = true;
 
 $config->repo->commentDtable->fieldList['time']         = $config->repo->repoDtable->fieldList['time'];

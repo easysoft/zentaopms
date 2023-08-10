@@ -83,6 +83,7 @@ $config->host->actionList['delete']['icon']         = 'trash';
 $config->host->actionList['delete']['text']         = $lang->delete;
 $config->host->actionList['delete']['hint']         = $lang->delete;
 $config->host->actionList['delete']['showText']     = true;
+$config->host->actionList['delete']['ajaxSubmit']   = true;
 $config->host->actionList['delete']['data-confirm'] = $lang->host->confirmDelete;
 $config->host->actionList['delete']['url']          = array('module' => 'host', 'method' => 'delete', 'params' => 'id={id}');
 
