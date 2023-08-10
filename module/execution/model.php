@@ -130,9 +130,11 @@ class executionModel extends model
 
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) return print(js::error($this->lang->execution->accessDenied) . js::locate('back'));
 
-        $executions = $this->fetchPairs(0, 'all');
+        $executions = $this->fetchPairs($execution->project, 'all');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
-        if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
+        if(!$executionID) $executionID = key($executions);
+        if($execution->multiple and !isset($executions[$executionID])) $executionID = key($executions);
+        if($execution->multiple and $executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
         $this->session->set('execution', $executionID, $this->app->tab);
 
         if($execution and $execution->type == 'stage')
@@ -156,8 +158,6 @@ class executionModel extends model
         if(!$features['burn'])   unset($this->lang->execution->menu->burn);
         if(!$features['other'])  unset($this->lang->execution->menu->other);
         if(!$features['story'] and $this->config->edition == 'open') unset($this->lang->execution->menu->view);
-
-        if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
