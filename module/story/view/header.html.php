@@ -255,8 +255,7 @@ function loadProductReviewers(productID)
             }
             $reviewer.replaceWith(data);
             $reviewer = $('#reviewer');
-            if($reviewer.data('pickertype')) $reviewer.picker({chosenMode: true});
-            else $reviewer.chosen();
+            $reviewer.picker({chosenMode: true});
             if(needNotReview == 'checked') $('#reviewer').attr('disabled', 'disabled').trigger('chosen:updated');
         }
     });
