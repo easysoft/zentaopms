@@ -1,5 +1,11 @@
 ALTER TABLE `zt_doc` ADD `editedList` text NULL AFTER `editingDate`;
 
+ALTER TABLE `zt_case` ADD INDEX `scene` (`scene`);
+UPDATE `zt_case` SET `scene` = `scene` - 100000000 WHERE `scene` > 100000000;
+UPDATE `zt_scene` SET `sort` = `sort` - 100000000 WHERE `sort` > 100000000;
+UPDATE `zt_scene` SET `parent` = `parent` - 100000000 WHERE `parent` > 100000000;
+UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',10000000', ','), `path` = REPLACE(`path`, ',1000000', ','), `path` = REPLACE(`path`, ',100000', ','), `path` = REPLACE(`path`, ',10000', ',');
+
 -- DROP TABLE IF EXISTS `zt_actionlatest`;
 CREATE TABLE IF NOT EXISTS `zt_actionlatest` (
   `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
