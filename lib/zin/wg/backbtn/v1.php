@@ -58,7 +58,6 @@ class backBtn extends btn
             'build'          => 'execution-build,build-view',
             'projectbuild'   => 'projectbuild-browse,projectbuild-view',
             'mr'             => 'mr-browse',
-            'repo'           => 'repo-log,repo-browse',
             'compile'        => 'compile-browse',
             'store'          => 'store-browse',
             'space'          => 'space-browse',

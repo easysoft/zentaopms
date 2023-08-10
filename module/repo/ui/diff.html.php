@@ -18,8 +18,6 @@ $browser = helper::getBrowser();
 jsVar('browser', $browser['name']);
 jsVar('edition', $config->edition);
 
-$backURI = $this->session->repoView ? $this->session->repoView : $this->session->repoList;
-
 $breadcrumbItems = array();
 $breadcrumbItems[] = h::a
 (
@@ -65,7 +63,7 @@ $breadcrumbItems[] = span(setClass('label label-exchange'), icon('exchange'));
 
 featureBar
 (
-    backBtn(set::icon('back'), $backURI ? set::url($backURI) : null, setClass('bg-transparent diff-back-btn'), $lang->goback),
+    backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), $lang->goback),
     item(set::type('divider')),
     ...$breadcrumbItems,
 );
