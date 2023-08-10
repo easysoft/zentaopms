@@ -54,7 +54,6 @@
     const timers      = {timeout: [], interval: []};
     let currentAppUrl = isInAppTab ? '' : location.href;
     let zinbar        = null;
-    let historyState  = parent.window.history.state;
 
     $.apps = $.extend(
     {
@@ -701,7 +700,7 @@
     function loadCurrentPage(options)
     {
         if(typeof options === 'string') options = {selector: options};
-        return loadPage(options);
+        return loadPage($.extend({url: currentAppUrl}, options));
     }
 
     function reloadPage()
