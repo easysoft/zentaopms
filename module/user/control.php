@@ -1384,13 +1384,13 @@ class user extends control
     {
         $params = base64_decode($this->get->params);
         parse_str($params, $parsedParams);
-        $users = $this->user->getPairs($parsedParams['params'], $parsedParams['usersToAppended']);
+        $users = $this->user->getPairs(zget($parsedParams, 'params', ''), zget($parsedParams, 'usersToAppended', ''));
 
         $search   = $this->get->search;
         $limit    = $this->get->limit;
         $index    = 0;
         $newUsers = array();
-        if(empty($search)) return array();
+        //if(empty($search)) return array();
         foreach($users as $account => $realname)
         {
             if($index >= $limit) break;

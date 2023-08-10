@@ -1417,8 +1417,7 @@ class bug extends control
         $this->view->showFields   = $this->config->bug->custom->batchEditFields;
 
         /* Set users. */
-        $users = $this->loadModel('user')->getPairs('devfirst', '', $this->config->batchMaxCount);
-        $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
+        $users = $this->loadModel('user')->getPairs();
 
         $branchIdList    = array();
         $projectIdList   = array();
@@ -1444,12 +1443,37 @@ class bug extends control
                 }
             }
 
-            $this->config->moreLinks["duplicateBugs[{$bug->id}]"] = inlink('ajaxGetProductBugs', "productID={$bug->product}&bugID={$bug->id}&type=json");
-            if(!empty($this->config->user->moreLink))
+            $bug->assignedToList = array();
+            if($this->app->tab == 'project' or $this->app->tab == 'execution')
             {
-                $this->config->moreLinks["resolvedBys[$bug->id]"] = $this->config->user->moreLink;
-                $this->config->moreLinks["assignedTos[$bug->id]"] = $this->config->user->moreLink;
+                if($bug->execution)
+                {
+                    $bug->assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $executionMembers[$bug->execution];
+                }
+                elseif($bug->project)
+                {
+                    $bug->assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $projectMembers[$bug->project];
+                }
+                else
+                {
+                    $bug->assignedToList = $productMembers[$bug->product][$bug->branch];
+                    if(empty($bug->assignedToList))
+                    {
+                        $bug->assignedToList = $users;
+                        $this->config->moreLinks["assignedTos[$bug->id]"] = helper::createLink('user', 'ajaxGetMore');
+                        unset($bug->assignedToList['closed']);
+                    }
+                }
             }
+            else
+            {
+                $bug->assignedToList = $users;
+                $this->config->moreLinks["assignedTos[$bug->id]"] = helper::createLink('user', 'ajaxGetMore');
+                unset($bug->assignedToList['closed']);
+            }
+
+            $this->config->moreLinks["duplicateBugs[{$bug->id}]"] = inlink('ajaxGetProductBugs', "productID={$bug->product}&bugID={$bug->id}&type=json");
+            $this->config->moreLinks["resolvedBys[$bug->id]"]     = helper::createLink('user', 'ajaxGetMore');
         }
 
         /* Get assigned to member. */
@@ -1937,6 +1961,8 @@ class bug extends control
 
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
+
+        $this->config->moreLinks['duplicateBug'] = inlink('ajaxGetProductBugs', "productID={$productID}&bugID={$bugID}&type=json");
 
         $this->view->title          = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->bug            = $bug;
