@@ -2154,11 +2154,16 @@ class testcaseModel extends model
      * @param  object $case
      * @param  array  $users
      * @param  array  $branches
+     * @param  array  $modulePairs
+     * @param  string $browseType
+     * @param  string $mode         datatable|table
      * @access public
      * @return void
      */
-    public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable', $isCase = 1)
+    public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
     {
+        $isCase = $case->isCase;
+
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('case', $case);
 
@@ -2227,30 +2232,21 @@ class testcaseModel extends model
             switch($id)
             {
             case 'id':
-                $showid = "";
-                if($isCase == 2)
-                {
-                    $showid = substr($case->id,1);
-                    $showid = preg_replace('/^0+/', '', $showid);
-                }
-                else
-                {
-                    $showid = $case->id;
-                }
+                $showID = ($browseType == 'all' && !$this->cookie->onlyScene) ? $case->index : $case->id;
                 if($canBatchAction)
                 {
                     $disabled = $canBeChanged ? '' : 'disabled';
                     if($isCase == 1){
-                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $showid), '', "data-app='{$this->app->tab}'");
+                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $showID), '', "data-app='{$this->app->tab}'");
                     }
                     else
                     {
-                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) .  sprintf('%03d', $showid);
+                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) .  sprintf('%03d', $showID);
                     }
                 }
                 else
                 {
-                    printf('%03d', $showid);
+                    printf('%03d', $showID);
                 }
                 break;
             case 'pri':
