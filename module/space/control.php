@@ -51,6 +51,12 @@ class space extends control
             $instance->externalID = 0;
             $instance->orgID      = $instance->id;
             $instance->type       = 'app';
+
+            if(in_array($instance->appName, $this->config->space->zentaoApps))
+            {
+                $externalApp = $this->space->getExternalAppByApp($instance);
+                if($externalApp) $instance->externalID = $externalApp->id;
+            }
         }
         $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc');
         $maxID     = 0;
@@ -58,8 +64,9 @@ class space extends control
         foreach($pipelines as $key => $pipeline)
         {
             if($pipeline->createdBy == 'system') unset($pipelines[$key]);
+
             $pipeline->createdAt  = $pipeline->createdDate;
-            $pipeline->appName    = ucfirst($pipeline->type);
+            $pipeline->appName    = $this->lang->space->appType[$pipeline->type];
             $pipeline->status     = '';
             $pipeline->type       = 'external';
             $pipeline->externalID = $pipeline->id;

@@ -20,8 +20,8 @@ $lang->space->featureBar['browse']['running']  = 'Running';
 $lang->space->featureBar['browse']['stopped']  = 'Stopped';
 $lang->space->featureBar['browse']['abnormal'] = 'Abnormal';
 
-$lang->space->appType['GitLab']    = 'GitLab';
-$lang->space->appType['Gitea']     = 'Gitea';
-$lang->space->appType['Gogs']      = 'Gogs';
-$lang->space->appType['Jenkins']   = 'Jenkins';
-$lang->space->appType['SonarQube'] = 'SonarQube';
+$lang->space->appType['gitlab']    = 'GitLab';
+$lang->space->appType['gitea']     = 'Gitea';
+$lang->space->appType['gogs']      = 'Gogs';
+$lang->space->appType['jenkins']   = 'Jenkins';
+$lang->space->appType['sonarqube'] = 'SonarQube';

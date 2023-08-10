@@ -71,4 +71,4 @@ $config->space->dtable->fieldList['actions']['list']['edit']['url']  = 'javascri
 
 $config->space->dtable->fieldList['actions']['list']['bindUser']['icon'] = 'lock';
 $config->space->dtable->fieldList['actions']['list']['bindUser']['hint'] = $lang->gitlab->bindUser;
-$config->space->dtable->fieldList['actions']['list']['bindUser']['url']  = 'javascript:bindUser({orgID}, "{appName}")';
+$config->space->dtable->fieldList['actions']['list']['bindUser']['url']  = 'javascript:bindUser({externalID}, "{appName}")';
