@@ -81,7 +81,7 @@ class instance extends control
         $currentResource = $this->cne->getAppConfig($instance);
         $customItems     = $this->cne->getCustomItems($instance);
 
-        $this->instanceZen->saveAuthInfo($instance);
+        if($instance->status == 'running') $this->instanceZen->saveAuthInfo($instance);
 
         $this->view->title           = $instance->appName;
         $this->view->instance        = $instance;
@@ -475,6 +475,13 @@ class instance extends control
         }
         $instance = $this->instance->getByID($instanceID);
         if(!$instance) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['success']));
+
+        $externalApp = $this->loadModel('space')->getExternalAppByApp($instance);
+        if($externalApp)
+        {
+            $actionID = $this->loadModel('pipeline')->delete($externalApp->id, strtolower($instance->appName));
+            if(!$actionID) return $this->send(array('result' => 'fail', 'message' => $this->lang->pipeline->delError));
+        }
 
         $success = $this->instance->uninstall($instance);
         $this->action->create('instance', $instance->id, 'uninstall', '', json_encode(array('result' => $success, 'app' => array('alias' => $instance->appName, 'app_version' => $instance->version))));
