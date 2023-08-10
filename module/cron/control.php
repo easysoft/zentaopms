@@ -150,6 +150,7 @@ class cron extends control
         /* make cron status to running. */
         $configID = $this->cron->getConfigID();
         $configID = $this->cron->markCronStatus('running', $configID);
+        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('id')->eq(1)->exec();
 
         /* Get and parse crons. */
         $crons       = $this->cron->getCrons('nostop');
