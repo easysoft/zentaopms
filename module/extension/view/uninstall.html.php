@@ -36,7 +36,7 @@
       <i class='icon-exclamation-sign'></i>
       <div class='content'>
       <?php
-        echo "<h3 class='error'>" . $lang->extension->uninstallFailed . "</h3>"; 
+        echo "<h3 class='error'>" . $lang->extension->uninstallFailed . "</h3>";
         echo "<p>$error</p>";
       ?>
       </div>
@@ -60,5 +60,12 @@
     <?php endif;?>
   </div>
 </div>
-</body>
-</html>
+<script>
+$(function()
+{
+    parent.$('#triggerModal .modal-content .modal-header .close').on('click', function()
+    {
+        parent.location.reload();
+    });
+});
+</script>
