@@ -524,6 +524,8 @@
         if(typeof options === 'string') options = {url: options};
         options = options || {};
 
+        if(is18version && !options.partial) return $.apps.openApp(options.url, options);
+
         if ($.apps.isOldPage(options.url)) return loadOldPage(options.url);
         else hideOldPage();
 
