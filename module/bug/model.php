@@ -2062,10 +2062,8 @@ class bugModel extends model
             ->orderBy('id desc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll();
-        foreach($data as $bug)
-        {
-            $bugs[$bug->id] = $bug->id . ':' . $bug->title;
-        }
+
+        foreach($data as $bug) $bugs[$bug->id] = $bug->id . ':' . $bug->title;
         return $bugs;
     }
 

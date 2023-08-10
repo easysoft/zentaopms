@@ -2601,7 +2601,7 @@ class bug extends control
     public function ajaxGetProductBugs($productID, $bugID, $type = 'html')
     {
         $search      = $this->get->search;
-        $limit       = $this->get->limit;
+        $limit       = $this->get->limit ? $this->get->limit : $this->config->maxCount;
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
