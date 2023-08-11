@@ -26,7 +26,7 @@ foreach($projectExecutions as $projectID => $executions)
     {
         $group = $onlyClosed ? 'closed' : $getExecutionGroup($execution);
 
-        $item = array($execution->id, $execution->name, zget(common::convert2Pinyin(array($execution->name)), $execution->name, ''));
+        $item = array($execution->id, $execution->name, zget($namePinyinList, $execution->name, ''));
 
         if(!isset($data[$group][$projectID])) $data[$group][$projectID] = $projectItem;
         $data[$group][$projectID][4][] = $item;

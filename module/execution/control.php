@@ -3931,6 +3931,7 @@ class execution extends control
 
         $this->view->projects          = $projectPairs;
         $this->view->projectExecutions = $projectExecutions;
+        $this->view->namePinyinList    = common::convert2Pinyin($nameList);
         $this->display();
     }
 
