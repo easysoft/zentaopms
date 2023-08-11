@@ -31,7 +31,7 @@ window.afterPageUpdate = function()
         
         /* Load default tab content. */
         var height = getIframeHeight();
-        $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', fileAsId)) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
+        $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', file)) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
         
         /* Select default tree item. */
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);

@@ -110,6 +110,7 @@ class repo extends control
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
 
+        $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;
         $this->view->pager         = $pager;
