@@ -172,13 +172,6 @@ class testcase extends control
                     if($sceneCount == 0) $pager->offset = $recPerPage * ($pageID - 1) - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始偏移量。
 
                     $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
-                    foreach($cases as $case)
-                    {
-                        $case->parent = 0;
-                        $case->grade  = 1;
-                        $case->path   = ',' . $case->id . ',';
-                        $case->isCase = 1;
-                    }
                     $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
                 }
                 else
@@ -198,6 +191,7 @@ class testcase extends control
         else
         {
             $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         }
 
         $sceneCount = count($scenes);
@@ -214,6 +208,13 @@ class testcase extends control
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
+        foreach($cases as $case)
+        {
+            $case->parent = 0;
+            $case->grade  = 1;
+            $case->path   = ',' . $case->id . ',';
+            $case->isCase = 1;
+        }
 
         /* Build the search form. */
         $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
