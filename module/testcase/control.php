@@ -158,6 +158,7 @@ class testcase extends control
 
             if(!$this->cookie->onlyScene)
             {
+                $recPerPage = $pager->recPerPage;
                 $sceneTotal = $pager->recTotal;
                 $sceneCount = count($scenes);
 
