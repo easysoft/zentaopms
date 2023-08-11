@@ -2909,21 +2909,22 @@ class testcase extends control
 
         if(count($caseIDList) > 1)
         {
-            $caseSorts = $this->dao->select('sort')->from(TABLE_CASE)->where('id')->in($caseIDList)->orderBy($orderBy)->fetchPairs();
-            foreach($caseSorts as $sort)
+            $caseSorts = $this->dao->select('id, sort')->from(TABLE_CASE)->where('id')->in($caseIDList)->orderBy($orderBy)->fetchPairs();
+            foreach($caseSorts as $id => $sort)
             {
                 $caseID = array_shift($caseIDList);
-                $this->dao->update(TABLE_CASE)->set('sort')->eq($sort)->where('id')->eq($caseID)->exec();
+
+                if($id != $caseID) $this->dao->update(TABLE_CASE)->set('sort')->eq($sort)->where('id')->eq($caseID)->exec();
             }
         }
 
         if(count($sceneIDList) > 1)
         {
-            $sceneSorts = $this->dao->select('sort')->from(TABLE_SCENE)->where('id')->in($sceneIDList)->orderBy($orderBy)->fetchPairs();
-            foreach($sceneSorts as $sort)
+            $sceneSorts = $this->dao->select('id, sort')->from(TABLE_SCENE)->where('id')->in($sceneIDList)->orderBy($orderBy)->fetchPairs();
+            foreach($sceneSorts as $id => $sort)
             {
                 $sceneID = array_shift($sceneIDList);
-                $this->dao->update(TABLE_SCENE)->set('sort')->eq($sort)->where('id')->eq($sceneID)->exec();
+                if($id != $sceneID) $this->dao->update(TABLE_SCENE)->set('sort')->eq($sort)->where('id')->eq($sceneID)->exec();
             }
         }
     }
