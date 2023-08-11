@@ -1,6 +1,7 @@
 $(function()
 {
     onScmChange();
+    $('div.service-project .form-label').addClass('required');
 });
 
 function onProductChange(event)
@@ -43,6 +44,12 @@ function onProjectChange()
 {
     var serviceProject = $('#serviceProject').zui('picker').$.state.value;
     var items          = $('#serviceProject').zui('picker').$.state.items;
+    if(!serviceProject)
+    {
+        $('#name').val('');
+        return;
+    }
+
     for(i in items)
     {
         if(items[i].value == serviceProject)

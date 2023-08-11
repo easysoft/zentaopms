@@ -239,7 +239,7 @@ class repoModel extends model
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($repo->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->check('name', 'unique', "`SCM` = '{$repo->SCM}'")
-            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
+            ->checkIF($isPipelineServer && $repo->serviceProject, 'serviceProject', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
             ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
             ->autoCheck()
             ->exec();
@@ -352,7 +352,7 @@ class repoModel extends model
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->check('name', 'unique', "`SCM` = '{$data->SCM}' and `id` <> $id")
-            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}' and `id` <> $id")
+            ->checkIF($isPipelineServer && $data->serviceProject, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}' and `id` <> $id")
             ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}' and `id` <> $id")
             ->autoCheck()
             ->where('id')->eq($id)->exec();

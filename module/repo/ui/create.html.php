@@ -76,13 +76,12 @@ formPanel
     ),
     formRow
     (
-        setClass('service hide'),
+        setClass('service hide service-project'),
         formGroup
         (
             set::width('1/2'),
             set::name("serviceProject"),
             set::label($lang->repo->serviceProject),
-            set::required(true),
             set::control("picker"),
         ),
     ),

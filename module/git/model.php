@@ -82,7 +82,7 @@ class gitModel extends model
         {
             $this->updateCommit($repo, $commentGroup, true);
 
-            if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+            if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
 
             /* Create compile by tag. */
             $jobs = zget($tagGroup, $repoID, array());
