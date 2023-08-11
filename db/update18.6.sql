@@ -70,4 +70,3 @@ CREATE TABLE IF NOT EXISTS `zt_solution` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-REPLACE INTO `zt_space` (`id`, `name`,`k8space`,`owner`,`default`,`createdAt`) VALUES (1, 'default space', 'quickon-app', 'qadmin', 1, current_date());
