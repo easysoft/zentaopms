@@ -62,6 +62,7 @@ function deleteFile(fileID, obj)
  * @param  int    $extension
  * @param  int    $imageWidth
  * @param  string $fileTitle
+ * @param  string $type download,preview
  * @access public
  * @return void
  */
