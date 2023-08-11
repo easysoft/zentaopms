@@ -2703,29 +2703,8 @@ class testcase extends control
     {
         if($this->post->caseIDList)
         {
-            $caseIDList = $this->post->caseIDList;
-            $caseIDList = array_unique($caseIDList);
-            unset($_POST['caseIDList']);
-            $allChanges = $this->testcase->batchChangeScene($caseIDList, $sceneID);
+            $this->testcase->batchChangeScene($this->post->caseIDList, $sceneID);
             if(dao::isError()) return print(js::error(dao::getError()));
-
-            if(!empty($allChanges[1]))
-            {
-                foreach($allChanges[1] as $caseID => $changes)
-                {
-                    $this->loadModel('action');
-                    $actionID = $this->action->create('case', $caseID, 'Edited');
-                }
-            }
-
-            if(!empty($allChanges[0]))
-            {
-                foreach($allChanges[0] as $sceneID => $changes)
-                {
-                    $this->loadModel('action');
-                    $actionID = $this->action->create('scene', $sceneID - CHANGEVALUE, 'Edited');
-                }
-            }
         }
 
         echo js::locate($this->session->caseList, 'parent');
