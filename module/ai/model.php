@@ -1043,7 +1043,7 @@ class aiModel extends model
      * @param  object       $object
      * @param  array        $linkArgs  optional, link arguments, as defined in `->args` of items of `$config->ai->targetFormVars`, e.g. array('story' => 1). If not provided, will try to get from object.
      * @access public
-     * @return array        array(link|false, bool), link to target form, and whether should stop execution and return link.
+     * @return array        array(link|false, bool), link to target form, and whether php should stop execution and return link.
      */
     public function getTargetFormLocation($prompt, $object, $linkArgs = array())
     {
@@ -1058,7 +1058,7 @@ class aiModel extends model
         $module = strtolower($targetFormConfig->m);
         $method = strtolower($targetFormConfig->f);
 
-        /* Try assemble link vars from both passed-in `$linkArgs` and object props. */
+        /* Try to assemble link vars from both passed-in `$linkArgs` and object props. */
         $varsConfig = $this->config->ai->targetFormVars[$module][$method];
         $vars = array();
         foreach($varsConfig->args as $arg => $isRequired)
@@ -1068,7 +1068,7 @@ class aiModel extends model
             {
                 $var = $linkArgs[$arg];
             }
-            elseif(!empty($object->$arg) && is_object($object->$arg) && !empty($object->$arg->id)) // If corresponding object exists, use its id.
+            elseif(!empty($object->$arg) && is_object($object->$arg) && !empty($object->$arg->id)) // If the corresponding object exists, use its id.
             {
                 $var = $object->$arg->id;
             }
@@ -1078,7 +1078,7 @@ class aiModel extends model
             }
             else
             {
-                /* Try get related object, we are sorry if it could not find any. */
+                /* Try to get a related object, we are sorry if it could not find any. */
                 $relatedObj = $this->tryGetRelatedObjects($prompt, $object, array($arg));
                 $var = !empty($relatedObj) ? current($relatedObj) : '';
             }
@@ -1112,7 +1112,7 @@ class aiModel extends model
 
         $vars = array();
 
-        /* If native object of module exists, try getting stuff related to its id. */
+        /* If a native object of a module exists, try getting stuff related to its id. */
         if(!empty($object->{$prompt->module}) && is_object($object->{$prompt->module}) && !empty($object->{$prompt->module}->id))
         {
             $objectId = $object->{$prompt->module}->id;
