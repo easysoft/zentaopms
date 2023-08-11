@@ -1407,13 +1407,15 @@ class testcase extends control
 
         foreach($caseIDList as $caseID)
         {
-            $vs = $this->dao->findById((int)$caseID)->from(VIEW_SCENECASE)->fetch();
-            if($vs->isCase == 2)
+            if(strpos($caseID, 'scene_') !== false)
             {
-                $this->testcase->delete(TABLE_SCENE, $caseID-CHANGEVALUE);
+                $caseID = str_replace('scene_', '', $caseID);
+                $this->testcase->delete(TABLE_SCENE, $caseID);
             }
-            else
+
+            if(strpos($caseID, 'case_') !== false)
             {
+                $caseID = str_replace('case_', '', $caseID);
                 $this->testcase->delete(TABLE_CASE, $caseID);
             }
         }
