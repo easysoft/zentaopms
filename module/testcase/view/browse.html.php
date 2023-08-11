@@ -141,8 +141,9 @@ js::set('langNormal',       $lang->testcase->normal);
               {
                   $case->index = $index;
 
+                  $prefix  = $case->isCase == 1 ? 'case_' : 'scene_';
                   $trClass = '';
-                  $trAttrs = "data-id='{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
+                  $trAttrs = "data-id='{$prefix}{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
                   if($case->isCase == 2)
                   {
                       $trAttrs .= " data-nested='true'";
@@ -502,9 +503,9 @@ function toOrder(sourceID,targetID)
     }
   }
 
-  var scenes  = newOrders.join();
-  var orderBy = 'sort_desc';
-  $.post(createLink('testcase', 'updateOrder'), {'scenes' : scenes, 'orderBy' : orderBy}, function(data){
+  const idList  = newOrders.join();
+  const orderBy = 'sort_desc';
+  $.post(createLink('testcase', 'updateOrder'), {idList, orderBy}, function(data){
     window.location.reload();
   });
 }

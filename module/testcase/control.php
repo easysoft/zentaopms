@@ -2900,37 +2900,31 @@ class testcase extends control
      */
     public function updateOrder()
     {
-        $idList  = explode(',', trim($this->post->scenes, ','));
+        $idList  = explode(',', trim($this->post->idList, ','));
         $orderBy = $this->post->orderBy;
         if(strpos($orderBy, 'sort') === false) return false;
-        /* Get list of original scenes and cases, and sort with orderBy param. */
-        $scenesMap = $this->dao->select('id,sort,isCase')->from(VIEW_SCENECASE)->where('id')->in($idList)->orderBy($orderBy)->fetchAll('id');
 
-        foreach($scenesMap as $scene)
+        $caseIDList  = array_filter(array_map(function($id){return strpos($id, 'case_')  !== false ? str_replace('case_',  '', $id) : '';}, $idList));
+        $sceneIDList = array_filter(array_map(function($id){return strpos($id, 'scene_') !== false ? str_replace('scene_', '', $id) : '';}, $idList));
+
+        if(count($caseIDList) > 1)
         {
-            /* Compare with sorted list from front-end. */
-            $newID = array_shift($idList);
-            if($scene->id == $newID) continue;
-
-            /* Change sort value of scene. */
-            if ($scenesMap[$newID]->isCase == 2)
+            $caseSorts = $this->dao->select('sort')->from(TABLE_CASE)->where('id')->in($caseIDList)->orderBy($orderBy)->fetchPairs();
+            foreach($caseSorts as $sort)
             {
-                $this->dao->update(TABLE_SCENE)
-                    ->set('sort')->eq($scene->sort)
-                    ->set('lastEditedBy')->eq($this->app->user->account)
-                    ->set('lastEditedDate')->eq(helper::now())
-                    ->where('id')->eq($newID - CHANGEVALUE)
-                    ->exec();
-                continue;
+                $caseID = array_shift($caseIDList);
+                $this->dao->update(TABLE_CASE)->set('sort')->eq($sort)->where('id')->eq($caseID)->exec();
             }
+        }
 
-            /* Change sort value of case. */
-            $this->dao->update(TABLE_CASE)
-                ->set('sort')->eq($scene->sort)
-                ->set('lastEditedBy')->eq($this->app->user->account)
-                ->set('lastEditedDate')->eq(helper::now())
-                ->where('id')->eq($newID)
-                ->exec();
+        if(count($sceneIDList) > 1)
+        {
+            $sceneSorts = $this->dao->select('sort')->from(TABLE_SCENE)->where('id')->in($sceneIDList)->orderBy($orderBy)->fetchPairs();
+            foreach($sceneSorts as $sort)
+            {
+                $sceneID = array_shift($sceneIDList);
+                $this->dao->update(TABLE_SCENE)->set('sort')->eq($sort)->where('id')->eq($sceneID)->exec();
+            }
         }
     }
 
