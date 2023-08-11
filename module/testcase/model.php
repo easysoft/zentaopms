@@ -3622,6 +3622,7 @@ class testcaseModel extends model
                 ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
                 ->orderBy($orderBy)
                 ->fetchAll('id');
+            $caseList = $this->loadModel('story')->checkNeedConfirm($caseList);
             $caseList = $this->appendData($caseList);
             foreach($caseList as $case) $cases[$case->scene][$case->id] = $case;
         }
