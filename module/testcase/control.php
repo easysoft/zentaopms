@@ -2821,41 +2821,39 @@ class testcase extends control
     }
 
     /**
-     * Delete scene.
+     * Delete a scene.
      *
-     * @param  int    $sceneId
+     * @param  int    $sceneID
      * @param  string $confirm
      * @access public
      * @return void
      */
     public function deleteScene($sceneID, $confirm = 'no')
     {
-        $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($sceneID)->andWhere('isCase')->eq(2)->fetch();
+        $scene = $this->testcase->getSceneByID($sceneID);
 
         if($confirm == 'no') return print(js::confirm(sprintf($this->lang->testcase->confirmDeleteScene,addslashes($scene->title)), $this->createLink('testcase', 'deleteScene', "sceneID=$sceneID&confirm=yes")));
 
-        $childrenCount = $this->dao->select('count(*) as count')->from(VIEW_SCENECASE)->where('parent')->eq($sceneID)->andWhere('deleted')->eq(0)->fetch('count');
+        $childrenCount = $this->dao->select('COUNT(*) AS count')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('parent')->eq($sceneID)->fetch('count');
+        if(!$childrenCount) $childrenCount = $this->dao->select('COUNT(*) AS count')->from(TABLE_CASE)->where('deleted')->eq('0')->andWhere('scene')->eq($sceneID)->fetch('count');
+
         if($childrenCount)
         {
             if($confirm != "wait") return print(js::confirm(sprintf($this->lang->testcase->hasChildren), $this->createLink('testcase', 'deleteScene', "sceneID=$sceneID&confirm=wait")));
-            $all = $this->dao->select('id,isCase')->from(VIEW_SCENECASE)->where('path')->like($scene->path . '%')->andWhere('deleted')->eq(0)->fetchAll();
 
-            foreach($all as $v)
-            {
-                if($v->isCase == 2)
-                {
-                    $this->testcase->delete(TABLE_SCENE, $v->id - CHANGEVALUE);
-                }
-                else
-                {
-                    $this->testcase->delete(TABLE_CASE, $v->id);
-                }
-            }
+            $scenes = $this->dao->select('id')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('path')->like($scene->path . '%')->fetchPairs();
+            $cases  = $this->dao->select('id')->from(TABLE_CASE)->where('deleted')->eq('0')->andWhere('scene')->in($scenes)->fetchPairs();
+
+            $this->dao->update(TABLE_CASE)->set('deleted')->eq('1')->where('deleted')->eq('0')->andWhere('scene')->in($scenes)->fetchPairs();
+            $this->dao->update(TABLE_SCENE)->set('deleted')->eq('1')->where('deleted')->eq(0)->andWhere('path')->like($scene->path . '%')->exec();
+
+            $this->loadModel('action');
+            foreach($cases as $caseID)   $this->action->create('case',  $caseID,  'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+            foreach($scenes as $sceneID) $this->action->create('scene', $sceneID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
         }
         else
         {
-
-            $this->testcase->delete(TABLE_SCENE, $sceneID-CHANGEVALUE);
+            $this->testcase->delete(TABLE_SCENE, $sceneID);
         }
 
         echo js::reload('parent');
