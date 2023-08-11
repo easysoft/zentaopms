@@ -590,6 +590,10 @@ CREATE TABLE IF NOT EXISTS `zt_config` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `unique` ON `zt_config`(`vision`,`owner`,`module`,`section`,`key`);
+CREATE INDEX `vision` ON `zt_config`(`vision`);
+CREATE INDEX `owner`  ON `zt_config`(`owner`);
+CREATE INDEX `module` ON `zt_config`(`module`);
+CREATE INDEX `key`    ON `zt_config`(`key`);
 
 -- DROP TABLE IF EXISTS `zt_cron`;
 CREATE TABLE IF NOT EXISTS `zt_cron` (
