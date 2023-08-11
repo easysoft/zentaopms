@@ -166,7 +166,11 @@ class cron extends control
             /* When cron is null then die. */
             if(empty($crons)) break;
             if(empty($parsedCrons)) break;
-            if(!$this->cron->getTurnon()) break;
+            if(!$this->cron->getTurnon())
+            {
+                $this->cron->logCron("The cron process turned off.\n");
+                break;
+            }
 
             /* Die old process when restart. */
             if(file_exists($restartTag) and !$restart)
