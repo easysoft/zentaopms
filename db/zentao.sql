@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `zt_api_lib_release` (
   `addedDate` datetime NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_api`;
 CREATE TABLE IF NOT EXISTS `zt_api` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -195,6 +196,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflowobject` (
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_approvalflowspec`;
 CREATE TABLE IF NOT EXISTS `zt_approvalflowspec` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
@@ -1249,10 +1251,10 @@ CREATE TABLE IF NOT EXISTS `zt_notify` (
   `sendTime` datetime NULL,
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `failReason` text NULL,
-  PRIMARY KEY (`id`),
-  KEY `objectType` (`objectType`),
-  KEY `status` (`status`)
+  PRIMARY KEY (`id`)
 ) ENGINE='InnoDB' COLLATE 'utf8_general_ci';
+CREATE INDEX `objectType` ON `zt_notify`(`objectType`);
+CREATE INDEX `status`     ON `zt_notify`(`status`);
 
 -- DROP TABLE IF EXISTS `zt_oauth`;
 CREATE TABLE IF NOT EXISTS `zt_oauth` (
@@ -14385,7 +14387,7 @@ CREATE TABLE `zt_scene` (
   `grade` tinyint(3) NOT NULL DEFAULT '0',
   `path` varchar(1000) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP VIEW IF EXISTS `ztv_scenecase`;
 CREATE OR REPLACE VIEW `ztv_scenecase` AS SELECT
@@ -15856,9 +15858,9 @@ CREATE TABLE `zt_demandspec` (
   `title` varchar(255) NOT NULL,
   `spec` mediumtext NOT NULL,
   `verify` mediumtext NOT NULL,
-  `files` text NOT NULL,
-  UNIQUE KEY `demand` (`demand`,`version`)
+  `files` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `demand` ON `zt_demandspec`(`demand`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_demandreview`;
 CREATE TABLE `zt_demandreview` (
@@ -15868,7 +15870,8 @@ CREATE TABLE `zt_demandreview` (
   `result` varchar(30) NOT NULL,
   `reviewDate` datetime NOT NULL,
   UNIQUE KEY `demand` (`demand`,`version`,`reviewer`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`);
 
 -- DROP TABLE IF EXISTS `zt_charter`;
 CREATE TABLE `zt_charter` (
