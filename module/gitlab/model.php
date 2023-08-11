@@ -538,7 +538,7 @@ class gitlabModel extends model
             $url      = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page={$perPage}&active=true";
             $httpData = commonModel::http($url, null, array(), array(), 'data', 'GET', 30, true, false);
             $result   = json_decode($httpData['body']);
-            if(!empty($result))
+            if(!empty($result) && is_array($result))
             {
                 $response = array_merge($response, $result);
                 $page += 1;

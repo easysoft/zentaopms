@@ -122,8 +122,8 @@ class repoZen extends repo
             exec($versionCommand, $versionOutput, $versionResult);
             if($versionResult)
             {
-                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, implode("<br />", $versionOutput));
-                dao::$errors['client'] = $this->lang->repo->error->cmd . "<br />" . nl2br($message);
+                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, implode("\n", $versionOutput));
+                dao::$errors['client'] = $this->lang->repo->error->cmd . "\n" . $message;
                 return false;
             }
             $svnVersion = end($versionOutput);
@@ -152,7 +152,7 @@ class repoZen extends repo
             exec($command, $output, $result);
             if($result)
             {
-                $message = sprintf($this->lang->repo->error->output, $command, $result, implode("<br />", $output));
+                $message = sprintf($this->lang->repo->error->output, $command, $result, implode("\n", $output));
                 if(stripos($message, 'Expected FS format between') !== false and strpos($message, 'found format') !== false)
                 {
                     dao::$errors['client'] = $this->lang->repo->error->clientVersion;
@@ -160,11 +160,11 @@ class repoZen extends repo
                 }
                 if(preg_match('/[^\:\/A-Za-z0-9_\-\'\"\.]/', $path))
                 {
-                    dao::$errors['encoding'] = $this->lang->repo->error->encoding . "<br />" . nl2br($message);
+                    dao::$errors['encoding'] = $this->lang->repo->error->encoding . "\n" . $message;
                     return false;
                 }
 
-                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br>" . nl2br($message);
+                dao::$errors['submit'] = $this->lang->repo->error->connect . "\n" . $message;
                 return false;
             }
         }
@@ -215,7 +215,7 @@ class repoZen extends repo
             exec($command, $output, $result);
             if($result)
             {
-                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br />" . sprintf($this->lang->repo->error->output, $command, $result, implode("<br />", $output));
+                dao::$errors['submit'] = $this->lang->repo->error->connect . "\n" . sprintf($this->lang->repo->error->output, $command, $result, implode("\n", $output));
                 return false;
             }
         }

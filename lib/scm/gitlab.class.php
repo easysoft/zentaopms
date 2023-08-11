@@ -146,7 +146,7 @@ class gitlab
         {
             $params['page'] = $page;
             $list = $this->fetch($api, $params);
-            if(empty($list)) break;
+            if(empty($list) || !is_array($list)) break;
 
             foreach($list as $tag) $tags[] = $tag->name;
             if(count($list) < $params['per_page']) break;
@@ -173,7 +173,7 @@ class gitlab
         {
             $params['page'] = $page;
             $branchList = $this->fetch("branches", $params);
-            if(empty($branchList)) break;
+            if(empty($branchList) || !is_array($branchList)) break;
 
             foreach($branchList as $branch)
             {
@@ -835,7 +835,7 @@ class gitlab
                 return array();
             }
 
-            if($response[1] == 500 or $response[1] == 404) return array();
+            if(in_array($response[1], array(500, 404, 401))) return array();
             return json_decode($response['body']);
         }
     }
