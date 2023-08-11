@@ -491,7 +491,7 @@ class ai extends control
 
         if($prompt->status == 'draft') $_SESSION['auditPrompt']['time'] = time();
 
-        return header("location: $location", true, 302);
+        echo js::locate($location, '$.apps.open');
     }
 
     /**

@@ -1087,7 +1087,7 @@ class aiModel extends model
         }
         $linkVars = vsprintf($varsConfig->format, $vars);
 
-        return array(helper::createLink($module, $method, $linkVars), false);
+        return array(helper::createLink($module, $method, $linkVars) . (empty($varsConfig->app) ? '' : "#app=$varsConfig->app"), false);
     }
 
     /**
