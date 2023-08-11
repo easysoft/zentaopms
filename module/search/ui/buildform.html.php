@@ -9,6 +9,8 @@ $opts->formSession     = $formSession;
 $opts->module          = $module;
 $opts->actionURL       = $actionURL;
 $opts->groupItems      = $groupItems;
+$opts->submitText      = $lang->search->common;
+$opts->resetText       = $lang->search->reset;
 $opts->onSubmit        = jsRaw("window.onSearchFormResult.bind(null, '$formName')");
 
 
