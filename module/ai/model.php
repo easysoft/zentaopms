@@ -1163,7 +1163,7 @@ class aiModel extends model
                                 ->where('tps.story')->eq($objectId)
                                 ->andWhere('tp.project')->ne(0)
                                 ->andWhere('tp.deleted')->eq(0)
-                                ->fetch('tps.project');
+                                ->fetch('project');
                         }
                         if($objectName == 'project')
                         {
@@ -1172,7 +1172,7 @@ class aiModel extends model
                                 ->where('tps.story')->eq($objectId)
                                 ->andWhere('tp.type')->eq('project')
                                 ->andWhere('tp.deleted')->eq(0)
-                                ->fetch('tps.project');
+                                ->fetch('project');
                         }
                         break;
                     case 'productplan': // product, story, branch, execution, task, bug, case, project, doc
@@ -1232,7 +1232,7 @@ class aiModel extends model
                             $vars[] = $this->dao->select('tb.execution')->from(TABLE_BUILD)->alias('tb')
                                 ->leftJoin(TABLE_RELEASE)->alias('tr')->on('tr.build = tb.id')
                                 ->where('tr.id')->eq($objectId)
-                                ->fetch('tb.execution');
+                                ->fetch('execution');
                         }
                         if($objectName == 'bug')
                         {
@@ -1280,7 +1280,7 @@ class aiModel extends model
                             $vars[] = $this->dao->select('tpp.product')->from(TABLE_TASK)->alias('tt')
                                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tt.project')
                                 ->where('tt.id')->eq($objectId)
-                                ->fetch('tpp.product');
+                                ->fetch('product');
                         }
                         if($objectName == 'story')     $vars[] = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($objectId)->fetch('story');
                         if($objectName == 'branch')
@@ -1288,14 +1288,14 @@ class aiModel extends model
                             $vars[] = $this->dao->select('tpp.branch')->from(TABLE_TASK)->alias('tt')
                                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tt.project')
                                 ->where('tt.id')->eq($objectId)
-                                ->fetch('tpp.branch');
+                                ->fetch('branch');
                         }
                         if($objectName == 'productplan')
                         {
                             $vars[] = $this->dao->select('tpp.plan')->from(TABLE_TASK)->alias('tt')
                                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tt.project')
                                 ->where('tt.id')->eq($objectId)
-                                ->fetch('tpp.plan');
+                                ->fetch('plan');
                         }
                         if($objectName == 'execution') $vars[] = $this->dao->select('execution')->from(TABLE_TASK)->where('id')->eq($objectId)->fetch('execution');
                         if($objectName == 'bug')       $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('task')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
@@ -1320,7 +1320,7 @@ class aiModel extends model
                             $vars[] = $this->dao->select('tpp.plan')->from(TABLE_CASE)->alias('tc')
                                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tc.project')
                                 ->where('tc.id')->eq($objectId)
-                                ->fetch('tpp.plan');
+                                ->fetch('plan');
                         }
                         if($objectName == 'task') $vars[] = $this->dao->select('max(task) as maxId')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         if($objectName == 'bug')  $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
