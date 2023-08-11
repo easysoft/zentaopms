@@ -2580,7 +2580,11 @@ class storyModel extends model
             $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             if(dao::isError()) return false;
 
-            if($task->story) $this->setStage($task->story);
+            if($task->story)
+            {
+                $storyStage = $this->dao->select('stage')->from(TABLE_STORY)->where('id')->eq($task->story)->fetch('stage');
+                if($storyStage && $storyStage != 'projected') $this->setStage($task->story);
+            }
 
             $this->action->create('task', $taskID, 'Opened', '');
         }
