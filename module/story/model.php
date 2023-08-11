@@ -2540,7 +2540,6 @@ class storyModel extends model
                 $field = trim($field);
                 if(empty($field)) continue;
 
-                if(!isset($task->$field)) continue;
                 if(!empty($task->$field)) continue;
                 if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
 
