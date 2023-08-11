@@ -74,7 +74,7 @@
           <tr>
             <td colspan="5" class="text-center form-actions">
               <?php echo html::submitButton();?>
-              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
+              <?php if(!isonlybody()) echo html::a($this->createLink('space', 'browse'), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>
           </tr>
         </tfoot>
