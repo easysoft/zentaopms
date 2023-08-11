@@ -2837,20 +2837,14 @@ class testcase extends control
         if($confirm == 'no') return print(js::confirm(sprintf($this->lang->testcase->confirmDeleteScene,addslashes($scene->title)), $this->createLink('testcase', 'deleteScene', "sceneID=$sceneID&confirm=yes")));
 
         $childrenCount = $this->dao->select('COUNT(*) AS count')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('parent')->eq($sceneID)->fetch('count');
-        if(!$childrenCount) $childrenCount = $this->dao->select('COUNT(*) AS count')->from(TABLE_CASE)->where('deleted')->eq('0')->andWhere('scene')->eq($sceneID)->fetch('count');
-
         if($childrenCount)
         {
             if($confirm != "wait") return print(js::confirm(sprintf($this->lang->testcase->hasChildren), $this->createLink('testcase', 'deleteScene', "sceneID=$sceneID&confirm=wait")));
 
             $scenes = $this->dao->select('id')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('path')->like($scene->path . '%')->fetchPairs();
-            $cases  = $this->dao->select('id')->from(TABLE_CASE)->where('deleted')->eq('0')->andWhere('scene')->in($scenes)->fetchPairs();
-
-            $this->dao->update(TABLE_CASE)->set('deleted')->eq('1')->where('deleted')->eq('0')->andWhere('scene')->in($scenes)->fetchPairs();
             $this->dao->update(TABLE_SCENE)->set('deleted')->eq('1')->where('deleted')->eq(0)->andWhere('path')->like($scene->path . '%')->exec();
 
             $this->loadModel('action');
-            foreach($cases as $caseID)   $this->action->create('case',  $caseID,  'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
             foreach($scenes as $sceneID) $this->action->create('scene', $sceneID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
         }
         else
