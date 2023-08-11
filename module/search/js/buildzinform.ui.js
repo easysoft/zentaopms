@@ -1,4 +1,4 @@
-window.onSearchFormResult = function(formName, response)
+if(window.onSearchFormResult === undefined) window.onSearchFormResult = function(formName, response)
 {
     response.then(res => res.json())
         .then(json => {
