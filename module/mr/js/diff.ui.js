@@ -151,7 +151,7 @@ function findItemInTreeItems(list, key, level) {
             parentTree = [item.key];
         }
 
-        if (item.key === key) return item;
+        if (item.id === key) return item;
 
         if (item.children && item.children.length > 0)
         {
