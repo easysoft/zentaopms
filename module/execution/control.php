@@ -3825,16 +3825,20 @@ class execution extends control
      * @param  string $module
      * @param  string $method
      * @param  mixed  $extra
+     * @param  mixed  $type
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($executionID, $module, $method, $extra)
+    public function ajaxGetDropMenu($executionID, $module, $method, $extra, $type = '')
     {
+        $onlyClosed = $type == 'closed';
+
         $this->view->link        = $this->execution->getLink($module, $method, $extra);
         $this->view->module      = $module;
         $this->view->method      = $method;
         $this->view->executionID = $executionID;
         $this->view->extra       = $extra;
+        $this->view->onlyClosed  = $onlyClosed;
 
         $cacheProjectsKey   = $this->config->cacheKeys->execution->ajaxGetDropMenuProjects;
         $cacheExecutionsKey = $this->config->cacheKeys->execution->ajaxGetDropMenuExecutions;
@@ -3860,6 +3864,12 @@ class execution extends control
             ->andWhere('multiple')->eq('1')
             ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($onlyClosed)
+            ->andWhere('status')
+            ->in('done,closed')->fi()
+            ->beginIF(!$onlyClosed)
+            ->andWhere('status')
+            ->notin('done,closed')->fi()
             ->andWhere('project')->in(array_keys($projects))
             ->orderBy('order_asc')
             ->fetchAll('id');
