@@ -626,11 +626,19 @@ class webhookModel extends model
      *
      * @param  int    $webhookID
      * @param  int    $actionID
+     * @param  string $toList
      * @access public
      * @return string
      */
-    public function getOpenIdList($webhookID, $actionID)
+    public function getOpenIdList($webhookID, $actionID, $toList = '')
     {
+        if($toList)
+        {
+            $openIdList = $this->getBoundUsers($webhookID, $toList);
+            $openIdList = join(',', $openIdList);
+            return $openIdList;
+        }
+
         if(empty($actionID)) return false;
 
         $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
@@ -662,10 +670,11 @@ class webhookModel extends model
      * @param  object $webhook
      * @param  string $sendData
      * @param  int    $actionID
+     * @param  string $appendUser
      * @access public
      * @return int
      */
-    public function fetchHook($webhook, $sendData, $actionID = 0)
+    public function fetchHook($webhook, $sendData, $actionID = 0, $appendUser = '')
     {
         if(!extension_loaded('curl')) return print(helper::jsonEncode($this->lang->webhook->error->curl));
 
@@ -673,7 +682,7 @@ class webhookModel extends model
         {
             if(is_string($webhook->secret)) $webhook->secret = json_decode($webhook->secret);
 
-            $openIdList = $this->getOpenIdList($webhook->id, $actionID);
+            $openIdList = $this->getOpenIdList($webhook->id, $actionID, $appendUser);
             if(empty($openIdList)) return false;
             if($webhook->type == 'dinguser')
             {
