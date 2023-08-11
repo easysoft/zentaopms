@@ -19,15 +19,20 @@ function onProductChange(event)
 
 function onHostChange()
 {
-    var host = $('[name=serviceHost]').val();
-    var url  = $.createLink('repo', 'ajaxGetProjects', "host=" + host);
-    if(host == '') return false;
+    var host     = $('[name=serviceHost]').val();
+    var url      = $.createLink('repo', 'ajaxGetProjects', "host=" + host);
+    var $project = $('#serviceProject').zui('picker');
+    if(host == '')
+    {
+      $project.render({items: []});
+      $project.$.clear();
+      return false;
+    }
 
     toggleLoading('#serviceProject', true);
     $.get(url, function(response)
     {
         var data = JSON.parse(response);
-        var $project = $('#serviceProject').zui('picker');
         $project.render({items: data});
         $project.$.clear();
         toggleLoading('#serviceProject', false);
