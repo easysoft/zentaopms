@@ -213,6 +213,8 @@
             aTag.style.display = 'none';
             document.body.appendChild(aTag);
             aTag.click();
+
+            if($.appCode !== 'admin') $.apps.close($.appCode);
           });
         }
 
