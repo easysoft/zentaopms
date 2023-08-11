@@ -1419,7 +1419,7 @@ class aiModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('module')->eq($module)
             ->beginIF(!commonModel::hasPriv('ai', 'promptaudit'))->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
-            ->beginIF(commonModel::hasPriv('ai', 'promptaudit'))->andWhere('status', true)->eq('active')->orWhere('createdBy')->eq($this->app->user->account)->markRight(1)->fi()
+            ->beginIF(commonModel::hasPriv('ai', 'promptaudit'))->andWhere('status', true)->eq('active')->orWhere('createdBy')->eq($this->app->user->account)->orWhere('createdBy')->eq('system')->markRight(1)->fi()
             ->orderBy('id_desc')
             ->fetchAll();
     }
