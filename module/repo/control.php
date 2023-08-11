@@ -1754,10 +1754,6 @@ class repo extends control
     public function ajaxGetGiteaProjects($giteaID)
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($giteaID);
-        if(!$projects) $this->send(array('message' => array()));
-
-        $options = "<option value=''></option>";
-        foreach($projects as $project) $options .= "<option value='{$project->full_name}' data-name='{$project->name}'>{$project->full_name}</option>";
 
         $options = array();
         $options[] = array('text' => '', 'value' => '');;
@@ -1779,11 +1775,6 @@ class repo extends control
     public function ajaxGetGogsProjects($gogsID)
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($gogsID);
-        $options = "<option value=''></option>";
-        if(!empty($projects))
-        {
-            foreach($projects as $project) $options .= "<option value='{$project->full_name}' data-name='{$project->name}'>{$project->full_name}</option>";
-        }
 
         $options = array();
         $options[] = array('text' => '', 'value' => '');;
@@ -1808,12 +1799,6 @@ class repo extends control
 
         if(!$projects) return print('[]');
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
-        $options = "<option value=''></option>";
-        foreach($projects as $project)
-        {
-            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
-            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
-        }
 
         $options = array();
         $options[] = array('text' => '', 'value' => '');;

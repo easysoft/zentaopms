@@ -42,3 +42,5 @@ $config->index->oldPages[] = 'webhook-create';
 $config->index->oldPages[] = 'dept-browse';
 $config->index->oldPages[] = 'repo-setrules';
 $config->index->oldPages[] = 'host-treemap';
+$config->index->oldPages[] = 'gogs-binduser';
+$config->index->oldPages[] = 'gitea-binduser';

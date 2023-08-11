@@ -22,7 +22,7 @@ class gogs extends control
 
         /* This is essential when changing tab(menu) from gogs to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
-        $this->loadModel('ci')->setMenu();
+        if($this->app->rawMethod != 'binduser') $this->loadModel('ci')->setMenu();
     }
 
     /**
