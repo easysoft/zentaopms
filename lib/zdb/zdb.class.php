@@ -378,7 +378,7 @@ class zdb
     public function addslashes($data)
     {
         if(is_string($data)) return addslashes($data);
-        if(array_is_list($data))
+        if((function_exists('array_is_list') && array_is_list($data)) || (is_array($data) && array_keys($data) === array_keys(array_keys($data))))
         {
             $result = array();
             foreach($data as $item)
