@@ -9,7 +9,8 @@ $opts->formSession     = $formSession;
 $opts->module          = $module;
 $opts->actionURL       = $actionURL;
 $opts->groupItems      = $groupItems;
-$opts->onSubmit        = jsRaw('window.onSubmit');
+$opts->onSubmit        = jsRaw("window.onSearchFormResult.bind(null, '$formName')");
+
 
 if(empty($opts->savedQuery)) unset($opts->savedQuery);
 
