@@ -1537,7 +1537,6 @@ class programplanModel extends model
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->where('t2.product')->eq($productID)
             ->andWhere('t1.project')->eq($projectID)
-            ->andWhere('t1.type')->eq('stage')
             ->andWhere('t1.milestone')->eq(1)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.begin asc,path')
