@@ -225,7 +225,6 @@ class cronModel extends model
     public function update($cronID)
     {
         $cron = fixer::input('post')
-            ->add('lastTime', helper::now())
             ->skipSpecial('m,h,dom,mon,dow,command')
             ->get();
 
