@@ -6140,7 +6140,7 @@ class executionModel extends model
         {
             if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
 
-            $children = zget($childExecutions, $executionID, array());
+            $children = isset($childExecutions[$executionID]) ? $childExecutions[$executionID] : array();
             if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children, $childExecutions);
         }
         return $sortedExecutions;
