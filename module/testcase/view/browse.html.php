@@ -328,7 +328,7 @@ js::set('langNormal',       $lang->testcase->normal);
             <?php endif;?>
               <div class="list-group">
                 <?php
-                foreach($scenes as $sceneId => $scene)
+                foreach($scenes as $sceneID => $scene)
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($scenesPinYin, $scene, '') . '"') : '';
                     $actionLink = $this->createLink('testcase', 'batchChangeScene', "sceneID=$sceneID");
