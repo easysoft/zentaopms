@@ -1410,7 +1410,7 @@ class testcase extends control
             if(strpos($caseID, 'scene_') !== false)
             {
                 $sceneID = str_replace('scene_', '', $caseID);
-                $this->deleteScene($sceneID, 'wait')
+                $this->deleteScene($sceneID, 'wait');
             }
 
             if(strpos($caseID, 'case_') !== false)
