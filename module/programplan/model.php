@@ -297,8 +297,8 @@ class programplanModel extends model
                 $reviewDeadline[$taskExecutionID]['taskEnd'] = $task->deadline;
             }
 
-            $start = $realBegan ? $realBegan : $estStart;
-            $end   = $realEnd   ? $realEnd   : $estEnd;
+            $start = $estStart;
+            $end   = $estEnd;
             if(empty($start) and $execution) $start = $execution->begin;
             if(empty($end)   and $execution) $end   = $execution->end;
             if($start > $end) $end = $start;
