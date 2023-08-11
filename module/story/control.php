@@ -1434,7 +1434,7 @@ class story extends control
         $storyID = (int)$storyID;
         $product = $this->product->getByID($story->product);
 
-        if($tab == 'product' and !empty($product->shadow))
+        if(!(defined('RUN_MODE') && RUN_MODE == 'api') and $tab == 'product' and !empty($product->shadow))
         {
             $backLink = $this->session->productList ? $this->session->productList : inlink('product', 'all');
             $js       = js::start();

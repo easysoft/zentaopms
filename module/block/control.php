@@ -1278,6 +1278,7 @@ class block extends control
      */
     public function printWaterfallReportBlock()
     {
+        $this->loadModel('program')->refreshStats();
         $this->app->loadLang('programplan');
         $project = $this->loadModel('project')->getByID($this->session->project);
         $today   = helper::today();
