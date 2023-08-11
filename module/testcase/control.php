@@ -2695,18 +2695,18 @@ class testcase extends control
     /**
      * Batch change scene.
      *
-     * @param  int $sceneId
+     * @param  int $sceneID
      * @access public
      * @return void
      */
-    public function batchChangeScene($sceneId)
+    public function batchChangeScene($sceneID)
     {
         if($this->post->caseIDList)
         {
             $caseIDList = $this->post->caseIDList;
             $caseIDList = array_unique($caseIDList);
             unset($_POST['caseIDList']);
-            $allChanges = $this->testcase->batchChangeScene($caseIDList, $sceneId);
+            $allChanges = $this->testcase->batchChangeScene($caseIDList, $sceneID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if(!empty($allChanges[1]))

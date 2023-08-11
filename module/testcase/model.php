@@ -2908,7 +2908,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function batchChangeScene($caseIDList, $sceneId)
+    public function batchChangeScene($caseIDList, $sceneID)
     {
         $now        = helper::now();
         $allChanges = array();
@@ -2919,7 +2919,7 @@ class testcaseModel extends model
             ->fetchAll('id');
 
         /* If the target node is root. */
-        if(!$sceneId)
+        if(!$sceneID)
         {
             $oldCases = $ioldCases;
 
@@ -2958,8 +2958,8 @@ class testcaseModel extends model
                 if(!isset($finalOldCases1[$caseID])) continue;
 
                 $oldCase = $finalOldCases1[$caseID];
-                if($sceneId == $oldCase->parent) continue;
-                if($sceneId == $oldCase->id) continue;
+                if($sceneID == $oldCase->parent) continue;
+                if($sceneID == $oldCase->id) continue;
 
                 $case = new stdclass();
                 $case->lastEditedBy   = $this->app->user->account;
@@ -2995,8 +2995,8 @@ class testcaseModel extends model
                 if (!isset($finalOldCases2[$caseID])) continue;
 
                 $oldCase = $finalOldCases2[$caseID];
-                if($sceneId == $oldCase->parent) continue;
-                if($sceneId == $oldCase->id) continue;
+                if($sceneID == $oldCase->parent) continue;
+                if($sceneID == $oldCase->id) continue;
 
                 $case = new stdclass();
                 $case->lastEditedBy   = $this->app->user->account;
@@ -3004,7 +3004,7 @@ class testcaseModel extends model
 
                 if($oldCase->isCase == 2)
                 {
-                    $case->parent = $sceneId;
+                    $case->parent = $sceneID;
                     $resultScene  = $this->dao->findById((int)$oldCase->parent - CHANGEVALUE)->from(TABLE_SCENE)->fetch();
                     $case->path   = $resultScene->path . "$caseID,";
                     $case->grade  = $resultScene->grade + 1;
@@ -3017,7 +3017,7 @@ class testcaseModel extends model
                 }
                 else
                 {
-                    $case->scene = $sceneId;
+                    $case->scene = $sceneID;
                     $this->dao->update(TABLE_CASE)->data($case)
                         ->autoCheck()
                         ->where('id')->eq((int)$caseID)
@@ -3028,7 +3028,7 @@ class testcaseModel extends model
         }
         else
         {
-            $sceneRow = $this->dao->findById((int)$sceneId)->from(VIEW_SCENECASE)->fetch();
+            $sceneRow = $this->dao->findById((int)$sceneID)->from(VIEW_SCENECASE)->fetch();
 
             /* Remove ancestors of target node. Won't change ancestors' scene to be target scene. */
             $oldCases = array();
@@ -3083,8 +3083,8 @@ class testcaseModel extends model
                 if(isset($finalOldCases1[$caseID]))
                 {
                     $oldCase = $finalOldCases1[$caseID];
-                    if($sceneId == $oldCase->parent) continue;
-                    if($sceneId == $oldCase->id) continue;
+                    if($sceneID == $oldCase->parent) continue;
+                    if($sceneID == $oldCase->id) continue;
 
                     $resFlag = strpos($sceneRow->path,$oldCase->path);
                     /* Target node is child. */
@@ -3098,7 +3098,7 @@ class testcaseModel extends model
 
                     if($oldCase->isCase == 2)
                     {
-                        $case->parent = $sceneId;
+                        $case->parent = $sceneID;
                         $case->path   = $sceneRow->path . "$caseID,";
                         $case->grade  = $sceneRow->grade + 1;
 
@@ -3108,7 +3108,7 @@ class testcaseModel extends model
                     }
                     else
                     {
-                        $case->scene = $sceneId;
+                        $case->scene = $sceneID;
 
                         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq((int)$caseID)->exec();
                         if(!dao::isError()) $allChanges[1][$caseID] = common::createChanges($oldCase, $case);
@@ -3122,8 +3122,8 @@ class testcaseModel extends model
                 if(!isset($finalOldCases2[$caseID])) continue;
 
                 $oldCase = $finalOldCases2[$caseID];
-                if($sceneId == $oldCase->parent) continue;
-                if($sceneId == $oldCase->id) continue;
+                if($sceneID == $oldCase->parent) continue;
+                if($sceneID == $oldCase->id) continue;
 
                 $resFlag = strpos($sceneRow->path,$oldCase->path);
                 /* Target node is child. */

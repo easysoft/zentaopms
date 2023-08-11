@@ -331,7 +331,7 @@ js::set('langNormal',       $lang->testcase->normal);
                 foreach($scenes as $sceneId => $scene)
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($scenesPinYin, $scene, '') . '"') : '';
-                    $actionLink = $this->createLink('testcase', 'batchChangeScene', "sceneId=$sceneId");
+                    $actionLink = $this->createLink('testcase', 'batchChangeScene', "sceneID=$sceneID");
                     echo html::a('#', $scene, '', "title='$scene' $searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                 }
                 ?>
