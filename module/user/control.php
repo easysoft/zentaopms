@@ -1390,11 +1390,10 @@ class user extends control
         $limit    = $this->get->limit;
         $index    = 0;
         $newUsers = array();
-        //if(empty($search)) return array();
         foreach($users as $account => $realname)
         {
             if($index >= $limit) break;
-            if(stripos($account, $search) === false and stripos($realname, $search) === false) continue;
+            if($search && stripos($account, $search) === false and stripos($realname, $search) === false) continue;
             $index ++;
             $newUsers[$account] = $realname;
         }
