@@ -1418,6 +1418,8 @@ class bug extends control
 
         /* Set users. */
         $users = $this->loadModel('user')->getPairs();
+        $limitUsers = $users;
+        if(count($users) > $this->config->batchMaxCount) $limitUsers = array_slice($users, 0 , $this->config->batchMaxCount);
 
         $branchIdList    = array();
         $projectIdList   = array();
@@ -1448,32 +1450,33 @@ class bug extends control
             {
                 if($bug->execution)
                 {
-                    $bug->assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $executionMembers[$bug->execution];
+                    $bug->assignedToList = $executionMembers[$bug->execution];
                 }
                 elseif($bug->project)
                 {
-                    $bug->assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $projectMembers[$bug->project];
+                    $bug->assignedToList = $projectMembers[$bug->project];
                 }
                 else
                 {
                     $bug->assignedToList = $productMembers[$bug->product][$bug->branch];
                     if(empty($bug->assignedToList))
                     {
-                        $bug->assignedToList = $users;
-                        $this->config->moreLinks["assignedTos[$bug->id]"] = helper::createLink('user', 'ajaxGetMore');
+                        $bug->assignedToList = $limitUsers;
+                        if(count($users) > $this->config->batchMaxCount) $this->config->moreLinks["assignedTos[$bug->id]"] = helper::createLink('user', 'ajaxGetMore');
                         unset($bug->assignedToList['closed']);
                     }
                 }
             }
             else
             {
-                $bug->assignedToList = $users;
-                $this->config->moreLinks["assignedTos[$bug->id]"] = helper::createLink('user', 'ajaxGetMore');
+                $bug->assignedToList = $limitUsers;
+                if(count($users) > $this->config->batchMaxCount) $this->config->moreLinks["assignedTos[$bug->id]"] = helper::createLink('user', 'ajaxGetMore');
                 unset($bug->assignedToList['closed']);
             }
+            $bug->assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + array($bug->assignedTo => zget($users, $bug->assignedTo)) + $bug->assignedToList;
 
             $this->config->moreLinks["duplicateBugs[{$bug->id}]"] = inlink('ajaxGetProductBugs', "productID={$bug->product}&bugID={$bug->id}&type=json");
-            $this->config->moreLinks["resolvedBys[$bug->id]"]     = helper::createLink('user', 'ajaxGetMore');
+            if(count($users) > $this->config->batchMaxCount) $this->config->moreLinks["resolvedBys[$bug->id]"]     = helper::createLink('user', 'ajaxGetMore');
         }
 
         /* Get assigned to member. */
@@ -1547,6 +1550,7 @@ class bug extends control
         $this->view->bugs             = $bugs;
         $this->view->branch           = $branch;
         $this->view->users            = $users;
+        $this->view->limitUsers       = $limitUsers;
         $this->view->modules          = $modules;
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->productBugList   = $productBugList;
