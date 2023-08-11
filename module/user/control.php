@@ -1239,11 +1239,13 @@ class user extends control
         $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
 
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
+
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
         $this->view->type       = $period;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->recTotal   = count($dateGroups, 1) - count($dateGroups);
+        $this->view->recTotal   = $recTotal;
         $this->view->user       = $user;
         $this->view->dateGroups = $dateGroups;
         $this->view->direction  = $direction;

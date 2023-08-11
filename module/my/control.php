@@ -1566,7 +1566,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next', $originTotal = 0)
+    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next')
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -1612,12 +1612,14 @@ EOF;
         $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
 
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
+
         /* Assign. */
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->dateGroups  = $dateGroups;
-        $this->view->direction   = $direction;
-        $this->view->originTotal = count($dateGroups, 1) - count($dateGroups);
+        $this->view->type       = $type;
+        $this->view->orderBy    = $orderBy;
+        $this->view->dateGroups = $dateGroups;
+        $this->view->direction  = $direction;
+        $this->view->recTotal   = $recTotal;
         $this->display();
     }
 

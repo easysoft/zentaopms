@@ -283,8 +283,10 @@ class company extends control
 
         $dateGroups = $this->action->buildDateGroup($actions, $direction, $browseType, $orderBy);
 
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
+
         /* Assign. */
-        $this->view->recTotal     = count($dateGroups, 1) - count($dateGroups);
+        $this->view->recTotal     = $recTotal;
         $this->view->browseType   = $browseType;
         $this->view->account      = $account;
         $this->view->accountPairs = $accountPairs;

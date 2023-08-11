@@ -1034,6 +1034,8 @@ class project extends control
         $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', $projectID, 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
 
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
+
         $project = $this->project->getByID($projectID);
 
         /* Assign. */
@@ -1047,7 +1049,7 @@ class project extends control
         $this->view->param        = $param;
         $this->view->dateGroups   = $dateGroups;
         $this->view->direction    = $direction;
-        $this->view->recTotal     = count($dateGroups, 1) - count($dateGroups);
+        $this->view->recTotal     = $recTotal;
         $this->display();
     }
 

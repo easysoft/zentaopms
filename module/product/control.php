@@ -878,6 +878,8 @@ class product extends control
         $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, $productID, 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
 
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
+
         /* Assign. */
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
         $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
@@ -890,7 +892,7 @@ class product extends control
         $this->view->param        = $param;
         $this->view->dateGroups   = $dateGroups;
         $this->view->direction    = $direction;
-        $this->view->recTotal     = count($dateGroups, 1) - count($dateGroups);
+        $this->view->recTotal     = $recTotal;
         $this->display();
     }
 

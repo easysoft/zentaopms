@@ -1185,8 +1185,8 @@ class actionModel extends model
             ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
             ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
-            ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
+            ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF($endDate)->andWhere('date')->le($endDate)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->andWhere('1=1', true)
@@ -2423,5 +2423,20 @@ class actionModel extends model
         $lastMonth = date('Y-m-d', strtotime('-1 month'));
         $this->dao->delete()->from(TABLE_ACTIONLATEST)->where('date')->lt($lastMonth)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * Get dynamic count.
+     *
+     * @access public
+     * @return void
+     */
+    public function getDynamicCount()
+    {
+        $condition = $this->session->actionQueryCondition;
+        $count     = $this->dao->select('count(1) as count')->from(TABLE_ACTION)
+            ->where($condition)
+            ->fetch('count');
+        return $count;
     }
 }
