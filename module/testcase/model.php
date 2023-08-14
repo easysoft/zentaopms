@@ -3236,7 +3236,7 @@ class testcaseModel extends model
             {
                 foreach($cases[$id] as $case)
                 {
-                    $case->id     = $id . '_' . $case->id;
+                    $case->id     = 'case_' . $case->id;
                     $case->parent = $id;
                     $case->grade  = $scene->grade + 1;
                     $case->path   = $scene->path . $case->id . ',';
