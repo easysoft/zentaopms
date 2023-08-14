@@ -260,15 +260,6 @@ class cron extends control
             $sleepTime = 60 - ((time() - strtotime($now->format('Y-m-d H:i:s'))) % 60);
             sleep($sleepTime);
 
-            /* Break while. */
-            echo "Check connection to the client by send this msg.";
-            ob_flush();
-            flush();
-            if('cli' !== PHP_SAPI && 'fpm-fcgi' !== PHP_SAPI && (connection_status() != CONNECTION_NORMAL || connection_aborted()))
-            {
-                $this->cron->logCron("The cron process ended.\n");
-                break;
-            }
             if(((time() - $startedTime) / 3600 / 24) >= $this->config->cron->maxRunDays) break;
         }
 
