@@ -3220,43 +3220,4 @@ class testcase extends control
 
         $this->display();
     }
-
-    public function printRow($cases)
-    {
-        foreach($cases as $case)
-        {
-            $trClass = '';
-            $trAttrs = "data-id='{$index}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$parent}' data-product='{$case->product}'";
-
-            if($case->isCase == 2)
-            {
-                $trAttrs .= " data-nested='true'";
-                $trClass .= $parent == '0' ? ' is-top-level table-nest-child-hide' : ' table-nest-hide';
-            }
-
-            if($parent)
-            {
-                if($case->isCase == 1) $trClass .= ' is-nest-child';
-
-                $trClass .= ' table-nest-hide';
-                $trAttrs .= " data-nest-parent='$case->parent' data-nest-path='$case->path'";
-            }
-            elseif($case->isCase == 1)
-            {
-                $trClass .= ' no-nest';
-            }
-            $trAttrs .= " class='row-case $trClass'";
-
-            echo "<tr data-itype='{$case->isCase}' {$trAttrs}>";
-            foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table', $case->isCase);
-            echo '</tr>';
-
-            if(!empty($case->children) || !empty($case->cases))
-            {
-                $newParent = $index;
-                if(!empty($case->children)) $this->printRow($case->children);
-                if(!empty($case->cases))    $this->printRow($case->cases);
-            }
-        }
-    }
 }
