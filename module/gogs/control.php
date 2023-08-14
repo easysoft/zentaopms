@@ -190,11 +190,12 @@ class gogs extends control
     /**
      * Bind gogs user to zentao users.
      *
-     * @param  int     $gogsID
+     * @param  int    $gogsID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function bindUser($gogsID)
+    public function bindUser($gogsID, $type = 'all')
     {
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
         $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -206,11 +207,44 @@ class gogs extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
-        $this->view->title         = $this->lang->gogs->bindUser;
-        $this->view->userPairs     = $userPairs;
-        $this->view->gogsUsers     = $this->gogs->apiGetUsers($gogsID);
-        $this->view->bindedUsers   = $this->gogs->getUserAccountIdPairs($gogsID);
-        $this->view->matchedResult = $this->gogs->getMatchedUsers($gogsID, $this->view->gogsUsers, $zentaoUsers);
+        $userList      = array();
+        $gogsUsers   = $this->gogs->apiGetUsers($gogsID);
+        $bindedUsers   = $this->gogs->getUserAccountIdPairs($gogsID);
+        $matchedResult = $this->gogs->getMatchedUsers($gogsID, $gogsUsers, $zentaoUsers);
+
+        foreach($gogsUsers as $gogsUserID => $gogsUser)
+        {
+            $user = new stdclass();
+            $user->email          = '';
+            $user->status         = 'notBind';
+            $user->gogsID         = $gogsUser->id;
+            $user->gogsEmail      = $gogsUser->email;
+            $user->gogsUser       = $gogsUser->realname . '@' . $gogsUser->account;
+            $user->gogsUserAvatar = $gogsUser->avatar;
+
+            $user->zentaoUsers = isset($matchedResult[$gogsUser->id]) ? $matchedResult[$gogsUser->id]->zentaoAccount : '';
+            if($user->zentaoUsers)
+            {
+                if(isset($zentaoUsers[$user->zentaoUsers])) $user->email = $zentaoUsers[$user->zentaoUsers]->email;
+
+                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $gogsUser->id)
+                {
+                    $user->status = 'binded';
+                    if(!isset($bindedUsers[$user->zentaoUsers])) $user->status = 'bindedError';
+                }
+            }
+
+            if($type != 'all' && $user->status != $type) continue;
+            $userList[] = $user;
+        }
+
+        $this->view->title       = $this->lang->gogs->bindUser;
+        $this->view->type        = $type;
+        $this->view->gogsID    = $gogsID;
+        $this->view->recTotal    = count($userList);
+        $this->view->userList    = $userList;
+        $this->view->userPairs   = $userPairs;
+        $this->view->zentaoUsers = $zentaoUsers;
         $this->display();
     }
 
