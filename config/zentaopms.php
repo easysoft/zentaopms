@@ -372,8 +372,6 @@ define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
 define('TABLE_SCENE',     '`' . $config->db->prefix . 'scene`');
 define('VIEW_SCENECASE',  '`ztv_scenecase`');
 
-define('CHANGEVALUE', 100000000);
-
 define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
 define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
 define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
