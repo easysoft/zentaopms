@@ -1382,7 +1382,7 @@ class programModel extends model
         foreach($stats as $projectID => $project)
         {
             $totalReal = $project['totalConsumed'] + $project['totalLeft'];
-            $progress  = $totalReal ? round($project['totalConsumed'] / $totalReal, 2) * 100 : 0;
+            $progress  = $totalReal ? floor($project['totalConsumed'] / $totalReal * 1000) / 1000 * 100 : 0;
             $this->dao->update(TABLE_PROJECT)
                 ->set('progress')->eq($progress)
                 ->set('teamCount')->eq($project['teamCount'])

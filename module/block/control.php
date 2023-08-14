@@ -559,6 +559,7 @@ class block extends control
         elseif($mode == 'getblockdata')
         {
             $code = strtolower($this->get->blockid);
+            $this->loadModel('program')->refreshStats();
 
             $params = $this->get->param;
             $params = json_decode(base64_decode($params));
@@ -1278,7 +1279,6 @@ class block extends control
      */
     public function printWaterfallReportBlock()
     {
-        $this->loadModel('program')->refreshStats();
         $this->app->loadLang('programplan');
         $project = $this->loadModel('project')->getByID($this->session->project);
         $today   = helper::today();
@@ -1465,7 +1465,6 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $count, 1);
         $this->loadModel('execution');
-        $this->loadModel('program')->refreshStats();
         $this->view->executionStats = !defined('TUTORIAL') ? $this->execution->getStatData($this->session->project, $type, 0, 0, false, '', 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
     }
 
@@ -1843,7 +1842,6 @@ class block extends control
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id', 'name');
         $projectID    = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
 
-        $this->loadModel('program')->refreshStats();
         $this->view->executionStats = $this->execution->getStatData($projectID, $status, 0, 0, false, 'skipParent', 'id_asc', $pager);
     }
 
