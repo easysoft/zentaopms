@@ -2122,6 +2122,7 @@ class testcaseModel extends model
         foreach($cases as $case)
         {
             $case->index = $index;
+            $case->id    = str_replace(array('case_', 'scene_'), '', $case->id);   // Remove the prefix of case id.
 
             $trClass = '';
             $prefix  = $case->isCase == 1 ? 'case_' : 'scene_';
