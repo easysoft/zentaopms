@@ -1031,6 +1031,9 @@ class block extends control
                     $project->sv = $this->weekly->getSV($project->ev, $project->pv);
                     $project->cv = $this->weekly->getCV($project->ev, $project->ac);
 
+                    $left              = (float)$this->weekly->getLeft($project->id, $today);
+                    $project->progress = ($project->ac + $left) ? floor($project->ac / ($project->ac + $left) * 1000) / 1000 * 100 : 0;
+                    $project->progress = $project->progress > 100 ? 100 : $project->progress;
                     $project->current  = $current;
                 }
             }
@@ -1297,7 +1300,7 @@ class block extends control
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
         $left     = (float)$this->weekly->getLeft($this->session->project, $today);
-        $progress = (!empty($this->view->ac) or !empty($left)) ? floor($this->view->ac / ($this->view->ac + $left) * 1000) / 1000 * 100 : 0;
+        $progress = ($this->view->ac + $left) ? floor($this->view->ac / ($this->view->ac + $left) * 1000) / 1000 * 100 : 0;
         $this->view->progress = $progress > 100 ? 100 : $progress;
         $this->view->current  = $current;
     }
