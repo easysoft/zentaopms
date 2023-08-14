@@ -1,5 +1,6 @@
 .table.table-form {width: auto;}
-.table-form > tbody > tr > td .form-control + .form-control {margin-top: 5px;}
+.div-depts {margin-bottom: 5px;}
+.clear-margin {margin: 0px;}
 
 .tree li.has-list > .tree-actions > .tree-action[data-type="delete"] {display: none;}
 .tree-toggle {cursor: pointer;}
