@@ -671,6 +671,7 @@ div
             ) : null
         ),
         set::bodyClass('pt-0 h-80 overflow-y-auto'),
+        set::shadow(false),
         dynamic()
     ),
     div

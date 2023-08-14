@@ -7,7 +7,7 @@
 .m-project-view #mainContent {display: flex; margin-bottom: 60px;}
 .m-project-view #mainContent .main {flex: 1 0 65%; overflow-x: hidden;}
 .m-project-view #mainContent .side {flex: 1 1 35%; overflow: hidden;}
-#dynamicBlock {display: flex; flex-direction: column; box-shadow: none;}
+#dynamicBlock {display: flex; flex-direction: column;}
 #dynamicBlock .panel-body {flex: 1 1 auto; overflow-y: auto;}
 #historyBlock {overflow-y: auto;}
 
