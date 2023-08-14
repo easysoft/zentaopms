@@ -208,7 +208,7 @@ class gogs extends control
         }
 
         $userList      = array();
-        $gogsUsers   = $this->gogs->apiGetUsers($gogsID);
+        $gogsUsers     = $this->gogs->apiGetUsers($gogsID);
         $bindedUsers   = $this->gogs->getUserAccountIdPairs($gogsID);
         $matchedResult = $this->gogs->getMatchedUsers($gogsID, $gogsUsers, $zentaoUsers);
 
@@ -240,7 +240,7 @@ class gogs extends control
 
         $this->view->title       = $this->lang->gogs->bindUser;
         $this->view->type        = $type;
-        $this->view->gogsID    = $gogsID;
+        $this->view->gogsID      = $gogsID;
         $this->view->recTotal    = count($userList);
         $this->view->userList    = $userList;
         $this->view->userPairs   = $userPairs;

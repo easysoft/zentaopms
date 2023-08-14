@@ -9,8 +9,8 @@ window.setUserEmail = function()
 
 window.renderGitlabUser = function(result, {row})
 {
-    const gitlabID = row.data.gitlabID;
-    result.push({html: `<input type="hidden" name='gogsUserNames[]' value='${gitlabID}'>`});
+    const gogsID = row.data.gogsID;
+    result.push({html: `<input type="hidden" name='gogsUserNames[]' value='${gogsID}'>`});
 
     return result;
 }
