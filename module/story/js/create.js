@@ -245,6 +245,7 @@ function loadBranchRelation(branch, branchIndex)
     $.ajaxSettings.async = false;
     loadModuleForTwins(productID, branch, branchIndex)
     loadPlanForTwins(productID, branch, branchIndex)
+    loadURS()
     $.ajaxSettings.async = true;
 
     disableSelectedBranches()
