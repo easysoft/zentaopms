@@ -2918,9 +2918,9 @@ class testcaseModel extends model
         $oldCases = $this->dao->select('id, scene')->from(TABLE_CASE)->where('id')->in($caseIDList)->andWhere('scene')->ne($sceneID)->fetchAll();
         $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('id')->in($caseIDList)->andWhere('scene')->ne($sceneID)->exec();
 
+        $newCase = new stdclass();
         foreach($oldCases as $oldCase)
         {
-            $newCase = clone $oldCase;
             $newCase->scene = $sceneID;
 
             $changes  = common::createChanges($oldCase, $newCase);
