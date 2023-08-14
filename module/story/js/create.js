@@ -227,6 +227,7 @@ function disableSelectedBranches()
     })
 
     $(".table-form select[id^=branches]").trigger('chosen:updated');
+    loadURS();
 }
 
  /**
