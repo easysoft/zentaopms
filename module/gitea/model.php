@@ -331,8 +331,8 @@ class giteaModel extends model
         {
             if(isset($bindedUsers[$giteaUser->account]))
             {
-                $giteaUser->zentaoAccount = $bindedUsers[$giteaUser->account];
-                $matchedUsers[]           = $giteaUser;
+                $giteaUser->zentaoAccount     = $bindedUsers[$giteaUser->account];
+                $matchedUsers[$giteaUser->id] = $giteaUser;
                 continue;
             }
 
@@ -344,8 +344,8 @@ class giteaModel extends model
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
             {
-                $giteaUser->zentaoAccount = current($matchedZentaoUsers);
-                $matchedUsers[]           = $giteaUser;
+                $giteaUser->zentaoAccount     = current($matchedZentaoUsers);
+                $matchedUsers[$giteaUser->id] = $giteaUser;
             }
         }
 
