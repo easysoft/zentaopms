@@ -116,13 +116,11 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                         setClass('grow'),
                         picker
                         (
-                            set::id("products{$i}"),
                             set::name("products[$i]"),
                             set::value($product->id),
                             set::items($allProducts),
                             set::last($product->id),
                             set::disabled($isStage && $project->stageBy == 'project'),
-                            on::change('loadBranches'),
                             $isStage && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null,
                         )
                     ),
@@ -138,13 +136,12 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                     $lang->product->branchName['branch'],
                     picker
                     (
-                        set::id("branch{$i}"),
                         set::name("branch[$i][]"),
                         set::items($branches),
-                        set::value($branchIdList),
+                        set::value(implode(',', $branchIdList)),
                         set::disabled($isStage && $project->stageBy == 'project'),
                         set::multiple(true),
-                        on::change("loadPlans('#products{$i}', this)")
+                        on::change("branchChange")
                     )
                 ),
             ),
@@ -170,7 +167,6 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                     btn
                     (
                         setClass('btn btn-link text-gray addLine'),
-                        on::click('addNewLine'),
                         icon('plus')
                     ),
                     btn
@@ -178,7 +174,6 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                         setClass('btn btn-link text-gray removeLine'),
                         setClass($i == 0 ? 'hidden' : ''),
                         icon('trash'),
-                        on::click('removeLine'),
                     ),
                 )
             ),
@@ -221,10 +216,8 @@ else
             set::label($lang->project->manageProducts),
             picker
             (
-                set::id('products0'),
                 set::name('products[0]'),
                 set::items($allProducts),
-                on::change('loadBranches')
             )
         ),
         formGroup
@@ -236,10 +229,9 @@ else
                 $lang->product->branchName['branch'],
                 picker
                 (
-                    set::id('branch0'),
                     set::name('branch[0][]'),
                     set::multiple(true),
-                    on::change("loadPlans('#products0', this)")
+                    on::change("branchChange")
                 )
             ),
         ),
@@ -264,7 +256,6 @@ else
                 btn
                 (
                     setClass('btn btn-link text-gray addLine'),
-                    on::click('addNewLine'),
                     icon('plus')
                 ),
                 btn
@@ -272,7 +263,6 @@ else
                     setClass('btn btn-link text-gray removeLine'),
                     setClass('hidden'),
                     icon('trash'),
-                    on::click('removeLine'),
                 ),
             ),
         ),
@@ -299,6 +289,9 @@ formPanel
             $showExecutionExec ? $lang->execution->copyExec : $lang->execution->copy
         )
     ),
+    on::click('.addLine', 'addNewLine'),
+    on::click('.removeLine', 'removeLine'),
+    on::change('[name^=products]', 'loadBranches'),
     formGroup
     (
         set::width('1/2'),

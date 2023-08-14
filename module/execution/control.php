@@ -1745,7 +1745,11 @@ class execution extends control
             /* Filter empty plans. */
             if(!empty($_POST['plans']))
             {
-                foreach($_POST['plans'] as $key => $planItem) $_POST['plans'][$key] = array_filter($_POST['plans'][$key]);
+                foreach($_POST['plans'] as $key => $planItem)
+                {
+                    $_POST['plans'][$key] = explode(',', $_POST['plans'][$key]);
+                    $_POST['plans'][$key] = array_filter($_POST['plans'][$key]);
+                }
                 $_POST['plans'] = array_filter($_POST['plans']);
             }
 

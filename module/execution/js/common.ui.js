@@ -140,20 +140,22 @@ function loadBranches(e)
     /* When selecting a product, delete a plan that is empty by default. */
     $("#planDefault").remove();
 
-    let $product = $(e.target);
-    $(".productsBox select[name^='products']").each(function()
+    let chosenProducts = [];
+    let $product       = $(e.target);
+    $("[name^='products']").each(function()
     {
         let productID = $(this).val();
+        if(productID > 0 && chosenProducts.indexOf(productID) == -1) chosenProducts.push(productID);
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
             zui.Modal.alert(errorSameProducts);
-            $product.val(0);
+            $product.zui('picker').$.setValue(0);
             return false;
         }
     });
 
     let $formRow  = $product.closest('.form-row');
-    let index     = $formRow.find('select').first().attr('name').match(/\d+/)[0];
+    let index     = $formRow.find("[name^='products']").first().attr('name').match(/\d+/)[0];
     let oldBranch = $(e.target).attr('data-branch') !== undefined ? $product.attr('data-branch') : 0;
 
     if(!multiBranchProducts[$product.val()])
@@ -167,17 +169,18 @@ function loadBranches(e)
     {
         if(data)
         {
-            $formRow.find("select[name^='branch']").replaceWith(data);
-            $formRow.find('.form-group').eq(0).removeClass('w-1/2').addClass('w-1/4');
-            $formRow.find('.form-group').eq(1).removeClass('hidden');
-            $formRow.find("select[name^='branch']").attr('multiple', '').attr('name', 'branch[' + index + '][]').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this)");
-        }
+            $formRow.find('.form-group').eq(1).find('.picker-box').empty();
+            $formRow.find('.form-group').eq(1).find('.picker-box').append(`<div id='branch${index}'></div>`);
 
-        if(typeof isStage != 'undefined' && isStage == true)
-        {
-            $formRow.find("select[name^='branch'] option").attr('selected', 'selected');
-            $formRow.find("select[name^='branch']").trigger('chosen:updated');
-            $formRow.find("div[id^='branch']").addClass('chosen-disabled');
+            $formRow.find('.form-group').eq(0).addClass('w-1/4').removeClass('w-1/2');
+            $formRow.find('.form-group').eq(1).removeClass('hidden');
+
+            data = JSON.parse(data);
+            new zui.Picker(`#branch${index}`, {
+                items: data,
+                multiple: true,
+                name: `branch[${index}]`,
+            });
         }
     });
 
@@ -204,9 +207,16 @@ window.loadPlans = function(product, branch)
     {
         if(data)
         {
-            $("div#plan" + index).find("select[name^='plans']").replaceWith(data);
-            $("div#plan" + index).find('.chosen-container').remove();
-            $("div#plan" + index).find('select').attr('name', 'plans[' + productID + ']' + '[]').attr('id', 'plans' + productID);
+            data = JSON.parse(data);
+
+            $("div#plan" + index).find('.picker-box').empty();
+            $("div#plan" + index).find('.picker-box').append(`<div id='plans${productID}'></div>`);
+
+            new zui.Picker(`#plans${productID}`, {
+                items: data,
+                multiple: true,
+                name: `plans[${productID}]`,
+            });
         }
     });
 }
@@ -220,10 +230,14 @@ window.loadPlans = function(product, branch)
  */
 function addNewLine(e)
 {
-    const obj     = e.target;
+    const obj     = e.target
     const newLine = $(obj).closest('.form-row').clone();
-    let index     = 0;
-    $(".productsBox select[name^='products']").each(function()
+
+    let index   = 0;
+    let options = zui.Picker.query("[name^='products']").options;
+
+    /* 将已有产品下拉的最大name属性的值加1赋值给新行. */
+    $("[name^='products']").each(function()
     {
         let id = $(this).attr('name').replace(/[^\d]/g, '');
 
@@ -233,23 +247,34 @@ function addNewLine(e)
         index = id > index ? id : index;
     })
 
-    newLine.find('.addLine').on('click', addNewLine);
-    newLine.find('.removeLine').on('click', removeLine);
-    newLine.find("select[name^='products']").on('change', loadBranches);
-    newLine.find("select[name^='branch']").on('change', "loadPlan('#products" + index + "', this)");
-
+    /* 处理新一行控件的显示/隐藏，宽度/是否居中等样式问题. */
     newLine.addClass('newLine');
-    newLine.find('.linkProduct > .form-label').html('').removeClass('required');
-    newLine.find('.removeLine').removeClass('hidden');
-    newLine.find("select[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).val('');
-    newLine.find("select[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]');
-    newLine.find("select[name^='plans']").empty();
-    newLine.find("select[name^='branch']").val('');
+    newLine.find('.form-label').html('');
     newLine.find('.form-group').eq(0).addClass('w-1/2').removeClass('w-1/4');
     newLine.find('.form-group').eq(1).addClass('hidden');
     newLine.find("div[id^='plan']").attr('id', 'plan' + index);
+    newLine.find('.linkProduct > .form-label').html('').removeClass('required');
+    newLine.find('.removeLine').removeClass('hidden');
+
 
     $(obj).closest('.form-row').after(newLine);
+
+    /* 重新初始化新一行的下拉控件. */
+    newLine.find('.form-group').eq(0).find('.picker-box').empty();
+    newLine.find('.form-group').eq(0).find('.picker-box').append(`<div id=products${index}></div>`);
+
+    newLine.find('div[id^=plan] .picker-box').empty();
+    newLine.find('div[id^=plan] .picker-box').append(`<div id=plans${index}></div>`);
+
+    options.name         = `products[${index}]`;
+    options.defaultValue = '';
+    new zui.Picker(`#products${index}`, options);
+
+    new zui.Picker(`#plans${index}`, {
+        items:[],
+        multiple: true,
+        name: `plans[${index}]`,
+    });
 }
 
 /**

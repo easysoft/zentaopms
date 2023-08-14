@@ -148,3 +148,9 @@ window.triggerTips = function()
         backdrop: false
     });
 }
+
+window.branchChange = function(e)
+{
+    let $product = $(e.target).closest('.form-row').find("[name^='products']");
+    loadPlans($product, $(e.target));
+}

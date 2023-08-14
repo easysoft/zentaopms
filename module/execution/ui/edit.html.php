@@ -163,7 +163,6 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                                     set::last($product->id),
                                     $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null,
                                     set::disabled($execution->type == 'stage' && $project->stageBy == 'project'),
-                                    on::change('productChange'),
                                     $execution->type == 'stage' && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null,
                                 )
                             ),
@@ -210,7 +209,6 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                             btn
                             (
                                 setClass('btn btn-link text-gray addLine'),
-                                on::click('addNewLine'),
                                 icon('plus')
                             ),
                             btn
@@ -218,7 +216,6 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                                 setClass('btn btn-link text-gray removeLine'),
                                 setClass($i == 0 ? 'hidden' : ''),
                                 icon('trash'),
-                                on::click('removeLine'),
                             ),
                         )
                     ),
@@ -264,7 +261,6 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                         set::id('products0'),
                         set::name('products[0]'),
                         set::items($allProducts),
-                        on::change('productChange')
                     )
                 ),
                 formGroup
@@ -305,7 +301,6 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                         btn
                         (
                             setClass('btn btn-link text-gray addLine'),
-                            on::click('addNewLine'),
                             icon('plus')
                         ),
                         btn
@@ -313,7 +308,6 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                             setClass('btn btn-link text-gray removeLine'),
                             setClass('hidden'),
                             icon('trash'),
-                            on::click('removeLine'),
                         ),
                     ),
                 ),
@@ -350,7 +344,6 @@ else
                                 set::last($product->id),
                                 $hasBranch && $product->branches ? set::lastBranch(implode(',', $product->branches)) : null,
                                 set::disabled($project->model == 'waterfall' || $project->model == 'waterfallplus'),
-                                on::change('productChange'),
                                 $project->model == 'waterfall' || $project->model == 'waterfallplus' ? formHidden("products[$i]", $product->id) : null,
                             )
                         ),
@@ -388,7 +381,7 @@ else
                         (
                             set::name("plans[$product->id][]"),
                             set::items($plans),
-                            set::value(isset($product->plans) ? $product->plans : ''),
+                            set::value(isset($product->plans) ? implode(',', $product->plans) : ''),
                             set::multiple(true)
                         )
                     ),
@@ -406,6 +399,9 @@ formPanel
 (
     set::class('editPanel'),
     !helper::isAjaxRequest('modal') ? modalHeader(set::title($lang->execution->edit)) : null,
+    on::click('.addLine', 'addNewLine'),
+    on::click('.removeLine', 'removeLine'),
+    on::change('[name^=products]', 'productChange'),
     $projectBox,
     formGroup
     (
