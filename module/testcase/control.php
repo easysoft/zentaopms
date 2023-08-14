@@ -1685,10 +1685,11 @@ class testcase extends control
      */
     public function batchConfirmStoryChange($productID = 0)
     {
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
-        $caseIDList = array_unique($this->post->caseIDList);
-
-        foreach($caseIDList as $caseID) $this->confirmStoryChange($caseID,false);
+        if($this->post->caseIDList)
+        {
+            $caseIDList = $this->testcase->filterIdList($this->post->caseIDList);
+            foreach($caseIDList as $caseID) $this->confirmStoryChange($caseID,false);
+        }
         echo js::locate($this->session->caseList);
     }
 
