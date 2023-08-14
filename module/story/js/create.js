@@ -59,9 +59,8 @@ $(function()
         return false;
     });
 
-    $('#module').on('change', function(){
-        loadURS();
-    });
+    $('#module').on('change', function(){ loadURS(); });
+    if($('form select[id^=branches]').length > 0) loadURS();
 
     if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length)
     {
