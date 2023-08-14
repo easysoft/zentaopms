@@ -1461,7 +1461,7 @@ class testcaseModel extends model
         if(!$caseIDList) return false;
 
         $oldCases = $this->getByList($caseIDList, "type != {$type}");
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('type')->ne($type)->('id')->in($caseIDList)->exec();
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('type')->ne($type)->andWhere('id')->in($caseIDList)->exec();
         if(dao::isError()) return false;
 
         $this->loadModel('action');
