@@ -652,11 +652,10 @@ class testcaseModel extends model
         if($this->app->tab == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
 
         /* Search criteria under compatible project. */
-        $sql = $this->dao->select('*')->from(VIEW_SCENECASE)->alias('t1');
+        $sql = $this->dao->select('*')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
         $cases = $sql
             ->where($caseQuery)
-            ->andWhere('t1.isCase')->eq(1)
             ->beginIF($this->app->tab == 'project' and $this->config->systemMode == 'new')->andWhere('t2.project')->eq($this->session->project)->fi()
             ->beginIF($this->app->tab == 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($this->app->tab != 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t1.product')->eq($productID)->fi()
