@@ -50,3 +50,27 @@ $config->gogs->dtable->fieldList['actions']['sortType'] = false;
 $config->gogs->dtable->fieldList['actions']['fixed']    = 'right';
 $config->gogs->dtable->fieldList['actions']['menu']     = array('edit', 'bindUser', 'delete');
 $config->gogs->dtable->fieldList['actions']['list']     = $config->gogs->actionList;
+
+$config->gogs->dtable->bindUser = new stdclass();
+$config->gogs->dtable->bindUser->fieldList['gogsUser']['title']    = $lang->gogs->gogsAccount;
+$config->gogs->dtable->bindUser->fieldList['gogsUser']['type']     = 'avatarName';
+$config->gogs->dtable->bindUser->fieldList['gogsUser']['sortType'] = false;
+$config->gogs->dtable->bindUser->fieldList['gogsUser']['width']    = 300;
+
+$config->gogs->dtable->bindUser->fieldList['gogsEmail']['title'] = $lang->gogs->gogsEmail;
+$config->gogs->dtable->bindUser->fieldList['gogsEmail']['type']  = 'text';
+$config->gogs->dtable->bindUser->fieldList['gogsEmail']['width'] = 200;
+
+$config->gogs->dtable->bindUser->fieldList['email']['title'] = $lang->gogs->zentaoEmail;
+$config->gogs->dtable->bindUser->fieldList['email']['type']  = 'text';
+$config->gogs->dtable->bindUser->fieldList['email']['width'] = 200;
+
+$config->gogs->dtable->bindUser->fieldList['zentaoUsers']['title']   = array('html' => $lang->gogs->zentaoAccount . "<span class='text-gray'>{$lang->gogs->accountDesc}</span>");
+$config->gogs->dtable->bindUser->fieldList['zentaoUsers']['type']    = 'control';
+$config->gogs->dtable->bindUser->fieldList['zentaoUsers']['control'] = 'picker';
+$config->gogs->dtable->bindUser->fieldList['zentaoUsers']['width']   = 300;
+
+$config->gogs->dtable->bindUser->fieldList['status']['title'] = $lang->gogs->bindingStatus;
+$config->gogs->dtable->bindUser->fieldList['status']['type']  = 'html';
+$config->gogs->dtable->bindUser->fieldList['status']['width'] = 100;
+$config->gogs->dtable->bindUser->fieldList['status']['map']   = $lang->gogs->bindStatus;
