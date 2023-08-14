@@ -134,52 +134,7 @@ js::set('langNormal',       $lang->testcase->normal);
           </tr>
         </thead>
         <tbody id='caseTableList'>
-          <?php
-          function printRow($index, $testcase, $cases, $setting, $users, $branchOption, $modulePairs, $browseType, $mode)
-          {
-              foreach($cases as $case)
-              {
-                  $case->index = $index;
-
-                  $prefix  = $case->isCase == 1 ? 'case_' : 'scene_';
-                  $trClass = '';
-                  $trAttrs = "data-id='{$prefix}{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
-                  if($case->isCase == 2)
-                  {
-                      $trAttrs .= " data-nested='true'";
-                      $trClass .= $case->parent == '0' ? ' is-top-level table-nest-child-hide' : ' table-nest-hide';
-                  }
-
-                  if($case->parent)
-                  {
-                      if($case->isCase != 2) $trClass .= ' is-nest-child';
-                      $trClass .= ' table-nest-hide';
-                      $trAttrs .= " data-nest-parent='{$case->parent}' data-nest-path='{$case->path}'";
-                  }
-                  elseif($case->isCase != 2)
-                  {
-                      $trClass .= ' no-nest';
-                  }
-                  $trAttrs .= " class='row-case $trClass'";
-
-                  echo "<tr data-itype='{$case->isCase}' {$trAttrs}>";
-                  foreach($setting as $key => $value) $testcase->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $mode, $case->isCase);
-                  echo '</tr>';
-
-                  $index++;
-
-                  if(!empty($case->children) || !empty($case->cases))
-                  {
-                      if(!empty($case->children)) $index = printRow($index, $testcase, $case->children, $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
-                      if(!empty($case->cases))    $index = printRow($index, $testcase, $case->cases,    $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
-                  }
-              }
-
-              return $index;
-          }
-
-          printRow(1, $this->testcase, $cases, $setting, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');
-          ?>
+          <?php $this->testcase->printRow(1, $cases, $setting, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
         </tbody>
       </table>
       <?php if(!$useDatatable) echo '</div>';?>

@@ -2104,6 +2104,62 @@ class testcaseModel extends model
     }
 
     /**
+     * Print rows of cases.
+     *
+     * @param  int    $index
+     * @param  array  $cases
+     * @param  array  $setting
+     * @param  array  $users
+     * @param  array  $branchOption
+     * @param  array  $modulePairs
+     * @param  string $browseType
+     * @param  string $mode
+     * @access public
+     * @return int
+     */
+    public function printRow($index, $cases, $setting, $users, $branchOption, $modulePairs, $browseType, $mode)
+    {
+        foreach($cases as $case)
+        {
+            $case->index = $index;
+
+            $trClass = '';
+            $trAttrs = "data-id='{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
+            if($case->isCase == 2)
+            {
+                $trAttrs .= " data-nested='true'";
+                $trClass .= $case->parent == '0' ? ' is-top-level table-nest-child-hide' : ' table-nest-hide';
+            }
+
+            if($case->parent)
+            {
+                if($case->isCase != 2) $trClass .= ' is-nest-child';
+                $trClass .= ' table-nest-hide';
+                $trAttrs .= " data-nest-parent='{$case->parent}' data-nest-path='{$case->path}'";
+            }
+            elseif($case->isCase != 2)
+            {
+                $trClass .= ' no-nest';
+            }
+            $trAttrs .= " class='row-case $trClass'";
+
+            echo "<tr data-itype='{$case->isCase}' {$trAttrs}>";
+            foreach($setting as $key => $value) $this->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $mode, $case->isCase);
+            echo '</tr>';
+
+            $index++;
+
+            if(!empty($case->children) || !empty($case->cases))
+            {
+                if(!empty($case->children)) $index = printRow($index, $case->children, $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
+                if(!empty($case->cases))    $index = printRow($index, $case->cases,    $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
+            }
+        }
+
+        return $index;
+    }
+
+    /**
      * Print cell data
      *
      * @param  object $col
