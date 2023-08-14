@@ -2718,87 +2718,52 @@ class testcase extends control
      */
     public function changeScene()
     {
-        $now       = helper::now();
-        $currentID = $this->post->sourceID;
-        $targetID  = $this->post->targetID;
+        $sourceID = $this->post->sourceID;
+        $targetID = $this->post->targetID;
+        if(strpos('scene_', $targetID) === false) return true;
 
-        $targetScene  = $this->dao->findById((int)$targetID)->from(VIEW_SCENECASE)->fetch();
-        $currentScene = $this->dao->findById((int)$currentID)->from(VIEW_SCENECASE)->fetch();
+        $sceneID = str_replace('scene_', '', $targetID);
 
-        $product = $targetScene->product;
-        $module  = $targetScene->module;
-        if($targetScene->isCase == 2)
+        if(strpos('case_', $sourceID) !== false)
         {
-            if($currentScene->isCase == 2)
-            {
-                $childPath = $targetScene->path . "$currentID,";
-                $grade     = $targetScene->grade + 1;
+            $caseID  = str_replace('case_', '', $sourceID);
+            $oldCase = $this->dao->select('scene')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
+            if($oldCase->scene == $sceneID) return true;
 
-                $this->dao->update(TABLE_SCENE)->set('parent')->eq($targetID)
-                    ->set('path')->eq($childPath)
-                    ->set('grade')->eq($grade)
-                    ->set('product')->eq($product)
-                    ->set('module')->eq($module)
-                    ->set('lastEditedBy')->eq($this->app->user->account)
-                    ->set('lastEditedDate')->eq($now)
-                    ->where('id')->eq($currentID-CHANGEVALUE)
-                    ->exec();
+            $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('id')->eq($caseID)->exec();
+            if(dao::isError()) return false;
 
-                $children = $this->dao->select('*')->from(VIEW_SCENECASE)
-                    ->where('deleted')->eq(0)
-                    ->andWhere('path')->like("%,$currentID,%")
-                    ->orderBy('grade')
-                    ->fetchAll('id');
+            $newCase = new stdclass();
+            $newCase->scene = $sceneID;
 
-                foreach($children as $id => $childScene)
-                {
-                    if($id && $id != $currentID)
-                    {
-                        if($childScene->parent)
-                        {
-                            $parentScene = $this->dao->findById((int)$childScene->parent-CHANGEVALUE)->from(TABLE_SCENE)->fetch();
-                            if($childScene->isCase == 2)
-                            {
-                                if($childScene->grade > $currentScene->grade)
-                                {
-                                    $childPath = $parentScene->path . "$id,";
-                                    $grade     = $parentScene->grade + 1;
-
-                                    $this->dao->update(TABLE_SCENE)->set('path')->eq($childPath)
-                                        ->set('grade')->eq($grade)
-                                        ->set('product')->eq($parentScene->product)
-                                        ->set('module')->eq($parentScene->module)
-                                        ->set('lastEditedBy')->eq($this->app->user->account)
-                                        ->set('lastEditedDate')->eq($now)
-                                        ->where('id')->eq($id - CHANGEVALUE)
-                                        ->exec();
-                                }
-                            }
-                            else
-                            {
-                                $this->dao->update(TABLE_CASE)
-                                    ->set('product')->eq($parentScene->product)
-                                    ->set('module')->eq($parentScene->module)
-                                    ->set('lastEditedBy')->eq($this->app->user->account)
-                                    ->set('lastEditedDate')->eq($now)
-                                    ->where('id')->eq($id)
-                                    ->exec();
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                $this->dao->update(TABLE_CASE)->set('scene')->eq($targetID)
-                    ->set('product')->eq($product)
-                    ->set('module')->eq($module)
-                    ->set('lastEditedBy')->eq($this->app->user->account)
-                    ->set('lastEditedDate')->eq($now)
-                    ->where('id')->eq($currentID)
-                    ->exec();
-            }
+            $changes  = common::createChanges($oldCase, $newCase);
+            $actionID = $this->loadModel('action')->create('case', $caseID, 'edited');
+            $this->action->logHistory($actionID, $changes);
         }
+
+        if(strpos('scene_', $sourceID) !== false)
+        {
+            $oldSceneID = str_replace('scene_', '', $sourceID);
+            if($oldSceneID == $sceneID) return true;
+
+            $oldScene      = $this->testcase->getSceneByID($oldSceneID);
+            $newScene      = $this->testcase->getSceneByID($sceneID);
+            $oldParentPath = substr($oldScene->path, 0, strpos($oldScene->path, $oldScene->parent) + strlen($oldScene->parent) + 1);
+
+            $this->dao->update(TABLE_SCENE)->set('parent')->eq($sceneID)->where('id')->eq($oldSceneID)->exec();
+            if(dao::isError()) return false;
+
+            $this->dao->update(TABLE_SCENE)
+                ->set('product')->eq($newScene->product)
+                ->set('branch')->eq($newScene->branch)
+                ->set('module')->eq($newScene->module)
+                ->set('grade')->eq("grade + {$newScene->grade} - {$oldScene->grade}")
+                ->set('path')->eq("REPLACE(path, '{$oldParentPath}', '{$newScene->path}')")
+                ->where('path')->like("$oldScene->path}%")
+                ->exec();
+        }
+
+        return !dao::isError();
     }
 
     /**
