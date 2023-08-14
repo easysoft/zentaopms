@@ -11,7 +11,6 @@ $(function()
     }
 })
 
-let   newRowID = 0;
 const isCreate = (config.currentMethod == 'create' || config.currentMethod == 'createScene');
 const isEdit   = (config.currentMethod == 'edit'   || config.currentMethod == 'editScene');
 
