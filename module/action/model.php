@@ -2006,21 +2006,21 @@ class actionModel extends model
 
         if($action->objectType == 'case')
         {
-            $case = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($action->objectID)->fetch();
-            if($case->scene)
+            $caseScene = $this->dao->select('scene')->from(TABLE_CASE)->where('id')->eq($action->objectID)->fetch('scene');
+            if($caseScene)
             {
-                $scene = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($case->scene)->fetch();
+                $scene = $this->loadModel('testcase')->getSceneByID($caseScene);
                 if($scene->deleted) return print(js::error($this->lang->action->refusecase));
             }
         }
 
         if($action->objectType == 'scene')
         {
-            $scene = $this->dao->select('*')->from("zt_scene")->where('id')->eq($action->objectID)->fetch();
+            $scene = $this->loadModel('testcase')->getSceneByID($action->objectID);
             if($scene->parent)
             {
-                $scenerow = $this->dao->select('*')->from(VIEW_SCENECASE)->where('id')->eq($scene->parent)->fetch();
-                if($scenerow->deleted) return print(js::error($this->lang->action->refusescene));
+                $parentScene = $this->testcase->getSceneByID($scene->parent);
+                if($parentScene->deleted) return print(js::error($this->lang->action->refusescene));
             }
         }
 
