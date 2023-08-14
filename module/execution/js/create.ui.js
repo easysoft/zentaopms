@@ -96,7 +96,8 @@ function loadMembers()
 
 $(document).on('change', '#begin', function()
 {
-    $("#end,#days").val('');
+    $("#days").val('');
+    $('#end').zui('datePicker').$.changeState({value: ''});
     $("input[name='delta']").prop('checked', false);
 });
 

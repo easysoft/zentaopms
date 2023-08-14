@@ -29,8 +29,8 @@ function computeWorkDays(currentID)
     }
     else
     {
-        beginDate = $('#begin').val();
-        endDate   = $('#end').val();
+        beginDate = $('input[name=begin]').val();
+        endDate   = $('input[name=end]').val();
     }
 
     if(beginDate && endDate)
@@ -44,7 +44,6 @@ function computeWorkDays(currentID)
     }
 }
 
-
 /**
  * Compute the end date for project.
  *
@@ -55,7 +54,7 @@ function computeWorkDays(currentID)
 function computeEndDate()
 {
     let delta     = $('input[name^=delta]:checked').val();
-    let beginDate = $('#begin').val();
+    let beginDate = $('input[name=begin]').val();
     if(!beginDate) return;
 
     delta     = parseInt(delta);
@@ -67,7 +66,7 @@ function computeEndDate()
 
     let endDate = formatDate(beginDate, delta - 1);
 
-    $('#end').val(endDate);
+    $('#end').zui('datePicker').$.changeState({value: endDate});
     computeWorkDays();
 }
 
