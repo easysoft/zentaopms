@@ -595,9 +595,10 @@
      * @param {string} [url]
      * @param {string} [target]
      * @param {Object} [options]
+     * @param {Function} [callback]
      * @returns
      */
-    function loadModal(url, target, options)
+    function loadModal(url, target, options, callback)
     {
         options = $.extend({url}, options);
         if(!target) return zui.Modal.open(options);
@@ -606,7 +607,7 @@
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
-        modal.render(options);
+        modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
     }
 
     function loadTarget(url, target, options)

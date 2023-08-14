@@ -263,6 +263,7 @@ class avatar extends wg
     {
         $src  = $this->prop('src');
         $text = $this->prop('text');
+        $code = $this->prop('code');
 
         /* With avatar. */
         if($src)
@@ -272,8 +273,9 @@ class avatar extends wg
             return h::img
             (
                 setClass('avatar-img'),
-                set('src', $src ),
-                set('alt', $text)
+                set('src', $src),
+                set('alt', $text),
+                set('data-code', $code),
             );
         }
 
