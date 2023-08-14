@@ -1365,11 +1365,9 @@ class testcaseModel extends model
      */
     public function batchChangeModule($idList, $moduleID)
     {
-        $this->loadModel('action');
-
-        $caseIDList  = array_filter(array_map(function($id){return strpos($id, 'case_')  !== false ? str_replace('case_',  '', $id) : '';}, $idList));
-        $sceneIDList = array_filter(array_map(function($id){return strpos($id, 'scene_') !== false ? str_replace('scene_', '', $id) : '';}, $idList));
-        if(!$caseIDList && !$sceneIDList) return true;
+        $caseIDList  = $this->filterIdList($idList);
+        $sceneIDList = $this->filterIdList($idList, 'scene_');
+        if(!$caseIDList && !$sceneIDList) return false;
 
         $this->batchChangeCaseModule($caseIDList, $moduleID);
         $this->batchChangeSceneModule($sceneIDList, $moduleID);
@@ -1387,18 +1385,27 @@ class testcaseModel extends model
      */
     public function batchChangeCaseModule($caseIDList, $moduleID)
     {
-        $oldCases = $this->dao->select('id, module')->from(TABLE_CASE)->where('id')->in($caseIDList)->andWhere('module')->ne($moduleID)->fetchAll();
-        $this->dao->update(TABLE_CASE)->set('module')->eq($moduleID)->where('id')->in($caseIDList)->andWhere('module')->ne($moduleID)->exec();
+        if(!$caseIDList) return false;
+
+        $oldCases = $this->getByList($caseIDList, "module != {$moduleID}");
+        $this->dao->update(TABLE_CASE)->set('module')->eq($moduleID)->where('module')->ne($moduleID)->andWhere('id')->in($caseIDList)->exec();
         if(dao::isError()) return false;
 
-        $newCase = new stdclass();
+        $this->loadModel('action');
+
+        $case = new stdclass();
+        $case->module         = $moduleID;
+        $case->lastEditedBy   = $this->app->user->account;
+        $case->lastEditedDate = helper::now();
+
         foreach($oldCases as $oldCase)
         {
-            $newCase->module = $moduleID;
-
-            $changes  = common::createChanges($oldCase, $newCase);
-            $actionID = $this->action->create('case', $oldCase->id, 'edited');
-            $this->action->logHistory($actionID, $changes);
+            $changes = common::createChanges($oldCase, $case);
+            if($changes)
+            {
+                $actionID = $this->action->create('case', $oldCase->id, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
         }
 
         return !dao::isError();
@@ -1414,18 +1421,27 @@ class testcaseModel extends model
      */
     public function batchChangeSceneModule($sceneIDList, $moduleID)
     {
-        $oldScenes = $this->dao->select('id, module')->from(TABLE_SCENE)->where('id')->in($sceneIDList)->andWhere('module')->ne($moduleID)->fetchAll();
-        $this->dao->update(TABLE_SCENE)->set('module')->eq($moduleID)->where('id')->in($sceneIDList)->andWhere('module')->ne($moduleID)->exec();
+        if(!$sceneIDList) return false;
+
+        $oldScenes = $this->dao->select('id, module')->from(TABLE_SCENE)->where('module')->ne($moduleID)->andWhere('id')->in($sceneIDList)->fetchAll();
+        $this->dao->update(TABLE_SCENE)->set('module')->eq($moduleID)->where('module')->ne($moduleID)->andWhere('id')->in($sceneIDList)->exec();
         if(dao::isError()) return false;
 
-        $newScene = new stdclass();
+        $this->loadModel('action');
+
+        $scene = new stdclass();
+        $scene->module         = $moduleID;
+        $scene->lastEditedBy   = $this->app->user->account;
+        $scene->lastEditedDate = helper::now();
+
         foreach($oldScenes as $oldScene)
         {
-            $newScene->module = $moduleID;
-
-            $changes  = common::createChanges($oldScene, $newScene);
-            $actionID = $this->action->create('scene', $oldScene->id, 'edited');
-            $this->action->logHistory($actionID, $changes);
+            $changes = common::createChanges($oldScene, $scene);
+            if($changes)
+            {
+                $actionID = $this->action->create('scene', $oldScene->id, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
         }
 
         return !dao::isError();

@@ -1440,7 +1440,7 @@ class testcase extends control
     {
         if($this->post->caseIDList)
         {
-            $allChanges = $this->testcase->batchChangeModule($this->post->caseIDList, $moduleID);
+            $this->testcase->batchChangeModule($this->post->caseIDList, $moduleID);
             if(dao::isError()) return print(js::error(dao::getError()));
         }
 
