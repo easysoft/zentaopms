@@ -3335,32 +3335,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Search cases has scene.
-     *
-     * @param  int $viewID
-     * @access public
-     * @return string
-     */
-    public function getParents($viewID)
-    {
-        if($viewID == 0) return '/';
-
-        $path = $this->dao->select('path')->from(VIEW_SCENECASE)->where('id')->eq((int)$viewID)->fetch('path');
-        $path = trim($path, ',');
-        if(!$path) return '/';
-
-        $pathArr   = explode(',', $path);
-        $scenePath = "";
-        foreach ($pathArr as $vid)
-        {
-            $title      = $this->dao->select('title')->from(VIEW_SCENECASE)->where('id')->eq((int)$vid)->fetch('title');
-            $scenePath .= '&nbsp;<i class="icon-angle-right"></i>&nbsp;'.$title;
-        }
-
-        return substr($scenePath,34);
-    }
-
-    /**
      * Get scene list include sub scenes and cases.
      *
      * @param  int    $productID
