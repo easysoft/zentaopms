@@ -21,3 +21,11 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
         data: postData
     });
 });
+
+window.onSearchFormResult = function(formName, response)
+{
+    response.then(res => res.json())
+        .then(json => {
+            loadTarget(json.load, 'mr-story');
+        }).catch(console.error);
+}

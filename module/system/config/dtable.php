@@ -53,3 +53,25 @@ $config->system->dtable->backup->fieldList['actions']['list']['delete']['icon'] 
 $config->system->dtable->backup->fieldList['actions']['list']['delete']['hint'] = $lang->delete;
 $config->system->dtable->backup->fieldList['actions']['list']['delete']['url']  = array('module' => 'system', 'method' => 'deleteBackup', 'params' => 'name={name}');
 $config->system->dtable->backup->fieldList['actions']['list']['delete']['data-confirm'] = $lang->system->backup->confirmDelete;
+
+$config->system->dtable->instanceList = new stdclass();
+
+$config->system->dtable->instanceList->fieldList['name']['title']    = $lang->system->dbName;
+$config->system->dtable->instanceList->fieldList['name']['type']     = 'title';
+$config->system->dtable->instanceList->fieldList['name']['sortType'] = false;
+$config->system->dtable->instanceList->fieldList['name']['link']     = array('module' => 'instance', 'method' => 'view', 'params' => 'id={id}');
+
+$config->system->dtable->instanceList->fieldList['version']['title'] = $lang->instance->version;
+$config->system->dtable->instanceList->fieldList['version']['name']  = 'appVersion';
+
+$config->system->dtable->instanceList->fieldList['status']['title'] = $lang->system->dbStatus;
+$config->system->dtable->instanceList->fieldList['status']['name']  = 'status';
+$config->system->dtable->instanceList->fieldList['status']['map']   = $lang->instance->statusList;
+
+$config->system->dtable->instanceList->fieldList['cpu']['title']    = $lang->instance->cpu;
+$config->system->dtable->instanceList->fieldList['cpu']['name']     = 'cpu';
+$config->system->dtable->instanceList->fieldList['cpu']['minWidth'] = '160';
+
+$config->system->dtable->instanceList->fieldList['mem']['title']    = $lang->instance->mem;
+$config->system->dtable->instanceList->fieldList['mem']['name']     = 'mem';
+$config->system->dtable->instanceList->fieldList['mem']['minWidth'] = '230';

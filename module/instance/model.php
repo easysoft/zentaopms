@@ -1721,11 +1721,12 @@ class InstanceModel extends model
         $tip  = "{$rate}% = {$metrics->usage} / {$metrics->limit}";
 
         if(empty($color) && $rate == 0)               $color = 'gray';
-        if(empty($color) && $rate > 0 && $rate < 60)  $color = 'primary';
-        if(empty($color) && $rate >= 0 && $rate < 80) $color = 'warning';
+        if(empty($color) && $rate > 0 && $rate < 50)  $color = 'secondary';
+        if(empty($color) && $rate >= 0 && $rate < 70) $color = 'warning';
+        if(empty($color) && $rate >= 0 && $rate < 90) $color = 'important';
         if(empty($color) && $rate >= 80)              $color = 'danger';
 
-        if($type == 'array') return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%');
+        if($type == 'array') return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => $metrics->usage, 'limit' => $metrics->limit);
 
         if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
 
@@ -1751,11 +1752,12 @@ class InstanceModel extends model
         $tip  = "{$rate}% = " . helper::formatKB($metrics->usage) . ' / ' . helper::formatKB($metrics->limit);
 
         if(empty($color) && $rate == 0)               $color = 'gray';
-        if(empty($color) && $rate > 0 && $rate < 60)  $color = 'primary';
-        if(empty($color) && $rate >= 0 && $rate < 80) $color = 'warning';
+        if(empty($color) && $rate > 0 && $rate < 50)  $color = 'secondary';
+        if(empty($color) && $rate >= 0 && $rate < 70) $color = 'warning';
+        if(empty($color) && $rate >= 0 && $rate < 90) $color = 'important';
         if(empty($color) && $rate >= 80)              $color = 'danger';
 
-        if($type == 'array') return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%');
+        if($type == 'array') return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => helper::formatKB($metrics->usage), 'limit' => helper::formatKB($metrics->limit));
 
         if(strtolower($type) == 'pie') commonModel::printProgressPie($rate, '', $tip);
 
