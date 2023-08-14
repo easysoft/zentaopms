@@ -177,6 +177,20 @@
     }
 
     /**
+     * Check if link1 and link2 are same link.
+     *
+     * @param {string} link1
+     * @param {string} link2
+     * @returns {boolean}
+     */
+    function isSameLink(link1, link2)
+    {
+        link2 = link2 || location;
+        if(typeof link2 === 'object') link2 = link2.href + link2.hash;
+        return $.parseLink(link1).url === $.parseLink(link2).url;
+    }
+
+    /**
      * Open tab of app
      * @param {string} [url]   Url to open
      * @param {string} [appCode] The code of target app to open
@@ -260,7 +274,7 @@
 
         /* Show page app and update iframe source */
         var iframe = app.$iframe[0];
-        var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
+        var isSameUrl = iframe && url && isSameLink(url, iframe.contentWindow.location);
         if (url && (!isSameUrl || forceReload !== false))
         {
             app.$app.toggleClass('open-from-hidden', app.zIndex < openedAppZIndex)
@@ -439,7 +453,7 @@
         else if($.tabSession) url = $.tabSession.convertUrlWithTid(url);
 
         var iframe    = app.$iframe[0];
-        var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
+        var isSameUrl = iframe && url && isSameLink(url, iframe.contentWindow.location);;
 
         app.$app.trigger('beforereloadapp');
 
