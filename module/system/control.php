@@ -65,7 +65,15 @@ class system extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($total, $recPerPage, $pageID);
 
-        $instances = $this->loadModel('instance')->getByAccount($this->app->user->account, $pager, '', '', 'running');
+        $instances        = $this->loadModel('instance')->getByAccount($this->app->user->account, $pager, '', '', 'running');
+        $instancesMetrics = $this->cne->instancesMetrics($instances);
+
+        foreach($instances as $instance)
+        {
+            $metrics       = zget($instancesMetrics, $instance->id);
+            $instance->cpu = $this->instance->printCpuUsage($instance, $metrics->cpu, 'array');
+            $instance->mem = $this->instance->printMemUsage($instance, $metrics->memory, 'array');
+        }
 
         $actions = $this->loadModel('action')->getDynamic('all', 'today');
 
@@ -75,7 +83,6 @@ class system extends control
         $this->view->instances        = $instances;
         $this->view->actions          = $actions;
         $this->view->cneMetrics       = $this->cne->cneMetrics();
-        $this->view->instancesMetrics = $this->cne->instancesMetrics($instances);
         $this->view->pager            = $pager;
 
         $this->display();
