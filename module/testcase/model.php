@@ -3003,26 +3003,32 @@ class testcaseModel extends model
      * @param  array $caseIDList
      * @param  int   $sceneID
      * @access public
-     * @return array
+     * @return bool
      */
     public function batchChangeScene($caseIDList, $sceneID)
     {
+        $caseIDList = $this->filterIdList($caseIDList);
+        if(!$caseIDList) return false;
+
+        $oldCases = $this->getByList($caseIDList, "scene != {$sceneID}");
+        $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('scene')->ne($sceneID)->andWhere('id')->in($caseIDList)->exec();
+        if(dao::isError()) return false;
+
         $this->loadModel('action');
 
-        $caseIDList = array_filter(array_map(function($caseID){return strpos($caseID, 'case_') !== false ? str_replace('case_', '', $caseID) : '';}, $caseIDList));
-        if(!$caseIDList) return true;
+        $case = new stdclass();
+        $case->scene          = $sceneID;
+        $case->lastEditedBy   = $this->app->user->account;
+        $case->lastEditedDate = helper::now();
 
-        $oldCases = $this->dao->select('id, scene')->from(TABLE_CASE)->where('id')->in($caseIDList)->andWhere('scene')->ne($sceneID)->fetchAll();
-        $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('id')->in($caseIDList)->andWhere('scene')->ne($sceneID)->exec();
-
-        $newCase = new stdclass();
         foreach($oldCases as $oldCase)
         {
-            $newCase->scene = $sceneID;
-
-            $changes  = common::createChanges($oldCase, $newCase);
-            $actionID = $this->action->create('case', $oldCase->id, 'edited');
-            $this->action->logHistory($actionID, $changes);
+            $changes = common::createChanges($oldCase, $case);
+            if($changes)
+            {
+                $actionID = $this->action->create('case', $oldCase->id, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
         }
 
         return !dao::isError();
