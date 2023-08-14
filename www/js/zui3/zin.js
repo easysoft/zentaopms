@@ -927,7 +927,6 @@
                     if(url) options.url = url;
                     options.type = 'iframe';
                     modalTrigger = new window.parent.$.zui.ModalTrigger(options);
-                    console.log('> modalTrigger', options);
                     $link.data('zui.modaltrigger', modalTrigger);
                 }
                 modalTrigger.show();
@@ -938,9 +937,10 @@
 
         if(typeof options.back === 'string') return goBack(options.back, url);
 
-        var thisAppCode = $link.data('app')
+        var appCode = options.app;
         if(url)
         {
+            if(appCode === 'help') return $.apps.openUrl(url, {app: appCode});
             if(url.indexOf('javascript:') === 0 || url[0] === '#') return;
             var urlInfo = $.parseLink(url);
             if(urlInfo.external || (urlInfo.moduleName === 'file' && urlInfo.methodName === 'download')) return;
@@ -953,20 +953,12 @@
         }
         else
         {
-            if(!thisAppCode) return;
+            if(!appCode) return;
         }
-        if(!thisAppCode) thisAppCode = $.apps.getAppCode(url);
-        if(!thisAppCode) return;
-        if(thisAppCode === 'help')
-        {
-            $.apps.appsMap.help.text = $link.text();
-            if(!$.apps.appsMap.help.url)
-            {
-                $.apps.appsMap.help.url = url;
-            }
-        }
+        if(!appCode) appCode = $.apps.getAppCode(url);
+        if(!appCode) return;
 
-        $.apps.openUrl(url, {app: thisAppCode});
+        $.apps.openUrl(url, {app: appCode});
         e.preventDefault();
     }
 
