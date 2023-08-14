@@ -81,9 +81,15 @@ class ai extends control
         {
             $modelConfig = fixer::input('post')->get();
 
+            $currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->openaiVendorList) : $modelConfig->vendor;
+            $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['requiredFields'];
+
             $errors = array();
             if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
-            if(empty($modelConfig->key))  $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->apiKey);
+            foreach($vendorRequiredFields as $field)
+            {
+                if(empty($modelConfig->$field)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$field);
+            }
             if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr))
             {
                 $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
@@ -122,9 +128,15 @@ class ai extends control
     {
         $modelConfig = fixer::input('post')->get();
 
+        $currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->openaiVendorList) : $modelConfig->vendor;
+        $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['requiredFields'];
+
         $errors = array();
         if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
-        if(empty($modelConfig->key))  $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->apiKey);
+        foreach($vendorRequiredFields as $field)
+        {
+            if(empty($modelConfig->$field)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$field);
+        }
         if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr))
         {
             $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
