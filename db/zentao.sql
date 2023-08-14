@@ -459,6 +459,7 @@ CREATE INDEX `product` ON `zt_case`(`product`);
 CREATE INDEX `story`   ON `zt_case`(`story`);
 CREATE INDEX `fromBug` ON `zt_case`(`fromBug`);
 CREATE INDEX `module`  ON `zt_case`(`module`);
+CREATE INDEX `scene `  ON `zt_case`(`scene`);
 
 -- DROP TABLE IF EXISTS `zt_casestep`;
 CREATE TABLE IF NOT EXISTS `zt_casestep` (
