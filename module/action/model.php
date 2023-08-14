@@ -1138,7 +1138,6 @@ class actionModel extends model
 
         /* Restrict query data in this year when no limit for big data. */
         $beginDate = '';
-        $endDate   = '';
         if($period == 'all')
         {
             $year = date('Y');
