@@ -2413,7 +2413,9 @@ class projectModel extends model
     {
         $this->loadModel('user');
 
-        $members = array_keys($this->getTeamMembers($projectID));
+        $teams        = array_keys($this->getTeamMembers($projectID));
+        $stakeholders = array_keys($this->loadModel('stakeholder')->getStakeHolderPairs($projectID));
+        $members      = array_merge($teams, $stakeholders);
 
         /* Link products of other programs. */
         if(!empty($_POST['otherProducts']))
