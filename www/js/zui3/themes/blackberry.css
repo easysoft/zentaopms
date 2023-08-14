@@ -1,0 +1,54 @@
+:root
+{
+  /* generate from https://uicolors.app/create */
+  --color-primary-50: #f2f6fc;
+  --color-primary-100: #e2ecf7;
+  --color-primary-200: #aac8e6;
+  --color-primary-300: #81acd9;
+  --color-primary-400: #6390ce;
+  --color-primary-500: #4f78c1;
+  --color-primary-600: #4565b0;
+  --color-primary-700: #3d5390;
+  --color-primary-800: #354873;
+  --color-primary-900: #26304b;
+  --color-primary-50-rgb: 242, 246, 252;
+  --color-primary-100-rgb: 226, 236, 247;
+  --color-primary-200-rgb: 170, 200, 230;
+  --color-primary-300-rgb: 129, 172, 217;
+  --color-primary-400-rgb: 99, 144, 206;
+  --color-primary-500-rgb: 79, 120, 193;
+  --color-primary-600-rgb: 69, 101, 176;
+  --color-primary-700-rgb: 61, 83, 144;
+  --color-primary-800-rgb: 53, 72, 115;
+  --color-primary-900-rgb: 38, 48, 75;
+
+  --color-secondary-50: #f3f6fb;
+  --color-secondary-100: #e4ebf5;
+  --color-secondary-200: #adc6e3;
+  --color-secondary-300: #86a9d4;
+  --color-secondary-400: #698dc8;
+  --color-secondary-500: #5675ba;
+  --color-secondary-600: #4b64aa;
+  --color-secondary-700: #42538b;
+  --color-secondary-800: #344166;
+  --color-secondary-900: #262d45;
+  --color-secondary-50-rgb: 243, 246, 251;
+  --color-secondary-100-rgb: 228, 235, 245;
+  --color-secondary-200-rgb: 173, 198, 227;
+  --color-secondary-300-rgb: 134, 169, 212;
+  --color-secondary-400-rgb: 105, 141, 200;
+  --color-secondary-500-rgb: 86, 117, 186;
+  --color-secondary-600-rgb: 75, 100, 170;
+  --color-secondary-700-rgb: 66, 83, 139;
+  --color-secondary-800-rgb: 52, 65, 102;
+  --color-secondary-900-rgb: 38, 45, 69;
+
+  --color-link: var(--color-primary-700);
+  --color-link-hover: var(--color-primary-600);
+  --color-link-visited: var(--color-primary-800);
+  --color-link-rgb: var(--color-primary-700-rgb);
+  --color-link-hover-rgb: var(--color-primary-600-rgb);
+  --color-link-visited-rgb: var(--color-primary-800-rgb);
+
+  --zt-header-bg: var(--color-primary-800);
+}
