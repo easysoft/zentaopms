@@ -1342,11 +1342,11 @@ class testcase extends control
      */
     public function batchReview($result)
     {
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList, 'parent'));
-        $caseIdList = array_unique($this->post->caseIDList);
-        $actions    = $this->testcase->batchReview($caseIdList, $result);
-
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if($this->post->caseIDList)
+        {
+            $this->testcase->batchReview($this->post->caseIDList, $result);
+            if(dao::isError()) return print(js::error(dao::getError()));
+        }
         echo js::locate($this->session->caseList, 'parent');
     }
 
