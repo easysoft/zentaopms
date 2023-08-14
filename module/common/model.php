@@ -1184,11 +1184,11 @@ class commonModel extends model
             if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')
             {
                 $executionID = $menuItem->link['vars'];
-                commonModel::buildMoreButton((int)$executionID, $printHtml);
+                $menuHtml .= commonModel::buildMoreButton((int)$executionID, false);
             }
             elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
             {
-                commonModel::buildAppButton($printHtml);
+                $menuHtml .= commonModel::buildAppButton(false);
             }
             else
             {
@@ -1785,14 +1785,14 @@ EOF;
      * @access public
      * @return bool
      */
-    public static function buildMoreButton(int $executionID, bool $printHtml = true): bool
+    public static function buildMoreButton(int $executionID, bool $printHtml = true): string
     {
         global $lang, $app;
 
-        if(commonModel::isTutorialMode()) return false;
+        if(commonModel::isTutorialMode()) return '';
 
         $object = $app->dbh->query('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
-        if(empty($object)) return false;
+        if(empty($object)) return '';
 
         $executionPairs = array();
         $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
@@ -1810,7 +1810,7 @@ EOF;
             $executionPairs[$execution->id] = $execution->name;
         }
 
-        if(empty($executionPairs)) return false;
+        if(empty($executionPairs)) return '';
 
         $html  = "<li class='divider'></li><li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->more}<span class='caret'></span></a>";
         $html .= "<ul class='dropdown-menu'>";
@@ -1829,7 +1829,7 @@ EOF;
         $html .= "</ul></li>\n";
 
         if($printHtml) echo $html;
-        return true;
+        return $html;
     }
 
     /**
@@ -1840,11 +1840,11 @@ EOF;
      * @access public
      * @return bool
      */
-    public static function buildAppButton(bool $printHtml = true): bool
+    public static function buildAppButton(bool $printHtml = true): string
     {
         global $app, $config, $lang;
 
-        if(commonModel::isTutorialMode()) return false;
+        if(commonModel::isTutorialMode()) return '';
 
         $condition     = '';
         if(!$app->user->admin)
@@ -1854,11 +1854,11 @@ EOF;
             {
                 if(commonModel::hasPriv($pipelineType, 'browse')) $types .= "'$pipelineType',";
             }
-            if(empty($types)) return false;
+            if(empty($types)) return '';
             $condition .= ' AND `type` in (' . trim($types, ',') . ')';
         }
         $pipelineList = $app->dbh->query("SELECT `type`,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
-        if(empty($pipelineList)) return false;
+        if(empty($pipelineList)) return '';
 
         $appCommon = isset($lang->db->custom['devopsMenu']['menu']['app']) ? $lang->db->custom['devopsMenu']['menu']['app'] : $lang->app->common;
         $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$appCommon}<span class='caret'></span></a>";
@@ -1871,7 +1871,7 @@ EOF;
         $html .= "</ul></li>\n";
 
         if($printHtml) echo $html;
-        return true;
+        return $html;
     }
 
     /**
