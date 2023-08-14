@@ -264,7 +264,7 @@ class cron extends control
             echo "Check connection to the client by send this msg.";
             ob_flush();
             flush();
-            if('cli' !== PHP_SAPI && (connection_status() != CONNECTION_NORMAL || connection_aborted()))
+            if('cli' !== PHP_SAPI && 'fpm-fcgi' !== PHP_SAPI && (connection_status() != CONNECTION_NORMAL || connection_aborted()))
             {
                 $this->cron->logCron("The cron process ended.\n");
                 break;
