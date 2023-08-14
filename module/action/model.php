@@ -1150,9 +1150,8 @@ class actionModel extends model
 
         if(is_numeric($projectID))
         {
-            $project   = $this->dao->select('COALESCE(realBegan, begin) AS begin, COALESCE(realEnd, end) AS end')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
-            $beginDate = $project->begin;
-            $endDate   = $project->end > helper::today() ? helper::today() : $project->end;
+            $openedDate = $this->dao->select('openedDate')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('openedDate');
+            $beginDate  = $openedDate > $beginDate ? $openedDate : $beginDate;
         }
 
         $condition = "(($condition) OR `objectType` IN ('doc', 'doclib'))";
@@ -1170,7 +1169,6 @@ class actionModel extends model
             ->andWhere('date')->lt($end)
             ->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
-            ->beginIF($endDate)->andWhere('date')->le($endDate)->fi()
             ->fetchPairs();
         $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
         $condition .= " OR (`objectID` in ($efforts) AND `objectType` = 'effort')";
@@ -1187,7 +1185,6 @@ class actionModel extends model
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
-            ->beginIF($endDate)->andWhere('date')->le($endDate)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->andWhere('1=1', true)
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
