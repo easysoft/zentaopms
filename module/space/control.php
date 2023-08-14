@@ -128,6 +128,7 @@ class space extends control
         $pgList      = $this->cne->sharedDBList('postgresql');
         $versionList = $this->store->getVersionPairs($appID);
 
+        $this->view->title       = $this->lang->space->install;
         $this->view->apps        = $apps;
         $this->view->appID       = $appID;
         $this->view->defaultApp  = $defaultApp;
