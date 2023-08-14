@@ -2151,8 +2151,8 @@ class testcaseModel extends model
 
             if(!empty($case->children) || !empty($case->cases))
             {
-                if(!empty($case->children)) $index = printRow($index, $case->children, $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
-                if(!empty($case->cases))    $index = printRow($index, $case->cases,    $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
+                if(!empty($case->children)) $index = $this->printRow($index, $case->children, $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
+                if(!empty($case->cases))    $index = $this->printRow($index, $case->cases,    $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
             }
         }
 
