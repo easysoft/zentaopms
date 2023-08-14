@@ -370,7 +370,6 @@ define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
 define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
 define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
 define('TABLE_SCENE',     '`' . $config->db->prefix . 'scene`');
-define('VIEW_SCENECASE',  '`ztv_scenecase`');
 
 define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
 define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
