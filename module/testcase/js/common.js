@@ -278,6 +278,7 @@ function setScenes()
     branch    = $('#branch').val();
     moduleID  = $('#module').val();
     if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(sceneID) == 'undefined') sceneID = 0;
     element = (config.currentMethod == 'createscene' || config.currentMethod == 'editscene') ? 'parent' : 'scene';
     link = createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&element=' + element + '&sceneID=' + sceneID);
 

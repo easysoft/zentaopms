@@ -17,6 +17,7 @@
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
 <?php js::set('caseID', $case->id);?>
+<?php js::set('sceneID', $case->scene);?>
 <?php js::set('tab', $this->app->tab);?>
 <?php js::set('isLibCase', $isLibCase);?>
 <?php js::set('testtasks', $testtasks);?>
