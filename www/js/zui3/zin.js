@@ -915,9 +915,26 @@
         if(!$link.length || $link.hasClass('ajax-submit') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
 
         const options = $link.dataset();
-        if(options.toggle) return;
-
         const url = options.url || $link.attr('href');
+        if(options.toggle)
+        {
+            if(options.toggle === 'iframeModal')
+            {
+                var modalTrigger = $link.data('zui.modaltrigger');
+                if(!modalTrigger)
+                {
+                    delete options.toggle;
+                    if(url) options.url = url;
+                    options.type = 'iframe';
+                    modalTrigger = new window.parent.$.zui.ModalTrigger(options);
+                    console.log('> modalTrigger', options);
+                    $link.data('zui.modaltrigger', modalTrigger);
+                }
+                modalTrigger.show();
+            }
+            e.preventDefault();
+            return;
+        }
 
         if(typeof options.back === 'string') return goBack(options.back, url);
 
