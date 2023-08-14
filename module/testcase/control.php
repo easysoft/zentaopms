@@ -1124,7 +1124,8 @@ class testcase extends control
     public function batchEdit($productID = 0, $branch = 0, $type = 'case', $tab = '')
     {
         if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
-        $caseIDList = array_unique($this->post->caseIDList);
+
+        $caseIDList = $this->testcase->filterIdList($this->post->caseIDList);
         $testtasks  = $this->loadModel('testtask')->getGroupByCases($caseIDList);
         if($this->post->title)
         {
