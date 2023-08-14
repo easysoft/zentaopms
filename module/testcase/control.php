@@ -1422,17 +1422,8 @@ class testcase extends control
     {
         if($this->post->caseIDList)
         {
-            $caseIDList = $this->post->caseIDList;
-            $caseIDList = array_unique($caseIDList);
-            unset($_POST['caseIDList']);
-            $allChanges = $this->testcase->batchChangeBranch($caseIDList, $branchID);
+            $this->testcase->batchChangeBranch($this->post->caseIDList, $branchID);
             if(dao::isError()) return print(js::error(dao::getError()));
-            foreach($allChanges as $caseID => $changes)
-            {
-                $this->loadModel('action');
-                $actionID = $this->action->create('case', $caseID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
         }
 
         echo js::locate($this->session->caseList, 'parent');

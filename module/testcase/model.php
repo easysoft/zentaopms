@@ -1324,28 +1324,35 @@ class testcaseModel extends model
      * @param  array  $caseIDList
      * @param  int    $branchID
      * @access public
-     * @return array
+     * @return bool
      */
     public function batchChangeBranch($caseIDList, $branchID)
     {
-        $now        = helper::now();
-        $allChanges = array();
-        $oldCases   = $this->getByList($caseIDList);
-        foreach($caseIDList as $caseID)
+        $caseIDList = $this->filterIdList($caseIDList);
+        if(!$caseIDList) return false;
+
+        $oldCases = $this->getByList($caseIDList, "branch != {$branchID}");
+        $this->dao->update(TABLE_CASE)->set('branch')->eq($branchID)->where('branch')->ne($branchID)->andWhere('id')->in($caseIDList)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
+
+        $case = new stdclass();
+        $case->branch         = $branchID;
+        $case->lastEditedBy   = $this->app->user->account;
+        $case->lastEditedDate = helper::now();
+
+        foreach($oldCases as $oldCase)
         {
-            $oldCase = $oldCases[$caseID];
-            if($branchID == $oldCase->branch) continue;
-
-            $case = new stdclass();
-            $case->lastEditedBy   = $this->app->user->account;
-            $case->lastEditedDate = $now;
-            $case->branch         = $branchID;
-
-            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq((int)$caseID)->exec();
-            if(!dao::isError()) $allChanges[$caseID] = common::createChanges($oldCase, $case);
+            $changes = common::createChanges($oldCase, $case);
+            if($changes)
+            {
+                $actionID = $this->action->create('case', $oldCase->id, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
         }
 
-        return $allChanges;
+        return !dao::isError();
     }
 
     /**
