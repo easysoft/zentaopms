@@ -1148,6 +1148,19 @@ class testcaseModel extends model
     }
 
     /**
+     * Filter id list: remove prefix.
+     *
+     * @param  array  $idList
+     * @param  string $prefix
+     * @access public
+     * @return array
+     */
+    public function filterIdList($idList, $prefix = 'case_')
+    {
+        return array_filter(array_map(function($id){return strpos($id, $prefix) !== false ? str_replace($prefix, '', $id) : (int)$id;}, $idList));
+    }
+
+    /**
      * Batch update testcases.
      *
      * @param  array $testtasks
