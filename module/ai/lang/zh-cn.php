@@ -397,7 +397,10 @@ $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';
 $lang->ai->models->common         = '语言模型';
 $lang->ai->models->type           = '语言模型';
+$lang->ai->models->vendor         = '供应商';
 $lang->ai->models->apiKey         = 'API Key';
+$lang->ai->models->resource       = 'Resource';
+$lang->ai->models->deployment     = 'Deployment';
 $lang->ai->models->proxyType      = '代理类型';
 $lang->ai->models->proxyAddr      = '代理地址';
 $lang->ai->models->description    = '描述';
@@ -419,6 +422,10 @@ $lang->ai->models->statusList['off'] = '停用';
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
 // $lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
+
+$lang->ai->models->openaiVendorList = array();
+$lang->ai->models->openaiVendorList['openai'] = 'OpenAI';
+$lang->ai->models->openaiVendorList['azure']  = 'Azure';
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = '不使用代理';

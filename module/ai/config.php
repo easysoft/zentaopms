@@ -1,6 +1,9 @@
 <?php
-$config->ai->openai = new stdclass();
+$config->ai->vendorList = array();
+$config->ai->vendorList['openai']['requiredFields'] = array('key');
+$config->ai->vendorList['azure']['requiredFields']  = array('key', 'resource', 'deployment');
 
+$config->ai->openai = new stdclass();
 $config->ai->openai->api = new stdclass();
 $config->ai->openai->api->version    = 'v1';                           // OpenAI API version, required.
 $config->ai->openai->api->format     = 'https://api.openai.com/%s/%s'; // OpenAI API format, args: API version, API name.

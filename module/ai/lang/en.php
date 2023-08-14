@@ -397,7 +397,10 @@ $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';
 $lang->ai->models->common         = 'Language Model';
 $lang->ai->models->type           = 'Model';
+$lang->ai->models->vendor         = 'Vendor';
 $lang->ai->models->apiKey         = 'API Key';
+$lang->ai->models->resource       = 'Resource';
+$lang->ai->models->deployment     = 'Deployment';
 $lang->ai->models->proxyType      = 'Proxy Type';
 $lang->ai->models->proxyAddr      = 'Proxy Address';
 $lang->ai->models->description    = 'Description';
@@ -419,6 +422,10 @@ $lang->ai->models->statusList['off'] = 'Disable';
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
 // $lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
+
+$lang->ai->models->openaiVendorList = array();
+$lang->ai->models->openaiVendorList['OpenAI'] = 'OpenAI';
+$lang->ai->models->openaiVendorList['Azure']  = 'Azure';
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = 'No Proxy';

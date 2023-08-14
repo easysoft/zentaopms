@@ -10,6 +10,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php
+$currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->openaiVendorList) : $modelConfig->vendor;
+$requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
+js::set('vendorList', $config->ai->vendorList);
+?>
 <style>
   .required:after {right: -12px;}
 </style>
@@ -21,8 +26,20 @@
         <td><?php echo html::select('type', $lang->ai->models->typeList, $modelConfig->type, "class='form-control chosen' required");?></td>
       </tr>
       <tr>
+        <th><?php echo $lang->ai->models->vendor;?></th>
+        <td><?php echo html::select('vendor', $lang->ai->models->openaiVendorList, $currentVendor, "class='form-control chosen' required");?></td>
+      </tr>
+      <tr class="vendor-row <?php echo in_array('key', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="key">
         <th><?php echo $lang->ai->models->apiKey;?></th>
         <td><?php echo html::input('key', $modelConfig->key, "class='form-control' required");?></td>
+      </tr>
+      <tr class="vendor-row <?php echo in_array('resource', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="resource">
+        <th><?php echo $lang->ai->models->resource;?></th>
+        <td><?php echo html::input('resource', empty($modelConfig->resource) ? '' : $modelConfig->resource, "class='form-control' required");?></td>
+      </tr>
+      <tr class="vendor-row <?php echo in_array('deployment', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="deployment">
+        <th><?php echo $lang->ai->models->deployment;?></th>
+        <td><?php echo html::input('deployment', empty($modelConfig->deployment) ? '' : $modelConfig->deployment, "class='form-control' required");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->ai->models->proxyType;?></th>
@@ -63,6 +80,16 @@ $(function() {
     {
         var proxyType = $(this).val();
         $('#proxyAddrContainer').toggle(proxyType != '');
+    });
+    $('select[name="vendor"]').change(function()
+    {
+      var vendor = $(this).val();
+      var requiredFields = vendorList[vendor]['requiredFields'];
+      $('.vendor-row').each(function()
+      {
+        var name = $(this).data('vendor-field');
+        $(this).toggleClass('hidden', !requiredFields.includes(name));
+      });
     });
     $('#mainForm').on('submit', function()
     {

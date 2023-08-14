@@ -1,6 +1,6 @@
 <?php
 /**
- * The ai module de lang file of ZenTaoPMS.
+ * The ai module en lang file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -397,7 +397,10 @@ $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';
 $lang->ai->models->common         = 'Language Model';
 $lang->ai->models->type           = 'Model';
+$lang->ai->models->vendor         = 'Vendor';
 $lang->ai->models->apiKey         = 'API Key';
+$lang->ai->models->resource       = 'Resource';
+$lang->ai->models->deployment     = 'Deployment';
 $lang->ai->models->proxyType      = 'Proxy Type';
 $lang->ai->models->proxyAddr      = 'Proxy Address';
 $lang->ai->models->description    = 'Description';
@@ -419,6 +422,10 @@ $lang->ai->models->statusList['off'] = 'Disable';
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
 // $lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
+
+$lang->ai->models->openaiVendorList = array();
+$lang->ai->models->openaiVendorList['OpenAI'] = 'OpenAI';
+$lang->ai->models->openaiVendorList['Azure']  = 'Azure';
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = 'No Proxy';
