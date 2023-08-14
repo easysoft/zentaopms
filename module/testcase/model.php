@@ -2912,7 +2912,7 @@ class testcaseModel extends model
     {
         $this->loadModel('action');
 
-        $caseIDList = array_filter(array_map(function($caseID){return strpos($caseID, 'case_')  !== false ? str_replace('case_',  '', $caseID) : '';}, $caseIDList));
+        $caseIDList = array_filter(array_map(function($caseID){return strpos($caseID, 'case_') !== false ? str_replace('case_', '', $caseID) : '';}, $caseIDList));
         if(!$caseIDList) return true;
 
         $oldCases = $this->dao->select('id, scene')->from(TABLE_CASE)->where('id')->in($caseIDList)->andWhere('scene')->ne($sceneID)->fetchAll();
