@@ -105,7 +105,7 @@ class header extends wg
         (
             btn
             (
-                setClass('bg-white ring-0 rounded bg-opacity-30'),
+                setClass('secondary ring-0 rounded'),
                 set::text($lang->visionList[$currentVision]),
                 set::caret(false)
             ),
@@ -139,6 +139,9 @@ class header extends wg
                 'href'      => createLink('my', 'profile', '', '', true),
                 'className' => 'items-center gap-2 px-2 py-1 row text-inherit',
                 'style'     => array('padding-left' => 0),
+                'data-toggle' => 'modal',
+                'data-size' => 700,
+                'data-id'   => 'profile',
                 'renders'   => array(array('__html' => implode('', array
                 (
                     userAvatar(set::user($user), setClass('flex-none'))->render(),
@@ -159,7 +162,9 @@ class header extends wg
                 'icon' => 'account',
                 'text' => $lang->profile,
                 'class' => 'iframe',
-                'data-width' => 700
+                'data-toggle' => 'modal',
+                'data-size' => 700,
+                'data-id'   => 'profile',
             );
 
             if($app->config->vision === 'rnd')
@@ -187,7 +192,8 @@ class header extends wg
                     'icon' => 'controls',
                     'text' => $lang->preference,
                     'class' => 'iframe',
-                    'data-width' => 700
+                    'data-width' => 700,
+                    'data-toggle' => 'modal'
                 );
             }
 
@@ -198,8 +204,8 @@ class header extends wg
                     'url' => createLink('my', 'changepassword', '', '', true),
                     'icon' => 'cog-outline',
                     'text' => $lang->changePassword,
-                    'class' => 'iframe',
-                    'data-width' => 600
+                    'data-toggle' => 'modal',
+                    'data-size' => 'sm'
                 );
             }
 
@@ -215,6 +221,7 @@ class header extends wg
         (
             'text' => $lang->theme,
             'icon' => 'theme',
+            'key'  => 'theme',
             'items' => $themeItems
         );
 
@@ -244,7 +251,7 @@ class header extends wg
         }
         else
         {
-            $items[] = array('text' => $lang->logout, 'url' => createLink('user', 'logout'), 'target' => '_top', 'icon' => 'exit');
+            $items[] = array('text' => $lang->logout, 'url' => "javascript:$.apps.logout()", 'icon' => 'exit');
         }
 
         return dropdown
@@ -332,11 +339,9 @@ class header extends wg
             switch($objectType)
             {
                 case 'doc':
-                    $params             = "objectType=&objectID=0&libID=0";
-                    $createMethod       = 'selectLibType';
-                    $isOnlyBody         = true;
-                    $item['class']      = 'iframe';
-                    $item['data-width'] = '700px';
+                    $params              = "objectType=&objectID=0&libID=0";
+                    $createMethod        = 'selectLibType';
+                    $item['data-toggle'] = 'modal';
                     break;
                 case 'project':
                     if($config->vision == 'lite')
@@ -422,7 +427,7 @@ class header extends wg
             btn
             (
                 icon('plus', set::size('lg')),
-                setClass('bg-white ring-0 rounded bg-opacity-20'),
+                setClass('secondary ring-0 rounded'),
                 set::square(true),
                 set::size('sm'),
                 set::caret(false)
