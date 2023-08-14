@@ -1403,22 +1403,10 @@ class testcase extends control
      */
     public function batchDelete($productID = 0)
     {
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
-        $caseIDList = array_unique($this->post->caseIDList);
-
-        foreach($caseIDList as $caseID)
+        if($this->post->caseIDList)
         {
-            if(strpos($caseID, 'scene_') !== false)
-            {
-                $sceneID = str_replace('scene_', '', $caseID);
-                $this->deleteScene($sceneID, 'wait');
-            }
-
-            if(strpos($caseID, 'case_') !== false)
-            {
-                $caseID = str_replace('case_', '', $caseID);
-                $this->testcase->delete(TABLE_CASE, $caseID);
-            }
+            $this->testcase->batchDelete($this->post->caseIDList);
+            if(dao::isError()) return print(js::error(dao::getError()));
         }
         echo js::locate($this->session->caseList);
     }
