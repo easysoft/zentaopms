@@ -2124,7 +2124,8 @@ class testcaseModel extends model
             $case->index = $index;
 
             $trClass = '';
-            $trAttrs = "data-id='{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
+            $prefix  = $case->isCase == 1 ? 'case_' : 'scene_';
+            $trAttrs = "data-id='{$prefix}{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
             if($case->isCase == 2)
             {
                 $trAttrs .= " data-nested='true'";
