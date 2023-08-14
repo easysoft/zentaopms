@@ -14,7 +14,7 @@
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
 .main-col .doc-title .actions a > span {color: #9EA3B0;}
 
-#content .title {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#content .title {overflow: hidden; text-overflow: clip; white-space: nowrap;}
 #mainContent .scrollbar-hover {max-height: 2000px; overflow: scroll;}
 #content .editor-preview {background: #fff}
 #content .CodeMirror{border: none}
@@ -120,3 +120,5 @@
 .tree li>.list-toggle {top: 5px; left: -4px;}
 .flex-left {display: inline-flex; flex: auto}
 .history-btn:focus {background-color: rgba(255,255,255,.8)}
+
+#actionbox {margin-left: 30px;}

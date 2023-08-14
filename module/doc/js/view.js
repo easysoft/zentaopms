@@ -108,7 +108,6 @@ function fullScreen()
     }
 
     $('.main-col iframe').css('min-height', $(window).height() + 'px');
-    adjustPageTitleWidth();
 }
 
 /**
@@ -126,20 +125,6 @@ function exitFullScreen()
     $('#content .detail').eq(1).removeClass('hidden');
     $('.main-col iframe').css('min-height', '380px');
     $.cookie('isFullScreen', 0);
-    adjustPageTitleWidth();
-}
-
-/**
- * Adjust title width.
- *
- * @access public
- * @return void
- */
-function adjustPageTitleWidth()
-{
-    var $titleContent = $('.detail-title.doc-title');
-    var titleWidth    = $titleContent.width() - $titleContent.find('.info').width() - $titleContent.find('.actions').width() - $titleContent.find('#editorBox').width();
-    $titleContent.find('.flex-left > .title').css('max-width', titleWidth + 'px');
 }
 
 document.addEventListener('fullscreenchange', function (e)
@@ -221,12 +206,10 @@ $(function()
             $icon.removeClass('text-primary');
             $icon.addClass('history-btn');
         }
-        adjustPageTitleWidth();
     }).on('click', '#closeBtn', function()
     {
         $('#history').addClass('hidden');
         $('#hisTrigger').removeClass('text-primary');
-        adjustPageTitleWidth();
     });
 
     $('#outline li.has-list').addClass('open in');
@@ -281,7 +264,6 @@ $(function()
             }
             $('#docExport').attr('href', createLink('doc', exportMethod, 'libID=' + libID + '&moduleID=0&docID=' + docID + '&version=' + $('#content .doc-title .version').data('version')));
             if($('.files-list').length) $('#content .detail-content.article-content').css('height', 'calc(100vh - 300px)');
-            adjustPageTitleWidth();
 
             if($versionLink.data('version') != latestVersion)
             {
@@ -301,5 +283,8 @@ $(function()
         $('#outlineMenu').css('display', 'none');
         $('.outline-toggle').css('display', 'none');
     }
-    adjustPageTitleWidth();
+
+    var $titleContent = $('.detail-title.doc-title')
+    $titleContent.find('.flex-left').css('max-width', 'calc(100% - ' + (180 + $titleContent.find('#editorBox').width()) + 'px)');
+    $titleContent.find('.flex-left .title').css('max-width', 'calc(100% - ' + $titleContent.find('.info').width() + 'px)');
 })
