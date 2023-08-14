@@ -3524,44 +3524,44 @@ class testcaseModel extends model
     /**
      * Get scene name.
      *
-     * @param  array $moduleIdList
-     * @param  bool  $allPath
+     * @param  array $sceneIDList
+     * @param  bool  $fullPath
      * @param  bool  $branchPath
      * @access public
      * @return array
      */
-    public function getScenesName($moduleIdList, $allPath = true, $branchPath = false)
+    public function getScenesName($sceneIDList, $fullPath = true, $branchPath = false)
     {
-        if(!$allPath) return $this->dao->select('id, title')->from(VIEW_SCENECASE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchPairs('id', 'title');
+        if(!$fullPath) return $this->dao->select('id, title')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('id')->in($sceneIDList)->fetchPairs();
 
-        $modules    = $this->dao->select('id, title, path, branch')->from(VIEW_SCENECASE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchAll('path');
-        $allModules = $this->dao->select('id, title')->from(VIEW_SCENECASE)->where('id')->in(join(array_keys($modules)))->andWhere('deleted')->eq(0)->fetchPairs('id', 'title');
+        $scenes    = $this->dao->select('id, title, path, branch')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('id')->in($sceneIDList)->fetchAll('path');
+        $allScenes = $this->dao->select('id, title')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('id')->in(join(array_keys($scenes)))->fetchPairs();
 
         $branchIDList = array();
-        $modulePairs  = array();
-        foreach($modules as $module)
+        $scenePairs   = array();
+        foreach($scenes as $scene)
         {
-            $paths = explode(',', trim($module->path, ','));
-            $moduleName = '';
-            foreach($paths as $path) $moduleName .= '/' . $allModules[$path];
-            $modulePairs[$module->id] = $moduleName;
+            $title = '';
+            $path  = explode(',', trim($scene->path, ','));
+            foreach($path as $sceneID) $title .= '/' . $allScenes[$sceneID];
 
-            if($module->branch) $branchIDList[$module->branch] = $module->branch;
+            $scenePairs[$scene->id] = $title;
+
+            if($scene->branch) $branchIDList[] = $scene->branch;
         }
 
-        if(!$branchPath) return $modulePairs;
+        if(!$branchPath) return $scenePairs;
 
-        $branchs  = $this->dao->select('id, title')->from(VIEW_SCENECASE)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
-        foreach($modules as $module)
+        $branchs = $this->dao->select('id, title')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('id')->in($branchIDList)->fetchPairs();
+        foreach($scenes as $scene)
         {
-            if(isset($modulePairs[$module->id]))
-            {
-                $branchName = isset($branchs[$module->branch]) ? '/' . $branchs[$module->branch]->name : '';
-                $modulePairs[$module->id] = $branchName . $modulePairs[$module->id];
-            }
+            if(!isset($scenePairs[$scene->id])) continue;
+
+            $branchName = isset($branchs[$scene->branch]) ? '/' . $branchs[$scene->branch] : '';
+            $scenePairs[$scene->id] = $branchName . $scenePairs[$scene->id];
         }
 
-        return $modulePairs;
+        return $scenePairs;
     }
 
     /**
