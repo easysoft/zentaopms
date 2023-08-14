@@ -1450,17 +1450,17 @@ class testcase extends control
     /**
      * Batch review case.
      *
-     * @param  string $result
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function batchCaseTypeChange($result)
+    public function batchCaseTypeChange($type)
     {
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList, 'parent'));
-        $caseIdList = array_unique($this->post->caseIDList);
-        $this->testcase->batchCaseTypeChange($caseIdList, $result);
-
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if($this->post->caseIDList)
+        {
+            $this->testcase->batchCaseTypeChange($this->post->caseIDList, $type);
+            if(dao::isError()) return print(js::error(dao::getError()));
+        }
         echo js::locate($this->session->caseList, 'parent');
     }
 

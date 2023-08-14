@@ -1451,29 +1451,37 @@ class testcaseModel extends model
      * Batch case type change.
      *
      * @param  array   $caseIDList
-     * @param  string  $result
+     * @param  string  $type
      * @access public
      * @return array
      */
-    public function batchCaseTypeChange($caseIdList, $result)
+    public function batchCaseTypeChange($caseIDList, $type)
     {
-        $now     = helper::now();
-        $actions = array();
+        $caseIDList = $this->filterIdList($idList);
+        if(!$caseIDList) return false;
+
+        $oldCases = $this->getByList($caseIDList, "type != {$type}");
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('type')->ne($type)->('id')->in($caseIDList)->exec();
+        if(dao::isError()) return false;
+
         $this->loadModel('action');
 
-        $oldCases = $this->getByList($caseIdList);
-        foreach($caseIdList as $caseID)
-        {
-            $case = new stdClass();
-            $case->lastEditedBy   = $this->app->user->account;
-            $case->lastEditedDate = $now;
-            $case->type           = $result;
+        $case = new stdClass();
+        $case->type           = $type;
+        $case->lastEditedBy   = $this->app->user->account;
+        $case->lastEditedDate = helper::now();
 
-            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
-            $actionID = $this->action->create('case', $caseID, 'Edited', '', ucfirst($result));
-            $changes  = common::createChanges($oldCases[$caseID], $case);
-            $this->action->logHistory($actionID, $changes);
+        foreach($oldCases as $oldCase)
+        {
+            $changes = common::createChanges($oldCase, $case);
+            if($changes)
+            {
+                $actionID = $this->action->create('case', $oldCase->id, 'Edited', '', ucfirst($result));
+                $this->action->logHistory($actionID, $changes);
+            }
         }
+
+        return !dao::isError();
     }
 
     /**
