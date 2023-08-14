@@ -187,7 +187,7 @@ js::set('langNormal',       $lang->testcase->normal);
                   unset($lang->testcase->typeList['']);
                   foreach($lang->testcase->typeList as $key => $result)
                   {
-                      $actionLink = $this->createLink('testcase', 'batchCaseTypeChange', "result=$key");
+                      $actionLink = $this->createLink('testcase', 'batchCaseTypeChange', "type=$key");
                       echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"") . '</li>';
                   }
                   echo '</ul></li>';
