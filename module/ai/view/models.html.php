@@ -10,6 +10,10 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php
+$currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->openaiVendorList) : $modelConfig->vendor;
+$requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
+?>
 <div id='mainContent' class='main-content'>
   <table class='table table-form mw-600px'>
     <tr>
@@ -17,9 +21,27 @@
       <td><?php echo zget($lang->ai->models->typeList, $modelConfig->type, $lang->ai->models->unconfigured);?></td>
     </tr>
     <tr>
-      <th><?php echo $lang->ai->models->apiKey;?></th>
-      <td><?php echo empty($modelConfig->key) ? $lang->ai->models->unconfigured : ("<code title='{$lang->ai->models->concealTip}'>" . substr_replace($modelConfig->key, '...', 4, strlen($modelConfig->key) - 8) . '</code>');?></td>
+      <th><?php echo $lang->ai->models->vendor;?></th>
+      <td><?php echo zget($lang->ai->models->openaiVendorList, $modelConfig->vendor, $lang->ai->models->unconfigured)?></td>
     </tr>
+    <?php if(in_array('key', $requiredFields)): ?>
+      <tr>
+        <th><?php echo $lang->ai->models->apiKey; ?></th>
+        <td><?php echo empty($modelConfig->key) ? $lang->ai->models->unconfigured : ("<code title='{$lang->ai->models->concealTip}'>" . substr_replace($modelConfig->key, '...', 4, strlen($modelConfig->key) - 8) . '</code>'); ?></td>
+      </tr>
+    <?php endif; ?>
+    <?php if(in_array('resource', $requiredFields)): ?>
+      <tr>
+        <th><?php echo $lang->ai->models->resource; ?></th>
+        <td><?php echo empty($modelConfig->resource) ? $lang->ai->models->unconfigured : $modelConfig->resource; ?></td>
+      </tr>
+    <?php endif; ?>
+    <?php if(in_array('deployment', $requiredFields)): ?>
+      <tr>
+        <th><?php echo $lang->ai->models->deployment; ?></th>
+        <td><?php echo empty($modelConfig->deployment) ? $lang->ai->models->unconfigured : $modelConfig->deployment; ?></td>
+      </tr>
+    <?php endif; ?>
     <tr>
       <th><?php echo $lang->ai->models->proxyType;?></th>
       <td><?php echo zget($lang->ai->models->proxyTypes, $modelConfig->proxyType, $lang->ai->models->unconfigured);?></td>
