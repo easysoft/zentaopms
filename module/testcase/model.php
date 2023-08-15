@@ -1960,11 +1960,17 @@ class testcaseModel extends model
      */
     public function importToLib($caseIdList = 0)
     {
-        if(empty($caseIdList)) $caseIdList = $this->post->caseIdList;
-        $caseIdList = explode(',' , $caseIdList);
-        $libID      = $this->post->lib;
-
+        $libID = $this->post->lib;
         if(empty($libID)) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->testcase->caselib);
+
+        if($caseIdList)
+        {
+            $caseIdList = explode(',' , $caseIdList);
+        }
+        else
+        {
+            $caseIdList = $this->filterIdList(explode(',', $this->post->caseIdList));
+        }
 
         $this->loadModel('action');
         $cases          = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($caseIdList)->fetchAll('id');
