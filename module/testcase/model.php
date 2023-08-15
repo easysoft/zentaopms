@@ -1151,21 +1151,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Filter id list: remove prefix.
-     *
-     * @param  array  $idList
-     * @param  string $type     case|scene
-     * @access public
-     * @return array
-     */
-    public function filterIdList($idList, $type = 'case')
-    {
-        if($type == 'case')  return array_filter(array_map(function($id){return strpos($id, 'case_')  !== false ? str_replace('case_',  '', $id) : (int)$id;}, $idList));
-        if($type == 'scene') return array_filter(array_map(function($id){return strpos($id, 'scene_') !== false ? str_replace('scene_', '', $id) : (int)$id;}, $idList));
-        return $idList;
-    }
-
-    /**
      * Batch update testcases.
      *
      * @param  array $testtasks
