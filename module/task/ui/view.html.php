@@ -99,7 +99,25 @@ detailBody
             set::content(empty($task->desc) ? $lang->noData : $task->desc),
             set::useHtml(true)
         ),
-        $task->story ?
+        $task->fromBug ?
+        section
+        (
+            set::title($lang->task->fromBug),
+            sectionCard
+            (
+                entityLabel
+                (
+                    set::entityID($task->fromBug),
+                    set::text($fromBug->title),
+                ),
+                item
+                (
+                    set::title($lang->bug->steps),
+                    empty($fromBug->steps) && empty($fromBug->steps) ? $lang->noData : html($fromBug->steps)
+                )
+            )
+        ) : null,
+        !$task->fromBug && $task->story ?
         section
         (
             set::title($lang->task->story),
