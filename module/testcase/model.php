@@ -1395,16 +1395,17 @@ class testcaseModel extends model
     {
         if(!$caseIDList) return false;
 
-        $oldCases = $this->getByList($caseIDList, "module != {$moduleID}");
-        $this->dao->update(TABLE_CASE)->set('module')->eq($moduleID)->where('module')->ne($moduleID)->andWhere('id')->in($caseIDList)->exec();
-        if(dao::isError()) return false;
-
-        $this->loadModel('action');
+        $oldCases = $this->getByList($caseIDList, "module != '{$moduleID}'");
 
         $case = new stdclass();
         $case->module         = $moduleID;
         $case->lastEditedBy   = $this->app->user->account;
         $case->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_CASE)->data($case)->where('module')->ne($moduleID)->andWhere('id')->in($caseIDList)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
 
         foreach($oldCases as $oldCase)
         {
