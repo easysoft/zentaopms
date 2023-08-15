@@ -192,6 +192,7 @@ detailBody
                         a
                         (
                             set('data-toggle', 'modal'),
+                            set('data-size', 'lg'),
                             set::href(createLink('story', 'view', "id={$task->story}")),
                             set::title($task->storyTitle),
                             $task->storyTitle
@@ -203,6 +204,7 @@ detailBody
                         a
                         (
                             set('data-toggle', 'modal'),
+                            set('data-size', 'lg'),
                             set::href(createLink('bug', 'view', "id={$task->fromBug}")),
                             set::title($fromBug->title),
                             $fromBug->title
