@@ -434,6 +434,9 @@ class repo extends control
 
         $this->commonAction($repoID, $objectID);
         $repo = $this->repo->getByID($repoID);
+        session_start();
+        $this->session->set('storyList', $this->app->getURI(true), 'product');
+        session_write_close();
         if($browser['name'] != 'ie') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
 
         if($_POST)

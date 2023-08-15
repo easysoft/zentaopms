@@ -247,7 +247,7 @@ class GitRepo
 
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         chdir($this->root);
-        $list = execCmd(escapeCmd("$this->client blame -l $revision -- $path"), 'array');
+        $list = execCmd(escapeCmd("$this->client blame -c -l $revision -- $path"), 'array');
 
         $blames   = array();
         $revLine  = 0;
@@ -256,7 +256,7 @@ class GitRepo
         {
             if(empty($line)) continue;
             if($line[0] == '^') $line = substr($line, 1);
-            preg_match('/^([0-9a-f]{39,40})\s.*\((\S+)\s+([\d-]+)\s(.*)\s(\d+)\)(.*)$/U', $line, $matches);
+            preg_match('/^([0-9a-f]{39,40})\s.*\(\s*(\S+)\s+([\d-]+)\s(.*)\s(\d+)\)(.*)$/U', $line, $matches);
 
             if(isset($matches[1]) and $matches[1] != $revision)
             {
