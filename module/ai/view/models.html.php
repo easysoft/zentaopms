@@ -22,7 +22,7 @@ $requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
     </tr>
     <tr>
       <th><?php echo $lang->ai->models->vendor;?></th>
-      <td><?php echo zget($lang->ai->models->openaiVendorList, $modelConfig->vendor, $lang->ai->models->unconfigured)?></td>
+      <td><?php echo empty($modelConfig->vendor) ? $lang->ai->models->unconfigured : $lang->ai->models->openaiVendorList[$modelConfig->vendor]?></td>
     </tr>
     <?php if(in_array('key', $requiredFields)): ?>
       <tr>
