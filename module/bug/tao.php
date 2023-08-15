@@ -31,7 +31,8 @@ class bugTao extends bugModel
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
             ->leftJoin(TABLE_TASK)->alias('t4')->on('t1.task = t4.id')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t5')->on('t1.plan = t5.id')
-            ->where('t1.id')->eq((int)$bugID)->fetch();
+            ->where('t1.id')->eq((int)$bugID)
+            ->fetch();
     }
 
     /**
