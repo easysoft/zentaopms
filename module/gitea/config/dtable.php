@@ -50,3 +50,27 @@ $config->gitea->dtable->fieldList['actions']['sortType'] = false;
 $config->gitea->dtable->fieldList['actions']['fixed']    = 'right';
 $config->gitea->dtable->fieldList['actions']['menu']     = array('edit', 'bindUser', 'delete');
 $config->gitea->dtable->fieldList['actions']['list']     = $config->gitea->actionList;
+
+$config->gitea->dtable->bindUser = new stdclass();
+$config->gitea->dtable->bindUser->fieldList['giteaUser']['title']    = $lang->gitea->giteaAccount;
+$config->gitea->dtable->bindUser->fieldList['giteaUser']['type']     = 'avatarName';
+$config->gitea->dtable->bindUser->fieldList['giteaUser']['sortType'] = false;
+$config->gitea->dtable->bindUser->fieldList['giteaUser']['width']    = 300;
+
+$config->gitea->dtable->bindUser->fieldList['giteaEmail']['title'] = $lang->gitea->giteaEmail;
+$config->gitea->dtable->bindUser->fieldList['giteaEmail']['type']  = 'text';
+$config->gitea->dtable->bindUser->fieldList['giteaEmail']['width'] = 200;
+
+$config->gitea->dtable->bindUser->fieldList['email']['title'] = $lang->gitea->zentaoEmail;
+$config->gitea->dtable->bindUser->fieldList['email']['type']  = 'text';
+$config->gitea->dtable->bindUser->fieldList['email']['width'] = 200;
+
+$config->gitea->dtable->bindUser->fieldList['zentaoUsers']['title']   = array('html' => $lang->gitea->zentaoAccount . "<span class='text-gray'>{$lang->gitea->accountDesc}</span>");
+$config->gitea->dtable->bindUser->fieldList['zentaoUsers']['type']    = 'control';
+$config->gitea->dtable->bindUser->fieldList['zentaoUsers']['control'] = 'picker';
+$config->gitea->dtable->bindUser->fieldList['zentaoUsers']['width']   = 300;
+
+$config->gitea->dtable->bindUser->fieldList['status']['title'] = $lang->gitea->bindingStatus;
+$config->gitea->dtable->bindUser->fieldList['status']['type']  = 'html';
+$config->gitea->dtable->bindUser->fieldList['status']['width'] = 100;
+$config->gitea->dtable->bindUser->fieldList['status']['map']   = $lang->gitea->bindStatus;
