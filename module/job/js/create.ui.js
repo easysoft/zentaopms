@@ -99,7 +99,7 @@ function changeRepo(event)
             else
             {
                 $('.reference').removeClass('gitRepo');
-                if($('#triggerType').val() == 'tag') $('.svn-fields').removeClass('hidden');
+                if($('[name=triggerType]').val() == 'tag') $('.svn-fields').removeClass('hidden');
 
                 $('#svnDir').remove();
                 $('#svnDirBox').append("<div class='load-indicator loading'></div>");

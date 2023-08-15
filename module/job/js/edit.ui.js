@@ -91,7 +91,7 @@ function changeRepo(event)
             else
             {
                 $('.reference').removeClass('gitRepo');
-                if($('#triggerType').val() == 'tag') $('.svn-fields').removeClass('hidden');
+                if($('[name=triggerType]').val() == 'tag') $('.svn-fields').removeClass('hidden');
 
                 $('#svnDir').remove();
                 $('#svnDirBox').append("<div class='load-indicator loading'></div>");
@@ -108,13 +108,6 @@ function changeRepo(event)
                     $('#svnDirBox').append(html);
                 })
             }
-
-            var triggerOptions = $('#triggerType').zui('picker').options.items;
-            for(i in triggerOptions)
-            {
-                if(triggerOptions[i].value == 'tag') triggerOptions[i].text = data.type == 'gitlab' ? buildTag : dirChange;
-            }
-            $('#triggerType').zui('picker').render({items: triggerOptions});
         }
     });
 
