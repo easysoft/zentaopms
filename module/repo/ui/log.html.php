@@ -53,7 +53,7 @@ $config->repo->logDtable->fieldList['revision']['link'] = array('module' => 'rep
 
 $logs = initTableData($logs, $config->repo->logDtable->fieldList);
 
-$footToolbar['items'][] = array('text' => $lang->repo->diff, 'class' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
+$footToolbar['items'][] = array('text' => $lang->repo->diff, 'className' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
 
 featureBar(
     backBtn

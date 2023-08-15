@@ -95,7 +95,9 @@ window.checkedChange = function(changes)
  */
 window.diffClick = function()
 {
-    var checkedIds  = getCurrentCheckedIds();
+    var checkedIds = getCurrentCheckedIds();
+    if(checkedIds.length < 2) return;
+
     var newDiffLink = diffLink.replace('{oldRevision}', revisionMap[checkedIds[1]]);
     newDiffLink     = newDiffLink.replace('{newRevision}', revisionMap[checkedIds[0]]);
 
