@@ -110,17 +110,42 @@ class project extends control
     }
 
     /**
+     * 设置1.5级项目下拉菜单。
      * Ajax get project drop menu.
      *
+     * @param  int    $projectID
+     * @param  string $module
+     * @param  string $method
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(string $projectID, string $module, string $method)
+    public function ajaxGetDropMenu(int $projectID, string $module, string $method)
     {
         /* Set cookie for show all project. */
         $_COOKIE['showClosed'] = 1;
 
-        $this->projectZen->getDropMenu(intval($projectID), $module, $method);
+        /* Query user's project and program. */
+        $projects = $this->project->getListByCurrentUser();
+        $programs = $this->loadModel('program')->getPairs(true);
+
+        /* Generate project tree. */
+        $orderedProjects = array();
+        foreach($projects as $project)
+        {
+            $project->parent = $this->program->getTopByID($project->parent);
+            $project->parent = isset($programs[$project->parent]) ? $project->parent : $project->id;
+
+            $orderedProjects[$project->parent][] = $project;
+        }
+
+        $this->view->link      = $this->project->getProjectLink($module, $method, $projectID); // Create the link from module,method.
+        $this->view->projectID = $projectID;
+        $this->view->projects  = $orderedProjects;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->programs  = $programs;
+
+        $this->display();
     }
 
     /**

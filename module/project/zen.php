@@ -569,49 +569,6 @@ class projectZen extends project
     }
 
     /**
-     * 获取项目下拉选择框选项.
-     * Get project drop menu.
-     *
-     * @param  int        $projectID
-     * @param  int        $module
-     * @param  int        $method
-     * @access protected
-     * @return void
-     */
-    protected function getDropMenu(int $projectID, string $module, string $method) :void
-    {
-        $this->loadModel('program');
-
-        $programs        = array();
-        $orderedProjects = array();
-
-        /* Query user's project and program. */
-        $projects = $this->project->getListByCurrentUser();
-        $programs = $this->program->getPairs(true);
-
-        /* Create the link from module,method. */
-        $link = $this->project->getProjectLink($module, $method, $projectID);
-
-        /* Generate project tree. */
-        foreach($projects as $project)
-        {
-            $project->parent = $this->program->getTopByID($project->parent);
-            $project->parent = isset($programs[$project->parent]) ? $project->parent : $project->id;
-
-            $orderedProjects[$project->parent][] = $project;
-        }
-
-        $this->view->link      = $link;
-        $this->view->projectID = $projectID;
-        $this->view->projects  = $orderedProjects;
-        $this->view->module    = $module;
-        $this->view->method    = $method;
-        $this->view->programs  = $programs;
-
-        $this->display();
-    }
-
-    /**
      * Send variables to activate page.
      *
      * @param  object $project
