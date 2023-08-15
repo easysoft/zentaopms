@@ -50,5 +50,13 @@
   --color-link-hover-rgb: var(--color-primary-600-rgb);
   --color-link-visited-rgb: var(--color-primary-800-rgb);
 
+  --radius-sm: 0;
+  --radius: 1px;
+  --radius-md: 1px;
+  --radius-lg: 1px;
+  --radius-xl: 1px;
+  --radius-2xl: 1px;
+  --radius-3xl: 1px;
+
   --zt-header-bg: var(--color-primary-800);
 }
