@@ -34,13 +34,13 @@ class repoZen extends repo
             ->setIf($this->post->SCM == 'Git', 'account', '')
             ->setIf($this->post->SCM == 'Git', 'password', '')
             ->setIf(in_array($this->post->SCM, array('Gitea', 'Gogs')), 'path', $_POST['path'])
-            ->setIf($this->post->acl != '', 'acl', json_encode($this->post->acl))
             ->setIf($this->post->encrypt == 'base64', 'password', base64_encode($this->post->password))
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')->join('product', ',')
             ->setDefault('projects', '')->join('projects', ',')
             ->get();
 
+        if($this->post->acl != '') $repo->acl = json_encode($this->post->acl);
         if($repo->SCM == 'Subversion')
         {
             $scm = $this->app->loadClass('scm');

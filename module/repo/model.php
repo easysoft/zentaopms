@@ -11,8 +11,23 @@ class repoModel extends model
     public function checkPriv($repo)
     {
         $account = $this->app->user->account;
-        if(strpos(",{$this->app->company->admins},", ",$account,") !== false) return true;
-        if(empty($repo->acl->groups) and empty($repo->acl->users)) return true;
+        $acl     = !empty($repo->acl->acl) ? $repo->acl->acl : 'custom';
+
+        if(strpos(",{$this->app->company->admins},", ",$account,") !== false || $acl == 'open') return true;
+        if($acl == 'custom' && empty($repo->acl->groups) && empty($repo->acl->users)) return true;
+
+        if($acl == 'private')
+        {
+            $userProjects = explode(',', $this->app->user->view->projects);
+            $userProducts = explode(',', $this->app->user->view->products);
+            $repoProjects = explode(',', $repo->projects);
+            $repoProducts = explode(',', $repo->product);
+
+            $sameProjects = array_intersect($userProjects, $repoProjects);
+            $sameProducts = array_intersect($userProducts, $repoProducts);
+            if(!empty($sameProjects) || !empty($sameProducts)) return true;
+        }
+
         if(!empty($repo->acl->groups))
         {
             foreach($this->app->user->groups as $group)
@@ -21,6 +36,7 @@ class repoModel extends model
             }
         }
         if(!empty($repo->acl->users) and in_array($account, $repo->acl->users)) return true;
+
         return false;
     }
 
@@ -589,7 +605,10 @@ class repoModel extends model
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
         $repo->codePath = $repo->path;
         if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
+
         $repo->acl = json_decode($repo->acl);
+        if(empty($repo->acl)) $repo->acl = new stdclass();
+        if(empty($repo->acl->acl)) $repo->acl->acl = 'custom';
         return $repo;
     }
 

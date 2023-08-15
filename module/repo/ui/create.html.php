@@ -81,6 +81,7 @@ formPanel
         (
             set::width('1/2'),
             set::name("serviceProject"),
+            set::items(array()),
             set::label($lang->repo->serviceProject),
             set::control("picker"),
         ),
@@ -162,37 +163,56 @@ formPanel
             )
         )
     ),
-    formGroup
+    formRow
     (
-        set::label($lang->repo->acl),
-        inputGroup
+        set::id('aclList'),
+        formGroup
         (
-            $lang->repo->group,
-            width('full'),
-            control(set(array
-            (
-                'name' => "acl[groups][]",
-                'id' => "aclgroups",
-                'value' => NULL,
-                'type' => "picker",
-                'items' => $groups,
-                'multiple' => true
-            )))
-        ),
-        inputGroup
-        (
-            $lang->repo->user,
-            control(set(array
-            (
-                'name' => "acl[users][]",
-                'id' => "aclusers",
-                'value' => NULL,
-                'type' => "picker",
-                'items' => $users,
-                'multiple' => true
-            ))),
-            setClass('mt-2')
+            set::width('1/2'),
+            set::name('acl[acl]'),
+            set::label($lang->repo->acl),
+            set::control('radioList'),
+            set::items($lang->repo->aclList),
+            set::value('open'),
+            on::change('onAclChange'),
         )
+    ),
+    formRow
+    (
+        set::id('whitelist'),
+        setClass('hidden'),
+        formGroup
+        (
+            set::label($lang->product->whitelist),
+            inputGroup
+            (
+                $lang->repo->group,
+                width('full'),
+                control(set(array
+                (
+                    'name' => "acl[groups][]",
+                    'id' => "aclgroups",
+                    'value' => NULL,
+                    'type' => "picker",
+                    'items' => $groups,
+                    'multiple' => true
+                )))
+            ),
+            inputGroup
+            (
+                $lang->repo->user,
+                control(set(array
+                (
+                    'name' => "acl[users][]",
+                    'id' => "aclusers",
+                    'value' => NULL,
+                    'type' => "picker",
+                    'items' => $users,
+                    'multiple' => true
+                ))),
+                setClass('mt-2')
+            )
+        ),
     ),
     formGroup
     (
