@@ -16,6 +16,7 @@ cid=1
 pid=1
 
 */
+
 r(count($calc->getResult())) && p('') && e('20'); // 测试按产品的年度完成需求分组数。
 
 r($calc->getResult(array('product' => '3',  'year' => '2016')))  && p('0:value') && e('0');  // 测试2016年产品3关闭的需求规模数。
