@@ -499,6 +499,7 @@ class searchModel extends model
         $formSessionName = $module . 'Form';
         if(isset($_SESSION[$formSessionName]))
         {
+            $_SESSION[$formSessionName] = $this->convertFormFrom20To18($_SESSION[$formSessionName]);
             for($i = 1; $i <= $this->config->search->groupItems; $i ++)
             {
                 $fieldName = 'field' . $i;
@@ -639,6 +640,75 @@ class searchModel extends model
     }
 
     /**
+     * 转换formSession格式。
+     * Convert format of formSession from version 18 to version 20 .
+     *
+     * @param  array  $formSession
+     * @access public
+     * @return array
+     */
+    public function convertFormFrom18To20($formSession)
+    {
+        $queryForm   = array();
+
+        $queryForm = array();
+        if(isset($formSession['field1']))
+        {
+            foreach($formSession as $field => $value)
+            {
+                $index = substr($field, -1);
+                if(is_numeric($index))
+                {
+                    $field = substr($field, 0, strlen($field) - 1);
+                    $queryForm[$index][$field] = $value;
+                }
+                elseif($field == 'groupAndOr')
+                {
+                    $queryForm[$field][$field] = $value;
+                }
+            }
+            $formSession = array_values($queryForm);
+        }
+
+        return $formSession;
+    }
+
+    /**
+     * 转换formSession格式。
+     * Convert format of formSession from version 20 to version 18 .
+     *
+     * @param  array  $formSession
+     * @access public
+     * @return array
+     */
+    public function convertFormFrom20To18($formSession)
+    {
+        $queryForm = array();
+
+        if(!isset($formSession['field1']))
+        {
+            foreach($formSession as $i => $formItem)
+            {
+                $i++;
+                if(isset($formItem['groupAndOr']))
+                {
+                    $queryForm['groupAndOr'] = $formItem['groupAndOr'];
+                }
+                elseif(isset($formItem['field']))
+                {
+                    $queryForm['field' . $i]    = $formItem['field'];
+                    $queryForm['andOr' . $i]    = $formItem['andOr'];
+                    $queryForm['operator' . $i] = $formItem['operator'];
+                    $queryForm['value' . $i]    = $formItem['value'];
+                }
+            }
+            $formSession = $queryForm;
+        }
+
+        return $formSession;
+    }
+
+    /**
      * Get a query.
      *
      * @param  int    $queryID
@@ -656,6 +726,8 @@ class searchModel extends model
 
         $hasDynamic  = strpos($query->form, '$') !== false;
         $query->form = unserialize($query->form);
+        $query->form = $this->convertFormFrom20To18($query->form);
+
         if($hasDynamic)
         {
             $_POST = $query->form;

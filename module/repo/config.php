@@ -1,5 +1,6 @@
 <?php
-global $lang;
+global $lang, $app;
+$app->loadLang('repo');
 
 $config->program = new stdclass();
 $config->program->suffix['c']    = "cpp";

@@ -546,6 +546,7 @@ class mr extends control
 
         $this->app->loadModuleConfig('release');
         $this->app->loadModuleConfig('task');
+        $this->app->loadModuleConfig('repo');
 
         $MR       = $this->mr->getByID($MRID);
         $product  = $this->mr->getMRProduct($MR);
@@ -793,6 +794,7 @@ class mr extends control
         $this->loadModel('execution');
         $this->loadModel('product');
         $this->app->loadLang('task');
+        $this->app->loadModuleConfig('repo');
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
