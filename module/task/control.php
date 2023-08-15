@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of task module of ZenTaoPMS.
  *
@@ -305,36 +306,39 @@ class task extends control
     }
 
     /**
-     * View a task.
+     * 查看一个任务。View a task.
      *
      * @param  int    $taskID
      * @access public
      * @return void
      */
-    public function view($taskID)
+    public function view(int $taskID)
     {
-        $taskID = (int)$taskID;
-        $task   = $this->task->getById($taskID, true);
+        $task = $this->task->getById($taskID, true);
+
         if(!$task)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'load' => $this->createLink('execution', 'all')));
         }
 
-        $this->session->set('executionList', $this->app->getURI(true), 'execution');
-
+        /* 为视图设置常用的公共变量和设置菜单为任务所属执行. Set common variables to view and set menu to the execution of the task. */
         $this->taskZen->commonAction($taskID);
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
-        $execution = $this->execution->getById($task->execution);
+        /* 如果当前主导航是项目，则设置菜单为会话中保存的项目. Set menu to project which saved in session if current app tab is project. */
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
+        $this->session->project = $task->project;
+
+        $this->session->set('executionList', $this->app->getURI(true), 'execution'); // This allow get var of session as `$_SESSION['app-execution']['executionList']`.
+
+        $execution = $this->view->execution ?? $this->execution->getById($task->execution);
         if(!helper::isAjaxRequest('modal') and $execution->type == 'kanban')
         {
             helper::setcookie('taskToOpen', $taskID);
-            return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
+            return $this->send(array('load' => $this->createLink('execution', 'kanban', "executionID=$execution->id")));
         }
 
-        $this->session->project = $task->project;
-
+        /* 检查和设置任务的相关信息如果它来自缺陷或需求。Check and set related info if the task came from bug or story. */
         if($task->fromBug != 0)
         {
             $bug = $this->loadModel('bug')->getById($task->fromBug);
@@ -356,10 +360,8 @@ class task extends control
 
         if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
 
-        /* Update action. */
-        if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
-
-        $this->executeHooks($taskID);
+        /* Execute workflow hooks if edition is not open. */
+        if($this->config->edition != 'open') $this->executeHooks($taskID);
 
         $this->view->title        = "TASK#$task->id $task->name / $execution->name";
         $this->view->execution    = $execution;
