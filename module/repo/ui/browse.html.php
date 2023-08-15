@@ -236,7 +236,7 @@ $commentsTableData = initTableData($revisions, $config->repo->commentDtable->fie
 
 $readAllLink = $this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $encodePath . "&revision=HEAD&type=$logType");
 
-$footToolbar['items'][] = array('text' => $lang->repo->diff, 'class' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
+$footToolbar['items'][] = array('text' => $lang->repo->diff, 'className' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
 $footToolbar['items'][] = array('text' => $lang->repo->allLog, 'url' => $readAllLink);
 
 sidebar
