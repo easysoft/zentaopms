@@ -78,3 +78,5 @@ CREATE INDEX `vision` ON `zt_config`(`vision`);
 CREATE INDEX `owner`  ON `zt_config`(`owner`);
 CREATE INDEX `module` ON `zt_config`(`module`);
 CREATE INDEX `key`    ON `zt_config`(`key`);
+
+UPDATE `zt_programoutput` SET `activity` = (SELECT `activity` FROM `zt_zoutput` WHERE `zt_programoutput`.`output` = `zt_zoutput`.`id`);
