@@ -71,7 +71,7 @@ formPanel
             set::required(true),
             set::value(isset($repo->gitService) ? $repo->gitService : ''),
             set::control("picker"),
-            set::items($serviceHosts)
+            set::items(!empty($serviceHosts) ? $serviceHosts : array()),
         ),
     ),
     formRow
@@ -84,7 +84,7 @@ formPanel
             set::label($lang->repo->serviceProject),
             set::required(true),
             set::control("picker"),
-            set::items($projects),
+            set::items(!empty($projects) ? $projects : array()),
             set::value(isset($repo->project) ? $repo->project : ''),
         ),
     ),
