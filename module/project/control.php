@@ -211,23 +211,18 @@ class project extends control
      * Ajax: Get selected object's form information: create or edit.
      *
      * @param  string $objectType project|program
-     * @param  string $objectID
-     * @param  string $selectedProgramID
+     * @param  int    $objectID
+     * @param  int    $selectedProgramID
      * @access public
      * @return void
      */
-    public function ajaxGetProjectFormInfo(string $objectType, string $objectID, string $selectedProgramID)
+    public function ajaxGetProjectFormInfo(string $objectType, int $objectID, int $selectedProgramID)
     {
-        $objectID          = (int)$objectID;
-        $selectedProgramID = (int)$selectedProgramID;
-        $projectFormInfo   = array();
-
-        /* 如果选择项目集，获取项目集相关信息。*/
         /* If selectedProgramID exist, get the info for the program. */
+        $projectFormInfo = array();
         if($selectedProgramID)
         {
             $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
-
             if($selectedProgram->budget) $availableBudget = $this->program->getBudgetLeft($selectedProgram);
 
             $projectFormInfo['selectedProgramBegin'] = $selectedProgram->begin;
@@ -236,11 +231,9 @@ class project extends control
             $projectFormInfo['selectedProgramPath']  = explode(',', $selectedProgram->path);
         }
 
-        /* 获取可用预算和项目集时间段。*/
         /* Get the available budget and program time range. */
         if(!empty($objectID))
         {
-            /* 获取最后选中的最后项目集。*/
             /* Get the path of the last selected program. */
             $object = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
             $projectFormInfo['objectPath'] = explode(',', $object->path);
