@@ -39,13 +39,14 @@ formBase
         set::footToolbar(array(
             'items' => array(
                 array(
-                    'text'  => $lang->import,
-                    'class' => 'btn secondary import-bug-btn size-sm',
+                    'text'      => $lang->import,
+                    'className' => 'btn secondary import-bug-btn size-sm',
                 ),
                 array(
-                    'text'  => $lang->goback,
-                    'class' => 'btn size-sm text-gray',
-                    'url'   => createLink('execution', 'task', "executionID={$execution->id}")
+                    'text'      => $lang->goback,
+                    'className' => 'btn btn-info size-sm text-gray',
+                    'url'       => createLink('execution', 'task', "executionID={$execution->id}"),
+                    'btnType'   => 'info'
                 )
             )
         )),
