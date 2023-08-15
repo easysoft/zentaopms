@@ -108,6 +108,13 @@ function changeRepo(event)
                     $('#svnDirBox').append(html);
                 })
             }
+
+            var triggerOptions = $('#triggerType').zui('picker').options.items;
+            for(i in triggerOptions)
+            {
+                if(triggerOptions[i].value == 'tag') triggerOptions[i].text = data.type != 'subversion' ? buildTag : dirChange;
+            }
+            $('#triggerType').zui('picker').render({items: triggerOptions});
         }
     });
 
@@ -165,7 +172,7 @@ function changeTriggerType(event)
     {
         var type = event;
     }
-    $('.svn-fields').addClass('hidden');
+    dirs ? $('.svn-fields').removeClass('hidden') : $('.svn-fields').addClass('hidden');
     $('.comment-fields').addClass('hidden');
     $('.custom-fields').addClass('hidden');
     if(type == 'commit')   $('.comment-fields').removeClass('hidden');
