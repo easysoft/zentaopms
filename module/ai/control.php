@@ -145,7 +145,18 @@ class ai extends control
 
         $this->ai->setConfig($modelConfig);
 
-        $result = $this->ai->complete('test', 1); // Test completing 'test' with length of 1.
+        if($currentVendor == 'azure')
+        {
+            $messages = array(
+                (object)array('role' => 'user', 'content' => 'Hello?')
+            );
+            $result = $this->ai->converse($messages);
+        }
+        else
+        {
+            $result = $this->ai->complete('test', 1); // Test completing 'test' with length of 1.
+        }
+
         if($result === false)
         {
             return $this->send(array('result' => 'fail', 'message' => empty($this->ai->errors) ? $this->lang->ai->models->testConnectionResult->fail : sprintf($this->lang->ai->models->testConnectionResult->failFormat, implode(', ', $this->ai->errors))));
