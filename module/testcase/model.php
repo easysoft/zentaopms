@@ -2209,9 +2209,10 @@ class testcaseModel extends model
             $case->index = $index;
             $case->id    = str_replace(array('case_', 'scene_'), '', $case->id);   // Remove the prefix of case id.
 
-            $trClass = '';
-            $prefix  = $case->isCase == 1 ? 'case_' : 'scene_';
-            $trAttrs = "data-id='{$prefix}{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
+            $trClass      = '';
+            $idPrefix     = $case->isCase == 1 ? 'case_' : '';
+            $objectPrefix = $case->isCase == 1 ? 'case_' : 'scene_';
+            $trAttrs      = "data-id='{$idPrefix}{$case->id}' data-object-id='{$objectPrefix}{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
             if($case->isCase == 2)
             {
                 $trAttrs .= " data-nested='true'";
