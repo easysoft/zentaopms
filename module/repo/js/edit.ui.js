@@ -58,7 +58,14 @@ function onProjectChange()
  */
 function onScmChange(event)
 {
-    var scm = $('[name=SCM]').val();
+    if(typeof(event) == 'object')
+    {
+        var scm = $(event.target).val();
+    }
+    else
+    {
+        var scm = repoSCM;
+    }
     if(!scm)
     {
         for(i in scmList)
@@ -71,13 +78,13 @@ function onScmChange(event)
     (scm == 'Git') ? $('.tips-git').removeClass('hidden') : $('.tips-git').addClass('hidden');
     if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')
     {
-        $('.account-fields').hide();
+        $('.account-fields').addClass('hidden');
         $('#path').attr('placeholder', pathGitTip);
         $('#client').attr('placeholder', clientGitTip);
     }
     else
     {
-        $('.account-fields').show();
+        $('.account-fields').removeClass('hidden');
         $('#path').attr('placeholder', pathSvnTip);
         $('#client').attr('placeholder', clientSvnTip);
     }
@@ -114,5 +121,25 @@ function onScmChange(event)
                 $hostPicker.$.clear();
             });
         }
+    }
+}
+
+/**
+ * On acl change event.
+ *
+ * @param  event $event
+ * @access public
+ * @return void
+ */
+function onAclChange(event)
+{
+    const acl = $(event.target).val();
+    if(acl == 'private' || acl == 'custom')
+    {
+        $('#whitelist').removeClass('hidden');
+    }
+    else
+    {
+        $('#whitelist').addClass('hidden');
     }
 }

@@ -15,6 +15,7 @@ jsVar('pathSvnTip', $lang->repo->example->path->svn);
 jsVar('clientGitTip', $lang->repo->example->client->git);
 jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
+jsVar('repoSCM', $repo->SCM);
 
 formPanel
 (
@@ -168,37 +169,56 @@ formPanel
             )
         )
     ),
-    formGroup
+    formRow
     (
-        set::label($lang->repo->acl),
-        inputGroup
+        set::id('aclList'),
+        formGroup
         (
-            $lang->repo->group,
-            width('full'),
-            control(set(array
-            (
-                'name' => "acl[groups][]",
-                'id' => "aclgroups",
-                'value' => empty($repo->acl->groups) ? '' : implode(',', $repo->acl->groups),
-                'type' => "picker",
-                'items' => $groups,
-                'multiple' => true
-            )))
-        ),
-        inputGroup
-        (
-            $lang->repo->user,
-            control(set(array
-            (
-                'name' => "acl[users][]",
-                'id' => "aclusers",
-                'value' => empty($repo->acl->users) ? '' : implode(',', $repo->acl->users),
-                'type' => "picker",
-                'items' => $users,
-                'multiple' => true
-            ))),
-            setClass('mt-2')
+            set::width('1/2'),
+            set::name('acl[acl]'),
+            set::label($lang->repo->acl),
+            set::control('radioList'),
+            set::items($lang->repo->aclList),
+            set::value($repo->acl->acl),
+            on::change('onAclChange'),
         )
+    ),
+    formRow
+    (
+        set::id('whitelist'),
+        $repo->acl->acl == 'open' ? setClass('hidden') : null,
+        formGroup
+        (
+            set::label($lang->product->whitelist),
+            inputGroup
+            (
+                $lang->repo->group,
+                width('full'),
+                control(set(array
+                (
+                    'name' => "acl[groups][]",
+                    'id' => "aclgroups",
+                    'value' => empty($repo->acl->groups) ? '' : implode(',', $repo->acl->groups),
+                    'type' => "picker",
+                    'items' => $groups,
+                    'multiple' => true
+                )))
+            ),
+            inputGroup
+            (
+                $lang->repo->user,
+                control(set(array
+                (
+                    'name' => "acl[users][]",
+                    'id' => "aclusers",
+                    'value' => empty($repo->acl->users) ? '' : implode(',', $repo->acl->users),
+                    'type' => "picker",
+                    'items' => $users,
+                    'multiple' => true
+                ))),
+                setClass('mt-2')
+            )
+        ),
     ),
     formGroup
     (

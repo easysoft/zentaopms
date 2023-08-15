@@ -108,7 +108,7 @@ $lang->repo->file               = '文件';
 $lang->repo->action             = '操作';
 $lang->repo->code               = '代码';
 $lang->repo->review             = '评审';
-$lang->repo->acl                = '权限';
+$lang->repo->acl                = '访问控制';
 $lang->repo->group              = '分组';
 $lang->repo->user               = '用户';
 $lang->repo->info               = '版本信息';
@@ -165,6 +165,10 @@ $lang->repo->scmList['Gogs']       = 'Gogs';
 $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
+
+$lang->repo->aclList['private'] = '私有 (所属产品和相关项目人员可访问)';
+$lang->repo->aclList['open']    = '公开 (有DevOps视图权限即可访问)';
+$lang->repo->aclList['custom']  = '自定义';
 
 $lang->repo->gitlabHost    = 'GitLab Server';
 $lang->repo->gitlabToken   = 'GitLab Token';
