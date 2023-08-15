@@ -1334,19 +1334,20 @@ class testcaseModel extends model
      */
     public function batchChangeBranch($caseIDList, $branchID)
     {
-        $caseIDList = $this->filterIdList($caseIDList);
+        $caseIDList = array_filter($caseIDList);
         if(!$caseIDList) return false;
 
-        $oldCases = $this->getByList($caseIDList, "branch != {$branchID}");
-        $this->dao->update(TABLE_CASE)->set('branch')->eq($branchID)->where('branch')->ne($branchID)->andWhere('id')->in($caseIDList)->exec();
-        if(dao::isError()) return false;
-
-        $this->loadModel('action');
+        $oldCases = $this->getByList($caseIDList, "branch != '{$branchID}'");
 
         $case = new stdclass();
         $case->branch         = $branchID;
         $case->lastEditedBy   = $this->app->user->account;
         $case->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_CASE)->data($case)->where('branch')->ne($branchID)->andWhere('id')->in($caseIDList)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
 
         foreach($oldCases as $oldCase)
         {
