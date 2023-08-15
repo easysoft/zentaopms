@@ -51,7 +51,7 @@ CREATE TABLE `zt_action` (
   KEY `action` (`action`),
   KEY `objectID` (`objectID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
-CREATE TABLE IF NOT EXISTS `zt_actionlatest` (
+CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
   `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
