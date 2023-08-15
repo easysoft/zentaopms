@@ -378,7 +378,8 @@ class project extends control
     }
 
     /**
-     * Set module display mode.
+     * 设置展示项目集的层级。
+     * Sets the level of the display program.
      *
      * @access public
      * @return void
@@ -388,9 +389,8 @@ class project extends control
         $this->loadModel('setting');
         if($_POST)
         {
-            $programTitle = $this->post->programTitle;
-            $this->setting->setItem($this->app->user->account . '.project.programTitle', $programTitle);
-            return print(js::reload('parent.parent'));
+            $this->setting->setItem($this->app->user->account . '.project.programTitle', $this->post->programTitle);
+            return $this->send(array('result' => 'success', 'load' => true));
         }
 
         $status = $this->setting->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
