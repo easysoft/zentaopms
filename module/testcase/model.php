@@ -2344,12 +2344,13 @@ class testcaseModel extends model
                 if($canBatchAction)
                 {
                     $disabled = $canBeChanged ? '' : 'disabled';
-                    if($isCase == 1){
-                        echo html::checkbox('caseIDList', array('case_' . $case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $showID), '', "data-app='{$this->app->tab}'");
+                    if($isCase == 1)
+                    {
+                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $showID), '', "data-app='{$this->app->tab}'");
                     }
                     else
                     {
-                        echo html::checkbox('caseIDList', array('scene_' . $case->id => ''), '', $disabled) .  sprintf('%03d', $showID);
+                        echo html::checkbox('sceneIDList', array($case->id => ''), '', $disabled) .  sprintf('%03d', $showID);
                     }
                 }
                 else
