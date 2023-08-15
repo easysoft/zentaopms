@@ -64,6 +64,7 @@ DtSort.defaultConfig = {
     dataNestedAttrName: 'data-nested',
     nestPathAttrName: 'data-nest-path',
     dataTypeAttrName: 'data-itype',
+    objectIdAttrName: 'data-object-id',
     moveBuffer: 2,
     canAccept: function(source, target,sameLevel, sourceMgr, targetMgr){return target.dataNested == "true";},
     canMove: function(source, sourceMgr){return source.dataNested != "true";},
@@ -148,6 +149,7 @@ DtSort.Table.prototype.measure = function()
         var dataNested = $row.attr(this.options.dataNestedAttrName);
         var nestPath = $row.attr(this.options.nestPathAttrName);
         var dataType = $row.attr(this.options.dataTypeAttrName);
+        var objectID = $row.attr(this.options.objectIdAttrName);
 
         var pos = DtSort.tools.elementPos($rows[i]);
         var size = DtSort.tools.elementSize($rows[i]);
@@ -167,6 +169,7 @@ DtSort.Table.prototype.measure = function()
             dataNested: dataNested,
             nestPath: nestPath,
             dateType: dataType,
+            objectID: objectID,
             boundary: {x:pos.x, y:pos.y, w:size.w, h:size.h},
             $dom: $row
         });
