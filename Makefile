@@ -1,6 +1,6 @@
 VERSION        = $(shell head -n 1 VERSION)
 XUANVERSION    = $(shell jq -r .pkg.xuanxuan.gitVersion < ci.json)
-XVERSION       = $(shell jq -r .pkg.xuanxuan.ersion < ci.json)
+XVERSION       = $(shell jq -r .pkg.xuanxuan.version < ci.json)
 XHPROF_VERSION = 2.3.9
 
 XUANPATH      := $(XUANXUAN_SRC_PATH)
