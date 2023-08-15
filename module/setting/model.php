@@ -16,13 +16,14 @@ class settingModel extends model
     //-------------------------------- methods for get, set and delete setting items. ----------------------------//
 
     /**
+     * 获取配置。
      * Get value of an item.
      *
      * @param  string   $paramString    see parseItemParam();
      * @access public
      * @return misc
      */
-    public function getItem($paramString)
+    public function getItem(string $paramString)
     {
         return $this->createDAO($this->parseItemParam($paramString), 'select')->fetch('value');
     }
@@ -40,6 +41,7 @@ class settingModel extends model
     }
 
     /**
+     * 设置配置。
      * Set value of an item.
      *
      * @param  string $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
