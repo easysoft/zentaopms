@@ -424,8 +424,8 @@ $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
 // $lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
 
 $lang->ai->models->openaiVendorList = array();
-$lang->ai->models->openaiVendorList['OpenAI'] = 'OpenAI';
-$lang->ai->models->openaiVendorList['Azure']  = 'Azure';
+$lang->ai->models->openaiVendorList['openai'] = 'OpenAI';
+$lang->ai->models->openaiVendorList['azure']  = 'Azure';
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = 'No Proxy';
