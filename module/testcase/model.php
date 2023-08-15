@@ -1466,19 +1466,20 @@ class testcaseModel extends model
      */
     public function batchCaseTypeChange($caseIDList, $type)
     {
-        $caseIDList = $this->filterIdList($idList);
+        $caseIDList = array_filter($caseIDList);
         if(!$caseIDList) return false;
 
-        $oldCases = $this->getByList($caseIDList, "type != {$type}");
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('type')->ne($type)->andWhere('id')->in($caseIDList)->exec();
-        if(dao::isError()) return false;
-
-        $this->loadModel('action');
+        $oldCases = $this->getByList($caseIDList, "type != '{$type}'");
 
         $case = new stdClass();
         $case->type           = $type;
         $case->lastEditedBy   = $this->app->user->account;
         $case->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('type')->ne($type)->andWhere('id')->in($caseIDList)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
 
         foreach($oldCases as $oldCase)
         {
