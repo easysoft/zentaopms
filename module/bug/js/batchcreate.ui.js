@@ -1,6 +1,7 @@
 function loadExecutionBuilds(event)
 {
-    const $target     = $(event.target);
+    const $target = $(event.target);
+    if($target.closest('.form-batch-ditto').data('ditto') == 'on') return false;
     const $currentRow = $target.closest('tr');
     const executionID = $target.val();
     const branch      = $currentRow.find('.form-batch-input[data-name="branch"]').val() || '0'; // Branch ID (from same row).
@@ -29,7 +30,7 @@ function setOpenedBuilds(link, $currentRow)
         {
             const $build = $row.find('[data-name="openedBuild"] .picker').zui('picker');
             $build.render({items: builds});
-            $build.$.changeState({value: ''});
+            $build.$.setValue($build.$.value.split(','));
 
             $row = $row.next('tr');
 
@@ -54,7 +55,7 @@ function setLane(event)
         {
             const $lane = $row.find('[data-name="laneID"] .picker').zui('picker');
             $lane.render({items: lanes});
-            $lane.$.changeState({value: ''});
+            $lane.$.setValue($lane.options.defaultValue);
 
             $row = $row.next('tr');
 
@@ -79,7 +80,7 @@ function loadProductExecutionsByProject(event)
     /* Get executions with ajax request. */
     $.getJSON($.createLink('product', 'ajaxGetExecutionsByProject', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch), function(data)
     {
-        /* Return if server not return any data. */
+        /* Return if server do not return any data. */
         if(!data || !data.executions) return;
 
         /* Update executions form control in current row and all follow ditto rows. */
@@ -89,7 +90,7 @@ function loadProductExecutionsByProject(event)
             /* Find execution form control and clear old options. */
             const $execution = $row.find('[data-name="execution"] .picker').zui('picker');
             $execution.render({items: data.executions});
-            $execution.$.changeState({value: ''});
+            $execution.$.setValue($execution.$.value);
 
             /* Set next row to current row and continue the loop. */
             $row = $row.next('tr');
