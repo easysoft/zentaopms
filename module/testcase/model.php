@@ -1433,15 +1433,16 @@ class testcaseModel extends model
         if(!$sceneIDList) return false;
 
         $oldScenes = $this->dao->select('id, module')->from(TABLE_SCENE)->where('module')->ne($moduleID)->andWhere('id')->in($sceneIDList)->fetchAll();
-        $this->dao->update(TABLE_SCENE)->set('module')->eq($moduleID)->where('module')->ne($moduleID)->andWhere('id')->in($sceneIDList)->exec();
-        if(dao::isError()) return false;
-
-        $this->loadModel('action');
 
         $scene = new stdclass();
         $scene->module         = $moduleID;
         $scene->lastEditedBy   = $this->app->user->account;
         $scene->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_SCENE)->data($scene)->where('module')->ne($moduleID)->andWhere('id')->in($sceneIDList)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
 
         foreach($oldScenes as $oldScene)
         {
