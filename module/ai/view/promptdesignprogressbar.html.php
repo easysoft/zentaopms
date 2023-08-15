@@ -10,7 +10,7 @@
  */
 ?>
 <header id="mainMenu" class='design-steps'>
-  <?php echo  html::a(inlink("prompts"), html::commonButton("<i class='icon icon-back icon-sm'></i> $lang->goback", '', 'btn btn-info'));?>
+  <?php echo  html::a(inlink("prompts"), html::commonButton("<i class='icon icon-angle-left'></i> $lang->goback", 'style="font-weight: bold;"', 'btn btn-link'));?>
   <div class='steps'>
     <?php
     $step = preg_replace('/^prompt/', '', $app->methodName);
