@@ -1088,10 +1088,10 @@ class projectZen extends project
      * @param  array  $members2Import
      * @param  array  $deptUsers
      * @param  int    $days
-     * @access public
+     * @access protected
      * @return array
      */
-    public function buildMembers(array $currentMembers, array $members2Import, array $deptUsers, int $days): array
+    protected function buildMembers(array $currentMembers, array $members2Import, array $deptUsers, int $days): array
     {
         $teamMembers = array();
         foreach($currentMembers as $account => $member)
@@ -1138,5 +1138,44 @@ class projectZen extends project
         }
 
         return $teamMembers;
+    }
+
+    /**
+     * 格式化导出的项目数据。
+     * Format the export project data.
+     *
+     * @param  string    $status
+     * @param  string    $orderBy
+     * @access protected
+     * @return array
+     */
+    protected function formatExportProjects(string $status, string $orderBy): array
+    {
+        $this->loadModel('product');
+
+        $projects = $this->project->getList($status, $orderBy);
+        $users    = $this->loadModel('user')->getPairs('noletter');
+        foreach($projects as $i => $project)
+        {
+            $project->PM     = zget($users, $project->PM);
+            $project->status = $this->processStatus('project', $project);
+            $project->model  = zget($this->lang->project->modelList, $project->model);
+            $project->budget = $project->budget != 0 ? $project->budget . zget($this->lang->project->unitList, $project->budgetUnit) : $this->lang->project->future;
+            $project->parent = $project->parentName;
+
+            $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
+            $project->linkedProducts = implode('，', $linkedProducts);
+
+            if(!$project->hasProduct) $project->linkedProducts = '';
+            $project->hasProduct = zget($this->lang->project->projectTypeList, $project->hasProduct);
+
+            if($this->post->exportType == 'selected')
+            {
+                $checkedItem = $this->cookie->checkedItem;
+                if(strpos(",$checkedItem,", ",{$project->id},") === false) unset($projects[$i]);
+            }
+        }
+
+        return $projects;
     }
 }

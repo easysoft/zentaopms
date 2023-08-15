@@ -241,10 +241,10 @@ class projectModel extends model
      * 根据状态和和我参与的查询项目列表。
      * Get project list by status and with my participation.
      *
-     * @param  string    $status
-     * @param  string    $orderBy
-     * @param  bool      $involved
-     * @param  int       $pager
+     * @param  string      $status
+     * @param  string      $orderBy
+     * @param  bool        $involved
+     * @param  object|null $pager
      * @access public
      * @return array
      */

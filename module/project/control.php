@@ -47,6 +47,7 @@ class project extends control
     }
 
     /**
+     * 导出项目。
      * Export project.
      *
      * @param  string $status
@@ -54,51 +55,26 @@ class project extends control
      * @access public
      * @return void
      */
-    public function export($status, $orderBy)
+    public function export(string $status, string $orderBy)
     {
         if($_POST)
         {
-            $projectLang   = $this->lang->project;
-            $projectConfig = $this->config->project;
+            /* Get export field lists. */
+            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $this->config->project->list->exportFields);
 
-            /* Create field lists. */
-            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $projectConfig->list->exportFields);
-
+            /* Process export field titie. */
             foreach($fields as $key => $fieldName)
             {
-                $fieldName = trim($fieldName);
-                $fields[$fieldName] = zget($projectLang, $fieldName);
+                $fields[$fieldName] = zget($this->lang->project, trim($fieldName));
                 unset($fields[$key]);
             }
-            if(!isset($this->config->setCode) or empty($this->config->setCode)) unset($fields['code']);
+            if(!isset($this->config->setCode) || empty($this->config->setCode)) unset($fields['code']);
+            if(isset($fields['hasProduct'])) $fields['hasProduct'] = $this->lang->project->type;
 
-            if(isset($fields['hasProduct'])) $fields['hasProduct'] = $projectLang->type;
+            /* Format the export project data. */
+            $projects = $this->projectZen->formatExportProjects($status, $orderBy);
 
-            $projects = $this->project->getList($status, $orderBy);
-            $users    = $this->loadModel('user')->getPairs('noletter');
-
-            $this->loadModel('product');
-            foreach($projects as $i => $project)
-            {
-                $hasProduct = $project->hasProduct;
-
-                $project->PM         = zget($users, $project->PM);
-                $project->status     = $this->processStatus('project', $project);
-                $project->model      = zget($projectLang->modelList, $project->model);
-                $project->budget     = $project->budget != 0 ? $project->budget . zget($projectLang->unitList, $project->budgetUnit) : $this->lang->project->future;
-                $project->parent     = $project->parentName;
-                $project->hasProduct = zget($projectLang->projectTypeList, $project->hasProduct);
-
-                $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
-                $project->linkedProducts = implode('，', $linkedProducts);
-
-                if(!$hasProduct) $project->linkedProducts = '';
-                if($this->post->exportType == 'selected')
-                {
-                    $checkedItem = $this->cookie->checkedItem;
-                    if(strpos(",$checkedItem,", ",{$project->id},") === false) unset($projects[$i]);
-                }
-            }
+            /* Set export data. */
             if($this->config->edition != 'open') list($fields, $projects) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projects);
             $this->post->set('fields', $fields);
             $this->post->set('rows', $projects);
