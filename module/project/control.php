@@ -27,6 +27,7 @@ class project extends control
     }
 
     /**
+     * 创建项目引导。
      * Project create guide.
      *
      * @param  int    $programID
@@ -36,7 +37,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function createGuide($programID = 0, $from = 'project', $productID = 0, $branchID = 0)
+    public function createGuide(int $programID = 0, string $from = 'project', int $productID = 0, int $branchID = 0)
     {
         $this->view->from      = $from;
         $this->view->programID = $programID;
