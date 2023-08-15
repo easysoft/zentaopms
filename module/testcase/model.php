@@ -3288,7 +3288,7 @@ class testcaseModel extends model
             ->where('product')->eq($productID)
             ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
             ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
-            ->orderBy('grade_desc, id_asc')
+            ->orderBy('grade_desc, sort_asc')
             ->fetchAll('id');
         if(!$scenes) return array();
 
