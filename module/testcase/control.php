@@ -1125,7 +1125,7 @@ class testcase extends control
     {
         if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
 
-        $caseIDList = $this->testcase->filterIdList($this->post->caseIDList);
+        $caseIDList = array_filter($this->post->caseIDList);
         $testtasks  = $this->loadModel('testtask')->getGroupByCases($caseIDList);
         if($this->post->title)
         {
@@ -1403,9 +1403,9 @@ class testcase extends control
      */
     public function batchDelete($productID = 0)
     {
-        if($this->post->caseIDList)
+        if($this->post->caseIDList || $this->post->sceneIDList)
         {
-            $this->testcase->batchDelete($this->post->caseIDList);
+            $this->testcase->batchDelete($this->post->caseIDList, $this->post->sceneIDList);
             if(dao::isError()) return print(js::error(dao::getError()));
         }
         echo js::locate($this->session->caseList);
@@ -1438,9 +1438,9 @@ class testcase extends control
      */
     public function batchChangeModule($moduleID)
     {
-        if($this->post->caseIDList)
+        if($this->post->caseIDList || $this->post->sceneIDList)
         {
-            $this->testcase->batchChangeModule($this->post->caseIDList, $moduleID);
+            $this->testcase->batchChangeModule($this->post->caseIDList, $this->post->sceneIDList, $moduleID);
             if(dao::isError()) return print(js::error(dao::getError()));
         }
 
@@ -1687,7 +1687,7 @@ class testcase extends control
     {
         if($this->post->caseIDList)
         {
-            $caseIDList = $this->testcase->filterIdList($this->post->caseIDList);
+            $caseIDList = array_filter($this->post->caseIDList);
             foreach($caseIDList as $caseID) $this->confirmStoryChange($caseID,false);
         }
         echo js::locate($this->session->caseList);
