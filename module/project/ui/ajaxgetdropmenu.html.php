@@ -52,6 +52,7 @@ foreach($projects as $programID => $programProjects)
         $item = array();
         $item['id']    = $project->id;
         $item['text']  = $project->name;
+        $item['icon']  = $project->model == 'scrum' ? 'sprint' : $project->model;
         $item['keys']  = zget(common::convert2Pinyin(array($project->name)), $project->name, '');
 
         if(!isset($data[$group][$programID])) $data[$group][$programID] = $programItem;
