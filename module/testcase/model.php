@@ -1297,13 +1297,14 @@ class testcaseModel extends model
      * Batch delete cases or scenes.
      *
      * @param  array  $caseIDList
+     * @param  array  $sceneIDList
      * @access public
      * @return bool
      */
-    public function batchDelete($caseIDList)
+    public function batchDelete($caseIDList, $sceneIDList)
     {
-        $caseIDList  = $this->filterIdList($caseIDList);
-        $sceneIDList = $this->filterIdList($caseIDList, 'scene');
+        $caseIDList  = array_filter($caseIDList);
+        $sceneIDList = array_filter($sceneIDList);
         if(!$caseIDList && !$sceneIDList) return false;
 
         $this->loadModel('action');
@@ -1363,15 +1364,16 @@ class testcaseModel extends model
     /**
      * Batch change module.
      *
-     * @param  array  $idList
+     * @param  array  $caseIDList
+     * @param  array  $sceneIDList
      * @param  int    $moduleID
      * @access public
      * @return bool
      */
-    public function batchChangeModule($idList, $moduleID)
+    public function batchChangeModule($caseIDList, $sceneIDList, $moduleID)
     {
-        $caseIDList  = $this->filterIdList($idList);
-        $sceneIDList = $this->filterIdList($idList, 'scene');
+        $caseIDList  = array_filter($caseIDList);
+        $sceneIDList = array_filter($sceneIDList);
         if(!$caseIDList && !$sceneIDList) return false;
 
         $this->batchChangeCaseModule($caseIDList, $moduleID);
@@ -1964,14 +1966,8 @@ class testcaseModel extends model
         $libID = $this->post->lib;
         if(empty($libID)) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->testcase->caselib);
 
-        if($caseIdList)
-        {
-            $caseIdList = explode(',' , $caseIdList);
-        }
-        else
-        {
-            $caseIdList = $this->filterIdList(explode(',', $this->post->caseIdList));
-        }
+        if(!$caseIdList) $caseIdList = $this->post->caseIdList;
+        $caseIdList = array_filter(explode(',' , $caseIdList));
 
         $this->loadModel('action');
         $cases          = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($caseIdList)->fetchAll('id');
