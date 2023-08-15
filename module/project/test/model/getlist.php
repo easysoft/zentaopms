@@ -4,40 +4,37 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/project.class.php';
 su('admin');
 
-function initData()
-{
-    $project = zdTable('project');
-    $project->id->range('11-19');
-    $project->project->range('11-19');
-    $project->name->prefix("项目")->range('11-19');
-    $project->code->prefix("project")->range('11-19');
-    $project->model->range("scrum");
-    $project->auth->range("[]");
-    $project->path->range("[]");
-    $project->type->range("project");
-    $project->grade->range("1");
-    $project->days->range("1");
-    $project->status->range("wait,doing,suspended,closed");
-    $project->desc->range("[]");
-    $project->budget->range("100000,200000");
-    $project->budgetUnit->range("CNY");
-    $project->percent->range("0-0");
-    $project->openedDate->range("`2023-05-01 10:00:10`");
-    $project->gen(9);
+$project = zdTable('project');
+$project->id->range('11-19');
+$project->project->range('11-19');
+$project->name->prefix("项目")->range('11-19');
+$project->code->prefix("project")->range('11-19');
+$project->model->range("scrum");
+$project->auth->range("[]");
+$project->path->range("[]");
+$project->type->range("project");
+$project->grade->range("1");
+$project->days->range("1");
+$project->status->range("wait,doing,suspended,closed");
+$project->desc->range("[]");
+$project->budget->range("100000,200000");
+$project->budgetUnit->range("CNY");
+$project->percent->range("0-0");
+$project->openedDate->range("`2023-05-01 10:00:10`");
+$project->gen(9);
 
-    zdTable('team')->gen(10);
+zdTable('team')->gen(10);
 
-    $stakeholder = zdTable('stakeholder');
-    $stakeholder->id->range('1-9');
-    $stakeholder->objectID->range('11-19');
-    $stakeholder->objectType->range('program,project');
-    $stakeholder->user->range("admin");
-    $stakeholder->type->range("inside");
-    $stakeholder->from->range("[]");
-    $stakeholder->createdBy->range("admin");
-    $stakeholder->createdDate->range("`2023-05-01 10:00:10`");
-    $stakeholder->gen(9);
-}
+$stakeholder = zdTable('stakeholder');
+$stakeholder->id->range('1-9');
+$stakeholder->objectID->range('11-19');
+$stakeholder->objectType->range('program,project');
+$stakeholder->user->range("admin");
+$stakeholder->type->range("inside");
+$stakeholder->from->range("[]");
+$stakeholder->createdBy->range("admin");
+$stakeholder->createdDate->range("`2023-05-01 10:00:10`");
+$stakeholder->gen(9);
 
 /**
 
@@ -48,7 +45,6 @@ cid=1
 
 */
 
-initData();
 $statusList = array('', 'all', 'undone', 'unclosed', 'error');
 
 $projectTester = new Project();
