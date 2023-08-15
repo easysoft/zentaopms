@@ -33,3 +33,4 @@ CodeSniffer.conf
 test/runtime/*
 test/www
 !/**/.gitkeep
+build/*.gz

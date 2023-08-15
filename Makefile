@@ -272,12 +272,17 @@ ciCommon:
 	make cleanAssets
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	# en
-	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
-	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
-	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
-	mv zentaopms zentaoalm
-	zip -r -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
-	rm -fr zentaoalm
+	cp -a zentaopms zentaoalm
+	cd zentaoalm/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
+	cd zentaoalm/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
+	cd zentaoalm/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
+	zip -rq -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
+
+	# downgrade
+	./misc/downgrade.sh -p 7.2,7.1,7.0,5.4 -i -r zentaopms framework/ module/*
+	cp zentaopms/build/downgrade-*.tar.gz $(RELEASE_PATH)
+	rm -fr zentaopms zentaoalm
+
 	# move pms zip to build and release path.
 	rm -f $(BUILD_PATH)/ZenTao*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip
 	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
