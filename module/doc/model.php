@@ -2189,7 +2189,7 @@ class docModel extends model
             ->andWhere('type')->in('text,word,ppt,excel,url,article')
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('count');
-        $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTIONLATEST)->alias('t1')
+        $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTIONRECENT)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
             ->where('t1.objectType')->eq('doc')
             ->andWhere('t1.action')->eq('edited')

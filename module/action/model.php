@@ -71,7 +71,7 @@ class actionModel extends model
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dao->lastInsertID();
 
-        $this->dao->insert(TABLE_ACTIONLATEST)->data($action)->autoCheck()->exec();
+        $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
         /* Call the message notification function. */
@@ -1076,6 +1076,8 @@ class actionModel extends model
      */
     public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $limit = 50, $productID = 'all', $projectID = 'all', $executionID = 'all', $date = '', $direction = 'next')
     {
+        $this->cleanActions();
+
         /* Computer the begin and end date of a period. */
         $beginAndEnd = $this->computeBeginAndEnd($period);
         extract($beginAndEnd);
@@ -1086,32 +1088,32 @@ class actionModel extends model
         if(!$this->app->user->admin)
         {
             $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-            if($productID == 'all')   $authedProducts   = !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
-            if($projectID == 'all')   $authedProjects   = !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
-            if($executionID == 'all') $authedExecutions = !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
+            if($productID == 'all')   $grantedProducts   = !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
+            if($projectID == 'all')   $grantedProjects   = !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
+            if($executionID == 'all') $grantedExecutions = !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
 
             if($productID == 'all' and $projectID == 'all')
             {
                 $productCondition = '';
-                foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+                foreach(explode(',', $grantedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
                 if(!empty($productCondition)) $productCondition .= '))';
 
-                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
-                $executionCondition = isset($authedExecutions) ? "(execution != 0 and execution " . helper::dbIN($authedExecutions) . ')' : "(execution != 0 and execution = '$executionID')";
+                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($grantedProjects) . ')';
+                $executionCondition = isset($grantedExecutions) ? "(execution != 0 and execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != 0 and execution = '$executionID')";
             }
             elseif($productID == 'all' and is_numeric($projectID))
             {
                 $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
                 $executions = $this->loadModel('execution')->fetchPairs($projectID) + array(0 => 0);
 
-                $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
+                $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
 
                 $productCondition = '';
                 foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
                 if(!empty($productCondition)) $productCondition .= '))';
 
                 $projectCondition   = "(execution = '0' and project = '$projectID')";
-                $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
+                $executionCondition = "(execution != '0' and execution " . helper::dbIN($grantedExecutions) . ')';
             }
             elseif(is_numeric($productID) and $projectID == 'all')
             {
@@ -1119,12 +1121,12 @@ class actionModel extends model
                 $projects   = $this->product->getProjectPairsByProduct($productID);
                 $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
 
-                $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
-                $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
+                $grantedProjects   = array_intersect(array_keys($projects), explode(',', $grantedProjects));
+                $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
 
                 $productCondition   = "(execution = '0' and project = '0' and product like '%,$productID,%')";
-                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
-                $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
+                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($grantedProjects) . ')';
+                $executionCondition = "(execution != '0' and execution " . helper::dbIN($grantedExecutions) . ')';
             }
 
             $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0')";
@@ -1164,8 +1166,8 @@ class actionModel extends model
         $efforts = $this->dao->select('id')->from(TABLE_EFFORT)
             ->where($condition)
             ->beginIF($period != 'all')
-            ->andWhere('date')->gt($begin)
-            ->andWhere('date')->lt($end)
+            ->beginIF(isset($begin))->andWhere('date')->gt($begin)->fi()
+            ->beginIF(isset($end))->andWhere('date')->lt($end)->fi()
             ->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
             ->fetchPairs();
@@ -1174,25 +1176,24 @@ class actionModel extends model
         $condition  = "($condition)";
 
         /* Get actions. */
-        $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONLATEST : TABLE_ACTION;
+        $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
         $actions = $this->dao->select('*')->from($actionTable)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
+            ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
+            ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
-            ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
+            ->beginIF($period != 'all')
+            ->andWhere('date')->gt($begin)
+            ->andWhere('date')->lt($end)
+            ->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
-            ->andWhere('1=1', true)
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
-            ->markRight(1)
-            /* Types excluded from Lite. */
-            ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
-            ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
@@ -1844,22 +1845,16 @@ class actionModel extends model
 
         $period = strtolower($period);
 
-        if($period == 'all')        return array('begin' => '1970-1-1',  'end' => '2109-1-1');
-        if($period == 'today')      return array('begin' => $today,      'end' => $tomorrow);
-        if($period == 'yesterday')  return array('begin' => $yesterday,  'end' => $today);
-        if($period == 'twodaysago') return array('begin' => $twoDaysAgo, 'end' => $yesterday);
-        if($period == 'latest3days')return array('begin' => $twoDaysAgo, 'end' => $tomorrow);
+        if($period == 'all')         return array('begin' => '1970-1-1',  'end' => LONG_TIME);
+        if($period == 'today')       return array('begin' => $today,      'end' => $tomorrow);
+        if($period == 'yesterday')   return array('begin' => $yesterday,  'end' => $today);
+        if($period == 'twodaysago')  return array('begin' => $twoDaysAgo, 'end' => $yesterday);
+        if($period == 'latest3days') return array('begin' => $twoDaysAgo, 'end' => $tomorrow);
+        if($period == 'lastweek')    return date::getLastWeek();
+        if($period == 'thismonth')   return date::getThisMonth();
+        if($period == 'lastmonth')   return date::getLastMonth();
 
-        /* If the period is by week, add the end time to the end date. */
-        if($period == 'thisweek' or $period == 'lastweek')
-        {
-            $func = "get$period";
-            extract(date::$func());
-            return array('begin' => $begin, 'end' => $end);
-        }
-
-        if($period == 'thismonth')  return date::getThisMonth();
-        if($period == 'lastmonth')  return date::getLastMonth();
+        return date::getThisWeek();
     }
 
     /**
@@ -2417,7 +2412,7 @@ class actionModel extends model
     public function cleanActions()
     {
         $lastMonth = date('Y-m-d', strtotime('-1 month'));
-        $this->dao->delete()->from(TABLE_ACTIONLATEST)->where('date')->lt($lastMonth)->exec();
+        $this->dao->delete()->from(TABLE_ACTIONRECENT)->where('date')->lt($lastMonth)->exec();
         return !dao::isError();
     }
 
