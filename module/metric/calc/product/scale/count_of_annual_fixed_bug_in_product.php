@@ -24,12 +24,13 @@ class count_of_annual_fixed_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.resolution', 't1.closedDate');
+    public $fieldList = array('t1.product', 't1.resolution', 't1.closedDate');
 
     public $result = array();
 
     public function calculate($data)
     {
+        $product    = $data->product;
         $resolution = $data->resolution;
         $closedDate = $data->closedDate;
 
@@ -38,17 +39,15 @@ class count_of_annual_fixed_bug_in_product extends baseCalc
         $year = substr($closedDate, 0, 4);
         if($resolution != 'fixed' || $year == '0000') return false;
 
-        if(!isset($this->result[$year])) $this->result[$year] = 0;
-        $this->result[$year] += 1;
+        if(!isset($this->result[$product])) $this->result[$product] = array();
+        if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;
+
+        $this->result[$product][$year] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $value)
-        {
-            $records[] = array('year' => $year, 'value' => $value);
-        }
+        $records = $this->getRecords(array('product', 'year', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
