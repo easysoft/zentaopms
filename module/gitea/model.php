@@ -98,9 +98,9 @@ class giteaModel extends model
      *
      * @param  int    $giteaID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function bindUser($giteaID)
+    public function bindUser(int $giteaID): bool
     {
         $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $users       = $this->post->zentaoUsers;
@@ -148,6 +148,8 @@ class giteaModel extends model
                 $this->loadModel('action')->create('giteauser', $giteaID, 'bind', '', sprintf($this->lang->gitea->bindDynamic, $giteaNames[$openID], $zentaoUsers[$account]->realname));
             }
         }
+
+        return true;
     }
 
     /**
@@ -306,13 +308,13 @@ class giteaModel extends model
     /**
      * Get matched gitea users.
      *
-     * @param  int   $giteaID
-     * @param  array $giteaUsers
-     * @param  array $zentaoUsers
+     * @param  int    $giteaID
+     * @param  array  $giteaUsers
+     * @param  array  $zentaoUsers
      * @access public
      * @return array
      */
-    public function getMatchedUsers($giteaID, $giteaUsers, $zentaoUsers)
+    public function getMatchedUsers(int $giteaID, array $giteaUsers, array $zentaoUsers): array
     {
         $matches = new stdclass;
         foreach($giteaUsers as $giteaUser)
@@ -331,8 +333,8 @@ class giteaModel extends model
         {
             if(isset($bindedUsers[$giteaUser->account]))
             {
-                $giteaUser->zentaoAccount = $bindedUsers[$giteaUser->account];
-                $matchedUsers[]           = $giteaUser;
+                $giteaUser->zentaoAccount     = $bindedUsers[$giteaUser->account];
+                $matchedUsers[$giteaUser->id] = $giteaUser;
                 continue;
             }
 
@@ -344,8 +346,8 @@ class giteaModel extends model
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
             {
-                $giteaUser->zentaoAccount = current($matchedZentaoUsers);
-                $matchedUsers[]           = $giteaUser;
+                $giteaUser->zentaoAccount     = current($matchedZentaoUsers);
+                $matchedUsers[$giteaUser->id] = $giteaUser;
             }
         }
 

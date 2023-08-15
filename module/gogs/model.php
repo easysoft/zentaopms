@@ -66,6 +66,17 @@ class gogsModel extends model
     }
 
     /**
+     * Create a gogs.
+     *
+     * @access public
+     * @return bool
+     */
+    public function create()
+    {
+        return $this->loadModel('pipeline')->create('gogs');
+    }
+
+    /**
      * Update a gogs.
      *
      * @param  int $id
@@ -82,9 +93,9 @@ class gogsModel extends model
      *
      * @param  int    $gogsID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function bindUser($gogsID)
+    public function bindUser(int $gogsID): bool
     {
         $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $users       = $this->post->zentaoUsers;
@@ -132,6 +143,8 @@ class gogsModel extends model
                 $this->loadModel('action')->create('gogsuser', $gogsID, 'bind', '', sprintf($this->lang->gogs->bindDynamic, $gogsNames[$openID], $zentaoUsers[$account]->realname));
             }
         }
+
+        return true;
     }
 
     /**
@@ -192,8 +205,9 @@ class gogsModel extends model
     {
         $apiRoot  = rtrim($url, '/') . '/api/v1%s' . "?token={$token}";
         $url      = sprintf($apiRoot, "/user");
-        $response = commonModel::http($url);
-        $user     = json_decode($response);
+        $httpData = commonModel::httpWithHeader($url);
+        $user     = json_decode($httpData['body']);
+        if(empty($httpData['header'])) return false;
         if(empty($user)) return null;
 
         /* Check whether the token belongs to the administrator by edit user. */
@@ -267,7 +281,7 @@ class gogsModel extends model
      * @access public
      * @return array
      */
-    public function getMatchedUsers($gogsID, $gogsUsers, $zentaoUsers)
+    public function getMatchedUsers(int $gogsID, array $gogsUsers, array $zentaoUsers): array
     {
         $matches = new stdclass;
         foreach($gogsUsers as $gogsUser)
@@ -286,8 +300,8 @@ class gogsModel extends model
         {
             if(isset($bindedUsers[$gogsUser->account]))
             {
-                $gogsUser->zentaoAccount = $bindedUsers[$gogsUser->account];
-                $matchedUsers[]          = $gogsUser;
+                $gogsUser->zentaoAccount     = $bindedUsers[$gogsUser->account];
+                $matchedUsers[$gogsUser->id] = $gogsUser;
                 continue;
             }
 
@@ -299,8 +313,8 @@ class gogsModel extends model
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
             {
-                $gogsUser->zentaoAccount = current($matchedZentaoUsers);
-                $matchedUsers[]          = $gogsUser;
+                $gogsUser->zentaoAccount     = current($matchedZentaoUsers);
+                $matchedUsers[$gogsUser->id] = $gogsUser;
             }
         }
 
@@ -331,7 +345,7 @@ class gogsModel extends model
 
             $gogs  = $this->getByID($gogsID);
             $oauth = "{$gogs->token}@";
-            $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', "\$1$oauth", $project->html_url);
+            $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', '${1}' . $gogs->token . '@', $project->html_url);
         }
 
         return $project;
