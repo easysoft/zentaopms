@@ -223,17 +223,22 @@ class job extends control
         $this->view->repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
-        if($repo->SCM == 'Subversion')
+        if($repo->SCM == 'Subversion' && $job->triggerType == 'tag')
         {
             $dirs = array();
+            $path = empty($repo->prefix) ? '/' : $this->repo->decodePath('');
             $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
             if($tags)
             {
-                $path = empty($repo->prefix) ? '/' : $this->repo->decodePath('');
-                $dirs['/'] = $this->loadrepo->encodePath($path);
-                foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
+                $dirs['/'] = $path;
+                foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $dirPath;
             }
             $this->view->dirs = $dirs;
+
+            foreach($this->lang->job->triggerTypeList as $type => $name)
+            {
+                if($type == 'tag') $this->lang->job->triggerTypeList[$type] = $this->lang->job->dirChange;
+            }
         }
 
         $repoList             = $this->repo->getList($this->projectID);

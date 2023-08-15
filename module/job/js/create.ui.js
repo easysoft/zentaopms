@@ -116,6 +116,13 @@ function changeRepo(event)
                     $('#svnDirBox').append(html);
                 })
             }
+
+            var triggerOptions = $('#triggerType').zui('picker').options.items;
+            for(i in triggerOptions)
+            {
+                if(triggerOptions[i].value == 'tag') triggerOptions[i].text = data.type != 'subversion' ? buildTag : dirChange;
+            }
+            $('#triggerType').zui('picker').render({items: triggerOptions});
         }
     });
 

@@ -17,6 +17,7 @@ jsVar('engine', $job->engine);
 jsVar('job', $job);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('buildTag', $lang->job->buildTag);
+jsVar('dirs', !empty($dirs) ? $dirs : '');
 
 if($job->customParam)
 {
