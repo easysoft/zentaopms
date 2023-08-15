@@ -188,6 +188,28 @@ detailBody
                     ),
                     item
                     (
+                        set::name($lang->task->story),
+                        a
+                        (
+                            set('data-toggle', 'modal'),
+                            set::href(createLink('story', 'view', "id={$task->story}")),
+                            set::title($task->storyTitle),
+                            $task->storyTitle
+                        )
+                    ),
+                    item
+                    (
+                        set::name($lang->task->fromBug),
+                        a
+                        (
+                            set('data-toggle', 'modal'),
+                            set::href(createLink('bug', 'view', "id={$task->fromBug}")),
+                            set::title($fromBug->title),
+                            $fromBug->title
+                        )
+                    ),
+                    item
+                    (
                         set::name($lang->task->assignedTo),
                         $task->assignedToRealName
                     ),

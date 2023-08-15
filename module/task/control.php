@@ -356,6 +356,7 @@ class task extends control
             $task->storySpec   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->spec);
             $task->storyVerify = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
             $task->storyFiles  = zget($story, 'files', array());
+            $task->storyTitle  =  empty($story) ? '' : $story->title;
         }
 
         if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
