@@ -70,11 +70,18 @@ class aiModel extends model
         if(json_last_error()) $postData = $data;
 
         /* Set auth and content-type headers. */
-        $requestHeaders = array(sprintf($this->config->ai->openai->api->authFormat, $this->modelConfig->key));
+        $requestHeaders = array(sprintf($this->config->ai->openai->api->{$this->modelConfig->vendor}->authFormat, $this->modelConfig->key));
         $requestHeaders[] = isset($this->config->ai->openai->contentType[$type]) ? $this->config->ai->openai->contentType[$type] : $this->config->ai->openai->contentType[''];
 
         /* Assemble request url. */
-        $url = sprintf($this->config->ai->openai->api->format, $this->config->ai->openai->api->version, $this->config->ai->openai->api->methods[$type]);
+        if($this->modelConfig->vendor == 'azure')
+        {
+            $url = sprintf($this->config->ai->openai->api->azure->format, $this->config->ai->openai->api->azure->resource, $this->config->ai->openai->api->azure->deployment, $this->config->ai->openai->api->methods[$type], $this->config->ai->openai->api->azure->apiVersion);
+        }
+        else
+        {
+            $url = sprintf($this->config->ai->openai->api->openai->format, $this->config->ai->openai->api->openai->version, $this->config->ai->openai->api->methods[$type]);
+        }
 
         /* Set up requestor. */
         $ch = curl_init();
