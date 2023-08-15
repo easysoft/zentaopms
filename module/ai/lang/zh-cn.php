@@ -130,9 +130,9 @@ $lang->ai->prompts->field            = '字段';
 
 /* Purpose setting. */
 $lang->ai->prompts->purpose        = '操作';
-$lang->ai->prompts->purposeTip     = '';
+$lang->ai->prompts->purposeTip     = '“我希望<它能完成什么事情，以便于达到什么样的目标>”';
 $lang->ai->prompts->elaboration    = '补充要求';
-$lang->ai->prompts->elaborationTip = '';
+$lang->ai->prompts->elaborationTip = '“我希望<它的回答请注意一些补充要求>”';
 $lang->ai->prompts->inputPreview   = '输入预览';
 $lang->ai->prompts->dataPreview    = '对象数据预览';
 $lang->ai->prompts->rolePreview    = '角色提词预览';
