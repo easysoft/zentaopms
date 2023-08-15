@@ -3294,7 +3294,8 @@ class testcaseModel extends model
     public function getSceneGroups($productID, $branch = 0, $moduleID = 0, $orderBy = 'id_desc', $pager = null)
     {
         $scenes = $this->dao->select('*')->from(TABLE_SCENE)
-            ->where('product')->eq($productID)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
             ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
             ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
             ->orderBy('grade_desc, sort_asc')
