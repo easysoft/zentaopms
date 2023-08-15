@@ -83,7 +83,7 @@ class bugModel extends model
     }
 
     /**
-     * gitlab问题转为bug。
+     * Gitlab 问题转为 bug。
      * Create bug from gitlab issue.
      *
      * @param  object    $bug
@@ -156,22 +156,25 @@ class bugModel extends model
     public function getPlanBugs(int $planID, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
     {
         if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_BUG)
+
+        $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder")->from(TABLE_BUG)
             ->where('plan')->eq($planID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+            ->orderBy($orderBy)->page($pager)
+            ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+
         return $bugs;
     }
 
     /**
-     * 获取Bug的基础数据。
+     * 获取 bug 的基础数据。
      * Get base info of a bug.
      *
-     * @param  int $bugID
+     * @param  int          $bugID
      * @access protected
      * @return object|false
      */
@@ -181,10 +184,11 @@ class bugModel extends model
     }
 
     /**
+     * 获取 bug。
      * Get info of a bug.
      *
-     * @param  int    $bugID
-     * @param  bool   $setImgSize
+     * @param  int          $bugID
+     * @param  bool         $setImgSize
      * @access public
      * @return object|false
      */
@@ -199,21 +203,22 @@ class bugModel extends model
         $bug = $this->file->replaceImgURL($bug, 'steps');
         if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
 
-        if($bug->project)      $bug->projectName       = $this->bugTao->getNameFromTable($bug->project, TABLE_PROJECT, 'name');
-        if($bug->duplicateBug) $bug->duplicateBugTitle = $this->bugTao->getNameFromTable($bug->duplicateBug, TABLE_BUG, 'title');
-        if($bug->case)         $bug->caseTitle         = $this->bugTao->getNameFromTable($bug->case, TABLE_CASE, 'title');
+        if($bug->project)      $bug->projectName       = $this->bugTao->getNameFromTable($bug->project,      TABLE_PROJECT, 'name');
+        if($bug->duplicateBug) $bug->duplicateBugTitle = $this->bugTao->getNameFromTable($bug->duplicateBug, TABLE_BUG,     'title');
+        if($bug->case)         $bug->caseTitle         = $this->bugTao->getNameFromTable($bug->case,         TABLE_CASE,    'title');
+        if($bug->toStory)      $bug->toStoryTitle      = $this->bugTao->getNameFromTable($bug->toStory,      TABLE_STORY,   'title');
+        if($bug->toTask)       $bug->toTaskTitle       = $this->bugTao->getNameFromTable($bug->toTask,       TABLE_TASK,    'name');
         if($bug->relatedBug)   $bug->relatedBugTitles  = $this->bugTao->getBugPairsByList($bug->relatedBug);
-        if($bug->toStory)      $bug->toStoryTitle      = $this->bugTao->getNameFromTable($bug->toStory, TABLE_STORY, 'title');
-        if($bug->toTask)       $bug->toTaskTitle       = $this->bugTao->getNameFromTable($bug->toTask, TABLE_TASK, 'name');
 
         $bug->linkMRTitles = $this->mr->getLinkedMRPairs($bugID, 'bug');
         $bug->toCases      = $this->bugTao->getCasesFromBug($bugID);
         $bug->files        = $this->file->getByObject('bug', $bugID);
+
         return $this->bugTao->appendDelayedDays($bug);
     }
 
     /**
-     * 获取指定字段的bug列表。
+     * 获取指定字段的 bug 列表。
      * Get bugs by ID list.
      *
      * @param  int|array|string $bugIdList
@@ -230,7 +235,7 @@ class bugModel extends model
     }
 
     /**
-     * 获取激活的未转为bug和任务的 bugs。
+     * 获取激活的未转为 bug 和任务的 bugs。
      * Get active bugs.
      *
      * @param  array|int  $products
@@ -708,7 +713,7 @@ class bugModel extends model
      */
     public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $branch = '0'): void
     {
-        $projectID     = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
+        $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
 
         /* Get product params. */
         $productParams = ($productID && isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
@@ -887,6 +892,7 @@ class bugModel extends model
     }
 
     /**
+     * 获取某个项目的 bugs。
      * Get bugs of a project.
      *
      * @param  int    $projectID
@@ -901,16 +907,17 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getProjectBugs($projectID, $productID = 0, $branchID = 0, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
+    public function getProjectBugs(int $projectID, int $productID = 0, int $branchID = 0, int $build = 0, string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', object $pager = null): array
     {
-        $type = strtolower($type);
-        if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        if(strpos($orderBy, 'pri_') !== false)      $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
+        $type = strtolower($type);
         if($type == 'bysearch')
         {
-            $queryID = (int)$param;
             if($this->session->projectBugQuery === false) $this->session->set('projectBugQuery', ' 1 = 1');
+
+            $queryID = (int)$param;
             if($queryID)
             {
                 $query = $this->loadModel('search')->getQuery($queryID);
@@ -923,13 +930,13 @@ class bugModel extends model
 
             $bugQuery = $this->getBugQuery($this->session->projectBugQuery);
 
-            $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
+            $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
                 ->where($bugQuery)
                 ->andWhere('project')->eq((int)$projectID)
                 ->andWhere('deleted')->eq(0)
                 ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
-                ->beginIF(!empty($productID) and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false)->andWhere('product')->eq($productID)->fi()
-                ->beginIF(!empty($productID) and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false and $branchID != 'all')->andWhere('branch')->eq($branchID)->fi()
+                ->beginIF(!empty($productID) && strpos($bugQuery, 'product') === false && strpos($bugQuery, '`product` IN') === false)->andWhere('product')->eq($productID)->fi()
+                ->beginIF(!empty($productID) && strpos($bugQuery, 'product') === false && strpos($bugQuery, '`product` IN') === false && $branchID != 'all')->andWhere('branch')->eq($branchID)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -949,7 +956,9 @@ class bugModel extends model
                 ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', t1.openedBuild, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll();
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
@@ -1669,9 +1678,7 @@ class bugModel extends model
      */
     public function getBySonarqubeID(int $sonarqubeID): array|bool
     {
-        return $this->dao->select('issueKey')->from(TABLE_BUG)
-            ->where('issueKey')->like("$sonarqubeID:%")
-            ->fetchPairs();
+        return $this->dao->select('issueKey')->from(TABLE_BUG)->where('issueKey')->like("$sonarqubeID:%")->fetchPairs();
     }
 
     /**
