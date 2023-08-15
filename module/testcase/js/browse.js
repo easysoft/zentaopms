@@ -24,11 +24,11 @@ $(function()
 
     $('#importToLib').on('click', function()
     {
-        var storyIdList = '';
+        var caseIdList = '';
         $("input[name^='caseIDList']:checked").each(function()
         {
-            storyIdList += $(this).val() + ',';
-            $('#caseIdList').val(storyIdList);
+            caseIdList += $(this).val() + ',';
+            $('#caseIdList').val(caseIdList);
         });
     });
 
