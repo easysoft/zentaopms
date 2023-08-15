@@ -1063,14 +1063,10 @@ class testcaseModel extends model
      */
     public function batchReview($caseIDList, $result)
     {
-        $caseIDList = $this->filterIdList($caseIDList);
+        $caseIDList = array_filter($caseIDList);
         if(!$caseIDList) return false;
 
-        $oldCases = $this->getByList($caseIDList, 'status = wait');
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('status')->eq('wait')->andWhere('id')->in($caseIDList)->exec();
-        if(dao::isError()) return false;
-
-        $this->loadModel('action');
+        $oldCases = $this->getByList($caseIDList, "status = 'wait'");
 
         $now  = helper::now();
         $case = new stdClass();
@@ -1079,6 +1075,11 @@ class testcaseModel extends model
         $case->lastEditedBy   = $this->app->user->account;
         $case->lastEditedDate = $now;
         if($result == 'pass') $case->status = 'normal';
+
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('status')->eq('wait')->andWhere('id')->in($caseIDList)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
 
         foreach($oldCases as $oldCase)
         {
