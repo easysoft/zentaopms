@@ -3019,19 +3019,20 @@ class testcaseModel extends model
      */
     public function batchChangeScene($caseIDList, $sceneID)
     {
-        $caseIDList = $this->filterIdList($caseIDList);
+        $caseIDList = array_filter($caseIDList);
         if(!$caseIDList) return false;
 
-        $oldCases = $this->getByList($caseIDList, "scene != {$sceneID}");
-        $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('scene')->ne($sceneID)->andWhere('id')->in($caseIDList)->exec();
-        if(dao::isError()) return false;
-
-        $this->loadModel('action');
+        $oldCases = $this->getByList($caseIDList, "scene != '{$sceneID}'");
 
         $case = new stdclass();
         $case->scene          = $sceneID;
         $case->lastEditedBy   = $this->app->user->account;
         $case->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_CASE)->data($case)->where('scene')->ne($sceneID)->andWhere('id')->in($caseIDList)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
 
         foreach($oldCases as $oldCase)
         {
