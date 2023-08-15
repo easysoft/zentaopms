@@ -4,12 +4,17 @@ function loadExecutionBuilds(event)
     if($target.closest('.form-batch-ditto').data('ditto') == 'on') return false;
     const $currentRow = $target.closest('tr');
     const executionID = $target.val();
+    const projectID   = $currentRow.find('.form-batch-control[data-name="project"] .picker').zui('picker').$.value || '0';
     const branch      = $currentRow.find('.form-batch-input[data-name="branch"]').val() || '0'; // Branch ID (from same row).
     const productID = $('[name="product"]').val();
 
     if(executionID != 0)
     {
         var link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch);
+    }
+    else if(projectID != 0)
+    {
+        var link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch);
     }
     else
     {
@@ -41,7 +46,8 @@ function setOpenedBuilds(link, $currentRow)
 
 function setLane(event)
 {
-    const $target     = $(event.target);
+    const $target = $(event.target);
+    if($target.closest('.form-batch-ditto').data('ditto') == 'on') return false;
     const $currentRow = $target.closest('tr');
     const regionID    = $target.val();
 
@@ -71,7 +77,8 @@ function setLane(event)
  */
 function loadProductExecutionsByProject(event)
 {
-    const $target     = $(event.target);              // Project form control element.
+    const $target = $(event.target); // Project form control element.
+    if($target.closest('.form-batch-ditto').data('ditto') == 'on') return false;
     const $currentRow = $target.closest('tr');        // Currenr batch form row element.
     const projectID   = $target.val();                // Project ID.
     const productID   = $('[name="product"]').val();  // Product ID (from hidden form control).
