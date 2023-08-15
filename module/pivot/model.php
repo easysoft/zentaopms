@@ -1541,7 +1541,8 @@ class pivotModel extends model
                 {
                     if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
                     {
-                        $columnSQL = "$stat(0) as `$uuName`";
+                        $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS UNSIGNED)" : "TO_NUMBER(tt.`$field`)";
+                        $columnSQL  = "$stat($convertSql) as `$uuName`";
                     }
                     else
                     {
