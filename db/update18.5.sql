@@ -19,7 +19,7 @@ DELETE FROM zt_privrelation WHERE `priv` = 'branch-manage' AND relationPriv = 'p
 
 UPDATE `zt_cron` SET `type` = 'zentao' WHERE `command` = 'moduleName=weekly&methodName=computeWeekly' AND `type` = 'system';
 
-ALTER TABLE `zt_doc` ADD `editedList` text NULL AFTER `editingDate`;
+ALTER TABLE `zt_doc` ADD `editedList` text NULL;
 
 ALTER TABLE `zt_case` ADD INDEX `scene` (`scene`);
 UPDATE `zt_case` SET `scene` = `scene` - 100000000 WHERE `scene` > 100000000;
@@ -58,8 +58,8 @@ SELECT `objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,
 WHERE `date` >= DATE(DATE_SUB(NOW(), INTERVAL 1 MONTH));
 
 ALTER TABLE `zt_notify`
-MODIFY COLUMN `toList` text NOT NULL AFTER `action`,
-MODIFY COLUMN `subject` text NOT NULL AFTER `ccList`,
+MODIFY COLUMN `toList` text NOT NULL,
+MODIFY COLUMN `subject` text NOT NULL,
 DROP INDEX `objectType_toList_status`,
 ADD INDEX `objectType`(`objectType` ASC),
 ADD INDEX `status`(`status` ASC);
@@ -78,3 +78,4 @@ CREATE INDEX `module` ON `zt_config`(`module`);
 CREATE INDEX `key`    ON `zt_config`(`key`);
 
 UPDATE `zt_programoutput` SET `activity` = (SELECT `activity` FROM `zt_zoutput` WHERE `zt_programoutput`.`output` = `zt_zoutput`.`id`);
+ALTER TABLE `zt_reviewissue` MODIFY COLUMN `opinion` mediumtext NOT NULL DEFAULT '';
