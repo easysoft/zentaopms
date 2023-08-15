@@ -223,6 +223,18 @@ class job extends control
         $this->view->repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
+        if($repo->SCM == 'Subversion')
+        {
+            $dirs = array();
+            $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
+            if($tags)
+            {
+                $path = empty($repo->prefix) ? '/' : $this->repo->decodePath('');
+                $dirs['/'] = $this->loadrepo->encodePath($path);
+                foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
+            }
+            $this->view->dirs = $dirs;
+        }
 
         $repoList             = $this->repo->getList($this->projectID);
         $repoPairs            = array(0 => '', $repo->id => $repo->name);

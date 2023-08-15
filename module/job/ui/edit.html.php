@@ -146,7 +146,7 @@ formPanel
             set::label($lang->job->branch),
             set::required(true),
             set::name('reference'),
-            set::items($refList),
+            set::items(!empty($refList) ? $refList : array()),
             set::value(isset($job->reference) ? $job->reference : ''),
         ),
     ),
@@ -183,6 +183,8 @@ formPanel
             set::name('svnDir[]'),
             set::label($lang->job->svnDir),
             set::control('select'),
+            set::items(!empty($dirs) ? $dirs : array()),
+            set::value($job->svnDir),
         ),
     ),
     formRow

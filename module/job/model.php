@@ -179,6 +179,7 @@ class jobModel extends model
             ->remove('repoType,reference')
             ->cleanInt('product')
             ->get();
+        $repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($job->engine == 'jenkins')
         {
@@ -188,7 +189,6 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            $repo    = $this->loadModel('repo')->getByID($job->repo);
             $project = zget($repo, 'project');
             if($job->repo && !empty($repo))
             {
@@ -240,7 +240,7 @@ class jobModel extends model
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
         $job->svnDir = '';
-        if($job->triggerType == 'tag' and $this->post->repoType == 'Subversion')
+        if($job->triggerType == 'tag' and $repo->SCM == 'Subversion')
         {
             $job->svnDir = array_pop($_POST['svnDir']);
             if($job->svnDir == '/' and $_POST['svnDir']) $job->svnDir = array_pop($_POST['svnDir']);
@@ -275,14 +275,14 @@ class jobModel extends model
             ->batchCheckIF($job->triggerType === 'schedule' and $job->atDay !== '0', "atDay", 'notempty')
             ->batchCheckIF($job->triggerType === 'schedule', "atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
-            ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
+            ->batchCheckIF(($repo->SCM == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
             ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
         $id = $this->dao->lastInsertId();
-        if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $this->post->repoType);
+        if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $repo->SCM);
         return $id;
     }
 
@@ -305,6 +305,7 @@ class jobModel extends model
             ->add('editedDate', helper::now())
             ->remove('repoType,reference')
             ->get();
+        $repo = $this->loadModel('repo')->getByID($job->gitlabRepo);
 
         if($job->engine == 'jenkins')
         {
@@ -314,7 +315,6 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            $repo    = $this->loadModel('repo')->getByID($job->gitlabRepo);
             $project = zget($repo, 'project');
             if(!empty($repo))
             {
@@ -367,7 +367,7 @@ class jobModel extends model
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
         $job->svnDir = '';
-        if($job->triggerType == 'tag' and $this->post->repoType == 'Subversion')
+        if($job->triggerType == 'tag' and $repo->SCM == 'Subversion')
         {
             $job->svnDir = array_pop($_POST['svnDir']);
             if($job->svnDir == '/' and $_POST['svnDir']) $job->svnDir = array_pop($_POST['svnDir']);
@@ -403,14 +403,14 @@ class jobModel extends model
             ->batchCheckIF($job->triggerType === 'schedule' and $job->atDay !== '0', "atDay", 'notempty')
             ->batchCheckIF($job->triggerType === 'schedule', "atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
-            ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
+            ->batchCheckIF(($repo->SCM == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
             ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
         if(dao::isError()) return false;
 
-        $this->initJob($id, $job, $this->post->repoType);
+        $this->initJob($id, $job, $repo->SCM);
         return true;
     }
 
