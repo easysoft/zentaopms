@@ -271,6 +271,11 @@ $lang->install->groupList['LITEPROJECT']['desc']  = 'Operation Management Interf
 $lang->install->groupList['LITETEAM']['name']     = 'LITETEAM';
 $lang->install->groupList['LITETEAM']['desc']     = 'Operation Management Interface Team';
 
+$lang->install->groupList['IPDPRODUCTPLAN']['name'] = 'PRODUCT PLANING';
+$lang->install->groupList['IPDDEMAND']['name']      = 'DEMAND ANALYSIS';
+$lang->install->groupList['IPDPMT']['name']         = 'IPDPMT';
+$lang->install->groupList['IPDADMIN']['name']       = 'IPDADMIN';
+
 $lang->install->cronList[''] = 'Moniteur Cron';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Mise à jour Graphe Burndown';
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Rappel Tâches quotidiennes';

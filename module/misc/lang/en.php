@@ -104,6 +104,7 @@ $lang->misc->feature->visionsDesc    = "<p>The concept of interface has been add
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.6']        = '2023-08-15';
 $lang->misc->releaseDate['18.5']        = '2023-07-05';
 $lang->misc->releaseDate['18.4']        = '2023-06-14';
 $lang->misc->releaseDate['18.4.beta1']  = '2023-05-31';
@@ -205,6 +206,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.6'][]        = array('title' => "We have made significant improvements to the performance of commonly used lists and the details of BI functionality, while also refining the functionality details of waterfall projects. Additionally, we have diligently addressed and resolved any identified bugs.", 'desc' => '');
 $lang->misc->feature->all['18.5'][]        = array('title' => "Our academy's curriculum now supports cloud-based importing and the previewing of PDF files within courses. Additionally, we've optimized the loading speed of commonly used lists and addressed multiple bugs.", 'desc' => '');
 $lang->misc->feature->all['18.4'][]        = array('title' => 'In this release, we have improved the performance of the core list, added compatibility with Dameng databases, and resolved multiple bugs.', 'desc' => '');
 $lang->misc->feature->all['18.4.beta1'][]  = array('title' => 'Fix bugs.', 'desc' => '');

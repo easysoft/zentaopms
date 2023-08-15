@@ -20,6 +20,7 @@ $lang->product->create           = "Erstelle {$lang->productCommon}";
 $lang->product->delete           = "Lösche {$lang->productCommon}";
 $lang->product->deleted          = 'Gelöscht';
 $lang->product->close            = 'Schließen';
+$lang->product->activate         = 'Activate';
 $lang->product->select           = "Auswahl {$lang->productCommon}";
 $lang->product->mine             = 'Meine Zuständigkeiten';
 $lang->product->other            = 'Andere';

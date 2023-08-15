@@ -1180,7 +1180,8 @@ class upgradeModel extends model
              case '18_4':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.4'));
              case '18_5':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall')); // confirm insert position.
+                if(strpos($fromVersion, 'ipd') === false) $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall'));
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.5')); // confirm insert position.
         }
 
         return $confirmContent;

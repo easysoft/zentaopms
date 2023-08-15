@@ -232,6 +232,7 @@ $config->upgrade->liteVersion['liteVIP1_2'] = 'biz7_1';
 $config->upgrade->ipdVersion = array();
 $config->upgrade->ipdVersion['ipd1_0_beta1'] = '18_4_alpha1';
 $config->upgrade->ipdVersion['ipd1_0']       = '18_5';
+$config->upgrade->ipdVersion['ipd1_0_1']     = '18_6';
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
