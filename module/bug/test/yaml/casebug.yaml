@@ -1,0 +1,93 @@
+---
+title: zt_bug
+author: Mengyi Liu
+version: 1.0
+fields:
+  - field: id
+    range: 1-10000
+  - field: project
+    range: 11-20,0{5}
+  - field: product
+    range: 1-10,1{5}
+  - field: branch
+    range: 0
+  - field: module
+    range: 0
+  - field: execution
+    range: 101-110,0{5}
+  - field: plan
+    range: 0
+  - field: story
+    range: 2-40:4,0{5}
+  - field: storyVersion
+    range: 3{10},1{5}
+  - field: task
+    range: 0
+  - field: toTask
+    range: 0
+  - field: toStory
+    range: 0
+  - field: title
+    fields:
+      - field: title1
+        range: 测试单转Bug,SonarQube_Bug
+      - field: title2
+        range: 1-10000
+  - field: keywords
+    range: []
+  - field: severity
+    range: 1-4
+  - field: pri
+    range: 1-4
+    range: active
+  - field: confirmed
+    range: 0
+  - field: activatedCount
+    range: 0
+  - field: mailto
+    range: admin{100},[]{200}
+  - field: openedBy
+    range: admin
+  - field: openedDate
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: openedBuild
+    range: 11-20,11{6}
+  - field: assignedTo
+    range: admin,dev1,test1
+  - field: assignedDate
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: deadline
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD"
+  - field: resolvedBy
+    range: ""
+  - field: resolution
+    range: ""
+  - field: resolvedBuild
+    range: ""
+  - field: resolvedDate
+    range: ""
+    prefix: ""
+    postfix: ""
+  - field: closedBy
+    range: ""
+  - field: closedDate
+    range: ""
+  - field: duplicateBug
+    range: 0
+  - field: case
+    range: 2-40:4
+  - field: caseVersion
+    range: 1{10},0{5}
+  - field: result
+    range: 2-40:4
+  - field: testtask
+    range: 1-10,0{5}

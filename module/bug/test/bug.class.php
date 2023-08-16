@@ -801,6 +801,7 @@ class bugTest
     }
 
     /**
+     * 测试获取用例关联的bugs。
      * Test get case bugs.
      *
      * @param  int    $runID
@@ -809,7 +810,7 @@ class bugTest
      * @access public
      * @return string
      */
-    public function getCaseBugsTest($runID, $caseID = 0, $version = 0)
+    public function getCaseBugsTest(int $runID, int $caseID = 0, int $version = 0): string|array
     {
         $array = $this->objectModel->getCaseBugs($runID, $caseID, $version);
 

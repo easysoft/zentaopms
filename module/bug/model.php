@@ -1232,16 +1232,19 @@ class bugModel extends model
     }
 
     /**
+     * 获取用例关联的bugs。
      * Get case bugs.
      *
      * @param  int    $runID
      * @param  int    $caseID
      * @param  int    $version
      * @access public
-     * @return void
+     * @return array|null
      */
-    public function getCaseBugs($runID, $caseID = 0, $version = 0)
+    public function getCaseBugs(int $runID, int $caseID = 0, int $version = 0): array|null
     {
+        /* 获取用例关联的bugs。 */
+        /* Get case bugs. */
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('1=1')
             ->beginIF($runID)->andWhere('`result`')->eq($runID)->fi()
