@@ -172,6 +172,26 @@ class Project
     }
 
     /**
+     * Do create a project.
+     *
+     * @param  object $project
+     * @access public
+     * @return array
+     */
+    public function doCreate(object $project)
+    {
+        $this->project->doCreate($project);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $project;
+        }
+    }
+
+    /**
      * Do activate a project.
      *
      * @param  int    $projectID
