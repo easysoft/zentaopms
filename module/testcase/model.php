@@ -3288,6 +3288,9 @@ class testcaseModel extends model
             ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
             ->orderBy('grade_desc, sort_asc')
             ->fetchAll('id');
+
+        $pager->recTotal = 0;
+
         if(!$scenes) return array();
 
         $cases = array();
