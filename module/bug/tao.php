@@ -55,7 +55,7 @@ class bugTao extends bugModel
     {
         $browseType = strtolower($browseType);
 
-        if($browseType == 'bysearch')    return $this->getBySearch($productIdList, $branch, $projectID, $queryID, $orderBy, '', $pager, $projectID);
+        if($browseType == 'bysearch')    return $this->getBySearch('bug', $productIdList, $branch, $projectID, $queryID, $orderBy, '', $pager, $projectID);
         if($browseType == 'needconfirm') return $this->getNeedConfirmList($productIdList, $projectID, $executionIdList, $branch, $moduleIdList, $orderBy, $pager);
 
         $lastEditedDate = '';
@@ -113,7 +113,8 @@ class bugTao extends bugModel
      * 搜索 bug。
      * Search bugs.
      *
-     * @param  array      $productIdList
+     * @param  string     $object
+     * @param  array|int  $productIdList
      * @param  int|string $branch
      * @param  int        $projectID
      * @param  int        $queryID
@@ -123,24 +124,26 @@ class bugTao extends bugModel
      * @access public
      * @return array
      */
-    protected function getBySearch(array $productIdList, int|string $branch = 0, int $projectID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null): array
+    protected function getBySearch(string $object = 'bug', array|int $productIdList, int|string $branch = 0, int $projectID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null): array
     {
-        $bugQuery = $this->processSearchQuery($queryID, $productIdList, (string)$branch);
+        $bugQuery = $this->processSearchQuery($object, $queryID, $productIdList, (string)$branch);
 
         return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
             ->where($bugQuery)
             ->andWhere('deleted')->eq('0')
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
 
-            ->beginIF(!$this->app->user->admin)
+            ->beginIF($object == 'bug' && !$this->app->user->admin)
             ->andWhere('project')->in('0,' . $this->app->user->view->projects)
             ->andWhere('execution')->in('0,' . $this->app->user->view->sprints)
             ->fi()
 
             ->beginIF($projectID)
             ->andWhere('project', true)->eq($projectID)
+            ->beginIF($objectType == 'bug')
             ->orWhere('project')->eq(0)
             ->andWhere('openedBuild')->eq('trunk')
+            ->fi()
             ->markRight(1)
             ->fi()
 
@@ -268,13 +271,14 @@ class bugTao extends bugModel
      * 处理搜索的查询语句。
      * Process search query.
      *
+     * @param  string     $object
      * @param  int        $queryID
-     * @param  array      $productIdList
+     * @param  array|int  $productIdList
      * @param  int|string $branch
      * @access protected
      * @return string
      */
-    private function processSearchQuery(int $queryID, array $productIdList, string $branch): string
+    private function processSearchQuery(string $object, int $queryID, array|int $productIdList, string|int $branch): string
     {
         /* 设置 bug 查询的 session。*/
         /* Set the session of bug query. */
@@ -294,6 +298,42 @@ class bugTao extends bugModel
 
         /* 在 bug 的查询中加上产品的限制。*/
         /* Append product condition in bug query. */
+        if($object != 'bug') return $this->appendProductConditionForProject($bugQuery, $productIdList, $branch);
+
+        return $this->appendProductConditionForBug($bugQuery, $productIdList, (string)$branch);
+    }
+
+    /**
+     * Append product condition for project.
+     *
+     * @param  string     $bugQuery
+     * @param  int        $productID
+     * @param  string|int $branchID
+     * @access private
+     * @return string
+     */
+    private function appendProductConditionForProject(string $bugQuery, int $productID, string|int $branchID): string
+    {
+        if(strpos($bugQuery, 'product') === false && strpos($bugQuery, '`product` IN') === false)
+        {
+            $bugQuery .= ' AND `product` = ' . $productID;
+            if($branchID != 'all') $bugQuery .= ' AND `branch` = ' . $branchID;
+        }
+
+        return $bugQuery;
+    }
+
+    /**
+     * Append product condition for bug.
+     *
+     * @param  string  $bugQuery
+     * @param  array   $productIdList
+     * @param  string  $branch
+     * @access private
+     * @return string
+     */
+    private function appendProductConditionForBug(string $bugQuery, array $productIdList, string $branch): string
+    {
         if(strpos($bugQuery, '`product`') !== false)
         {
             $productPairs  = $this->loadModel('product')->getPairs('', 0, '', 'all');
