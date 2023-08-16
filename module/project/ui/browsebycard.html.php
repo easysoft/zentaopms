@@ -115,21 +115,17 @@ if(!empty($projectStats))
             }
         }
 
-        $actionItems = array();
-        $canActions  = (common::hasPriv('project','edit') or common::hasPriv('project','start') or common::hasPriv('project','activate') or common::hasPriv('project','suspend') or common::hasPriv('project','close'));
-        if($canActions)
+        $actionItems  = array();
+        $actionParams = "projectID={$project->id}";
+        $actionList   = array('edit', 'start', 'suspend', 'close', 'activate');
+        foreach($actionList as $action)
         {
-            $actionParams = "projectID={$project->id}";
-            $actionList   = array('edit', 'start', 'suspend', 'close', 'activate');
-            foreach($actionList as $action)
-            {
-                if(!common::hasPriv('project', $action)) continue;
-                $actionItem = $config->project->actionList[$action];
-                $actionItem['url']      = createLink('project', $action, $actionParams);
-                $actionItem['disabled'] = !$this->project->isClickable($project, $action);
+            if(!common::hasPriv('project', $action)) continue;
+            $actionItem = $config->project->actionList[$action];
+            $actionItem['url']      = createLink('project', $action, $actionParams);
+            $actionItem['disabled'] = !$this->project->isClickable($project, $action);
 
-                $actionItems[] = $actionItem;
-            }
+            $actionItems[] = $actionItem;
         }
 
         $projectCards[] = div
@@ -275,19 +271,17 @@ if(!empty($projectStats))
                             div
                             (
                                 setClass('project-actions'),
-                                $canActions ? dropdown
+                                $actionItems ? dropdown
                                 (
                                     set::caret(false),
-                                    btn(
+                                    btn
+                                    (
                                         setClass('ghost btn square btn-default'),
                                         set::icon('ellipsis-v')
                                     ),
                                     set::placement('left-end'),
                                     set::menu(array('class' => 'flex p-2 project-menu-actions')),
-                                    set::items
-                                    (
-                                        $actionItems
-                                    )
+                                    set::items($actionItems)
                                 ) : null
                             )
                         )
