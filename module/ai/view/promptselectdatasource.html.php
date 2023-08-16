@@ -394,7 +394,7 @@ customElements.define('selected-data-sorter', SelectedDataSorter, {extends: 'div
                 <ul>
                   <?php foreach(array_keys($dataSource) as $index => $objectGroupKey):?>
                     <li data-group-key='<?php echo $objectGroupKey;?>'>
-                      <a class='btn btn-block <?php echo $objectGroupKey == $activeDataSource ? ' active btn-info' : ' btn-link';?>'>
+                      <a class='btn btn-block <?php echo $objectGroupKey == $activeDataSource ? ' active btn-info' : ' btn-link';?>' <?php echo $objectGroupKey == $activeDataSource ? 'style="background-color: #E6F0FF;"' : '';?>>
                         <?php echo $lang->ai->dataSource[$objectGroupKey]['common'];?>
                       </a>
                     </li>
