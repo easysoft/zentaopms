@@ -154,7 +154,7 @@ class testcase extends control
         {
             $pager->pageID = $pageID;   // 场景和用例混排，$pageID 可能大于场景分页后的总页数。在 pager 构造函数中会被设为 1，这里要重新赋值。
 
-            $scenes = $this->testcase->getSceneGroups($productID, $branch, $moduleID, $sort, $pager);   // 获取包含子场景和用例的顶级场景树。
+            $scenes = $this->testcase->getSceneGroups($productID, $branch, $moduleID, $caseType, $sort, $pager);   // 获取包含子场景和用例的顶级场景树。
 
             if(!$this->cookie->onlyScene)
             {

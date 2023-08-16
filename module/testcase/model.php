@@ -3274,18 +3274,20 @@ class testcaseModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $moduleID
+     * @param  string $caseType
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getSceneGroups($productID, $branch = 0, $moduleID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getSceneGroups($productID, $branch = 0, $moduleID = 0, $caseType = '', $orderBy = 'id_desc', $pager = null)
     {
+        $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $scenes = $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->orderBy('grade_desc, sort_asc')
             ->fetchAll('id');
 
@@ -3296,14 +3298,22 @@ class testcaseModel extends model
         $cases = array();
         if($scenes && !$this->cookie->onlyScene)
         {
-            $caseList = $this->dao->select('*')->from(TABLE_CASE)
-                ->where('deleted')->eq('0')
-                ->andWhere('scene')->ne(0)
-                ->andWhere('product')->eq($productID)
-                ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
-                ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
+            $stmt = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1');
+
+            if($this->app->tab == 'project') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
+
+            $caseList = $stmt->where('t1.deleted')->eq('0')
+                ->andWhere('t1.scene')->ne(0)
+                ->andWhere('t1.product')->eq($productID)
+                ->beginIF($this->app->tab == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
+                ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+                ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+                ->beginIF($this->cookie->showAutoCase)->andWhere('t1.auto')->ne('unit')->fi()
+                ->beginIF(!$this->cookie->showAutoCase)->andWhere('t1.auto')->notIN('unit,auto')->fi()
+                ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
                 ->orderBy($orderBy)
                 ->fetchAll('id');
+
             $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
             $caseList = $this->loadModel('story')->checkNeedConfirm($caseList);
             $caseList = $this->appendData($caseList);
