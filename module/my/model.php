@@ -1020,7 +1020,7 @@ class myModel extends model
     public function getReviewingTypeList()
     {
         $typeList = array();
-        if($this->getReviewingDemands('id_desc', true))   $typeList[] = 'demand';
+        if($this->config->edition == 'ipd' and $this->getReviewingDemands('id_desc', true))   $typeList[] = 'demand';
         if($this->getReviewingStories('id_desc', true))   $typeList[] = 'story';
         if($this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
