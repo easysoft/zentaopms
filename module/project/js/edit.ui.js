@@ -1,3 +1,8 @@
+$(function()
+{
+    new zui.Tooltip('#programHover', {title: programTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light programTip'});
+});
+
 /* 切换项目管理模型的逻辑. */
 $(document).on('click', '.dropdown-menu .menu-item', function()
 {
