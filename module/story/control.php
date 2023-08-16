@@ -452,7 +452,7 @@ class story extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->story->custom->createFields;
 
-        $requirementStatus = strpos($product->vision, 'or') !== false ? 'launched' : 'changing,active,reviewing';
+        $requirementStatus = strpos($product->vision, 'or') !== false ? 'launched' : 'active';
 
         $this->view->URS              = $storyType == 'story' ? $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, $requirementStatus, 'id_desc', 0, '', 'requirement') : '';
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
@@ -3113,7 +3113,7 @@ class story extends control
      */
     public function ajaxGetProductUserStories($productID, $branchID = 0, $requirementList = 0)
     {
-        $URS = $this->story->getProductStoryPairs($productID, $branchID, 0, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
+        $URS = $this->story->getProductStoryPairs($productID, $branchID, 0, 'active', 'id_desc', 0, '', 'requirement');
 
         return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
     }
