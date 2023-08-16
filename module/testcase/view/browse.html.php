@@ -513,7 +513,7 @@ $(function()
   // parent: parent,
   // dataNested: dataNested,
   // nestPath: nestPath,
-  // dataType: dataType,
+  // isScene: isScene,
   // objectID: objectID
   // boundary: {x:pos.x, y:pos.y, w:size.w, h:size.h},
   // $dom: $row,
@@ -522,7 +522,7 @@ $(function()
   for(var i=0; i<trList.length; i++){
     $row = $(trList[i]);
 
-    if($row.attr("data-itype") == "1") continue;
+    if($row.attr("data-is-scene") == "0") continue;
 
     var dataId = $row.attr("data-id");
     xtable.toggleNestedRows(dataId, true,true);

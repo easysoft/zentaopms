@@ -72,7 +72,7 @@ DtSort.defaultConfig = {
     parentAttrName: 'data-parent',
     dataNestedAttrName: 'data-nested',
     nestPathAttrName: 'data-nest-path',
-    dataTypeAttrName: 'data-itype',
+    isSceneAttrName: 'data-is-scene',
     objectIdAttrName: 'data-object-id',
     moveBuffer: 2,
     canAccept: function(source, target,sameLevel, sourceMgr, targetMgr){return target.dataNested == "true";},
@@ -157,7 +157,7 @@ DtSort.Table.prototype.measure = function()
         var parent = $row.attr(this.options.parentAttrName);
         var dataNested = $row.attr(this.options.dataNestedAttrName);
         var nestPath = $row.attr(this.options.nestPathAttrName);
-        var dataType = $row.attr(this.options.dataTypeAttrName);
+        var isScene = $row.attr(this.options.isSceneAttrName);
         var objectID = $row.attr(this.options.objectIdAttrName);
 
         var pos = DtSort.tools.elementPos($rows[i]);
@@ -177,7 +177,7 @@ DtSort.Table.prototype.measure = function()
             parent: parent,
             dataNested: dataNested,
             nestPath: nestPath,
-            dateType: dataType,
+            isScene: isScene,
             objectID: objectID,
             boundary: {x:pos.x, y:pos.y, w:size.w, h:size.h},
             $dom: $row
@@ -644,9 +644,9 @@ $(function()
         var selectedCaseNum = 0;
         for(var i=0; i<trList.length; i++)
         {
-            var $tr      = $(trList[i]);
-            var dataType = $tr.attr("data-itype");
-            if(dataType != "1") continue;
+            var $tr     = $(trList[i]);
+            var isScene = $tr.attr("data-is-scene");
+            if(isScene == "1") continue;
             var $cbx = $tr.find(".checkbox-primary").find("input");
             if($cbx.is(':checked') == true) selectedCaseNum ++;
         }

@@ -211,10 +211,10 @@ class testcase extends control
         $cases = $this->testcase->appendData($cases);
         foreach($cases as $case)
         {
-            $case->parent = 0;
-            $case->grade  = 1;
-            $case->path   = ',' . $case->id . ',';
-            $case->isCase = 1;
+            $case->parent  = 0;
+            $case->grade   = 1;
+            $case->path    = ',' . $case->id . ',';
+            $case->isScene = false;
         }
 
         /* Build the search form. */

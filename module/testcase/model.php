@@ -2204,10 +2204,10 @@ class testcaseModel extends model
             $case->id    = str_replace(array('case_', 'scene_'), '', $case->id);   // Remove the prefix of case id.
 
             $trClass      = '';
-            $idPrefix     = $case->isCase == 1 ? 'case_' : '';
-            $objectPrefix = $case->isCase == 1 ? 'case_' : 'scene_';
+            $idPrefix     = !$case->isScene ? 'case_' : '';
+            $objectPrefix = !$case->isScene ? 'case_' : 'scene_';
             $trAttrs      = "data-id='{$idPrefix}{$case->id}' data-object-id='{$objectPrefix}{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
-            if($case->isCase == 2)
+            if($case->isScene)
             {
                 $trAttrs .= " data-nested='true'";
                 $trClass .= $case->parent == '0' ? ' is-top-level table-nest-child-hide' : ' table-nest-hide';
@@ -2215,18 +2215,19 @@ class testcaseModel extends model
 
             if($case->parent)
             {
-                if($case->isCase != 2) $trClass .= ' is-nest-child';
+                if(!$case->isScene) $trClass .= ' is-nest-child';
                 $trClass .= ' table-nest-hide';
                 $trAttrs .= " data-nest-parent='{$case->parent}' data-nest-path='{$case->path}'";
             }
-            elseif($case->isCase != 2)
+            elseif(!$case->isScene)
             {
                 $trClass .= ' no-nest';
             }
             $trAttrs .= " class='row-case $trClass'";
 
-            echo "<tr data-itype='{$case->isCase}' {$trAttrs}>";
-            foreach($setting as $key => $value) $this->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $mode, $case->isCase);
+            $isScene = $case->isScene ? 1 : 0;
+            echo "<tr data-is-scene='{$isScene}' {$trAttrs}>";
+            foreach($setting as $key => $value) $this->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $mode);
             echo '</tr>';
 
             $index++;
@@ -2256,7 +2257,7 @@ class testcaseModel extends model
      */
     public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
     {
-        $isCase = $case->isCase;
+        $isScene = $case->isScene;
 
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('case', $case);
@@ -2308,7 +2309,7 @@ class testcaseModel extends model
 
             if($id == 'title')
             {
-                if($isCase == 2)
+                if($isScene)
                 {
                     echo "<td class='c-name table-nest-title text-left sort-handler has-prefix has-suffix' {$title}><span class='table-nest-icon icon '></span>";
                 }
@@ -2330,7 +2331,7 @@ class testcaseModel extends model
                 if($canBatchAction)
                 {
                     $disabled = $canBeChanged ? '' : 'disabled';
-                    if($isCase == 1)
+                    if(!$isScene)
                     {
                         echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $showID), '', "data-app='{$this->app->tab}'");
                     }
@@ -2345,7 +2346,7 @@ class testcaseModel extends model
                 }
                 break;
             case 'pri':
-                if($isCase != 2)
+                if(!$isScene)
                 {
                     echo "<span class='label-pri label-pri-" . $case->pri . "' title='" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
                     echo zget($this->lang->testcase->priList, $case->pri, $case->pri);
@@ -2353,7 +2354,7 @@ class testcaseModel extends model
                 }
                 break;
             case 'title':
-                if($isCase == 1){
+                if(!$isScene){
                     if($this->app->tab == 'project')
                     {
                         $showBranch = isset($this->config->project->testcase->showBranch) ? $this->config->project->testcase->showBranch : 1;
@@ -2417,7 +2418,7 @@ class testcaseModel extends model
                 echo $case->keywords;
                 break;
             case 'version':
-                if($isCase == 1) echo $case->version;
+                if(!$isScene) echo $case->version;
                 break;
             case 'openedBy':
                 echo zget($users, $case->openedBy);
@@ -2444,23 +2445,24 @@ class testcaseModel extends model
                 if(!helper::isZeroDate($case->lastRunDate)) echo substr($case->lastRunDate, 5, 11);
                 break;
             case 'lastRunResult':
-                if ($isCase == 1) {
+                if(!$isScene)
+                {
                     $class = 'result-' . $case->lastRunResult;
                     $lastRunResultText = $case->lastRunResult ? zget($this->lang->testcase->resultList, $case->lastRunResult, $case->lastRunResult) : $this->lang->testcase->unexecuted;
                     echo "<span class='$class'>" . $lastRunResultText . "</span>";
                 }
                 break;
             case 'bugs':
-                if ($isCase == 1) echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
+                if(!$isScene) echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
                 break;
             case 'results':
-                if ($isCase == 1) echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;
+                if(!$isScene) echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;
                 break;
             case 'stepNumber':
-                if ($isCase == 1) echo $case->stepNumber;
+                if(!$isScene) echo $case->stepNumber;
                 break;
             case 'actions':
-                if ($isCase == 1)
+                if(!$isScene)
                 {
                     $case->browseType = $browseType;
                     echo $this->buildOperateMenu($case, 'browse');
@@ -3323,17 +3325,17 @@ class testcaseModel extends model
             $scene->results    = 0;
             $scene->caseFails  = 0;
             $scene->stepNumber = 0;
-            $scene->isCase     = 2;
+            $scene->isScene    = true;
 
             if(isset($cases[$id]))
             {
                 foreach($cases[$id] as $case)
                 {
-                    $case->id     = 'case_' . $case->id;
-                    $case->parent = $id;
-                    $case->grade  = $scene->grade + 1;
-                    $case->path   = $scene->path . $case->id . ',';
-                    $case->isCase = 1;
+                    $case->id      = 'case_' . $case->id;
+                    $case->parent  = $id;
+                    $case->grade   = $scene->grade + 1;
+                    $case->path    = $scene->path . $case->id . ',';
+                    $case->isScene = false;
 
                     $scene->cases[$case->id] = $case;
                 }
