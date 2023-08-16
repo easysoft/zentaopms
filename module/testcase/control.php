@@ -736,11 +736,8 @@ class testcase extends control
         }
 
         /* Set module option menu. */
-        $moduleOptionMenu          = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : $branch);
-        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
-
-        $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
-        $sceneOptionMenu['ditto'] = $this->lang->testcase->ditto;
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : $branch);
+        $sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
