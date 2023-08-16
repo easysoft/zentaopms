@@ -165,6 +165,12 @@ class projectZen extends project
             return false;
         }
 
+        if($this->post->delta != 999 and !$project->end)
+        {
+            dao::$errors['end'] = $this->lang->project->copyProject->endTips;
+            return false;
+        }
+
         if(!empty($project->budget))
         {
             if(!is_numeric($project->budget))

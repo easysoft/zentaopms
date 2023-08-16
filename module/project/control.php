@@ -408,8 +408,6 @@ class project extends control
 
         if($_POST)
         {
-            if($this->post->delta == '999') $_POST['end'] = LONG_TIME;
-
             $postData = form::data($this->config->project->form->create);
             $project  = $this->projectZen->prepareCreateExtras($postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

@@ -11,15 +11,15 @@ $config->project->form->activate =  array();
 $config->project->form->manageProducts = array();
 
 $config->project->form->create['parent']     = array('type' => 'int',    'required' => false, 'default' => 0);
-$config->project->form->create['name']       = array('type' => 'string', 'required' => true, 'filter' => 'trim');
-$config->project->form->create['code']       = array('type' => 'string', 'required' => true, 'filter' => 'trim');
+$config->project->form->create['name']       = array('type' => 'string', 'required' => true,  'filter'  => 'trim');
+$config->project->form->create['code']       = array('type' => 'string', 'required' => true,  'filter'  => 'trim');
 $config->project->form->create['multiple']   = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['hasProduct'] = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['PM']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['budget']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['budgetUnit'] = array('type' => 'string', 'required' => false, 'default' => 'CNY');
 $config->project->form->create['begin']      = array('type' => 'date',   'required' => true);
-$config->project->form->create['end']        = array('type' => 'date',   'required' => true);
+$config->project->form->create['end']        = array('type' => 'date',   'required' => false);
 $config->project->form->create['desc']       = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['acl']        = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['whitelist']  = array('type' => 'array',  'required' => false, 'default' => '');
@@ -35,4 +35,4 @@ $config->project->form->close['realEnd'] = array('type' => 'date', 'required' =>
 $config->project->form->activate['begin']        = array('type' => 'date',   'required' => true);
 $config->project->form->activate['end']          = array('type' => 'date',   'required' => true);
 $config->project->form->activate['readjustTime'] = array('type' => 'int',    'required' => false, 'default' => '');
-$config->project->form->activate['readjustTask'] = array('type' => 'array',    'required' => false, 'default' => '');
+$config->project->form->activate['readjustTask'] = array('type' => 'array',  'required' => false, 'default' => '');

@@ -131,6 +131,7 @@ class projectTao extends projectModel
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
+            ->batchCheck($this->config->project->create->requiredFields, 'notempty')
             ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent    and `model`   = '{$project->model}' and `deleted` = '0'")
             ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model`  = '{$project->model}' and `deleted` = '0'")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
