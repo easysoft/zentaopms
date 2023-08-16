@@ -238,24 +238,30 @@ class project extends control
     }
 
     /**
-     * Project index view.
+     * 项目仪表盘。
+     * Project dashboard view.
      *
      * @param  int    $projectID
      * @param  string $browseType
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function index($projectID = 0, $browseType = 'all', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function index(int $projectID = 0, string $browseType = 'all', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
-
-        if($projectID == 0 and common::hasPriv('project', 'create')) $this->locate($this->createLink('project', 'create'));
-        if($projectID == 0 and !common::hasPriv('project', 'create')) $this->locate($this->createLink('project', 'browse'));
-
-        $this->project->setMenu($projectID);
+        if(empty($projectID) && common::hasPriv('project', 'create'))  $this->locate($this->createLink('project', 'create'));
+        if(empty($projectID) && !common::hasPriv('project', 'create')) $this->locate($this->createLink('project', 'browse'));
 
         $projectID = (int)$projectID;
+        $this->project->setMenu($projectID);
+        helper::setcookie("lastProject", strVal($projectID));
+
         $project = $this->project->getByID($projectID);
+        if(empty($project) || $project->type != 'project') return print(js::error($this->lang->notFound) . js::locate('back'));
+        if($project->model != 'kanban' || $this->config->vision == 'lite') return print($this->fetch('block', 'dashboard', "dashboard={$project->model}project&projectID={$projectID}"));
 
         /* Locate to task when set no execution. */
         if(!$project->multiple)
@@ -267,46 +273,31 @@ class project extends control
             }
         }
 
-        if(empty($project) || $project->type != 'project') return print(js::error($this->lang->notFound) . js::locate('back'));
+        /* Load pager and get kanban list. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        if(!$projectID) $this->locate($this->createLink('project', 'browse'));
-        helper::setcookie("lastProject", strVal($projectID));
-
-        if($project->model == 'kanban' and $this->config->vision != 'lite')
+        $kanbanList       = $this->loadModel('execution')->getList($projectID, 'all', $browseType, 0, 0, 0, $pager);
+        $actionList       = $this->config->execution->statusActions + array('delete');
+        $executionActions = array();
+        foreach($kanbanList as $kanbanID => $kanban)
         {
-            /* Load pager and get kanban list. */
-            $this->app->loadClass('pager', true);
-            $pager = new pager($recTotal, $recPerPage, $pageID);
-
-            $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType, 0, 0, 0, $pager);
-
-            $executionActions = array();
-            foreach($kanbanList as $kanbanID => $kanban)
+            foreach($actionList as $action)
             {
-                foreach($this->config->execution->statusActions as $action)
-                {
-                    if($this->execution->isClickable($kanban, $action)) $executionActions[$kanbanID][] = $action;
-                }
-                if($this->execution->isClickable($kanban, 'delete')) $executionActions[$kanbanID][] = 'delete';
+                if($this->execution->isClickable($kanban, $action)) $executionActions[$kanbanID][] = $action;
             }
-
-            $this->view->kanbanList       = $kanbanList;
-            $this->view->browseType       = $browseType;
-            $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
-            $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs('all');
-            $this->view->executionActions = $executionActions;
-            $this->view->pager            = $pager;
-
-            $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
-            $this->view->project     = $project;
-            $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid|all');
-
-            $this->display();
         }
-        else
-        {
-            echo $this->fetch('block', 'dashboard', "dashboard={$project->model}project&projectID={$projectID}");
-        }
+
+        $this->view->title            = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
+        $this->view->pager            = $pager;
+        $this->view->project          = $project;
+        $this->view->kanbanList       = $kanbanList;
+        $this->view->browseType       = $browseType;
+        $this->view->userIdPairs      = $this->loadModel('user')->getPairs('nodeleted|showid|all');
+        $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
+        $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs('all');
+        $this->view->executionActions = $executionActions;
+        $this->display();
     }
 
     /**
