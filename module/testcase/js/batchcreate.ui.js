@@ -19,12 +19,9 @@ function loadScenes(productID, moduleID, $currentRow)
         let $row = $currentRow;
         while($row.length)
         {
-            const $scene = $row.find('.form-batch-input[data-name="scene"]').empty();
-
-            $.each(scenes, function(index, scene)
-            {
-                $scene.append('<option value="' + scene.value + '">' + scene.text + '</option>');
-            });
+            const $scene = $row.find('[data-name="scene"] .picker').zui('picker');
+            $scene.render({items: stories});
+            $scene.$.setValue($scene.$.value);
 
             $row = $row.next('tr');
 
