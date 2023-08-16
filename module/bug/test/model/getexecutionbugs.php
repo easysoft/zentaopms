@@ -1,7 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php'; su('admin');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
+su('admin');
+
+function initData()
+{
+    $bug = zdTable('bug');
+    $bug->id->range('1-10');
+    $bug->product->range('1,2,3,4');
+    $bug->branch->range('0,0,1');
+    $bug->project->range('1,2');
+    $bug->execution->range('1,2');
+    $bug->module->range('1,0');
+    $bug->status->range("resolved,active,closed");
+    $bug->title->prefix("BUG")->range('1-10');
+    $bug->plan->range('1,0');
+    $bug->assignedTo->range('admin,zhangsan');
+    $bug->openedBy->range('admin,zhangsan');
+    $bug->resolvedBy->range('admin');
+    $bug->confirmed->range('0,1');
+    $bug->resolution->range('postponed,fixed');
+    $bug->openedBuild->range('trunk,2,1');
+    $bug->gen(10);
+}
+
+initData();
 
 /**
 
@@ -19,13 +43,20 @@ pid=1
 
 */
 
-$executionIDList = array('101', '102', '103', '104', '105', '106', '1000001');
+$executionIdList = array(2, 1, 1000001);
+$productIdList   = array(1, 2);
+$branchIdList    = array('1');
+$buildIdList     = array(1, 'trunk');
+$typeList        = array('unresolved', 'noclosed', 'assignedtome', 'openedbyme');
+$paramList       = array(1);
+$excludeBugs     = array(10);
 
-$bug=new bugTest();
-r($bug->getExecutionBugsTest($executionIDList[0])) && p() && e('BUG3,BUG2,BUG1');     // 测试获取执行ID为101的bug
-r($bug->getExecutionBugsTest($executionIDList[1])) && p() && e('BUG6,BUG5,BUG4');     // 测试获取执行ID为102的bug
-r($bug->getExecutionBugsTest($executionIDList[2])) && p() && e('BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7');    // 测试获取执行ID为103的bug
-r($bug->getExecutionBugsTest($executionIDList[3])) && p() && e('BUG12,BUG11,BUG10');  // 测试获取执行ID为104的bug
-r($bug->getExecutionBugsTest($executionIDList[4])) && p() && e('缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;15,BUG14,BUG13'); // 测试获取执行ID为105的bug
-r($bug->getExecutionBugsTest($executionIDList[5])) && p() && e('BUG18,BUG17,bug16');  // 测试获取执行ID为106的bug
-r($bug->getExecutionBugsTest($executionIDList[6])) && p() && e('0');                  // 测试获取不存在的执行的bug
+$bug = new bugTest();
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all'))                               && p('0:title;1:title;2:title;3:title;4:title') && e('BUG10;BUG8;BUG6;BUG4;BUG2'); // 测试获取项目ID为2的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, 'all', 0, $excludeBugs[0])) && p('0:title;1:title;2:title;3:title')         && e('BUG8;BUG6;BUG4;BUG2');       // 测试获取项目ID为2不包含id为10的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', $buildIdList[0]))              && p('0:title;1:title;2:title')                 && e('BUG9;BUG6;BUG3');            // 测试获取项目ID为2, 影响版本为1的bug
+r($bug->getExecutionBugsTest($executionIdList[0], $productIdList[1], 'all'))               && p('0:title;1:title;2:title')                 && e('BUG10;BUG6;BUG2');           // 测试获取项目ID为2,产品ID为2的bug
+r($bug->getExecutionBugsTest($executionIdList[0], $productIdList[1], $branchIdList[0]))    && p('0:title')                                 && e('BUG6');                      // 测试获取项目ID为2,产品ID为2, 分支为1的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, $typeList[0]))              && p('0:title;1:title')                         && e('BUG8;BUG2');                 // 测试获取项目ID为2,未解决的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, $typeList[1]))              && p('0:title;1:title;2:title;3:title')         && e('BUG10;BUG8;BUG4;BUG2');      // 测试获取项目ID为2,未关闭的bug
+r($bug->getExecutionBugsTest($executionIdList[1], 0, 'all', 0, 'all', $paramList[0]))      && p('0:title;1:title;2:title;3:title;4:title') && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取项目ID为1,模块为1的bug

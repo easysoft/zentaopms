@@ -959,7 +959,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionBugs(int $executionID, int $productID = 0, string|int $branchID = 'all', int|array $builds = 0, string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', object $pager = null): array
+    public function getExecutionBugs(int $executionID, int $productID = 0, string|int $branchID = 'all', string|array $builds = '0', string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', object $pager = null): array
     {
         if(strpos($orderBy, 'pri_') !== false)      $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);

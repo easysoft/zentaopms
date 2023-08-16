@@ -635,29 +635,20 @@ class bugTest
     }
 
     /**
+     * 测试获取执行的 bug。
      * Test get bugs of a execution.
      *
      * @param  int    $executionID
      * @access public
      * @return string
      */
-    public function getExecutionBugsTest($executionID)
+    public function getExecutionBugsTest(int $executionID, int $productID = 0, string|int $branchID = 'all', int|array $builds = 0, string $type = '', int $param = 0, string $excludeBugs = ''): array
     {
-        $array = $this->objectModel->getExecutionBugs($executionID);
+        $bugs = $this->objectModel->getExecutionBugs($executionID, $productID, $branchID, $builds, $type, $param, $orderBy = 'id_desc', $excludeBugs);
 
-        $title = '';
-        foreach($array as $bug) $title .= ',' . $bug->title;
-        $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
+        if(dao::isError()) return dao::getError();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
-        }
+        return array_values($bugs);
     }
 
     /**
