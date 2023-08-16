@@ -208,8 +208,6 @@ detailBody
                         set::name($lang->task->execution),
                         a
                         (
-                            set('data-toggle', 'modal'),
-                            set('data-size', 'lg'),
                             set::href(createLink('execution', 'view', "executionID=$execution->id")),
                             $execution->name
                         )
