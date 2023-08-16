@@ -1732,23 +1732,36 @@ class bugModel extends model
     }
 
     /**
+     * 判断当前动作是否可以点击。
      * Adjust the action is clickable.
      *
      * @param  string $bug
      * @param  string $action
      * @param  string $module
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function isClickable($object, $action, $module = 'bug')
+    public static function isClickable(object $object, string $action, string $module = 'bug'): bool
     {
         $action = strtolower($action);
 
+        /* 如果bug状态是激活，没有确认过，这个bug可以被确认。 */
+        /* If the status is active, and the confirmed is 0, the bug can be confirm. */
         if($module == 'bug' && $action == 'confirm')  return $object->status == 'active' && $object->confirmed == 0;
+        /* 如果bug不是关闭状态，这个bug可以被指派。 */
+        /* If the status isn't closed, the bug can be assginTo. */
         if($module == 'bug' && $action == 'assignTo') return $object->status != 'closed';
+        /* 如果bug是激活状态，这个bug可以被解决。 */
+        /* If the status is active, the bug can be resolve. */
         if($module == 'bug' && $action == 'resolve')  return $object->status == 'active';
+        /* 如果bug是解决状态，这个bug可以被关闭。 */
+        /* If the status is resolved, the bug can be close. */
         if($module == 'bug' && $action == 'close')    return $object->status == 'resolved';
+        /* 如果bug不是激活状态，这个bug可以被激活。 */
+        /* If the status isn't active, the bug can be activate. */
         if($module == 'bug' && $action == 'activate') return $object->status != 'active';
+        /* 如果bug是激活状态，这个bug可以被转为需求。 */
+        /* If the status is active, the bug can be toStory. */
         if($module == 'bug' && $action == 'tostory')  return $object->status == 'active';
 
         return true;

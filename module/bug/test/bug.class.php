@@ -1126,6 +1126,7 @@ class bugTest
     }
 
     /**
+     * 测试判断当前动作是否可以点击。
      * Test adjust the action is clickable.
      *
      * @param  object $bug
@@ -1133,18 +1134,10 @@ class bugTest
      * @access public
      * @return int
      */
-    public function isClickableTest($bug, $action)
+    public function isClickableTest(object $bug, string $action): int
     {
-        $object = $this->objectModel->isClickable($bug, $action);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object ? 1 : 2;
-        }
+        $bool = $this->objectModel->isClickable($bug, $action);
+        return $bool ? 1 : 2;
     }
 
     /**
