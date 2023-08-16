@@ -119,16 +119,16 @@ else
         $moduleTitle   .= $product->name  . '/';
         $moduleItems[]  = span($product->name) . icon('angle-right');
     }
-   foreach($modulePath as $key => $module)
-   {
-       $moduleTitle   .= $module->name;
-       $moduleItems[]  = a(set::href(createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id")), $module->name) ?? span($module->name);
-       if(isset($modulePath[$key + 1]))
-       {
-           $moduleTitle   .= '/';
-           $moduleItems[]  = icon('angle-right');
-       }
-   }
+    foreach($modulePath as $key => $module)
+    {
+        $moduleTitle   .= $module->name;
+        $moduleItems[]  = a(set::href(createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id")), $module->name) ?? span($module->name);
+        if(isset($modulePath[$key + 1]))
+        {
+            $moduleTitle   .= '/';
+            $moduleItems[]  = icon('angle-right');
+        }
+    }
 }
 
 detailBody
