@@ -35,7 +35,7 @@ class repoZen extends repo
             ->setIf($this->post->SCM == 'Git', 'password', '')
             ->setIf(in_array($this->post->SCM, array('Gitea', 'Gogs')), 'path', $_POST['path'])
             ->setIf($this->post->encrypt == 'base64', 'password', base64_encode($this->post->password))
-            ->skipSpecial('path,client,account,password')
+            ->skipSpecial('path,client,account,password,desc')
             ->setDefault('product', '')->join('product', ',')
             ->setDefault('projects', '')->join('projects', ',')
             ->get();

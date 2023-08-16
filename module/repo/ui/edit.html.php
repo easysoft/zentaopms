@@ -222,10 +222,12 @@ formPanel
     ),
     formGroup
     (
-        set::name("desc"),
         set::label($lang->story->spec),
-        set::control("editor"),
-        set::value($repo->desc),
+        editor
+        (
+            set::name("desc"),
+            html($repo->desc),
+        )
     )
 );
 
