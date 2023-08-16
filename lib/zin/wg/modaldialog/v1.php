@@ -28,6 +28,11 @@ class modalDialog extends wg
         'footer' => array('map' => 'toolbar')
     );
 
+    public static function getPageCSS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function buildHeader()
     {
         $title       = $this->prop('title');
@@ -91,6 +96,7 @@ class modalDialog extends wg
         return div
         (
             setClass('modal-body', $this->prop('bodyClass')),
+            on::scroll('e.stopPropagation();'),
             set($this->prop('bodyProps')),
             $this->children(),
             $rawContent ? rawContent() : null,
