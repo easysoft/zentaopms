@@ -11,10 +11,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datatable.fix.html.php';?>
+<?php include '../../common/view/zui3dtable.html.php';?>
 <?php
-js::import($jsRoot . 'dtable/min.js');
-css::import($jsRoot . 'dtable/min.css');
-
 $cols       = $this->execution->generateCol($orderBy);
 $executions = $this->execution->generateRow($executionStats, $users, $productID);
 

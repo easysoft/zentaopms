@@ -5811,7 +5811,7 @@ class executionModel extends model
 
                 if($sortType) $set->sortType = $sortType;
 
-                $set->width = str_replace('px', '', $set->width);
+                if(isset($set->width)) $set->width = str_replace('px', '', $set->width);
 
                 unset($set->id);
 
