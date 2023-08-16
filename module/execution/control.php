@@ -1006,7 +1006,7 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
-        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $branch, $build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $branch, (string)$build, $type, $param, $sort, '', $pager);
         $bugs  = $this->bug->batchAppendDelayedDays($bugs);
         $users = $this->user->getPairs('noletter');
 
