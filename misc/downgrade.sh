@@ -5,6 +5,7 @@ phpVer="7.4"
 installRector="false"
 codeRootDir=$PWD
 composerDir="$(dirname "$(realpath "$0")")"
+outputDir="$PWD/build"
 
 helper() {
   cat << EOF
@@ -14,12 +15,13 @@ Arguments:
      可以指定多个版本，用逗号分隔，如 7.4,7.0,5.4
   -i 在 misc 目录执行 composer install, 安装 rector
   -r 指定要降级的代码根目录, 默认为当前目录
+  -o 降级补丁包输出目录
 EOF
 }
 
 # 处理命令行参数, 获取要降级的目录
 [ $# -eq 0 ] && helper
-while getopts "ir:p:" opt; do
+while getopts "ir:p:o:" opt; do
   case $opt in
     "p")
       phpVer=$OPTARG
@@ -29,6 +31,9 @@ while getopts "ir:p:" opt; do
       ;;
     "i")
       installRector="true"
+      ;;
+    "o")
+      outputDir=$OPTARG
       ;;
     *)
       helper
@@ -200,13 +205,14 @@ archiveChangedFiles() {
     pointTime=$2
     archiveDir=$3
 
-    find "$archiveDir" -type f -newermt "$pointTime" -printf "%P\n" > /tmp/changedFiles
+    find "$archiveDir" -type f -name '*.php' -newermt "$pointTime" -printf "%P\n" > /tmp/changedFiles
 
     lastDir=$PWD
     cd "$archiveDir" || exit 1
     mkdir -p build/
+    test -d "$outputDir" || mkdir -pv "$outputDir"
 
-    downPatchFile="${archiveDir}/build/downgrade-php$phpVersion.tar.gz"
+    downPatchFile="${outputDir}/downgrade-php$phpVersion.tar.gz"
     tar zcf "$downPatchFile" --files-from=/tmp/changedFiles
     echo "Release downgrade patch file: $downPatchFile"
 

@@ -8,6 +8,9 @@ BUILD_PATH    := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH  := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 XUAN_WEB_PATH := $(ZENTAO_BUILD_PATH)/web
 
+DOWNGRADE_ENABLED := $(or $(DOWNGRADE_ENABLED),$(shell jq -r .downgrade.enabled < ci.json))
+DOWNGRADE_VERSIONS := $(or $(DOWNGRADE_VERSIONS),$(shell jq -r .downgrade.versions < ci.json))
+
 all:
 	make clean
 	make ci
@@ -279,8 +282,8 @@ ciCommon:
 	zip -rq -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
 
 	# downgrade
-	./misc/downgrade.sh -p 7.2,7.1,7.0,5.4 -i -r zentaopms framework/ module/*
-	cp zentaopms/build/downgrade-*.tar.gz $(RELEASE_PATH)
+	@test "$(DOWNGRADE_ENABLED)" != "true" && echo "skip downgrade" || ./misc/downgrade.sh -p "$(DOWNGRADE_VERSIONS)" -i -r zentaopms -o "$(RELEASE_PATH)" framework/ module/*
+
 	rm -fr zentaopms zentaoalm
 
 	# move pms zip to build and release path.

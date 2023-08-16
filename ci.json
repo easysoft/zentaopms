@@ -15,6 +15,10 @@
       "gitVersion": "master"
     }
   },
+  "downgrade": {
+    "enabled": false,
+    "versions": "7.2,7.1,7.0,5.4"
+  },
   "upload": {
     "bucket": "download"
   },

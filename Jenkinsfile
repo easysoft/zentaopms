@@ -25,6 +25,10 @@ pipeline {
     PUBLISH_ZIP = "true"
     PUBLISH_IMAGE = "true"
     PUBLISH_ZBOX = "true"
+
+    // set to blank for auto-detect from ci.json
+    DOWNGRADE_ENABLED = ""
+    DOWNGRADE_VERSIONS = ""
   }
 
   stages {
@@ -230,6 +234,11 @@ pipeline {
                             script: 'git for-each-ref --format="%(taggername)" refs/tags/$(git tag --points-at HEAD)'
             ).trim()}"""
 
+            DOWNGRADE_ENABLED = """${sh(
+                            returnStdout: true,
+                            script: 'test -n "${DOWNGRADE_ENABLED}" && echo ${DOWNGRADE_ENABLED} || (jq -r .downgrade.enabled < ci.json)'
+            ).trim()}"""
+
             XIM_USERS = """${sh(
                             returnStdout: true,
                             script: 'jq -r .notice.users < ci.json'
@@ -283,7 +292,7 @@ pipeline {
                   }
                   axis {
                     name "PHPVERSION"
-                    values "php5.4_5.6", "php7.0", "php7.1",  "php7.2_7.4", "php8.1", "k8s.php7.2_7.4", "k8s.php8.1"
+                    values "php5.4_5.6", "php7.0", "php7.1",  "php7.2_7.4", "k8s.php7.2_7.4"
                   }
                 }
                 excludes {
@@ -294,10 +303,11 @@ pipeline {
                     }
                     axis {
                       name "PHPVERSION"
-                      values "k8s.php7.2_7.4", "k8s.php8.1"
+                      values "k8s.php7.2_7.4"
                     }
                   }
                 }
+
                 stages {
                   
                   stage("ZIP") {
@@ -310,7 +320,6 @@ pipeline {
                                 returnStdout: true,
                                 script: 'test ${ZLANG} = cn && echo -n "int." || echo -n ""'
                       ).trim()}"""
-                      DOWNGRADE_ENABLED = "true"
                     }
 
                     stages {
@@ -347,7 +356,26 @@ pipeline {
                           sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.zip'
 
                           script {
-                            sh 'env | grep VERSION'
+                            // copy php7.2 as php8.0
+                            if (env.PHPVERSION=="php7.2_7.4") {
+                              sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-php8.0.zip'
+                              nexusArtifactUploader(
+                                nexusVersion: 'nexus3',
+                                protocol: env.ARTIFACT_PROTOCOL,
+                                nexusUrl: env.ARTIFACT_HOST,
+                                groupId: 'zentao.pmsPack' + '.' + env.GIT_TAG_BUILD_GROUP,
+                                version: env.PMS_VERSION,
+                                repository: env.ARTIFACT_REPOSITORY,
+                                credentialsId: env.ARTIFACT_CRED_ID,
+                                artifacts: [
+                                  [artifactId: env.ARTIFACT_NAME,
+                                  classifier: 'php8.0',
+                                  file: env.ZENTAO_RELEASE_PATH + '/base.zip',
+                                  type: 'zip']
+                                ]
+                              )
+                            }
+
                             def pkgVersionMap = [
                               "biz": ["bizPack", env.BIZ_VERSION],
                               "max": ["maxPack", env.MAX_VERSION],
