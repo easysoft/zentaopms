@@ -773,13 +773,14 @@ class bugTest
     }
 
     /**
+     * 测试获取需求产生的bug。
      * Test get bugs of a story.
      *
      * @param  int    $storyID
      * @access public
      * @return string
      */
-    public function getStoryBugsTest($storyID)
+    public function getStoryBugsTest(int $storyID): array|string
     {
         $array = $this->objectModel->getStoryBugs($storyID);
 
