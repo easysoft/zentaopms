@@ -2380,9 +2380,9 @@ class productModel extends model
             {
                 $link = helper::createLink('testcase', 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=all') . "&browseType=$extra");
             }
-            elseif($module == 'testreport' and ($method == 'create' or $method == 'edit'))
+            elseif($module == 'testreport' and strpos('create,edit,browse', $method) !== false)
             {
-                $vars   = $method == 'edit' ? "objectID=%s" : "objectID=&objectType=testtask&extra=%s";
+                $vars   = ($method == 'edit' or $method == 'browse') ? "objectID=%s" : "objectID=&objectType=testtask&extra=%s";
                 $method = $method == 'edit' ? 'browse' : $method;
                 $link   = helper::createLink($module, $method, $vars);
             }
