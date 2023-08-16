@@ -98,7 +98,7 @@ class docModel extends model
         }
 
         $products   = $this->loadModel('product')->getPairs();
-        $projects   = $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '');
+        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '');
         $executions = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf');
         $waterfalls = array();
         if(empty($objectID) and $type == 'execution')
