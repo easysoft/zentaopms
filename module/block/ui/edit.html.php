@@ -39,7 +39,7 @@ row
         form
         (
             on::change('#code', 'getForm'),
-            on::change('#paramstype', 'onParamsTypeChange'),
+            on::change('#paramstype', 'changeType'),
             formRow
             (
                 setClass('hidden'),

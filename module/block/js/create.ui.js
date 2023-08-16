@@ -17,7 +17,7 @@ function getForm(event)
  *
  * @return void
  */
-function onParamsTypeChange()
+function changeType()
 {
     const lang = config.clientLang;
     const code = $('#code').zui('picker').$.state.selections[0].text;

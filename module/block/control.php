@@ -67,24 +67,19 @@ class block extends control
             $formData->left = $formData->width == 1 ? '2' : '0';
             $formData->top  = $this->block->computeBlockTop($formData);
 
-            /* 执行区块的数据插入 并且返回数据给view层。 */
+            /* 执行区块的数据插入并且返回数据给view层。 */
             $blockID = $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadComponent('#dashboard'); setTimeout(() => $('#dashboard .dashboard-block[data-id=\"$blockID\"]').scrollIntoView({behavior: 'smooth'}), 500);", 'closeModal' => true));
         }
 
-        /* 不同的仪表盘获取不同的可选择的模块列表。 */
-        $modules = $this->blockZen->getAvailableModules($dashboard);
+        $modules = $this->blockZen->getAvailableModules($dashboard); // 不同的仪表盘获取不同的可选择的模块列表。
         unset($modules['']);
 
-        /* 如果当前没有选择模块，则选中第一个。 */
-        if(empty($module) && !empty($modules)) $module = current(array_keys($modules));
+        if(empty($module) && !empty($modules)) $module = current(array_keys($modules)); // 如果当前没有选择模块，则选中第一个。
 
-        /* 根据仪表盘和模块获取可用的区块列表。 */
-        $codes = $this->blockZen->getAvailableCodes($dashboard, $module);
-
-        /* 根据所属模块和区块code获取参数配置项列表。 */
-        $params = $this->blockZen->getAvailableParams($module, $code);
+        $codes  = $this->blockZen->getAvailableCodes($dashboard, $module); // 根据仪表盘和模块获取可用的区块列表。
+        $params = $this->blockZen->getAvailableParams($module, $code); // 根据所属模块和区块code获取参数配置项列表。
 
         $this->view->title      = $this->lang->block->createBlock;
         $this->view->dashboard  = $dashboard;
@@ -109,68 +104,57 @@ class block extends control
      */
     public function edit(int $blockID, string $module = '', string $code = '')
     {
+        /* 处理表单提交事件。 */
         if($_POST)
         {
+            /* 获取表单提交内容。 */
             $formData = form::data($this->config->block->form->edit)->get();
             $formData->id = $blockID;
+
+            /* 如果是HTML区块，则对html区块数据做处理后将内容存放到params字段中。 */
             if($formData->module == 'html')
             {
                 $formData = $this->loadModel('file')->processImgURL($formData, 'html', $this->post->uid);
                 $formData->params['html'] = $formData->html;
             }
+
+            /* 将params数组转成json格式，方便在数据库中存储。 */
             $formData->params = json_encode($formData->params);
             unset($formData->html);
 
+            /* 根据表单中选择的宽度匹配配置项中的高度。 */
             if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
 
+            /* 执行区块的数据变更并且返回数据给view层。 */
             $this->block->update($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "$('#dashboard').dashboard('load', '$blockID')", 'closeModal' => true));
         }
 
-        /* 如果没传 $code 说明是首次进入页面，直接使用待编辑 $block 的 $code。 */
-        /* If no $code is passed, it indicates that you are entering the page for the first time, and you can directly use the $code of the $block to be edited. */
-        $block  = $this->block->getByID($blockID);
-        $module = $module ? $module : $block->module;
-        $code   = $code ? $code : $block->code;
+        $block  = $this->block->getByID($blockID);    // 根据区块ID获取区块信息。
+        $module = $module ? $module : $block->module; // 获取当前选中的模块，默认取区块的所属模块。
+        $code   = $code   ? $code   : $block->code;   // 获取当前选中的区块code，默认取区块的所属code。
 
-        $codes      = $this->blockZen->getAvailableCodes($block->dashboard, $module);
-        $params     = $this->blockZen->getAvailableParams($module, $code);
-        $blockTitle = $block->title;
-        if($module != $block->module || $code != $block->code)
-        {
-            if($module == 'scrumtest' && $code != 'all')
-            {
-                $blockTitle = zget($codes, $code);
-            }
-            else
-            {
-                $typeOptions = isset($params['type']['options']) ? $params['type']['options'] : array();
-                $blockTitle  = zget($codes, $code);
-                if(!empty($typeOptions))
-                {
-                    $typeName   = empty($typeOptions) ? '' : $typeOptions[array_keys($typeOptions)[0]];
-                    $blockTitle = vsprintf($this->lang->block->blockTitle, array($typeName, $blockTitle));
-                }
-            }
-        }
+        $modules = $this->blockZen->getAvailableModules($block->dashboard);        // 根据所属仪表盘获取可选择的模块列表。
+        $codes   = $this->blockZen->getAvailableCodes($block->dashboard, $module); // 根据所属仪表盘和选中模块获取可选择的区块列表。
+        $params  = $this->blockZen->getAvailableParams($module, $code);            // 根据当前选中模块和选中区块code获取参数配置项列表。
 
-        $widths       = !empty($this->config->block->size[$module][$code]) ? array_keys($this->config->block->size[$module][$code]) : array('1', '2');
+        $blockSize = !empty($this->config->block->size[$module][$code]) ? $this->config->block->size[$module][$code] : $this->config->block->defaultSize; // 获取当前区块的可选尺寸。
+
+        /* 根据区块的可选尺寸生成区块的可选宽度列表。 */
         $widthOptions = array();
-        foreach($widths as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
+        foreach(array_keys($blockSize) as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
 
-        $this->view->title     = $this->lang->block->editBlock;
-        $this->view->block     = $block;
-        $this->view->dashboard = $block->dashboard;
-        $this->view->module    = $module;
-        $this->view->modules   = $this->blockZen->getAvailableModules($block->dashboard);
-        $this->view->codes     = $codes;
-        /* $codes 包含 $code 时，页面才选中对应的 $code，否则为空。 */
-        /* Only when $codes have a value and contain $code, the corresponding $code is selected on the page, otherwise it is $blank. */
-        $this->view->code         = in_array($code, array_keys($codes)) ? $code : '';
+        $this->view->title        = $this->lang->block->editBlock;
+        $this->view->block        = $block;
+        $this->view->dashboard    = $block->dashboard;
+        $this->view->module       = $module;
+        $this->view->modules      = $this->blockZen->getAvailableModules($block->dashboard);
+        $this->view->codes        = $codes;
+        $this->view->code         = in_array($code, array_keys($codes)) ? $code : ''; //当变更了所属模块(module)后, 判断当前code在是否还包含在codes中，没有的话置空code。
         $this->view->params       = $params;
         $this->view->widthOptions = $widthOptions;
-        $this->view->blockTitle   = $blockTitle;
+        $this->view->blockTitle   = $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
         $this->display();
     }
 
