@@ -124,7 +124,7 @@ class bugTao extends bugModel
      * @access public
      * @return array
      */
-    protected function getBySearch(string $object = 'bug', array|int $productIdList, int|string $branch = 0, int $projectID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null): array
+    protected function getBySearch(string $object = 'bug', array|int $productIdList = array(), int|string $branch = 0, int $projectID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null): array
     {
         $bugQuery = $this->processSearchQuery($object, $queryID, $productIdList, (string)$branch);
 

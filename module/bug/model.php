@@ -1028,30 +1028,34 @@ class bugModel extends model
     }
 
     /**
+     * 获取产品未关联版本的bug。
      * Get product left bugs.
      *
-     * @param  int|string $buildIdList
+     * @param  array      $buildIdList
      * @param  int        $productID
-     * @param  int        $branch
+     * @param  int|string $branch
      * @param  string     $linkedBugs
      * @param  object     $pager
      * @access public
-     * @return array
+     * @return array|null
      */
-    public function getProductLeftBugs($buildIdList, $productID, $branch = '', $linkedBugs = '', $pager = null)
+    public function getProductLeftBugs(array $buildIdList, int $productID, int|string $branch = '', string $linkedBugs = '', object $pager = null): array|null
     {
+        /* Get executions of builds. */
         $executionIdList = $this->getLinkedExecutionByIdList($buildIdList);
         if(empty($executionIdList)) return array();
 
+        /* Get min begin date and max end date. */
+        $minBegin   = '1970-00-00';
+        $maxEnd     = '1970-00-00';
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll();
-        $minBegin   = '';
-        $maxEnd     = '';
         foreach($executions as $execution)
         {
-            if(empty($minBegin) or $minBegin > $execution->begin) $minBegin = $execution->begin;
-            if(empty($maxEnd)   or $maxEnd   < $execution->end)   $maxEnd   = $execution->end;
+            if(empty($minBegin) || $minBegin > $execution->begin) $minBegin = $execution->begin;
+            if(empty($maxEnd)   || $maxEnd   < $execution->end)   $maxEnd   = $execution->end;
         }
 
+        /* Get builds before min begin date. */
         $beforeBuilds = $this->dao->select('t1.id')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
             ->where('t1.product')->eq($productID)
@@ -1061,6 +1065,7 @@ class bugModel extends model
             ->andWhere('t1.date')->lt($minBegin)
             ->fetchPairs('id', 'id');
 
+        /* Return bugs that unrelate builds in the execution timeframe. */
         return $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
             ->andWhere('toStory')->eq(0)
@@ -1129,7 +1134,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getReleaseBugs(array $buildIdList, int $productID, int $branch = 0, string $linkedBugs = '', object $pager = null): array
+    public function getReleaseBugs(array $buildIdList, int $productID, int|string $branch = 0, string $linkedBugs = '', object $pager = null): array
     {
         $executionIdList = $this->getLinkedExecutionByIdList($buildIdList);
         if(empty($executionIdList)) return array();

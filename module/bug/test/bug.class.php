@@ -665,21 +665,24 @@ class bugTest
     }
 
     /**
+     * 测试获取产品未关联版本的bug。
      * Test get product left bugs.
      *
-     * @param  int    $buildID
-     * @param  int    $productID
+     * @param  array      $buildIdList
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  string     $linkedBugs
      * @access public
-     * @return string
+     * @return array|string
      */
-    public function getProductLeftBugsTest($buildID, $productID)
+    public function getProductLeftBugsTest(array $buildIdList, int $productID, int|string $branch = '', string $linkedBugs = ''): array|string
     {
-        $array = $this->objectModel->getProductLeftBugs($buildID, $productID);
+        $array = $this->objectModel->getProductLeftBugs($buildIdList, $productID, $branch, $linkedBugs);
 
         $title = '';
         foreach($array as $bug) $title .= ',' . $bug->title;
         $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
+        $title = str_replace(array("'", '@', '$', '%'), '', $title);
 
         if(dao::isError())
         {
