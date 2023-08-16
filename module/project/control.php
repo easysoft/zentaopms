@@ -251,22 +251,26 @@ class project extends control
      */
     public function index(int $projectID = 0, string $browseType = 'all', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
-        $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
-        if(empty($projectID) && common::hasPriv('project', 'create'))  $this->locate($this->createLink('project', 'create'));
-        if(empty($projectID) && !common::hasPriv('project', 'create')) $this->locate($this->createLink('project', 'browse'));
+        $projectID = $this->project->checkAccess($projectID, $this->project->getPairsByProgram());
+        if(!$projectID)
+        {
+            if(is_bool($projectID)) return $this->sendError($this->lang->project->accessDenied, inLink('browse'));
 
-        $projectID = (int)$projectID;
-        $this->project->setMenu($projectID);
-        helper::setcookie("lastProject", strVal($projectID));
+            if(common::hasPriv('project', 'create')) $this->locate(inLink('create'));
+            $this->locate(inLink('browse'));
+        }
 
         $project = $this->project->getByID($projectID);
-        if(empty($project) || $project->type != 'project') return print(js::error($this->lang->notFound) . js::locate('back'));
+        if(empty($project) || $project->type != 'project') return $this->sendError($this->lang->notFound, inLink('browse'));
+
+        $this->project->setMenu($projectID);
         if($project->model != 'kanban' || $this->config->vision == 'lite') return print($this->fetch('block', 'dashboard', "dashboard={$project->model}project&projectID={$projectID}"));
 
+        $this->loadModel('execution');
         /* Locate to task when set no execution. */
         if(!$project->multiple)
         {
-            $executions = $this->loadModel('execution')->getList($project->id);
+            $executions = $this->execution->getList($project->id);
             foreach($executions as $execution)
             {
                 if(!$execution->multiple) $this->locate($this->createLink('execution', 'task', "executionID={$execution->id}"));
@@ -277,26 +281,15 @@ class project extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $kanbanList       = $this->loadModel('execution')->getList($projectID, 'all', $browseType, 0, 0, 0, $pager);
-        $actionList       = $this->config->execution->statusActions + array('delete');
-        $executionActions = array();
-        foreach($kanbanList as $kanbanID => $kanban)
-        {
-            foreach($actionList as $action)
-            {
-                if($this->execution->isClickable($kanban, $action)) $executionActions[$kanbanID][] = $action;
-            }
-        }
-
-        $this->view->title            = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
-        $this->view->pager            = $pager;
-        $this->view->project          = $project;
-        $this->view->kanbanList       = $kanbanList;
-        $this->view->browseType       = $browseType;
-        $this->view->userIdPairs      = $this->loadModel('user')->getPairs('nodeleted|showid|all');
-        $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
-        $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs('all');
-        $this->view->executionActions = $executionActions;
+        $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
+        $this->view->pager       = $pager;
+        $this->view->project     = $project;
+        $this->view->browseType  = $browseType;
+        $this->view->actionList  = $this->config->execution->statusActions + array('delete');
+        $this->view->kanbanList  = $this->execution->getList($projectID, 'all', $browseType, 0, 0, 0, $pager);
+        $this->view->usersAvatar = $this->user->getAvatarPairs('all');
+        $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid|all');
+        $this->view->memberGroup = $this->execution->getMembersByIdList(array_keys($this->view->kanbanList));
         $this->display();
     }
 
@@ -561,7 +554,8 @@ class project extends control
      */
     public function view($projectID = 0)
     {
-        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
+        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
+        if(is_bool($projectID)) return $this->sendError($this->lang->project->accessDenied, inLink('browse'));
 
         $this->session->set('teamList', $this->app->getURI(true), 'project');
 
@@ -782,6 +776,10 @@ class project extends control
      */
     public function execution(string $status = 'undone', int $projectID = 0, string $orderBy = 'order_asc', int $productID = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
+        $projects  = $this->project->getPairsByProgram();
+        $projectID = $this->project->checkAccess($projectID, $projects);
+        if(is_bool($projectID)) return $this->sendError($this->lang->project->accessDenied, inLink('browse'));
+
         $this->loadModel('execution');
         $this->loadModel('task');
         $this->loadModel('programplan');
@@ -789,10 +787,7 @@ class project extends control
 
         if($this->cookie->showTask) $this->session->set('taskList', $this->app->getURI(true), 'project');
 
-        $projectID = (int)$projectID;
-        $projects  = $this->project->getPairsByProgram();
-        $projectID = $this->project->saveState($projectID, $projects);
-        $project   = $this->project->getByID($projectID);
+        $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
         if(!$projectID) return print(js::locate($this->createLink('project', 'browse')));
