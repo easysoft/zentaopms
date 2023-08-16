@@ -835,11 +835,11 @@ class task extends control
             $laneID  = isset($output['laneID']) ? $output['laneID'] : '';
             $this->task->cancel($task, (string)$laneID);
 
-            if(dao::isError()) return print($this->send(array('result' => 'fail', 'message' => dao::getError())));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->executeHooks($taskID);
 
-            if(helper::isAjaxRequest('modal')) return $this->taskZen->responseModal($oldTask, $from);
+            if(helper::isAjaxRequest('modal')) return $this->send($this->taskZen->responseModal($oldTask, $from));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID")));
         }
 
