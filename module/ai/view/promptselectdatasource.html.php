@@ -21,7 +21,7 @@
   #data-sources {flex-grow: 2; display: flex; flex-direction: row; margin-right: 16px;}
   #data-selected {flex-grow: 1; display: flex; flex-direction: column;}
   .heading > * {display: inline-block; padding: 4px 0;}
-  #data-category-select {flex-grow: 1; background-color: #fafafa; border: 1px solid #eee; border-right: none;}
+  #data-category-select {flex-grow: 1; background-color: #f8f8f8; border: 1px solid #eee; border-right: none;}
   #data-category-select > ul {padding: 16px; margin: 0; list-style: none;}
   #data-category-select > ul > li > a.active {font-weight: bold;}
   #data-categories {flex-grow: 1; display: flex; flex-direction: column;}

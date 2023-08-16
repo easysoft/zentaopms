@@ -21,10 +21,10 @@
   .input-label {width: 120px; padding: 6px 12px; text-align: right;}
   .input {flex-grow: 1;}
   #prompt-preview-wrapper {margin: 16px 0; height: calc(100% - 48px);}
-  #prompt-preview {padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f7f8f9; min-height: 100px; height: 100%; overflow-y: auto;}
+  #prompt-preview {padding: 8px; border: 1px solid #E6EAF1; border-radius: 4px; background-color: #f8f8f8; min-height: 100px; height: 100%; overflow-y: auto;}
   #prompt-preview {cursor: default; user-select: none;}
   #prompt-preview .active {background-color: #d6e5fe;}
-  #prompt-preview .prompt-data, #prompt-preview .prompt-role, #prompt-preview .prompt-text {border-bottom: 1px solid #ccc; padding: 16px 0;}
+  #prompt-preview .prompt-data, #prompt-preview .prompt-role, #prompt-preview .prompt-text {border-bottom: 1px solid #E6EAF1; padding: 16px 0;}
   #prompt-preview .prompt-data {padding-top: 0;}
   #prompt-preview .prompt-text {border-bottom: unset; padding-bottom: 0;}
   #prompt-preview .block-header {padding-bottom: 8px;}
