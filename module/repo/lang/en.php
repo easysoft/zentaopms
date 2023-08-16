@@ -166,6 +166,10 @@ $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';
 
+$lang->repo->aclList['private'] = 'Private';
+$lang->repo->aclList['open']    = 'Open';
+$lang->repo->aclList['custom']  = 'Custom';
+
 $lang->repo->gitlabHost    = 'GitLab Host';
 $lang->repo->gitlabToken   = 'GitLab Token';
 $lang->repo->gitlabProject = 'Project';

@@ -225,6 +225,7 @@ $lang->system->backup->typeList['restore'] = 'Automatic backup before rollback';
 $lang->system->backup->waitting        = 'Backup is in progress, please wait...';
 $lang->system->backup->waittingStore   = 'Restoring app data, please wait...';
 $lang->system->backup->progress        = 'Backup in progress（%d/%d）';
+$lang->system->backup->progressStore   = 'Restore in progress（%d/%d）';
 $lang->system->backup->progressSQL     = 'In backup，%s has been backed up';
 $lang->system->backup->progressAttach  = 'There are a total of %s files in the backup, and %s files have already been backed up';
 $lang->system->backup->progressCode    = 'There are a total of %s files in the backup, and %s files have already been backed up';

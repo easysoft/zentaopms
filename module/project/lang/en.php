@@ -341,6 +341,10 @@ $lang->project->multipleList['0'] = 'No';
 $lang->project->acls['private'] = 'Private';
 $lang->project->acls['open']    = 'Open';
 
+$lang->project->shortAclList['private'] = 'Private';
+$lang->project->shortAclList['open']    = 'Open';
+$lang->project->shortAclList['program'] = 'Open within the program';
+
 $lang->project->subAclList['private'] = "Private (Only the {$lang->projectCommon} leader, team members and stakeholders can access)";
 $lang->project->subAclList['open']    = "Open (accessible with {$lang->projectCommon} view permissions)";
 $lang->project->subAclList['program'] = "Open in the program (all upper-level program team leaders and stakeholders, the {$lang->projectCommon} leader, team members and stakeholders can access)";

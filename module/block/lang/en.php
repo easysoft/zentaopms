@@ -37,6 +37,7 @@ $lang->block->lblNum          = 'Number';
 $lang->block->lblHtml         = 'HTML Content';
 $lang->block->html            = 'HTML';
 $lang->block->dynamic         = 'Dynamics';
+$lang->block->zentaoDynamic   = 'ZenTao Dynamics';
 $lang->block->assignToMe      = 'Work';
 $lang->block->wait            = 'Wait';
 $lang->block->doing           = 'Doing';
@@ -553,6 +554,8 @@ $lang->block->productstatistic->unclosed        = 'unclosed';
 $lang->block->productstatistic->storyStatistics = 'Story Statistics';
 $lang->block->productstatistic->monthDone       = 'Completed this month <span class="text-success font-bold">%s</span>';
 $lang->block->productstatistic->monthOpened     = 'Added this month <span class="text-primary font-bold">%s</span>';
+$lang->block->productstatistic->opened          = 'Opened';
+$lang->block->productstatistic->done            = 'Done';
 $lang->block->productstatistic->news            = 'Latest product advancements';
 $lang->block->productstatistic->newPlan         = 'Latest Plan';
 $lang->block->productstatistic->newExecution    = 'Latest Execution';
@@ -660,6 +663,15 @@ $lang->block->sprint = new stdclass();
 $lang->block->sprint->totalExecution = 'Total';
 $lang->block->sprint->thisYear       = 'This Year';
 $lang->block->sprint->statusCount    = "Status of {$lang->executionCommon}";
+
+
+
+
+
+
+
+
+
 
 $lang->block->monthlyprogress = new stdclass();
 $lang->block->monthlyprogress->doneStoryEstimateTrendChart = "The Finished {$lang->SRCommon} Scale Trend Chart";

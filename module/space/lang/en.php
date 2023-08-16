@@ -12,6 +12,9 @@ $lang->space->handConfig     = 'Manual configuration';
 $lang->space->addType        = 'Add method';
 $lang->space->instanceType   = 'Instance type';
 
+$lang->space->notice = new stdclass;
+$lang->space->notice->toInstall = 'Please install in application store';
+
 $lang->space->byList = 'List';
 $lang->space->byCard = 'Card';
 

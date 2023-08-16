@@ -56,3 +56,4 @@ $lang->cron->notice->mon  = 'Range:1-12';
 $lang->cron->notice->dow  = 'Range:0-6';
 $lang->cron->notice->help = 'Note：If the server is restarted or the Cron is not working, it means the Cron has stopped. You can restart it by clicking 【Restart】 or refresh this page. If the last execution time changes, it means the Cron is running.';
 $lang->cron->notice->errorRule = '"%s" is not valid';
+$lang->cron->notice->errorType = 'You cannot create scheduled tasks of operating system command types';
