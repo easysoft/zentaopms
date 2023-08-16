@@ -895,55 +895,32 @@ class bugModel extends model
      * 获取某个项目的 bugs。
      * Get bugs of a project.
      *
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @param  int    $branchID
-     * @param  int    $build
-     * @param  string $type
-     * @param  int    $param
-     * @param  string $orderBy
-     * @param  string $excludeBugs
-     * @param  object $pager
+     * @param  int        $projectID
+     * @param  int        $productID
+     * @param  int|string $branchID
+     * @param  int        $build
+     * @param  string     $type
+     * @param  int        $param
+     * @param  string     $orderBy
+     * @param  string     $excludeBugs
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getProjectBugs(int $projectID, int $productID = 0, int $branchID = 0, int $build = 0, string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', object $pager = null): array
+    public function getProjectBugs(int $projectID, int $productID = 0, int|string $branchID = 0, int $build = 0, string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', object $pager = null): array
     {
         if(strpos($orderBy, 'pri_') !== false)      $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
         $type = strtolower($type);
+
         if($type == 'bysearch')
         {
-            if($this->session->projectBugQuery === false) $this->session->set('projectBugQuery', ' 1 = 1');
-
-            $queryID = (int)$param;
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('projectBugQuery', $query->sql);
-                    $this->session->set('projectBugForm', $query->form);
-                }
-            }
-
-            $bugQuery = $this->getBugQuery($this->session->projectBugQuery);
-
-            $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
-                ->where($bugQuery)
-                ->andWhere('project')->eq((int)$projectID)
-                ->andWhere('deleted')->eq(0)
-                ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
-                ->beginIF(!empty($productID) && strpos($bugQuery, 'product') === false && strpos($bugQuery, '`product` IN') === false)->andWhere('product')->eq($productID)->fi()
-                ->beginIF(!empty($productID) && strpos($bugQuery, 'product') === false && strpos($bugQuery, '`product` IN') === false && $branchID != 'all')->andWhere('branch')->eq($branchID)->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
+            $bugs = $this->bugTao->getBySearch('project', $productIID, $branchID, $projectID = 0, (int)$param, $excludeBugs, $orderBy, $pager);
         }
         else
         {
-            $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
+            $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
                 ->where('t1.deleted')->eq(0)
                 ->beginIF(empty($build))->andWhere('t1.project')->eq($projectID)->fi()
