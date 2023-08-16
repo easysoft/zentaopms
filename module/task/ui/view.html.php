@@ -89,6 +89,33 @@ if($task->team)
     }
 }
 
+/* Set the module name of the task. */
+$moduleTitle = '';
+$moduleItems = array();
+if(empty($modulePath))
+{
+    $moduleTitle .= '/';
+    $moduleItems[] = span('/');
+}
+else
+{
+    if($product)
+    {
+        $moduleTitle   .= $product->name  . '/';
+        $moduleItems[]  = span($product->name) . icon('angle-right');
+    }
+   foreach($modulePath as $key => $module)
+   {
+       $moduleTitle   .= $module->name;
+       $moduleItems[]  = a(set::href(createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id")), $module->name) ?? span($module->name);
+       if(isset($modulePath[$key + 1]))
+       {
+           $moduleTitle   .= '/';
+           $moduleItems[]  = icon('angle-right');
+       }
+   }
+}
+
 detailBody
 (
     sectionList
@@ -179,12 +206,19 @@ detailBody
                     item
                     (
                         set::name($lang->task->execution),
-                        $execution->name
+                        a
+                        (
+                            set('data-toggle', 'modal'),
+                            set('data-size', 'lg'),
+                            set::href(createLink('execution', 'view', "executionID=$execution->id")),
+                            $execution->name
+                        )
                     ),
                     item
                     (
                         set::name($lang->task->module),
-                        ''
+                        set::title($moduleTitle),
+                        $moduleItems
                     ),
                     item
                     (
