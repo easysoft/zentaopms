@@ -820,8 +820,9 @@ class baseHelper
      */
     public static function setcookie(string $name, string $value = '', int $expire = null, string $path = null, string $domain = '', bool $secure = null, bool $httponly = true)
     {
-        global $config, $app;
+        if(defined('RUN_MODE') && RUN_MODE == 'test') return;
 
+        global $config, $app;
         if($expire === null) $expire = $config->cookieLife;
         if($path   === null) $path   = $config->webRoot;
         if($secure === null) $secure = $config->cookieSecure;
