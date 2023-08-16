@@ -24,8 +24,23 @@ detailHeader
         (
             set
             (
-                array('entityID' => $task->id, 'level' => 1, 'text' => $task->name)
-            )
+                array
+                (
+                    'entityID' => $task->id,
+                    'level' => 1,
+                )
+            ),
+            $task->parent ?
+            span
+            (
+                setClass('text'),
+                set::title($task->name),
+                span(setClass('label gray-pale rounded-xl'), $lang->task->childrenAB),
+                a(set::href(createLink('task', 'view', "taskID={$task->parent}")), $task->parentName),
+                span('/'),
+                $task->name
+            ) : $task->name
+
         )
     ),
     !isAjaxRequest('modal') && common::hasPriv('task', 'create') ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
