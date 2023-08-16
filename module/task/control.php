@@ -334,7 +334,7 @@ class task extends control
         $execution = $this->view->execution ?? $this->execution->getById($task->execution);
         if(!helper::isAjaxRequest('modal') and $execution->type == 'kanban')
         {
-            helper::setcookie('taskToOpen', $taskID);
+            helper::setcookie('taskToOpen', (string)$taskID);
             return $this->send(array('load' => $this->createLink('execution', 'kanban', "executionID=$execution->id")));
         }
 
