@@ -616,8 +616,9 @@ class zanodemodel extends model
             ->page($pager)
             ->fetchAll();
 
-        $hostIDList = array_column($list, 'parent');
-        $hosts      = $this->dao->select('id,status,heartbeat')->from(TABLE_ZAHOST)
+        $hostIDList = array();
+        foreach($list as $l) $hostIDList[] = $l->parent;
+        $hosts = $this->dao->select('id,status,heartbeat')->from(TABLE_ZAHOST)
             ->where('id')->in(array_unique($hostIDList))
             ->fetchAll('id');
 
