@@ -83,7 +83,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
     <div class="table-header fixed-right">
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
-    <div id="myTable"></div>
+    <div id="dtable"></div>
     <div class='table-footer'>
       <div class="table-actions btn-toolbar">
         <?php
@@ -143,7 +143,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
 
   function renderSparkline()
   {
-      $('#myTable .dtable-rows .sparkline.pending').removeClass('pending').sparkline();
+      $('#dtable .dtable-rows .sparkline.pending').removeClass('pending').sparkline();
   }
 
   function tryRenderSparkline()
@@ -180,7 +180,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
       $.cookie('checkedItem', checkItems.join(','), {expires: config.cookieLife, path: config.webRoot});
   }
 
-  $('#myTable').dtable(options);
+  $('#dtable').dtable(options);
 
   $('#batchEditBtn').click(function()
   {
