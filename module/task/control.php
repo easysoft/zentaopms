@@ -733,7 +733,7 @@ class task extends control
             /* Get the information returned after a task is started. */
             $from     = zget($output, 'from');
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);
-            $this->send($response);
+            return $this->send($response);
         }
 
         $this->view->title = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
