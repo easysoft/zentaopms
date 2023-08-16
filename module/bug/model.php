@@ -1041,10 +1041,12 @@ class bugModel extends model
      */
     public function getProductLeftBugs(array $buildIdList, int $productID, int|string $branch = '', string $linkedBugs = '', object $pager = null): array|null
     {
+        /* 获取版本关联的执行。 */
         /* Get executions of builds. */
         $executionIdList = $this->getLinkedExecutionByIdList($buildIdList);
         if(empty($executionIdList)) return array();
 
+        /* 获取执行的最小开始时间和最大结束时间。 */
         /* Get min begin date and max end date. */
         $minBegin   = '1970-00-00';
         $maxEnd     = '1970-00-00';
@@ -1055,7 +1057,8 @@ class bugModel extends model
             if(empty($maxEnd)   || $maxEnd   < $execution->end)   $maxEnd   = $execution->end;
         }
 
-        /* Get builds before min begin date. */
+        /* 获取在最小开始日期之前 未完成的版本id。 */
+        /* Get undone builds before min begin date. */
         $beforeBuilds = $this->dao->select('t1.id')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
             ->where('t1.product')->eq($productID)
@@ -1065,6 +1068,7 @@ class bugModel extends model
             ->andWhere('t1.date')->lt($minBegin)
             ->fetchPairs('id', 'id');
 
+        /* 返回在执行最小开始和最大结束时间内的未关联版本的bugs。 */
         /* Return bugs that unrelate builds in the execution timeframe. */
         return $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
@@ -1090,7 +1094,8 @@ class bugModel extends model
      */
     public function getProductBugPairs(int $productID, int|string $branch = ''): array
     {
-        $bugs = array();
+        /* 获取产品的bugs。 */
+        /* Get product bugs. */
         $data = $this->dao->select('id, title')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
@@ -1098,6 +1103,9 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll();
+        /* 将bugs转为bug键对。 */
+        /* Convert bugs to bug pairs. */
+        $bugs = array();
         foreach($data as $bug) $bugs[$bug->id] = $bug->id . ':' . $bug->title;
         return $bugs;
     }
@@ -1115,9 +1123,11 @@ class bugModel extends model
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
+        /* 获取产品关联的项目。 */
         /* Get related projects of product. */
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branchID);
 
+        /* 获取项目的团队成员。 */
         /* Get team members of projects. */
         return $this->loadModel('user')->getTeamMemberPairs(array_keys($projects));
     }
