@@ -3,20 +3,20 @@ author: Zhu Jinyong
 version: "1.0"
 fields:
   - field: id
-    range: 11-100
+    range: 1-100
   - field: project
-    range: 1-10
+    range: 0{10},1-10{100!}
   - field: model
-    range: scrum{30},waterfall{30},kanban{30}
+    range: "[]{10},scrum{30},waterfall{30},kanban{30}"
   - field: name
     note: "名称"
     fields:
     - field: name1
-      range: '项目'
+      range: '项目集{10},项目{100}'
     - field: name2
       range: 1-10000
   - field: type
-    range: project
+    range: program{10},project{100}
   - field: status
     range: wait{2},doing{4},suspended,closed
   - field: lifetime
@@ -40,7 +40,7 @@ fields:
     note: "Only project has auth"
     range: "extend"
   - field: parent
-    range: 1-10
+    range: 0{10},1-10{100!}
   - field: path
     fields:
       - field: path1
@@ -48,13 +48,13 @@ fields:
         range: 1-10
       - field: path2
         prefix: ","
-        range: 11-100
+        range: "[]{10},11-100"
         postfix: ","
   - field: grade
     range: "2"
   - field: code
-    range: 1-10000
-    prefix: "project"
+    range: 1-10,1-10000
+    prefix: "program{10},project{100}"
   - field: begin
     range: "(-3M)-(+M):1D"
     type: timestamp
