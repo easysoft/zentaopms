@@ -1098,9 +1098,10 @@ class actionModel extends model
         if(!$this->app->user->admin)
         {
             $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-            if($productID == 'all')   $grantedProducts   = !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
-            if($projectID == 'all')   $grantedProjects   = !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
-            if($executionID == 'all') $grantedExecutions = !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
+            if($productID == 'all')   $grantedProducts   = empty($aclViews) || !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
+            if($projectID == 'all')   $grantedProjects   = empty($aclViews) || !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
+            if($executionID == 'all') $grantedExecutions = empty($aclViews) || !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
+            if(empty($grantedProducts)) $grantedProducts = '0';
 
             if($productID == 'all' and $projectID == 'all')
             {
