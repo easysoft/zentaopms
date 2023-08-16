@@ -1211,6 +1211,7 @@ class bugModel extends model
     }
 
     /**
+     * 获取需求产生的bugs。
      * Get bugs of a story.
      *
      * @param  int    $storyID
@@ -1218,11 +1219,13 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getStoryBugs($storyID, $executionID = 0)
+    public function getStoryBugs(int $storyID, int $executionID = 0): array|null
     {
+        /* 获取需求产生的bugs。 */
+        /* Get bugs of the story. */
         return $this->dao->select('id, title, pri, type, status, assignedTo, resolvedBy, resolution')
             ->from(TABLE_BUG)
-            ->where('story')->eq((int)$storyID)
+            ->where('story')->eq($storyID)
             ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
