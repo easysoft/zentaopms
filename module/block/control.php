@@ -25,6 +25,98 @@ class block extends control
     }
 
     /**
+     * 展示当前仪表盘下的区块列表。
+     * Display blocks for dashboard.
+     *
+     * @param  string $dashboard
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function dashboard(string $dashboard, int $projectID = 0)
+    {
+        /* 获取传入应用对应的区块列表 以及 获取当前应用下区块启用状态。 */
+        $blocks      = $this->block->getMyDashboard($dashboard);
+        $isInitiated = $this->block->getBlockInitStatus($dashboard);
+
+        /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式。 */
+        if(empty($blocks) && !$isInitiated && !commonModel::isTutorialMode())
+        {
+            $this->block->initBlock($dashboard);                // 初始化该 app 下区块数据。
+            $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表。
+        }
+
+        /* 处理页面需要的数据格式。 */
+        $blocks = $this->blockZen->processBlockForRender($blocks, $projectID);
+
+        /* 如果页面渲染方式为 json 的话，直接返回 json 格式数据 ，主要是为了给应用提供数据。 */
+        if($this->app->getViewType() == 'json') return print(json_encode($blocks));
+
+        /* 为项目仪表盘页面，设置1.5级导航的项目ID. */
+        if($this->app->rawModule == 'project' && $this->app->rawMethod == 'index') $this->view->projectID = $this->session->project;
+        if(($this->app->rawModule == 'qa' && $this->app->rawMethod == 'index') || ($this->app->rawModule == 'product' && $this->app->rawMethod == 'dashboard')) $this->view->productID = $this->session->product;
+
+        $this->view->title     = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
+        $this->view->blocks    = $blocks;
+        $this->view->dashboard = $dashboard;
+        $this->display();
+    }
+
+    /**
+     * 输出一个区块信息。
+     * Print a block.
+     *
+     * @param  int    $blockID
+     * @param  string $params
+     * @access public
+     * @return void
+     */
+    public function printBlock(int $blockID, string $params = '')
+    {
+        $block = $this->block->getByID($blockID);
+
+        /* 如果是外部调用，判断密码并组织外部需要的返回信息。  */
+        if($this->blockZen->isExternalCall())
+        {
+            if(!$this->block->checkAPI($this->get->hash)) return;
+            $this->blockZen->organizaExternalData($block); // 组织外部需要返回的信息。
+        }
+
+        if(empty($block)) return '';
+
+        if($params)
+        {
+            $params = helper::safe64Decode($params);
+            parse_str($params, $params);
+        }
+
+        /* 根据 block 的 code 值，选择性调用 zen 中 print + $code + Block 方法获取区块数据。 */
+        if(isset($block->params->num) && !isset($block->params->count)) $block->params->count = $block->params->num;
+
+        $code = $block->code;
+        if($code == 'statistic' || $code == 'list' || $code == 'overview' || $code == 'team') $code = $block->module . ucfirst($code);
+
+        $function = 'print' . ucfirst($code) . 'Block';
+        if(method_exists('blockZen', $function)) $this->blockZen->$function($block, (array)$params);
+
+        /* 补全 moreLink 信息。 */
+        $projectID = isset($params['projectID']) ? $params['projectID'] : 0;
+        $this->blockZen->createMoreLink($block, (int)$projectID);
+
+        /* 组织渲染页面需要的数据。*/
+        $this->view->moreLink       = $block->moreLink;
+        $this->view->block          = $block;
+        $this->view->longBlock      = $block->width >= 2;
+        $this->view->isExternalCall = $this->blockZen->isExternalCall();
+
+        /* 根据 viewType 值 ，判断是否需要返回 json 数据。 */
+        $viewType = (isset($block->params->viewType) && $block->params->viewType == 'json') ? 'json' : 'html';
+        if($viewType == 'json') return $this->blockZen->printBlock4Json();
+
+        $this->display('block', strtolower($code) . 'block');
+    }
+
+    /**
      * 创建区块。
      * Create a block under a dashboard.
      *
@@ -96,7 +188,7 @@ class block extends control
      * 编辑区块。
      * Edit a block.
      *
-     * @param  string $dashboard
+     * @param  int    $blockID
      * @param  string $module
      * @param  string $code
      * @access public
@@ -151,7 +243,7 @@ class block extends control
         $this->view->module       = $module;
         $this->view->modules      = $this->blockZen->getAvailableModules($block->dashboard);
         $this->view->codes        = $codes;
-        $this->view->code         = in_array($code, array_keys($codes)) ? $code : ''; //当变更了所属模块(module)后, 判断当前code在是否还包含在codes中，没有的话置空code。
+        $this->view->code         = in_array($code, array_keys($codes)) ? $code : ''; // 当变更了所属模块(module)后, 判断当前code在是否还包含在codes中，没有的话置空code。
         $this->view->params       = $params;
         $this->view->widthOptions = $widthOptions;
         $this->view->blockTitle   = $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
@@ -162,35 +254,17 @@ class block extends control
      * 根据区块ID删除一个区块。
      * Delete a block by id.
      *
-     * @param  string $blockID
+     * @param  int    $blockID
      * @access public
      * @return void
      */
-    public function delete(string $blockID)
+    public function delete(int $blockID)
     {
-        $blockID = (int)$blockID;
+        /* 执行区块的数据删除并且返回数据给view层。 */
         $this->block->deleteBlock($blockID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $this->loadModel('score')->create('block', 'set'); // 设置区块后的积分奖励操作。
 
-        $this->loadModel('score')->create('block', 'set');
-        return $this->send(array('result' => 'success'));
-    }
-
-    /**
-     * 重新构建区块的布局。
-     * build the layout of blocks.
-     *
-     * @access public
-     * @return void
-     */
-    public function buildLayout()
-    {
-        $orders = explode(',', $orders);
-        foreach($orders as $order => $blockID) $this->block->setOrder($blockID, $order);
-
-        if(dao::isError()) return $this->send(array('result' => 'fail'));
-
-        $this->loadModel('score')->create('block', 'set');
         return $this->send(array('result' => 'success'));
     }
 
@@ -198,27 +272,27 @@ class block extends control
      * 永久关闭区块。
      * Close block forever.
      *
-     * @param  string $blockID
+     * @param  int    $blockID
      * @access public
      * @return void
      */
-    public function close(string $blockID)
+    public function close(int $blockID)
     {
-        $blockID = (int)$blockID; // 强制转换为 int 类型，防止调用 model、tao 方法时报错。
-
-        /* 永久关闭区块。 */
+        /* 所有配置过该区块的人都要删掉此区块，所以要按照module和code来删除, 不能用ID来删。 */
         $block = $this->block->getByID($blockID);
         $this->block->deleteBlock(0, $block->module, $block->code);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        /* 将关闭的区块保存到配置信息。 */
+        /* 将关闭的区块保存到配置信息以便恢复时使用。 */
         $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
         $this->loadModel('setting')->setItem('system.block.closed', $closedBlock . ",{$block->module}|{$block->code}");
+
         return $this->send(array('result' => 'success'));
     }
 
     /**
-     * 将当前仪表盘下的区块恢复默认。
-     * Reset dashboard blocks.
+     * 将当前用户该仪表盘下的区块恢复默认布局。
+     * Reset dashboard layout.
      *
      * @param  string $dashboard
      * @access public
@@ -226,106 +300,10 @@ class block extends control
      */
     public function reset(string $dashboard)
     {
+        /* 执行恢复布局并且返回数据给view层。 */
         $this->block->reset($dashboard);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success'));
-    }
-
-    /**
-     * 展示当前仪表盘下的区块列表。
-     * Display blocks for dashboard.
-     *
-     * @param  string $dashboard
-     * @param  string $projectID
-     * @access public
-     * @return void
-     */
-    public function dashboard(string $dashboard, string $projectID = '0')
-    {
-        $projectID = (int)$projectID; // 强制转换为 int 类型，防止调用 model、tao 方法时报错。
-
-        /* 获取传入应用对应的区块列表 以及 获取当前应用下区块启用状态。 */
-        $blocks      = $this->block->getMyDashboard($dashboard);
-        $isInitiated = $this->block->getBlockInitStatus($dashboard);
-
-        /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式。 */
-        if(empty($blocks) && !$isInitiated && !commonModel::isTutorialMode())
-        {
-            $this->block->initBlock($dashboard); // 初始化该 app 下区块数据。
-            $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表。
-        }
-
-        /* 处理页面需要的数据格式。 */
-        $blocks = $this->blockZen->processBlockForRender($blocks, $projectID);
-
-        /* 如果页面渲染方式为 json 的话，直接返回 json 格式数据 ，主要是为了给应用提供数据。 */
-        if($this->app->getViewType() == 'json') return print(json_encode($blocks));
-
-        /* 为项目仪表盘页面，设置1.5级导航的项目ID. */
-        if($this->app->rawModule == 'project' && $this->app->rawMethod == 'index') $this->view->projectID = $this->session->project;
-        if(($this->app->rawModule == 'qa' && $this->app->rawMethod == 'index') ||
-         ($this->app->rawModule == 'product' && $this->app->rawMethod == 'dashboard')) $this->view->productID = $this->session->product;
-
-        /* 组织渲染页面需要数据。 */
-        $this->view->title     = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
-        $this->view->blocks    = $blocks;
-        $this->view->dashboard = $dashboard;
-        $this->render();
-    }
-
-    /**
-     * 输出一个区块信息。
-     * Print a block.
-     *
-     * @param  int    $blockID
-     * @param  string $params
-     * @access public
-     * @return string
-     */
-    public function printBlock(int $blockID, string $params = '')
-    {
-        $block = $this->block->getByID($blockID);
-
-        /* 如果是外部调用，判断密码并组织外部需要的返回信息。  */
-        if($this->blockZen->isExternalCall())
-        {
-            if(!$this->block->checkAPI($this->get->hash)) return;
-            $this->blockZen->organizaExternalData($block); // 组织外部需要返回的信息。
-        }
-
-        if(empty($block)) return '';
-
-        if($params)
-        {
-            $params = helper::safe64Decode($params);
-            parse_str($params, $params);
-        }
-
-        /* 根据 block 的 code 值，选择性调用 zen 中 print + $code + Block 方法获取区块数据。 */
-        if(isset($block->params->num) && !isset($block->params->count)) $block->params->count = $block->params->num;
-
-        $code = $block->code;
-        if($code == 'statistic' || $code == 'list' || $code == 'overview' || $code == 'team') $code = $block->module . ucfirst($code);
-
-        $function = 'print' . ucfirst($code) . 'Block';
-        if(method_exists('blockZen', $function)) $this->blockZen->$function($block, (array)$params);
-
-        /* 补全 moreLink 信息。 */
-        $projectID = isset($params['projectID']) ? $params['projectID'] : 0;
-        $this->blockZen->createMoreLink($block, (int)$projectID);
-
-        /* 组织渲染页面需要的数据。*/
-        $this->view->moreLink       = $block->moreLink;
-        $this->view->title          = $block->title;
-        $this->view->block          = $block;
-        $this->view->longBlock      = $block->width >= 2;
-        $this->view->isExternalCall = $this->blockZen->isExternalCall();
-
-        /* 根据 viewType 值 ，判断是否需要返回 json 数据。 */
-        $viewType = (isset($block->params->viewType) && $block->params->viewType == 'json') ? 'json' : 'html';
-        if($viewType == 'json') return $this->blockZen->printBlock4Json();
-
-        $this->display('block', strtolower($code) . 'block');
     }
 }
