@@ -26,6 +26,7 @@ window.renderRowData = function($row, index, row)
             let bugModules = modules[row.product][row.branch];
             let $module    = info[0];
             $module.render({items: bugModules});
+            $module.$.setValue(row.module);
         });
     }
 
