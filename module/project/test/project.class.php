@@ -112,13 +112,12 @@ class Project
      *
      * @param  object $project
      * @param  object $oldProject
-     * @param  string $uid
      * @access public
      * @return void
      */
-    public function update(object $project, object $oldProject, string $uid)
+    public function update(object $project, object $oldProject)
     {
-        $this->project->update($project, $oldProject, $uid);
+        $this->project->update($project, $oldProject);
 
         if(dao::isError()) return array('message' => dao::getError());
 

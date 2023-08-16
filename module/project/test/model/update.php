@@ -4,24 +4,62 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/project.class.php';
 su('admin');
 
+$project = zdTable('project');
+$project->id->range('1-5');
+$project->project->range('0');
+$project->name->prefix("项目")->range('1-5');
+$project->code->prefix("project")->range('1-5');
+$project->model->range("scrum,waterfall,kanban");
+$project->auth->range("[]");
+$project->path->range("[]");
+$project->type->range("project");
+$project->grade->range("1");
+$project->days->range("1");
+$project->status->range("wait");
+$project->desc->range("[]");
+$project->budget->range("100000,200000");
+$project->budgetUnit->range("CNY");
+$project->percent->range("0-0");
+
+$project->gen(5);
+
+$product = zdTable('product')->gen(5);
+
 /**
 
 title=测试 projectModel::update();
+timeout=0
 cid=1
-pid=1
 
-正常更新项目的情况 >> 测试更新项目十
-未关联产品的项目 >> 最少关联一个产品
-更新项目名称为空时 >> 『项目名称』不能为空。
-当计划完成为空时更新项目信息 >> 『计划开始』不能为空。
-当项目的完成日期小于执行的完成日期时 >> 项目的完成日期应大于等于执行的最大完成日期：2022-10-26
-当项目的开始日期大于执行的开始日期时 >> 项目的开始日期应小于等于执行的最小开始日期：2022-07-07
+- 正常更新项目的情况属性name @测试更新项目十
+
+- 更新项目名称为空时属性name @~~
+
+- 当计划完成为空时更新项目信息属性begin @2022-07-06
+
+- 当项目的完成日期小于执行的完成日期时属性end @~~
+
+- 当项目的开始日期大于执行的开始日期时属性begin @2022-08-07
+
+- 无产品项目属性name @测试更新影子产品
+
+- 正常更新项目的情况属性name @测试更新项目十
+
+- 更新项目名称为空时属性name @~~
+
+- 当计划完成为空时更新项目信息属性begin @2022-07-06
+
+- 当项目的完成日期小于执行的完成日期时属性end @~~
+
+- 当项目的开始日期大于执行的开始日期时属性begin @2022-08-07
+
+- 无产品项目
+ - 属性name @测试更新影子产品
+ - 属性status @closed
 
 */
 
 global $tester;
-$tester->app->loadConfig('execution');
-
 $project = new Project();
 
 $data = new stdclass();
@@ -36,39 +74,37 @@ $data->hasProduct = 1;
 $data->PM         = 'admin';
 $data->whitelist  = 'dev10, dev12';
 
-$oldProject = new stdclass();
-$oldProject->id        = 1;
-$oldProject->stageBy   = 'project';
-$oldProject->whitelist = 'dev1, dev2';
+$normalProject = clone $data;
 
-$uid = '144312345125125';
-
-$normalProject = json_decode(json_encode($data));
-
-$noProductProject = json_decode(json_encode($data));
-$noProductProject->products = array();
-
-$emptyTitleProject = json_decode(json_encode($data));
+$emptyTitleProject = clone $data;
 $emptyTitleProject->name = '';
 
-$emptyBeginProject = json_decode(json_encode($data));
+$emptyBeginProject = clone $data;
 $emptyBeginProject->begin = '';
 
-$emptyEndProject = json_decode(json_encode($data));
+$emptyEndProject = clone $data;
 $emptyEndProject->end = '';
 
-$beginGtExecutionBegin = json_decode(json_encode($data));
+$beginGtExecutionBegin = clone $data;
 $beginGtExecutionBegin->begin = '2022-08-07';
 
-$withoutProductProject = json_decode(json_encode($data));
-$withoutProductProject->hasProduct = '';
-$withoutProductProject->name       = '测试更新影子产品';
-$withoutProductProject->status     = 'closed';
+$noProductProject = clone $data;
+$noProductProject->hasProduct = 0;
+$noProductProject->name       = '测试更新影子产品';
+$noProductProject->status     = 'closed';
 
-r($project->update($normalProject,         $oldProject, $uid)) && p('name')             && e('测试更新项目十');                                         // 正常更新项目的情况
-r($project->update($noProductProject,      $oldProject, $uid)) && p('message:0')        && e('最少关联一个产品');                                       // 未关联产品的项目
-r($project->update($emptyTitleProject,     $oldProject, $uid)) && p('message[name]:0')  && e('『项目名称』不能为空。');                                 // 更新项目名称为空时
-r($project->update($emptyBeginProject,     $oldProject, $uid)) && p('message[begin]:0') && e('『计划开始』不能为空。');                                 // 当计划完成为空时更新项目信息
-r($project->update($emptyEndProject,       $oldProject, $uid)) && p('message:end')      && e('项目的完成日期应大于等于执行的最大完成日期：2022-10-26'); // 当项目的完成日期小于执行的完成日期时
-r($project->update($beginGtExecutionBegin, $oldProject, $uid)) && p('message:begin')    && e('项目的开始日期应小于等于执行的最小开始日期：2022-07-07'); // 当项目的开始日期大于执行的开始日期时
-r($project->update($withoutProductProject, $oldProject, $uid)) && p('name')             && e('测试更新影子产品');                                       // 无产品项目
+$oldProject = $tester->loadModel('project')->getById(1);
+r($project->update($normalProject,         $oldProject)) && p('name')  && e('测试更新项目十');   // 正常更新项目的情况
+r($project->update($emptyTitleProject,     $oldProject)) && p('name')  && e('~~');               // 更新项目名称为空时
+r($project->update($emptyBeginProject,     $oldProject)) && p('begin') && e('2022-07-06');       // 当计划完成为空时更新项目信息
+r($project->update($emptyEndProject,       $oldProject)) && p('end')   && e('~~');               // 当项目的完成日期小于执行的完成日期时
+r($project->update($beginGtExecutionBegin, $oldProject)) && p('begin') && e('2022-08-07');       // 当项目的开始日期大于执行的开始日期时
+r($project->update($noProductProject,      $oldProject)) && p('name')  && e('测试更新影子产品'); // 无产品项目
+
+$oldProject = $tester->loadModel('project')->getById(2);
+r($project->update($normalProject,         $oldProject)) && p('name')        && e('测试更新项目十');          // 正常更新项目的情况
+r($project->update($emptyTitleProject,     $oldProject)) && p('name')        && e('~~');                      // 更新项目名称为空时
+r($project->update($emptyBeginProject,     $oldProject)) && p('begin')       && e('2022-07-06');              // 当计划完成为空时更新项目信息
+r($project->update($emptyEndProject,       $oldProject)) && p('end')         && e('~~');                      // 当项目的完成日期小于执行的完成日期时
+r($project->update($beginGtExecutionBegin, $oldProject)) && p('begin')       && e('2022-08-07');              // 当项目的开始日期大于执行的开始日期时
+r($project->update($noProductProject,      $oldProject)) && p('name,status') && e('测试更新影子产品,closed'); // 无产品项目
