@@ -1439,7 +1439,10 @@ class productModel extends model
             ->fetchAll('id');
 
         /* Only show leaf executions. */
-        $allExecutions = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)->where('type')->notin(array('program', 'project'))->fetchAll('id');
+        $allExecutions = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)
+            ->where('type')->notin(array('program', 'project'))
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
         $parents = array();
         foreach($allExecutions as $exec) $parents[$exec->parent] = true;
 
