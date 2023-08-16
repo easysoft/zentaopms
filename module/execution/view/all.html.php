@@ -138,18 +138,18 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
               return [{html: '<span class="sparkline pending text-left no-padding" values="' + info.row.data.burns.join(',') + '"></span>'}];
           }
           return result;
-      }
+      },
   };
 
   function renderSparkline()
   {
-      $('#dtable .dtable-rows .sparkline.pending').removeClass('pending').sparkline();
+      $('#dtable .sparkline.pending').removeClass('pending').sparkline();
   }
 
   function tryRenderSparkline()
   {
       if(window.renderingSparkline) clearTimeout(window.renderingSparkline);
-      window.renderingSparkline = setTimeout(renderSparkline, 200);
+      window.renderingSparkline = setTimeout(renderSparkline, 500);
   }
 
   function createSortLink(col)
