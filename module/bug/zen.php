@@ -1991,7 +1991,7 @@ class bugZen extends bug
      * @access protected
      * @return bool
      */
-    protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0, string $message = ''): bool
+    protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0, string $message = ''): bool|int
     {
         if(!$message) $message = $this->lang->saveSuccess;
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => $message, 'data' => $bugID));
