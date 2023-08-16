@@ -53,15 +53,15 @@ toolbar
             'data-type' => 'bycard'
         ))
     ))),
-    item(set(array
+    hasPriv('project', 'export') ? item(set(array
     (
         'icon'        => 'export',
         'text'        => $lang->project->export,
         'class'       => 'ghost export',
         'url'         => createLink('project', 'export', "status={$status}&orderBy={$orderBy}"),
         'data-toggle' => 'modal'
-    ))),
-    item(set(array
+    ))) : null,
+    hasPriv('project', 'createGuide') ? item(set(array
     (
         'icon'          => 'plus',
         'text'          => $lang->project->create,
@@ -69,7 +69,7 @@ toolbar
         'url'           => createLink('project', 'createGuide'),
         'data-toggle'   => 'modal',
         'data-position' => 'center'
-    )))
+    ))) : null
 );
 
 $projectCards = null;
@@ -104,9 +104,11 @@ if(!empty($projectStats))
                     (
                         setClass('avatar circle size-sm'),
                         set::title($users[$member]),
-                        img
+                        avatar
                         (
-                            set('src', $usersAvatar[$member]),
+                            set::size('sm'),
+                            set::text($users[$member]),
+                            set::src(zget($usersAvatar, $member, '')),
                         ),
                     );
                 $count ++;
@@ -255,9 +257,11 @@ if(!empty($projectStats))
                                     (
                                         setClass('avatar size-sm circle'),
                                         set::title($users[$lastMember]),
-                                        img
+                                        avatar
                                         (
-                                            set('src', $usersAvatar[$lastMember]),
+                                            set::size('sm'),
+                                            set::text($users[$lastMember]),
+                                            set::src(zget($usersAvatar, $lastMember, '')),
                                         ),
                                     ) : null,
                                     a
@@ -305,7 +309,7 @@ div
             setClass('text-gray'),
             $lang->project->empty
         ),
-        btn(set(array
+        hasPriv('project', 'createGuide') ? btn(set(array
         (
             'icon'          => 'plus',
             'text'          => $lang->project->create,
@@ -313,7 +317,7 @@ div
             'url'           => createLink('project', 'createGuide'),
             'data-toggle'   => 'modal',
             'data-position' => 'center'
-        )))
+        ))) : null
     ) : $projectCards,
     !empty($projectStats) ? div
     (
