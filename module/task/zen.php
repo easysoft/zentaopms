@@ -536,6 +536,7 @@ class taskZen extends task
         $team      = $this->post->team ? array_filter($this->post->team) : array();
         $task      = form::data()->setDefault('execution', $executionID)
             ->setDefault('project', $execution->project)
+            ->setDefault('left', 0)
             ->setIF($this->post->estimate, 'left', $this->post->estimate)
             ->setIF($this->post->mode, 'mode', $this->post->mode)
             ->setIF($this->post->story, 'storyVersion', isset($this->post->story) ? $this->loadModel('story')->getVersion($this->post->story) : 0)
