@@ -890,7 +890,7 @@ class screenModel extends model
                 $component->option->value = $this->filter->month;
 
                 $options = array();
-                for($month = 12; $month > 1; $month--) $options[] = array('label' => $month, 'value' => $month);
+                for($month = 12; $month >= 1; $month--) $options[] = array('label' => $month, 'value' => $month);
                 $component->option->dataset = $options;
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=" . $this->filter->year . "&month=' + value + '&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
