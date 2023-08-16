@@ -68,7 +68,9 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               </div>
             </td>
             <?php endif;?>
+            <?php if($this->app->tab != 'project'):?>
             <td class='w-60px <?php if((!$branches and $type == 'story') or $type == 'requirement') echo "hidden"; ?> switchBranch'></td>
+            <?php endif;?>
             <td colspan="2" class='<?php if($branches and $type == 'story') echo "hidden"; ?> switchBranch'>
             <div class='input-group' id='moduleIdBox'>
               <?php if(!$hiddenProduct):?>
@@ -90,8 +92,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           </tr>
           <?php $hiddenSource = strpos(",$showFields,", ',source,') !== false ? '' : 'hidden';?>
           <?php if($type == 'story'):?>
-          <?php if($branches):?>
-          <tr class='switchBranch' >
+          <tr class='<?php if(!$branches) echo 'hidden'; ?> switchBranch' >
             <th><?php echo $lang->product->branchName[$product->type];?></th>
             <td colspan="4">
               <div class='input-group' style='display: flex;'>
@@ -125,7 +126,6 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
             <?php endif;?>
           </tr>
-          <?php endif;?>
           <tr class='hidden' >
             <th></th>
             <td colspan="4" id="storyNoticeBranch">

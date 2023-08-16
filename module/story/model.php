@@ -265,7 +265,7 @@ class storyModel extends model
         if($product->type == 'normal' or $product->type == 'branch' or $story->type == 'requirement')
         {
             if(!$this->post->branches) $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
-            if(!$this->post->modules)  $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
+            if(!$this->post->modules or $product->type == 'normal')  $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
             $this->post->plans    = isset($story->plan) ? array($story->plan) : array(0 => 0);
         }
 

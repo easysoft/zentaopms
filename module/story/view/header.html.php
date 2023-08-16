@@ -100,6 +100,16 @@ function loadProductBranches(productID)
         if(storyType == 'story' && page == 'create')
         {
             var newProductType = data ? 'normal' : 'branch';
+
+            if(newProductType == 'normal')
+            {
+                $('.table-form tr:first').append($('#assignedToBox'));
+            }
+            else
+            {
+                $('.sourceBox').prev('tr').append($('#assignedToBox'));
+            }
+
             if(originProductType != newProductType)
             {
                 $('.switchBranch').toggleClass('hidden');
