@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $statusMap  = array();
-$canInstall = hasPriv('instance', 'create');
+$canInstall = hasPriv('instance', 'install');
 
 foreach($instances as $instance) if(!$instance->externalID) $statusMap[$instance->id] = $instance->status;
 jsVar('statusMap', $statusMap);

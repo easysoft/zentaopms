@@ -402,7 +402,7 @@ class hostModel extends model
     public static function isClickable($host, $action)
     {
         if(!$host->id)                                return false;
-        if (!common::hasPriv('host', 'changeStatus')) return false;
+        if (in_array($action, array('online', 'offline')) && !common::hasPriv('host', 'changeStatus')) return false;
 
         if($host->status == 'online'  && $action == 'online')  return false;
         if($host->status == 'offline' && $action == 'offline') return false;

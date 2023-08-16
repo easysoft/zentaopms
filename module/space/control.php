@@ -108,7 +108,7 @@ class space extends control
      */
     public function createApplication($appID = 0)
     {
-        if(!commonModel::hasPriv('instance', 'create')) $this->loadModel('common')->deny('instance', 'create', false);
+        if(!commonModel::hasPriv('instance', 'install')) $this->loadModel('common')->deny('instance', 'install', false);
 
         $this->app->loadLang('sonarqube');
         $this->app->loadLang('jenkins');
