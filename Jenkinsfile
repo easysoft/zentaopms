@@ -681,6 +681,7 @@ pipeline {
                               sh 'bash build-zbox.sh en win $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
                               sh 'bash build-zbox.sh zh-cn win $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
                               sh 'tree ./release'
+                              sh 'find release/ -name "*.exe" | xargs chmod +r'
                             }
 
                             script {
@@ -697,7 +698,6 @@ pipeline {
                                 def SubGroup = entry.value[0]
                                 def Zversion = entry.value[1]
                                 
-
                                 nexusArtifactUploader(
                                   nexusVersion: 'nexus3',
                                   protocol: env.ARTIFACT_PROTOCOL,
@@ -709,11 +709,11 @@ pipeline {
                                   artifacts: [
                                     [artifactId: 'ZenTaoPMS',
                                      classifier: 'zbox.win64',
-                                     file: './release/zh-cn/' + Zversion + '/ZenTaoPMS-' + Zversion + '-zbox.win64.tar.gz',
+                                     file: './release/zh-cn/' + Zversion + '/ZenTaoPMS-' + Zversion + '-zbox.win64.exe',
                                      type: 'tar.gz'],
                                     [artifactId: 'ZenTaoALM',
                                      classifier: 'zbox.win64',
-                                     file: './release/en/' + Zversion + '/ZenTaoALM-' + Zversion + '-zbox.win64.tar.gz',
+                                     file: './release/en/' + Zversion + '/ZenTaoALM-' + Zversion + '-zbox.win64.exe',
                                      type: 'tar.gz']
                                   ]
                                 )
@@ -738,10 +738,10 @@ pipeline {
                             container('docker') {
                               sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
                               sh 'tree ./release'
-                              sh "mv `find release/zh-cn/$PMS_VERSION release/en/$PMS_VERSION -type f -name 'ZenTao*.tar.gz'` release/upload/$PMS_VERSION"
-                              sh "mv `find release/zh-cn/$BIZ_VERSION release/en/$BIZ_VERSION -type f -name 'ZenTao*.tar.gz'` release/upload/$BIZ_VERSION"
-                              sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*.tar.gz'` release/upload/$MAX_VERSION"
-                              sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*.tar.gz'` release/upload/$IPD_VERSION"
+                              sh "mv `find release/zh-cn/$PMS_VERSION release/en/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$PMS_VERSION"
+                              sh "mv `find release/zh-cn/$BIZ_VERSION release/en/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$BIZ_VERSION"
+                              sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$MAX_VERSION"
+                              sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$IPD_VERSION"
                             }
                             container('jnlp') {
                               sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
