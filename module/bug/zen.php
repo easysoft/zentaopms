@@ -1989,7 +1989,7 @@ class bugZen extends bug
      * @param  int       $regionID
      * @param  string    $message
      * @access protected
-     * @return bool
+     * @return bool|int
      */
     protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0, string $message = ''): bool|int
     {

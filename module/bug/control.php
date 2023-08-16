@@ -1361,9 +1361,9 @@ class bug extends control
      * @param  int     $productID
      * @param  int     $bugID
      * @access public
-     * @return array
+     * @return int
      */
-    public function ajaxGetProductBugs($productID, $bugID): array
+    public function ajaxGetProductBugs($productID, $bugID): int
     {
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
