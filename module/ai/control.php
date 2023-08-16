@@ -514,7 +514,7 @@ class ai extends control
 
         if($prompt->status == 'draft') $_SESSION['auditPrompt']['time'] = time();
 
-        echo js::locate($location, '$.apps.open');
+        echo js::start() . "const currentApp = parent.$.apps.getLastApp().code; parent.$.apps.open('$location'); if(currentApp != parent.$.apps.getLastApp().code) parent.$.apps.close(currentApp);" . js::end();
     }
 
     /**
