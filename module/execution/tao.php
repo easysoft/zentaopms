@@ -24,4 +24,41 @@ class executionTao extends executionModel
         $this->session->set('execution', $executionID, $this->app->tab);
         $this->setProjectSession($executionID);
     }
+
+    /**
+     * 获取执行团队成员数量。
+     * Get execution team member count.
+     *
+     * @param  array     $executionIdList
+     * @access protected
+     * @return void
+     */
+    protected function getMemberCountGroup(array $executionIdList): array
+    {
+        return $this->dao->select('t1.root,count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in($executionIdList)
+            ->andWhere('t1.type')->ne('project')
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
+            ->fetchAll('root');
+    }
+
+    /**
+     * 获取执行关联的产品信息。
+     * Get product information of the linked execution.
+     *
+     * @param  int       $projectID
+     * @access protected
+     * @return array
+     */
+    protected function getProductList(int $projectID): array
+    {
+        return $this->dao->select('t1.id,GROUP_CONCAT(product) as product,GROUP_CONCAT(t3.`name`) as productName')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+            ->leftjoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.type')->in('kanban,sprint,stage')
+            ->fetchAll('id');
+    }
 }

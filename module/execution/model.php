@@ -1821,49 +1821,83 @@ class executionModel extends model
     }
 
     /**
+     * 获取执行数据。
      * Get execution stat data.
-
-     * @param  int        $projectID
-     * @param  string     $browseType all|undone|wait|doing|suspended|closed|involved|bySearch|review
-     * @param  int        $productID
-     * @param  int        $branch
-     * @param  bool       $withTasks
-     * @param  string|int $param skipParent
-     * @param  string     $orderBy
-     * @param  object     $pager
+     *
+     * @param  int         $projectID
+     * @param  string      $browseType all|undone|wait|doing|suspended|closed|involved|bySearch|review
+     * @param  int         $productID
+     * @param  int         $branch
+     * @param  bool        $withTasks
+     * @param  string|int  $param      skipParent|hasParentName
+     * @param  string      $orderBy
+     * @param  object|null $pager
      * @access public
      * @return array
      */
-    public function getStatData($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null)
+    public function getStatData(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $branch = 0, bool $withTasks = false, string|int $param = '', string $orderBy = 'id_asc', object|null $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStats($browseType);
 
-        $productID = (int)$productID;
+        $executions = $this->fetchExecutionList($projectID, $browseType, $productID, (int) $param, $orderBy, $pager);
+        $executions = $this->batchProcessExecution($executions, $projectID, $productID, $withTasks, $param);
 
-        /* Construct the query SQL at search executions. */
-        $executionQuery = '';
-        if($browseType == 'bySearch')
+        return array_values($executions);
+    }
+
+    /**
+     * 获取搜索执行的查询语句。
+     * Get execution query SQL.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function getExecutionQuery(int $queryID): string
+    {
+        /* Get query SQL. */
+        if($queryID)
         {
-            $queryID = (int)$param;
-            if($queryID)
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
             {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('executionQuery', $query->sql);
-                    $this->session->set('executionForm', $query->form);
-                }
+                $this->session->set('executionQuery', $query->sql);
+                $this->session->set('executionForm', $query->form);
             }
-            if($this->session->executionQuery === false) $this->session->set('executionQuery', ' 1 = 1');
-
-            $executionQuery = $this->session->executionQuery;
-            $allProject = "`project` = 'all'";
-
-            if(strpos($executionQuery, $allProject) !== false) $executionQuery = str_replace($allProject, '1', $executionQuery);
-            $executionQuery = preg_replace('/(`\w*`)/', 't1.$1',$executionQuery);
         }
+        if($this->session->executionQuery === false) $this->session->set('executionQuery', ' 1 = 1');
 
-        $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        $executionQuery = $this->session->executionQuery;
+
+        /* If all projects are searched change the query SQL to 1=1. */
+        $allProject = "`project` = 'all'";
+        if(strpos($executionQuery, $allProject) !== false) $executionQuery = str_replace($allProject, '1', $executionQuery);
+
+        /* Replace field. */
+        $executionQuery = preg_replace('/(`\w*`)/', 't1.$1',$executionQuery);
+
+        return $executionQuery;
+    }
+
+    /**
+     * 获取执行列表信息。
+     * Get execution list information.
+     *
+     * @param  int         $projectID
+     * @param  string      $browseType all|undone|wait|doing|suspended|closed|involved|bySearch|review
+     * @param  int         $productID
+     * @param  string      $orderBy
+     * @param  int         $param
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function fetchExecutionList(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $param = 0, string $orderBy = 'id_asc', object|null $pager = null): array
+    {
+        /* Construct the query SQL at search executions. */
+        $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
+
+        return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
@@ -1883,63 +1917,57 @@ class executionModel extends model
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
+    }
 
-        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, GROUP_CONCAT(product) as product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->groupBy('project')->fetchPairs();
+    /**
+     * 批量处理执行数据。
+     * Batch process execution data.
+     *
+     * @param  array      $executions
+     * @param  int        $projectID
+     * @param  int        $productID
+     * @param  bool       $withTasks
+     * @param  string|int $param     skipParent|hasParentName
+     * @access public
+     * @return array
+     */
+    public function batchProcessExecution(array $executions, int $projectID = 0, int $productID = 0, bool $withTasks = false, string|int $param = ''): array
+    {
+        if(empty($executions)) return $executions;
 
-        $hours = $this->loadModel('project')->computerProgress($executions);
-        $burns = $this->getBurnData($executions);
-
-        /* Get the number of execution teams. */
-        $teams = $this->dao->select('t1.root,count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in(array_keys($executions))
-            ->andWhere('t1.type')->ne('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.root')
-            ->fetchAll('root');
-
-        $productNameList = $this->dao->select('t1.id,GROUP_CONCAT(t3.`name`) as productName')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
-            ->leftjoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
-            ->where('t1.project')->eq($projectID)
-            ->andWhere('t1.type')->in('kanban,sprint,stage')
-            ->groupBy('t1.id')
-            ->fetchPairs();
+        $memberGroup = $this->executionTao->getMemberCountGroup(array_keys($executions)); // Get execution team member count.
+        $productList = $this->executionTao->getProductList($projectID); // Get product name of the linked execution.
 
         if($withTasks) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
 
-        /* Process executions. */
-        $this->app->loadConfig('task');
-
+        $parentList = array();
         $emptyHour  = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
         $today      = helper::today();
-        $parentList = array();
+        $hours      = $this->loadModel('project')->computerProgress($executions);
+        $burns      = $this->getBurnData($executions);
         foreach($executions as $execution)
         {
-            $execution->productName = isset($productNameList[$execution->id]) ? $productNameList[$execution->id] : '';
+            $execution->productName = isset($productList[$execution->id]) ? $productList[$execution->id]->productName : '';
+            $execution->end         = date(DT_DATE1, strtotime($execution->end));
+            $execution->hours       = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
+            $execution->teamCount   = isset($memberGroup[$execution->id]) ? $memberGroup[$execution->id]->teams : 0;
 
-            /* Process the end time. */
-            $execution->end = date(DT_DATE1, strtotime($execution->end));
+            if(isset($executions[$execution->parent])) $executions[$execution->parent]->isParent = 1;
+            if(empty($productID) && !empty($productList[$execution->id])) $execution->product = $productList[$execution->id]->product;
 
             /* Judge whether the execution is delayed. */
-            if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
+            if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended')
             {
                 $delay = helper::diffDate($today, $execution->end);
                 if($delay > 0) $execution->delay = $delay;
             }
-
-            if(isset($executions[$execution->parent])) $executions[$execution->parent]->isParent = 1;
 
             /* Process the burns. */
             $execution->burns = array();
             $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
             foreach($burnData as $data) $execution->burns[] = $data->value;
 
-            /* Process the hours. */
-            $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
-            $execution->teamCount   = isset($teams[$execution->id]) ? $teams[$execution->id]->teams : 0;
-
-            if(isset($executionTasks) and isset($executionTasks[$execution->id])) $execution->tasks = $executionTasks[$execution->id];
+            if(isset($executionTasks) && isset($executionTasks[$execution->id])) $execution->tasks = $executionTasks[$execution->id];
 
             /* In the case of the waterfall model, calculate the sub-stage. */
             if($param === 'skipParent')
@@ -1952,15 +1980,8 @@ class executionModel extends model
                 $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
                 $executions[$execution->id]->title = implode('/', $parentExecutions);
             }
-
-            /* Bind execution product */
-            if(!empty($projectProductIdList) and !empty($projectProductIdList[$execution->id]))
-            {
-                $execution->product = $projectProductIdList[$execution->id];
-            }
         }
-
-        return array_values($executions);
+        return $executions;
     }
 
     /**

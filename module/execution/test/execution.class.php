@@ -1874,7 +1874,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function fixFirstTest($executionID, $param = array(), $date)
+    public function fixFirstTest($executionID, $param = array(), $date = '')
     {
         global $tester;
 
@@ -2991,5 +2991,20 @@ class executionTest
     {
         $extendFields = $this->executionModel->getExtendFields($moduleName);
         return $extendFields;
+    }
+
+    /**
+     * 获取搜索执行的查询语句。
+     * Get execution query SQL.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function getExecutionQueryTest(int $queryID): string
+    {
+        if(!$queryID) $this->executionModel->session->set('executionQuery', "(( `project` = 'all' ) AND ( 1  AND `status` = 'doing'))");
+
+        return $this->executionModel->getExecutionQuery($queryID);
     }
 }
