@@ -131,7 +131,7 @@
                   ?>
                   <div class="group-item menus-browse" data-id='0' data-module='<?php echo $moduleName;?>' data-package='0'>
                     <div class="checkbox-primary checkbox-inline checkbox-left check-all">
-                      <input type='checkbox' value='browse' <?php if($menusPrivs == $menusSelect) echo 'checked';?>>
+                      <input type='checkbox' name='<?php echo "actions[$moduleName][]"?>' value='browse' id='<?php echo "actions[$moduleName]browse"?>' <?php if($menusPrivs == $menusSelect) echo 'checked';?>>
                       <label class='text-left <?php if(!empty($menusSelect) and $menusPrivs != $menusSelect) echo 'checkbox-indeterminate-block';?>' for='actions[<?php echo $moduleName;?>]browse'><?php echo $lang->$moduleName->browse;?></label>
                     </div>
                     <i class="priv-toggle icon"></i>
