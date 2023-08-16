@@ -192,7 +192,7 @@ function loadStories2(productID, moduleID, num)
     });
 
     branch = 0;
-    link = createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&number=' + num);
+    link = createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&number=' + num);
     $.get(link, function(scenes){
         if(!scenes) scenes = '<select id="scene' + num + '" name="scene[' + num + ']" class="form-control"></select>';
         if(config.currentMethod == 'batchcreate')
