@@ -2265,10 +2265,26 @@ class projectModel extends model
      */
     public function getStats4Kanban()
     {
-        $ongoingExecutions = $this->projectTao->getOngoingExecutions();
-        $projectsStats     = $this->projectTao->getProjectsStats();
+        /* Get execution of the status is doing. */
+        $executions        = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');
+        $projectExecutions = array();
+        foreach($executions as $execution) $projectExecutions[$execution->project][$execution->id] = $execution;
 
-        return array('kanbanGroup' => $projectsStats, 'latestExecutions' => $ongoingExecutions);
+        /* The execution is sorted in reverse order by execution ID. */
+        $ongoingExecutions = array();
+        foreach($projectExecutions as $projectID => $executions)
+        {
+            krsort($projectExecutions[$projectID]);
+            $ongoingExecutions[$projectID] = current($projectExecutions[$projectID]);
+        }
+
+        $projectsStats = $this->loadModel('program')->getProjectStats(0, 'all', 0, 'order_asc');
+        $projectsStats = $this->projectTao->classifyProjects($projectsStats);
+
+        /* Only display recent two closed projects. */
+        $projectsStats = $this->projectTao->sortAndReduceClosedProjects($projectsStats, 2);
+
+        return array($projectsStats, $ongoingExecutions);
     }
 
     /**

@@ -360,6 +360,7 @@ class project extends control
     }
 
     /**
+     * 项目看板。
      * Project kanban.
      *
      * @access public
@@ -367,7 +368,7 @@ class project extends control
      */
     public function kanban()
     {
-        extract($this->project->getStats4Kanban());
+        list($kanbanGroup, $latestExecutions) = $this->project->getStats4Kanban();
 
         $this->view->title            = $this->lang->project->kanban;
         $this->view->kanbanGroup      = array_filter($kanbanGroup);
