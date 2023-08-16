@@ -1299,11 +1299,10 @@ class taskModel extends model
      */
     public function getByID(int $taskID, bool $setImgSize = false): false|object
     {
-        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-            ->where('t1.id')->eq((int)$taskID)
+            ->where('t1.id')->eq($taskID)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetch();
         if(!$task) return false;
@@ -1336,8 +1335,7 @@ class taskModel extends model
         $task->files = $this->file->getByObject('task', $taskID);
         if($setImgSize && $task->desc) $task->desc = $this->file->setImgSize($task->desc);
 
-        if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
-
+        /* Process a task, compute its progress and get its related information. */
         return $this->processTask($task);
     }
 
@@ -2018,6 +2016,9 @@ class taskModel extends model
 
         /* Get related test cases. */
         if($task->story) $task->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->andWhere('deleted')->eq('0')->fetchPairs();
+
+        /* Set realname to task.*/
+        if($task->assignedTo != 'closed') $task->assignedToRealName = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($task->assignedTo)->fetch('realname');
 
         /* Set closed realname. */
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
