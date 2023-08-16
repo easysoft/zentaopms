@@ -248,14 +248,14 @@ detailBody
                     item
                     (
                         set::name($lang->task->fromBug),
-                        a
+                        !empty($fromBug) ? a
                         (
                             set('data-toggle', 'modal'),
                             set('data-size', 'lg'),
                             set::href(createLink('bug', 'view', "id={$task->fromBug}")),
                             set::title($fromBug->title),
                             $fromBug->title
-                        )
+                        ) : null
                     ),
                     item
                     (
