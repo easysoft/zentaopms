@@ -2391,6 +2391,7 @@ class testcaseModel extends model
                 echo "<span title='$stages'>$stages</span>";
                 break;
             case 'status':
+                if($isCase == 2) break;
                 if($case->needconfirm)
                 {
                     print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>");
