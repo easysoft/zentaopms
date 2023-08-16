@@ -255,6 +255,7 @@ class baseHelper
             return "IN ('" . join("','", $idList) . "')";
         }
 
+        if(is_null($idList)) $idList = '';
         if(!is_string($idList)) $idList = json_encode($idList);
         $idList = addslashes($idList);
         return "IN ('" . str_replace(',', "','", str_replace(' ', '', $idList)) . "')";
@@ -785,6 +786,19 @@ class baseHelper
         }
 
         return null;
+    }
+
+    /**
+     * 检查是否启用缓存。
+     * Check is enable cache.
+     *
+     * @return bool
+     */
+    public static function isCacheEnabled()
+    {
+        if(isset($_GET['_nocache']) || isset($_SERVER['HTTP_X_ZT_REFRESH'])) return false;
+        global $config;
+        return $config->cache->enable;
     }
 }
 

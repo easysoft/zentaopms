@@ -24,6 +24,7 @@ class upgradeModel extends model
     public function __construct()
     {
         parent::__construct();
+        if($this->config->edition == 'ipd') $this->config->vision = 'rnd';
         $this->loadModel('setting');
     }
 
@@ -43,7 +44,7 @@ class upgradeModel extends model
         {
             if(!is_numeric($version[0])) continue;
             if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
-            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array());
+            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array(), 'ipd' => array());
         }
         if($fromEdition == 'open') return $versions;
 
@@ -67,6 +68,11 @@ class upgradeModel extends model
             if(isset($versions[$open])) $versions[$open]['max'][] = $max;
         }
 
+        /* Update ipd sql only from ipd. */
+        foreach($this->config->upgrade->ipdVersion as $ipd => $open)
+        {
+            if(isset($versions[$open])) $versions[$open]['ipd'][] = $ipd;
+        }
         return $versions;
     }
 
@@ -91,6 +97,16 @@ class upgradeModel extends model
         /* Execute. */
         $fromOpenVersion = $this->getOpenVersion($fromVersion);
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
+
+        /* Get total sqls and write in tmp file. */
+        if(is_writable($this->app->getTmpRoot()))
+        {
+            file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', '0-0');
+            $confirm        = $this->getConfirm($fromVersion);
+            $updateTotalSql = count(explode(';', $confirm));
+            file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
+        }
+
         foreach($versions as $openVersion => $chargedVersions)
         {
             $executedXuanxuan = false;
@@ -494,8 +510,6 @@ class upgradeModel extends model
                 }
 
                 $this->updateGroup4Lite();
-
-                if($this->config->edition != 'open') $this->importLiteModules();
                 break;
             case '16_5':
                 $this->updateProjectStatus();
@@ -593,6 +607,15 @@ class upgradeModel extends model
             case '17_8':
                 if(!$executedXuanxuan)
                 {
+                    $table  = $this->config->db->prefix . 'user';
+                    $clientStatusExists = $this->checkFieldsExists($table, 'clientStatus');
+                    $clientLangExists   = $this->checkFieldsExists($table, 'clientLang');
+                    $pinyinExists       = $this->checkFieldsExists($table, 'pinyin');
+
+                    if(!$clientStatusExists) $this->dbh->query("ALTER TABLE $table ADD `clientStatus` varchar(10) NOT NULL DEFAULT 'zh-cn' AFTER `deleted`");
+                    if(!$clientLangExists)   $this->dbh->query("ALTER TABLE $table ADD `clientLang` enum('0','1') enum('online','away','busy','offline','meeting') NOT NULL DEFAULT 'offline' AFTER `deleted`");
+                    if(!$pinyinExists)       $this->dbh->query("ALTER TABLE $table ADD `pinyin` varchar(255) NOT NULL DEFAULT '' AFTER `realname`");
+
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.5.sql';
                     $this->execSQL($xuanxuanSql);
                 }
@@ -635,6 +658,38 @@ class upgradeModel extends model
             case '18_4_alpha1':
                 if($this->config->edition != 'open') $this->processDataset();
                 $this->setURSwitchStatus($fromVersion);
+                break;
+            case '18_4_beta1':
+                if($this->config->edition != 'open')
+                {
+                    $this->processDeployStepAction();
+                    $this->updateBISQL();
+                    $this->checkPivotSQL();
+                }
+                break;
+            case '18_4':
+                if(!$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan7.1.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan7.2.beta.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+
+                if($this->config->edition != 'open' and in_array($fromVersion, $this->config->upgrade->missedFlowFieldVersions))
+                {
+                    $this->fixMissedFlowField();
+                }
+                break;
+            case '18_5':
+                $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
+                if(strpos($fromVersion, 'ipd') === false) $this->execSQL($this->getUpgradeFile('ipdinstall'));
+                if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));
+                if($this->config->edition == 'ipd' and strpos($fromVersion, 'ipd') === false) $this->addORPriv();
+
+                $this->loadModel('product')->refreshStats(true);
+                $this->loadModel('program')->refreshStats(true);
+                $this->updatePivotFieldsType();
                 break;
         }
 
@@ -771,6 +826,9 @@ class upgradeModel extends model
                 $this->addFileFields();
                 $this->addReportActions();
                 break;
+            case 'biz6_4':
+                $this->importLiteModules();
+                break;
         }
     }
 
@@ -789,6 +847,17 @@ class upgradeModel extends model
                 $this->addDefaultKanbanPri();
                 break;
         }
+    }
+
+    /**
+     * Process data for ipd.
+     *
+     * @param  int   $ipdVersion
+     * @access public
+     * @return void
+     */
+    public function executeIpd($ipdVersion)
+    {
     }
 
     /**
@@ -1105,7 +1174,14 @@ class upgradeModel extends model
              case '18_3':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.3'));
              case '18_4_alpha1':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.4.alpha1')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.4.alpha1'));
+             case '18_4_beta1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.4.beta1'));
+             case '18_4':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.4'));
+             case '18_5':
+                if(strpos($fromVersion, 'ipd') === false) $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall'));
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.5')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -1330,7 +1406,7 @@ class upgradeModel extends model
      */
     public function getEditionByVersion($version)
     {
-        $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
+        $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max', 'i' => 'ipd');
         return is_numeric($version[0]) ? 'open' : $editions[$version[0]];
     }
 
@@ -1389,7 +1465,7 @@ class upgradeModel extends model
     {
         if(empty($version)) $version = $this->config->installedVersion;
 
-        $editions     = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
+        $editions     = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion', 'i' => 'ipdVersion');
         $version      = str_replace('.', '_', $version);
         $fromEdition  = is_numeric($version[0]) ? 'open' : $editions[$version[0]];
         $openVersion  = is_numeric($version[0]) ? $version : $this->config->upgrade->{$fromEdition}[$version];
@@ -1427,7 +1503,7 @@ class upgradeModel extends model
                     try
                     {
                         $tableExists = true;
-                        $stmt        = $this->dbh->query("show fields from `{$table}`");
+                        $stmt        = $this->dbh->query("show fields from `$table`");
                         while($row = $stmt->fetch()) $fields[$row->Field] = $row->Field;
                     }
                     catch(PDOException $e)
@@ -1453,11 +1529,11 @@ class upgradeModel extends model
                         if(stripos($line, 'auto_increment') !== false) $line .= ' primary key';
                         try
                         {
-                            $this->dbh->exec("ALTER TABLE `{$table}` ADD $line");
+                            $this->dbh->exec("ALTER TABLE `$table` ADD $line");
                         }
                         catch(PDOException $e)
                         {
-                            $alterSQL .= "ALTER TABLE `{$table}` ADD $line;\n";
+                            $alterSQL .= "ALTER TABLE `$table` ADD $line;\n";
                         }
                     }
                 }
@@ -2016,18 +2092,7 @@ class upgradeModel extends model
         $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
         $ignoreCode   = '|1050|1054|1060|1091|1061|';
 
-        /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
-        $sqls = explode("\n", file_get_contents($sqlFile));
-        foreach($sqls as $key => $line)
-        {
-            $line       = trim($line);
-            $sqls[$key] = $line;
-
-            /* Skip sql that is note. */
-            if(preg_match('/^--|^#|^\/\*/', $line) or empty($line)) unset($sqls[$key]);
-        }
-        $sqls = explode(';', join("\n", $sqls));
-
+        $sqls = $this->parseToSqls($sqlFile);
         foreach($sqls as $sql)
         {
             if(empty($sql)) continue;
@@ -2050,6 +2115,17 @@ class upgradeModel extends model
             try
             {
                 $this->saveLogs($sql);
+
+                /* Calculate the number of sql runs completed. */
+                if(is_writable($this->app->getTmpRoot()))
+                {
+                    $sqlLines    = file_get_contents($this->app->getTmpRoot() . 'upgradeSqlLines');
+                    $sqlLines    = explode('-', $sqlLines);
+                    $executeLine = $sqlLines[1];
+                    $executeLine ++;
+                    file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $sqlLines[0] . '-' . $executeLine);
+                }
+
                 $this->dbh->exec($sql);
             }
             catch(PDOException $e)
@@ -2061,6 +2137,30 @@ class upgradeModel extends model
             }
         }
     }
+
+    /**
+     * Parse sql file to sqls.
+     *
+     * @param  string $sqlFile
+     * @access public
+     * @return array
+     */
+    public function parseToSqls($sqlFile)
+    {
+        /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
+        $sqls = explode("\n", file_get_contents($sqlFile));
+        $sqlList = array();
+        foreach($sqls as $key => $line)
+        {
+            $line = trim($line);
+            if(!$line) continue;
+            /* Skip sql that is note. */
+            if(!preg_match('/^--|^#|^\/\*/', $line)) $sqlList[] = $line;
+        }
+
+        return array_filter(explode(';', join("\n", $sqlList)));
+    }
+
 
     /**
      * Add priv for version 4.0.1
@@ -2305,6 +2405,49 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Add or view priv for adminer.
+     *
+     * @access public
+     * @return void
+     */
+    public function addORPriv()
+    {
+        $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchAll();
+
+        foreach($admins as $key => $admin) $admins[$key] = trim($admin->admins, ',');
+
+        $admins = implode(',', $admins);
+
+        $user = $this->dao->select('*')->from(TABLE_USER)
+            ->where('account')->in($admins)
+            ->fetchPairs('account', 'visions');
+
+        foreach($user as $account => $visions)
+        {
+            if(strpos($visions, 'or') === false)
+            {
+                $visions = 'or,' . $visions;
+                $this->dao->update(TABLE_USER)->set('visions')->eq($visions)->where('account')->eq($account)->exec();
+            }
+        }
+
+        include('priv.php');
+        foreach($orData as $role => $name)
+        {
+            $this->dao->insert(TABLE_GROUP)
+                ->set('vision')->eq('or')
+                ->set('name')->eq($name)
+                ->set('role')->eq($role)
+                ->set('desc')->eq($name)
+                ->exec();
+            if(dao::isError()) continue;
+            $groupID = $this->dao->lastInsertID();
+            $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
+            $this->dao->exec($sql);
+        }
     }
 
     /**
@@ -3309,6 +3452,7 @@ class upgradeModel extends model
     {
         $fromVersion = $this->config->installedVersion;
         $needProcess = array();
+        if(strpos($fromVersion, 'ipd') !== false) return $needProcess;
         if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = 'process';
         if(strpos($fromVersion, 'max') === false and $this->config->systemMode == 'new')
         {
@@ -7127,7 +7271,7 @@ class upgradeModel extends model
                 $fieldConfig = isset($upgradeConfig[$module][$code]) ? $upgradeConfig[$module][$code] : array();
                 foreach($fieldConfig as $key => $value) $field->$key = $value;
 
-                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
+                $this->dao->replace(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
             }
         }
 
@@ -7831,7 +7975,7 @@ class upgradeModel extends model
             /* User requriement */
             $requirementStory = $this->dao->select('count(1) as total')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->fetch('total');
             if($requirementStory > 0) $returnData['ur'] = true;
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 /* issue,risk,opportunity,process,QA,meeting */
                 $issue = $this->dao->select('count(1) as total')->from(TABLE_ISSUE)->alias('t1')
@@ -7905,7 +8049,7 @@ class upgradeModel extends model
                 ->fetch('total');
             if($waterfull > 0) $returnData['waterfall'] = true;
 
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 /* assetlib */
                 $assetlib = $this->dao->select('count(1) as total')->from(TABLE_ASSETLIB)
@@ -8052,10 +8196,13 @@ class upgradeModel extends model
      *
      * @param  string $type
      * @access public
-     * @return void
+     * @return void|bool
      */
     public function processDataset()
     {
+        $dataviewData = $this->dao->select('id')->from(TABLE_DATAVIEW)->fetch();
+        if(!empty($dataviewData)) return true;
+
         $this->loadModel('dataset');
         $this->loadModel('dataview');
 
@@ -8499,6 +8646,13 @@ class upgradeModel extends model
 
             if($chart)
             {
+                if($chart->sql)
+                {
+                    $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+                    $stmt = $this->dbh->query($chart->sql);
+                    if(!$stmt) continue;
+                }
+
                 $settings = $chart->settings;
                 if($type == 'chart') $chartType = $chart->builtin ? $chart->type : $settings[0]['type'];
                 if($type == 'pivot') $chartType = 'table';
@@ -9041,6 +9195,7 @@ class upgradeModel extends model
         $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
 
         $this->loadModel('pivot');
+        $this->loadModel('dataview');
 
         foreach($reports as $report)
         {
@@ -9095,7 +9250,7 @@ class upgradeModel extends model
                     $filter->field      = $varName;
                     $filter->name       = $vars->showName[$index];
                     $filter->type       = $vars->requestType[$index];
-                    $filter->typeOption = $filter->type == 'select' ? $vars->selectList[$index] : '';
+                    $filter->typeOption = $filter->type == 'select' ? zget($vars->selectList, $index, '') : '';
                     $filter->default    = isset($vars->default) ? zget($vars->default, $index, '') : '';
 
                     $filters[] = $filter;
@@ -9147,8 +9302,18 @@ class upgradeModel extends model
 
                 $columns[] = $column;
 
-                $data->stage = 'draft';
-                $data->step  = 1;
+                $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+                $stmt = $this->dbh->query($data->sql);
+
+                if(!$stmt)
+                {
+                    $data->stage = 'draft';
+                    $data->step  = 1;
+                }
+                else
+                {
+                    $settings->summary = 'notuse';
+                }
             }
 
             $settings->columns = $columns;
@@ -9166,7 +9331,18 @@ class upgradeModel extends model
                     $sql = str_replace('$' . $filter->field, $filterDefault, $sql);
                 }
             }
-            $fieldSettings = $this->getFieldSettings($sql);
+
+            $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+            $stmt = $this->dbh->query($sql);
+            if(!$stmt) /* Fix bug #35559. */
+            {
+                $data->stage = 'draft';
+                $fieldSettings = array();
+            }
+            else
+            {
+                $fieldSettings = $this->getFieldSettings($sql);
+            }
 
             $data->settings = json_encode($settings);
             $data->fields   = json_encode($fieldSettings);
@@ -9213,7 +9389,6 @@ class upgradeModel extends model
             $fieldSetting->object = $relatedTable;
             $fieldSetting->field  = $field;
             $fieldSetting->type   = 'string';
-
             $fieldSettings[$field] = $fieldSetting;
         }
 
@@ -9285,5 +9460,239 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Delete deploystep action where id not in zt_deploy.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processDeployStepAction()
+    {
+        $steps = $this->dao->select('*')->from(TABLE_DEPLOYSTEP)->fetchAll('id');
+        if($steps) $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('deploystep')->andWhere('objectID')->notIN(array_keys($steps))->exec();
+    }
+
+    /**
+     * Update BI SQL for 18.4.stable new function: dataview model.php checkUniColumn().
+     *
+     * @access public
+     * @return void
+     */
+    public function updateBISQL()
+    {
+        $alpha1File = $this->getUpgradeFile('18.4.alpha1');
+        $beta1File  = $this->getUpgradeFile('18.4.beta1');
+
+        $alpha1SQL = explode(";", file_get_contents($alpha1File));
+        $beta1SQL  = explode(";", file_get_contents($beta1File));
+        $execSQL   = array();
+
+        foreach($alpha1SQL as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
+        foreach($beta1SQL  as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
+
+        /* Update stage to published and update sql. */
+        foreach($execSQL as $sql)
+        {
+            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+            $sql = trim($sql);
+
+            $this->dbh->exec($sql);
+        }
+    }
+
+    public function checkPivotSQL()
+    {
+        $this->loadModel('pivot');
+        $this->loadModel('chart');
+        $this->loadModel('dataview');
+        $pivots    = $this->dao->select('*')->from(TABLE_PIVOT)->where('deleted')->eq(0)->fetchAll('id');
+        $pivotList = array_keys($pivots);
+
+        foreach($pivotList as $pivotID)
+        {
+            $pivot   = $this->pivot->getByID($pivotID);
+            $sql     = $this->chart->parseSqlVars($pivot->sql, $pivot->filters);
+            $stage   = $pivot->stage;
+            if($stage == 'draft') continue;
+
+            $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+            $stmt = $this->dbh->query($sql);
+            if(!$stmt) /* Fix bug #35559. */
+            {
+                $stage = 'draft';
+            }
+            elseif(!$this->dataview->checkUniColumn($sql))
+            {
+                $stage = 'draft';
+            }
+
+            $this->dao->update(TABLE_PIVOT)->set('stage')->eq($stage)->where('id')->eq($pivotID)->exec();
+        }
+    }
+
+    /**
+     * Fix missed rnd workflow field.
+     *
+     * @access public
+     * @return void
+     */
+    public function fixMissedFlowField()
+    {
+        $this->loadModel('workflow');
+        $this->loadModel('workflowaction');
+        $this->loadModel('workflowlayout');
+
+        $modules         = $this->config->workflow->buildin->modules;
+        $actions         = $this->config->workflowaction->buildin->actions;
+        $actionTypes     = $this->config->workflowaction->buildin->types;
+        $actionMethods   = $this->config->workflowaction->buildin->methods;
+        $actionOpens     = $this->config->workflowaction->buildin->opens;
+        $actionLayouts   = $this->config->workflowaction->buildin->layouts;
+        $actionPositions = $this->config->workflowaction->buildin->positions;
+        $actionShows     = $this->config->workflowaction->buildin->shows;
+        $layouts         = $this->config->workflowlayout->buildin->layouts;
+
+        $account = isset($this->app->user) ? $this->app->user->account : 'admin';
+        $now     = helper::now();
+
+        /* Insert buildin modules to TABLE_WORKFLOW. */
+        $data = new stdclass();
+        $data->vision      = 'rnd';
+        $data->buildin     = 1;
+        $data->createdBy   = $account;
+        $data->createdDate = $now;
+        $data->status      = 'normal';
+        foreach($modules as $app => $appModules)
+        {
+            $data->app = $app;
+            foreach($appModules as $module => $options)
+            {
+                $this->app->loadLang($module);
+
+                $data->module    = $module;
+                $data->name      = isset($this->lang->$module->common) ? $this->lang->$module->common : $module;
+                $data->table     = str_replace('`', '', zget($options, 'table', ''));
+                $data->navigator = zget($options, 'navigator', 'secondary');
+                if($module == 'story')     $data->name = $this->lang->searchObjects['story'];
+                if($module == 'execution') $data->name = $this->lang->workflow->execution;
+
+                $modelField = $this->dao->select('id')->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq('rnd')->fetch('id');
+                if(!$modelField) $this->dao->insert(TABLE_WORKFLOW)->data($data)->exec();
+            }
+        }
+
+        /* Insert actions of buildin modules to TABLE_WORKFLOWACTION. */
+        $data = new stdclass();
+        $data->buildin       = 1;
+        $data->role          = 'buildin';
+        $data->extensionType = 'none';
+        $data->createdBy     = $account;
+        $data->createdDate   = $now;
+        foreach($actions as $module => $moduleActions)
+        {
+            $data->module = $module;
+            foreach($moduleActions as $action)
+            {
+                $data->action = $action;
+
+                /* Use default action name if not set flow action name. */
+                $name = '';
+                if(isset($this->lang->$module->$action)) $name = $this->lang->$module->$action;
+                if(empty($name) && in_array($action, array_keys($this->config->flowAction)))
+                {
+                    $methodName = $this->config->flowAction[$action];
+                    if(isset($this->lang->$module->$methodName)) $name = $this->lang->$module->$methodName;
+                }
+                if(empty($name) && isset($this->lang->workflowaction->default->actions[$action])) $name = $this->lang->workflowaction->default->actions[$action];
+                if(empty($name)) $name = $action;
+                $data->name   = $name;
+
+                $data->method   = $data->action;
+                $data->open     = 'normal';
+                $data->layout   = 'normal';
+                $data->type     = 'single';
+                $data->position = 'browseandview';
+                $data->show     = 'direct';
+                if(isset($actionMethods[$module][$action]))   $data->method   = $actionMethods[$module][$action];
+                if(isset($actionOpens[$module][$action]))     $data->open     = $actionOpens[$module][$action];
+                if(isset($actionLayouts[$module][$action]))   $data->layout   = $actionLayouts[$module][$action];
+                if(isset($actionTypes[$module][$action]))     $data->type     = $actionTypes[$module][$action];
+                if(isset($actionPositions[$module][$action])) $data->position = $actionPositions[$module][$action];
+                if(isset($actionShows[$module][$action]))     $data->show     = $actionShows[$module][$action];
+
+                $actionField = $this->dao->select('id')->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq('rnd')->fetch('id');
+                if(!$actionField) $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
+            }
+        }
+
+        /* Insert layouts of buildin modules to TABLE_WORKFLOWLAYOUT. */
+        $data = new stdclass();
+        foreach($layouts as $module => $moduleLayouts)
+        {
+            $data->module = $module;
+            foreach($moduleLayouts as $action => $layoutFields)
+            {
+                $order = 1;
+                $data->action = $action;
+                foreach($layoutFields as $field => $options)
+                {
+                    $data->field      = $field;
+                    $data->width      = zget($options, 'width', 0);
+                    $data->mobileShow = zget($options, 'mobileShow', 0);
+                    $data->order      = $order++;
+
+                    if($data->width == 'auto') $data->width = 0;
+
+                    $layoutField = $this->dao->select('id')->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq('rnd')->fetch('id');
+                    if(!$layoutField) $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($data)->exec();
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Update pivot fields type, pivotID maybe is 1008,1012,1013,1015,1020,1027.
+     *
+     * @access public
+     * @return void
+     */
+    public function updatePivotFieldsType()
+    {
+        $fieldsPairs   = array();
+        $fieldsPairs[] = array('maybeID' => 1008, 'beforefields' => '"execution":{"object":"project","field":"execution","type":"string"},"type":{"object":"project","field":"type","type":"string"}',
+                               'fields' => '{"id":{"object":"project","field":"id","type":"string"},"project":{"object":"project","field":"project","type":"string"},"execution":{"object":"project","field":"execution","type":"string"},"type":{"object":"task","field":"type","type":"option"},"taskID":{"object":"task","field":"taskID","type":"string"},"projectstatus":{"object":"task","field":"projectstatus","type":"string"}}',
+                               'langs'  => '{"project":{"zh-cn":"\\u9879\\u76ee\\u540d\\u79f0","zh-tw":"","en":"","de":"","fr":""},"execution":{"zh-cn":"\\u6267\\u884c\\u540d\\u79f0","zh-tw":"","en":"","de":"","fr":""},"id":{"zh-cn":"\\u9879\\u76eeID","zh-tw":"","en":"","de":"","fr":""},"type":{"zh-cn":"\\u4efb\\u52a1\\u7c7b\\u578b","zh-tw":"","en":"","de":"","fr":""},"taskID":{"zh-cn":"taskID","zh-tw":"","en":"","de":"","fr":""},"projectstatus":{"zh-cn":"projectstatus","zh-tw":"","en":"","de":"","fr":""}}');
+        $fieldsPairs[] = array('maybeID' => 1012, 'beforefields' => '"project":{"object":"projectstory","field":"project","type":"string"},"execution":{"object":"project","field":"execution","type":"string"},"status":{"object":"project","field":"status","type":"string"}',
+                               'fields' => '{"id":{"object":"project","field":"id","type":"string"},"project":{"object":"projectstory","field":"project","type":"string"},"execution":{"object":"project","field":"execution","type":"string"},"status":{"object":"story","field":"status","type":"option"}}',
+                               );
+        $fieldsPairs[] = array('maybeID' => 1013, 'beforefields' => '"execution":{"object":"project","field":"execution","type":"string"},"stage":{"object":"project","field":"stage","type":"string"}}',
+                               'fields' => '{"id":{"object":"project","field":"id","type":"string"},"project":{"object":"projectstory","field":"project","type":"string"},"execution":{"object":"project","field":"execution","type":"string"},"stage":{"object":"story","field":"stage","type":"option"}}',
+                               'langs' => '{"project":{"zh-cn":"\\u9879\\u76ee\\u540d\\u79f0","zh-tw":"","en":"","de":"","fr":""},"execution":{"zh-cn":"\\u6267\\u884c\\u540d\\u79f0","zh-tw":"","en":"","de":"","fr":""},"id":{"zh-cn":"\\u9879\\u76eeID","zh-tw":"","en":"","de":"","fr":""},"stage":{"zh-cn":"\\u9636\\u6bb5","zh-tw":"","en":"","de":"","fr":""}}');
+        $fieldsPairs[] = array('maybeID' => 1015, 'beforefields' => '"bugID":{"object":"bug","field":"bugID","type":"string"},"status":{"object":"project","field":"status","type":"string"}',
+                               'fields' => '{"id":{"object":"project","field":"id","type":"string"},"project":{"object":"project","field":"project","type":"string"},"t3id":{"object":"project","field":"t3id","type":"string"},"execution":{"object":"project","field":"execution","type":"string"},"bugID":{"object":"bug","field":"bugID","type":"string"},"status":{"object":"bug","field":"status","type":"option"}}',
+                               );
+        $fieldsPairs[] = array('maybeID' => 1020, 'beforefields' => '"bugID":{"object":"project","field":"bugID","type":"string"},"type":{"object":"product","field":"type","type":"string"}',
+                               'fields' => '{"id":{"object":"product","field":"id","type":"string"},"name":{"object":"product","field":"name","type":"string"},"bugID":{"object":"project","field":"bugID","type":"string"},"type":{"object":"bug","field":"type","type":"option"}}',
+                               'langs' => '{"count":{"zh-cn":"\\u9700\\u6c42\\u6570","zh-tw":"\\u9700\\u6c42\\u6570","en":"Stories"},"done":{"zh-cn":"\\u5b8c\\u6210\\u6570","zh-tw":"\\u5b8c\\u6210\\u6570","en":"Done"},"id":{"zh-cn":"\\u7f16\\u53f7","zh-tw":"","en":"","de":"","fr":""},"name":{"zh-cn":"\\u4ea7\\u54c1\\u540d\\u79f0","zh-tw":"","en":"","de":"","fr":""},"bugID":{"zh-cn":"bugID","zh-tw":"","en":"","de":"","fr":""},"type":{"zh-cn":"Bug\\u7c7b\\u578b","zh-tw":"","en":"","de":"","fr":""}}');
+        $fieldsPairs[] = array('maybeID' => 1027, 'beforefields' => '"bugID":{"object":"bug","field":"bugID","type":"string"},"type":{"object":"project","field":"type","type":"string"}',
+                               'fields' => '{"id":{"object":"project","field":"id","type":"string"},"project":{"object":"project","field":"project","type":"string"},"t3id":{"object":"project","field":"t3id","type":"string"},"execution":{"object":"project","field":"execution","type":"string"},"bugID":{"object":"bug","field":"bugID","type":"string"},"type":{"object":"bug","field":"type","type":"option"}}',
+                               'langs' => '{"stories":{"zh-cn":"\\u9700\\u6c42\\u6570","zh-tw":"\\u9700\\u6c42\\u6570","en":"Stories"},"tasks":{"zh-cn":"\\u4efb\\u52a1\\u6570","zh-tw":"\\u4efb\\u52a1\\u6570","en":"Tasks"},"undoneStory":{"zh-cn":"\\u5269\\u4f59\\u9700\\u6c42\\u6570","zh-tw":"\\u5269\\u4f59\\u9700\\u6c42\\u6570","en":"Undone Story"},"undoneTask":{"zh-cn":"\\u5269\\u4f59\\u4efb\\u52a1\\u6570","zh-tw":"\\u5269\\u4f59\\u4efb\\u52a1\\u6570","en":"Undone Task"},"consumed":{"zh-cn":"\\u5df2\\u6d88\\u8017\\u5de5\\u65f6","zh-tw":"\\u5df2\\u6d88\\u8017\\u5de5\\u65f6","en":"Cost(h)"},"left":{"zh-cn":"\\u5269\\u4f59\\u5de5\\u65f6","zh-tw":"\\u5269\\u4f59\\u5de5\\u65f6","en":"Left(h)"},"consumedPercent":{"zh-cn":"\\u8fdb\\u5ea6","zh-tw":"\\u8fdb\\u5ea6","en":"Process"},"execution":{"zh-cn":"\\u6267\\u884c\\u540d\\u79f0","zh-tw":"","en":"","de":"","fr":""},"id":{"zh-cn":"\\u9879\\u76eeID","zh-tw":"","en":"","de":"","fr":""},"project":{"zh-cn":"\\u9879\\u76ee\\u540d\\u79f0","zh-tw":"","en":"","de":"","fr":""},"bugID":{"zh-cn":"bugID","zh-tw":"","en":"","de":"","fr":""},"type":{"zh-cn":"Bug\\u7c7b\\u578b","zh-tw":"","en":"","de":"","fr":""}}');
+
+        foreach($fieldsPairs as $field)
+        {
+            $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('fields')->like("%{$field['beforefields']}%")->fetchAll();
+            if(count($pivot) > 1 or count($pivot) == 0) continue;
+
+            $pivot = reset($pivot);
+
+            $data = new stdclass();
+            if(isset($field['fields'])) $data->fields = $field['fields'];
+            if(isset($field['langs']))  $data->langs = $field['langs'];
+
+            $this->dao->update(TABLE_PIVOT)->data($data)->where('id')->eq($pivot->id)->exec();
+        }
     }
 }

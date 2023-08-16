@@ -134,13 +134,18 @@ class compileModel extends model
 
         $url = new stdclass();
         $url->userPWD = "$jenkinsUser:$jenkinsPassword";
+
+        $detailUrl             = strpos($jenkins->pipeline, '/job/') !== false ? sprintf('%s%s/api/json', $jenkinsServer, $jenkins->pipeline) : sprintf('%s/job/%s/api/json', $jenkinsServer, $jenkins->pipeline);
+        $hasParameterizedBuild = $this->loadModel('job')->checkParameterizedBuild($detailUrl, $url->userPWD);
+        $buildInterface        = $hasParameterizedBuild ? 'buildWithParameters' : 'build';
+
         if(strpos($jenkins->pipeline, '/job/') !== false)
         {
-            $url->url = sprintf('%s%sbuildWithParameters/api/json', $jenkinsServer, $jenkins->pipeline);
+            $url->url = sprintf("%s%s{$buildInterface}/api/json", $jenkinsServer, $jenkins->pipeline);
         }
         else
         {
-            $url->url = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->pipeline);
+            $url->url = sprintf("%s/job/%s/{$buildInterface}/api/json", $jenkinsServer, $jenkins->pipeline);
         }
 
         return $url;

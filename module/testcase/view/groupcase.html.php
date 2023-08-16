@@ -20,7 +20,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
       <?php if(common::canModify('product', $product) and common::hasPriv('testcase', 'create')):?>
-      <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>

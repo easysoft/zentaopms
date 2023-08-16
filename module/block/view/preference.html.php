@@ -87,7 +87,7 @@
         <th class='w-120px'><?php echo $lang->my->storyConcept;?></th>
         <td><?php echo html::select('URSR', $URSRList, $URSR, "class='form-control picker URSR'");?></td>
       </tr>
-      <?php if($this->config->systemMode == 'ALM'):?>
+      <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
       <tr>
         <th><?php echo $lang->my->programLink;?></th>
         <td><?php echo html::select('programLink', $lang->my->programLinkList, $programLink, "class='form-control picker programLink'");?></td>
@@ -97,6 +97,7 @@
         <th><?php echo $lang->my->productLink;?></th>
         <td><?php echo html::select('productLink', $lang->my->productLinkList, $productLink, "class='form-control picker productLink'");?></td>
       </tr>
+      <?php if($config->vision != 'or'):?>
       <tr>
         <th><?php echo $lang->my->projectLink;?></th>
         <td><?php echo html::select('projectLink', $lang->my->projectLinkList, $projectLink, "class='form-control picker projectLink'");?></td>
@@ -105,6 +106,7 @@
         <th><?php echo $lang->my->executionLink;?></th>
         <td><?php echo html::select('executionLink', $lang->my->executionLinkList, $executionLink, "class='form-control picker executionLink'");?></td>
       </tr>
+      <?php endif;?>
       <tr>
         <td colspan='2' class='text-center form-actions'>
           <?php echo html::submitButton();?>

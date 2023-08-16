@@ -30,7 +30,6 @@ js::set('foldAll',     $lang->execution->treeLevel['root']);
 ?>
 <style>
 body {margin-bottom: 25px;}
-.btn-group a i.icon-plus {font-size: 16px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 </style>
@@ -269,18 +268,24 @@ body {margin-bottom: 25px;}
         </thead>
         <tbody>
           <?php foreach($tasks as $task):?>
+          <?php
+          $privs['canBatchEdit']         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
+          $privs['canBatchClose']        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
+          $privs['canBatchCancel']       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
+          $privs['canBatchChangeModule'] = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
+          $privs['canBatchAssignTo']     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
+          ?>
           <tr <?php if(!empty($task->children)) echo 'class="table-parent" '; ?>data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
             <?php if($this->app->getViewType() == 'xhtml'):?>
             <?php
+
             foreach($customFields as $field)
             {
                 if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
-                {
-                  $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');
-                }
+                $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', false, false, $privs);
             }?>
             <?php else:?>
-            <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', false, $showBranch);?>
+            <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', false, $showBranch, $privs);?>
             <?php endif;?>
           </tr>
           <?php if(!empty($task->children)):?>
@@ -288,16 +293,24 @@ body {margin-bottom: 25px;}
           <?php foreach($task->children as $key => $child):?>
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
+
+          <?php
+          $childPrivs['canBatchEdit']         = common::hasPriv('task', 'batchEdit', !empty($child) ? $child : null);
+          $childPrivs['canBatchClose']        = (common::hasPriv('task', 'batchClose', !empty($child) ? $child : null) and strtolower($browseType) != 'closed');
+          $childPrivs['canBatchCancel']       = common::hasPriv('task', 'batchCancel', !empty($child) ? $child : null);
+          $childPrivs['canBatchChangeModule'] = common::hasPriv('task', 'batchChangeModule', !empty($child) ? $child : null);
+          $childPrivs['canBatchAssignTo']     = common::hasPriv('task', 'batchAssignTo', !empty($child) ? $child : null);
+          ?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
             <?php if($this->app->getViewType() == 'xhtml'):?>
             <?php
             foreach($customFields as $field)
             {
                 if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
-                $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);
+                $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true, false, $childPrivs);
             }?>
             <?php else:?>
-            <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true, $showBranch);?>
+            <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true, $showBranch, $childPrivs);?>
             <?php endif;?>
           </tr>
           <?php $i ++;?>

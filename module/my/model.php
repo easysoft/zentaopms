@@ -286,10 +286,7 @@ class myModel extends model
      */
     public function getActions()
     {
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 50, 1);
-
-        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager);
+        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50);
         $users   = $this->loadModel('user')->getList();
 
         $simplifyUsers = array();
@@ -1023,6 +1020,7 @@ class myModel extends model
     public function getReviewingTypeList()
     {
         $typeList = array();
+        if($this->config->edition == 'ipd' and $this->getReviewingDemands('id_desc', true))   $typeList[] = 'demand';
         if($this->getReviewingStories('id_desc', true))   $typeList[] = 'story';
         if($this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
@@ -1054,6 +1052,7 @@ class myModel extends model
     public function getReviewingList($browseType, $orderBy = 'time_desc', $pager = null)
     {
         $reviewList = array();
+        if($this->config->edition == 'ipd' and ($browseType == 'all' or $browseType == 'demand'))   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
         if($browseType == 'all' or $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
         if($browseType == 'all' or $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($browseType == 'all' or $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
@@ -1088,6 +1087,47 @@ class myModel extends model
         $reviewList = $reviewList[$pager->pageID - 1];
 
         return $reviewList;
+    }
+
+    /**
+     * Get reviewing demands.
+     *
+     * @param  string $orderBy
+     * @param  bool   $checkExists
+     * @access public
+     * @return array
+     */
+    public function getReviewingDemands($orderBy = 'id_desc', $checkExists = false)
+    {
+        if(!common::hasPriv('demand', 'review')) return array();
+
+        $this->app->loadLang('demand');
+        $stmt = $this->dao->select("t1.*")->from(TABLE_DEMAND)->alias('t1')
+            ->leftJoin(TABLE_DEMANDREVIEW)->alias('t2')->on('t1.id = t2.demand and t1.version = t2.version')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.reviewer')->eq($this->app->user->account)
+            ->andWhere('t2.result')->eq('')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.status')->eq('reviewing')
+            ->orderBy($orderBy)
+            ->query();
+
+        $demands = array();
+        while($data = $stmt->fetch())
+        {
+            if($checkExists) return true;
+            $demand = new stdclass();
+            $demand->id      = $data->id;
+            $demand->title   = $data->title;
+            $demand->type    = 'demand';
+            $demand->time    = $data->createdDate;
+            $demand->status  = $data->status;
+            $demands[$demand->id] = $demand;
+        }
+
+        $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($demands))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+        foreach($actions as $demandID => $date) $demands[$demandID]->time = $date;
+        return array_values($demands);
     }
 
     /**

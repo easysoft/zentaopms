@@ -119,8 +119,10 @@ class executionEntry extends entry
     {
         $oldExecution = $this->loadModel('execution')->getByID($executionID);
 
+        $useCode = $this->checkCodeUsed();
         /* Set $_POST variables. */
-        $fields = 'project,code,name,begin,end,lifetime,desc,days,acl,status,PO,PM,QD,RD';
+        $fields = 'project,name,begin,end,lifetime,desc,days,acl,status,PO,PM,QD,RD';
+        if($useCode) $fields .= 'code';
         $this->batchSetPost($fields, $oldExecution);
 
         $this->setPost('whitelist', $this->request('whitelist', explode(',', $oldExecution->whitelist)));

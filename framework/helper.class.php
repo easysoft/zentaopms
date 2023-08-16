@@ -350,6 +350,9 @@ class helper extends baseHelper
     }
 
     /**
+     * 是否是内网。
+     * Check is intranet.
+     *
      * @return bool
      */
     public static function isIntranet()

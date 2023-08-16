@@ -5,6 +5,7 @@ $(function()
     expandTree();
     renderFilters(pivot);
     initQueryBtn();
+    initOriginQueryBtn();
 
     $('body').resize(() => {calcPreviewGrowFilter();});
 
@@ -20,17 +21,14 @@ function expandTree()
     tree.expand($('.pivot-' + pivotID).parents('li'));
 }
 
-/*$('.btn-export').click(function()
-{
-    if(typeof pivotID == 'undefined' || !pivotID) return;
-    pivot = getQueryInfo();
-});
-*/
-
 function getQueryInfo()
 {
-    var pivotInfo = pivot;
+    // if not use JSON.parse(JSON.stringify()), edit pivotInfo also affects pivot. If click btn-query-origin, pivot setting also have summary field.
+    var pivotInfo = JSON.parse(JSON.stringify(pivot));
     pivotInfo.searchFilters = JSON.parse(JSON.stringify(pivotInfo.filters));
+    pivotInfo.step = 4;
+
+    if(!pivotInfo.searchFilters) return pivotInfo;
 
     if(isQueryFilter(pivotInfo.filters))
     {
@@ -70,7 +68,6 @@ function getQueryInfo()
         });
     }
 
-    pivotInfo.step = 4;
     return pivotInfo;
 }
 
@@ -84,14 +81,51 @@ function initQueryBtn()
 {
     $('.btn-query').click(function()
     {
-        pivotInfo = getQueryInfo();
-        $.post(createLink('pivot', 'ajaxGetPivot'), pivotInfo,function(resp)
-        {
-            var myDatagrid = $('#datagirdInfo');
-            myDatagrid.find('.reportData').remove();
-            myDatagrid.append(resp);
-        });
+        var pivotInfo = getQueryInfo();
+        refreshPivot(pivotInfo);
+    });
+}
 
+/**
+ * Init origin query button.
+ *
+ * @access public
+ * @return void
+ */
+function initOriginQueryBtn()
+{
+    $('.btn-query-origin').click(function()
+    {
+        var pivotInfo = getQueryInfo();
+        pivotInfo.settings['summary'] = 'notuse';
+        refreshPivot(pivotInfo, true);
+    });
+}
+
+function refreshPivot(pivotInfo, isOrigin = false)
+{
+    $.post(createLink('pivot', 'ajaxGetPivot'), pivotInfo,function(resp)
+    {
+        var myDatagrid = $('#datagirdInfo');
+        myDatagrid.find('.reportData').remove();
+        myDatagrid.append(resp);
+
+        if(isOrigin)
+        {
+            $('#filterItems').addClass('hidden');
+            $('#filterMargin').removeClass('hidden');
+
+            $('#pivot-query').removeClass('hidden');
+            $('#origin-query').addClass('hidden');
+        }
+        else
+        {
+            $('#filterItems').removeClass('hidden');
+            $('#filterMargin').addClass('hidden');
+
+            $('#pivot-query').addClass('hidden');
+            $('#origin-query').removeClass('hidden');
+        }
     });
 }
 
@@ -150,26 +184,10 @@ function calcPreviewGrowFilter()
     {
         var $nowDom = $filterItems.find('.filter-item-' + index);
         if(canGrowTotal >= index + 1) $nowDom.addClass('filter-item-grow');
-        if(filter.type == 'select' && $nowDom.find('.picker').length) $nowDom.find('.picker').find('.picker-selections').css('width', WIDTH_INPUT);
     });
 
     if(!lineWrap && nowWidth >= 60) $('.query-inside').removeClass('hidden');
     else $('.query-outside').removeClass('visibility-hidden');
-
-    /* Set picker-selection width, default 128px. */
-    waitForRepaint(function()
-    {
-        pivot.filters.forEach(function(filter, index)
-        {
-            var $nowDom = $filterItems.find('.filter-item-' + index);
-            if(filter.type == 'select' && $nowDom.find('.picker').length)
-            {
-                var pickerWidth = $nowDom.hasClass('filter-item-grow') ? $nowDom.find('.picker')[0].getBoundingClientRect().width : WIDTH_INPUT;
-                $nowDom.find('.picker').find('.picker-selections').css('width', pickerWidth);
-            }
-        });
-    });
-
 }
 
 function renderFilters(pivot)
@@ -295,4 +313,10 @@ function exportData()
 function isQueryFilter(filters)
 {
     return filters.length > 0 && filters[0].from == 'query';
+}
+
+function locate(module, method, params)
+{
+    var link = createLink(module, method, params);
+    window.location.href = link;
 }

@@ -24,7 +24,7 @@
     <form class="load-indicator main-form form-ajax<?php if(defined('TUTORIAL')) echo ' not-watch';?>" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
-          <?php if($this->config->systemMode == 'ALM'):?>
+          <?php if(in_array($this->config->systemMode, array('ALM', 'PLM'))):?>
           <tr>
             <th class='w-140px'><?php echo $lang->program->common;?></th>
             <td><?php echo html::select('program', $programs, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td><td></td>

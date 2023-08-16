@@ -609,21 +609,38 @@ class zanode extends control
      * Ajax: run ZTF script.
      *
      * @param  int    $scriptID
+     * @param  string $taskID
      * @access public
      * @return void
      */
-    public function ajaxRunZTFScript($scriptID = 0)
+    public function ajaxRunZTFScript($scriptID = 0, $taskID = 0)
     {
         if($_POST)
         {
             $caseIDList = $_POST['caseIDList'];
+            $runIDList  = empty($_POST['runIDList']) ? array() : $_POST['runIDList'];
             $script     = $this->zanode->getAutomationByID($scriptID);
-            $cases = $this->loadModel('testcase')->getByList($caseIDList);
+            $cases      = $this->loadModel('testcase')->getByList($caseIDList);
+
+            $runs = array();
+            if($taskID)
+            {
+                $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)
+                ->where('`case`')->in($caseIDList)
+                ->andWhere('task')->eq($taskID)->fi()
+                ->fetchPairs('case', 'id');
+            }
+
+            $caseIDListArray = explode(',', $caseIDList);
+            $runIDListArray  = explode(',', $runIDList);
+            $case2RunMap     = array();
+
+            foreach($caseIDListArray as $index => $caseID) $case2RunMap[$caseID] = empty($runIDListArray[$index]) ? 0 : $runIDListArray[$index];
 
             foreach($cases as $id => $case)
             {
                 if($case->auto != 'auto') continue;
-                $resultID = $this->loadModel('testtask')->initResult(0, $id, $case->version, $script->node);
+                $resultID = $this->loadModel('testtask')->initResult($case2RunMap[$id], $id, $case->version, $script->node);
                 if(!dao::isError()) $this->zanode->runZTFScript($script->id, $id, $resultID);
             }
 

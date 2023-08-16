@@ -197,6 +197,7 @@ $config->openMethods[] = 'misc.checkupdate';
 $config->openMethods[] = 'misc.ping';
 $config->openMethods[] = 'misc.captcha';
 $config->openMethods[] = 'misc.features';
+$config->openMethods[] = 'misc.getremind';
 $config->openMethods[] = 'sso.login';
 $config->openMethods[] = 'sso.logout';
 $config->openMethods[] = 'sso.bind';
@@ -316,6 +317,7 @@ define('TABLE_API_LIB_RELEASE', '`' . $config->db->prefix . 'api_lib_release`');
 
 define('TABLE_MODULE',        '`' . $config->db->prefix . 'module`');
 define('TABLE_ACTION',        '`' . $config->db->prefix . 'action`');
+define('TABLE_ACTIONRECENT',  '`' . $config->db->prefix . 'actionrecent`');
 define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
 define('TABLE_HOLIDAY',       '`' . $config->db->prefix . 'holiday`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
@@ -369,9 +371,6 @@ define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
 define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
 define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
 define('TABLE_SCENE',     '`' . $config->db->prefix . 'scene`');
-define('VIEW_SCENECASE',  '`ztv_scenecase`');
-
-define('CHANGEVALUE', 100000000);
 
 define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
 define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
@@ -455,6 +454,7 @@ $config->programPriv->scrum         = array('story', 'requirement', 'productplan
 $config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 $config->programPriv->agileplus     = $config->programPriv->scrum;
 $config->programPriv->waterfallplus = $config->programPriv->waterfall;
+$config->programPriv->ipd           = $config->programPriv->waterfall;
 
 $config->safeFileTimeout  = 3600;
 $config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');

@@ -10,11 +10,7 @@ class projectModel extends model
      */
     public function checkPriv($projectID)
     {
-        if(empty($projectID)) return false;
-
-        /* If is admin, return true. */
-        if($this->app->user->admin) return true;
-        return (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false);
+        return !empty($projectID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false));
     }
 
     /**
@@ -236,32 +232,22 @@ class projectModel extends model
         $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, $involved);
         if(empty($projects)) return array();
 
-        $projectIdList = array_keys($projects);
-        $teams = $this->dao->select('t1.root, count(t1.id) as count')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.root')
-            ->fetchAll('root');
+        $projectParentNames = $this->getParentProgram($projects);
 
-        $estimates = $this->dao->select("t2.project as project, sum(t1.estimate) as estimate")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t1.parent')->lt(1)
-            ->andWhere('t2.project')->in($projectIdList)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t2.project')
-            ->fetchAll('project');
+        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('status')->notin('done,closed')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->fetchGroup('project');
 
         $this->app->loadClass('pager', $static = true);
         foreach($projects as $projectID => $project)
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
-            $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
-            $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
-            $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
-            $project->parentName = $this->getParentProgram($project);
+            $project->executions = isset($executions[$projectID]) ? $executions[$projectID] : array();
+            $project->parentName = $projectParentNames[$project->id];
         }
         return $projects;
     }
@@ -269,21 +255,45 @@ class projectModel extends model
     /**
      * Get all parent program of a program.
      *
-     * @param  int    $parentID
+     * @param  array $projects
      * @access public
-     * @return string
+     * @return array
      */
-    public function getParentProgram($project)
+    public function getParentProgram($projects)
     {
-        if($project->parent == 0) return '';
+        if(empty($projects)) return array();
 
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->orderBy('grade asc')->fetchPairs();
+        $parents        = array();
+        $projectParents = array();
+        foreach($projects as $project)
+        {
+            $projectParents[$project->id] = array();
 
-        $parentProgram = '';
-        foreach($parentName as $name) $parentProgram .= $name . '/';
-        $parentProgram = rtrim($parentProgram, '/');
+            if(!$project->parent) continue;
 
-        return $parentProgram;
+            foreach(explode(',', trim($project->path, ',')) as $parent)
+            {
+                if($parent == $project->id) continue;
+
+                $parents[$parent] = $parent;
+
+                $projectParents[$project->id][] = $parent;
+            }
+        }
+
+        $parentNames = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in($parents)->fetchPairs();
+
+        foreach($projectParents as $projectID => $parents)
+        {
+            $programNames = array();
+            foreach($parents as $parent)
+            {
+                $programNames[] = $parentNames[$parent];
+            }
+            $projectParents[$projectID] = implode('/', $programNames);
+        }
+
+        return $projectParents;
     }
 
     /**
@@ -385,12 +395,11 @@ class projectModel extends model
      */
     public function getTotalTaskByProject($projectIdList)
     {
-        return $this->dao->select("t1.project, count(t1.id) as allTasks, count(if(t1.status = 'wait', 1, null)) as waitTasks, count(if(t1.status = 'doing', 1, null)) as doingTasks, count(if(t1.status = 'done', 1, null)) as doneTasks, count(if(t1.status = 'wait' or t1.status = 'pause' or t1.status = 'cancel', 1, null)) as leftTasks, count(if(t1.status = 'done' or t1.status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
-            ->where('t1.project')->in($projectIdList)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.project')
+        $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->in($projectIdList)->andWhere('deleted')->eq(0)->fetchPairs();
+        return $this->dao->select("project, count(id) as allTasks, count(if(status = 'wait', 1, null)) as waitTasks, count(if(status = 'doing', 1, null)) as doingTasks, count(if(status = 'done', 1, null)) as doneTasks, count(if(status = 'wait' or status = 'pause' or status = 'cancel', 1, null)) as leftTasks, count(if(status = 'done' or status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)
+            ->where('execution')->in($executionIdList)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('project')
             ->fetchAll('project');
     }
 
@@ -523,9 +532,11 @@ class projectModel extends model
         $workhour = new stdclass();
         $workhour->totalHours    = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root=t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.account=t3.account')
             ->where('t2.id')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('project')
+            ->andWhere('t3.deleted')->eq(0)
             ->fetch('totalHours');
         $workhour->totalEstimate = $total->totalEstimate;
         $workhour->totalConsumed = $totalConsumed;
@@ -1233,6 +1244,7 @@ class projectModel extends model
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF(!isset($_POST['multiple']), 'multiple', '1')
+            ->setIF($this->post->model == 'ipd', 'division', '0')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', $this->post->name)
@@ -1258,7 +1270,7 @@ class projectModel extends model
             }
         }
 
-        if($_POST['products'])
+        if($_POST['products'] and $this->post->model != 'ipd')
         {
             $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
@@ -1546,7 +1558,7 @@ class projectModel extends model
             if(dao::isError()) return false;
         }
 
-        if($_POST['products'])
+        if($_POST['products'] and $oldProject->model != 'ipd')
         {
             $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
@@ -2401,7 +2413,9 @@ class projectModel extends model
     {
         $this->loadModel('user');
 
-        $members = array_keys($this->getTeamMembers($projectID));
+        $teams        = array_keys($this->getTeamMembers($projectID));
+        $stakeholders = array_keys($this->loadModel('stakeholder')->getStakeHolderPairs($projectID));
+        $members      = array_merge($teams, $stakeholders);
 
         /* Link products of other programs. */
         if(!empty($_POST['otherProducts']))
@@ -2796,8 +2810,11 @@ class projectModel extends model
             }
         }
 
-        if($project and $project->model == 'waterfall') $model = $project->model;
-        if($project and $project->model == 'waterfallplus') $model = 'waterfall';
+        if($project)
+        {
+            if(in_array($project->model, array('waterfall', 'waterfallplus'))) $model = 'waterfall';
+            if($project->model == 'ipd') $model = 'ipd';
+        }
         if($project and $project->model == 'kanban')
         {
             $model = $project->model . 'Project';
@@ -2812,9 +2829,8 @@ class projectModel extends model
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
         }
 
-        if(empty($project->hasProduct))
+        if(empty($project->hasProduct) or $model == 'ipd')
         {
-            unset($lang->project->menu->settings['subMenu']->products);
             $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
             $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
@@ -2838,8 +2854,6 @@ class projectModel extends model
                     $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
                     $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
                 }
-
-                unset($lang->project->menu->settings['subMenu']->products);
             }
         }
         else
@@ -2848,7 +2862,9 @@ class projectModel extends model
             unset($lang->project->menu->projectplan);
         }
 
-        if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
+        if(isset($lang->project->menu->storyGroup))  unset($lang->project->menu->storyGroup);
+        if($model != 'ipd' and $project->hasProduct) unset($lang->project->menu->settings['subMenu']->module);
+        if(empty($project->hasProduct))              unset($lang->project->menu->settings['subMenu']->products);
 
         /* Reset project priv. */
         $moduleName = $this->app->rawModule;
@@ -2856,7 +2872,7 @@ class projectModel extends model
         $this->loadModel('common')->resetProjectPriv($objectID);
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
-        if(isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus'))
+        if(isset($project->model) and (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))))
         {
             $lang->project->createExecution = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
             $lang->project->lastIteration   = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
@@ -2998,7 +3014,7 @@ class projectModel extends model
     public function checkCanChangeModel($projectID, $model)
     {
         $checkList = $this->config->project->checkList->$model;
-        if($this->config->edition == 'max') $checkList = $this->config->project->maxCheckList->$model;
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd') $checkList = $this->config->project->maxCheckList->$model;
         foreach($checkList as $module)
         {
             if($module == '') continue;

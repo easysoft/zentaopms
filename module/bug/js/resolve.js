@@ -2,18 +2,6 @@ function setDuplicate(resolution)
 {
     if(resolution == 'duplicate')
     {
-        $.ajaxSettings.async = false;
-        $.get(createLink('bug', 'ajaxGetProductBugs', 'projectID=' + productID + '&bugID=' + bugID),function(data)
-        {
-            $('#duplicateBug').replaceWith(data);
-            $('#pk_duplicateBug-search').parent().parent().remove();
-            $('#duplicateBug').picker(
-            {
-                disableEmptySearch : true,
-                dropWidth : 'auto'
-            });
-        });
-        $.ajaxSettings.async = true;
         $('#duplicateBugBox').show();
     }
     else

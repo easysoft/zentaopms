@@ -46,7 +46,15 @@ class projectStory extends control
         $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
 
         /* Set product list for export. */
-        $this->session->set('exportProductList', $this->products);
+        $this->session->set('exportProductList',  $this->products);
+        $this->session->set('executionStoryList', $this->app->getURI(true));
+        $this->session->set('productList',        $this->app->getURI(true));
+        if($storyType == 'requirement')
+        {
+            unset($this->lang->projectstory->featureBar['story']['linkedExecution']);
+            unset($this->lang->projectstory->featureBar['story']['unlinkedExecution']);
+            $this->lang->projectstory->unlinkStory = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->projectstory->unlinkStory);
+        }
 
         if(empty($this->products)) return print($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID)));
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
@@ -100,12 +108,13 @@ class projectStory extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function linkStory($projectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function linkStory($projectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1, $storyType = 'story')
     {
-        echo $this->fetch('execution', 'linkStory', "projectID=$projectID&browseType=$browseType&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('execution', 'linkStory', "projectID=$projectID&browseType=$browseType&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&extra=&storyType=$storyType");
     }
 
     /**

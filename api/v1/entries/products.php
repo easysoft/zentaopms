@@ -112,14 +112,20 @@ class productsEntry extends entry
      */
     public function post()
     {
-        $fields = 'program,code,line,name,PO,QD,RD,type,desc,whitelist';
+        $useCode = $this->checkCodeUsed();
+
+        $fields = 'program,line,name,PO,QD,RD,type,desc,whitelist';
+        if($useCode) $fields .= ',code';
         $this->batchSetPost($fields);
 
         $this->setPost('acl', $this->request('acl', 'private'));
         $this->setPost('whitelist', $this->request('whitelist', array()));
 
         $control = $this->loadController('product', 'create');
-        $this->requireFields('name,code');
+
+        $requireFields = 'name';
+        if($useCode) $requireFields .= ',code';
+        $this->requireFields($requireFields);
 
         $control->create($this->request('program', 0));
 
@@ -130,7 +136,7 @@ class productsEntry extends entry
         $product = $this->loadModel('product')->getByID($data->id);
         $product = $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user');
 
-        return $this->send(200, $product);
+        return $this->send(201, $product);
     }
 
     /**

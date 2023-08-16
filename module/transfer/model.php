@@ -463,14 +463,16 @@ class transferModel extends model
         foreach($sysDataFields as $field)
         {
             $dataList[$field] = $this->loadModel($field)->getPairs();
+            if(!isset($dataList[$field][0])) $dataList[$field][0] = '';
+            sort($dataList[$field]);
             if($field == 'user')
             {
                 $dataList[$field] = $this->loadModel($field)->getPairs('noclosed|nodeleted|noletter');
                 unset($dataList[$field]['']);
-                if(!in_array(strtolower($this->app->methodName) ,array('ajaxgettbody','ajaxgetoptions','showimport')))
-                {
-                    foreach($dataList[$field] as $key => $value) $dataList[$field][$key] = $value . "(#$key)";
-                }
+            }
+            if(!in_array(strtolower($this->app->methodName) ,array('ajaxgettbody','ajaxgetoptions','showimport')))
+            {
+                foreach($dataList[$field] as $key => $value) $dataList[$field][$key] = $value . "(#$key)";
             }
         }
 
@@ -1461,7 +1463,7 @@ class transferModel extends model
                 if($control == 'select')
                 {
                     if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
-                    if(empty($options) and is_array($values)) $options = array_slice($values, 0, 1);
+                    if(empty($options) and is_array($values)) $options = array_slice($values, 0, 1, true);
                 }
 
                 if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';

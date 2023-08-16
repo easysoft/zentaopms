@@ -187,7 +187,7 @@ $lang->custom->notice->forceReview         = '%s review is required for committe
 $lang->custom->notice->forceNotReview      = "%s review is not required for committers selected.";
 $lang->custom->notice->longlife            = 'Define stalled bugs.';
 $lang->custom->notice->invalidNumberKey    = 'The key should be =< 255.';
-$lang->custom->notice->invalidStringKey    = 'The key should be lowercase letters, numbers or underlines.';
+$lang->custom->notice->invalidStringKey    = 'The key should be letters, numbers or underlines.';
 $lang->custom->notice->cannotSetTimezone   = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
 $lang->custom->notice->noClosedBlock       = 'You have no blocks that are closed permanently.';
 $lang->custom->notice->required            = 'The selected field is required.';
@@ -254,6 +254,7 @@ $lang->custom->selectProgramTips = "After switching to the Light Mode, in order 
 
 $lang->custom->modeList['light'] = 'Light Mode';
 $lang->custom->modeList['ALM']   = 'ALM Mode';
+$lang->custom->modeList['PLM']   = 'IPD Mode';
 
 $lang->custom->modeIntroductionList['light'] = "Provides the core function of {$lang->projectCommon} management, suitable for small R&D teams";
 $lang->custom->modeIntroductionList['ALM']   = 'The concept is more complete and rigorous, and the function is more abundant. It is suitable for medium and large R&D teams';

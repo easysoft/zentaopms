@@ -32,9 +32,10 @@ class releasesEntry extends entry
         {
             $result   = array();
             $releases = $data->data->releases;
+            $pager    = $data->data->pager;
             foreach($releases as $release) $result[] = $this->format($release, 'deleted:bool,date:date,mailto:userList');
 
-            return $this->send(200, array('total' => count($result), 'releases' => $result));
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'releases' => $result));
         }
 
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);

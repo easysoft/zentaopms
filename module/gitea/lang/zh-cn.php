@@ -13,6 +13,7 @@ $lang->gitea->giteaAccount  = 'Gitea用户';
 $lang->gitea->giteaEmail    = '邮箱';
 $lang->gitea->zentaoAccount = '禅道用户';
 $lang->gitea->bindingStatus = '绑定状态';
+$lang->gitea->all           = '全部';
 $lang->gitea->notBind       = '未绑定';
 $lang->gitea->binded        = '已绑定';
 $lang->gitea->bindDynamic   = '%s与禅道用户%s';

@@ -15,6 +15,7 @@
 <style>
 .search-form .form-actions {padding-bottom: 10px!important;}
 </style>
+<?php js::set('storyType', $storyType);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->linkStory;?></span></span>
@@ -47,19 +48,26 @@
           <th class='c-object'><?php echo $lang->story->product;?></th>
           <?php endif;?>
           <th class='c-module'><?php echo $lang->story->module;?></th>
-          <th class='c-plan <?php if(empty($project->hasProduct) && $project->model != 'scrum') echo 'hide';?>'><?php echo $lang->story->plan;?></th>
+          <th class='c-plan <?php if((empty($project->hasProduct) && $project->model != 'scrum') || $storyType != 'story') echo 'hide';?>'><?php echo $lang->story->plan;?></th>
+          <?php if($object->model == 'ipd' and $storyType == 'requirement'):?>
+          <th class='c-plan'><?php echo $lang->story->roadmap;?></th>
+          <th class='c-status'><?php echo $lang->story->status;?></th>
+          <?php else:?>
           <th class='c-stage'><?php echo $lang->story->stage;?></th>
+          <?php endif;?>
           <?php if($project->hasProduct && $productType != 'normal'):?>
           <th class='c-branch'><?php echo $lang->product->branchName[$productType];?></th>
           <?php endif;?>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
+          <?php if($storyType != 'requirement'):?>
           <th class='c-estimate text-right'><?php echo $lang->story->estimateAB;?></th>
+          <?php endif;?>
         </tr>
       </thead>
       <tbody>
       <?php $storyCount = 0;?>
       <?php foreach($allStories as $story):?>
-      <?php $storyLink = $this->createLink('execution', 'storyView', "storyID=$story->id", '', true);?>
+      <?php $storyLink = $this->app->tab == 'execution' ? $this->createLink('execution', 'storyView', "storyID=$story->id", '', true) : $this->createLink('projectstory', 'view', "storyID=$story->id", '', true);?>
       <tr>
         <td class='cell-id'>
           <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)));?>
@@ -84,16 +92,23 @@
           ?>
         </td>
         <?php if($project->hasProduct):?>
-        <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name);?></td>
+        <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=&param=0&storyType=story&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID={$project->id}"), $products[$story->product]->name);?></td>
         <?php endif;?>
         <td class='c-module text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
-        <td class='text-ellipsis <?php if(empty($project->hasProduct) && $project->model != 'scrum') echo 'hide';?>' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
+        <td class='text-ellipsis <?php if((empty($project->hasProduct) && $project->model != 'scrum') || $storyType != 'story') echo 'hide';?>' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
+        <?php if($object->model == 'ipd' and $storyType == 'requirement'):?>
+        <td title="<?php echo zget($roadmaps, $story->roadmap, '');?>"><?php echo zget($roadmaps, $story->roadmap, '');?></td>
+        <td><?php echo zget($lang->story->statusList, $story->status);?></td>
+        <?php else:?>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
+        <?php endif;?>
         <?php if($project->hasProduct && $productType != 'normal'):?>
         <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
         <?php endif;?>
         <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
+        <?php if($storyType != 'requirement'):?>
         <td class='text-right c-estimate' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
+        <?php endif;?>
       </tr>
       <?php $storyCount++;?>
       <?php endforeach;?>

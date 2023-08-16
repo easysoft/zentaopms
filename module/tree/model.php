@@ -318,7 +318,7 @@ class treeModel extends model
                 {
                     $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task' and parent != 0) OR (root = $id and type = 'story'))")
                         ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-                        ->andWhere('branch')->in($activeBranch)->fi()
+                        ->beginIF(!empty($activeBranch))->andWhere('branch')->in($activeBranch)->fi()
                         ->andWhere('deleted')->eq(0)
                         ->orderBy('grade desc, branch, `order`, type')
                         ->fetchAll('id');
@@ -430,6 +430,7 @@ class treeModel extends model
 
         $this->loadModel('branch');
         $projectID        = zget($extra, 'projectID', 0);
+        $projectModel     = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch('model');
         $branches         = array($branch => '');
         $executionModules = array();
         if($branch and empty($projectID))
@@ -470,7 +471,7 @@ class treeModel extends model
             {
                 $this->buildTree($treeMenu, $module, $type, $userFunc, $extra, $branch);
             }
-            elseif(isset($executionModules[$module->id]) || !empty($product->shadow))
+            elseif(isset($executionModules[$module->id]) || !empty($product->shadow) || $projectModel == 'ipd')
             {
                 $this->buildTree($treeMenu, $module, $type, $userFunc, $extra, $branch);
             }
@@ -1004,9 +1005,7 @@ class treeModel extends model
                 $paths = $this->dao->select('DISTINCT t3.' . $field)->from($table1)->alias('t1')
                     ->leftJoin($table2)->alias('t2')->on('t1.' . $linkObject . ' = t2.id')
                     ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
-                    ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
-                    ->where('(t1.project')->eq($executionID)
-                    ->orWhere('t4.project')->eq($executionID)->markRight(1)
+                    ->where('t1.project')->eq($executionID)
                     ->andWhere('t3.deleted')->eq(0)
                     ->andWhere('t2.deleted')->eq(0)
                     ->beginIF(isset($extra['branchID']) and $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()

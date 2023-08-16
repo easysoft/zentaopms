@@ -162,7 +162,7 @@ class reportsEntry extends entry
             $newProject->id            = $project->id;
             $newProject->name          = $project->name;
             $newProject->status        = $project->status;
-            $newProject->progress      = round($project->hours->progress, 1);
+            $newProject->progress      = isset($project->progress) ? $project->progress : round($project->hours->progress, 1);
             $newProject->totalConsumed = round($project->hours->totalConsumed, 1);
             $newProject->totalLeft     = round($project->hours->totalLeft, 1);
             if(isset($project->delay)) $newProject->delay = $project->delay;
@@ -206,7 +206,7 @@ class reportsEntry extends entry
             $newExecution->id            = $execution->id;
             $newExecution->name          = $execution->name;
             $newExecution->status        = $execution->status;
-            $newExecution->progress      = round($execution->hours->progress, 1);
+            $newExecution->progress      = isset($execution->progress) ? $execution->progress : round($execution->hours->progress, 1);
             $newExecution->totalConsumed = round($execution->hours->totalConsumed, 1);
             $newExecution->totalLeft     = round($execution->hours->totalLeft, 1);
             if(isset($execution->delay)) $newExecution->delay = $execution->delay;

@@ -417,7 +417,6 @@ class baseEntry
      */
     public function setPost($key, $value)
     {
-        if(in_array($key, array('desc', 'spec', 'verify', 'steps'))) $value = htmlspecialchars($value);
         $_POST[$key] = $value;
     }
 
@@ -475,6 +474,19 @@ class baseEntry
             }
         }
     }
+
+    /**
+     * 检查是否在后台启用了代号.
+     * Check whether config->setCode are used in product,project,execution.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkCodeUsed()
+    {
+        return isset($this->config->setCode) ? $this->config->setCode : 0;
+    }
+
 
     /**
      * 格式化数据的字段类型.

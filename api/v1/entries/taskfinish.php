@@ -28,17 +28,18 @@ class taskFinishEntry extends entry
         $fields = 'finishedDate,comment';
         $this->batchSetPost($fields);
 
+        $realStarted = $this->request('realStarted', (isset($task->realStarted) and !helper::isZeroDate($task->realStarted)) ? $task->realStarted : '');
+        if($realStarted) $this->setPost('realStarted', $realStarted);
         $this->setPost('currentConsumed', $this->request('currentConsumed', 0));
         $this->setPost('consumed', $this->request('currentConsumed', 0) + $task->consumed);
 
         $control = $this->loadController('task', 'finish');
-        $this->requireFields('assignedTo,currentConsumed,realStarted,finishedDate');
+        $this->requireFields('currentConsumed,realStarted,finishedDate');
         $control->finish($taskID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
-        if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $task = $this->loadModel('task')->getByID($taskID);
 

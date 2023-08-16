@@ -727,7 +727,7 @@ CREATE TABLE `zt_cron` (
   `lastTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `lastTime` (`lastTime`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_dashboard` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -2148,6 +2148,19 @@ CREATE TABLE `zt_product` (
   `acl` enum('open','private','custom') NOT NULL DEFAULT 'open',
   `whitelist` text NOT NULL,
   `reviewer` text NOT NULL,
+  `draftStories` mediumint(8) NOT NULL DEFAULT '0',
+  `activeStories` mediumint(8) NOT NULL DEFAULT '0',
+  `changingStories` mediumint(8) NOT NULL DEFAULT '0',
+  `reviewingStories` mediumint(8) NOT NULL DEFAULT '0',
+  `closedStories` mediumint(8) NOT NULL DEFAULT '0',
+  `totalStories` mediumint(8) NOT NULL DEFAULT '0',
+  `unresolvedBugs` mediumint(8) NOT NULL DEFAULT '0',
+  `closedBugs` mediumint(8) NOT NULL DEFAULT '0',
+  `fixedBugs` mediumint(8) NOT NULL DEFAULT '0',
+  `totalBugs` mediumint(8) NOT NULL DEFAULT '0',
+  `plans` mediumint(8) NOT NULL DEFAULT '0',
+  `releases` mediumint(8) NOT NULL DEFAULT '0',
+  `finishedStories` mediumint(9) NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `createdVersion` varchar(20) NOT NULL,

@@ -232,6 +232,7 @@ class task extends control
 
                 $response['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
                 $response['locate']  = $this->createLink('task', 'create', "executionID=$executionID&storyID={$storyParam}&moduleID=$moduleID");
+                if($this->app->tab == 'project') $response['locate']  = 'reload';
                 return $this->send($response);
             }
             elseif($this->post->after == 'toTaskList')
@@ -538,6 +539,8 @@ class task extends control
 
         /* Set menu. */
         $this->execution->setMenu($this->view->execution->id);
+        if(!$this->view->execution->multiple) $this->loadModel('project')->setMenu($this->view->task->project);
+
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
     }
 
@@ -952,6 +955,7 @@ class task extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
+        if(!$this->loadModel('common')->checkPrivByObject('execution', $task->execution)) return print(js::error($this->lang->execution->accessDenied) . js::locate($this->createLink('execution', 'all')));
 
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
@@ -1431,7 +1435,11 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->pause($taskID, $extra);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return print(js::error(dao::getError()));
+            }
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1468,6 +1476,7 @@ class task extends control
                 }
                 return print(js::closeModal('parent.parent', 'this'));
             }
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
 
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -1497,7 +1506,11 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->start($taskID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return print(js::error(dao::getError()));
+            }
 
             $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
             $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
@@ -1531,6 +1544,8 @@ class task extends control
                 }
                 return print(js::closeModal('parent.parent', 'this'));
             }
+
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 

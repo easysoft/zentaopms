@@ -977,7 +977,7 @@ class testtaskModel extends model
         $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
         $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
-        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq((int)$taskID)
@@ -1007,7 +1007,7 @@ class testtaskModel extends model
 
         $cases = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
 
-        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq((int)$taskID)
@@ -1034,7 +1034,7 @@ class testtaskModel extends model
         $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
         $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
-        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq((int)$taskID)
@@ -1110,7 +1110,7 @@ class testtaskModel extends model
             $fieldToSort   = substr($sort, 0, strpos($sort, '_'));
             $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $sort) : ('t2.' . $sort);
 
-            $runs = $this->dao->select('t2.*,t1.*, t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+            $runs = $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
                 ->where($caseQuery)
@@ -1341,7 +1341,7 @@ class testtaskModel extends model
             $postReals   = $postData->reals[$caseID];
 
             $caseResult  = $result ? $result : 'pass';
-            if($postData->node) $caseResult = '';
+            if(!empty($postData->node)) $caseResult = '';
             $stepResults = array();
             if($dbSteps)
             {
@@ -1582,7 +1582,7 @@ class testtaskModel extends model
 
         if($action == 'runcase')
         {
-            if(isset($testtask->caseStatus)) return $testtask->version < $testtask->caseVersion ? $testtask->caseStatus == 'wait' : $testtask->caseStatus != 'wait';
+            if(isset($testtask->caseStatus)) return $testtask->caseStatus != 'wait';
             return $testtask->status != 'wait';
         }
 
@@ -1613,7 +1613,6 @@ class testtaskModel extends model
         $caseLink    = helper::createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask&taskID=$run->task");
         $account     = $this->app->user->account;
         $id          = $col->id;
-        $caseChanged = $run->version < $run->caseVersion;
         $fromCaseID  = $run->fromCaseID;
 
         if($col->show)
@@ -1673,19 +1672,12 @@ class testtaskModel extends model
                 foreach(explode(',', trim($run->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
                 break;
             case 'status':
-                if($run->caseStatus != 'wait' and $caseChanged)
-                {
-                    echo "<span title='{$this->lang->testcase->changed}' class='warning'>{$this->lang->testcase->changed}</span>";
-                }
-                else
-                {
-                    $case = new stdClass();
-                    $case->status = $run->caseStatus;
+                $case = new stdClass();
+                $case->status = $run->caseStatus;
 
-                    $status = $this->processStatus('testcase', $case);
-                    if($run->status == $status) $status = $this->processStatus('testtask', $run);
-                    echo $status;
-                }
+                $status = $this->processStatus('testcase', $case);
+                if($run->status == $status) $status = $this->processStatus('testtask', $run);
+                echo $status;
                 break;
             case 'precondition':
                 echo $run->precondition;
@@ -1743,12 +1735,6 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
-                if($run->caseStatus != 'wait' and $caseChanged)
-                {
-                    common::printIcon('testcase', 'confirmChange', "id=$run->case&taskID=$run->task&from=list", $run, 'list', 'search', 'hiddenwin');
-                    break;
-                }
-
                 common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=executionID=$task->execution,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
 
                 common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
@@ -2244,17 +2230,21 @@ class testtaskModel extends model
 
             $case = new stdclass();
             if(!empty($caseResult->id)) $case->id = $caseResult->id;
-            $case->product    = $productID;
-            if(empty($caseResult->id)) $case->title = $caseResult->title;
-            $case->pri        = 3;
-            $case->type       = 'unit';
-            $case->stage      = 'unittest';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = $now;
-            $case->version    = 1;
-            if(empty($caseResult->id)) $case->auto = 'unit';
-            $case->frame      = $frame;
+            $case->status = 'normal';
+            $case->frame  = $frame;
+
+            if(empty($caseResult->id))
+            {
+                $case->type       = 'unit';
+                $case->stage      = 'unittest';
+                $case->product    = $productID;
+                $case->title      = $caseResult->title;
+                $case->pri        = 3;
+                $case->openedBy   = $this->app->user->account;
+                $case->openedDate = $now;
+                $case->version    = 1;
+                $case->auto       = 'unit';
+            }
 
             $result = new stdclass();
             $result->case       = 0;
@@ -2312,19 +2302,22 @@ class testtaskModel extends model
             if(!isset($suites[$suiteIndex])) $suites[$suiteIndex] = $suite;
 
             $case = new stdclass();
-            if(isset($caseResult->id)) $case->id = $caseResult->id;
-            if(!isset($caseResult->id)) $case->product = $productID;
-            $case->title      = $caseResult->title;
-            $case->pri        = 3;
-            $case->type       = 'feature';
-            $case->stage      = 'feature';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = $now;
-            $case->version    = 1;
-            $case->auto       = 'func';
-            $case->frame      = $frame;
-            $case->steps      = array();
+            if(!empty($caseResult->id)) $case->id = $caseResult->id;
+            $case->title  = $caseResult->title;
+            $case->frame  = $frame;
+            $case->status = 'normal';
+            $case->steps  = array();
+            $case->auto   = 'func';
+            if(empty($caseResult->id))
+            {
+                $case->product    = $productID;
+                $case->pri        = 3;
+                $case->type       = 'feature';
+                $case->stage      = 'feature';
+                $case->openedBy   = $this->app->user->account;
+                $case->openedDate = $now;
+                $case->version    = 1;
+            }
 
             $result = new stdclass();
             $result->case       = 0;

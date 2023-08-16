@@ -77,7 +77,7 @@ $hasBugButton        = $features['qa'] && ($canCreateBug || $canBatchCreateBug);
 
 $canCreateStory      = $features['story'] && $productID && common::hasPriv('story', 'create');
 $canBatchCreateStory = $features['story'] && $productID && common::hasPriv('story', 'batchCreate');
-$canLinkStory        = $features['story'] && $productID && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct);
+$canLinkStory        = $features['story'] && $productID && common::hasPriv('execution', 'linkStory');
 $canLinkStoryByPlan  = $features['story'] && $productID && common::hasPriv('execution', 'importplanstories') && !empty($project->hasProduct);
 $hasStoryButton      = $features['story'] && ($canCreateStory || $canBatchCreateStory || $canLinkStory || $canLinkStoryByPlan);
 

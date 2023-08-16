@@ -55,8 +55,6 @@ class executionsEntry extends entry
         $result = array();
         foreach($data->data->executionStats as $execution)
         {
-            foreach($execution->hours as $field => $value) $execution->$field = $value;
-
             $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,delay,progress,children,' . $appendFields);
             $result[]  = $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
         }
@@ -80,7 +78,10 @@ class executionsEntry extends entry
      */
     public function post($projectID = 0)
     {
-        $fields = 'project,code,name,begin,end,lifetime,desc,days,percent,parent';
+        $useCode = $this->checkCodeUsed();
+
+        $fields = 'project,name,begin,end,lifetime,desc,days,percent,parent';
+        if($useCode) $fields .= 'code';
         $this->batchSetPost($fields);
 
         $projectID = $this->param('project', $projectID);
@@ -94,7 +95,12 @@ class executionsEntry extends entry
         $this->setPost('products',  $this->request('products', array()));
         $this->setPost('plans',     $this->request('plans', array()));
 
-        $control = $this->loadController('execution', 'create'); $this->requireFields('name,code,begin,end,days');
+        $control = $this->loadController('execution', 'create');
+
+        $requireFields = 'name,begin,end';
+        if($useCode) $requireFields .= ',code';
+        $this->requireFields($requireFields);
+
         $control->create($projectID);
 
         $data = $this->getData();
@@ -122,7 +128,7 @@ class executionsEntry extends entry
         $account  = $this->app->user->account;
         $projects = $data->data->projects;
         $dropMenu = array('involved' => array(), 'other' => array(), 'closed' => array());
-        foreach($data->data->executions as $projectID => $projectExecutions)
+        foreach($data->data->projectExecutions as $projectID => $projectExecutions)
         {
             foreach($projectExecutions as $execution)
             {

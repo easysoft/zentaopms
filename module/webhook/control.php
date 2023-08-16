@@ -347,44 +347,35 @@ class webhook extends control
     public function asyncSend()
     {
         $webhooks = $this->webhook->getList($orderBy = 'id_desc', $pager = null, $decode = false);
-        if(empty($webhooks))
+        if(!empty($webhooks))
         {
-            echo "NO WEBHOOK EXIST.\n";
-            return false;
-        }
-
-        $dataList = $this->webhook->getDataList();
-        if(empty($dataList))
-        {
-            echo "OK\n";
-            return true;
-        }
-
-        $this->webhook->setSentStatus(array_keys($dataList), 'senting');
-
-        $now  = helper::now();
-        $diff = 0;
-        foreach($dataList as $data)
-        {
-            $webhook = zget($webhooks, $data->objectID, '');
-            if($webhook)
+            $dataList = $this->webhook->getDataList();
+            if(!empty($dataList))
             {
-                /* if connect time is out then ignore it.*/
-                if($diff < 29)
+                $this->webhook->setSentStatus(array_keys($dataList), 'senting');
+
+                $diff   = 0;
+                $result = '';
+                foreach($dataList as $data)
                 {
-                    $time = time();
-                    $result = $this->webhook->fetchHook($webhook, $data->data, $data->action);
-                    $diff = time() - $time;
+                    $webhook = zget($webhooks, $data->objectID, '');
+                    if($webhook)
+                    {
+                        /* if connect time is out then ignore the rest.*/
+                        if($diff < 30)
+                        {
+                            $time = time();
+                            $result = $this->webhook->fetchHook($webhook, $data->data, $data->action);
+                            $diff = time() - $time;
+                        }
+                        $this->webhook->saveLog($webhook, $data->action, $data->data, $result);
+                    }
                 }
-                $this->webhook->saveLog($webhook, $data->action, $data->data, $result);
+
+                $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in(array_keys($dataList))->andWhere('status')->eq('senting')->exec();
             }
-
-            $this->webhook->setSentStatus($data->id, 'sended', $now);
         }
-
-        $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->exec();
 
         echo "OK\n";
-        return true;
     }
 }

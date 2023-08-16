@@ -128,8 +128,8 @@ class taskModel extends model
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamConsumed,teamLeft,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
-            ->removeIF(empty($this->post->estStarted), 'estStarted')
-            ->removeIF(empty($this->post->deadline), 'deadline')
+            ->removeIF(!$this->post->estStarted, 'estStarted')
+            ->removeIF(!$this->post->deadline, 'deadline')
             ->add('version', 1)
             ->get();
 
@@ -169,6 +169,12 @@ class taskModel extends model
                 if(strlen(trim($task->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
                 $requiredFields = str_replace(',estimate,', ',', $requiredFields);
             }
+
+            if(strpos($requiredFields, ',estStarted,') !== false and !isset($task->estStarted)) dao::$errors['estStarted'] = sprintf($this->lang->error->notempty, $this->lang->task->estStarted);
+            if(strpos($requiredFields, ',deadline,') !== false and !isset($task->deadline)) dao::$errors['deadline'] = sprintf($this->lang->error->notempty, $this->lang->task->deadline);
+            if(isset($task->estStarted) and isset($task->deadline) and !helper::isZeroDate($task->deadline) and $task->deadline <= $task->estStarted) dao::$errors['deadline'] = sprintf($this->lang->error->ge, $this->lang->task->deadline, $task->estStarted);
+
+            if(dao::isError()) return false;
 
             $requiredFields = trim($requiredFields, ',');
 
@@ -793,7 +799,7 @@ class taskModel extends model
                     $this->action->logHistory($actionID, $changes);
                 }
 
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $newParentTask->status, $oldParentTask->status);
+                if(($this->config->edition != 'open') && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $newParentTask->status, $oldParentTask->status);
             }
         }
         else
@@ -1304,7 +1310,7 @@ class taskModel extends model
             unset($oldTask->parent);
             unset($task->parent);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+            if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
             if(isset($oldTask->team))
             {
                 $users = $this->loadModel('user')->getPairs('noletter|noempty');
@@ -1532,8 +1538,6 @@ class taskModel extends model
             }
         }
 
-        $isBiz = $this->config->edition == 'biz';
-        $isMax = $this->config->edition == 'max';
         foreach($tasks as $taskID => $task)
         {
             if(strpos(',doing,pause,', $task->status) && empty($teams) && $task->parent >= 0 && empty($task->left))
@@ -1593,7 +1597,7 @@ class taskModel extends model
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
                 if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($oldTask->execution, 'task', $oldTask->id);
-                if(($isBiz || $isMax) && $oldTask->feedback && !isset($feedbacks[$oldTask->feedback]))
+                if($this->config->edition != 'open' && $oldTask->feedback && !isset($feedbacks[$oldTask->feedback]))
                 {
                     $feedbacks[$oldTask->feedback] = $oldTask->feedback;
                     $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
@@ -1839,7 +1843,7 @@ class taskModel extends model
         $this->loadModel('kanban');
         if(!isset($output['toColID']) or $task->status == 'done') $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
         if(isset($output['toColID']) and $task->status == 'doing') $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -2139,7 +2143,7 @@ class taskModel extends model
                 if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
             }
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+            if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
 
             return common::createChanges($oldTask, $task);
         }
@@ -2225,7 +2229,7 @@ class taskModel extends model
             if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
             if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+            if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
 
             return common::createChanges($oldTask, $task);
         }
@@ -2519,7 +2523,7 @@ class taskModel extends model
         if(is_string($type)) $type = strtolower($type);
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         $fields  = "DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder";
-        $this->config->edition == 'max' && $fields .= ', t6.name as designName, t6.version as latestDesignVersion';
+        ($this->config->edition == 'max' or $this->config->edition == 'ipd') && $fields .= ', t6.name as designName, t6.version as latestDesignVersion';
 
         $actionIDList = array();
         if($type == 'assignedbyme') $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
@@ -2530,7 +2534,7 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on('t4.task = t1.id')
             ->leftJoin(TABLE_MODULE)->alias('t5')->on('t1.module = t5.id')
-            ->beginIF($this->config->edition == 'max')->leftJoin(TABLE_DESIGN)->alias('t6')->on('t1.design= t6.id')->fi()
+            ->beginIF($this->config->edition == 'max' or $this->config->edition == 'ipd')->leftJoin(TABLE_DESIGN)->alias('t6')->on('t1.design= t6.id')->fi()
             ->where('t1.execution')->eq((int)$executionID)
             ->beginIF($type == 'myinvolved')
             ->andWhere("((t4.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
@@ -3777,23 +3781,44 @@ class taskModel extends model
      * @param string $mode
      * @param bool   $child
      * @param bool   $showBranch
+     * @param array  $privs
      *
      * @access public
      * @return void
      */
-    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false, $showBranch = false)
+    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false, $showBranch = false, $privs = array())
     {
-        $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
-        $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
-        $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
-        $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
-        $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
+        if(!empty($privs))
+        {
+            $canBatchEdit         = $privs['canBatchEdit'];
+            $canBatchClose        = $privs['canBatchClose'];
+            $canBatchCancel       = $privs['canBatchCancel'];
+            $canBatchChangeModule = $privs['canBatchChangeModule'];
+            $canBatchAssignTo     = $privs['canBatchAssignTo'];
+        }
+        else
+        {
+            $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
+            $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
+            $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
+            $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
+            $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
+        }
 
         $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchCancel or $canBatchChangeModule or $canBatchAssignTo);
         $storyChanged   = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));
 
         $canView  = common::hasPriv('task', 'view');
-        $taskLink = helper::createLink('task', 'view', "taskID=$task->id");
+        if($this->config->vision == 'lite')
+        {
+            $taskLink  = helper::createLink('task', 'view', "taskID=$task->id", '', true);
+            $linkClass = 'class="iframe"';
+        }
+        else
+        {
+            $taskLink  = helper::createLink('task', 'view', "taskID=$task->id");
+            $linkClass = '';
+        }
         $account  = $this->app->user->account;
         $id       = $col->id;
         if($col->show)
@@ -3852,7 +3877,7 @@ class taskModel extends model
                 if($task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
                 if($task->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
                 if(!empty($task->team)) echo '<span class="label label-badge label-light" title="' . $this->lang->task->multiple . '">' . $this->lang->task->multipleAB . '</span> ';
-                echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color' title='$task->name'") : "<span style='color: $task->color'>$task->name</span>";
+                echo $canView ? html::a($taskLink, $task->name, null, "$linkClass style='color: $task->color' title='$task->name'") : "<span style='color: $task->color'>$task->name</span>";
                 if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';
                 if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '', "class='bug'");
                 break;
@@ -3875,7 +3900,7 @@ class taskModel extends model
                 echo round($task->progress, 2) . '%';
                 break;
             case 'deadline':
-                if(substr($task->deadline, 0, 4) > 0) echo '<span>' . substr($task->deadline, 5, 6) . '</span>';
+                if(!helper::isZeroDate($task->deadline)) echo '<span>' . substr($task->deadline, 5, 6) . '</span>';
                 break;
             case 'openedBy':
                 echo zget($users, $task->openedBy);
@@ -4177,7 +4202,7 @@ class taskModel extends model
         $list .= '<td></td>';
         $list .= '<td></td>';
         $list .= '<td class="c-actions">';
-        $list .= $this->buildOperateMenu($task, 'browse');
+        $list .= $this->buildOperateBrowseMenu($task, $execution);
         $list .= '</td></tr>';
 
         if(!empty($task->children))
@@ -4217,6 +4242,12 @@ class taskModel extends model
     {
         if($task->deleted) return '';
 
+        if($this->config->systemMode == 'PLM')
+        {
+            $execution = $this->loadModel('execution')->getByID($task->execution);
+            $execution = $this->loadModel('execution')->canStageStart($execution);
+        }
+
         $menu   = '';
         $params = "taskID=$task->id";
         if((empty($task->team) || empty($task->children)) && $task->executionList->type != 'kanban')
@@ -4226,11 +4257,11 @@ class taskModel extends model
 
         $menu .= $this->buildMenu('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', $this->lang->task->assignTo);
 
-        $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
-        $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);
-        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        if(!empty($execution['canStart'])) $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        if(!empty($execution['canStart'])) $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        if(!empty($execution['canStart'])) $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         $menu .= $this->buildMenu('task', 'pause',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
-        $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'view', '', '', 'iframe showinonlybody text-success', true);
+        if(!empty($execution['canStart'])) $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'view', '', '', 'iframe showinonlybody text-success', true);
         $menu .= $this->buildMenu('task', 'activate',       $params, $task, 'view', '', '', 'iframe showinonlybody text-success', true);
         $menu .= $this->buildMenu('task', 'close',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         $menu .= $this->buildMenu('task', 'cancel',         $params, $task, 'view', '', '', 'iframe showinonlybody', true);
@@ -4254,7 +4285,7 @@ class taskModel extends model
      * @access public
      * @return string
      */
-    public function buildOperateBrowseMenu($task)
+    public function buildOperateBrowseMenu($task, $execution = '')
     {
         $menu   = '';
         $params = "taskID=$task->id";

@@ -506,7 +506,10 @@ class router extends baseRouter
         }
         else
         {
-            $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName' AND `vision` = '{$this->config->vision}'")->fetch();
+            $actionQuery = "SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'";
+            if(isset($this->app->user) && $this->app->user->account != 'guest') $actionQuery .= " AND `vision` = '{$this->config->vision}'";
+
+            $action = $this->dbh->query($actionQuery)->fetch();
             if(zget($action, 'extensionType') == 'override')
             {
                 $this->rawModule = $this->moduleName;

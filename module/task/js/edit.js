@@ -171,8 +171,15 @@ $('#confirmButton').click(function()
 
     if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
     {
-        bootbox.alert(totalLeftError);
-        return false;
+        if(confirm(confirmRecord))
+        {
+            $('#status').val('done');
+            $('#status').trigger('chosen:updated');
+        }
+        else
+        {
+            return false;
+        }
     }
 
     $('#estimate').val(totalEstimate);

@@ -135,10 +135,11 @@ $config->product->create->requiredFields = 'name,code';
 $config->product->edit->requiredFields   = 'name,code';
 
 $config->product->editor = new stdclass();
-$config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->product->editor->close  = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->product->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
+$config->product->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->product->editor->edit     = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->product->editor->activate = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->product->editor->close    = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->product->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 
 $config->product->report = new stdclass();
 $config->product->report->stage = array();
@@ -156,10 +157,9 @@ $config->product->report->planLabels   = array();
 $config->product->report->planLabels[] = '';
 
 $config->product->statisticFields = array();
-$config->product->statisticFields['requirements'] = array('draftRequirements', 'activeRequirements', 'changingRequirements', 'reviewingRequirements', 'closedRequirements');
-$config->product->statisticFields['stories']      = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishClosedStories', 'unclosedStories');
-$config->product->statisticFields['bugs']         = array('unResolvedBugs', 'closedBugs', 'fixedBugs');
-$config->product->statisticFields['plans']        = array('plans');
-$config->product->statisticFields['releases']     = array('releases');
+$config->product->statisticFields['stories']  = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishedStories', 'finishClosedStories', 'totalStories');
+$config->product->statisticFields['bugs']     = array('unresolvedBugs', 'closedBugs', 'fixedBugs');
+$config->product->statisticFields['plans']    = array('plans');
+$config->product->statisticFields['releases'] = array('releases');
 
 $config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,ajaxgetplans,';

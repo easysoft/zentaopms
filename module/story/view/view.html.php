@@ -269,6 +269,26 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
+                <?php if($config->edition == 'ipd' && $story->type == 'requirement'):?>
+                <tr>
+                  <th><?php echo $lang->story->roadmap;?></th>
+                  <td>
+                  <?php
+                  if($story->roadmap && isset($roadmaps[$story->roadmap]))
+                  {
+                      if(commonModel::hasPriv('roadmap', 'view'))
+                      {
+                          echo html::a($this->createLink('roadmap', 'view', "roadmapID={$story->roadmap}"), $roadmaps[$story->roadmap]);
+                      }
+                      else
+                      {
+                          echo $roadmaps[$story->roadmap];
+                      }
+                  }
+                  ?>
+                  </td>
+                </tr>
+                <?php endif;?>
                 <?php if($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan):?>
                 <tr class='plan-line'>
                   <th><?php echo $lang->story->plan;?></th>
@@ -322,7 +342,7 @@
                   </td>
                 </tr>
                 <?php endif;?>
-                <tr>
+                <tr class='categoryTR'>
                   <th><?php echo $lang->story->category;?></th>
                   <td><?php echo zget($lang->story->categoryList, $story->category, $story->category)?></td>
                 </tr>
@@ -431,13 +451,13 @@
           <?php if(!empty($twins)):?>
           <li class='active'><a href='#legendTwins' data-toggle='tab'><?php echo $lang->story->twins;?></a></li>
           <?php endif;?>
-          <?php if($this->config->URAndSR and !$hiddenURS):?>
+          <?php if($this->config->URAndSR and !$hiddenURS and $config->vision != 'or'):?>
           <li class='<?php if(empty($twins)) echo 'active';?>'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <?php endif;?>
           <?php if($story->type == 'story'):?>
           <li class="<?php if((!$this->config->URAndSR || $hiddenURS) and empty($twins)) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <?php endif;?>
-          <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
+          <li <?php if($config->vision == 'or') echo "class='active'";?>><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
         <div class='tab-content'>
           <?php if(!empty($twins)):?>
@@ -447,7 +467,7 @@
             </ul>
           </div>
           <?php endif;?>
-          <?php if($this->config->URAndSR and !$hiddenURS):?>
+          <?php if($this->config->URAndSR and !$hiddenURS and $config->vision != 'or'):?>
           <div class='tab-pane <?php if(empty($twins)) echo 'active';?>' id='legendStories'>
             <ul class="list-unstyled">
               <?php
@@ -498,7 +518,7 @@
             </ul>
           </div>
           <?php endif;?>
-          <div class="tab-pane" id='legendRelated'>
+          <div class="tab-pane <?php if($config->vision == 'or') echo 'active';?>" id='legendRelated'>
             <table class="table table-data">
               <tbody>
                 <?php if($story->type == 'story'):?>

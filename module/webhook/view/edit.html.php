@@ -91,13 +91,11 @@
           <td><?php echo html::input('domain', $webhook->domain, "class='form-control'");?></td>
           <td></td>
         </tr>
-        <?php if(strpos("dinggroup|dinguser|wechatgroup|wechatuser|feishuuser|feishugroup", $webhook->type) === false):?>
         <tr>
           <th><?php echo $lang->webhook->sendType;?></th>
           <td><?php echo html::select('sendType', $lang->webhook->sendTypeList, $webhook->sendType, "class='form-control'");?></td>
           <td><?php echo $lang->webhook->note->async;?></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->webhook->product;?></th>
           <td><?php echo html::select('products[]', $products, $webhook->products, "class='form-control chosen' multiple");?></td>

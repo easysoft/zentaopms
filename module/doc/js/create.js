@@ -16,7 +16,7 @@ $(function()
         $('#modalBasicInfo #copyTitle').html($('.doc-title #editorTitle').val().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"));
     });
 
-    $('#saveDraft').click(function()
+    $('#saveDraft').click(function(event)
     {
         if($.trim($('#editorTitle').val()) == '')
         {
@@ -24,9 +24,16 @@ $(function()
             return false;
         }
         $('#status').val('draft');
+        event.preventDefault();
         submit(this);
     });
-    $('#releaseBtn').click(function(){submit(this);});
+
+    $('#releaseBtn').click(function(event)
+    {
+        event.preventDefault();
+        submit(this);
+    });
+
     $('#basicInfoLink').click(function()
     {
         if($('#editorTitle').val() == '')

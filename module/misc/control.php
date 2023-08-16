@@ -338,4 +338,23 @@ class misc extends control
         if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
         $this->loadModel('setting')->setItem('system.common.global.skip' . ucfirst($feature), $accounts);
     }
+
+    /**
+     * Clean cache files.
+     *
+     * @return void
+     */
+    public function cleanCache()
+    {
+        $cacheConfig = $this->config->cache;
+        if(!$cacheConfig->enable && !$cacheConfig->enableFullPage)
+        {
+            echo 'Cache is disabled.';
+            return;
+        }
+
+        $this->misc->cleanCachaFiles(rtrim($this->app->getCacheRoot(), DS));
+
+        echo 'Cleaned cache files.';
+    }
 }

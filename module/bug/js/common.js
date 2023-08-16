@@ -319,7 +319,7 @@ function loadProductStories(productID)
     if(typeof(branch) == 'undefined') branch = 0;
     if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleId=0&storyID=' + oldStoryID);
-    $('#storyIdBox').load(link, function(){$('#story').chosen();});
+    $('#storyIdBox').load(link, function(){$('#story').picker();});
 }
 
 /**
@@ -427,7 +427,7 @@ function changeAssignedTo(projectID)
 function loadProductExecutionsByProject(productID, projectID = 0, num = 0)
 {
     var branch = $('#branches' + num).val();
-    if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(branch) === undefined || branch == null) branch = 0;
 
     if(projectID == 'ditto')
     {
@@ -773,7 +773,7 @@ function setStories(moduleID, productID, storyID)
         $('#story').replaceWith(stories);
         $('#story_chosen').remove();
         $('#story').next('.picker').remove();
-        $("#story").chosen();
+        $("#story").picker();
     });
 }
 

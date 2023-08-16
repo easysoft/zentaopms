@@ -701,10 +701,10 @@ class adminModel extends model
         }
         else
         {
-            $news        = json_decode($zentaoData['news']);
-            $publicclass = json_decode($zentaoData['publicclass']);
-            $plugins     = json_decode($zentaoData['plugin']);
-            $patches     = json_decode($zentaoData['patch']);
+            if(!empty($zentaoData['news']))        $news        = json_decode($zentaoData['news']);
+            if(!empty($zentaoData['publicclass'])) $publicclass = json_decode($zentaoData['publicclass']);
+            if(!empty($zentaoData['plugin']))      $plugins     = json_decode($zentaoData['plugin']);
+            if(!empty($zentaoData['patch']))       $patches     = json_decode($zentaoData['patch']);
             if(common::checkNotCN()) array_pop($plugins);
         }
 

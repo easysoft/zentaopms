@@ -17,6 +17,8 @@
 <?php js::set('taskCaseBrowseType', ($browseType == 'bymodule' and $this->session->taskCaseBrowseType == 'bysearch') ? 'all' : $this->session->taskCaseBrowseType);?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('moduleID', $moduleID);?>
+<?php js::set('case2RunMap', $case2RunMap);?>
+<?php js::set('taskID', $taskID);?>
 <?php js::set('automation',     !empty($automation) ? $automation->id : 0);?>
 <?php $this->app->loadLang('zanode');?>
 <?php js::set('runCaseConfirm', $lang->zanode->runCaseConfirm);?>
@@ -170,13 +172,15 @@ $("thead").find('.c-assignedTo').attr('class', '');
 function runAutocase()
 {
     var caseIDList = [];
+    var runIDList  = [];
     $.each($('input[name^=caseIDList]:checked'),function(){
         caseIDList.push($(this).val());
+        runIDList.push(case2RunMap[$(this).val()]);
     });
 
-    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation)
+    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation + "&taskID=" + taskID)
 
-    var postData = {'caseIDList' : caseIDList.join(',')};
+    var postData = {'caseIDList' : caseIDList.join(','), 'runIDList' : runIDList.join(',')};
 
     var response = true;
     $.post(url, postData, function(result)

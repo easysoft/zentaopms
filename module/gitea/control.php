@@ -175,10 +175,11 @@ class gitea extends control
      * Bind gitea user to zentao users.
      *
      * @param  int     $giteaID
+     * @param  string  $type
      * @access public
      * @return void
      */
-    public function bindUser($giteaID)
+    public function bindUser($giteaID, $type = 'all')
     {
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
         $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -190,11 +191,42 @@ class gitea extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
-        $this->view->title         = $this->lang->gitea->bindUser;
-        $this->view->userPairs     = $userPairs;
-        $this->view->giteaUsers    = $this->gitea->apiGetUsers($giteaID);
-        $this->view->bindedUsers   = $this->gitea->getUserAccountIdPairs($giteaID);
-        $this->view->matchedResult = $this->gitea->getMatchedUsers($giteaID, $this->view->giteaUsers, $zentaoUsers);
+        $giteaUsers    = $this->gitea->apiGetUsers($giteaID);
+        $bindedUsers   = $this->gitea->getUserAccountIdPairs($giteaID);
+        $matchedResult = $this->gitea->getMatchedUsers($giteaID, $giteaUsers, $zentaoUsers);
+
+        foreach($giteaUsers as $userID => &$user)
+        {
+            $user->binded        = 0;
+            $user->zentaoUsers   = array('' => '');
+            $user->zentaoAccount = isset($matchedResult[$user->id]) ? $matchedResult[$user->id]->zentaoAccount : '';
+            if($user->zentaoAccount)
+            {
+                $user->zentaoUsers  += array($user->zentaoAccount => zget($userPairs, $user->zentaoAccount));
+                if(isset($bindedUsers[$user->zentaoAccount]) && $bindedUsers[$user->zentaoAccount] == $user->id)
+                {
+                    $user->binded = 1;
+                    if(!isset($bindedUsers[$user->zentaoAccount])) $user->binded = 2;
+                }
+            }
+
+            if($type == 'notBind' && $user->binded > 0)
+            {
+                unset($giteaUsers[$userID]);
+            }
+            elseif($type == 'binded' && $user->binded == 0)
+            {
+                unset($giteaUsers[$userID]);
+            }
+
+        }
+
+        $this->view->title       = $this->lang->gitea->bindUser;
+        $this->view->userPairs   = array('' => '') + $userPairs;
+        $this->view->giteaUsers = $giteaUsers;
+        $this->view->giteaID    = $giteaID;
+        $this->view->type        = $type;
+        $this->view->zentaoUsers = $zentaoUsers;
         $this->display();
     }
 

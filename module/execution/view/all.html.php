@@ -11,10 +11,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datatable.fix.html.php';?>
+<?php include '../../common/view/zui3dtable.html.php';?>
 <?php
-js::import($jsRoot . 'dtable/min.js');
-css::import($jsRoot . 'dtable/min.css');
-
 $cols       = $this->execution->generateCol($orderBy);
 $executions = $this->execution->generateRow($executionStats, $users, $productID);
 
@@ -37,7 +35,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
   <div class='btn-toolBar pull-left'>
     <?php if($from == 'project'):?>
     <div class='btn-group'>
-      <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
+      <?php $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
@@ -85,7 +83,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
     <div class="table-header fixed-right">
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
-    <div id="myTable"></div>
+    <div id="dtable"></div>
     <div class='table-footer'>
       <div class="table-actions btn-toolbar">
         <?php
@@ -140,18 +138,18 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
               return [{html: '<span class="sparkline pending text-left no-padding" values="' + info.row.data.burns.join(',') + '"></span>'}];
           }
           return result;
-      }
+      },
   };
 
   function renderSparkline()
   {
-      $('#myTable .dtable-rows .sparkline.pending').removeClass('pending').sparkline();
+      $('#dtable .sparkline.pending').removeClass('pending').sparkline();
   }
 
   function tryRenderSparkline()
   {
       if(window.renderingSparkline) clearTimeout(window.renderingSparkline);
-      window.renderingSparkline = setTimeout(renderSparkline, 200);
+      window.renderingSparkline = setTimeout(renderSparkline, 500);
   }
 
   function createSortLink(col)
@@ -182,7 +180,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
       $.cookie('checkedItem', checkItems.join(','), {expires: config.cookieLife, path: config.webRoot});
   }
 
-  $('#myTable').dtable(options);
+  $('#dtable').dtable(options);
 
   $('#batchEditBtn').click(function()
   {

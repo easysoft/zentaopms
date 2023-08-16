@@ -484,7 +484,12 @@ class kanban extends control
         $regionPairs = array();
         foreach($regions as $regionID => $region)
         {
-            $regionPairs[$regionID] = $this->lang->kanban->copy . $region . $this->lang->kanban->styleCommon;
+            $max_length = 20;
+            if (mb_strlen($region, 'UTF-8') > $max_length) {
+                $region = mb_substr($region, 0, $max_length, 'UTF-8') . '...';
+            }
+
+            $regionPairs[$regionID] = $this->lang->kanban->copy . '"' . $region . '"' . $this->lang->kanban->styleCommon;
         }
 
         $this->view->regions = array('custom' => $this->lang->kanban->custom) + $regionPairs;

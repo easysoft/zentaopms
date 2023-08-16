@@ -37,7 +37,7 @@ class index extends control
         if($this->get->open) $open = $this->get->open;
 
         $latestVersionList = array();
-        if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList);
+        if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList, true);
 
         $showFeatures = false;
         foreach($this->config->newFeatures as $feature)

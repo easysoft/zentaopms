@@ -201,10 +201,6 @@ class company extends control
         $this->session->set('meetingList',     $uri, 'project');
         $this->session->set('meetingroomList', $uri, 'admin');
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Append id for secend sort. */
         if($direction == 'next') $orderBy = 'date_desc';
         if($direction == 'pre')  $orderBy = 'date_asc';
@@ -253,11 +249,11 @@ class company extends control
             if(!$productID)   $productID   = 'all';
             if(!$projectID)   $projectID   = 'all';
             if(!$executionID) $executionID = 'all';
-            $actions = $this->action->getDynamic($account, $browseType, $orderBy, $pager, $productID, $projectID, $executionID, $date, $direction);
+            $actions = $this->action->getDynamic($account, $browseType, $orderBy, 50, $productID, $projectID, $executionID, $date, $direction);
         }
         else
         {
-            $actions = $this->action->getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy, $pager, $date, $direction);
+            $actions = $this->action->getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy, 50, $date, $direction);
         }
 
         /* Build search form. */
@@ -285,6 +281,10 @@ class company extends control
         $this->config->company->dynamic->search['params']['actor']['values']     = $accountPairs;
         $this->loadModel('search')->setSearchParams($this->config->company->dynamic->search);
 
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $browseType, $orderBy);
+
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
+
         /* Assign. */
         $this->view->recTotal     = $recTotal;
         $this->view->browseType   = $browseType;
@@ -295,10 +295,9 @@ class company extends control
         $this->view->executionID  = $executionID;
         $this->view->queryID      = $queryID;
         $this->view->orderBy      = $orderBy;
-        $this->view->pager        = $pager;
         $this->view->userID       = $userID;
         $this->view->param        = $param;
-        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $browseType, $orderBy);
+        $this->view->dateGroups   = $dateGroups;
         $this->view->direction    = $direction;
         $this->display();
     }

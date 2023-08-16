@@ -30,7 +30,7 @@
     </div>
   </div>
   <?php
-  $visibleFields  = array();
+  if(!isset($visibleFields)) $visibleFields  = array();
   $requiredFields = array();
   foreach(explode(',', $showFields) as $field)
   {
@@ -113,7 +113,7 @@
             <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?> sourceBox'><?php echo html::select('source[$id]', $sourceList, '', "class='form-control chosen' id='source_\$id'");?></td>
             <td class='<?php echo zget($visibleFields, 'source', 'hidden')?> sourceBox'><?php echo html::input('sourceNote[$id]', '', "class='form-control' id='sourceNote_\$id'");?></td>
             <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?> verifyBox'><textarea name="verify[$id]" id="verify$id" rows="1" class="form-control autosize"></textarea></td>
-            <td class='text-left' style='overflow:visible'><?php echo html::select('category[$id]', $lang->story->categoryList, 'feature', "class='form-control chosen'");?></td>
+            <td class='text-left categoryBox' style='overflow:visible'><?php echo html::select('category[$id]', $lang->story->categoryList, 'feature', "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?> priBox' style='overflow:visible'><?php echo html::select('pri[$id]', $priList, $pri, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?> estimateBox'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'>
@@ -138,7 +138,7 @@
             <td colspan="<?php echo count($visibleFields) + 3?>" class="text-center form-actions">
               <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
               <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');?>
-              <?php echo html::backButton();?>
+              <?php echo $this->session->productList ? html::a($this->session->productList, $lang->goback, '', "class='btn btn-back btn-wide'") : html::backButton();?>
             </td>
           </tr>
         </tfoot>

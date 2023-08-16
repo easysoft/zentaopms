@@ -1036,7 +1036,7 @@ class repoModel extends model
                         $file->repo     = $repoID;
                         $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
 
-                        if($file->oldPath and $file->action == 'R')
+                        if($file->action == 'R' && !empty($file->oldPath))
                         {
                             $file->path    = $file->oldPath;
                             $file->parent  = dirname($file->path);
@@ -1100,7 +1100,7 @@ class repoModel extends model
                 $repoFile->parent   = $parentPath == '\\' ? '/' : $parentPath;
                 $repoFile->type     = $info['kind'];
                 $repoFile->action   = $info['action'];
-                $repoFile->oldPath  = $info['oldPath'];
+                $repoFile->oldPath  = empty($info['oldPath']) ? '' : $info['oldPath'];
                 $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
 
                 if($repoFile->oldPath and $repoFile->action == 'R')
@@ -3025,5 +3025,23 @@ class repoModel extends model
             $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->andWhere('branch')->eq($deletedBranch)->exec();
         }
         return true;
+    }
+
+    /**
+     * Check str in array.
+     *
+     * @param  string $str
+     * @param  array  $checkAry
+     * @access public
+     * @return bool
+     */
+    public function strposAry($str, $checkAry)
+    {
+        foreach($checkAry as $check)
+        {
+            if(mb_strpos($str, $check) !== false) return true;
+        }
+
+        return false;
     }
 }

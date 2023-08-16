@@ -97,10 +97,12 @@ class model extends baseModel
         if(empty($module)) $module = $moduleName;
         if(empty($method)) $method = $methodName;
 
-        static $actions = array();
+        static $actions   = array();
+        static $hasAction = array();
+        if(!isset($hasAction[$moduleName])) $hasAction[$moduleName] = true;
         if($this->config->edition != 'open')
         {
-            if(empty($actions[$moduleName]))
+            if($hasAction[$moduleName] and empty($actions[$moduleName]))
             {
                 $actions[$moduleName] = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
                     ->where('module')->eq($moduleName)
@@ -108,6 +110,8 @@ class model extends baseModel
                     ->andWhere('status')->eq('enable')
                     ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
                     ->fetchAll('action');
+
+                if(empty($actions[$moduleName])) $hasAction[$moduleName] = false;
             }
         }
 

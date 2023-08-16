@@ -151,14 +151,15 @@ class dbh
     public function tableExits($tableName)
     {
         $tableName = str_replace('`', "'", $tableName);
-        $sql = "SHOW TABLES FROM {$this->config->name} like $tableName";
+        $tableName = str_replace("'", "", $tableName);
+        $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
         switch($this->config->driver)
         {
             case 'mysql':
-                $sql = "SHOW TABLES FROM {$this->config->name} like {$tableName}";
+                $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
                 break;
             case 'dm':
-                $sql = "SELECT * FROM all_tables WHERE owner='{$this->config->name}' AND table_name={$tableName}";
+                $sql = "SELECT * FROM all_tables WHERE owner='{$this->config->name}' AND table_name='{$tableName}'";
                 break;
             default:
                 $sql = '';
@@ -255,7 +256,8 @@ class dbh
     public function formatDmSQL($sql)
     {
         $sql = trim($sql);
-        $sql = str_replace(array('\r', '\n'), ' ', $sql);
+        /* '\\\\n' try to compatible screen json like \u0232\\nBug. */
+        $sql = str_replace(array('\\\\n', '\r', '\n'), ' ', $sql);
         $sql = $this->formatFunction($sql);
 
         $actionPos = strpos($sql, ' ');
@@ -266,7 +268,10 @@ class dbh
             case 'SELECT':
                 return $this->formatField($sql);
             case 'REPLACE':
-                $sql = str_replace('REPLACE', 'INSERT', $sql);
+                $result = $this->processReplace($sql);
+                if($result != $sql) return $result;
+
+                $sql    = str_replace('REPLACE', 'INSERT', $sql);
                 $action = 'INSERT';
             case 'INSERT':
             case 'UPDATE':
@@ -278,7 +283,7 @@ class dbh
                 if(strpos($sql, '\\\\') !== FALSE) $sql = str_replace('\\\\', '\\', $sql);
                 break;
             case 'CREATE':
-                if(stripos($sql, 'CREATE VIEW') === 0) return '';
+                if(stripos($sql, 'CREATE VIEW') === 0) $sql = str_replace('CREATE VIEW', 'CREATE OR REPLACE VIEW', $sql);
                 if(stripos($sql, 'CREATE FUNCTION') === 0) return '';
 
                 if(stripos($sql, 'CREATE OR REPLACE VIEW ') === 0)
@@ -306,10 +311,11 @@ class dbh
                     $fields = implode(',', $fieldList);
                     return substr($sql, 0, $fieldsBegin+6) . $fields . substr($sql, $fieldsEnd);
                 }
-                elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0)
+                elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0 || stripos($sql, 'CREATE INDEX') === 0)
                 {
                     preg_match('/ON\ +[0-9a-zA-Z\_\.]+\`([0-9a-zA-Z\_]+)\`/', $sql, $matches);
-                    $tableName = explode('_', $matches[1]);
+
+                    $tableName = str_replace($this->config->prefix, '', $matches);
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName[1]) . '_', $sql);
                 }
             case 'ALTER':
@@ -320,6 +326,9 @@ class dbh
                 if(stripos($sql, 'SET SCHEMA') === 0) return $sql;
             case 'USE':
                 return '';
+            case 'DESC';
+                $tableName = str_replace('DESC ', '', $sql);
+                return "select COLUMN_NAME as Field from all_tab_columns where Table_Name='$tableName'";
             case 'DROP':
                 return $this->formatField($sql);
         }
@@ -452,7 +461,111 @@ class dbh
                 $sql = preg_replace('/\,\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
                 $sql = preg_replace('/\,\s*(unique|fulltext)*\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
                 $sql = preg_replace('/ float\s*\(+[\,\_\"0-9a-z ]+\)+/i', ' float', $sql);
+
+                /* Convert "date" datetime to "date" datetime(0) to fix bug 25725, dm database datetime default 6 */
+                preg_match_all('/"[0-9a-zA-Z]+" datetime/', $sql, $datetimeMatch);
+                if(!empty($datetimeMatch))
+                {
+                    foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
+                }
+
+                if(strpos($sql, "ALTER TABLE") !== false) $sql = $this->convertAlterTableSql($sql);
         }
+
+        return $sql;
+    }
+
+    /**
+     * Process replace into sql.
+     *
+     * @param mixed $sql
+     * @access public
+     * @return void
+     */
+    public function processReplace($sql)
+    {
+        // 解析REPLACE INTO语句，提取出表名、字段和值
+        $matches = [];
+        preg_match('/^REPLACE\s+INTO\s+`?([\w_]+)`?\s*\((.*)\)\s+VALUES\s*\((.*?)\)\s*$/i', $sql, $matches);
+        $table_name = $matches[1];
+        $columns = array_map('trim', explode(',', $matches[2]));
+        $values = array_map('trim', explode(', ', $matches[3]));
+        if($table_name == '' or $columns == '' or $values == '') return $sql;
+
+        // 构造SELECT语句，查询数据是否存在
+        $where = [];
+        foreach ($columns as $index => $column) {
+            $value  = trim($values[$index], "'");
+            $column = trim($column, '`');
+            $values[$index]  = $value;
+            $columns[$index] = $column;
+            $where[] = "`$column` = '$value'";
+        }
+
+        $select_sql = "SELECT * FROM `$table_name` WHERE " . implode(' AND ', $where);
+
+        $result = $this->query($select_sql);
+        $result = $result->fetchAll();
+        $sql    = in_array('id', $columns) ? "SET IDENTITY_INSERT `$table_name` ON;" : '';
+
+        if($result)
+        {
+            // 数据已存在，构造UPDATE语句并执行
+            $set   = [];
+            $where = [];
+            foreach ($columns as $index => $column) {
+                $value   = $values[$index];
+                $set[]   = "`$column` = '$value'";
+                $where[] = "`$column` = '$value'";
+            }
+
+            $sql .= "UPDATE `$table_name` SET " . implode(', ', $set) . " WHERE " . implode(' AND ', $where);
+        }
+        else
+        {
+            // 数据不存在，构造INSERT INTO语句并执行
+            $selectColumn = array();
+            $selectValue  = array();
+            foreach ($columns as $index => $column) {
+                $selectColumn[] .= "`$column`";
+                $selectValue[]  .= "'{$values[$index]}'";
+            }
+            $sql .= "INSERT INTO `$table_name` (" . implode(', ', $selectColumn) . ") VALUES (" . implode(', ', $selectValue) . ")";
+        }
+
+        return $sql;
+    }
+
+    /**
+     * Convert alter table sql.
+     *
+     * @param mixed $sql
+     * @access public
+     * @return void
+     */
+    public function convertAlterTableSql($sql)
+    {
+        /* If table has datas and sql no default values defined, add default ''/0. */
+        if(strpos($sql, "NOT NULL") !== false && strpos($sql, "DEFAULT") === false)
+        {
+            $default = '';
+            if(strpos($sql, "integer") !== false) $default = 0;
+            $sql = str_replace("NOT NULL", "NOT NULL DEFAULT '" . $default ."'", $sql);
+        }
+
+        $pattern = '/ALTER TABLE "(.*?)" CHANGE "(.*?)" "(.*?)" (.*?)(?:;|$)/';
+        preg_match($pattern, $sql, $matches);
+        if(count($matches) != 5) return $sql;
+
+        $tableName     = $matches[1];
+        $oldColumnName = $matches[2];
+        $newColumnName = $matches[3];
+        $params        = str_replace("'", "''", $matches[4]);
+
+        $sql  = 'begin ';
+        if($oldColumnName != $newColumnName) $sql .= "execute immediate 'ALTER TABLE $tableName ALTER " . '"' . $oldColumnName . '" RENAME TO "' . $newColumnName . '"' . "';";
+        $sql .= "execute immediate 'ALTER TABLE $tableName MODIFY " . '"' . $newColumnName . '" ' . $params . "';";
+        $sql .= 'end;';
 
         return $sql;
     }

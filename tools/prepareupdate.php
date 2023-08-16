@@ -117,12 +117,14 @@ class prepareUpdate
             foreach($stories as $storyID)
             {
                 $storyTitle   = $this->getStoryOrBugTitle('story', $storyID);
+                $storyTitle   = htmlspecialchars_decode($storyTitle);
                 $doneStories .= $storyTitle ? $storyID . ' ' . $storyTitle . "\n" : '';
             }
 
             foreach($bugs as $bugID)
             {
                 $bugTitle   = $this->getStoryOrBugTitle('bug', $bugID);
+                $bugTitle   = htmlspecialchars_decode($bugTitle);
                 $fixedBugs .= $bugTitle ? $bugID . ' ' . $bugTitle . "\n" : '';
             }
         }
@@ -265,8 +267,8 @@ class prepareUpdate
     public function addLastVersion()
     {
         `sed -i "s/ \/\/ pms insert position\.$/\\n\\\$lang->upgrade->fromVersions['{$this->internalZT->pmsVersionAB}']       = '{$this->internalZT->pmsVersion}'; \/\/ pms insert position\./" ../module/upgrade/lang/version.php`;
-        `sed -i "s/ \/\/ biz insert position\.$/\\n\\\$lang->upgrade->fromVersions['biz{$this->internalZT->bizVersionAB}']       = 'Biz{$this->internalZT->bizVersion}'; \/\/ biz insert position\./" ../module/upgrade/lang/version.php`;
-        `sed -i "s/ \/\/ max insert position\.$/\\n\\\$lang->upgrade->fromVersions['max{$this->internalZT->lastMaxVersionAB}']       = 'Max{$this->internalZT->lastMaxVersion}'; \/\/ max insert position\./" ../module/upgrade/lang/version.php`;
+        `sed -i "s/ \/\/ biz insert position\.$/\\n\\\$lang->upgrade->fromVersions['biz{$this->internalZT->bizVersionAB}']        = 'Biz{$this->internalZT->bizVersion}'; \/\/ biz insert position\./" ../module/upgrade/lang/version.php`;
+        `sed -i "s/ \/\/ max insert position\.$/\\n\\\$lang->upgrade->fromVersions['max{$this->internalZT->lastMaxVersionAB}']        = 'Max{$this->internalZT->lastMaxVersion}'; \/\/ max insert position\./" ../module/upgrade/lang/version.php`;
     }
 
     /**
@@ -277,8 +279,8 @@ class prepareUpdate
      */
     public function addVersionCorrespondence()
     {
-        `sed -i "s/ \/\/ biz insert position\.$/\\n\\\$config->upgrade->bizVersion['biz{$this->internalZT->bizVersionAB}']       = '{$this->internalZT->pmsVersionAB}'; \/\/ biz insert position\./" ../module/upgrade/config.php`;
-        `sed -i "s/ \/\/ max insert position\.$/\\n\\\$config->upgrade->maxVersion['max{$this->internalZT->maxVersionAB}']       = '{$this->internalZT->pmsVersionAB}'; \/\/ max insert position\./" ../module/upgrade/config.php`;
+        `sed -i "s/ \/\/ biz insert position\.$/\\n\\\$config->upgrade->bizVersion['biz{$this->internalZT->bizVersionAB}']        = '{$this->internalZT->pmsVersionAB}'; \/\/ biz insert position\./" ../module/upgrade/config.php`;
+        `sed -i "s/ \/\/ max insert position\.$/\\n\\\$config->upgrade->maxVersion['max{$this->internalZT->maxVersionAB}']        = '{$this->internalZT->pmsVersionAB}'; \/\/ max insert position\./" ../module/upgrade/config.php`;
     }
 
     /**

@@ -111,6 +111,9 @@ $lang->misc->feature->promptExec        = '执行AI提词';
 $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec.png';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.6']        = '2023-08-15';
+$lang->misc->releaseDate['18.5']        = '2023-07-05';
+$lang->misc->releaseDate['18.4']        = '2023-06-14';
 $lang->misc->releaseDate['18.4.beta1']  = '2023-05-31';
 $lang->misc->releaseDate['18.4.alpha1'] = '2023-04-21';
 $lang->misc->releaseDate['18.3']        = '2023-03-15';
@@ -210,6 +213,9 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.6'][]        = array('title' => '优化了常用列表性能和BI功能的细节，并完善了瀑布项目的功能细节。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['18.5'][]        = array('title' => '学堂课程支持从云端导入，支持课程中PDF文件的预览，同时还优化了常用列表的加载速度，修复了多处Bug。', 'desc' => '');
+$lang->misc->feature->all['18.4'][]        = array('title' => '本次发布优化了核心列表的性能，兼容达梦数据库，修复了多处Bug。', 'desc' => '');
 $lang->misc->feature->all['18.4.beta1'][]  = array('title' => '解Bug。', 'desc' => '');
 $lang->misc->feature->all['18.4.alpha1'][] = array('title' => '优化权限、文档交互体验，测试新增场景概念，用例支持xmind导入，并对BI模块中的大屏、透视表、图表、数据表进行了全面升级。', 'desc' => '');
 $lang->misc->feature->all['18.3'][]        = array('title' => '二次开发增加语言项自定义,支持对菜单和检索标签的语言项进行定义；二次开发增加编辑器功能，支持用户按需开启和关闭；表单意外退出支持表单暂存，下次进入自动代入填写的未保存信息。', 'desc' => '');

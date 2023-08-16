@@ -43,7 +43,7 @@ js::set('showFeatures',  $showFeatures);
 #menuMoreList > li.active:after {content: attr(data-tip); display: block; position: absolute; left: 100%; background-color: #f1a325; color: #fff; top: 3px; white-space: nowrap; line-height: 16px; padding: 8px 10px; margin-left: 5px; border-radius: 4px;}
 <?php endif;?>
 
-<?php if($this->config->vision == 'lite'):?>
+<?php if($config->vision == 'lite' or $config->vision == 'or'):?>
 #searchbox .dropdown-menu.show-quick-go.with-active {min-height: 180px;}
 <?php endif;?>
 </style>
@@ -134,15 +134,15 @@ js::set('showFeatures',  $showFeatures);
           <div class="version-list">
             <div>
               <i class='version-upgrade icon-version'></i>
-              <h4><?php echo $version->name;?></h4>
+              <h4><?php echo $version['name'];?></h4>
             </div>
-            <div class="version-detail"><?php echo $version->explain;?></div>
+            <div class="version-detail"><?php echo $version['explain'];?></div>
             <div class="version-footer">
               <a href="<?php echo inLink('changeLog', 'version=' . $versionNumber);?>" class="btn btn-link iframe" data-width="800"><?php echo $lang->index->log;?></strong></a>
-              <a href='<?php echo $version->link?>' class='btn btn-primary upgrade-now' style='color: white;' target='_blank'><?php echo $lang->index->upgradeNow;?></a>
+              <a href='<?php echo $version['link']?>' class='btn btn-primary upgrade-now' style='color: white;' target='_blank'><?php echo $lang->index->upgradeNow;?></a>
             </div>
           </div>
-          <?php if($version->name != $lastVersion->name):?>
+          <?php if($version['name'] != $lastVersion['name']):?>
           <hr class='version-hr'>
           <?php endif;?>
           <?php endforeach;?>

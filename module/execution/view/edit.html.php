@@ -87,17 +87,17 @@
             </div>
           </td>
         </tr>
-        <?php if($project->model == 'waterfall' or $project->model == 'waterfallplus'):?>
+        <?php if(in_array($project->model, array('waterfall', 'waterfallplus'))):?>
         <tr>
           <th><?php echo $lang->stage->type;?></th>
           <td>
-          <?php echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute); ?>
+          <?php echo $enableOptionalAttr ? html::select('attribute', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute); ?>
           </td>
           <td>
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
           </td>
         </tr>
-        <?php elseif($execution->type != 'kanban'):?>
+        <?php elseif($execution->type != 'kanban' and $project->model != 'ipd'):?>
         <tr>
           <th><?php echo $lang->execution->type;?></th>
           <td>
@@ -109,10 +109,12 @@
           <th><?php echo $lang->execution->teamname;?></th>
           <td><?php echo html::input('team', $execution->team, "class='form-control'");?></td>
         </tr>
+        <?php if($project->model != 'ipd'):?>
         <tr>
           <th><?php echo $lang->execution->status;?></th>
           <td><?php echo html::select('status', $lang->execution->statusList, $execution->status, "class='form-control chosen'");?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th rowspan='2'><?php echo $lang->execution->owner;?></th>
           <td>

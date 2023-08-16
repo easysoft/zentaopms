@@ -1,5 +1,5 @@
 <?php $canOrder = (common::hasPriv('program', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
-<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='programTableList' data-preserve-nested='true' data-nest-level-indent='22'>
+<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='programTableList' data-preserve-nested='true' data-nest-level-indent='22' data-selectable="false" data-skipResortRows="true">
   <table class='table has-sort-head table-fixed table-nested' id='programList'>
     <?php $vars = "status=$status&orderBy=%s";?>
     <thead>
@@ -86,11 +86,7 @@
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td>
-          <?php if(isset($progressList[$program->id])):?>
-          <div class='progress-pie' data-doughnut-size='85' data-color='#00DA88' data-value='<?php echo round($progressList[$program->id])?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
-            <div class='progress-info'><?php echo round($progressList[$program->id]);?></div>
-          </div>
-          <?php endif;?>
+          <?php echo html::ring($program->progress); ?>
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $program) . "</td>";?>
         <td class='c-actions'>
@@ -125,6 +121,7 @@ th.table-nest-title > .table-nest-toggle-global:before {width: 100%; left: 0 !im
 #programTableList .icon-kanban:before {content: '\e983';}
 #programTableList .icon-waterfallplus:before {content: '\e9ed';}
 #programTableList .icon-agileplus:before {content: '\e9ee';}
+#programTableList .icon-ipd:before {content: "\e9f9";}
 #programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18;}
 #programTableList > tr[data-nest-parent] {background: #f8f8f8;}
 </style>
@@ -174,12 +171,6 @@ $(function()
             $list.children('.drop-not-allowed').removeClass('drop-not-allowed');
             $('#programForm').table('initNestedList')
         }
-    });
-
-    $('#programForm').on('tableNestStateChanged', function()
-    {
-        /* Ensure visible progress pie inited after toggle nest states. */
-        $('.progress-pie:visible').progressPie();
     });
 });
 </script>

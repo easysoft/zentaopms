@@ -92,6 +92,6 @@ class storiesEntry extends entry
         if(isset($data->result) and !isset($data->id)) return $this->sendError(400, $data->message);
 
         $story = $this->loadModel('story')->getByID($data->id);
-        return $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(201, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 }

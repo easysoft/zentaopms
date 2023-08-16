@@ -99,12 +99,13 @@ class datatableModel extends model
                 $set->order = $order++;
                 $set->id    = $id;
                 $set->show  = true;
-                $set->width = $fieldList[$id]['width'];
-                $set->fixed = $fieldList[$id]['fixed'];
-                $set->title = $fieldList[$id]['title'];
                 $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
                 $set->name  = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
 
+                if(isset($fieldList[$id]['type']))     $set->type = $fieldList[$id]['type'];
+                if(isset($fieldList[$id]['title']))    $set->title = $fieldList[$id]['title'];
+                if(isset($fieldList[$id]['fixed']))    $set->fixed = $fieldList[$id]['fixed'];
+                if(isset($fieldList[$id]['width']))    $set->width = $fieldList[$id]['width'];
                 if(isset($fieldList[$id]['minWidth'])) $set->minWidth = $fieldList[$id]['minWidth'];
                 if(isset($fieldList[$id]['maxWidth'])) $set->maxWidth = $fieldList[$id]['maxWidth'];
                 if(isset($fieldList[$id]['pri']))      $set->pri = $fieldList[$id]['pri'];

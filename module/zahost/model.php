@@ -202,7 +202,6 @@ class zahostModel extends model
             if(empty($downloadedImage))
             {
                 $refreshPageData = true;
-                $remoteImage->id     = 0;
                 $remoteImage->status = 'notDownloaded';
                 $remoteImage->from   = 'zentao';
                 $remoteImage->osName = $remoteImage->os;

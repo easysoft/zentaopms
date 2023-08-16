@@ -21,6 +21,7 @@ class feedbacksEntry extends entry
     {
         if(strpos(strtolower($this->param('fields')), 'moduleandproduct') !== false) return $this->getModuleAndProduct();
 
+        $this->app->session->set('feedbackProduct', 'all');
         $control = $this->loadController('feedback', 'admin');
         $control->admin($this->param('status', 'unclosed'), 0, $this->param('orderBy', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();

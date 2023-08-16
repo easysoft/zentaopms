@@ -117,7 +117,13 @@ $(function()
 
     if(isWaterfall)
     {
-        hidePlanBox(executionAttr);
+        $('#attribute').change(function()
+        {
+            var attribute = $(this).val();
+            hidePlanBox(attribute);
+        })
+
+        $('#attribute').change();
     }
 })
 var lastProjectID = $("#project").val();

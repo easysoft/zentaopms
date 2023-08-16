@@ -164,9 +164,21 @@ class blockModel extends model
      */
     public function getWelcomeBlockData()
     {
+        $today = date('Y-m-d');
+
         $data = array();
 
-        $tasks = $this->dao->select("count(distinct t1.id) as tasks, count(distinct if(t1.status = 'done', 1, null)) as doneTasks")->from(TABLE_TASK)->alias('t1')
+        /* Story. */
+        $data['stories'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('story')
+            ->fetch('count');
+
+        /* Task. */
+        $tasks = $this->dao->select("t1.id,t1.status,t1.deadline")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
             ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t4.task = t1.id and t4.account = '{$this->app->user->account}'")
@@ -180,65 +192,39 @@ class blockModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($this->config->vision)->andWhere('t3.vision')->eq($this->config->vision)->fi()
-            ->fetch();
+            ->fetchAll();
 
-        $data['tasks']     = isset($tasks->tasks)     ? $tasks->tasks : 0;
-        $data['doneTasks'] = isset($tasks->doneTasks) ? $tasks->doneTasks : 0;
+        $totalTasks = array();
+        $delayTasks = array();
+        $doneTasks  = array();
+        foreach($tasks as $task)
+        {
+            if($task->status == 'done') $doneTasks[$task->id] = true;
+            if(in_array($task->status, array('wait', 'doing')) && $task->deadline && $task->deadline < $today) $delayTasks[$task->id] = true;
+            $totalTasks[$task->id] = true;
+        }
+        $data['tasks']     = count($totalTasks);
+        $data['doneTasks'] = count($doneTasks);
+        $data['delayTask'] = count($delayTasks);
 
-        $data['bugs']       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->alias('t1')
+        /* Bug. */
+        $bugs = $this->dao->select('t1.id,t1.status,t1.deadline')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
             ->where('t1.assignedTo')->eq($this->app->user->account)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.status')->ne('closed')
             ->andWhere('t2.deleted')->eq(0)
-            ->fetch('count');
-        $data['stories']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.assignedTo')->eq($this->app->user->account)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.type')->eq('story')
-            ->fetch('count');
-        $data['executions'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_EXECUTION)
-            ->where('status')->notIN('done,closed')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetch('count');
-        $data['products']   = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)
-            ->where('status')->ne('closed')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetch('count');
+            ->fetchAll();
 
-        $today = date('Y-m-d');
-        $data['delayTask'] = (int)$this->dao->select('count(t1.id) AS count')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
-            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
-            ->where('t1.assignedTo')->eq($this->app->user->account)
-            ->andWhere('(t2.status')->ne('suspended')
-            ->orWhere('t3.status')->ne('suspended')
-            ->markRight(1)
-            ->andWhere('t1.status')->in('wait,doing')
-            ->andWhere('t1.deadline')->notZeroDate()
-            ->andWhere('t1.deadline')->lt($today)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0)
-            ->fetch('count');
-        $data['delayBug'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.assignedTo')->eq($this->app->user->account)
-            ->andWhere('t1.status')->eq('active')
-            ->andWhere('t1.deadline')->notZeroDate()
-            ->andWhere('t1.deadline')->lt($today)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetch('count');
-        $data['delayProject'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
-            ->where('status')->in('wait,doing')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('end')->lt($today)
-            ->andWhere('deleted')->eq(0)
-            ->fetch('count');
+        $totalBugs = array();
+        $delayBugs = array();
+        foreach($bugs as $bug)
+        {
+            if($bug->status == 'active' && $bug->deadline && $bug->deadline < $today) $delayBugs[$bug->id] = true;
+            $totalBugs[$bug->id] = true;
+        }
+        $data['bugs']     = count($totalBugs);
+        $data['delayBug'] = count($delayBugs);
 
         return $data;
     }
@@ -836,6 +822,10 @@ class blockModel extends model
         $params->todoCount['default'] = 20;
         $params->todoCount['control'] = 'input';
 
+        $params->reviewCount['name']    = $this->lang->block->reviewCount;
+        $params->reviewCount['default'] = 20;
+        $params->reviewCount['control'] = 'input';
+
         $params->taskCount['name']    = $this->lang->block->taskCount;
         $params->taskCount['default'] = 20;
         $params->taskCount['control'] = 'input';
@@ -844,7 +834,7 @@ class blockModel extends model
         $params->bugCount['default'] = 20;
         $params->bugCount['control'] = 'input';
 
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             if(helper::hasFeature('risk'))
             {
@@ -875,10 +865,6 @@ class blockModel extends model
         $params->storyCount['name']    = $this->lang->block->storyCount;
         $params->storyCount['default'] = 20;
         $params->storyCount['control'] = 'input';
-
-        $params->reviewCount['name']    = $this->lang->block->reviewCount;
-        $params->reviewCount['default'] = 20;
-        $params->reviewCount['control'] = 'input';
 
         return json_encode($params);
     }

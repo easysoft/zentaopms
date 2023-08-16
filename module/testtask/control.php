@@ -161,7 +161,7 @@ class testtask extends control
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
 
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $this->lang->waterfall->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
                 $this->lang->waterfall->menu->qa['subMenu']->testtask['subModule'] = '';
@@ -555,6 +555,9 @@ class testtask extends control
         /* Append bugs and results. */
         $runs = $this->testcase->appendData($runs, 'run');
 
+        $case2RunMap = array();
+        foreach($runs as $run) $case2RunMap[$run->case] = $run->id;
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->testtask->common;
@@ -564,6 +567,7 @@ class testtask extends control
         $this->view->productName    = $this->products[$productID];
         $this->view->task           = $task;
         $this->view->runs           = $runs;
+        $this->view->case2RunMap    = $case2RunMap;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
         $this->view->assignedToList = $assignedToList;
         $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($productID, 'case', 0, array('treeModel', 'createTestTaskLink'), $taskID, $task->branch);
@@ -1356,7 +1360,7 @@ class testtask extends control
         }
 
         if(!$this->post->caseIDList) return print(js::locate($url, 'parent'));
-        $caseIDList = array_unique($this->post->caseIDList);
+        $caseIDList = array_filter($this->post->caseIDList);
 
         /* The case of tasks of qa. */
         if($productID or ($this->app->tab == 'project' and empty($productID)))

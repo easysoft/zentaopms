@@ -51,36 +51,31 @@ class program extends control
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
-        if($programType === 'bygrid')
+        $this->program->refreshStats(); // Refresh stats fields of projects.
+
+        if(strtolower($status) == 'bysearch')
         {
-            $programs = $this->program->getProgramStats($status, 20, $orderBy);
+            $programs = $this->program->getListBySearch($orderBy, (int)$param);
         }
         else
         {
-            if(strtolower($status) == 'bysearch')
-            {
-                $programs = $this->program->getListBySearch($orderBy, (int)$param);
-            }
-            else
-            {
-                /* Get top programs and projects. */
-                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
-                if(!$topObjects) $topObjects = array(0);
-                $programs   = $this->program->getList($status, $orderBy, null, 'child', array_keys($topObjects));
+            /* Get top programs and projects. */
+            $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
+            if(!$topObjects) $topObjects = array(0);
+            $programs   = $this->program->getList($status, $orderBy, null, 'child', array_keys($topObjects));
 
-                /* Get summary. */
-                $topCount = $indCount = 0;
-                foreach($programs as $program)
-                {
-                    if($program->type == 'program' and $program->parent == 0) $topCount ++;
-                    if($program->type == 'project' and $program->parent == 0) $indCount ++;
-                }
-                $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
+            /* Get summary. */
+            $topCount = $indCount = 0;
+            foreach($programs as $program)
+            {
+                if($program->type == 'program' and $program->parent == 0) $topCount ++;
+                if($program->type == 'project' and $program->parent == 0) $indCount ++;
             }
+            $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
         }
 
         /* Get PM id list. */
-        $accounts   = array_unique(array_column($programs, 'PM'));
+        $accounts   = array_unique(array_column(json_decode(json_encode($programs), true), 'PM'));
         $hasProject = false;
         foreach($programs as $program)
         {
@@ -107,7 +102,6 @@ class program extends control
         $this->view->pager        = $pager;
         $this->view->programType  = $programType;
         $this->view->PMList       = $PMList;
-        $this->view->progressList = $this->program->getProgressList(array_keys($programs));
         $this->view->hasProject   = $hasProject;
 
         $this->display();
@@ -148,9 +142,10 @@ class program extends control
     {
         $programPairs = $this->program->getPairs();
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api' && !isset($programPairs[$programID]))
+        if(!isset($programPairs[$programID]))
         {
-            return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('program', 'browse')));
         }
 
         $programID = $this->program->saveState($programID, $programPairs);

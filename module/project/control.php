@@ -137,11 +137,14 @@ class project extends control
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
 
+        $parents = array_column($projects, 'parent');
+        $parents = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($parents)->fetchAll('id');
+
         $programs = $this->program->getPairs(true);
 
         foreach($projects as $project)
         {
-            $project->parent = $this->program->getTopByID($project->parent);
+            $project->parent = isset($parents[$project->id]) ? $this->program->getTopByPath($parents[$project->id]) : 0;
             $project->parent = isset($programs[$project->parent]) ? $project->parent : $project->id;
             $orderedProjects[$project->parent][] = $project;
             unset($projects[$project->id]);
@@ -405,11 +408,12 @@ class project extends control
         $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bySearch&queryID=myQueryID");
         $this->project->buildSearchForm($queryID, $actionURL);
 
+        $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
+
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
-        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
         $this->view->title          = $this->lang->project->browse;
-        $this->view->projectStats   = $projectStats;
+        $this->view->projectStats   = $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
         $this->view->pager          = $pager;
         $this->view->programID      = $programID;
         $this->view->program        = $this->program->getByID($programID);
@@ -426,7 +430,6 @@ class project extends control
         $this->view->recPerPage     = $recPerPage;
         $this->view->pageID         = $pageID;
         $this->view->showBatchEdit  = $this->cookie->showProjectBatchEdit;
-        $this->view->allProjectsNum = $this->loadModel('program')->getProjectStats($programID, 'all');
 
         $this->display();
     }
@@ -515,7 +518,7 @@ class project extends control
                     {
                         foreach($planStory as $id => $story)
                         {
-                            if($story->status == 'draft' or $story->status == 'reviewing')
+                            if($story->status != 'active')
                             {
                                 unset($planStory[$id]);
                                 continue;
@@ -875,14 +878,14 @@ class project extends control
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getById($projectID);
 
-        if($this->config->systemMode == 'ALM')
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             $programList = array_filter(explode(',', $project->path));
             array_pop($programList);
             $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
         }
 
-        if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus', $project->model) === false)
+        if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus,ipd', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('project', 'browse')));
@@ -897,10 +900,6 @@ class project extends control
                 foreach($product->branches as $branchID) $linkedBranches[$branchID] = $branchID;
             }
         }
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
 
         /* Check exist extend fields. */
         $isExtended = false;
@@ -924,7 +923,7 @@ class project extends control
         $this->view->workhour     = $this->project->getWorkhour($projectID);
         $this->view->planGroup    = $this->loadModel('execution')->getPlans($products);
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
-        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 30, 'all', $projectID);
         $this->view->isExtended   = $isExtended;
 
         $this->display();
@@ -1017,7 +1016,7 @@ class project extends control
         $this->session->set('testtaskList',    $uri, 'qa');
         $this->session->set('reportList',      $uri, 'qa');
 
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             $this->session->set('riskList', $uri, 'project');
             $this->session->set('issueList', $uri, 'project');
@@ -1026,10 +1025,6 @@ class project extends control
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Set the user and type. */
         $account = 'all';
         if($type == 'account')
@@ -1037,30 +1032,27 @@ class project extends control
             $user = $this->loadModel('user')->getById($param, 'account');
             if($user) $account = $user->account;
         }
-        $period  = $type == 'account' ? 'all'  : $type;
-        $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', $projectID, 'all', $date, $direction);
-        if(empty($recTotal)) $recTotal = count($actions);
+        $period     = $type == 'account' ? 'all' : $type;
+        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', $projectID, 'all', $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
 
-        /* The header and position. */
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
+
         $project = $this->project->getByID($projectID);
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->dynamic;
-        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->project->dynamic;
-
-        $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
-        $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted');
 
         /* Assign. */
-        $this->view->projectID  = $projectID;
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->account    = $account;
-        $this->view->param      = $param;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction  = $direction;
-        $this->view->recTotal   = $recTotal;
+        $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->dynamic;
+        $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
+        $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted');
+        $this->view->projectID    = $projectID;
+        $this->view->type         = $type;
+        $this->view->orderBy      = $orderBy;
+        $this->view->account      = $account;
+        $this->view->param        = $param;
+        $this->view->dateGroups   = $dateGroups;
+        $this->view->direction    = $direction;
+        $this->view->recTotal     = $recTotal;
         $this->display();
     }
 
@@ -1098,6 +1090,8 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
+
         $allExecution = $this->execution->getStatData($projectID, 'all');
         $this->view->allExecutionNum = empty($allExecution);
 
@@ -1122,6 +1116,11 @@ class project extends control
         }
         $changeStatusHtml .= "</div></div></div>";
 
+        if($project->model == 'ipd' and $this->config->edition == 'ipd')
+        {
+            $this->view->reviewPoints = $this->loadModel('review')->getReviewPointByProject($projectID);
+        }
+
         $this->view->executionStats   = $executionStats;
         $this->view->showToggleIcon   = $showToggleIcon;
         $this->view->productList      = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
@@ -1134,7 +1133,7 @@ class project extends control
         $this->view->orderBy          = $orderBy;
         $this->view->users            = $this->loadModel('user')->getPairs('noletter');
         $this->view->status           = $status;
-        $this->view->isStage          = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
+        $this->view->isStage          = (isset($project->model) and in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) ? true : false;
         $this->view->changeStatusHtml = common::hasPriv('execution', 'batchChangeStatus') ? $changeStatusHtml : '';
 
         $this->display();

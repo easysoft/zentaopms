@@ -20,6 +20,7 @@ $lang->product->create           = "Create {$lang->productCommon}";
 $lang->product->delete           = "Delete {$lang->productCommon}";
 $lang->product->deleted          = 'Deleted';
 $lang->product->close            = "Close";
+$lang->product->activate         = 'Activate';
 $lang->product->select           = "Select {$lang->productCommon}";
 $lang->product->mine             = 'Mine';
 $lang->product->other            = 'Others';
@@ -41,11 +42,12 @@ $lang->product->checkedProducts  = "%s {$lang->productCommon}s selected";
 $lang->product->pageSummary      = "Total {$lang->productCommon}s: %s.";
 $lang->product->lineSummary      = "Total product lines: %s, Total {$lang->productCommon}s: %s.";
 
-$lang->product->indexAction  = "All {$lang->productCommon}";
-$lang->product->closeAction  = "Close {$lang->productCommon}";
-$lang->product->orderAction  = "Sort {$lang->productCommon}";
-$lang->product->exportAction = "Export {$lang->productCommon}";
-$lang->product->link2Project = "Link {$lang->projectCommon}";
+$lang->product->indexAction    = "All {$lang->productCommon}";
+$lang->product->closeAction    = "Close {$lang->productCommon}";
+$lang->product->activateAction = "Activate {$lang->productCommon}";
+$lang->product->orderAction    = "Sort {$lang->productCommon}";
+$lang->product->exportAction   = "Export {$lang->productCommon}";
+$lang->product->link2Project   = "Link {$lang->projectCommon}";
 
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';
@@ -202,7 +204,7 @@ else
 $lang->product->aclList['open']    = "Default (Users with privileges to {$lang->productCommon} can access it.)";
 //$lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members can access it.)';
 
-$lang->product->acls['private'] = 'Private {$lang->productCommon}';
+$lang->product->acls['private'] = "Private {$lang->productCommon}";
 $lang->product->acls['open']    = 'Default';
 
 $lang->product->aclTips['open']    = "Users with privileges to {$lang->productCommon} can access it.";
@@ -250,3 +252,6 @@ $lang->product->featureBar['dynamic']['thisWeek']  = 'This Week';
 $lang->product->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->product->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->product->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->product->action = new stdclass();
+$lang->product->action->activate = array('main' => '$date, activated by <strong>$actor</strong>.');

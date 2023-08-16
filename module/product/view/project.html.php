@@ -37,7 +37,7 @@
       <thead>
         <tr>
           <th class='c-id'><?php echo $lang->idAB;?></th>
-          <?php if($config->systemMode == 'ALM'):?>
+          <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
           <th class='c-program'><?php echo $lang->program->common;?></th>
           <?php endif;?>
           <th><?php echo $lang->project->name;?></th>
@@ -68,7 +68,7 @@
         <?php if($project->status == 'closed')    $closedCount ++;?>
         <tr>
           <td><?php printf('%03d', $project->id);?></td>
-          <?php if($config->systemMode == 'ALM'):?>
+          <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
           <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
           <?php endif;?>
           <td class='text-left'>

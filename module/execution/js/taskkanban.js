@@ -487,7 +487,8 @@ function createKanban(kanbanID, data, options)
     var $kanban = $('#kanban-' + kanbanID);
     if($kanban.length) return updateKanban(kanbanID, data);
 
-    $kanban = $('<div id="kanban-' + kanbanID + '" data-id="' + kanbanID + '"></div>').appendTo('#kanbans');
+    $kanban = $('<div id="kanban-' + kanbanID + '" data-id="' + kanbanID + '"></div>');
+    $('#kanbans').append($kanban);
     $kanban.kanban($.extend({data: data, calcColHeight: calcColHeight, displayCards: typeof window.displayCards === 'number' ? window.displayCards : 2}, options));
 }
 
@@ -1173,13 +1174,9 @@ function handleSortCards(event)
     if(groupBy != 'default' || searchValue != '') return;
     var newLaneID = event.element.closest('.kanban-lane').data('id');
     var newColID  = event.element.closest('.kanban-col').data('id');
-    var cards     = event.element.closest('.kanban-lane-items').data('cards');
-    var orders    = cards.map(function(card){return card.id});
-    var fromID    = String(event.element.data('id'));
-    var toID      = String(event.target.data('id'));
-
-    orders.splice(orders.indexOf(fromID), 1);
-    orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
+    var cards     = event.element.closest('.kanban-lane-items').find('.kanban-item');
+    var orders    = [];
+    cards.each(function(){orders.push($(this).data('id'))});
 
     var url = createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
     $.getJSON(url, function(response)

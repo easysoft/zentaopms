@@ -295,7 +295,7 @@ class commonModel extends model
     public function setApproval()
     {
         $this->config->openedApproval = false;
-        if($this->config->edition == 'max' && $this->config->vision == 'rnd') $this->config->openedApproval = true;
+        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') && $this->config->vision == 'rnd') $this->config->openedApproval = true;
     }
 
     /**
@@ -960,6 +960,7 @@ class commonModel extends model
     {
         global $lang;
         global $app;
+        global $config;
 
         $app->loadLang('my');
 
@@ -1009,7 +1010,7 @@ class commonModel extends model
 
             /* Check whether other preference item under the module have permissions. If yes, point to other methods. */
             $moduleLinkList = $currentModule . 'LinkList';
-            if(!$display and isset($lang->my->$moduleLinkList))
+            if(!$display and isset($lang->my->$moduleLinkList) and $config->vision != 'or')
             {
                 foreach($lang->my->$moduleLinkList as $key => $linkList)
                 {
@@ -1025,7 +1026,7 @@ class commonModel extends model
             }
 
             /* Check whether other methods under the module have permissions. If yes, point to other methods. */
-            if($display == false and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution')))
+            if($display == false and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution', 'demandpool')))
             {
                 foreach($lang->$currentModule->menu as $menu)
                 {
@@ -1049,7 +1050,7 @@ class commonModel extends model
             }
 
             /* Check whether the menu of this group have permissions. If yes, point to them. */
-            if($display == false and isset($lang->$group->menu))
+            if($display == false and isset($lang->$group->menu) and $config->vision != 'or')
             {
                 foreach($lang->$group->menu as $menu)
                 {
@@ -1746,13 +1747,13 @@ EOF;
             }
             if($type == 'button')
             {
-                if($method != 'edit' and $method != 'copy' and $method != 'delete')
+                if($method == 'edit' or $method == 'copy' or $method == 'delete' or ($method == 'review' and $module == 'charter'))
                 {
-                    return html::a($link, "<i class='$class'></i> " . "<span class='text'>{$title}</span>", $target, "class='btn btn-link $extraClass' $misc", true);
+                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title=\"$title\" $misc", false);
                 }
                 else
                 {
-                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title=\"$title\" $misc", false);
+                    return html::a($link, "<i class='$class'></i> " . "<span class='text'>{$title}</span>", $target, "class='btn btn-link $extraClass' $misc", true);
                 }
             }
             else
@@ -2327,6 +2328,7 @@ EOF;
             ->andWhere($titleField)->in($titles)
             ->andWhere($dateField)->ge($date)->fi()
             ->beginIF($condition)->andWhere($condition)->fi()
+            ->beginIF($type == 'story')->andWhere('type')->eq($data->type)
             ->fetchPairs();
 
         if($duplicate and is_string($titles)) return array('stop' => true, 'duplicate' => key($duplicate));
@@ -2525,7 +2527,7 @@ EOF;
          */
         $module    = $this->app->getModuleName();
         $method    = $this->app->getMethodName();
-        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|';
+        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|';
         if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return;
 
         /**
@@ -2551,16 +2553,18 @@ EOF;
      */
     public static function hasPriv($module, $method, $object = null, $vars = '')
     {
-        global $app, $lang;
+        global $app, $lang, $config;
         $module = strtolower($module);
         $method = strtolower($method);
         parse_str($vars, $params);
 
+        if($config->vision == 'or' and $module == 'story') $module = 'requirement';
         if(empty($params['storyType']) and $module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
         if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
         if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
         if($module == 'product' and $method == 'browse' and !empty($params['storyType']) and $params['storyType'] == 'requirement') $method = 'requirement';
         if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
+        if($app->config->vision != 'lite' and $module == 'feedback' and $method == 'view') $method = 'adminview';
 
         /* If the user is doing a tutorial, have all tutorial privs. */
         if(defined('TUTORIAL'))
@@ -2869,11 +2873,14 @@ EOF;
             $itemsPinYin     = explode(trim($sign), $convertedPinYin);
             foreach($notConvertedItems as $item)
             {
-                $itemPinYin  = array_shift($itemsPinYin);
+                $key        = key($itemsPinYin);
+                $itemPinYin = $itemsPinYin[$key];
+                unset($itemsPinYin[$key]);
+
                 $wordsPinYin = explode("\t", trim($itemPinYin));
 
                 $abbr = '';
-                foreach($wordsPinYin as $i => $wordPinyin)
+                foreach($wordsPinYin as $wordPinyin)
                 {
                     if($wordPinyin)
                     {
@@ -3035,6 +3042,8 @@ EOF;
      */
     public static function canBeChanged($module, $object = null)
     {
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
+
         global $app, $config;
         static $productsStatus   = array();
         static $executionsStatus = array();
@@ -3636,7 +3645,7 @@ EOF;
     /**
      * Check object priv.
      *
-     * @param  string   $objectType
+     * @param  string   $objectType program|project|product|execution
      * @param  int      $objectID
      * @access public
      * @return bool
@@ -3644,30 +3653,9 @@ EOF;
     public function checkPrivByObject($objectType, $objectID)
     {
         $objectType = strtolower($objectType);
-        $canVisit   = true;
-        switch($objectType)
-        {
-            case 'custom':
-                $doclib = $this->loadModel('doc')->getLibById($objectID);
-                if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, (string)$this->app->user->account) === false) $canVisit = false;
-                break;
-            case 'product':
-                $doclib   = $this->loadModel('doc')->getLibById($objectID);
-                $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
-                break;
-            case 'project':
-                $doclib   = $this->loadModel('doc')->getLibById($objectID);
-                $canVisit = $this->loadModel('project')->checkPriv($doclib->project);
-                break;
-            case 'execution':
-                $doclib   = $this->loadModel('doc')->getLibById($objectID);
-                $canVisit = $this->loadModel('execution')->checkPriv($doclib->execution);
-                break;
-            default:
-                break;
-        }
+        if(in_array($objectType, array('program', 'project', 'product', 'execution'))) return $this->loadModel($objectType)->checkPriv($objectID);
 
-        return $canVisit;
+        return false;
     }
 
 }

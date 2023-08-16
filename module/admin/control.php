@@ -32,11 +32,14 @@ class admin extends control
 
     /**
      * Index page.
+     *
      * @access public
      * @return void
      */
     public function index()
     {
+        set_time_limit(0);
+
         $community = zget($this->config->global, 'community', '');
         if(!$community or $community == 'na')
         {
@@ -78,7 +81,7 @@ class admin extends control
      */
     public function ajaxSetZentaoData()
     {
-        if(helper::isIntranet()) return $this->send(array('result' => 'fail'));
+        if(helper::isIntranet()) return $this->send(array('result' => 'ignore'));
 
         $hasInternet = $this->admin->checkInternet();
 

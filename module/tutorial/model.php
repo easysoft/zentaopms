@@ -83,7 +83,7 @@ class tutorialModel extends model
         $product->deleted        = '0';
         $product->branch         = '';
         $product->reviewer       = $this->app->user->account;
-        $product->branches       = array('1' => 'Test branch');
+        $product->branches       = array();
         $product->plans          = array('1' => 'Test plan');
 
         return $product;
@@ -98,31 +98,15 @@ class tutorialModel extends model
     public function getProductStats()
     {
         $product = $this->getProduct();
-        $product->stories = array();
-        $product->stories[0]              = '';
-        $product->stories[1]              = 'draft';
-        $product->stories[2]              = 'reviewing';
-        $product->stories[3]              = 'active';
-        $product->stories[4]              = 'closed';
-        $product->stories[5]              = 'changing';
-        $product->stories[6]              = 'finishClosed';
-        $product->stories[7]              = 'unclosed';
-        $product->stories['']             = 0;
-        $product->stories['draft']        = 0;
-        $product->stories['reviewing']    = 0;
-        $product->stories['active']       = 0;
-        $product->stories['closed']       = 0;
-        $product->stories['changing']     = 0;
-        $product->stories['finishClosed'] = 0;
-        $product->stories['unclosed']     = 0;
-        $product->requirements            = $product->stories;
-        $product->plans                   = 0;
-        $product->releases                = 0;
-        $product->bugs                    = 0;
-        $product->unResolved              = 0;
-        $product->closedBugs              = 0;
-        $product->fixedBugs               = 0;
-        $product->assignToNull            = 0;
+        $product->totalStories     = 0;
+        $product->draftStories     = 0;
+        $product->activeStories    = 0;
+        $product->changingStories  = 0;
+        $product->reviewingStories = 0;
+        $product->plans            = 0;
+        $product->releases         = 0;
+        $product->unresolvedBugs   = 0;
+        $product->fixedBugs        = 0;
 
         $productStat[$product->program][$product->line]['products'][$product->id] = $product;
         return $productStat;
@@ -195,9 +179,11 @@ class tutorialModel extends model
     public function getProjectStats($browseType = '')
     {
         $project   = $this->getProject();
-        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
-        $project->hours       = (object)$emptyHour;
+        $project->progress    = 0;
+        $project->estimate    = 0;
+        $project->consumed    = 0;
+        $project->left        = 0;
         $project->leftTasks   = '—';
         $project->teamMembers = array_keys($this->getTeamMembers());
         $project->teamCount   = count($project->teamMembers);
@@ -218,9 +204,11 @@ class tutorialModel extends model
     public function getExecutionStats($browseType = '')
     {
         $execution = $this->getProject();
-        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
-        $execution->hours        = (object)$emptyHour;
+        $execution->progress       = 0;
+        $execution->estimate       = 0;
+        $execution->consumed       = 0;
+        $execution->left           = 0;
         $execution->leftTasks    = '—';
         $execution->teamMembers  = array_keys($this->getTeamMembers());
         $execution->teamCount    = count($execution->teamMembers);
@@ -346,10 +334,11 @@ class tutorialModel extends model
         $execution->QD            = $this->app->user->account;
         $execution->RD            = $this->app->user->account;
         $execution->deleted       = '0';
-        $execution->totalConsumed = 0;
-        $execution->totalLeft     = 0;
-        $execution->totalHours    = 0;
-        $execution->totalEstimate = 0;
+        $execution->consumed      = 0;
+        $execution->left          = 0;
+        $execution->hours         = 0;
+        $execution->estimate      = 0;
+        $execution->progress      = 0;
         $execution->displayCards  = 0;
         $execution->fluidBoard    = 0;
         $execution->hours         = $hours;

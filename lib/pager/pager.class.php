@@ -21,6 +21,28 @@ helper::import(dirname(dirname(__FILE__)) . '/base/pager/pager.class.php');
 class pager extends basePager
 {
     /**
+     * 分页查询起始偏移量。
+     * offset
+     *
+     * @var float
+     * @access public
+     */
+    public $offset = 0;
+
+    /**
+     * 设置分页查询起始偏移量。
+     * Set offset of paging query.
+     *
+     * @param  int    $offset
+     * @access public
+     * @return void
+     */
+    public function setOffset($offset)
+    {
+        $this->offset = $offset;
+    }
+
+    /**
      * 设置模块名。
      * Set the $moduleName property.
      *
@@ -83,6 +105,20 @@ class pager extends basePager
 
         /* If the original module name and method name of the request are set, the module parameter is removed. */
         if($this->app->isFlow) unset($this->params['module']);
+    }
+
+    /**
+     * 创建limit语句。
+     * Create the limit string.
+     *
+     * @access public
+     * @return string
+     */
+    public function limit()
+    {
+        $limit = '';
+        if($this->pageTotal > 1) $limit = ' lImiT ' . ($this->offset + ($this->pageID - 1) * $this->recPerPage) . ", $this->recPerPage";
+        return $limit;
     }
 
     /**

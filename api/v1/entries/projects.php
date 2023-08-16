@@ -48,8 +48,6 @@ class projectsEntry extends entry
             $result = array();
             foreach($data->data->projectStats as $project)
             {
-                foreach($project->hours as $field => $value) $project->$field = $value;
-
                 $result[] = $this->format($project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool');
             }
 
@@ -79,8 +77,11 @@ class projectsEntry extends entry
     {
         $fields = 'name,begin,end,products';
         $this->batchSetPost($fields);
+        if(isset($_POST['products'])) $_POST['hasProduct'] = true;
 
-        $this->setPost('code', $this->request('code', ''));
+        $useCode = $this->checkCodeUsed();
+
+        if($useCode) $this->setPost('code', $this->request('code', ''));
         $this->setPost('acl', $this->request('acl', 'private'));
         $this->setPost('parent', $this->request('program', 0));
         $this->setPost('whitelist', $this->request('whitelist', array()));
@@ -89,7 +90,10 @@ class projectsEntry extends entry
         $this->setPost('parent', $this->request('parent', 0));
 
         $control = $this->loadController('project', 'create');
-        $this->requireFields('name,code,begin,end,products');
+
+        $requireFields = 'name,begin,end,products';
+        if($useCode) $requireFields .= ',code';
+        $this->requireFields($requireFields);
 
         $control->create($this->request('model', 'scrum'));
 

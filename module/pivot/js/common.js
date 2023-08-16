@@ -139,10 +139,15 @@ function checkFormSetting()
  */
 function validate(showError = false)
 {
-    var pivot = DataStorage.pivot;
+    var pivot        = DataStorage.pivot;
     var formSettings = pivot.settings;
-    /* Code for temporary */
-    var isReady = true;
+    var isReady      = true;
+
+    if("summary" in formSettings && formSettings.summary == 'notuse')
+    {
+        if(isReady) $('#datagrid-tip').addClass('hidden');
+        return true;
+    }
 
     /* check group settings. */
     var exist = false;

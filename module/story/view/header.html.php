@@ -100,6 +100,16 @@ function loadProductBranches(productID)
         if(storyType == 'story' && page == 'create')
         {
             var newProductType = data ? 'normal' : 'branch';
+
+            if(newProductType == 'normal')
+            {
+                $('.table-form tr:first').append($('#assignedToBox'));
+            }
+            else
+            {
+                $('.sourceBox').prev('tr').append($('#assignedToBox'));
+            }
+
             if(originProductType != newProductType)
             {
                 $('.switchBranch').toggleClass('hidden');
@@ -255,8 +265,7 @@ function loadProductReviewers(productID)
             }
             $reviewer.replaceWith(data);
             $reviewer = $('#reviewer');
-            if($reviewer.data('pickertype')) $reviewer.picker({chosenMode: true});
-            else $reviewer.chosen();
+            $reviewer.picker({chosenMode: true});
             if(needNotReview == 'checked') $('#reviewer').attr('disabled', 'disabled').trigger('chosen:updated');
         }
     });

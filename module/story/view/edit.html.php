@@ -148,9 +148,10 @@
               <?php if($story->parent <= 0):?>
               <tr class="<?php if($hiddenProduct) echo 'hidden';?>">
                 <th class='thWidth'><?php echo $lang->story->product;?></th>
-                <td>
+                <td id='productBox'>
                   <div class='input-group'>
-                    <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
+                    <?php $class = $hiddenProduct ? 'disabled' : ''?>
+                    <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product $class'");?>
                     <span class='input-group-addon fix-border fix-padding'></span>
                     <?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
                   </div>
@@ -183,10 +184,12 @@
                 </td>
               </tr>
               <?php if($story->parent >= 0 and $story->type == 'story'):?>
+              <?php if($app->tab == 'product'):?>
               <tr class="<?php if($hiddenParent) echo 'hidden';?>">
                 <th><?php echo $lang->story->parent;?></th>
                 <td><?php echo html::select('parent', $stories, $story->parent, "class='form-control chosen'");?></td>
               </tr>
+              <?php endif;?>
               <tr class="<?php if($hiddenPlan) echo 'hidden';?>">
                 <th><?php echo $lang->story->plan;?></th>
                 <td>

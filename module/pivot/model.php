@@ -196,9 +196,114 @@ class pivotModel extends model
                 }
                 $pivots[$index]->used = $this->screen->checkIFChartInUse($pivot->id, 'pivot', $screenList);
             }
+
+            if($isObject and $pivots[$index]->stage == 'published') $pivots[$index] = $this->processFieldSettings($pivots[$index]);
         }
 
         return $isObject ? reset($pivots) : $pivots;
+    }
+
+    /**
+     * Process pivot field settings, function like dataview/js/basequery.js getFieldSettings().
+     *
+     * @param  object $pivot
+     * @access public
+     * @return object
+     */
+    public function processFieldSettings($pivot)
+    {
+        if(isset($pivot->fieldSettings))
+        {
+            $fieldSettings = $pivot->fieldSettings;
+        }
+        else
+        {
+            $fieldSettings = (!empty($pivot->fields) and $pivot->fields != 'null') ? json_decode($pivot->fields) : array();
+        }
+        if(empty($fieldSettings)) return $pivot;
+
+        $this->loadModel('chart');
+        $this->loadModel('dataview');
+
+        $sql        = isset($pivot->sql)     ? $pivot->sql     : '';
+        $filters    = isset($pivot->filters) ? (is_array($pivot->filters) ? $pivot->filters : json_decode($pivot->filters, true)) : array();
+        $recPerPage = 20;
+        $pageID     = 1;
+
+        if(!empty($filters))
+        {
+            foreach($filters as $index => $filter)
+            {
+                if(empty($filter['default'])) continue;
+
+                $filters[$index]['default'] = $this->processDateVar($filter['default']);
+            }
+        }
+        $querySQL = $this->chart->parseSqlVars($sql, $filters);
+
+        $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+        $stmt = $this->dbh->query($querySQL);
+        if(!$stmt) return $pivot;
+
+        $columns      = $this->dataview->getColumns($querySQL);
+        $columnFields = array();
+        foreach($columns as $column => $type) $columnFields[$column] = $column;
+
+        $tableAndFields = $this->chart->getTables($querySQL);
+        $tables   = $tableAndFields['tables'];
+        $fields   = $tableAndFields['fields'];
+        $querySQL = $tableAndFields['sql'];
+
+        $moduleNames = array();
+        if($tables) $moduleNames = $this->dataview->getModuleNames($tables);
+
+        list($fieldPairs, $relatedObject) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames);
+
+        /* Use fieldPairs, columns, relatedObject, objectFields refresh pivot fieldSettings .*/
+
+        $objectFields = array();
+        foreach($this->lang->dataview->objects as $object => $objectName) $objectFields[$object] = $this->dataview->getTypeOptions($object);
+
+        $fieldSettingsNew = new stdclass();
+
+        foreach($fieldPairs as $index => $field)
+        {
+            $defaultType   = $columns->$index;
+            $defaultObject = $relatedObject[$index];
+
+            if(!empty($objectFields) and isset($objectFields[$defaultObject]) and isset($objectFields[$defaultObject][$index])) $defaultType = $objectFields[$defaultObject][$index]['type'] == 'object' ? 'string' : $objectFields[$defaultObject][$index]['type'];
+
+            if(!isset($fieldSettings->$index))
+            {
+                $fieldItem = new stdclass();
+                $fieldItem->name   = $field;
+                $fieldItem->object = $defaultObject;
+                $fieldItem->field  = $index;
+                $fieldItem->type   = $defaultType;
+
+                $fieldSettingsNew->$index = $fieldItem;
+            }
+            else
+            {
+                if(!isset($fieldSettings->$index->object) or strlen($fieldSettings->$index->object) == 0) $fieldSettings->$index->object = $defaultObject;
+
+                if(!isset($fieldSettings->$index->field) or strlen($fieldSettings->$index->field) == 0)
+                {
+                    $fieldSettings->$index->field  = $index;
+                    $fieldSettings->$index->object = $defaultObject;
+                    $fieldSettings->$index->type   = 'string';
+                }
+
+                $object = $fieldSettings->$index->object;
+                $type   = $fieldSettings->$index->type;
+                if($object == $defaultObject && $type != $defaultType) $fieldSettings->$index->type = $defaultType;
+
+                $fieldSettingsNew->$index = $fieldSettings->$index;
+            }
+        }
+        $pivot->fieldSettings = $fieldSettingsNew;
+
+        return $pivot;
     }
 
     /**
@@ -1434,7 +1539,15 @@ class pivotModel extends model
                 }
                 else
                 {
-                    $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                    if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
+                    {
+                        $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS UNSIGNED)" : "TO_NUMBER(tt.`$field`)";
+                        $columnSQL  = "$stat($convertSql) as `$uuName`";
+                    }
+                    else
+                    {
+                        $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                    }
                 }
 
                 if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
@@ -2050,8 +2163,7 @@ class pivotModel extends model
      */
     public function buildPivotTable($data, $configs, $fields = array(), $sql = '')
     {
-        $clientLang  = $this->app->getClientLang();
-        $width       = 128;
+        $width = 128;
 
         /* Init table. */
         $table  = "<table class='reportData table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
@@ -2147,6 +2259,81 @@ class pivotModel extends model
         return $sql;
     }
 
+    /**
+     * Gen sheet by origin sql.
+     *
+     * @param  array  $fields
+     * @param  array  $settings
+     * @param  string $sql
+     * @param  array  $filters
+     * @param  array  $langs
+     * @access public
+     * @return string
+     */
+    public function genOriginSheet($fields, $settings, $sql, $filters, $langs = array())
+    {
+        $sql = $this->initVarFilter($filters, $sql);
+
+        /* Create sql. */
+        $sql = str_replace(';', '', $sql);
+
+        if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
+        {
+            foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
+        }
+
+        /* Process rows. */
+        $connectSQL = '';
+        if(!empty($filters) && !isset($filters[0]['from']))
+        {
+            $wheres = array();
+            foreach($filters as $field => $filter)
+            {
+                $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
+            }
+
+            $whereStr    = implode(' and ', $wheres);
+            $connectSQL .= " where $whereStr";
+        }
+
+        $columnSQL = "select * from ($sql) tt" . $connectSQL;
+        $rows = $this->dao->query($columnSQL)->fetchAll();
+
+        $cols = array();
+        $clientLang = $this->app->getClientLang();
+        /* Build cols. */
+        foreach($fields as $field)
+        {
+            $key = $field['field'];
+
+            $col = new stdclass();
+            $col->name    = $key;
+            $col->isGroup = true;
+
+            $fieldObject  = $field['object'];
+            $relatedField = $field['field'];
+
+            $colLabel = $key;
+            if($fieldObject)
+            {
+                $this->app->loadLang($fieldObject);
+                if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
+            }
+
+            if(isset($langs[$key]) and !empty($langs[$key][$clientLang])) $colLabel = $langs[$key][$clientLang];
+            $col->label = $colLabel;
+
+            $cols[0][] = $col;
+        }
+
+        $data = new stdclass();
+        $data->cols = $cols;
+        $data->array = json_decode(json_encode($rows), true);
+
+        $configs = array_fill(0, count($rows), array_fill(0, count($fields), 1));
+
+        return array($data, $configs);
+    }
 }
 
 /**

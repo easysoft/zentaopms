@@ -69,6 +69,11 @@ class backup extends control
         }
         krsort($backups);
 
+        $diskSapce = $this->backup->checkDiskSpace($this->backupPath);
+        $alertTips = sprintf($this->lang->backup->insufficientDisk, round($diskSapce / (1024 * 1024 * 1024), 2));
+
+        $this->view->diskSapce  = $diskSapce;
+        $this->view->alertTips  = $alertTips;
         $this->view->title      = $this->lang->backup->common;
         $this->view->position[] = $this->lang->backup->common;
         $this->view->backups    = $backups;

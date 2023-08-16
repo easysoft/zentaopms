@@ -1,3 +1,12 @@
+window.setCheckedCookie = function() {
+    var checkeds = [];
+    var $checkboxes = $('#mainContent .main-table tbody>tr input[type="checkbox"][name^=caseIDList]:checked');
+    $checkboxes.each(function() {
+        checkeds.push($(this).val());
+    });
+    $.cookie('checkedItem', checkeds.join(','), {expires: config.cookieLife, path: config.webRoot});
+};
+
 /**
  * Confirm batch delete cases.
  *
@@ -24,11 +33,11 @@ $(function()
 
     $('#importToLib').on('click', function()
     {
-        var storyIdList = '';
+        var caseIdList = '';
         $("input[name^='caseIDList']:checked").each(function()
         {
-            storyIdList += $(this).val() + ',';
-            $('#caseIdList').val(storyIdList);
+            caseIdList += $(this).val() + ',';
+            $('#caseIdList').val(caseIdList);
         });
     });
 
@@ -64,6 +73,7 @@ DtSort.defaultConfig = {
     dataNestedAttrName: 'data-nested',
     nestPathAttrName: 'data-nest-path',
     dataTypeAttrName: 'data-itype',
+    objectIdAttrName: 'data-object-id',
     moveBuffer: 2,
     canAccept: function(source, target,sameLevel, sourceMgr, targetMgr){return target.dataNested == "true";},
     canMove: function(source, sourceMgr){return source.dataNested != "true";},
@@ -148,6 +158,7 @@ DtSort.Table.prototype.measure = function()
         var dataNested = $row.attr(this.options.dataNestedAttrName);
         var nestPath = $row.attr(this.options.nestPathAttrName);
         var dataType = $row.attr(this.options.dataTypeAttrName);
+        var objectID = $row.attr(this.options.objectIdAttrName);
 
         var pos = DtSort.tools.elementPos($rows[i]);
         var size = DtSort.tools.elementSize($rows[i]);
@@ -167,6 +178,7 @@ DtSort.Table.prototype.measure = function()
             dataNested: dataNested,
             nestPath: nestPath,
             dateType: dataType,
+            objectID: objectID,
             boundary: {x:pos.x, y:pos.y, w:size.w, h:size.h},
             $dom: $row
         });

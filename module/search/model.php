@@ -428,7 +428,7 @@ class searchModel extends model
             ->skipSpecial('sql,form')
             ->remove('onMenuBar')
             ->get();
-        if($this->post->onMenuBar) $query->shortcut = 1;
+        if($this->post->onMenuBar) $query->shortcut = '1';
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
 
         if(!dao::isError())
@@ -711,17 +711,29 @@ class searchModel extends model
             }
         }
 
-        $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
-        $stmt = $this->dao->select("*, {$scoreColumn} as score")
+        $orderBy        = 'score_desc, editedDate_desc';
+        $scoreColumn    = "*, (MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE)) as score";
+        $whereCondition = "(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})";
+
+        if($this->config->db->driver == 'dm')
+        {
+            $whereCondition = preg_replace("/\b(AND|OR)\b/", "", $likeCondition, 1);
+            if(!$whereCondition) $whereCondition = '1=1';
+
+            $scoreColumn    = '*';
+            $orderBy        = 'editedDate_desc';
+        }
+
+        $stmt = $this->dao->select($scoreColumn)
             ->from(TABLE_SEARCHINDEX)
-            ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
+            ->where("($whereCondition)")
             ->andWhere('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObject)
             ->markRight(1)
             ->orWhere('(objectType')->in($filterObject)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
-            ->orderBy('score_desc, editedDate_desc')
+            ->orderBy($orderBy)
             ->query();
 
         $idListGroup = array();
@@ -759,12 +771,12 @@ class searchModel extends model
             $table = $this->config->objectTables[$module];
 
             $fields = '';
-            if($module == 'issue') $fields = $this->config->edition == 'max' ? 'id,project,owner,lib' : 'id,project,owner';
+            if($module == 'issue') $fields = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 'id,project,owner,lib' : 'id,project,owner';
             if($module == 'project') $fields = 'id,model';
             if($module == 'execution')$fields = 'id,type,project';
-            if($module == 'story' or $module == 'requirement') $fields = $this->config->edition == 'max' ? 'id,type,lib' : 'id,type';
-            if(($module == 'risk' or $module == 'opportunity') and $this->config->edition == 'max') $fields = 'id,lib';
-            if($module == 'doc' and $this->config->edition == 'max') $fields = 'id,assetLib,assetLibType';
+            if($module == 'story' or $module == 'requirement') $fields = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 'id,type,lib' : 'id,type';
+            if(($module == 'risk' or $module == 'opportunity') and ($this->config->edition == 'max' or $this->config->edition == 'ipd')) $fields = 'id,lib';
+            if($module == 'doc' and ($this->config->edition == 'max' or $this->config->edition == 'ipd')) $fields = 'id,assetLib,assetLibType';
             if(empty($fields)) continue;
 
             $objectList[$module] = $this->dao->select($fields)->from($table)->where('id')->in($idList)->fetchAll('id');
@@ -831,7 +843,7 @@ class searchModel extends model
 
                 $record->extraType = isset($story->type) ? $story->type : '';
             }
-            elseif(($module == 'risk' or $module == 'opportunity') and $this->config->edition == 'max')
+            elseif(($module == 'risk' or $module == 'opportunity') and ($this->config->edition == 'max' or $this->config->edition == 'ipd'))
             {
                 $object = $objectList[$module][$record->objectID];
                 if(!empty($object->lib))
@@ -842,7 +854,7 @@ class searchModel extends model
 
                 $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
             }
-            elseif($module == 'doc' and $this->config->edition == 'max')
+            elseif($module == 'doc' and ($this->config->edition == 'max' or $this->config->edition == 'ipd'))
             {
                 $doc = $objectList['doc'][$record->objectID];
                 if(!empty($doc->assetLib))

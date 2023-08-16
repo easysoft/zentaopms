@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '18.4.beta1';         // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '18.6';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
@@ -34,7 +34,7 @@ $config->methodVar   = 'f';                       // 请求类型为GET：模块
 $config->viewVar     = 't';                       // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
 $config->sessionVar  = 'zentaosid';               // 请求类型为GET：session变量名。         requestType=GET: the session var name.
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
-$config->visions     = ',rnd,lite,';              // 支持的界面类型。                       Supported vision formats.
+$config->visions     = ',or,rnd,lite,';           // 支持的界面类型。                       Supported vision formats.
 
 /* 支持的主题和语言。Supported thems and languages. */
 $config->themes['default'] = 'default';
@@ -70,12 +70,6 @@ $config->slaveDB->persistant = false;
 $config->slaveDB->driver     = 'mysql';
 $config->slaveDB->encoding   = 'UTF8';
 $config->slaveDB->strictMode = false;
-
-/* 缓存设置。Cache settings. */
-$config->cache = new stdclass();
-$config->cache->enable   = false;         // 是否开启缓存。Enable cache or not.
-$config->cache->lifetime = 5 * 60;        // 缓存生存时间。The lifetime of cache.
-$config->cache->driver   = 'File';        // 缓存驱动。   The driver of cache. can be File|Yac|Apcu.
 
 /* 可用域名后缀列表。Domain postfix lists. */
 $config->domainPostfix  = "|com|com.cn|com.hk|com.tw|com.vc|edu.cn|es|";
@@ -167,6 +161,7 @@ $config->wideSize      = 1400;
 $config->timeout       = 30000;
 $config->duplicateTime = 30;
 $config->maxCount      = 500;
+$config->batchMaxCount = 20;
 $config->moreLinks     = array();
 
 /* 配置参数过滤。Filter param settings. */
@@ -176,6 +171,10 @@ if(file_exists($filterConfig)) include $filterConfig;
 /* 引用数据库的配置。 Include the database config file. */
 $dbConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'db.php';
 if(file_exists($dbConfig)) include $dbConfig;
+
+/* 引用缓存的配置。 Include the cache config file. */
+$cacheConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'cache.php';
+if(file_exists($cacheConfig)) include $cacheConfig;
 
 /* 引用自定义的配置。 Include the custom config file. */
 $myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
@@ -198,9 +197,11 @@ if($config->edition != 'open')
 {
     $config->version = $config->edition . $config->{$config->edition . 'Version'};
     if($config->edition != 'max') unset($config->maxVersion);
+    if($config->edition != 'ipd') unset($config->ipdVersion);
 }
 else
 {
     unset($config->bizVersion);
     unset($config->maxVersion);
+    unset($config->ipdVersion);
 }

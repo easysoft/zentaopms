@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php js::set('maxUploadSize', $maxUploadSize);?>
+<?php js::set('exceedLimitMsg', $exceedLimitMsg);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -34,3 +36,12 @@
   </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
+<script>
+$(function()
+{
+    parent.$('#triggerModal .modal-content .modal-header .close').on('click', function()
+    {
+        parent.location.reload();
+    });
+});
+</script>

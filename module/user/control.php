@@ -321,7 +321,6 @@ class user extends control
 
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->testcase->appendData($cases);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
 
@@ -1233,25 +1232,22 @@ class user extends control
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
         $date    = empty($date) ? '' : date('Y-m-d', $date);
 
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
 
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
-        $this->view->position[] = $this->lang->user->dynamic;
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
 
         /* Assign. */
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
         $this->view->type       = $period;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager      = $pager;
+        $this->view->recTotal   = $recTotal;
         $this->view->user       = $user;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
+        $this->view->dateGroups = $dateGroups;
         $this->view->direction  = $direction;
         $this->display();
     }
@@ -1390,17 +1386,16 @@ class user extends control
     {
         $params = base64_decode($this->get->params);
         parse_str($params, $parsedParams);
-        $users = $this->user->getPairs($parsedParams['params'], $parsedParams['usersToAppended']);
+        $users = $this->user->getPairs(zget($parsedParams, 'params', ''), zget($parsedParams, 'usersToAppended', ''));
 
         $search   = $this->get->search;
         $limit    = $this->get->limit;
         $index    = 0;
         $newUsers = array();
-        if(empty($search)) return array();
         foreach($users as $account => $realname)
         {
             if($index >= $limit) break;
-            if(stripos($account, $search) === false and stripos($realname, $search) === false) continue;
+            if($search && stripos($account, $search) === false and stripos($realname, $search) === false) continue;
             $index ++;
             $newUsers[$account] = $realname;
         }

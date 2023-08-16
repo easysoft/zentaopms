@@ -13,6 +13,7 @@ $lang->gogs->gogsAccount   = 'Gogs用户';
 $lang->gogs->gogsEmail     = '邮箱';
 $lang->gogs->zentaoAccount = '禅道用户';
 $lang->gogs->bindingStatus = '绑定状态';
+$lang->gogs->all           = '全部';
 $lang->gogs->notBind       = '未绑定';
 $lang->gogs->binded        = '已绑定';
 $lang->gogs->bindDynamic   = '%s与禅道用户%s';

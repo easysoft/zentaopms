@@ -141,6 +141,7 @@ $lang->block->default['waterfall']['project']['6']['grid']   = 4;
 $lang->block->default['waterfall']['project']['6']['source'] = 'project';
 
 $lang->block->default['waterfallplus'] = $lang->block->default['waterfall'];
+$lang->block->default['ipd']           = $lang->block->default['waterfall'];
 
 $lang->block->default['scrum']['project']['1']['title'] = $lang->projectCommon . ' Overall';
 $lang->block->default['scrum']['project']['1']['block'] = 'scrumoverview';
@@ -425,15 +426,19 @@ $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt = '
 $lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic = 'Dynamics';
 
 $lang->block->modules['waterfallplus']['index'] = $lang->block->modules['waterfall']['index'];
+$lang->block->modules['ipd']['index']           = $lang->block->modules['waterfall']['index'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
-$lang->block->modules['product']->availableBlocks->statistic = 'Rapport de ' . $lang->productCommon;
-$lang->block->modules['product']->availableBlocks->overview  = "Vue d'ensemble du " . $lang->productCommon;
-$lang->block->modules['product']->availableBlocks->list      = 'Liste ' . $lang->productCommon;
-$lang->block->modules['product']->availableBlocks->story     = 'Story';
-$lang->block->modules['product']->availableBlocks->plan      = 'Plan';
-$lang->block->modules['product']->availableBlocks->release   = 'Release';
+$lang->block->modules['product']->availableBlocks->overview  = $lang->productCommon . ' Übersicht';
+if($this->config->vision != 'or')
+{
+    $lang->block->modules['product']->availableBlocks->statistic = $lang->productCommon . ' Berichte';
+    $lang->block->modules['product']->availableBlocks->list      = $lang->productCommon . ' Liste';
+    $lang->block->modules['product']->availableBlocks->story     = 'Story';
+    $lang->block->modules['product']->availableBlocks->plan      = 'Plan';
+    $lang->block->modules['product']->availableBlocks->release   = 'Release';
+}
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
@@ -630,7 +635,7 @@ $lang->block->zentaoclient->edition->linux64 = 'Linux';
 $lang->block->zentaoclient->edition->mac64   = 'Mac OS';
 
 $lang->block->guideTabs['flowchart']      = 'Flowchart';
-$lang->block->guideTabs['systemMode']     = 'Operating Modes';
+//$lang->block->guideTabs['systemMode']     = 'Operating Modes';
 $lang->block->guideTabs['visionSwitch']   = 'Interface Switch';
 $lang->block->guideTabs['themeSwitch']    = 'Theme Switch';
 $lang->block->guideTabs['preference']     = 'Personalized setting';
@@ -655,6 +660,18 @@ $lang->block->visions['lite']        = new stdclass();
 $lang->block->visions['lite']->key   = 'lite';
 $lang->block->visions['lite']->title = 'Operation Management Interface';
 $lang->block->visions['lite']->text  = "Specially designed for Non-R&D teams, and based on the visual Kanban {$lang->projectCommon} management model.";
+if($config->edition == 'ipd')
+{
+    $lang->block->visionTitle = 'The user interface of ZenTao is divided into 【OR & MM Interface】【IPD Interface】 and 【Operation Management Interface】.';
+
+    $lang->block->visions['rnd']->title = 'IPD Interface';
+    $lang->block->visions['rnd']->text  = "Doing things right by integrating the program, {$lang->productCommon}, {$lang->projectCommon}, execution,test, etc., and provide the lifecycle {$lang->projectCommon} management solution.";
+
+    $lang->block->visions['or']        = new stdclass();
+    $lang->block->visions['or']->key   = 'or';
+    $lang->block->visions['or']->title = 'OR & MM Interface';
+    $lang->block->visions['or']->text  = "Doing the right thing by integrating RM Hub, requirements, {$lang->productCommon}, roadmap planning, and project initiation, empowering effective requirement and market management.";
+}
 
 $lang->block->customModes['light'] = 'Light Mode';
 $lang->block->customModes['ALM']   = 'ALM Mode';

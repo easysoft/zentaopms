@@ -405,7 +405,7 @@ class designModel extends model
     public function setMenu($projectID, $products, $productID = 0)
     {
         $project = $this->loadModel('project')->getByID($projectID);
-        if(!empty($project) and $project->model == 'waterfall') $typeList = 'typeList';
+        if(!empty($project) and (in_array($project->model,  array('waterfall', 'ipd')))) $typeList = 'typeList';
         if(!empty($project) and $project->model == 'waterfallplus') $typeList = 'plusTypeList';
 
         /* Show custom design types. */

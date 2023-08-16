@@ -13,7 +13,10 @@
 <div class='vision-switch'>
   <p><?php echo $lang->block->visionTitle;?></p>
   <div class="vision-switch-container">
+    <?php if($config->edition == 'ipd') $lang->block->visions = array('or' => $lang->block->visions['or']) + $lang->block->visions;?>
+    <?php $userVisions = explode(',', $app->user->visions);?>
     <?php foreach($lang->block->visions as $vision):?>
+    <?php if(!in_array($vision->key, $userVisions)) continue;?>
     <?php $active = $this->config->vision == $vision->key ? 'active' : '';?>
     <a href="<?php echo $this->createLink('my', 'ajaxSwitchVision', "vision=$vision->key");?>" data-type="ajax" class='vision <?php echo $active;?>' data-value="<?php echo $vision->key;?>">
       <div class='vision-img'>

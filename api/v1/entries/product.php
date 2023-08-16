@@ -107,10 +107,12 @@ class productEntry extends entry
      */
     public function put($productID)
     {
+        $useCode = $this->checkCodeUsed();
         $oldProduct = $this->loadModel('product')->getByID($productID);
 
         /* Set $_POST variables. */
         $fields = 'program,line,name,PO,QD,RD,type,desc,whitelist,status,acl';
+        if($useCode) $fields .= ',code';
         $this->batchSetPost($fields, $oldProduct);
 
         $control = $this->loadController('product', 'edit');

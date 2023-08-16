@@ -24,6 +24,7 @@
 <?php js::set('members', $members);?>
 <?php js::set('page', 'edit');?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
+<?php js::set('confirmRecord', $lang->task->confirmRecord);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>

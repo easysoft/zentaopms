@@ -79,9 +79,9 @@
           <td title='<?php echo zget($lang->execution->statusList, $execution->status);?>'><?php echo zget($lang->execution->statusList, $execution->status);?></td>
           <td title='<?php echo zget($users, $execution->PM);?>'><?php echo zget($users, $execution->PM);?></td>
           <td title='<?php echo $execution->end;?>'><?php echo $execution->end;?></td>
-          <td title='<?php echo $execution->hours->totalEstimate;?>'><?php echo $execution->hours->totalEstimate;?></td>
-          <td title='<?php echo $execution->hours->totalConsumed;?>'><?php echo $execution->hours->totalConsumed;?></td>
-          <td title='<?php echo $execution->hours->totalLeft;?>'><?php echo $execution->hours->totalLeft;?></td>
+          <td title='<?php echo $execution->estimate;?>'><?php echo $execution->estimate;?></td>
+          <td title='<?php echo $execution->consumed;?>'><?php echo $execution->consumed;?></td>
+          <td title='<?php echo $execution->left;?>'><?php echo $execution->left;?></td>
         </tr>
         <?php endforeach;?>
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>

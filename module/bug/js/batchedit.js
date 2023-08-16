@@ -24,7 +24,7 @@ $(document).on('click', '.chosen-with-drop', function(){oldValue = $(this).prev(
 /* Set ditto value. */
 $(document).on('change', 'select', function()
 {
-    if($(this).val() == 'ditto')
+    if($(this).data('zui.picker').getValue() == 'ditto')
     {
         var index  = $(this).closest('td').index();
         var row    = $(this).closest('tr').index();
@@ -38,34 +38,34 @@ $(document).on('change', 'select', function()
         }
 
         var value = '';
+        var label = '';
         for(i = row - 1; i >= 0; i--)
         {
-            value = tbody.children('tr').eq(i).find('td').eq(index).find('select').val();
+            value = tbody.children('tr').eq(i).find('td').eq(index).find('select').data('zui.picker').getValue();
+            label = tbody.children('tr').eq(i).find('td').eq(index).find('select').data('zui.picker').getListItem(value).text;
             if(value != 'ditto') break;
         }
 
         isPlans = $(this).attr('name').indexOf('plans') != -1;
 
+        $(this).data('zui.picker').updateOptionList([{text: label, value}]);
         if(isPlans)
         {
             var valueStr = ',' + $(this).find('option').map(function(){return $(this).val();}).get().join(',') + ',';
             if(valueStr.indexOf(',' + value + ',') != -1)
             {
-                $(this).val(value);
+                $(this).data('zui.picker').setValue(value);
             }
             else
             {
                 alert(dittoNotice);
-                $(this).val(oldValue);
+                $(this).data('zui.picker').setValue(oldValue);
             }
         }
         else
         {
-            $(this).val(value);
+            $(this).data('zui.picker').setValue(value);
         }
-
-        $(this).trigger("chosen:updated");
-        $(this).trigger("change");
     }
 })
 
@@ -80,14 +80,30 @@ $(function()
 
     var firstResolution  = $('select[id^="resolutions"]').eq(0);
     var maxAutoDropWidth = document.body.scrollWidth + ($(firstResolution)[0].offsetWidth / 2) - $(firstResolution)[0].getBoundingClientRect().right;
-    $('select[id^="duplicateBugs"]').picker(
+
+    initPicker = function($element)
     {
-        disableEmptySearch : true,
-        dropWidth : 'auto',
-        maxAutoDropWidth : maxAutoDropWidth,
-        onReady: function(event)
+        var picker = $element.data('zui.picker');
+        var originOptions = picker.options;
+
+        if(picker) picker.destroy();
+
+        var addOptions =
         {
+          disableEmptySearch : true,
+          dropWidth : 'auto',
+          maxAutoDropWidth : maxAutoDropWidth,
+          searchDelay : 1000,
+          onReady: function(event)
+          {
             $(event.picker.$container).addClass('required');
+          }
         }
+        var options = $.extend({}, originOptions, addOptions);
+        $element.picker(options);
+    };
+
+    $('select[id^="duplicateBugs"]').each(function(){
+      initPicker($(this));
     });
 });

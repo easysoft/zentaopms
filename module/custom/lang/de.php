@@ -254,6 +254,7 @@ $lang->custom->selectProgramTips = "After switching to the Light Mode, in order 
 
 $lang->custom->modeList['light'] = 'Light Mode';
 $lang->custom->modeList['ALM']   = 'ALM Mode';
+$lang->custom->modeList['PLM']   = 'IPD Mode';
 
 $lang->custom->modeIntroductionList['light'] = "Provides the core function of {$lang->projectCommon} management, suitable for small R&D teams";
 $lang->custom->modeIntroductionList['ALM']   = 'The concept is more complete and rigorous, and the function is more abundant. It is suitable for medium and large R&D teams';

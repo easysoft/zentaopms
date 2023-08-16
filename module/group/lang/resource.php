@@ -452,6 +452,7 @@ $lang->resource->product->dynamic         = 'dynamic';
 $lang->resource->product->project         = 'project';
 $lang->resource->product->dashboard       = 'dashboard';
 $lang->resource->product->close           = 'closeAction';
+$lang->resource->product->activate        = 'activateAction';
 $lang->resource->product->updateOrder     = 'orderAction';
 $lang->resource->product->all             = 'list';
 $lang->resource->product->kanban          = 'kanban';
@@ -475,14 +476,16 @@ $lang->product->methodOrder[50]  = 'dynamic';
 $lang->product->methodOrder[55]  = 'project';
 $lang->product->methodOrder[60]  = 'dashboard';
 $lang->product->methodOrder[65]  = 'close';
-$lang->product->methodOrder[70]  = 'updateOrder';
-$lang->product->methodOrder[75]  = 'all';
-$lang->product->methodOrder[80]  = 'kanban';
-$lang->product->methodOrder[85]  = 'manageLine';
-$lang->product->methodOrder[90]  = 'export';
-$lang->product->methodOrder[95] = 'whitelist';
-$lang->product->methodOrder[100] = 'addWhitelist';
-$lang->product->methodOrder[105] = 'unbindWhitelist';
+$lang->product->methodOrder[70]  = 'activate';
+$lang->product->methodOrder[75]  = 'updateOrder';
+$lang->product->methodOrder[80]  = 'all';
+$lang->product->methodOrder[85]  = 'kanban';
+$lang->product->methodOrder[90]  = 'manageLine';
+$lang->product->methodOrder[95]  = 'build';
+$lang->product->methodOrder[100] = 'export';
+$lang->product->methodOrder[105] = 'whitelist';
+$lang->product->methodOrder[110] = 'addWhitelist';
+$lang->product->methodOrder[115] = 'unbindWhitelist';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();
@@ -1966,16 +1969,18 @@ $lang->api->methodOrder[100] = 'sql';
 
 $lang->resource->file = new stdclass();
 $lang->resource->file->download     = 'download';
+$lang->resource->file->preview      = 'preview';
 $lang->resource->file->edit         = 'edit';
 $lang->resource->file->delete       = 'delete';
 $lang->resource->file->uploadImages = 'uploadImages';
 $lang->resource->file->setPublic     = 'setPublic';
 
 $lang->file->methodOrder[5]  = 'download';
-$lang->file->methodOrder[10] = 'edit';
-$lang->file->methodOrder[15] = 'delete';
-$lang->file->methodOrder[20] = 'uploadImages';
-$lang->file->methodOrder[25] = 'setPublic';
+$lang->file->methodOrder[10] = 'preview';
+$lang->file->methodOrder[15] = 'edit';
+$lang->file->methodOrder[20] = 'delete';
+$lang->file->methodOrder[25] = 'uploadImages';
+$lang->file->methodOrder[30] = 'setPublic';
 
 $lang->resource->misc = new stdclass();
 $lang->resource->misc->ping = 'ping';

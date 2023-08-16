@@ -431,4 +431,34 @@ class backupModel extends model
         if(file_put_contents($summaryFile, json_encode($summary))) return true;
         return false;
     }
+
+    /**
+     * Check disk space is enough.
+     *
+     * @param  int    $backupPath
+     * @access public
+     * @return int
+     */
+    public function checkDiskSpace($backupPath)
+    {
+        $nofile        = strpos($this->config->backup->setting, 'nofile') !== false;
+        $diskFreeSpace = disk_free_space($backupPath);
+        $zfile = $this->app->loadClass('zfile');
+        $backFileSize = 0;
+
+        if(!$nofile)
+        {
+            $appRoot = $this->app->getAppRoot();
+            $appRootSize = $zfile->getDirSize($appRoot);
+            $backFileSize = $appRootSize - $zfile->getDirSize($appRoot . 'tmp') - $zfile->getDirSize($appRoot . 'www/course');
+        }
+
+        $backSqlSize = $this->dao->select('sum(data_length+index_length) as size')
+            ->from('information_schema.tables')
+            ->where('TABLE_SCHEMA')->eq($this->config->db->name)
+            ->groupBy('TABLE_SCHEMA')
+            ->fetch('size');
+
+        return ($diskFreeSpace - ($backFileSize + $backSqlSize) > 0) ? 0 : $backFileSize + $backSqlSize;
+    }
 }

@@ -152,7 +152,7 @@ class webhookModel extends model
     public function getDataList()
     {
         $dataList  = $this->dao->select('*')->from(TABLE_NOTIFY)->where('status')->eq('wait')->andWhere('objectType')->eq('webhook')->orderBy('id')->fetchAll('id');
-        $dataList += $this->dao->select('*')->from(TABLE_NOTIFY)->where('status')->eq('senting')->andWhere('sendTime')->ge(date('Y-m-d H:i:s', time() - 3 * 3600))->andWhere('objectType')->eq('webhook')->orderBy('id')->fetchAll('id');
+        $dataList += $this->dao->select('*')->from(TABLE_NOTIFY)->where('status')->eq('senting')->andWhere('objectType')->eq('webhook')->orderBy('id')->fetchAll('id');
         return $dataList;
     }
 
@@ -626,11 +626,19 @@ class webhookModel extends model
      *
      * @param  int    $webhookID
      * @param  int    $actionID
+     * @param  string $toList
      * @access public
      * @return string
      */
-    public function getOpenIdList($webhookID, $actionID)
+    public function getOpenIdList($webhookID, $actionID, $toList = '')
     {
+        if($toList)
+        {
+            $openIdList = $this->getBoundUsers($webhookID, $toList);
+            $openIdList = join(',', $openIdList);
+            return $openIdList;
+        }
+
         if(empty($actionID)) return false;
 
         $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
@@ -662,10 +670,11 @@ class webhookModel extends model
      * @param  object $webhook
      * @param  string $sendData
      * @param  int    $actionID
+     * @param  string $appendUser
      * @access public
      * @return int
      */
-    public function fetchHook($webhook, $sendData, $actionID = 0)
+    public function fetchHook($webhook, $sendData, $actionID = 0, $appendUser = '')
     {
         if(!extension_loaded('curl')) return print(helper::jsonEncode($this->lang->webhook->error->curl));
 
@@ -673,7 +682,7 @@ class webhookModel extends model
         {
             if(is_string($webhook->secret)) $webhook->secret = json_decode($webhook->secret);
 
-            $openIdList = $this->getOpenIdList($webhook->id, $actionID);
+            $openIdList = $this->getOpenIdList($webhook->id, $actionID, $appendUser);
             if(empty($openIdList)) return false;
             if($webhook->type == 'dinguser')
             {
@@ -789,7 +798,7 @@ class webhookModel extends model
         $log->url         = $webhook->url;
         $log->contentType = $webhook->contentType;
         $log->data        = $data;
-        $log->result      = $result;
+        $log->result      = (string)$result;
 
         $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();

@@ -118,6 +118,7 @@ $lang->story->project          = $lang->projectCommon;
 $lang->story->branch           = "Branche/Plateforme";
 $lang->story->module           = 'Module';
 $lang->story->moduleAB         = 'Module';
+$lang->story->roadmap          = 'Roadmap';
 $lang->story->source           = 'De';
 $lang->story->sourceNote       = 'Note';
 $lang->story->fromBug          = 'Depuis Bug';
@@ -215,6 +216,13 @@ $lang->story->statusList['active']    = 'Active';
 $lang->story->statusList['closed']    = 'Fermée';
 $lang->story->statusList['changing']  = 'Changée';
 
+if($config->systemMode == 'PLM')
+{
+    $lang->story->statusList['launched']   = 'Launched';
+    $lang->story->statusList['developing'] = 'Developing';
+}
+
+$lang->story->stageList = array();
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'En Attente';
 $lang->story->stageList['planned']    = 'Plannifée';
@@ -363,6 +371,9 @@ $lang->story->action->unlinkrelatedstory    = array('main' => '$date, dissociée
 $lang->story->action->unlinkchildstory      = array('main' => '$date, dissociée par <strong>$actor</strong> de la sous-Story <strong>$extra</strong>.');
 $lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
 $lang->story->action->synctwins             = array('main' => "\$date, the system judges that this story is adjusted synchronously due to the \$operate of twin story <strong>\$extra</strong>.", 'operate' => 'operateList');
+$lang->story->action->linked2roadmap        = array('main' => '$date, linked by <strong>$actor</strong> to Roadmap <strong>$extra</strong>');
+$lang->story->action->unlinkedfromroadmap   = array('main' => '$date, unlinked by <strong>$actor</strong> from Roadmap <strong>$extra</strong>.');
+$lang->story->action->changedbycharter      = array('main' => '$date, launched by <strong>$actor</strong> for charter <strong>$extra</strong>, Synchronously adjust the story status to launched.');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();

@@ -279,4 +279,38 @@ class api extends router
 
         return $output;
     }
+
+    /**
+     * 设置vision。
+     * set Debug.
+     *
+     * @access public
+     * @return void
+     */
+    public function setVision()
+    {
+        $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
+        if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
+        if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
+
+        $vision = 'rnd';
+        if($this->config->installed and validater::checkAccount($account))
+        {
+            $sql     = new sql();
+            $account = $sql->quote($account);
+
+            $user = $this->dbh->query("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
+            if(!empty($user->visions))
+            {
+                $userVisions = explode(',', $user->visions);
+                if(!in_array($vision, $userVisions)) $vision = '';
+                if(empty($vision)) list($vision) = $userVisions;
+            }
+        }
+
+        list($defaultVision) = explode(',', trim($this->config->visions, ','));
+        if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
+
+        $this->config->vision = $vision ? $vision : $defaultVision;
+    }
 }

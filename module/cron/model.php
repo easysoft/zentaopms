@@ -32,14 +32,21 @@ class cronModel extends model
      */
     public function getCrons($params = '')
     {
-        return $this->dao->select('*')->from(TABLE_CRON)
-            ->where('1=1')
-            ->beginIF(strpos($params, 'nostop') !== false)->andWhere('status')->ne('stop')->fi()
-            ->beginIF($this->config->edition != 'max')
-            ->andWhere('command')->ne('moduleName=measurement&methodName=initCrontabQueue')
-            ->andWhere('command')->ne('moduleName=measurement&methodName=execCrontabQueue')
-            ->fi()
-            ->fetchAll('id');
+        $validCrons = $this->dao->select('*')->from(TABLE_CRON)->fetchAll('id');
+
+        $commandInMaxEdition = array(
+            'moduleName=measurement&methodName=initCrontabQueue',
+            'moduleName=measurement&methodName=execCrontabQueue',
+            'moduleName=weekly&methodName=computeWeekly',
+        );
+        foreach($validCrons as $id => $cron)
+        {
+            if(strpos($params, 'nostop') !== false and $cron->status == 'stop') unset($validCrons[$id]);
+
+            if($this->config->edition != 'max' and in_array($cron->command, $commandInMaxEdition)) unset($validCrons[$id]);
+        }
+
+        return $validCrons;
     }
 
     /**
@@ -76,7 +83,7 @@ class cronModel extends model
                 }
             }
         }
-        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('lastTime')->eq('0000-00-00 00:00:00')->andWhere('status')->ne('stop')->exec();
+
         return $parsedCrons;
     }
 
@@ -134,15 +141,16 @@ class cronModel extends model
     }
 
     /**
-     * Get last execed time.
+     * Get the last executed time of cron process.
      *
      * @access public
-     * @return string
+     * @return string|null
      */
     public function getLastTime()
     {
-        $cron = $this->dao->select('*')->from(TABLE_CRON)->orderBy('lastTime desc')->limit(1)->fetch();
-        return isset($cron->lastTime) ? $cron->lastTime : '0000-00-00 00:00:00';
+        $lastTime =  $this->dao->select('lastTime')->from(TABLE_CRON)->where('id')->eq(1)->fetch('lastTime');
+        if(!dao::isError()) return $lastTime;
+        return null;
     }
 
     /**
@@ -171,7 +179,7 @@ class cronModel extends model
      */
     public function checkChange()
     {
-        $updatedCron = $this->dao->select('*')->from(TABLE_CRON)->where('lastTime')->eq('0000-00-00 00:00:00')->andWhere('status')->ne('stop')->fetch();
+        $updatedCron = $this->dao->select('*')->from(TABLE_CRON)->where('lastTime')->notZeroDatetime()->andWhere('status')->ne('stop')->fetch();
         return $updatedCron ? true : false;
     }
 
@@ -185,7 +193,7 @@ class cronModel extends model
     {
         $cron = fixer::input('post')
             ->add('status', 'normal')
-            ->add('lastTime', '0000-00-00 00:00:00')
+            ->add('lastTime', null)
             ->skipSpecial('m,h,dom,mon,dow,command')
             ->get();
 
@@ -217,7 +225,6 @@ class cronModel extends model
     public function update($cronID)
     {
         $cron = fixer::input('post')
-            ->add('lastTime', '0000-00-00 00:00:00')
             ->skipSpecial('m,h,dom,mon,dow,command')
             ->get();
 

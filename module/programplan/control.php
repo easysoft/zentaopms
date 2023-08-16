@@ -75,7 +75,7 @@ class programplan extends control
             $module       = 'programplan';
             $section      = 'browse';
             $object       = 'stageCustom';
-            if(!isset($this->config->programplan->browse->stageCustom)) $this->setting->setItem("$owner.$module.browse.stageCustom", 'date,task');
+            if(!isset($this->config->programplan->browse->stageCustom)) $this->setting->setItem("$owner.$module.browse.stageCustom", 'date,task,point');
 
             $selectCustom = $this->setting->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
@@ -113,11 +113,17 @@ class programplan extends control
             $plans = $this->programplan->getPlans($projectID, $productID, $sort);
         }
 
+        $project = $this->project->getByID($projectID);
+        if($project->model == 'ipd' and $this->config->edition == 'ipd')
+        {
+            $this->view->reviewPoints = $this->loadModel('review')->getReviewPointByProject($projectID);
+        }
+
         $zooming = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';
         $this->view->title        = $this->lang->programplan->browse;
         $this->view->position[]   = $this->lang->programplan->browse;
         $this->view->projectID    = $projectID;
-        $this->view->project      = $this->project->getByID($projectID);
+        $this->view->project      = $project;
         $this->view->productID    = $productID;
         $this->view->product      = $this->product->getByID($productID);
         $this->view->productList  = $this->product->getProductPairsByProject($projectID, 'all', '', false);
@@ -173,13 +179,13 @@ class programplan extends control
 
         $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
         $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent', 'order_asc');
-        if(!empty($planID) and !empty($plans) and $project->model == 'waterfallplus')
+        if(!empty($planID) and !empty($plans) and in_array($project->model, array('ipd', 'waterfallplus')))
         {
             $executionType = 'stage';
             unset($this->lang->programplan->typeList['agileplus']);
         }
 
-        if(!empty($planID) and !empty($executions) and empty($plans) and $project->model == 'waterfallplus')
+        if(!empty($planID) and !empty($executions) and empty($plans) and in_array($project->model, array('ipd', 'waterfallplus')))
         {
             $executionType = 'agileplus';
             unset($this->lang->programplan->typeList['stage']);
@@ -278,6 +284,7 @@ class programplan extends control
         $this->view->position[]         = $this->lang->programplan->edit;
         $this->view->isCreateTask       = $this->programplan->isCreateTask($planID);
         $this->view->plan               = $plan;
+        $this->view->project            = $this->project->getByID($plan->project);
         $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $planID, $plan->product);
         $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
         $this->view->isTopStage         = $this->programplan->checkTopStage($planID);
@@ -344,7 +351,15 @@ class programplan extends control
             if(!isset($_POST['id']) or empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
             $objectID =  $_POST['id'];
 
-            $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
+            if($_POST['type'] == 'point')
+            {
+                $this->loadModel('review')->updateReviewDate($objectID, $_POST['type']);
+            }
+            else
+            {
+                $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
+            }
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success'));
@@ -377,14 +392,18 @@ class programplan extends control
      *
      * @param  int    $stageID
      * @param  string $attribute
+     * @param  string $projectModel
      * @access public
      * @return int
      */
-    public function ajaxGetAttribute($stageID, $attribute)
+    public function ajaxGetAttribute($stageID, $attribute, $projectModel = '')
     {
         $this->app->loadLang('stage');
 
         $parentAttribute = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
+
+        if($projectModel == 'ipd') $this->lang->stage->typeList = $this->lang->stage->ipdTypeList;
+
         if(empty($parentAttribute) or $parentAttribute == 'mix')
         {
             return print(html::select('attribute', $this->lang->stage->typeList, $attribute, "class='form-control chosen'"));

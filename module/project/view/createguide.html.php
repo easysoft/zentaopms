@@ -27,14 +27,23 @@
       <button class="close" data-dismiss="modal">x</button>
       <h2 class='text-center'><?php echo $lang->project->chooseProgramType; ?></h2>
       <div class='row'>
-        <div class='col col-xs-4'>
-          <?php
-          $tab = $from == 'global' ? 'project' : $app->tab;
-          if($tab == 'product') $tab = 'project';
+        <?php
+        $tab = $from == 'global' ? 'project' : $app->tab;
+        if($tab == 'product') $tab = 'project';
 
-          $hasWaterfall     = helper::hasFeature('waterfall');
-          $hasWaterfallPlus = helper::hasFeature('waterfallplus');
-          ?>
+        $hasWaterfall     = helper::hasFeature('waterfall');
+        $hasWaterfallPlus = helper::hasFeature('waterfallplus');
+        ?>
+        <?php if($config->systemMode == 'PLM'):?>
+        <div class='col col-xs-4'>
+          <div class='project-type text-center'>
+            <?php echo html::a($this->createLink("project", "create", "model=ipd&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='ipd' src='{$config->webRoot}theme/default/images/main/ipd.png'>", '', "data-app='{$tab}' class='createButton'")?>
+            <h3><?php echo $lang->project->ipd; ?></h3>
+            <p><?php echo $lang->project->ipdTitle; ?></p>
+          </div>
+        </div>
+        <?php endif;?>
+        <div class='col col-xs-4'>
           <div class='project-type text-center'>
             <?php echo html::a($this->createLink("project", "create", "model=scrum&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', "data-app='{$tab}' class='createButton'")?>
             <h3><?php echo $lang->project->scrum; ?></h3>
@@ -70,11 +79,6 @@
             <?php echo html::a($this->createLink("project", "create", "model=waterfallplus&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='waterfallplus' src='{$config->webRoot}theme/default/images/main/waterfallplus.png'>", '', "data-app='{$tab}' class='createButton'")?>
             <h3><?php echo $lang->project->waterfallplus;?></h3>
             <p><?php echo $lang->project->waterfallplusTitle;?></p>
-          </div>
-        </div>
-        <div class='col col-xs-4'>
-          <div class='project-type text-center'>
-            <div class='project-type-img more-type'><span class='text-muted'><?php echo $lang->project->moreModelTitle;?></span></div>
           </div>
         </div>
         <?php endif;?>

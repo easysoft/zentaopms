@@ -1,0 +1,23 @@
+.form-actions .btn {margin-right: 5px;}
+.td-row {display: flex;}
+.td-row>div {flex: 1;}
+.error td {color: red;}
+.datatable{width: auto;}
+.table-panel {overflow: auto;}
+.ellipsis-multi {overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1;}
+.query-padding {padding-left: 15px;}
+
+#mainContent {padding: 0px; background: none; box-shadow: none;}
+#mainContent .panel {padding: 0px 10px 10px 10px; border: 0px;}
+#mainContent .panel-heading {padding: 20px 20px 10px 20px;}
+#dataform {padding: 0px 10px;}
+#dataform textarea.form-control {padding: 20px 10px; box-shadow: inset 0 0px 0px rgb(0 0 0 / 10%), 0 0 15px rgb(0 0 0 / 10%); border: 0px;}
+#mainContent .panel.table-panel .datatable.table tr>th, #mainContent .table-panel .datatable.table tr>td {padding: 5px 20px;}
+
+#queryTable .titleResult {padding:20px 0px 10px 20px;}
+.fieldSettings {margin: -8px 10px; border: none;}
+.dataview-export {margin: -8px 0px; border: none;}
+#edit select[name^='relatedTable'] + div .picker-selections:first-child {border-right: none;}
+#edit select[name^='relatedTable'] + div.picker-focus .picker-selections {border-right: 1px solid #2e7fff;}
+
+#queryFilters .radio-inline input[type=radio] {margin-top: 0px;}

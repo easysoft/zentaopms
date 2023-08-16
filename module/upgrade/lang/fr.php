@@ -9,6 +9,7 @@
  * @version     $Id: en.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
+global $config;
 $lang->upgrade->common          = 'Mise à jour';
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Résultat';
@@ -31,6 +32,22 @@ $lang->upgrade->warnningContent = <<<EOT
    e.g. mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
+
+if($config->db->driver == 'dm')
+{
+    $lang->upgrade->warnningContent = <<<EOT
+<p>The upgrade requires high database privileges, please use the root user.<br>
+   Please backup your database before updating ZenTao!</p>
+<pre>
+1. It can be backed up by graphical client tools.
+2. Use DIsql tool to back up data.
+   $> BACKUP DATABASE BACKUPSET  <span class='text-danger'>'filename'</span>;
+   After the statement is executed, a backup set directory named "filename" is generated in the default backup path.
+   The default backup path is the path configured with BAK_PATH in dm.ini. If BAK_PATH is not configured, bak in SYSTEM_PATH is used by default.
+   This is the simplest database backup statement,To set additional backup options, you need to understand the syntax of the online backup database.
+</pre>
+EOT;
+}
 
 $lang->upgrade->createFileWinCMD   = 'Ouvrez la fenêtre Ligne de commandes de windows et exécutez <strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = 'Executez la ligne de commande suivante: <strong style="color:#ed980f">touch %s</strong>';
@@ -142,3 +159,5 @@ $lang->upgrade->recoveryActions->review = 'Review';
 
 $lang->upgrade->remark     = 'Remark';
 $lang->upgrade->remarkDesc = 'You can also switch the mode in the Admin-System-Mode page of the system.';
+
+$lang->upgrade->upgradingTip = 'The system is being upgraded, please wait patiently...';

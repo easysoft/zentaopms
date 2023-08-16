@@ -22,17 +22,17 @@ class taskStartEntry extends entry
     {
         $task = $this->loadModel('task')->getByID($taskID);
 
-        $fields = 'assignedTo,realStarted,consumed,left,comment';
+        $fields = 'assignedTo,consumed,left,comment';
         $this->batchSetPost($fields);
 
+        $this->setPost('realStarted', $this->request('realStarted', helper::now()));
+
         $control = $this->loadController('task', 'start');
-        $this->requireFields('left');
         $control->start($taskID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
-        if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $task = $this->loadModel('task')->getByID($taskID);
 

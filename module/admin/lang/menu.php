@@ -39,10 +39,13 @@ $lang->admin->menuList->dev['name']  = $lang->admin->menuSetting['dev']['name'];
 $lang->admin->menuList->dev['desc']  = $lang->admin->menuSetting['dev']['desc'];
 $lang->admin->menuList->dev['order'] = 45;
 
-$lang->admin->menuList->convert['name']  = $lang->admin->menuSetting['convert']['name'];
-$lang->admin->menuList->convert['desc']  = $lang->admin->menuSetting['convert']['desc'];
-$lang->admin->menuList->convert['link']  = 'convert|convertjira';
-$lang->admin->menuList->convert['order'] = 50;
+if($config->db->driver == 'mysql')
+{
+    $lang->admin->menuList->convert['name']  = $lang->admin->menuSetting['convert']['name'];
+    $lang->admin->menuList->convert['desc']  = $lang->admin->menuSetting['convert']['desc'];
+    $lang->admin->menuList->convert['link']  = 'convert|convertjira';
+    $lang->admin->menuList->convert['order'] = 50;
+}
 
 $lang->admin->menuList->ai['name']  = $lang->admin->menuSetting['ai']['name'];
 $lang->admin->menuList->ai['desc']  = $lang->admin->menuSetting['ai']['desc'];
@@ -190,7 +193,15 @@ $lang->admin->menuList->ai['menuOrder']['5']  = 'prompts';
 // $lang->admin->menuList->ai['menuOrder']['10'] = 'conversations';
 $lang->admin->menuList->ai['menuOrder']['15'] = 'models';
 
-if($config->edition != 'max')
+$lang->admin->menuList->ai['subMenu']['prompts']       = array('link' => "{$lang->admin->ai->prompt}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize,promptedit');
+// $lang->admin->menuList->ai['subMenu']['conversations'] = array('link' => "{$lang->admin->ai->conversation}|ai|conversations|");
+$lang->admin->menuList->ai['subMenu']['models']        = array('link' => "{$lang->admin->ai->model}|ai|models|", 'alias' => 'editmodel');
+
+$lang->admin->menuList->ai['menuOrder']['5']  = 'prompts';
+// $lang->admin->menuList->ai['menuOrder']['10'] = 'conversations';
+$lang->admin->menuList->ai['menuOrder']['15'] = 'models';
+
+if($config->edition != 'max' and $config->edition != 'ipd')
 {
     unset($lang->admin->menuList->model['subMenu']['scrum']);
     unset($lang->admin->menuList->model['subMenu']['agileplus']);
@@ -208,7 +219,7 @@ if(!helper::hasFeature('waterfallplus'))
     unset($lang->admin->menuList->model['subMenu']['waterfallplus']);
     unset($lang->admin->menuList->model['menuOrder']['25']);
 }
-if($config->edition == 'max')
+if($config->edition == 'max' or $config->edition == 'ipd')
 {
     if(!helper::hasFeature('scrum_auditplan') and !helper::hasFeature('scrum_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
     if(!helper::hasFeature('agileplus_auditplan') and !helper::hasFeature('agileplus_process')) unset($lang->admin->menuList->model['subMenu']['agileplus'], $lang->admin->menuList->model['menuOrder']['20']);
