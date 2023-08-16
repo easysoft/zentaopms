@@ -70,32 +70,25 @@ if(!empty($kanbanList))
         }
 
         $actionItems = array();
-        $canActions  = (common::hasPriv('execution','edit') or (!empty($executionActions) and isset($executionActions[$kanbanID])));
-        if($canActions)
+        foreach($actionList as $action)
         {
-            $actionParams = "executionID={$kanban->id}";
-            $actionList   = array('edit', 'start', 'putoff', 'suspend', 'close', 'activate', 'delete');
-            foreach($actionList as $action)
+            if(!common::hasPriv('execution', $action)) continue;
+            if(!$this->execution->isClickable($kanban, $action)) continue;
+
+            $actionItem = $config->execution->actionList[$action];
+            $actionItem['url'] = createLink('execution', $action, "executionID={$kanban->id}");
+            if($action == 'edit')
             {
-                if($action != 'edit' && !in_array($action, $executionActions[$kanban->id])) continue;
-                if(!common::hasPriv('execution', $action)) continue;
-
-                $actionItem = $config->execution->actionList[$action];
-                $actionItem['url']      = createLink('execution', $action, $actionParams);
-                $actionItem['disabled'] = !$this->execution->isClickable($project, $action);
-                if($action == 'edit')
-                {
-                    $actionItem['text'] = $lang->kanban->edit;
-                    $actionItem['hint'] = $lang->kanban->edit;
-                }
-                elseif($action == 'delete')
-                {
-                    $actionItem['text'] = $lang->kanban->delete;
-                    $actionItem['hint'] = $lang->kanban->delete;
-                }
-
-                $actionItems[] = $actionItem;
+                $actionItem['text'] = $lang->kanban->edit;
+                $actionItem['hint'] = $lang->kanban->edit;
             }
+            elseif($action == 'delete')
+            {
+                $actionItem['text'] = $lang->kanban->delete;
+                $actionItem['hint'] = $lang->kanban->delete;
+            }
+
+            $actionItems[] = $actionItem;
         }
 
         $cardCount =  count($kanbanCards);
@@ -126,7 +119,7 @@ if(!empty($kanbanList))
                     ),
                     div
                     (
-                        $canActions ? dropdown
+                        $actionItems ? dropdown
                         (
                             set::caret(false),
                             btn
