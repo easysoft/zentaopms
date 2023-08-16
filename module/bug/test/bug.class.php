@@ -1208,13 +1208,14 @@ class bugTest
     }
 
     /**
+     * 测试获取bug查询语句。
      * Test get bug query.
      *
      * @param  string $bugQuery
      * @access public
-     * @return array
+     * @return string|array
      */
-    public function getBugQueryTest($bugQuery)
+    public function getBugQueryTest(string $bugQuery): string|array
     {
         $array = $this->objectModel->getBugQuery($bugQuery);
 

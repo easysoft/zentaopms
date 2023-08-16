@@ -1667,14 +1667,17 @@ class bugModel extends model
     }
 
     /**
+     * 获取bug查询语句。
      * Get bug query.
      *
      * @param  string $bugQuery
      * @access public
      * @return string
      */
-    public function getBugQuery($bugQuery)
+    public function getBugQuery(string $bugQuery): string
     {
+        /* 如果要查询所有产品，将当前用户可以看到的"`product` = 'all'" 换为自己可以看到所有的产品ID。 */
+        /* If you need to query all products, replace "`product` = 'all'" with the products that the current user can see.. */
         $allProduct = "`product` = 'all'";
         if(strpos($bugQuery, $allProduct) !== false)
         {
@@ -1683,6 +1686,8 @@ class bugModel extends model
             $bugQuery = $bugQuery . ' AND `product` ' . helper::dbIN($products);
         }
 
+        /* 如果要查询所有项目，将当前用户可以看到的"`project` = 'all'" 换为自己可以看到所有的项目ID。 */
+        /* If you need to query all projects, replace "`project` = 'all'" with the projects that the current user can see.. */
         $allProject = "`project` = 'all'";
         if(strpos($bugQuery, $allProject) !== false)
         {
@@ -1692,11 +1697,18 @@ class bugModel extends model
             $bugQuery = $bugQuery . ' AND `project` in (' . $projectIdList . ')';
         }
 
-        /* Fix bug #2878. */
+        /* 如果要依据解决日期搜索，解决日期应该不是'0000-00-00'。 */
+        /* If you need to query by resolvedDate, resolvedDate shouldn't be '0000-00-00'. */
         if(strpos($bugQuery, ' `resolvedDate` ') !== false) $bugQuery = str_replace(' `resolvedDate` ', " `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` ", $bugQuery);
+        /* 如果要依据关闭日期搜索，关闭日期应该不是'0000-00-00'。 */
+        /* If you need to query by closedDate, closedDate shouldn't be '0000-00-00'. */
         if(strpos($bugQuery, ' `closedDate` ') !== false)   $bugQuery = str_replace(' `closedDate` ', " `closedDate` != '0000-00-00 00:00:00' AND `closedDate` ", $bugQuery);
+        /* 如果要依据需求搜索，需求ID应该不是0。 */
+        /* If you need to query by story, story shouldn't be zero. */
         if(strpos($bugQuery, ' `story` ') !== false)
         {
+            /* 如果要搜索条件是包含或者不包含，应该从需求的标题、关键字、描述、期望中搜索。 */
+            /* If query condition is include or notinclude, you should query from the title, keywords, spec, and verify of the story. */
             preg_match_all("/`story`[ ]+(NOT *)?LIKE[ ]+'%([^%]*)%'/Ui", $bugQuery, $out);
             if(!empty($out[2]))
             {
