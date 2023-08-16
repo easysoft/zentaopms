@@ -140,7 +140,7 @@ detailBody
                 item
                 (
                     set::title($lang->bug->steps),
-                    empty($fromBug->steps) && empty($fromBug->steps) ? $lang->noData : html($fromBug->steps)
+                    empty($fromBug->steps) ? $lang->noData : html($fromBug->steps)
                 )
             )
         ) : null,
