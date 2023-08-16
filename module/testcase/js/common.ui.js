@@ -34,33 +34,18 @@ function loadStories(productID, moduleID, num, $currentRow = null)
     var storyLink    = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=0&number=' + num);
     $.getJSON(storyLink, function(stories)
     {
-        if(config.currentMethod == 'batchcreate')
+        if(!stories) return;
+
+        let $row = $currentRow;
+        while($row.length)
         {
-            if(!stories) return;
+            const $story = $row.find('[data-name="story"] .picker').zui('picker');
+            $story.render({items: stories});
+            $story.$.setValue($story.$.value);
 
-            let $row = $currentRow;
-            while($row.length)
-            {
-                const $story = $row.find('.form-batch-input[data-name="story"]').empty();
+            $row = $row.next('tr');
 
-                $.each(stories, function(index, story)
-                {
-                    $story.append('<option value="' + story.value + '">' + story.text + '</option>');
-                });
-
-                $row = $row.next('tr');
-
-                if(!$row.find('td[data-name="story"][data-ditto="on"]').length || !$row.find('td[data-name="branch"][data-ditto="on"]').length) break;
-            }
-        }
-        else
-        {
-            if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
-            $('#story' + num).replaceWith(stories);
-            $('#story' + num + "_chosen").remove();
-            $('#story' + num).next('.picker').remove();
-            $('#story' + num).attr('name', 'story[' + num + ']');
-            $('#story' + num).picker();
+            if(!$row.find('td[data-name="story"][data-ditto="on"]').length || !$row.find('td[data-name="branch"][data-ditto="on"]').length || !$row.find('td[data-name="module"][data-ditto="on"]').length) break;
         }
     });
 }
