@@ -3284,7 +3284,7 @@ class testcaseModel extends model
         $scenes = $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
-            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
             ->orderBy('grade_desc, sort_asc')
             ->fetchAll('id');
@@ -3300,7 +3300,7 @@ class testcaseModel extends model
                 ->where('deleted')->eq('0')
                 ->andWhere('scene')->ne(0)
                 ->andWhere('product')->eq($productID)
-                ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+                ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
                 ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
                 ->orderBy($orderBy)
                 ->fetchAll('id');
