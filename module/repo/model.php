@@ -338,7 +338,7 @@ class repoModel extends model
             ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
             ->setDefault('client', 'svn')
             ->setDefault('product', '')
-            ->skipSpecial('path,client,account,password')
+            ->skipSpecial('path,client,account,password,desc')
             ->join('product', ',')
             ->setDefault('projects', '')->join('projects', ',')
             ->get();
