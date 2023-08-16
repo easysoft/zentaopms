@@ -2669,24 +2669,22 @@ class testcase extends control
     }
 
     /**
-     * Change scene.
+     * Change scene of a case or change parent of a scene.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function changeScene()
     {
         $sourceID = $this->post->sourceID;
-        $targetID = $this->post->targetID;
-        if(strpos('scene_', $targetID) === false) return true;
+        $sceneID  = $this->post->targetID;
+        if($sourceID == $sceneID) return false;
 
-        $sceneID = str_replace('scene_', '', $targetID);
-
-        if(strpos('case_', $sourceID) !== false)
+        if(strpos($sourceID, 'case_') !== false)
         {
             $caseID  = str_replace('case_', '', $sourceID);
             $oldCase = $this->dao->select('scene')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
-            if($oldCase->scene == $sceneID) return true;
+            if($oldCase->scene == $sceneID) return false;
 
             $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('id')->eq($caseID)->exec();
             if(dao::isError()) return false;
@@ -2697,29 +2695,23 @@ class testcase extends control
             $changes  = common::createChanges($oldCase, $newCase);
             $actionID = $this->loadModel('action')->create('case', $caseID, 'edited');
             $this->action->logHistory($actionID, $changes);
+
+            return !dao::isError();
         }
 
-        if(strpos('scene_', $sourceID) !== false)
-        {
-            $oldSceneID = str_replace('scene_', '', $sourceID);
-            if($oldSceneID == $sceneID) return true;
+        $oldScene      = $this->testcase->getSceneByID($sourceID);
+        $newScene      = $this->testcase->getSceneByID($sceneID);
+        $oldParentPath = substr($oldScene->path, 0, strpos($oldScene->path, ",{$oldScene->id},") + strlen(",{$oldScene->id},"));
 
-            $oldScene      = $this->testcase->getSceneByID($oldSceneID);
-            $newScene      = $this->testcase->getSceneByID($sceneID);
-            $oldParentPath = substr($oldScene->path, 0, strpos($oldScene->path, $oldScene->parent) + strlen($oldScene->parent) + 1);
-
-            $this->dao->update(TABLE_SCENE)->set('parent')->eq($sceneID)->where('id')->eq($oldSceneID)->exec();
-            if(dao::isError()) return false;
-
-            $this->dao->update(TABLE_SCENE)
-                ->set('product')->eq($newScene->product)
-                ->set('branch')->eq($newScene->branch)
-                ->set('module')->eq($newScene->module)
-                ->set('grade')->eq("grade + {$newScene->grade} - {$oldScene->grade}")
-                ->set('path')->eq("REPLACE(path, '{$oldParentPath}', '{$newScene->path}')")
-                ->where('path')->like("$oldScene->path}%")
-                ->exec();
-        }
+        $this->dao->update(TABLE_SCENE)->set('parent')->eq($sceneID)->where('id')->eq($oldScene->id)->exec();
+        $this->dao->update(TABLE_SCENE)
+            ->set('product')->eq($newScene->product)
+            ->set('branch')->eq($newScene->branch)
+            ->set('module')->eq($newScene->module)
+            ->set("grade=grade + {$newScene->grade} + 1 - {$oldScene->grade}")
+            ->set("path=REPLACE(path, '{$oldParentPath}', '{$newScene->path}{$oldScene->id},')")
+            ->where('path')->like("{$oldScene->path}%")
+            ->exec();
 
         return !dao::isError();
     }
