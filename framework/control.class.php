@@ -222,7 +222,7 @@ class control extends baseControl
         if(isset($this->$extensionClass)) return $this->$extensionClass;
 
         /* 设置扩展的名字和相应的文件。Set extenson name and extension file. */
-        $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $type);
+        $moduleExtPath = $this->app->getModuleExtPath($moduleName, $type);
         if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['custom'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['saas']   . 'class/' . $extensionName . '.class.php';
@@ -259,7 +259,7 @@ class control extends baseControl
         $methodName = strtolower(trim($methodName));
 
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
-        $viewExtPath = $this->app->getModuleExtPath($moduleName, $viewDir, 'view');
+        $viewExtPath = $this->app->getModuleExtPath($moduleName, $viewDir);
 
         $viewType     = ($this->viewType == 'mhtml' or $this->viewType == 'xhtml') ? 'html' : $this->viewType;
         $mainViewFile = $modulePath . $viewDir . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';

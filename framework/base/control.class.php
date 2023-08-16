@@ -404,7 +404,7 @@ class baseControl
         $methodName = strtolower(trim($methodName));
 
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
-        $viewExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $viewDir);
+        $viewExtPath = $this->app->getModuleExtPath($moduleName, $viewDir);
 
         $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
         $mainViewFile = $modulePath . $viewDir . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
@@ -443,7 +443,7 @@ class baseControl
          * Find extViewFile in ext/_$siteCode/view first, then try ext/view/.
          */
         $moduleName = basename(dirname(dirname(realpath($viewFile))));
-        $extPath    = $this->app->getModuleExtPath('', $moduleName, 'view');
+        $extPath    = $this->app->getModuleExtPath($moduleName, 'view');
 
         $checkedOrder = array('site', 'saas', 'custom', 'vision', 'xuan', 'common');
         $fileName     = basename($viewFile);
@@ -479,7 +479,7 @@ class baseControl
         $methodName = strtolower(trim($methodName));
 
         $modulePath = $this->app->getModulePath($this->appName, $moduleName);
-        $cssExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'css');
+        $cssExtPath = $this->app->getModuleExtPath($moduleName, 'css');
 
         $clientLang = $this->app->getClientLang();
         $notCNLang  = !str_contains('|zh-cn|zh-tw|', "|{$clientLang}|");
@@ -596,7 +596,7 @@ class baseControl
         $methodName = strtolower(trim($methodName));
 
         $modulePath = $this->app->getModulePath($this->appName, $moduleName);
-        $jsExtPath  = $this->app->getModuleExtPath($this->appName, $moduleName, 'js');
+        $jsExtPath  = $this->app->getModuleExtPath($moduleName, 'js');
 
         $js           = '';
         $mainJsFile   = $modulePath . 'js' . DS . $this->devicePrefix . "common{$suffix}.js";
@@ -803,7 +803,7 @@ class baseControl
          */
         $modulePath        = $this->app->getModulePath($appName, $moduleName);
         $moduleControlFile = $modulePath . 'control.php';
-        $actionExtPath     = $this->app->getModuleExtPath($appName, $moduleName, 'control');
+        $actionExtPath     = $this->app->getModuleExtPath($moduleName, 'control');
         $file2Included     = $moduleControlFile;
 
         if(!empty($actionExtPath))

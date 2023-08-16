@@ -379,7 +379,7 @@ class router extends baseRouter
         $configDirFiles = helper::ls($this->getModulePath($appName, $moduleName) . DS . 'config', '.php');
 
         /* 查找扩展配置文件。Get extension config files. */
-        if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($appName, $moduleName, 'config');
+        if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($moduleName, 'config');
         if($config->framework->extensionLevel >= 1)
         {
             if(!empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');

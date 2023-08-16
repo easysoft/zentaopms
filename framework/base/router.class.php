@@ -1718,7 +1718,7 @@ class baseRouter
      * @access  public
      * @return  string the extension path.
      */
-    public function getModuleExtPath($appName, $moduleName, $ext)
+    public function getModuleExtPath($moduleName, $ext)
     {
         $saasExtPath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
 
@@ -1795,7 +1795,7 @@ class baseRouter
      */
     public function setActionExtFile()
     {
-        $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
+        $moduleExtPaths = $this->getModuleExtPath($this->moduleName, 'control');
 
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
@@ -1839,7 +1839,7 @@ class baseRouter
      */
     public function checkAPIFile()
     {
-        $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
+        $moduleExtPaths = $this->getModuleExtPath($this->moduleName, 'control');
 
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
@@ -1900,7 +1900,7 @@ class baseRouter
         $apiFiles      = array();
         $siteExtended  = false;
 
-        $targetExtPaths = $this->getModuleExtPath($appName, $moduleName, $class);
+        $targetExtPaths = $this->getModuleExtPath($moduleName, $class);
         foreach($targetExtPaths as $extType => $targetExtPath)
         {
             if(empty($targetExtPath)) continue;
@@ -3105,7 +3105,7 @@ class baseRouter
             $commonExtFiles = array();
             $siteExtFiles   = array();
 
-            $extPath = $this->getModuleExtPath($appName, $moduleName, $type);
+            $extPath = $this->getModuleExtPath($moduleName, $type);
             if($this->config->framework->extensionLevel >= 1)
             {
                 $clientLang = $type == 'lang' ? $this->clientLang : '';
