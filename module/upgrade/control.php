@@ -309,11 +309,14 @@ class upgrade extends control
                 }
 
                 /* Create Program. */
+                $result = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(isset($result['result']) && $result['result'] == 'fail') return $this->send($result);
+
                 list($programID, $projectList, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
-                if(dao::isError()) return print(js::error(dao::getError()));
 
                 /* Process merged products and projects. */
-                if($_POST['projectType'] == 'execution')
+                if($projectType == 'execution')
                 {
                     /* Use historical projects as execution upgrades. */
                     $this->upgrade->processMergedData($programID, $projectList, $lineID, $linkedProducts, $linkedSprints);
@@ -324,7 +327,7 @@ class upgrade extends control
                     $singleProducts = array_diff($linkedProducts, $sprintProducts);
                     foreach($linkedSprints as $sprint)
                     {
-                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array($sprintProducts[$sprint] => $sprintProducts[$sprint]), array($sprint => $sprint));
+                        $this->upgrade->processMergedData($programID, zget($projectList, $sprint, array()), $lineID, array($sprintProducts[$sprint] => $sprintProducts[$sprint]), array($sprint => $sprint));
                     }
                 }
 
@@ -362,13 +365,13 @@ class upgrade extends control
 
                 /* Create Program. */
                 list($programID, $projectList, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
-                if(dao::isError()) return print(js::error(dao::getError()));
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
                 /* Process productline. */
                 $this->dao->delete()->from(TABLE_MODULE)->where('`root`')->eq(0)->andWhere('`type`')->eq('line')->exec();
 
                 /* Process merged products and projects. */
-                if($_POST['projectType'] == 'execution')
+                if($projectType == 'execution')
                 {
                     /* Use historical projects as execution upgrades. */
                     $this->upgrade->processMergedData($programID, $projectList, $lineID, $linkedProducts, $linkedSprints);
@@ -392,9 +395,9 @@ class upgrade extends control
 
                 /* Create Program. */
                 list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
-                if(dao::isError()) return print(js::error(dao::getError()));
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                if($_POST['projectType'] == 'execution')
+                if($projectType == 'execution')
                 {
                     /* Use historical projects as execution upgrades. */
                     $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
@@ -414,9 +417,9 @@ class upgrade extends control
 
                 /* Create Program. */
                 list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
-                if(dao::isError()) return print(js::error(dao::getError()));
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                if($_POST['projectType'] == 'execution')
+                if($projectType == 'execution')
                 {
                     /* Use historical projects as execution upgrades. */
                     $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
@@ -431,13 +434,12 @@ class upgrade extends control
                 }
 
                 /* If is more-link sprints, and as project upgrade, set old relation into new project. */
-                $projectProducts = $this->dao->select('product,project,branch,plan')->from(TABLE_PROJECTPRODUCT)
-                    ->where('project')->in($linkedSprints)
-                    ->fetchAll();
+                $projectProducts = $this->dao->select('product,project,branch,plan')->from(TABLE_PROJECTPRODUCT)->where('project')->in($linkedSprints)->fetchAll();
+
                 foreach($projectProducts as $projectProduct)
                 {
                     $data = new stdclass();
-                    $data->project = $_POST['projectType'] == 'execution' ? $projectList : $projectList[$projectProduct->project];
+                    $data->project = $projectType == 'execution' ? $projectList : $projectList[$projectProduct->project];
                     $data->product = $projectProduct->product;
                     $data->plan    = $projectProduct->plan;
                     $data->branch  = $projectProduct->branch;
@@ -446,7 +448,7 @@ class upgrade extends control
                 }
             }
 
-            return print(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type&programID=$programID&projectType=$projectType"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('upgrade', 'mergeProgram', "type=$type&programID=$programID&projectType=$projectType")));
         }
 
         /* Get no merged product and project count. */
@@ -468,7 +470,7 @@ class upgrade extends control
             /* Update sprints history. */
             $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
             $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
-            return print(js::locate($this->createLink('upgrade', 'mergeRepo')));
+            $this->locate($this->createLink('upgrade', 'mergeRepo'));
         }
 
         $this->view->noMergedProductCount = $noMergedProductCount;
@@ -654,7 +656,7 @@ class upgrade extends control
         $this->view->programs    = $programs;
         $this->view->programID   = $programID;
         $this->view->projects    = $this->upgrade->getProjectPairsByProgram($currentProgramID);
-        $this->view->lines       = $currentProgramID ? $this->loadModel('product')->getLinePairs($currentProgramID) : array('' => '');
+        $this->view->lines       = $currentProgramID ? $this->loadModel('product')->getLinePairs($currentProgramID) : array();
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->systemMode  = $systemMode;
@@ -675,7 +677,7 @@ class upgrade extends control
         if($_POST)
         {
             $mergeMode = $this->post->projectType;
-            if($mergeMode == 'manually') $this->locate(inlink('mergeProgram'));
+            if($mergeMode == 'manually') return $this->send(array('result' => 'success', 'load' => inlink('mergeProgram')));
 
             if($mode == 'light') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
             if($mode == 'ALM')   $programID = $this->loadModel('program')->createDefaultProgram();
@@ -762,7 +764,7 @@ class upgrade extends control
             $this->dao->delete()->from(TABLE_BLOCK)->exec();
             $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('blockInited')->exec();
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
-            return $this->send(array('result' => 'success', 'load' => inlink('afterExec', 'fromVersion=&processed=no')));
+            $this->locate(inlink('afterExec', 'fromVersion=&processed=no'));
         }
 
         $this->view->title    = $this->lang->upgrade->mergeRepo;
@@ -828,11 +830,11 @@ class upgrade extends control
         {
             $this->view->title    = $this->lang->upgrade->consistency;
             $this->view->alterSQL = $alterSQL;
-            return print($this->display('upgrade', 'consistency'));
+            return $this->display('upgrade', 'consistency');
         }
 
         $extFiles = $this->upgrade->getExtFiles();
-        if(!empty($extFiles) and $skipMoveFile == 'no') return print(js::locate(inlink('moveExtFiles', "fromVersion=$fromVersion")));
+        if(!empty($extFiles) and $skipMoveFile == 'no') $this->locate(inlink('moveExtFiles', "fromVersion=$fromVersion"));
 
         $response = $this->upgrade->removeEncryptedDir();
         if($response['result'] == 'fail')

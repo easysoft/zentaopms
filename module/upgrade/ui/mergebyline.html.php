@@ -87,7 +87,7 @@ $getMergeData = function($data)
             set::class('border p-4 overflow-hidden'),
             div
             (
-                set::class('flex'),
+                set::class('flex mb-4'),
                 cell
                 (
                     set::width('1/3'),
@@ -109,7 +109,6 @@ $getMergeData = function($data)
             ),
             div
             (
-                set::class('mt-4'),
                 $checkBoxGroup
             )
         ),

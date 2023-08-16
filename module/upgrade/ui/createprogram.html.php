@@ -31,31 +31,17 @@ $createProgram = function($data)
             set::class('programForm mt-4 form-grid'),
             formGroup
             (
-                set::class('programName hidden program-exist'),
-                set::label($lang->upgrade->existProgram),
-                set::required(true),
-                inputGroup
-                (
-                    picker(set::id('programs'), set::name('programs'), set::items($data->programs), set::value($data->programID), set('data-on', 'change'), set('data-call', 'changePrograms')),
-                    span
-                    (
-                        set('class', 'input-group-addon'),
-                        checkbox(set::name('newProgram'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewProgram'))
-                    ),
-                )
-            ),
-            formGroup
-            (
-                set::class('programName program-no-exist'),
+                set::class('programName'),
                 set::label($lang->upgrade->programName),
                 set::required(true),
                 inputGroup
                 (
+                    picker(set::id('programs'), set::name('programs'), set::items($data->programs), set::value($data->programID), set('data-on', 'change'), set('data-call', 'changePrograms'), set::class('hidden')),
                     input(set::name('programName')),
                     span
                     (
                         set('class', 'input-group-addon'),
-                        checkbox(set::name('newProgram'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewProgram'))
+                        checkbox(set::name('newProgram'), set::text($lang->upgrade->newProgram), set::value('0'), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewProgram'))
                     ),
                     input(set::class('hidden'), set::name('programID'))
                 )
@@ -71,29 +57,16 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                set::class('projectName hidden project-exist'),
-                set::label($lang->upgrade->existProject),
-                inputGroup
-                (
-                    picker(set::id('projects'), set::name('projects'), set::items($data->projects), set::class('picker-field')),
-                    span
-                    (
-                        set('class', 'input-group-addon'),
-                        checkbox(set::name('newProject'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewProject'))
-                    )
-                )
-            ),
-            formGroup
-            (
-                set::class('projectName hidden project-no-exist'),
+                set::class('projectName hidden'),
                 set::label($lang->upgrade->projectName),
                 inputGroup
                 (
                     input(set::name('projectName'), set::value(isset($data->sprintName) ? $data->sprintName : '')),
+                    picker(set::id('projects'), set::name('projects'), set::items($data->projects), set::class('picker-field hidden')),
                     span
                     (
-                        set('class', 'input-group-addon'),
-                        checkbox(set::name('newProject'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewProject'))
+                        set('class', 'input-group-addon ' . (count($data->projects) ? '' : 'hidden')),
+                        checkbox(set::name('newProject'), set::text($lang->upgrade->newProgram), set::value('0'), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewProject'))
                     )
                 )
             ),
@@ -108,29 +81,16 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                set::class('lineName hidden line-exist'),
-                set::label($lang->upgrade->existLine),
-                inputGroup
-                (
-                    picker(set::id('lines'), set::name('lines'), set::items($data->lines)),
-                    span
-                    (
-                        set('class', 'input-group-addon'),
-                        checkbox(set::name('newLine'), set::text($lang->upgrade->newProgram), set::value(1), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewLine'))
-                    )
-                )
-            ),
-            formGroup
-            (
-                set::class('lineName line-no-exist'),
+                set::class('lineName'),
                 set::label($lang->upgrade->line),
                 inputGroup
                 (
+                    picker(set::id('lines'), set::name('lines'), set::items($data->lines), set::class('hidden')),
                     input(set::name('lineName'), set::value(isset($data->lineName) ? $data->lineName : '')),
                     span
                     (
-                        set('class', 'input-group-addon'),
-                        checkbox(set::name('newLine'), set::text($lang->upgrade->newProgram), set::value(0), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewLine'))
+                        set('class', 'input-group-addon ' . (count($data->lines) ? '' : 'hidden')),
+                        checkbox(set::name('newLine'), set::text($lang->upgrade->newProgram), set::value('0'), set::checked(true), set('data-on', 'change'), set('data-call', 'changeNewLine'))
                     )
                 )
             ),

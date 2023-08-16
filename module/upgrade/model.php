@@ -4746,19 +4746,30 @@ class upgradeModel extends model
         $data    = fixer::input('post')->get();
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
 
+        $projectType = zget($data, 'projectType', 'project');
         if(isset($data->newProgram))
         {
-            if(!$this->post->longTime and !$this->post->end and isset($data->begin)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
-
-            if(isset($data->projectName) and $data->projectType == 'execution' and empty($data->projectName)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName)));
-
-            if($data->projectType == 'project')
+            if(empty($data->programName))
             {
-                $projectPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)
-                    ->where('deleted')->eq('0')
-                    ->andWhere('id')->in($projectIdList)
-                    ->fetchPairs();
+                dao::$errors['programName'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->programName);
+                return false;
+            }
 
+            if(!$this->post->longTime and !$this->post->end and isset($data->begin))
+            {
+                dao::$errors['end'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->end);
+                return false;
+            }
+
+            if(isset($data->projectName) and $projectType == 'execution' and empty($data->projectName))
+            {
+                dao::$errors['projectName'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName);
+                return false;
+            }
+
+            if($projectType == 'project')
+            {
+                $projectPairs  = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq('0')->andWhere('id')->in($projectIdList)->fetchPairs();
                 $projectNames  = array();
                 $duplicateList = '';
                 foreach($projectPairs as $projectID => $projectName)
@@ -4773,11 +4784,7 @@ class upgradeModel extends model
                     $projectNames[$projectName] = $projectID;
                 }
 
-                if($duplicateList)
-                {
-                    echo "<script>new parent.$.zui.ModalTrigger({url: parent.$.createLink('upgrade', 'renameObject', 'type=project&duplicateList=$duplicateList', '', 1), type: 'iframe', width:'40%'}).show();</script>";
-                    die;
-                }
+                if($duplicateList) return array('result' => 'fail', 'callback' => "loadModal('" . helper::createLink('upgrade', 'renameObject', "type=project&duplicateList={$duplicateList}") . "')");
             }
 
             /* Insert program. */
@@ -4792,7 +4799,7 @@ class upgradeModel extends model
             $program->openedVersion = $this->config->version;
             $program->acl           = isset($data->programAcl) ? $data->programAcl : 'open';
             $program->days          = $this->computeDaysDelta($program->begin, $program->end);
-            $program->PM            = $data->projectType == 'project' ? $data->PM : '';
+            $program->PM            = $projectType == 'project' ? zget($data, 'PM', '') : '';
             $program->vision        = 'rnd';
 
             $this->app->loadLang('program');
@@ -4840,8 +4847,8 @@ class upgradeModel extends model
                 $line->root   = $programID;
                 $line->order  = $maxOrder;
                 $this->dao->insert(TABLE_MODULE)->data($line)->exec();
-                $lineID = $this->dao->lastInsertID();
 
+                $lineID = $this->dao->lastInsertID();
                 $path   = ",$lineID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
 
@@ -4852,20 +4859,25 @@ class upgradeModel extends model
         }
         else
         {
-            $lineID = $data->lines;
+            $lineID = !empty($data->lines) ? $data->lines : 0;
         }
 
         if(!isset($data->sprints)) return array($programID, 0, $lineID);
 
+        $projectList = array();
         if(isset($data->newProject))
         {
-            if(!$this->post->longTime and !$this->post->end) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
+            if(!$this->post->longTime and !$this->post->end)
+            {
+                dao::$errors['end'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->end);
+                return false;
+            }
 
             /* Create a project. */
             $this->loadModel('action');
             $this->app->loadLang('doc');
             $this->lang->project->name = $this->lang->upgrade->projectName;
-            if($data->projectType == 'execution')
+            if($projectType == 'execution')
             {
                 /* Use historical projects as execution upgrades. */
                 $projectList = $this->createProject($programID, $data);
@@ -4891,11 +4903,7 @@ class upgradeModel extends model
                     }
                 }
 
-                if($duplicateList)
-                {
-                    echo "<script>new parent.$.zui.ModalTrigger({url: parent.$.createLink('upgrade', 'renameObject', 'type=project&duplicateList=$duplicateList', '', 1), type: 'iframe', width:'40%'}).show();</script>";
-                    die;
-                }
+                if($duplicateList) return array('result' => 'fail', 'callback' => "loadModal('" . helper::createLink('upgrade', 'renameObject', "type=project&duplicateList={$duplicateList}") . "')");
 
                 foreach($projectIdList as $projectID)
                 {
@@ -4911,7 +4919,7 @@ class upgradeModel extends model
                 }
             }
         }
-        else
+        else if(!empty($data->projects))
         {
             $projectList = $data->projects;
             $this->dao->update(TABLE_PROJECT)->set('status')->eq($data->projectStatus)->where('id')->eq($projectList)->exec();
@@ -4941,7 +4949,7 @@ class upgradeModel extends model
         $project->model          = 'scrum';
         $project->parent         = $programID;
         $project->status         = $data->projectStatus;
-        $project->team           = empty($data->team) ? $data->team : $data->projectName;
+        $project->team           = !empty($data->team) ? $data->team : $data->projectName;
         $project->begin          = $data->begin;
         $project->end            = isset($data->end) ? $data->end : LONG_TIME;
         $project->days           = $this->computeDaysDelta($project->begin, $project->end);
@@ -5025,16 +5033,16 @@ class upgradeModel extends model
      */
     public function processMergedData($programID, $projectID, $lineID = 0, $productIdList = array(), $sprintIdList = array())
     {
+        if(!$projectID) return false;
+
+        /* No project is created when there are no sprints. */
+        if(!$sprintIdList) return false;
+
         /* Product linked objects. */
         $this->dao->update(TABLE_RELEASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
 
         /* Compute product acl. */
         $this->computeProductAcl($productIdList, $programID, $lineID);
-
-        /* No project is created when there are no sprints. */
-        if(!$sprintIdList) return;
-
-        if(!$projectID) return print(js::alert($this->lang->upgrade->projectEmpty));
 
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
@@ -6423,7 +6431,7 @@ class upgradeModel extends model
     {
         $isOldVersion = false;
         $fromVersion  = str_replace('_', '.', $fromVersion);
-        if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '12.5.3', '<='))
+        if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '12.0.0', '<='))
         {
             $isOldVersion = true;
         }
@@ -6898,11 +6906,11 @@ class upgradeModel extends model
      */
     public function processBugLinkBug()
     {
-        $bugs = $this->dao->select('id,relatedBug')->from(TABLE_BUG)->where('relatedBug')->ne('')->fetchPairs();
-        foreach($bugs as $bugID => $relatedBugs)
+        $bugs = $this->dao->select('id,linkBug')->from(TABLE_BUG)->where('linkBug')->ne('')->fetchPairs();
+        foreach($bugs as $bugID => $linkBugs)
         {
-            $relatedBugs = explode(',', $relatedBugs);
-            $this->dao->update(TABLE_BUG)->set("relatedBug = TRIM(BOTH ',' from CONCAT(relatedbug, ',$bugID'))")->where('id')->in($relatedBugs)->andWhere('id')->ne($bugID)->andWhere("CONCAT(',', relatedBug, ',')")->notlike("%,$bugID,%")->exec();
+            $linkBugs = explode(',', $linkBugs);
+            $this->dao->update(TABLE_BUG)->set("linkBug = TRIM(BOTH ',' from CONCAT(relatedbug, ',$bugID'))")->where('id')->in($linkBugs)->andWhere('id')->ne($bugID)->andWhere("CONCAT(',', linkBug, ',')")->notlike("%,$bugID,%")->exec();
         }
 
         return !dao::isError();

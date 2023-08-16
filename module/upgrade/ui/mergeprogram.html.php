@@ -43,6 +43,7 @@ div
         form
         (
             set::actions(''),
+            set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
             div
             (
                 div
