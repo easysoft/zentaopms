@@ -404,9 +404,11 @@ class repoModel extends model
         if($type == 'task')  $links = $this->post->tasks;
 
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
-        if(empty($revisionInfo)) $this->updateCommit($repoID);
-
-        $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
+        if(empty($revisionInfo))
+        {
+            $this->updateCommit($repoID);
+            $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
+        }
         if(empty($revisionInfo)) return false;
 
         $revisionID = $revisionInfo->id;
