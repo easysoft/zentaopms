@@ -119,7 +119,7 @@ class Project
     {
         $this->project->update($project, $oldProject);
 
-        if(dao::isError()) return array('message' => dao::getError());
+        if(dao::isError()) return dao::getError();
 
         return $this->project->getByID($oldProject->id);
     }
@@ -187,6 +187,27 @@ class Project
         else
         {
             return $project;
+        }
+    }
+
+    /**
+     * Do update a project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return array
+     */
+    public function doUpdate(int $projectID, object $project)
+    {
+        $this->project->doUpdate($projectID, $project);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->project->getByID($projectID);
         }
     }
 
