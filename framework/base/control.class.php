@@ -1128,12 +1128,25 @@ class baseControl
     /**
      * return error json
      *
-     * @param  mixed $error
+     * @param  mixed       $error
+     * @param  string|bool $locate
      * @return void
      */
-    public function sendError($error)
+    public function sendError(mixed $error, string|bool $locate = false)
     {
-        return $this->send(array('result' => 'fail', 'message' => $error));
+        $result = array('result' => 'fail');
+        if($locate)
+        {
+            if(empty($error)) $error = $this->lang->error->accessDenied;
+            $result['load'] = array('alert' => $error);
+
+            if(is_string($locate)) $result['load']['locate'] = $locate;
+        }
+        else
+        {
+            $result['message'] = $error;
+        }
+        return $this->send($result);
     }
 
     /**
@@ -1145,7 +1158,7 @@ class baseControl
     public function sendSuccess(array $data)
     {
         $data['result'] = 'success';
-        if(empty($data['message'])) $data['message'] = $this->lang->saveSuccess;
+        if(!isset($data['message'])) $data['message'] = $this->lang->saveSuccess;
 
         if(!isset($data['closeModal']) && helper::isAjaxRequest('modal'))
         {
