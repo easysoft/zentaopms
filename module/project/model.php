@@ -98,11 +98,11 @@ class projectModel extends model
 
         if(!isset($projects[$projectID]))
         {
-            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false && !empty($projects))
+            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$projectID},") === false && !empty($projects))
             {
                 /* Redirect old project to new project. */
                 $newProjectID = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('project');
-                if(!$newProjectID || strpos(",{$this->app->user->view->projects},", ",{$newProjectID},") !== false) $newProjectID = false;
+                if(!$newProjectID || strpos(",{$this->app->user->view->projects},", ",{$newProjectID},") === false) $newProjectID = false;
             }
 
             $projectID = isset($newProjectID) ? $newProjectID : (int)key($projects);
