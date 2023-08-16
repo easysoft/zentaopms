@@ -695,6 +695,7 @@ class bugTest
     }
 
     /**
+     * 测试获取产品的bug键对。
      * Test get bug pairs of a product.
      *
      * @param  int        $productID
@@ -702,14 +703,14 @@ class bugTest
      * @access public
      * @return string
      */
-    public function getProductBugPairsTest($productID, $branch = '')
+    public function getProductBugPairsTest(int $productID, int|string $branch = ''): array|string
     {
         $array = $this->objectModel->getProductBugPairs($productID, $branch);
 
         $title = '';
         foreach($array as $bug) $title .= ',' . $bug;
         $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
+        $title = str_replace(array("'", '@', '$', '%'), '', $title);
 
         if(dao::isError())
         {

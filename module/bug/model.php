@@ -1080,14 +1080,15 @@ class bugModel extends model
     }
 
     /**
-     * get Product Bug Pairs
+     * 获取产品的bug键对。
+     * Get product bug pairs.
      *
      * @param  int        $productID
      * @param  int|string $branch
      * @access public
-     * @return void
+     * @return array
      */
-    public function getProductBugPairs($productID, $branch = '')
+    public function getProductBugPairs(int $productID, int|string $branch = ''): array
     {
         $bugs = array();
         $data = $this->dao->select('id, title')->from(TABLE_BUG)
@@ -1097,10 +1098,7 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll();
-        foreach($data as $bug)
-        {
-            $bugs[$bug->id] = $bug->id . ':' . $bug->title;
-        }
+        foreach($data as $bug) $bugs[$bug->id] = $bug->id . ':' . $bug->title;
         return $bugs;
     }
 
