@@ -107,6 +107,19 @@ function loadProductExecutionsByProject(event)
         }
     });
 
-    var link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch);
+    const executionID = $currentRow.find('.form-batch-control[data-name="execution"] .picker').zui('picker').$.value || '0';
+    if(executionID != 0)
+    {
+        var link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch);
+    }
+    else if(projectID != 0)
+    {
+        var link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch);
+    }
+    else
+    {
+        var link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch);
+    }
+
     setOpenedBuilds(link, $currentRow);
 }
