@@ -1162,25 +1162,32 @@ class bugModel extends model
     }
 
     /**
+     * 通过版本 id 列表获取版本关联的执行。
      * Get linked execution by build id list.
      *
-     * @param  string $buildIdList
+     * @param  array  $buildIdList
      * @access public
      * @return array
      */
-    public function getLinkedExecutionByIdList($buildIdList)
+    public function getLinkedExecutionByIdList(array $buildIdList): array
     {
+        /* Get information of builds. */
         $builds = $this->dao->select('id,execution,builds')->from(TABLE_BUILD)->where('id')->in($buildIdList)->fetchAll('id');
 
         $executionIdList   = array();
         $linkedBuildIdList = array();
         foreach($builds as $build)
         {
+            /* 如果版本的builds字段不为空，将版本的builds追加到linkedBuildIdList数组。 */
+            /* If build builds is not empty, append build builds to linkedBuildIdList. */
             if($build->builds) $linkedBuildIdList = array_merge($linkedBuildIdList, explode(',', $build->builds));
-
-            if(empty($build->execution)) continue;
-            $executionIdList[$build->execution] = $build->execution;
+            /* 如果版本的执行字段不为空，将执行字段追加到executionIdList数组。 */
+            /* If build execution is not empty, append build execution to executionIdList. */
+            if(!empty($build->execution)) $executionIdList[$build->execution] = $build->execution;
         }
+
+        /* 如果linkedBuildIdList不为空，将关联builds的版本追加到executionIdList数组。 */
+        /* If linkedBuildIdList is not empty, append the execution of the linked builds to executionIdList. */
         if($linkedBuildIdList)
         {
             $linkedBuilds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in(array_unique($linkedBuildIdList))->fetchAll('id');

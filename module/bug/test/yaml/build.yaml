@@ -1,0 +1,20 @@
+---
+title: zt_build
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: execution
+    range: 0{2},1-90
+  - field: builds
+    fields:
+      - field: build1
+        range: "``{50}, `,`{50}"
+      - field: build2
+        range: "``{50}, 2-100:2{50}"
+      - field: build3
+        range: "``{50}, `,`{50}"
+      - field: build4
+        range: "``{50}, 4-100:2{50}"
+      - field: build5
+        range: "``{50}, `,`{50}"
+

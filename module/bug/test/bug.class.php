@@ -1347,4 +1347,31 @@ class bugTest
             return $build;
         }
     }
+
+    /**
+     * 测试通过版本 id 列表获取版本关联的执行。
+     * Test get linked execution by id list.
+     *
+     * @param  string $buildIdList
+     * @access public
+     * @return void
+     */
+    public function getLinkedExecutionByIdListTest(string $buildIdList): array|string
+    {
+        $buildIdList = explode(',', $buildIdList);
+        $array       = $this->objectModel->getLinkedExecutionByIdList($buildIdList);
+
+        $idList = '';
+        foreach($array as $execution) $idList .= ',' . $execution;
+        $idList = trim($idList, ',');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $idList;
+        }
+    }
 }
