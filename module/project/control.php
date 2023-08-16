@@ -820,7 +820,7 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  int    $branchID
+     * @param  string $branchID
      * @param  string $orderBy
      * @param  int    $build
      * @param  string $type
@@ -831,7 +831,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function bug(int $projectID = 0, int $productID = 0, $branchID = 'all', $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug(int $projectID = 0, int $productID = 0, string $branchID = 'all', string $orderBy = 'status,id_desc', int $build = 0, string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
