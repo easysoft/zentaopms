@@ -117,6 +117,7 @@ class bugTao extends bugModel
      * @param  array|int  $productIdList
      * @param  int|string $branch
      * @param  int        $projectID
+     * @param  int        $executionID
      * @param  int        $queryID
      * @param  string     $excludeBugs
      * @param  string     $orderBy
@@ -124,7 +125,7 @@ class bugTao extends bugModel
      * @access public
      * @return array
      */
-    protected function getBySearch(string $object = 'bug', array|int $productIdList = array(), int|string $branch = 0, int $projectID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null): array
+    protected function getBySearch(string $object = 'bug', array|int $productIdList = array(), int|string $branch = 0, int $projectID = 0, int $executionID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null): array
     {
         $bugQuery = $this->processSearchQuery($object, $queryID, $productIdList, (string)$branch);
 
@@ -145,6 +146,10 @@ class bugTao extends bugModel
             ->andWhere('openedBuild')->eq('trunk')
             ->fi()
             ->markRight(1)
+            ->fi()
+
+            ->beginIF($object == 'execution')
+            ->andWhere('execution')->eq($executionID)
             ->fi()
 
             ->orderBy($orderBy)
@@ -280,6 +285,9 @@ class bugTao extends bugModel
      */
     private function processSearchQuery(string $object, int $queryID, array|int $productIdList, string|int $branch): string
     {
+        $queryName = $object != 'bug' ? $object . 'BugQuery' : 'bugQuery';
+        $formName  = $object != 'bug' ? $object . 'BugForm' : 'bugForm';
+
         /* 设置 bug 查询的 session。*/
         /* Set the session of bug query. */
         if($queryID)
@@ -288,13 +296,13 @@ class bugTao extends bugModel
 
             if($query)
             {
-                $this->session->set('bugQuery', $query->sql);
-                $this->session->set('bugForm', $query->form);
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($formName, $query->form);
             }
         }
-        if($this->session->bugQuery === false) $this->session->set('bugQuery', ' 1 = 1');
+        if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
 
-        $bugQuery = $this->getBugQuery($this->session->bugQuery);
+        $bugQuery = $this->getBugQuery($this->session->$queryName);
 
         /* 在 bug 的查询中加上产品的限制。*/
         /* Append product condition in bug query. */

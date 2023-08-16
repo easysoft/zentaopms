@@ -916,7 +916,7 @@ class bugModel extends model
 
         if($type == 'bysearch')
         {
-            $bugs = $this->bugTao->getBySearch('project', $productIID, $branchID, $projectID = 0, (int)$param, $excludeBugs, $orderBy, $pager);
+            $bugs = $this->bugTao->getBySearch('project', $productIID, $branchID, $projectID, $param, $excludeBugs, $orderBy, $pager);
         }
         else
         {
@@ -944,11 +944,12 @@ class bugModel extends model
     }
 
     /**
+     * 获取执行的 bug。
      * Get bugs of a execution.
      *
      * @param  int          $executionID
      * @param  int          $productID
-     * @param  int          $branchID
+     * @param  int|string   $branchID
      * @param  string|array $builds
      * @param  string       $type
      * @param  int          $param
@@ -958,64 +959,43 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionBugs($executionID, $productID = 0, $branchID = 'all', $builds = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
+    public function getExecutionBugs(int $executionID, int $productID = 0, string|int $branchID = 'all', int|array $builds = 0, string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', object $pager = null): array
     {
-        $type = strtolower($type);
-        if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        if(strpos($orderBy, 'pri_') !== false)      $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
+        $type = strtolower($type);
         if($type == 'bysearch')
         {
-            $queryID = (int)$param;
-            if($this->session->executionBugQuery === false) $this->session->set('executionBugQuery', ' 1 = 1');
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('executionBugQuery', $query->sql);
-                    $this->session->set('executionBugForm', $query->form);
-                }
-            }
-
-            $bugQuery = $this->getBugQuery($this->session->executionBugQuery);
-
-            $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-                ->where($bugQuery)
-                ->andWhere('execution')->eq((int)$executionID)
-                ->andWhere('deleted')->eq(0)
-                ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
-                ->beginIF(!empty($productID) and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false)->andWhere('product')->eq($productID)->fi()
-                ->beginIF(!empty($productID) and $branchID !== 'all' and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false)->andWhere('branch')->eq($branchID)->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
+            $bugs = $this->bugTao->getBySearch('execution', $productIID, $branchID, $projectID = 0, $executionID, $param, $excludeBugs, $orderBy, $pager);
         }
         else
         {
             $condition = '';
             if($builds)
             {
-                if(!is_array($builds)) $builds = explode(',', $builds);
-
                 $conditions = array();
-                foreach($builds as $build)
-                {
-                    if($build) $conditions[] = "FIND_IN_SET('$build', t1.openedBuild)";
-                }
+
+                if(!is_array($builds)) $builds = array_unique(explode(',', $builds));
+                foreach($builds as $build) $conditions[] = "FIND_IN_SET('$build', t1.openedBuild)";
+
                 $condition = implode(' OR ', $conditions);
                 $condition = "($condition)";
             }
-            $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
-                ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
-                ->where('t1.deleted')->eq(0)
-                ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t1.branch')->eq($branchID)->fi()
+
+            $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
+                ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
+                ->where('t1.deleted')->eq('0')
+                ->beginIF(!empty($productID) && $branchID !== 'all')->andWhere('t1.branch')->eq($branchID)->fi()
                 ->beginIF(empty($builds))->andWhere('t1.execution')->eq($executionID)->fi()
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
                 ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($condition)->andWhere("$condition")->fi()
-                ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
+                ->beginIF(!empty($param))
+                ->andWhere('t2.path')->like("%,$param,%")
+                ->andWhere('t2.deleted')->eq('0')
+                ->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
