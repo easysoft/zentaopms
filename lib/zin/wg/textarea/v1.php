@@ -5,7 +5,7 @@ namespace zin;
 class textarea extends wg
 {
     protected static array $defineProps = array(
-        'name: string',
+        'name?: string',
         'id?: string',
         'class?: string',
         'required?: bool',

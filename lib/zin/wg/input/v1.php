@@ -6,7 +6,7 @@ class input extends wg
 {
     protected static array $defineProps = array(
         'type: string',
-        'name: string',
+        'name?: string',
         'id?: string',
         'class?: string',
         'value?: string',
