@@ -433,12 +433,12 @@ function toOrder(sourceID,targetID)
   var productID  = 0;
 
   $('#caseTableList > tr').each(function(i, elem){
-    if($(elem).data('object-id') == sourceID) productID = $(elem).data('product');
+    if($(elem).data('id') == sourceID) productID = $(elem).data('product');
   });
 
   $('#caseTableList > tr').each(function(i, elem){
     if($(elem).data('product') != productID) return;
-    origOrders.push($(elem).data('object-id'));
+    origOrders.push($(elem).data('id'));
   });
 
   for(var i=0; i<origOrders.length;i++)
@@ -491,8 +491,8 @@ function checkProduct(sourceID, targetID)
   var sourceElem = null;
   var targetElem = null;
   $('#caseTableList > tr').each(function(i, elem){
-    if($(elem).data('object-id') == sourceID) sourceElem = elem;
-    if($(elem).data('object-id') == targetID) targetElem = elem;
+    if($(elem).data('id') == sourceID) sourceElem = elem;
+    if($(elem).data('id') == targetID) targetElem = elem;
   });
 
   if(sourceID == targetID) return false;
@@ -514,7 +514,6 @@ $(function()
   // dataNested: dataNested,
   // nestPath: nestPath,
   // isScene: isScene,
-  // objectID: objectID
   // boundary: {x:pos.x, y:pos.y, w:size.w, h:size.h},
   // $dom: $row,
   var xtable = $('#caseForm').data('zui.table');
@@ -540,17 +539,17 @@ $(function()
       if(sameLevel == true) {
         if(target.dataNested == "true"){
           //同级别拖拽到场景下面，需要弹框询问是排序还是切换场景
-          $("#sceneDragModal").attr("sourceID", source.objectID);
-          $("#sceneDragModal").attr("targetID", target.objectID);
+          $("#sceneDragModal").attr("sourceID", source.id);
+          $("#sceneDragModal").attr("targetID", target.id);
           $("#sceneDragModal").modal("show");
         } else {
           //同级别拖拽到测试用例上，只能是调整顺序
-          toOrder(source.objectID, target.objectID);
+          toOrder(source.id, target.id);
         }
       } else {
         //不同级别，只有拖拽到场景下才有用，这里执行切换场景操作
         if(target.dataNested == "true"){
-          toChange(source.objectID, target.objectID);
+          toChange(source.id, target.id);
         }
       }
     }
