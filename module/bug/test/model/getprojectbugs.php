@@ -1,31 +1,96 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php'; su('admin');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
+
+su('admin');
+
+function initData()
+{
+    $bug = zdTable('bug');
+    $bug->id->range('1-10');
+    $bug->product->range('1,2,3,4');
+    $bug->branch->range('0,0,1');
+    $bug->project->range('1,2');
+    $bug->module->range('1,0');
+    $bug->status->range("resolved,active,closed");
+    $bug->title->prefix("BUG")->range('1-10');
+    $bug->plan->range('1,0');
+    $bug->assignedTo->range('admin,zhangsan');
+    $bug->openedBy->range('admin,zhangsan');
+    $bug->resolvedBy->range('admin');
+    $bug->confirmed->range('0,1');
+    $bug->resolution->range('postponed,fixed');
+    $bug->openedBuild->range('trunk,2,1');
+    $bug->gen(10);
+}
+
+initData();
 
 /**
 
 title=bugModel->getProjectBugs();
+timeout=0
 cid=1
-pid=1
 
-测试获取项目ID为11的bug >> 测试单转Bug1;BUG3;BUG2
-测试获取项目ID为12的bug >> SonarQube_Bug2;BUG6;BUG5  
-测试获取项目ID为13的bug >> 测试单转Bug3;BUG9;bug8
-测试获取项目ID为14的bug >> SonarQube_Bug4;BUG12;BUG11
-测试获取项目ID为15的bug >> 测试单转Bug5;缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;15;BUG14
-测试获取项目ID为16的bug >> SonarQube_Bug6;BUG18;BUG17
-测试获取不存在的项目的bug >> 0
+- 测试获取项目ID为2的bug
+ - 第0条的title属性 @BUG10
+ - 第1条的title属性 @BUG8
+ - 第2条的title属性 @BUG6
+ - 第3条的title属性 @BUG4
+ - 第4条的title属性 @BUG2
+
+- 测试获取项目ID为2不包含id为10的bug
+ - 第0条的title属性 @BUG8
+ - 第1条的title属性 @BUG6
+ - 第2条的title属性 @BUG4
+ - 第3条的title属性 @BUG2
+
+- 测试获取项目ID为2, 影响版本为1的bug
+ - 第0条的title属性 @BUG9
+ - 第1条的title属性 @BUG6
+ - 第2条的title属性 @BUG3
+
+- 测试获取项目ID为2,产品ID为2的bug
+ - 第0条的title属性 @BUG10
+ - 第1条的title属性 @BUG6
+ - 第2条的title属性 @BUG2
+
+- 测试获取项目ID为2,产品ID为2, 分支为1的bug第0条的title属性 @BUG6
+
+- 测试获取项目ID为2,未解决的bug
+ - 第0条的title属性 @BUG8
+ - 第1条的title属性 @BUG2
+
+- 测试获取项目ID为2,未关闭的bug
+ - 第0条的title属性 @BUG10
+ - 第1条的title属性 @BUG8
+ - 第2条的title属性 @BUG4
+ - 第3条的title属性 @BUG2
+
+- 测试获取项目ID为1,模块为1的bug
+ - 第0条的title属性 @BUG9
+ - 第1条的title属性 @BUG7
+ - 第2条的title属性 @BUG5
+ - 第3条的title属性 @BUG3
+ - 第4条的title属性 @BUG1
 
 */
 
-$projectIDList = array('11', '12', '13', '14', '15', '16', '1000001');
+$projectIdList = array(2, 1, 1000001);
+$productIdList = array(1, 2);
+$branchIdList  = array('1');
+$buildIdList   = array(1, 'trunk');
+$typeList      = array('unresolved', 'noclosed', 'assignedtome', 'openedbyme');
+$paramList     = array(1);
+$excludeBugs   = array(10);
 
-$bug=new bugTest();
-r($bug->getProjectBugsTest($projectIDList[0])) && p('0:title;1:title;2:title') && e('测试单转Bug1;BUG3;BUG2');     // 测试获取项目ID为11的bug
-r($bug->getProjectBugsTest($projectIDList[1])) && p('0:title;1:title;2:title') && e('SonarQube_Bug2;BUG6;BUG5  '); // 测试获取项目ID为12的bug
-r($bug->getProjectBugsTest($projectIDList[2])) && p('0:title;1:title;2:title') && e('测试单转Bug3;BUG9;bug8');     // 测试获取项目ID为13的bug
-r($bug->getProjectBugsTest($projectIDList[3])) && p('0:title;1:title;2:title') && e('SonarQube_Bug4;BUG12;BUG11'); // 测试获取项目ID为14的bug
-r($bug->getProjectBugsTest($projectIDList[4])) && p('0:title;1:title;2:title') && e('测试单转Bug5;缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;15;BUG14'); // 测试获取项目ID为15的bug
-r($bug->getProjectBugsTest($projectIDList[5])) && p('0:title;1:title;2:title') && e('SonarQube_Bug6;BUG18;BUG17'); // 测试获取项目ID为16的bug
-r($bug->getProjectBugsTest($projectIDList[6])) && p('0:title;1:title;2:title') && e('0');                          // 测试获取不存在的项目的bug
+$bug = new bugTest();
+r($bug->getProjectBugsTest($projectIdList[0], 0, 'all'))                               && p('0:title;1:title;2:title;3:title;4:title') && e('BUG10;BUG8;BUG6;BUG4;BUG2'); // 测试获取项目ID为2的bug
+r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, 'all', 0, $excludeBugs[0])) && p('0:title;1:title;2:title;3:title')         && e('BUG8;BUG6;BUG4;BUG2');       // 测试获取项目ID为2不包含id为10的bug
+r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', $buildIdList[0]))              && p('0:title;1:title;2:title')                 && e('BUG9;BUG6;BUG3');            // 测试获取项目ID为2, 影响版本为1的bug
+r($bug->getProjectBugsTest($projectIdList[0], $productIdList[1], 'all'))               && p('0:title;1:title;2:title')                 && e('BUG10;BUG6;BUG2');           // 测试获取项目ID为2,产品ID为2的bug
+r($bug->getProjectBugsTest($projectIdList[0], $productIdList[1], $branchIdList[0]))    && p('0:title')                                 && e('BUG6');                      // 测试获取项目ID为2,产品ID为2, 分支为1的bug
+r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, $typeList[0]))              && p('0:title;1:title')                         && e('BUG8;BUG2');                 // 测试获取项目ID为2,未解决的bug
+r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, $typeList[1]))              && p('0:title;1:title;2:title;3:title')         && e('BUG10;BUG8;BUG4;BUG2');      // 测试获取项目ID为2,未关闭的bug
+r($bug->getProjectBugsTest($projectIdList[1], 0, 'all', 0, 'all', $paramList[0]))      && p('0:title;1:title;2:title;3:title;4:title') && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取项目ID为1,模块为1的bug

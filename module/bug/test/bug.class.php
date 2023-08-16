@@ -616,26 +616,22 @@ class bugTest
     }
 
     /**
+     * 测试获取项目的 bug。
      * Test get bugs of a project.
      *
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getProjectBugsTest($projectID)
+    public function getProjectBugsTest(int $projectID, int $productID = 0, int|string $branchID = 0, int $build = 0, string $type = '', int $param = 0, string $excludeBugs = ''): array
     {
-        $array = $this->objectModel->getProjectBugs($projectID);
+        $bugs = $this->objectModel->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $orderBy = 'id_desc', $excludeBugs);
 
-        foreach($array as $bug) $bug->title = str_replace("'", '', $bug->title);
+        foreach($bugs as $bug) $bug->title = str_replace("'", '', $bug->title);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $bugs;
     }
 
     /**
