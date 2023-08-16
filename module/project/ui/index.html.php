@@ -226,9 +226,9 @@ panel
         setClass('pt-4 flex justify-end'),
         pager
         (
-            usePager(array(
+            set::items(usePager(array(
                 'linkCreator' => helper::createLink('project', 'index', "projectID={$project->id}&browseType={$browseType}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}")
-            ))
+            )))
         )
     ) : null
 );
