@@ -84,42 +84,33 @@ class projectModel extends model
      * @param  int    $projectID
      * @param  array  $projects
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function saveState($projectID = 0, $projects = array())
+    public function checkAccess(int $projectID = 0, array $projects = array()): int|false
     {
         if(commonModel::isTutorialMode()) return $projectID;
 
-        if($projectID == 0 and $this->cookie->lastProject) $projectID = $this->cookie->lastProject;
-        if($projectID == 0 and (int)$this->session->project == 0) $projectID = (int)key($projects);
-        if($projectID == 0) $projectID = (int)key($projects);
-
-        $this->session->set('project', (int)$projectID, $this->app->tab);
-
-        if(!isset($projects[$this->session->project]))
+        if(!$projectID)
         {
-            if($projectID and strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false and !empty($projects))
+            if($this->cookie->lastProject) $projectID = $this->cookie->lastProject;
+            if(!$projectID) $projectID = $this->session->project ? $this->session->project : (int)key($projects);
+        }
+
+        if(!isset($projects[$projectID]))
+        {
+            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false && !empty($projects))
             {
                 /* Redirect old project to new project. */
                 $newProjectID = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('project');
-                if($newProjectID and strpos(",{$this->app->user->view->projects},", ",{$newProjectID},") !== false)
-                {
-                    $this->session->set('project', (int)$newProjectID, $this->app->tab);
-                    return $this->session->project;
-                }
+                if(!$newProjectID || strpos(",{$this->app->user->view->projects},", ",{$newProjectID},") !== false) $newProjectID = false;
+            }
 
-                $this->session->set('project', (int)key($projects), $this->app->tab);
-                print($this->projectTao->accessDenied());
-            }
-            else
-            {
-                $this->session->set('project', (int)key($projects), $this->app->tab);
-            }
+            $projectID = isset($newProjectID) ? $newProjectID : (int)key($projects);
         }
 
-        helper::setcookie('lastProject', (string)$this->session->project, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-
-        return $this->session->project;
+        $this->session->set('project', (int)$projectID, $this->app->tab);
+        if($projectID) helper::setcookie('lastProject', (string)$projectID);
+        return $projectID;
     }
 
     /**
@@ -620,24 +611,25 @@ class projectModel extends model
      * @param  string|array $model
      * @param  string       $param multiple|product
      * @access public
-     * @return object
+     * @return array
      */
-    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '', $model = '', $param = '')
+    public function getPairsByProgram(int $programID = 0, string $status = 'all', bool $isQueryAll = false, string $orderBy = 'order_asc', string $excludedModel = '', string|array $model = '', string $param = ''): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectPairs();
+
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!empty($programID))->andWhere('path')->like("%,$programID,%")->fi()
             ->beginIF($programID === 0)->andWhere('parent')->eq(0)->fi()
-            ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
+            ->beginIF($status != 'all' && $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->in($model)->fi()
             ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq(1)->fi()
             ->beginIF(strpos($param, 'product') !== false)->andWhere('hasProduct')->eq(1)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin && !$isQueryAll)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
             ->fetchPairs();
     }
@@ -2457,7 +2449,7 @@ class projectModel extends model
 
         $lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
 
-        $this->saveState($objectID, $this->getPairsByProgram());
+        $this->checkAccess($objectID, $this->getPairsByProgram());
 
         if(isset($project->acl) and $project->acl == 'open') unset($lang->project->menu->settings['subMenu']->whitelist);
 
