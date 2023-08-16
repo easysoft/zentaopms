@@ -1,0 +1,12 @@
+.nav-tabs.nav-stacked .nav-item {height:36px; line-height: 36px;}
+.nav-tabs.nav-stacked .nav-item:hover {background-color: #FCFDFE;}
+.nav-tabs.nav-stacked .nav-item > a.title {color: #5E626D;}
+.nav-tabs.nav-stacked .nav-item > a.title:before {background: transparent;}
+.nav-tabs.nav-stacked .nav-item > a.title.active {color: #0B0F18;border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
+.nav-tabs.nav-stacked .nav-item > a.title {border-left: 2px solid transparent}
+.nav-tabs.nav-stacked .nav-item > a.title:hover {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
+.nav-tabs.nav-stacked .nav-item:hover > a {color: #0B0F18;}
+.nav-tabs.nav-stacked .nav-item:hover > a.link {display: flex!important;}
+.nav-tabs.nav-stacked .nav-item:hover > span.link {display: flex!important;}
+.nav-tabs.nav-stacked .nav-item.nav-prev {display: none}
+.nav-tabs.nav-stacked .nav-item.nav-next {display: none}
