@@ -1127,7 +1127,7 @@ EOF;
         $this->view->users      = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->queryID    = $queryID;
         $this->view->mode       = 'myMeeting';
-        $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram('', 'all', true);
+        $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram(0, 'all', true);
         $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
         $this->view->rooms      = $this->loadModel('meetingroom')->getPairs();
 
@@ -1221,7 +1221,7 @@ EOF;
         $this->view->tickets     = $tickets;
         $this->view->depts       = $this->loadModel('dept')->getOptionMenu();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
-        $this->view->projects    = $this->loadModel('project')->getPairsByProgram('', 'noclosed');
+        $this->view->projects    = $this->loadModel('project')->getPairsByProgram(0, 'noclosed');
         $this->view->allProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $this->view->modulePairs = $this->tree->getModulePairs(0, 'feedback');
         $this->view->modules     = $this->tree->getOptionMenu(0, $viewType = 'feedback', 0);

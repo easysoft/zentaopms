@@ -167,7 +167,7 @@ class group extends control
 
         $this->view->group      = $group;
         $this->view->programs   = $this->loadModel('program')->getParentPairs('', '', false);
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram('', 'all', true, 'order_desc');
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', true, 'order_desc');
         $this->view->executions = $executions;
         $this->view->products   = $this->loadModel('product')->getPairs();
         if(!empty($changeAdmin)) $this->app->user->admin = false;

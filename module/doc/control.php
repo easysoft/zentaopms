@@ -180,7 +180,7 @@ class doc extends control
         if($type == 'project')
         {
             $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
-            $objects       = $this->project->getPairsByProgram('', 'all', false, 'order_asc', $excludedModel);
+            $objects       = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', $excludedModel);
             if($this->app->tab == 'doc')
             {
                 $this->view->executionPairs = array(0 => '') + $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
@@ -425,7 +425,7 @@ class doc extends control
         if($linkType == 'project')
         {
             $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
-            $objects       = $this->project->getPairsByProgram('', 'all', false, 'order_asc', $excludedModel);
+            $objects       = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', $excludedModel);
             $this->view->executions = array();
             if($lib->type == 'execution')
             {
@@ -592,7 +592,7 @@ class doc extends control
         $objects = array();
         if($objectType == 'project')
         {
-            $objects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+            $objects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', 'kanban');
         }
         elseif($objectType == 'execution')
         {
@@ -1418,7 +1418,7 @@ class doc extends control
         if($this->config->vision == 'lite')         unset($spaceList['api'], $spaceList['product'], $typeList['api']);
 
         $products = $this->loadModel('product')->getPairs();
-        $projects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+        $projects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', 'kanban');
 
         $this->view->spaceList  = $spaceList;
         $this->view->typeList   = $typeList;

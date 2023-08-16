@@ -5486,7 +5486,7 @@ class executionModel extends model
         $this->config->execution->all->search['actionURL'] = $actionURL;
 
         $projectPairs  = array(0 => '');
-        $projectPairs += $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', '', '', 'multiple');
+        $projectPairs += $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', '', '', 'multiple');
         $this->config->execution->all->search['params']['project']['values'] = $projectPairs + array('all' => $this->lang->execution->allProject);
 
         $this->loadModel('search')->setSearchParams($this->config->execution->all->search);

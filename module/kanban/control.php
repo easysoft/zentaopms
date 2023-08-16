@@ -1328,7 +1328,7 @@ class kanban extends control
 
         $builds2Imported = array();
         $projects        = array($this->lang->kanban->allProjects);
-        $projects       += $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+        $projects       += $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', 'kanban');
         $builds2Imported = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);
 
         $this->view->projects          = $projects;
@@ -1382,7 +1382,7 @@ class kanban extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram('', 'all', false, '', '', '', 'multiple');
+        $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram(0, 'all', false, '', '', '', 'multiple');
         $this->view->selectedProjectID   = $selectedProjectID;
         $this->view->lanePairs           = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->executions2Imported = $this->execution->getStatData($selectedProjectID, 'undone', 0, 0, false, 'hasParentName', 'id_asc', $pager);

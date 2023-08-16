@@ -1819,7 +1819,7 @@ class execution extends control
         if($projectModel == 'agileplus')     $projectModel = array('scrum', 'agileplus');
         if($projectModel == 'waterfallplus') $projectModel = array('waterfall', 'waterfallplus');
 
-        $copyProjects  = $this->loadModel('project')->getPairsByProgram(isset($project->parent) ? $project->parent : '', 'noclosed', '', 'order_asc', '', $projectModel, 'multiple');
+        $copyProjects  = $this->loadModel('project')->getPairsByProgram(isset($project->parent) ? $project->parent : 0, 'noclosed', '', 'order_asc', '', $projectModel, 'multiple');
         $copyProjectID = ($projectID == 0) ? key($copyProjects) : $projectID;
 
         if(!empty($project->hasProduct)) $allProducts = array(0 => '') + $allProducts;
@@ -2710,8 +2710,7 @@ class execution extends control
      */
     public function executionKanban()
     {
-        $this->loadModel('project');
-        $projects   = $this->project->getPairsByProgram('', 'noclosed');
+        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'noclosed');
         $executions = $this->execution->getStatData(0, 'all', 0, 0, false, 'withchild', 'id_desc');
 
         foreach($executions as $execution)
