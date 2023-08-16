@@ -1081,7 +1081,7 @@ class baseControl
             {
                 print(urldecode(json_encode($data)));
                 $response = helper::removeUTF8Bom(ob_get_clean());
-                return print($response);
+                return helper::end($response);
             }
 
             /* Zand will use ob_get_clean() to print, so cannot clean so early. */
@@ -1090,7 +1090,7 @@ class baseControl
 
             $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
             $this->app->outputXhprof();
-            return print($response);
+            return helper::end($response);
         }
 
         /**
