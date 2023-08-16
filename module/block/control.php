@@ -36,72 +36,70 @@ class block extends control
      */
     public function create(string $dashboard, string $module = '', string $code = '')
     {
+        /* 处理表单提交事件。 */
         if($_POST)
         {
+            /* 获取表单提交内容。 */
             $formData = form::data($this->config->block->form->create)->get();
             $formData->dashboard = $dashboard;
             $formData->account   = $this->app->user->account;
             $formData->vision    = $this->config->vision;
 
+            /* 如果是HTML区块，则对html区块数据做处理后将内容存放到params字段中。 */
             if($formData->module == 'html')
             {
                 $formData = $this->loadModel('file')->processImgURL($formData, 'html', $this->post->uid);
                 $formData->params['html'] = $formData->html;
             }
+
+            /* 将params数组转成json格式，方便在数据库中存储。 */
             $formData->params = json_encode($formData->params);
             unset($formData->html);
 
-            $defaultSize = array('1' => '3');
+            /* 如果区块没有尺寸的配置项，则使用统一的默认尺寸。 */
+            $defaultSize = $this->config->block->defaultSize; // 默认为区块的统一默认尺寸。
             if(!empty($this->config->block->size[$formData->module][$formData->code]))                   $defaultSize      = $this->config->block->size[$formData->module][$formData->code];
             if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
-
             if(empty($formData->width))  $formData->width  = reset(array_keys($defaultSize));
             if(empty($formData->height)) $formData->height = reset($defaultSize);
-            $formData->left = $formData->width == 1 ? 2 : 0;
+
+            /* 设置区块距离左侧的宽度和距离顶部的高度。 */
+            $formData->left = $formData->width == 1 ? '2' : '0';
             $formData->top  = $this->block->computeBlockTop($formData);
 
+            /* 执行区块的数据插入 并且返回数据给view层。 */
             $blockID = $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadComponent('#dashboard'); setTimeout(() => $('#dashboard .dashboard-block[data-id=\"$blockID\"]').scrollIntoView({behavior: 'smooth'}), 500);", 'closeModal' => true));
         }
 
+        /* 不同的仪表盘获取不同的可选择的模块列表。 */
         $modules = $this->blockZen->getAvailableModules($dashboard);
         unset($modules['']);
+
+        /* 如果当前没有选择模块，则选中第一个。 */
         if(empty($module) && !empty($modules)) $module = current(array_keys($modules));
 
+        /* 根据仪表盘和模块获取可用的区块列表。 */
         $codes = $this->blockZen->getAvailableCodes($dashboard, $module);
+
+        /* 根据所属模块和区块code获取参数配置项列表。 */
         $params = $this->blockZen->getAvailableParams($module, $code);
-        if($module == 'scrumtest' && $code != 'all')
-        {
-            $blockTitle = zget($codes, $code);
-        }
-        else
-        {
-            $typeOptions = isset($params['type']['options']) ? $params['type']['options'] : array();
-            $blockTitle  = zget($codes, $code);
-            if(!empty($typeOptions))
-            {
-                $typeName   = empty($typeOptions) ? '' : $typeOptions[array_keys($typeOptions)[0]];
-                $blockTitle = vsprintf($this->lang->block->blockTitle, array($typeName, $blockTitle));
-            }
 
-            if(empty($blockTitle) && !in_array($module, array('product', 'project', 'execution', 'qa'))) $blockTitle = zget($modules, $module);
-        }
-
-        $this->view->title        = $this->lang->block->createBlock;
-        $this->view->dashboard    = $dashboard;
-        $this->view->module       = $module;
-        $this->view->code         = $code;
-        $this->view->modules      = $modules;
-        $this->view->codes        = $codes;
-        $this->view->params       = $params;
-        $this->view->blockTitle   = $blockTitle ? $blockTitle : '';
+        $this->view->title      = $this->lang->block->createBlock;
+        $this->view->dashboard  = $dashboard;
+        $this->view->module     = $module;
+        $this->view->code       = $code;
+        $this->view->modules    = $modules;
+        $this->view->codes      = $codes;
+        $this->view->params     = $params;
+        $this->view->blockTitle = $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
         $this->display();
     }
 
     /**
      * 编辑区块。
-     * Update a block.
+     * Edit a block.
      *
      * @param  string $dashboard
      * @param  string $module
@@ -109,9 +107,8 @@ class block extends control
      * @access public
      * @return void
      */
-    public function edit(string $blockID, string $module = '', string $code = '')
+    public function edit(int $blockID, string $module = '', string $code = '')
     {
-        $blockID = (int)$blockID;
         if($_POST)
         {
             $formData = form::data($this->config->block->form->edit)->get();

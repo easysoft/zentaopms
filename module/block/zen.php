@@ -142,6 +142,31 @@ class blockZen extends block
     }
 
     /**
+     * 自动生成区块的默认标题。
+     * Get block default title.
+     *
+     * @param  string    $modules
+     * @param  string    $module
+     * @param  array     $codes
+     * @param  string    $code
+     * @param  array     $params
+     * @access protected
+     * @return string
+     */
+    protected function getBlockTitle(array $modules, string $module, array $codes, string $code, array $params): string
+    {
+        $blockTitle = zget($codes, $code, '');
+        if($module != 'scrumtest' || $code == 'all')
+        {
+            $options = isset($params['type']['options']) ? $params['type']['options'] : array();
+            if(!empty($options)) $blockTitle = vsprintf($this->lang->block->blockTitle, array(reset($options), $blockTitle));
+            if(empty($blockTitle) && !in_array($module, array('product', 'project', 'execution', 'qa'))) $blockTitle = zget($modules, $module, '');
+        }
+
+        return $blockTitle;
+    }
+
+    /**
      * 处理每个区块以渲染 UI。
      * Process each block for render UI.
      *

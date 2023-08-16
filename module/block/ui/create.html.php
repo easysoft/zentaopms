@@ -80,7 +80,7 @@ row
                     (
                         set::label($lang->block->name),
                         set::name('title'),
-                        set::value(''),
+                        set::value($blockTitle),
                         set::control('input')
                     ),
                 ),
