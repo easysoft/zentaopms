@@ -1,5 +1,11 @@
 <?PHP
 $lang->instance = new stdclass;
+$lang->instance->common           = 'Applications';
+$lang->instance->view             = 'Application Detail';
+$lang->instance->ajaxStatus       = 'Get Application Status';
+$lang->instance->ajaxStart        = 'Start Application';
+$lang->instance->ajaxStop         = 'Stop Application';
+$lang->instance->ajaxUninstall    = 'Uninstall Application';
 $lang->instance->name             = 'name';
 $lang->instance->appName          = 'Application type';
 $lang->instance->version          = 'version';

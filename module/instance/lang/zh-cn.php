@@ -1,5 +1,11 @@
 <?php
 $lang->instance = new stdclass;
+$lang->instance->common           = '应用';
+$lang->instance->view             = '应用详情';
+$lang->instance->ajaxStatus       = '获取应用状态';
+$lang->instance->ajaxStart        = '启动应用';
+$lang->instance->ajaxStop         = '关闭应用';
+$lang->instance->ajaxUninstall    = '卸载应用';
 $lang->instance->name             = '名称';
 $lang->instance->appName          = '应用类型';
 $lang->instance->version          = '版本';

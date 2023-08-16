@@ -1223,14 +1223,6 @@ $lang->resource->host->view         = 'view';
 $lang->resource->host->changeStatus = 'changeStatus';
 $lang->resource->host->treemap      = 'treemap';
 
-$lang->host->methodOrder[0]  = 'browse';
-$lang->host->methodOrder[5]  = 'create';
-$lang->host->methodOrder[10] = 'edit';
-$lang->host->methodOrder[15] = 'delete';
-$lang->host->methodOrder[20] = 'view';
-$lang->host->methodOrder[25] = 'changeStatus';
-$lang->host->methodOrder[30] = 'treemap';
-
 $lang->resource->zahost = new stdclass();
 $lang->resource->zahost->browse         = 'browse';
 $lang->resource->zahost->create         = 'create';
@@ -1403,10 +1395,23 @@ $lang->resource->ops->city     = 'city';
 $lang->resource->ops->cpuBrand = 'cpuBrand';
 $lang->resource->ops->os       = 'os';
 
-$lang->ops->methodOrder[0]  = 'provider';
-$lang->ops->methodOrder[5]  = 'city';
-$lang->ops->methodOrder[10] = 'cpuBrand';
-$lang->ops->methodOrder[15] = 'os';
+$lang->resource->instance = new stdclass();
+$lang->resource->instance->install       = 'install';
+$lang->resource->instance->view          = 'view';
+$lang->resource->instance->visit         = 'visit';
+$lang->resource->instance->ajaxStatus    = 'ajaxStatus';
+$lang->resource->instance->ajaxStart     = 'ajaxStart';
+$lang->resource->instance->ajaxStop      = 'ajaxStop';
+$lang->resource->instance->ajaxUninstall = 'ajaxUninstall';
+$lang->resource->instance->upgrade       = 'upgrade';
+
+$lang->resource->space = new stdclass();
+$lang->resource->space->browse          = 'browse';
+$lang->resource->space->getStoreAppInfo = 'getStoreAppInfo';
+
+$lang->resource->store = new stdclass();
+$lang->resource->store->browse  = 'browse';
+$lang->resource->store->appView = 'appView';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();

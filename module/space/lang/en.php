@@ -1,16 +1,19 @@
 <?php
-$lang->space->status         = 'Status';
-$lang->space->noApps         = 'No service';
-$lang->space->defaultSpace   = 'Default space';
-$lang->space->systemSpace    = 'System space';
-$lang->space->searchInstance = 'Search Services';
-$lang->space->upgrade        = 'Upgrade';
-$lang->space->install        = 'Add an application';
-$lang->space->createdBy      = 'Creator';
-$lang->space->createdAt      = 'Creation time';
-$lang->space->handConfig     = 'Manual configuration';
-$lang->space->addType        = 'Add method';
-$lang->space->instanceType   = 'Instance type';
+$lang->space->common          = 'Applications';
+$lang->space->browse          = 'Application List';
+$lang->space->getStoreAppInfo = 'Get application information';
+$lang->space->status          = 'Status';
+$lang->space->noApps          = 'No service';
+$lang->space->defaultSpace    = 'Default space';
+$lang->space->systemSpace     = 'System space';
+$lang->space->searchInstance  = 'Search Services';
+$lang->space->upgrade         = 'Upgrade';
+$lang->space->install         = 'Add an application';
+$lang->space->createdBy       = 'Creator';
+$lang->space->createdAt       = 'Creation time';
+$lang->space->handConfig      = 'Manual configuration';
+$lang->space->addType         = 'Add method';
+$lang->space->instanceType    = 'Instance type';
 
 $lang->space->byList = 'List';
 $lang->space->byCard = 'Card';
