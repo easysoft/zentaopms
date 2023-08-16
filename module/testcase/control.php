@@ -1102,9 +1102,11 @@ class testcase extends control
                 $this->caselib->setLibMenu($libraries, $libID);
 
                 /* Set modules. */
-                $modules[$productID][$branch] = $this->tree->getOptionMenu($libID, 'caselib', 0, $branch);
+                $modules    = array();
+                $libModules = $this->tree->getOptionMenu($libID, 'caselib', 0, $branch);
+                foreach($libModules as $moduleID => $module) $modules[] = array('text' => $module, 'value' => $moduleID);
 
-                $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
+                $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
             }
             else
             {
@@ -1127,11 +1129,17 @@ class testcase extends control
                     {
                         $branchTagOption = $this->loadModel('branch')->getPairsByProjectProduct($this->session->project, $productID);
                     }
-                    foreach($branchTagOption as $branchID => $branchName) $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
+
+                    foreach($branchTagOption as $branchID => $branchName)
+                    {
+                        $branchModules = $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
+                        foreach($branchModules as $moduleID => $module) $modules[$productID][$branchID][] = array('text' => $module, 'value' => $moduleID);
+                    }
                 }
                 else
                 {
-                    $modules[$productID][BRANCH_MAIN] = $this->tree->getOptionMenu($productID, 'case');
+                    $branchModules = $this->tree->getOptionMenu($productID, 'case');
+                    foreach($branchModules as $moduleID => $module) $modules[$productID][BRANCH_MAIN][] = array('text' => $module, 'value' => $moduleID);
                 }
 
                 $this->view->branchTagOption = array($productID => $branchTagOption);
@@ -1171,8 +1179,10 @@ class testcase extends control
                     $branchProduct = true;
                 }
 
+                $modules     = array();
                 $modulePairs = $this->tree->getOptionMenu($product->id, 'case', 0, $branches);
-                $modules[$product->id] = $product->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
+                foreach($modulePairs as $moduleID => $module) $modules[] = array('text' => $module, 'value' => $moduleID);
+                if($product->type == 'normal') $modules = array(0 => $modules);
             }
 
             $this->view->products        = $products;
@@ -1185,7 +1195,6 @@ class testcase extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
-        $this->view->stories = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $stories;
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
@@ -1193,7 +1202,8 @@ class testcase extends control
         $this->view->showFields   = $this->config->testcase->custom->batchEditFields;
 
         /* Append module when change product type. */
-        $modulePairs = array(0 => '/');
+        $modulePairs = array();
+        $scenePairs  = array();
         foreach($cases as $case)
         {
             $caseProduct = $type == 'lib' ? $productID : $case->product;
@@ -1203,23 +1213,22 @@ class testcase extends control
             }
             else
             {
-                $modulePairs[$case->id] = isset($modules[$caseProduct]) ? $modules[$caseProduct][0] : array() + $this->tree->getModulesName($case->module);
+                $modulePairs[$case->id] = isset($modules[$caseProduct]) ? $modules[$caseProduct][0] : array('text' => $this->tree->getModulesName($case->module), 'value' => $case->module);
             }
-        }
 
-        $scenePairs = array(0 => '/');
-        foreach($cases as $case)
-        {
-            $scenePairs[$case->id] = $this->testcase->getSceneMenu($productID, $case->module, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);;
+            $scenes = $this->testcase->getSceneMenu($productID, $case->module, $viewType = 'case', $startSceneID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+            foreach($scenes as $sceneID => $scene) $scenePairs[$case->id][] = array('text' => $scene, 'value' => $sceneID);
+            if(!isset($scenes[$case->scene])) $scenePairs[$case->id][] = array('text' => '/' .$this->testcase->fetchSceneName($case->scene), 'value' => $case->scene);
         }
 
         /* Assign. */
         $this->view->scenePairs     = $scenePairs;
+        $this->view->stories        = $stories;
         $this->view->caseIdList     = $caseIdList;
         $this->view->productID      = $productID;
         $this->view->branchProduct  = $branchProduct;
-        $this->view->priList        = array('ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->priList;
-        $this->view->typeList       = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->typeList;
+        $this->view->priList        = $this->lang->testcase->priList;
+        $this->view->typeList       = $this->lang->testcase->typeList;
         $this->view->cases          = $cases;
         $this->view->forceNotReview = $this->testcase->forceNotReview();
         $this->view->modulePairs    = $modulePairs;

@@ -17,14 +17,20 @@ window.handleRenderRow = function($row, index, row)
     }
 
     /* Set the modules for the row. */
-    let $module = $row.find('.form-batch-input[data-name=module]').empty();
-    let modules = modulePairs[row.id];
-    $.each(modules, function(moduleID, moduleName){ $module.append('<option value="' + moduleID + '">' + moduleName + '</option>'); });
+    $row.find('.form-batch-control[data-name="module"] .picker-box').on('inited', function(e, info)
+    {
+        let $module = info[0];
+        $module.render({items: modulePairs[row.id]});
+        $module.$.setValue(row.module);
+    });
 
     /* Set the scenes for the row. */
-    let $scene = $row.find('.form-batch-input[data-name=scene]').empty();
-    let scenes = scenePairs[row.id];
-    $.each(scenes, function(sceneID, sceneName){ $scene.append('<option value="' + sceneID + '">' + sceneName + '</option>'); });
+    $row.find('.form-batch-control[data-name="scene"] .picker-box').on('inited', function(e, info)
+    {
+        let $scene = info[0];
+        $scene.render({items: scenePairs[row.id]});
+        $scene.$.setValue(row.scene);
+    });
 }
 
 function loadBranches()
