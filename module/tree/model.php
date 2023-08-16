@@ -1654,17 +1654,18 @@ class treeModel extends model
      *
      * @param  int    $moduleID
      * @access public
-     * @return void
+     * @return object|false
      */
-    public function getProduct($moduleID)
+    public function getProduct(int $moduleID): object|false
     {
-        if($moduleID == 0) return '';
-        $path  = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq((int)$moduleID)->fetch('path');
+        if($moduleID == 0) return false;
+        $path  = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch('path');
         $paths = explode(',', trim($path, ','));
-        if(!$path) return '';
+        if(!$path) return false;
+
         $moduleID = $paths[0];
         $module   = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
-        if($module->type != 'story' or !$module->root) return '';
+        if($module->type != 'story' or !$module->root) return false;
         return $this->dao->select('name')->from(TABLE_PRODUCT)->where('id')->eq($module->root)->fetch();
     }
 
