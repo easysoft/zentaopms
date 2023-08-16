@@ -3592,7 +3592,7 @@ class testcaseModel extends model
             }
 
             $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq($sceneID)->exec();
-            $this->dao->update(TABLE_SCENE)->set("path = REPLACE(path, {$oldScene->path}, {$scene->path})")
+            $this->dao->update(TABLE_SCENE)->set("path = REPLACE(path, '{$oldScene->path}', '{$scene->path}')")
                 ->where('id')->ne($sceneID)
                 ->andWhere('path')->like("{$oldScene->path}%")
                 ->exec();
