@@ -393,7 +393,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function create($model = 'scrum', $programID = 0, $copyProjectID = 0, $extra = '')
+    public function create(string $model = 'scrum', int $programID = 0, int $copyProjectID = 0, string $extra = '')
     {
         $this->session->set('projectModel', $model);
 
@@ -448,10 +448,9 @@ class project extends control
      * @param  string $from
      * @access public
      */
-    public function edit(string $projectID, string $from = '')
+    public function edit(int $projectID, string $from = '')
     {
-        $projectID = (int)$projectID;
-        $project   = $this->project->getByID($projectID);
+        $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
         if($project->model == 'kanban')
@@ -465,6 +464,8 @@ class project extends control
         {
             $postData   = form::data($this->config->project->form->edit);
             $newProject = $this->projectZen->prepareProject($postData, $project->hasProduct);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = $this->project->update($newProject, $project);
             if($changes)
@@ -486,7 +487,6 @@ class project extends control
             $locateLink = ($this->session->projectList and $from != 'view') ? $this->session->projectList : inLink('view', "projectID=$projectID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
-        unset($this->lang->project->modelList['']);
 
         $this->projectZen->buildEditForm($projectID, $project);
     }

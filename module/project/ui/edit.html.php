@@ -17,6 +17,7 @@ jsVar('ignore', $lang->project->ignore);
 jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
 jsVar('allProducts', $allProducts);
 jsVar('branchGroups', $branchGroups);
+jsVar('programTip', $lang->program->tips);
 
 $projectModelItems = array();
 foreach($lang->project->modelList as $key => $text)
@@ -195,7 +196,12 @@ formPanel
             (
                 setClass('pl-2 flex self-center'),
                 setStyle(array('color' => 'var(--form-label-color)')),
-                icon('help')
+                icon
+                (
+                    'help',
+                    set('data-toggle', 'tooltip'),
+                    set('id', 'programHover'),
+                )
             )
         ),
         formGroup
@@ -256,11 +262,13 @@ formPanel
     formGroup
     (
         set::width('1/4'),
-        set::name('PM'),
-        set::control('select'),
-        set::value($project->PM),
         set::label($lang->project->PM),
-        set::items($PMUsers)
+        picker
+        (
+            set::name('PM'),
+            set::value($project->PM),
+            set::items($PMUsers)
+        ),
     ),
     formRow
     (
@@ -350,7 +358,72 @@ formPanel
             )
         )
     ),
-    empty($linkedProducts) ? null : $productGroup,
+    empty($linkedProducts) ?
+    formRow
+    (
+        setClass('productBox'),
+        formGroup
+        (
+            set::width('1/2'),
+            set('id', 'linkProduct'),
+            set::label($lang->project->manageProducts),
+            set::required(true),
+            inputGroup
+            (
+                div
+                (
+                    setClass('grow'),
+                    picker
+                    (
+                        set::name('products[0]'),
+                        set::items($allProducts),
+                    )
+                ),
+            )
+        ),
+        formGroup
+        (
+            set::width('1/4'),
+            setClass('hidden'),
+            inputGroup
+            (
+                $lang->product->branchName['branch'],
+                picker
+                (
+                    set::name("branch[0][]"),
+                )
+            ),
+        ),
+        formGroup
+        (
+            set::width('1/2'),
+            inputGroup
+            (
+                set::id("plan0"),
+                $lang->project->associatePlan,
+                picker
+                (
+                    set::name('plans[0][]'),
+                    set::items(null),
+                )
+            ),
+            div
+            (
+                setClass('pl-2 flex self-center line-btn'),
+                btn
+                (
+                    setClass('btn ghost addLine'),
+                    icon('plus')
+                ),
+                btn
+                (
+                    setClass('btn ghost removeLine'),
+                    icon('trash'),
+                    $i == 0 ? set::disabled(true) : null
+                ),
+            )
+        ),
+    ) : $productGroup,
     ($model == 'waterfall' || $model == 'waterfallplus') ? formRow
     (
         setClass("stageBy $stageByClass"),

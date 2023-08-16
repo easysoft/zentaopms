@@ -93,7 +93,11 @@ class projectZen extends project
         if($hasProduct)
         {
             /* Check if products not empty. */
-            if(!count(array_filter($this->post->products))) return false;
+            if(!$this->post->products || !count(array_filter($this->post->products)))
+            {
+                dao::$errors['products[0]'] = $this->lang->project->error->productNotEmpty;
+                return false;
+            }
 
             $project->parent = (int)$project->parent;
             /* Check if products and branch valid. */
@@ -165,6 +169,7 @@ class projectZen extends project
             return false;
         }
 
+        /* 如果没有选择长期，则判断计划结束日期不能为空. */
         if($this->post->delta != 999 and !$project->end)
         {
             dao::$errors['end'] = $this->lang->project->copyProject->endTips;

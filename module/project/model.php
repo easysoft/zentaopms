@@ -1283,8 +1283,8 @@ class projectModel extends model
         /* 对比新旧白名单检查是否需要更新白名单。*/
         /* Check if whitelist shoud update .*/
         $projectID    = $oldProject->id;
-        $whitelist    = array_filter(explode(',', $project->whitelist));
-        $oldWhitelist = array_filter(explode(',', $oldProject->whitelist));
+        $whitelist    = array_filter(explode(',', (string)$project->whitelist));
+        $oldWhitelist = array_filter(explode(',', (string)$oldProject->whitelist));
         if(count($oldWhitelist) != count($whitelist) || !empty(array_diff($oldWhitelist, $whitelist)))
         {
             if(!$oldProject->hasProduct)
@@ -1388,15 +1388,14 @@ class projectModel extends model
 
         /* 更新项目表。*/
         /* Update project table. */
-        $success = $this->projectTao->doUpdate($projectID, $project);
-        if(!$success) return false;
+        if(!$this->projectTao->doUpdate($projectID, $project)) return false;
 
         /* 更新项目的关联信息。*/
         /* Update relation info of this project. */
-        $this->updateUserView($projectID, $project->acl);            // 更新用户视图。
-        $this->updateShadowProduct($project, $oldProject);           // 更新影子产品关联信息。
-        $this->updateWhitelist($project, $oldProject);               // 更新关联的白名单列表。
-        $this->updateProductStage($projectID, $oldProject->stageBy); // 更新关联的所有产品的阶段。
+        $this->updateUserView($projectID, $project->acl);                    // 更新用户视图。
+        $this->updateShadowProduct($project, $oldProject);                   // 更新影子产品关联信息。
+        $this->updateWhitelist($project, $oldProject);                       // 更新关联的白名单列表。
+        $this->updateProductStage($projectID, (string)$oldProject->stageBy); // 更新关联的所有产品的阶段。
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 
