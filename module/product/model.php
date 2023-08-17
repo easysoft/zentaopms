@@ -720,6 +720,7 @@ class productModel extends model
         $product = fixer::input('post')
             ->callFunc('name', 'trim')
             ->setDefault('status', 'normal')
+            ->setDefault('PMT', '')
             ->setDefault('line', 0)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
