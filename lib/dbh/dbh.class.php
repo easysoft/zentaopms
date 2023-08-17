@@ -486,7 +486,7 @@ class dbh
     {
         // 解析REPLACE INTO语句，提取出表名、字段和值
         $matches = [];
-        preg_match('/^REPLACE\s+INTO\s+`?([\w_]+)`?\s*\((.*)\)\s+VALUES\s*\((.*?)\)\s*$/i', $sql, $matches);
+        preg_match('/^REPLACE\s+INTO\s+`?([\w_]+)`?\s*\((.*)\)\s+VALUES\s*\(([^()]+)\)\s*$/i', $sql, $matches);
         $table_name = $matches[1];
         $columns = array_map('trim', explode(',', $matches[2]));
         $values = array_map('trim', explode(', ', $matches[3]));

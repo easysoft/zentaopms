@@ -683,7 +683,13 @@ class upgradeModel extends model
                 break;
             case '18_5':
                 $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
-                if(strpos($fromVersion, 'ipd') === false) $this->execSQL($this->getUpgradeFile('ipdinstall'));
+                $ipdinstall  = false;
+
+                if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.5', '<'))             $ipdinstall = true;
+                if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.5', '<')) $ipdinstall = true;
+                if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<')) $ipdinstall = true;
+                if($ipdinstall) $this->execSQL($this->getUpgradeFile('ipdinstall'));
+
                 if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));
                 if($this->config->edition == 'ipd' and strpos($fromVersion, 'ipd') === false) $this->addORPriv();
 
@@ -1180,7 +1186,12 @@ class upgradeModel extends model
              case '18_4':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.4'));
              case '18_5':
-                if(strpos($fromVersion, 'ipd') === false) $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall'));
+                $ipdinstall  = false;
+                if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.5', '<'))             $ipdinstall = true;
+                if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.5', '<')) $ipdinstall = true;
+                if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<')) $ipdinstall = true;
+                if($ipdinstall) $confirmContent .= file_get_contents($this->getUpgradeFile('ipdinstall'));
+
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.5')); // confirm insert position.
         }
 
