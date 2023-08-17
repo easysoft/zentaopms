@@ -133,13 +133,11 @@ class Project
      */
     public function batchUpdate($data)
     {
-        $_POST = $data;
-        $this->project->batchUpdate();
+        $this->project->batchUpdate($data);
 
-        unset($_POST);
         if(dao::isError()) return array('message' => dao::getError());
 
-        return $this->project->getByIdList($data['projectIdList']);
+        return $this->project->getByIdList(array_keys($data));
     }
 
     /**
