@@ -87,7 +87,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'sort_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $this->loadModel('datatable');
         $this->app->loadLang('zanode');
