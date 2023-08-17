@@ -697,6 +697,7 @@ class taskZen extends task
             $task->assignedTo = !empty($postData->testAssignedTo[$key]) ? $postData->testAssignedTo[$key] : '';
             $task->estimate   = (float)$postData->testEstimate[$key];
             $task->left       = (float)$postData->testEstimate[$key];
+            $task->type       = 'test'; /* Setting the task type to test to prevent duplicate tasks from being created. */
 
             $testTasks[$storyID] = $task;
         }
