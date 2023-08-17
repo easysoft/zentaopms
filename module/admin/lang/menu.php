@@ -273,7 +273,8 @@ if($config->vision == 'lite')
 
 if($config->inQuickon)
 {
-    $lang->admin->menuList->platform['subMenu']['dashboard'] = array('link' => "{$lang->dashboard}|system|dashboard|");
+    $dashboard = is_object($lang->dashboard) ? $lang->dashboard->common : $lang->dashboard;
+    $lang->admin->menuList->platform['subMenu']['dashboard'] = array('link' => "{$dashboard}|system|dashboard|");
     $lang->admin->menuList->platform['menuOrder']['5']       = 'dashboard';
 
     $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|system|browsebackup|", 'alias' => 'restorebackup');
