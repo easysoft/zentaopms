@@ -1259,9 +1259,9 @@ class productplanModel extends model
         $canCreateExec  = common::hasPriv('execution', 'create');
         $canLinkStory   = common::hasPriv('productplan', 'linkStory', $plan);
         $canLinkBug     = common::hasPriv('productplan', 'linkBug', $plan);
-        $canEdit        = common::hasPriv('productplan', 'edit');
+        $canEdit        = common::hasPriv('productplan', 'edit', $plan);
         $canCreateChild = common::hasPriv('productplan', 'create');
-        $canDelete      = common::hasPriv('productplan', 'delete');
+        $canDelete      = common::hasPriv('productplan', 'delete', $plan);
 
         $menu  = '';
         $menu .= $this->buildMenu('productplan', 'start', $params, $plan, $type, 'play', 'hiddenwin', '', false, '', $this->lang->productplan->startAB);
