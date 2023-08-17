@@ -98,14 +98,15 @@ class projectModel extends model
 
         if(!isset($projects[$projectID]))
         {
-            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$projectID},") === false && !empty($projects))
+            $canView = strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false;
+            if(!$canView && !empty($projects))
             {
                 /* Redirect old project to new project. */
                 $newProjectID = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('project');
-                if(!$newProjectID || strpos(",{$this->app->user->view->projects},", ",{$newProjectID},") === false) $newProjectID = false;
-            }
+                if(!$newProjectID || strpos(",{$this->app->user->view->projects},", ",{$newProjectID},") === false) return false;
 
-            $projectID = isset($newProjectID) ? $newProjectID : (int)key($projects);
+                $projectID = $newProjectID ? $newProjectID : (int)key($projects);
+            }
         }
 
         $this->session->set('project', (int)$projectID, $this->app->tab);
@@ -2366,113 +2367,39 @@ class projectModel extends model
     /**
      * Set menu of project module.
      *
-     * @param  int    $objectID  projectID
+     * @param  int    $projectID
      * @access public
      * @return int
      */
-    public function setMenu($objectID)
+    public function setMenu(int $projectID): int
     {
         global $lang;
-
-        $objectID = (int)$objectID;
-        $model    = 'scrum';
-        $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
-        $project  = $this->projectTao->fetchProjectInfo($objectID);
-
-        if(!$project)
+        $projectID = (empty($projectID) and $this->session->project) ? $this->session->project : $projectID;
+        $project   = $this->projectTao->fetchProjectInfo($projectID);
+        if($project->project)
         {
-            $execution = $this->loadModel('execution')->getByID($objectID);
-            if($execution and $execution->project and !$execution->multiple)
-            {
-                $project = $this->projectTao->fetchProjectInfo($execution->project);
-                $objectID = $execution->project;
-            }
+            $project   = $this->projectTao->fetchProjectInfo($project->project);
+            $projectID = $project->project;
         }
 
-        if($project and $project->model == 'waterfall') $model = $project->model;
-        if($project and $project->model == 'waterfallplus') $model = 'waterfall';
-        if($project and $project->model == 'kanban')
-        {
-            $model = $project->model . 'Project';
-
-            $lang->executionCommon = $lang->project->kanban;
-        }
-
-        if(isset($lang->$model))
-        {
-            $lang->project->menu        = $lang->{$model}->menu;
-            $lang->project->menuOrder   = $lang->{$model}->menuOrder;
-            $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
-        }
-
-        if(empty($project->hasProduct))
-        {
-            unset($lang->project->menu->settings['subMenu']->products);
-            $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
-            $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
-
-            if(isset($project->model) and ($project->model == 'scrum' or $project->model == 'agileplus'))
-            {
-                $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
-            }
-            else
-            {
-                unset($lang->project->menu->projectplan);
-            }
-
-            if(!empty($this->config->URAndSR) && $project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
-            {
-                $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
-
-                if($project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
-                {
-                    $lang->project->menu->story = $lang->project->menu->storyGroup;
-                    $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
-                    $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
-                    $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
-                }
-
-                unset($lang->project->menu->settings['subMenu']->products);
-            }
-        }
-        else
-        {
-            unset($lang->project->menu->settings['subMenu']->module);
-            unset($lang->project->menu->projectplan);
-        }
-
-        if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
+        $this->projectTao->setMenuByModel($project->model);
+        $this->projectTao->setMenuByProduct($project->id, $project->hasProduct, $project->model);
 
         /* Reset project priv. */
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
-        $this->loadModel('common')->resetProjectPriv($objectID);
+        $this->loadModel('common')->resetProjectPriv($projectID);
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
-        if(isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus'))
-        {
-            $lang->project->createExecution = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
-            $lang->project->lastIteration   = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
+        $lang->switcherMenu = $this->getSwitcher($projectID, $moduleName, $methodName);
 
-            $this->loadModel('execution');
-            $executionCommonLang   = $lang->executionCommon;
-            $lang->executionCommon = $lang->project->stage;
-
-            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
-
-            $lang->execution->typeList['sprint'] = $executionCommonLang;
-        }
-
-        $lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
-
-        $this->checkAccess($objectID, $this->getPairsByProgram());
-
+        $this->checkAccess($projectID, $this->getPairsByProgram());
         if(isset($project->acl) and $project->acl == 'open') unset($lang->project->menu->settings['subMenu']->whitelist);
 
-        common::setMenuVars('project', $objectID);
+        common::setMenuVars('project', $projectID);
 
-        $this->setNoMultipleMenu($objectID);
-        return $objectID;
+        $this->setNoMultipleMenu($projectID);
+        return $projectID;
     }
 
     /**
