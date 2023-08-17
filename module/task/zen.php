@@ -691,10 +691,10 @@ class taskZen extends task
             $task = new stdclass();
             $task->execution  = $executionID;
             $task->story      = $storyID;
-            $task->pri        = isset($postData->testPri[$key]) ? $postData->testPri[$key] : ($_POST['pri'] ?? 3);
-            $task->estStarted = isset($postData->testEstStarted[$key]) ? $postData->testEstStarted[$key] :null;
-            $task->deadline   = isset($postData->testDeadline[$key])   ? $postData->testDeadline[$key]   :null;
-            $task->assignedTo = isset($postData->testAssignedTo[$key]) ? $postData->testAssignedTo[$key] :'';
+            $task->pri        = !empty($postData->testPri[$key]) ? $postData->testPri[$key] : ($_POST['pri'] ?? 3);
+            $task->estStarted = !empty($postData->testEstStarted[$key]) ? $postData->testEstStarted[$key] : null;
+            $task->deadline   = !empty($postData->testDeadline[$key])   ? $postData->testDeadline[$key]   : null;
+            $task->assignedTo = !empty($postData->testAssignedTo[$key]) ? $postData->testAssignedTo[$key] : '';
             $task->estimate   = (float)$postData->testEstimate[$key];
             $task->left       = (float)$postData->testEstimate[$key];
 
