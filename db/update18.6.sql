@@ -11,9 +11,6 @@ CREATE TABLE IF NOT EXISTS `zt_prompt` (
   `role` text DEFAULT NULL,
   `characterization` text DEFAULT NULL,
   `status` enum('draft','active','replaced') NOT NULL DEFAULT 'draft',
-  `parent` mediumint(8) unsigned DEFAULT NULL,
-  `successor` mediumint(8) unsigned DEFAULT NULL,
-  `revision` mediumint(8) unsigned DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) DEFAULT NULL,
@@ -34,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `zt_promptrole` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -----------------------------------------------------------------------------
--- Privs of AI module, will need to be updated when merged with 18.x branch.
+-- Privs of AI module.
 -----------------------------------------------------------------------------
 REPLACE INTO
     `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`)
