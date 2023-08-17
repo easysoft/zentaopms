@@ -1425,6 +1425,8 @@ class bug extends control
      */
     public function ajaxGetReleasedBuilds(int $productID, int|string $branch = 'all'): string
     {
+        /* 获取已发布的版本。 */
+        /* Get released builds. */
         $releasedBuilds = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
 
         return print(helper::jsonEncode($releasedBuilds));
