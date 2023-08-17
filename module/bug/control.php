@@ -1365,6 +1365,8 @@ class bug extends control
      */
     public function ajaxGetProductBugs($productID, $bugID): int
     {
+        /* 获取除了这个 bugID 的产品 bugs。 */
+        /* Get product bugs exclude this bugID. */
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
         $branch      = $bug->branch > 0 ? $bug->branch . ',0' : '0';
