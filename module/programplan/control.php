@@ -53,7 +53,7 @@ class programplan extends control
         $this->session->set('projectPlanList', $this->app->getURI(true), 'project');
         $this->commonAction($projectID, $productID);
 
-        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
+        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess($projectID, $this->project->getPairsByProgram());
 
         /* Get the product under the project and adjust the three-level navigation action button. */
         $products = $this->loadModel('product')->getProducts($projectID);

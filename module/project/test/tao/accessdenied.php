@@ -21,7 +21,7 @@ cid=1
 global $tester;
 $tester->loadModel('project');
 
-$tester->project->saveState(2, array(2 => ''));
+$tester->project->checkAccess(2, array(2 => ''));
 r($_SESSION['project']) && p() && e('2');
 
 $tester->project->accessDenied();

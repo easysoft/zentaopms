@@ -267,7 +267,7 @@ class testreport extends control
             elseif($this->app->tab == 'project')
             {
                 $projects  = $this->project->getPairsByProgram();
-                $projectID = $this->project->saveState($execution->id, $projects);
+                $projectID = $this->project->checkAccess($execution->id, $projects);
                 $this->project->setMenu($projectID);
             }
 

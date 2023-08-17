@@ -50,7 +50,7 @@ class storyZen extends story
             }
 
             $projects  = $this->project->getPairsByProgram();
-            $projectID = $this->project->saveState($projectID, $projects);
+            $projectID = $this->project->checkAccess($projectID, $projects);
             $this->project->setMenu($projectID);
         }
 
