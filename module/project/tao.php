@@ -855,8 +855,8 @@ class projectTao extends projectModel
         global $lang;
         if($hasProduct)
         {
-            unset($lang->project->menu->settings['subMenu']->module);
             unset($lang->project->menu->projectplan);
+            unset($lang->project->menu->settings['subMenu']->module);
             if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
             return true;
         }
@@ -864,23 +864,15 @@ class projectTao extends projectModel
         $projectProduct = (int)$this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
         $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
-        if(in_array($model, $this->config->project->scrumList))
-        {
-            $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
-        }
+        if(in_array($model, $this->config->project->scrumList)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
 
         /* Init story dropdown for project secondary meun. */
-        if(!empty($this->config->URAndSR) && $model !== 'kanban' && isset($lang->project->menu->storyGroup))
+        if($model !== 'kanban' && !empty($this->config->URAndSR) && isset($lang->project->menu->storyGroup))
         {
-            $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
-
-            if(isset($lang->project->menu->storyGroup))
-            {
-                $lang->project->menu->story = $lang->project->menu->storyGroup;
-                $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
-                $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
-                $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
-            }
+            $lang->project->menu->story = $lang->project->menu->storyGroup;
+            $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
+            $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
+            $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
         }
 
         unset($lang->project->menu->settings['subMenu']->products);
