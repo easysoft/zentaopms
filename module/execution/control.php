@@ -1220,7 +1220,6 @@ class execution extends control
         $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $productID, $branchID, $moduleID, $orderBy, $pager, $type);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
-        $cases = $this->testcase->appendData($cases, 'case');
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
 
         $modules = $this->tree->getAllModulePairs('case');

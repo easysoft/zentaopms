@@ -1735,6 +1735,7 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
+                $run->fails = $run->taskFails;
                 common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=executionID=$task->execution,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
 
                 common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");

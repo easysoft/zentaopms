@@ -690,7 +690,6 @@ EOF;
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->testcase->appendData($cases, $type == 'assigntome' ? 'run' : 'case');
 
         /* Build the search form. */
         $currentMethod = $this->app->rawMethod;

@@ -148,6 +148,10 @@ $lang->upgrade->mergeProjectTip   = "历史的{$lang->projectCommon}将直接同
 $lang->upgrade->mergeExecutionTip = "系统将自动按年创建项目，将历史的{$lang->projectCommon}数据按照年份归并到对应的项目下。";
 $lang->upgrade->createProgramTip  = "同时系统将自动创建一个默认的项目集，将所有的{$lang->projectCommon}都放在默认的项目集下。";
 $lang->upgrade->mergeManuallyTip  = '可以手工选择数据归并的方式。';
+$lang->upgrade->processCaseTitle  = '旧版本中的%s条用例数据需要进行升级';
+$lang->upgrade->processCaseFinish = '用例数据升级成功';
+$lang->upgrade->processCaseNumber = '成功升级%s条用例数据, 剩余%s条用例数据需要升级';
+$lang->upgrade->processCaseTip    = '点击确认执行按钮，进行用例数据升级。';
 
 $lang->upgrade->defaultGroup = '默认分组';
 

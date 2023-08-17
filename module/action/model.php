@@ -90,6 +90,9 @@ class actionModel extends model
         /* Add index for global search. */
         $this->saveIndex($objectType, $objectID, $actionType);
 
+        $changeFunc = 'after' . ucfirst($objectType);
+        if(method_exists($this, $changeFunc)) call_user_func_array(array($this, $changeFunc), array($action, $actionID));
+
         return $actionID;
     }
 
@@ -879,6 +882,18 @@ class actionModel extends model
      * @access public
      * @return array
      */
+    public function getHistoryByActionID($actionID)
+    {
+        return $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll();
+    }
+
+    /**
+     * Get histories of an action.
+     *
+     * @param  int    $actionID
+     * @access public
+     * @return array
+     */
     public function getHistory($actionID)
     {
         return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
@@ -906,6 +921,13 @@ class actionModel extends model
                 $change['action'] = $actionID;
             }
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
+        }
+
+        if(isset($this->session->calllbackActionList[$actionID]))
+        {
+            $callbackMethod = $this->session->calllbackActionList[$actionID];
+            unset($this->session->calllbackActionList[$actionID]);
+            if(method_exists($this, $callbackMethod)) call_user_func_array(array($this, $callbackMethod), array($actionID));
         }
     }
 
@@ -2253,6 +2275,127 @@ class actionModel extends model
         }
 
         $this->search->saveIndex($objectType, $data);
+    }
+
+    /**
+     * Trigger to update the field.
+     *
+     * @param  object $action
+     * @param  int    $actionID
+     * @access public
+     * @return void
+     */
+    public function afterBug($action, $actionID)
+    {
+        if(in_array($action->action, array('opened', 'edited', 'deleted', 'undeleted')))
+        {
+            $bug      = $this->dao->select('id,`case`,result')->from(TABLE_BUG)->where('id')->eq($action->objectID)->fetch();
+            $caseID   = $bug->case;
+            $resultID = $bug->result;
+            $this->computeLinkBugs($caseID, $resultID);
+            $this->session->set('calllbackActionList', array($actionID => 'afterBugCallback'));
+        }
+    }
+
+    /**
+     * Trigger to update the field.
+     *
+     * @param  int    $actionID
+     * @access public
+     * @return void
+     */
+    public function afterBugCallback($actionID)
+    {
+        $action    = $this->getByID($actionID);
+        $histories = $this->getHistoryByActionID($actionID);
+        $caseID    = 0;
+        $resultID  = 0;
+        foreach($histories as $history)
+        {
+            if($history->field == 'case')   $caseID   = $history->old;
+            if($history->field == 'result') $resultID = $history->old;
+        }
+        $this->computeLinkBugs($caseID, $resultID);
+    }
+
+    /**
+     * Count the number of bugs associated with a case.
+     *
+     * @param  int    $caseID
+     * @param  int    $resultID
+     * @access public
+     * @return void
+     */
+    public function computeLinkBugs($caseID, $resultID)
+    {
+        if($caseID)
+        {
+            $bugs = $this->dao->select('count(*) as count')->from(TABLE_BUG)->where('`case`')->eq($caseID)->andWhere('deleted')->eq('0')->fetch('count');
+            $bugs = $bugs ? $bugs : 0;
+            $this->dao->update(TABLE_CASE)->set('bugs')->eq($bugs)->where('id')->eq($caseID)->exec();
+        }
+
+        $testRun = $this->dao->select('id,task,`case`')->from(TABLE_TESTRUN)->where('id')->eq($resultID)->fetch();
+        if(!empty($testRun))
+        {
+            $taskBugs = $this->dao->select('count(*) as count')->from(TABLE_BUG)->where('result')->eq($resultID)->andWhere('`case`')->eq($caseID)->andWhere('deleted')->eq('0')->fetch('count');
+            $taskBugs = $taskBugs ? $taskBugs : 0;
+            $this->dao->update(TABLE_TESTRUN)->set('taskBugs')->eq($taskBugs)->where('id')->eq($resultID)->exec();
+        }
+    }
+
+    /**
+     * Trigger to update the field.
+     *
+     * @param  object $action
+     * @param  int    $actionID
+     * @access public
+     * @return void
+     */
+    public function afterCase($action)
+    {
+        $objectID = $action->objectID;
+        if(in_array($action->action, array('opened', 'edited', 'deleted', 'undeleted', 'linked2testtask', 'unlinkedfromtesttask')))
+        {
+            $case  = $this->dao->select('id,version')->from(TABLE_CASE)->where('id')->eq($objectID)->fetch();
+            $steps = $this->dao->select('count(*) as count')->from(TABLE_CASESTEP)->where('`case`')->eq($objectID)->andWhere('version')->eq($case->version)->fetch('count');
+            $steps = $steps ? $steps : 0;
+            $this->dao->update(TABLE_CASE)->set('steps')->eq($steps)->where('id')->eq($objectID)->exec();
+
+            $testrunList = $this->dao->select('*')->from(TABLE_TESTRUN)->where('`case`')->eq($objectID)->fetchAll();
+            foreach($testrunList as $testrun)
+            {
+                $taskSteps = $this->dao->select('count(distinct t1.id) as count')->from(TABLE_CASESTEP)->alias('t1')
+                    ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.`case`=t2.`case`')
+                    ->where('t2.id')->eq($testrun->id)
+                    ->andWhere('t1.`case`')->eq($testrun->case)
+                    ->andWhere('t1.type')->ne('group')
+                    ->andWhere('t1.version=t2.version')
+                    ->fetch('count');
+
+                $taskSteps = $taskSteps ? $taskSteps : 0;
+                $this->dao->update(TABLE_TESTRUN)->set('taskSteps')->eq($taskSteps)->where('id')->eq($testrun->id)->exec();
+            }
+        }
+
+        if($action->action == 'run')
+        {
+            $executions = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->where('`case`')->eq($objectID)->fetch('count');
+            $fails      = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->where('`case`')->eq($objectID)->andWhere('caseResult')->eq('fail')->fetch('count');
+            $executions = $executions ? $executions : 0;
+            $fails      = $fails ? $fails : 0;
+            $this->dao->update(TABLE_CASE)->set('executions')->eq($executions)->set('fails')->eq($fails)->where('id')->eq($objectID)->exec();
+
+            $testrunList = $this->dao->select('*')->from(TABLE_TESTRUN)->where('`case`')->eq($objectID)->fetchAll();
+            foreach($testrunList as $testrun)
+            {
+                $taskExecutions = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->where('`run`')->eq($testrun->id)->fetch('count');
+                $taskFails      = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->where('`run`')->eq($testrun->id)->andWhere('caseResult')->eq('fail')->fetch('count');
+                $taskExecutions = $taskExecutions ? $taskExecutions : 0;
+                $taskFails      = $taskFails ? $taskFails : 0;
+                $this->dao->update(TABLE_TESTRUN)->set('taskExecutions')->eq($taskExecutions)->set('taskFails')->eq($taskFails)->where('id')->eq($testrun->id)->exec();
+            }
+        }
     }
 
     /**
