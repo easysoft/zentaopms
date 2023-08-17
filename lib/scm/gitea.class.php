@@ -322,7 +322,14 @@ class Gitea
         if(strpos($fromRevision, '^') !== false)
         {
             $list = execCmd(escapeCmd("$this->client log -2 $toRevision --pretty=format:%H -- $path"), 'array');
-            if(isset($list[1])) $fromRevision = $list[1];
+            if(isset($list[1]))
+            {
+                $fromRevision = $list[1];
+            }
+            else
+            {
+                $fromRevision = 'HEAD^';
+            }
         }
         $lines = execCmd(escapeCmd("$this->client diff $fromRevision $toRevision -- $path"), 'array');
         return $lines;

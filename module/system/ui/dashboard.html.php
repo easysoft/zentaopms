@@ -12,6 +12,11 @@ namespace zin;
 
 $cpuInfo    = $this->cne->getCpuUsage($cneMetrics->metrics->cpu);
 $memoryInfo = $this->cne->getMemUsage($cneMetrics->metrics->memory);
+$status     = isset($lang->CNE->statusList[$cneMetrics->status]) ? $cneMetrics->status : 'unknown';
+
+$cpuInfo['tip']    = trim(substr($cpuInfo['tip'], strpos($cpuInfo['tip'], '=') + 1));
+$memoryInfo['tip'] = trim(substr($memoryInfo['tip'], strpos($memoryInfo['tip'], '=') + 1));
+
 jsVar('cpuInfo',        $cpuInfo);
 jsVar('memoryInfo',     $memoryInfo);
 jsVar('instanceIdList', array_column($instances, 'id'));
@@ -32,13 +37,13 @@ div
                 setClass('basis-1/2 justify-center pl-6 pt-10 pb-10'),
                 div
                 (
-                    setClass('flex row basis-2/3 justify-evenly h-full'),
-                    icon('checked', set::size(80)),
+                    setClass('flex row basis-2/3 justify-evenly h-full ml-5'),
+                    icon(zget($this->lang->CNE->statusIcons, $status), set::size(30), setClass('app-status-circle status-' . $status)),
                     div
                     (
-                        setClass('p-2 ml-2 pr-6 flex col justify-between normal'),
+                        setClass('p-2 ml-8 pr-6 flex col justify-between normal'),
                         setStyle('white-space', 'nowrap'),
-                        div(setClass('text-xl font-semibold'), zget($lang->CNE->statusList, $cneMetrics->status, $lang->CNE->statusList['unknown'])),
+                        div(setClass('text-xl font-semibold'), zget($lang->CNE->statusList, $status)),
                         $lang->system->cneStatus
                     ),
                     div(),
@@ -80,7 +85,7 @@ div
                     (
                         setClass('absolute text-lg'),
                         setStyle(array('transform' => 'translate(-50%, -50%)', 'top' => '50%', 'left' => '50%', 'white-space' => 'nowrap')),
-                        icon('checked', setClass('mr-1')),
+                        icon('cpu', setClass('mr-1'), set::size(20),setStyle('color', $cpuInfo['color'])),
                         $lang->system->cpuUsage
                     )
                 ),
@@ -102,7 +107,7 @@ div
                     (
                         setClass('absolute text-lg'),
                         setStyle(array('transform' => 'translate(-50%, -50%)', 'top' => '50%', 'left' => '50%', 'white-space' => 'nowrap')),
-                        icon('checked', setClass('mr-1')),
+                        icon('memory', setClass('mr-1'), set::size(20), setStyle('color', $memoryInfo['color'])),
                         $lang->system->memUsage
                     )
                 ),

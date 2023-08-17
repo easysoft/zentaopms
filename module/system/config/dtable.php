@@ -68,10 +68,10 @@ $config->system->dtable->instanceList->fieldList['status']['title'] = $lang->sys
 $config->system->dtable->instanceList->fieldList['status']['name']  = 'status';
 $config->system->dtable->instanceList->fieldList['status']['map']   = $lang->instance->statusList;
 
-$config->system->dtable->instanceList->fieldList['cpu']['title']    = $lang->instance->cpu;
+$config->system->dtable->instanceList->fieldList['cpu']['title'] = array('html' => '<i class="icon icon-cpu mr-1"></i>' . $lang->instance->cpu);
 $config->system->dtable->instanceList->fieldList['cpu']['name']     = 'cpu';
 $config->system->dtable->instanceList->fieldList['cpu']['minWidth'] = '160';
 
-$config->system->dtable->instanceList->fieldList['mem']['title']    = $lang->instance->mem;
+$config->system->dtable->instanceList->fieldList['mem']['title'] = array('html' => '<i class="icon icon-memory mr-1"></i>' . $lang->instance->mem);
 $config->system->dtable->instanceList->fieldList['mem']['name']     = 'mem';
 $config->system->dtable->instanceList->fieldList['mem']['minWidth'] = '230';
