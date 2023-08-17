@@ -1282,16 +1282,18 @@ class bug extends control
      * Ajax 方式加载所有的用户。
      * AJAX: get all users as assignedTo list.
      *
-     * @param  string $selectedUser
-     * @param  string $params       noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
+     * @param  string $params noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
      * @access public
-     * @return string
+     * @return array
      */
-    public function ajaxLoadAllUsers(string $selectedUser = '', string $params = 'devfirst|noclosed'): string
+    public function ajaxLoadAllUsers(string $params = 'devfirst|noclosed')
     {
+        /* 获取所有用户，并将它转为picker组件需要的数据。 */
+        /* Get all users, and convert it to picker items. */
         $allUsers = $this->loadModel('user')->getPairs($params);
-
-        return print(html::select('assignedTo', $allUsers, $selectedUser, 'class="form-control"'));
+        $userList = array();
+        foreach($allUsers as $account => $user) $userList[] = array('text' => $user, 'value' => $account, 'key' => $user . $account);
+        return print(json_encode($userList));
     }
 
     /**

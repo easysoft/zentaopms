@@ -629,12 +629,13 @@ function loadAllUsers(event)
 {
     const isClosedBug = bug.status = 'closed';
     const params      = isClosedBug ? '&params=devfirst' : '';
-    const link        = $.createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val() + params);
+    const link        = $.createLink('bug', 'ajaxLoadAllUsers', params);
     $.get(link, function(data)
     {
         if(data)
         {
-            $('#assignedTo').replaceWith(data);
+            data = JSON.parse(data);
+            $('[name="assignedTo"]').zui('picker').render({items: data});
             if(!isClosedBug)
             {
                 const moduleID  = $('[name="module"]').val();
