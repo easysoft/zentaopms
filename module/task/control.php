@@ -979,7 +979,7 @@ class task extends control
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionTasks($executionID, $taskID = 0)
+    public function ajaxGetExecutionTasks(int $executionID, int $taskID = 0)
     {
         $tasks = $this->task->getExecutionTaskPairs((int)$executionID);
         $items = array();
