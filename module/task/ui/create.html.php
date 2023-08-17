@@ -33,7 +33,7 @@ jsVar('showFields', $showFields);
 jsVar('toTaskList', !empty($task->id));
 jsVar('blockID', $blockID);
 jsVar('executionID', $execution->id);
-jsVar('taskID', $taskID);
+jsVar('taskID', $taskID ?? 0);
 jsVar('ditto', $lang->task->ditto);
 jsVar('teamMemberError', $lang->task->error->teamMember);
 jsVar('vision', $config->vision);
