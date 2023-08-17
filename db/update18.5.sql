@@ -26,6 +26,7 @@ UPDATE `zt_cron` SET `type` = 'zentao' WHERE `command` = 'moduleName=weekly&meth
 ALTER TABLE `zt_doc` ADD `editedList` text NULL;
 
 ALTER TABLE `zt_case` ADD INDEX `scene` (`scene`);
+UPDATE `zt_case` SET `sort` = `id` WHERE `sort` = 0;
 UPDATE `zt_case` SET `scene` = `scene` - 100000000 WHERE `scene` > 100000000;
 UPDATE `zt_scene` SET `sort` = `sort` - 100000000 WHERE `sort` > 100000000;
 UPDATE `zt_scene` SET `parent` = `parent` - 100000000 WHERE `parent` > 100000000;
