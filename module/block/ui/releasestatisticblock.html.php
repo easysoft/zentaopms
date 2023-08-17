@@ -16,7 +16,7 @@ $releaseProgressData = array();
 $i = 1;
 foreach($releases as $productName => $releaseCount)
 {
-    $progress = $releaseCount / $annualMaxReleases * 100 . '%';
+    $progress = ($annualMaxReleases ? ($releaseCount / $annualMaxReleases * 100) : 0) . '%';
 
     $nameClass  = '';
     $labelClass = 'primary';

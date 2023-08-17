@@ -10,12 +10,17 @@ ALTER TABLE `zt_block` MODIFY `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER 
 
 UPDATE `zt_block` SET `dashboard` = CONCAT(`module`, `type`);
 UPDATE `zt_block` SET `module` = IF(`source` != '', `source`, `code`);
+UPDATE `zt_block` SET `width` = IF(`grid` > 4, '2', '1');
 DROP INDEX account_vision_module_type_order ON `zt_block`;
 
 ALTER TABLE `zt_block` DROP COLUMN `source`;
 ALTER TABLE `zt_block` DROP COLUMN `type`;
 ALTER TABLE `zt_block` DROP COLUMN `grid`;
 ALTER TABLE `zt_block` DROP COLUMN `order`;
+
+DELETE FROM `zt_block` where `module` = 'todo' and `code` = 'list';
+DELETE FROM `zt_block` where `module` = 'contribute' and `code` = 'contribute';
+DELETE FROM `zt_block` where `module` = 'project' and `code` = 'projectteam';
 
 ALTER TABLE `zt_todo`  CHANGE `idvalue` `objectID` mediumint(8) unsigned default '0' NOT NULL AFTER `type`;
 ALTER TABLE `zt_todo` CHANGE `config` `config` VARCHAR(1000) NOT NULL  DEFAULT '';

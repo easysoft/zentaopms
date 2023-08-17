@@ -17,13 +17,14 @@ set::title($title);
 jsVar('blockID', $block->id);
 jsVar('blockTitle', $lang->block->blockTitle);
 
-$showModules  = ($dashboard == 'my' && $modules);
-$showCodes    = (($showModules && $module && $codes) || $dashboard != 'my');
-$code         = $showCodes ? $code : $module;
-$widths       = !empty($config->block->size[$module][$code]) ? array_keys($config->block->size[$module][$code]) : array('1', '2');
-$widthOptions = array();
-foreach($widths as $width) $widthOptions[$width] = zget($lang->block->widthOptions, $width);
+$showModules = ($dashboard == 'my' && $modules);
+$showCodes   = (($showModules && $module && $codes) || $dashboard != 'my');
+$code        = $showCodes ? $code : $module;
+$blockSize   = !empty($config->block->size[$module][$code]) ? $config->block->size[$module][$code] : $config->block->defaultSize; // 获取当前区块的可选尺寸。
 
+/* 根据区块的可选尺寸生成区块的可选宽度列表。 */
+$widthOptions = array();
+foreach(array_keys($blockSize) as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
 row
 (
     setID('blockEditForm'),

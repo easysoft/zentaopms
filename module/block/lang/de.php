@@ -129,7 +129,6 @@ $lang->block->titleList['assigntome']     = 'Assign to me';
 $lang->block->titleList['project']        = "{$lang->projectCommon} List";
 $lang->block->titleList['dynamic']        = 'Dynamic';
 $lang->block->titleList['list']           = 'Todo List';
-$lang->block->titleList['contribute']     = 'Contribute';
 $lang->block->titleList['scrumoverview']  = "{$lang->projectCommon} Overview";
 $lang->block->titleList['scrumtest']      = 'Scrum Test Request';
 $lang->block->titleList['scrumlist']      = 'Scrum List';

@@ -42,7 +42,7 @@ class block extends control
         /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式。 */
         if(empty($blocks) && !$isInitiated && !commonModel::isTutorialMode())
         {
-            $this->block->initBlock($dashboard);                // 初始化该 app 下区块数据。
+            $this->blockZen->initBlock($dashboard);             // 初始化该 app 下区块数据。
             $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表。
         }
 
@@ -148,7 +148,7 @@ class block extends control
             $formData->params = json_encode($formData->params);
             unset($formData->html);
 
-            /* 如果区块没有尺寸的配置项，则使用统一的默认尺寸。 */
+            /* 根据module和code生成区块的宽度和高度。 */
             $defaultSize = $this->config->block->defaultSize; // 默认为区块的统一默认尺寸。
             if(!empty($this->config->block->size[$formData->module][$formData->code]))                   $defaultSize      = $this->config->block->size[$formData->module][$formData->code];
             if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
@@ -156,12 +156,14 @@ class block extends control
             if(empty($formData->height)) $formData->height = reset($defaultSize);
 
             /* 设置区块距离左侧的宽度和距离顶部的高度。 */
-            $formData->left = $formData->width == 1 ? '2' : '0';
+            $formData->left = $formData->width == 1 ? 2 : 0;
             $formData->top  = $this->block->computeBlockTop($formData);
 
             /* 执行区块的数据插入并且返回数据给view层。 */
             $blockID = $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('score')->create('block', 'set');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadComponent('#dashboard'); setTimeout(() => $('#dashboard .dashboard-block[data-id=\"$blockID\"]').scrollIntoView({behavior: 'smooth'}), 500);", 'closeModal' => true));
         }
 
@@ -174,14 +176,14 @@ class block extends control
         $codes  = $this->blockZen->getAvailableCodes($module);         // 根据仪表盘和模块获取可用的区块列表。
         $params = $this->blockZen->getAvailableParams($module, $code); // 根据所属模块和区块code获取参数配置项列表。
 
-        $this->view->title      = $this->lang->block->createBlock;
-        $this->view->dashboard  = $dashboard;
-        $this->view->module     = $module;
-        $this->view->code       = $code;
-        $this->view->modules    = $modules;
-        $this->view->codes      = $codes;
-        $this->view->params     = $params;
-        $this->view->blockTitle = $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
+        $this->view->title        = $this->lang->block->createBlock;
+        $this->view->dashboard    = $dashboard;
+        $this->view->module       = $module;
+        $this->view->code         = $code;
+        $this->view->modules      = $modules;
+        $this->view->codes        = $codes;
+        $this->view->params       = $params;
+        $this->view->blockTitle   = $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
         $this->display();
     }
 
@@ -221,6 +223,8 @@ class block extends control
             /* 执行区块的数据变更并且返回数据给view层。 */
             $this->block->update($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('score')->create('block', 'set');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "$('#dashboard').dashboard('load', '$blockID')", 'closeModal' => true));
         }
 
@@ -232,22 +236,15 @@ class block extends control
         $codes   = $this->blockZen->getAvailableCodes($module);             // 根据所属仪表盘和选中模块获取可选择的区块列表。
         $params  = $this->blockZen->getAvailableParams($module, $code);     // 根据当前选中模块和选中区块code获取参数配置项列表。
 
-        $blockSize = !empty($this->config->block->size[$module][$code]) ? $this->config->block->size[$module][$code] : $this->config->block->defaultSize; // 获取当前区块的可选尺寸。
-
-        /* 根据区块的可选尺寸生成区块的可选宽度列表。 */
-        $widthOptions = array();
-        foreach(array_keys($blockSize) as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
-
-        $this->view->title        = $this->lang->block->editBlock;
-        $this->view->block        = $block;
-        $this->view->dashboard    = $block->dashboard;
-        $this->view->module       = $module;
-        $this->view->modules      = $this->blockZen->getAvailableModules($block->dashboard);
-        $this->view->codes        = $codes;
-        $this->view->code         = in_array($code, array_keys($codes)) ? $code : ''; // 当变更了所属模块(module)后, 判断当前code在是否还包含在codes中，没有的话置空code。
-        $this->view->params       = $params;
-        $this->view->widthOptions = $widthOptions;
-        $this->view->blockTitle   = $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
+        $this->view->title      = $this->lang->block->editBlock;
+        $this->view->block      = $block;
+        $this->view->dashboard  = $block->dashboard;
+        $this->view->module     = $module;
+        $this->view->modules    = $this->blockZen->getAvailableModules($block->dashboard);
+        $this->view->codes      = $codes;
+        $this->view->code       = in_array($code, array_keys($codes)) ? $code : ''; // 当变更了所属模块(module)后, 判断当前code在是否还包含在codes中，没有的话置空code。
+        $this->view->params     = $params;
+        $this->view->blockTitle = $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
         $this->display();
     }
 

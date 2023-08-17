@@ -2,6 +2,52 @@
 class blockZen extends block
 {
     /**
+     * 初始化用户某个仪表盘下的区块数据。
+     * Init block when account use first.
+     *
+     * @param  string $dashboard
+     * @access public
+     * @return bool
+     */
+    public function initBlock(string $dashboard): bool
+    {
+        if(!$dashboard) return false;
+
+        $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
+        $account = $this->app->user->account;
+        $vision  = $this->config->vision;
+
+        /* 获取该仪表盘下的初始化默认布局。 */
+        $blocks = $dashboard == 'my' ? $this->lang->block->default[$flow][$dashboard] : $this->lang->block->default[$dashboard];
+
+        foreach($blocks as $block)
+        {
+            /* 根据module和code生成区块的宽度和高度。 */
+            $defaultSize = $this->config->block->defaultSize; // 默认为区块的统一默认尺寸。
+            if(!empty($this->config->block->size[$block['module']][$block['code']]))                  $defaultSize     = $this->config->block->size[$block['module']][$block['code']];
+            if(!empty($this->config->block->size[$block['module']][$block['code']][$block['width']])) $block['height'] = $this->config->block->size[$block['module']][$block['code']][$block['width']];
+            if(empty($block['width']))  $block['width']  = reset(array_keys($defaultSize));
+            if(empty($block['height'])) $block['height'] = reset($defaultSize);
+
+            $block['account']   = $account;   // 所属用户。
+            $block['dashboard'] = $dashboard; // 所属仪表盘。
+            $block['params']    = isset($block['params']) ? helper::jsonEncode($block['params']) : ''; // 配置项信息。
+            $block['vision']    = $this->config->vision;                         // 所属用户界面。
+            $block['left']      = $block['width'] == 1 ? 2 : 0;                  // 距左侧宽度。
+            $block['top']       = $this->block->computeBlockTop((object)$block); // 距顶部高度。
+
+            $this->block->create((object)$block);
+        }
+        if(dao::isError()) return false;
+
+        /* 保存当前区块已经被初始化过的记录。 */
+        $this->loadModel('setting')->setItem("$account.$dashboard.common.blockInited@$vision", '1');
+        $this->loadModel('setting')->setItem("$account.$dashboard.block.initVersion", (string)$this->config->block->version);
+
+        return true;
+    }
+
+    /**
      * 根据仪表盘获取可使用的模块列表。
      * Get module options when adding or editing blocks.
      *
@@ -174,6 +220,15 @@ class blockZen extends block
 
             /* 生成更多链接。 */
             $this->createMoreLink($block, $projectID);
+
+            $defaultSize = $this->config->block->defaultSize; // 默认为区块的统一默认尺寸。
+            if(!empty($this->config->block->size[$block->module][$block->code])) $defaultSize = $this->config->block->size[$block->module][$block->code];
+
+            if(empty($block->width))  $block->width  = reset(array_keys($defaultSize));
+            if(empty($block->height)) $block->height = !empty($this->config->block->size[$block->module][$block->code][$block->width]) ? $this->config->block->size[$block->module][$block->code][$block->width] : reset($defaultSize);
+
+            /* 设置区块距离左侧的宽度和距离顶部的高度。 */
+            $block->left = $block->width == 1 ? 2 : 0;
         }
 
         /* 根据每个区块的高度和宽度重新生成各个区块的left和top属性。 */

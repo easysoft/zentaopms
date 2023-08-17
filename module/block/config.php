@@ -106,15 +106,6 @@ $config->block->params['project']->orderBy['options'] = $lang->block->orderByLis
 $config->block->params['project']->orderBy['control'] = 'picker';
 $config->block->params['project']->count = $config->block->params['default']->count;
 
-$config->block->params['projectteam'] = new stdclass();
-$config->block->params['projectteam']->type['name']       = $lang->block->type;
-$config->block->params['projectteam']->type['options']    = $lang->block->typeList->projectAll;
-$config->block->params['projectteam']->type['control']    = 'picker';
-$config->block->params['projectteam']->orderBy['name']    = $lang->block->orderBy;
-$config->block->params['projectteam']->orderBy['options'] = $lang->block->orderByList->project;
-$config->block->params['projectteam']->orderBy['control'] = 'picker';
-$config->block->params['projectteam']->count = $config->block->params['default']->count;
-
 $config->block->params['build'] = $config->block->params['default'];
 
 $config->block->params['product'] = new stdclass();
@@ -323,64 +314,64 @@ $config->block->modules['doc']->moreLinkList->docmycollection = 'doc|myspace|typ
 $config->block->modules['doc']->moreLinkList->productdoc      = 'doc|productspace|';
 $config->block->modules['doc']->moreLinkList->projectdoc      = 'doc|projectspace|';
 
-$config->block->defaultSize = array('1' => '3');
+$config->block->defaultSize = array(1 => 3);
 
 $config->block->size = array();
-$config->block->size['product']['list']             = array('2' => '6', '1' => '6');
-$config->block->size['product']['story']            = array('2' => '6', '1' => '6');
-$config->block->size['product']['plan']             = array('2' => '6', '1' => '6');
-$config->block->size['product']['bug']              = array('2' => '6', '1' => '6');
-$config->block->size['product']['release']          = array('2' => '6', '1' => '6');
-$config->block->size['product']['statistic']        = array('2' => '5', '1' => '11');
-$config->block->size['product']['bugstatistic']     = array('2' => '5', '1' => '8');
-$config->block->size['product']['monthlyprogress']  = array('2' => '5', '1' => '13');
-$config->block->size['product']['annualworkload']   = array('2' => '6', '1' => '13');
-$config->block->size['product']['overview']         = array('1' => '3', '3' => '3');
-$config->block->size['product']['releasestatistic'] = array('1' => '8', '2' => '5');
+$config->block->size['product']['list']             = array(2 => 6, 1 => 6);
+$config->block->size['product']['story']            = array(2 => 6, 1 => 6);
+$config->block->size['product']['plan']             = array(2 => 6, 1 => 6);
+$config->block->size['product']['bug']              = array(2 => 6, 1 => 6);
+$config->block->size['product']['release']          = array(2 => 6, 1 => 6);
+$config->block->size['product']['statistic']        = array(2 => 5, 1 => 11);
+$config->block->size['product']['bugstatistic']     = array(2 => 5, 1 => 8);
+$config->block->size['product']['monthlyprogress']  = array(2 => 5, 1 => 13);
+$config->block->size['product']['annualworkload']   = array(2 => 6, 1 => 13);
+$config->block->size['product']['overview']         = array(1 => 3, 3 => 3);
+$config->block->size['product']['releasestatistic'] = array(1 => 8, 2 => 5);
 
-$config->block->size['project']['overview']      = array('1' => '3');
-$config->block->size['project']['statistic']     = array('2' => '5', '1' => '8');
-$config->block->size['project']['recentproject'] = array('2' => '4', '1' => '4');
-$config->block->size['project']['project']       = array('2' => '6', '1' => '6');
+$config->block->size['project']['overview']      = array(1 => 3);
+$config->block->size['project']['statistic']     = array(2 => 5, 1 => 8);
+$config->block->size['project']['recentproject'] = array(2 => 4, 1 => 4);
+$config->block->size['project']['project']       = array(2 => 6, 1 => 6);
 
-$config->block->size['scrumproject']['scrumoverview']  = array('2' => '5', '1' => '8');
-$config->block->size['scrumproject']['scrumlist']      = array('2' => '6', '1' => '6');
-$config->block->size['scrumproject']['scrumtest']      = array('2' => '6', '1' => '6');
-$config->block->size['scrumproject']['sprint']         = array('1' => '3');
-$config->block->size['scrumproject']['projectdynamic'] = array('1' => '8', '2' => '8');
+$config->block->size['scrumproject']['scrumoverview']  = array(2 => 5, 1 => 8);
+$config->block->size['scrumproject']['scrumlist']      = array(2 => 6, 1 => 6);
+$config->block->size['scrumproject']['scrumtest']      = array(2 => 6, 1 => 6);
+$config->block->size['scrumproject']['sprint']         = array(1 => 3);
+$config->block->size['scrumproject']['projectdynamic'] = array(1 => 8, 2 => 8);
 
-$config->block->size['execution']['overview']  = array('1' => '3');
-$config->block->size['execution']['statistic'] = array('2' => '5', '1' => '8');
-$config->block->size['execution']['list']      = array('2' => '6', '1' => '6');
-$config->block->size['execution']['task']      = array('2' => '6', '1' => '6');
-$config->block->size['execution']['build']     = array('2' => '6', '1' => '6');
+$config->block->size['execution']['overview']  = array(1 => 3);
+$config->block->size['execution']['statistic'] = array(2 => 5, 1 => 8);
+$config->block->size['execution']['list']      = array(2 => 6, 1 => 6);
+$config->block->size['execution']['task']      = array(2 => 6, 1 => 6);
+$config->block->size['execution']['build']     = array(2 => 6, 1 => 6);
 
-$config->block->size['qa']['statistic'] = array('2' => '5', '1' => '8');
-$config->block->size['qa']['testtask']  = array('2' => '6', '1' => '6');
-$config->block->size['qa']['bug']       = array('2' => '6', '1' => '6');
-$config->block->size['qa']['case']      = array('2' => '6', '1' => '6');
+$config->block->size['qa']['statistic'] = array(2 => 5, 1 => 8);
+$config->block->size['qa']['testtask']  = array(2 => 6, 1 => 6);
+$config->block->size['qa']['bug']       = array(2 => 6, 1 => 6);
+$config->block->size['qa']['case']      = array(2 => 6, 1 => 6);
 
-$config->block->size['doc']['docstatistic']    = array('2' => '3', '1' => '3');
-$config->block->size['doc']['docmycollection'] = array('2' => '4', '1' => '4');
-$config->block->size['doc']['docrecentupdate'] = array('2' => '4', '1' => '4');
-$config->block->size['doc']['productdoc']      = array('2' => '6', '1' => '6');
-$config->block->size['doc']['projectdoc']      = array('2' => '6', '1' => '6');
-$config->block->size['doc']['docdynamic']      = array('1' => '8');
-$config->block->size['doc']['docviewlist']     = array('1' => '4');
-$config->block->size['doc']['doccollectlist']  = array('1' => '4');
+$config->block->size['doc']['docstatistic']    = array(2 => 3, 1 => 3);
+$config->block->size['doc']['docmycollection'] = array(2 => 4, 1 => 4);
+$config->block->size['doc']['docrecentupdate'] = array(2 => 4, 1 => 4);
+$config->block->size['doc']['productdoc']      = array(2 => 6, 1 => 6);
+$config->block->size['doc']['projectdoc']      = array(2 => 6, 1 => 6);
+$config->block->size['doc']['docdynamic']      = array(1 => 8);
+$config->block->size['doc']['docviewlist']     = array(1 => 4);
+$config->block->size['doc']['doccollectlist']  = array(1 => 4);
 
-$config->block->size['welcome']['welcome']                 = array('2' => '3');
-$config->block->size['guide']['guide']                     = array('2' => '6');
-$config->block->size['assigntome']['assigntome']           = array('2' => '6', '1' => '6');
-$config->block->size['dynamic']['dynamic']                 = array('1' => '8');
-$config->block->size['zentaodynamic']['zentaodynamic']     = array('1' => '4');
-$config->block->size['teamachievement']['teamachievement'] = array('1' => '6');
+$config->block->size['welcome']['welcome']                 = array(2 => 3);
+$config->block->size['guide']['guide']                     = array(2 => 6);
+$config->block->size['assigntome']['assigntome']           = array(2 => 6, 1 => 6);
+$config->block->size['dynamic']['dynamic']                 = array(1 => 8);
+$config->block->size['zentaodynamic']['zentaodynamic']     = array(1 => 4);
+$config->block->size['teamachievement']['teamachievement'] = array(1 => 6);
 
-$config->block->size['singleproduct']['singlestatistic']       = array('2' => '5', '1' => '11');
-$config->block->size['singleproduct']['singlebugstatistic']    = array('2' => '5', '1' => '8');
-$config->block->size['singleproduct']['roadmap']               = array('2' => '6', '1' => '6');
-$config->block->size['singleproduct']['singlestory']           = array('2' => '6', '1' => '6');
-$config->block->size['singleproduct']['singleplan']            = array('2' => '6', '1' => '6');
-$config->block->size['singleproduct']['singlerelease']         = array('2' => '6', '1' => '6');
-$config->block->size['singleproduct']['singledynamic']         = array('1' => '8');
-$config->block->size['singleproduct']['singlemonthlyprogress'] = array('3' => '5', '1' => '15');
+$config->block->size['singleproduct']['singlestatistic']       = array(2 => 5, 1 => 11);
+$config->block->size['singleproduct']['singlebugstatistic']    = array(2 => 5, 1 => 8);
+$config->block->size['singleproduct']['roadmap']               = array(2 => 6, 1 => 6);
+$config->block->size['singleproduct']['singlestory']           = array(2 => 6, 1 => 6);
+$config->block->size['singleproduct']['singleplan']            = array(2 => 6, 1 => 6);
+$config->block->size['singleproduct']['singlerelease']         = array(2 => 6, 1 => 6);
+$config->block->size['singleproduct']['singledynamic']         = array(1 => 8);
+$config->block->size['singleproduct']['singlemonthlyprogress'] = array(3 => 5, 1 => 15);

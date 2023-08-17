@@ -130,7 +130,6 @@ $lang->block->titleList['assigntome']     = '待处理';
 $lang->block->titleList['project']        = "{$lang->projectCommon}列表";
 $lang->block->titleList['dynamic']        = '最新动态';
 $lang->block->titleList['list']           = '我的待办';
-$lang->block->titleList['contribute']     = '我的贡献';
 $lang->block->titleList['scrumoverview']  = "{$lang->projectCommon}总览";
 $lang->block->titleList['scrumtest']      = '测试单列表';
 $lang->block->titleList['scrumlist']      = '迭代列表';

@@ -17,15 +17,15 @@ set::title($title);
 jsVar('dashboard', $dashboard);
 jsVar('blockTitle', $lang->block->blockTitle);
 
-$showModules  = ($dashboard == 'my' && $modules);
-$showCodes    = (($showModules && $module && $codes) || $dashboard != 'my');
-$code         = $showCodes ? $code : $module;
-$widths       = !empty($config->block->size[$module][$code]) ? array_keys($config->block->size[$module][$code]) : array('1', '2');
+$showModules = ($dashboard == 'my' && $modules);
+$showCodes   = (($showModules && $module && $codes) || $dashboard != 'my');
+$code        = $showCodes ? $code : $module;
+$blockSize   = !empty($config->block->size[$module][$code]) ? $config->block->size[$module][$code] : $config->block->defaultSize; // 获取当前区块的可选尺寸。
+
+/* 根据区块的可选尺寸生成区块的可选宽度列表。 */
 $widthOptions = array();
-foreach($widths as $width) $widthOptions[$width] = zget($lang->block->widthOptions, $width);
-
-$defaultWidth = !empty($config->block->size[$module][$code]) ? reset(array_keys($config->block->size[$module][$code])) : 1;
-
+foreach(array_keys($blockSize) as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
+$defaultWidth = reset(array_keys($blockSize));
 row
 (
     set::id('blockCreateForm'),
