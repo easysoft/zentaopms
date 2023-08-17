@@ -1855,32 +1855,6 @@ class bugModel extends model
     }
 
     /**
-     * Print assigned html.
-     *
-     * @param  object $bug
-     * @param  array  $users
-     * @access public
-     * @return void
-     */
-    public function printAssignedHtml($bug, $users)
-    {
-        $btnTextClass   = '';
-        $btnClass       = '';
-        $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->assignToNull;
-        if(empty($bug->assignedTo)) $btnClass = $btnTextClass = 'assigned-none';
-        if($bug->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
-        if(!empty($bug->assignedTo) and $bug->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
-
-        $btnClass    .= $bug->assignedTo == 'closed' ? ' disabled' : '';
-        $btnClass    .= ' iframe btn btn-icon-left btn-sm';
-
-        $assignToLink = helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $bug->assignedTo) . "'>{$assignedToText}</span>", '', "class='$btnClass'");
-
-        echo !common::hasPriv('bug', 'assignTo', $bug) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
-    }
-
-    /**
      * Get toList and ccList.
      *
      * @param  object    $bug
