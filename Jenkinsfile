@@ -710,11 +710,11 @@ pipeline {
                                     [artifactId: 'ZenTaoPMS',
                                      classifier: 'zbox.win64',
                                      file: './release/zh-cn/' + Zversion + '/ZenTaoPMS-' + Zversion + '-zbox.win64.exe',
-                                     type: 'tar.gz'],
+                                     type: 'exe'],
                                     [artifactId: 'ZenTaoALM',
                                      classifier: 'zbox.win64',
                                      file: './release/en/' + Zversion + '/ZenTaoALM-' + Zversion + '-zbox.win64.exe',
-                                     type: 'tar.gz']
+                                     type: 'exe']
                                   ]
                                 )
                               } // End for loop
