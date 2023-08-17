@@ -945,7 +945,7 @@ class transferModel extends model
         $table = $this->config->objectTables[$object];
         if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();
 
-        if($object == 'build') $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
+        if($object == 'build') $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
 
         return $relatedObjects;
     }
