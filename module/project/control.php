@@ -733,7 +733,7 @@ class project extends control
     {
         $projects  = $this->project->getPairsByProgram();
         $projectID = $this->project->checkAccess($projectID, $projects);
-        if(is_bool($projectID)) return $this->sendError($this->lang->project->accessDenied, inLink('browse'));
+        if(is_bool($projectID)) return $this->send(array('result' => 'fail', 'message' => $this->lang->project->accessDenied, 'locate' => inlink('browse')));
 
         $this->loadModel('execution');
         $this->loadModel('task');
@@ -745,8 +745,8 @@ class project extends control
         $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
-        if(!$projectID) return print(js::locate($this->createLink('project', 'browse')));
-        if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return print(js::locate($this->createLink('project', 'index', "projectID=$projectID")));
+        if(!$projectID) return $this->send(array('result' => 'fail', 'locate' => inlink('browse')));
+        if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'locate' => inlink('index', "projectID=$projectID")));
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', true);
@@ -762,9 +762,9 @@ class project extends control
         $this->view->projects       = $projects;
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
-        $this->view->isStage        = isset($project->model) && ($project->model == 'waterfall' || $project->model == 'waterfallplus');
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->isStage        = isset($project->model) && (in_array($project->model, array('waterfall', 'waterfallplus')));
         $this->view->avatarList     = $this->user->getAvatarPairs('');
 
         $this->display();
