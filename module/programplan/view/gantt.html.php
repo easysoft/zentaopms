@@ -632,7 +632,7 @@ $(function()
     function getDeadlineBtn(task)
     {
         var date = task.deadline;
-        if(task.type == 'point' && canEditDeadline && (!task.rawStatus || task.rawStatus == 'fail' || task.rawStatus == 'draft')) return "<table><tr><td><span class='deadline'>" + gridDateToStr(new Date(date.valueOf() - 1)) + '</span> <a class="btn btn-primary editDeadline" title="<?php echo $lang->programplan->edit;?>"><i class="icon-common-edit icon-edit"></i> <?php echo $lang->programplan->edit;?></a></td></tr></table>';
+        if(task.type == 'point' && canEditDeadline && (!task.rawStatus || task.rawStatus == 'fail' || task.rawStatus == 'draft')) return "<table><tr><td><span class='deadline'>" + gridDateToStr(new Date(date.valueOf())) + '</span> <a class="btn btn-primary editDeadline" title="<?php echo $lang->programplan->edit;?>"><i class="icon-common-edit icon-edit"></i> <?php echo $lang->programplan->edit;?></a></td></tr></table>';
         return date;
     }
 
