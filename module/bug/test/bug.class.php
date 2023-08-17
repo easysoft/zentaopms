@@ -1359,4 +1359,20 @@ class bugTest
             return $idList;
         }
     }
+
+    /**
+     * 测试获取 bugs 统计信息。
+     * Test get the statistics of the bugs.
+     *
+     * @param  string $bugIdList
+     * @access public
+     * @return string
+     */
+    public function summaryTest(string $bugIdList): string
+    {
+        $bugs    = $this->objectModel->getByIdList($bugIdList);
+        if(empty($bugs)) $bugs = array();
+        $summary = $this->objectModel->summary($bugs);
+        return $summary;
+    }
 }

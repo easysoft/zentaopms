@@ -1909,12 +1909,16 @@ class bugModel extends model
      */
     public function summary(array $bugs): string
     {
+        /* 获取为解决的bug数量。 */
+        /* Get unresolved bug count. */
         $unresolved = 0;
         foreach($bugs as $bug)
         {
             if($bug->status != 'resolved' && $bug->status != 'closed') $unresolved ++;
         }
 
+        /* 返回bug的统计信息。 */
+        /* Return the statistics of the bugs. */
         return sprintf($this->lang->bug->notice->summary, count($bugs), $unresolved);
     }
 
