@@ -98,14 +98,15 @@ class projectModel extends model
 
         if(!isset($projects[$projectID]))
         {
-            $canView = strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false;
-            if(!$canView && !empty($projects))
+            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$projectID},") === false && !empty($projects))
             {
                 /* Redirect old project to new project. */
-                $newProjectID = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('project');
-                if(!$newProjectID || strpos(",{$this->app->user->view->projects},", ",{$newProjectID},") === false) return false;
-
-                $projectID = $newProjectID ? $newProjectID : (int)key($projects);
+                $projectID = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('project');
+                if(!$projectID || strpos(",{$this->app->user->view->projects},", ",{$projectID},") === false) return false;
+            }
+            else
+            {
+                $projectID = key($projects);
             }
         }
 
@@ -151,41 +152,6 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->fetchPairs('id', 'name');
-    }
-
-    /*
-     * Get project swapper.
-     *
-     * @param  int     $projectID
-     * @param  string  $currentModule
-     * @param  string  $currentMethod
-     * @access public
-     * @return string
-     */
-    public function getSwitcher($projectID, $currentModule, $currentMethod)
-    {
-        if($currentModule == 'project' and $currentMethod == 'browse') return;
-
-        $currentProjectName = $this->lang->project->common;
-        if($projectID)
-        {
-            $currentProject     = $this->getById($projectID);
-            $currentProjectName = zget($currentProject, 'name', '');
-        }
-
-        if($this->app->viewType == 'mhtml' and $projectID)
-        {
-            $output  = $this->lang->project->common . $this->lang->colon;
-            $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '')\">{$currentProjectName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-            return $output;
-        }
-
-        $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'><span class='text'>{$currentProjectName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
-
-        return $output;
     }
 
     /**
@@ -2359,37 +2325,28 @@ class projectModel extends model
      *
      * @param  int    $projectID
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function setMenu(int $projectID): int
+    public function setMenu(int $projectID): int|false
     {
-        global $lang;
-        $projectID = (empty($projectID) and $this->session->project) ? $this->session->project : $projectID;
-        $project   = $this->projectTao->fetchProjectInfo($projectID);
-        if($project && !isset($this->lang->project->executionList[$project->model]))
-        {
-            $project   = $this->projectTao->fetchProjectInfo($project->project);
-            $projectID = $project->project;
-        }
-
-        $model      = $project ? $project->model : '';
-        $hasProduct = $project ? $project->hasProduct : 0;
-        $this->projectTao->setMenuByModel($model);
-        $this->projectTao->setMenuByProduct($projectID, $hasProduct, $model);
-
-        /* Reset project priv. */
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
-        $this->loadModel('common')->resetProjectPriv($projectID);
-        if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
+        if(!$this->loadModel('common')->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
-        $lang->switcherMenu = $this->getSwitcher($projectID, $moduleName, $methodName);
+        $projectID = $this->checkAccess($projectID, $this->getPairsByProgram());
+        $project   = $this->projectTao->fetchProjectInfo($projectID);
+        if(!$project) return false;
 
-        $this->checkAccess($projectID, $this->getPairsByProgram());
-        if(isset($project->acl) and $project->acl == 'open') unset($lang->project->menu->settings['subMenu']->whitelist);
+        /* Reset project priv. */
+        $this->common->resetProjectPriv($projectID);
+        if($project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
+        /* Set secondary menu. */
+        $this->projectTao->setMenuByModel($project->model);
+        $this->projectTao->setMenuByProduct($projectID, $project->hasProduct, $project->model);
+
+        /* Replace url params. */
         common::setMenuVars('project', $projectID);
-
         $this->setNoMultipleMenu($projectID);
         return $projectID;
     }
