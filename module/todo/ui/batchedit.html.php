@@ -33,6 +33,7 @@ $fnGenerateCustomizedFields = function() use ($showFields, $customFields)
 
 jsVar('nameItems', $nameItems);
 jsVar('timeItems', $timeItems);
+jsVar('moduleList', $config->todo->moduleList);
 
 div
 (
@@ -71,7 +72,7 @@ formBatchPanel
     set::mode('edit'),
     set::data(array_values($editedTodos)),
     set::onRenderRow(jsRaw('renderRowData')),
-    on::change('[data-name="type"]', 'setNameCell'),
+    on::change('[data-name="type"]', 'changeType'),
     on::click('.time-check', "window.togglePending"),
     formBatchItem
     (

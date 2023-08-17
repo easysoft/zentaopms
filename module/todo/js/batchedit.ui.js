@@ -15,9 +15,10 @@ window.renderRowData = function($row, index, row)
             let $nameBox = $row.find('td[data-name="name"]');
             $nameBox.html("<div class='picker-box' id='name'></div>");
             data = {};
-            data.name  = 'name';
-            data.items = nameItems[row.type];
-            data.defaultValue  = row.objectID;
+            data.name         = 'name';
+            data.multiple     = false;
+            data.items        = nameItems[row.type];
+            data.defaultValue = row.objectID;
             $nameBox.find('#name').picker(data);
         }
     }
@@ -43,4 +44,24 @@ window.togglePending = function(e)
     {
         $(this).zui('picker').render({disabled: e.target.checked});
     });
-}
+};
+
+window.changeType = function(e)
+{
+    const type     = e.target.value;
+    const $tr      = $(e.target).closest('tr');
+    const index    = $tr.find('.form-control-static[data-name="id"]').text()
+    const $nameBox = $tr.find('[data-name="name"]');
+
+    if(moduleList.indexOf(type) !== -1)
+    {
+            items = nameItems[type];
+            $nameBox.html("<div class='picker-box' id='name'></div>");
+            $nameBox.find('#name').picker({items: items, name: 'name'});
+    }
+    else
+    {
+        $nameBox.html($('#nameInputBox').html());
+        $nameBox.find('input[name=name]').attr('name', 'name[' + index + ']').attr('id', 'name_' + index);
+    }
+};
