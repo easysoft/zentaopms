@@ -1,12 +1,13 @@
 <?php
 $config->project->form = new stdclass();
 
-$config->project->form->create   =  array();
-$config->project->form->edit     =  array();
-$config->project->form->close    =  array();
-$config->project->form->start    =  array();
-$config->project->form->suspend  =  array();
-$config->project->form->activate =  array();
+$config->project->form->create    =  array();
+$config->project->form->edit      =  array();
+$config->project->form->batchedit =  array();
+$config->project->form->close     =  array();
+$config->project->form->start     =  array();
+$config->project->form->suspend   =  array();
+$config->project->form->activate  =  array();
 
 $config->project->form->manageProducts = array();
 
@@ -36,3 +37,11 @@ $config->project->form->activate['begin']        = array('type' => 'date',   're
 $config->project->form->activate['end']          = array('type' => 'date',   'required' => true);
 $config->project->form->activate['readjustTime'] = array('type' => 'int',    'required' => false, 'default' => '');
 $config->project->form->activate['readjustTask'] = array('type' => 'array',  'required' => false, 'default' => '');
+
+$config->project->form->batchedit['parent']  = array('type' => 'int',    'required' => false);
+$config->project->form->batchedit['name']    = array('type' => 'string', 'required' => true, 'filter' => 'trim', 'base' => true);
+$config->project->form->batchedit['PM']      = array('type' => 'string', 'required' => false);
+$config->project->form->batchedit['begin']   = array('type' => 'date',   'required' => true);
+$config->project->form->batchedit['end']     = array('type' => 'date',   'required' => true);
+$config->project->form->batchedit['acl']     = array('type' => 'string', 'required' => false);
+if(isset($config->setCode) and $config->setCode == 1) $config->project->form->batchedit['code'] = array('type' => 'string', 'required' => true, 'filter' => 'trim');
