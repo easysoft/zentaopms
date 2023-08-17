@@ -156,43 +156,27 @@ $footToolbar = $canBatchAction ? array('items' => array
     $canBatchAssignTo ? array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $assignedToItems) : null,
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'primary')) : null;
 
-if(empty($bugs))
-{
-    panel
-    (
-        p
-        (
-            span($lang->bug->notice->noBug, set('class', 'text-gray')),
-            $canBeChanged && common::hasPriv('bug', 'create') ? a(icon('plus'), $lang->bug->create, set('href', createLink('bug', 'create', "productID={$product->id}&branch={$branch}&extra=moduleID=$currentModuleID"))) : null,
-        ),
-        setClass('text-center'),
-        setStyle('padding', '80px 10px'),
-    );
-}
-else
-{
-    $cols = $this->loadModel('datatable')->getSetting('bug');
-    if(isset($cols['branch']))    $cols['branch']['map']    = $branchTagOption;
-    if(isset($cols['project']))   $cols['project']['map']   = $projectPairs;
-    if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
+$cols = $this->loadModel('datatable')->getSetting('bug');
+if(isset($cols['branch']))    $cols['branch']['map']    = $branchTagOption;
+if(isset($cols['project']))   $cols['project']['map']   = $projectPairs;
+if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
 
-    if($product->type == 'normal') unset($cols['branch']);
+if($product->type == 'normal') unset($cols['branch']);
 
-    $bugs = initTableData($bugs, $cols, $this->bug);
+$bugs = initTableData($bugs, $cols, $this->bug);
 
-    dtable
-    (
-        set::cols($cols),
-        set::data(array_values($bugs)),
-        set::fixedLeftWidth('0.44'),
-        set::userMap($users),
-        set::customCols(true),
-        set::checkable($canBatchAction),
-        set::footToolbar($footToolbar),
-        set::footPager(usePager()),
-        set::onRenderCell(jsRaw('window.onRenderCell')),
-        set::modules($modulePairs)
-    );
-}
+dtable
+(
+    set::cols($cols),
+    set::data(array_values($bugs)),
+    set::fixedLeftWidth('0.44'),
+    set::userMap($users),
+    set::customCols(true),
+    set::checkable($canBatchAction),
+    set::footToolbar($footToolbar),
+    set::footPager(usePager()),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::modules($modulePairs)
+);
 
 render();
