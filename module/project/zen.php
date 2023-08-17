@@ -1152,6 +1152,28 @@ class projectZen extends project
     }
 
     /**
+     * 构造用户键值对和列表。
+     * Build user pairs and user list.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildUsers(): array
+    {
+        $userList  = array();
+        $userPairs = array();
+        $users     = $this->loadModel('user')->getList('all');
+
+        foreach($users as $user)
+        {
+            $userList[$user->account]  = $user;
+            $userPairs[$user->account] = $user->realname;
+        }
+
+        return array($userPairs, $userList);
+    }
+
+    /**
      * 格式化导出的项目数据。
      * Format the export project data.
      *

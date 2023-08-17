@@ -562,11 +562,6 @@ class project extends control
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getById($projectID);
 
-        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
-        {
-            $programList = array_filter(explode(',', trim($project->path, ',')));
-            $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
-        }
         if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
@@ -587,24 +582,8 @@ class project extends control
         $this->app->loadClass('pager', true);
         $pager = new pager(0, 30, 1);
 
-        /* Check exist extend fields. */
-        $isExtended = false;
-        if($this->config->edition != 'open')
-        {
-            $extend = $this->loadModel('workflowaction')->getByModuleAndAction('project', 'view');
-            if(!empty($extend) and $extend->extensionType == 'extend') $isExtended = true;
-        }
-
         $this->executeHooks($projectID);
-
-        $userList  = array();
-        $userPairs = array();
-        $users     = $this->loadModel('user')->getList('all');
-        foreach($users as $user)
-        {
-            $userList[$user->account]  = $user;
-            $userPairs[$user->account] = $user->realname;
-        }
+        list($userPairs, $userList) = $this->projectZen->buildUsers();
 
         $this->view->title        = $this->lang->project->view;
         $this->view->projectID    = $projectID;
@@ -617,7 +596,7 @@ class project extends control
         $this->view->planGroup    = $this->loadModel('execution')->getPlans($products);
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
-        $this->view->isExtended   = $isExtended;
+        $this->view->programList  = $this->loadModel('program')->getPairsByList($project->path);
         $this->view->users        = $userPairs;
         $this->view->userList     = $userList;
 
