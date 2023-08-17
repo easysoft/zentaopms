@@ -912,37 +912,6 @@ class bugZen extends bug
     }
 
     /**
-     * 设置导出数据源。
-     * Set export data source.
-     *
-     * @param  int       $productID
-     * @param  string    $browseType
-     * @param  int       $executionID
-     * @access protected
-     * @return bool
-     */
-    protected function setExportDataSource(int $productID, string $browseType, int $executionID): bool
-    {
-        if(!$productID or $browseType == 'bysearch')
-        {
-            /* Set module data source. */
-            $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
-            $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
-
-            /* In execution, set data source. */
-            if($executionID)
-            {
-                $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-                $projectID = $object->type == 'project' ? $object->id : $object->parent;
-                $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
-                $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * 处理列表页面的参数。
      * Processing browse params.
      *

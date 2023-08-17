@@ -587,16 +587,40 @@ class bug extends control
     {
         if($_POST)
         {
+            /* 设置bug导出的参数。 */
+            /* Set bug export params. */
             $this->session->set('bugTransferParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
 
-            $this->bugZen->setExportDataSource($productID, $browseType, $executionID);
+            /* 设置导出数据源。 */
+            /* Set export data source. */
+            if(!$productID || $browseType == 'bysearch')
+            {
+                /* 设置模块数据源。 */
+                /* Set module data source. */
+                $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+                $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
+
+                /* 如果导出执行的bug，设置数据源。 */
+                /* In execution, set data source. */
+                if($executionID)
+                {
+                    $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+                    $projectID = $object->type == 'project' ? $object->id : $object->parent;
+                    $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
+                    $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
+                }
+            }
 
             $this->loadModel('transfer')->export('bug');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        /* 获取产品信息。 */
+        /* Get product information. */
         $product = $this->loadModel('product')->getByID($productID);
 
+        /* 展示相关变量。 */
+        /* Show the variables associated. */
         $this->view->fileName        = $this->bugZen->getExportFileName($executionID, $browseType, $product);
         $this->view->allExportFields = $this->bugZen->getExportFields($executionID, $product);
         $this->view->customExport    = true;
