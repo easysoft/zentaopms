@@ -7,7 +7,7 @@ fields:
   - field: project
     range: 0{10},1-10{100!}
   - field: model
-    range: "[]{10},scrum{30},waterfall{30},kanban{30}"
+    range: "[]{10},[scrum,waterfall,kanban,agileplus,waterfallplus]{30!}"
   - field: name
     note: "名称"
     fields:
