@@ -162,9 +162,8 @@ $(document).on('change', 'select', function()
 
 function loadStories2(productID, moduleID, num)
 {
-    var branchIDName = (config.currentMethod == 'batchcreate' || config.currentMethod == 'showimport') ? '#branch' : '#branches';
-    var branchID     = $(branchIDName + num).val();
-    var storyLink    = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&objectID=0&number=' + num);
+    var branch    = $('#branches' + num).val();
+    var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&objectID=0&number=' + num);
     $.get(storyLink, function(stories)
     {
         if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
@@ -191,8 +190,8 @@ function loadStories2(productID, moduleID, num)
         }
     });
 
-    branch = 0;
-    link = createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&number=' + num);
+    const sceneID = $('#scene' + num).val();
+    const link = createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&element=scene&sceneID=' + sceneID + '&number=' + num);
     $.get(link, function(scenes){
         if(!scenes) scenes = '<select id="scene' + num + '" name="scene[' + num + ']" class="form-control"></select>';
         if(config.currentMethod == 'batchcreate')
