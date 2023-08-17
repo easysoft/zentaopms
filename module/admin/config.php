@@ -15,7 +15,7 @@ $config->admin->menuGroup['message']   = array('mail', 'webhook', 'sms', 'messag
 $config->admin->menuGroup['dev']       = array('dev', 'entry', 'editor');
 $config->admin->menuGroup['extension'] = array('extension');
 $config->admin->menuGroup['convert']   = array('convert');
-$config->admin->menuGroup['platform']  = array('system', 'repo', 'account', 'host', 'serverroom', 'ops', 'tree');
+$config->admin->menuGroup['platform']  = array('system', 'repo', 'account', 'host', 'serverroom', 'ops', 'tree', 'domain', 'deploy', 'service');
 
 $config->admin->menuModuleGroup['model']['custom|set']        = array('project', 'issue', 'risk', 'opportunity', 'nc');
 $config->admin->menuModuleGroup['model']['custom|required']   = array('project', 'build');

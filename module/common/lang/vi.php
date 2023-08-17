@@ -229,12 +229,28 @@ $lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subMod
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
 
-$lang->devops->compile  = 'Pipelines';
-$lang->devops->mr       = 'Merge Request';
-$lang->devops->repo     = 'Repo';
-$lang->devops->rules    = 'Rule';
-$lang->devops->settings = 'Setting Merge Request';
-$lang->devops->set      = 'Set';
+$lang->devops->compile     = 'Pipelines';
+$lang->devops->mr          = 'Merge Request';
+$lang->devops->repo        = 'Repo';
+$lang->devops->rules       = 'Rule';
+$lang->devops->settings    = 'Setting Merge Request';
+$lang->devops->platform    = 'Platform';
+$lang->devops->set         = 'Set';
+$lang->devops->WIPs        = 'WIPs';
+$lang->devops->environment = 'Environment';
+$lang->devops->resource    = 'Resource';
+$lang->devops->dblist      = 'Database';
+$lang->devops->domain      = 'Domain';
+$lang->devops->oss         = 'Oss';
+$lang->devops->host        = 'Host';
+$lang->devops->account     = 'Account';
+$lang->devops->serverroom  = 'IDC';
+$lang->devops->deploy      = 'Deploy';
+$lang->devops->service     = 'Service';
+$lang->devops->provider    = 'IDC Provider';
+$lang->devops->cpuBrand    = 'CPU Brand';
+$lang->devops->city        = 'IDC Location';
+$lang->devops->os          = 'OS Version';
 
 $lang->searchTips = '';
 $lang->searchAB   = 'Tìm ki?m';
