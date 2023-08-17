@@ -1044,13 +1044,14 @@ class task extends control
     }
 
     /**
+     * 禅道客户端获取任务动态。
      * AJAX: get the actions of a task. for web app.
      *
      * @param  int    $taskID
      * @access public
      * @return void
      */
-    public function ajaxGetDetail($taskID)
+    public function ajaxGetDetail(int $taskID)
     {
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
         $this->display();
