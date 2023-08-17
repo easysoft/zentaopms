@@ -1341,6 +1341,7 @@ class bug extends control
     }
 
     /**
+     * AJAX: 获取产品的团队成员。
      * Ajax get product members.
      *
      * @param  int    $productID
