@@ -553,7 +553,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function view($projectID = 0)
+    public function view(int $projectID = 0)
     {
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
         if(is_bool($projectID)) return $this->send(array('result' => 'fail', 'message' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse')));
@@ -611,7 +611,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function group($projectID = 0, $programID = 0)
+    public function group(int $projectID = 0, int $programID = 0)
     {
         $this->loadModel('group');
         $this->project->setMenu($projectID);
@@ -626,7 +626,7 @@ class project extends control
             foreach($groupUsers as $realname) $group->users .= $realname . ' ';
         }
 
-        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
+        $this->view->title      = $this->lang->group->browse;
         $this->view->groups     = $groups;
         $this->view->project    = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $this->view->projectID  = $projectID;
