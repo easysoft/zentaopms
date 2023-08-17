@@ -1271,22 +1271,6 @@ class bug extends control
     }
 
     /**
-     * Ajax get bug by ID.
-     *
-     * @param  int    $bugID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetByID(int $bugID)
-    {
-        $bug      = $this->bug->getBaseInfo($bugID);
-        $realname = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($bug->assignedTo)->fetch('realname');
-        $bug->assignedTo = $realname ? $realname : $bug->assignedTo;
-
-        return print(json_encode($bug));
-    }
-
-    /**
      * Ajax 方式获取产品下拉菜单。
      * Drop menu page.
      *
