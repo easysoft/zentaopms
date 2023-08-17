@@ -130,6 +130,9 @@
   {
     parent.$.zui.closeModal();
 
+    $('body', window.parent.document).attr('data-loading', '<?php echo $lang->ai->execute->loading;?>');
+    $('body', window.parent.document).addClass('load-indicator loading');
+
     let link = createLink('ai', 'promptexecute', 'promptId=' + promptId + '&objectId=' + objectId);
     link = link.replace('onlybody=yes', '');
     const aTag = document.createElement('a');
