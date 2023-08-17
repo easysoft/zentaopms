@@ -482,10 +482,10 @@ class project extends control
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => 'parent'));
 
             $locateLink = ($this->session->projectList and $from != 'view') ? $this->session->projectList : inLink('view', "projectID=$projectID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
         }
 
         $this->projectZen->buildEditForm($projectID, $project);
@@ -504,7 +504,9 @@ class project extends control
 
         if($this->post->name)
         {
-            $allChanges = $this->project->batchUpdate();
+            $projects = form::batchData($this->config->project->form->batchedit)->get();
+
+            $allChanges = $this->project->batchUpdate($projects);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($allChanges))
@@ -518,10 +520,10 @@ class project extends control
                 }
             }
             $locateLink = $this->session->projectList;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
         }
 
-        if(!$this->post->projectIdList) return print(js::locate($this->session->projectList, 'parent'));
+        if(!$this->post->projectIdList) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->projectList));
         $projectIdList = $this->post->projectIdList;
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
@@ -533,14 +535,13 @@ class project extends control
             if(!isset($programs[$project->parent]) and !in_array($project->parent, $unauthorizedIDList)) $unauthorizedIDList[] = $project->parent;
             $appendPMUsers[$project->PM] = $project->PM;
         }
-        $unauthorizedPrograms = $this->program->getPairsByList($unauthorizedIDList);
 
         $this->view->title = $this->lang->project->batchEdit;
 
         $this->view->projects             = $projects;
         $this->view->programs             = $programs;
-        $this->view->unauthorizedPrograms = $unauthorizedPrograms;
-        $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $appendPMUsers);
+        $this->view->unauthorizedPrograms = $this->program->getPairsByList($unauthorizedIDList);
+        $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst', $appendPMUsers);
 
         $this->display();
     }
@@ -558,7 +559,6 @@ class project extends control
         if(is_bool($projectID)) return $this->sendError($this->lang->project->accessDenied, inLink('browse'));
 
         $this->session->set('teamList', $this->app->getURI(true), 'project');
-
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getById($projectID);
 

@@ -302,16 +302,16 @@ class projectZen extends project
      */
     protected function buildEditForm(int $projectID, object $project): void
     {
-        $productPlans        = array();
-        $linkedBranchList    = array();
-        $parentProject       = $this->loadModel('program')->getByID($project->parent);
-        $projectStories      = $this->project->getStoriesByProject($projectID);
-        $branches            = $this->project->getBranchesByProject($projectID);
-        $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
-        $projectBranches     = $this->project->getBranchGroup($projectID, array_keys($linkedProducts));
-        $plans               = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
-        $withProgram         = $this->config->systemMode == 'ALM';
-        $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
+        $productPlans     = array();
+        $linkedBranchList = array();
+        $parentProject    = $this->loadModel('program')->getByID($project->parent);
+        $projectStories   = $this->project->getStoriesByProject($projectID);
+        $branches         = $this->project->getBranchesByProject($projectID);
+        $linkedProducts   = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
+        $projectBranches  = $this->project->getBranchGroup($projectID, array_keys($linkedProducts));
+        $plans            = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
+        $withProgram      = $this->config->systemMode == 'ALM';
+        $allProducts      = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
 
         $unmodifiableProducts     = array();
         $unmodifiableMainBranches = array();
@@ -346,7 +346,7 @@ class projectZen extends project
             }
         }
 
-        $this->view->title      = $this->lang->project->edit;
+        $this->view->title = $this->lang->project->edit;
 
         $this->view->PMUsers                  = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
         $this->view->users                    = $this->user->getPairs('noclosed|nodeleted');

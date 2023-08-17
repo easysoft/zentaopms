@@ -605,7 +605,7 @@ class projectModel extends model
      * Get project pairs by programID.
      *
      * @param  int          $programID
-     * @param  string       $status    all|wait|doing|suspended|closed|noclosed
+     * @param  string       $status    all|wait|doing|suspended|closed|noclosed|noprogram
      * @param  bool         $isQueryAll
      * @param  string       $orderBy
      * @param  string       $excludedModel
@@ -623,7 +623,7 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!empty($programID))->andWhere('path')->like("%,$programID,%")->fi()
-            ->beginIF($programID === 0)->andWhere('parent')->eq(0)->fi()
+            ->beginIF($programID === 0 && $status == 'noprogram')->andWhere('parent')->eq(0)->fi()
             ->beginIF($status != 'all' && $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->in($model)->fi()
@@ -1427,40 +1427,38 @@ class projectModel extends model
     /**
      * Batch update projects.
      *
+     * @param  array  $data
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function batchUpdate()
+    public function batchUpdate(array $data): array|false
     {
         $projects     = array();
         $allChanges   = array();
-        $data         = fixer::input('post')->get();
-        $oldProjects  = $this->getByIdList($this->post->id);
+        $oldProjects  = $this->getByIdList(array_keys($data));
         $extendFields = $this->getFlowExtendFields();
-        foreach($data->id as $projectID)
+        foreach($data as $projectID => $project)
         {
-            $projectID   = (int)$projectID;
-            $projectName = $data->name[$projectID];
-            if(isset($data->code)) $projectCode = $data->code[$projectID];
+            $projectID = (int)$projectID;
 
             $projects[$projectID] = new stdClass();
-            if(isset($data->parent[$projectID])) $projects[$projectID]->parent = $data->parent[$projectID];
             $projects[$projectID]->id             = $projectID;
-            $projects[$projectID]->name           = $projectName;
+            $projects[$projectID]->name           = $project->name;
             $projects[$projectID]->model          = $oldProjects[$projectID]->model;
-            $projects[$projectID]->PM             = $data->PM[$projectID];
-            $projects[$projectID]->begin          = $data->begin[$projectID];
-            $projects[$projectID]->end            = $data->end[$projectID] == $this->lang->project->longTime ? LONG_TIME : $data->end[$projectID];
-            $projects[$projectID]->acl            = $data->acl[$projectID];
+            $projects[$projectID]->PM             = $project->PM;
+            $projects[$projectID]->begin          = $project->begin;
+            $projects[$projectID]->end            = $project->end == $this->lang->project->longTime ? LONG_TIME : $project->end;
+            $projects[$projectID]->acl            = $project->acl;
             $projects[$projectID]->lastEditedBy   = $this->app->user->account;
             $projects[$projectID]->lastEditedDate = helper::now();
 
-            if(isset($data->code)) $projects[$projectID]->code = $projectCode;
-            if($data->end[$projectID] == $this->lang->project->longTime) $projects[$projectID]->days = 0;
+            if(isset($project->parent)) $projects[$projectID]->parent = $project->parent;
+            if(isset($project->code))   $projects[$projectID]->code   = $project->code;
+            if($project->end == $this->lang->project->longTime) $projects[$projectID]->days = 0;
 
             foreach($extendFields as $extendField)
             {
-                $projects[$projectID]->{$extendField->field} = $this->post->{$extendField->field}[$projectID];
+                $projects[$projectID]->{$extendField->field} = $project->{$extendField->field};
                 if(is_array($projects[$projectID]->{$extendField->field})) $projects[$projectID]->{$extendField->field} = implode(',', $projects[$projectID]->{$extendField->field});
 
                 $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
@@ -1476,17 +1474,7 @@ class projectModel extends model
             $oldProject = $oldProjects[$projectID];
             $parentID   = !isset($project->parent) ? $oldProject->parent : $project->parent;
 
-            $this->dao->update(TABLE_PROJECT)->data($project)
-                ->autoCheck('begin,end')
-                ->batchCheck($this->config->project->edit->requiredFields, 'notempty')
-                ->checkIF($project->begin != '', 'begin', 'date')
-                ->checkIF($project->end != '', 'end', 'date')
-                ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = '{$project->model}' and `deleted` = '0'")
-                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = '{$project->model}' and `deleted` = '0'")
-                ->checkFlow()
-                ->where('id')->eq($projectID)
-                ->exec();
+            $this->projectTao->doUpdate($projectID, $project);
 
             if(dao::isError())
             {
@@ -1498,6 +1486,7 @@ class projectModel extends model
 
             if(!dao::isError())
             {
+                /* 无产品项目信息变更后更新影子产品的相关字段. */
                 if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
 
                 if(isset($project->parent))
@@ -1516,6 +1505,7 @@ class projectModel extends model
             }
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }
+
         return $allChanges;
     }
 

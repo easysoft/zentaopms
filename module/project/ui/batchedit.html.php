@@ -35,7 +35,7 @@ formBatchPanel
     (
         set::name('parent'),
         set::label($lang->project->program),
-        set::control('select'),
+        set::control('picker'),
         set::items($programs),
         set::width('128px'),
     ),
