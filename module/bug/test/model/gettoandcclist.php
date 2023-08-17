@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php'; su('admin');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
 
 zdTable('bug')->gen(82);
@@ -10,6 +10,20 @@ zdTable('bug')->gen(82);
 title=bugModel->getToAndCcList();
 cid=1
 pid=1
+
+- 测试获取bug1的联系人 @admin,admin
+
+
+- 测试获取bug2的联系人 @admin,admin
+
+
+- 测试获取bug3的联系人 @admin,admin
+
+
+- 测试获取bug51的联系人 @dev1,admin
+
+
+- 测试获取bug81的联系人 @test1,admin,admin
 
 */
 
