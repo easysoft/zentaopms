@@ -426,7 +426,7 @@ class task extends control
             $effort = $this->buildEffortForStart($task, $taskData);
             if($this->post->comment) $effort->work = $this->post->comment;
             if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
-            if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
+            if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEffortOrder($effortID, $currentTeam->order);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Start a task. */
@@ -544,6 +544,7 @@ class task extends control
     }
 
     /**
+     * 完成任务操作。
      * Finish a task.
      *
      * @param  int    $taskID
@@ -557,7 +558,7 @@ class task extends control
         parse_str($extra, $output);
 
         $this->taskZen->commonAction($taskID);
-        $task        = $this->task->getById($taskID);
+        $task        = $this->view->task;
         $currentTeam = !empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
 
         if(!empty($_POST))
@@ -566,10 +567,9 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Get and record esitimate for task. */
-            $effort = $this->buildEffortForFinish($task, $taskData);
-            if($this->post->comment) $effort->work = $this->post->comment;
+            $effort = $this->taskZen->buildEffortForFinish($task, $taskData);
             if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
-            if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
+            if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEffortOrder($effortID, $currentTeam->order);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = $this->task->finish($task, $taskData);
@@ -677,7 +677,7 @@ class task extends control
             $effort = $this->taskZen->buildEffortForStart($task, $taskData);
             if($this->post->comment) $effort->work = $this->post->comment;
             if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
-            if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
+            if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEffortOrder($effortID, $currentTeam->order);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Restart a task. */
