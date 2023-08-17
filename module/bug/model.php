@@ -1864,13 +1864,14 @@ class bugModel extends model
     }
 
     /**
+     * 获取指派用户和抄送给用户列表。
      * Get toList and ccList.
      *
-     * @param  object    $bug
+     * @param  object      $bug
      * @access public
-     * @return bool|array
+     * @return array|false
      */
-    public function getToAndCcList($bug)
+    public function getToAndCcList(object $bug): array|false
     {
         /* Set toList and ccList. */
         $toList = $bug->assignedTo ? $bug->assignedTo : '';

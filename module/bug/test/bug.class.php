@@ -1166,13 +1166,14 @@ class bugTest
     }
 
     /**
+     * 测试 获取指派用户和抄送给用户列表。
      * Test get toList and ccList.
      *
      * @param  int    $bugID
      * @access public
-     * @return string
+     * @return string|string
      */
-    public function getToAndCcListTest($bugID)
+    public function getToAndCcListTest(int $bugID): array|string
     {
         $bug   = $this->objectModel->getByID($bugID);
         $array = $this->objectModel->getToAndCcList($bug);

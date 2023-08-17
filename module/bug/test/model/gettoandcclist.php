@@ -13,7 +13,7 @@ pid=1
 
 */
 
-$bugIDList = array('1', '2', '3', '51', '81');
+$bugIDList = array(1, 2, 3, 51, 81);
 
 $bug=new bugTest();
 r($bug->getToAndCcListTest($bugIDList[0])) && p() && e('admin,admin');       // 测试获取bug1的联系人
