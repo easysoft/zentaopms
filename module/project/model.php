@@ -170,7 +170,7 @@ class projectModel extends model
         if($projectID)
         {
             $currentProject     = $this->getById($projectID);
-            $currentProjectName = $currentProject->name;
+            $currentProjectName = zget($currentProject, 'name', '');
         }
 
         if($this->app->viewType == 'mhtml' and $projectID)
@@ -2366,14 +2366,16 @@ class projectModel extends model
         global $lang;
         $projectID = (empty($projectID) and $this->session->project) ? $this->session->project : $projectID;
         $project   = $this->projectTao->fetchProjectInfo($projectID);
-        if($project->project)
+        if($project && !isset($this->lang->project->executionList[$project->model]))
         {
             $project   = $this->projectTao->fetchProjectInfo($project->project);
             $projectID = $project->project;
         }
 
-        $this->projectTao->setMenuByModel($project->model);
-        $this->projectTao->setMenuByProduct($project->id, $project->hasProduct, $project->model);
+        $model      = $project ? $project->model : '';
+        $hasProduct = $project ? $project->hasProduct : 0;
+        $this->projectTao->setMenuByModel($model);
+        $this->projectTao->setMenuByProduct($projectID, $hasProduct, $model);
 
         /* Reset project priv. */
         $moduleName = $this->app->rawModule;
