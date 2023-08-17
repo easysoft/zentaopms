@@ -259,11 +259,11 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
                 'id' => 'batchUnlinkStory'
             ),
             /* Module button. */
-            array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? '' : 'hidden', 'items' => $moduleItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
+            array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? 'secondary' : 'hidden', 'items' => $moduleItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
             /* Plan button. */
-            array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? '' : 'hidden', 'items' => $planItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
+            array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? 'secondary' : 'hidden', 'items' => $planItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
             /* AssignedTo button. */
-            array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'items' => $assignItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
+            array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? 'secondary' : 'hidden'), 'items' => $assignItems, 'type' => 'dropdown', 'data-placement' => 'top-start'),
             /* Batch import to lib button .*/
             !$canBatchImportToLib ? null : array('text' => $lang->story->importToLib, 'className' => 'btn secondary', 'id' => 'importToLib', 'data-toggle' => 'modal', 'url' => '#batchImportToLib'),
         )
