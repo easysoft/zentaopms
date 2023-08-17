@@ -90,6 +90,9 @@ class actionModel extends model
         /* Add index for global search. */
         $this->saveIndex($objectType, $objectID, $actionType);
 
+        $changeFunc = 'after' . ucfirst($objectType);
+        if(method_exists($this, $changeFunc)) call_user_func_array(array($this, $changeFunc), array($action, $actionID));
+
         return $actionID;
     }
 
@@ -906,6 +909,13 @@ class actionModel extends model
                 $change['action'] = $actionID;
             }
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
+        }
+
+        if(isset($this->session->calllbackActionList[$actionID]))
+        {
+            $callbackMethod = $this->session->calllbackActionList[$actionID];
+            unset($this->session->calllbackActionList[$actionID]);
+            if(method_exists($this, $callbackMethod)) call_user_func_array(array($this, $callbackMethod), array($actionID));
         }
     }
 
