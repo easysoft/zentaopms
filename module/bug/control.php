@@ -1410,6 +1410,8 @@ class bug extends control
      */
     public function ajaxGetExecutionLang(int $projectID)
     {
+        /* 获取项目信息，返回执行的语言项。 */
+        /* Get project information and then return language item of the execution. */
         $project = $this->loadModel('project')->getByID($projectID);
         return $project->model == 'kanban' ? print($this->lang->bug->kanban) : print($this->lang->bug->execution);
     }
