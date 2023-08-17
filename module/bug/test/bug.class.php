@@ -1143,14 +1143,14 @@ class bugTest
     /**
      * Test link bug to build and release.
      *
-     * @param  array  $bugIDList
-     * @param  int    $resolvedBuild
+     * @param  int        $bugID
+     * @param  int|string $resolvedBuild
      * @access public
-     * @return object
+     * @return object|array|bool
      */
-    public function linkBugToBuildTest($bugIDList, $resolvedBuild)
+    public function linkBugToBuildTest(int $bugID, int|string $resolvedBuild): array|object|bool
     {
-        $this->objectModel->linkBugToBuild($bugIDList, $resolvedBuild);
+        $this->objectModel->linkBugToBuild($bugID, $resolvedBuild);
 
         global $tester;
         $release = $tester->dao->select('id,bugs')->from(TABLE_RELEASE)->where('build')->eq($resolvedBuild)->andWhere('deleted')->eq('0')->fetch();

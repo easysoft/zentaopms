@@ -1786,26 +1786,31 @@ class bugModel extends model
     /**
      * Link bug to build and release
      *
-     * @param  string|array    $bugs
-     * @param  int    $resolvedBuild
+     * @param  int        $bugID
+     * @param  int|string $resolvedBuild
      * @access public
      * @return bool
      */
-    public function linkBugToBuild($bugs, $resolvedBuild)
+    public function linkBugToBuild(int $bugID, int|string $resolvedBuild): bool
     {
-        if(empty($resolvedBuild) or $resolvedBuild == 'trunk') return true;
-        if(is_array($bugs)) $bugs = implode(',', $bugs);
+        /* 如果版本为空，或者版本为主干，返回。 */
+        /* If resolved build is empty or resolved build is trunk, return true. */
+        if(empty($resolvedBuild) || $resolvedBuild == 'trunk') return true;
 
+        /* 获取版本信息，并且将bugs关联到版本。 */
+        /* Get build information, and relate the bugs to the build. */
         $build     = $this->dao->select('id,product,bugs')->from(TABLE_BUILD)->where('id')->eq($resolvedBuild)->fetch();
-        $buildBugs = $build->bugs . ',' . $bugs;
+        $buildBugs = $build->bugs . ',' . $bugID;
         $buildBugs = explode(',', trim($buildBugs, ','));
         $buildBugs = array_unique($buildBugs);
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq(implode(',', $buildBugs))->where('id')->eq($resolvedBuild)->exec();
 
+        /* 将bugs关联到版本关联的发布。 */
+        /* Relate bugs to the build-related release. */
         $release = $this->dao->select('id,bugs')->from(TABLE_RELEASE)->where('product')->eq($build->product)->andWhere("(FIND_IN_SET('$resolvedBuild', build) or shadow = $resolvedBuild)")->andWhere('deleted')->eq('0')->fetch();
         if($release)
         {
-            $releaseBugs = $release->bugs . ',' . $bugs;
+            $releaseBugs = $release->bugs . ',' . $bugID;
             $releaseBugs = explode(',', trim($releaseBugs, ','));
             $releaseBugs = array_unique($releaseBugs);
             $this->dao->update(TABLE_RELEASE)->set('bugs')->eq(implode(',', $releaseBugs))->where('id')->eq($release->id)->exec();

@@ -18,17 +18,16 @@ pid=1
 
 */
 
-$bugIDList1 = array('1', '2');
-$bugIDList2 = array('3', '4');
-$bugIDList3 = array('5', '6');
-$bugIDList4 = array('7', '8');
-$bugIDList5 = array('9', '10');
+$bugIDList = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-$buildList = array('1', '3', '5');
+$buildList = array(1, 3, 5, 'trunk', 0, '');
 
 $bug = new bugTest();
-r($bug->linkBugToBuildTest($bugIDList1, $buildList[0])) && p('bugs', '-')  && e('1,2');   // 把bug 1 2关联到build 1
-r($bug->linkBugToBuildTest($bugIDList2, $buildList[1])) && p('bugs', '-')  && e('3,4');   // 把bug 3 4关联到build 3
-r($bug->linkBugToBuildTest($bugIDList3, $buildList[2])) && p('bugs', '-')  && e('5,6');   // 把bug 5 6关联到build 5
-r($bug->linkBugToBuildTest($bugIDList4, $buildList[0])) && p('bugs', '-')  && e('1,2,7,8');   // 把bug 5 6关联到build 1
-r($bug->linkBugToBuildTest($bugIDList5, $buildList[0])) && p('bugs', '-')  && e('1,2,7,8,9,10');   // 把bug 5 6关联到build 1
+r($bug->linkBugToBuildTest($bugIDList[0], $buildList[0])) && p('bugs', '-')  && e('1');     // 把bug 1关联到build 1
+r($bug->linkBugToBuildTest($bugIDList[1], $buildList[1])) && p('bugs', '-')  && e('2');     // 把bug 2关联到build 3
+r($bug->linkBugToBuildTest($bugIDList[2], $buildList[2])) && p('bugs', '-')  && e('3');     // 把bug 3关联到build 5
+r($bug->linkBugToBuildTest($bugIDList[3], $buildList[0])) && p('bugs', '-')  && e('1,4');   // 把bug 4 关联到build 1
+r($bug->linkBugToBuildTest($bugIDList[4], $buildList[0])) && p('bugs', '-')  && e('1,4,5'); // 把bug 5 关联到build 1
+r($bug->linkBugToBuildTest($bugIDList[5], $buildList[3])) && p('bugs', '-')  && e('0');     // 把bug 6 关联到build trunk
+r($bug->linkBugToBuildTest($bugIDList[6], $buildList[4])) && p('bugs', '-')  && e('0');     // 把bug 7 关联到build 0
+r($bug->linkBugToBuildTest($bugIDList[7], $buildList[5])) && p('bugs', '-')  && e('0');     // 把bug 8 关联到build ''
