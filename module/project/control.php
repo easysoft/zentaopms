@@ -691,10 +691,10 @@ class project extends control
             $user = $this->loadModel('user')->getById($param, 'account');
             if($user) $account = $user->account;
         }
+
         $period  = $type == 'account' ? 'all'  : $type;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
         $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', $projectID, 'all', $date, $direction);
-        if(empty($recTotal)) $recTotal = count($actions);
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);
@@ -712,7 +712,7 @@ class project extends control
         $this->view->param      = $param;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
         $this->view->direction  = $direction;
-        $this->view->recTotal   = $recTotal;
+        $this->view->recTotal   = $pager->recTotal;
         $this->display();
     }
 
