@@ -1315,15 +1315,21 @@ class bug extends control
      */
     public function ajaxGetDropMenu(int $productID, string $module, string $method, string $extra = '')
     {
+        /* 如果extra不为空，通过extra获取产品。 */
+        /* IF extra is not empty, get products by extra. */
         $products = array();
         if(!empty($extra)) $products = $this->product->getProducts($extra, 'all', 'program desc, line desc, ');
 
+        /* 如果当前系统模式是全生命周期管理模式，设置项目集和产品线信息。 */
+        /* If system mode is ALM, show programs and product lines. */
         if($this->config->systemMode == 'ALM')
         {
             $this->view->programs = $this->loadModel('program')->getPairs(true);
             $this->view->lines    = $this->product->getLinePairs();
         }
 
+        /* 设置要展示的相关变量。 */
+        /* Show the variables associated. */
         $this->view->productID = $productID;
         $this->view->module    = $module;
         $this->view->method    = $method;
