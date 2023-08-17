@@ -2759,25 +2759,6 @@ class executionTest
     /**
      * Test print nested list.
      *
-     * @param  int    $projectID
-     * @access public
-     * @return string
-     */
-    public function printNestedListTest($projectID = 0)
-    {
-        $executions = $this->executionModel->getStatData($projectID);
-
-        global $app;
-        $app->moduleName = 'execution';
-        ob_start();
-        $this->executionModel->printNestedList($executions[0], false, array(), 1);
-        $result = ob_get_clean();
-        return mb_substr(strip_tags($result), 0, 2);
-    }
-
-    /**
-     * Test print nested list.
-     *
      * @param  int    $executionID
      * @access public
      * @return string

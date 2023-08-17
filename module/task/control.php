@@ -988,53 +988,6 @@ class task extends control
     }
 
     /**
-     * 获取执行列表中的任务信息。
-     * Ajax get tasks for execution list.
-     *
-     * @param  int    $executionID
-     * @param  int    $maxTaskID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetTasks(int $executionID, int $maxTaskID = 0)
-    {
-        $this->loadModel('task');
-        $this->loadModel('execution');
-        $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-
-        $tasks = $this->dao->select('*')->from(TABLE_TASK)
-            ->where('deleted')->eq('0')
-            ->andWhere('status')->notin('closed,cancel')
-            ->andWhere('parent')->le('0')
-            ->andWhere('execution')->eq($executionID)
-            ->andWhere('id')->gt($maxTaskID)
-            ->orderBy('id_asc')
-            ->limit(50)
-            ->fetchAll('id');
-
-        if(empty($tasks)) return print('');
-
-        $parentGroup = $this->dao->select('*')->from(TABLE_TASK)
-            ->where('parent')->in(array_keys($tasks))
-            ->andWhere('parent')->gt('0')
-            ->andWhere('deleted')->eq('0')
-            ->fetchGroup('parent', 'id');
-
-        $users = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        foreach($tasks as $taskID => $task) $tasks[$taskID]->children = isset($parentGroup[$taskID]) ? $parentGroup[$taskID] : array();
-
-        $list  = '';
-        $count = count($tasks);
-        foreach($tasks as $task)
-        {
-            $showmore = ($count == 50) && ($task == end($tasks));
-            $list    .= $this->task->buildNestedList($execution, $task, false, $showmore, $users);
-        }
-
-        return print($list);
-    }
-
-    /**
      * 禅道客户端获取任务动态。
      * AJAX: get the actions of a task. for web app.
      *
