@@ -1923,40 +1923,36 @@ class bugModel extends model
     }
 
     /**
+     * 获取用例步骤的序号。
      * Return index of a case's step.
      *
-     * @param  object    $caseStep
+     * @param  object $caseStep
      * @access public
      * @return int
      */
     public function getCaseStepIndex($caseStep)
     {
-        static $index     = 0;
         static $stepIndex = 0;
         static $itemIndex = 0;
         static $groupID   = 0;
 
+        /* 子步骤或者不是分组步骤的序号。*/
         if($caseStep->type == 'item')
         {
-            if($groupID and $caseStep->parent == $groupID)
-            {
-                $itemIndex ++;
-                $index = $stepIndex . '.' . $itemIndex;
-            }
-            else
-            {
-                $stepIndex ++;
-                $index = $stepIndex;
-            }
-        }
-        else
-        {
-            if($caseStep->type == 'group') $groupID = $caseStep->id;
-            $stepIndex ++;
-            $itemIndex = 0;
-            $index = $stepIndex;
+            /* 如果步骤属于当前分组，显示分组序号和步骤序号。*/
+            if($groupID && $caseStep->parent == $groupID) return $stepIndex . '.' . $itemIndex ++;
+
+            /* 不是分组或者不属于当前分组的步骤，直接显示步骤序号。*/
+            return $stepIndex ++;
         }
 
-        return $index;
+        /* 当前是分组类型的步骤。*/
+        if($caseStep->type == 'group') $groupID = $caseStep->id;
+
+        /* 重置步骤序号。*/
+        $itemIndex = 0;
+
+        /* 返回分组步骤的序号。*/
+        return $stepIndex ++;
     }
 }
