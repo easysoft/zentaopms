@@ -3848,7 +3848,7 @@ class testcaseModel extends model
             $this->dao->insert(TABLE_SCENE)->data($scene)->autoCheck()->exec();
             $sceneID = $this->dao->lastInsertID();
 
-            $this->dao->update(TABLE_SCENE)->set('`order`')->eq($sceneID)->where('id')->eq((int)$sceneID)->exec();
+            $this->dao->update(TABLE_SCENE)->set('sort')->eq($sceneID)->where('id')->eq((int)$sceneID)->exec();
         }
         else
         {
