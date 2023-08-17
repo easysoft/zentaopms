@@ -34,44 +34,44 @@ foreach($testStories as $storyID => $storyTitle)
             ),
             h::td
             (
-                select
+                !empty($task) ? select
                 (
                     set::id("testPri{$i}"),
                     set::name("testPri[$i]"),
                     set::required(true),
                     set::value($task->pri),
                     set::items($lang->task->priList),
-                ),
+                ) : null,
             ),
             h::td
             (
-                input
+                !empty($task) ? input
                 (
                     set::id("testEstStarted{$i}"),
                     set::name("testEstStarted[$i]"),
                     set::type('date'),
                     set::value($task->estStarted),
-                ),
+                ) : null,
             ),
             h::td
             (
-                input
+                !empty($task) ? input
                 (
                     set::id("testDeadline{$i}"),
                     set::name("testDeadline[$i]"),
                     set::type('date'),
                     set::value($task->deadline),
-                ),
+                ) : null,
             ),
             h::td
             (
-                select
+                !empty($task) ? select
                 (
-                    set::id("testAssignedTo{$i}"),
-                    set::name("testAssignedTo[$i]"),
-                    set::value($task->assignedTo),
-                    set::items($members),
-                ),
+                        set::id("testAssignedTo{$i}"),
+                        set::name("testAssignedTo[$i]"),
+                        set::value($task->assignedTo),
+                        set::items($members),
+                ) : null,
             ),
             h::td
             (
