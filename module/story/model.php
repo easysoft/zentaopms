@@ -121,16 +121,22 @@ class storyModel extends model
     }
 
     /**
-     * Get test stories.
+     * 获取执行中已经为该需求创建了测试类型任务的需求ID的键值对。
+     * Get the key-value pairs for story ID which the test type task has been created for this story in the execution.
      *
      * @param  array  $storyIdList
      * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function getTestStories($storyIdList, $executionID)
+    public function getTestStories(array $storyIdList, int $executionID): array
     {
-        return $this->dao->select('story')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('type')->eq('test')->andWhere('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchPairs('story', 'story');
+        return $this->dao->select('story')->from(TABLE_TASK)
+            ->where('execution')->eq($executionID)
+            ->andWhere('type')->eq('test')
+            ->andWhere('story')->in($storyIdList)
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs('story', 'story');
     }
 
     /**
