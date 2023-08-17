@@ -672,30 +672,10 @@ class project extends control
      * @access public
      * @return void
      */
-    public function dynamic($projectID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic(int $projectID = 0, string $type = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next')
     {
-        $projectID = (int)$projectID;
         $this->loadModel('execution');
         $this->project->setMenu($projectID);
-
-        /* Save session. */
-        $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri, 'product');
-        $this->session->set('productPlanList', $uri, 'product');
-        $this->session->set('releaseList',     $uri, 'product');
-        $this->session->set('storyList',       $uri, 'product');
-        $this->session->set('taskList',        $uri, 'execution');
-        $this->session->set('buildList',       $uri, 'execution');
-        $this->session->set('bugList',         $uri, 'qa');
-        $this->session->set('caseList',        $uri, 'qa');
-        $this->session->set('testtaskList',    $uri, 'qa');
-        $this->session->set('reportList',      $uri, 'qa');
-
-        if($this->config->edition == 'max')
-        {
-            $this->session->set('riskList', $uri, 'project');
-            $this->session->set('issueList', $uri, 'project');
-        }
 
         /* Append id for second sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
@@ -718,7 +698,7 @@ class project extends control
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->dynamic;
+        $this->view->title = $project->name . $this->lang->colon . $this->lang->project->dynamic;
 
         $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted');
