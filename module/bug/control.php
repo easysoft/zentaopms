@@ -101,18 +101,21 @@ class bug extends control
      */
     public function browse(int $productID, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        /* 把访问的产品ID等状态信息保存到session和cookie中。*/
+        /* Save the product id user last visited to session and cookie. */
         $productID  = $this->product->saveState($productID, $this->products);
         $product    = $this->product->getByID($productID);
         $branch     = $this->bugZen->getBrowseBranch($branch, $product->type);
         $browseType = $browseType ? strtolower($browseType) : 'unclosed';
 
+        /* 设置1.5级导航相关信息。*/
+        /* Set the 1.5 nav. */
+        $this->qa->setMenu($this->products, $productID, $branch);
+
         /* 设置排序字段。*/
         /* Set the order field. */
         if(!$orderBy) $orderBy = 'id_desc';
         if($this->cookie->qaBugOrder) $orderBy = $this->cookie->qaBugOrder;
-
-        /* 设置导航。*/
-        $this->qa->setMenu($this->products, $productID, $branch);
 
         $this->bugZen->setBrowseCookie($product, $branch, $browseType, $param, $orderBy);
 
