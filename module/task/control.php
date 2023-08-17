@@ -1441,7 +1441,8 @@ class task extends control
     }
 
     /**
-     * AJAX: return stories of test in html select.
+     * AJAX: 返回一个html格式的需求选择列表用于创建测试类型的任务。该需求的名称将作为创建任务的子任务名称。
+     * AJAX: Return the stories selection list in html format for create the task with test type. The child task has same name with the story.
      *
      * @param  int    $executionID
      * @param  int    $taskID      The task ID which the task copy from. This will be used for creating a task from a existed task.
@@ -1455,7 +1456,12 @@ class task extends control
         $testStories     = array();
         foreach($stories as $testStoryID => $storyTitle)
         {
+            /**
+             * 如果在执行中已经为该需求创建了测试类型任务，则跳过这个需求不再给前台展示。
+             * If a test type task has already been created for the requirement during execution, the requirement is skipped and not shown to the foreground.
+             */
             if(empty($testStoryID) || isset($testStoryIdList[$testStoryID])) continue;
+
             $testStories[$testStoryID] = $storyTitle;
         }
 
