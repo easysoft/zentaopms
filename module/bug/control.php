@@ -632,8 +632,8 @@ class bug extends control
             }
         }
 
-        /* 如果是影子产品并且对应的项目不是多迭代项目，删掉迭代 Bug 数量报表*/
-        /* Unset execution bugs report if the product is shadow product and corresponding project is not multiple. */
+        /* 如果是影子产品并且对应的项目不是多迭代项目，删掉迭代 Bug 数量报表。*/
+        /* Unset execution bugs report if the product is shadow and corresponding project is not multiple. */
         $project = $this->loadModel('project')->getByShadowProduct($productID);
         if(!empty($project) && !$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
 

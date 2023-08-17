@@ -26,7 +26,7 @@ detailHeader
 $reports = array();
 foreach($lang->bug->report->charts as $key => $label) $reports[] = array('text' => $label, 'value' => $key);
 
-$echarts   = array();
+$echarts = array();
 foreach($charts as $type => $option)
 {
     $chartData = $datas[$type];
