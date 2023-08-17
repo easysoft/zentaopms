@@ -643,7 +643,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function createGroup($projectID = 0)
+    public function createGroup(int $projectID = 0)
     {
         $this->loadModel('group');
 
@@ -656,8 +656,7 @@ class project extends control
             return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
-        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
-
+        $this->view->title = $this->lang->group->create;
         $this->display('group', 'create');
     }
 
