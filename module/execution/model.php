@@ -2490,14 +2490,15 @@ class executionModel extends model
     }
 
     /**
-     * Get the execution by ID.
+     * 获取执行的信息。
+     * Get the execution information by ID.
      *
      * @param  int    $executionID
      * @param  bool   $setImgSize
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID($executionID, $setImgSize = false)
+    public function getByID(int $executionID, bool $setImgSize = false): object|false
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecution();
 
@@ -2511,6 +2512,7 @@ class executionModel extends model
             if($delay > 0) $execution->delay = $delay;
         }
 
+        /* Get hours information. */
         $total = $this->dao->select('
             ROUND(SUM(estimate), 2) AS totalEstimate,
             ROUND(SUM(consumed), 2) AS totalConsumed,
@@ -2520,6 +2522,8 @@ class executionModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
+
+        /* Get hours information of the closed and cancel task. */
         $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
             ->where('execution')->eq((int)$executionID)
             ->andWhere('deleted')->eq(0)
@@ -2527,6 +2531,7 @@ class executionModel extends model
             ->andWhere('status')->in('closed,cancel')
             ->fetch('totalLeft');
 
+        /* Set the hours information for the task. */
         $execution->days          = $execution->days ? $execution->days : '';
         $execution->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->eq($execution->id)->andWhere('type')->eq('execution')->fetch('totalHours');
         $execution->totalEstimate = round((float)$total->totalEstimate, 1);

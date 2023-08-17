@@ -19,14 +19,12 @@ su('admin');
 /**
 
 title=executionModel->getByID();
-cid=1
+timeout=0
 pid=1
-
-根据executionID查找任务详情 >> 迭代1
 
 */
 
-$executionID = '3';
-
 $execution = new executionTest();
-r($execution->getByIDTest($executionID)) && p('name') && e('迭代1'); //根据executionID查找任务详情
+r($execution->getByIDTest(3))       && p('name') && e('迭代1'); // 根据executionID查找任务详情
+r($execution->getByIDTest(3, true)) && p('name') && e('迭代1'); // 根据executionID查找任务详情并替换图片链接
+r($execution->getByIDTest(6))       && p()       && e('0');     // 查询存在的执行

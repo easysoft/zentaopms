@@ -664,9 +664,9 @@ class executionTest
      *
      * @param  string $executionID
      * @access public
-     * @return array
+     * @return string|object|false
      */
-    public function getByIDTest($executionID)
+    public function getByIDTest(int $executionID): string|object|false
     {
         $object = $this->executionModel->getByID($executionID);
 
