@@ -1,24 +1,4 @@
 /**
-  * Load team members of the latest execution of a product as assignedTo list.
-  *
-  * @param  int    $productID
-  * @param  bool   $changeProduct
-  * @access public
-  * @return void
-  */
-function loadExecutionTeamMembers(productID, changeProduct)
-{
-    var link = createLink('bug', 'ajaxLoadExecutionTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
-    $.post(link, function(data)
-    {
-        $('#assignedTo').replaceWith(data);
-        $('#assignedTo_chosen').remove();
-        $('#assignedTo').chosen();
-        if(typeof(changeProduct) != undefined && changeProduct) setAssignedTo();
-    })
-}
-
-/**
  * Load assignedTo and stories of module.
  *
  * @access public

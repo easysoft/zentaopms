@@ -1255,22 +1255,6 @@ class bug extends control
     }
 
     /**
-     * ajax方式获取产品关联执行的团队成员列表。
-     * AJAX: get team members of the latest executions of a product as assignedTo list.
-     *
-     * @param  int    $productID
-     * @param  string $selectedUser
-     * @access public
-     * @return string
-     */
-    public function ajaxLoadExecutionTeamMembers(int $productID, string $selectedUser = '')
-    {
-        $productMembers = $this->bug->getProductMemberPairs($productID);
-
-        return print(html::select('assignedTo', $productMembers, $selectedUser, 'class="form-control"'));
-    }
-
-    /**
      * Ajax 方式加载所有的用户。
      * AJAX: get all users as assignedTo list.
      *
