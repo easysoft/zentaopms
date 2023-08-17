@@ -3375,6 +3375,7 @@ class storyModel extends model
         if($excludeStories) $storyQuery = $storyQuery . ' AND `id` NOT ' . helper::dbIN($excludeStories);
         if($excludeStatus)  $storyQuery = $storyQuery . ' AND `status` NOT ' . helper::dbIN($excludeStatus);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
+        if(in_array($this->app->moduleName, array('build', 'projectrelease', 'release'))) $storyQuery .= "AND `parent` >= 0 ";
         $allBranch = "`branch` = 'all'";
         if(!empty($executionID))
         {
