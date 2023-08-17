@@ -64,10 +64,6 @@ $(document).ready(function()
     })
 });
 
-function setStories(){
-    //do nothing
-}
-
 if(window.ztmindmap == undefined) window.ztmindmap = {};
 
 ztmindmap.ModuleManager = function(wraper){ this.wraper = wraper;}
