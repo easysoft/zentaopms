@@ -1342,6 +1342,8 @@ class bug extends control
      */
     public function ajaxGetProductMembers(int $productID, string $selectedUser = '', int $branchID = 0)
     {
+        /* 获取产品的成员。如果产品团队成员为空，返回未关闭的用户。 */
+        /* Get product members. If product members is empty, get noclosed users. */
         $productMembers = $this->bug->getProductMemberPairs($productID, $branchID);
         $productMembers = array_filter($productMembers);
         if(empty($productMembers)) $productMembers = $this->loadModel('user')->getPairs('devfirst|noclosed');
