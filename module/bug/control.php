@@ -1387,6 +1387,8 @@ class bug extends control
      */
     public function ajaxGetProjectTeamMembers(int $projectID)
     {
+        /* 获取项目团队成员。 */
+        /* Get project team members. */
         $teamMembers = empty($projectID) ? array() : $this->loadModel('project')->getTeamMemberPairs($projectID);
         $items       = array();
         foreach($teamMembers as $account => $member)
