@@ -16,6 +16,22 @@ title=测试bugModel->linkBugToBuild();
 cid=1
 pid=1
 
+- 把bug 1关联到build 1属性bugs @1
+
+- 把bug 2关联到build 3属性bugs @2
+
+- 把bug 3关联到build 5属性bugs @3
+
+- 把bug 4 关联到build 1属性bugs @1,4
+
+- 把bug 5 关联到build 1属性bugs @1,4,5
+
+- 把bug 6 关联到build trunk属性bugs @0
+
+- 把bug 7 关联到build 0属性bugs @0
+
+- 把bug 8 关联到build ''属性bugs @0
+
 */
 
 $bugIDList = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
