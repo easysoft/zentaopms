@@ -60,6 +60,9 @@ $config->project->maxCheckList->kanban        = array('execution', 'build');
 $config->project->maxCheckList->agileplus     = $config->project->maxCheckList->scrum;
 $config->project->maxCheckList->waterfallplus = $config->project->maxCheckList->waterfall;
 
+$config->project->scrumList     = array('scrum', 'agileplus');
+$config->project->waterfallList = array('waterfall', 'waterfallplus');
+
 $config->project->search['module']                   = 'project';
 $config->project->search['fields']['name']           = $lang->project->name;
 $config->project->search['fields']['code']           = $lang->project->code;
