@@ -1513,6 +1513,7 @@ class transferModel extends model
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
             }
 
+            if(in_array($model, $this->config->transfer->actionModule)) $html .= '<td><a onclick="delItem(this)"><i class="icon-close"></i></a></td>';
             $html .= '</tr>' . "\n";
         }
 
