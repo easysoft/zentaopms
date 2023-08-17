@@ -24,7 +24,7 @@ class upgradeModel extends model
     public function __construct()
     {
         parent::__construct();
-        if($this->config->edition == 'ipd') $this->config->vision = 'rnd';
+        if($this->config->edition != 'lite') $this->config->vision = 'rnd';
         $this->loadModel('setting');
     }
 
