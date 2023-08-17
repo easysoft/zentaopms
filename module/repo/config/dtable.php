@@ -1,6 +1,7 @@
 <?php
 global $lang, $app;
 $app->loadLang('sonarqube');
+$app->loadLang('bug');
 
 $config->repo->dtable = new stdclass();
 
@@ -195,3 +196,29 @@ $config->repo->taskDtable->fieldList['name']['title']        = $lang->task->name
 $config->repo->taskDtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}', 'target' => '_blank');
 $config->repo->taskDtable->fieldList['assignedTo']['title']  = $lang->task->assignedTo;
 
+$config->repo->reviewDtable = new stdclass();
+
+$config->repo->reviewDtable->fieldList['id']['title'] = $lang->idAB;
+$config->repo->reviewDtable->fieldList['id']['type']  = 'id';
+
+$config->repo->reviewDtable->fieldList['title']['type'] = 'title';
+$config->repo->reviewDtable->fieldList['title']['link'] = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}&from=repo');
+
+$config->repo->reviewDtable->fieldList['fileLocation']['title'] = $lang->repo->file . '/' . $lang->repo->location;
+$config->repo->reviewDtable->fieldList['fileLocation']['name']  = 'entry';
+$config->repo->reviewDtable->fieldList['fileLocation']['width'] = '300';
+
+$config->repo->reviewDtable->fieldList['revisionA']['name']  = 'revisionA';
+$config->repo->reviewDtable->fieldList['revisionA']['width'] = '100';
+
+$config->repo->reviewDtable->fieldList['type']['title'] = $lang->repo->type;
+$config->repo->reviewDtable->fieldList['type']['name']  = 'repoType';
+$config->repo->reviewDtable->fieldList['type']['map']   = $lang->repo->typeList;
+
+$config->repo->reviewDtable->fieldList['status']['map'] = $lang->bug->statusList;
+
+$config->repo->reviewDtable->fieldList['openedBy']['type'] = 'user';
+
+$config->repo->reviewDtable->fieldList['assignedTo']['type'] = 'user';
+
+$config->repo->reviewDtable->fieldList['openedDate']['type'] = 'datetime';
