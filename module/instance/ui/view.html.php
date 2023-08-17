@@ -86,7 +86,7 @@ div
                                 (
                                     setClass('flex progress-container'),
                                     set::title($cpuInfo['tip']),
-                                    icon('cog-outline text-' . $cpuInfo['color']),
+                                    icon('cpu text-' . $cpuInfo['color']),
                                     $lang->instance->cpuUsage,
                                     div
                                     (
@@ -99,7 +99,7 @@ div
                                             setStyle('width', $cpuInfo['rate'])
                                         )
                                     ),
-                                    icon('desktop text-' . $memoryInfo['color']),
+                                    icon('memory text-' . $memoryInfo['color']),
                                     $lang->instance->memUsage,
                                     span
                                     (
