@@ -1403,6 +1403,8 @@ class testcase extends control
      */
     public function batchDelete($productID = 0)
     {
+        $this->post->caseIDList  = $this->post->caseIDList ? $this->post->caseIDList : array();
+        $this->post->sceneIDList = $this->post->sceneIDList ? $this->post->sceneIDList : array();
         if($this->post->caseIDList || $this->post->sceneIDList)
         {
             $this->testcase->batchDelete($this->post->caseIDList, $this->post->sceneIDList);
