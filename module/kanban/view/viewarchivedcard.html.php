@@ -87,6 +87,7 @@ js::set('systemMode', $this->config->systemMode);
         if($card->color == '#b10b0b') $color = 'has-color red';
         if($card->color == '#cfa227') $color = 'has-color yellow';
         if($card->color == '#2a5f29') $color = 'has-color green';
+        $card->deadline = isset($card->deadline) ? $card->deadline : '';
         ?>
         <?php
         $nameColor = '';
