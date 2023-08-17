@@ -287,8 +287,8 @@ class project extends control
         $this->view->browseType  = $browseType;
         $this->view->actionList  = $this->config->execution->statusActions + array('delete');
         $this->view->kanbanList  = $this->execution->getList($projectID, 'all', $browseType, 0, 0, 0, $pager);
-        $this->view->usersAvatar = $this->user->getAvatarPairs('all');
-        $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid|all');
+        $this->view->usersAvatar = $this->loadModel('user')->getAvatarPairs('all');
+        $this->view->userIdPairs = $this->user->getPairs('nodeleted|showid|all');
         $this->view->memberGroup = $this->execution->getMembersByIdList(array_keys($this->view->kanbanList));
         $this->display();
     }
