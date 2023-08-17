@@ -134,7 +134,7 @@ js::set('langNormal',       $lang->testcase->normal);
           </tr>
         </thead>
         <tbody id='caseTableList'>
-          <?php $this->testcase->printRow(1, $cases, $setting, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
+          <?php $this->testcase->printRow($cases, $setting, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
         </tbody>
       </table>
       <?php if(!$useDatatable) echo '</div>';?>

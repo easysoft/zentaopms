@@ -2185,7 +2185,6 @@ class testcaseModel extends model
     /**
      * Print rows of cases.
      *
-     * @param  int    $index
      * @param  array  $cases
      * @param  array  $setting
      * @param  array  $users
@@ -2196,7 +2195,7 @@ class testcaseModel extends model
      * @access public
      * @return int
      */
-    public function printRow($index, $cases, $setting, $users, $branchOption, $modulePairs, $browseType, $mode)
+    public function printRow($cases, $setting, $users, $branchOption, $modulePairs, $browseType, $mode)
     {
         foreach($cases as $case)
         {
@@ -2220,24 +2219,19 @@ class testcaseModel extends model
             }
             $trAttrs .= " class='row-case $trClass'";
 
-            $case->index = $index;
-            $case->id    = str_replace(array('case_', 'scene_'), '', $case->id);   // Remove the prefix of case id.
+            $case->id = str_replace(array('case_', 'scene_'), '', $case->id);   // Remove the prefix of case id.
 
             $isScene = $case->isScene ? 1 : 0;
             echo "<tr data-is-scene='{$isScene}' {$trAttrs}>";
             foreach($setting as $key => $value) $this->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $mode);
             echo '</tr>';
 
-            $index++;
-
             if(!empty($case->children) || !empty($case->cases))
             {
-                if(!empty($case->children)) $index = $this->printRow($index, $case->children, $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
-                if(!empty($case->cases))    $index = $this->printRow($index, $case->cases,    $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
+                if(!empty($case->children)) $this->printRow($case->children, $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
+                if(!empty($case->cases))    $this->printRow($case->cases,    $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
             }
         }
-
-        return $index;
     }
 
     /**
@@ -2325,22 +2319,22 @@ class testcaseModel extends model
             switch($id)
             {
             case 'id':
-                $showID = ($browseType == 'all' && !$this->cookie->onlyScene) ? $case->index : $case->id;
+                $showID = ($browseType == 'all' && !$this->cookie->onlyScene && $case->isScene) ? '': sprintf('%03d', $case->id);
                 if($canBatchAction)
                 {
                     $disabled = $canBeChanged ? '' : 'disabled';
                     if(!$isScene)
                     {
-                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $showID), '', "data-app='{$this->app->tab}'");
+                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), $showID, '', "data-app='{$this->app->tab}'");
                     }
                     else
                     {
-                        echo html::checkbox('sceneIDList', array($case->id => ''), '', $disabled) .  sprintf('%03d', $showID);
+                        echo html::checkbox('sceneIDList', array($case->id => ''), '', $disabled) . $showID;
                     }
                 }
                 else
                 {
-                    printf('%03d', $showID);
+                    echo $showID;
                 }
                 break;
             case 'pri':
