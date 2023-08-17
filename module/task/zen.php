@@ -64,6 +64,7 @@ class taskZen extends task
         $this->view->blockID       = helper::isAjaxRequest('modal') ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assingtome', 'assingtome') : 0;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
         $this->view->from          = $storyID || $todoID || $bugID  ? 'other' : 'task';
+        $this->view->taskID        = $taskID;
 
         $this->display();
     }
@@ -686,19 +687,14 @@ class taskZen extends task
         {
             if(empty($storyID)) continue;
 
-            /* Process the ditto option as a concrete value. */
-            $estStarted = !isset($postData->testEstStarted[$key]) || isset($postData->estStartedDitto[$key]) ? $estStarted : $postData->testEstStarted[$key];
-            $deadline   = !isset($postData->testDeadline[$key]) || isset($postData->deadlineDitto[$key]) ? $deadline : $postData->testDeadline[$key];
-            $assignedTo = !isset($postData->testAssignedTo[$key]) || $postData->testAssignedTo[$key] == 'ditto' ? $assignedTo : $postData->testAssignedTo[$key];
-
             /* Set task data. */
             $task = new stdclass();
             $task->execution  = $executionID;
             $task->story      = $storyID;
-            $task->pri        = $postData->testPri[$key];
-            $task->estStarted = empty($estStarted) ? null : $estStarted;
-            $task->deadline   = empty($deadline) ? null : $deadline;
-            $task->assignedTo = $assignedTo;
+            $task->pri        = isset($postData->testPri[$key]) ? $postData->testPri[$key] : ($_POST['pri'] ?? 3);
+            $task->estStarted = isset($postData->testEstStarted[$key]) ? $postData->testEstStarted[$key] :null;
+            $task->deadline   = isset($postData->testDeadline[$key])   ? $postData->testDeadline[$key]   :null;
+            $task->assignedTo = isset($postData->testAssignedTo[$key]) ? $postData->testAssignedTo[$key] :'';
             $task->estimate   = (float)$postData->testEstimate[$key];
             $task->left       = (float)$postData->testEstimate[$key];
 
