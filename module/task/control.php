@@ -988,6 +988,7 @@ class task extends control
     }
 
     /**
+     * 获取执行列表中的任务信息。
      * Ajax get tasks for execution list.
      *
      * @param  int    $executionID
@@ -995,7 +996,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function ajaxGetTasks($executionID, $maxTaskID = 0)
+    public function ajaxGetTasks(int $executionID, int $maxTaskID = 0)
     {
         $this->loadModel('task');
         $this->loadModel('execution');
@@ -1020,17 +1021,7 @@ class task extends control
             ->fetchGroup('parent', 'id');
 
         $users = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        foreach($tasks as $taskID => $task)
-        {
-            if(isset($parentGroup[$taskID]))
-            {
-                $tasks[$taskID]->children = $parentGroup[$taskID];
-            }
-            else
-            {
-                $tasks[$taskID]->children = array();
-            }
-        }
+        foreach($tasks as $taskID => $task) $tasks[$taskID]->children = isset($parentGroup[$taskID]) ? $parentGroup[$taskID] : array();
 
         $list  = '';
         $count = count($tasks);
