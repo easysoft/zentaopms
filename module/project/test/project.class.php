@@ -325,7 +325,7 @@ class Project
     }
 
     /**
-     * Test set menu.
+     * Test setMenu.
      *
      * @param  int    $projectID
      * @access public
@@ -337,6 +337,21 @@ class Project
         $this->project->app->rawMethod = 'index';
 
         $this->project->setMenu($projectID);
+
+        global $lang;
+        return $lang->executionCommon;
+    }
+
+    /**
+     * Test setMenuByModel.
+     *
+     * @param  string $model
+     * @access public
+     * @return string
+     */
+    public function setMenuByModelTest($model)
+    {
+        $this->project->setMenuByModel($model);
 
         global $lang;
         return $lang->executionCommon;
