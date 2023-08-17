@@ -797,4 +797,99 @@ class projectTao extends projectModel
             ->groupBy('project')
             ->fetchAll('project');
     }
+
+    /**
+     * 根据项目模式设置菜单。
+     * Set menu by project model.
+     *
+     * @param  string    $projectModel
+     * @access protected
+     * @return bool
+     */
+    protected function setMenuByModel(string $projectModel): bool
+    {
+        global $lang;
+        $model = 'scrum';
+        if(in_array($projectModel, array('waterfall', 'waterfallplus')))
+        {
+            $model = 'waterfall';
+            $lang->project->createExecution = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
+            $lang->project->lastIteration   = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
+
+            $this->loadModel('execution');
+            $executionCommonLang   = $lang->executionCommon;
+            $lang->executionCommon = $lang->project->stage;
+
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
+            $lang->execution->typeList['sprint'] = $executionCommonLang;
+        }
+        elseif($projectModel == 'kanban')
+        {
+            $model = 'kanbanProject';
+            $lang->executionCommon = $lang->project->kanban;
+        }
+
+        if(isset($lang->$model))
+        {
+            $lang->project->menu        = $lang->{$model}->menu;
+            $lang->project->menuOrder   = $lang->{$model}->menuOrder;
+            $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
+        }
+
+        return true;
+    }
+
+    /**
+     * 根据是否产品型项目设置菜单。
+     * Set menu by whether product project.
+     *
+     * @param  int       $projectID
+     * @param  int       $hasProduct
+     * @param  string    $model
+     * @access protected
+     * @return bool
+     */
+    protected function setMenuByProduct(int $projectID, int $hasProduct, string $model): bool
+    {
+        global $lang;
+        if(empty($hasProduct))
+        {
+            unset($lang->project->menu->settings['subMenu']->products);
+            $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
+            $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+
+            if($model == 'scrum' || $model == 'agileplus')
+            {
+                $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
+            }
+            else
+            {
+                unset($lang->project->menu->projectplan);
+            }
+
+            if(!empty($this->config->URAndSR) && $model !== 'kanban' && isset($lang->project->menu->storyGroup))
+            {
+                $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+
+                if($model !== 'kanban' && isset($lang->project->menu->storyGroup))
+                {
+                    $lang->project->menu->story = $lang->project->menu->storyGroup;
+                    $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
+                    $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
+                    $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
+                }
+
+                unset($lang->project->menu->settings['subMenu']->products);
+            }
+        }
+        else
+        {
+            unset($lang->project->menu->settings['subMenu']->module);
+            unset($lang->project->menu->projectplan);
+        }
+
+        if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
+        return true;
+    }
 }
