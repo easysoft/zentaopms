@@ -1900,18 +1900,19 @@ class bugModel extends model
     }
 
     /**
-     * Summary
+     * Bug 列表底部的统计信息。
+     * The statistic summary in table footer.
      *
-     * @param  array    $bugs
+     * @param  array  $bugs
      * @access public
      * @return string
      */
-    public function summary($bugs)
+    public function summary(array $bugs): string
     {
         $unresolved = 0;
         foreach($bugs as $bug)
         {
-            if($bug->status != 'resolved' && $bug->status != 'closed') $unresolved++;
+            if($bug->status != 'resolved' && $bug->status != 'closed') $unresolved ++;
         }
 
         return sprintf($this->lang->bug->notice->summary, count($bugs), $unresolved);
