@@ -210,6 +210,7 @@ class testcase extends control
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         foreach($cases as $case)
         {
+            $case->id      = 'case_' . $case->id;   // Add a prefix to avoid duplication with the scene ID.
             $case->parent  = 0;
             $case->grade   = 1;
             $case->path    = ',' . $case->id . ',';
