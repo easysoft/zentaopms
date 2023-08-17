@@ -22,8 +22,12 @@ $blocks = json_decode(json_encode($blocks), true);
 
 $blockMenuItems = array();
 $blockMenuItems[] = array('text' => $lang->block->refresh, 'className' => 'not-open-url', 'data' => array('type' => 'refresh'));
-$blockMenuItems[] = array('text' => $lang->edit, 'className' => 'not-open-url', 'data' => array('type' => 'edit', 'url' => createLink('block', 'edit', "blockID={id}"), 'size' => 'sm'));
-$blockMenuItems[] = array('text' => $lang->block->hidden, 'className' => 'not-open-url', 'data' => array('type' => 'delete', 'url' => createLink('block', 'delete', "blockID={id}&type=hidden"), 'confirm' => $lang->block->confirmRemoveBlock));
+if($this->app->user->account != 'guest')
+{
+    $blockMenuItems[] = array('text' => $lang->edit, 'className' => 'not-open-url', 'data' => array('type' => 'edit', 'url' => createLink('block', 'edit', "blockID={id}"), 'size' => 'sm'));
+    $blockMenuItems[] = array('text' => $lang->block->hidden, 'className' => 'not-open-url', 'data' => array('type' => 'delete', 'url' => createLink('block', 'delete', "blockID={id}"), 'confirm' => $lang->block->confirmRemoveBlock));
+    if($this->app->user->admin) $blockMenuItems[] = array('text' => $lang->block->closeForever, 'className' => 'not-open-url', 'data' => array('type' => 'delete', 'url' => createLink('block', 'close', "blockID={id}"), 'confirm' => $lang->block->confirmClose));
+}
 $blockMenuItems[] = array('text' => $lang->block->createBlock, 'className' => 'not-open-url', 'data' => array('type' => 'create', 'url' => createLink('block', 'create', "dashboard=$dashboard"), 'toggle' => 'modal', 'size' => 'sm'));
 $blockMenuItems[] = array('text' => $lang->block->reset, 'className' => 'not-open-url', 'data' => array('type' => 'reset', 'url' => createLink('block', 'reset', "dashboard=$dashboard"), 'confirm' => $lang->block->confirmReset));
 

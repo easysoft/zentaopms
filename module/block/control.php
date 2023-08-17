@@ -168,9 +168,10 @@ class block extends control
         $modules = $this->blockZen->getAvailableModules($dashboard); // 不同的仪表盘获取不同的可选择的模块列表。
         unset($modules['']);
 
+        if(empty($modules)) $module = $dashboard;                                       // 如果该仪表盘下没有模块列表，则模块同仪表盘。
         if(empty($module) && !empty($modules)) $module = current(array_keys($modules)); // 如果当前没有选择模块，则选中第一个。
 
-        $codes  = $this->blockZen->getAvailableCodes($dashboard, $module); // 根据仪表盘和模块获取可用的区块列表。
+        $codes  = $this->blockZen->getAvailableCodes($module);         // 根据仪表盘和模块获取可用的区块列表。
         $params = $this->blockZen->getAvailableParams($module, $code); // 根据所属模块和区块code获取参数配置项列表。
 
         $this->view->title      = $this->lang->block->createBlock;
@@ -227,9 +228,9 @@ class block extends control
         $module = $module ? $module : $block->module; // 获取当前选中的模块，默认取区块的所属模块。
         $code   = $code   ? $code   : $block->code;   // 获取当前选中的区块code，默认取区块的所属code。
 
-        $modules = $this->blockZen->getAvailableModules($block->dashboard);        // 根据所属仪表盘获取可选择的模块列表。
-        $codes   = $this->blockZen->getAvailableCodes($block->dashboard, $module); // 根据所属仪表盘和选中模块获取可选择的区块列表。
-        $params  = $this->blockZen->getAvailableParams($module, $code);            // 根据当前选中模块和选中区块code获取参数配置项列表。
+        $modules = $this->blockZen->getAvailableModules($block->dashboard); // 根据所属仪表盘获取可选择的模块列表。
+        $codes   = $this->blockZen->getAvailableCodes($module);             // 根据所属仪表盘和选中模块获取可选择的区块列表。
+        $params  = $this->blockZen->getAvailableParams($module, $code);     // 根据当前选中模块和选中区块code获取参数配置项列表。
 
         $blockSize = !empty($this->config->block->size[$module][$code]) ? $this->config->block->size[$module][$code] : $this->config->block->defaultSize; // 获取当前区块的可选尺寸。
 

@@ -2,7 +2,7 @@
 class blockZen extends block
 {
     /**
-     * 添加或编辑区块时获取可使用的模块选项。
+     * 根据仪表盘获取可使用的模块列表。
      * Get module options when adding or editing blocks.
      *
      * @param  string    $dashboard
@@ -55,49 +55,26 @@ class blockZen extends block
     }
 
     /**
-     * 添加或编辑区块时获取可使用的区块选项。
+     * 根据模块获取可使用的区块列表。
      * Get block options when adding or editing blocks.
      *
-     * @param  string        $dashboard
      * @param  string        $module
      * @access protected
      * @return string[]|true
      */
-    protected function getAvailableCodes(string $dashboard, string $module): array|bool
+    protected function getAvailableCodes(string $module): array|bool
     {
-        if($this->isExternalCall())
+        /* 获取当前模块下的所有区块列表。 */
+        if($module && isset($this->lang->block->modules[$module]))
         {
-            $lang = str_replace('_', '-', $this->get->lang);
-            $this->app->setClientLang($lang);
-            $this->app->loadLang('common');
-            $this->app->loadLang('block');
-
-            if(!$this->block->checkAPI($this->get->hash)) return array();
-        }
-
-        if($dashboard == 'my')
-        {
-            if($module && isset($this->lang->block->modules[$module]))
-            {
-                $blocks = $this->lang->block->modules[$module]->availableBlocks;
-            }
-            else
-            {
-                $blocks = array();
-            }
+            $blocks = $this->lang->block->modules[$module]->availableBlocks;
         }
         else
         {
-            if($dashboard && isset($this->lang->block->modules[$dashboard]))
-            {
-                $blocks = $this->lang->block->modules[$dashboard]->availableBlocks;
-            }
-            else
-            {
-                $blocks = $this->lang->block->availableBlocks;
-            }
+            $blocks = array();
         }
 
+        /* 过滤掉永久关闭的区块。 */
         if(isset($this->config->block->closed))
         {
             foreach($blocks as $blockKey => $blockName)
@@ -106,17 +83,11 @@ class blockZen extends block
             }
         }
 
-        if($this->isExternalCall())
-        {
-            echo json_encode($blocks);
-            return true;
-        }
-
-        return !empty($blocks) ? $blocks : array();
+        return $blocks;
     }
 
     /**
-     * 添加或编辑区块时获取其他表单项。
+     * 根据区块获取区块相关可配置参数列表。
      * Get other form items when adding or editing blocks.
      *
      * @param  string    $module
@@ -126,6 +97,7 @@ class blockZen extends block
      */
     protected function getAvailableParams(string $module = '', string $code = ''): array
     {
+        /* 特殊的模块对code特殊处理。 */
         if($code == 'todo' || $code == 'list' || $module == 'assigntome')
         {
             $code = $module;
@@ -135,10 +107,10 @@ class blockZen extends block
             $code = $module . $code;
         }
 
-        $params = zget($this->config->block->params, $code, '');
+        $params = zget($this->config->block->params, $code, array());
         $params = json_decode(json_encode($params), true);
 
-        return !empty($params) ? $params : array();
+        return $params;
     }
 
     /**
@@ -155,12 +127,14 @@ class blockZen extends block
      */
     protected function getBlockTitle(array $modules, string $module, array $codes, string $code, array $params): string
     {
-        $blockTitle = zget($codes, $code, '');
+        $blockTitle = zget($codes, $code, ''); // 标快的标题默认是区块列表下拉选中的内容。
+
+        /* scrumtest以外的区块标题前面要根据选中的type类型填充内容。 如：已关闭的产品列表。 */
         if($module != 'scrumtest' || $code == 'all')
         {
             $options = isset($params['type']['options']) ? $params['type']['options'] : array();
             if(!empty($options)) $blockTitle = vsprintf($this->lang->block->blockTitle, array(reset($options), $blockTitle));
-            if(empty($blockTitle) && !in_array($module, array('product', 'project', 'execution', 'qa'))) $blockTitle = zget($modules, $module, '');
+            if(empty($blockTitle) && !in_array($module, array('product', 'project', 'execution', 'qa'))) $blockTitle = zget($modules, $module, ''); // 特殊的区块标题使用模块列表选中的文本内容。 如：欢迎总览区块。
         }
 
         return $blockTitle;
@@ -202,6 +176,7 @@ class blockZen extends block
             $this->createMoreLink($block, $projectID);
         }
 
+        /* 根据每个区块的高度和宽度重新生成各个区块的left和top属性。 */
         $blocks = array_values($blocks);
         $height = array(1 => 0, 2 => 0);
         foreach($blocks as $block)
@@ -222,7 +197,7 @@ class blockZen extends block
     }
 
     /**
-     * 补全区块的加载链接。
+     * 补全区块的加载更多链接。
      * Get the more link of the block.
      *
      * @param  object    $block
@@ -280,24 +255,6 @@ class blockZen extends block
     }
 
     /**
-     * 生成 HTML 区块。
-     * Generate HTML block.
-     *
-     * @param  object    $block
-     * @access protected
-     * @return string
-     */
-    protected function generateHtmlBlock(object $block): string
-    {
-        if(empty($block->params->html))
-        {
-            return "<div class='empty-tip'>" . $this->lang->block->emptyTip . '</div>';
-        }
-
-        return "<div class='panel-body'><div class='article-content'>" . $block->params->html . '</div></div>';
-    }
-
-    /**
      * 去掉待定和已暂停的任务。
      * Remove undetermined and suspended tasks.
      *
@@ -311,10 +268,7 @@ class blockZen extends block
         foreach($todos as $key => $todo)
         {
             /* '2030-01-01' means undetermined */
-            if($todo->date == FUTURE_TIME || ($todo->type == 'task' && isset($suspendedTasks[$todo->objectID])))
-            {
-                unset($todos[$key]);
-            }
+            if($todo->date == FUTURE_TIME || ($todo->type == 'task' && isset($suspendedTasks[$todo->objectID]))) unset($todos[$key]);
         }
         return $todos;
     }
@@ -2047,8 +2001,6 @@ class blockZen extends block
             $this->view->meetings = $meetings;
             $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         }
-
-
 
         $this->view->users          = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->isExternalCall = $this->isExternalCall();

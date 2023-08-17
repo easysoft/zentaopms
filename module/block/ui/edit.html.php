@@ -98,14 +98,15 @@ row
                         ),
                     )
                 ),
-                $module == 'html' ? formRow
+                formRow
                 (
+                    set::class($module == 'html' ? '' : 'hidden'),
                     formGroup
                     (
                         set::label($lang->block->lblHtml),
-                        editor(set::name('html'), html($block->param->html)),
+                        editor(set::name('html'), html($block->params->html)),
                     )
-                ) : null
+                )
             )
         )
     )
