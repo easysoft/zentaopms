@@ -88,8 +88,8 @@
           ?>
         </td>
         <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(inlink('bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
-        <td><?php echo (common::hasPriv('testtask', 'results') and $case->executions) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->executions, '', "class='iframe'") : $case->executions;?></td>
-        <td><?php echo $case->steps;?></td>
+        <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
+        <td><?php echo $case->stepNumber;?></td>
         <td class='c-actions'>
           <?php common::printIcon('testcase', 'edit', "caseID=$case->id", $case, 'list');?>
           <?php common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'list', 'trash', 'hiddenwin');?>

@@ -394,6 +394,7 @@ class testtask extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $cases = array();
+        $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
         foreach($runs as $run) $cases[$run->case] = $run;
 
         $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->in(array_keys($cases))->andWhere('run')->in(array_keys($runs))->fetchAll('run');
@@ -551,6 +552,9 @@ class testtask extends control
         unset($this->config->testcase->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
+        /* Append bugs and results. */
+        $runs = $this->testcase->appendData($runs, 'run');
+
         $case2RunMap = array();
         foreach($runs as $run) $case2RunMap[$run->case] = $run->id;
 
@@ -704,6 +708,7 @@ class testtask extends control
 
         $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $runs = $this->testcase->appendData($runs, 'run');
         $groupCases  = array();
         $groupByList = array();
         foreach($runs as $run)

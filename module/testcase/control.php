@@ -208,6 +208,7 @@ class testcase extends control
 
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->testcase->appendData($cases);
         foreach($cases as $case)
         {
             $case->id      = 'case_' . $case->id;   // Add a prefix to avoid duplication with the scene ID.
@@ -216,8 +217,6 @@ class testcase extends control
             $case->path    = ',' . $case->id . ',';
             $case->isScene = false;
         }
-
-        $scenes = $this->loadModel('story')->checkNeedConfirm($scenes);
 
         /* Build the search form. */
         $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
@@ -329,6 +328,7 @@ class testcase extends control
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, '', 'no', $caseType, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->testcase->appendData($cases);
 
         $groupCases  = array();
         $groupByList = array();
@@ -1815,6 +1815,7 @@ class testcase extends control
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in(@array_keys($cases))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedScenes  = $this->testcase->getSceneMenu($productID, 0);
 
+            $cases = $this->testcase->appendData($cases);
             foreach($cases as $case)
             {
                 $case->stepDesc   = '';
@@ -1882,9 +1883,9 @@ class testcase extends control
                 if(isset($users[$case->lastRunner]))                   $case->lastRunner    = $users[$case->lastRunner];
                 if(isset($caseLang->resultList[$case->lastRunResult])) $case->lastRunResult = $caseLang->resultList[$case->lastRunResult];
 
-                $case->bugsAB       = $taskID ? $case->taskBugs : $case->bugs;
-                $case->resultsAB    = $taskID ? $case->taskExecutions : $case->executions;
-                $case->stepNumberAB = $taskID ? $case->taskSteps : $case->steps;
+                $case->bugsAB       = $case->bugs;       unset($case->bugs);
+                $case->resultsAB    = $case->results;    unset($case->results);
+                $case->stepNumberAB = $case->stepNumber; unset($case->stepNumber);
                 unset($case->caseFails);
 
                 $case->stage = explode(',', $case->stage);

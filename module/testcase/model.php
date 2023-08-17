@@ -683,7 +683,7 @@ class testcaseModel extends model
      */
     public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
-        return $this->dao->select('t1.id as run, t1.task,t1.case,t1.version,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status as lastRunStatus,t1.taskFails as fails,t2.id as id,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t2.story,t2.storyVersion,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t1.id as run, t1.task,t1.case,t1.version,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status as lastRunStatus,t2.id as id,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t2.story,t2.storyVersion,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.assignedTo')->eq($account)
@@ -747,7 +747,7 @@ class testcaseModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)->page($pager)
             ->fetchAll('id');
-        return $cases;
+        return $this->appendData($cases);
     }
 
     /**
@@ -1545,7 +1545,7 @@ class testcaseModel extends model
 
         $action = strtolower($action);
 
-        if($module == 'testcase' && $action == 'createbug')   return $case->fails > 0;
+        if($module == 'testcase' && $action == 'createbug')   return $case->caseFails > 0;
         if($module == 'testcase' && $action == 'review')      return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
 
         return true;
@@ -2288,9 +2288,7 @@ class testcaseModel extends model
                 $class .= $case->status;
                 $title  = "title='" . $this->processStatus('testcase', $case) . "'";
             }
-            if($id == 'bugs') $title = "title='{$case->$id}'";
-            if($id == 'results') $title = "title='{$case->executions}'";
-            if($id == 'stepNumber') $title = "title='{$case->steps}'";
+            if(strpos(',bugs,results,stepNumber,', ",$id,") !== false) $title = "title='{$case->$id}'";
             if($id == 'actions') $class .= ' c-actions';
             if($id == 'lastRunResult') $class .= " {$case->lastRunResult}";
             if(strpos(',stage,precondition,keywords,story,', ",{$id},") !== false) $class .= ' text-ellipsis';
@@ -2456,10 +2454,10 @@ class testcaseModel extends model
                 if(!$isScene) echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
                 break;
             case 'results':
-                if(!$isScene) echo (common::hasPriv('testtask', 'results') and $case->executions) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->executions, '', "class='iframe'") : $case->executions;
+                if(!$isScene) echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;
                 break;
             case 'stepNumber':
-                if(!$isScene) echo $case->steps;
+                if(!$isScene) echo $case->stepNumber;
                 break;
             case 'actions':
                 if(!$isScene)
@@ -2475,6 +2473,69 @@ class testcaseModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Append bugs and results.
+     *
+     * @param  int    $cases
+     * @param  string $type
+     * @param  array  $caseIdlist
+     * @access public
+     * @return void
+     */
+    public function appendData($cases, $type = 'case', $caseIdlist = array())
+    {
+        if(empty($caseIdlist)) $caseIdList = array_keys($cases);
+        if($type == 'case')
+        {
+            $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
+            $results    = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+
+            $caseFails = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)
+                ->where('caseResult')->eq('fail')
+                ->andwhere('`case`')->in($caseIdList)
+                ->groupBy('`case`')
+                ->fetchPairs('case','count');
+
+            $steps = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case`=t2.`id`')
+                ->where('t1.`case`')->in($caseIdList)
+                ->andWhere('t1.type')->ne('group')
+                ->andWhere('t1.version=t2.version')
+                ->groupBy('t1.`case`')
+                ->fetchPairs('case', 'count');
+        }
+        else
+        {
+            $caseBugs = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`result`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
+            $results  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`run`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+
+            $caseFails = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)
+                ->where('caseResult')->eq('fail')
+                ->andwhere('`run`')->in($caseIdList)
+                ->groupBy('`case`')
+                ->fetchPairs('case','count');
+
+            $steps = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.`case`=t2.`case`')
+                ->where('t2.`id`')->in($caseIdList)
+                ->andWhere('t1.type')->ne('group')
+                ->andWhere('t1.version=t2.version')
+                ->groupBy('t1.`case`')
+                ->fetchPairs('case', 'count');
+        }
+
+        foreach($cases as $key => $case)
+        {
+            $caseID = $type == 'case' ? $case->id : $case->case;
+            $case->bugs       = isset($caseBugs[$caseID])  ? $caseBugs[$caseID]   : 0;
+            $case->results    = isset($results[$caseID])   ? $results[$caseID]    : 0;
+            $case->caseFails  = isset($caseFails[$caseID]) ? $caseFails[$caseID]  : 0;
+            $case->stepNumber = isset($steps[$caseID])     ? $steps[$caseID]      : 0;
+        }
+
+        return $cases;
     }
 
     /**

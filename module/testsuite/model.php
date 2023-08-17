@@ -236,7 +236,7 @@ class testsuiteModel extends model
         if(!$append) return $cases;
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-        return $cases;
+        return $this->loadModel('testcase')->appendData($cases);
     }
 
     /**

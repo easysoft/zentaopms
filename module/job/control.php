@@ -279,6 +279,7 @@ class job extends control
             $runs   = $this->testtask->getRuns($taskID, 0, 'id');
 
             $cases = array();
+            $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
             foreach($runs as $run) $cases[$run->case] = $run;
 
             $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->in(array_keys($cases))->andWhere('run')->in(array_keys($runs))->fetchAll('run');
