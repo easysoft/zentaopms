@@ -556,23 +556,21 @@ class project extends control
     public function view($projectID = 0)
     {
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
-        if(is_bool($projectID)) return $this->sendError($this->lang->project->accessDenied, inLink('browse'));
+        if(is_bool($projectID)) return $this->send(array('result' => 'fail', 'message' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse')));
 
         $this->session->set('teamList', $this->app->getURI(true), 'project');
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getById($projectID);
 
-        if($this->config->systemMode == 'ALM')
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
-            $programList = array_filter(explode(',', $project->path));
-            array_pop($programList);
+            $programList = array_filter(explode(',', trim($project->path, ',')));
             $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
         }
-
         if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return print(js::error($this->lang->notFound) . js::locate($this->createLink('project', 'browse')));
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'load' => $this->createLink('project', 'browse')));
         }
 
         $products = $this->loadModel('product')->getProducts($projectID);
@@ -609,12 +607,10 @@ class project extends control
         }
 
         $this->view->title        = $this->lang->project->view;
-        $this->view->position     = $this->lang->project->view;
         $this->view->projectID    = $projectID;
         $this->view->project      = $project;
         $this->view->products     = $products;
         $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
-        $this->view->users        = $userPairs;
         $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
         $this->view->statData     = $this->project->getStatData($projectID);
         $this->view->workhour     = $this->project->getWorkhour($projectID);
@@ -622,6 +618,7 @@ class project extends control
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
         $this->view->isExtended   = $isExtended;
+        $this->view->users        = $userPairs;
         $this->view->userList     = $userList;
 
         $this->display();
