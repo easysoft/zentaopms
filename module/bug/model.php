@@ -1831,6 +1831,8 @@ class bugModel extends model
      */
     public function updateRelatedBug(int $bugID, string $relatedBug, string $oldRelatedBug): bool
     {
+        /* 获取需要修改的相关 bug。 */
+        /* Get related bugs that need to change. */
         $relatedBugs        = explode(',', $relatedBug);
         $oldRelatedBugs     = explode(',', $oldRelatedBug);
         $addedRelatedBugs   = array_diff($relatedBugs, $oldRelatedBugs);
@@ -1838,6 +1840,8 @@ class bugModel extends model
         $changedRelatedBugs = array_merge($addedRelatedBugs, $removedRelatedBugs);
         $changedRelatedBugs = $this->dao->select('id, relatedBug')->from(TABLE_BUG)->where('id')->in(array_filter($changedRelatedBugs))->fetchPairs();
 
+        /* 更新相关 bug。 */
+        /* Update the related bug. */
         foreach($changedRelatedBugs as $changedBugID => $relatedBugs)
         {
             if(in_array($changedBugID, $addedRelatedBugs))

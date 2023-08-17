@@ -1272,15 +1272,16 @@ class bugTest
     }
 
     /**
+     * 测试更新相关 bug。
      * The test for updatelinkbug function.
      *
-     * @param  string $bugID
+     * @param  int    $bugID
      * @param  string $relatedBug
      * @param  string $oldRelatedBug
      * @access public
      * @return array
      */
-    public function updateRelatedBugTest($bugID, $relatedBug, $oldRelatedBug)
+    public function updateRelatedBugTest(int $bugID, string $relatedBug, string $oldRelatedBug): array|bool
     {
         $this->objectModel->updateRelatedBug($bugID, $relatedBug, $oldRelatedBug);
 
