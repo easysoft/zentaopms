@@ -2863,7 +2863,7 @@ class projectModel extends model
         }
 
         if(isset($lang->project->menu->storyGroup))  unset($lang->project->menu->storyGroup);
-        if($model != 'ipd' and $project->hasProduct) unset($lang->project->menu->settings['subMenu']->module);
+        if($model != 'ipd' and isset($project->hasProduct) and $project->hasProduct) unset($lang->project->menu->settings['subMenu']->module);
         if(empty($project->hasProduct))              unset($lang->project->menu->settings['subMenu']->products);
 
         /* Reset project priv. */
