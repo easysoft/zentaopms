@@ -1263,17 +1263,18 @@ class bug extends control
      * AJAX: get team members of the executions as assignedTo list.
      *
      * @param  int    $executionID
-     * @param  string $selectedUser
      * @access public
      * @return string
      */
-    public function ajaxLoadAssignedTo(int $executionID, string $selectedUser = ''): string
+    public function ajaxLoadAssignedTo(int $executionID): string
     {
-        $executionMembers = $this->user->getTeamMemberPairs($executionID, 'execution');
-        $items            = array();
-        foreach($executionMembers as $account => $member)
+        /* 获取执行团队成员，并将它转为picker组件需要的数据。 */
+        /* Get execution team members, and convert it to picker items. */
+        $members = $this->user->getTeamMemberPairs($executionID, 'execution');
+        $items   = array();
+        foreach($members as $account => $member)
         {
-            if($account) $items[] = array('text' => $member, 'value' => $account, 'keys' => $member);
+            if($account) $items[] = array('text' => $member, 'value' => $account, 'keys' => $account . $member);
         }
         return print(json_encode($items));
     }
