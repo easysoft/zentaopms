@@ -14114,7 +14114,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
   `type` char(30) NOT NULL DEFAULT 'review',
   `listID` mediumint(8) NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `opinion` mediumtext NOT NULL DEFAULT '',
+  `opinion` mediumtext NULL,
   `opinionDate` DATE NULL,
   `status` char(30) NOT NULL DEFAULT '',
   `resolution` char(30) NOT NULL DEFAULT '',
