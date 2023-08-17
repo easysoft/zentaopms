@@ -607,31 +607,33 @@ class programModel extends model
     }
 
     /**
+     * 获取项目列表数据。
      * Get project list data.
      *
-     * @param  int       $programID
-     * @param  string    $browseType
-     * @param  string    $queryID
-     * @param  string    $orderBy
-     * @param  object    $pager
-     * @param  int       $programTitle
-     * @param  int       $involved
-     * @param  bool      $queryAll
+     * @param  int         $programID
+     * @param  string      $browseType all|wait|undone|doing|suspended|closed|bysearch|review
+     * @param  string      $queryID
+     * @param  string      $orderBy
+     * @param  object|null $pager
+     * @param  string      $programTitle 0|base|end
+     * @param  int         $involved
+     * @param  bool        $queryAll
      * @access public
-     * @return object
+     * @return object[]
      */
-    public function getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false)
+    public function getProjectList(int $programID = 0, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', object|null $pager = null, string $programTitle = '', int $involved = 0, bool $queryAll = false): array
     {
         $path = '';
-        if($programID)
+        if($programID) $path = $this->getByID($programID)->path;
+
+        /* Get query project SQL. */
+        $query = '';
+        if($browseType == 'bysearch')
         {
-            $program = $this->getByID($programID);
-            $path    = $program->path;
+            $this->loadModel('search')->setQuery('project', $queryID);
+            $query = str_replace('`id`','t1.id', $this->session->projectQuery);
         }
 
-        $this->loadModel('search')->setQuery('project', $queryID);
-
-        $query       = str_replace('`id`','t1.id', $this->session->projectQuery);
         $projectList = $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
@@ -663,21 +665,34 @@ class programModel extends model
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
-        if($programTitle and $this->config->systemMode == 'ALM')
+        if($programTitle and $this->config->systemMode == 'ALM') $projectList = $this->batchProcessProgramName($projectList, $programTitle, $programID);
+        return $projectList;
+    }
+
+    /**
+     * 批量处理项目所属的项目集名称
+     * Batch the name of the program to which the project belongs.
+     *
+     * @param  array  $projectList
+     * @param  string $programTitle
+     * @param  int    $programID
+     * @access public
+     * @return object[]
+     */
+    public function batchProcessProgramName(array $projectList, string $programTitle = '', int $programID = 0): array
+    {
+        $programList = $this->getPairs();
+        foreach($projectList as $id => $project)
         {
-            $programList = $this->getPairs();
-            foreach($projectList as $id => $project)
-            {
-                $path = explode(',', $project->path);
-                $path = array_filter($path);
-                array_pop($path);
-                $programID = $programTitle == 'base' ? current($path) : end($path);
-                if(empty($path) || $programID == $id) continue;
+            $path = explode(',', $project->path);
+            $path = array_filter($path);
+            array_pop($path);
+            $programID = $programTitle == 'base' ? current($path) : end($path);
+            if(empty($path) || $programID == $id) continue;
 
-                $programName = isset($programList[$programID]) ? $programList[$programID] : '';
+            $programName = isset($programList[$programID]) ? $programList[$programID] : '';
 
-                if($programName) $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
-            }
+            if($programName) $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
         }
         return $projectList;
     }
@@ -1530,20 +1545,21 @@ class programModel extends model
     }
 
     /**
-     * Get project stats.
+     * 获取项目统计数据。
+     * Get project stats data.
      *
-     * @param  int    $programID
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $programTitle
-     * @param  int    $involved
-     * @param  bool   $queryAll
+     * @param  int         $programID
+     * @param  string      $browseType
+     * @param  int         $queryID
+     * @param  string      $orderBy
+     * @param  object|null $pager
+     * @param  string      $programTitle
+     * @param  int         $involved
+     * @param  bool        $queryAll
      * @access public
      * @return array
      */
-    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false)
+    public function getProjectStats(int $programID = 0, string $browseType = 'undone', int $queryID = 0, string $orderBy = 'id_desc', object|null $pager = null, string $programTitle = '', int $involved = 0, bool $queryAll = false)
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
@@ -1552,13 +1568,7 @@ class programModel extends model
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
-        $leftTasks   = array();
-
-        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)
-            ->where('deleted')->eq(0)
-            ->andWhere('project')->in($projectKeys)
-            ->andWhere('type')->in('sprint,stage,kanban')
-            ->fetchAll('id');
+        $executions  = $this->loadModel('project')->getExecutionList($projectKeys);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
@@ -1571,6 +1581,7 @@ class programModel extends model
         $hours = $this->computeProjectHours($tasks);
 
         /* Get the number of left tasks. */
+        $leftTasks = array();
         if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
         {
             $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
@@ -1590,8 +1601,7 @@ class programModel extends model
             ->fetchGroup('root', 'account');
 
         $stats = $this->appendStatToProjects($projects, 'hours,teamCount,teamMembers,leftTasks', array('hours' => $hours, 'teams' => $teamMembers, 'leftTasks' => $leftTasks));
-        /* Convert predefined HTML entities to characters. */
-        foreach($stats as $project) $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
+        foreach($stats as $project) $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES); //  Convert predefined HTML entities to characters.
 
         return $stats;
     }

@@ -789,6 +789,23 @@ class projectModel extends model
     }
 
     /**
+     * 获取项目下的执行数据。
+     * Get execution data under the project.
+     *
+     * @param  array    $projectIdList
+     * @access public
+     * @return object[]
+     */
+    public function getExecutionList(array $projectIdList = array()): array
+    {
+        return $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->in($projectIdList)
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->fetchAll('id');
+    }
+
+    /**
      * 根据项目类型生成权限数据。
      * Get project priv data according by the project type.
      *

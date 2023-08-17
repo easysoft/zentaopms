@@ -346,40 +346,6 @@ class programTest
     }
 
     /**
-     * Get project stats.
-     *
-     * @param  int    $programID
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getProjectStatsTest($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null)
-    {
-        return $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager);
-    }
-
-    /**
-     * Get project list.
-     *
-     * @param  int    $programID
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  int    $pager
-     * @param  int    $programTitle
-     * @param  int    $involved
-     * @access public
-     * @return array
-     */
-    public function getProjectListTest($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0)
-    {
-        return $this->program->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved);
-    }
-
-    /**
      * Get progress list.
      *
      * @access public

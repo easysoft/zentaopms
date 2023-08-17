@@ -2,6 +2,9 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
+zdTable('user')->gen(5);
+su('admin');
+
 zdTable('project')->gen(50);
 
 $task = zdTable('task');
@@ -10,9 +13,9 @@ $task->gen(100);
 
 /**
 
-title=测试 programModel::create();
+title=测试 programModel::appendStatToProjects();
+timeout=0
 cid=1
-pid=1
 
 */
 
@@ -60,4 +63,3 @@ r(isset($stat->hours))       && p() && e('1'); //正常传入数据，检查hour
 r(isset($stat->teamCount))   && p() && e('1'); //正常传入数据，检查teamCount字段
 r(isset($stat->teamMembers)) && p() && e('1'); //正常传入数据，检查teamMembers字段
 r(isset($stat->leftTasks))   && p() && e('1'); //正常传入数据，检查leftTasks字段
-
