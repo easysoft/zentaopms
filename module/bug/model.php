@@ -1937,22 +1937,28 @@ class bugModel extends model
         static $groupID   = 0;
 
         /* 子步骤或者不是分组步骤的序号。*/
+        /* Return the sequence number of a sub step or not a grouping step. */
         if($caseStep->type == 'item')
         {
             /* 如果步骤属于当前分组，显示分组序号和步骤序号。*/
+            /* If the step belongs to the current group, return the group number and step number. */
             if($groupID && $caseStep->parent == $groupID) return $stepIndex . '.' . $itemIndex ++;
 
             /* 不是分组或者不属于当前分组的步骤，直接显示步骤序号。*/
+            /* Step that is not a group or do not belong to the current group, return the step number. */
             return $stepIndex ++;
         }
 
-        /* 当前是分组类型的步骤。*/
+        /* 设置 groupID。*/
+        /* Set groupID. */
         if($caseStep->type == 'group') $groupID = $caseStep->id;
 
         /* 重置步骤序号。*/
+        /* Reset step number. */
         $itemIndex = 0;
 
         /* 返回分组步骤的序号。*/
+        /* Return the step number. */
         return $stepIndex ++;
     }
 }
