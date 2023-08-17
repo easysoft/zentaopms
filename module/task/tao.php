@@ -905,7 +905,7 @@ class taskTao extends taskModel
                   ->where('id')->eq($currentTeam->id)
                   ->exec();
 
-        if($task->mode == 'linear' and empty($record->order)) $this->updateEstimateOrder($effortID, $currentTeam->order);
+        if($task->mode == 'linear' and empty($record->order)) $this->updateEffortOrder($effortID, $currentTeam->order);
     }
 
     /**
@@ -1023,7 +1023,7 @@ class taskTao extends taskModel
 
         unset($oldParentTask->subStatus);
         unset($newParentTask->subStatus);
-        
+
         $status  = $newParentTask->status;
         $changes = common::createChanges($oldParentTask, $newParentTask);
         $action  = '';

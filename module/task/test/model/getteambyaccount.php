@@ -10,18 +10,6 @@ title=taskModel->getTeamByAccount();
 timeout=0
 cid=1
 
-- 获取未开始的指定账号的团队信息 @admin_wait
-
-- 获取进行中的指定账号的团队信息 @admin_doing
-
-- 过滤已完成的成员获取的指定账号的团队信息 @admin_wait
-
-- 获取不存在的账号 @_
-
-- 不过滤已完成的成员获取的指定账号的团队信息 @admin_done
-
-- 根据传入的日志ID获取对应成员的团队信息 @dev1_wait
-
 */
 
 $task = zdTable('task');
@@ -87,7 +75,7 @@ $users[0]->status = 'doing';
 r($task->getTeamByAccountTest($users, 'admin')) && p() && e('admin_doing'); //获取进行中的指定账号的团队信息
 
 $users[0]->status = 'done';
-r($task->getTeamByAccountTest($users, 'admin')) && p() && e('admin_wait'); //过滤已完成的成员获取的指定账号的团队信息
-r($task->getTeamByAccountTest($users, 'dev')) && p() && e('_');            //获取不存在的账号
-r($task->getTeamByAccountTest($users, 'admin', array('filter' => '')))                  && p() && e('admin_done'); //不过滤已完成的成员获取的指定账号的团队信息
-r($task->getTeamByAccountTest($users, 'dev1',  array('filter' => '', 'effortID' => 3))) && p() && e('dev1_wait');  //根据传入的日志ID获取对应成员的团队信息
+r($task->getTeamByAccountTest($users, 'admin'))                                         && p() && e('admin_wait'); // 过滤已完成的成员获取的指定账号的团队信息
+r($task->getTeamByAccountTest($users, 'dev'))                                           && p() && e('_');          // 获取不存在的账号
+r($task->getTeamByAccountTest($users, 'admin', array('filter' => '')))                  && p() && e('admin_done'); // 不过滤已完成的成员获取的指定账号的团队信息
+r($task->getTeamByAccountTest($users, 'dev1',  array('filter' => '', 'effortID' => 3))) && p() && e('dev1_wait');  // 根据传入的日志ID获取对应成员的团队信息

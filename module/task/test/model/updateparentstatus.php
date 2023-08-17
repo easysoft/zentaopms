@@ -6,8 +6,9 @@ include dirname(__FILE__, 2) . '/task.class.php';
 /**
 
 title=taskModel->updateParentStatus();
+timeout=0
 cid=1
-pid=1
+
 */
 
 zdTable('user')->config('user')->gen(3);

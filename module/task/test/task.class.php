@@ -1335,31 +1335,6 @@ class taskTest
     }
 
     /**
-     * Test get task's team member pairs.
-     *
-     * @param  int    $taskID
-     * @access public
-     * @return array
-     */
-    public function getMemberPairsTest($taskID)
-    {
-        $task = $this->objectModel->getByID($taskID);
-        if(empty($task)) return 0;
-
-        $object = $this->objectModel->getMemberPairs($task);
-        $object['count'] = count($object);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Get the users who finished the multiple task.
      *
      * @param  int          $taskID
@@ -2151,15 +2126,15 @@ class taskTest
     }
 
     /**
-     * Test updateEstimateOrder method.
+     * Test updateEffortOrder method.
      *
      * @param  int         $effortID
      * @access public
      * @return object|bool
      */
-    public function updateEstimateOrderTest(int $effortID): object|bool
+    public function updateEffortOrderTest(int $effortID): object|bool
     {
-        $this->objectModel->updateEstimateOrder($effortID, 1);
+        $this->objectModel->updateEffortOrder($effortID, 1);
         if(dao::isError())
         {
             return !dao::getError();

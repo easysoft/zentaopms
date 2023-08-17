@@ -2,6 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
+
+zdTable('user')->gen(5);
 su('admin');
 
 /**
@@ -9,12 +11,6 @@ su('admin');
 title=taskModel->needUpdateBugStatus();
 timeout=0
 cid=1
-
-- 计算不来源于bug的任务是否需要更新bug状态 @0
-
-- 计算来源于bug的任务是否需要更新bug状态 bug状态为active @1
-
-- 计算来源于bug的任务是否需要更新bug状态 bug状态为resolved @0
 
 */
 $bug = zdTable('bug');

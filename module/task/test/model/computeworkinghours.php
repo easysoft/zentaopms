@@ -8,8 +8,8 @@ zdTable('task')->config('task_computeworkinghours')->gen(15);
 /**
 
 title=taskModel->computeWorkingHours();
+timeout=0
 cid=1
-pid=1
 
 */
 

@@ -3,7 +3,7 @@ author: Hu Fangzhou
 version: "1.0"
 fields:
   - field: id
-    range: 1-5
+    range: 1-100
   - field: name
     range: 项目,迭代,阶段,看板{2}
   - field: project

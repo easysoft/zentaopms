@@ -779,15 +779,17 @@ class taskZen extends task
 
         if($consumed < 0) dao::$errors[] = $this->lang->task->error->consumedSmall;
 
-        $estimate = new stdclass();
-        $estimate->date     = helper::isZeroDate($task->finishedDate) ? helper::today() : substr($task->finishedDate, 0, 10);
-        $estimate->task     = $oldTask->id;
-        $estimate->left     = 0;
-        $estimate->work     = zget($task, 'work', '');
-        $estimate->account  = $this->app->user->account;
-        $estimate->consumed = $consumed;
+        $effort = new stdclass();
+        $effort->date     = helper::isZeroDate($task->finishedDate) ? helper::today() : substr($task->finishedDate, 0, 10);
+        $effort->task     = $oldTask->id;
+        $effort->left     = 0;
+        $effort->work     = zget($task, 'work', '');
+        $effort->account  = $this->app->user->account;
+        $effort->consumed = $consumed;
 
-        return $estimate;
+        if($this->post->comment) $effort->work = $this->post->comment;
+
+        return $effort;
     }
 
     /**
@@ -819,7 +821,7 @@ class taskZen extends task
     protected function commonAction(int $taskID): void
     {
         $this->view->task      = $this->task->getByID($taskID);
-        $this->view->execution = $this->execution->getById($this->view->task->execution);
+        $this->view->execution = $this->execution->getByID($this->view->task->execution);
         $this->view->members   = $this->loadModel('user')->getTeamMemberPairs($this->view->execution->id, 'execution','nodeleted');
         $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
 

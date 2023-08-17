@@ -1,0 +1,14 @@
+title: zt_team
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: root
+    range: 3
+  - field: type
+    range: execution
+  - field: account
+    range: admin,user1,user2,user3,user4,user5
+  - field: limited
+    range: 'no'

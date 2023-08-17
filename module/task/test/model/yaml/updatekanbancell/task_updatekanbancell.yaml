@@ -4,7 +4,7 @@ author: Mengyi Liu
 version: "1.0"
 fields:
 - field: execution
-  range: 11
+  range: 1
 - field: story
   range: 0
 - field: parent

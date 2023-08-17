@@ -443,10 +443,9 @@ class taskModel extends model
      * 更新父任务的状态.
      * Update parent status by taskID.
      *
-     * @param int  $taskID
-     * @param int  $parentID
-     * @param bool $createAction
-     *
+     * @param  int    $taskID
+     * @param  int    $parentID
+     * @param  bool   $createAction
      * @access public
      * @return void
      */
@@ -462,9 +461,8 @@ class taskModel extends model
         $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
         if($oldParentTask->parent != '-1') $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
 
+        /* Compute parent task hours and status. */
         $this->computeWorkingHours($parentID);
-
-        /* Compute parent task status. */
         $status = $this->taskTao->getParentStatusById($parentID);
         if(empty($status))
         {
@@ -482,28 +480,24 @@ class taskModel extends model
 
         if($parentTask->status == $status)
         {
-            if(!dao::isError())
+            if(dao::isError()) return;
+            $changes = common::createChanges($oldParentTask, $parentTask);
+            if($changes)
             {
-                $changes = common::createChanges($oldParentTask, $parentTask);
-                if($changes)
-                {
-                    $actionID = $this->loadModel('action')->create('task', $parentID, 'Edited', '', '', '', false);
-                    $this->action->logHistory($actionID, $changes);
-                }
+                $actionID = $this->loadModel('action')->create('task', $parentID, 'Edited', '', '', '', false);
+                $this->action->logHistory($actionID, $changes);
             }
             return;
         }
 
         /* Update task status. */
         $this->taskTao->updateTaskByChildAndStatus($parentTask, $childTask, $status);
-
         if(dao::isError() || !$createAction) return;
 
         if($parentTask->story) $this->loadModel('story')->setStage($parentTask->story);
 
         /* Create action record. */
         $this->taskTao->createUpdateParentTaskAction($oldParentTask);
-
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $status, $oldParentTask->status);
     }
 
@@ -620,7 +614,7 @@ class taskModel extends model
      * @param  string $account
      * @param  array  $extra
      * @access public
-     * @return object
+     * @return object|bool
      */
     public function getTeamByAccount(array $teams, string $account = '', array $extra = array('filter' => 'done')): object|bool
     {
@@ -628,23 +622,14 @@ class taskModel extends model
 
         $filterStatus = zget($extra, 'filter', '');
         $effortID     = zget($extra, 'effortID', '');
-
-        $repeatUsers = array();
-        $taskID      = 0;
+        $repeatUsers  = array();
+        $taskID       = 0;
         foreach($teams as $team)
         {
-            if(isset($extra['order']) and $team->order == $extra['order'] and $team->account == $account) return $team;
-
-            if(empty($taskID) and $effortID) $taskID = $team->task;
-
-            if(isset($repeatUsers[$team->account]))
-            {
-                $repeatUsers[$team->account] = 1;
-            }
-            else
-            {
-                $repeatUsers[$team->account] = 0;
-            }
+            if(isset($extra['order']) && $team->order == $extra['order'] && $team->account == $account) return $team;
+            if(empty($taskID) && $effortID) $taskID = $team->task;
+            if(isset($repeatUsers[$team->account]))  $repeatUsers[$team->account] = 1;
+            if(!isset($repeatUsers[$team->account])) $repeatUsers[$team->account] = 0;
         }
 
         /*
@@ -652,18 +637,11 @@ class taskModel extends model
          * 2. Not by effort;
          * Then direct get team by account.
          */
-        if(empty($repeatUsers[$account]))
+        if(empty($repeatUsers[$account]) || empty($effortID))
         {
             foreach($teams as $team)
             {
-                if($team->account == $account) return $team;
-            }
-        }
-        elseif(empty($effortID))
-        {
-            foreach($teams as $team)
-            {
-                if($filterStatus and $team->status == $filterStatus) continue;
+                if(empty($effortID) && $filterStatus && $team->status == $filterStatus) continue;
                 if($team->account == $account) return $team;
             }
         }
@@ -681,7 +659,7 @@ class taskModel extends model
                     return false;
                 }
 
-                if($effort->left == 0 and $currentTeam->account == $effort->account) $prevTeam = array_shift($teams);
+                if($effort->left == 0 && $currentTeam->account == $effort->account) $prevTeam = array_shift($teams);
             }
         }
 
@@ -1646,14 +1624,14 @@ class taskModel extends model
 
     /**
      * 更新串行任务工时日志的排序。
-     * Update estimate order for linear task team.
+     * Update effort order for linear task team.
      *
      * @param  int    $effortID
      * @param  int    $order
      * @access public
      * @return bool
      */
-    public function updateEstimateOrder(int $effortID, int $order): bool
+    public function updateEffortOrder(int $effortID, int $order): bool
     {
         $this->dao->update(TABLE_EFFORT)->set('`order`')->eq((int)$order)->where('id')->eq($effortID)->exec();
         return !dao::isError();
@@ -2051,7 +2029,7 @@ class taskModel extends model
         if($task->fromBug == 0) return false;
 
         /* If bug has been resolved, return false. */
-        $bug = $this->loadModel('bug')->getById($task->fromBug);
+        $bug = $this->loadModel('bug')->getByID($task->fromBug);
         if($bug->status == 'resolved') return false;
 
         return true;
@@ -2452,16 +2430,16 @@ class taskModel extends model
     }
 
     /**
+     * 添加一条工时记录。
      * Add task effort.
      *
-     * @param  object    $data
+     * @param  object $data
      * @access public
      * @return int
      */
-    public function addTaskEffort($data)
+    public function addTaskEffort(object $data): int
     {
-        $oldTask = $this->getById($data->task);
-
+        $oldTask  = $this->getById($data->task);
         $relation = $this->loadModel('action')->getRelatedFields('task', $data->task);
 
         $effort = new stdclass();
@@ -2573,17 +2551,17 @@ class taskModel extends model
     }
 
     /**
+     * 获取任务的团队成员。
      * Get task's team member pairs.
      *
      * @param  object $task
-     *
      * @access public
      * @return array
      */
-    public function getMemberPairs($task)
+    public function getMemberPairs(object $task): array
     {
         $users   = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
-        $members = array('');
+        $members = array();
         foreach($task->team as $member)
         {
             if(isset($users[$member->account])) $members[$member->account] = $users[$member->account];

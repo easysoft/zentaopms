@@ -8,7 +8,7 @@ fields:
 - field: space
   range: 0
 - field: kanban
-  range: 11
+  range: 1
 - field: lastEditedDate
   range: "20220101 000000"
   type: timestamp

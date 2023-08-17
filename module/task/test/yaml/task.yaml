@@ -4,6 +4,8 @@ version: "1.0"
 fields:
   - field: id
     range: 1-100
+  - field: project
+    range: 1
   - field: execution
     range: 3
   - field: module

@@ -6,7 +6,7 @@ fields:
 - field: id
   range: 1-100
 - field: kanban
-  range: 11
+  range: 1
 - field: lane
   range: 1
 - field: column
