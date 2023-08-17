@@ -2609,12 +2609,15 @@ class testcase extends control
      * @param  string $element
      * @param  int    $sceneID
      * @param  int    $number
+     * @param  int    $ditto
      * @access public
      * @return void
      */
-    public function ajaxGetScenes($productID, $branch = 0, $moduleID = 0, $element = 'scene', $sceneID = 0, $number = 0)
+    public function ajaxGetScenes($productID, $branch = 0, $moduleID = 0, $element = 'scene', $sceneID = 0, $number = 0, $ditto = 0)
     {
         $scenes = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $sceneID);
+
+        if($ditto) $scenes['ditto'] = $this->lang->testcase->ditto;
 
         die(html::select($number ? "{$element}[{$number}]" : $element, $scenes, '', "class='form-control'"));
     }
