@@ -2456,10 +2456,10 @@ class testcaseModel extends model
                 if(!$isScene) echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
                 break;
             case 'results':
-                if (!$isScene) echo (common::hasPriv('testtask', 'results') and $case->executions) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->executions, '', "class='iframe'") : $case->executions;
+                if(!$isScene) echo (common::hasPriv('testtask', 'results') and $case->executions) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->executions, '', "class='iframe'") : $case->executions;
                 break;
             case 'stepNumber':
-                if (!$isScene) echo $case->steps;
+                if(!$isScene) echo $case->steps;
                 break;
             case 'actions':
                 if(!$isScene)
