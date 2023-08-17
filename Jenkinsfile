@@ -292,7 +292,7 @@ pipeline {
                   }
                   axis {
                     name "PHPVERSION"
-                    values "php5.4_5.6", "php7.0", "php7.1",  "php7.2_7.4", "k8s.php7.2_7.4"
+                    values "php5.4_5.6", "php7.0", "php7.1",  "php7.2_7.4", "k8s.php7.2_7.4", "php8.1", "k8s.php8.1"
                   }
                 }
                 excludes {
@@ -303,7 +303,7 @@ pipeline {
                     }
                     axis {
                       name "PHPVERSION"
-                      values "k8s.php7.2_7.4"
+                      values "k8s.php7.2_7.4", "k8s.php8.1"
                     }
                   }
                 }
