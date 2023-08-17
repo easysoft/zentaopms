@@ -54,11 +54,25 @@ class executionTao extends executionModel
      */
     protected function getProductList(int $projectID): array
     {
-        return $this->dao->select('t1.id,GROUP_CONCAT(product) as product,GROUP_CONCAT(t3.`name`) as productName')->from(TABLE_EXECUTION)->alias('t1')
+        $executions = $this->dao->select('t1.id,t2.product,t3.name')->from(TABLE_EXECUTION)->alias('t1')
             ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->leftjoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
             ->where('t1.project')->eq($projectID)
             ->andWhere('t1.type')->in('kanban,sprint,stage')
-            ->fetchAll('id');
+            ->fetchAll();
+
+        $productList = array();
+        foreach($executions as $execution)
+        {
+            if(!isset($productList[$execution->id]))
+            {
+                $productList[$execution->id] = new stdclass();
+                $productList[$execution->id]->product     = '';
+                $productList[$execution->id]->productName = '';
+            }
+            $productList[$execution->id]->product     .= $execution->product . ',';
+            $productList[$execution->id]->productName .= $execution->name . ',';
+        }
+        return $productList;
     }
 }

@@ -1947,13 +1947,13 @@ class executionModel extends model
         $burns      = $this->getBurnData($executions);
         foreach($executions as $execution)
         {
-            $execution->productName = isset($productList[$execution->id]) ? $productList[$execution->id]->productName : '';
+            $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
             $execution->end         = date(DT_DATE1, strtotime($execution->end));
             $execution->hours       = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
             $execution->teamCount   = isset($memberGroup[$execution->id]) ? $memberGroup[$execution->id]->teams : 0;
 
             if(isset($executions[$execution->parent])) $executions[$execution->parent]->isParent = 1;
-            if(empty($productID) && !empty($productList[$execution->id])) $execution->product = $productList[$execution->id]->product;
+            if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
 
             /* Judge whether the execution is delayed. */
             if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended')
