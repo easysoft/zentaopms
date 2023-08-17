@@ -856,7 +856,7 @@ class projectTao extends projectModel
         if(empty($hasProduct))
         {
             unset($lang->project->menu->settings['subMenu']->products);
-            $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
+            $projectProduct = (int)$this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
             $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
             if($model == 'scrum' || $model == 'agileplus')
