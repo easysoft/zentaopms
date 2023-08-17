@@ -1,12 +1,10 @@
-.detail{padding-bottom: 10px; margin: 0 10px; border-bottom: 1px solid #eee;}
-.detail:first-child{padding:10px 0; margin:0 10px;}
-.detail:last-child{border-bottom:0;}
-.detail .detail-title{font-size: 15px; font-weight: 700;}
-.detail .detail-title .label-id{position: relative; top: -2px; display: inline-block; min-width: 30px; padding: 0 5px; font-size: 12px; line-height: 16px; color: #838a9d; text-align: center; vertical-align: middle; background-color: transparent; border: 1px solid #838a9d; border-radius: 2px;}
-.detail .detail-content{padding: 0; margin-top: 10px;}
-.detail .detail-content .item-label{display: flex; padding: 6px 8px; text-align: center; align-items: center; color: rgb(148 163 184);}
-.detail .detail-content .item-label span{margin-left: auto;}
-.detail .detail-content .item-content{font-weight: 700; align-self: center; padding-left: 8px;}
-.detail .detail-content .item-content.normal{color:#00da88;}
 .actions-menu {bottom: 12px;}
 .actions-menu.no-divider .divider{display: none;}
+
+.flex-col {flex-direction: column;}
+.chart > div {margin: auto;}
+.pie-chart {position: relative;}
+.pie-chart .pie-chart-title {position: relative; top: -60%; left: 2%; height: 1rem;}
+
+.member-list > .center-y {width: 12.5%}
+.memberBox .panel-heading, .otherInfoBox .panel-heading{background-color: var(--color-slate-100); color: var(--color-slate-900)}

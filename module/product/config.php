@@ -52,6 +52,7 @@ $config->product->statisticFields['plans']        = array('plans');
 $config->product->statisticFields['releases']     = array('releases');
 
 $config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,ajaxgetplans,';
+$config->product->memberFields       = array('PO', 'QD', 'RD', 'feedback', 'ticket', 'createdBy;');
 
 $config->product->actionList['edit']['icon'] = 'edit';
 $config->product->actionList['edit']['text'] = $lang->edit;

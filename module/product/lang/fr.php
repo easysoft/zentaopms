@@ -34,6 +34,7 @@ $lang->product->export           = 'Export';
 $lang->product->dashboard        = "Dashboard";
 $lang->product->changeProgram    = "{$lang->productCommon} confirmation of the scope of influence of adjustment of the program set";
 $lang->product->changeProgramTip = "%s > Change Program";
+$lang->product->selectProgram    = 'Filter Programs';
 $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Remove Whitelist';
 $lang->product->track            = 'Consulter Stories Matrice';
@@ -89,6 +90,7 @@ $lang->product->assignToNullBugsTitle = 'Bugs non assignés';
 $lang->product->closedBugs            = 'Closed Bug';
 $lang->product->bugFixedRate          = 'Repair Rate';
 $lang->product->unfoldClosed          = 'Unfold Closed';
+$lang->product->storyDeliveryRate     = "Story Delivery Rate";
 
 $lang->product->confirmDelete        = "Voulez-vous vraiment supprimer le {$lang->productCommon} ?";
 $lang->product->errorNoProduct       = "Aucun {$lang->productCommon} n'est créé pour l'instant !";

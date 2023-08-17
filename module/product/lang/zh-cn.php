@@ -90,6 +90,7 @@ $lang->product->assignToNullBugsTitle = '未指派Bug';
 $lang->product->closedBugs            = '关闭Bug';
 $lang->product->bugFixedRate          = '修复率';
 $lang->product->unfoldClosed          = '展开已关闭';
+$lang->product->storyDeliveryRate     = "需求交付率";
 
 $lang->product->confirmDelete        = " 您确定删除该{$lang->productCommon}吗？";
 $lang->product->errorNoProduct       = "还没有创建{$lang->productCommon}！";
@@ -125,6 +126,7 @@ $lang->product->PO             = "{$lang->productCommon}负责人";
 $lang->product->QD             = '测试负责人';
 $lang->product->RD             = '发布负责人';
 $lang->product->feedback       = '反馈负责人';
+$lang->product->ticket         = '工单负责人';
 $lang->product->acl            = '访问控制';
 $lang->product->reviewer       = '评审人';
 $lang->product->groups         = '权限组';

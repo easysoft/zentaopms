@@ -374,6 +374,8 @@ class product extends control
         $product = $this->product->getStatByID($productID);
         if(!$product) return $this->productZen->responseNotFound4View();
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
+        if($product->program) $product->programName = $this->loadModel('program')->getByID($product->program)->name;
+        if($product->line) $product->lineName = $this->loadModel('tree')->getByID($product->line)->name;
 
         /* Set navigation menu. */
         $this->product->setMenu($productID);
@@ -381,13 +383,19 @@ class product extends control
         /* Execute hooks. */
         $this->executeHooks($productID);
 
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, 30, 1);
+
         $this->view->title     = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->product   = $product;
         $this->view->actions   = $this->loadModel('action')->getList('product', $productID);
+        $this->view->dynamics  = $this->action->getDynamic('all', 'all', 'date_desc', $pager, $productID);
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->groups    = $this->loadModel('group')->getPairs();
         $this->view->branches  = $this->loadModel('branch')->getPairs($productID);
         $this->view->reviewers = !empty($product->reviewer) ? explode(',', $product->reviewer) : array();
+        $this->view->members   = $this->loadModel('user')->getListByAccounts(array($product->PO, $product->RD, $product->QD, $product->feedback, $product->ticket, $product->createdBy), 'account');
 
         $this->display();
     }

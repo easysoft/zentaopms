@@ -90,6 +90,7 @@ $lang->product->assignToNullBugsTitle = 'Unassigned Bugs';
 $lang->product->closedBugs            = 'Closed Bug';
 $lang->product->bugFixedRate          = 'Repair Rate';
 $lang->product->unfoldClosed          = 'Unfold Closed';
+$lang->product->storyDeliveryRate     = "Story Delivery Rate";
 
 $lang->product->confirmDelete        = " Do you want to delete the {$lang->productCommon}?";
 $lang->product->errorNoProduct       = "No {$lang->productCommon} is created yet!";

@@ -939,11 +939,12 @@ class productTao extends productModel
     {
         /* 通过产品ID获取每一个需求状态对应的数量。Get count of each story status of the product. */
         $statusCountList = $this->loadModel('story')->getStoriesCountByProductID($productID, $storyType);
+        foreach($statusCountList as $status => $stat) $statusCountList[$status] = $stat->count;
 
         /* 确保每一种需求状态都是有值的。Padding the stories to make sure all status have records. */
         foreach(array_keys($this->lang->story->statusList) as $status)
         {
-            $statusCountList[$status] = isset($statusCountList[$status]) ? $statusCountList[$status]->count : 0;
+            if(!isset($statusCountList[$status])) $statusCountList[$status] = 0;
         }
 
         return $statusCountList;

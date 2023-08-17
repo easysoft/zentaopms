@@ -13,227 +13,301 @@ declare(strict_types=1);
 namespace zin;
 
 /* Flag variable for hiding product code. */
-$hiddenCode = (!isset($config->setCode) || $config->setCode == 0);
+$hiddenCode    = (!isset($config->setCode) || $config->setCode == 0);
+$allStoryCount = array_sum($product->stories);
 
-/* Link for float actions. */
-$goBackLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
-
-/* Platform detail. */
-function generatePlatformDetail($product, $branches, $lang)
+$membersDom = array();
+foreach($config->product->memberFields as $field)
 {
-    if($product->type != 'platform') return null;
+    if(empty($product->$field)) continue;
+    if(!isset($members[$product->$field])) continue;
 
-    $branchItemList = array();
-    foreach($branches as $branchName) $branchItemList[] = array('text' => $branchName);
-    $branchItemList[] = array
+    $user = $members[$product->$field];
+    $membersDom[] = div
     (
-        'url'  => createLink('branch', 'manage', "productID={$product->id}"),
-        'icon' => 'plus',
-        'text' => $lang->branch->add
-    );
-
-    return div
-    (
-        setClass('detail'),
-        div(
-            setClass('detail-title'),
-            $lang->product->branchName['platform'],
-            btn
-            (
-                set::url(createLink('branch', 'manage', "productID={$product->id}")),
-                set::icon('more')
-            )
+        setClass('w-1/6 center-y'),
+        avatar
+        (
+            setClass('primary-outline'),
+            set::size('36'),
+            set::text($user->realname),
+            set::src($user->avatar),
         ),
-        div(
-            setClass('detail-content flex flex-wrap'),
-            menu(set::items($branchItemList))
-        )
+        span(setClass('my-2'), $user->realname),
+        span(setClass('text-gray'), $lang->product->$field),
     );
 }
 
-/* Manager Information. */
-function generateManagerInfoItemList($product, $lang, $users, $reviewers)
-{
-    /* String of reviewer list. */
-    $reviewerListStr = '';
-    foreach($reviewers as $reviewer)
-    {
-        if(empty($reviewer)) continue;
-        $reviewerListStr .= (zget($users, $reviewer) . ' ');
-    }
-
-    $fnGenerateItem = function($label, $content)
-    {
-        return div
-        (
-            setClass('w-1/2 flex'),
-            div(setClass('w-1/6 item-label'), icon(setClass('ml-auto pr-1.5'), 'person'), $label),
-            div(setClass('item-content'), $content)
-        );
-    };
-
-    return div
-    (
-        setClass('detail-content flex flex-wrap'),
-        $fnGenerateItem($lang->productCommon,     zget($users, $product->PO)),
-        $fnGenerateItem($lang->product->release,  zget($users, $product->RD)),
-        $fnGenerateItem($lang->product->qa,       zget($users, $product->QD)),
-        $fnGenerateItem($lang->product->reviewer, $reviewerListStr),
-    );
-}
-
-/* Basic Information. */
-function generateBasicInfoItemList($product, $lang, $hiddenCode, $users, $groups)
-{
-    /* ACL is custom Detail */
-    $whitelist = explode(',', $product->whitelist);
-    foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
-    $aclCustomDetail = ($product->acl == 'custom') ? div
-        (
-            setClass('w-1/2 flex'),
-            div(setClass('w-1/6 item-label'), $lang->product->whitelist),
-            $whitelist
-        ) : null;
-
-    /* Generate UI for each basic information item. */
-    $fnGenerateItem = function($label, $content, $status = '')
-    {
-        return div
-        (
-            setClass('w-1/2 flex'),
-            div(setClass('w-1/6 item-label'), span($label)),
-            div(setClass('item-content'), !empty($status) ? setClass($status) : null, $content)
-        );
-    };
-
-    /* The UI without product code. */
-    if($hiddenCode)
-    {
-        return div
-        (
-            setClass('detail-content flex flex-wrap'),
-            $fnGenerateItem($lang->product->type,                          zget($lang->product->typeList, $product->type)),
-            $fnGenerateItem($lang->product->createdBy,                     zget($users, $product->createdBy)),
-            $fnGenerateItem($lang->productCommon . $lang->product->status, zget($lang->product->statusList, $product->status), $product->status),
-            $fnGenerateItem($lang->product->createdDate,                   formatTime($product->createdDate, DT_DATE1)),
-            $fnGenerateItem($lang->product->acl,                           $lang->product->aclList[$product->acl]),
-            $aclCustomDetail
-        );
-    }
-
-    return div
-    (
-        setClass('detail-content flex flex-wrap'),
-        $fnGenerateItem($lang->product->code,                          $product->code),
-        $fnGenerateItem($lang->product->createdBy,                     zget($users, $product->createdBy)),
-        $fnGenerateItem($lang->product->type,                          zget($lang->product->typeList, $product->type)),
-        $fnGenerateItem($lang->product->createdDate,                   formatTime($product->createdDate, DT_DATE1)),
-        $fnGenerateItem($lang->productCommon . $lang->product->status, zget($lang->product->statusList, $product->status), $product->status),
-        $fnGenerateItem($lang->product->acl,                           $lang->product->aclList[$product->acl]),
-        $aclCustomDetail
-    );
-}
-
-/* Other information. */
-function generateOtherInfoItemList($product, $lang)
-{
-    $space = common::checkNotCN() ? ' ' : '';
-
-    $fnGenerateItem = function($label, $content)
-    {
-        return div(
-            setClass('w-1/3 flex'),
-            div(setClass('w-2/6 item-label'), span($label)),
-            div(setClass('item-content'), $content)
-        );
-    };
-
-    return div
-    (
-        setClass('detail-content flex flex-wrap'),
-        $fnGenerateItem($lang->story->statusList['active'] . $space . $lang->story->common,    $product->stories['active']),
-        $fnGenerateItem($lang->product->plans,                                                 $product->plans),
-        $fnGenerateItem($lang->product->bugs,                                                  $product->bugs),
-        $fnGenerateItem($lang->story->statusList['draft'] . $space . $lang->story->common,     $product->stories['draft']),
-        $fnGenerateItem($lang->product->builds,                                                $product->builds),
-        $fnGenerateItem($lang->product->docs,                                                  $product->docs),
-        $fnGenerateItem($lang->story->statusList['changing'] . $space . $lang->story->common,  $product->stories['changing']),
-        $fnGenerateItem($lang->product->releases,                                              $product->releases),
-        $fnGenerateItem($lang->product->cases,                                                 $product->cases),
-        $fnGenerateItem($lang->story->statusList['reviewing'] . $space . $lang->story->common, $product->stories['reviewing']),
-        $fnGenerateItem($lang->product->projects,                                              $product->projects),
-        $fnGenerateItem($lang->product->executions,                                            $product->executions),
-    );
-}
-
-$actionMenuList = !$product->deleted ? $this->product->buildOperateMenu($product, 'view') : array();
-
-/* Layout. */
-dropmenu(set::text($product->name));
-
-detailBody
+div
 (
-    sectionList
+    setClass('flex w-full'),
+    cell
     (
-        section
-        (
-            entityLabel
-            (
-                set::entityID($product->id),
-                set::level(1),
-                set::text($product->name)
-            ),
-        ),
-        /* Platform and branches list. */
-        generatePlatformDetail($product, $branches, $lang),
-        /* Manager list. */
+        setClass('mr-3 w-2/3'),
         div
         (
-            setClass('detail'),
+            setClass('flex-auto canvas flex p-4'),
             div
             (
-                setClass('detail-title'),
-                $lang->product->manager
+                setClass('text-center w-1/3 flex flex-col justify-center items-center'),
+                div
+                (
+                    set('class', 'chart pie-chart'),
+                    echarts
+                    (
+                        set::color(array('#2B80FF', '#E3E4E9')),
+                        set::series
+                        (
+                            array(array('type' => 'pie', 'radius' => array('80%', '90%'), 'itemStyle' => array('borderRadius' => '40'), 'label' => array('show' => false), 'data' => array($product->storyDeliveryRate, 100 - $product->storyDeliveryRate)))
+                        )
+                    )->size(120, 120),
+                    div
+                    (
+                        set::class('pie-chart-title text-center'),
+                        div(span(set::class('text-2xl font-bold'), $product->storyDeliveryRate . '%')),
+                        div
+                        (
+                            span
+                            (
+                                setClass('text-sm text-gray'),
+                                $lang->product->storyDeliveryRate,
+                                icon
+                                (
+                                    'help ml-1',
+                                    toggle::tooltip(array('title' => $lang->product->storyDeliveryRate)),
+                                    set('data-placement', 'bottom'),
+                                    set('data-type', 'white'),
+                                    set('data-class-name', 'text-gray border border-light'),
+                                    setClass('text-gray '),
+                                )
+                            )
+                        )
+                    )
+                ),
+                div
+                (
+                    setClass('border w-3/4 flex justify-center items-center pl-4 py-2'),
+                    div
+                    (
+                        setClass('w-1/3'),
+                        div
+                        (
+                            setClass('article-h1'),
+                            $allStoryCount,
+                        ),
+                        $lang->product->totalStories,
+                    ),
+                    div
+                    (
+                        setClass('w-1/3'),
+                        div
+                        (
+                            setClass('article-h1'),
+                            $product->stories['closed'],
+                        ),
+                        $lang->story->statusList['closed']
+                    ),
+                    div
+                    (
+                        setClass('w-1/3'),
+                        div
+                        (
+                            setClass('article-h1'),
+                            $allStoryCount - $product->stories['closed'],
+                        ),
+                        $lang->story->unclosed
+                    ),
+                )
             ),
-            generateManagerInfoItemList($product, $lang, $users, $reviewers)
-        ),
-        /* Base information. */
-        div
-        (
-            setClass('detail w-full'),
-            div(setClass('detail-title'), $lang->product->basicInfo),
-            generateBasicInfoItemList($product, $lang, $hiddenCode, $users, $groups)
-        ),
-        /* Other information. */
-        div
-        (
-            setClass('detail w-full'),
-            div(setClass('detail-title'), $lang->product->otherInfo),
-            generateOtherInfoItemList($product, $lang)
-        ),
-        /* Extend Fields. */
-        /* Float action toolbar. */
-        div
-        (
-            setClass('w-2/3 text-center fixed actions-menu'),
-            setClass($product->deleted ? 'no-divider' : ''),
-            floatToolbar
+            div
             (
-                isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-                !empty($actionMenuList['main']) ? set::main($actionMenuList['main']) : null,
-                !empty($actionMenuList['suffix']) ? set::suffix($actionMenuList['suffix']) : null,
-                set::object($product)
-            )
-        )
-    ),
-    detailSide
-    (
-        history
+                setClass('flex-none w-2/3'),
+                div
+                (
+                    setClass('flex items-center'),
+                    label
+                    (
+                        setClass('rounded-full'),
+                        $product->id
+                    ),
+                    div
+                    (
+                        setClass('article-h2 ml-2 clip'),
+                        $product->name
+                    ),
+                    !$hiddenCode ? label
+                    (
+                        setClass('light-outline mx-2 flex-none'),
+                        $product->code
+                    ) : null,
+                    $product->type != 'normal' ? label
+                    (
+                        setClass('light-outline mx-2 text-warning flex-none'),
+                        $lang->product->typeList[$product->type]
+                    ) : null,
+                    $product->deleted ? label
+                    (
+                        setClass('danger-outline text-dange flex-noner'),
+                        $lang->product->deleted
+                    ) : null,
+                    label
+                    (
+                        setClass("ml-2 flex-none"),
+                        setClass($product->status == 'normal' ? 'text-success' : 'text-gray'),
+                        $this->processStatus('product', $product)
+                    ),
+                    span
+                    (
+                        setClass('ml-2 flex-none'),
+                        $lang->product->abbr->aclList[$product->acl],
+                        icon
+                        (
+                            'help',
+                            toggle::tooltip(array('title' => $lang->product->aclList[$product->acl])),
+                            set('data-placement', 'right'),
+                            set('data-type', 'white'),
+                            set('data-class-name', 'text-gray border border-light'),
+                            setClass('ml-2 mt-2 text-gray'),
+                        )
+                    ),
+                ),
+                div
+                (
+                    setClass('flex mt-4'),
+                    $config->systemMode == 'ALM' && $product->program ? div
+                    (
+                        setClass('clip w-1/2'),
+                        set::title($lang->product->program),
+                        icon('program', setClass('pr-1')),
+                        $product->programName,
+                    ) : null,
+                    $product->line ? div
+                    (
+                        setClass('clip w-1/2'),
+                        set::title($lang->product->line),
+                        icon('lane', setClass('pr-1')),
+                        $product->lineName,
+                    ) : null,
+                ),
+                div
+                (
+                    set::class('detail-content mt-4'),
+                    html($product->desc),
+                ),
+            ),
+        ),
+        div
         (
-            set::actions($actions),
-            set::commentUrl(createLink('action', 'comment', "objectType=product&objectID=$product->id&zin=1")),
-        )
-    )
+            setClass('mt-4 p-4 bg-white'),
+            panel
+            (
+                setClass('mb-4 memberBox'),
+                set::title($lang->product->manager),
+                div(setClass('flex flex-wrap member-list pt-2'), $membersDom)
+            ),
+            panel
+            (
+                setClass('otherInfoBox'),
+                set::title($lang->product->otherInfo),
+                div
+                (
+                    setClass('flex flex-wrap'),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->plans),
+                        span(setClass('ml-2'), $product->plans)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->releases),
+                        span(setClass('ml-2'), $product->releases)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->bugs),
+                        span(setClass('ml-2'), $product->bugs)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->projects),
+                        span(setClass('ml-2'), $product->projects)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->builds),
+                        span(setClass('ml-2'), $product->builds)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->docs),
+                        span(setClass('ml-2'), $product->docs)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->cases),
+                        span(setClass('ml-2'), $product->cases)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->executions),
+                        span(setClass('ml-2'), $product->executions)
+                    ),
+                )
+            ),
+        ),
+    ),
+    cell
+    (
+        setClass('w-1/3'),
+        panel
+        (
+            to::heading
+            (
+                div(set('class', 'panel-title'), $lang->execution->latestDynamic)
+            ),
+            to::headingActions
+            (
+                common::hasPriv('product', 'dynamic') ? btn
+                (
+                    setClass('ghost text-gray font-normal'),
+                    set::url(createLink('product', 'dynamic', "productID={$product->id}&type=all")),
+                    $lang->more
+                ) : null
+            ),
+            set::bodyClass('h-80 overflow-y-auto pt-0'),
+            set::shadow(false),
+            dynamic()
+        ),
+        div
+        (
+            setClass('mt-4'),
+            history
+            (
+                set::commentUrl(createLink('action', 'comment', array('objectType' => 'product', 'objectID' => $product->id))),
+                set::bodyClass('h-72 overflow-y-auto')
+            )
+        ),
+    ),
 );
 
-render();
+$actionMenuList = !$product->deleted ? $this->product->buildOperateMenu($product, 'view') : array();
+div
+(
+    setClass('w-2/3 text-center fixed actions-menu'),
+    setClass($product->deleted ? 'no-divider' : ''),
+    floatToolbar
+    (
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        !empty($actionMenuList['main']) ? set::main($actionMenuList['main']) : null,
+        !empty($actionMenuList['suffix']) ? set::suffix($actionMenuList['suffix']) : null,
+        set::object($product)
+    )
+);
