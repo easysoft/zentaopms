@@ -773,7 +773,7 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title          = $this->lang->execution->allExecutions;
-        $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
+        $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, (bool)$this->cookie->showTask, '', $orderBy, $pager);
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
         $this->view->productID      = $productID;
         $this->view->product        = $this->product->getByID($productID);
