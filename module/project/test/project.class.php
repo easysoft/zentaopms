@@ -323,4 +323,22 @@ class Project
         $actions = $this->project->buildActionList($project);
         return current($actions);
     }
+
+    /**
+     * Test set menu.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return string
+     */
+    public function setMenuTest($projectID = 0)
+    {
+        $this->project->app->rawModule = 'project';
+        $this->project->app->rawMethod = 'index';
+
+        $this->project->setMenu($projectID);
+
+        global $lang;
+        return $lang->executionCommon;
+    }
 }
