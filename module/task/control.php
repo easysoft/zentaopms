@@ -1444,7 +1444,7 @@ class task extends control
      * AJAX: return stories of test in html select.
      *
      * @param  int    $executionID
-     * @param  int    $taskID
+     * @param  int    $taskID      The task ID which the task copy from. This will be used for creating a task from a existed task.
      * @access public
      * @return string
      */
