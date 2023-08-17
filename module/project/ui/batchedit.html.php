@@ -55,7 +55,7 @@ formBatchPanel
     (
         set::name('PM'),
         set::label($lang->project->PM),
-        set::control('select'),
+        set::control('picker'),
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($PMUsers),
