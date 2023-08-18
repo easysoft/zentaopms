@@ -1062,7 +1062,7 @@ class baseRouter
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
-        if(isset($_GET[$this->config->sessionVar]))
+        if(isset($_GET[$this->config->sessionVar]) and preg_match('/^\w+$/', $_GET[$this->config->sessionVar])) // Check zentaosid only exist [0-9a-zA-Z_].
         {
             helper::restartSession($_GET[$this->config->sessionVar]);
         }
