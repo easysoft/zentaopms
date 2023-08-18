@@ -17,7 +17,7 @@ class bugZen extends bug
         if($result && $result['stop'])
         {
             $message = sprintf($this->lang->duplicate, $this->lang->bug->common);
-            return $this->send(array('result' => 'success', 'id' => $result['duplicate'], 'message' => $message, 'load' => $this->createLink('bug', 'view', "bugID={$result['duplicate']}")));
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('bug', 'view', "bugID={$result['duplicate']}")));
         }
 
         return true;
