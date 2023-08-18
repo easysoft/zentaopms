@@ -1423,9 +1423,9 @@ class testcase extends control
      */
     public function batchChangeBranch($branchID)
     {
-        if($this->post->caseIDList)
+        if($this->post->caseIDList || $this->post->sceneIDList)
         {
-            $this->testcase->batchChangeBranch($this->post->caseIDList, $branchID);
+            $this->testcase->batchChangeBranch($this->post->caseIDList, $this->post->sceneIDList, $branchID);
             if(dao::isError()) return print(js::error(dao::getError()));
         }
 
