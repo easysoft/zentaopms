@@ -1312,6 +1312,11 @@ class taskModel extends model
             $task->team    = $this->taskTao->getTeamByTask($taskID);
             foreach($task->team as $member) $task->members[$member->account] = $member->account;
         }
+        else
+        {
+            $task->members = array();
+            $task->team    = false;
+        }
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         $task->files = $this->file->getByObject('task', $taskID);
