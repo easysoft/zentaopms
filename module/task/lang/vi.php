@@ -187,7 +187,7 @@ $lang->task->legendLife   = 'Toàn bộ nhiệm vụ';
 $lang->task->legendDesc   = 'Mô tả nhiệm vụ';
 
 $lang->task->confirmDelete          = "Bạn có muốn xóa nhiệm vụ này?";
-$lang->task->confirmDeleteEstimate  = "Bạn có muốn xóa nó?";
+$lang->task->confirmDeleteEffort    = "Bạn có muốn xóa nó?";
 $lang->task->copyStoryTitle         = "Copy";
 $lang->task->afterSubmit            = "Tiếp ";
 $lang->task->successSaved           = "Đã tạo!";

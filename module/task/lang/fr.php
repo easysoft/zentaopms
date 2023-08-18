@@ -244,8 +244,8 @@ $lang->task->action->linked2revision      = array('main' => '$date, linked by <s
 $lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
 
 $lang->task->confirmDelete             = "Voulez-vous réellement supprimer cette tâche ?";
-$lang->task->confirmDeleteEstimate     = "Voulez-vous la supprimer ?";
-$lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
+$lang->task->confirmDeleteEffort       = "Voulez-vous la supprimer ?";
+$lang->task->confirmDeleteLastEffort   = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
 $lang->task->copyStoryTitle            = '<span style="color:blue;">StoryModel</span>';
 $lang->task->afterSubmit               = "Suiv. ";
 $lang->task->successSaved              = "Créée !";

@@ -55,7 +55,7 @@ $lang->task->legendDesc   = '任务描述';
 $lang->task->legendDetail = '任务详情';
 
 $lang->task->confirmDelete         = "您确定要删除这个任务吗？";
-$lang->task->confirmDeleteEstimate = "您确定要删除这个记录吗？";
+$lang->task->confirmDeleteEffort   = "您确定要删除这个记录吗？";
 $lang->task->confirmFinish         = '"预计剩余"为0，确认将任务状态改为"已完成"吗？';
 $lang->task->confirmRecord         = '"剩余"为0，任务将标记为"已完成"，您确定吗？';
 $lang->task->confirmTransfer       = '"当前剩余"为0，任务将被转交，您确定吗？';

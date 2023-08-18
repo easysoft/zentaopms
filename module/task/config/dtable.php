@@ -212,7 +212,7 @@ $config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['orde
 $config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['show']         = 'clickable';
 $config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['url']          = array('module' => 'task', 'method' => 'deleteWorkhour', 'params' => 'taskID={id}');
 $config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['class']        = 'ajax-submit btn ghost square size-sm';
-$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['data-confirm'] = $lang->task->confirmDeleteEstimate;
+$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['data-confirm'] = $lang->task->confirmDeleteEffort;
 
 $config->task->dtable->importTask = new stdclass();
 

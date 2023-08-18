@@ -203,7 +203,7 @@ $lang->task->legendDetail = '任務詳情';
 $lang->task->legendMisc   = '其他相關';
 
 $lang->task->confirmDelete          = "您確定要刪除這個任務嗎？";
-$lang->task->confirmDeleteEstimate  = "您確定要刪除這個記錄嗎？";
+$lang->task->confirmDeleteEffort    = "您確定要刪除這個記錄嗎？";
 $lang->task->copyStoryTitle         = "同{$lang->SRCommon}";
 $lang->task->afterSubmit            = "添加之後";
 $lang->task->successSaved           = "成功添加，";

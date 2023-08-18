@@ -244,8 +244,8 @@ $lang->task->action->linked2revision      = array('main' => '$date, 由 <strong>
 $lang->task->action->unlinkedfromrevision = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>。');
 
 $lang->task->confirmDelete             = "您确定要删除这个任务吗？";
-$lang->task->confirmDeleteEstimate     = "您确定要删除这个记录吗？";
-$lang->task->confirmDeleteLastEstimate = "您确定要删除该条日志吗？删除最后一条工时日志后，该任务状态将调整为未开始。";
+$lang->task->confirmDeleteEffort       = "您确定要删除这个记录吗？";
+$lang->task->confirmDeleteLastEffort   = "您确定要删除该条工时日志吗？删除最后一条工时日志后，该任务状态将调整为未开始。";
 $lang->task->copyStoryTitle            = "同{$lang->SRCommon}";
 $lang->task->afterSubmit               = "添加之后";
 $lang->task->successSaved              = "成功添加，";

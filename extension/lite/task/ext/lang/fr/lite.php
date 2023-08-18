@@ -55,7 +55,7 @@ $lang->task->legendDesc   = 'Task Description';
 $lang->task->legendDetail = 'Task Detail';
 
 $lang->task->confirmDelete         = "Do you want to delete this task?";
-$lang->task->confirmDeleteEstimate = "Do you want to delete it?";
+$lang->task->confirmDeleteEffort   = "Do you want to delete it?";
 $lang->task->confirmFinish         = '"Left Hour" is 0. Do you want to change the status to "Finished"?';
 $lang->task->confirmRecord         = '"Left Hour" is 0. Do you want to set the task as "Finished"?';
 $lang->task->confirmTransfer       = '"Left Hour" is 0，Do you want to transfer task?';

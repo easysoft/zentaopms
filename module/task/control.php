@@ -517,31 +517,31 @@ class task extends control
     }
 
     /**
-     * Delete estimate.
+     * 删除任务工时。Delete the work hour from the task.
      *
-     * @param  int    $estimateID
+     * @param  int    $effortID
      * @access public
      * @return void
      */
-    public function deleteWorkhour(int $estimateID, $confirm = 'no')
+    public function deleteWorkhour(int $effortID, $confirm = 'no')
     {
-        $estimate = $this->task->getEffortByID($estimateID);
-        $taskID   = $estimate->objectID;
-        $task     = $this->task->getById($taskID);
+        $effort = $this->task->getEffortByID($effortID);
+        $taskID = $effort->objectID;
+        $task   = $this->task->getById($taskID);
 
-        if($confirm == 'no' and $task->consumed - $estimate->consumed == 0)
+        if($confirm == 'no' and $task->consumed - $effort->consumed == 0)
         {
-            $formUrl = $this->createLink('task', 'deleteWorkhour', "estimateID=$estimateID&confirm=yes");
-            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->task->confirmDeleteLastEstimate}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});"));
+            $formUrl = $this->createLink('task', 'deleteWorkhour', "effortID=$effortID&confirm=yes");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->task->confirmDeleteLastEffort}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});"));
         }
 
-        $changes = $this->task->deleteWorkhour($estimateID);
+        $changes = $this->task->deleteWorkhour($effortID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $actionID = $this->loadModel('action')->create('task', $taskID, 'DeleteEstimate');
         $this->action->logHistory($actionID, $changes);
 
-        if($task->consumed - $estimate->consumed == 0) $this->action->create('task', $taskID, 'Adjusttasktowait');
+        if($task->consumed - $effort->consumed == 0) $this->action->create('task', $taskID, 'Adjusttasktowait');
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }

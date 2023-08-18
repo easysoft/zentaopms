@@ -81,7 +81,7 @@ if($efforts)
                         common::hasPriv('task', 'deleteWorkhour') ? a
                         (
                             setClass('btn ghost toolbar-item square size-sm ajax-submit'),
-                            set('data-confirm', $lang->task->confirmDeleteEstimate),
+                            set('data-confirm', $lang->task->confirmDeleteEffort),
                             set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
                             icon('trash')
                         ) : null,
@@ -93,7 +93,7 @@ if($efforts)
             setClass('table-title'),
             $lang->task->committed
         );
-        h::table 
+        h::table
         (
             setClass('table condensed bordered'),
             h::tr
