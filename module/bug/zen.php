@@ -1854,21 +1854,23 @@ class bugZen extends bug
      * Relevant processing after create bug.
      *
      * @param  object    $bug
-     * @param  array     $output
+     * @param  array     $params
      * @param  string    $from
      * @access protected
      * @return bool
      */
-    protected function afterCreate(object $bug, array $output, string $from = ''): bool
+    protected function afterCreate(object $bug, array $params, string $from = ''): bool
     {
-        /* Set from param if there is a object to transfer bug. */
+        /* 将 bug 的模块保存到 cookie。*/
+        /* Set module of bug to cookie. */
         helper::setcookie('lastBugModule', (string)$bug->module);
 
         $this->updateFileAfterCreate($bug->id);
-        list($laneID, $columnID) = $this->getKanbanVariable($output);
+
+        list($laneID, $columnID) = $this->getKanbanVariable($params);
         $this->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
 
-        $todoID = isset($output['todoID']) ? $output['todoID'] : 0;
+        $todoID = isset($params['todoID']) ? $params['todoID'] : 0;
         if($todoID) $this->updateTodoAfterCreate($bug->id, $todoID);
 
         return !dao::isError();
@@ -2056,14 +2058,14 @@ class bugZen extends bug
      * respond after deleting.
      *
      * @param  object    $bug
-     * @param  array     $output
+     * @param  array     $params
      * @param  string    $message
      * @access protected
      * @return bool
      */
-    protected function responseAfterCreate(object $bug, array $output, string $message = ''): bool
+    protected function responseAfterCreate(object $bug, array $params, string $message = ''): bool
     {
-        $executionID = $bug->execution ? $bug->execution : (int)zget($output, 'executionID', $this->session->execution);
+        $executionID = $bug->execution ? $bug->execution : (int)zget($params, 'executionID', $this->session->execution);
 
         /* Return bug id when call the API. */
         if(!$message) $message = $this->lang->saveSuccess;
@@ -2082,11 +2084,10 @@ class bugZen extends bug
             {
                 $location = $this->createLink('execution', 'bug', "executionID=$executionID");
             }
-
         }
         elseif($this->app->tab == 'project')
         {
-            $location = $this->createLink('project', 'bug', "projectID=" . zget($output, 'projectID', $this->session->project));
+            $location = $this->createLink('project', 'bug', "projectID=" . zget($params, 'projectID', $this->session->project));
         }
         else
         {

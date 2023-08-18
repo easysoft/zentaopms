@@ -202,9 +202,9 @@ class bug extends control
     public function create(int $productID, string $branch = '', string $extras = '')
     {
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras, $output);
+        parse_str($extras, $params);
 
-        $from = isset($output['from']) ? $output['from'] : '';
+        $from = isset($params['from']) ? $params['from'] : '';
 
         if(!empty($_POST))
         {
@@ -217,16 +217,16 @@ class bug extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $bug->id = $bugID;
-            $this->bugZen->afterCreate($bug, $output, $from);
+            $this->bugZen->afterCreate($bug, $params, $from);
 
             $message = $this->executeHooks($bugID);
-            return $this->responseAfterCreate($bug, $output, $message);
+            return $this->responseAfterCreate($bug, $params, $message);
         }
 
         $productID      = $this->product->saveState($productID, $this->products);
         $currentProduct = $this->product->getByID($productID);
         if($branch === '') $branch = (string)$this->cookie->preBranch;
-        $this->bugZen->setCreateMenu($productID, $branch, $output);
+        $this->bugZen->setCreateMenu($productID, $branch, $params);
 
         /* 初始化一个bug对象，尽可能把属性都绑定到bug对象上，extract() 出来的变量除外。 */
         /* Init bug, give bug as many variables as possible, except for extract variables. */
