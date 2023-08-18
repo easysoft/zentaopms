@@ -648,7 +648,7 @@ class taskModel extends model
         elseif($effortID)
         {
             $efforts  = $this->getTaskEfforts($taskID, '', $effortID);
-            $prevTeam = $currentTeam = null;
+            $prevTeam = $currentTeam = current($teams);
             foreach($efforts as $effort)
             {
                 $currentTeam = reset($teams);
