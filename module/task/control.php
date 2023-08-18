@@ -850,6 +850,7 @@ class task extends control
     }
 
     /**
+     * 激活一个任务
      * Activate a task.
      *
      * @param  int    $taskID
@@ -885,7 +886,7 @@ class task extends control
             $this->executeHooks($taskID);
 
             /* Get the information returned after a task is started. */
-            $task     = $this->task->fetchById($taskID);
+            $task     = $this->task->fetchByID($taskID);
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);
             $this->send($response);
         }
