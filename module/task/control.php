@@ -523,7 +523,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function deleteWorkhour($estimateID, $confirm = 'no')
+    public function deleteWorkhour(int $estimateID, $confirm = 'no')
     {
         $estimate = $this->task->getEffortByID($estimateID);
         $taskID   = $estimate->objectID;
