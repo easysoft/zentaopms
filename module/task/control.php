@@ -1011,39 +1011,32 @@ class task extends control
      *
      * @param  int    $executionID
      * @param  string $browseType
+     * @param  string $chartType  default|pie|bar|line
      * @access public
      * @return void
      */
-    public function report($executionID, $browseType = 'all', $chartType = 'default')
+    public function report(int $executionID, string $browseType = 'all', string $chartType = 'default')
     {
         $this->loadModel('report');
-        $this->view->charts   = array();
+        $this->view->charts = array();
 
-        if(!empty($_POST))
-        {
-            foreach($this->post->charts as $chart)
-            {
-                $chartFunc   = 'getDataOf' . $chart;
-                $chartData   = $this->task->$chartFunc();
-                $chartOption = $this->lang->task->report->$chart;
-                if(!empty($chartType) and $chartType != 'default') $chartOption->type = $chartType;
-                $this->task->mergeChartOption($chart);
-                $this->view->charts[$chart] = $chartOption;
-                $this->view->datas[$chart]  = $this->report->computePercent($chartData);
-            }
-        }
+        /* Build chart data. */
+        $chartList = array();
+        if(!empty($_POST)) $chartList = $this->taskZen->buildChartData();
 
+        /* If the project is non-execution, the chart of tasks by execution is not shown. */
         $execution = $this->loadModel('execution')->getByID($executionID);
         if(!$execution->multiple) unset($this->lang->task->report->charts['tasksPerExecution']);
 
-
         $this->execution->setMenu($executionID);
-        $this->executions          = $this->execution->getPairs();
-        $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->task->report->common;
+
+        $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->report->common;
         $this->view->executionID   = $executionID;
         $this->view->browseType    = $browseType;
         $this->view->chartType     = $chartType;
+        $this->view->charts        = $chartList;
         $this->view->checkedCharts = $this->post->charts ? implode(',', $this->post->charts) : '';
+
         $this->display();
     }
 

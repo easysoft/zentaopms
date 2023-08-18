@@ -811,6 +811,34 @@ class taskZen extends task
     }
 
     /**
+     * 构造图表数据。
+     * Build chart data.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function buildChartData(): array
+    {
+        $chartList = array();
+        $dataList  = array();
+        foreach($this->post->charts as $chart)
+        {
+            $chartFunc   = 'getDataOf' . $chart;
+            $chartData   = $this->task->$chartFunc();
+            $chartOption = $this->lang->task->report->$chart;
+            if(!empty($chartType) and $chartType != 'default') $chartOption->type = $chartType;
+
+            $this->task->mergeChartOption($chart);
+
+            $chartList[$chart] = $chartOption;
+            $dataList[$chart]  = $this->report->computePercent($chartData);
+        }
+        $this->view->datas  = $dataList;
+
+        return $chartList;
+    }
+
+    /**
      * 任务模块的一些常用操作。
      * Common actions of task module.
      *
