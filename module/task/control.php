@@ -435,7 +435,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update other data related to the task after it is started. */
-            $result = $this->task->afterStart($task, $changes, $this->post->left, $output);
+            $result = $this->task->afterStart($task, $changes, (float)$this->post->left, $output);
             if(is_array($result)) $this->send($result);
 
             /* Get the information returned after a task is started. */
