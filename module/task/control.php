@@ -811,6 +811,7 @@ class task extends control
     }
 
     /**
+     * 取消一个任务。
      * Cancel a task.
      *
      * @param  int    $taskID
@@ -830,7 +831,7 @@ class task extends control
         {
             $this->loadModel('action');
 
-            $oldTask = $this->task->getById($taskID);
+            $oldTask = $this->task->getByID($taskID);
             $task    = $this->taskZen->buildTaskForCancel($oldTask);
             $laneID  = isset($output['laneID']) ? $output['laneID'] : '';
             $this->task->cancel($task, (string)$laneID);

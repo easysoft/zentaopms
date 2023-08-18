@@ -1173,17 +1173,17 @@ class taskModel extends model
     }
 
     /**
+     * 取消一个任务。
      * Cancel a task.
      *
-     * @param object  $task
-     * @param string  $extra
-     *
+     * @param  object  $task
+     * @param  string  $extra
      * @access public
-     * @return array
+     * @return bool
      */
     public function cancel(object $task, string $extra = ''): bool
     {
-        $oldTask = $this->getById($task->id);
+        $oldTask = $this->getByID($task->id);
         $this->dao->update(TABLE_TASK)->data($task)
              ->autoCheck()
              ->checkFlow()
