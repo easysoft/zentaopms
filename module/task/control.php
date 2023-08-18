@@ -378,15 +378,16 @@ class task extends control
     }
 
     /**
-     * Confirm story change
+     * 确认需求变更。
+     * Confirm story change.
      *
      * @param  int    $taskID
      * @access public
      * @return void
      */
-    public function confirmStoryChange($taskID)
+    public function confirmStoryChange(int $taskID)
     {
-        $task = $this->task->getById($taskID);
+        $task = $this->task->getByID($taskID);
         $this->dao->update(TABLE_TASK)->set('storyVersion')->eq($task->latestStoryVersion)->where('id')->eq($taskID)->exec();
         $this->loadModel('action')->create('task', $taskID, 'confirmed', '', $task->latestStoryVersion);
 
