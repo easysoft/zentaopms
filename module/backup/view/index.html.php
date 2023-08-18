@@ -124,7 +124,6 @@
       </div>
       <div class="modal-footer">
       <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $lang->backup->cancelBackup;?></button>
-      <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="backupData()"><?php echo $lang->backup->ongoBackup;?></button>
       </div>
     </div>
   </div>
