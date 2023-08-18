@@ -1306,9 +1306,12 @@ class taskModel extends model
         if($task->parent > 0) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
         /* Get task team and team members. */
-        $task->members = array();
-        $task->team    = $this->taskTao->getTeamByTask($taskID);
-        foreach($task->team as $member) $task->members[$member->account] = $member->account;
+        if(!empty($task->mode))
+        {
+            $task->members = array();
+            $task->team    = $this->taskTao->getTeamByTask($taskID);
+            foreach($task->team as $member) $task->members[$member->account] = $member->account;
+        }
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         $task->files = $this->file->getByObject('task', $taskID);
