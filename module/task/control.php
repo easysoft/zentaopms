@@ -948,9 +948,9 @@ class task extends control
      * @access public
      * @return string
      */
-    public function ajaxGetUserTasks($userID = '', $id = '', $status = 'wait,doing', $appendID = 0)
+    public function ajaxGetUserTasks(int $userID = 0, string $id = '', string $status = 'wait,doing', int $appendID = 0)
     {
-        if($userID == '') $userID = $this->app->user->id;
+        if($userID == 0) $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
