@@ -117,7 +117,8 @@ else
     if($product)
     {
         $moduleTitle   .= $product->name  . '/';
-        $moduleItems[]  = span($product->name) . icon('angle-right');
+        $moduleItems[]  = span(a(set::href(createLink('product', 'browse', "productID=$product->id")), $product->name));
+        $moduleItems[]  = icon('angle-right');
     }
     foreach($modulePath as $key => $module)
     {
