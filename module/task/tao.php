@@ -880,7 +880,7 @@ class taskTao extends taskModel
      *
      * @param  int       $parentID
      * @param  object    $data
-     * @param  string    $action
+     * @param  string    $action Activated
      * @param  string    $comment
      * @access protected
      * @return void
