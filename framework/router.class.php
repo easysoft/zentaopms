@@ -692,4 +692,24 @@ class router extends baseRouter
         $this->rawParams = parent::mergeParams($defaultParams, $passedParams);
         return $this->rawParams;
     }
+
+    /**
+     * 加载一个模块：
+     *
+     * Load a module.
+     *
+     * @access public
+     * @return bool|object  if the module object of die.
+     */
+    public function loadModule()
+    {
+        /* 不能直接请求基类的方法 Cannot call methods of base control class. */
+        if(method_exists('Control', $this->methodName))
+        {
+            echo 'Cannot call methods of base control class.';
+            return false;
+        }
+
+        return parent::loadModule();
+    }
 }
