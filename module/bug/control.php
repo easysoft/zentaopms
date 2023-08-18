@@ -541,25 +541,14 @@ class bug extends control
     {
         if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->notice->confirmDelete, 'confirmed' => inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
 
+        /* 删除 bug。 */
+        /* Delete bug. */
         $bug = $this->bug->getByID($bugID);
-
         $this->bug->delete(TABLE_BUG, $bugID);
-
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        /* 如果 bug 转任务，删除 bug 时确认是否更新任务状态。*/
-        /* If the bug has been transfered to a task, confirm to update task when delete the bug. */
-        if($bug->toTask)
-        {
-            $task = $this->task->getByID($bug->toTask);
-            if(!$task->deleted)
-            {
-                $confirmedURL = $this->createLink('task', 'view', "taskID={$bug->toTask}");
-                $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-                return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->notice->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
-            }
-        }
-
+        /* 返回删除 bug 后的相应。 */
+        /* Return response after deleting bug. */
         $message = $this->executeHooks($bugID);
         return $this->bugZen->responseAfterDelete($bug, $from, $message);
     }

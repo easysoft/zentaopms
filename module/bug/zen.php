@@ -954,8 +954,8 @@ class bugZen extends bug
     /**
      * 处理创建 bug 请求数据。
      * Processing request data for creating bug.
-     * 
-     * @param  form      $formData 
+     *
+     * @param  form      $formData
      * @access protected
      * @return object
      */
@@ -2112,6 +2112,19 @@ class bugZen extends bug
     {
         if(!$message) $message = $this->lang->saveSuccess;
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
+
+        /* 如果 bug 转任务，删除 bug 时确认是否更新任务状态。*/
+        /* If the bug has been transfered to a task, confirm to update task when delete the bug. */
+        if($bug->toTask)
+        {
+            $task = $this->task->getByID($bug->toTask);
+            if(!$task->deleted)
+            {
+                $confirmedURL = $this->createLink('task', 'view', "taskID={$bug->toTask}");
+                $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
+                return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->bug->notice->remindTask, $bug->toTask), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+            }
+        }
 
         /* 在弹窗中删除 bug 时的返回。*/
         /* Respond when delete bug in modal.。*/
