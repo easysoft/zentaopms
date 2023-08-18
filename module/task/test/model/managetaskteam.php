@@ -22,16 +22,16 @@ $teamSourceList   = array(array('admin', 'user1', 'user2', 'user3'), array('admi
 $teamEstimateList = array(array(1, 2, 3, 4), array(2, 3, 4, 5, 7));
 $teamConsumedList = array(array(0, 0, 0, 0), array(4, 3, 2, 1), array(4, 3, 2, 1, 0));
 $teamLeftList     = array(array(0, 0, 0, 0), array(0, 1, 3, 5, 7));
-$teamData[]       = array('team' => $teamList[1], 'teamSourceList' => $teamSourceList[0], 'teamEstimateList' => $teamEstimateList[0], 'teamConsumedList' => $teamConsumedList[0], 'teamLeftList' => $teamLeftList[0]);
-$teamData[]       = array('team' => $teamList[1], 'teamSourceList' => $teamSourceList[0], 'teamEstimateList' => $teamEstimateList[0], 'teamConsumedList' => $teamConsumedList[1], 'teamLeftList' => $teamLeftList[0]);
-$teamData[]       = array('team' => $teamList[0], 'teamSourceList' => $teamSourceList[1], 'teamEstimateList' => $teamEstimateList[0], 'teamConsumedList' => $teamConsumedList[0], 'teamLeftList' => $teamLeftList[0]);
-$teamData[]       = array('team' => $teamList[0], 'teamSourceList' => $teamSourceList[1], 'teamEstimateList' => $teamEstimateList[0], 'teamConsumedList' => $teamConsumedList[1], 'teamLeftList' => $teamLeftList[0]);
-$teamData[]       = array('team' => $teamList[0], 'teamSourceList' => $teamSourceList[0], 'teamEstimateList' => $teamEstimateList[0], 'teamConsumedList' => $teamConsumedList[0], 'teamLeftList' => $teamLeftList[0]);
-$teamData[]       = array('team' => $teamList[0], 'teamSourceList' => $teamSourceList[0], 'teamEstimateList' => $teamEstimateList[0], 'teamConsumedList' => $teamConsumedList[1], 'teamLeftList' => $teamLeftList[0]);
-$teamData[]       = array('team' => $teamList[2], 'teamSourceList' => $teamSourceList[2], 'teamEstimateList' => $teamEstimateList[0], 'teamConsumedList' => $teamConsumedList[0], 'teamLeftList' => $teamLeftList[0]);
-$teamData[]       = array('team' => $teamList[2], 'teamSourceList' => $teamSourceList[2], 'teamEstimateList' => $teamEstimateList[0], 'teamConsumedList' => $teamConsumedList[1], 'teamLeftList' => $teamLeftList[0]);
-$teamData[]       = array('team' => $teamList[2], 'teamSourceList' => $teamSourceList[3], 'teamEstimateList' => $teamEstimateList[0], 'teamConsumedList' => $teamConsumedList[0], 'teamLeftList' => $teamLeftList[0]);
-$teamData[]       = array('team' => $teamList[2], 'teamSourceList' => $teamSourceList[3], 'teamEstimateList' => $teamEstimateList[0], 'teamConsumedList' => $teamConsumedList[1], 'teamLeftList' => $teamLeftList[0]);
+$teamData[]       = array('team' => $teamList[1], 'teamSource' => $teamSourceList[0], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[0], 'teamLeft' => $teamLeftList[0]);
+$teamData[]       = array('team' => $teamList[1], 'teamSource' => $teamSourceList[0], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[1], 'teamLeft' => $teamLeftList[0]);
+$teamData[]       = array('team' => $teamList[0], 'teamSource' => $teamSourceList[1], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[0], 'teamLeft' => $teamLeftList[0]);
+$teamData[]       = array('team' => $teamList[0], 'teamSource' => $teamSourceList[1], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[1], 'teamLeft' => $teamLeftList[0]);
+$teamData[]       = array('team' => $teamList[0], 'teamSource' => $teamSourceList[0], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[0], 'teamLeft' => $teamLeftList[0]);
+$teamData[]       = array('team' => $teamList[0], 'teamSource' => $teamSourceList[0], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[1], 'teamLeft' => $teamLeftList[0]);
+$teamData[]       = array('team' => $teamList[2], 'teamSource' => $teamSourceList[2], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[0], 'teamLeft' => $teamLeftList[0]);
+$teamData[]       = array('team' => $teamList[2], 'teamSource' => $teamSourceList[2], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[1], 'teamLeft' => $teamLeftList[0]);
+$teamData[]       = array('team' => $teamList[2], 'teamSource' => $teamSourceList[3], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[0], 'teamLeft' => $teamLeftList[0]);
+$teamData[]       = array('team' => $teamList[2], 'teamSource' => $teamSourceList[3], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[1], 'teamLeft' => $teamLeftList[0]);
 
 $task = new taskTest();
 

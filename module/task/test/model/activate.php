@@ -28,10 +28,10 @@ $teamSourceList   = array('admin', 'user1', 'user2', 'user3');
 
 $teamData = new stdclass();
 $teamData->team             = $accountList;
-$teamData->teamLeftList     = $teamLeftList;
-$teamData->teamSourceList   = $teamSourceList;
-$teamData->teamEstimateList = $teamEstimateList;
-$teamData->teamConsumedList = $teamConsumedList;
+$teamData->teamLeft     = $teamLeftList;
+$teamData->teamSource   = $teamSourceList;
+$teamData->teamEstimate = $teamEstimateList;
+$teamData->teamConsumed = $teamConsumedList;
 
 $emptyTeamData = new stdclass();
 
