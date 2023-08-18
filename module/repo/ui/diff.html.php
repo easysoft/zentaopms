@@ -14,6 +14,18 @@ namespace zin;
 
 dropmenu(set::module('repo'), set::tab('repo'));
 
+jsVar('repo', $repo);
+jsVar('repoLang', $lang->repo);
+jsVar('objectID', $objectID);
+
+/* Prepare repo dropdown data. */
+if($repo->SCM != 'Subversion')
+{
+    $items = $this->repoZen->getBranchAndTagItems($repo, '');
+    $tabs     = array(array('name' => 'branchesAndTags', 'text' => $lang->repo->branch));
+    $menuData = array('branchesAndTags' => array(array('text' => $lang->repo->branch, 'items' => $items['branchMenus']), array('text' => $lang->repo->tag, 'items' => $items['tagMenus'])));
+}
+
 $browser = helper::getBrowser();
 jsVar('browser', $browser['name']);
 jsVar('edition', $config->edition);
@@ -49,17 +61,67 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
 if(strpos($repo->SCM, 'Subversion') === false)
 {
     $oldRevision = $oldRevision == '^' ? "$newRevision" : $oldRevision;
-    $revisionWg  = h::span(setClass('label label-info diff-label'), substr($oldRevision, 0, 10) . " : " . substr($newRevision, 0, 10) . ' (' . zget($historys, $oldRevision, '') . ' : ' . zget($historys, $newRevision, ''));
+
+    $breadcrumbItems[] = input(set::type('hidden'), set::name('oldRevision'), set::value($oldRevision));
+    $breadcrumbItems[] = input(set::type('hidden'), set::name('newRevision'), set::value($newRevision));
+    $breadcrumbItems[] = input(set::type('hidden'), set::name('isBranchOrTag'), set::value($isBranchOrTag));
+    $breadcrumbItems[] = span($lang->repo->source . ':');
+    $breadcrumbItems[] = dropmenu
+        (
+            setID('source'),
+            set::objectID($selected),
+            set::text($oldRevision),
+            set::data(array('data' => $menuData, 'tabs' => $tabs)),
+        );
+    $breadcrumbItems[] = span(setClass('label label-exchange mr-2'), icon('exchange'));
+    $breadcrumbItems[] = span($lang->repo->target . ':');
+    $breadcrumbItems[] = dropmenu
+        (
+            setID('target'),
+            set::objectID($selected),
+            set::text($newRevision),
+            set::data(array('data' => $menuData, 'tabs' => $tabs)),
+        );
+    $breadcrumbItems[] = btn
+        (
+            set::id('diffForm'),
+            set::type('primary'),
+            set::size('md'),
+            $lang->repo->compare,
+            on::click('goDiff')
+        );
 }
 else
 {
     $oldRevision = $oldRevision == '^' ? $newRevision - 1 : $oldRevision;
-    $revisionWg  = h::span(setClass('label label-info'), $oldRevision . ':' . $newRevision);
 
+    $breadcrumbItems[] = input(set::type('hidden'), set::name('isBranchOrTag'), set::value($isBranchOrTag));
+    $breadcrumbItems[] = input
+        (
+            setClass('svn-version mr-2'),
+            setStyle('width', '160px'),
+            set::name('oldRevision'),
+            set::value($oldRevision),
+            set::placeholder($lang->repo->source),
+        );
+    $breadcrumbItems[] = span(setClass('label label-exchange mr-2'), icon('exchange'));
+    $breadcrumbItems[] = input
+        (
+            setClass('svn-version mr-2'),
+            setStyle('width', '160px'),
+            set::name('newRevision'),
+            set::value($newRevision),
+            set::placeholder($lang->repo->target),
+        );
+    $breadcrumbItems[] = btn
+        (
+            set::id('diffForm'),
+            set::type('primary'),
+            set::size('md'),
+            $lang->repo->compare,
+            on::click('goDiff')
+        );
 }
-
-$breadcrumbItems[] = $revisionWg;
-$breadcrumbItems[] = span(setClass('label label-exchange'), icon('exchange'));
 
 featureBar
 (

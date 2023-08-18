@@ -30,6 +30,8 @@ $lang->repo->addWebHook      = '添加Webhook';
 $lang->repo->apiGetRepoByUrl = '接口：通过URL获取代码库';
 $lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息： %name 于 %time 提交 %version %comment';
 $lang->repo->notRelated      = '暂时没有关联禅道对象';
+$lang->repo->source          = '基准';
+$lang->repo->target          = '对比';
 
 $lang->repo->browseAction    = '浏览代码库';
 $lang->repo->createAction    = '添加代码库';
@@ -57,6 +59,7 @@ $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
 $lang->repo->addComment = '添加评论';
 $lang->repo->addIssue   = '提问题';
+$lang->repo->compare    = '比较';
 
 $lang->repo->copy     = '点击复制';
 $lang->repo->copied   = '复制成功';
@@ -225,6 +228,10 @@ $lang->repo->error->clientPath    = "客户端安装目录不能有空格！";
 $lang->repo->error->notFound      = "代码库『%s』路径 %s 不存在，请确认此代码库是否已在本地服务器被删除";
 $lang->repo->error->noWritable    = '%s 不可写！请检查该目录权限，否则无法下载。';
 $lang->repo->error->noCloneAddr   = '该项目克隆地址未找到';
+$lang->repo->error->differentVersions = '基准和对比不能一样';
+$lang->repo->error->needTwoVersion    = '必须选择两个分支/标签';
+$lang->repo->error->emptyVersion      = '版本不能为空';
+$lang->repo->error->versionError      = '版本格式错误！';
 
 $lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置代码库定时同步。';
 $lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";

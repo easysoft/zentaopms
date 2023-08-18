@@ -16,3 +16,6 @@
 .tree li.tree-item.selected{color: #438EFF !important;}
 #monacoTree{overflow: auto;}
 .monaco-dropmenu{background: #efefef;}
+
+#featureBar .dropmenu-btn .icon-angle-right {display: none;}
+#featureBar .dropmenu-btn {padding-left: 0.3rem;}

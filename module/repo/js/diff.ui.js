@@ -26,11 +26,11 @@ window.afterPageUpdate = function()
         $('#monacoTree').css('height', getSidebarHeight() - 8 + 'px');
         /* Init tab template. */
         if(!tabTemp) tabTemp = $('#monacoTabs ul li').first().clone();
-        
+
         /* Load default tab content. */
         var height = getIframeHeight();
         $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetDiffEditorContent', urlParams.replace('%s', fileAsId)) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
-        
+
         /* Select default tree item. */
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);
         if(currentElement != undefined) $('#' + currentElement.id).parent().addClass('selected');
@@ -222,9 +222,14 @@ $('.inline-appose').on('click', function()
 
 $(".label-exchange").on('click', function()
 {
-    var newDiffLink = diffLink.replace('{oldRevision}', newRevision);
-    newDiffLink     = newDiffLink.replace('{newRevision}', oldRevision);
-    openUrl(newDiffLink);
+    var source = $('#oldRevision').val();
+    var target = $('#newRevision').val();
+    if(source && target)
+    {
+        $('#oldRevision').val(target);
+        $('#newRevision').val(source);
+        $('#diffForm').trigger('click');
+    }
 });
 
 /**
@@ -239,4 +244,57 @@ window.loadLinkPage = function(link)
 {
     $('#linkObject').attr('href', link);
     $('#linkObject').trigger('click');
+}
+
+$(document).on('click', '.dropmenu-list li.tree-item', function()
+{
+    var selectedSource = $('#source button.dropmenu-btn').data('value');
+    var selectedTarget = $('#target button.dropmenu-btn').data('value');
+    if(selectedSource) $('#oldRevision').val(selectedSource);
+    if(selectedTarget) $('#newRevision').val(selectedTarget);
+    $('#isBranchOrTag').val('1');
+});
+
+/**
+ * 触发diff检查。
+ * Trigger diff.
+ *
+ * @access public
+ * @return viod
+ */
+function goDiff()
+{
+    var oldRevision   = $('#oldRevision').val();
+    var newRevision   = $('#newRevision').val();
+    var isBranchOrTag = $('#isBranchOrTag').val();
+    if(!oldRevision || !newRevision)
+    {
+        (repo.SCM != 'Subversion') ? zui.Modal.alert(repoLang.error.needTwoVersion) : zui.Modal.alert(repoLang.error.emptyVersion);
+        return false;
+    }
+
+    if(repo.SCM == 'Subversion')
+    {
+        var intRe = /^\d+$/;
+        if((intRe.test(oldRevision) == false && oldRevision != '^') || (intRe.test(newRevision) == false && newRevision != '^'))
+        {
+            zui.Modal.alert(repoLang.error.versionError);
+            return false;
+        }
+    }
+
+    if(oldRevision == newRevision)
+    {
+        zui.Modal.alert(repoLang.error.differentVersions);
+        return false;
+    }
+
+    if(isBranchOrTag)
+    {
+        oldRevision = btoa(encodeURIComponent(oldRevision));
+        newRevision = btoa(encodeURIComponent(newRevision));
+    }
+
+    var url = $.createLink('repo', 'diff', 'repoID=' + repo.id + '&objectID=' + objectID + '&entry=&oldRevision=' + oldRevision + '&newRevision=' +newRevision + '&showBug=0&encoding=&isBranchOrTag=' + isBranchOrTag);
+    loadPage(url);
 }

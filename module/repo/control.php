@@ -836,7 +836,20 @@ class repo extends control
      */
     public function diff($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '', $isBranchOrTag = false)
     {
-        $oldRevision = urldecode(urldecode($oldRevision)); //Fix error.
+        if($isBranchOrTag)
+        {
+            $oldRevision = strtr($oldRevision, '*', '-');
+            $newRevision = strtr($newRevision, '*', '-');
+            if($isBranchOrTag)
+            {
+                $oldRevision = urldecode(helper::safe64Decode($oldRevision));
+                $newRevision = urldecode(helper::safe64Decode($newRevision));
+            }
+        }
+        else
+        {
+            $oldRevision = urldecode(urldecode($oldRevision)); //Fix error.
+        }
 
         $this->commonAction($repoID, $objectID);
 
@@ -940,7 +953,8 @@ class repo extends control
         $this->view->historys    = in_array($repo->SCM, $this->config->repo->gitTypeList) ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in("$oldRevision,$newRevision")->andWhere('repo')->eq($repo->id)->fetchPairs() : '';
         $this->view->info        = $info;
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
+        $this->view->isBranchOrTag = $isBranchOrTag;
+        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
 
         $this->display();
     }

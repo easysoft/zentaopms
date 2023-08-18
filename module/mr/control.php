@@ -258,7 +258,7 @@ class mr extends control
         $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
         $this->mr->createMRLinkedAction($MRID, 'removemr');
 
-        echo js::locate(inlink('browse'), 'parent');
+        return $this->send(array('result' => 'success', 'reload' => inlink('browse')));
     }
 
     /**
