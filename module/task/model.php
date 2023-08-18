@@ -279,7 +279,7 @@ class taskModel extends model
         $task->story        = 0;
         $task->module       = 0;
         $task->estimate     = 0;
-        $task->estStarted   = '0000-00-00';
+        $task->estStarted   = null;
         $task->left         = 0;
         $task->pri          = 3;
         $task->type         = 'devel';
@@ -1032,7 +1032,8 @@ class taskModel extends model
      */
     public function recordWorkhour(int $taskID, array $workhour): array
     {
-        $task       = $this->taskTao->fetchByID($taskID);
+        $task = $this->taskTao->fetchByID($taskID);
+        $task = $this->taskTao->formatDatetime($task);
         $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
 
         /* Check if field is valid. */
@@ -1813,9 +1814,9 @@ class taskModel extends model
             $data->canceledBy   = '';
             $data->closedBy     = '';
             $data->closedReason = '';
-            $data->finishedDate = '0000-00-00 00:00:00';
-            $data->canceledDate = '0000-00-00 00:00:00';
-            $data->closedDate   = '0000-00-00 00:00:00';
+            $data->finishedDate = null;
+            $data->canceledDate = null;
+            $data->closedDate   = null;
             if($task->assignedTo == 'closed') $data->assignedTo = $this->app->user->account;
         }
         elseif($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
@@ -1833,9 +1834,9 @@ class taskModel extends model
             $data->canceledBy     = '';
             $data->closedBy       = '';
             $data->closedReason   = '';
-            $data->finishedDate   = '0000-00-00 00:00:00';
-            $data->canceledDate   = '0000-00-00 00:00:00';
-            $data->closedDate     = '0000-00-00 00:00:00';
+            $data->finishedDate   = null;
+            $data->canceledDate   = null;
+            $data->closedDate     = null;
         }
         else
         {
