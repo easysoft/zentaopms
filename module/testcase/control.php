@@ -118,13 +118,15 @@ class testcase extends control
         if($this->app->tab == 'project')
         {
             $linkedProducts = $this->product->getProducts($projectID, 'all', '', false);
-            $this->products = count($linkedProducts) > 1 ? array('0' => $this->lang->product->all) + $linkedProducts : $linkedProducts;
-            $productID      = count($linkedProducts) > 1 ? $productID : key($linkedProducts);
+            $this->products = array('0' => $this->lang->product->all) + $linkedProducts;
             $hasProduct     = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
             if(!$hasProduct) unset($this->config->testcase->search['fields']['product']);
 
             $branch = intval($branch) > 0 ? $branch : 'all';
             $this->loadModel('project')->setMenu($projectID);
+
+            $this->view->products   = $this->products;
+            $this->view->hasProduct = $hasProduct;
         }
         else
         {

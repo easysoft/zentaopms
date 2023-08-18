@@ -101,8 +101,29 @@ if($canDisplaySuite)
 $linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType={$caseType}";
 $browseLink = createLink('testcase', 'browse', $linkParams);
 if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browseUnits', "productID=$productID&browseType={key}");
+$productMenuLink = createLink(
+    'project',
+    'testcase',
+    array(
+        'projectID'  => $projectID,
+        'productID'  => '{key}',
+        'branch'     => $branch,
+        'browseType' => $browseType,
+        'param'      => $param,
+        'caseType'   => $caseType,
+        'orderBy'    => $orderBy,
+    )
+);
+
 featureBar
 (
+    !empty($hasProduct) && !empty($projectID) ? to::before(productMenu(set
+    ([
+        'items' => $products,
+        'activeKey' => $productID,
+        'closeLink' => '#',
+        'link' => $productMenuLink
+    ]))) : null,
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
     set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? $browseLink : null),
     set::load($load),

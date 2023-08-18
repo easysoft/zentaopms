@@ -839,17 +839,6 @@ class project extends control
      */
     public function testcase(int $projectID = 0, int $productID = 0, string $branch = 'all', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('product');
-        $this->session->set('bugList', $this->app->getURI(true), 'project');
-        $this->session->set('reviewList', $this->app->getURI(true), 'project');
-
-        $products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
-
-        $extra = "$projectID,$browseType";
-
-        $hasProduct = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
-        if($hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', $extra, $branch);
-
         echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }
 
