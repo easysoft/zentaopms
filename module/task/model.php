@@ -2092,7 +2092,7 @@ class taskModel extends model
         $tasks = $this->taskTao->getListByReportCondition('execution', $this->reportCondition());
         if(!$tasks) return array();
 
-        $datas = $this->processData4Report($tasks, '', 'execution');
+        $datas = $this->processData4Report($tasks, array(), 'execution');
 
         /* Get execution names for these tasks. */
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
@@ -2113,7 +2113,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, '', 'module');
+        $datas    = $this->processData4Report($tasks, array(), 'module');
 
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas), true, true);
         foreach($datas as $moduleID => $data)
@@ -2136,7 +2136,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, '', 'assignedTo');
+        $datas    = $this->processData4Report($tasks, array(), 'assignedTo');
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data)
@@ -2159,7 +2159,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, '', 'type');
+        $datas    = $this->processData4Report($tasks, array(), 'type');
 
         foreach($datas as $type => $data)
         {
@@ -2181,7 +2181,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, '', 'pri');
+        $datas    = $this->processData4Report($tasks, array(), 'pri');
 
         foreach($datas as $pri) $pri->name = $this->lang->task->priList[$pri->name];
         return $datas;
@@ -2201,7 +2201,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        return $this->processData4Report($tasks, '', 'deadline');
+        return $this->processData4Report($tasks, array(), 'deadline');
     }
 
     /**
@@ -2269,7 +2269,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, '', 'finishedBy');
+        $datas    = $this->processData4Report($tasks, array(), 'finishedBy');
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data)
@@ -2293,7 +2293,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, '', 'closedReason');
+        $datas    = $this->processData4Report($tasks, array(), 'closedReason');
 
         foreach($datas as $closedReason => $data)
         {
@@ -2317,7 +2317,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        return $this->processData4Report($tasks, '', 'date');
+        return $this->processData4Report($tasks, array(), 'date');
     }
 
     /**
@@ -2333,24 +2333,25 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, '', 'status');
+        $datas    = $this->processData4Report($tasks, array(), 'status');
 
         foreach($datas as $status => $data) $data->name = $this->lang->task->statusList[$status];
         return $datas;
     }
 
     /**
+     * 处理报表统计数据。
      * Process data for report.
      *
-     * @param  array    $tasks
-     * @param  array    $children
-     * @param  string   $field
+     * @param  array  $tasks
+     * @param  array  $children
+     * @param  string $field    execution|module|assignedTo|type|pri|deadline|estimate|left|consumed|finishedBy|closedReason|status|date
      * @access public
      * @return array
      */
-    public function processData4Report($tasks, $children, $field)
+    public function processData4Report(array $tasks, array $children, string $field): array
     {
-        if(is_array($children))
+        if(!empty($children))
         {
             /* Remove the parent task from the tasks. */
             foreach($children as $childTask) unset($tasks[$childTask->parent]);
@@ -2365,12 +2366,14 @@ class taskModel extends model
             $fields[$key] ++;
         }
 
+        /* Process table statistics data. */
         if($field != 'date' and $field != 'deadline') asort($fields);
         foreach($fields as $field => $count)
         {
             $data = new stdclass();
             $data->name  = $field;
             $data->value = $count;
+
             $datas[$field] = $data;
         }
 
