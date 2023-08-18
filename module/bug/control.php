@@ -1253,9 +1253,10 @@ class bug extends control
      */
     public function ajaxGetModuleOwner(int $moduleID, int $productID = 0): string
     {
-        list($account, $realname) = $this->bug->getModuleOwner($moduleID, $productID);
-
-        return print(json_encode(array($account, $realname)));
+        /* 获取bug模块负责人。 */
+        /* Get module owner. */
+        $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
+        return print(json_encode($moduleOwner));
     }
 
     /**
