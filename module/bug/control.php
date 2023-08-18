@@ -1226,7 +1226,12 @@ class bug extends control
      */
     public function ajaxGetUserBugs(int $userID = 0, string $id = '' , int $appendID = 0): string
     {
+        /* 如果user id是0，把它设置为当前用户的id。 */
+        /* If user id is zero, set it to current user id. */
         if($userID == 0) $userID = $this->app->user->id;
+
+        /* 获取指派给user id的bug。 */
+        /* Get bugs of user id. */
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
         $bugs    = $this->bug->getUserBugPairs($account, true, 0, array(), array(), $appendID);
