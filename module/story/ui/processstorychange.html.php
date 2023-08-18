@@ -12,48 +12,30 @@ declare(strict_types=1);
 
 namespace zin;
 
-$fnGetContent = function() use ($changedStories, $lang, $users)
-{
-    $trItems = array();
-    foreach($changedStories as $story)
-    {
-        $trItems[] = h::tr
-        (
-            h::td($story->id),
-            h::td($story->title),
-            h::td(setClass('text-danger'), $lang->story->changed),
-            h::td($story->version),
-            h::td(\zget($users, $story->openedBy)),
-        );
-    }
-
-    return $trItems;
-};
-
 modalHeader(set::title($lang->story->URChanged));
-h::table
-(
-    setClass('table'),
-    h::thead
+div(setClass('text-gray mb-2'), icon(setClass('text-warning pr-2'), 'exclamation'), $lang->story->changeTips);
+foreach($changedStories as $story)
+{
+    div
     (
-        h::tr
+        setClass('changedStoryBox'),
+        entityLabel(set(array('entityID' => $story->id, 'level' => 3, 'text' => $story->title))),
+        div
         (
-            h::th($lang->story->id),
-            h::th($lang->story->title),
-            h::th($lang->story->status),
-            h::th($lang->story->version),
-            h::th($lang->story->openedBy),
-        ),
-    ),
-    h::tbody($fnGetContent()),
-);
+            setClass('p-3'),
+            p(setClass('text-gray pb-3'), "[{$lang->story->legendSpec}]"),
+            html($story->spec),
+            p(setClass('text-gray pb-3 pt-3'), "[{$lang->story->legendVerify}]"),
+            html($story->verify),
+        )
+    );
+}
 
-div(setClass('alert secondary m-3'), $lang->story->changeTips);
 div
 (
-    setClass('actions text-center'),
-    btn(set::url(inlink('processstorychange', "id=$storyID&result=no")), setClass('secondary mr-3'), $lang->story->changeList['no']),
-    btn(set::url(inlink('change', "id=$storyID")), setClass('primary'), $lang->story->changeList['yes']),
+    setClass('actions text-center mt-3'),
+    btn(set::url(inlink('processstorychange', "id=$storyID&result=no")), setClass('secondary mr-5 btn-wide'), $lang->story->changeList['no']),
+    btn(set::url(inlink('change', "id=$storyID")), setClass('primary btn-wide'), $lang->story->changeList['yes']),
 );
 
 render();
