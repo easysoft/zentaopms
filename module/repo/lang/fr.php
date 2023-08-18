@@ -30,6 +30,8 @@ $lang->repo->addWebHook      = 'Add Webhook';
 $lang->repo->apiGetRepoByUrl = 'API: Get repo by URL';
 $lang->repo->blameTmpl       = 'Code for line <strong>%line</strong>: %name commited at %time, %version %comment';
 $lang->repo->notRelated      = 'There is currently no related ZenTao object';
+$lang->repo->source          = 'Criterion';
+$lang->repo->target          = 'Contrast';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Créer Ref';
@@ -57,6 +59,7 @@ $lang->repo->submit     = 'Soumettre';
 $lang->repo->cancel     = 'Annuler';
 $lang->repo->addComment = 'Ajout Comment.';
 $lang->repo->addIssue   = 'Add Issue';
+$lang->repo->compare    = 'Compare';
 
 $lang->repo->copy     = 'Click to copy';
 $lang->repo->copied   = 'Copy successful';
@@ -221,6 +224,10 @@ $lang->repo->error->clientPath    = "The client installation directory cannot ha
 $lang->repo->error->notFound      = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
 $lang->repo->error->noWritable    = '%s is not writable! Please check the privilege, or download will not be done.';
 $lang->repo->error->noCloneAddr   = 'The repository clone address was not found';
+$lang->repo->error->differentVersions = 'The criterion and contrast cannot be the same';
+$lang->repo->error->needTwoVersion    = 'Two branches or tags must be selected.';
+$lang->repo->error->emptyVersion      = 'Version cannot be empty';
+$lang->repo->error->versionError      = 'Wrong version format!';
 
 $lang->repo->syncTips          = '<strong>Vous pouvez trouver la référence sur la façon de définir la synchronisation Git à partir de la page se trouvant <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">ici</a>.</strong>';
 $lang->repo->encodingsTips     = "Les encodages des commentaires de validation peuvent être des valeurs séparées par des virgules，ex: utf-8";
