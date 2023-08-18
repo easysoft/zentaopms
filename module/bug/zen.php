@@ -962,12 +962,11 @@ class bugZen extends bug
     protected function prepareCreateExtras(form $formData): object
     {
         $bug = $formData->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
-            ->setIF($formData->assignedTo != '', 'assignedDate', helper::now())
-            ->setIF($formData->story !== false, 'storyVersion', $this->loadModel('story')->getVersion($formData->story))
-            ->removeIF(empty($bug->deadline), 'deadline')
+            ->setIF($formData->data->assignedTo != '', 'assignedDate', helper::now())
+            ->setIF($formData->data->story !== false, 'storyVersion', $this->loadModel('story')->getVersion($formData->data->story))
             ->get();
 
-        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $bug->uid);
+        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
     }
 
     /**
