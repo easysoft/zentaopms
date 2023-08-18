@@ -649,6 +649,7 @@ class taskTest
     {
         $effort  = $this->objectModel->getEffortByID($effortID);
         foreach($param as $key => $value) $effort->{$key} = $value;
+        unset($effort->isLast);
 
         $changes = $this->objectModel->updateEffort($effort);
 

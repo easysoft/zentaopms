@@ -487,6 +487,7 @@ class task extends control
     }
 
     /**
+     * 编辑一条日志。
      * Edit a effort.
      *
      * @param  int    $effortID
@@ -510,7 +511,7 @@ class task extends control
 
         $this->view->title  = $this->lang->task->editEffort;
         $this->view->effort = $effort;
-        $this->view->task   = $this->task->getById($effort->objectID);
+        $this->view->task   = $this->task->getByID($effort->objectID);
         $this->display();
     }
 

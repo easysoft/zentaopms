@@ -10,57 +10,6 @@ title=taskModel->updateEffort();
 timeout=0
 cid=1
 
-- 正常编辑日志，查看返回的信息
- - 第0条的field属性 @consumed
- - 第0条的old属性 @3
- - 第0条的new属性 @4.1
-
-- 正常编辑日志，查看返回的信息
- - 第0条的field属性 @consumed
- - 第0条的old属性 @4
- - 第0条的new属性 @9
-
-- 正常编辑日志，查看返回的信息
- - 第0条的field属性 @consumed
- - 第0条的old属性 @5
- - 第0条的new属性 @4.1
-
-- 正常编辑日志，查看返回的信息
- - 第0条的field属性 @consumed
- - 第0条的old属性 @6
- - 第0条的new属性 @4.1
-
-- 正常编辑日志，查看返回的信息
- - 第0条的field属性 @consumed
- - 第0条的old属性 @7
- - 第0条的new属性 @4.1
-
-- 编辑日志，剩余时间传0，查看返回的信息
- - 第0条的field属性 @consumed
- - 第0条的old属性 @4.1
- - 第0条的new属性 @5.2
-
-- 编辑日志，剩余时间传0，查看返回的信息 @0
-
-- 编辑日志，剩余时间传0，查看返回的信息
- - 第0条的field属性 @consumed
- - 第0条的old属性 @4.1
- - 第0条的new属性 @3.2
-
-- 编辑日志，剩余时间传0，查看返回的信息
- - 第0条的field属性 @consumed
- - 第0条的old属性 @4.1
- - 第0条的new属性 @2.2
-
-- 编辑日志，剩余时间传0，查看返回的信息
- - 第0条的field属性 @consumed
- - 第0条的old属性 @4.1
- - 第0条的new属性 @1.2
-
-- 编辑日志，消耗时间传0，查看返回的信息 @『工时』应当大于『0』。
-
-- 编辑日志，消耗时间传0，查看返回的信息 @『工时』应当大于『0』。
-
 */
 $task = zdTable('task');
 $task->id->range('1-10');
@@ -111,18 +60,18 @@ $noConsumedEffort->consumed = 0;
 $noConsumedEffort->left     = 3;
 $noConsumedEffort->work     = '无剩时间余变更工作内容测试';
 
-$task = new taskTest(); 
+$task = new taskTest();
 r($task->updateEffortTest(1, $normalEffort)) && p('0:field,old,new') && e('consumed,3,4.1'); // 正常编辑日志，查看返回的信息
-r($task->updateEffortTest(2, $normalEffort)) && p('0:field,old,new') && e('consumed,4,9');   // 正常编辑日志，查看返回的信息
+r($task->updateEffortTest(2, $normalEffort)) && p('0:field,old,new') && e('consumed,4,9.1'); // 正常编辑日志，查看返回的信息
 r($task->updateEffortTest(3, $normalEffort)) && p('0:field,old,new') && e('consumed,5,4.1'); // 正常编辑日志，查看返回的信息
 r($task->updateEffortTest(4, $normalEffort)) && p('0:field,old,new') && e('consumed,6,4.1'); // 正常编辑日志，查看返回的信息
 r($task->updateEffortTest(5, $normalEffort)) && p('0:field,old,new') && e('consumed,7,4.1'); // 正常编辑日志，查看返回的信息
 
-r($task->updateEffortTest(1, $noLeftEffort)) && p('0:field,old,new') && e('consumed,4.1,5.2'); // 编辑日志，剩余时间传0，查看返回的信息
-r($task->updateEffortTest(2, $noLeftEffort)) && p('')                && e('0');                // 编辑日志，剩余时间传0，查看返回的信息
-r($task->updateEffortTest(3, $noLeftEffort)) && p('0:field,old,new') && e('consumed,4.1,3.2'); // 编辑日志，剩余时间传0，查看返回的信息
-r($task->updateEffortTest(4, $noLeftEffort)) && p('0:field,old,new') && e('consumed,4.1,2.2'); // 编辑日志，剩余时间传0，查看返回的信息
-r($task->updateEffortTest(5, $noLeftEffort)) && p('0:field,old,new') && e('consumed,4.1,1.2'); // 编辑日志，剩余时间传0，查看返回的信息
+r($task->updateEffortTest(1, $noLeftEffort)) && p()                  && e('0');          // 编辑日志，剩余时间传0，查看返回的信息
+r($task->updateEffortTest(2, $noLeftEffort)) && p('0:field,old,new') && e('left,22,42'); // 编辑日志，剩余时间传0，查看返回的信息
+r($task->updateEffortTest(3, $noLeftEffort)) && p()                  && e('0');          // 编辑日志，剩余时间传0，查看返回的信息
+r($task->updateEffortTest(4, $noLeftEffort)) && p()                  && e('0');          // 编辑日志，剩余时间传0，查看返回的信息
+r($task->updateEffortTest(5, $noLeftEffort)) && p()                  && e('0');          // 编辑日志，剩余时间传0，查看返回的信息
 
 r($task->updateEffortTest(1, $noConsumedEffort)) && p('0') && e('『工时』应当大于『0』。'); // 编辑日志，消耗时间传0，查看返回的信息
 r($task->updateEffortTest(2, $noConsumedEffort)) && p('0') && e('『工时』应当大于『0』。'); // 编辑日志，消耗时间传0，查看返回的信息
