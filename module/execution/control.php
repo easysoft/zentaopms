@@ -2168,6 +2168,7 @@ class execution extends control
     }
 
     /**
+     * 批量设置执行状态。
      * Batch change status.
      *
      * @param  string    $status
@@ -2175,7 +2176,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function batchChangeStatus($status, $projectID = 0)
+    public function batchChangeStatus(string $status, int $projectID = 0)
     {
         $executionIdList = $this->post->executionIDList;
         if(is_string($executionIdList)) $executionIdList = explode(',', $executionIdList);
@@ -2207,10 +2208,10 @@ class execution extends control
 
             if($status == 'closed') $alertLang = sprintf($this->lang->execution->hasNotClosedChildren, $pointOutStages);
 
-            return print(js::alert($alertLang) . js::locate($this->session->executionList, 'parent'));
+            return $this->sendSuccess(array('message' => $alertLang, 'load' => true));
         }
 
-        return print(js::locate($this->session->executionList, 'parent'));
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
