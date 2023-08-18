@@ -819,6 +819,8 @@ class taskZen extends task
      */
     protected function buildChartData(): array
     {
+        $this->loadModel('report');
+
         $chartList = array();
         $dataList  = array();
         foreach($this->post->charts as $chart)

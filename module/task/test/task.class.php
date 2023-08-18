@@ -882,58 +882,23 @@ class taskTest
     }
 
     /**
+     * 处理报表统计数据。
      * Test process data for report.
      *
-     * @param  bool  $children
-     * @param  array $field
+     * @param  int     $executionID
+     * @param  srtring $field       execution|module|assignedTo|type|pri|deadline|estimate|left|consumed|finishedBy|closedReason|status|date
+     * @param  bool    $skipParent
      * @access public
      * @return array
      */
-    public function processData4ReportTest($children, $field)
+    public function processData4ReportTest(int $executionID, string $field, bool $skipParent = false): array
     {
-        $tasks = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('`execution`')->eq('101')->andWhere('deleted')->eq(0)->fetchAll('id');
-        $parents = array();
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0) $parents[$task->parent] = $task->parent;
-        }
-        $parents = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0)
-            {
-                if(isset($tasks[$task->parent]))
-                {
-                    $tasks[$task->parent]->children[$task->id] = $task;
-                }
-                else
-                {
-                    $parent = $parents[$task->parent];
-                    $task->parentName = $parent->name;
-                }
-            }
-            $task->date = '0000-00-00';
-        }
+        $children = array();
+        if($skipParent) $children = $this->objectModel->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->gt(0)->andWhere('execution')->eq($executionID)->fetchAll();
 
-        $children = $children ? $tasks[601]->children + $tasks[602]->children + $tasks[603]->children : array();
-
-        $object = $this->objectModel->processData4Report($tasks, $children, $field);
-
-        $object['void'] = isset($object['']) ? $object[''] : 'void';
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            if($field == 'deadline')
-            {
-                $dateList = array(date('Y-m-d',strtotime('-8 day')), date('Y-m-d',strtotime('-15 day')));
-                return array($object[$dateList[0]], $object[$dateList[1]]);
-            }
-            return count($object) == 0 ? array('void' => 'void') : $object;
-        }
+        $selectField = $field == 'date' ? ", DATE_FORMAT(`finishedDate`, '%Y-%m-%d') AS `date`" : '';
+        $tasks       = $this->objectModel->dao->select("* {$selectField}")->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->eq($executionID)->fetchAll('id');
+        return $this->objectModel->processData4Report($tasks, $children, $field);
     }
 
     /**

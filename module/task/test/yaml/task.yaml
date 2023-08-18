@@ -31,3 +31,13 @@ fields:
         postfix: ","
       - field: mailto2
         range: "[]{2},user1{3}"
+  - field: deadline
+    range: "20210101 000000:1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: finishedDate
+    range: "20210101 000000:1D"
+    type: timestamp
+    format: "YY/MM/DD hh::mm:ss"
+    postfix: "\t"
