@@ -190,36 +190,26 @@ class bug extends control
     }
 
     /**
-     * 创建一个bug。
+     * 创建一个 bug。
      * Create a bug.
      *
      * @param  int    $productID
      * @param  string $branch
-     * @param  string $extras       Other params, for example, executionID=10,moduleID=10.
+     * @param  string $extras    Other params, for example, executionID=10,moduleID=10.
      * @access public
      * @return void
      */
     public function create(int $productID, string $branch = '', string $extras = '')
     {
-        if($branch === '') $branch = (string)$this->cookie->preBranch;
-
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
-        extract($output);
 
         $from = isset($output['from']) ? $output['from'] : '';
 
         if(!empty($_POST))
         {
-            $bug = form::data($this->config->bug->form->create)
-                ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
-                ->setIF($this->post->assignedTo != '', 'assignedDate', helper::now())
-                ->setIF($this->post->story !== false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-                ->get();
-
-            if(empty($bug->deadline)) unset($bug->deadline);
-
-            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
+            $formData = form::data($this->config->bug->form->create);
+            $bug      = $this->bugZen->prepareCreateExtras($formData);
 
             $this->bugZen->checkExistBug($bug);
 
@@ -236,13 +226,13 @@ class bug extends control
 
         $productID      = $this->product->saveState($productID, $this->products);
         $currentProduct = $this->product->getByID($productID);
+        if($branch === '') $branch = (string)$this->cookie->preBranch;
         $this->bugZen->setCreateMenu($productID, $branch, $output);
 
         /* 初始化一个bug对象，尽可能把属性都绑定到bug对象上，extract() 出来的变量除外。 */
         /* Init bug, give bug as many variables as possible, except for extract variables. */
         $fields = array('productID' => $productID, 'branch' => $branch, 'title' => ($from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : ''), 'assignedTo' => (isset($currentProduct->QD) ? $currentProduct->QD : ''));
         $bug = $this->bugZen->initBug($fields);
-
         $bug = $this->bugZen->setOptionMenu($bug, $currentProduct);
 
         /* 处理复制bug，从用例、测试单、日志转bug。 */
@@ -252,6 +242,7 @@ class bug extends control
         /* 获取分支、版本、需求、项目、执行、产品、项目的模式，构造$this->view。*/
         /* Get branches, builds, stories, project, projects, executions, products, project model and build create form. */
         $this->bugZen->buildCreateForm($bug, $output, $from);
+
         $this->display();
     }
 

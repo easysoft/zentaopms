@@ -12,12 +12,12 @@ class bugZen extends bug
      */
     protected function checkExistBug(object $bug): bool
     {
-        /* Check repeat bug. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
-        if($result and $result['stop'])
+
+        if($result && $result['stop'])
         {
             $message = sprintf($this->lang->duplicate, $this->lang->bug->common);
-            return $this->send(array('result' => 'success', 'id' => $result['duplicate'], 'message' => $message, 'locate' => $this->createLink('bug', 'view', "bugID={$result['duplicate']}")));
+            return $this->send(array('result' => 'success', 'id' => $result['duplicate'], 'message' => $message, 'load' => $this->createLink('bug', 'view', "bugID={$result['duplicate']}")));
         }
 
         return true;
@@ -949,6 +949,25 @@ class bugZen extends bug
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         return array($moduleID, $queryID, $realOrderBy, $pager);
+    }
+
+    /**
+     * 处理创建 bug 请求数据。
+     * Processing request data for creating bug.
+     * 
+     * @param  form      $formData 
+     * @access protected
+     * @return object
+     */
+    protected function prepareCreateExtras(form $formData): object
+    {
+        $bug = $formData->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
+            ->setIF($formData->assignedTo != '', 'assignedDate', helper::now())
+            ->setIF($formData->story !== false, 'storyVersion', $this->loadModel('story')->getVersion($formData->story))
+            ->removeIF(empty($bug->deadline), 'deadline')
+            ->get();
+
+        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $bug->uid);
     }
 
     /**
