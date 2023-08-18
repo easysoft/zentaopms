@@ -2787,32 +2787,36 @@ class testcase extends control
      */
     public function updateOrder()
     {
-        $idList  = explode(',', trim($this->post->idList, ','));
-        $orderBy = $this->post->orderBy;
-        if(strpos($orderBy, 'sort') === false) return false;
+        $type     = $this->post->type;
+        $sourceID = $this->post->sourceID;
+        $targetID = $this->post->targetID;
+        $dataList = $this->post->dataList;
+        if(!$type || !$sourceID || !$targetID || !$dataList) return false;
 
-        $caseIDList  = array_filter(array_map(function($id){return strpos($id, 'case_')  !== false ? str_replace('case_',  '', $id) : '';}, $idList));
-        $sceneIDList = array_filter(array_map(function($id){return strpos($id, 'scene_') !== false ? str_replace('scene_', '', $id) : '';}, $idList));
+        $idList      = array_map(function($data){return $data['id'];},    $dataList);
+        $orderList   = array_map(function($data){return $data['order'];}, $dataList);
+        $sourceIndex = array_search($sourceID, $idList);
+        $targetIndex = array_search($targetID, $idList);
 
-        if(count($caseIDList) > 1)
+        if($sourceIndex > $targetIndex)
         {
-            $caseSorts = $this->dao->select('id, sort')->from(TABLE_CASE)->where('id')->in($caseIDList)->orderBy($orderBy)->fetchPairs();
-            foreach($caseSorts as $id => $sort)
-            {
-                $caseID = array_shift($caseIDList);
-
-                if($id != $caseID) $this->dao->update(TABLE_CASE)->set('sort')->eq($sort)->where('id')->eq($caseID)->exec();
-            }
+            $idList    = array_slice($idList,    $targetIndex, $sourceIndex - $targetIndex + 1);
+            $orderList = array_slice($orderList, $targetIndex, $sourceIndex - $targetIndex + 1);
+            array_unshift($idList, array_pop($idList));
+        }
+        else
+        {
+            $idList    = array_slice($idList,    $sourceIndex, $targetIndex - $sourceIndex + 1);
+            $orderList = array_slice($orderList, $sourceIndex, $targetIndex - $sourceIndex + 1);
+            array_splice($idList, -1, 0, array_shift($idList));
         }
 
-        if(count($sceneIDList) > 1)
+        $table = $type == 'case' ? TABLE_CASE : TABLE_SCENE;
+
+        foreach($idList as $key => $id)
         {
-            $sceneSorts = $this->dao->select('id, sort')->from(TABLE_SCENE)->where('id')->in($sceneIDList)->orderBy($orderBy)->fetchPairs();
-            foreach($sceneSorts as $id => $sort)
-            {
-                $sceneID = array_shift($sceneIDList);
-                if($id != $sceneID) $this->dao->update(TABLE_SCENE)->set('sort')->eq($sort)->where('id')->eq($sceneID)->exec();
-            }
+            if(!isset($orderList[$key])) continue;
+            $this->dao->update($table)->set('sort')->eq($orderList[$key])->where('id')->eq($id)->exec();
         }
     }
 

@@ -70,6 +70,8 @@ var DtSort = {};
 DtSort.defaultConfig = {
     idAttrName: 'data-id',
     parentAttrName: 'data-parent',
+    productAttrName: 'data-product',
+    orderAttrName: 'data-order',
     dataNestedAttrName: 'data-nested',
     nestPathAttrName: 'data-nest-path',
     isSceneAttrName: 'data-is-scene',
@@ -154,6 +156,8 @@ DtSort.Table.prototype.measure = function()
         var rowIndex = i;
         var id = $row.attr(this.options.idAttrName);
         var parent = $row.attr(this.options.parentAttrName);
+        var product = $row.attr(this.options.productAttrName);
+        var order = $row.attr(this.options.orderAttrName);
         var dataNested = $row.attr(this.options.dataNestedAttrName);
         var nestPath = $row.attr(this.options.nestPathAttrName);
         var isScene = $row.attr(this.options.isSceneAttrName);
@@ -173,6 +177,8 @@ DtSort.Table.prototype.measure = function()
             id: id,
             index: i,
             parent: parent,
+            product: product,
+            order: order,
             dataNested: dataNested,
             nestPath: nestPath,
             isScene: isScene,
