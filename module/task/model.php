@@ -4242,9 +4242,9 @@ class taskModel extends model
     {
         if($task->deleted) return '';
 
-        $isPlmMode = $this->config->systemMode == 'PLM';
+        $isPLMMode = $this->config->systemMode == 'PLM';
 
-        if($isPlmMode)
+        if($isPLMMode)
         {
             $execution = $this->loadModel('execution')->getByID($task->execution);
             $execution = $this->loadModel('execution')->canStageStart($execution);
@@ -4259,7 +4259,7 @@ class taskModel extends model
 
         $menu .= $this->buildMenu('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', $this->lang->task->assignTo);
 
-        $plmCanStart = !($isPlmMode and empty($execution['canStart']));
+        $plmCanStart = !($isPLMMode and empty($execution['canStart']));
         if($plmCanStart) $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         if($plmCanStart) $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         if($plmCanStart) $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'view', '', '', 'iframe showinonlybody', true);
