@@ -23,18 +23,20 @@
     $executable  = $this->ai->isExecutable($prompt);
     $published   = $prompt->status == 'active';
 
-    /* Design button. */
-    if(common::hasPriv('ai', 'promptassignrole')) $html .= html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon-design text-primary"></i>', '', "class='btn" . ($published ? ' disabled' : '') . "' title='{$lang->ai->prompts->action->design}'");
+      if($this->config->edition != 'open')
+      {
+          /* Design button. */
+          if(common::hasPriv('ai', 'promptassignrole')) $html .= html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon-design text-primary"></i>', '', "class='btn" . ($published ? ' disabled' : '') . "' title='{$lang->ai->prompts->action->design}'");
 
-    /* Test / audit button. */
-    if(common::hasPriv('ai', 'promptaudit')) $html .= html::a($executable ? $this->ai->getTestingLocation($prompt) : '#', '<i class="icon-menu-backend text-primary"></i>', '', "id='prompt-audit-button-$prompt->id' class='prompt-audit-btn btn"  . ($executable && !$published ? '' : ' disabled') . "' title='{$lang->ai->prompts->action->test}'" . ($executable ? '' : " data-toggle='modal' data-target='#designConfirmModal'"));
+          /* Test / audit button. */
+          if(common::hasPriv('ai', 'promptaudit')) $html .= html::a($executable ? $this->ai->getTestingLocation($prompt) : '#', '<i class="icon-menu-backend text-primary"></i>', '', "id='prompt-audit-button-$prompt->id' class='prompt-audit-btn btn" . ($executable && !$published ? '' : ' disabled') . "' title='{$lang->ai->prompts->action->test}'" . ($executable ? '' : " data-toggle='modal' data-target='#designConfirmModal'"));
 
-    /* Edit button. */
-    if(common::hasPriv('ai', 'promptedit')) $html .= html::a(helper::createLink('ai', 'promptedit', "prompt=$prompt->id"), '<i class="icon-edit text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->edit}'");
+          /* Edit button. */
+          if(common::hasPriv('ai', 'promptedit')) $html .= html::a(helper::createLink('ai', 'promptedit', "prompt=$prompt->id"), '<i class="icon-edit text-primary"></i>', '', "class='btn' title='{$lang->ai->prompts->action->edit}'");
 
-    /* Divider. */
-    if(common::hasPriv('ai', 'promptpublish') || common::hasPriv('ai', 'promptunpublish')) $html .= '<div class="dividing-line"></div>';
-
+          /* Divider. */
+          if(common::hasPriv('ai', 'promptpublish') || common::hasPriv('ai', 'promptunpublish')) $html .= '<div class="dividing-line"></div>';
+      }
     /* Publish button. */
     if(common::hasPriv('ai', 'promptpublish')) $html .= html::a(!$published && $executable ? "javascript:togglePromptStatus($prompt->id)" : '#', '<i class="icon-publish text-primary"></i>', '', "class='btn"  . (!$published && $executable ? '' : ' disabled') . "' title='{$lang->ai->prompts->action->publish}'" . ($executable ? '' : " data-toggle='modal' data-target='#designConfirmModal'"));
 
@@ -60,7 +62,7 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('ai', 'createprompt')) echo html::a($this->createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> " . $lang->ai->prompts->create, '', "class='btn btn-primary iframe'");?>
+    <?php if($this->config->edition != 'open' && common::hasPriv('ai', 'createprompt')) echo html::a($this->createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> " . $lang->ai->prompts->create, '', "class='btn btn-primary iframe'");?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
@@ -88,7 +90,7 @@
       <div class="table-empty-tip">
         <p>
           <span class="text-muted"><?php echo $lang->ai->prompts->emptyList;?></span>
-          <?php if(common::hasPriv('ai', 'createprompt')) echo html::a($this->createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> " . $lang->ai->prompts->create, '', "class='btn btn-info iframe'");?>
+          <?php if($this->config->edition != 'open' && common::hasPriv('ai', 'createprompt')) echo html::a($this->createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> " . $lang->ai->prompts->create, '', "class='btn btn-info iframe'");?>
         </p>
       </div>
     <?php else:?>

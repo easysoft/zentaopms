@@ -61,21 +61,25 @@
       </div>
     </div>
     <div class="cell"><?php include '../../common/view/action.html.php';?></div>
-    <div class='main-actions'>
-      <div class="btn-toolbar">
-        <?php echo html::a(helper::createLink('ai', 'prompts'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn'");?>
-        <?php if(!$prompt->deleted):?>
-          <?php if(($prompt->status == 'draft' && (common::hasPriv('ai', 'promptassignrole') || common::hasPriv('ai', 'promptaudit') || common::hasPriv('ai', 'publish'))) || ($prompt->status != 'draft' && common::hasPriv('ai', 'unpublish'))):?><div class='divider'></div><?php endif;?>
-          <?php if(common::hasPriv('ai', 'promptassignrole') && $prompt->status == 'draft') echo html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon icon-design icon-sm"></i> ' . $lang->ai->prompts->action->design, '', "class='btn'");?>
-          <?php if(common::hasPriv('ai', 'promptaudit') && $prompt->status == 'draft' && $this->ai->isExecutable($prompt)) echo html::a($this->ai->getTestingLocation($prompt), '<i class="icon icon-bug icon-sm"></i> ' . $lang->ai->prompts->action->test, '', "class='btn prompt-audit-btn'");?>
-          <?php if(common::hasPriv('ai', 'promptpublish') && $prompt->status == 'draft' && $this->ai->isExecutable($prompt)) echo html::a(helper::createLink('ai', 'promptpublish', "id={$prompt->id}"), '<i class="icon icon-publish icon-sm"></i> ' . $lang->ai->prompts->action->publish, '', "class='btn'");?>
-          <?php if(common::hasPriv('ai', 'promptunpublish') && $prompt->status == 'active') echo html::a(helper::createLink('ai', 'promptunpublish', "id={$prompt->id}"), '<i class="icon icon-ban icon-sm"></i> ' . $lang->ai->prompts->action->unpublish, '', "class='btn' id='unpublish-btn'");?>
-          <?php if(common::hasPriv('ai', 'promptedit') || common::hasPriv('ai', 'promptdelete')):?><div class='divider'></div><?php endif;?>
-          <?php if(common::hasPriv('ai', 'promptedit'))   echo html::a(helper::createLink('ai', 'promptedit', "prompt=$prompt->id"), '<i class="icon icon-edit icon-sm"></i>', '', "class='btn' title='{$lang->ai->prompts->action->edit}'");?>
-          <?php if(common::hasPriv('ai', 'promptdelete')) echo html::a(helper::createLink('ai', 'promptdelete', "prompt=$prompt->id"), '<i class="icon icon-trash icon-sm"></i>', '', "class='btn deleter' title='{$lang->ai->prompts->action->delete}'");?>
-        <?php endif;?>
+    <?php if($this->config->edition != 'open'): ?>
+      <div class='main-actions'>
+        <div class="btn-toolbar">
+          <?php echo html::a(helper::createLink('ai', 'prompts'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn'"); ?>
+          <?php if(!$prompt->deleted): ?>
+            <?php if(($prompt->status == 'draft' && (common::hasPriv('ai', 'promptassignrole') || common::hasPriv('ai', 'promptaudit') || common::hasPriv('ai', 'publish'))) || ($prompt->status != 'draft' && common::hasPriv('ai', 'unpublish'))): ?>
+              <div class='divider'></div><?php endif; ?>
+            <?php if(common::hasPriv('ai', 'promptassignrole') && $prompt->status == 'draft') echo html::a(helper::createLink('ai', 'promptassignrole', "prompt=$prompt->id"), '<i class="icon icon-design icon-sm"></i> ' . $lang->ai->prompts->action->design, '', "class='btn'"); ?>
+            <?php if(common::hasPriv('ai', 'promptaudit') && $prompt->status == 'draft' && $this->ai->isExecutable($prompt)) echo html::a($this->ai->getTestingLocation($prompt), '<i class="icon icon-bug icon-sm"></i> ' . $lang->ai->prompts->action->test, '', "class='btn prompt-audit-btn'"); ?>
+            <?php if(common::hasPriv('ai', 'promptpublish') && $prompt->status == 'draft' && $this->ai->isExecutable($prompt)) echo html::a(helper::createLink('ai', 'promptpublish', "id={$prompt->id}"), '<i class="icon icon-publish icon-sm"></i> ' . $lang->ai->prompts->action->publish, '', "class='btn'"); ?>
+            <?php if(common::hasPriv('ai', 'promptunpublish') && $prompt->status == 'active') echo html::a(helper::createLink('ai', 'promptunpublish', "id={$prompt->id}"), '<i class="icon icon-ban icon-sm"></i> ' . $lang->ai->prompts->action->unpublish, '', "class='btn' id='unpublish-btn'"); ?>
+            <?php if(common::hasPriv('ai', 'promptedit') || common::hasPriv('ai', 'promptdelete')): ?>
+              <div class='divider'></div><?php endif; ?>
+            <?php if(common::hasPriv('ai', 'promptedit')) echo html::a(helper::createLink('ai', 'promptedit', "prompt=$prompt->id"), '<i class="icon icon-edit icon-sm"></i>', '', "class='btn' title='{$lang->ai->prompts->action->edit}'"); ?>
+            <?php if(common::hasPriv('ai', 'promptdelete')) echo html::a(helper::createLink('ai', 'promptdelete', "prompt=$prompt->id"), '<i class="icon icon-trash icon-sm"></i>', '', "class='btn deleter' title='{$lang->ai->prompts->action->delete}'"); ?>
+          <?php endif; ?>
+        </div>
       </div>
-    </div>
+    <?php endif; ?>
   </div>
   <div class="side-col col-4">
     <div class="cell">
