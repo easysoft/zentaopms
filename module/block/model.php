@@ -76,14 +76,15 @@ class blockModel extends model
             list($moduleName, $blockKey) = explode('|', $block);
             if($moduleName == $blockKey)
             {
-                $blockPairs[$block] = $this->lang->block->moduleList[$moduleName];
+                $blockPairs[$block] = zget($this->lang->block->moduleList, $moduleName);
             }
             else
             {
                 $blockName = $blockKey;
                 if(isset($this->lang->block->modules[$moduleName]->availableBlocks[$blockKey])) $blockName = $this->lang->block->modules[$moduleName]->availableBlocks[$blockKey];
                 if(isset($this->lang->block->availableBlocks[$blockKey])) $blockName = $this->lang->block->availableBlocks[$blockKey];
-                $blockPairs[$block] = "{$this->lang->block->moduleList[$moduleName]}|{$blockName}";
+                $moduleName = zget($this->lang->block->moduleList, $moduleName);
+                $blockPairs[$block] = "{$moduleName}|{$blockName}";
             }
         }
 
@@ -99,22 +100,15 @@ class blockModel extends model
      * @access public
      * @return array|false
      */
-    public function getMyDashboard(string $dashboard, int $hidden = 0): array|false
+    public function getMyDashboard(string $dashboard): array|false
     {
-        return $this->blockTao->fetchMyBlocks($dashboard, $hidden);
-    }
-
-    /**
-     * 获取隐藏的区块列表。
-     * Get hidden blocks.
-     *
-     * @param  string      $module
-     * @access public
-     * @return array|false
-     */
-    public function getMyHiddenBlocks(string $dashboard): array|false
-    {
-        return $this->blockTao->fetchMyBlocks($dashboard, 1);
+        return $this->dao->select('*')->from(TABLE_BLOCK)
+            ->where('account')->eq($this->app->user->account)
+            ->andWhere('dashboard')->eq($dashboard)
+            ->andWhere('hidden')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->orderBy('width_desc,top_asc,id_asc')
+            ->fetchAll();
     }
 
     /**

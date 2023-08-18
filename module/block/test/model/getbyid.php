@@ -24,20 +24,20 @@ timeout=0
 cid=1
 
 - 测试获取ID为2的block的内容
-- 属性account @admin
-- 属性dashboard @my
-- 属性module @welcome
-- 属性code @welcome
-- 属性title @区块名称1
-- 属性width @2
+ - 属性account @admin
+ - 属性dashboard @my
+ - 属性module @welcome
+ - 属性code @welcome
+ - 属性title @区块名称1
+ - 属性width @2
 
 - 测试获取ID为3的block的内容
-- 属性account @admin
-- 属性dashboard @my
-- 属性module @guide
-- 属性code @guide
-- 属性title @区块名称2
-- 属性width @2
+ - 属性account @admin
+ - 属性dashboard @my
+ - 属性module @guide
+ - 属性code @guide
+ - 属性title @区块名称2
+ - 属性width @2
 
 - 测试获取ID不存在的block的内容 @0
 

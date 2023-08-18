@@ -176,14 +176,14 @@ class block extends control
         $codes  = $this->blockZen->getAvailableCodes($module);         // 根据仪表盘和模块获取可用的区块列表。
         $params = $this->blockZen->getAvailableParams($module, $code); // 根据所属模块和区块code获取参数配置项列表。
 
-        $this->view->title        = $this->lang->block->createBlock;
-        $this->view->dashboard    = $dashboard;
-        $this->view->module       = $module;
-        $this->view->code         = $code;
-        $this->view->modules      = $modules;
-        $this->view->codes        = $codes;
-        $this->view->params       = $params;
-        $this->view->blockTitle   = $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
+        $this->view->title      = $this->lang->block->createBlock;
+        $this->view->dashboard  = $dashboard;
+        $this->view->module     = $module;
+        $this->view->code       = $code;
+        $this->view->modules    = $modules;
+        $this->view->codes      = $codes;
+        $this->view->params     = $params;
+        $this->view->blockTitle = $this->blockZen->getBlockTitle($modules, $module, $codes, $code, $params);
         $this->display();
     }
 

@@ -15,7 +15,6 @@ function initData()
     $block->module->range('project');
     $block->code->range('list,statistic');
     $block->title->prefix('区块名称')->range('2-5');
-    $block->order->range('1-4');
 
     $block->gen(4);
 }
@@ -48,10 +47,10 @@ $tester->loadModel('block');
 initData();
 
 $blockTest = new blockTest();
-r($tester->block->getByID(2)) && p('id') && e('2');    // 测试ID为2的区块是否存在
+r($tester->block->getByID(2)) && p('id') && e('2');            // 测试ID为2的区块是否存在
 r($tester->block->deleteBlock(2, '', '')) && p('') && e('1');  // 测试ID为2的区块删除后的返回结果
-r($tester->block->getByID(2)) && p('id') && e('0');    // 测试ID为2的区块的是否存在
-r($tester->block->getByID(3)) && p('id') && e('3');    // 测试ID为3的区块的是否存在
+r($tester->block->getByID(2)) && p('id') && e('0');            // 测试ID为2的区块的是否存在
+r($tester->block->getByID(3)) && p('id') && e('3');            // 测试ID为3的区块的是否存在
 r($tester->block->deleteBlock(0, 'project', 'statistic')) && p('') && e('1');  // 测试根据代号删除区块后的返回结果
 r($tester->block->getByID(3)) && p('id') && e('0');    // 测试ID为3的区块的是否存在
 r($tester->block->deleteBlock(22)) && p('') && e('1'); // 测试ID为22的区块删除后的返回结果
