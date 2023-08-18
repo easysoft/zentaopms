@@ -13,6 +13,7 @@ zdTable('kanbancell')->config('kanbancell_activate')->gen(27);
 zdTable('kanbancolumn')->config('kanbancolumn_activate')->gen(27);
 zdTable('kanbanlane')->config('kanbanlane_activate')->gen(3);
 zdTable('kanbanregion')->config('kanbanregion_activate')->gen(1);
+zdTable('history')->gen(0);
 
 /**
 
