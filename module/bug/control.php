@@ -500,20 +500,28 @@ class bug extends control
      */
     public function close(int $bugID, string $extra = '')
     {
+        /* 获取 bug 信息，并检查 bug 所属执行的权限。*/
+        /* Get bug info, and check privilege of bug 所属执行的权限。*/
         $oldBug = $this->bug->getByID($bugID);
         $this->bugZen->checkBugExecutionPriv($oldBug);
 
         if(!empty($_POST))
         {
-            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $output);
-
+            /* 设置bug信息。 */
+            /* Set bug information. */
             $bug = form::data($this->config->bug->form->close)->add('id', $bugID)->get();
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
 
-            $this->bug->close($bug, $output);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            /* 设置额外变量。 */
+            /* Set extra variables. */
+            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+            parse_str($extra, $output);
 
+            $this->bug->close($bug, $output);
+
+            /* 返回关闭 bug 后的响应。 */
+            /* Return response after closing bug. */
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $message  = $this->executeHooks($bugID);
             $regionID = zget($output, 'regionID', 0);
             return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
