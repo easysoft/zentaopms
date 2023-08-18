@@ -213,8 +213,7 @@ class bug extends control
 
             $this->bugZen->checkExistBug($bug);
 
-            $action = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
-            $bugID  = $this->bug->create($bug, $action);
+            $bugID  = $this->bug->create($bug, $from);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $bug->id = $bugID;

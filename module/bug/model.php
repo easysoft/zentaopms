@@ -47,14 +47,15 @@ class bugModel extends model
     }
 
     /**
-     * bug的入库操作。
+     * bug 的入库操作。
      * Insert bug into zt_bug.
      *
-     * @param  object $bug
+     * @param  object    $bug
+     * @param  string    $from
      * @access public
      * @return int|false
      */
-    public function create(object $bug, string $action = 'Opened'): int|false
+    public function create(object $bug, string $from): int|false
     {
         $this->dao->insert(TABLE_BUG)->data($bug, 'laneID')
             ->autoCheck()
@@ -67,6 +68,7 @@ class bugModel extends model
 
         $bugID = $this->dao->lastInsertID();
 
+        $action = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
         $this->loadModel('action')->create('bug', $bugID, $action);
 
         /* Add score for create. */
