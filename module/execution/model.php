@@ -1880,6 +1880,30 @@ class executionModel extends model
     }
 
     /**
+     * 获取执行id=>name的键值对。
+     * Get an array of execution id:name.
+     *
+     * @param  int     $projectID
+     * @param  string  $type
+     * @param  bool    $filterMulti
+     * @param  bool    $queryAll
+     * @access public
+     * @return array
+     */
+    public function fetchPairs($projectID = 0, $type = 'all', $filterMulti = true, $queryAll = false): array
+    {
+        return $this->dao->select('id,name')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
+            ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
+            ->beginIF($filterMulti)->andWhere('multiple')->eq('1')->fi()
+            ->beginIF(!$queryAll && !$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->fetchPairs();
+    }
+
+    /**
      * 获取执行列表信息。
      * Get execution list information.
      *
