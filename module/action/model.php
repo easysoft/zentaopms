@@ -72,7 +72,7 @@ class actionModel extends model
         $actionID = $this->dao->lastInsertID();
 
         $hasRecentTable = true;
-        if(defined('IN_UPGRADE'))
+        if(defined('IN_UPGRADE') and IN_UPGRADE)
         {
             $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
             if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.6', '<'))               $hasRecentTable = false;
