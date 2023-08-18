@@ -184,7 +184,7 @@ $items[] = array
     'hidden'   => zget($visibleFields, 'pri', true, false),
     'control'  => 'priPicker',
     'items'    => $lang->bug->priList,
-    'value'    => '',
+    'value'    => 3,
     'width'    => '80px',
     'required' => isset($requiredFields['pri']),
     'ditto'    => true,
@@ -212,6 +212,7 @@ $items[] = array
     'control'  => 'picker',
     'items'    => $lang->bug->osList,
     'width'    => '200px',
+    'multiple' => true,
     'required' => isset($requiredFields['os']),
 );
 
@@ -224,6 +225,7 @@ $items[] = array
     'control'  => 'picker',
     'items'    => $lang->bug->browserList,
     'width'    => '200px',
+    'multiple' => true,
     'required' => isset($requiredFields['browser']),
 );
 

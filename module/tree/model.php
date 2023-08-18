@@ -85,7 +85,7 @@ class treeModel extends model
         if(($type == 'feedback' or $type == 'ticket') and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID])) $type  = 'story,' . $type;
         if($this->isMergeModule($rootID, $type))
         {
-            return $this->dao->select('id, name, root, branch, grade, path, parent')->from(TABLE_MODULE)
+            return $this->dao->select('id, name, root, branch, grade, path, parent, owner')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
                 ->beginIF($type == 'task')->andWhere('type')->eq('task')->fi()
                 ->beginIF($type != 'task')->andWhere('type')->in("story,$type")->fi()

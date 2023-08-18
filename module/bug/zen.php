@@ -1280,11 +1280,8 @@ class bugZen extends bug
         {
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = helper::now();
-            $bug->openedBuild = implode(',', $bug->openedBuild);
             $bug->product     = $productID;
             $bug->steps       = nl2br($bug->steps);
-            $bug->os          = implode(',', $bug->os);
-            $bug->browser     = implode(',', $bug->browser);
 
             /* Assign the bug to the person in charge of the module. */
             if(!empty($moduleOwners[$bug->module]))
