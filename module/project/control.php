@@ -923,6 +923,7 @@ class project extends control
     }
 
     /**
+     * 项目版本列表。
      * Browse builds of a project.
      *
      * @param  int    $projectID
@@ -935,17 +936,14 @@ class project extends control
      * @access public
      * @return void
      */
-    public function build($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function build(int $projectID = 0, string $type = 'all', int $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* Load module and get project. */
-        $this->loadModel('build');
-        $this->loadModel('product');
-        $projectID = (int)$projectID;
-        $project   = $this->project->getByID($projectID);
+        /* Set menu lang and session. */
         $this->project->setMenu($projectID);
-
         $this->session->set('buildList', $this->app->getURI(true), 'project');
 
+        $this->loadModel('build');
+        $project = $this->project->getByID($projectID);
         if($project->multiple)
         {
             $executionPairs = $this->loadModel('execution')->getByProject($project->id, 'all', '', true, $project->model == 'waterfall');
@@ -954,8 +952,9 @@ class project extends control
         }
         if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
 
-        $product = $param ? $this->loadModel('product')->getById((int)$param) : '';
-        if($product and $product->type != 'normal')
+        $this->loadModel('product');
+        $product = $param ? $this->product->getById((int)$param) : '';
+        if($product && $product->type != 'normal')
         {
             $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($product->id, '', $projectID);
             $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
@@ -964,7 +963,7 @@ class project extends control
 
         /* Build the search form. */
         $type      = strtolower($type);
-        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID   = $type == 'bysearch' ? (int)$param : 0;
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
         $products  = $this->product->getProducts($projectID, 'all', '', false);
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project', $project);
@@ -992,8 +991,6 @@ class project extends control
         $this->view->orderBy    = $orderBy;
         $this->view->param      = $param;
         $this->view->pager      = $pager;
-        $this->view->recTotal   = $pager->recTotal;
-
         $this->display();
     }
 
