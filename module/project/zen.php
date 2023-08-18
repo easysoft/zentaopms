@@ -462,6 +462,180 @@ class projectZen extends project
     }
 
     /**
+     * 为项目的bug列表准备分支数据。
+     * Prepare branches for project bug list.
+     * 
+     * @param  object    $product
+     * @param  int       $productID
+     * @param  int       $projectID
+     * @access protected
+     * @return void
+     */
+    protected function prepareBranchForBug($product, int $productID, int $projectID)
+    {
+        $branchOption    = array();
+        $branchTagOption = array();
+        if($product and $product->type != 'normal')
+        {
+            /* Display status of branch. */
+            $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+            foreach($branches as $branchInfo)
+            {
+                $branchOption[$branchInfo->id]    = $branchInfo->name;
+                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            }
+        }
+
+        $this->view->branchOption    = $branchOption;
+        $this->view->branchTagOption = $branchTagOption;
+    }
+
+    /**
+     * 为项目bug列表准备模块数据。
+     * Prepare modules for project bug list.
+     * 
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $build
+     * @param  string $branchID
+     * @param  array  $products
+     * @access protected
+     * @return void
+     */
+    protected function prepareModuleForBug(int $productID, int $projectID, string $type, int $param, string $orderBy, int $build, string $branchID, array $products)
+    {
+        $moduleID = $type != 'bysearch' ? $param : 0;
+        $modules  = $this->loadModel('tree')->getAllModulePairs('bug');
+
+        /* Get module tree.*/
+        $extra = array('projectID' => $projectID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branchID);
+        if($projectID and empty($productID) and count($products) > 1)
+        {
+            $moduleTree = $this->tree->getBugTreeMenu($projectID, $productID, 0, array('treeModel', 'createBugLink'), $extra);
+        }
+        elseif(!empty($products))
+        {
+            $productID  = empty($productID) ? reset($products)->id : $productID;
+            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('productID' => $productID, 'branchID' => $branchID), $branchID);
+        }
+        else
+        {
+            $moduleTree = array();
+        }
+
+        $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
+
+        $showModule = !empty($this->config->project->bug->showModule) ? $this->config->project->bug->showModule : '';
+
+        $this->view->moduleTree  = $moduleTree;
+        $this->view->modules     = $modules;
+        $this->view->moduleID    = $moduleID;
+        $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
+    }
+
+    /**
+     * 处理项目bug列表的搜索表单。
+     * Process search form for project bug list. 
+     * 
+     * @param  object     $project
+     * @param  string     $type
+     * @param  int        $param
+     * @param  int        $projectID
+     * @param  int        $productID
+     * @param  string     $branchID
+     * @param  string     $orderBy
+     * @param  int        $build
+     * @param  array      $products
+     * @access protected
+     * @return void
+     */
+    protected function processBugSearchParams(object $project, string $type, int $param, int $projectID, int $productID, string $branchID, string $orderBy, int $build, array $products)
+    {
+        if(!$project->multiple) unset($this->config->bug->datatable->fieldList['execution']);
+        if(!$project->hasProduct)
+        {
+            unset($this->config->bug->search['fields']['product']);
+            if($project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
+        }
+        if(!$project->multiple and !$project->hasProduct) unset($this->config->bug->search['fields']['plan']);
+
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&branchID=$branchID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
+        $this->loadModel('execution')->buildBugSearchForm($products, $queryID, $actionURL, 'project');
+    }
+
+    /**
+     * 为bug列表视图构造必要的变量。 
+     * 
+     * @param  int       $productID
+     * @param  int       $projectID
+     * @param  object    $project
+     * @param  string    $type
+     * @param  int       $param
+     * @param  string    $orderBy
+     * @param  int       $build
+     * @param  string    $branchID
+     * @param  array     $products
+     * @param  int       $recTotal
+     * @param  int       $recPerPage
+     * @param  int       $pageID
+     * @access protected
+     * @return void
+     */
+    protected function buildBugView(int $productID, int $projectID, object $project, string $type, int $param, string $orderBy, int $build, string $branchID, array $products, int $recTotal, int $recPerPage, int $pageID)
+    {
+        $this->loadModel('bug');
+        $this->loadModel('user');
+
+        /* Load pager and get bugs, user. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $sort  = common::appendOrder($orderBy);
+
+        $bugs = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $sort, '', $pager);
+        $bugs = $this->bug->processBuildForBugs($bugs);
+        $bugs = $this->bug->batchAppendDelayedDays($bugs);
+
+        /* Get story and task id list. */
+        $storyIdList = $taskIdList = array();
+        foreach($bugs as $bug)
+        {
+            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+        }
+
+        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
+        $taskList  = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList) : array();
+
+        $this->view->title        = $project->name . $this->lang->colon . $this->lang->bug->common;
+        $this->view->bugs         = $bugs;
+        $this->view->build        = $this->loadModel('build')->getById($build);
+        $this->view->buildID      = $this->view->build ? $this->view->build->id : 0;
+        $this->view->pager        = $pager;
+        $this->view->orderBy      = $orderBy;
+        $this->view->type         = $type;
+        $this->view->param        = $param;
+        $this->view->productID    = $productID;
+        $this->view->project      = $project;
+        $this->view->branchID     = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
+        $this->view->builds       = $this->loadModel('build')->getBuildPairs($productID);
+        $this->view->users        = $this->user->getPairs('noletter');
+        $this->view->executions   = $this->loadModel('execution')->getPairs($projectID, 'all', 'empty|withdelete');
+        $this->view->plans        = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
+        $this->view->stories      = $storyList;
+        $this->view->tasks        = $taskList;
+        $this->view->projectPairs = $this->project->getPairsByProgram();
+        $this->display();
+    }
+
+    /**
      * Send variables to view page.
      *
      * @param  object $project
