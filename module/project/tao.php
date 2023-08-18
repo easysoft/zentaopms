@@ -853,7 +853,7 @@ class projectTao extends projectModel
     protected function setMenuByProduct(int $projectID, int $hasProduct, string $model): bool
     {
         global $lang;
-        if($hasProduct)
+        if(!$hasProduct)
         {
             unset($lang->project->menu->projectplan);
             unset($lang->project->menu->settings['subMenu']->module);
