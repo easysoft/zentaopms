@@ -1666,7 +1666,7 @@ class treeModel extends model
         $moduleID = $paths[0];
         $module   = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
         if($module->type != 'story' or !$module->root) return false;
-        return $this->dao->select('name')->from(TABLE_PRODUCT)->where('id')->eq($module->root)->fetch();
+        return $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($module->root)->fetch();
     }
 
     /**
