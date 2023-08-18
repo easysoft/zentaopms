@@ -297,7 +297,7 @@ function loadAssignedToByProject(projectID)
 
 function loadAssignedToByExecution(executionID)
 {
-    const link = $.createLink('bug', 'ajaxLoadAssignedTo', 'executionID=' + executionID).val());
+    const link = $.createLink('bug', 'ajaxLoadAssignedTo', 'executionID=' + executionID);
     $.get(link, function(data)
     {
         let assignedTo        = $('[name="assignedTo"]').val();
