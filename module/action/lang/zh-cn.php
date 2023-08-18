@@ -162,6 +162,13 @@ $lang->action->objectTypes['repo']             = '代码库';
 $lang->action->objectTypes['dataview']         = '中间表';
 $lang->action->objectTypes['privlang']         = '权限';
 $lang->action->objectTypes['scene']            = '场景';
+$lang->action->objectTypes['serverroom']       = '机房';
+$lang->action->objectTypes['account']          = '账号';
+$lang->action->objectTypes['host']             = '主机';
+$lang->action->objectTypes['deploy']           = '发布';
+$lang->action->objectTypes['service']          = '服务';
+$lang->action->objectTypes['domain']           = '域名';
+
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -834,6 +841,9 @@ $lang->action->label->serverroom   = '机房|serverroom|browse|';
 $lang->action->label->host         = '主机|host|view|id=%s';
 $lang->action->label->account      = "账号|account|view|id=%s";
 $lang->action->label->instance     = '应用|instance|view|id=%s';
+$lang->action->label->deploy       = '上线|deploy|view|id=%s';
+$lang->action->label->domian       = '域名|domian|view|id=%s';
+$lang->action->label->service      = '服务|service|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

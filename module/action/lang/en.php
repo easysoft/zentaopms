@@ -165,6 +165,10 @@ $lang->action->objectTypes['scene']            = 'Scene';
 $lang->action->objectTypes['serverroom']       = 'IDC';
 $lang->action->objectTypes['account']          = 'Account';
 $lang->action->objectTypes['host']             = 'Host';
+$lang->action->objectTypes['deploy']           = 'Deploy';
+$lang->action->objectTypes['service']          = 'Service';
+$lang->action->objectTypes['domain']           = 'Domain';
+
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -837,6 +841,13 @@ $lang->action->label->stage        = 'Stage|stage|browse|';
 $lang->action->label->module       = 'Module|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = 'Ticket|ticket|view|id=%s';
 $lang->action->label->chartgroup   = 'Group';
+$lang->action->label->serverroom   = 'IDC|serverroom|browse|';
+$lang->action->label->host         = 'Host|host|view|id=%s';
+$lang->action->label->account      = "Account|account|view|id=%s";
+$lang->action->label->instance     = 'Application|instance|view|id=%s';
+$lang->action->label->deploy       = 'Deploy|deploy|view|id=%s';
+$lang->action->label->domian       = 'Domain|domian|view|id=%s';
+$lang->action->label->service      = 'Service|service|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

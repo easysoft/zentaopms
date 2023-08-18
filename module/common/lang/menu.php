@@ -486,6 +486,7 @@ $lang->devops->homeMenu = new stdclass();
 //$lang->devops->homeMenu->dashboard   = array('link' => "{$lang->dashboard}|system|dashboard");
 $lang->devops->homeMenu->repos       = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import');
 $lang->devops->homeMenu->compile     = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
+$lang->devops->homeMenu->deploy      = array('link' => "{$lang->devops->deploy}|deploy|browse", 'subModule' => 'create,edit,browse,view');
 $lang->devops->homeMenu->WIPs        = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs', 'alias' => 'createapplication,binduser,edit');
 //$lang->devops->homeMenu->environment = array('link' => "{$lang->devops->environment}|gitlab|browse", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit,import');
 //$lang->devops->homeMenu->app         = array('link' => "{$lang->app->common}|app|serverlink|%s");
@@ -689,6 +690,7 @@ $lang->navGroup->devopssetting    = 'devops';
 $lang->navGroup->space            = 'devops';
 $lang->navGroup->store            = 'devops';
 $lang->navGroup->instance         = 'devops';
+$lang->navGroup->deploy           = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';
@@ -737,6 +739,8 @@ $lang->navGroup->serverroom    = 'admin';
 $lang->navGroup->account       = 'admin';
 $lang->navGroup->host          = 'admin';
 $lang->navGroup->ops           = 'admin';
+$lang->navGroup->service       = 'admin';
+$lang->navGroup->domain        = 'admin';
 
 $lang->navGroup->index   = 'index';
 $lang->navGroup->misc    = 'misc';

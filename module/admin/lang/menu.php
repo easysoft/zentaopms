@@ -182,10 +182,9 @@ $lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
 //$lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
-$lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops,tree');
+$lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops,tree,domain,service');
 $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
 
-$lang->admin->menuList->platform['tabMenu']['resource']['deploy']     = array('link' => "{$lang->devops->deploy}|deploy|browse|", 'alias' => 'create,edit,browse,view');
 $lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,browse,view,treemap,changestatus,group', 'subModule' => 'tree');
 $lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'ccreate,edit,view,browse');
 $lang->admin->menuList->platform['tabMenu']['resource']['service']    = array('link' => "{$lang->devops->service}|service|browse|", 'alias' => 'create,edit,view,browse');
@@ -195,8 +194,8 @@ $lang->admin->menuList->platform['tabMenu']['resource']['provider']   = array('l
 $lang->admin->menuList->platform['tabMenu']['resource']['city']       = array('link' => "{$lang->devops->city}|ops|city|", 'alias' => 'city');
 $lang->admin->menuList->platform['tabMenu']['resource']['cpuBrand']   = array('link' => "{$lang->devops->cpuBrand}|ops|cpuBrand|", 'alias' => 'cpubrand');
 $lang->admin->menuList->platform['tabMenu']['resource']['os']         = array('link' => "{$lang->devops->os}|ops|os|", 'alias' => 'os');
+$lang->admin->menuList->platform['tabMenu']['resource']['stage']      = array('link' => "{$lang->devops->os}|ops|stage|", 'alias' => 'stage');
 
-$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['5']  = 'deploy';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['10']  = 'host';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['15'] = 'serverroom';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20'] = 'service';
@@ -206,15 +205,15 @@ $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['35'] = 'pr
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['40'] = 'city';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['45'] = 'cpuBrand';
 $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['50'] = 'os';
+$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['55'] = 'stage';
 
 if($config->edition === 'open')
 {
     unset($lang->admin->menuList->platform['tabMenu']['resource']['domain']);
     unset($lang->admin->menuList->platform['tabMenu']['resource']['service']);
-    unset($lang->admin->menuList->platform['tabMenu']['resource']['deploy']);
-    unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['5']);
+    unset($lang->admin->menuList->platform['tabMenu']['resource']['stage']);
     unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20']);
-    unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['30']);
+    unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['55']);
 }
 
 //$lang->admin->menuList->platform['menuOrder']['15'] = 'environment';
