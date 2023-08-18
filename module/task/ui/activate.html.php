@@ -106,7 +106,7 @@ if($isMultiple)
     }
 }
 
-$rowCount = (!empty($task->team) and count($task->team) < 6) ? 6 : 1 + count($task->team);
+if(!empty($task->team)) $rowCount = count($task->team) < 6 ? 6 : 1 + count($task->team);
 $teamForm = array();
 $i        = 1;
 foreach($task->team as $member)
