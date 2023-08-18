@@ -803,13 +803,13 @@ class bugZen extends bug
      * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
      *
      * @param  object    $bug
-     * @param  object    $currentProduct
+     * @param  object    $product
      * @access protected
      * @return object
      */
-    protected function setOptionMenu(object $bug, object $currentProduct): object
+    protected function setOptionMenu(object $bug, object $product): object
     {
-        $bug = $this->getBugBranches($bug, $currentProduct);
+        $bug = $this->getBugBranches($bug, $product);
         $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
 
@@ -819,7 +819,7 @@ class bugZen extends bug
     }
 
     /**
-     * 为创建bug设置导航数据。
+     * 为创建 bug 设置导航数据。
      * Set menu for create bug page.
      *
      * @param  int       $productID
