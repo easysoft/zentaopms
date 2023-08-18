@@ -186,7 +186,8 @@ else
 }
 
 $config->execution->datatable->fieldList['id']['title']    = 'idAB';
-$config->execution->datatable->fieldList['id']['type']    = 'checkID';
+$config->execution->datatable->fieldList['id']['type']     = 'checkID';
+$config->execution->datatable->fieldList['id']['fixed']    = 'left';
 $config->execution->datatable->fieldList['id']['sortType'] = true;
 $config->execution->datatable->fieldList['id']['checkbox'] = true;
 

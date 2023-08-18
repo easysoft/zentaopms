@@ -115,6 +115,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
   <script>
   cols = JSON.parse(cols);
   data = JSON.parse(data);
+  if(convertCols != undefined) cols = convertCols(cols);
   const options =
   {
       striped: true,
