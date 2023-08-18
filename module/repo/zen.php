@@ -22,7 +22,14 @@ class repoZen extends repo
      */
     protected function prepareCreate(form $formData, bool $isPipelineServer): object|false
     {
-        if(!$this->checkClient()) return false;
+        if($this->config->inContainer || $this->config->inQuickon)
+        {
+            $formData->data->client = $_POST['client'] = $this->post->SCM == 'Subversion' ? 'svn' : 'git';
+        }
+        else
+        {
+            if(!$this->checkClient()) return false;
+        }
         if(!$this->checkConnection()) return false;
 
         $repo = $formData
