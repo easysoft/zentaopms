@@ -5,5 +5,7 @@ version: "1.0"
 fields:
 - field: type
   range: scrum
+- field: project
+  range: 1-10
 ...
 
