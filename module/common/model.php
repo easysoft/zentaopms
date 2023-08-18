@@ -964,6 +964,9 @@ class commonModel extends model
 
         $app->loadLang('my');
 
+        /* Ensure user has latest rights set. */
+        $app->user->rights = $app->control->loadModel('user')->authorize($app->user->account);
+
         $menuOrder = $lang->mainNav->menuOrder;
         ksort($menuOrder);
 
