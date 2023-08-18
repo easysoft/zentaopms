@@ -1786,12 +1786,13 @@ class taskModel extends model
      * @access public
      * @return void
      */
-    public function deleteWorkhour($estimateID)
+    public function deleteWorkhour(int $estimateID)
     {
         $estimate = $this->getEffortByID($estimateID);
         $task     = $this->getById($estimate->objectID);
         $now      = helper::now();
 
+        /* Compute the left and consumed workhour of the task. */
         $consumed = $task->consumed - $estimate->consumed;
         $left     = $task->left;
         if($estimate->isLast)
@@ -1805,6 +1806,7 @@ class taskModel extends model
             if(empty($lastTwoEstimate) and $left == 0) $left = $task->estimate;
         }
 
+        /* Define and prepare one new task object to update the task. */
         $data = new stdclass();
         $data->consumed = $consumed;
         $data->left     = $left;
@@ -1822,14 +1824,6 @@ class taskModel extends model
             $data->closedDate   = null;
             if($task->assignedTo == 'closed') $data->assignedTo = $this->app->user->account;
         }
-        elseif($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
-        {
-            $data->status         = 'done';
-            $data->assignedTo     = $task->openedBy;
-            $data->assignedDate   = $now;
-            $data->finishedBy     = $this->app->user->account;
-            $data->finishedDate   = $now;
-        }
         elseif($estimate->isLast and $left != 0 and strpos('done,pause,cancel,closed', $task->status) !== false)
         {
             $data->status         = 'doing';
@@ -1841,19 +1835,30 @@ class taskModel extends model
             $data->canceledDate   = null;
             $data->closedDate     = null;
         }
+        elseif($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
+        {
+            $data->status         = 'done';
+            $data->assignedTo     = $task->openedBy;
+            $data->assignedDate   = $now;
+            $data->finishedBy     = $this->app->user->account;
+            $data->finishedDate   = $now;
+        }
         else
         {
             $data->status = $task->status;
         }
 
+        /* 如果该任务是多人团队任务则做一些额外的处理。*/
         if(!empty($task->team))
         {
+            /* 获取要删除的工时的团队，如果要删除的工时的用户不是团队成员则不做任何处理。*/
             $currentTeam = $this->getTeamByAccount($task->team, $estimate->account, array('effortID' => $estimateID, 'order' => $estimate->order));
             if($currentTeam)
             {
                 $left = $currentTeam->left;
-                if($task->mode == 'multi')
+                if($task->mode == 'multi') /* 如果任务是多人并行任务。注：多人串行任务的mode是linear。*/
                 {
+                    /* 获取要删除的工时对应的用户的工时信息列表。*/
                     $accountEstimates = $this->getTaskEfforts($currentTeam->task, $estimate->account, $estimateID);
                     $lastEstimate     = array_pop($accountEstimates);
                     if($lastEstimate->id == $estimateID)
@@ -1863,13 +1868,17 @@ class taskModel extends model
                     }
                 }
 
+                /* 更新要删除的工时对应的用户的任务信息。*/
                 $newTeamInfo = new stdclass();
                 $newTeamInfo->consumed = $currentTeam->consumed - $estimate->consumed;
                 if($currentTeam->status != 'done') $newTeamInfo->left = $left;
-                if($currentTeam->status == 'done' and $left > 0 and $task->mode == 'multi') $newTeamInfo->left = $left;
+                if($currentTeam->status == 'done' and $left > 0 and $task->mode == 'multi')
+                {
+                    $newTeamInfo->status = 'doing';
+                    $newTeamInfo->left = $left;
+                }
 
                 if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
-                if($task->mode == 'multi' and $currentTeam->status == 'done' and $left > 0) $newTeamInfo->status = 'doing';
                 if($task->mode == 'multi' and $currentTeam->status == 'done' and ($newTeamInfo->consumed == 0 and $left == 0))
                 {
                     $newTeamInfo->status = 'doing';
@@ -1879,13 +1888,16 @@ class taskModel extends model
             }
         }
 
+        /* 删除工时；如果任务是多人任务，则重新计算工时。*/
         $this->dao->update(TABLE_EFFORT)->set('deleted')->eq('1')->where('id')->eq($estimateID)->exec();
         if(!empty($task->team)) $data = $this->computeMultipleHours($task, $data);
 
+        /* 更新任务、父任务状态、需求阶段。*/
         $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->objectID)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story)  $this->loadModel('story')->setStage($task->story);
 
+        /* 计算此工时所对应任务的变更。*/
         $oldTask = new stdclass();
         $oldTask->consumed = $task->consumed;
         $oldTask->left     = $task->left;
