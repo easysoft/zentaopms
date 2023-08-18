@@ -742,6 +742,7 @@ class task extends control
     }
 
     /**
+     * 批量取消任务。
      * Batch cancel tasks.
      *
      * @access public
