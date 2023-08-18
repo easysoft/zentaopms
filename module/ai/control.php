@@ -198,6 +198,13 @@ class ai extends control
         $this->view->pager      = $pager;
         $this->view->title      = $this->lang->ai->prompts->common;
 
+        if($this->config->edition == 'open')
+        {
+            $this->view->promptModules = array_map(function($prompt)
+            {
+                return $prompt->module;
+            }, $this->ai->getPrompts());
+        }
         $this->display();
     }
 

@@ -67,9 +67,19 @@
   <div class="side-col" id="sidebar">
     <div class="cell">
       <ul id="modules" class="tree" data-ride="tree" data-name="tree-modules">
-        <?php foreach($this->lang->ai->prompts->modules as $moduleKey => $moduleName):?>
-          <li <?php if($module == $moduleKey) echo 'class="active"';?>><a href="<?php echo $this->createLink('ai', 'prompts', "module=$moduleKey");?>"><?php echo $moduleName;?></a></li>
-        <?php endforeach;?>
+        <?php
+        $moduleList = $this->config->edition != 'open'
+          ? $this->lang->ai->prompts->modules
+          : array_filter($this->lang->ai->prompts->modules, function($v, $k) use ($promptModules)
+          {
+            return in_array($k, $promptModules);
+          }, ARRAY_FILTER_USE_BOTH);
+        ?>
+        <?php foreach($moduleList as $moduleKey => $moduleName): ?>
+          <li <?php if($module == $moduleKey) echo 'class="active"'; ?>><a
+              href="<?php echo $this->createLink('ai', 'prompts', "module=$moduleKey"); ?>"><?php echo $moduleName; ?></a>
+          </li>
+        <?php endforeach; ?>
       </ul>
     </div>
   </div>
