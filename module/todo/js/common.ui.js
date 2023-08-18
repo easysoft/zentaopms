@@ -95,13 +95,13 @@ function loadList(type, id, todoDefaultType, objectID)
 {
     if(id)
     {
-        nameBoxClass = '.name-box' + id;
-        nameBoxID    = '#nameBox' + id;
+        let nameBoxClass = '.name-box' + id;
+        let nameBoxID    = '#nameBox' + id;
     }
     else
     {
-        nameBoxClass = '.name-box';
-        nameBoxID    = '#nameBox';
+        let nameBoxClass = '.name-box';
+        let nameBoxID    = '#nameBox';
     }
 
     id = id ? id : '';
@@ -112,7 +112,7 @@ function loadList(type, id, todoDefaultType, objectID)
 
     if(moduleList.indexOf(type) !== -1)
     {
-        link = $.createLink(type, objectsMethod[type], param);
+        let link = $.createLink(type, objectsMethod[type], param);
         $.get(link, function(data)
         {
             data = JSON.parse(data);
