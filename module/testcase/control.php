@@ -2792,11 +2792,14 @@ class testcase extends control
         $targetID = $this->post->targetID;
         $dataList = $this->post->dataList;
         if(!$type || !$sourceID || !$targetID || !$dataList) return false;
+        if($sourceID == $targetID) return false;
 
         $idList      = array_map(function($data){return $data['id'];},    $dataList);
         $orderList   = array_map(function($data){return $data['order'];}, $dataList);
         $sourceIndex = array_search($sourceID, $idList);
         $targetIndex = array_search($targetID, $idList);
+
+        if($sourceIndex === false || $targetIndex === false) return false;
 
         if($sourceIndex > $targetIndex)
         {
@@ -2808,7 +2811,14 @@ class testcase extends control
         {
             $idList    = array_slice($idList,    $sourceIndex, $targetIndex - $sourceIndex + 1);
             $orderList = array_slice($orderList, $sourceIndex, $targetIndex - $sourceIndex + 1);
-            array_splice($idList, -1, 0, array_shift($idList));
+            if(count($idList) == 2)
+            {
+                $idList = array_reverse($idList);
+            }
+            else
+            {
+                array_splice($idList, -1, 0, array_shift($idList));
+            }
         }
 
         $table = $type == 'case' ? TABLE_CASE : TABLE_SCENE;
