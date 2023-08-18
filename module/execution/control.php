@@ -215,6 +215,7 @@ class execution extends control
         }
 
         /* Assign. */
+        if($this->app->tab == 'project') $this->view->projectID = $executionID;
         $this->view->tasks        = $tasks;
         $this->view->pager        = $pager;
         $this->view->recTotal     = $pager->recTotal;
