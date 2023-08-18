@@ -40,7 +40,20 @@ class repoZen extends repo
             ->setDefault('projects', '')->join('projects', ',')
             ->get();
 
-        if($this->post->acl != '') $repo->acl = json_encode($this->post->acl);
+        $acl = $this->post->acl;
+        if($acl['acl'] == 'custom')
+        {
+            $aclGroups = array_filter($acl['groups']);
+            $aclUsers  = array_filter($acl['users']);
+            if(empty($aclGroups) && empty($aclUsers))
+            {
+                $this->app->loadLang('product');
+                dao::$errors['acl'] = sprintf($this->lang->error->notempty, $this->lang->product->whitelist);
+                return false;
+            }
+        }
+        $repo->acl = json_encode($acl);
+
         if($repo->SCM == 'Subversion')
         {
             $scm = $this->app->loadClass('scm');

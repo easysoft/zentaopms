@@ -23,6 +23,7 @@ dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 formPanel
 (
     set::title($lang->mr->create),
+    set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
     formGroup
     (
         setClass('hidden'),
@@ -43,7 +44,7 @@ formPanel
         ),
         formGroup
         (
-            set::labelWidth('5em'),
+            set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
             set::required(true),
             set::label($lang->mr->sourceBranch),
             set::name('sourceBranch'),
@@ -64,7 +65,7 @@ formPanel
         ),
         formGroup
         (
-            set::labelWidth('6em'),
+            set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
             set::required(true),
             set::label($lang->mr->targetBranch),
             set::name('targetBranch'),
