@@ -30,7 +30,7 @@ $canBatchChangeBranch = $canBeChanged && hasPriv('bug', 'batchChangeBranch');
 $canBatchChangeModule = $canBeChanged && hasPriv('bug', 'batchChangeModule');
 $canBatchResolve      = $canBeChanged && hasPriv('bug', 'batchResolve');
 $canBatchAssignTo     = $canBeChanged && hasPriv('bug', 'batchAssignTo');
-$canBatchClose        = common::hasPriv('bug', 'batchClose');
+$canBatchClose        = hasPriv('bug', 'batchClose');
 $canManageModule      = hasPriv('tree', 'browse');
 $canBatchAction       = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchActivate || $canBatchChangeBranch || $canBatchChangeModule || $canBatchResolve || $canBatchAssignTo;
 
@@ -176,7 +176,10 @@ dtable
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::onRenderCell(jsRaw('window.onRenderCell')),
-    set::modules($modulePairs)
+    set::modules($modulePairs),
+    set::emptyTip($lang->bug->notice->noBug),
+    set::createTip($lang->bug->create),
+    set::createLink($canBeChanged && hasPriv('bug', 'create') ? array('module' => 'bug', 'method' => 'create', 'params' => "productID={$product->id}&branch={$branch}&extra=moduleID=$currentModuleID") : '')
 );
 
 render();
