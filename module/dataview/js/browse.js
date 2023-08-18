@@ -165,3 +165,15 @@ function initPager(pageID, recPerPage, recTotal, fieldCount)
     $('#queryResult').html(viewResult.replace('%s', recTotal).replace('%s', fieldCount));
 }
 
+/**
+ * Set export show or hidden.
+ *
+ * @param  string stat show|hide
+ * @access public
+ * @return void
+ */
+function setExport(stat)
+{
+    if(stat == 'show') $('.dataview-export').removeClass('hidden');
+    else $('.dataview-export').addClass('hidden');
+}
