@@ -1325,26 +1325,29 @@ class task extends control
     }
 
     /**
-     * Ajax get task by ID.
+     * AJAX: Get the json of the task by ID.
+     * Note: This function is NOT used in open edition.
      *
      * @param  int    $taskID
      * @access public
      * @return void
      */
-    public function ajaxGetByID($taskID)
+    public function ajaxGetByID(int $taskID)
     {
-        $task       = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
-        $realname   = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($task->assignedTo)->fetch('realname');
+        $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        if(!$task) return;
+
+        $realname   = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($task->assignedTo)->fetch('realname');
         $assignedTo = $task->assignedTo == 'closed' ? 'Closed' : $task->assignedTo;
 
         $task->assignedTo = $realname ? $realname : $assignedTo;
         if($task->story)
         {
             $this->app->loadLang('story');
-            $stage = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($task->story)->andWhere('version')->eq($task->storyVersion)->fetch('stage');
+            $stage = $this->dao->select('stage')->from(TABLE_STORY)->where('id')->eq($task->story)->andWhere('version')->eq($task->storyVersion)->fetch('stage');
             $task->storyStage = zget($this->lang->story->stageList, $stage);
         }
-        echo json_encode($task);
+        return print(json_encode($task));
     }
 
     /**
