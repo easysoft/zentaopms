@@ -911,17 +911,17 @@ class task extends control
     }
 
     /**
+     * 删除一个任务。
      * Delete a task.
      *
      * @param  int    $executionID
      * @param  int    $taskID
-     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
-    public function delete($executionID, $taskID, $confirm = 'no')
+    public function delete(int $executionID, int $taskID)
     {
-        $task = $this->task->getById($taskID);
+        $task = $this->task->getByID($taskID);
         if($task->parent == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->task->cannotDeleteParent));
 
         $this->task->delete(TABLE_TASK, $taskID);
