@@ -15903,9 +15903,9 @@ VALUES
     (652, 651, '', 'package', ',open,biz,max,', ',rnd,', 40),
     (653, 651, '', 'package', ',open,biz,max,', ',rnd,', 60),
     (654, 651, '', 'package', ',open,biz,max,', ',rnd,', 80),
-    (655, 651, '', 'package', ',open,biz,max,', ',rnd,', 100),
+    (655, 651, '', 'package', ',biz,max,', ',rnd,', 100),
     (656, 651, '', 'package', ',open,biz,max,', ',rnd,', 120),
-    (657, 651, '', 'package', ',open,biz,max,', ',rnd,', 140);
+    (657, 651, '', 'package', ',biz,max,', ',rnd,', 140);
 
 REPLACE INTO
     `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`)
