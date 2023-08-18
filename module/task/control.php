@@ -476,6 +476,7 @@ class task extends control
             $changes  = $this->task->recordWorkhour($taskID, $workhour);
             if(dao::isError()) return $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
+            /* 更新任务对应的项目集、项目和执行的状态。*/
             $this->loadModel('common')->syncPPEStatus($taskID);
 
             $task     = $this->task->getById($taskID);
