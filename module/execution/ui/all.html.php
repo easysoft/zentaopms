@@ -25,8 +25,7 @@ if($canBatchAction)
     $footToolbar['items'][] = array(
         'type'  => 'btn-group',
         'items' => array(
-            array('text' => $lang->edit, 'class' => "btn primary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('execution', 'batchEdit')),
-            array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+            array('text' => $lang->edit, 'className' => "btn secondary size-sm {$editClass}", 'data-url' => createLink('execution', 'batchEdit')),
         )
     );
 
@@ -35,7 +34,7 @@ if($canBatchAction)
         $statusList = array();
         foreach($lang->execution->statusList as $key => $value)
         {
-            $statusList[] = array('text' => $value, 'class' => 'batch-btn', 'data-url' => createLink('execution', 'batchChangeStatus', "status=$key&executionID={$execution->id}"));
+            $statusList[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('execution', 'batchChangeStatus', "status=$key"));
         }
 
         menu
@@ -44,6 +43,8 @@ if($canBatchAction)
             set::class('dropdown-menu'),
             set::items($statusList)
         );
+
+        $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->statusAB,   'className' => 'btn btn-caret size-sm secondary', 'url' => '#navStatus', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
     }
 }
 
