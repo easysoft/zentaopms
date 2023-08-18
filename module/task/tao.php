@@ -368,7 +368,7 @@ class taskTao extends taskModel
      *
      * @param  object    $task
      * @access protected
-     * @return bool
+     * @return void
      */
     protected function cancelParentTask(object $task): void
     {
