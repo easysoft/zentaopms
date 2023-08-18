@@ -117,7 +117,7 @@ $lang->block->budget          = '预算';
 $lang->block->left            = '剩余';
 
 $lang->block->summary = new stdclass();
-$lang->block->summary->welcome = '禅道已陪伴您%s天，<strong>昨日</strong>完成了<a href="' . helper::createLink('my', 'contribute', 'mode=audit') .'" class="text-success">%s</a>条评审、完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务、解决了<a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>个Bug，今日期待优秀的您来处理';
+$lang->block->summary->welcome = '禅道已陪伴您%s天，<strong>昨日</strong>完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务、解决了<a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>个Bug，今日期待优秀的您来处理';
 
 $lang->block->dashboard['default'] = '仪表盘';
 $lang->block->dashboard['my']      = '地盘';
@@ -526,22 +526,13 @@ $lang->block->welcome->reviewByMe = '待我评审';
 $lang->block->welcome->assignToMe = '指派给我';
 
 $lang->block->welcome->reviewList = array();
-$lang->block->welcome->reviewList['story']    = '需求数';
-$lang->block->welcome->reviewList['feedback'] = '反馈数';
-$lang->block->welcome->reviewList['testcase'] = '用例数';
+$lang->block->welcome->reviewList['story'] = '需求数';
 
 $lang->block->welcome->assignList = array();
-$lang->block->welcome->assignList['task']        = '任务数';
-$lang->block->welcome->assignList['bug']         = 'BUG数';
-$lang->block->welcome->assignList['story']       = '研发需求数';
-$lang->block->welcome->assignList['testcase']    = '用例数';
-$lang->block->welcome->assignList['requirement'] = '用户需求数';
-$lang->block->welcome->assignList['testtask']    = '测试单数';
-$lang->block->welcome->assignList['issue']       = '问题数';
-$lang->block->welcome->assignList['risk']        = '风险数';
-$lang->block->welcome->assignList['qa']          = 'QA数';
-$lang->block->welcome->assignList['meeting']     = '会议数';
-$lang->block->welcome->assignList['feedback']    = '工单数';
+$lang->block->welcome->assignList['task']     = '任务数';
+$lang->block->welcome->assignList['bug']      = 'BUG数';
+$lang->block->welcome->assignList['story']    = '研发需求数';
+$lang->block->welcome->assignList['testcase'] = '用例数';
 
 $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = '禅道运行模式分为【轻量级管理模式】和【全生命周期管理模式】。';

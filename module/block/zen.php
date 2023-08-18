@@ -387,6 +387,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印欢迎总览区块。
      * Welcome block.
      *
      * @access protected
@@ -394,26 +395,12 @@ class blockZen extends block
      */
     protected function printWelcomeBlock(): void
     {
-        $this->view->tutorialed = $this->loadModel('tutorial')->getTutorialed();
-
-        $data = $this->block->getWelcomeBlockData();
-
-        $this->view->tasks      = $data['tasks'];
-        $this->view->doneTasks  = $data['doneTasks'];
-        $this->view->bugs       = $data['bugs'];
-        $this->view->stories    = $data['stories'];
-        $this->view->executions = $data['executions'];
-
-        $this->view->delay['task'] = $data['delayTask'];
-        $this->view->delay['bug']  = $data['delayBug'];
-
+        /* 计算当前时间是早上还是中午还是下午还是晚上。 */
         $time = date('H:i');
         $welcomeType = '19:00';
-        foreach($this->lang->block->welcomeList as $type => $name)
-        {
-            if($time >= $type) $welcomeType = $type;
-        }
+        foreach($this->lang->block->welcomeList as $type => $name) $welcomeType = $time >= $type ? $type : $welcomeType;
 
+        /* 获取禅道陪伴当前用户总天数。 */
         $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
             ->where('date')->gt('1970-01-01')
             ->andWhere('actor')->eq($this->app->user->account)
@@ -421,29 +408,83 @@ class blockZen extends block
             ->limit('1')
             ->fetch('date');
 
-        $usageDays = 1;
+        $usageDays = 1; // 最小陪伴天数是一天。
         if($firstUseDate) $usageDays = ceil((time() - strtotime($firstUseDate)) / 3600 / 24);
 
+        $yesterday  = strtotime("-1 day");
+        /* 获取昨日完成的任务数。 */
+        $finishTask      = 0;
+        $finishTaskGroup = $this->loadModel('metric')->getResultByCode('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
+        if(!empty($finishTaskGroup))
+        {
+            $finishTaskGroup = reset($finishTaskGroup);
+            $finishTask      = zget($finishTaskGroup, 'value', 0);
+        }
+
+        /* 获取昨日解决的BUG数。 */
+        $fixBug      = 0;
+        $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
+        if(!empty($fixBug))
+        {
+            $fixBugGroup = reset($fixBugGroup);
+            $fixBug      = zget($fixBugGroup, 'value', 0);
+        }
+
+        /* 根据完成任务和修复bug的数量给与称号。 */
+        $honorary = '';
+        if($finishTask || $fixBug)
+        {
+            $honorary = $finishTask > $fixBug ? 'task' : 'bug';
+            $honorary = zget($this->lang->block->honorary, $honorary, '');
+        }
+
+        /* 生成指派给我的数据。 */
         $assignToMe = array();
         foreach($this->lang->block->welcome->assignList as $field => $label)
         {
             $type = 'assignedTo';
             if($field == 'testcase') $type = 'assigntome';
 
-            $number = rand(1, 100);
-            $assignToMe[$field] = array('number' => $number, 'delay' => rand(1, 100) >= 90 ? rand(1, $number) : 0, 'href' => helper::createLink('my', 'work', "mode=$field&type=$type"));
+            /* 根据不同的模块生成不同的度量项查询码。 */
+            $code = "assigned_{$field}";
+            if($field == 'story')    $code = "pending_story";
+            if($field == 'testcase') $code = "assigned_case";
+
+            /* 查询当前指派给当前用户的不同数据。 */
+            $assignedGroup = $this->metric->getResultByCode("count_of_{$code}_in_user", array('user' => $this->app->user->account));
+            $count = 0;
+            if(!empty($assignedGroup))
+            {
+                $assignedGroup = reset($assignedGroup);
+                $count         = zget($assignedGroup, 'value', 0);
+            }
+            $assignToMe[$field] = array('number' => $count, 'delay' => 0, 'href' => helper::createLink('my', 'work', "mode=$field&type=$type"));
         }
 
+        /* 生成待我审批的数据。 */
         $reviewByMe = array();
         foreach($this->lang->block->welcome->reviewList as $field => $label)
         {
-            $number = rand(1, 100);
-            $reviewByMe[$field] = array('number' => $number, 'delay' => rand(1, 100) >= 90 ? rand(1, $number) : 0);
+            /* 根据不同的模块生成不同的度量项查询码。 */
+            $code = "reviewing_{$field}";
+
+            /* 查询当前指派给当前用户的不同数据。 */
+            $reviewingGroup = $this->metric->getResultByCode("count_of_{$code}_in_user", array('user' => $this->app->user->account));
+            $count = 0;
+            if(!empty($reviewingGroup))
+            {
+                $reviewingGroup = reset($reviewingGroup);
+                $count          = zget($reviewingGroup, 'value', 0);
+            }
+            $reviewByMe[$field] = array('number' => $count, 'delay' => 0);
         }
 
-        $this->view->usageDays    = $usageDays;
+        $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())]; // 当前年月日 星期几。
         $this->view->welcomeType  = $welcomeType;
-        $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())];
+        $this->view->usageDays    = $usageDays;
+        $this->view->finishTask   = $finishTask;
+        $this->view->fixBug       = $fixBug;
+        $this->view->honorary     = $honorary;
         $this->view->assignToMe   = $assignToMe;
         $this->view->reviewByMe   = $reviewByMe;
     }

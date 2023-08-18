@@ -25,8 +25,8 @@ $getMeasureItem = function($data)
         (
             div
             (
-                set('class', 'text-3xl text-primary h-40px'),
-                a(set('href', $info['href']), $info['number'])
+                set('class', 'text-3xl h-40px'),
+                !empty($info['href']) ? a(set('href', $info['href']), $info['number']) : span($info['number'])
             ),
             div(zget($welcomeLabel, $key, '')),
             !empty($info['delay']) ? div
@@ -38,23 +38,6 @@ $getMeasureItem = function($data)
     }
     return $items;
 };
-
-$doneReview = rand(0, 100);
-$finishTask = rand(0, 100);
-$fixBug     = rand(0, 100);
-
-if($doneReview > $finishTask && $doneReview > $fixBug)
-{
-    $honorary = 'review';
-}
-else if($finishTask > $doneReview && $finishTask > $fixBug)
-{
-    $honorary = 'task';
-}
-else
-{
-    $honorary = 'bug';
-}
 
 $blockNavCode = 'nav-' . uniqid();
 panel
@@ -75,7 +58,7 @@ panel
             cell
             (
                 set::class('pr-8'),
-                span(set('class', 'text-sm font-normal'), html(sprintf($lang->block->summary->welcome, $usageDays, $doneReview, $finishTask, $fixBug)))
+                span(set('class', 'text-sm font-normal'), html(sprintf($lang->block->summary->welcome, $usageDays, $finishTask, $fixBug)))
             )
         )
     ),
@@ -109,7 +92,7 @@ panel
                     )
                 )
             ),
-            center(span(set('class', 'label circle honorary text-xs'), $lang->block->honorary[$honorary]))
+            $honorary ? center(span(set('class', 'label circle honorary text-xs'), $honorary)) : null
         ),
         cell
         (
