@@ -2258,4 +2258,19 @@ class taskTest
         $childID = $this->objectModel->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('id');
         return $this->objectModel->dao->select('action')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($childID)->orderBy('id_desc')->fetch();
     }
+
+    /**
+     * 获取报表的查询语句。
+     * Get report condition from session.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function reportConditionTest(string $sql = ''): string
+    {
+        if($sql) $this->objectModel->session->set('taskQueryCondition', $sql);
+
+        return $this->objectModel->reportCondition();
+    }
 }

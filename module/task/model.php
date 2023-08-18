@@ -2415,12 +2415,13 @@ class taskModel extends model
     }
 
     /**
+     * 获取报表的查询语句。
      * Get report condition from session.
      *
      * @access public
-     * @return void
+     * @return string
      */
-    public function reportCondition()
+    public function reportCondition(): string
     {
         if(isset($_SESSION['taskQueryCondition']))
         {
