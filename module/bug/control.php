@@ -546,7 +546,7 @@ class bug extends control
         $this->bug->delete(TABLE_BUG, $bugID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        /* 返回删除 bug 后的相应。 */
+        /* 返回删除 bug 后的响应。 */
         /* Return response after deleting bug. */
         $message = $this->executeHooks($bugID);
         return $this->bugZen->responseAfterDelete($bug, $from, $message);
@@ -1140,17 +1140,19 @@ class bug extends control
     {
         if($this->post->id)
         {
-            $activateBugs = form::batchData($this->config->bug->form->batchActivate)->get();
-
+            /* 获取原有 bug 信息。 */
+            /* Get old bugs. */
             $oldBugs = $this->bug->getByIdList($this->post->id);
 
+            /* 激活状态是解决或关闭的 bugs。 */
+            /* Activate bugs whose status is resolved or closed. */
+            $activateBugs = form::batchData($this->config->bug->form->batchActivate)->get();
             foreach($activateBugs as $bugID => $bug)
             {
                 if($bug->status != 'resolved' && $bug->status != 'closed') continue;
                 $oldBug = $oldBugs[$bugID];
 
                 $bug->status         = 'active';
-                $bug->openedBuild    = implode(',', $bug->openedBuild);
                 $bug->activatedCount = $oldBug->activatedCount + 1;
 
                 $this->bug->activate($bug);
@@ -1158,22 +1160,28 @@ class bug extends control
             }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('score')->create('ajax', 'batchOther');
 
+            /* 返回批量激活 bugs 后的响应。 */
+            /* Return response after batch activating bugs. */
             if(empty($message)) $message = $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList));
         }
 
+        /* 如果没有要激活的bugs，跳转到上一个界面。 */
+        /* If there are no bugs to activate, locate to the previous interface. */
         if(!$this->post->bugIdList) $this->locate($this->session->bugList);
-        $bugIdList = array_unique($this->post->bugIdList);
 
         $this->qa->setMenu($this->products, $productID, $branch);
 
+        /* 展示关联的变量。 */
+        /* Show the variables associated. */
+        $bugIdList = array_unique($this->post->bugIdList);
         $this->view->title  = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
         $this->view->bugs   = $this->bug->getByIdList($bugIdList);
         $this->view->users  = $this->user->getPairs('noclosed');
         $this->view->builds = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noreleased');
-
         $this->display();
     }
 
