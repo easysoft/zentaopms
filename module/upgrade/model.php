@@ -685,9 +685,9 @@ class upgradeModel extends model
                 $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
                 $ipdinstall  = false;
 
-                if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.5', '<'))             $ipdinstall = true;
-                if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.5', '<')) $ipdinstall = true;
-                if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<')) $ipdinstall = true;
+                if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.5', '<='))             $ipdinstall = true;
+                if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.5', '<=')) $ipdinstall = true;
+                if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<=')) $ipdinstall = true;
                 if($ipdinstall) $this->execSQL($this->getUpgradeFile('ipdinstall'));
 
                 if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));
