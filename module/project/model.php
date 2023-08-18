@@ -2321,6 +2321,7 @@ class projectModel extends model
     }
 
     /**
+     * 设置项目的导航菜单。
      * Set menu of project module.
      *
      * @param  int    $projectID
@@ -2352,34 +2353,25 @@ class projectModel extends model
     }
 
     /**
+     * 设置未启用迭代的菜单。
      * Set multi-scrum menu.
      *
-     * @param  int    $objectID
+     * @param  int    $projectID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function setNoMultipleMenu($objectID)
+    public function setNoMultipleMenu(int $projectID): bool
     {
-        $moduleName = $this->app->rawModule;
-        $methodName = $this->app->rawMethod;
-
         $this->session->set('multiple', true);
 
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('multiple')->eq('0')->fetch();
-        if(empty($project)) return;
-
-        if(!in_array($project->type, array('project', 'sprint', 'kanban'))) return;
+        $project = $this->projectTao->fetchProjectInfo($projectID);
+        if(empty($project) || $project->multiple) return false;
+        if(!in_array($project->type, array('project', 'sprint', 'kanban'))) return false;
 
         if($project->type == 'project')
         {
             $model       = $project->model;
-            $projectID   = $project->id;
-            $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)
-                ->where('project')->eq($projectID)
-                ->andWhere('multiple')->eq('0')
-                ->andWhere('type')->in('kanban,sprint')
-                ->andWhere('deleted')->eq('0')
-                ->fetch('id');
+            $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
         }
         else
         {
@@ -2387,71 +2379,37 @@ class projectModel extends model
             $executionID = $project->id;
             $projectID   = $project->project;
         }
-        if(empty($projectID) or empty($executionID)) return;
+        if(empty($projectID) || empty($executionID)) return false;
 
         $this->session->set('project', $projectID, 'project');
         $this->session->set('multiple', false);
 
-        $navGroup = zget($this->lang->navGroup, $moduleName);
-        $this->lang->$navGroup->menu        = $this->lang->project->noMultiple->{$model}->menu;
-        $this->lang->$navGroup->menuOrder   = $this->lang->project->noMultiple->{$model}->menuOrder;
-        $this->lang->$navGroup->dividerMenu = $this->lang->project->noMultiple->{$model}->dividerMenu;
+        global $lang;
+        $navGroup = zget($lang->navGroup, $this->app->rawModule);
+        $lang->$navGroup->menu        = $lang->project->noMultiple->{$model}->menu;
+        $lang->$navGroup->menuOrder   = $lang->project->noMultiple->{$model}->menuOrder;
+        $lang->$navGroup->dividerMenu = $lang->project->noMultiple->{$model}->dividerMenu;
 
-        /* Single execution and has no product project menu. */
-        if(!$project->hasProduct && !$project->multiple && !empty($this->config->URAndSR) && isset($this->lang->$navGroup->menu->storyGroup))
-        {
-            $this->lang->$navGroup->menu->story = $this->lang->$navGroup->menu->storyGroup;
-            $this->lang->$navGroup->menu->story['link'] = sprintf($this->lang->$navGroup->menu->storyGroup['link'], '%s', $projectID);
+        $this->projectTao->setNavGroupMenu($navGroup, $executionID, $project);
 
-            $this->lang->$navGroup->menu->story['dropMenu']->story['link']       = sprintf($this->lang->$navGroup->menu->storyGroup['dropMenu']->story['link'], '%s', $projectID);
-            $this->lang->$navGroup->menu->story['dropMenu']->requirement['link'] = sprintf($this->lang->$navGroup->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectID);
-        }
+        $lang->project->menu        = $lang->$navGroup->menu;
+        $lang->project->menuOrder   = $lang->$navGroup->menuOrder;
+        $lang->project->dividerMenu = $lang->$navGroup->dividerMenu;
 
-        if(isset($this->lang->$navGroup->menu->storyGroup)) unset($this->lang->$navGroup->menu->storyGroup);
-        foreach($this->lang->$navGroup->menu as $label => $menu)
-        {
-            $objectID = 0;
-            if(strpos($this->config->project->multiple['project'], ",{$label},") !== false) $objectID = $projectID;
-            if(strpos($this->config->project->multiple['execution'], ",{$label},") !== false)
-            {
-                $objectID = $executionID;
-                $this->lang->$navGroup->menu->{$label}['subModule'] = 'project';
-            }
-
-            $this->lang->$navGroup->menu->$label = commonModel::setMenuVarsEx($menu, $objectID);
-            if(isset($menu['subMenu']))
-            {
-                foreach($menu['subMenu'] as $key1 => $subMenu) $this->lang->$navGroup->menu->{$label}['subMenu']->$key1 = common::setMenuVarsEx($subMenu, $objectID);
-            }
-
-            if(!isset($menu['dropMenu'])) continue;
-            foreach($menu['dropMenu'] as $key2 => $dropMenu)
-            {
-                $this->lang->$navGroup->menu->{$label}['dropMenu']->$key2 = common::setMenuVarsEx($dropMenu, $objectID);
-
-                if(!isset($dropMenu['subMenu'])) continue;
-                foreach($dropMenu['subMenu'] as $key3 => $subMenu) $this->lang->$navGroup->menu->{$label}['dropMenu']->$key3 = common::setMenuVarsEx($subMenu, $objectID);
-            }
-        }
-
-        /* If objectID is set, cannot use homeMenu. */
-        unset($this->lang->project->homeMenu);
-        $this->lang->switcherMenu         = $this->getSwitcher($projectID, $moduleName, $methodName);
-        $this->lang->project->menu        = $this->lang->$navGroup->menu;
-        $this->lang->project->menuOrder   = $this->lang->$navGroup->menuOrder;
-        $this->lang->project->dividerMenu = $this->lang->$navGroup->dividerMenu;
-
+        /* If projectID is set, cannot use homeMenu. */
+        unset($lang->project->homeMenu);
         if(empty($project->hasProduct))
         {
-            unset($this->lang->project->menu->settings['subMenu']->products);
+            unset($lang->project->menu->settings['subMenu']->products);
         }
         else
         {
-            unset($this->lang->project->menu->settings['subMenu']->module);
-            unset($this->lang->project->menu->projectplan);
+            unset($lang->project->menu->settings['subMenu']->module);
+            unset($lang->project->menu->projectplan);
         }
 
         $this->loadModel('common')->resetProjectPriv($projectID);
+        return true;
     }
 
     /**

@@ -853,7 +853,7 @@ class projectTao extends projectModel
     protected function setMenuByProduct(int $projectID, int $hasProduct, string $model): bool
     {
         global $lang;
-        if(!$hasProduct)
+        if($hasProduct)
         {
             unset($lang->project->menu->projectplan);
             unset($lang->project->menu->settings['subMenu']->module);
@@ -878,6 +878,59 @@ class projectTao extends projectModel
         unset($lang->project->menu->settings['subMenu']->products);
         if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
         if(!in_array($model, $this->config->project->scrumList)) unset($lang->project->menu->projectplan);
+        return true;
+    }
+
+    /**
+     * 根据访问模块的导航组设置菜单。
+     * Set menu lang for module.
+     *
+     * @param  string     $navGroup
+     * @param  int        $executionID
+     * @param  object     $project
+     * @access protected
+     * @return bool
+     */
+    protected function setNavGroupMenu(string $navGroup, int $executionID, object $project): bool
+    {
+        global $lang;
+        /* Single execution and has no product project menu. */
+        if(!$project->hasProduct && !$project->multiple && !empty($this->config->URAndSR) && isset($lang->$navGroup->menu->storyGroup))
+        {
+            $lang->$navGroup->menu->story = $lang->$navGroup->menu->storyGroup;
+            $lang->$navGroup->menu->story['link'] = sprintf($lang->$navGroup->menu->storyGroup['link'], '%s', $project->id);
+
+            $lang->$navGroup->menu->story['dropMenu']->story['link']       = sprintf($lang->$navGroup->menu->storyGroup['dropMenu']->story['link'], '%s', $project->id);
+            $lang->$navGroup->menu->story['dropMenu']->requirement['link'] = sprintf($lang->$navGroup->menu->storyGroup['dropMenu']->requirement['link'], '%s', $project->id);
+        }
+
+        if(isset($lang->$navGroup->menu->storyGroup)) unset($lang->$navGroup->menu->storyGroup);
+        foreach($lang->$navGroup->menu as $label => $menu)
+        {
+            $objectID = 0;
+            if(strpos($this->config->project->multiple['project'], ",{$label},") !== false) $objectID = $project->id;
+            if(strpos($this->config->project->multiple['execution'], ",{$label},") !== false)
+            {
+                $objectID = $executionID;
+                $lang->$navGroup->menu->{$label}['subModule'] = 'project';
+            }
+
+            $lang->$navGroup->menu->$label = commonModel::setMenuVarsEx($menu, $objectID);
+            if(isset($menu['subMenu']))
+            {
+                foreach($menu['subMenu'] as $key1 => $subMenu) $lang->$navGroup->menu->{$label}['subMenu']->$key1 = common::setMenuVarsEx($subMenu, $objectID);
+            }
+
+            if(!isset($menu['dropMenu'])) continue;
+            foreach($menu['dropMenu'] as $key2 => $dropMenu)
+            {
+                $lang->$navGroup->menu->{$label}['dropMenu']->$key2 = common::setMenuVarsEx($dropMenu, $objectID);
+
+                if(!isset($dropMenu['subMenu'])) continue;
+                foreach($dropMenu['subMenu'] as $key3 => $subMenu) $lang->$navGroup->menu->{$label}['dropMenu']->$key3 = common::setMenuVarsEx($subMenu, $objectID);
+            }
+        }
+
         return true;
     }
 }
