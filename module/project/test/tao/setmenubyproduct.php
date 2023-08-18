@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/project.class.php';
+
+zdTable('project')->gen(50);
+su('admin');
+
+/**
+
+title=测试 projectModel::setMenuByProduct();
+cid=1
+pid=1
+
+*/
+
+$projectTester = new Project();
+
+r($projectTester->setMenuByProductTest(1, 'scrum'))         && p() && e('scrum|projectplan|settings'); // 敏捷有产品项目
+r($projectTester->setMenuByProductTest(1, ''))              && p() && e('||settings');                 // 项目不存在的情况
+r($projectTester->setMenuByProductTest(1, 'error'))         && p() && e('error||settings');            // 项目模式错误的情况
+r($projectTester->setMenuByProductTest(1, 'waterfall'))     && p() && e('waterfall||settings');        // 瀑布有产品项目
+r($projectTester->setMenuByProductTest(1, 'waterfallplus')) && p() && e('waterfallplus||settings');    // 融合瀑布有产品项目
+r($projectTester->setMenuByProductTest(1, 'kanban'))        && p() && e('kanban||settings');           // 看板有产品项目
+r($projectTester->setMenuByProductTest(0, 'scrum'))         && p() && e('scrum||');                    // 敏捷无产品项目
+r($projectTester->setMenuByProductTest(0, 'waterfall'))     && p() && e('waterfall||');                // 瀑布无产品项目
+r($projectTester->setMenuByProductTest(0, 'kanban'))        && p() && e('kanban||');                   // 看板无产品项目

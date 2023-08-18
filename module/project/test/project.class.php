@@ -356,4 +356,25 @@ class Project
         global $lang;
         return $lang->executionCommon;
     }
+
+    /**
+     * Test setMenuByProduct.
+     *
+     * @param  string $model
+     * @access public
+     * @return string
+     */
+    public function setMenuByProductTest($hasProduct, $model)
+    {
+        global $lang;
+        $this->project->setMenuByModel($model);
+        $this->project->setMenuByProduct(11, $hasProduct, $model);
+
+        $result = array(
+            $model,
+            isset($lang->project->menu->projectplan) ? 'projectplan' : '',
+            isset($lang->project->menu->settings['subMenu']->module) ? 'settings' : '',
+        );
+        return implode('|', $result);
+    }
 }
