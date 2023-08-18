@@ -15880,21 +15880,21 @@ VALUES
     (2117, 'ai', 'models', 653, ',open,biz,max,', ',rnd,', '1', 5),
     (2118, 'ai', 'editmodel', 653, ',open,biz,max,', ',rnd,', '1', 10),
     (2119, 'ai', 'testconnection', 653, ',open,biz,max,', ',rnd,', '1', 15),
-    (2120, 'ai', 'createprompt', 655, ',open,biz,max,', ',rnd,', '1', 20),
-    (2121, 'ai', 'promptedit', 655, ',open,biz,max,', ',rnd,', '1', 25),
-    (2122, 'ai', 'promptdelete', 657, ',open,biz,max,', ',rnd,', '1', 30),
-    (2123, 'ai', 'promptassignrole', 655, ',open,biz,max,', ',rnd,', '1', 35),
-    (2124, 'ai', 'promptselectdatasource', 655, ',open,biz,max,', ',rnd,', '1', 40),
-    (2125, 'ai', 'promptsetpurpose', 655, ',open,biz,max,', ',rnd,', '1', 45),
-    (2126, 'ai', 'promptsettargetform', 655, ',open,biz,max,', ',rnd,', '1', 50),
-    (2127, 'ai', 'promptfinalize', 655, ',open,biz,max,', ',rnd,', '1', 55),
-    (2128, 'ai', 'promptaudit', 655, ',open,biz,max,', ',rnd,', '1', 60),
+    (2120, 'ai', 'createprompt', 655, ',biz,max,', ',rnd,', '1', 20),
+    (2121, 'ai', 'promptedit', 655, ',biz,max,', ',rnd,', '1', 25),
+    (2122, 'ai', 'promptdelete', 657, ',biz,max,', ',rnd,', '1', 30),
+    (2123, 'ai', 'promptassignrole', 655, ',biz,max,', ',rnd,', '1', 35),
+    (2124, 'ai', 'promptselectdatasource', 655, ',biz,max,', ',rnd,', '1', 40),
+    (2125, 'ai', 'promptsetpurpose', 655, ',biz,max,', ',rnd,', '1', 45),
+    (2126, 'ai', 'promptsettargetform', 655, ',biz,max,', ',rnd,', '1', 50),
+    (2127, 'ai', 'promptfinalize', 655, ',biz,max,', ',rnd,', '1', 55),
+    (2128, 'ai', 'promptaudit', 655, ',biz,max,', ',rnd,', '1', 60),
     (2129, 'ai', 'promptpublish', 656, ',open,biz,max,', ',rnd,', '1', 65),
     (2130, 'ai', 'promptunpublish', 656, ',open,biz,max,', ',rnd,', '1', 70),
     (2131, 'ai', 'prompts', 654, ',open,biz,max,', ',rnd,', '1', 75),
     (2132, 'ai', 'promptview', 654, ',open,biz,max,', ',rnd,', '1', 80),
     (2133, 'ai', 'promptexecute', 652, ',open,biz,max,', ',rnd,', '1', 85),
-    (2134, 'ai', 'roletemplates', 655, ',open,biz,max,', ',rnd,', '1', 86);
+    (2134, 'ai', 'roletemplates', 655, ',biz,max,', ',rnd,', '1', 86);
 
 REPLACE INTO
     `zt_privmanager` (`id`, `parent`, `code`, `type`, `edition`, `vision`, `order`)
