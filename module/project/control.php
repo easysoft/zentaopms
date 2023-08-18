@@ -264,7 +264,6 @@ class project extends control
         if(empty($project) || $project->type != 'project') return $this->sendError($this->lang->notFound, inLink('browse'));
 
         $this->project->setMenu($projectID);
-        if($project->model != 'kanban' || $this->config->vision == 'lite') return print($this->fetch('block', 'dashboard', "dashboard={$project->model}project&projectID={$projectID}"));
 
         $this->loadModel('execution');
         /* Locate to task when set no execution. */
@@ -276,6 +275,8 @@ class project extends control
                 if(!$execution->multiple) $this->locate($this->createLink('execution', 'task', "executionID={$execution->id}"));
             }
         }
+
+        if($project->model != 'kanban' || $this->config->vision == 'lite') return print($this->fetch('block', 'dashboard', "dashboard={$project->model}project&projectID={$projectID}"));
 
         /* Load pager and get kanban list. */
         $this->app->loadClass('pager', true);
