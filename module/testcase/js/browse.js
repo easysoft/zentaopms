@@ -72,12 +72,11 @@ DtSort.defaultConfig = {
     parentAttrName: 'data-parent',
     productAttrName: 'data-product',
     orderAttrName: 'data-order',
-    dataNestedAttrName: 'data-nested',
     nestPathAttrName: 'data-nest-path',
     isSceneAttrName: 'data-is-scene',
     moveBuffer: 2,
-    canAccept: function(source, target,sameLevel, sourceMgr, targetMgr){return target.dataNested == "true";},
-    canMove: function(source, sourceMgr){return source.dataNested != "true";},
+    canAccept: function(source, target,sameLevel, sourceMgr, targetMgr){return target.isScene == 1;},
+    canMove: function(source, sourceMgr){return true;},
     finish: function(source, target, sameLevel , sourceMgr, targetMgr){},
     movingClass: 'tr-moving',
     acceptableClass: 'tr-acceptable',
@@ -158,7 +157,6 @@ DtSort.Table.prototype.measure = function()
         var parent = $row.attr(this.options.parentAttrName);
         var product = $row.attr(this.options.productAttrName);
         var order = $row.attr(this.options.orderAttrName);
-        var dataNested = $row.attr(this.options.dataNestedAttrName);
         var nestPath = $row.attr(this.options.nestPathAttrName);
         var isScene = $row.attr(this.options.isSceneAttrName);
 
@@ -170,7 +168,7 @@ DtSort.Table.prototype.measure = function()
             size = {w:this.rowList[0].boundary.w, h:this.rowList[0].boundary.h};
         }
 
-        if(dataNested == "true" && nestPath == undefined)
+        if(isScene == 1 && nestPath == undefined)
             nestPath = "," + id + ",";
 
         this.rowList.push({
@@ -179,7 +177,6 @@ DtSort.Table.prototype.measure = function()
             parent: parent,
             product: product,
             order: order,
-            dataNested: dataNested,
             nestPath: nestPath,
             isScene: isScene,
             boundary: {x:pos.x, y:pos.y, w:size.w, h:size.h},
@@ -220,15 +217,15 @@ DtSort.Table.prototype.pick = function(pos)
         }
         if(boundary.y <= pos.y && pos.y < maxH)
         {
-                hitIndex = i;
-                break;
+            hitIndex = i;
+            break;
         }
     }
 
     if(hitIndex < 0) return undefined;
 
     var hitRow = this.rowList[hitIndex];
-    if(this.rowList[hitIndex].dataNested == "true")
+    if(this.rowList[hitIndex].isScene == 1)
     {
         var hitRows = [hitRow]
         for(var i=hitIndex+1; i<this.rowList.length;i++)
