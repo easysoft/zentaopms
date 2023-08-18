@@ -114,7 +114,7 @@ js::set('systemMode', $this->config->systemMode);
             $delayed = (!empty($card->delay) or (!helper::isZeroDate($card->deadline) and helper::now() > $card->deadline)) ? "<span class='delayed label label-danger label-badge'>{$lang->execution->delayed}</span>" : '';
         }
 
-        if(common::hasPriv($card->fromType, 'view') and empty($card->children)) echo "<div class='cardName {$card->fromType}Name'>" . html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', " title='$title'") . "$delayed</div>";
+        if(common::hasPriv($card->fromType, 'view') and empty($card->children)) echo "<div class='cardName {$card->fromType}Name'>" . html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $title, '', " title='$title'") . "$delayed</div>";
         if(!common::hasPriv($card->fromType, 'view') or !empty($card->children)) echo "<div class='cardName {$card->fromType}Name'><div title='$title'>$name</div>$delayed</div>";
         if($card->fromType == 'productplan' or $card->fromType == 'build')
         {
