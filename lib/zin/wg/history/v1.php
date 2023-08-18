@@ -25,12 +25,12 @@ class history extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    private function marker(int $num): wg
+    private function marker(int|string $content): wg
     {
         return span
         (
             setClass('marker', 'relative', 'z-10', 'text-sm', 'rounded-full', 'aspect-square', 'inline-flex', 'justify-center', 'items-center', 'mr-1', 'border', 'h-5', 'w-5', 'z-10'),
-            $num
+            is_int($content) ? $content : icon('check', setClass('text-success font-semibold'))
         );
     }
 
@@ -105,8 +105,7 @@ class history extends wg
         return li
         (
             setClass('mb-2 flex'),
-            set::value($i),
-            $this->marker($i),
+            $this->marker($action->action === 'finished' ? 'finished' : $i),
             $actionItemView
         );
     }
