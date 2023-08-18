@@ -512,6 +512,23 @@ class taskTao extends taskModel
     }
 
     /**
+     * Format the task with valid datetime that set the zero date or datetime to null.
+     *
+     * @param  object $task
+     * @return object
+     */
+    protected function formatDatetime(object $task): object
+    {
+        if(empty($task)) return $task;
+        foreach($task as $key => $value)
+        {
+            if(!in_array($key, array('deadline', 'openedDate', 'assignedDate', 'estStarted', 'realStarted', 'finishedDate', 'canceledDate', 'closedDate', 'lastEditedDate', 'activatedDate'))) continue;
+            if(!empty($value) && is_string($value) && helper::isZeroDate($value)) $task->$key = null;
+        }
+        return $task;
+    }
+
+    /**
      * 获取执行下的任务。
      * Fetch tasks under execution by executionID(Todo).
      *
