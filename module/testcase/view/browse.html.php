@@ -505,29 +505,27 @@ $(function()
 
     DtSort.sort({
         container: "#caseTableList",
-        canMove: function(source, sourceMgr){ return true; },
         canAccept: function(source, target, sameLevel, sourceMgr, targetMgr){
-            if(sameLevel == true) return true;   // 同级别
-            if(target.isScene == 1) return true; // 拖到场景下面
-            return false;
+            if(sameLevel) return source.isScene == 0 || target.isScene == 1; // 同级别不能场景拖动到用例，其他都允许。
+            return target.isScene == 1; // 跨级别只能拖动到场景，其他都不允许。
         },
         finish: function(source, target, sameLevel , sourceMgr, targetMgr){
-            if(sameLevel) { // 同级别拖拽
+            if(sameLevel) { // 同级别拖动
                 if(source.isScene == 1 && target.isScene == 1) {
-                    /* 场景拖拽到场景，弹窗询问是更改所属场景还是调整顺序。*/
+                    /* 场景拖动到场景，弹窗询问是更改所属场景还是调整顺序。*/
                     $("#sceneDragModal").data("source", source);
                     $("#sceneDragModal").data("target", target);
                     $("#sceneDragModal").modal("show");
                 } else if(source.isScene == 0 && target.isScene == 0) {
-                    /* 用例拖拽到用例，调整顺序。*/
+                    /* 用例拖动到用例，调整顺序。*/
                     toOrder(source, target);
                 } else if(source.isScene == 0 && target.isScene == 1) {
-                    /* 用例拖拽到场景，更改所属场景。*/
+                    /* 用例拖动到场景，更改所属场景。*/
                     toChange(source, target);
                 }
-            } else { // 跨级别拖拽
+            } else { // 跨级别拖动
                 const sourceParent = source.parent.id || source.parent;
-                if(target.isScene == 1 && source.parent != target.id) toChange(source, target); // 拖拽到非父场景的场景，更改所属场景。
+                if(target.isScene == 1 && source.parent != target.id) toChange(source, target); // 拖动到非父场景的场景，更改所属场景。
             }
         }
     });
