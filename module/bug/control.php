@@ -1095,6 +1095,8 @@ class bug extends control
      */
     public function batchClose(int $releaseID = 0, string $viewType = '')
     {
+        /* 关闭解决的 bugs。 */
+        /* Close resolved bugs. */
         $bugIdList = $releaseID ? $this->post->unlinkBugs : $this->post->bugIdList;
         if($bugIdList)
         {
@@ -1120,10 +1122,11 @@ class bug extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
+        /* 返回批量关闭 bugs 后的响应。 */
+        /* Return response after batch closing bugs. */
         $load = true;
-        if($skipBugs) $load = array('confirm' => sprintf($this->lang->bug->notice->skipClose, implode(',', $skipBugs)), 'confirmed' => 'true', 'canceled' => 'true');
-
-        if($viewType) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'closeModal' => true));
+        if($skipBugs) $load = array('confirm' => sprintf($this->lang->bug->notice->skipClose, implode(',', $skipBugs)), 'confirmed' => true, 'canceled' => true);
+        if($viewType) $load = $this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug");
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load, 'closeModal' => true));
     }
 
