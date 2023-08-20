@@ -31,6 +31,7 @@ class day_of_invested_in_project extends baseCalc
             ->where('module')->eq('execution')
             ->andWhere('key')->eq('defaultWorkhours')
             ->fetch('value');
+        if(empty($defaultHours)) $defaultHours = 0;
 
         return $this->dao->select("t3.id as project, SUM(t1.consumed) as consumed, $defaultHours as defaultHours")
             ->from(TABLE_EFFORT)->alias('t1')
@@ -48,7 +49,7 @@ class day_of_invested_in_project extends baseCalc
         $consumed     = $row->consumed;
         $defaultHours = $row->defaultHours;
 
-        if(!isset($this->result[$project])) $this->result[$project] = round($consumed / $defaultHours, 2);
+        if(!isset($this->result[$project])) $this->result[$project] = $defaultHours ? round($consumed / $defaultHours, 2) : 0;
     }
 
     public function getResult($options = array())
