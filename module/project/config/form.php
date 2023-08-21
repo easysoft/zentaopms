@@ -1,13 +1,13 @@
 <?php
 $config->project->form = new stdclass();
 
-$config->project->form->create    =  array();
-$config->project->form->edit      =  array();
-$config->project->form->batchedit =  array();
-$config->project->form->close     =  array();
-$config->project->form->start     =  array();
-$config->project->form->suspend   =  array();
-$config->project->form->activate  =  array();
+$config->project->form->create    = array();
+$config->project->form->edit      = array();
+$config->project->form->batchedit = array();
+$config->project->form->close     = array();
+$config->project->form->start     = array();
+$config->project->form->suspend   = array();
+$config->project->form->activate  = array();
 
 $config->project->form->manageProducts = array();
 
