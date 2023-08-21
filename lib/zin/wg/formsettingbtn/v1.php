@@ -29,6 +29,26 @@ class formSettingBtn extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
+    private function buildCustomFields(array $customFields): array
+    {
+        $listFields = zget($customFields, 'list', array());
+        $showFields = zget($customFields, 'show', array());
+        if(!$listFields) return array();
+
+        $items = array();
+        foreach($listFields as $field => $text)
+        {
+            $items[] = checkbox
+            (
+                set::name('fields[]'),
+                set::value($field),
+                set::text($text),
+                set::checked($showFields ? in_array($field, $showFields) : true)
+            );
+        }
+        return $items;
+    }
+
     protected function build(): wg
     {
         $customFields = $this->prop('customFields', array());
@@ -58,17 +78,8 @@ class formSettingBtn extends wg
                         btn(set::text($lang->cancel), set::btnType('button'), on::click('cancelFormSetting'), set('data-url', $cancelLink)),
                         btn(set::text($lang->restore), setClass('text-primary ghost'), set::href('#'), set('data-url', $customLink), on::click('revertDefaultFields')),
                     )),
-                    array_map(function($field)
-                    {
-                        return checkbox
-                        (
-                            set::name('fields[]'),
-                            set::value($field['name']),
-                            set::text($field['text']),
-                            set::checked(isset($field['show']) ? $field['show'] : false),
-                            set('data-default', isset($field['default']) ? $field['default'] : false)
-                        );
-                    }, $customFields),
+                    to::headingActions(array(btn(set::icon('close'), setClass('ghost'), set::size('sm'), on::click('closeCustomPopupMenu')))),
+                    $this->buildCustomFields($customFields)
                 )
             ))
         );
