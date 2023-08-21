@@ -107,6 +107,7 @@ $lang->misc->feature->aiPrompts         = 'AI prompts';
 $lang->misc->feature->aiPromptsImage    = 'theme/default/images/main/ai_prompts_en.png';
 $lang->misc->feature->promptDesign      = 'Prompt Engineering';
 $lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design_en.png';
+$lang->misc->feature->promptDesignLink  = 'https://www.zentao.net/page/enterprise.html';
 $lang->misc->feature->promptExec        = 'Prompt Execution';
 $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec_en.png';
 

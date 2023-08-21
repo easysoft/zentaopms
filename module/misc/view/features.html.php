@@ -20,7 +20,18 @@
             </div>
         <?php elseif($feature == 'promptDesign'): ?>
             <div class='text-center'>
-                <img class='text-center' src='<?php echo $config->webRoot . $lang->misc->feature->promptDesignImage; ?>'/>
+                <?php if($this->config->edition == 'open'): ?>
+                    <map name="imgButton">
+                        <area
+                                shape="rect"
+                                coords="655,150,720,180"
+                                href="<?php echo $lang->misc->feature->promptDesignLink; ?>"
+                                target="_blank"
+                                alt="<?php echo $lang->misc->feature->promptDesign; ?>"
+                        />
+                    </map>
+                <?php endif; ?>
+                <img usemap="#imgButton" class='text-center' src='<?php echo $config->webRoot . $lang->misc->feature->promptDesignImage; ?>'/>
             </div>
         <?php elseif($feature == 'promptExec'): ?>
             <div class='text-center'>
