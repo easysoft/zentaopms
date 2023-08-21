@@ -806,7 +806,7 @@ class bug extends control
     {
         /* 如果没有选择的 bug，跳转到前一个页面。*/
         /* If there is no bug ID, locate to the previous step. */
-        if(!$this->post->bugIdList) $this->locate($this->session->bugList);
+        if(!$this->post->bugIdList && !$this->post->id) $this->locate($this->session->bugList);
 
         if($this->post->id)
         {
