@@ -56,6 +56,7 @@ class group extends control
     }
 
     /**
+     * 创建权限分组。
      * Create a group.
      *
      * @access public
@@ -65,10 +66,12 @@ class group extends control
     {
         if(!empty($_POST))
         {
-            $this->group->create();
-            if(dao::isError()) return $this->sendError(dao::getError());
+            $group = form::data($this->config->group->form->create)->get();
+            if($this->post->limited) $group->role = 'limited';
+            $this->group->create($group);
 
-            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
@@ -76,6 +79,7 @@ class group extends control
     }
 
     /**
+     * 编辑权限分组。
      * Edit a group.
      *
      * @param  int    $groupID
@@ -84,11 +88,12 @@ class group extends control
      */
     public function edit(int $groupID)
     {
-       if(!empty($_POST))
+        if(!empty($_POST))
         {
-            $this->group->update($groupID);
-            if(dao::isError()) return $this->sendError(dao::getError());
+            $group = form::data($this->config->group->form->edit)->get();
+            $this->group->update($groupID, $group);
 
+            if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
@@ -97,8 +102,7 @@ class group extends control
 
         $this->view->title    = $title;
         $this->view->position = $position;
-        $this->view->group    = $this->group->getById($groupID);
-
+        $this->view->group    = $this->group->getByID($groupID);
         $this->display();
     }
 
@@ -111,16 +115,17 @@ class group extends control
      */
     public function copy(int $groupID)
     {
-       if(!empty($_POST))
+        if(!empty($_POST))
         {
-            $this->group->copy($groupID);
-            if(dao::isError()) return $this->sendError(dao::getError());
+            $group = form::data($this->config->group->form->copy)->get();
+            $this->group->copy($groupID, $group, (array)$this->post->options);
 
-            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
-        $this->view->group      = $this->group->getById($groupID);
+        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
+        $this->view->group = $this->group->getById($groupID);
         $this->display();
     }
 
