@@ -537,7 +537,7 @@ class task extends control
         }
 
         $changes = $this->task->deleteWorkhour($effortID);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError() || empty($changes)) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $actionID = $this->loadModel('action')->create('task', $taskID, 'DeleteEstimate');
         $this->action->logHistory($actionID, $changes);

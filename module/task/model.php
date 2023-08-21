@@ -1789,13 +1789,19 @@ class taskModel extends model
      *
      * @param  int    $effortID
      * @access public
-     * @return void
+     * @return array|false
      */
     public function deleteWorkhour(int $effortID)
     {
         $effort = $this->getEffortByID($effortID);
-        $task   = $this->getById($effort->objectID);
-        $now    = helper::now();
+        if(empty($effort))
+        {
+            dao::$errors[] = $this->lang->notFound;
+            return false;
+        }
+
+        $task = $this->getById($effort->objectID);
+        $now  = helper::now();
 
         /* Compute the left and consumed workhour of the task. */
         $consumed = $task->consumed - $effort->consumed;
