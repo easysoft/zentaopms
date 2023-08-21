@@ -1049,7 +1049,7 @@ class task extends control
      *
      * @param  int    $executionID
      * @param  string $orderBy
-     * @param  string $type
+     * @param  string $type     browse type, such as: all,unclosed,assignedtome,myinvolved,assignedbyme,needconfirm,etc
      * @access public
      * @return void
      */
