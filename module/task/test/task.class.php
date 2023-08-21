@@ -924,26 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of tasks per finishedBy.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerFinishedByTest()
-    {
-        $object = $this->objectModel->getDataOfTasksPerFinishedBy();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get report data of tasks per closed reason.
      *
      * @access public

@@ -2266,12 +2266,13 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of tasks per finishedBy
+     * 获取按由谁完成统计的报表数据。
+     * Get report data of tasks per finishedBy.
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerFinishedBy()
+    public function getDataOfTasksPerFinishedBy(): array
     {
         $tasks = $this->dao->select('id,finishedBy')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2279,8 +2280,9 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, array(), 'finishedBy');
+        $datas = $this->processData4Report($tasks, array(), 'finishedBy');
 
+        /* Get user's realname. */
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data)
         {

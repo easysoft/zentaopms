@@ -36,6 +36,8 @@ fields:
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"
+  - field: finishedBy
+    range: "[],admin{2},[]{3}"
   - field: finishedDate
     range: "20210101 000000:1D"
     type: timestamp
