@@ -2315,7 +2315,8 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of finished tasks per day
+     * 获取按每天完成统计的报表数据。
+     * Get report data of finished tasks per day.
      *
      * @access public
      * @return object[]

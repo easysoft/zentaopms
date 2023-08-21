@@ -924,26 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of finished tasks per day.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOffinishedTasksPerDayTest()
-    {
-        $object = $this->objectModel->getDataOffinishedTasksPerDay();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get report data of tasks per status.
      *
      * @access public
