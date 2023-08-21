@@ -924,26 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of tasks per left.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerLeftTest()
-    {
-        $object = $this->objectModel->getDataOfTasksPerLeft();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get report data of tasks per consumed.
      *
      * @access public

@@ -2230,12 +2230,13 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of tasks per left
+     * 获取按剩余时间统计的报表数据。
+     * Get report data of tasks per left.
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerLeft()
+    public function getDataOfTasksPerLeft(): array
     {
         $tasks = $this->dao->select('id,`left`')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
