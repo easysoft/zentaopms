@@ -924,26 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of tasks per module.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerModuleTest()
-    {
-        $object = $this->objectModel->getDataOfTasksPerModule();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get report data of tasks per assignedto.
      *
      * @access public

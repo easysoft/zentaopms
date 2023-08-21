@@ -1,0 +1,15 @@
+title: branch
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: product
+    range: 1
+  - field: name
+    range: 1-10
+    prefix: 分支
+  - field: status
+    range: active{5},closed{5}
+  - field: order
+    range: 1-10
