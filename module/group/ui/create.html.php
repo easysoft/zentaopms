@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace zin;
 
+modalHeader(set::title($lang->group->create));
 formPanel
 (
-    set::title($lang->group->create),
     formGroup
     (
         set::label($lang->group->name),
@@ -40,5 +40,4 @@ formPanel
             set::value(1)
         )
     ) : null,
-    set::actions(array('submit'))
 );
