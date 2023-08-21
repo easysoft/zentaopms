@@ -17,40 +17,23 @@ jsVar('tab',           $this->app->tab);
 jsVar('createRelease', $lang->release->create);
 jsVar('refresh',       $lang->refreshIcon);
 
-foreach(explode(',', $config->bug->create->requiredFields) as $field)
-{
-    if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
-}
-
-$showExecution        = strpos(",$showFields,", ',execution,')        !== false;
-$showDeadline         = strpos(",$showFields,", ',deadline,')         !== false;
-$showNoticefeedbackBy = strpos(",$showFields,", ',noticefeedbackBy,') !== false;
-$showOS               = strpos(",$showFields,", ',os,')               !== false;
-$showBrowser          = strpos(",$showFields,", ',browser,')          !== false;
-$showSeverity         = strpos(",$showFields,", ',severity,')         !== false;
-$showPri              = strpos(",$showFields,", ',pri,')              !== false;
-$showStory            = strpos(",$showFields,", ',story,')            !== false;
-$showTask             = strpos(",$showFields,", ',task,')             !== false;
-$showMailto           = strpos(",$showFields,", ',mailto,')           !== false;
-$showKeywords         = strpos(",$showFields,", ',keywords,')         !== false;
-
 formPanel
 (
-    on::change('[name="product"]',              'changeProduct'),
-    on::change('[name="branch"]',               'changeBranch'),
-    on::change('[name="project"]',              'changeProject'),
-    on::change('[name="execution"]',            'changeExecution'),
-    on::change('[name="module"]',               'changeModule'),
-    on::change('[name="region"]',               'changeRegion'),
-    on::change('[name="contactListMenu"]',      'changeContact'),
-    on::click('#allBuilds',             'loadAllBuilds'),
-    on::click('#allUsers',              'loadAllUsers'),
-    on::click('#refreshModule',         'refreshModule'),
-    on::click('#refreshMailto',         'refreshContact'),
-    on::click('#refreshExecutionBuild', 'refreshExecutionBuild'),
-    on::click('#refreshProductBuild',   'refreshProductBuild'),
+    on::change('[name="product"]',         'changeProduct'),
+    on::change('[name="branch"]',          'changeBranch'),
+    on::change('[name="project"]',         'changeProject'),
+    on::change('[name="execution"]',       'changeExecution'),
+    on::change('[name="module"]',          'changeModule'),
+    on::change('[name="region"]',          'changeRegion'),
+    on::change('[name="contactListMenu"]', 'changeContact'),
+    on::click('#allBuilds',                'loadAllBuilds'),
+    on::click('#allUsers',                 'loadAllUsers'),
+    on::click('#refreshModule',            'refreshModule'),
+    on::click('#refreshMailto',            'refreshContact'),
+    on::click('#refreshExecutionBuild',    'refreshExecutionBuild'),
+    on::click('#refreshProductBuild',      'refreshProductBuild'),
     set::title($lang->bug->create),
-    to::headingActions(icon('cog-outline')),
+    set::customFields(true),
     formRow
     (
         formGroup
@@ -129,18 +112,14 @@ formPanel
         ),
         formGroup
         (
-            set::class($showExecution ? '' : 'hidden'),
             set::width('1/2'),
+            set('id', 'executionBox'),
             set::label($bug->projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution),
-            inputGroup
+            picker
             (
-                set('id', 'executionBox'),
-                picker
-                (
-                    set::name('execution'),
-                    set::items($executions),
-                    set::value(!empty($bug->execution->id) ? $bug->execution->id : '')
-                )
+                set::name('execution'),
+                set::items($executions),
+                set::value(!empty($bug->execution->id) ? $bug->execution->id : '')
             )
         )
     ),
@@ -225,9 +204,9 @@ formPanel
             set::value($laneID)
         ),
     ) : null,
-    ($showDeadline || $showNoticefeedbackBy) ? formRow
+    formRow
     (
-        $showDeadline ? formGroup
+        formGroup
         (
             set::width('1/2'),
             set::label($lang->bug->deadline),
@@ -237,24 +216,24 @@ formPanel
                 set::name('deadline'),
                 set::value($bug->deadline)
             )
-        ) : null,
-        $showNoticefeedbackBy ? formGroup
+        ),
+        formGroup
         (
             set::width('1/2'),
             set::label($lang->bug->feedbackBy),
             set::name('feedbackBy'),
             set::value(isset($bug->feedbackBy) ? $bug->feedbackBy : '')
-        ) : null,
-    ) : null,
+        ),
+    ),
     formRow
     (
-        $showNoticefeedbackBy ? formGroup
+        formGroup
         (
             set::width('1/2'),
             set::label($lang->bug->notifyEmail),
             set::name('notifyEmail'),
             set::value($bug->notifyEmail)
-        ) : null,
+        ),
         formGroup
         (
             set::width('1/2'),
@@ -267,7 +246,7 @@ formPanel
     ),
     formRow
     (
-        $showOS ? formGroup
+        formGroup
         (
             set::width('1/2'),
             set::label($lang->bug->os),
@@ -276,8 +255,8 @@ formPanel
             set::name('os[]'),
             set::value($bug->os),
             set::multiple(true)
-        ) : null,
-        $showBrowser ? formGroup
+        ),
+        formGroup
         (
             set::width('1/2'),
             set::label($lang->bug->browser),
@@ -285,7 +264,7 @@ formPanel
             set::items($lang->bug->browserList),
             set::name('browser'),
             set::value($bug->browser)
-        ) : null
+        )
     ),
     formRow
     (
@@ -321,7 +300,7 @@ formPanel
             set::name('severity'),
             set::value($bug->severity)
         ),
-        $showPri ? formGroup
+        formGroup
         (
             set::width('180px'),
             set::label($lang->bug->pri),
@@ -329,7 +308,7 @@ formPanel
             set::items(array_filter($lang->bug->priList)),
             set::name('pri'),
             set::value($bug->pri)
-        ) : null
+        )
     ),
     formRow
     (
@@ -343,9 +322,9 @@ formPanel
             )
         ),
     ),
-    ($showStory || $showTask) ? formRow
+    formRow
     (
-        $showStory ? formGroup
+        formGroup
         (
             set::width('1/2'),
             set::label($lang->bug->story),
@@ -359,8 +338,8 @@ formPanel
                     set::value($bug->storyID)
                 )
             )
-        ) : null,
-        $showTask ? formGroup
+        ),
+        formGroup
         (
             set::width('1/2'),
             set::label($lang->bug->task),
@@ -368,11 +347,11 @@ formPanel
             set::items(''),
             set::name('task'),
             set::value($bug->taskID)
-        ) : null
-    ) : null,
-    ($showMailto || $showKeywords) ? formRow
+        )
+    ),
+    formRow
     (
-        $showMailto ? formGroup
+        formGroup
         (
             set::width('1/2'),
             set::label($lang->bug->lblMailto),
@@ -415,15 +394,15 @@ formPanel
                     )
                 )
             )
-        ) : null,
-        $showKeywords ? formGroup
+        ),
+        formGroup
         (
             set::width('1/2'),
             set::label($lang->bug->keywords),
             set::name('keywords'),
             set::value($bug->keywords)
-        ) : null
-    ) : null,
+        )
+    ),
     formRow
     (
         formGroup
