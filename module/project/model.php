@@ -756,6 +756,21 @@ class projectModel extends model
     }
 
     /**
+     * Get project list by query
+     *
+     * @param  string $status
+     * @param  string $order
+     * @param  int    $count
+     * @param  string $excludedModel
+     * @access public
+     * @return void
+     */
+    public function getProjectList(string $status, string $order, int $count, string $excludedModel)
+    {
+        return $this->projectTao->fetchProjectListByQuery($status, 0, $order, $count, $excludedModel);
+    }
+
+    /**
      * 获取项目下的执行数据。
      * Get execution data under the project.
      *

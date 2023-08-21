@@ -9,10 +9,10 @@ $config->block->projectstatistic->items['story'][] = array('field' => 'storyPoin
 $config->block->projectstatistic->items['story'][] = array('field' => 'done',        'unit' => 'unit');
 $config->block->projectstatistic->items['story'][] = array('field' => 'undone',      'unit' => 'unit');
 
-$config->block->projectstatistic->items['task'][]  = array('field' => 'number', 'unit' => 'unit');
+$config->block->projectstatistic->items['task'][]  = array('field' => 'tasks',  'unit' => 'unit');
 $config->block->projectstatistic->items['task'][]  = array('field' => 'wait',   'unit' => 'unit');
 $config->block->projectstatistic->items['task'][]  = array('field' => 'doing',  'unit' => 'unit');
 
-$config->block->projectstatistic->items['bug'][]   = array('field' => 'number',    'unit' => 'unit');
+$config->block->projectstatistic->items['bug'][]   = array('field' => 'bugs',      'unit' => 'unit');
 $config->block->projectstatistic->items['bug'][]   = array('field' => 'resolved',  'unit' => 'unit');
 $config->block->projectstatistic->items['bug'][]   = array('field' => 'activated', 'unit' => 'unit');

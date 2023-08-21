@@ -717,8 +717,6 @@ class blockZen extends block
      */
     protected function printReleaseStatisticBlock(object $block): void
     {
-
-
         $years  = array();
         $months = array();
         $groups = array();
@@ -914,70 +912,93 @@ class blockZen extends block
     {
         if(!empty($block->params->type) && preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
-        /* Load models and langs. */
-        $this->loadModel('project');
-        $this->loadModel('weekly');
-        $this->loadModel('execution');
-        $this->app->loadLang('task');
-        $this->app->loadLang('story');
-        $this->app->loadLang('bug');
-
         /* Set project status and count. */
         $status = isset($block->params->type)  ? $block->params->type       : 'all';
         $count  = isset($block->params->count) ? (int)$block->params->count : 15;
 
         /* Get projects. */
         $excludedModel = $this->config->edition == 'max' ? '' : 'waterfall';
-        $projects      = $this->project->getOverviewList($status, 0, 'order_asc', $count, $excludedModel);
-        if(empty($projects))
-        {
-            $this->view->projects = $projects;
-            return;
-        }
+        $projects      = $this->loadModel('project')->getProjectList($status, 'order_asc', $count, $excludedModel);
+        $projectIdList = array_keys($projects);
 
+        $this->loadModel('metric');
+        $riskCountGroup    = $this->metric->getResultByCode('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)));
+        $issueCountGroup   = $this->metric->getResultByCode('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)));
+        /* 敏捷项目的统计信息。 */
+        $investedGroup      = $this->metric->getResultByCode('day_of_invested_in_project',         array('project' => join(',', $projectIdList)));
+        $consumeTaskGroup   = $this->metric->getResultByCode('consume_of_task_in_project',         array('project' => join(',', $projectIdList)));
+        $leftTaskGroup      = $this->metric->getResultByCode('left_of_task_in_project',            array('project' => join(',', $projectIdList)));
+        $countStoryGroup    = $this->metric->getResultByCode('scale_of_story_in_project',          array('project' => join(',', $projectIdList)));
+        $finishedStoryGroup = $this->metric->getResultByCode('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)));
+        $unclosedStoryGroup = $this->metric->getResultByCode('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)));
+        $countTaskGroup     = $this->metric->getResultByCode('count_of_task_in_project',           array('project' => join(',', $projectIdList)));
+        $waitTaskGroup      = $this->metric->getResultByCode('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)));
+        $doingTaskGroup     = $this->metric->getResultByCode('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)));
+        $countBugGroup      = $this->metric->getResultByCode('count_of_bug_in_project',            array('project' => join(',', $projectIdList)));
+        $closedBugGroup     = $this->metric->getResultByCode('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)));
+        $activatedBugGroup  = $this->metric->getResultByCode('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)));
+
+        if($investedGroup)      $investedGroup      = $this->groupMetricData($investedGroup,      'project');
+        if($consumeTaskGroup)   $consumeTaskGroup   = $this->groupMetricData($consumeTaskGroup,   'project');
+        if($leftTaskGroup)      $leftTaskGroup      = $this->groupMetricData($leftTaskGroup,      'project');
+        if($countStoryGroup)    $countStoryGroup    = $this->groupMetricData($countStoryGroup,    'project');
+        if($finishedStoryGroup) $finishedStoryGroup = $this->groupMetricData($finishedStoryGroup, 'project');
+        if($unclosedStoryGroup) $unclosedStoryGroup = $this->groupMetricData($unclosedStoryGroup, 'project');
+        if($countTaskGroup)     $countTaskGroup     = $this->groupMetricData($countTaskGroup,     'project');
+        if($waitTaskGroup)      $waitTaskGroup      = $this->groupMetricData($waitTaskGroup,      'project');
+        if($doingTaskGroup)     $doingTaskGroup     = $this->groupMetricData($doingTaskGroup,     'project');
+        if($countBugGroup)      $countBugGroup      = $this->groupMetricData($countBugGroup,      'project');
+        if($closedBugGroup)     $closedBugGroup     = $this->groupMetricData($closedBugGroup,     'project');
+        if($activatedBugGroup)  $activatedBugGroup  = $this->groupMetricData($activatedBugGroup,  'project');
+
+        /* 瀑布项目的统计信息。 */
+        $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)));
+        $SVGroup           = $this->metric->getResultByCode('sv_in_waterfall',                  array('project' => join(',', $projectIdList)));
+        $PVGroup           = $this->metric->getResultByCode('pv_of_task_in_waterfall',          array('project' => join(',', $projectIdList)));
+        $EVGroup           = $this->metric->getResultByCode('ev_of_finished_task_in_waterfall', array('project' => join(',', $projectIdList)));
+        $CVGroup           = $this->metric->getResultByCode('cv_in_waterfall',                  array('project' => join(',', $projectIdList)));
+        $ACGroup           = $this->metric->getResultByCode('ac_of_all_in_waterfall',           array('project' => join(',', $projectIdList)));
+
+        if($riskCountGroup)    $riskCountGroup    = $this->groupMetricData($riskCountGroup,    'project');
+        if($issueCountGroup)   $issueCountGroup   = $this->groupMetricData($issueCountGroup,   'project');
+        if($taskProgressGroup) $taskProgressGroup = $this->groupMetricData($taskProgressGroup, 'project');
+        if($SVGroup)           $SVGroup           = $this->groupMetricData($SVGroup,           'project');
+        if($PVGroup)           $PVGroup           = $this->groupMetricData($PVGroup,           'project');
+        if($EVGroup)           $EVGroup           = $this->groupMetricData($EVGroup,           'project');
+        if($CVGroup)           $CVGroup           = $this->groupMetricData($CVGroup,           'project');
+        if($ACGroup)           $ACGroup           = $this->groupMetricData($ACGroup,           'project');
+
+        /* 将获取的统计信息按照projectID补充到projects数组中。 */
+        $this->loadModel('execution');
+        $this->app->loadClass('pager', true);
+        $pager  = pager::init(0, 3, 1);
         $today  = helper::today();
-        $monday = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
-        $tasks  = $this->dao->select("project,
-            sum(consumed) as totalConsumed,
-            sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
-            ->from(TABLE_TASK)
-            ->where('project')->in(array_keys($projects))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->groupBy('project')
-            ->fetchAll('project');
-
         foreach($projects as $projectID => $project)
         {
+            $project->progress = isset($taskProgressGroup[$projectID]['value']) ? $taskProgressGroup[$projectID]['value'] * 100 : 0;
             if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
             {
-                $this->app->loadClass('pager', true);
-                $pager = pager::init(0, 3, 1);
-                $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
-                $project->executions = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
+                $project->executions   = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
+                $project->costs        = isset($investedGroup[$projectID]['value'])      ? $investedGroup[$projectID]['value']      : 0;
+                $project->consumed     = isset($consumeTaskGroup[$projectID]['value'])   ? $consumeTaskGroup[$projectID]['value']   : 0;
+                $project->remainder    = isset($leftTaskGroup[$projectID]['value'])      ? $leftTaskGroup[$projectID]['value']      : 0;
+                $project->storyPoints  = isset($countStoryGroup[$projectID]['value'])    ? $countStoryGroup[$projectID]['value']    : 0;
+                $project->done         = isset($finishedStoryGroup[$projectID]['value']) ? $finishedStoryGroup[$projectID]['value'] : 0;
+                $project->undone       = isset($unclosedStoryGroup[$projectID]['value']) ? $unclosedStoryGroup[$projectID]['value'] : 0;
+                $project->tasks        = isset($countTaskGroup[$projectID]['value'])     ? $countTaskGroup[$projectID]['value']     : 0;
+                $project->wait         = isset($waitTaskGroup[$projectID]['value'])      ? $waitTaskGroup[$projectID]['value']      : 0;
+                $project->doing        = isset($doingTaskGroup[$projectID]['value'])     ? $doingTaskGroup[$projectID]['value']     : 0;
+                $project->bugs         = isset($countBugGroup[$projectID]['value'])      ? $countBugGroup[$projectID]['value']      : 0;
+                $project->resolvedDate = isset($closedBugGroup[$projectID]['value'])     ? $closedBugGroup[$projectID]['value']     : 0;
+                $project->active       = isset($activatedBugGroup[$projectID]['value'])  ? $activatedBugGroup[$projectID]['value']  : 0;
             }
             elseif(in_array($project->model, array('waterfall', 'waterfallplus')))
             {
-                $begin   = $project->begin;
-                $weeks   = $this->weekly->getWeekPairs($begin);
-                $current = zget($weeks, $monday, '');
-                $current = substr($current, 0, -11) . substr($current, -6);
-
-                $pvAndev = $this->weekly->getPVEV($projectID, $today);
-                $project->pv = $pvAndev['PV'];
-                $project->ev = $pvAndev['EV'];
-                $project->ac = $this->weekly->getAC($projectID, $today);
-                $project->sv = $this->weekly->getSV($project->ev, $project->pv);
-                $project->cv = $this->weekly->getCV($project->ev, $project->ac);
-
-                $progress = 0;
-                if(isset($tasks[$projectID]) && ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft))
-                {
-                    $progress = round($tasks[$projectID]->totalConsumed / ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft), 3) * 100;
-                }
-
-                $project->current  = $current;
-                $project->progress = $progress;
+                $project->pv = isset($PVGroup[$projectID]['value']) ? $PVGroup[$projectID]['value'] * 100 : 0;
+                $project->ev = isset($EVGroup[$projectID]['value']) ? $EVGroup[$projectID]['value'] * 100 : 0;
+                $project->ac = isset($ACGroup[$projectID]['value']) ? $ACGroup[$projectID]['value'] * 100 : 0;
+                $project->sv = isset($SVGroup[$projectID]['value']) ? $SVGroup[$projectID]['value'] * 100 : 0;
+                $project->cv = isset($CVGroup[$projectID]['value']) ? $CVGroup[$projectID]['value'] * 100 : 0;
             }
             if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, $today);
         }
@@ -3006,5 +3027,21 @@ class blockZen extends block
         $sso = isset($this->get->sso) ? base64_decode($this->get->sso) : '';
         $this->view->sso  = $sso;
         $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
+    }
+
+    /**
+     * 对度量项数组按照某一个字段进行分组。
+     * Group field on metricData.
+     *
+     * @param  array   $data
+     * @param  string  $field
+     * @access private
+     * @return array
+     */
+    private function groupMetricData(array $data, string $field): array
+    {
+        $data = json_decode(json_encode($data), true);
+        if(!empty($data)) $data = array_column($data, null, $field);
+        return $data;
     }
 }
