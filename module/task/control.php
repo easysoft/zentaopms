@@ -1069,7 +1069,7 @@ class task extends control
 
             /* Get tasks. */
             $tasks = $this->task->getExportTasks($orderBy);
-            if($type == 'group') $tasks = $this->taskZen->processExportGroup($tasks, $orderBy);
+            if($type == 'group') $tasks = $this->taskZen->processExportGroup($executionID, $tasks, $orderBy);
 
             /* Process export data. */
             $tasks = $this->taskZen->processExportData($tasks, $execution->project);

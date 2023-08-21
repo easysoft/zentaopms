@@ -132,7 +132,7 @@ $thead = function() use($lang, $groupList, $groupBy, $allCount)
 {
     return h::tr
     (
-        $allCount ? setClass('divider') : null, 
+        $allCount ? setClass('divider') : null,
         h::th
         (
             setClass('c-side text-left has-btn group-menu'),
@@ -214,7 +214,7 @@ $thead = function() use($lang, $groupList, $groupBy, $allCount)
     );
 };
 
-$tbody = function() use($tasks, $lang, $groupBy, $users)
+$tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList)
 {
     $tbody = array();
     $groupIndex = 1;

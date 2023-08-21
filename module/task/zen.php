@@ -1360,12 +1360,13 @@ class taskZen extends task
      * 处理导出任务分组信息。
      * Process export task group information.
      *
+     * @param  int       $executionID
      * @param  array     $tasks
      * @param  string    $orderBy
      * @access protected
      * @return object[]
      */
-    protected function processExportGroup(array $tasks, string $orderBy): array
+    protected function processExportGroup(int $executionID, array $tasks, string $orderBy): array
     {
         $stories    = $this->loadModel('story')->getExecutionStories($executionID);
         $groupTasks = array();
