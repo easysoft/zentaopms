@@ -53,27 +53,26 @@ class projectModel extends model
     }
 
     /**
+     * 判断项目操作的权限。
      * Judge an action is clickable or not.
      *
-     * @param  object    $project
-     * @param  string    $action
+     * @param  object $project
+     * @param  string $action
      * @access public
      * @return bool
      */
-    public static function isClickable($project, $action)
+    public static function isClickable(object $project, string $action)
     {
+        if(empty($project) || !isset($project->type)) return true;
+
         $action = strtolower($action);
-
-        if(empty($project)) return true;
-        if(!isset($project->type)) return true;
-
-        if($action == 'start')    return $project->status == 'wait' or $project->status == 'suspended';
-        if($action == 'finish')   return $project->status == 'wait' or $project->status == 'doing';
-        if($action == 'close')    return $project->status != 'closed';
-        if($action == 'suspend')  return $project->status == 'wait' or $project->status == 'doing';
-        if($action == 'activate') return $project->status == 'done' or $project->status == 'closed';
+        if($action == 'close')     return $project->status != 'closed';
+        if($action == 'group')     return $project->model != 'kanban';
+        if($action == 'start')     return $project->status == 'wait' || $project->status == 'suspended';
+        if($action == 'finish')    return $project->status == 'wait' || $project->status == 'doing';
+        if($action == 'suspend')   return $project->status == 'wait' || $project->status == 'doing';
+        if($action == 'activate')  return $project->status == 'done' || $project->status == 'closed';
         if($action == 'whitelist') return $project->acl != 'open';
-        if($action == 'group') return $project->model != 'kanban';
 
         return true;
     }
