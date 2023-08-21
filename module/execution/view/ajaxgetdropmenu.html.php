@@ -6,7 +6,7 @@
  * @param object $execution
  * @return string
  */
-$getExecutionGroup = function($execution): string
+$getExecutionGroup = function($execution)
 {
     global $app;
     if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $app->user->account or isset($execution->teams[$app->user->account]))) return 'my';
