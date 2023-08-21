@@ -10,6 +10,15 @@ declare(strict_types=1);
  */
 namespace zin;
 
+foreach($teamMembers as $member)
+{
+    $member->days    = $member->days . $this->lang->execution->day;
+    $member->hours   = $member->hours . $this->lang->execution->workHour;
+    $member->total   = $member->totalHours . $this->lang->execution->workHour;
+    $member->actions = array();
+    if(common::hasPriv('project', 'unlinkMember', $member) && $canBeChanged) $member->actions = array('unlink');
+}
+
 /* zin: Define the set::module('team') feature bar on main menu. */
 featureBar
 (

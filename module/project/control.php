@@ -1005,30 +1005,18 @@ class project extends control
      */
     public function team(int $projectID = 0)
     {
-        $projectID = (int)$projectID;
-        $this->session->set('teamList', $this->app->getURI(true), 'project');
-
         $this->app->loadLang('execution');
         $this->project->setMenu($projectID);
 
-        $project     = $this->project->getById($projectID);
-        $deptID      = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $teamMembers = $this->project->getTeamMembers($projectID);
-        foreach($teamMembers as $member)
-        {
-            $member->days    = $member->days . $this->lang->execution->day;
-            $member->hours   = $member->hours . $this->lang->execution->workHour;
-            $member->total   = $member->totalHours . $this->lang->execution->workHour;
-            $member->actions = array();
-            if(common::hasPriv('project', 'unlinkMember', $member) && common::canModify('project', $project)) $member->actions = array('unlink');
-        }
+        $project = $this->project->getByID($projectID);
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
 
         $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->team;
         $this->view->projectID    = $projectID;
-        $this->view->teamMembers  = $teamMembers;
+        $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
         $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         $this->view->canBeChanged = common::canModify('project', $project);
-        $this->view->recTotal     = count($teamMembers);
+        $this->view->recTotal     = count($this->view->teamMembers);
 
         $this->display();
     }
