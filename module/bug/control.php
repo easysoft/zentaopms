@@ -869,8 +869,8 @@ class bug extends control
     }
 
     /**
-     * 批量修改bug分支。
-     * Batch change branch.
+     * 批量修改 bug 的分支。
+     * Batch change branch of the bug.
      *
      * @param  int    $branchID
      * @access public
@@ -880,9 +880,13 @@ class bug extends control
     {
         if($this->post->bugIdList)
         {
+            /* 准备 bug 修改分支需要的数据。 */
+            /* Prepare data to change branch. */
             $bugIdList = array_unique($this->post->bugIdList);
             $oldBugs   = $this->bug->getByIdList($bugIdList);
 
+            /* 更新 bug 的分支，获取跳过的 bug id 列表。 */
+            /* Update the branch of the bug, and get the list of bug id to skip. */
             $skipBugIdList = '';
             foreach($bugIdList as $bugID)
             {
@@ -908,6 +912,8 @@ class bug extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
+        /* 返回批量修改分支 bugs 后的响应。 */
+        /* Return response after batch changing branch of the bugs. */
         $load = $this->session->bugList;
         if(!empty($skipBugIdList)) $load = array('confirm' => sprintf($this->lang->bug->notice->noSwitchBranch, $skipBugIdList), 'confirmed' => 'true', 'canceled' => 'true');
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load));
