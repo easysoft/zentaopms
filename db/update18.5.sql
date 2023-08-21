@@ -61,15 +61,14 @@ CREATE INDEX `project`  ON `zt_actionrecent`(`project`);
 CREATE INDEX `action`   ON `zt_actionrecent`(`action`);
 CREATE INDEX `objectID` ON `zt_actionrecent`(`objectID`);
 
-ALTER TABLE `zt_notify` MODIFY COLUMN `toList` text NOT NULL;
-ALTER TABLE `zt_notify` MODIFY COLUMN `subject` text NOT NULL;
-ALTER TABLE `zt_notify` DROP INDEX `objectType_toList_status`;
+ALTER TABLE `zt_notify` MODIFY `toList` text NOT NULL;
+ALTER TABLE `zt_notify` MODIFY `subject` text NOT NULL;
+DROP INDEX `objectType_toList_status` ON `zt_notify`;
 
 CREATE INDEX `objectType` ON `zt_notify` (`objectType`);
 CREATE INDEX `status` ON `zt_notify` (`status`);
 
 CREATE INDEX `deleted` ON `zt_bug` (`deleted`);
-CREATE INDEX `project` ON `zt_bug` (`project`);
 CREATE INDEX `product_status_deleted` ON `zt_bug` (`product`,`status`,`deleted`);
 
 UPDATE `zt_cron` SET `m` = '*/1' WHERE `m` = '*/5' AND `command` in ('moduleName=mail&methodName=asyncSend', 'moduleName=webhook&methodName=asyncSend') and `type` = 'zentao';
@@ -82,4 +81,4 @@ CREATE INDEX `module` ON `zt_config`(`module`);
 CREATE INDEX `key`    ON `zt_config`(`key`);
 
 UPDATE `zt_programoutput` SET `activity` = (SELECT `activity` FROM `zt_zoutput` WHERE `zt_programoutput`.`output` = `zt_zoutput`.`id`);
-ALTER TABLE `zt_reviewissue` MODIFY COLUMN `opinion` mediumtext NOT NULL DEFAULT '';
+ALTER TABLE `zt_reviewissue` MODIFY `opinion` mediumtext NOT NULL DEFAULT '';
