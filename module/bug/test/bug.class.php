@@ -347,8 +347,9 @@ class bugTest
      */
     public function assignTest(object $bug): array|object
     {
+        $oldBug = $this->objectModel->getByID($bug->id);
         $_SERVER['HTTP_HOST'] = '';
-        $this->objectModel->assign($bug);
+        $this->objectModel->assign($bug, $oldBug);
         if(dao::isError())
         {
             return dao::getError();
