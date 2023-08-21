@@ -54,7 +54,13 @@ class panel extends wg
         (
             setClass('panel-heading', $this->prop('headingClass')),
             set($this->prop('headingProps')),
-            empty($title) ? null : div(setClass('panel-title', $this->prop('titleClass', empty($size) ? null : "text-$size")), $title, set($this->prop('titleProps'))),
+            !empty($title) ? div
+            (
+                setClass('panel-title', $this->prop('titleClass', empty($size) ? null : "text-$size")),
+                $this->prop('titleIcon') ? icon($this->prop('titleIcon')) : null,
+                set($this->prop('titleProps')),
+                $title
+            ) : null,
             $headingBlock,
             $actions
         );
