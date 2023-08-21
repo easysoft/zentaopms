@@ -141,10 +141,12 @@ class bugTao extends bugModel
 
             ->beginIF($projectID)
             ->andWhere('project', true)->eq($projectID)
-            ->beginIF($objectType == 'bug')
+            ->fi()
+            ->beginIF($projectID && $object == 'bug')
             ->orWhere('project')->eq(0)
             ->andWhere('openedBuild')->eq('trunk')
             ->fi()
+            ->beginIF($projectID)
             ->markRight(1)
             ->fi()
 
