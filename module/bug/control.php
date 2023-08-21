@@ -914,8 +914,8 @@ class bug extends control
     }
 
     /**
-     * 批量修改bug所属模块。
-     * Batch change the module of bug.
+     * 批量修改 bug 的所属模块。
+     * Batch change the module of the bug.
      *
      * @param  int    $moduleID
      * @access public
@@ -925,13 +925,16 @@ class bug extends control
     {
         if($this->post->bugIdList)
         {
+            /* 获取要修改计划的 bug id 列表。 */
+            /* Get bug id list to change plan. */
             $bugIdList = array_unique($this->post->bugIdList);
             foreach($bugIdList as $bugID)
             {
+                /* 更新 bug 的模块。 */
+                /* Update the module of the bug. */
                 $bug = new stdclass();
                 $bug->id     = (int)$bugID;
                 $bug->module = $moduleID;
-
                 $this->bug->update($bug);
             }
 
