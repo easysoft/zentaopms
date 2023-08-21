@@ -50,7 +50,7 @@ else
      * Define every group name, include expanded group.
      */
     $tabs = array();
-    $tabs[] = array('name' => 'my',     'text' => $lang->execution->mine);
+    $tabs[] = array('name' => 'my',     'text' => $lang->execution->involved);
     $tabs[] = array('name' => 'other',  'text' => $lang->execution->other);
     $tabs[] = array('name' => 'closed', 'text' => $lang->execution->closedExecution);
 
