@@ -2292,12 +2292,13 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of tasks per closed reason
+     * 获取按关闭原因统计的报表数据。
+     * Get report data of tasks per closed reason.
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerClosedReason()
+    public function getDataOfTasksPerClosedReason(): array
     {
         $tasks = $this->dao->select('id,closedReason')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2305,8 +2306,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, array(), 'closedReason');
-
+        $datas = $this->processData4Report($tasks, array(), 'closedReason');
         foreach($datas as $closedReason => $data)
         {
             if(isset($this->lang->task->reasonList[$closedReason])) $data->name = $this->lang->task->reasonList[$closedReason];

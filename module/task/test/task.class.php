@@ -924,26 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of tasks per closed reason.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerClosedReasonTest()
-    {
-        $object = $this->objectModel->getDataOfTasksPerClosedReason();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get report data of finished tasks per day.
      *
      * @access public
