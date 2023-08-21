@@ -365,22 +365,4 @@ class bugTao extends bugModel
 
         return $bugQuery;
     }
-
-    /**
-     * 更新bug根据id。
-     * Update bug by id.
-     *
-     * @param  int       $bugID
-     * @param  object    $bug
-     * @access protected
-     * @return bool
-     */
-    protected function updateByID(int $bugID, object $bug): bool
-    {
-        if(!isset($bug->lastEditedBy))   $bug->lastEditedBy = $this->app->user->account;
-        if(!isset($bug->lastEditedDate)) $bug->lastEditedDate = helper::now();
-
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq($bugID)->exec();
-        return !dao::isError();
-    }
 }
