@@ -25,12 +25,15 @@ UPDATE `zt_cron` SET `type` = 'zentao' WHERE `command` = 'moduleName=weekly&meth
 
 ALTER TABLE `zt_doc` ADD `editedList` text NULL;
 
-ALTER TABLE `zt_case` ADD INDEX `scene` (`scene`);
+CREATE INDEX `scene` ON `zt_case`(`scene`);
 UPDATE `zt_case` SET `sort` = `id` WHERE `sort` = 0;
 UPDATE `zt_case` SET `scene` = `scene` - 100000000 WHERE `scene` > 100000000;
 UPDATE `zt_scene` SET `sort` = `sort` - 100000000 WHERE `sort` > 100000000;
 UPDATE `zt_scene` SET `parent` = `parent` - 100000000 WHERE `parent` > 100000000;
-UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',10000000', ','), `path` = REPLACE(`path`, ',1000000', ','), `path` = REPLACE(`path`, ',100000', ','), `path` = REPLACE(`path`, ',10000', ',');
+UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',10000000', ',');
+UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',1000000', ',');
+UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',100000', ',');
+UPDATE `zt_scene` SET `path` = REPLACE(`path`, ',10000', ',');
 
 DROP VIEW IF EXISTS `ztv_scenecase`;
 
@@ -58,20 +61,16 @@ CREATE INDEX `project`  ON `zt_actionrecent`(`project`);
 CREATE INDEX `action`   ON `zt_actionrecent`(`action`);
 CREATE INDEX `objectID` ON `zt_actionrecent`(`objectID`);
 
-INSERT INTO `zt_actionrecent`(`objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,`date`,`comment`,`extra`,`read`,`vision`,`efforted`)
-SELECT `objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,`date`,`comment`,`extra`,`read`,`vision`,`efforted` FROM `zt_action`
-WHERE `date` >= DATE(DATE_SUB(NOW(), INTERVAL 1 MONTH));
+ALTER TABLE `zt_notify` MODIFY COLUMN `toList` text NOT NULL;
+ALTER TABLE `zt_notify` MODIFY COLUMN `subject` text NOT NULL,
+ALTER TABLE `zt_notify` DROP INDEX `objectType_toList_status`,
 
-ALTER TABLE `zt_notify`
-MODIFY COLUMN `toList` text NOT NULL,
-MODIFY COLUMN `subject` text NOT NULL,
-DROP INDEX `objectType_toList_status`,
-ADD INDEX `objectType`(`objectType` ASC),
-ADD INDEX `status`(`status` ASC);
+CREATE INDEX `objectType` ON `zt_notify` (`objectType`);
+CREATE INDEX `status` ON `zt_notify` (`status`);
 
-CREATE INDEX deleted ON zt_bug (deleted);
-CREATE INDEX project ON zt_bug (project);
-CREATE INDEX product_status_deleted ON zt_bug (product,status,deleted);
+CREATE INDEX `deleted` ON `zt_bug` (`deleted`);
+CREATE INDEX `project` ON `zt_bug` (`project`);
+CREATE INDEX `product_status_deleted` ON `zt_bug` (`product`,`status`,`deleted`);
 
 UPDATE `zt_cron` SET `m` = '*/1' WHERE `m` = '*/5' AND `command` in ('moduleName=mail&methodName=asyncSend', 'moduleName=webhook&methodName=asyncSend') and `type` = 'zentao';
 
