@@ -116,7 +116,7 @@
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
           <?php
-          $actionLink = $this->createLink('product', 'batchEdit');
+          $actionLink = $this->createLink('product', 'batchEdit', "programID=$programID");
           echo html::commonButton($lang->edit, "id='editBtn' data-form-action='$actionLink'");
           ?>
         </div>
