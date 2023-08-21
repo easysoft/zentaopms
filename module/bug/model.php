@@ -1028,8 +1028,8 @@ class bugModel extends model
 
         /* 获取执行的最小开始时间和最大结束时间。 */
         /* Get min begin date and max end date. */
-        $minBegin   = '1970-00-00';
-        $maxEnd     = '1970-00-00';
+        $minBegin   = '1970-01-01';
+        $maxEnd     = '1970-01-01';
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll();
         foreach($executions as $execution)
         {
