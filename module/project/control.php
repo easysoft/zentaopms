@@ -856,7 +856,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testreport($projectID = 0, $objectType = 'project', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testreport(int $projectID = 0, string $objectType = 'project', string $extra = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         echo $this->fetch('testreport', 'browse', "objectID=$projectID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
@@ -872,16 +872,11 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testtask($projectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testtask(int $projectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('testtask');
         $this->app->loadLang('testreport');
 
-        /* Save session. */
-        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
-        $this->session->set('buildList', $this->app->getURI(true), 'execution');
-
-        $projectID = (int)$projectID;
         $this->project->setMenu($projectID);
 
         /* Load pager. */
@@ -891,19 +886,6 @@ class project extends control
         $project = $this->project->getByID($projectID);
         $tasks   = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
 
-        $waitCount    = 0;
-        $testingCount = 0;
-        $blockedCount = 0;
-        $doneCount    = 0;
-        foreach($tasks as $task)
-        {
-            if($task->status == 'wait')    $waitCount ++;
-            if($task->status == 'doing')   $testingCount ++;
-            if($task->status == 'blocked') $blockedCount ++;
-            if($task->status == 'done')    $doneCount ++;
-            if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
-        }
-
         $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->common;
         $this->view->project      = $project;
         $this->view->projectID    = $projectID;
@@ -911,10 +893,6 @@ class project extends control
         $this->view->pager        = $pager;
         $this->view->orderBy      = $orderBy;
         $this->view->tasks        = $tasks;
-        $this->view->waitCount    = $waitCount;
-        $this->view->testingCount = $testingCount;
-        $this->view->blockedCount = $blockedCount;
-        $this->view->doneCount    = $doneCount;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products     = $this->loadModel('product')->getPairs('', 0);
         $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.

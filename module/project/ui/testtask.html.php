@@ -10,6 +10,20 @@ declare(strict_types=1);
  */
 namespace zin;
 
+/* Compute summary. */
+$waitCount    = 0;
+$testingCount = 0;
+$blockedCount = 0;
+$doneCount    = 0;
+foreach($tasks as $task)
+{
+    if($task->status == 'wait')    $waitCount ++;
+    if($task->status == 'doing')   $testingCount ++;
+    if($task->status == 'blocked') $blockedCount ++;
+    if($task->status == 'done')    $doneCount ++;
+    if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
+}
+
 featureBar
 (
     set::current('all'),
