@@ -924,26 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of tasks per priority.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerPriTest()
-    {
-        $object = $this->objectModel->getDataOfTasksPerPri();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get report data of tasks per deadline.
      *
      * @access public

@@ -2174,19 +2174,20 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of tasks per priority
+     * 获取按照优先级统计的报表数据。
+     * Get report data of tasks per priority.
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerPri()
+    public function getDataOfTasksPerPri(): array
     {
         $tasks = $this->dao->select('id,pri')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, array(), 'pri');
+        $datas = $this->processData4Report($tasks, array(), 'pri');
 
         foreach($datas as $pri) $pri->name = $this->lang->task->priList[$pri->name];
         return $datas;
