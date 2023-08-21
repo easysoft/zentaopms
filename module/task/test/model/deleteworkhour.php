@@ -4,6 +4,12 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
 
+$effort = zdTable('task');
+$effort->gen(1);
+
+$effort = zdTable('effort');
+$effort->gen(1);
+
 /**
 
 title=taskModel->deleteWorkhour();
