@@ -376,7 +376,7 @@ class story extends control
         if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Process the module when branch products are switched to normal products. */
-        if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
+        if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName((array)$story->module);
 
         $storyBranch    = $story->branch > 0 ? $story->branch : '0';
         $branch         = $product->type == 'branch' ? $storyBranch : 'all';

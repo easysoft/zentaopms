@@ -984,7 +984,7 @@ class testcase extends control
                 }
             }
 
-            if(!isset($moduleOptionMenu[$case->module])) $moduleOptionMenu += $this->tree->getModulesName($case->module);
+            if(!isset($moduleOptionMenu[$case->module])) $moduleOptionMenu += $this->tree->getModulesName((array)$case->module);
 
             /* Get product and branches. */
             if($this->app->tab == 'execution' or $this->app->tab == 'project')

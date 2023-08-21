@@ -1386,7 +1386,7 @@ class testtask extends control
         foreach($cases as $caseID => $case)
         {
             if($case->auto == 'auto' and $confirm == 'yes') unset($cases[$caseID]);
-            $moduleOptionMenu += $this->tree->getModulesName($case->module);
+            $moduleOptionMenu += $this->tree->getModulesName((array)$case->module);
         }
         if(empty($cases)) return print(js::locate($url));
 

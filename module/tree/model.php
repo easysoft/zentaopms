@@ -1698,18 +1698,20 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getModulesName($moduleIdList, $allPath = true, $branchPath = false)
+    public function getModulesName(array $moduleIdList, bool $allPath = true, bool $branchPath = false): array
     {
         if(!$allPath) return $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchPairs('id', 'name');
 
+        /* Get modules and submodules through id list. */
         $modules     = $this->dao->select('id, name, path, branch')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchAll('path');
         $allModules  = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in(join(array_keys($modules)))->andWhere('deleted')->eq(0)->fetchPairs('id', 'name');
 
+        /* Constructs a key-value pair for the module name:id. */
         $branchIDList = array();
-        $modulePairs = array();
+        $modulePairs  = array();
         foreach($modules as $module)
         {
-            $paths = explode(',', trim($module->path, ','));
+            $paths      = explode(',', trim($module->path, ','));
             $moduleName = '';
             foreach($paths as $path) $moduleName .= '/' . $allModules[$path];
             $modulePairs[$module->id] = $moduleName;
@@ -1719,14 +1721,14 @@ class treeModel extends model
 
         if(!$branchPath) return $modulePairs;
 
-        $branchs  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
+        /* Prefixes the module name with the branch name. */
+        $branchs = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
         foreach($modules as $module)
         {
-            if(isset($modulePairs[$module->id]))
-            {
-                $branchName = isset($branchs[$module->branch]) ? '/' . $branchs[$module->branch]->name : '';
-                $modulePairs[$module->id] = $branchName . $modulePairs[$module->id];
-            }
+            if(!isset($modulePairs[$module->id])) continue;
+
+            $branchName = isset($branchs[$module->branch]) ? '/' . $branchs[$module->branch]->name : '';
+            $modulePairs[$module->id] = $branchName . $modulePairs[$module->id];
         }
 
         return $modulePairs;

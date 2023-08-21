@@ -1178,7 +1178,7 @@ class bugZen extends bug
         /* 获取所属模块列表。*/
         /* Get module option menu. */
         $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, 'bug', 0, $bug->branch);
-        if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName($bug->module);
+        if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName((array)$bug->module);
 
         /* 获取该 bug 关联产品和分支下的 bug 列表。*/
         /* Get bugs of current product. */

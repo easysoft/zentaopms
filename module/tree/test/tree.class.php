@@ -546,24 +546,6 @@ class treeTest
     }
 
     /**
-     * Test get modules name.
-     *
-     * @param  array  $moduleIdList
-     * @param  bool    $allPath
-     * @param  bool    $branchPath
-     * @access public
-     * @return array
-     */
-    public function getModulesNameTest($moduleIdList, $allPath = true, $branchPath = false)
-    {
-        $objects = $this->objectModel->getModulesName($moduleIdList, $allPath, $branchPath);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Test update modules' order.
      *
      * @param  array  $orders

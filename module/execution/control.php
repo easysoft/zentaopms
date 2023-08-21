@@ -3377,7 +3377,7 @@ class execution extends control
 
             if(!isset($modules[$story->module]))
             {
-                $storyModule = $this->tree->getModulesName($story->module);
+                $storyModule = $this->tree->getModulesName((array)$story->module);
                 $productName = count($products) > 1 ? $products[$story->product]->name : '';
                 $modules[$story->module] = $productName . zget($storyModule, $story->module, '');
             }

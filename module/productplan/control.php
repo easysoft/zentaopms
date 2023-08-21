@@ -445,7 +445,7 @@ class productplan extends control
         $modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
         foreach($planStories as $story)
         {
-            if(!isset($modulePairs[$story->module])) $modulePairs += $this->tree->getModulesName($story->module);
+            if(!isset($modulePairs[$story->module])) $modulePairs += $this->tree->getModulesName((array)$story->module);
             $storyIdList[] = $story->id;
         }
 
