@@ -147,9 +147,8 @@ class baseCalc
             $satisify = true;
             foreach($options as $scope => $option)
             {
-                $row = (object)$row;
-                if(!isset($row->$scope)) continue;
-                $satisify = ($satisify && in_array($row->$scope, $option));
+                if(!isset($row[$scope])) continue;
+                $satisify = ($satisify && in_array($row[$scope], $option));
             }
             if($satisify) $filteredRows[] = $row;
         }
