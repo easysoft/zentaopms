@@ -29,16 +29,17 @@ class bugZen extends bug
      *
      * @param  object      $bug
      * @access protected
-     * @return boll|string
+     * @return bool|int
      */
-    protected function checkBugExecutionPriv(object $bug): bool|string
+    protected function checkBugExecutionPriv(object $bug): bool|int
     {
-        if($bug->execution and !$this->loadModel('execution')->checkPriv($bug->execution))
+        if($bug->execution && !$this->loadModel('execution')->checkPriv($bug->execution))
         {
             echo js::alert($this->lang->bug->notice->executionAccessDenied);
 
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('bug', 'index', '')));
+            $loginLink = $this->createLink('user', 'login');
+            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate($this->createLink('bug', 'index', '')));
+
             if($this->app->tab == 'my') return print(js::reload('parent'));
 
             return print(js::locate('back'));

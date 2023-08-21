@@ -135,7 +135,7 @@ class bug extends control
     }
 
     /**
-     * 查看一个bug。
+     * 查看一个 bug。
      * View a bug.
      *
      * @param  int    $bugID
@@ -144,12 +144,14 @@ class bug extends control
      */
     public function view(int $bugID)
     {
-        /* Judge bug exits or not. */
-        $bug = $this->bug->getById($bugID, true);
-        if(!$bug) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
+        $bug = $this->bug->getByID($bugID, true);
 
-        $this->session->set('storyList', '', 'product');
-        $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
+        /* 判断 bug 是否存在。*/
+        /* Judge bug exits or not. */
+        if(!$bug) return print(js::alert($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+
+        /* 检查用户是否拥有所属执行的权限。*/
+        /* Check bug execution priv. */
         $this->bugZen->checkBugExecutionPriv($bug);
 
         /* Update action. */
@@ -157,31 +159,29 @@ class bug extends control
 
         if(!isonlybody()) $this->bugZen->setViewMenu($bug);
 
-        $bugID     = $bug->id;
-        $productID = $bug->product;
-        $product   = $this->product->getByID($productID);
+        $product   = $this->product->getByID($bug->product);
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
-
-        $projects  = $this->product->getProjectPairsByProduct($productID, (string)$bug->branch);
+        $projects  = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
         $projectID = key($projects);
-        $this->session->set("project", $projectID, 'project');
 
-        $this->executeHooks($bugID);
+        $this->session->set("project", $projectID, 'project');
+        $this->session->set('storyList', '', 'product');
+        $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 
         $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
         $this->view->product     = $product;
         $this->view->project     = $this->loadModel('project')->getByID($bug->project);
         $this->view->projects    = $projects;
-        $this->view->executions  = $this->product->getExecutionPairsByProduct($productID, $bug->branch, (string)$projectID, 'noclosed');
+        $this->view->executions  = $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, (string)$projectID, 'noclosed');
         $this->view->bug         = $bug;
-        $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getById($bug->module);
+        $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getByID($bug->module);
         $this->view->modulePath  = $this->loadModel('tree')->getParents($bug->module);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->branches    = $branches;
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all');
-        $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bugID, 'bug');
-        $this->view->actions     = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs($bug->product, 'all');
+        $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bug->id, 'bug');
+        $this->view->actions     = $this->loadModel('action')->getList('bug', $bug->id);
         $this->view->legendBasic = $this->bugZen->getBasicInfoTable($this->view);
         $this->view->legendLife  = $this->bugZen->getBugLifeTable($this->view);
         $this->view->legendMain  = $this->bugZen->getMainRelatedTable($this->view);
