@@ -40,7 +40,7 @@ formPanel
         set::label($lang->group->desc),
         checkList
         (
-            set::name('options'),
+            set::name('options[]'),
             set::inline(true),
             set::items($lang->group->copyOptions),
         )
