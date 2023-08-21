@@ -367,15 +367,18 @@ class bug extends control
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirm['id'], $this->post->uid);
 
             $this->bug->confirm($bug, $kanbanData);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message  = $this->executeHooks($bugID);
-            $regionID = zget($kanbanData, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
+            /* 返回确认 bug 后的响应。 */
+            /* Return response after confirming bug. */
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $message = $this->executeHooks($bugID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', zget($kanbanData, 'regionID', 0), $message);
         }
 
         $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
 
+        /* 展示相关变量。 */
+        /* Show the variables associated. */
         $this->view->title   = $this->lang->bug->confirm;
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed', $oldBug->assignedTo);
