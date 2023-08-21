@@ -924,26 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of tasks per consumed.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerConsumedTest()
-    {
-        $object = $this->objectModel->getDataOfTasksPerConsumed();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get report data of tasks per finishedBy.
      *
      * @access public

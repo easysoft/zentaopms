@@ -2248,12 +2248,13 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of tasks per consumed
+     * 获取按消耗时间统计的报表数据。
+     * Get report data of tasks per consumed.
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerConsumed()
+    public function getDataOfTasksPerConsumed(): array
     {
         $tasks = $this->dao->select('id,consumed')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
