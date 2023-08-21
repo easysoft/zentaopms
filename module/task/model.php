@@ -2151,19 +2151,20 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of tasks per type
+     * 获取按任务类型统计的报表数据。
+     * Get report data of tasks per type.
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerType()
+    public function getDataOfTasksPerType(): array
     {
         $tasks = $this->dao->select('id,type')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, array(), 'type');
+        $datas = $this->processData4Report($tasks, array(), 'type');
 
         foreach($datas as $type => $data)
         {
