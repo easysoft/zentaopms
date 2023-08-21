@@ -7,7 +7,7 @@ zdTable('user')->gen(1);
 zdTable('product')->gen(10);
 
 zdTable('bug')->config('bug_resolve')->gen(7);
-zdTable('project')->config('project_resolve')->gen(1);
+zdTable('project')->config('project_resolve')->gen(10);
 zdTable('kanbanregion')->config('kanbanregion_resolve')->gen(1);
 zdTable('kanbanlane')->config('kanbanlane_resolve')->gen(1);
 zdTable('kanbancolumn')->config('kanbancolumn_resolve')->gen(9);
