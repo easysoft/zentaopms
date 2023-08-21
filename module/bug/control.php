@@ -1038,6 +1038,7 @@ class bug extends control
     }
 
     /**
+     * 批量解决 bugs。
      * Batch resolve bugs.
      *
      * @param  string    $resolution
@@ -1049,6 +1050,7 @@ class bug extends control
     {
         if($this->post->bugIdList)
         {
+            /* 准备 bug 解决 需要的数据。 */
             /* Prepare resolve data. */
             $bugIdList = array_unique($this->post->bugIdList);
             $bugs      = $this->bug->getByIdList($bugIdList);
@@ -1059,9 +1061,12 @@ class bug extends control
             $now   = helper::now();
             foreach($bugIdList as $bugID)
             {
+                /* 只有激活的bug或者解决方案不为已解决的bug可以解决。 */
+                /* Only active bugs or bugs whose resolution is not fixed can be resolve. */
                 $oldBug = $bugs[$bugID];
                 if($oldBug->resolution == 'fixed' || $oldBug->status != 'active') continue;
 
+                /* 获取 bug 的指派给人员。 */
                 /* Get bug assignedTo. */
                 $assignedTo = $oldBug->openedBy;
                 if(!isset($users[$assignedTo]))
@@ -1080,6 +1085,8 @@ class bug extends control
                     if(empty($assignedTo)) $assignedTo = $productQD;
                 }
 
+                /* 构建 bug。 */
+                /* Build bug. */
                 $bug = new stdClass();
                 $bug->id            = (int)$bugID;
                 $bug->resolution    = $resolution;
@@ -1100,6 +1107,8 @@ class bug extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
+        /* 返回批量解决 bugs 后的响应。 */
+        /* Return response after batch resolving bugs. */
         if(empty($message)) $message = $this->lang->saveSuccess;
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
     }
