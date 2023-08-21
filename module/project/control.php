@@ -638,23 +638,26 @@ class project extends control
     }
 
     /**
+     * 添加项目权限组。
      * Project create a group.
      *
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function createGroup(int $projectID = 0)
+    public function createGroup(int $projectID)
     {
         $this->loadModel('group');
-
         if(!empty($_POST))
         {
-            $_POST['project'] = $projectID;
-            $groupID = $this->group->create();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
-            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+            $this->lang->project->name = $this->lang->group->name;
+
+            $group = form::data($this->config->group->form->create)->get();
+            $group->project = $projectID;
+            $this->group->create($group);
+
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->group->create;
@@ -1246,9 +1249,12 @@ class project extends control
         $group = $this->loadModel('group')->getByID($groupID);
         if(!empty($_POST))
         {
-            $_POST['project'] = $group->project;
+            $this->lang->project->name = $this->lang->group->name;
 
-            $this->group->copy($groupID);
+            $newGroup = form::data($this->config->group->form->copy)->get();
+            $newGroup->project = $group->project;
+            $this->group->copy($groupID, $newGroup, (array)$this->post->options);
+
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => true));
         }
@@ -1272,7 +1278,11 @@ class project extends control
         $this->loadModel('group');
         if(!empty($_POST))
         {
-            $this->group->update($groupID);
+            $this->lang->project->name = $this->lang->group->name;
+
+            $group = form::data($this->config->group->form->edit)->get();
+            $this->group->update($groupID, $group);
+
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => true));
         }
