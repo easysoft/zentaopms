@@ -239,7 +239,7 @@ function loadExecutionLabel(projectID)
         const link = $.createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
         $.post(link, function(executionLang)
         {
-            $('#executionBox').prev().html(executionLang);
+            $('#executionBox .form-label').html(executionLang);
         })
     }
 }
