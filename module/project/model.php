@@ -78,7 +78,8 @@ class projectModel extends model
     }
 
     /**
-     * Save project state.
+     * 检查用户是否可以访问当前项目。
+     * Check whether access to the current project is allowed or not.
      *
      * @param  int    $projectID
      * @param  array  $projects
