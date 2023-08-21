@@ -433,18 +433,19 @@ class backupModel extends model
     }
 
     /**
-     * Check disk space is enough.
+     * Get disk space.
      *
      * @param  int    $backupPath
      * @access public
      * @return int
      */
-    public function checkDiskSpace($backupPath)
+    public function getkDiskSpace($backupPath)
     {
         $nofile        = strpos($this->config->backup->setting, 'nofile') !== false;
         $diskFreeSpace = disk_free_space($backupPath);
+        $backFileSize  = 0;
+
         $zfile = $this->app->loadClass('zfile');
-        $backFileSize = 0;
 
         if(!$nofile)
         {
@@ -459,6 +460,6 @@ class backupModel extends model
             ->groupBy('TABLE_SCHEMA')
             ->fetch('size');
 
-        return ($diskFreeSpace - ($backFileSize + $backSqlSize) > 0) ? 0 : $backFileSize + $backSqlSize;
+        return $diskFreeSpace . ',' . ($backFileSize + $backSqlSize);
     }
 }

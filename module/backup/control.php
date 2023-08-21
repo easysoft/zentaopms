@@ -69,15 +69,30 @@ class backup extends control
         }
         krsort($backups);
 
-        $diskSapce = $this->backup->checkDiskSpace($this->backupPath);
-        $alertTips = sprintf($this->lang->backup->insufficientDisk, round($diskSapce / (1024 * 1024 * 1024), 2));
-
-        $this->view->diskSapce  = $diskSapce;
-        $this->view->alertTips  = $alertTips;
         $this->view->title      = $this->lang->backup->common;
         $this->view->position[] = $this->lang->backup->common;
         $this->view->backups    = $backups;
         $this->display();
+    }
+
+    /**
+     * Ajax get disk space.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetkDiskSpace()
+    {
+        set_time_limit(0);
+        session_write_close();
+        $diskSapce = $this->backup->getkDiskSpace($this->backupPath);
+        $diskSapce = explode(',', $diskSapce);
+
+        $space = new stdclass();
+        $space->freeSpace = $diskSapce[0];
+        $space->needSpace = $diskSapce[1];
+
+        echo json_encode($space);
     }
 
     /**

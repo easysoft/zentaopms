@@ -36,9 +36,10 @@ $lang->backup->confirmRestore   = 'Möchten Sie das Backup wiederherstellen?';
 $lang->backup->holdDays         = 'Behalten der letzen %s Tage der Backups';
 $lang->backup->copiedFail       = 'Copy failed files: ';
 $lang->backup->restoreTip       = 'Nur Dateien und Datenbanken können wiederhergestellt werden. Code kann manuell wieder hergestellt werden.';
-$lang->backup->insufficientDisk = 'Disk space less than%.2fG, it may cause insufficient backup space or affect the use, please process it and try again.';
+$lang->backup->insufficientDisk = 'Disk space less thanNEED_SPACEG, it may cause insufficient backup space or affect the use, please process it and try again.';
 $lang->backup->ongoBackup       = 'ongoing backup';
 $lang->backup->cancelBackup     = 'cancel backup';
+$lang->backup->getSpaceLoading  = 'Calculate backup space';
 
 $lang->backup->success = new stdclass();
 $lang->backup->success->backup  = 'Erledigt!';

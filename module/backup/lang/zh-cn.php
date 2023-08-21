@@ -36,9 +36,10 @@ $lang->backup->confirmRestore   = '是否还原该备份？';
 $lang->backup->holdDays         = '备份保留最近 %s 天';
 $lang->backup->copiedFail       = '复制失败的文件：';
 $lang->backup->restoreTip       = '还原功能只还原附件和数据库，如果需要还原代码，可以手动还原。';
-$lang->backup->insufficientDisk = '磁盘空间小于%.2fG，可能会导致备份空间不足或影响使用，请处理后再试。';
+$lang->backup->insufficientDisk = '磁盘空间小于NEED_SPACEG，可能会导致备份空间不足或影响使用，请处理后再试。';
 $lang->backup->ongoBackup       = '继续备份';
 $lang->backup->cancelBackup     = '取消备份';
+$lang->backup->getSpaceLoading  = '正在计算备份空间';
 
 $lang->backup->success = new stdclass();
 $lang->backup->success->backup  = '备份成功！';

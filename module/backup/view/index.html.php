@@ -31,7 +31,7 @@
         if(common::hasPriv('backup', 'backup'))
         {
             $backupLink = helper::createLink('backup', 'backup', 'reload=yes');
-            echo html::commonButton("<i class='icon icon-copy'> </i>" . $lang->backup->backup, "data-link='{$backupLink}'", 'btn btn-primary backup');
+            echo html::commonButton("<i class='icon icon-copy'> </i>" . $lang->backup->backup, "data-link='{$backupLink}'", 'btn btn-primary backup load-indicator');
         }
         ?>
       </div>
@@ -120,7 +120,7 @@
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-body">
-        <p><?php echo $alertTips;?></p>
+        <p></p>
       </div>
       <div class="modal-footer">
       <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $lang->backup->cancelBackup;?></button>
@@ -129,9 +129,11 @@
   </div>
 </div>
 <?php js::set('backup', $lang->backup->common);?>
-<?php js::set('diskSapce', $diskSapce);?>
+<?php js::set('startBackup', $lang->backup->backup);?>
+<?php js::set('getSpaceLoading', $lang->backup->getSpaceLoading);?>
 <?php js::set('rmPHPHeader', $lang->backup->rmPHPHeader);?>
 <?php js::set('confirmRestore', $lang->backup->confirmRestore);?>
 <?php js::set('restore', $lang->backup->restore);?>
 <?php js::set('backupTimeout', $lang->backup->error->timeout);?>
+<?php js::set('alertTips', $lang->backup->insufficientDisk);?>
 <?php include '../../common/view/footer.html.php';?>

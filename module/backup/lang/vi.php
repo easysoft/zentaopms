@@ -33,9 +33,10 @@ $lang->backup->confirmRestore   = 'Bạn có muốn khôi phục sao lưu này?'
 $lang->backup->holdDays         = 'Giữ ít nhất %s ngày sao lưu';
 $lang->backup->copiedFail       = 'Copy failed files: ';
 $lang->backup->restoreTip       = 'Chỉ tập tin và CSDL có thể được khôi phục bằng cách Click Khôi phục. Mã nguồn có thể khôi phục thủ công.';
-$lang->backup->insufficientDisk = 'Không gian đĩa nhỏ hơn%.2fG, Nó có thể gây ra không đủ dung lượng sao lưu hoặc ảnh hưởng đến việc sử dụng, vui lòng xử lý và thử lại.';
+$lang->backup->insufficientDisk = 'Không gian đĩa nhỏ hơnNEED_SPACEG, Nó có thể gây ra không đủ dung lượng sao lưu hoặc ảnh hưởng đến việc sử dụng, vui lòng xử lý và thử lại.';
 $lang->backup->ongoBackup       = 'tiếp tục sao lưu';
 $lang->backup->cancelBackup     = 'hủy sao lưu';
+$lang->backup->getSpaceLoading  = 'Tính toán không gian dự phòng';
 
 $lang->backup->success = new stdclass();
 $lang->backup->success->backup  = 'Sao lưu hoàn thành!';
