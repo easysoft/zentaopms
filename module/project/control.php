@@ -1046,9 +1046,8 @@ class project extends control
         }
         else
         {
-            $response['result']  = 'success';
-            $response['message'] = '';
-            $response['load']    = helper::createLink('project', 'team', "projectID={$projectID}");
+            $response['result'] = 'success';
+            $response['load']   = helper::createLink('project', 'team', "projectID={$projectID}");
         }
         return $this->send($response);
     }
