@@ -4,29 +4,18 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
 
+zdTable('task')->config('task')->gen(30);
+
 /**
 
 title=taskModel->getDataOfTasksPerEstimate();
+timeout=0
 cid=1
-pid=1
-
-统计预计工时为0的任务数量 >> 0,83
-统计预计工时为1的任务数量 >> 1,83
-统计预计工时为2的任务数量 >> 2,83
-统计预计工时为3的任务数量 >> 3,83
-统计预计工时为4的任务数量 >> 4,83
-统计预计工时为5的任务数量 >> 5,83
-统计预计工时为6的任务数量 >> 6,82
-统计预计工时为7的任务数量 >> 7,82
 
 */
 
-$task = new taskTest();
-r($task->getDataOfTasksPerEstimateTest()) && p('0:name,value') && e('0,83'); //统计预计工时为0的任务数量
-r($task->getDataOfTasksPerEstimateTest()) && p('1:name,value') && e('1,83'); //统计预计工时为1的任务数量
-r($task->getDataOfTasksPerEstimateTest()) && p('2:name,value') && e('2,83'); //统计预计工时为2的任务数量
-r($task->getDataOfTasksPerEstimateTest()) && p('3:name,value') && e('3,83'); //统计预计工时为3的任务数量
-r($task->getDataOfTasksPerEstimateTest()) && p('4:name,value') && e('4,83'); //统计预计工时为4的任务数量
-r($task->getDataOfTasksPerEstimateTest()) && p('5:name,value') && e('5,83'); //统计预计工时为5的任务数量
-r($task->getDataOfTasksPerEstimateTest()) && p('6:name,value') && e('6,82'); //统计预计工时为6的任务数量
-r($task->getDataOfTasksPerEstimateTest()) && p('7:name,value') && e('7,82'); //统计预计工时为7的任务数量
+global $tester;
+$taskModule = $tester->loadModel('task');
+
+r(count($taskModule->getDataOfTasksPerEstimate())) && p()               && e('11');  // 按预计工时统计的数量
+r($taskModule->getDataOfTasksPerEstimate())        && p('1:name,value') && e('1,3'); // 统计预计工时为1的任务数量

@@ -2212,12 +2212,13 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of tasks per estimate
+     * 获取按预计时间统计的报表数据。
+     * Get report data of tasks per estimate.
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerEstimate()
+    public function getDataOfTasksPerEstimate(): array
     {
         $tasks = $this->dao->select('id,estimate')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())

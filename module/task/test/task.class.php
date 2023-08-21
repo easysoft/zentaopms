@@ -924,26 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of tasks per estimate.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerEstimateTest()
-    {
-        $object = $this->objectModel->getDataOfTasksPerEstimate();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get report data of tasks per left.
      *
      * @access public
