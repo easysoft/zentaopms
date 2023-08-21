@@ -286,8 +286,8 @@ class bug extends control
     }
 
     /**
-     * 指派bug。
-     * Update assign of bug.
+     * 指派 bug。
+     * Assign bug.
      *
      * @param  int    $bugID
      * @access public
@@ -295,31 +295,33 @@ class bug extends control
      */
     public function assignTo(int $bugID)
     {
-        /* Get old bug, and check privilege of the execution. */
-        $oldBug = $this->bug->getById($bugID);
+        /* 获取更新前的 bug，并且检查所属执行的权限。*/
+        /* Get old bug and check privilege of the execution. */
+        $oldBug = $this->bug->getByID($bugID);
         $this->bugZen->checkBugExecutionPriv($oldBug);
 
         if(!empty($_POST))
         {
+            /* 初始化 bug 数据。*/
             /* Init bug data. */
             $bug = form::data($this->config->bug->form->assignTo)->add('id', $bugID)->get();
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->assignto['id'], $this->post->uid);
 
-            if($oldBug->status != 'closed') $this->bug->assign($bug);
+            if($oldBug->status != 'closed') $this->bug->assign($bug, $oldBug);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $message = $this->executeHooks($bugID);
             if(!$message) $message = $this->lang->saveSuccess;
 
-            /* Response after assigning bug. */
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
-        /* Set menu. */
         $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
 
-        /* Get assigned to member. */
-        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        /* 获取指派给的用户列表。*/
+        /* Get users that can be assigned to. */
+        if($this->app->tab == 'project' || $this->app->tab == 'execution')
         {
             $users = $this->bugZen->getAssignedToPairs($oldBug);
         }
@@ -328,11 +330,10 @@ class bug extends control
             $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
         }
 
-        /* Show the variables associated. */
         $this->view->title   = $this->lang->bug->assignTo;
-        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
-        $this->view->users   = $users;
         $this->view->bug     = $oldBug;
+        $this->view->users   = $users;
+        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
     }
 

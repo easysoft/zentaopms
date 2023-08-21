@@ -375,25 +375,23 @@ class bugModel extends model
     }
 
     /**
-     * 将任务指派给一个用户。
+     * 将 bug 指派给一个用户。
      * Assign a bug to a user.
      *
      * @param  object $bug
+     * @param  object $oldBug
      * @access public
      * @return bool
      */
-    public function assign(object $bug): bool
+    public function assign(object $bug, object $oldBug): bool
     {
-        /* Get old bug. */
-        $oldBug = $this->getById($bug->id);
-
-        /* Update assigned of the bug. */
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
+        /* 记录指派动作。*/
         /* Record log. */
-        $changes  = common::createChanges($oldBug, $bug);
         $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Assigned', $bug->comment, $bug->assignedTo);
+        $changes  = common::createChanges($oldBug, $bug);
         if($changes) $this->action->logHistory($actionID, $changes);
 
         return !dao::isError();
