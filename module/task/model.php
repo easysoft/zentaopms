@@ -2102,7 +2102,7 @@ class taskModel extends model
 
     /**
      * 获取按模块任务数统计的报表数据。
-     * Get report data of tasks per module
+     * Get report data of tasks per module.
      *
      * @access public
      * @return object[]
@@ -2126,20 +2126,22 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of tasks per assignedTo
+     * 获取按指派给统计的报表数据。
+     * Get report data of tasks per assignedTo.
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerAssignedTo()
+    public function getDataOfTasksPerAssignedTo(): array
     {
         $tasks = $this->dao->select('id,assignedTo')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, array(), 'assignedTo');
+        $datas = $this->processData4Report($tasks, array(), 'assignedTo');
 
+        /* Get user's realname. */
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data)
         {

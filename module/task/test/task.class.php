@@ -924,26 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of tasks per assignedto.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerAssignedToTest()
-    {
-        $object = $this->objectModel->getDataOfTasksPerAssignedTo();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get report data of tasks per type.
      *
      * @access public
