@@ -2095,7 +2095,7 @@ class taskModel extends model
         $datas = $this->processData4Report($tasks, array(), 'execution');
 
         /* Get execution names for these tasks. */
-        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
+        $executions = $this->loadModel('execution')->fetchPairs(0, 'all', true, true);
         foreach($datas as $executionID => $data) $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
         return $datas;
     }
