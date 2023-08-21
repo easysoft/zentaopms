@@ -979,7 +979,7 @@ class bug extends control
                 /* 更新 bug 的计划。 */
                 /* Update the plan of the bug. */
                 $bug = new stdclass();
-                $bug->id   = $bugID;
+                $bug->id   = (int)$bugID;
                 $bug->plan = $planID;
                 $this->bug->update($bug);
             }
