@@ -12,6 +12,7 @@
 class testsuite extends control
 {
     /**
+     * 所有产品。
      * All products.
      *
      * @var    array
@@ -20,7 +21,15 @@ class testsuite extends control
     public $products = array();
 
     /**
-     * Construct function.
+     * 构造函数
+     *
+     * 1.加载其他model类。
+     * 2.获取产品，并输出到视图。
+     *
+     * The construct function.
+     *
+     * 1. Load model of other modules.
+     * 2. Get products and assign to view.
      *
      * @param  string $moduleName
      * @param  string $methodName
@@ -36,6 +45,7 @@ class testsuite extends control
     }
 
     /**
+     * 索引页，导向browse页面。
      * Index page, header to browse.
      *
      * @access public
@@ -47,6 +57,7 @@ class testsuite extends control
     }
 
     /**
+     * 测试套件列表。
      * Browse test suites.
      *
      * @param  int    $productID
@@ -58,22 +69,27 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $productID = 0, string $type = 'all', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        /* 将当前URI存入SESSION。 */
         /* Save session. */
         $this->session->set('testsuiteList', $this->app->getURI(true), 'qa');
 
-        /* Set menu. */
+        /* 设置1.5级导航。 */
+        /* Set level 1.5 menu. */
         $productID = $this->product->saveState($productID, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
+        /* 加载分页。 */
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* 二次排序规则。 */
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
+        /* 根据产品名称获取套件，如果查询为空并且不在第一页，则初始化至当前页码到第一页。 */
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
         $suites      = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         if(empty($suites) and $pageID > 1)
@@ -81,6 +97,8 @@ class testsuite extends control
             $pager  = pager::init(0, $recPerPage, 1);
             $suites = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         }
+
+        /* 获取私有和公开的套件数量。 */
         $privateNum = 0;
         foreach($suites as $suiteItem)
         {
@@ -94,7 +112,6 @@ class testsuite extends control
         $summary   = str_replace(array('%total%', '%public%', '%private%'), array($suitesNum, $publicNum, $privateNum), $this->lang->testsuite->summary);
 
         $this->view->title       = $productName . $this->lang->testsuite->common;
-
         $this->view->productID   = $productID;
         $this->view->productName = $productName;
         $this->view->orderBy     = $orderBy;
@@ -104,7 +121,6 @@ class testsuite extends control
         $this->view->pager       = $pager;
         $this->view->product     = $this->product->getByID($productID);
         $this->view->summary     = $summary;
-
         $this->display();
     }
 
@@ -147,6 +163,7 @@ class testsuite extends control
             return $this->send($response);
         }
 
+        /* 设置1.5级菜单。 */
         /* Set menu. */
         $productID  = $this->product->saveState($productID, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
@@ -157,6 +174,7 @@ class testsuite extends control
     }
 
     /**
+     * 查看一个测试套件详情。
      * View a test suite.
      *
      * @param  int    $suiteID
@@ -167,25 +185,30 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function view($suiteID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function view(int $suiteID, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
         $this->app->loadLang('testtask');
 
+        /* 根据id获取测试套件信息。 */
         /* Get test suite, and set menu. */
         $suite = $this->testsuite->getById($suiteID, true);
         if(!$suite) return print(js::error($this->lang->notFound) . js::locate('back'));
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
+        /* 设置1.5级菜单。 */
         /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
+        /* 用例列表URI存入session。 */
         /* Save session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
+        /* 生成排序规则。 */
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
+        /* 初始化用例列表分页。 */
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -193,7 +216,6 @@ class testsuite extends control
         $this->executeHooks($suiteID);
 
         $this->view->title      = "SUITE #$suite->id $suite->name";
-
         $this->view->productID    = $productID;
         $this->view->suite        = $suite;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -205,18 +227,18 @@ class testsuite extends control
         $this->view->branches     = $this->loadModel('branch')->getPairs($suite->product);
         $this->view->canBeChanged = common::canBeChanged('testsuite', $suite);
         $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
-
         $this->display();
     }
 
     /**
+     * 修改一个测试套件。
      * Edit a test suite.
      *
      * @param  int    $suiteID
      * @access public
      * @return void
      */
-    public function edit($suiteID)
+    public function edit(int $suiteID)
     {
         $suite = $this->testsuite->getById($suiteID);
         if(!empty($_POST))
@@ -245,17 +267,18 @@ class testsuite extends control
 
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
+        /* 设置1.5级菜单。 */
         /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
-
         $this->view->suite = $suite;
         $this->display();
     }
 
     /**
+     * 删除一个测试套件。
      * Delete a test suite.
      *
      * @param  int    $suiteID
@@ -263,7 +286,7 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function delete($suiteID, $confirm = 'no')
+    public function delete(int $suiteID, string $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -279,6 +302,7 @@ class testsuite extends control
             $message = $this->executeHooks($suiteID);
             if($message) $response['message'] = $message;
 
+            /* 如果是ajax操作，直接返回操作结果。 */
             /* if ajax request, send result. */
             if($this->server->ajax)
             {
@@ -299,6 +323,7 @@ class testsuite extends control
     }
 
     /**
+     * 关联用例到一个测试套件。
      * Link cases to a test suite.
      *
      * @param  int    $suiteID
@@ -309,8 +334,9 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function linkCase($suiteID, $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkCase(int $suiteID, int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        /* 当前页面存入session。 */
         /* Save session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
@@ -323,14 +349,17 @@ class testsuite extends control
 
         $suite = $this->testsuite->getById($suiteID);
 
+        /* 设置1.5级菜单。 */
         /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
+        /* 初始化一个分页器。 */
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* 创建搜索表单。 */
         /* Build the search form. */
         $this->loadModel('testcase');
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', 0, 'all');
@@ -351,17 +380,16 @@ class testsuite extends control
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         $this->view->title      = $suite->name . $this->lang->colon . $this->lang->testsuite->linkCase;
-
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->cases   = $this->testsuite->getUnlinkedCases($suite, $param, $pager);
         $this->view->suiteID = $suiteID;
         $this->view->pager   = $pager;
         $this->view->suite   = $suite;
-
         $this->display();
     }
 
     /**
+     * 从测试套件中移除一个用例。
      * Remove a case from test suite.
      *
      * @param  int    $suiteID
@@ -370,7 +398,7 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function unlinkCase($suiteID, $rowID, $confirm = 'no')
+    public function unlinkCase(int $suiteID, int $rowID, string $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -392,13 +420,14 @@ class testsuite extends control
     }
 
     /**
+     * 批量取消关联用例。
      * Batch unlink cases.
      *
      * @param  int    $suiteID
      * @access public
      * @return void
      */
-    public function batchUnlinkCases($suiteID)
+    public function batchUnlinkCases(int $suiteID)
     {
         if(isset($_POST['caseIDList']))
         {
