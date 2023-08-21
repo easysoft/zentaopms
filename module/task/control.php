@@ -1051,7 +1051,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function export($executionID, $orderBy, $type)
+    public function export(int $executionID, string $orderBy, string $type)
     {
         $execution       = $this->execution->getById($executionID);
         $allExportFields = $this->config->task->exportFields;
