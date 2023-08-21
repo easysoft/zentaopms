@@ -1024,22 +1024,27 @@ class blockZen extends block
         $products       = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
         $productIdList  = array_keys($products);
 
+        /* 按照产品分组获取产品需求交付率度量项。 */
         $storyDeliveryRate = $this->loadModel('metric')->getResultByCode('rate_of_delivery_story_in_product', array('product' => join(',', $productIdList)));
         $storyDeliveryRate = json_decode(json_encode($storyDeliveryRate), true);
         if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
 
+        /* 按照产品分组获取产品有效需求数度量项。 */
         $totalStories = $this->metric->getResultByCode('count_of_valid_story_in_product', array('product' => join(',', $productIdList)));
         $totalStories = json_decode(json_encode($totalStories), true);
         if(!empty($totalStories)) $totalStories = array_column($totalStories, null, 'product');
 
+        /* 按照产品分组获取产品已交付需求数度量项。 */
         $closedStories = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => join(',', $productIdList)));
         $closedStories = json_decode(json_encode($closedStories), true);
         if(!empty($closedStories)) $closedStories = array_column($closedStories, null, 'product');
 
+        /* 按照产品分组获取产品未关闭需求数度量项。 */
         $unclosedStories = $this->metric->getResultByCode('count_of_unclosed_story_in_product', array('product' => join(',', $productIdList)));
         $unclosedStories = json_decode(json_encode($unclosedStories), true);
         if(!empty($unclosedStories)) $unclosedStories = array_column($unclosedStories, null, 'product');
 
+        /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
         $groups = array();
