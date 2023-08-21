@@ -10,66 +10,49 @@ class groupTest
     /**
      * Test create a group.
      *
-     * @param mixed $param
+     * @param  array  $group
      * @access public
      * @return object
      */
-    public function createObject($param)
+    public function createObject($group)
     {
-        foreach($param as $k => $v) $_POST[$k] = $v;
-
-        $groupID = $this->objectModel->create();
-        unset($_POST);
+        $groupID = $this->objectModel->create((object)$group);
 
         if(dao::isError()) return dao::getError();
-
-        $object = $this->objectModel->getById($groupID);
-
-        return $object;
+        return $this->objectModel->getById($groupID);
     }
 
     /**
      * Update a group.
      *
      * @param  int    $groupID
+     * @param  array  $group
      * @access public
      * @return void
      */
-    public function updateTest($groupID, $param)
+    public function updateTest($groupID, $group)
     {
-        foreach($param as $k => $v) $_POST[$k] = $v;
-
-        $object = $this->objectModel->update($groupID);
-        unset($_POST);
-
+        $object = $this->objectModel->update($groupID, (object)$group);
         if(dao::isError()) return dao::getError();
 
-        $object = $this->objectModel->getByID($groupID);
-
-        return $object;
+        return $this->objectModel->getByID($groupID);
     }
 
     /**
      * Copy a group.
      *
      * @param  int    $groupID
+     * @param  array  $group
      * @access public
      * @return void
      */
-    public function copyTest($groupID, $param)
+    public function copyTest($groupID, $group)
     {
-        foreach($param as $k => $v) $_POST[$k] = $v;
-
-        $objects = $this->objectModel->copy($groupID);
-        unset($_POST);
-
+        $objects = $this->objectModel->copy($groupID, (object)$group, array());
         if(dao::isError()) return dao::getError();
 
         $newGroupID = $this->objectModel->dao->lastInsertID();
-        $object     = $this->objectModel->getByID($newGroupID);
-
-        $this->objectModel->delete($newGroupID);
-        return $object;
+        return $this->objectModel->getByID($newGroupID);
     }
 
     /**
@@ -420,33 +403,25 @@ class groupTest
         return $objects;
     }
 
-
-
-
-
     /**
      * 获取一条权限的基本信息
      *
      * @param   int         $privID
      * @param   string      $lang
-     * @access  public 
+     * @access  public
      * @return  void
      */
     public function getPrivInfoTest($priv, $lang)
     {
         $object = $this->objectModel->getPrivInfo($priv, $lang);
-        if(dao::isError()) return dao::getError();    
+        if(dao::isError()) return dao::getError();
         return $object;
     }
 
-
-
-
-
-    /**     
+    /**
      * 获取模块和权限包option
      *
-     * @access public 
+     * @access public
      * @return array
      */
     public function getModuleAndPackageTreeTest()
@@ -454,11 +429,10 @@ class groupTest
         return  $this->objectModel->getModuleAndPackageTree();
     }
 
-
     /**
      * 更新权限
      *
-     * @access public 
+     * @access public
      * @return void
      */
     public function updatePrivTest($privID,$lang)
