@@ -305,7 +305,7 @@ class storyModel extends model
             $story->module = $this->post->modules[$key];
             $story->plan   = $this->post->plans[$key];
 
-            if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $this->post->plan > 0 ? 'planned' : 'wait';
+            if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $story->plan > 0 ? 'planned' : 'wait';
             if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
             if(strpos($requiredFields, ',estimate,') !== false)
             {
