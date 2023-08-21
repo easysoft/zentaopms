@@ -943,7 +943,7 @@ class bug extends control
     }
 
     /**
-     * 批量修改bug计划。
+     * 批量修改 bug 的计划。
      * Batch change the plan of bug.
      *
      * @param  int    $planID
@@ -954,29 +954,39 @@ class bug extends control
     {
         if($this->post->bugIdList)
         {
-            $bugIdList   = array_unique($this->post->bugIdList);
-            $oldBugs     = $this->bug->getByIdList($bugIdList);
+            /* 准备 bug 修改计划需要的数据。 */
+            /* Prepare data to change plan. */
+            $bugIdList = array_unique($this->post->bugIdList);
+            $oldBugs   = $this->bug->getByIdList($bugIdList);
+
+            /* 修改 bugs 的计划。 */
+            /* Change the plan of bugs. */
             $unlinkPlans = array();
             $link2Plans  = array();
             foreach($bugIdList as $bugID)
             {
                 $oldBug = $oldBugs[$bugID];
+
+                /* 如果新老计划一致，跳过。 */
+                /* If the new plan is the same as the old one, skip it. */
                 if($planID == $oldBug->plan) continue;
 
-                /* Bugs link to plans and bugs unlink to plans. */
+                /* 关联 bug 到新计划，并取消与旧计划关联。 */
+                /* Link the bug to the new plan and unlink the bug from the old plan. */
                 $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
                 $link2Plans[$planID]        = empty($link2Plans[$planID])        ? $bugID : "{$link2Plans[$planID]},$bugID";
 
-                /* Update bug plan. */
+                /* 更新 bug 的计划。 */
+                /* Update the plan of the bug. */
                 $bug = new stdclass();
                 $bug->id   = $bugID;
                 $bug->plan = $planID;
-
                 $this->bug->update($bug);
             }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            /* 记录 bug 的计划变更动态。 */
             /* Record plan action. */
             $this->loadModel('action');
             foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
