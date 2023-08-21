@@ -12,10 +12,9 @@ declare(strict_types=1);
 
 namespace zin;
 
+modalHeader(set::title($lang->group->edit));
 formPanel
 (
-    set::shadow(!isonlybody()),
-    set::title($lang->group->create),
     formGroup
     (
         set::label($lang->group->name),
@@ -36,7 +35,4 @@ formPanel
             set::rows('5'),
         )
     ),
-    set::actions(array('submit'))
 );
-
-render();

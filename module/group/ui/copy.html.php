@@ -12,10 +12,9 @@ declare(strict_types=1);
 
 namespace zin;
 
+modalHeader(set::title($lang->group->copy));
 formPanel
 (
-    set::shadow(!isonlybody()),
-    set::title($lang->group->create),
     formGroup
     (
         set::label($lang->group->name),
@@ -46,7 +45,4 @@ formPanel
             set::items($lang->group->copyOptions),
         )
     ),
-    set::actions(array('submit'))
 );
-
-render();
