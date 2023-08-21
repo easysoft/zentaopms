@@ -1217,6 +1217,7 @@ class project extends control
     }
 
     /**
+     * 开始一个项目。
      * Start a project.
      *
      * @param  int $projectID
@@ -1243,7 +1244,7 @@ class project extends control
     }
 
     /**
-     * 挂起一个项目
+     * 挂起一个项目。
      * Suspend a project.
      *
      * @param  int $projectID
@@ -1274,7 +1275,7 @@ class project extends control
     }
 
     /**
-     * 关闭一个项目
+     * 关闭一个项目。
      * Close a project.
      *
      * @param  int $projectID
@@ -1305,7 +1306,7 @@ class project extends control
     }
 
     /**
-     * 激活项目并更新其状态
+     * 激活项目并更新其状态。
      * Activate a project.
      *
      * @param  int $projectID
@@ -1334,7 +1335,7 @@ class project extends control
     }
 
     /**
-     * 删除一个项目，并弹窗确认
+     * 删除一个项目，并弹窗确认。
      * Delete a project and confirm.
      *
      * @param  string  $projectID
@@ -1369,7 +1370,7 @@ class project extends control
     }
 
     /**
-     * 更新项目排列序号
+     * 更新项目排列序号。
      * Update projects order.
      *
      * @access public
@@ -1386,21 +1387,20 @@ class project extends control
     }
 
     /**
-     * 获取项目白名单列表
+     * 获取项目白名单列表。
      * Get white list personnel.
      *
-     * @param  string $projectID
+     * @param  int    $projectID
      * @param  string $from project|program|programProject
-     * @param  string $recTotal
-     * @param  string $recPerPage
-     * @param  string $pageID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      *
      * @access public
      * @return void
      */
-    public function whitelist(string $projectID = '0', string $from = 'project', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1')
+    public function whitelist(int $projectID = 0, string $from = 'project', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $projectID = (int)$projectID;
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getByID($projectID);
         if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
@@ -1409,10 +1409,10 @@ class project extends control
     }
 
     /**
-     * 添加用户到项目白名单中
+     * 添加用户到项目白名单中。
      * Adding users to the white list.
      *
-     * @param  string $projectID
+     * @param  int    $projectID
      * @param  int    $deptID
      * @param  int    $copyID
      * @param  int    $programID
@@ -1421,9 +1421,8 @@ class project extends control
      * @access public
      * @return void
      */
-    public function addWhitelist(string $projectID = '0', int $deptID = 0, int $copyID = 0, int $programID = 0, string $from = 'project')
+    public function addWhitelist(int $projectID = 0, int $deptID = 0, int $copyID = 0, int $programID = 0, string $from = 'project')
     {
-        $projectID = (int)$projectID;
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getByID($projectID);
         if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
@@ -1432,16 +1431,16 @@ class project extends control
     }
 
     /*
-     * 移除项目白名单人员
+     * 移除项目白名单人员。
      * Removing users from the white list.
      *
-     * @param  string  $id
-     * @param  string  $confirm
+     * @param  int    $id
+     * @param  string $confirm
      *
      * @access public
      * @return void
      */
-    public function unbindWhitelist(string $id = '0', $confirm = 'no')
+    public function unbindWhitelist(int $id = 0, $confirm = 'no')
     {
         echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
     }
@@ -1499,26 +1498,23 @@ class project extends control
     }
 
    /**
-     * 获取项目页面中下拉执行列表
+     * 获取项目页面中下拉执行列表。
      * AJAX: get executions of a project in html select.
      *
-     * @param  string $projectID
-     * @param  string $executionID
+     * @param  int    $projectID
      * @param  string $mode
      * @param  string $type all|sprint|stage|kanban
      *
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions(string $projectID, string $executionID = '0', string $mode = '', string $type = 'all'): void
+    public function ajaxGetExecutions(int $projectID, string $mode = '', string $type = 'all')
     {
         $executions = array();
-        $projectID  = (int)$projectID;
-
         if($projectID)
         {
-            $project     = $this->project->getByID($projectID);
-            $executions += (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
+            $project    = $this->project->getByID($projectID);
+            $executions = (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
         }
 
         $items = array();
@@ -1531,16 +1527,16 @@ class project extends control
     }
 
     /**
-     * 根据执行ID获取对应的项目下拉列表
+     * 根据执行ID获取对应的项目下拉列表。
      * AJAX: get a project by execution id.
      *
      * @param  string $executionID
      * @access public
      * @return string
      */
-    public function ajaxGetPairsByExecution(string $executionID)
+    public function ajaxGetPairsByExecution(int $executionID)
     {
-        $execution    = $this->loadModel('execution')->getByID((int)$executionID);
+        $execution    = $this->loadModel('execution')->getByID($executionID);
         $projectPairs = $this->loadModel('project')->getPairsByIdList($execution->project);
 
         if($this->app->getViewType() == 'json')
