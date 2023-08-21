@@ -133,13 +133,14 @@ class projectModel extends model
     }
 
     /**
+     * 获取有迭代项目关联的产品列表。
      * Get Multiple linked products for project.
      *
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getMultiLinkedProducts($projectID)
+    public function getMultiLinkedProducts(int $projectID): array
     {
         $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
         return $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
