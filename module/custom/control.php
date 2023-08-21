@@ -655,7 +655,13 @@ class custom extends control
             $this->loadModel('setting')->deleteItems("owner=$account&module=$module&section=$section&key=$key");
         }
 
-        return $this->send(array('result' => 'success', 'callback' => 'loadCurrentPage'));
+        $this->loadModel('common')->loadConfigFromDB();
+        $this->app->loadLang($module);
+        $this->app->loadConfig($module);
+
+        $customFields = $this->config->$module->list->{'custom' . ucfirst($key)};
+        $showFields   = $this->config->$module->custom->$key;
+        return $this->send(array('result' => 'success', 'key' => $key, 'callback' => 'loadCurrentPage', 'customFields' => $customFields, 'showFields' => $showFields));
     }
 
     /**
