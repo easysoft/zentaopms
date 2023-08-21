@@ -16,21 +16,15 @@ class groupModel extends model
     /**
      * Create a group.
      *
+     * @param  object $group
      * @access public
      * @return int|false
      */
-    public function create(): int|false
+    public function create($group): int|false
     {
-        $group = fixer::input('post')->get();
-        if(isset($group->limited))
-        {
-            unset($group->limited);
-            $group->role = 'limited';
-        }
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->batchCheck($this->config->group->create->requiredFields, 'notempty')
-            ->check('name', 'unique')
+            ->check('name', 'unique', "vision = '{$this->config->vision}'")
             ->exec();
         if(dao::isError()) return false;
 
@@ -46,19 +40,19 @@ class groupModel extends model
     }
 
     /**
+     * 更新权限分组。
      * Update a group.
      *
      * @param  int    $groupID
+     * @param  object $group
      * @access public
      * @return bool
      */
-    public function update(int $groupID): bool
+    public function update(int $groupID, object $group): bool
     {
-        $group = fixer::input('post')->get();
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->update(TABLE_GROUP)->data($group)
-            ->batchCheck($this->config->group->edit->requiredFields, 'notempty')
-            ->check('name', 'unique', "id != {$groupID}")
+            ->check('name', 'unique', "id != {$groupID} AND vision = '{$this->config->vision}'")
             ->where('id')->eq($groupID)
             ->exec();
 
@@ -69,21 +63,23 @@ class groupModel extends model
      * Copy a group.
      *
      * @param  int    $groupID
+     * @param  object $group
+     * @param  array  $options
      * @access public
      * @return bool
      */
-    public function copy(int $groupID): bool
+    public function copy(int $groupID, object $group, array $options): bool
     {
-        $group = fixer::input('post')->remove('options')->get();
         $this->lang->error->unique = $this->lang->group->repeat;
-        $this->dao->insert(TABLE_GROUP)->data($group)->check('name', 'unique')->check('name', 'notempty')->exec();
+        $this->dao->insert(TABLE_GROUP)->data($group)
+            ->check('name', 'unique', "vision = '{$this->config->vision}'")
+            ->exec();
         if(dao::isError()) return false;
-
-        if(!$this->post->options) return true;
+        if(empty($options)) return true;
 
         $newGroupID = $this->dao->lastInsertID();
-        if(in_array('copyPriv', $this->post->options)) $this->copyPriv($groupID, $newGroupID);
-        if(in_array('copyUser', $this->post->options)) $this->copyUser($groupID, $newGroupID);
+        if(in_array('copyPriv', $options)) $this->copyPriv($groupID, $newGroupID);
+        if(in_array('copyUser', $options)) $this->copyUser($groupID, $newGroupID);
         return true;
     }
 
