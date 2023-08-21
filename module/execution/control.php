@@ -1217,62 +1217,43 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function build($executionID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function build(int $executionID = 0, string $type = 'all', int $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* Load module and set session. */
-        $this->loadModel('build');
-        $this->loadModel('testtask');
-        $this->session->set('buildList', $this->app->getURI(true), 'execution');
-
         $execution   = $this->commonAction($executionID);
-        $executionID = $execution->id;
+        $executionID = (int)$execution->id;
 
         /* Get products' list. */
         $products = $this->product->getProducts($executionID, 'all', '', false);
 
         /* Build the search form. */
-        $type      = strtolower($type);
-        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('execution', 'build', "executionID=$executionID&type=bysearch&queryID=myQueryID");
-
-        $this->loadModel('build');
-        $product = $param ? $this->loadModel('product')->getById((int)$param) : '';
-        if($product and $product->type != 'normal')
-        {
-            $this->loadModel('branch');
-            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $executionID);
-            $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
-            $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
-        }
-        if(!$execution->hasProduct) unset($this->config->build->search['fields']['product']);
-        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'execution');
+        $type    = strtolower($type);
+        $this->project->buildProjectBuildSearchForm($products, $type == 'bysearch' ? (int)$param : 0, $executionID, $param, 'execution');
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Get builds. */
+        $this->loadModel('build');
         if($type == 'bysearch')
         {
-            $builds = $this->loadModel('build')->getExecutionBuildsBySearch((int)$executionID, $queryID, $pager);
+            $builds = $this->loadModel('build')->getExecutionBuildsBySearch($executionID, $queryID, $pager);
         }
         else
         {
-            $builds = $this->loadModel('build')->getExecutionBuilds((int)$executionID, $type, $param, $orderBy, $pager);
+            $builds = $this->loadModel('build')->getExecutionBuilds($executionID, $type, $param, $orderBy, $pager);
         }
 
-        /* Header and position. */
-        $this->view->title       = $execution->name . $this->lang->colon . $this->lang->execution->build;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->builds      = $this->executionZen->processBuildListData($builds, $executionID);
-        $this->view->product     = $type == 'product' ? $param : 'all';
-        $this->view->products    = $products;
-        $this->view->type        = $type;
-        $this->view->param       = $param;
-        $this->view->orderBy     = $orderBy;
-        $this->view->recTotal    = $pager->recTotal;
-        $this->view->pager       = $pager;
-
+        /* Set view data. */
+        $this->view->title    = $execution->name . $this->lang->colon . $this->lang->execution->build;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->builds   = $this->executionZen->processBuildListData($builds, $executionID);
+        $this->view->product  = $type == 'product' ? $param : 'all';
+        $this->view->products = $products;
+        $this->view->type     = $type;
+        $this->view->param    = $param;
+        $this->view->orderBy  = $orderBy;
+        $this->view->pager    = $pager;
         $this->display();
     }
 
