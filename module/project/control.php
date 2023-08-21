@@ -862,6 +862,7 @@ class project extends control
     }
 
     /**
+     * 项目下测试单列表。
      * Project test task list.
      *
      * @param  int    $projectID
@@ -874,9 +875,6 @@ class project extends control
      */
     public function testtask(int $projectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('testtask');
-        $this->app->loadLang('testreport');
-
         $this->project->setMenu($projectID);
 
         /* Load pager. */
@@ -884,19 +882,16 @@ class project extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $project = $this->project->getByID($projectID);
-        $tasks   = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
+        $tasks   = $this->loadModel('testtask')->getProjectTasks($projectID, $orderBy, $pager);
 
-        $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->common;
-        $this->view->project      = $project;
-        $this->view->projectID    = $projectID;
-        $this->view->projectName  = $project->name;
-        $this->view->pager        = $pager;
-        $this->view->orderBy      = $orderBy;
-        $this->view->tasks        = $tasks;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products     = $this->loadModel('product')->getPairs('', 0);
-        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
-        $this->view->actions      = $this->loadModel('action')->getList('testtask', $projectID);
+        $this->view->title    = $project->name . $this->lang->colon . $this->lang->project->common;
+        $this->view->project  = $project;
+        $this->view->pager    = $pager;
+        $this->view->orderBy  = $orderBy;
+        $this->view->tasks    = $tasks;
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->products = $this->loadModel('product')->getPairs('', 0);
+        $this->view->actions  = $this->loadModel('action')->getList('testtask', $projectID);
         $this->display();
     }
 
@@ -916,20 +911,21 @@ class project extends control
      */
     public function build(int $projectID = 0, string $type = 'all', int $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('build');
-        $this->loadModel('product');
-
+        /* Set menu lang. */
         $this->project->setMenu($projectID);
+        $project = $this->project->getByID($projectID);
 
-        /* Get project and product. */
-        $project  = $this->project->getByID($projectID);
-        $product  = $param ? $this->product->getById((int)$param) : '';
-        $products = $this->product->getProducts($projectID, 'all', '', false);
+        /* Build the search form. */
+        $type     = strtolower($type);
+        $products = $this->loadModel('product')->getProducts($projectID, 'all', '', false);
+        $this->project->buildProjectBuildSearchForm($products, $type == 'bysearch' ? (int)$param : 0, $projectID, $param, 'project');
 
-        $this->projectZen->processBuildSearchParams($project, (object)$product, $products, $type, $param);
-
+        /* Build the search form. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Get builds. */
+        $this->loadModel('build');
         if($type == 'bysearch')
         {
             $builds = $this->build->getProjectBuildsBySearch((int)$projectID, (int)$param, $orderBy, $pager);
@@ -939,18 +935,17 @@ class project extends control
             $builds = $this->build->getProjectBuilds((int)$projectID, $type, $param, $orderBy, $pager);
         }
 
-        /* Header and position. */
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->execution->build;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->builds     = $this->projectZen->processBuildListData($builds, $projectID);
-        $this->view->productID  = $type == 'product' ? $param : 'all';
-        $this->view->project    = $project;
-        $this->view->products   = $products;
-        $this->view->buildPairs = $this->loadModel('build')->getBuildPairs(0);
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->param      = $param;
-        $this->view->pager      = $pager;
+        /* Set view data. */
+        $this->view->title     = $project->name . $this->lang->colon . $this->lang->execution->build;
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->builds    = $this->projectZen->processBuildListData($builds, $projectID);
+        $this->view->productID = $type == 'product' ? $param : 'all';
+        $this->view->project   = $project;
+        $this->view->products  = $products;
+        $this->view->type      = $type;
+        $this->view->orderBy   = $orderBy;
+        $this->view->param     = $param;
+        $this->view->pager     = $pager;
         $this->display();
     }
 

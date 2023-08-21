@@ -876,19 +876,39 @@ class projectModel extends model
      *
      * @param  array  $products
      * @param  int    $queryID
-     * @param  string $actionURL
+     * @param  int    $projectID
+     * @param  int    $productID
      * @param  string $type project|execution
      * @access public
      * @return void
      */
-    public function buildProjectBuildSearchForm($products, $queryID, $actionURL, $type = 'project')
+    public function buildProjectBuildSearchForm(array $products, int $queryID, int $projectID, int $productID, string $type = 'project')
     {
         $this->loadModel('build');
 
         /* Set search param. */
-        if($type == 'execution') $this->config->build->search['module'] = 'executionBuild';
-        if($type == 'project') $this->config->build->search['module'] = 'projectBuild';
-        $this->config->build->search['actionURL'] = $actionURL;
+        $project = $this->projectTao->fetchProjectInfo($projectID);
+        if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
+
+        $product = $productID ? $this->loadModel('product')->getByID($productID) : '';
+        if($product and $product->type != 'normal')
+        {
+            $this->loadModel('branch');
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $executionID);
+            $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
+            $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
+        }
+
+        /* If there is an execution, set the execution filter item. */
+        if($type == 'project' && $project->multiple)
+        {
+            $executionPairs = $this->loadModel('execution')->getByProject($project->id, 'all', '', true, $project->model == 'waterfall');
+            $this->config->build->search['fields']['execution'] = zget($this->lang->project->executionList, $project->model);
+            $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executionPairs);
+        }
+
+        $this->config->build->search['module']    = $type == 'project' ? 'projectBuild' : 'executionBuild';
+        $this->config->build->search['actionURL'] = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
         $this->config->build->search['queryID']   = $queryID;
         $this->config->build->search['params']['product']['values'] = $products;
 
