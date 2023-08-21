@@ -27,7 +27,7 @@ foreach($tasks as $task)
 featureBar
 (
     set::current('all'),
-    set::linkParams("projectID={$projectID}")
+    set::linkParams("projectID={$project->id}")
 );
 
 toolbar
@@ -36,7 +36,7 @@ toolbar
     (
         setClass('btn primary'),
         set::icon('plus'),
-        set::url(helper::createLink('testtask', 'create', "product=0&executionID=0&build=0&projectID={$projectID}")),
+        set::url(helper::createLink('testtask', 'create', "product=0&executionID=0&build=0&projectID={$project->id}")),
         $lang->testtask->create
     ) : null
 );
