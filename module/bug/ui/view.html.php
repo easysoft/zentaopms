@@ -116,9 +116,6 @@ $tplExpect = strip_tags(trim($lang->bug->tplExpect));
 $steps     = str_replace('<p>' . $tplExpect, '<p class="article-h4 my-1">' . $tplExpect . '</p><p>', $steps);
 $steps     = str_replace('<p></p>', '', $steps);
 
-$files = '';
-foreach($bug->files as $file) $files .= "{$file->title},";
-
 detailHeader
 (
     to::title
@@ -181,11 +178,10 @@ detailBody
             set::content($steps),
             set::useHtml(true)
         ),
-        section
+        fileList
         (
-            set::title($lang->files),
-            set::content($files),
-            set::useHtml(true)
+            set::files($bug->files),
+            set::padding(false),
         ),
     ),
     history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'bug', 'objectID' => $bug->id)))),
