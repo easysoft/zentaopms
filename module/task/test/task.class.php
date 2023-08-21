@@ -1997,4 +1997,20 @@ class taskTest
 
         return $this->objectModel->reportCondition();
     }
+
+    /**
+     * 将默认图表设置与当前图表设置合并。
+     * Merge the default chart settings and the settings of current chart.
+     *
+     * @param  string $chartType
+     * @access public
+     * @return object
+     */
+    public function mergeChartOptionTest(string $chartType): object
+    {
+        global $lang;
+        $this->objectModel->mergeChartOption($chartType);
+
+        return $lang->task->report->$chartType;
+    }
 }

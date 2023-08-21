@@ -2063,13 +2063,14 @@ class taskModel extends model
     }
 
     /**
+     * 将默认图表设置与当前图表设置合并。
      * Merge the default chart settings and the settings of current chart.
      *
-     * @param  string    $chartType
+     * @param  string $chartType
      * @access public
      * @return void
      */
-    public function mergeChartOption($chartType)
+    public function mergeChartOption(string $chartType)
     {
         $chartOption  = $this->lang->task->report->$chartType;
         $commonOption = $this->lang->task->report->options;
@@ -2082,7 +2083,8 @@ class taskModel extends model
         /* merge configuration */
         foreach($commonOption->graph as $key => $value)
         {
-            if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
+            if(isset($chartOption->graph->$key)) continue;
+            $chartOption->graph->$key = $value;
         }
     }
 
