@@ -104,12 +104,14 @@ $lang->program->noProgram          = 'No program.';
 $lang->program->showClosed         = 'Closed programs.';
 $lang->program->tips               = "If a parent program is selected, the {$lang->productCommon}s under the parent program can be associated. If no program is selected for the {$lang->projectCommon}, a {$lang->productCommon} with the same name as the {$lang->projectCommon} is created and associated with the {$lang->projectCommon} by default.";
 $lang->program->confirmBatchUnlink = "Do you want to batch unlink these stakeholders?";
-$lang->program->beginLetterParent  = 'The start date of the program is less than the start date of the parent program:';
-$lang->program->endGreaterParent   = 'The finish date of the program is greater than the finish date of the parent program:';
-$lang->program->dateExceedParent   = 'The start and finish date of the program was greater than the start and finish date of the parent program:';
-$lang->program->beginGreateChild   = "The start date of the program is greater than the minimum start date of the subprogram or {$lang->projectCommon}:";
-$lang->program->endLetterChild     = "The finish date of the program is less than the maximum finish date of the subprogram or {$lang->projectCommon}:";
+
+$lang->program->beginLessThanParent  = 'The start date of the program is less than the start date of the parent program:';
+$lang->program->endGreatThanParent   = 'The finish date of the program is greater than the finish date of the parent program:';
+$lang->program->dateExceedParent     = 'The start and finish date of the program was greater than the start and finish date of the parent program:';
+$lang->program->beginGreatEqualChild = "The start date of the program is greater than the minimum start date of the subprogram or {$lang->projectCommon}:";
+$lang->program->endLessThanChild     = "The finish date of the program is less than the maximum finish date of the subprogram or {$lang->projectCommon}:";
 $lang->program->dateExceedChild    = "The start and finish date of the program no longer include the date scope of the subprogram or {$lang->projectCommon}:";
+
 $lang->program->closeErrorMessage  = "There are subprograms or {$lang->projectCommon}s that are not closed";
 $lang->program->hasChildren        = "The program has a child program or the {$lang->projectCommon} exists and can not be deleted.";
 $lang->program->hasProduct         = "The program has {$lang->productCommon}s exist and can not be deleted.";

@@ -421,13 +421,15 @@ $lang->project->cannotChangeToCat    = "该{$lang->projectCommon}已经有实际
 $lang->project->cannotCancelCat      = "该{$lang->projectCommon}下已经有子{$lang->projectCommon}，无法取消父{$lang->projectCommon}标记";
 $lang->project->parentBeginEnd       = "父{$lang->projectCommon}起止时间：%s ~ %s";
 $lang->project->parentBudget         = "父项目集预算：";
-$lang->project->beginLetterParent    = "{$lang->projectCommon}的开始日期小于了父项目集的开始日期：";
-$lang->project->endGreaterParent     = "{$lang->projectCommon}的完成日期大于了父项目集的完成日期：";
-$lang->project->dateExceedParent     = "{$lang->projectCommon}的起止日期已超出父项目集的起止日期：";
-$lang->project->beginGreateChild     = "{$lang->projectCommon}的开始日期应大于等于项目集的最小开始日期：%s";
-$lang->project->endLetterChild       = "{$lang->projectCommon}的完成日期应小于等于项目集的最大完成日期：%s";
-$lang->project->begigLetterExecution = "{$lang->projectCommon}的开始日期应小于等于执行的最小开始日期：%s";
-$lang->project->endGreateExecution   = "{$lang->projectCommon}的完成日期应大于等于执行的最大完成日期：%s";
+
+$lang->project->beginLessThanParent     = "{$lang->projectCommon}的开始日期小于了父项目集的开始日期：";
+$lang->project->endGreatThanParent      = "{$lang->projectCommon}的完成日期大于了父项目集的完成日期：";
+$lang->project->dateExceedParent        = "{$lang->projectCommon}的起止日期已超出父项目集的起止日期：";
+$lang->project->beginGreatEqualChild    = "{$lang->projectCommon}的开始日期应大于等于项目集的最小开始日期：%s";
+$lang->project->endLessThanChild        = "{$lang->projectCommon}的完成日期应小于等于项目集的最大完成日期：%s";
+$lang->project->beginLessEqualExecution = "{$lang->projectCommon}的开始日期应小于等于执行的最小开始日期：%s";
+$lang->project->endGreatEqualExecution  = "{$lang->projectCommon}的完成日期应大于等于执行的最大完成日期：%s";
+
 $lang->project->childLongTime        = "子{$lang->projectCommon}中有长期{$lang->projectCommon}，父{$lang->projectCommon}也应该是长期{$lang->projectCommon}";
 $lang->project->confirmUnlinkMember  = "您确定从该{$lang->projectCommon}中移除该用户吗？";
 $lang->project->stageByTips          = "按{$lang->projectCommon}创建为单套阶段，阶段关联所有{$lang->productCommon}；按{$lang->productCommon}创建为多套阶段，每套阶段关联一个{$lang->productCommon}。";

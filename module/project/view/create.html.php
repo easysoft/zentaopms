@@ -31,8 +31,8 @@
 <?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol)?>
 <?php js::set('parentBudget', $lang->project->parentBudget);?>
-<?php js::set('beginLetterParent', $lang->project->beginLetterParent);?>
-<?php js::set('endGreaterParent', $lang->project->endGreaterParent);?>
+<?php js::set('beginLessThanParent', $lang->project->beginLessThanParent);?>
+<?php js::set('endGreatThanParent', $lang->project->endGreatThanParent);?>
 <?php js::set('ignore', $lang->project->ignore);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>

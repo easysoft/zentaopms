@@ -522,11 +522,11 @@ class productplanModel extends model
             $parentPlan = $this->getByID($plan->parent);
             if($parentPlan->begin != $this->config->productplan->future)
             {
-                if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
+                if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);
             }
             if($parentPlan->end != $this->config->productplan->future)
             {
-                if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+                if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreatThanParent, $parentPlan->end);
             }
         }
 
@@ -630,11 +630,11 @@ class productplanModel extends model
         {
             if($parentPlan->begin !== $futureTime)
             {
-                if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
+                if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);
             }
             if($parentPlan->end !== $futureTime)
             {
-                if($plan->end !== $futureTime and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+                if($plan->end !== $futureTime and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreatThanParent, $parentPlan->end);
             }
         }
         elseif($oldPlan->parent == -1 and ($plan->begin != $futureTime or $plan->end != $futureTime))
@@ -648,7 +648,7 @@ class productplanModel extends model
                 if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
             }
             if($minBegin < $plan->begin and $minBegin != $futureTime) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $oldPlan->title, $plan->begin, $minBegin);
-            if($maxEnd > $plan->end and $maxEnd != $futureTime) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $oldPlan->title, $plan->end, $maxEnd);
+            if($maxEnd > $plan->end and $maxEnd != $futureTime) dao::$errors['end'] = sprintf($this->lang->productplan->endLessThanChildTip, $oldPlan->title, $plan->end, $maxEnd);
         }
 
         if(dao::isError()) return false;
@@ -821,8 +821,8 @@ class productplanModel extends model
             if($parentID > 0)
             {
                 $parent = zget($plans, $parentID, $this->getByID($parentID));
-                if($parent->begin != $futureConfig and $plan->begin != $futureConfig and $plan->begin < $parent->begin) return dao::$errors[] = sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin);
-                if($parent->end != $futureConfig and $plan->end != $futureConfig and $plan->end > $parent->end)         return dao::$errors[] = sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end);
+                if($parent->begin != $futureConfig and $plan->begin != $futureConfig and $plan->begin < $parent->begin) return dao::$errors[] = sprintf($this->lang->productplan->beginLessThanParentTip, $planID, $plan->begin, $parent->begin);
+                if($parent->end != $futureConfig and $plan->end != $futureConfig and $plan->end > $parent->end)         return dao::$errors[] = sprintf($this->lang->productplan->endGreatThanParentTip, $planID, $plan->end, $parent->end);
             }
             elseif($parentID == -1 and $plan->begin != $futureConfig)
             {
@@ -836,7 +836,7 @@ class productplanModel extends model
                     if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future)       $maxEnd   = $childPlan->end;
                 }
                 if($minBegin < $plan->begin and $minBegin != $futureConfig) return dao::$errors[] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
-                if($maxEnd > $plan->end     and $maxEnd != $futureConfig)   return dao::$errors[] = sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd);
+                if($maxEnd > $plan->end     and $maxEnd != $futureConfig)   return dao::$errors[] = sprintf($this->lang->productplan->endLessThanChildTip, $planID, $plan->end, $maxEnd);
             }
 
             $change = common::createChanges($oldPlan, $plan);
@@ -924,13 +924,13 @@ class productplanModel extends model
                 if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future) $maxEnd = $childPlan->end;
             }
             if($minBegin < $begin and $begin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->beginGreaterChild, $minBegin);
-            if($maxEnd > $end and $end != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->endLetterChild, $maxEnd);
+            if($maxEnd > $end and $end != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->endLessThanChild, $maxEnd);
         }
         elseif($plan->parent > 0)
         {
             $parentPlan = $this->getByID($plan->parent);
-            if($begin < $parentPlan->begin and $parentPlan->begin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
-            if($end > $parentPlan->end and $parentPlan->end != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+            if($begin < $parentPlan->begin and $parentPlan->begin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);
+            if($end > $parentPlan->end and $parentPlan->end != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->productplan->endGreatThanParent, $parentPlan->end);
         }
     }
 

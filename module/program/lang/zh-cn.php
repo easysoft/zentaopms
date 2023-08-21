@@ -104,11 +104,13 @@ $lang->program->noProgram          = '暂时没有项目集';
 $lang->program->showClosed         = '显示已关闭';
 $lang->program->tips               = "选择了父项目集，则可关联该父项目集下的{$lang->productCommon}。如果{$lang->projectCommon}未选择任何项目集，则系统会默认创建一个和该{$lang->projectCommon}同名的{$lang->productCommon}并关联该{$lang->projectCommon}。";
 $lang->program->confirmBatchUnlink = "您确定要批量移除这些干系人吗？";
-$lang->program->beginLetterParent  = '项目集的开始日期小于了父项目集的开始日期：';
-$lang->program->endGreaterParent   = '项目集的完成日期大于了父项目集的完成日期：';
-$lang->program->dateExceedParent   = '项目集的起止日期已超出父项目集的起止日期';
-$lang->program->beginGreateChild   = "项目集的开始日期大于了子项目集或{$lang->projectCommon}的最小开始日期：";
-$lang->program->endLetterChild     = "项目集的完成日期小于了子项目集或{$lang->projectCommon}的最大完成日期：";
+
+$lang->program->beginLessThanParent  = '项目集的开始日期小于了父项目集的开始日期：';
+$lang->program->endGreatThanParent   = '项目集的完成日期大于了父项目集的完成日期：';
+$lang->program->dateExceedParent     = '项目集的起止日期已超出父项目集的起止日期';
+$lang->program->beginGreatEqualChild = "项目集的开始日期大于了子项目集或{$lang->projectCommon}的最小开始日期：";
+$lang->program->endLessThanChild     = "项目集的完成日期小于了子项目集或{$lang->projectCommon}的最大完成日期：";
+
 $lang->program->dateExceedChild    = "项目集的起止日期已不包含子项目集或{$lang->projectCommon}的日期范围";
 $lang->program->closeErrorMessage  = "存在子项目集或{$lang->projectCommon}为未关闭状态";
 $lang->program->hasChildren        = "该项目集有子项目集或{$lang->projectCommon}存在，不能删除。";

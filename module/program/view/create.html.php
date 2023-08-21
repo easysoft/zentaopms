@@ -43,8 +43,8 @@
 <?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol)?>
 <?php js::set('parentBudget', $lang->program->parentBudget);?>
-<?php js::set('beginLetterParent', $lang->program->beginLetterParent);?>
-<?php js::set('endGreaterParent', $lang->program->endGreaterParent);?>
+<?php js::set('beginLessThanParent', $lang->program->beginLessThanParent);?>
+<?php js::set('endGreatThanParent', $lang->program->endGreatThanParent);?>
 <?php js::set('ignore', $lang->program->ignore);?>
 <?php js::set('page', $this->app->getMethodName());?>
 <?php $aclList = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;?>

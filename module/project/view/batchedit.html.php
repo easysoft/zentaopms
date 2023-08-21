@@ -14,8 +14,8 @@
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
 <?php js::set('changeProgram', $lang->project->changeProgram);?>
-<?php js::set('beginLetterParent', $lang->project->beginLetterParent);?>
-<?php js::set('endGreaterParent', $lang->project->endGreaterParent);?>
+<?php js::set('beginLessThanParent', $lang->project->beginLessThanParent);?>
+<?php js::set('endGreatThanParent', $lang->project->endGreatThanParent);?>
 <?php js::set('LONG_TIME', LONG_TIME);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('longTime', $lang->project->longTime);?>

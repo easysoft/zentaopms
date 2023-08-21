@@ -79,10 +79,12 @@ $lang->program->noProgram          = '暫時沒有項目集';
 $lang->program->showClosed         = '顯示已關閉';
 $lang->program->tips               = '選擇了父項目集，則可關聯該父項目集下的產品。如果項目未選擇任何項目集，則系統會預設創建一個和該項目同名的產品並關聯該項目。';
 $lang->program->confirmBatchUnlink = "您確定要批量移除這些干係人嗎？";
-$lang->program->beginLetterParent  = "父項目集的開始日期：%s，開始日期不能小於父項目集的開始日期";
-$lang->program->endGreaterParent   = "父項目集的完成日期：%s，完成日期不能大於父項目集的完成日期";
-$lang->program->beginGreateChild   = "子項目集的最小開始日期：%s，父項目集的開始日期不能大於子項目集的最小開始日期";
-$lang->program->endLetterChild     = "子項目的最大完成日期：%s，父項目的完成日期不能小於子項目的最大完成日期";
+
+$lang->program->beginLessThanParent  = "父項目集的開始日期：%s，開始日期不能小於父項目集的開始日期";
+$lang->program->endGreatThanParent   = "父項目集的完成日期：%s，完成日期不能大於父項目集的完成日期";
+$lang->program->beginGreatEqualChild = "子項目集的最小開始日期：%s，父項目集的開始日期不能大於子項目集的最小開始日期";
+$lang->program->endLessThanChild     = "子項目的最大完成日期：%s，父項目的完成日期不能小於子項目的最大完成日期";
+
 $lang->program->closeErrorMessage  = '存在子項目集或項目為未關閉狀態';
 $lang->program->hasChildren        = '該項目集有子項目集或項目存在，不能刪除。';
 $lang->program->hasProduct         = '該項目集有產品存在，不能刪除。';

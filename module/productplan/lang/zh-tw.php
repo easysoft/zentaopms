@@ -84,8 +84,8 @@ $lang->productplan->errorNoTitle      = 'ID %s 標題不能為空';
 $lang->productplan->errorNoBegin      = 'ID %s 開始時間不能為空';
 $lang->productplan->errorNoEnd        = 'ID %s 結束時間不能為空';
 $lang->productplan->beginGeEnd        = 'ID %s 開始時間不能大於結束時間';
-$lang->productplan->beginLetterParent = "父計劃的開始日期：%s，開始日期不能小於父計劃的開始日期";
-$lang->productplan->endGreaterParent  = "父計劃的完成日期：%s，完成日期不能大於父計劃的完成日期";
+$lang->productplan->beginLessThanParent = "父計劃的開始日期：%s，開始日期不能小於父計劃的開始日期";
+$lang->productplan->endGreatThanParent  = "父計劃的完成日期：%s，完成日期不能大於父計劃的完成日期";
 $lang->productplan->noLinkedProject   = "當前產品還未關聯項目，請進入產品的項目列表關聯或創建一個項目";
 $lang->productplan->enterProjectList  = "進入產品的項目列表";
 

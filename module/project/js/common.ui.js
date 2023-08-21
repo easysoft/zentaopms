@@ -372,19 +372,19 @@ function outOfDateTip(currentID)
             var projectEnd   = new Date(end);
             var projectBegin = new Date(begin);
 
-            var beginLetterParentTip = beginLetterParent + data.selectedProgramBegin;
-            var endGreaterParentTip  = endGreaterParent + data.selectedProgramEnd;
+            var beginLessThanParentTip = beginLessThanParent + data.selectedProgramBegin;
+            var endGreatThanParentTip  = endGreatThanParent + data.selectedProgramEnd;
 
             if(projectBegin >= parentBegin && projectEnd <= parentEnd) return;
 
             var dateTip = "";
             if(projectBegin < parentBegin)
             {
-                dateTip = currentID ? beginLetterParentTip + "'><p>" + beginLetterParentTip : beginLetterParentTip;
+                dateTip = currentID ? beginLessThanParentTip + "'><p>" + beginLessThanParentTip : beginLessThanParentTip;
             }
             else if(projectEnd > parentEnd)
             {
-                dateTip = currentID ? endGreaterParentTip + "'><p>" + endGreaterParentTip : endGreaterParentTip;
+                dateTip = currentID ? endGreatThanParentTip + "'><p>" + endGreatThanParentTip : endGreatThanParentTip;
             }
 
             if(currentID)

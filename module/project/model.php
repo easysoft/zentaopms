@@ -1230,8 +1230,8 @@ class projectModel extends model
             ->orderBy('begin_asc')
             ->fetch();
 
-        if($maxExecutionEnd   && $project->end   < $maxExecutionEnd->maxEnd)     dao::$errors['end']   = sprintf($this->lang->project->endGreateExecution,   $maxExecutionEnd->maxEnd);
-        if($minExecutionBegin && $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $minExecutionBegin->minBegin);
+        if($maxExecutionEnd   && $project->end   < $maxExecutionEnd->maxEnd)     dao::$errors['end']   = sprintf($this->lang->project->endGreatEqualExecution,   $maxExecutionEnd->maxEnd);
+        if($minExecutionBegin && $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->beginLessEqualExecution, $minExecutionBegin->minBegin);
 
         return !dao::isError();
     }

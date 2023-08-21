@@ -30,10 +30,10 @@
 <?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol)?>
 <?php js::set('parentBudget', $lang->program->parentBudget);?>
-<?php js::set('beginLetterParent', $lang->program->beginLetterParent);?>
-<?php js::set('endGreaterParent', $lang->program->endGreaterParent);?>
-<?php js::set('beginGreateChild', $lang->program->beginGreateChild);?>
-<?php js::set('endLetterChild', $lang->program->endLetterChild);?>
+<?php js::set('beginLessThanParent', $lang->program->beginLessThanParent);?>
+<?php js::set('endGreatThanParent', $lang->program->endGreatThanParent);?>
+<?php js::set('beginGreatEqualChild', $lang->program->beginGreatEqualChild);?>
+<?php js::set('endLessThanChild', $lang->program->endLessThanChild);?>
 <?php js::set('ignore', $lang->program->ignore);?>
 <?php $aclList = $program->parent ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->edit->requiredFields;?>

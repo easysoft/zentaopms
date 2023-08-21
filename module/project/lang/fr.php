@@ -417,13 +417,15 @@ $lang->project->cannotChangeToCat    = "The {$lang->projectCommon} has contents,
 $lang->project->cannotCancelCat      = "There are child {$lang->projectCommon}s of this {$lang->projectCommon}. You cannot cancel the parent {$lang->projectCommon} mark.";
 $lang->project->parentBeginEnd       = "The begin and end date of the parent {$lang->projectCommon}: %s ~ %s";
 $lang->project->parentBudget         = "The budget of the parent program: ";
-$lang->project->beginLetterParent    = "The start date of the {$lang->projectCommon} is < the start date of the parent program:";
-$lang->project->endGreaterParent     = "The finish date of the {$lang->projectCommon} is > the finish date of the parent program:";
-$lang->project->dateExceedParent     = "The start and finish date of the {$lang->projectCommon} was > the start and finish date of the parent program:";
-$lang->project->beginGreateChild     = "The start date of the {$lang->projectCommon} should be ≥ the start date of program: %s.";
-$lang->project->endLetterChild       = "The finish date of the {$lang->projectCommon} should be ≤ the finish date of program: %s.";
-$lang->project->begigLetterExecution = "The start date of {$lang->projectCommon} should be ≤ the minimum start date of the execution: %s.";
-$lang->project->endGreateExecution   = "The finish date of the {$lang->projectCommon} should be ≥ the maximum finish date of the execution: %s.";
+
+$lang->project->beginLessThanParent     = "The start date of the {$lang->projectCommon} is < the start date of the parent program:";
+$lang->project->endGreatThanParent      = "The finish date of the {$lang->projectCommon} is > the finish date of the parent program:";
+$lang->project->dateExceedParent        = "The start and finish date of the {$lang->projectCommon} was > the start and finish date of the parent program:";
+$lang->project->beginGreatEqualChild    = "The start date of the {$lang->projectCommon} should be ≥ the start date of program: %s.";
+$lang->project->endLessThanChild        = "The finish date of the {$lang->projectCommon} should be ≤ the finish date of program: %s.";
+$lang->project->beginLessEqualExecution = "The start date of {$lang->projectCommon} should be ≤ the minimum start date of the execution: %s.";
+$lang->project->endGreatEqualExecution  = "The finish date of the {$lang->projectCommon} should be ≥ the maximum finish date of the execution: %s.";
+
 $lang->project->childLongTime        = "There are long-term {$lang->projectCommon}s in the child {$lang->projectCommon}, and the parent {$lang->projectCommon} should also be a long-term {$lang->projectCommon}.";
 $lang->project->confirmUnlinkMember  = "Do you want to remove this user from {$lang->projectCommon}?";
 $lang->project->stageByTips          = "Created by {$lang->projectCommon} as a single set of stages, and the stage is associated with all {$lang->productCommon}s; created by {$lang->productCommon} as multiple sets of stages, each set of stages is associated with a {$lang->productCommon}";
