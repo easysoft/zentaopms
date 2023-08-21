@@ -2625,16 +2625,100 @@ class blockZen extends block
      */
     protected function printTeamAchievementBlock()
     {
-        $finishedTasks    = 111;
-        $yesterdayTasks   = 0;
-        $createdStories   = 111;
+        $years  = array();
+        $months = array();
+        for($i = 0; $i <= 1; $i ++)
+        {
+            $years[] = date('Y', strtotime("-{$i} day"));
+            $months[] = date('m', strtotime("-{$i} day"));
+        }
+
+        $this->loadModel('metric');
+        $finishedTaskGroup = $this->metric->getResultByCode('count_of_daily_finished_task'); // 完成任务数。
+        $createdStoryGroup = $this->metric->getResultByCode('count_of_daily_created_story'); // 创建需求数。
+        $closedBugGroup    = $this->metric->getResultByCode('count_of_daily_closed_bug');    // 关闭Bug数。
+        $runCaseGroup      = $this->metric->getResultByCode('count_of_daily_run_case');      // 执行用例数。
+        $consumedGroup     = $this->metric->getResultByCode('hour_of_daily_effort');         // 消耗工时。
+        $totalEffortGroup  = $this->metric->getResultByCode('day_of_daily_effort');          // 累计工作量。
+
+        /* 获取今日完成任务数和昨日完成任务数。 */
+        $finishedTasks  = 0;
+        $yesterdayTasks = 0;
+        if($finishedTaskGroup)
+        {
+            foreach($finishedTaskGroup as $data)
+            {
+                $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                if($currentDay == date('Y-m-d'))                      $finishedTasks  = $data['value'];
+                if($currentDay == date('Y-m-d', strtotime("-1 day"))) $yesterdayTasks = $data['value'];
+            }
+        }
+
+        /* 获取今日创建需求数和昨日创建需求数。 */
+        $createdStories   = 0;
         $yesterdayStories = 0;
-        $closedBugs       = 111;
-        $yesterdayBugs    = 0;
-        $runCases         = 111;
-        $yesterdayCases   = 0;
-        $consumedHours    = 111;
-        $yesterdayHours   = 0;
+        if($createdStoryGroup)
+        {
+            foreach($createdStoryGroup as $data)
+            {
+                $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                if($currentDay == date('Y-m-d'))                      $createdStories   = $data['value'];
+                if($currentDay == date('Y-m-d', strtotime("-1 day"))) $yesterdayStories = $data['value'];
+            }
+        }
+
+        /* 获取今日关闭BUG数和昨日关闭BUG数。 */
+        $closedBugs    = 0;
+        $yesterdayBugs = 0;
+        if($closedBugGroup)
+        {
+            foreach($closedBugGroup as $data)
+            {
+                $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                if($currentDay == date('Y-m-d'))                      $closedBugs    = $data['value'];
+                if($currentDay == date('Y-m-d', strtotime("-1 day"))) $yesterdayBugs = $data['value'];
+            }
+        }
+
+        /* 获取今日执行用例数和昨日执行用例数。 */
+        $runCases       = 0;
+        $yesterdayCases = 0;
+        if($runCaseGroup)
+        {
+            foreach($runCaseGroup as $data)
+            {
+                $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                if($currentDay == date('Y-m-d'))                      $runCases       = $data['value'];
+                if($currentDay == date('Y-m-d', strtotime("-1 day"))) $yesterdayCases = $data['value'];
+            }
+        }
+
+        /* 获取今日消耗工时和昨日消耗工时。 */
+        $consumedHours  = 0;
+        $yesterdayHours = 0;
+        if($consumedGroup)
+        {
+            foreach($consumedGroup as $data)
+            {
+                $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                if($currentDay == date('Y-m-d'))                      $consumedHours  = $data['value'];
+                if($currentDay == date('Y-m-d', strtotime("-1 day"))) $yesterdayHours = $data['value'];
+            }
+        }
+
+        /* 获取总投入的人天和今日投入的人天。 */
+        $totalWorkload = 0;
+        $todayWorkload = 0;
+        if($totalEffortGroup)
+        {
+            foreach($totalEffortGroup as $data)
+            {
+                $totalWorkload += $data['value'];
+                $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                if($currentDay == date('Y-m-d')) $todayWorkload = $data['value'];
+            }
+        }
+
         $this->view->finishedTasks   = $finishedTasks;
         $this->view->comparedTasks   = $finishedTasks - $yesterdayTasks;
         $this->view->createdStories  = $createdStories;
@@ -2645,8 +2729,9 @@ class blockZen extends block
         $this->view->comparedCases   = $runCases - $yesterdayCases;
         $this->view->consumedHours   = $consumedHours;
         $this->view->comparedHours   = $consumedHours - $yesterdayHours;
-        $this->view->totalWorkload   = 111;
-        $this->view->todayWorkload   = 11;
+        $this->view->totalWorkload   = $totalWorkload;
+        $this->view->todayWorkload   = $todayWorkload;
+
     }
 
     /**
