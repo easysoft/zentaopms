@@ -1276,19 +1276,34 @@ class bug extends control
     }
 
     /**
+     * 确认 bug 关联的需求变更。
      * Confirm story change.
      *
      * @param  int    $bugID
      * @access public
      * @return void
      */
-    public function confirmStoryChange($bugID)
+    public function confirmStoryChange(int $bugID)
     {
-        $bug = $this->bug->getById($bugID);
-        $this->bugZen->checkBugExecutionPriv($bug);
-        $this->dao->update(TABLE_BUG)->set('storyVersion')->eq($bug->latestStoryVersion)->where('id')->eq($bugID)->exec();
-        $this->loadModel('action')->create('bug', $bugID, 'confirmed', '', $bug->latestStoryVersion);
-        return print(js::reload('parent'));
+        /* 获取更新前的 bug，并且检查所属执行的权限。*/
+        /* Get old bug and check privilege of the execution. */
+        $oldBug = $this->bug->getById($bugID);
+        $this->bugZen->checkBugExecutionPriv($oldBug);
+
+        /* 更新 bug 的需求版本。 */
+        /* Update the version of the story. */
+        $bug = new stdclass();
+        $bug->id           = $bugID;
+        $bug->storyVersion = $oldBug->latestStoryVersion;
+        $this->bug->update($bug);
+
+        $message = $this->executeHooks($bugID);
+
+        /* 返回确认 bug 需求变更后的响应。 */
+        /* Return response after confirming the version change of the story in the bug. */
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(empty($message)) $message = $this->lang->saveSuccess;
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "bugID={$bugID}")));
     }
 
     /**
