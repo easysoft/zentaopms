@@ -924,26 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of tasks per status.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerStatusTest()
-    {
-        $object = $this->objectModel->getDataOfTasksPerStatus();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * 测试更新父任务状态。
      * Test update parent status by taskID.
      *

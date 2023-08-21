@@ -2200,6 +2200,26 @@ class taskModel extends model
     }
 
     /**
+     * 按照任务状态统计的报表数据。
+     * Get report data of status.
+     *
+     * @access public
+     * @return object[]
+     */
+    public function getDataOfTasksPerStatus(): array
+    {
+        $tasks = $this->dao->select('id,status')->from(TABLE_TASK)->alias('t1')
+            ->where($this->reportCondition())
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $datas = $this->processData4Report($tasks, array(), 'status');
+        foreach($datas as $status => $data) $data->name = $this->lang->task->statusList[$status];
+
+        return $datas;
+    }
+
+    /**
      * 获取按照截止日期统计的报表数据。
      * Get report data of tasks per deadline.
      *
@@ -2337,25 +2357,6 @@ class taskModel extends model
         if(!$tasks) return array();
 
         return $this->processData4Report($tasks, array(), 'date');
-    }
-
-    /**
-     * Get report data of status
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerStatus()
-    {
-        $tasks = $this->dao->select('id,status')->from(TABLE_TASK)->alias('t1')
-            ->where($this->reportCondition())
-            ->fetchAll('id');
-        if(!$tasks) return array();
-
-        $datas    = $this->processData4Report($tasks, array(), 'status');
-
-        foreach($datas as $status => $data) $data->name = $this->lang->task->statusList[$status];
-        return $datas;
     }
 
     /**
