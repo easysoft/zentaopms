@@ -178,22 +178,25 @@ class testsuiteModel extends model
     }
 
     /**
+     * 关联测试用例。
      * Link cases.
      *
      * @param  int   $suiteID
+     * @param  array $cases
+     * @param  array $versions
      * @access public
      * @return void
      */
-    public function linkCase($suiteID)
+    public function linkCase(int $suiteID, array $cases, array $versions)
     {
-        if($this->post->cases == false) return;
-        $postData = fixer::input('post')->get();
-        foreach($postData->cases as $caseID)
+        if(empty($cases)) return;
+
+        foreach($cases as $case)
         {
             $row = new stdclass();
-            $row->suite      = $suiteID;
-            $row->case       = $caseID;
-            $row->version    = $postData->versions[$caseID];
+            $row->suite = $suiteID;
+            $row->case  = $case;
+            $row->version = isset($versions[$case]) ?? 0;
             $this->dao->replace(TABLE_SUITECASE)->data($row)->exec();
         }
     }

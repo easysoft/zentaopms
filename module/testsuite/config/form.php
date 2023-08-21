@@ -17,3 +17,7 @@ $config->testsuite->form->edit['desc']           = array('required' => false, 't
 $config->testsuite->form->edit['type']           = array('required' => false, 'type' => 'string',   'default' => 'private');
 $config->testsuite->form->edit['lastEditedBy']   = array('required' => false, 'type' => 'string',   'default' => $app->user->account);
 $config->testsuite->form->edit['lastEditedDate'] = array('required' => false, 'type' => 'datetime', 'default' => helper::now());
+
+$config->testsuite->form->linkCase = array();
+$config->testsuite->form->linkCase['cases']    = array('required' => true, 'type' => 'array', 'default' => []);
+$config->testsuite->form->linkCase['versions'] = array('required' => true, 'type' => 'array', 'default' => []);
