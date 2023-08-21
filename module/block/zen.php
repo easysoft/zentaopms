@@ -851,44 +851,63 @@ class blockZen extends block
      */
     protected function printProjectOverviewBlock(object $block): void
     {
-        $projects = $this->dao->select('id, Year(closedDate) AS year')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->fetchPairs();
-        $projects = array_map(function($year){return $year == null ? 0 : $year;}, $projects);
-        $stats    = array_count_values($projects);
+        $this->loadModel('metric');
 
-        $thisYear    = date('Y');
-        $lastYear    = date('Y', strtotime('-1 year'));
-        $lastTwoYear = date('Y', strtotime('-2 years'));
+        /* 通过度量项获取项目总量数据。 */
+        $projectCount = 0;
+        $projectCountGroup = $this->metric->getResultByCode('count_of_project');
+        if(!empty($projectCountGroup))
+        {
+            $projectCountGroup = reset($projectCountGroup);
+            $projectCount      = zget($projectCountGroup, 'value', 0);
+        }
 
-        $thisYearCount    = zget($stats, $thisYear, 0);
-        $lastYearCount    = zget($stats, $lastYear, 0);
-        $lastTwoYearCount = zget($stats, $lastTwoYear, 0);
+        /* 通过度量项获取最近三年完成的项目数据。 */
+        $years = array();
+        $i     = 3;
+        foreach(array('lastTwoYear', 'lastYear', 'thisYear') as $year)
+        {
+            $i --;
+            $years[$year] = date('Y', strtotime("first day of -{$i} year"));
+        }
+        $finishedProjectGroup = $this->metric->getResultByCode('count_of_annual_finished_project', array('year' => join(',', $years)));
+        if($finishedProjectGroup) $finishedProjectGroup = array_column($finishedProjectGroup, null, 'year');
 
-        $maxCount = $thisYearCount;
-        if($lastYearCount > $maxCount)    $maxCount = $lastYearCount;
-        if($lastTwoYearCount > $maxCount) $maxCount = $lastTwoYearCount;
-
+        /* 组装前台所需的cards数组。 */
         $cards = array();
         $cards[0] = new stdclass();
-        $cards[0]->value = array_sum($stats);
+        $cards[0]->value = $projectCount;
         $cards[0]->class = 'text-primary';
         $cards[0]->label = $this->lang->block->projectoverview->totalProject;
         $cards[0]->url   = common::hasPriv('project', 'browse') ? helper::createLink('project', 'browse', 'programID=0&browseType=all') : null;
 
         $cards[1] = new stdclass();
-        $cards[1]->value = $thisYearCount;
+        $cards[1]->value = isset($finishedProjectGroup[date('Y')]['value']) ? $finishedProjectGroup[date('Y')]['value'] : 0;
         $cards[1]->label = $this->lang->block->projectoverview->thisYear;
 
         $cardGroup = new stdclass();
         $cardGroup->type  = 'cards';
         $cardGroup->cards = $cards;
 
+        /* 获取最近三年最多完成的项目数量。 */
+        $maxCount = 0;
+        if($finishedProjectGroup)
+        {
+            foreach($finishedProjectGroup as $data)
+            {
+                if($maxCount < $data['value']) $maxCount = $data['value'];
+            }
+
+        }
+
+        /* 组将前台柱状图所需的bars数组。 */
         $bars = array();
-        foreach(array('lastTwoYear', 'lastYear', 'thisYear') as $year)
+        foreach($years as $code => $year)
         {
             $bar = new stdclass();
-            $bar->label = $$year;
-            $bar->value = ${$year . 'Count'};
-            $bar->rate  = $maxCount ? round(${$year . 'Count'} / $maxCount * 100) . '%' : '0%';
+            $bar->label = $year;
+            $bar->value = isset($finishedProjectGroup[$year]['value']) ? $finishedProjectGroup[$year]['value'] : 0;;
+            $bar->rate  = $maxCount ? round($bar->value / $maxCount * 100) . '%' : '0%';
 
             $bars[] = $bar;
         }
@@ -938,18 +957,18 @@ class blockZen extends block
         $closedBugGroup     = $this->metric->getResultByCode('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)));
         $activatedBugGroup  = $this->metric->getResultByCode('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)));
 
-        if($investedGroup)      $investedGroup      = $this->groupMetricData($investedGroup,      'project');
-        if($consumeTaskGroup)   $consumeTaskGroup   = $this->groupMetricData($consumeTaskGroup,   'project');
-        if($leftTaskGroup)      $leftTaskGroup      = $this->groupMetricData($leftTaskGroup,      'project');
-        if($countStoryGroup)    $countStoryGroup    = $this->groupMetricData($countStoryGroup,    'project');
-        if($finishedStoryGroup) $finishedStoryGroup = $this->groupMetricData($finishedStoryGroup, 'project');
-        if($unclosedStoryGroup) $unclosedStoryGroup = $this->groupMetricData($unclosedStoryGroup, 'project');
-        if($countTaskGroup)     $countTaskGroup     = $this->groupMetricData($countTaskGroup,     'project');
-        if($waitTaskGroup)      $waitTaskGroup      = $this->groupMetricData($waitTaskGroup,      'project');
-        if($doingTaskGroup)     $doingTaskGroup     = $this->groupMetricData($doingTaskGroup,     'project');
-        if($countBugGroup)      $countBugGroup      = $this->groupMetricData($countBugGroup,      'project');
-        if($closedBugGroup)     $closedBugGroup     = $this->groupMetricData($closedBugGroup,     'project');
-        if($activatedBugGroup)  $activatedBugGroup  = $this->groupMetricData($activatedBugGroup,  'project');
+        if($investedGroup)      $investedGroup      = array_column($investedGroup,      null, 'project');
+        if($consumeTaskGroup)   $consumeTaskGroup   = array_column($consumeTaskGroup,   null, 'project');
+        if($leftTaskGroup)      $leftTaskGroup      = array_column($leftTaskGroup,      null, 'project');
+        if($countStoryGroup)    $countStoryGroup    = array_column($countStoryGroup,    null, 'project');
+        if($finishedStoryGroup) $finishedStoryGroup = array_column($finishedStoryGroup, null, 'project');
+        if($unclosedStoryGroup) $unclosedStoryGroup = array_column($unclosedStoryGroup, null, 'project');
+        if($countTaskGroup)     $countTaskGroup     = array_column($countTaskGroup,     null, 'project');
+        if($waitTaskGroup)      $waitTaskGroup      = array_column($waitTaskGroup,      null, 'project');
+        if($doingTaskGroup)     $doingTaskGroup     = array_column($doingTaskGroup,     null, 'project');
+        if($countBugGroup)      $countBugGroup      = array_column($countBugGroup,      null, 'project');
+        if($closedBugGroup)     $closedBugGroup     = array_column($closedBugGroup,     null, 'project');
+        if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
 
         /* 瀑布项目的统计信息。 */
         $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)));
@@ -959,14 +978,14 @@ class blockZen extends block
         $CVGroup           = $this->metric->getResultByCode('cv_in_waterfall',                  array('project' => join(',', $projectIdList)));
         $ACGroup           = $this->metric->getResultByCode('ac_of_all_in_waterfall',           array('project' => join(',', $projectIdList)));
 
-        if($riskCountGroup)    $riskCountGroup    = $this->groupMetricData($riskCountGroup,    'project');
-        if($issueCountGroup)   $issueCountGroup   = $this->groupMetricData($issueCountGroup,   'project');
-        if($taskProgressGroup) $taskProgressGroup = $this->groupMetricData($taskProgressGroup, 'project');
-        if($SVGroup)           $SVGroup           = $this->groupMetricData($SVGroup,           'project');
-        if($PVGroup)           $PVGroup           = $this->groupMetricData($PVGroup,           'project');
-        if($EVGroup)           $EVGroup           = $this->groupMetricData($EVGroup,           'project');
-        if($CVGroup)           $CVGroup           = $this->groupMetricData($CVGroup,           'project');
-        if($ACGroup)           $ACGroup           = $this->groupMetricData($ACGroup,           'project');
+        if($riskCountGroup)    $riskCountGroup    = array_column($riskCountGroup,    null, 'project');
+        if($issueCountGroup)   $issueCountGroup   = array_column($issueCountGroup,   null, 'project');
+        if($taskProgressGroup) $taskProgressGroup = array_column($taskProgressGroup, null, 'project');
+        if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
+        if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
+        if($EVGroup)           $EVGroup           = array_column($EVGroup,           null, 'project');
+        if($CVGroup)           $CVGroup           = array_column($CVGroup,           null, 'project');
+        if($ACGroup)           $ACGroup           = array_column($ACGroup,           null, 'project');
 
         /* 将获取的统计信息按照projectID补充到projects数组中。 */
         $this->loadModel('execution');
@@ -1026,19 +1045,20 @@ class blockZen extends block
 
         /* 按照产品分组获取产品需求交付率度量项。 */
         $storyDeliveryRate = $this->loadModel('metric')->getResultByCode('rate_of_delivery_story_in_product', array('product' => join(',', $productIdList)));
-        if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
 
         /* 按照产品分组获取产品有效需求数度量项。 */
         $totalStories = $this->metric->getResultByCode('count_of_valid_story_in_product', array('product' => join(',', $productIdList)));
-        if(!empty($totalStories)) $totalStories = array_column($totalStories, null, 'product');
 
         /* 按照产品分组获取产品已交付需求数度量项。 */
         $closedStories = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => join(',', $productIdList)));
-        if(!empty($closedStories)) $closedStories = array_column($closedStories, null, 'product');
 
         /* 按照产品分组获取产品未关闭需求数度量项。 */
         $unclosedStories = $this->metric->getResultByCode('count_of_unclosed_story_in_product', array('product' => join(',', $productIdList)));
-        if(!empty($unclosedStories)) $unclosedStories = array_column($unclosedStories, null, 'product');
+
+        if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
+        if(!empty($totalStories))      $totalStories      = array_column($totalStories,      null, 'product');
+        if(!empty($closedStories))     $closedStories     = array_column($closedStories,     null, 'product');
+        if(!empty($unclosedStories))   $unclosedStories   = array_column($unclosedStories,   null, 'product');
 
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
@@ -1656,17 +1676,14 @@ class blockZen extends block
         $createdBugGroup  = $this->metric->getResultByCode('count_of_daily_created_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
         $resolvedBugGroup = $this->metric->getResultByCode('count_of_daily_resolved_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
         $closedBugGroup   = $this->metric->getResultByCode('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
+        $bugFixRate       = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',           array('product' => join(',', $productIdList)));
+        $effectiveBug     = $this->metric->getResultByCode('count_of_effective_bug_in_product',      array('product' => join(',', $productIdList)));
+        $restoredBug      = $this->metric->getResultByCode('count_of_restored_bug_in_product',       array('product' => join(',', $productIdList)));
+        $activatedBug     = $this->metric->getResultByCode('count_of_activated_bug_in_product',      array('product' => join(',', $productIdList)));
 
-        $bugFixRate = $this->metric->getResultByCode('rate_of_fixed_bug_in_product', array('product' => join(',', $productIdList)));
-        if(!empty($bugFixRate)) $bugFixRate = array_column($bugFixRate, null, 'product');
-
-        $effectiveBug = $this->metric->getResultByCode('count_of_effective_bug_in_product', array('product' => join(',', $productIdList)));
+        if(!empty($bugFixRate))   $bugFixRate   = array_column($bugFixRate,   null, 'product');
         if(!empty($effectiveBug)) $effectiveBug = array_column($effectiveBug, null, 'product');
-
-        $restoredBug = $this->metric->getResultByCode('count_of_restored_bug_in_product', array('product' => join(',', $productIdList)));
-        if(!empty($restoredBug)) $restoredBug = array_column($restoredBug, null, 'product');
-
-        $activatedBug = $this->metric->getResultByCode('count_of_activated_bug_in_product', array('product' => join(',', $productIdList)));
+        if(!empty($restoredBug))  $restoredBug  = array_column($restoredBug,  null, 'product');
         if(!empty($activatedBug)) $activatedBug = array_column($activatedBug, null, 'product');
 
         foreach($products as $productID => $product)
@@ -1837,9 +1854,9 @@ class blockZen extends block
         $finishedStoryGroup  = $this->metric->getResultByCode('count_of_annual_finished_story'); // 已完成需求数。
         $storyScaleGroup     = $this->metric->getResultByCode('scale_of_annual_finished_story'); // 已完成需求规模。
 
-        if($createdReleaseGroup) $createdReleaseGroup = $this->groupMetricData($createdReleaseGroup, 'year');
-        if($finishedStoryGroup)  $finishedStoryGroup  = $this->groupMetricData($finishedStoryGroup,  'year');
-        if($storyScaleGroup)     $storyScaleGroup     = $this->groupMetricData($storyScaleGroup,     'year');
+        if($createdReleaseGroup) $createdReleaseGroup = array_column($createdReleaseGroup, null, 'year');
+        if($finishedStoryGroup)  $finishedStoryGroup  = array_column($finishedStoryGroup,  null, 'year');
+        if($storyScaleGroup)     $storyScaleGroup     = array_column($storyScaleGroup,     null, 'year');
 
         if(!empty($createdReleaseGroup[$year])) $data->finishedReleaseCount['year'] = zget($createdReleaseGroup[$year], 'value', 0);
         if(!empty($finishedStoryGroup[$year]))  $data->finishedStoryCount['year']   = zget($finishedStoryGroup[$year],  'value', 0);
@@ -2574,14 +2591,14 @@ class blockZen extends block
         $products      = $this->loadModel('product')->getPairs();
         $productIdList = array_keys($products);
 
-        $finishEstimateGroup = $this->loadModel('metric')->getResultByCode('scale_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
+        $this->loadModel('metric');
+        $finishEstimateGroup = $this->metric->getResultByCode('scale_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
+        $doneStoryGroup      = $this->metric->getResultByCode('count_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
+        $resolvedBugGroup    = $this->metric->getResultByCode('count_of_annual_restored_bug_in_product',   array('product' => join(',', $productIdList), 'year' => date('Y')));
+
         if(!empty($finishEstimateGroup)) $finishEstimateGroup = array_column($finishEstimateGroup, null, 'product');
-
-        $doneStoryGroup = $this->metric->getResultByCode('count_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
-        if(!empty($doneStoryGroup)) $doneStoryGroup = array_column($doneStoryGroup, null, 'product');
-
-        $resolvedBugGroup = $this->metric->getResultByCode('count_of_annual_restored_bug_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
-        if(!empty($resolvedBugGroup)) $resolvedBugGroup = array_column($resolvedBugGroup, null, 'product');
+        if(!empty($doneStoryGroup))      $doneStoryGroup      = array_column($doneStoryGroup,      null, 'product');
+        if(!empty($resolvedBugGroup))    $resolvedBugGroup    = array_column($resolvedBugGroup,    null, 'product');
 
         $doneStoryEstimate = array();
         $doneStoryCount    = array();
@@ -2804,17 +2821,16 @@ class blockZen extends block
         $count     = isset($block->params->count) ? $block->params->count : '';
         $productID = $this->session->product;
 
-        $storyDeliveryRate = $this->loadModel('metric')->getResultByCode('rate_of_delivery_story_in_product', array('product' => $productID));
+        $this->loadModel('metric');
+        $storyDeliveryRate = $this->metric->getResultByCode('rate_of_delivery_story_in_product',   array('product' => $productID));
+        $totalStories      = $this->metric->getResultByCode('count_of_valid_story_in_product',     array('product' => $productID));
+        $closedStories     = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => $productID));
+        $unclosedStories   = $this->metric->getResultByCode('count_of_unclosed_story_in_product',  array('product' => $productID));
+
         if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
-
-        $totalStories = $this->metric->getResultByCode('count_of_valid_story_in_product', array('product' => $productID));
-        if(!empty($totalStories)) $totalStories = array_column($totalStories, null, 'product');
-
-        $closedStories = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => $productID));
-        if(!empty($closedStories)) $closedStories = array_column($closedStories, null, 'product');
-
-        $unclosedStories = $this->metric->getResultByCode('count_of_unclosed_story_in_product', array('product' => $productID));
-        if(!empty($unclosedStories)) $unclosedStories = array_column($unclosedStories, null, 'product');
+        if(!empty($totalStories))      $totalStories      = array_column($totalStories,      null, 'product');
+        if(!empty($closedStories))     $closedStories     = array_column($closedStories,     null, 'product');
+        if(!empty($unclosedStories))   $unclosedStories   = array_column($unclosedStories,   null, 'product');
 
         $years  = array();
         $months = array();
@@ -2826,7 +2842,7 @@ class blockZen extends block
             $groups[date('Y-m', strtotime("first day of -{$i} month"))] = date('Y-m', strtotime("first day of -{$i} month"));
         }
         $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
-        $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
+        $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
         if(empty($monthFinish)) $monthFinish = array();
         if(empty($monthCreated)) $monthCreated = array();
 
@@ -3167,21 +3183,5 @@ class blockZen extends block
         $sso = isset($this->get->sso) ? base64_decode($this->get->sso) : '';
         $this->view->sso  = $sso;
         $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
-    }
-
-    /**
-     * 对度量项数组按照某一个字段进行分组。
-     * Group field on metricData.
-     *
-     * @param  array   $data
-     * @param  string  $field
-     * @access private
-     * @return array
-     */
-    private function groupMetricData(array $data, string $field): array
-    {
-        $data = json_decode(json_encode($data), true);
-        if(!empty($data)) $data = array_column($data, null, $field);
-        return $data;
     }
 }
