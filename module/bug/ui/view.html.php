@@ -101,7 +101,25 @@ $legendBasic['severity']['text']      = severityLabel(set::level(zget($lang->bug
 $legendBasic['pri']['text']           = priLabel(zget($lang->bug->priList, $legendBasic['pri']['text']));
 $legendLife['openedBuild']['text']    = $buildsHTML;
 $legendLife['resolution']['text']     = div(zget($lang->bug->resolutionList, $bug->resolution), $duplicateBug);
-$legendMain['story']['text']          = $bug->story ? div(label(set('class', 'dark-outline rounded-full size-sm mr-2'), $bug->story), span($bug->storyTitle)) : '';
+$legendMain['story']['text']          = $bug->story ? div
+(
+    label
+    (
+        setClass('dark-outline rounded-full size-sm mr-2'),
+        $bug->story
+    ),
+    span($bug->storyTitle),
+    $bug->storyStatus == 'active' && $bug->latestStoryVersion > $bug->storyVersion && common::hasPriv('bug', 'confirmStoryChange') ? span
+    (
+        ' (',
+        a
+        (
+            set::href(createLink('bug', 'confirmStoryChange', "bugID=$bug->id")),
+            $lang->confirm,
+        ),
+        ')',
+    ) : '',
+) : '';
 $legendMain['task']['text']           = $bug->task  ? div(label(set('class', 'dark-outline rounded-full size-sm mr-2'), $bug->task),  span($bug->taskName))   : '';;
 $legendMisc['relatedBug']['text']     = $relatedBugs;
 $legendMisc['linkCommit']['text']     = $linkCommits;
