@@ -469,7 +469,16 @@ class dbh
                     foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
                 }
 
-                if(strpos($sql, "ALTER TABLE") !== false) $sql = $this->convertAlterTableSql($sql);
+                if(strpos($sql, "ALTER TABLE") === 0)
+                {
+                    $sql = $this->convertAlterTableSql($sql);
+                    if(stripos($sql, "ADD") !== false)
+                    {
+                        // 使用正则表达式匹配并去除 "AFTER" 关键字及其后面的内容
+                        $pattern = "/\s+AFTER\s+.+$/i";
+                        $sql     = preg_replace($pattern, "", $sql);
+                    }
+                }
         }
 
         return $sql;

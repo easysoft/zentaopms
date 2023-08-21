@@ -269,7 +269,7 @@ $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
 $lang->project->modelList['']          = '';
-$lang->project->modelList['ipd']       = "IPD";
+if($config->systemMode == 'PML') $lang->project->modelList['ipd']       = "IPD";
 $lang->project->modelList['scrum']     = "Scrum";
 if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
