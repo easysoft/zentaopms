@@ -394,44 +394,55 @@ class bug extends control
      */
     public function resolve(int $bugID, string $extra = '')
     {
-        /* Get old bug, and check privilege of the execution. */
+        /* 获取 bug 信息，并检查 bug 所属执行的权限。*/
+        /* Get bug info, and check privilege of bug 所属执行的权限。*/
         $oldBug = $this->bug->getById($bugID);
         $this->bugZen->checkBugExecutionPriv($oldBug);
 
         if(!empty($_POST))
         {
+            /* 解析信息，并获取变量。 */
             /* Parse extra, and get variables. */
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
             parse_str($extra, $output);
 
+            /* 初始化 bug 数据。 */
             /* Init bug data. */
             $bug = $this->bugZen->buildBugForResolve($oldBug);
 
+            /* 检查解决 bug 的必填项。 */
             /* Check required fields. */
             $this->bugZen->checkRequiredForResolve($bug, $oldBug->execution);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* Can create build when resolving bug. */
+            /* 如果需要创建版本，创建版本。 */
+            /* If you need to create a build, create one. */
             if($bug->createBuild == 'on')
             {
                 $this->bug->createBuild($bug, $oldBug);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
+            /* 只有非关闭状态的 bug 可以解决。 */
+            /* Only unclosed bug can be resolved. */
             if($oldBug->status != 'closed') $this->bug->resolve($bug, $output);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message  = $this->executeHooks($bugID);
-            $regionID = zget($output, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
+            /* 返回解决 bug 后的响应。 */
+            /* Return response after resolving bug. */
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $message = $this->executeHooks($bugID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', zget($output, 'regionID', 0), $message);
         }
 
+        /* 移除解决方案“转需求”。 */
         /* Remove 'Convert to story' from the solution list. */
         unset($this->lang->bug->resolutionList['tostory']);
 
+        /* 设置菜单。 */
         /* Set menu. */
         $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
 
+        /* 展示相关变量。 */
         /* Show the variables associated. */
         $this->view->title      = $this->lang->bug->resolve;
         $this->view->bug        = $oldBug;
