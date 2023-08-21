@@ -382,7 +382,7 @@ class dbh
     public function processDmTableIndex($sql)
     {
 	if(strpos($sql, 'DROP INDEX') === FALSE) return $sql;
-        return preg_replace('/DROP INDEX `(\w+)` ON `zt_(\w+)`;/', 'DROP INDEX `$2_$1`;', $sql);
+        return preg_replace('/DROP INDEX `(\w+)` ON `zt_(\w+)`/', 'DROP INDEX `$2_$1`', $sql);
     }
 
     /**
