@@ -121,7 +121,7 @@ toolbar
 $groupList = array();
 foreach($lang->execution->groups as $key => $value)
 {
-    $link = createLink('executon', 'grouptask', "executionID={$executionID}&groupBy={$key}");
+    $link = createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$key}");
     $groupList[] = array(
         'text' => $value,
         'url'  => $link,

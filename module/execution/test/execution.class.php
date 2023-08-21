@@ -2380,7 +2380,7 @@ class executionTest
     }
 
     /**
-     * function setTreePath test by executon
+     * function setTreePath test by execution
      *
      * @param  string $executionID
      * @access public

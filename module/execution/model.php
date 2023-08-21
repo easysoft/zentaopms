@@ -2278,7 +2278,7 @@ class executionModel extends model
     }
 
     /**
-     * Get full name of executons.
+     * Get full name of executions.
      * @param  array $executions
      * @access public
      * @return array
