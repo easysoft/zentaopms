@@ -61,12 +61,12 @@ CREATE INDEX `project`  ON `zt_actionrecent`(`project`);
 CREATE INDEX `action`   ON `zt_actionrecent`(`action`);
 CREATE INDEX `objectID` ON `zt_actionrecent`(`objectID`);
 
-ALTER TABLE `zt_notify` ADD `toListCopy` text NOT NULL;
+ALTER TABLE `zt_notify` ADD `toListCopy` text NULL;
 UPDATE `zt_notify` SET `toListCopy` = `toList`;
 ALTER TABLE `zt_notify` DROP `toList`;
 ALTER TABLE `zt_notify` CHANGE COLUMN `toListCopy` `toList`;
 
-ALTER TABLE `zt_notify` ADD `subjectCopy` text NOT NULL;
+ALTER TABLE `zt_notify` ADD `subjectCopy` text NULL;
 UPDATE `zt_notify` SET `subjectCopy` = `subject`;
 ALTER TABLE `zt_notify` DROP `subject`;
 ALTER TABLE `zt_notify` CHANGE COLUMN `subjectCopy` `subject`;
@@ -89,7 +89,7 @@ CREATE INDEX `key`    ON `zt_config`(`key`);
 
 UPDATE `zt_programoutput` SET `activity` = (SELECT `activity` FROM `zt_zoutput` WHERE `zt_programoutput`.`output` = `zt_zoutput`.`id`);
 
-ALTER TABLE `zt_reviewissue` ADD `opinionCopy` mediumtext NOT NULL DEFAULT '';
+ALTER TABLE `zt_reviewissue` ADD `opinionCopy` mediumtext NULL;
 UPDATE `zt_reviewissue` SET `opinionCopy` = `opinion`;
 ALTER TABLE `zt_reviewissue` DROP `opinion`;
 ALTER TABLE `zt_reviewissue` CHANGE COLUMN `opinionCopy` `opinion`;
