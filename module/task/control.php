@@ -529,6 +529,7 @@ class task extends control
         $taskID = $effort->objectID;
         $task   = $this->task->getById($taskID);
 
+        /* Show a confirm message if the task has no consumed effort. */
         if($confirm == 'no' and $task->consumed - $effort->consumed == 0)
         {
             $formUrl = $this->createLink('task', 'deleteWorkhour', "effortID=$effortID&confirm=yes");
@@ -541,6 +542,7 @@ class task extends control
         $actionID = $this->loadModel('action')->create('task', $taskID, 'DeleteEstimate');
         $this->action->logHistory($actionID, $changes);
 
+        /* The task status will be set to wait as the consumed effort is set to 0. */
         if($task->consumed - $effort->consumed == 0) $this->action->create('task', $taskID, 'Adjusttasktowait');
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
