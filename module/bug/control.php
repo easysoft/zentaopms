@@ -1014,7 +1014,7 @@ class bug extends control
     }
 
     /**
-     * 批量确认BUG。
+     * 批量确认 bugs。
      * Batch confirm bugs.
      *
      * @access public
@@ -1024,14 +1024,22 @@ class bug extends control
     {
         if($this->post->bugIdList)
         {
+            /* 准备 bug 确认需要的数据。 */
+            /* Prepare resolve data. */
             $bugIdList = array_unique($this->post->bugIdList);
             $bugs      = $this->bug->getByIdList($bugIdList);
 
+            /* 初始化 bug 数据。 */
+            /* Init bug data. */
             $bug = form::data($this->config->bug->form->confirm)->setDefault('confirmed', 1)->remove('pri,type,status,mailto')->get();
             foreach($bugIdList as $bugID)
             {
+                /* 如果 bug 已经确认过，跳过。 */
+                /* If bug has been confirmed, skip it. */
                 if(!empty($bugs[$bugID]->confirmed)) continue;
 
+                /* 构建 bug。 */
+                /* Build bug. */
                 $bug->id         = (int)$bugID;
                 $bug->confirmed  = 1;
                 $bug->assignedTo = $this->app->user->account;
@@ -1044,6 +1052,8 @@ class bug extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
+        /* 返回批量确认 bugs 后的响应。 */
+        /* Return response after batch confirming bugs. */
         if(empty($message)) $message = $this->lang->saveSuccess;
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
     }
