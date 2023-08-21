@@ -14,7 +14,7 @@ $(function()
             {
                 if(data.needSpace > data.freeSpace)
                 {
-                    alertTips = alertTips.replace('NEED_SPACE', (data.needSpace/1024/1024).toFixed(2));
+                    alertTips = alertTips.replace('NEED_SPACE', (data.needSpace / (1024 * 1024 * 1024)).toFixed(2));
                     $('#spaceConfirm').find('p').text(alertTips);
                     $('#spaceConfirm').modal('show', 'center');
                 }

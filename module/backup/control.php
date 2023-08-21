@@ -89,8 +89,8 @@ class backup extends control
         $diskSapce = explode(',', $diskSapce);
 
         $space = new stdclass();
-        $space->freeSpace = $diskSapce[0];
-        $space->needSpace = $diskSapce[1];
+        $space->freeSpace = intval($diskSapce[0]);
+        $space->needSpace = intval($diskSapce[1]);
 
         echo json_encode($space);
     }
