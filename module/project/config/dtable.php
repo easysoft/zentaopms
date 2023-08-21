@@ -294,7 +294,7 @@ $config->projectGroup->dtable->fieldList['actions']['fixed']    = 'right';
 $config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['icon'] = 'lock';
 $config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['text'] = $lang->group->managePriv;
 $config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['hint'] = $lang->group->managePriv;
-$config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['url']  = helper::createLink('project', 'managePriv', "projectID={project}&type=byGroup&groupID={id}");
+$config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['url']  = helper::createLink('project', 'managePriv', "projectID={project}&groupID={id}");
 
 $config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['icon']        = 'persons';
 $config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['text']        = $lang->group->manageMember;

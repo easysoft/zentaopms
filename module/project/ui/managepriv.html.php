@@ -45,7 +45,7 @@ div
     )
 );
 
-$getActions = function($moduleActions, $moduleName, $version, $changelogs, $groupPrivs)
+$getActions = function($moduleActions, $moduleName, $groupPrivs)
 {
     global $lang;
 
@@ -54,7 +54,6 @@ $getActions = function($moduleActions, $moduleName, $version, $changelogs, $grou
     foreach($moduleActions as $action => $actionLabel)
     {
         if(!empty($lang->$moduleName->menus) and $action == 'browse') continue;
-        if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;
 
         $actionItems[] = div
             (
@@ -79,29 +78,12 @@ $moduleSelect = 0;
 foreach($lang->resource as $moduleName => $moduleActions)
 {
     if(!count((array)$moduleActions)) continue;
-    if(!$this->group->checkMenuModule($menu, $moduleName)) continue;
-
-    /* Check method in select version. */
-    if($version)
-    {
-        $hasMethod = false;
-        foreach($moduleActions as $action => $actionLabel)
-        {
-            if(strpos($changelogs, ",$moduleName-$actionLabel,") !== false)
-            {
-                $hasMethod = true;
-                break;
-            }
-        }
-        if(!$hasMethod) continue;
-    }
 
     $methodPrivs  = 0;
     $mehtodSelect = isset($groupPrivs[$moduleName]) ? count($groupPrivs[$moduleName]) : 0;
     foreach($moduleActions as $action => $actionLabel)
     {
         if(!empty($lang->$moduleName->menus) and $action == 'browse') continue;
-        if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;
         $methodPrivs ++;
     }
 
@@ -142,7 +124,7 @@ foreach($lang->resource as $moduleName => $moduleActions)
             (
                 set('id', $moduleName),
                 set('colspan', !empty($lang->$moduleName->menus) ? 1 : 2),
-                $getActions($moduleActions, $moduleName, $version, $changelogs, $groupPrivs),
+                $getActions($moduleActions, $moduleName, $groupPrivs),
             )
         );
 

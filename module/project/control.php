@@ -955,107 +955,44 @@ class project extends control
     /**
      * Manage privleges of a group.
      *
-     * @param  int       $projectID
-     * @param  string    $type
-     * @param  int       $param
-     * @param  string    $menu
-     * @param  string    $version
+     * @param  int    $projectID
+     * @param  int    $groupID
      * @access public
      * @return void
      */
-    public function managePriv($projectID, $type = 'byGroup', $param = 0, $menu = '', $version = '')
+    public function managePriv(int $projectID, int $groupID = 0)
     {
         $this->loadModel('group');
-        if($type == 'byGroup')
-        {
-            $groupID = $param;
-            $group   = $this->group->getById($groupID);
-        }
 
-        $this->view->type = $type;
         foreach($this->lang->resource as $moduleName => $action)
         {
-            if($this->group->checkMenuModule($menu, $moduleName) or $type != 'byGroup') $this->app->loadLang($moduleName);
+            $this->app->loadLang($moduleName);
         }
 
         if(!empty($_POST))
         {
-            if($type == 'byGroup') $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
+            $result = $this->group->updatePrivByGroup($groupID, '', '');
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('group', "projectID={$group->project}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('group', "projectID={$projectID}")));
         }
 
+        $group = $this->group->getById($groupID);
         $this->project->setMenu($projectID);
 
-        if($type == 'byGroup')
-        {
-            $this->group->sortResource();
-            $groupPrivs = $this->group->getPrivs($groupID);
+        $this->group->sortResource();
 
-            $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->managePriv;
+        $project = $this->project->getByID((int)$projectID);
+        $this->projectZen->processGroupPrivs($project);
 
-            /* Join changelog when be equal or greater than this version.*/
-            $realVersion = str_replace('_', '.', $version);
-            $changelog = array();
-            foreach($this->lang->changelog as $currentVersion => $currentChangeLog)
-            {
-                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = implode(',', $currentChangeLog);
-            }
+        $this->lang->resource = $this->project->getPrivsByModel($project->multiple ? $project->model : 'noSprint');
 
-            $this->view->group      = $group;
-            $this->view->changelogs = ',' . implode(',', $changelog) . ',';
-            $this->view->groupPrivs = $groupPrivs;
-            $this->view->groupID    = $groupID;
-            $this->view->projectID  = $projectID;
-            $this->view->menu       = $menu;
-            $this->view->version    = $version;
-
-            /* Unset not project privs. */
-            $project = $this->project->getByID((int)$group->project);
-            if($project->hasProduct)
-            {
-                if($this->config->URAndSR) unset($this->lang->resource->requirement);
-                unset($this->lang->resource->productplan);
-                unset($this->lang->resource->tree);
-            }
-            else
-            {
-                $this->lang->productplan->common  = $this->lang->productplan->plan;
-                $this->lang->projectstory->common = $this->lang->projectstory->storyCommon;
-                $this->lang->projectstory->story  = $this->lang->projectstory->storyList;
-                $this->lang->projectstory->view   = $this->lang->projectstory->storyView;
-                unset($this->lang->resource->project->manageProducts);
-                unset($this->lang->resource->projectstory->linkStory);
-                unset($this->lang->resource->projectstory->importplanstories);
-                unset($this->lang->resource->projectstory->unlinkStory);
-                unset($this->lang->resource->projectstory->batchUnlinkStory);
-                unset($this->lang->resource->story->view);
-                if($this->config->URAndSR) unset($this->lang->resource->requirement->view);
-                if($this->config->URAndSR) unset($this->lang->resource->requirement->batchChangeBranch);
-                unset($this->lang->resource->tree->browseTask);
-                unset($this->lang->resource->tree->browsehost);
-                unset($this->lang->resource->tree->editHost);
-                unset($this->lang->resource->tree->fix);
-            }
-
-            if($project->model == 'waterfall' or $project->model == 'waterfallplus')
-            {
-                unset($this->lang->resource->productplan);
-                unset($this->lang->resource->projectplan);
-            }
-            if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
-
-            if(!$project->multiple and !$project->hasProduct)
-            {
-                unset($this->lang->resource->story->batchChangePlan);
-                unset($this->lang->resource->execution->importplanstories);
-            }
-
-            $this->view->project  = $project;
-            $this->lang->resource = $this->project->getPrivsByModel($project->multiple ? $project->model : 'noSprint');
-        }
-
+        $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->managePriv;
+        $this->view->group      = $group;
+        $this->view->groupPrivs = $this->group->getPrivs($groupID);
+        $this->view->groupID    = $groupID;
+        $this->view->projectID  = $projectID;
+        $this->view->project    = $project;
         $this->display();
     }
 

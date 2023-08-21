@@ -571,8 +571,95 @@ class projectZen extends project
     }
 
     /**
-     * 为bug列表视图构造必要的变量。
+     * 处理项目版本列表的搜索表单。
+     * Process search form for project build list.
      *
+     * @param  object    $project
+     * @param  object    $product
+     * @param  array     $products
+     * @param  string    $type
+     * @param  int       $param
+     * @access protected
+     * @return void
+     */
+    protected function processBuildSearchParams(object $project, object $product, array $products, string $type, int $param)
+    {
+        /* 为无迭代项目和多分支产品处理搜索表单的参数。 */
+        if($project->multiple)
+        {
+            $executionPairs = $this->loadModel('execution')->getByProject($project->id, 'all', '', true, $project->model == 'waterfall');
+            $this->config->build->search['fields']['execution'] = zget($this->lang->project->executionList, $project->model);
+            $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executionPairs);
+        }
+        if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
+
+        if(!empty($product->type) && $product->type != 'normal')
+        {
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($product->id, '', $projectID);
+            $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
+            $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
+        }
+
+        /* Build the search form. */
+        $type      = strtolower($type);
+        $queryID   = $type == 'bysearch' ? (int)$param : 0;
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&type=bysearch&queryID=myQueryID");
+        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project', $project);
+    }
+
+    /**
+     * 处理项目权限分组可勾选的项。
+     * Process group privs for project.
+     *
+     * @param  object    $project
+     * @access protected
+     * @return void
+     */
+    protected function processGroupPrivs(object $project)
+    {
+        if($project->hasProduct)
+        {
+            if($this->config->URAndSR) unset($this->lang->resource->requirement);
+            unset($this->lang->resource->productplan);
+            unset($this->lang->resource->tree);
+        }
+        else
+        {
+            $this->lang->productplan->common  = $this->lang->productplan->plan;
+            $this->lang->projectstory->common = $this->lang->projectstory->storyCommon;
+            $this->lang->projectstory->story  = $this->lang->projectstory->storyList;
+            $this->lang->projectstory->view   = $this->lang->projectstory->storyView;
+            unset($this->lang->resource->project->manageProducts);
+            unset($this->lang->resource->projectstory->linkStory);
+            unset($this->lang->resource->projectstory->importplanstories);
+            unset($this->lang->resource->projectstory->unlinkStory);
+            unset($this->lang->resource->projectstory->batchUnlinkStory);
+            unset($this->lang->resource->story->view);
+            if($this->config->URAndSR) unset($this->lang->resource->requirement->view);
+            if($this->config->URAndSR) unset($this->lang->resource->requirement->batchChangeBranch);
+            unset($this->lang->resource->tree->browseTask);
+            unset($this->lang->resource->tree->browsehost);
+            unset($this->lang->resource->tree->editHost);
+            unset($this->lang->resource->tree->fix);
+        }
+
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
+        {
+            unset($this->lang->resource->productplan);
+            unset($this->lang->resource->projectplan);
+        }
+        if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
+
+        if(!$project->multiple and !$project->hasProduct)
+        {
+            unset($this->lang->resource->story->batchChangePlan);
+            unset($this->lang->resource->execution->importplanstories);
+        }
+    }
+
+    /**
+     * 为bug列表视图构造必要的变量。 
+     * 
      * @param  int       $productID
      * @param  int       $projectID
      * @param  object    $project
