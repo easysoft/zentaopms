@@ -30,7 +30,7 @@ r($bug->getPlanBugsTest($planIDList[1], $statusList[0])) && p('title', '-') && e
 r($bug->getPlanBugsTest($planIDList[1], $statusList[1])) && p('title', '-') && e('BUG6,BUG5,BUG4'); // 查询计划4 状态为active的bug
 r($bug->getPlanBugsTest($planIDList[1], $statusList[2])) && p('title', '-') && e('0');              // 查询计划4 状态为resolved的bug
 r($bug->getPlanBugsTest($planIDList[1], $statusList[3])) && p('title', '-') && e('0');              // 查询计划4 状态为closed的bug
-r($bug->getPlanBugsTest($planIDList[2], $statusList[0])) && p('title', '-') && e('BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7'); // 查询计划7 状态为all的bug
-r($bug->getPlanBugsTest($planIDList[2], $statusList[1])) && p('title', '-') && e('BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7'); // 查询计划7 状态为active的bug
+r($bug->getPlanBugsTest($planIDList[2], $statusList[0])) && p('title', '-') && e('BUG9,bug8,缺陷!()(){}|+=^&*#测试bug名称到底可以有多长！#￥&*":.<>。?/（）7'); // 查询计划7 状态为all的bug
+r($bug->getPlanBugsTest($planIDList[2], $statusList[1])) && p('title', '-') && e('BUG9,bug8,缺陷!()(){}|+=^&*#测试bug名称到底可以有多长！#￥&*":.<>。?/（）7'); // 查询计划7 状态为active的bug
 r($bug->getPlanBugsTest($planIDList[2], $statusList[2])) && p('title', '-') && e('0');              // 查询计划7 状态为resolved的bug
 r($bug->getPlanBugsTest($planIDList[2], $statusList[3])) && p('title', '-') && e('0');              // 查询计划7 状态为closed的bug

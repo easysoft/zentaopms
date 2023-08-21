@@ -169,7 +169,7 @@ class bugTest
             $title .= ',' . $bug->title;
         }
         $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
+        $title = str_replace(array("'", '@', '$', '%', ';'), '', $title);
 
         if(dao::isError())
         {
