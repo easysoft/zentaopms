@@ -133,6 +133,7 @@ class testsuiteModel extends model
     }
 
     /**
+     * 通过id获取测试套件的详情。
      * Get test suite info by id.
      *
      * @param  int   $suiteID
@@ -140,7 +141,7 @@ class testsuiteModel extends model
      * @access public
      * @return object
      */
-    public function getById($suiteID, $setImgSize = false)
+    public function getById(int $suiteID, bool $setImgSize = false): object
     {
         $suite = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
         $suite = $this->loadModel('file')->replaceImgURL($suite, 'desc');
@@ -151,30 +152,26 @@ class testsuiteModel extends model
     /**
      * Update a test suite.
      *
-     * @param  int   $suiteID
+     * @param  object $suite
+     * @param  int    $uid
      * @access public
-     * @return bool|array
+     * @return array|bool
      */
-    public function update($suiteID)
+    public function update(object $suite, int $uid): array|bool
     {
-        $oldSuite = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
-        $suite    = fixer::input('post')
-            ->stripTags($this->config->testsuite->editor->edit['id'], $this->config->allowedTags)
-            ->add('id', $suiteID)
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', helper::now())
-            ->remove('uid')
-            ->get();
-        $suite = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->edit['id'], $this->post->uid);
+        $oldSuite = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$suite->id)->fetch();
+        $suite    = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->edit['id'], $uid);
+
         $this->dao->update(TABLE_TESTSUITE)->data($suite)
             ->autoCheck()
             ->batchcheck($this->config->testsuite->edit->requiredFields, 'notempty')
             ->checkFlow()
-            ->where('id')->eq($suiteID)
+            ->where('id')->eq($suite->id)
             ->exec();
+
         if(!dao::isError())
         {
-            $this->file->updateObjectID($this->post->uid, $suiteID, 'testsuite');
+            $this->file->updateObjectID($uid, $suite->id, 'testsuite');
             return common::createChanges($oldSuite, $suite);
         }
         return false;

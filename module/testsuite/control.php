@@ -243,9 +243,14 @@ class testsuite extends control
         $suite = $this->testsuite->getById($suiteID);
         if(!empty($_POST))
         {
+            $response = array();
             $response['result']  = 'success';
             $response['message'] = $this->lang->testsuite->successSaved;
-            $changes = $this->testsuite->update($suiteID);
+
+            /* 根据suiteID更新数据，如果更新成功，则记录日志。 */
+            $suite   = form::data($this->config->testsuite->form->edit)->add('id', $suiteID)->get();
+            $uid     = $this->app->user->id;
+            $changes = $this->testsuite->update($suite, $uid);
             if(dao::isError())
             {
                 $response['result']  = 'fail';
