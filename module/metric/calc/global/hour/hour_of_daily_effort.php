@@ -26,7 +26,7 @@ class hour_of_daily_effort extends baseCalc
 
     public function getStatement()
     {
-        return $this->dao->select("year(date) as year, month(date) as month, day(date) as day, sum(consumed) as consumed")
+        return $this->dao->select("year(date) as year, month(date) as month, day(date) as day, date, sum(consumed) as consumed")
             ->from(TABLE_EFFORT)
             ->where('deleted')->eq('0')
             ->andWhere('year(date)')->ne('0000')
@@ -37,8 +37,9 @@ class hour_of_daily_effort extends baseCalc
     public function calculate($row)
     {
         $year     = $row->year;
-        $month    = $row->month;
-        $day      = $row->day;
+        $date     = $row->date;
+        $month    = substr($date, 5, 2);
+        $day      = substr($date, 8, 2);
         $consumed = $row->consumed;
 
         $this->result[$year] = array();
