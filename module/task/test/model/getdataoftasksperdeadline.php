@@ -4,29 +4,18 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
 
+zdTable('task')->config('task')->gen(30);
+
 /**
 
 title=taskModel->getDataOfTasksPerDeadline();
+timeout=0
 cid=1
-pid=1
-
-统计日期为+1days的任务数量 >> 17
-统计日期为+2days的任务数量 >> 17
-统计日期为+3days的任务数量 >> 18
-统计日期为+4days的任务数量 >> 18
-统计日期为-1days的任务数量 >> 17
-统计日期为-2days的任务数量 >> 17
-统计日期为-3days的任务数量 >> 17
-统计日期为-4days的任务数量 >> 17
 
 */
 
-$task = new taskTest();
-r($task->getDataOfTasksPerDeadlineTest(0)) && p("0:value") && e("17"); //统计日期为+1days的任务数量
-r($task->getDataOfTasksPerDeadlineTest(1)) && p("1:value") && e("17"); //统计日期为+2days的任务数量
-r($task->getDataOfTasksPerDeadlineTest(2)) && p("2:value") && e("18"); //统计日期为+3days的任务数量
-r($task->getDataOfTasksPerDeadlineTest(3)) && p("3:value") && e("18"); //统计日期为+4days的任务数量
-r($task->getDataOfTasksPerDeadlineTest(4)) && p("4:value") && e("17"); //统计日期为-1days的任务数量
-r($task->getDataOfTasksPerDeadlineTest(5)) && p("5:value") && e("17"); //统计日期为-2days的任务数量
-r($task->getdataoftasksperdeadlinetest(6)) && p("6:value") && e("17"); //统计日期为-3days的任务数量
-r($task->getdataoftasksperdeadlinetest(7)) && p("7:value") && e("17"); //统计日期为-4days的任务数量
+global $tester;
+$taskModule = $tester->loadModel('task');
+
+r(count($taskModule->getDataOfTasksPerDeadline())) && p()                        && e('30');           // 按照截止日期统计的任务数量
+r($taskModule->getDataOfTasksPerDeadline())        && p('2021-01-30:name,value') && e('2021-01-30,1'); // 统计截止日期为2021-01-30的任务数量

@@ -924,27 +924,6 @@ class taskTest
     }
 
     /**
-     * Test get report data of tasks per deadline.
-     *
-     * @access public
-     * @return array
-     */
-    public function getDataOfTasksPerDeadlineTest($dateID)
-    {
-        $dateList = array(date('Y-m-d',strtotime('+1 day')), date('Y-m-d',strtotime('+2 day')), date('Y-m-d',strtotime('+3 day')), date('Y-m-d',strtotime('+4 day')), date('Y-m-d',strtotime('-1 day')), date('Y-m-d',strtotime('-2 day')), date('Y-m-d',strtotime('-3 day')), date('Y-m-d',strtotime('-4 day')));
-        $object = $this->objectModel->getDataOfTasksPerDeadline();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return array($dateID => $object[$dateList[$dateID]]);
-        }
-    }
-
-    /**
      * Test get report data of tasks per estimate.
      *
      * @access public

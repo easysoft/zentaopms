@@ -2194,12 +2194,13 @@ class taskModel extends model
     }
 
     /**
-     * Get report data of tasks per deadline
+     * 获取按照截止日期统计的报表数据。
+     * Get report data of tasks per deadline.
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerDeadline()
+    public function getDataOfTasksPerDeadline(): array
     {
         $tasks = $this->dao->select('id,deadline')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
