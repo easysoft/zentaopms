@@ -916,35 +916,17 @@ class project extends control
      */
     public function build(int $projectID = 0, string $type = 'all', int $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* Set menu lang and session. */
-        $this->project->setMenu($projectID);
-        $this->session->set('buildList', $this->app->getURI(true), 'project');
-
         $this->loadModel('build');
-        $project = $this->project->getByID($projectID);
-        if($project->multiple)
-        {
-            $executionPairs = $this->loadModel('execution')->getByProject($project->id, 'all', '', true, $project->model == 'waterfall');
-            $this->config->build->search['fields']['execution'] = zget($this->lang->project->executionList, $project->model);
-            $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executionPairs);
-        }
-        if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
-
         $this->loadModel('product');
-        $product = $param ? $this->product->getById((int)$param) : '';
-        if($product && $product->type != 'normal')
-        {
-            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($product->id, '', $projectID);
-            $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
-            $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
-        }
 
-        /* Build the search form. */
-        $type      = strtolower($type);
-        $queryID   = $type == 'bysearch' ? (int)$param : 0;
-        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
-        $products  = $this->product->getProducts($projectID, 'all', '', false);
-        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project', $project);
+        $this->project->setMenu($projectID);
+
+        /* Get project and product. */
+        $project  = $this->project->getByID($projectID);
+        $product  = $param ? $this->product->getById((int)$param) : '';
+        $products = $this->product->getProducts($projectID, 'all', '', false);
+
+        $this->projectZen->processBuildSearchParams($project, (object)$product, $products, $type, $param);
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -961,7 +943,7 @@ class project extends control
         $this->view->title      = $project->name . $this->lang->colon . $this->lang->execution->build;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->builds     = $this->projectZen->processBuildListData($builds, $projectID);
-        $this->view->product    = $type == 'product' ? $param : 'all';
+        $this->view->productID  = $type == 'product' ? $param : 'all';
         $this->view->project    = $project;
         $this->view->products   = $products;
         $this->view->buildPairs = $this->loadModel('build')->getBuildPairs(0);

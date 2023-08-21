@@ -571,6 +571,43 @@ class projectZen extends project
     }
 
     /**
+     * 处理项目版本列表的搜索表单。
+     * Process search form for project build list.
+     *
+     * @param  object    $project
+     * @param  object    $product
+     * @param  array     $products
+     * @param  string    $type
+     * @param  int       $param
+     * @access protected
+     * @return void
+     */
+    protected function processBuildSearchParams(object $project, object $product, array $products, string $type, int $param)
+    {
+        /* 为无迭代项目和多分支产品处理搜索表单的参数。 */
+        if($project->multiple)
+        {
+            $executionPairs = $this->loadModel('execution')->getByProject($project->id, 'all', '', true, $project->model == 'waterfall');
+            $this->config->build->search['fields']['execution'] = zget($this->lang->project->executionList, $project->model);
+            $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executionPairs);
+        }
+        if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
+
+        if(!empty($product->type) && $product->type != 'normal')
+        {
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($product->id, '', $projectID);
+            $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
+            $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
+        }
+
+        /* Build the search form. */
+        $type      = strtolower($type);
+        $queryID   = $type == 'bysearch' ? (int)$param : 0;
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&type=bysearch&queryID=myQueryID");
+        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project', $project);
+    }
+
+    /**
      * 为bug列表视图构造必要的变量。 
      * 
      * @param  int       $productID

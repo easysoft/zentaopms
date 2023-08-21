@@ -18,7 +18,7 @@ if($project->hasProduct)
         select
         (
             set::name('product'),
-            set::value($product),
+            set::value($productID),
             set::items($products),
             on::change('changeProduct'),
         ),
