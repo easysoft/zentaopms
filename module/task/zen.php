@@ -766,7 +766,6 @@ class taskZen extends task
     protected function buildEffortForFinish(object $oldTask, object $task): object
     {
         /* Record consumed and left. */
-        $consumed = $task->consumed;
         if(empty($oldTask->team))
         {
             $consumed = $task->consumed - $oldTask->consumed;
@@ -1074,6 +1073,54 @@ class taskZen extends task
     }
 
     /**
+     * 格式化导出任务的字段。
+     * Format export task.
+     *
+     * @param  object    $task
+     * @param  array     $executions
+     * @param  array     $users
+     * @access protected
+     * @return object
+     */
+    protected function formatExportTask(object $task, array $executions, array $users): object
+    {
+        $taskLang = $this->lang->task;
+        if($this->post->fileType == 'csv')
+        {
+            $task->desc = htmlspecialchars_decode((string)$task->desc);
+            $task->desc = str_replace("<br />", "\n", $task->desc);
+            $task->desc = str_replace('"', '""', $task->desc);
+            $task->desc = str_replace('&nbsp;', ' ', $task->desc);
+        }
+
+        if(isset($executions[$task->execution]))              $task->execution    = $executions[$task->execution] . "(#$task->execution)";
+        if(isset($taskLang->typeList[$task->type]))           $task->type         = $taskLang->typeList[$task->type];
+        if(isset($taskLang->priList[$task->pri]))             $task->pri          = $taskLang->priList[$task->pri];
+        if(isset($taskLang->statusList[$task->status]))       $task->status       = $this->processStatus('task', $task);
+        if(isset($taskLang->reasonList[$task->closedReason])) $task->closedReason = $taskLang->reasonList[$task->closedReason];
+        if(isset($taskLang->modeList[$task->mode]))           $task->mode         = $taskLang->modeList[$task->mode];
+
+        if(isset($users[$task->openedBy]))     $task->openedBy     = $users[$task->openedBy];
+        if(isset($users[$task->assignedTo]))   $task->assignedTo   = $users[$task->assignedTo];
+        if(isset($users[$task->finishedBy]))   $task->finishedBy   = $users[$task->finishedBy];
+        if(isset($users[$task->canceledBy]))   $task->canceledBy   = $users[$task->canceledBy];
+        if(isset($users[$task->closedBy]))     $task->closedBy     = $users[$task->closedBy];
+        if(isset($users[$task->lastEditedBy])) $task->lastEditedBy = $users[$task->lastEditedBy];
+
+        $task->openedDate     = helper::isZeroDate($task->openedDate) ? '' : substr($task->openedDate,     0, 10);
+        $task->assignedDate   = helper::isZeroDate($task->assignedDate) ? '' : substr($task->assignedDate,   0, 10);
+        $task->finishedDate   = helper::isZeroDate($task->finishedDate) ? '' : substr($task->finishedDate,   0, 10);
+        $task->canceledDate   = helper::isZeroDate($task->canceledDate) ? '' : substr($task->canceledDate,   0, 10);
+        $task->closedDate     = helper::isZeroDate($task->closedDate) ? '' : substr($task->closedDate,     0, 10);
+        $task->lastEditedDate = helper::isZeroDate($task->lastEditedDate) ? '' : substr($task->lastEditedDate, 0, 10);
+        $task->estimate       = $task->estimate . $this->lang->execution->workHourUnit;
+        $task->consumed       = $task->consumed . $this->lang->execution->workHourUnit;
+        $task->left           = $task->left     . $this->lang->execution->workHourUnit;
+
+        return $task;
+    }
+
+    /**
      * 为表单获取自定义字段。
      * Get task's custom fields for form.
      *
@@ -1102,6 +1149,30 @@ class taskZen extends task
         }
 
         return array($customFields, $checkedFields);
+    }
+
+    /**
+     * 获取导出的字段。
+     * Get export fields.
+     *
+     * @param  string    $allExportFields
+     * @access protected
+     * @return void
+     */
+    protected function getExportFields(string $allExportFields): array
+    {
+        $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $allExportFields);
+
+        /* Compatible with the new UI widget. */
+        if($this->post->exportFields && str_contains($fields[0], ',')) $fields = explode(',', $fields[0]);
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($this->lang->task->$fieldName) ? $this->lang->task->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+
+        return $fields;
     }
 
     /**
@@ -1211,6 +1282,138 @@ class taskZen extends task
         return $postData->add('id', $taskID)
             ->add('lastEditedBy', $this->app->user->account)
             ->get();
+    }
+
+    /**
+     * 处理导出的任务数据。
+     * Process export data.
+     *
+     * @param  array     $tasks
+     * @param  int       $projectID
+     * @access protected
+     * @return object[]
+     */
+    protected function processExportData(array $tasks, int $projectID): array
+    {
+        /* Get users and executions. */
+        $users      = $this->loadModel('user')->getPairs('noletter');
+        $executions = $this->loadModel('execution')->fetchPairs($projectID, 'all', true, true);
+
+        /* Get related objects id lists. */
+        $relatedStoryIdList  = array();
+        foreach($tasks as $task)
+        {
+            $relatedStoryIdList[$task->story] = $task->story;
+            $relatedBugIdList[$task->fromBug] = $task->fromBug;
+        }
+
+        /* Get related objects title or names. */
+        $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
+        $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        $relatedModules = $this->loadModel('tree')->getAllModulePairs('task');
+
+        $bugs = $this->loadModel('bug')->getByIdList($relatedBugIdList);
+        foreach($tasks as $task)
+        {
+            $task->story   = isset($relatedStories[$task->story]) ? $relatedStories[$task->story] . "(#$task->story)" : '';
+            $task->fromBug = empty($task->fromBug) ? '' : "#$task->fromBug " . $bugs[$task->fromBug]->title;
+
+            if(isset($relatedModules[$task->module]))             $task->module       = $relatedModules[$task->module] . "(#$task->module)";
+
+            /* Convert username to real name. */
+            if(!empty($task->mailto))
+            {
+                $mailtoList = explode(',', $task->mailto);
+
+                $task->mailto = '';
+                foreach($mailtoList as $mailto)
+                {
+                    if(!empty($mailto)) $task->mailto .= ',' . zget($users, $mailto);
+                }
+            }
+
+            if($task->parent > 0 && strpos($task->name, htmlentities('>')) !== 0) $task->name = '>' . $task->name;
+            if(!empty($task->team))
+            {
+                $task->name = '[' . $this->lang->task->multipleAB . '] ' . $task->name;
+                unset($task->team);
+            }
+
+            $task = $this->formatExportTask($task, $executions, $users);
+
+            /* Set related files. */
+            $task->files = '';
+            if(isset($relatedFiles[$task->id]))
+            {
+                foreach($relatedFiles[$task->id] as $file)
+                {
+                    $fileURL = common::getSysURL() . $this->createLink('file', 'download', "fileID={$file->id}");
+                    $task->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
+                }
+            }
+        }
+
+        return $tasks;
+    }
+
+    /**
+     * 处理导出任务分组信息。
+     * Process export task group information.
+     *
+     * @param  array     $tasks
+     * @param  string    $orderBy
+     * @access protected
+     * @return object[]
+     */
+    protected function processExportGroup(array $tasks, string $orderBy): array
+    {
+        $stories    = $this->loadModel('story')->getExecutionStories($executionID);
+        $groupTasks = array();
+        foreach($tasks as $task)
+        {
+            $task->storyTitle = isset($stories[$task->story]) ? $stories[$task->story]->title : '';
+
+            if(!isset($task->team))
+            {
+                $groupTasks[$task->$orderBy][] = $task;
+                continue;
+            }
+
+            if($orderBy == 'finishedBy') $task->consumed = $task->estimate = $task->left = 0;
+            foreach($task->team as $team)
+            {
+                if($orderBy == 'finishedBy' and $team->left != 0)
+                {
+                    $task->estimate += $team->estimate;
+                    $task->consumed += $team->consumed;
+                    $task->left     += $team->left;
+                    continue;
+                }
+
+                $cloneTask = clone $task;
+                $cloneTask->estimate = $team->estimate;
+                $cloneTask->consumed = $team->consumed;
+                $cloneTask->left     = $team->left;
+                if($team->left == 0) $cloneTask->status = 'done';
+
+                if($orderBy == 'assignedTo')
+                {
+                    $cloneTask->assignedToRealName = zget($users, $team->account);
+                    $cloneTask->assignedTo = $team->account;
+                }
+                if($orderBy == 'finishedBy')$cloneTask->finishedBy = $team->account;
+                $groupTasks[$team->account][] = $cloneTask;
+            }
+            if(!empty($task->left) and $orderBy == 'finishedBy') $groupTasks[$task->finishedBy][] = $task;
+        }
+
+        $tasks = array();
+        foreach($groupTasks as $groupTask)
+        {
+            foreach($groupTask as $task) $tasks[] = $task;
+        }
+
+        return $tasks;
     }
 
     /**

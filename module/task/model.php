@@ -648,7 +648,7 @@ class taskModel extends model
         elseif($effortID)
         {
             $efforts  = $this->getTaskEfforts($taskID, '', $effortID);
-            $prevTeam = $currentTeam = current($teams);
+            $prevTeam = current($teams);
             foreach($efforts as $effort)
             {
                 $currentTeam = reset($teams);
@@ -1695,6 +1695,52 @@ class taskModel extends model
     }
 
     /**
+     * 获取导出的任务数据。
+     * Get export task information.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return object[]
+     */
+    public function getExportTasks(string $orderBy): array
+    {
+        $sort  = common::appendOrder($orderBy);
+        $tasks = array();
+        if($this->session->taskOnlyCondition)
+        {
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
+                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
+                ->orderBy($sort)
+                ->fetchAll('id');
+
+            foreach($tasks as $key => $task)
+            {
+                /* Compute task progress. */
+                if($task->consumed == 0 and $task->left == 0)
+                {
+                    $task->progress = 0;
+                }
+                elseif($task->consumed != 0 and $task->left == 0)
+                {
+                    $task->progress = 100;
+                }
+                else
+                {
+                    $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                }
+                $task->progress .= '%';
+            }
+        }
+        elseif($this->session->taskQueryCondition)
+        {
+            $stmt = $this->dbh->query($this->session->taskQueryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
+            while($row = $stmt->fetch()) $tasks[$row->id] = $row;
+        }
+
+        return $this->processExportTasks($tasks);
+    }
+
+    /**
      * 检查当前登录用户是否可以操作日志。
      * Check if the current user can operate effort.
      *
@@ -2042,6 +2088,68 @@ class taskModel extends model
 
         return $task;
     }
+
+    /**
+     * 处理导出的任务信息。
+     * Process export task information.
+     *
+     * @param  array $tasks
+     * @access protected
+     * @return object[]
+     */
+    protected function processExportTasks(array $tasks): array
+    {
+        /* Process multiple task info. */
+        $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
+        $users    = $this->loadModel('user')->getPairs('noletter');
+        if(!empty($taskTeam))
+        {
+            foreach($taskTeam as $taskID => $team)
+            {
+                $tasks[$taskID]->team     = $team;
+                $tasks[$taskID]->estimate = '';
+                $tasks[$taskID]->left     = '';
+                $tasks[$taskID]->consumed = '';
+
+                foreach($team as $userInfo)
+                {
+                    $tasks[$taskID]->estimate .= zget($users, $userInfo->account) . ':' . $userInfo->estimate . "\n";
+                    $tasks[$taskID]->left     .= zget($users, $userInfo->account) . ':' . $userInfo->left . "\n";
+                    $tasks[$taskID]->consumed .= zget($users, $userInfo->account) . ':' . $userInfo->consumed . "\n";
+                }
+            }
+        }
+
+        /* Process parent-child task task info. */
+        if($tasks)
+        {
+            $children = array();
+            foreach($tasks as $task)
+            {
+                if($task->parent > 0 and isset($tasks[$task->parent]))
+                {
+                    $children[$task->parent][$task->id] = $task;
+                    unset($tasks[$task->id]);
+                }
+            }
+            if(!empty($children))
+            {
+                $position = 0;
+                foreach($tasks as $task)
+                {
+                    $position ++;
+                    if(isset($children[$task->id]))
+                    {
+                        array_splice($tasks, $position, 0, $children[$task->id]);
+                        $position += count($children[$task->id]);
+                    }
+                }
+            }
+        }
+
+        return $tasks;
+    }
+
 
     /**
      * When task is finish, check whether need update status of bug.
