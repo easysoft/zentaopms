@@ -814,10 +814,11 @@ class taskZen extends task
      * 构造图表数据。
      * Build chart data.
      *
+     * @param  string    $chartType
      * @access protected
      * @return void
      */
-    protected function buildChartData(): array
+    protected function buildChartData(string $chartType): array
     {
         $this->loadModel('report');
 
@@ -835,7 +836,8 @@ class taskZen extends task
             $chartList[$chart] = $chartOption;
             $dataList[$chart]  = $this->report->computePercent($chartData);
         }
-        $this->view->datas  = $dataList;
+
+        $this->view->datas = $dataList;
 
         return $chartList;
     }
