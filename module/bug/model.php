@@ -55,7 +55,7 @@ class bugModel extends model
      * @access public
      * @return int|false
      */
-    public function create(object $bug, string $from): int|false
+    public function create(object $bug, string $from = ''): int|false
     {
         $this->dao->insert(TABLE_BUG)->data($bug, 'laneID')
             ->autoCheck()

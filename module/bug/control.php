@@ -722,8 +722,8 @@ class bug extends control
     }
 
     /**
-     * 批量创建bug。
-     * Batch create.
+     * 批量创建 bug。
+     * Batch create bug.
      *
      * @param  int    $productID
      * @param  string $branch
@@ -738,48 +738,55 @@ class bug extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
+        $bugImagesFile = $this->session->bugImagesFile ? $this->session->bugImagesFile : array();
+
         if(!empty($_POST))
         {
-            $bugs = $this->bugZen->buildBugsForBatchCreate($productID, $branch, $this->session->bugImagesFile);
+            $bugs = $this->bugZen->buildBugsForBatchCreate($productID, $branch, $bugImagesFile);
             $bugs = $this->bugZen->checkBugsForBatchCreate($bugs, $productID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message        = '';
-            $bugIdList      = array();
-            $uploadImages   = $this->post->uploadImage;
-            $bugImagesFiles = $this->session->bugImagesFile ? $this->session->bugImagesFile : array();
+            $message   = '';
+            $bugIdList = array();
             foreach($bugs as $index => $bug)
             {
-                $uploadImage = !empty($uploadImages[$index]) ? $uploadImages[$index] : '';
-
-                $file = $this->bugZen->processImageForBatchCreate($bug, $uploadImage, $bugImagesFiles);
-
                 $bug->id = $this->bug->create($bug);
 
+                /* 批量创建后的一些其他操作。*/
                 /* Processing other operations after batch creation. */
+                $uploadImage = !empty($this->post->uploadImage[$index]) ? $this->post->uploadImages[$index] : '';
+                $file        = $this->bugZen->processImageForBatchCreate($bug, $uploadImage, $bugImagesFile);
                 $this->bugZen->afterBatchCreate($bug, $output, $uploadImage, $file);
+
                 $message = $this->executeHooks($bug->id);
 
                 $bugIdList[] = $bug->id;
             }
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('score')->create('ajax', 'batchCreate');
 
             return $this->bugZen->responseAfterBatchCreate($productID, $branch, $executionID, $bugIdList, $message);
         }
 
-        /* Get product, then set menu. */
+        /* 把访问的产品ID等状态信息保存到session和cookie中。*/
+        /* Save the product id user last visited to session and cookie. */
         $productID = $this->product->saveState($productID, $this->products);
-        $product   = $this->product->getById($productID);
+        $product   = $this->product->getByID($productID);
+
+        /* 设置当前分支，并且设置导航。*/
+        /* Get branch and set menu. */
         if($branch === '') $branch = (int)$this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);
 
-        $bugImagesFile = $this->session->bugImagesFile ? $this->session->bugImagesFile : array();
+        /* 展示批量创建bug的相关变量。*/
+        /* Show the variables associated with the batch creation bugs. */
         $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $bugImagesFile);
 
-        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
-        $this->view->moduleID  = $moduleID;
-        $this->view->product   = $product;
+        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
+        $this->view->moduleID = $moduleID;
+        $this->view->product  = $product;
         $this->display();
     }
 
