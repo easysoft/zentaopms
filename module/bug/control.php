@@ -453,34 +453,45 @@ class bug extends control
      */
     public function activate(int $bugID, string $kanbanInfo = '')
     {
+        /* 获取 bug 信息，并检查 bug 所属执行的权限。*/
+        /* Get bug info, and check privilege of bug 所属执行的权限。*/
         $oldBug = $this->bug->getByID($bugID);
         $this->bugZen->checkBugExecutionPriv($oldBug);
 
         if(!empty($_POST))
         {
-            $kanbanInfo = str_replace(array(',', ' '), array('&', ''), $kanbanInfo);
-            parse_str($kanbanInfo, $kanbanParams);
-
-            $bug = form::data($this->config->bug->form->activate)->setDefault('assignedTo', $oldBug->resolvedBy)->add('activatedCount', $oldBug->activatedCount + 1)->add('id', $bugID)->get();
-            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
-
+            /* 只有状态为解决或者关闭的bug才可以激活。 */
+            /* Only bugs whose status is resolved or closed can be activated. */
             if($oldBug->status != 'resolved' && $oldBug->status != 'closed')
             {
                 dao::$errors[] = $this->lang->bug->error->cannotActivate;
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            $this->bug->activate($bug, $kanbanParams);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            /* 获取bug信息。 */
+            /* Build bug data. */
+            $bug = form::data($this->config->bug->form->activate)->setDefault('assignedTo', $oldBug->resolvedBy)->add('activatedCount', $oldBug->activatedCount + 1)->add('id', $bugID)->get();
+            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
 
-            $message  = $this->executeHooks($bugID);
-            $regionID = zget($kanbanParams, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
+            /* 解析看板信息。 */
+            /* Parse kanban information. */
+            $kanbanInfo = str_replace(array(',', ' '), array('&', ''), $kanbanInfo);
+            parse_str($kanbanInfo, $kanbanParams);
+
+            $this->bug->activate($bug, $kanbanParams);
+
+            /* 返回激活 bug 后的响应。 */
+            /* Return response after activating bug. */
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $message = $this->executeHooks($bugID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', zget($kanbanParams, 'regionID', 0), $message);
         }
 
         $productID = $oldBug->product;
         $this->qa->setMenu($this->products, $productID, $oldBug->branch);
 
+        /* 展示相关变量。 */
+        /* Show the variables associated. */
         $this->view->title   = $this->lang->bug->activate;
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed', $oldBug->resolvedBy);
