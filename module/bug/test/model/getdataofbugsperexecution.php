@@ -38,8 +38,8 @@ cid=1
 */
 
 $bug = new bugTest();
-r($bug->getDataOfBugsPerExecutionTest()) && p('11:name,value,title') && e('/PROJECT11,10,/PROJECT11');                                                         // 获取迭代11数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('12:name,value,title') && e('/PROJECT12,9,/PROJECT12');                                                          // 获取迭代12数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('13:name,value,title') && e('/PROJECT13,8,/PROJECT13');                                                          // 获取迭代13数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('14:name,value,title') && e('/一个超长的项目名称到底...,7,/一个超长的项目名称到底可以有多长就会加上省略号呢14'); // 名称很长的迭代展示
+r($bug->getDataOfBugsPerExecutionTest()) && p('11:name,value,title') && e('/PROJECT21,10,/PROJECT21');                                                         // 获取迭代11数据
+r($bug->getDataOfBugsPerExecutionTest()) && p('12:name,value,title') && e('/PROJECT22,9,/PROJECT22');                                                          // 获取迭代12数据
+r($bug->getDataOfBugsPerExecutionTest()) && p('13:name,value,title') && e('/PROJECT23,8,/PROJECT23');                                                          // 获取迭代13数据
+r($bug->getDataOfBugsPerExecutionTest()) && p('14:name,value,title') && e('/一个超长的项目名称到底...,7,/一个超长的项目名称到底可以有多长就会加上省略号呢24'); // 名称很长的迭代展示
 r($bug->getDataOfBugsPerExecutionTest()) && p('15:name')             && e('Error: Cannot get index 15.');                                                      // 获取迭代15没有bug数据
