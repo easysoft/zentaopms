@@ -115,13 +115,13 @@ class projectModel extends model
     }
 
     /**
+     * 获取项目的预算单位列表。
      * Get budget unit list.
      *
      * @access public
      * @return array
      */
-
-    public function getBudgetUnitList()
+    public function getBudgetUnitList(): array
     {
         $budgetUnitList = array();
         if($this->config->vision != 'lite')
