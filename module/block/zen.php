@@ -739,7 +739,7 @@ class blockZen extends block
             {
                 foreach($monthRelease as $release)
                 {
-                    if($group == "{$release->year}-{$release->month}") $releaseData[$group] = $release->value;
+                    if($group == "{$release['year']}-{$release['month']}") $releaseData[$group] = $release['value'];
                 }
             }
         }
@@ -752,7 +752,7 @@ class blockZen extends block
             {
                 foreach($releaseGroup as $release)
                 {
-                    if($product->id == $release->product) $releases[$product->name] = $release->value;
+                    if($product->id == $release['product']) $releases[$product->name] = $release['value'];
                 }
             }
         }
@@ -1026,22 +1026,18 @@ class blockZen extends block
 
         /* 按照产品分组获取产品需求交付率度量项。 */
         $storyDeliveryRate = $this->loadModel('metric')->getResultByCode('rate_of_delivery_story_in_product', array('product' => join(',', $productIdList)));
-        $storyDeliveryRate = json_decode(json_encode($storyDeliveryRate), true);
         if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
 
         /* 按照产品分组获取产品有效需求数度量项。 */
         $totalStories = $this->metric->getResultByCode('count_of_valid_story_in_product', array('product' => join(',', $productIdList)));
-        $totalStories = json_decode(json_encode($totalStories), true);
         if(!empty($totalStories)) $totalStories = array_column($totalStories, null, 'product');
 
         /* 按照产品分组获取产品已交付需求数度量项。 */
         $closedStories = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => join(',', $productIdList)));
-        $closedStories = json_decode(json_encode($closedStories), true);
         if(!empty($closedStories)) $closedStories = array_column($closedStories, null, 'product');
 
         /* 按照产品分组获取产品未关闭需求数度量项。 */
         $unclosedStories = $this->metric->getResultByCode('count_of_unclosed_story_in_product', array('product' => join(',', $productIdList)));
-        $unclosedStories = json_decode(json_encode($unclosedStories), true);
         if(!empty($unclosedStories)) $unclosedStories = array_column($unclosedStories, null, 'product');
 
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
@@ -1107,14 +1103,14 @@ class blockZen extends block
                 {
                     foreach($monthFinish as $story)
                     {
-                        if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthFinish[$group] = $story->value;
+                        if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthFinish[$group] = $story['value'];
                     }
                 }
                 if(!empty($monthCreated))
                 {
                     foreach($monthCreated as $story)
                     {
-                        if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthCreated[$group] = $story->value;
+                        if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthCreated[$group] = $story['value'];
                     }
                 }
             }
@@ -1662,19 +1658,15 @@ class blockZen extends block
         $closedBugGroup   = $this->metric->getResultByCode('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
 
         $bugFixRate = $this->metric->getResultByCode('rate_of_fixed_bug_in_product', array('product' => join(',', $productIdList)));
-        $bugFixRate = json_decode(json_encode($bugFixRate), true);
         if(!empty($bugFixRate)) $bugFixRate = array_column($bugFixRate, null, 'product');
 
         $effectiveBug = $this->metric->getResultByCode('count_of_effective_bug_in_product', array('product' => join(',', $productIdList)));
-        $effectiveBug = json_decode(json_encode($effectiveBug), true);
         if(!empty($effectiveBug)) $effectiveBug = array_column($effectiveBug, null, 'product');
 
         $restoredBug = $this->metric->getResultByCode('count_of_restored_bug_in_product', array('product' => join(',', $productIdList)));
-        $restoredBug = json_decode(json_encode($restoredBug), true);
         if(!empty($restoredBug)) $restoredBug = array_column($restoredBug, null, 'product');
 
         $activatedBug = $this->metric->getResultByCode('count_of_activated_bug_in_product', array('product' => join(',', $productIdList)));
-        $activatedBug = json_decode(json_encode($activatedBug), true);
         if(!empty($activatedBug)) $activatedBug = array_column($activatedBug, null, 'product');
 
         foreach($products as $productID => $product)
@@ -1689,9 +1681,9 @@ class blockZen extends block
             {
                 foreach($createdBugGroup as $data)
                 {
-                    $currentDay = "{$data->year}-{$data->month}-{$data->day}";
-                    if($currentDay == date('Y-m-d') && $productID == $data->product)                      $product->addToday     = $data->value;
-                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data->product) $product->addYesterday = $data->value;
+                    $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                    if($currentDay == date('Y-m-d') && $productID == $data['product'])                      $product->addToday     = $data['value'];
+                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data['product']) $product->addYesterday = $data['value'];
                 }
             }
 
@@ -1699,9 +1691,9 @@ class blockZen extends block
             {
                 foreach($resolvedBugGroup as $data)
                 {
-                    $currentDay = "{$data->year}-{$data->month}-{$data->day}";
-                    if($currentDay == date('Y-m-d') && $productID == $data->product)                      $product->resolvedToday     = $data->value;
-                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data->product) $product->resolvedYesterday = $data->value;
+                    $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                    if($currentDay == date('Y-m-d') && $productID == $data['product'])                      $product->resolvedToday     = $data['value'];
+                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data['product']) $product->resolvedYesterday = $data['value'];
                 }
             }
 
@@ -1709,9 +1701,9 @@ class blockZen extends block
             {
                 foreach($closedBugGroup as $data)
                 {
-                    $currentDay = "{$data->year}-{$data->month}-{$data->day}";
-                    if($currentDay == date('Y-m-d') && $productID == $data->product)                      $product->closedToday     = $data->value;
-                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data->product) $product->closedYesterday = $data->value;
+                    $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                    if($currentDay == date('Y-m-d') && $productID == $data['product'])                      $product->closedToday     = $data['value'];
+                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data['product']) $product->closedYesterday = $data['value'];
                 }
             }
 
@@ -1748,20 +1740,32 @@ class blockZen extends block
      */
     protected function printShortProductOverview(): void
     {
+        $data = new stdclass();
+        $data->productCount   = 0;
+        $data->releaseCount   = 0;
+        $data->milestoneCount = 0;
+
         $this->loadModel('metric');
         $productCount = $this->metric->getResultByCode('count_of_product');
-        if(!empty($productCount)) $productCount = reset($productCount);
+        if(!empty($productCount))
+        {
+            $productCount = reset($productCount);
+            $data->productCount = zget($productCount, 'value', 0);
+        }
 
         $releaseCount = $this->metric->getResultByCode('count_of_annual_created_release', array('year' => date('Y')));
-        if(!empty($releaseCount)) $releaseCount = reset($releaseCount);
+        if(!empty($releaseCount))
+        {
+            $releaseCount = reset($releaseCount);
+            $data->releaseCount = zget($releaseCount, 'value', 0);
+        }
 
         $milestoneCount = $this->metric->getResultByCode('count_of_marker_release');
-        if(!empty($milestoneCount)) $milestoneCount = reset($milestoneCount);
-
-        $data = new stdclass();
-        $data->productCount   = zget($productCount, 'value', 0);
-        $data->releaseCount   = zget($releaseCount, 'value', 0);
-        $data->milestoneCount = zget($milestoneCount, 'value', 0);
+        if(!empty($milestoneCount))
+        {
+            $milestoneCount = reset($milestoneCount);
+            $data->milestoneCount = zget($milestoneCount, 'value', 0);
+        }
 
         $this->view->data = $data;
     }
@@ -1776,23 +1780,76 @@ class blockZen extends block
      */
     protected function printLongProductOverview(array $params = array()): void
     {
-        $year  = isset($params['year']) ? (int)$params['year'] : date('Y');
-        $years = array(2023, 2022, 2021, 2020, 2019);
+        $year = isset($params['year']) ? (int)$params['year'] : date('Y');
 
+        /* 初始化报表数据为0。 */
         $data = new stdclass();
-        $data->productLineCount             = number_format(rand(1, 10000));
-        $data->productCount                 = number_format(rand(1, 10000));
-        $data->unfinishedPlanCount          = number_format(rand(1, 10000));
-        $data->unclosedStoryCount           = number_format(rand(1, 10000));
-        $data->activeBugCount               = number_format(rand(1, 10000));
-        $data->finishedReleaseCount['year'] = number_format(rand(1, 10000));
-        $data->finishedReleaseCount['week'] = number_format(rand(1, 10000));
-        $data->finishedStoryCount['year']   = number_format(rand(1, 10000));
-        $data->finishedStoryCount['week']   = number_format(rand(1, 10000));
-        $data->finishedStoryPoint['year']   = number_format(rand(1, 10000));
-        $data->finishedStoryPoint['week']   = number_format(rand(1, 10000));
+        $data->productLineCount             = 0;
+        $data->productCount                 = 0;
+        $data->unfinishedPlanCount          = 0;
+        $data->unclosedStoryCount           = 0;
+        $data->activeBugCount               = 0;
+        $data->finishedReleaseCount['year'] = 0;
+        $data->finishedReleaseCount['week'] = 0;
+        $data->finishedStoryCount['year']   = 0;
+        $data->finishedStoryCount['week']   = 0;
+        $data->finishedStoryPoint['year']   = 0;
+        $data->finishedStoryPoint['week']   = 0;
 
-        $this->view->years       = $years;
+        /* 从度量项获取各统计数据。 */
+        $this->loadModel('metric');
+        $productLineCount = $this->metric->getResultByCode('count_of_line'); // 产品线总量。
+        if(!empty($productLineCount))
+        {
+            $productLineCount = reset($productLineCount);
+            $data->productLineCount = zget($productLineCount, 'value', 0);
+        }
+
+        $productCount = $this->metric->getResultByCode('count_of_product'); // 产品总量。
+        if(!empty($productCount))
+        {
+            $productCount = reset($productCount);
+            $data->productCount = zget($productCount, 'value', 0);
+        }
+
+        $unfinishedPlanCount = $this->metric->getResultByCode('count_of_unfinished_productplan'); // 未完成计划数。
+        if(!empty($unfinishedPlanCount))
+        {
+            $unfinishedPlanCount = reset($unfinishedPlanCount);
+            $data->unfinishedPlanCount = zget($unfinishedPlanCount, 'value', 0);
+        }
+
+        $unclosedStoryCount = $this->metric->getResultByCode('count_of_unclosed_story'); // 未关闭需求数。
+        if(!empty($unclosedStoryCount))
+        {
+            $unclosedStoryCount = reset($unclosedStoryCount);
+            $data->unclosedStoryCount = zget($unclosedStoryCount, 'value', 0);
+        }
+
+        $activeBugCount = $this->metric->getResultByCode('count_of_activated_bug'); // 激活Bug数。
+        if(!empty($activeBugCount))
+        {
+            $activeBugCount = reset($activeBugCount);
+            $data->activeBugCount = zget($activeBugCount, 'value', 0);
+        }
+
+        $createdReleaseGroup = $this->metric->getResultByCode('count_of_annual_created_release'); // 已完成发布数。
+        $finishedStoryGroup  = $this->metric->getResultByCode('count_of_annual_finished_story'); // 已完成需求数。
+        $storyScaleGroup     = $this->metric->getResultByCode('scale_of_annual_finished_story'); // 已完成需求规模。
+
+        if($createdReleaseGroup) $createdReleaseGroup = $this->groupMetricData($createdReleaseGroup, 'year');
+        if($finishedStoryGroup)  $finishedStoryGroup  = $this->groupMetricData($finishedStoryGroup,  'year');
+        if($storyScaleGroup)     $storyScaleGroup     = $this->groupMetricData($storyScaleGroup,     'year');
+
+        if(!empty($createdReleaseGroup[$year])) $data->finishedReleaseCount['year'] = zget($createdReleaseGroup[$year], 'value', 0);
+        if(!empty($finishedStoryGroup[$year]))  $data->finishedStoryCount['year']   = zget($finishedStoryGroup[$year],  'value', 0);
+        if(!empty($storyScaleGroup[$year]))     $data->finishedStoryPoint['year']   = zget($storyScaleGroup[$year],     'value', 0);
+
+        /* 获取有数据的年份，默认显示今年。 */
+        $years = array(date('Y') => 0);
+        if($createdReleaseGroup || $finishedStoryGroup || $storyScaleGroup) $years = $years + $createdReleaseGroup + $finishedStoryGroup + $storyScaleGroup;
+
+        $this->view->years       = array_keys($years);
         $this->view->currentYear = $year;
         $this->view->data        = $data;
     }
@@ -2462,7 +2519,7 @@ class blockZen extends block
             {
                 foreach($monthFinishedScale as $scale)
                 {
-                    if($group == "{$scale->year}-{$scale->month}") $doneStoryEstimate[$group] = $scale->value;
+                    if($group == "{$scale['year']}-{$scale['month']}") $doneStoryEstimate[$group] = $scale['value'];
                 }
             }
 
@@ -2470,7 +2527,7 @@ class blockZen extends block
             {
                 foreach($monthCreatedStory as $story)
                 {
-                    if($group == "{$story->year}-{$story->month}") $doneStoryCount[$group] = $story->value;
+                    if($group == "{$story['year']}-{$story['month']}") $doneStoryCount[$group] = $story['value'];
                 }
             }
 
@@ -2478,7 +2535,7 @@ class blockZen extends block
             {
                 foreach($monthFinishedStory as $story)
                 {
-                    if($group == "{$story->year}-{$story->month}") $createStoryCount[$group] = $story->value;
+                    if($group == "{$story['year']}-{$story['month']}") $createStoryCount[$group] = $story['value'];
                 }
             }
 
@@ -2486,7 +2543,7 @@ class blockZen extends block
             {
                 foreach($monthCreatedBug as $bug)
                 {
-                    if($group == "{$bug->year}-{$bug->month}") $fixedBugCount[$group] = $bug->value;
+                    if($group == "{$bug['year']}-{$bug['month']}") $fixedBugCount[$group] = $bug['value'];
                 }
             }
 
@@ -2494,7 +2551,7 @@ class blockZen extends block
             {
                 foreach($monthFinishedBug as $bug)
                 {
-                    if($group == "{$bug->year}-{$bug->month}") $createBugCount[$group] = $bug->value;
+                    if($group == "{$bug['year']}-{$bug['month']}") $createBugCount[$group] = $bug['value'];
                 }
             }
         }
@@ -2518,15 +2575,12 @@ class blockZen extends block
         $productIdList = array_keys($products);
 
         $finishEstimateGroup = $this->loadModel('metric')->getResultByCode('scale_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
-        $finishEstimateGroup = json_decode(json_encode($finishEstimateGroup), true);
         if(!empty($finishEstimateGroup)) $finishEstimateGroup = array_column($finishEstimateGroup, null, 'product');
 
         $doneStoryGroup = $this->metric->getResultByCode('count_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
-        $doneStoryGroup = json_decode(json_encode($doneStoryGroup), true);
         if(!empty($doneStoryGroup)) $doneStoryGroup = array_column($doneStoryGroup, null, 'product');
 
         $resolvedBugGroup = $this->metric->getResultByCode('count_of_annual_restored_bug_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
-        $resolvedBugGroup = json_decode(json_encode($resolvedBugGroup), true);
         if(!empty($resolvedBugGroup)) $resolvedBugGroup = array_column($resolvedBugGroup, null, 'product');
 
         $doneStoryEstimate = array();
@@ -2634,12 +2688,12 @@ class blockZen extends block
         }
 
         $this->loadModel('metric');
-        $finishedTaskGroup = $this->metric->getResultByCode('count_of_daily_finished_task'); // 完成任务数。
-        $createdStoryGroup = $this->metric->getResultByCode('count_of_daily_created_story'); // 创建需求数。
-        $closedBugGroup    = $this->metric->getResultByCode('count_of_daily_closed_bug');    // 关闭Bug数。
-        $runCaseGroup      = $this->metric->getResultByCode('count_of_daily_run_case');      // 执行用例数。
-        $consumedGroup     = $this->metric->getResultByCode('hour_of_daily_effort');         // 消耗工时。
-        $totalEffortGroup  = $this->metric->getResultByCode('day_of_daily_effort');          // 累计工作量。
+        $finishedTaskGroup = $this->metric->getResultByCode('count_of_daily_finished_task', array('year' => join(',', $years), 'month' => join(',', $months))); // 完成任务数。
+        $createdStoryGroup = $this->metric->getResultByCode('count_of_daily_created_story', array('year' => join(',', $years), 'month' => join(',', $months))); // 创建需求数。
+        $closedBugGroup    = $this->metric->getResultByCode('count_of_daily_closed_bug',    array('year' => join(',', $years), 'month' => join(',', $months))); // 关闭Bug数。
+        $runCaseGroup      = $this->metric->getResultByCode('count_of_daily_run_case',      array('year' => join(',', $years), 'month' => join(',', $months))); // 执行用例数。
+        $consumedGroup     = $this->metric->getResultByCode('hour_of_daily_effort',         array('year' => join(',', $years), 'month' => join(',', $months))); // 消耗工时。
+        $totalEffortGroup  = $this->metric->getResultByCode('day_of_daily_effort',          array('year' => join(',', $years), 'month' => join(',', $months))); // 累计工作量。
 
         /* 获取今日完成任务数和昨日完成任务数。 */
         $finishedTasks  = 0;
@@ -2751,19 +2805,15 @@ class blockZen extends block
         $productID = $this->session->product;
 
         $storyDeliveryRate = $this->loadModel('metric')->getResultByCode('rate_of_delivery_story_in_product', array('product' => $productID));
-        $storyDeliveryRate = json_decode(json_encode($storyDeliveryRate), true);
         if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
 
         $totalStories = $this->metric->getResultByCode('count_of_valid_story_in_product', array('product' => $productID));
-        $totalStories = json_decode(json_encode($totalStories), true);
         if(!empty($totalStories)) $totalStories = array_column($totalStories, null, 'product');
 
         $closedStories = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => $productID));
-        $closedStories = json_decode(json_encode($closedStories), true);
         if(!empty($closedStories)) $closedStories = array_column($closedStories, null, 'product');
 
         $unclosedStories = $this->metric->getResultByCode('count_of_unclosed_story_in_product', array('product' => $productID));
-        $unclosedStories = json_decode(json_encode($unclosedStories), true);
         if(!empty($unclosedStories)) $unclosedStories = array_column($unclosedStories, null, 'product');
 
         $years  = array();
@@ -2828,14 +2878,14 @@ class blockZen extends block
             {
                 foreach($monthFinish as $story)
                 {
-                    if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthFinish[$group] = $story->value;
+                    if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthFinish[$group] = $story['value'];
                 }
             }
             if(!empty($monthCreated))
             {
                 foreach($monthCreated as $story)
                 {
-                    if($group == "{$story->year}-{$story->month}" && $productID == $story->product) $product->monthCreated[$group] = $story->value;
+                    if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthCreated[$group] = $story['value'];
                 }
             }
         }
