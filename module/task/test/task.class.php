@@ -2027,4 +2027,28 @@ class taskTest
         $tasks = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->fetchAll();
         return $this->objectModel->processExportTasks($tasks);
     }
+
+    /**
+     * 获取导出的任务数据。
+     * Get export task information.
+     *
+     * @param  string $orderBy
+     * @param  bool   $taskOnlyCondition
+     * @param  bool   $taskQueryCondition
+     * @param  string $exportType
+     * @access public
+     * @return object[]
+     */
+    public function getExportTasksTest(string $orderBy, bool $taskOnlyCondition = false, bool $taskQueryCondition = false, string $exportType = ''): array
+    {
+        if($taskOnlyCondition)  $this->objectModel->session->set('taskOnlyCondition', '1=1');
+        if($taskQueryCondition) $this->objectModel->session->set('taskQueryCondition', '1=1');
+        if($exportType)
+        {
+            $_POST['exportType'] = $exportType;
+            $_COOKIE['checkedItem'] = '1,2,3';
+        }
+
+        return $this->objectModel->getExportTasks($orderBy);
+    }
 }
