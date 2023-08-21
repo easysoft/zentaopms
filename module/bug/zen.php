@@ -403,24 +403,6 @@ class bugZen extends bug
     }
 
     /**
-     * 获得创建页面的自定义字段。
-     * Get custom fields.
-     *
-     * @access private
-     * @return array
-     */
-    private function getCustomFieldsForCreate(): array
-    {
-        $customFields = array();
-        foreach(explode(',', $this->config->bug->list->customCreateFields) as $field)
-        {
-            $customFields[$field] = $this->lang->bug->$field;
-        }
-
-        return $customFields;
-    }
-
-    /**
      * 获得bug创建页面的products和projects，并绑定到bug上。
      * Get the executions and projects for the bug create page and bind them to bug.
      *
@@ -1135,8 +1117,6 @@ class bugZen extends bug
         $bug = $this->getExecutionsForCreate($bug);
 
         $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
-        $this->view->customFields          = $this->getCustomFieldsForCreate();
-        $this->view->showFields            = $this->config->bug->custom->createFields;
         $this->view->productMembers        = $this->getProductMembersForCreate($bug);
         $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
