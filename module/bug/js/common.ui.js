@@ -576,7 +576,7 @@ function loadExecutionStories(executionID)
 
 function loadExecutionTasks(executionID)
 {
-    const link = $.createLink('task', 'ajaxGetExecutionTasks', 'executionID=' + executionID + '&taskID=' + bug.task);
+    const link = $.createLink('task', 'ajaxGetExecutionTasks', 'executionID=' + executionID);
     $.post(link, function(data)
     {
         let $taskPicker = $('[name="task"]').zui('picker');

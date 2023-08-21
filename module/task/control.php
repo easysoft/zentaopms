@@ -520,10 +520,11 @@ class task extends control
      * 删除任务工时。Delete the work hour from the task.
      *
      * @param  int    $effortID
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteWorkhour(int $effortID, $confirm = 'no')
+    public function deleteWorkhour(int $effortID, string $confirm = 'no')
     {
         $effort = $this->task->getEffortByID($effortID);
         $taskID = $effort->objectID;
@@ -983,13 +984,13 @@ class task extends control
      * AJAX: return execution tasks in html select.
      *
      * @param  int    $executionID
-     * @param  int    $taskID
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionTasks(int $executionID, int $taskID = 0)
+    public function ajaxGetExecutionTasks(int $executionID)
     {
         $tasks = $this->task->getExecutionTaskPairs((int)$executionID);
+
         $items = array();
         foreach($tasks as $taskID => $taskName) $items[] = array('text' => $taskName, 'value' => $taskID, 'keys' => $taskName);
         return print(json_encode($items));
