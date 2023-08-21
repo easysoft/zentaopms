@@ -1397,12 +1397,8 @@ class taskZen extends task
                 $cloneTask->left     = $team->left;
                 if($team->left == 0) $cloneTask->status = 'done';
 
-                if($orderBy == 'assignedTo')
-                {
-                    $cloneTask->assignedToRealName = zget($users, $team->account);
-                    $cloneTask->assignedTo = $team->account;
-                }
-                if($orderBy == 'finishedBy')$cloneTask->finishedBy = $team->account;
+                if($orderBy == 'assignedTo') $cloneTask->assignedTo = $team->account;
+                if($orderBy == 'finishedBy') $cloneTask->finishedBy = $team->account;
                 $groupTasks[$team->account][] = $cloneTask;
             }
             if(!empty($task->left) and $orderBy == 'finishedBy') $groupTasks[$task->finishedBy][] = $task;
