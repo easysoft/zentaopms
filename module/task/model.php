@@ -2081,7 +2081,7 @@ class taskModel extends model
     }
 
     /**
-     * 获取执行任务的报表数据。
+     * 获取按执行任务数统计的报表数据。
      * Get report data of tasks per execution.
      *
      * @access public
@@ -2101,20 +2101,22 @@ class taskModel extends model
     }
 
     /**
+     * 获取按模块任务数统计的报表数据。
      * Get report data of tasks per module
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOfTasksPerModule()
+    public function getDataOfTasksPerModule(): array
     {
         $tasks = $this->dao->select('id,module')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, array(), 'module');
+        $datas = $this->processData4Report($tasks, array(), 'module');
 
+        /* Get modules name. */
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas), true, true);
         foreach($datas as $moduleID => $data)
         {
