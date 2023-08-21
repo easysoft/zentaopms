@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
 
-zdTable('project')->config('project_createbuild')->gen(2);
+zdTable('project')->config('project_createbuild')->gen(20);
 zdTable('bug')->config('bug_createbuild')->gen(10);
 zdTable('user')->gen(1);
 zdTable('build')->gen(1);
