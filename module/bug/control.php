@@ -804,41 +804,41 @@ class bug extends control
      */
     public function batchEdit(int $productID = 0, string $branch = '0')
     {
+        /* 如果没有选择的 bug，跳转到前一个页面。*/
+        /* If there is no bug ID, locate to the previous step. */
+        if(!$this->post->bugIdList) $this->locate($this->session->bugList);
+
         if($this->post->id)
         {
+            /* 为批量编辑 bug 构造数据。*/
             /* Build bugs. */
             $bugs = $this->bugZen->buildBugsForBatchEdit();
 
+            /* 检查数据。*/
+            /* Check bugs. */
             $this->bugZen->checkBugsForBatchUpdate($bugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $oldBugs = $this->getByIdList(array_column($bugs, 'id'));
+            $oldBugs = $this->bug->getByIdList(array_column($bugs, 'id'));
 
-            /* Update bugs. */
             $message      = '';
-            $toTaskIdList = array();
-            $unlinkPlans  = array();
-            $link2Plans   = array();
             foreach($bugs as $bugID => $bug)
             {
                 $this->bug->update($bug);
 
-                /* Record score when bug is resolved. */
                 $oldBug = $oldBugs[$bugID];
-                if(isset($bug->status) and $bug->status == 'resolved' and $oldBug->status == 'active') $this->loadModel('score')->create('bug', 'resolve', $bug, $bug->resolvedBy);
 
-                if($this->config->edition != 'pms' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+                /* 批量编辑 bug 后的一些操作。*/
+                /* Operate after batch edit bugs. */
+                $this->bugZen->operateAfterBatchEdit($bug, $oldBug);
 
-                if($oldBug->toTask != 0 && isset($bug->status) && $bug->status != $oldBug->status) $toTaskIdList[$oldBug->toTask] = $oldBug->toTask;
+                /* 获取待处理的任务和计划列表。*/
+                /* Get toTaskIdList, unlinkPlans and link2Plans to be processed. */
+                list($toTaskIdList, $unlinkPlans, $link2Plans) = $this->bugZen->getToBeProcessedData($bug, $oldBug);
 
-                /* Get changes of plan. */
-                if($bug->plan != $oldBug->plan)
-                {
-                    if(!empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},{$bugID}";
-                    if(!empty($bug->plan))    $link2Plans[$bug->plan]     = empty($link2Plans[$bug->plan])     ? $bugID : "{$link2Plans[$bug->plan]},{$bugID}";
-                }
                 $message = $this->executeHooks($bug->id);
             }
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('score')->create('ajax', 'batchEdit');
@@ -847,24 +847,13 @@ class bug extends control
             foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
             foreach($link2Plans as $planID => $bugs)  $this->action->create('productplan', $planID, 'linkbug',   '', $bugs);
 
-            /* Get response and return. */
+            /* 批量编辑的返回。*/
+            /* Response of batch edit. */
             return $this->bugZen->responseAfterBatchEdit($toTaskIdList, $message);
         }
 
-        /* If there is no bug ID, return to the previous step. */
-        if(!$this->post->bugIdList) $this->locate($this->session->bugList);
-
         $this->bugZen->assignBatchEditVars($productID, $branch);
 
-        /* Assign. */
-        $this->view->productID      = $productID;
-        $this->view->severityList   = $this->lang->bug->severityList;
-        $this->view->typeList       = $this->lang->bug->typeList;
-        $this->view->priList        = $this->lang->bug->priList;
-        $this->view->resolutionList = $this->lang->bug->resolutionList;
-        $this->view->statusList     = $this->lang->bug->statusList;
-        $this->view->branch         = $branch;
-        $this->view->showFields     = $this->config->bug->custom->batchEditFields;
         $this->display();
     }
 

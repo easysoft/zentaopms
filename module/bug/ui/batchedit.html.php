@@ -22,7 +22,7 @@ jsVar('isBranchProduct', $branchProduct ? 1 : 0);
 
 $visibleFields  = array();
 $requiredFields = array();
-foreach(explode(',', $showFields) as $field)
+foreach(explode(',', $config->bug->custom->batchEditFields) as $field)
 {
     if($field) $visibleFields[$field] = '';
 }
@@ -202,7 +202,7 @@ formBatchPanel
             picker
             (
                 set::name('resolution'),
-                set::items($resolutionList),
+                set::items($lang->bug->resolutionList),
                 set::required(isset($requiredFields['resolution'])),
             ),
             picker

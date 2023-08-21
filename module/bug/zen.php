@@ -1258,7 +1258,7 @@ class bugZen extends bug
     }
 
     /**
-     * 为批量创建bug构造数据。
+     * 为批量创建 bug 构造数据。
      * Build bugs for the batch creation.
      *
      * @param  int       $productID
@@ -1513,10 +1513,10 @@ class bugZen extends bug
     }
 
     /**
-     * 为批量创建分配变量。
+     * 为批量编辑 bug 分配变量。
      * Assign variables for batch edit.
      *
-     * @param  int $     productID
+     * @param  int       $productID
      * @param  string    $branch
      * @access protected
      * @return void
@@ -1529,6 +1529,7 @@ class bugZen extends bug
 
         /* Set menu and get product id list. */
         if($this->app->tab == 'product') $this->product->setMenu($productID);
+
         if($productID)
         {
             $this->qa->setMenu($this->products, $productID, $branch);
@@ -1636,11 +1637,21 @@ class bugZen extends bug
             }
         }
 
+        $branchOptions = array();
+        foreach($branchTagOption as $productID => $productBranches)
+        {
+            $branchOptions[$productID] = array();
+            foreach($productBranches as $branchID => $branchName)
+            {
+                $branchOptions[$productID][] = array('text' => $branchName, 'value' => $branchID);
+            }
+        }
+
         $this->view->bugs            = $bugs;
         $this->view->branchProduct   = $branchProduct;
         $this->view->modules         = $bugModules;
         $this->view->productBugList  = $productBugList;
-        $this->view->branchTagOption = $branchTagOption;
+        $this->view->branchTagOption = $branchOptions;
         $this->view->products        = $products;
 
         return $branchTagOption;
@@ -2188,7 +2199,57 @@ class bugZen extends bug
     }
 
     /**
-     * 获得 batchEdit 方法的response。
+     * 批量编辑 bug 后的一些操作。
+     * Operate after batch edit bugs.
+     *
+     * @param  object    $bug
+     * @param  object    $oldBug
+     * @access protected
+     * @return void
+     */
+    protected function operateAfterBatchEdit(object $bug, object $oldBug): void
+    {
+        /* 解决 bug 奖励积分。*/
+        /* Record score when bug is resolved. */
+        if(isset($bug->status) && $bug->status == 'resolved' && $oldBug->status == 'active') $this->loadModel('score')->create('bug', 'resolve', $bug, $bug->resolvedBy);
+
+        /* 更新相关反馈的状态。*/
+        /* Update status of related feedback. */
+        if($this->config->edition != 'pms' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+    }
+
+    /**
+     * 获取待处理的任务和计划列表。
+     * Get toTaskIdList, unlinkPlans and link2Plans to be processed.
+     *
+     * @param  object    $bug
+     * @param  object    $oldBug
+     * @access protected
+     * @return array
+     */
+    protected function getToBeProcessedData(object $bug, object $oldBug): array
+    {
+        static $toTaskIdList = array();
+        static $unlinkPlans  = array();
+        static $link2Plans   = array();
+
+        /* 获取转任务的任务列表。*/
+        /* Get task list that is transfered by bug. */
+        if($oldBug->toTask != 0 && isset($bug->status) && $bug->status != $oldBug->status) $toTaskIdList[$oldBug->toTask] = $oldBug->toTask;
+
+        /* Bug 的所属计划变更后，获取变更的计划列表。*/
+        /* Get plan list that has been changed. */
+        if($bug->plan != $oldBug->plan)
+        {
+            if(!empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},{$bugID}";
+            if(!empty($bug->plan))    $link2Plans[$bug->plan]     = empty($link2Plans[$bug->plan])     ? $bugID : "{$link2Plans[$bug->plan]},{$bugID}";
+        }
+
+        return array($toTaskIdList, $unlinkPlans, $link2Plans);
+    }
+
+    /**
+     * 获得 batchEdit 方法的 response。
      * Get response for batchEdit.
      *
      * @param  array     $output

@@ -3,19 +3,24 @@ window.renderRowData = function($row, index, row)
     /* If there are multiple branch products, show the branches. */
     if(isBranchProduct == 1)
     {
-        let $branch = $row.find('[data-name="branch"] .picker').zui('picker');
+        $row.find('[data-name="branch"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $branch = info[0];
 
-        /* The product of current bug is multiple branch product, show branches in the select box. */
-        if(products[row.product] != undefined && products[row.product].type != 'normal' && branchTagOption[row.product] != undefined)
-        {
-            $branch.render({items: branchTagOption[row.product], disabled: false});
-        }
-        /* The product of current bug isn't multiple branch product, disable the input box. */
-        else
-        {
-            $branch.render({disabled: true});
-        }
-        $branch.$.changeState({value: ''});
+            /* The product of current bug is multiple branch product, show branches in the select box. */
+            if(products[row.product] != undefined && products[row.product].type != 'normal' && branchTagOption[row.product] != undefined)
+            {
+                let branches = branchTagOption[row.product];
+                $branch.render({items: branches, disabled: false});
+            }
+            /* The product of current bug isn't multiple branch product, disable the input box. */
+            else
+            {
+                $branch.render({disabled: true});
+            }
+
+            $branch.$.changeState({value: ''});
+        });
     }
 
     /* Show the modules of current bug's product. */
