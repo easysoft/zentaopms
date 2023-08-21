@@ -1477,8 +1477,8 @@ class bugZen extends bug
         {
             $oldBug = $oldBugs[$bug->id];
 
-            $bug->os      = implode(',', $bug->os);
-            $bug->browser = implode(',', $bug->browser);
+            if(is_array($bug->os))      $bug->os      = implode(',', $bug->os);
+            if(is_array($bug->browser)) $bug->browser = implode(',', $bug->browser);
 
             /* If bug is closed, the assignee will not be changed. */
             if($oldBug->status == 'closed') $bug->assignedTo = $oldBug->assignedTo;
