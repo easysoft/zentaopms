@@ -1257,31 +1257,32 @@ class project extends control
     }
 
     /**
+     * 复制项目权限组。
      * Project copy a group.
      *
      * @param  int    $groupID
      * @access public
      * @return void
      */
-    public function copyGroup($groupID)
+    public function copyGroup(int $groupID)
     {
-        $this->loadModel('group');
+        $group = $this->loadModel('group')->getByID($groupID);
         if(!empty($_POST))
-         {
-             $group = $this->group->getByID($groupID);
-             $_POST['project'] = $group->project;
-             $this->group->copy($groupID);
-             if(dao::isError()) return print(js::error(dao::getError()));
-             return print(js::closeModal('parent.parent', 'this'));
-         }
+        {
+            $_POST['project'] = $group->project;
 
-         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
-         $this->view->group      = $this->group->getById($groupID);
+            $this->group->copy($groupID);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => true));
+        }
 
-         $this->display('group', 'copy');
+        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
+        $this->view->group = $group;
+        $this->display('group', 'copy');
     }
 
     /**
+     * 编辑项目权限组。
      * Project edit a group.
      *
      * @param  string $groupID
@@ -1289,18 +1290,18 @@ class project extends control
      * @access public
      * @return void
      */
-    public function editGroup($groupID)
+    public function editGroup(int $groupID)
     {
-        $groupID = (int)$groupID;
         $this->loadModel('group');
         if(!empty($_POST))
         {
             $this->group->update($groupID);
-            return print(js::closeModal('parent.parent', 'this'));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
-        $this->view->group = $this->group->getById($groupID);
+        $this->view->group = $this->group->getByID($groupID);
         $this->display('group', 'edit');
     }
 
