@@ -2013,4 +2013,18 @@ class taskTest
 
         return $lang->task->report->$chartType;
     }
+
+    /**
+     * 处理导出的任务信息。
+     * Process export task information.
+     *
+     * @param  array $taskIdList
+     * @access public
+     * @return object[]
+     */
+    public function processExportTasksTest(array $taskIdList): array
+    {
+        $tasks = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->fetchAll();
+        return $this->objectModel->processExportTasks($tasks);
+    }
 }
