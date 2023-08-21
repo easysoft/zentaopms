@@ -1,1 +1,3 @@
 #mainContent .dtable .dtable-header .dtable-checkbox {display: none}
+.dtable-cell[data-col="budget"] .dtable-cell-content {overflow: visible; z-index: 10;}
+.dtable-cell[data-col="budget"] menu {padding: 5px;}

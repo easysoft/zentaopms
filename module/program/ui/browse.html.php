@@ -3,10 +3,17 @@ namespace zin;
 
 $confirmDeleteLang['program'] = $lang->program->confirmDelete;
 $confirmDeleteLang['project'] = $lang->project->confirmDelete;
-jsVar('confirmDeleteLang', $confirmDeleteLang);
+jsVar('confirmDeleteLang',   $confirmDeleteLang);
+jsVar('programBudgetLang',   $lang->program->programBudget);
+jsVar('projectBudgetLang',   $lang->program->projectBudget);
+jsVar('sumSubBudgetLang',    $lang->program->sumSubBudget);
+jsVar('exceededBudgetLang',  $lang->program->exceededBudget);
+jsVar('remainingBudgetLang', $lang->program->remainingBudget);
 
-$cols = $this->loadModel('datatable')->getSetting('program');
-$data = array();
+$this->loadModel('project');
+$cols    = $this->loadModel('datatable')->getSetting('program');
+$data    = array();
+$parents = array();
 foreach($programs as $program)
 {
     if(empty($program->parent)) $program->parent = 0;
@@ -31,8 +38,10 @@ foreach($programs as $program)
     }
 
     /* Calculate budget.*/
-    $programBudget   = $this->loadModel('project')->getBudgetWithUnit($program->budget);
-    $program->budget = $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;
+    $programBudget      = $this->project->getBudgetWithUnit($program->budget);
+    $program->rawBudget = (int)$program->budget;
+    $program->budget    = !empty($program->budget) ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;
+    $parents[$program->parent][] = $program->id;
 
     /* Progress. */
     if(isset($progressList[$program->id])) $program->progress = round($progressList[$program->id]);
@@ -56,7 +65,63 @@ foreach($programs as $program)
         $program->actions[] = $action;
     }
 
-    $data[] = $program;
+    $data[$program->id] = $program;
+}
+
+$fnComputeSubBudget = function($programID, $sumBudget) use($parents, $data, &$fnComputeSubBudget)
+{
+    if(!isset($parents[$programID]))
+    {
+        $sumBudget += $data[$programID]->rawBudget;
+    }
+    else
+    {
+        foreach($parents[$programID] as $subID) $sumBudget = $fnComputeSubBudget($subID, $sumBudget);
+    }
+    return $sumBudget;
+};
+
+foreach($data as $programID => $program)
+{
+    if(!isset($parents[$programID])) continue;
+    $program->subBudget = $fnComputeSubBudget($programID, 0);
+}
+
+/* Compute remaining budget. */
+foreach($parents as $parentID => $subs)
+{
+    if(!isset($data[$parentID])) continue;
+
+    $parentBudget = $data[$parentID]->rawBudget;
+    if(empty($parentBudget)) continue;
+    foreach($subs as $subID)
+    {
+        $subProgram = $data[$subID];
+        if($subProgram->type == 'program') continue;
+        $subProgram->remainingBudget = $parentBudget;
+        array_map(function($programID) use ($data, $subProgram)
+        {
+            if($programID != $subProgram->id) $subProgram->remainingBudget -= $data[$programID]->rawBudget;
+        }, $subs);
+    }
+}
+
+foreach($data as $programID => $program)
+{
+    if($program->rawBudget == 0) continue;
+    if($program->type == 'program' && !empty($program->subBudget) && $program->rawBudget < $program->subBudget)
+    {
+        $program->exceedBudget = $program->subBudget - $program->rawBudget;
+        $program->exceedBudget = $this->project->getBudgetWithUnit($program->exceedBudget);
+        $program->subBudget    = $this->project->getBudgetWithUnit($program->subBudget);
+    }
+    elseif($program->type == 'project' && !empty($program->remainingBudget) && $program->rawBudget > $program->remainingBudget)
+    {
+        $program->exceedBudget    = $program->rawBudget - $program->remainingBudget;
+        $program->exceedBudget    = $this->project->getBudgetWithUnit($program->exceedBudget);
+        $program->remainingBudget = $this->project->getBudgetWithUnit($program->remainingBudget);
+    }
+    $program->rawBudget = $this->project->getBudgetWithUnit($program->rawBudget);
 }
 
 jsVar('langManDay', $lang->program->manDay);
@@ -92,7 +157,7 @@ $footToolbar = common::hasPriv('project', 'batchEdit') ? array('items' => array(
 dtable
 (
     set::cols($cols),
-    set::data($data),
+    set::data(array_values($data)),
     set::nested(true),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.type == 'project';}")),

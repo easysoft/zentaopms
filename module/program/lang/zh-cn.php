@@ -220,3 +220,9 @@ $lang->program->latestReleaseDate = '最新发布时间';
 $lang->program->latestRelease     = '最新发布';
 $lang->program->manageLine        = '维护产品线';
 $lang->program->checkedProducts   = '共选中&nbsp;<strong>%total%</strong>&nbsp;个产品。';
+
+$lang->program->programBudget   = '项目集预算';
+$lang->program->projectBudget   = '项目预算';
+$lang->program->sumSubBudget    = '子集预算和';
+$lang->program->exceededBudget  = '已超出预算';
+$lang->program->remainingBudget = '项目集剩余';

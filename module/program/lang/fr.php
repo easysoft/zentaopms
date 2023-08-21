@@ -221,3 +221,9 @@ $lang->program->latestReleaseDate = 'Latest Release Date';
 $lang->program->latestRelease     = 'Latest Release';
 $lang->program->manageLine        = 'Gérer Ligne Produit';
 $lang->program->checkedProducts   = '<strong>%total%</strong>&nbsp; products selected.';
+
+$lang->program->programBudget   = 'Program Budget';
+$lang->program->projectBudget   = 'Project Budget';
+$lang->program->sumSubBudget    = 'Sum For Sub Program';
+$lang->program->exceededBudget  = 'Exceeded Budget';
+$lang->program->remainingBudget = 'Remaining For Program';

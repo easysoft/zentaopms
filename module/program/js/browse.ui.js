@@ -13,9 +13,25 @@ window.renderCell = function(result, {col, row})
         return result;
     }
 
-    if(col.name === 'budget')
+    if(col.name === 'budget' && typeof(row.data.exceedBudget) != 'undefined')
     {
-        result[0] = {html: '<div>' + row.data.budget + ' <span class="icon icon-exclamation-sign mr-2 text-danger"></span></div>', className:'flex items-end w-full items-end', style:{flexDirection:"column"}};
+        let iconSign = ' <span class="icon icon-exclamation mr-2 text-danger"></span>';
+        let menu     = '<menu class="dropdown-menu custom">';
+        let dropMenu = menu;
+        dropMenu    += '<div class="mb-1"><span class="text-gray">' + projectBudgetLang + ': </span><span class="font-bold">' + row.data.rawBudget + '</span></div>';
+        dropMenu    += '<div class="mb-1"><span class="text-gray">' + remainingBudgetLang + ': </span><span class="font-bold">' + row.data.remainingBudget + '</span></div>';
+        dropMenu    += '<div class="text-danger">' + exceededBudgetLang + ': <span class="font-bold">' + row.data.exceedBudget + '</span></div>';
+
+        if(row.data.type == 'program')
+        {
+            if(row.data.parent == 0) iconSign = ' <span class="icon icon-exclamation-sign mr-2 text-danger"></span>';
+            dropMenu  = menu;
+            dropMenu += '<div class="mb-1"><span class="text-gray">' + programBudgetLang + ': </span><span class="font-bold">' + row.data.rawBudget + '</span></div>';
+            dropMenu += '<div class="mb-1"><span class="text-gray">' + sumSubBudgetLang + ': </span><span class="font-bold">' + row.data.subBudget + '</span></div>';
+            dropMenu += '<div class="text-danger">' + exceededBudgetLang + ': <span class="font-bold">' + row.data.exceedBudget + '</span></div>';
+        }
+        iconSign = '<span data-toggle="dropdown" data-trigger="hover" data-placement="right-start">' + iconSign + '</span>';
+        result[0] = {html: '<div>' + row.data.budget + iconSign + dropMenu + '</div>', className:'flex items-end w-full items-end', style:{flexDirection:"column"}};
         return result;
     }
 
