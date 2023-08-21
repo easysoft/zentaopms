@@ -41,7 +41,7 @@ function initData()
 initData();
 
 $browseType      = array('all', 'bymodule', 'assigntome', 'openedbyme', 'resolvedbyme', 'assigntonull', 'unconfirmed', 'unresolved', 'unclosed', 'toclosed', 'postponedbugs', 'assignedbyme');
-$productIdList   = array('1', '2', '1000001');
+$productIdList   = array(array(1), array(2), array(1000001));
 $projectID       = array('0', '2', '1000001');
 $executionIdList = array(array(), array('3'), array('1000001'));
 $branch          = array('0', '1', '1000001');
