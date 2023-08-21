@@ -686,6 +686,7 @@ class upgradeModel extends model
                 $ipdinstall  = false;
 
                 if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.5', '<='))             $ipdinstall = true;
+                if(strpos($fromVersion, 'pro') !== false)                                                   $ipdinstall = true;
                 if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.5', '<=')) $ipdinstall = true;
                 if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<=')) $ipdinstall = true;
                 if($ipdinstall) $this->execSQL($this->getUpgradeFile('ipdinstall'));
