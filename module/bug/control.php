@@ -990,8 +990,8 @@ class bug extends control
     }
 
     /**
-     * 批量变更bug的指派人。
-     * Batch update assign of bug.
+     * 批量变更 bugs 的指派人。
+     * Batch update assign of bugs.
      *
      * @param  string  $assignedTo
      * @param  int     $objectID  projectID|executionID
@@ -1003,11 +1003,17 @@ class bug extends control
     {
         if($this->post->bugIdList)
         {
+            /* 获取指派给的 bug id 列表。 */
+            /* Get bug id list to assign. */
             $bugIdList = array_unique($this->post->bugIdList);
 
+            /* 初始化 bug 数据。 */
+            /* Init bug data. */
             $bug = form::data($this->config->bug->form->assignTo)->remove('mailto')->get();
             foreach($bugIdList as $bugID)
             {
+                /* 构建 bug。 */
+                /* Build bug. */
                 $bug->id         = (int)$bugID;
                 $bug->assignedTo = $assignedTo;
 
@@ -1018,6 +1024,8 @@ class bug extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
+        /* 返回批量指派 bugs 后的响应。 */
+        /* Return response after batch assigning bugs. */
         if($type == 'execution') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'bug', "executionID=$objectID")));
         if($type == 'project')   return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'bug', "projectID=$objectID")));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
