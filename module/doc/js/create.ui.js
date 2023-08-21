@@ -2,8 +2,8 @@ $(function()
 {
     $('.form').on('click', '#basicInfoLink', function()
     {
-        if($('#title').val() == '') 
-        {   
+        if($('#title').val() == '')
+        {
             zui.Modal.alert(titleNotEmpty);
             return false;
         }
@@ -22,8 +22,8 @@ $(function()
 
     $('.form').on('click', '#saveDraft', function()
     {
-        if($('#title').val() == '') 
-        {   
+        if($('#title').val() == '')
+        {
             zui.Modal.alert(titleNotEmpty);
             return false;
         }
@@ -35,7 +35,7 @@ $(function()
 window.loadExecutions = function(e)
 {
     const projectID = e.target.value;
-    const link = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix&type=sprint,stage");
+    const link = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
     $.get(link, function(data)
     {
         data = JSON.parse(data);

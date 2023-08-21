@@ -117,7 +117,7 @@ window.loadDocLibs = function(space, type)
 window.loadExecutions = function()
 {
     const projectID =  $('.modal-body input[name=project]').val();
-    const link      = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=0&mode=multiple,leaf,noprefix&type=sprint,stage");
+    const link      = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
     $.get(link, function(data)
     {
         if(data)
