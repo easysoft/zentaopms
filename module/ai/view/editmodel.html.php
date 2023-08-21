@@ -69,6 +69,7 @@ js::set('vendorList', $config->ai->vendorList);
         <td colspan='2' class='text-center'>
           <?php echo html::submitButton();?>
           <?php echo html::commonButton($lang->ai->models->testConnection, 'id="testConn"', 'btn btn-secondary btn-wide');?>
+          <?php echo html::a(inlink('models', ""), $lang->goback, '', 'class="btn btn-wide"');?>
         </td>
       </tr>
     </table>
