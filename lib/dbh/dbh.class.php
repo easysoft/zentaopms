@@ -256,9 +256,9 @@ class dbh
     public function formatDmSQL($sql)
     {
         $sql = trim($sql);
-        /* '\\\\n' try to compatible screen json like \u0232\\nBug. */
-        $sql = str_replace(array('\\\\n', '\r', '\n'), ' ', $sql);
         $sql = $this->formatFunction($sql);
+	$sql = $this->processDmChangeColumn($sql);
+        $sql = $this->processDmTableIndex($sql);
 
         $actionPos = strpos($sql, ' ');
         $action    = strtoupper(substr($sql, 0, $actionPos));
@@ -370,6 +370,32 @@ class dbh
             default:
                 return $sql;
         }
+    }
+
+    /**
+     * Format dm table index.
+     *
+     * @param string $sql
+     * @access public
+     * @return string
+     */
+    public function processDmTableIndex($sql)
+    {
+	if(strpos($sql, 'DROP INDEX') === FALSE) return $sql;
+        return preg_replace('/DROP INDEX `(\w+)` ON `zt_(\w+)`;/', 'DROP INDEX `$2_$1`;', $sql);
+    }
+
+    /**
+     * Format dm change column.
+     *
+     * @param string $sql
+     * @access public
+     * @return string
+     */
+    public function processDmChangeColumn($sql)
+    {
+	if(strpos($sql, 'CHANGE COLUMN') === FALSE) return $sql;
+	return preg_replace('/ALTER TABLE `([^`]+)` CHANGE COLUMN `([^`]+)` `([^`]+)`/', 'ALTER TABLE `$1` RENAME COLUMN `$2` TO `$3`;', $sql);
     }
 
     /**

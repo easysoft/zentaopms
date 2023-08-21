@@ -61,10 +61,17 @@ CREATE INDEX `project`  ON `zt_actionrecent`(`project`);
 CREATE INDEX `action`   ON `zt_actionrecent`(`action`);
 CREATE INDEX `objectID` ON `zt_actionrecent`(`objectID`);
 
-ALTER TABLE `zt_notify` MODIFY `toList` text NOT NULL;
-ALTER TABLE `zt_notify` MODIFY `subject` text NOT NULL;
-DROP INDEX `objectType_toList_status` ON `zt_notify`;
+ALTER TABLE `zt_notify` ADD `toListCopy` text NOT NULL;
+UPDATE `zt_notify` SET `toListCopy` = `toList`;
+ALTER TABLE `zt_notify` DROP `toList`;
+ALTER TABLE `zt_notify` CHANGE COLUMN `toListCopy` `toList`;
 
+ALTER TABLE `zt_notify` ADD `subjectCopy` text NOT NULL;
+UPDATE `zt_notify` SET `subjectCopy` = `subject`;
+ALTER TABLE `zt_notify` DROP `subject`;
+ALTER TABLE `zt_notify` CHANGE COLUMN `subjectCopy` `subject`;
+
+DROP INDEX `objectType_toList_status` ON `zt_notify`;
 CREATE INDEX `objectType` ON `zt_notify` (`objectType`);
 CREATE INDEX `status` ON `zt_notify` (`status`);
 
@@ -81,4 +88,8 @@ CREATE INDEX `module` ON `zt_config`(`module`);
 CREATE INDEX `key`    ON `zt_config`(`key`);
 
 UPDATE `zt_programoutput` SET `activity` = (SELECT `activity` FROM `zt_zoutput` WHERE `zt_programoutput`.`output` = `zt_zoutput`.`id`);
-ALTER TABLE `zt_reviewissue` MODIFY `opinion` mediumtext NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_reviewissue` ADD `opinionCopy` mediumtext NOT NULL DEFAULT '';
+UPDATE `zt_reviewissue` SET `opinionCopy` = `opinion`;
+ALTER TABLE `zt_reviewissue` DROP `opinion`;
+ALTER TABLE `zt_reviewissue` CHANGE COLUMN `opinionCopy` `opinion`;
