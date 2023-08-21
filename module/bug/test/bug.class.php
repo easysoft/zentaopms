@@ -1243,37 +1243,6 @@ class bugTest
     }
 
     /**
-     * Test get related objects id lists.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  array       $modules
-     * @param  array       $executions
-     * @param  string      $orderBy
-     * @access public
-     * @return string
-     */
-    public function getRelatedObjectsTest($object, $pairs)
-    {
-        $objects = $this->objectModel->getRelatedObjects($object, $pairs);
-        $ids     = '';
-        foreach($objects as $objectID => $object)
-        {
-            $ids .= ",$objectID:$object";
-        }
-        $ids = trim($ids, ',');
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $ids;
-        }
-    }
-
-    /**
      * 测试更新相关 bug。
      * The test for updatelinkbug function.
      *
