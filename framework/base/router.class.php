@@ -1062,7 +1062,7 @@ class baseRouter
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
-        if(isset($_GET[$this->config->sessionVar]) and preg_match('/^\w+$/', $_GET[$this->config->sessionVar])) // Check zentaosid only exist [0-9a-zA-Z_].
+        if(isset($_GET[$this->config->sessionVar]))
         {
             helper::restartSession($_GET[$this->config->sessionVar]);
         }
@@ -3354,7 +3354,8 @@ class ztSessionHandler
      */
     public function getSessionFile($id)
     {
-        if(!empty($this->sessionFile)) return $this->sessionFile;
+        if(!empty($this->sessionFile))  return $this->sessionFile;
+        if(!preg_match('/^\w+$/', $id)) return false;
 
         $sessionID = $id;
         if($this->tagID) $sessionID = md5($id . $this->tagID);
@@ -3406,6 +3407,7 @@ class ztSessionHandler
     public function read($id)
     {
         $sessFile = $this->getSessionFile($id);
+        if(!$sessFile) return false;
         if(!file_exists($sessFile))
         {
             ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
@@ -3426,6 +3428,8 @@ class ztSessionHandler
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
+        if(!$sessFile) return false;
+
         touch($sessFile);
         touch($this->rawFile);
         if(md5_file($sessFile) == md5($sessData)) return true;
