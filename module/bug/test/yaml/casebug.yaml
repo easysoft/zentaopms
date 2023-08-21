@@ -39,7 +39,6 @@ fields:
     range: 1-4
   - field: pri
     range: 1-4
-    range: active
   - field: confirmed
     range: 0
   - field: activatedCount
@@ -73,13 +72,7 @@ fields:
     range: ""
   - field: resolvedBuild
     range: ""
-  - field: resolvedDate
-    range: ""
-    prefix: ""
-    postfix: ""
   - field: closedBy
-    range: ""
-  - field: closedDate
     range: ""
   - field: duplicateBug
     range: 0
