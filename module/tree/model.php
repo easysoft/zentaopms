@@ -946,7 +946,7 @@ class treeModel extends model
             $extra['branchID'] = $branch;
         }
 
-        return call_user_func($userFunc, $type, $module, $parent, $extra);
+        return call_user_func($userFunc, $type, $module, (int)$parent, $extra);
     }
 
     /**
