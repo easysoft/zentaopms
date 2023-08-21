@@ -62,8 +62,8 @@ CREATE INDEX `action`   ON `zt_actionrecent`(`action`);
 CREATE INDEX `objectID` ON `zt_actionrecent`(`objectID`);
 
 ALTER TABLE `zt_notify` MODIFY COLUMN `toList` text NOT NULL;
-ALTER TABLE `zt_notify` MODIFY COLUMN `subject` text NOT NULL,
-ALTER TABLE `zt_notify` DROP INDEX `objectType_toList_status`,
+ALTER TABLE `zt_notify` MODIFY COLUMN `subject` text NOT NULL;
+ALTER TABLE `zt_notify` DROP INDEX `objectType_toList_status`;
 
 CREATE INDEX `objectType` ON `zt_notify` (`objectType`);
 CREATE INDEX `status` ON `zt_notify` (`status`);
@@ -74,7 +74,7 @@ CREATE INDEX `product_status_deleted` ON `zt_bug` (`product`,`status`,`deleted`)
 
 UPDATE `zt_cron` SET `m` = '*/1' WHERE `m` = '*/5' AND `command` in ('moduleName=mail&methodName=asyncSend', 'moduleName=webhook&methodName=asyncSend') and `type` = 'zentao';
 
-ALTER TABLE `zt_project` ADD INDEX `type_order` (`type`, `order`);
+CREATE INDEX `type_order` ON `zt_project` (`type`,`order`);
 
 CREATE INDEX `vision` ON `zt_config`(`vision`);
 CREATE INDEX `owner`  ON `zt_config`(`owner`);
