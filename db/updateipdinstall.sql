@@ -146,9 +146,8 @@ CREATE UNIQUE INDEX `roadmap_story` ON `zt_roadmapstory`(`roadmap`,`story`);
 
 ALTER TABLE `zt_story` MODIFY `status` enum('','changing','active','draft','closed','reviewing','launched','developing') NOT NULL DEFAULT '' AFTER `estimate`;
 
-ALTER TABLE `zt_project`
-ADD `charter` mediumint(8) NOT NULL DEFAULT 0 AFTER `project`,
-ADD `category` char(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `type`;
+ALTER TABLE `zt_project` ADD `charter` mediumint(8) NOT NULL DEFAULT 0 AFTER `project`;
+ALTER TABLE `zt_project` ADD `category` char(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `type`;
 
 REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `projectType`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
 ('概念',        '10',   'concept',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
