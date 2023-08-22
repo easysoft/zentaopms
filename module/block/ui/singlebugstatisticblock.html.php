@@ -66,7 +66,7 @@ panel
                     span
                     (
                         setClass('text-sm text-gray'),
-                        $lang->block->qastatistic->totalBug
+                        $lang->block->bugstatistic->effective
                     ),
                 ),
                 col
@@ -79,7 +79,7 @@ panel
                     span
                     (
                         setClass('text-sm text-gray'),
-                        $lang->block->productstatistic->closed
+                        $lang->block->bugstatistic->fixed
                     ),
                 ),
                 col
@@ -92,7 +92,7 @@ panel
                     span
                     (
                         setClass('text-sm text-gray'),
-                        $lang->bug->unResolved
+                        $lang->block->bugstatistic->activated
                     ),
                 ),
             ),

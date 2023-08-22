@@ -2872,6 +2872,8 @@ class blockZen extends block
         }
         $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
         $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
+        if(!$monthFinish)  $monthFinish  = array();
+        if(!$monthCreated) $monthCreated = array();
 
         /* 根据产品列表获取预计开始日期距离现在最近且预计开始日期大于当前日期的未开始状态计划。 */
         /* Obtain an unstarted status plan based on the product list, with an expected start date closest to the current date and an expected start date greater than the current date. */
@@ -2950,50 +2952,86 @@ class blockZen extends block
      */
     protected function printSingleBugStatisticBlock(object $block)
     {
-        $this->app->loadClass('pager', true);
-        $count     = isset($block->params->count) ? (int)$block->params->count : 0;
-        $type      = isset($block->params->type) ? $block->params->type : '';
-        $pager     = pager::init(0, $count , 1);
+        /* 获取需要统计的产品列表。 */
+        /* Obtain a list of products that require statistics. */
+        $status    = isset($block->params->type)  ? $block->params->type  : '';
+        $count     = isset($block->params->count) ? $block->params->count : '';
         $productID = $this->session->product;
 
-        $today = strtotime(helper::today());
-        $begin = strtotime(date('Y-m', strtotime('-2 month', $today)));
-        $end   = strtotime(date('Y-m', $today));
+        $this->loadModel('metric');
+        $bugFixedRate      = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',      array('product' => $productID)); // 从度量项获取各个产品的Bug修复率。
+        $effectiveBugGroup = $this->metric->getResultByCode('count_of_effective_bug_in_product', array('product' => $productID)); // 从度量项获取各个产品的有效Bug数。
+        $fixedBugGroup     = $this->metric->getResultByCode('count_of_fixed_bug_in_product',     array('product' => $productID)); // 从度量项获取各个产品的Bug修复数。
+        $activatedBugGroup = $this->metric->getResultByCode('count_of_activated_bug_in_product', array('product' => $productID)); // 从度量项获取各个产品的Bug激活数。
 
-        $closedBug     = rand(10, 10000);
-        $unresovledBug = rand(10, 1000);
-        $totalBug      = rand(100, 10000);
-        $resolvedRate  = rand(1, 100);
-        $months        = array();
-        $activateBugs  = array();
-        $resolveBugs   = array();
-        $closeBugs     = array();
-        for($date = $begin; $date <= $end; $date = strtotime('+1 month', $date))
+        if(!empty($bugFixedRate))      $bugFixedRate      = array_column($bugFixedRate,      null, 'product');
+        if(!empty($effectiveBugGroup)) $effectiveBugGroup = array_column($effectiveBugGroup, null, 'product');
+        if(!empty($fixedBugGroup))     $fixedBugGroup     = array_column($fixedBugGroup,     null, 'product');
+        if(!empty($fixedBugGroup))     $activatedBugGroup = array_column($activatedBugGroup, null, 'product');
+
+        /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
+        $years  = array();
+        $months = array();
+        $groups = array();
+        for($i = 5; $i >= 0; $i --)
         {
-            $month = date('Y-m', $date);
-            $activateBugs[$month] = rand(100, 400);
-            $resolveBugs[$month]  = rand(100, 400);
-            $closeBugs[$month]    = rand(100, 400);
-
-            $month = (int)ltrim(date('m', $date), '0');
-
-            $monthName = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? "{$month}{$this->lang->block->month}" : zget($this->lang->datepicker->monthNames, $month - 1, '');
-            if($month == 1) $monthName .= "\n" . date('Y', $date) . (in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $this->lang->year : '');
-
-            $months[] = $monthName;
+            $years[]  = date('Y',   strtotime("first day of -{$i} month"));
+            $months[] = date('m',   strtotime("first day of -{$i} month"));
+            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
-        $this->app->loadLang('bug');
+        $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
+        $monthFixedBugGroup   = $this->metric->getResultByCode('count_of_monthly_fixed_bug_in_product',   array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的解决Bug数。
+        $monthClosedBugGroup  = $this->metric->getResultByCode('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
 
-        $this->view->months        = $months;
-        $this->view->productID     = $productID;
-        $this->view->totalBug      = $totalBug;
-        $this->view->closedBug     = $closedBug;
-        $this->view->unresovledBug = $unresovledBug;
-        $this->view->resolvedRate  = $resolvedRate;
-        $this->view->activateBugs  = $activateBugs;
-        $this->view->resolveBugs   = $resolveBugs;
-        $this->view->closeBugs     = $closeBugs;
+        /* 组装页面所需的度量项数组。 */
+        $activateBugs   = array();
+        $resolveBugs    = array();
+        $closeBugs      = array();
+        $closedBugs     = isset($fixedBugGroup[$productID]['value'])     ? $fixedBugGroup[$productID]['value']      : 0;
+        $unresovledBugs = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
+        $totalBugs      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
+        $resolvedRate   = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
+        foreach($groups as $group)
+        {
+            $activateBugs[$group] = 0;
+            $resolveBugs[$group]  = 0;
+            $closeBugs[$group]    = 0;
+
+            if(!empty($monthCreatedBugGroup))
+            {
+                foreach($monthCreatedBugGroup as $data)
+                {
+                    if($group == "{$data['year']}-{$data['month']}") $activateBugs[$group] = $data['value'];
+                }
+            }
+
+            if(!empty($monthFixedBugGroup))
+            {
+                foreach($monthFixedBugGroup as $data)
+                {
+                    if($group == "{$data['year']}-{$data['month']}") $resolveBugs[$group] = $data['value'];
+                }
+            }
+
+            if(!empty($monthClosedBugGroup))
+            {
+                foreach($monthClosedBugGroup as $data)
+                {
+                    if($group == "{$data['year']}-{$data['month']}") $closeBugs[$group] = $data['value'];
+                }
+            }
+        }
+
+        $this->view->productID      = $productID;
+        $this->view->months         = $months;
+        $this->view->totalBugs      = $totalBugs;
+        $this->view->closedBugs     = $closedBugs;
+        $this->view->unresovledBugs = $unresovledBugs;
+        $this->view->resolvedRate   = $resolvedRate;
+        $this->view->activateBugs   = $activateBugs;
+        $this->view->resolveBugs    = $resolveBugs;
+        $this->view->closeBugs      = $closeBugs;
     }
 
     /**
