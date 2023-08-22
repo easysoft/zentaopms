@@ -2,32 +2,15 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
+
+zdTable('task')->gen(50);
 su('admin');
 
 /**
 
 title=taskModel->isClickable();
+timeout=0
 cid=1
-pid=1
-
-计算任务为父任务 状态为wait 能否进行start操作 >> 1
-计算任务为父任务 状态为doing 能否进行finished操作 >> 1
-计算任务为父任务 状态为done 能否进行pause操作 >> 2
-计算任务为父任务 状态为pause 能否进行assignto操作 >> 1
-计算任务为父任务 状态为closed 能否进行close操作 >> 2
-计算任务为父任务 状态为cancel 能否进行batchcreate操作 >> 1
-计算任务为普通任务 状态为wait 能否进行recordworkhour操作 >> 2
-计算任务为普通任务 状态为doing 能否进行delete操作 >> 2
-计算任务为普通任务 状态为done 能否进行start操作 >> 2
-计算任务为普通任务 状态为pause 能否进行finished操作 >> 1
-计算任务为普通任务 状态为closed 能否进行restart操作 >> 2
-计算任务为普通任务 状态为cancel 能否进行pause操作 >> 2
-计算任务为子任务 状态为wait 能否进行assignto操作 >> 1
-计算任务为子任务 状态为doing 能否进行close操作 >> 2
-计算任务为子任务 状态为done 能否进行batchcreate操作 >> 2
-计算任务为子任务 状态为pause 能否进行recordworkhour操作 >> 1
-计算任务为子任务 状态为closed 能否进行delete操作 >> 1
-计算任务为子任务 状态为cancel 能否进行start操作 >> 2
 
 */
 
@@ -104,16 +87,16 @@ $task18->parent = 1;
 $task18->status = 'cancel';
 
 $task = new taskTest();
-r($task->isClickableTest($task1, 'start'))           && p('1') && e("1"); //计算任务为父任务 状态为wait 能否进行start操作
-r($task->isClickableTest($task2, 'finished'))        && p('1') && e("1"); //计算任务为父任务 状态为doing 能否进行finished操作
-r($task->isClickableTest($task3, 'pause'))           && p('2') && e("2"); //计算任务为父任务 状态为done 能否进行pause操作
-r($task->isClickableTest($task4, 'assignto'))        && p('1') && e("1"); //计算任务为父任务 状态为pause 能否进行assignto操作
-r($task->isClickableTest($task5, 'close'))           && p('2') && e("2"); //计算任务为父任务 状态为closed 能否进行close操作
-r($task->isClickableTest($task6, 'batchcreate'))     && p('1') && e("1"); //计算任务为父任务 状态为cancel 能否进行batchcreate操作
-r($task->isClickableTest($task7, 'recordworkhour'))  && p('2') && e("2"); //计算任务为普通任务 状态为wait 能否进行recordworkhour操作
-r($task->isClickableTest($task8, 'delete'))          && p('2') && e("2"); //计算任务为普通任务 状态为doing 能否进行delete操作
-r($task->isClickableTest($task9, 'start'))           && p('2') && e("2"); //计算任务为普通任务 状态为done 能否进行start操作
-r($task->isClickableTest($task10, 'finished'))       && p('1') && e("1"); //计算任务为普通任务 状态为pause 能否进行finished操作
+r($task->isClickableTest($task1,  'start'))          && p('1') && e("1"); //计算任务为父任务 状态为wait 能否进行start操作
+r($task->isClickableTest($task2,  'finished'))       && p('1') && e("1"); //计算任务为父任务 状态为doing 能否进行finished操作
+r($task->isClickableTest($task3,  'pause'))          && p('2') && e("2"); //计算任务为父任务 状态为done 能否进行pause操作
+r($task->isClickableTest($task4,  'assignto'))       && p('1') && e("1"); //计算任务为父任务 状态为pause 能否进行assignto操作
+r($task->isClickableTest($task5,  'close'))          && p('2') && e("2"); //计算任务为父任务 状态为closed 能否进行close操作
+r($task->isClickableTest($task6,  'batchcreate'))    && p('1') && e("1"); //计算任务为父任务 状态为cancel 能否进行batchcreate操作
+r($task->isClickableTest($task7,  'recordworkhour')) && p('2') && e("2"); //计算任务为普通任务 状态为wait 能否进行recordworkhour操作
+r($task->isClickableTest($task8,  'delete'))         && p('2') && e("2"); //计算任务为普通任务 状态为doing 能否进行delete操作
+r($task->isClickableTest($task9,  'start'))          && p('2') && e("2"); //计算任务为普通任务 状态为done 能否进行start操作
+r($task->isClickableTest($task10, 'finished'))       && p('1') && e("2"); //计算任务为普通任务 状态为pause 能否进行finished操作
 r($task->isClickableTest($task11, 'restart'))        && p('2') && e("2"); //计算任务为普通任务 状态为closed 能否进行restart操作
 r($task->isClickableTest($task12, 'pause'))          && p('2') && e("2"); //计算任务为普通任务 状态为cancel 能否进行pause操作
 r($task->isClickableTest($task13, 'assignto'))       && p('1') && e("1"); //计算任务为子任务 状态为wait 能否进行assignto操作
