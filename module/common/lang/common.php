@@ -102,6 +102,7 @@ $lang->instance    = new stdclass();
 $lang->CNE         = new stdclass();
 $lang->account     = new stdclass();
 $lang->ops         = new stdclass();
+$lang->metric      = new stdclass();
 
 $lang->serverroom         = new stdclass();
 $lang->programstakeholder = new stdclass();

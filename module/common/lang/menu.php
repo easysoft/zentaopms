@@ -541,11 +541,15 @@ $lang->bi->menu         = new stdclass();
 $lang->bi->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
 $lang->bi->menu->pivot  = array('link' => "{$lang->pivot->common}|pivot|preview");
 $lang->bi->menu->chart  = array('link' => "{$lang->chart->common}|chart|preview");
+$lang->bi->menu->metric = array('link' => "{$lang->metric->common}|measurement|browse");
+
+$lang->bi->dividerMenu = ',metric,';
 
 /* BI menu order. */
 $lang->bi->menuOrder[5]  = 'screen';
 $lang->bi->menuOrder[10] = 'pivot';
 $lang->bi->menuOrder[15] = 'chart';
+$lang->bi->menuOrder[50] = 'metric';
 
 /* Company menu.*/
 $lang->company->menu              = new stdclass();
@@ -652,11 +656,12 @@ $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';
 $lang->navGroup->api    = 'doc';
 
-$lang->navGroup->screen   = 'bi';
-$lang->navGroup->pivot    = 'bi';
-$lang->navGroup->chart    = 'bi';
-$lang->navGroup->bidesign = 'bi';
-$lang->navGroup->report   = 'bi';
+$lang->navGroup->screen      = 'bi';
+$lang->navGroup->pivot       = 'bi';
+$lang->navGroup->chart       = 'bi';
+$lang->navGroup->bidesign    = 'bi';
+$lang->navGroup->report      = 'bi';
+$lang->navGroup->measurement = 'bi';
 
 $lang->navGroup->qa            = 'qa';
 $lang->navGroup->bug           = 'qa';
@@ -733,7 +738,6 @@ $lang->navGroup->featureconfig = 'admin';
 $lang->navGroup->doctemplate   = 'admin';
 $lang->navGroup->notifysetting = 'admin';
 $lang->navGroup->holidayseason = 'admin';
-$lang->navGroup->measurement   = 'admin';
 $lang->navGroup->system        = 'admin';
 $lang->navGroup->holiday       = 'admin';
 $lang->navGroup->serverroom    = 'admin';

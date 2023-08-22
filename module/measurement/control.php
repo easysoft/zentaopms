@@ -45,7 +45,6 @@ class measurement extends control
     public function browse(string $browseType = 'all', int $param = 0, string $orderBy = 'purpose,order_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
         $this->loadModel('datatable');
-        $this->session->set('measList', $this->app->getURI(true));
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
