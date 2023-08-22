@@ -1,0 +1,9 @@
+---
+title: zt_story
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: version
+    range: 1,2,2,1
+  - field: status
+    range: active
