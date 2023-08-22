@@ -532,17 +532,19 @@ class testcaseModel extends model
     }
 
     /**
-     * Get case list.
+     * Get cases by id list and query string.
      *
-     * @param  int|array|string $caseIDList
+     * @param  array  $caseIdList
+     * @param  string $query
      * @access public
      * @return array
      */
-    public function getByList($caseIDList = 0)
+    public function getByList(array $caseIdList = array(), string $query = ''): array
     {
         return $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq(0)
-            ->beginIF($caseIDList)->andWhere('id')->in($caseIDList)->fi()
+            ->beginIF($caseIdList)->andWhere('id')->in($caseIdList)->fi()
+            ->beginIF($query)->andWhere($query)->fi()
             ->fetchAll('id');
     }
 
