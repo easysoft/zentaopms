@@ -20,17 +20,6 @@ jsVar('storyType', $type);
 jsVar('feedbackSource', $config->story->feedbackSource);
 jsVar('branchCount', isset($fields['branches']['options']) ? count($fields['branches']['options']) : 0);
 
-$showFields = $config->story->custom->createFields;
-$fnGenerateCustomizedFields = function() use ($showFields, $customFields)
-{
-    global $config;
-    $showFields    = ",{$showFields},";
-    $fields        = array();
-    $defaultFields = explode(',', $config->story->list->customCreateFields);
-    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
-    return $fields;
-};
-
 formPanel
 (
     on::click('#saveButton', 'customSubmit'),
@@ -48,7 +37,7 @@ formPanel
         array('text' => $lang->story->saveDraft, 'id' => 'saveDraftButton', 'class' => 'secondary'),
         array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url'),
     )),
-    set::customFields(array('items' => $fnGenerateCustomizedFields(), 'urlParams' => 'module=story&section=custom&key=createFields')),
+    set::customFields(true),
     formRow
     (
         on::change('#product', 'loadProduct'),

@@ -102,14 +102,10 @@ class story extends control
         $fields = $this->storyZen->setModuleField($fields, $moduleID);
         $fields = $this->storyZen->removeFormFieldsForCreate($fields, $storyType);
 
-        /* Set Custom. */
-        foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
-
-        $this->view->title        = $this->view->product->name . $this->lang->colon . $this->lang->story->create;
-        $this->view->fields       = $fields;
-        $this->view->blockID      = $this->storyZen->getAssignMeBlockID();
-        $this->view->type         = $storyType;
-        $this->view->customFields = $customFields;
+        $this->view->title   = $this->view->product->name . $this->lang->colon . $this->lang->story->create;
+        $this->view->fields  = $fields;
+        $this->view->blockID = $this->storyZen->getAssignMeBlockID();
+        $this->view->type    = $storyType;
 
         $this->display();
     }
