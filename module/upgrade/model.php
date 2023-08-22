@@ -697,7 +697,8 @@ class upgradeModel extends model
                 $this->loadModel('product')->refreshStats(true);
                 $this->loadModel('program')->refreshStats(true);
                 $this->updatePivotFieldsType();
-                $this->addCreateAction4Story();
+
+                if(in_array($fromVersion, array('18.5', 'biz8.5', 'max4.5'))) $this->addCreateAction4Story();
                 break;
         }
 
@@ -9717,5 +9718,37 @@ class upgradeModel extends model
      */
     public function addCreateAction4Story()
     {
+        $stories = $this->dao->select('id,product,openedBy,openedDate,vision')->from(TABLE_STORY)->where('openedDate')->ge('2023-07-12')->fetchAll('id');
+        foreach($stories as $story)
+        {
+            $firstAction = $this->dao->select('*')->from(TABLE_ACTION)
+                ->where('objectType')->eq('story')
+                ->andWhere('objectID')->eq($story->id)
+                ->orderBy('date,id')
+                ->fetch();
+
+            if(empty($firstAction) or $firstAction->action != 'opened')
+            {
+                $actionDate = $story->openedDate;
+                if($firstAction->date <= $actionDate) $actionDate = date('Y-m-d H:i:s', strtotime($firstAction->date) - 1);
+
+                $action = new stdclass();
+                $action->objectType = 'story';
+                $action->objectID   = $story->id;
+                $action->product    = ',' . $story->product . ',';
+                $action->project    = 0;
+                $action->execution  = 0;
+                $action->actor      = $story->openedBy;
+                $action->action     = 'opened';
+                $action->date       = $actionDate;
+                $action->comment    = '';
+                $action->extra      = '';
+                $action->read       = 0;
+                $action->vision     = $story->vision;
+                $action->efforted   = 0;
+
+                $this->dao->insert(TABLE_ACTION)->data($action)->exec();
+            }
+        }
     }
 }
