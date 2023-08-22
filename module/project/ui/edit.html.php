@@ -90,6 +90,7 @@ if($linkedProducts)
                     picker
                     (
                         set::name("branch[$i][]"),
+                        set::multiple(true),
                         set::items($branches),
                         set::value(implode(',', $product->branches)),
                     )
