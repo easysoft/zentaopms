@@ -449,8 +449,8 @@ class backupModel extends model
 
         if(!$nofile)
         {
-            $appRoot = $this->app->getAppRoot();
-            $appRootSize = $zfile->getDirSize($appRoot);
+            $appRoot      = $this->app->getAppRoot();
+            $appRootSize  = $this->getZentaoSize($appRoot);
             $backFileSize = $appRootSize - $zfile->getDirSize($appRoot . 'tmp') - $zfile->getDirSize($appRoot . 'www/course');
         }
 
@@ -461,5 +461,30 @@ class backupModel extends model
             ->fetch('size');
 
         return $diskFreeSpace . ',' . ($backFileSize + $backSqlSize);
+    }
+
+    /**
+     * Get zentao size.
+     *
+     * @param  string $appRoot
+     * @access public
+     * @return int
+     */
+    public function getZentaoSize($appRoot)
+    {
+        $totalSize = 0;
+        $tmpDir    = realPath($appRoot . 'tmp/');
+        $dataDir   = realPath($appRoot . 'www/data/');
+        $iterator  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($appRoot, RecursiveDirectoryIterator::SKIP_DOTS));
+
+        foreach($iterator as $file)
+        {
+            $filePath = $file->getRealPath();
+            if(strpos($filePath, $tmpDir) !== 0 and strpos($filePath, $dataDir) !== 0)
+            {
+                $totalSize += $file->getSize();
+            }
+        }
+        return $totalSize;
     }
 }
