@@ -295,7 +295,7 @@ class testsuite extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->testsuite->confirmDelete, inlink('delete', "suiteID=$suiteID&confirm=yes")));
+            return print(js::confirm($this->lang->testsuite->confirmDelete, inlink('delete', "suiteID={$suiteID}&confirm=yes")));
         }
         else
         {
