@@ -1688,6 +1688,7 @@ class taskModel extends model
         $lastID = $this->dao->select('id')->from(TABLE_EFFORT)
             ->where('objectID')->eq($effort->objectID)
             ->andWhere('objectType')->eq('task')
+            ->andWhere('deleted')->eq('0')
             ->orderBy('date_desc,id_desc')->limit(1)->fetch('id');
 
         $effort->isLast = $lastID == $effort->id;

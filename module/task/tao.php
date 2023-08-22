@@ -260,11 +260,12 @@ class taskTao extends taskModel
     protected function getLeftAfterDeleteWorkhour(object $effort, object $task): float
     {
         $left = $task->left;
-        if(!$effort->isLast)
+        if($effort->isLast)
         {
             $lastTwoEfforts = $this->dao->select('*')->from(TABLE_EFFORT)
                 ->where('objectID')->eq($effort->objectID)
                 ->andWhere('objectType')->eq('task')
+                ->andWhere('deleted')->eq('0')
                 ->orderBy('date desc,id desc')->limit(2)->fetchAll();
             $lastTwoEfforts  = isset($lastTwoEfforts[1]) ? $lastTwoEfforts[1] : '';
             if($lastTwoEfforts) $left = $lastTwoEfforts->left;
