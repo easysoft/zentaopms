@@ -419,7 +419,7 @@ class testcaseTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->getByList($caseIdList);
     }
 
     /**
