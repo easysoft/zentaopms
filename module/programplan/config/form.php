@@ -54,3 +54,6 @@ $config->programplan->form->updateDateByGantt['id']        = array('required' =>
 $config->programplan->form->updateDateByGantt['startDate'] = array('required' => false, 'type' => 'string', 'default' => null);
 $config->programplan->form->updateDateByGantt['endDate']   = array('required' => false, 'type' => 'string', 'default' => '');
 $config->programplan->form->updateDateByGantt['type']      = array('required' => false, 'type' => 'string', 'default' => '');
+
+$config->programplan->form->updateTaskOrderByGantt['id']    = array('required' => false, 'type' => 'string', 'default' => '');
+$config->programplan->form->updateTaskOrderByGantt['tasks'] = array('required' => false, 'type' => 'array',  'default' => array());

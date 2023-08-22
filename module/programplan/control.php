@@ -227,7 +227,8 @@ class programplan extends control
         $taskID = !empty($idList[1]) ? $idList[1] : 0;
         if(empty($taskID)) return $this->send(array('result' => 'fail', 'message' => ''));
 
-        $this->loadModel('task')->updateOrderByGantt();
+        $postData = form::data($this->config->programplan->form->updateTaskOrderByGantt)->get();
+        $this->loadModel('task')->updateOrderByGantt($postData);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->loadModel('action')->create('task', $taskID, 'ganttMove');

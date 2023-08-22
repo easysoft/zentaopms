@@ -2147,4 +2147,25 @@ class taskTest
         if(dao::isError()) return dao::getError();
         return true;
     }
+
+    /**
+     * 拖动甘特图更新任务的顺序。
+     * Update order by gantt.
+     *
+     * @param  int    $executionID
+     * @param  int    $taskID
+     * @param  array  $taskIdList
+     * @access public
+     * @return string
+     */
+    public function updateOrderByGanttTest(int $executionID, int $taskID, array $taskIdList): string
+    {
+        $postData = new stdclass();
+        $postData->id = "{$executionID}-{$taskID}";
+
+        foreach($taskIdList as $id) $postData->tasks[] = "{$executionID}-{$id}";
+
+        $this->objectModel->updateOrderByGantt($postData);
+        return $this->objectModel->dao->select('GROUP_CONCAT(`order`) as taskOrder')->from(TABLE_TASK)->where('id')->in($taskIdList)->fetch('taskOrder');
+    }
 }

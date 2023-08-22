@@ -2645,23 +2645,24 @@ class taskModel extends model
     }
 
     /**
+     * 拖动甘特图更新任务的顺序。
      * Update order by gantt.
      *
+     * @param  object $postData
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateOrderByGantt()
+    public function updateOrderByGantt(object $postData): bool
     {
-        $data = fixer::input('post')->get();
-
         $order = 1;
-        foreach($data->tasks as $task)
+        foreach($postData->tasks as $task)
         {
             $idList = explode('-', $task);
             $taskID = $idList[1];
             $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
             $order ++;
         }
+        return !dao::isError();
     }
 
     /**
