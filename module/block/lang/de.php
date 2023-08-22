@@ -615,6 +615,11 @@ $lang->block->qastatistic->closedToday       = 'Closed Today';
 $lang->block->qastatistic->latestTesttask    = 'Latest Testtask';
 $lang->block->qastatistic->bugStatusStat     = 'Bug Status Distribution';
 
+$lang->block->bugstatistic = new stdclass();
+$lang->block->bugstatistic->effective = 'effectived';
+$lang->block->bugstatistic->fixed     = 'fixed';
+$lang->block->bugstatistic->activated = 'activated';
+
 $lang->block->executionstatistic = new stdclass();
 $lang->block->executionstatistic->allProject        = 'All Project';
 $lang->block->executionstatistic->progress          = 'Progress';

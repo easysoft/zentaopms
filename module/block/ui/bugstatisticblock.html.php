@@ -70,7 +70,7 @@ foreach($products as $productID => $product)
                     span
                     (
                         setClass('text-sm text-gray'),
-                        $lang->block->qastatistic->totalBug
+                        $lang->block->bugstatistic->effective
                     ),
                 ),
                 col
@@ -83,7 +83,7 @@ foreach($products as $productID => $product)
                     span
                     (
                         setClass('text-sm text-gray'),
-                        $lang->block->productstatistic->closed
+                        $lang->block->bugstatistic->fixed
                     ),
                 ),
                 col
@@ -96,14 +96,14 @@ foreach($products as $productID => $product)
                     span
                     (
                         setClass('text-sm text-gray'),
-                        $lang->bug->unResolved
+                        $lang->block->bugstatistic->activated
                     ),
                 ),
             ),
         ),
         cell
         (
-            setClass('p-4' .  ($longBlock ? ' mt-3' : ' pb-0')),
+            setClass('chart bar-chart p-4' .  ($longBlock ? ' mt-3' : ' pb-0')),
             set::width($longBlock ? '70%' : '100%'),
             echarts
             (

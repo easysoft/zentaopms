@@ -409,7 +409,7 @@ class blockZen extends block
             $finishTask      = zget($finishTaskGroup, 'value', 0);
         }
 
-        /* 获取昨日解决的BUG数。 */
+        /* 获取昨日解决的Bug数。 */
         $fixBug      = 0;
         $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
         if(!empty($fixBug))
@@ -564,6 +564,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印测试单区块。
      * Print testtask block.
      *
      * @params object     $block
@@ -597,6 +598,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印研发需求区块。
      * Print story block.
      *
      * @params object     $block
@@ -667,7 +669,7 @@ class blockZen extends block
     }
 
     /**
-     * 打印产品统计区块数据。
+     * 打印产品发布统计区块数据。
      * Print product release statistic block.
      *
      * @param  object    $block
@@ -676,17 +678,21 @@ class blockZen extends block
      */
     protected function printReleaseStatisticBlock(object $block): void
     {
+        /* 获取最近六个月的年月数组。 */
         $years  = array();
         $months = array();
         $groups = array();
         for($i = 5; $i >= 0; $i --)
         {
-            $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
-            $months[date('m', strtotime("first day of -{$i} month"))] = date('m', strtotime("first day of -{$i} month"));
-            $groups[date('Y-m', strtotime("first day of -{$i} month"))] = date('Y-m', strtotime("first day of -{$i} month"));
+            $years[]  = date('Y',   strtotime("first day of -{$i} month"));
+            $months[] = date('m',   strtotime("first day of -{$i} month"));
+            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
         }
+
+        /* 从度量项获取所有产品的月度发布次数的数据。 */
         $monthRelease = $this->loadModel('metric')->getResultByCode('count_of_monthly_created_release', array('year' => join(',', $years), 'month' => join(',', $months)));
 
+        /* 获取各个产品的年度(今年)发布次数。 */
         $products      = $this->loadModel('product')->getOrderedProducts('all');
         $productIdList = array_keys($products);
         $releaseGroup  = $this->metric->getResultByCode('count_of_annual_created_release_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
@@ -703,6 +709,7 @@ class blockZen extends block
             }
         }
 
+        /* 组装成由产品名称和发布次数组成的数组。 */
         $releases = array();
         foreach($products as $product)
         {
@@ -715,13 +722,14 @@ class blockZen extends block
                 }
             }
         }
-        arsort($releases);
+        arsort($releases); // 按发布次数从高到低排序。
 
         $this->view->releaseData = $releaseData;
         $this->view->releases    = $releases;
     }
 
     /**
+     * 打印版本区块。
      * Print Build block.
      *
      * @param  object    $block
@@ -747,6 +755,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印项目列表区块。
      * Print project block.
      *
      * @param  object    $block
@@ -780,6 +789,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印产品列表区块。
      * Print product block.
      *
      * @param  object    $block
@@ -802,9 +812,10 @@ class blockZen extends block
     }
 
     /**
+     * 打印项目概况区块。
      * Get data of the project overview block.
      *
-     * @param  object $block
+     * @param  object    $block
      * @access protected
      * @return void
      */
@@ -880,6 +891,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印项目统计区块。
      * Print project statistic block.
      *
      * @param  object    $block
@@ -900,8 +912,10 @@ class blockZen extends block
         $projectIdList = array_keys($projects);
 
         $this->loadModel('metric');
-        $riskCountGroup    = $this->metric->getResultByCode('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)));
-        $issueCountGroup   = $this->metric->getResultByCode('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)));
+        /* 敏捷和瀑布相关目的统计信息。 */
+        $riskCountGroup  = $this->metric->getResultByCode('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)));
+        $issueCountGroup = $this->metric->getResultByCode('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)));
+
         /* 敏捷项目的统计信息。 */
         $investedGroup      = $this->metric->getResultByCode('day_of_invested_in_project',         array('project' => join(',', $projectIdList)));
         $consumeTaskGroup   = $this->metric->getResultByCode('consume_of_task_in_project',         array('project' => join(',', $projectIdList)));
@@ -946,7 +960,7 @@ class blockZen extends block
         if($CVGroup)           $CVGroup           = array_column($CVGroup,           null, 'project');
         if($ACGroup)           $ACGroup           = array_column($ACGroup,           null, 'project');
 
-        /* 将获取的统计信息按照projectID补充到projects数组中。 */
+        /* 将获取的度量数据塞入项目列表数据中。 */
         $this->loadModel('execution');
         $this->app->loadClass('pager', true);
         $pager  = pager::init(0, 3, 1);
@@ -1002,17 +1016,18 @@ class blockZen extends block
         $products       = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
         $productIdList  = array_keys($products);
 
+        $this->loadModel('metric');
         /* 按照产品分组获取产品需求交付率度量项。 */
-        $storyDeliveryRate = $this->loadModel('metric')->getResultByCode('rate_of_delivery_story_in_product', array('product' => join(',', $productIdList)));
+        $storyDeliveryRate = $this->metric->getResultByCode('rate_of_delivery_story_in_product',   array('product' => join(',', $productIdList)));
 
         /* 按照产品分组获取产品有效需求数度量项。 */
-        $totalStories = $this->metric->getResultByCode('count_of_valid_story_in_product', array('product' => join(',', $productIdList)));
+        $totalStories      = $this->metric->getResultByCode('count_of_valid_story_in_product',     array('product' => join(',', $productIdList)));
 
         /* 按照产品分组获取产品已交付需求数度量项。 */
-        $closedStories = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => join(',', $productIdList)));
+        $closedStories     = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => join(',', $productIdList)));
 
         /* 按照产品分组获取产品未关闭需求数度量项。 */
-        $unclosedStories = $this->metric->getResultByCode('count_of_unclosed_story_in_product', array('product' => join(',', $productIdList)));
+        $unclosedStories   = $this->metric->getResultByCode('count_of_unclosed_story_in_product',  array('product' => join(',', $productIdList)));
 
         if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
         if(!empty($totalStories))      $totalStories      = array_column($totalStories,      null, 'product');
@@ -1025,12 +1040,12 @@ class blockZen extends block
         $groups = array();
         for($i = 5; $i >= 0; $i --)
         {
-            $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
-            $months[date('m', strtotime("first day of -{$i} month"))] = date('m', strtotime("first day of -{$i} month"));
-            $groups[date('Y-m', strtotime("first day of -{$i} month"))] = date('Y-m', strtotime("first day of -{$i} month"));
+            $years[]  = date('Y',   strtotime("first day of -{$i} month"));
+            $months[] = date('m',   strtotime("first day of -{$i} month"));
+            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
         }
         $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
-        $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
+        $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
 
         /* 根据产品列表获取预计开始日期距离现在最近且预计开始日期大于当前日期的未开始状态计划。 */
         /* Obtain an unstarted status plan based on the product list, with an expected start date closest to the current date and an expected start date greater than the current date. */
@@ -1171,6 +1186,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印瀑布项目统计区块。
      * Print waterfall report block.
      *
      * @access protected
@@ -1202,6 +1218,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印瀑布项目统计区块。
      * Print waterfall general report block.
      *
      * @access protected
@@ -1226,6 +1243,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印瀑布项目计划甘特图区块。
      * Print waterfall gantt block.
      *
      * @access protected
@@ -1243,6 +1261,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印瀑布项目问题列表区块。
      * Print waterfall issue block.
      *
      * @access protected
@@ -1254,6 +1273,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印瀑布项目风险列表区块。
      * Print waterfall risk block.
      *
      * @access protected
@@ -1265,6 +1285,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印瀑布项目工时统计区块。
      * Print waterfall estimate block.
      *
      * @access protected
@@ -1289,6 +1310,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印瀑布项目进度区块。
      * Print waterfall progress block.
      *
      * @access protected
@@ -1322,6 +1344,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印敏捷项目概况区块。
      * Print srcum project block.
      *
      * @access protected
@@ -1345,6 +1368,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印敏捷项目列表区块。
      * Print srcum project list block.
      *
      * @param  object    $block
@@ -1364,6 +1388,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印敏捷项目产品概况。
      * Print srcum product block.
      *
      * @param  object    $block
@@ -1394,6 +1419,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印敏捷项目问题列表区块。
      * Print scrum issue block.
      *
      * @access protected
@@ -1405,6 +1431,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印敏捷项目风险列表区块。
      * Print scrum risk block.
      *
      * @access protected
@@ -1416,6 +1443,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印问题列表区块。
      * Print issue block.
      *
      * @param  object    $block
@@ -1432,6 +1460,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印风险列表区块。
      * Print risk block.
      *
      * @param  object    $block
@@ -1460,6 +1489,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印项目动态区块。
      * Print project dynamic block.
      *
      * @param  object    $block
@@ -1480,6 +1510,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印敏捷项目路线图区块。
      * Print srcum road map block.
      *
      * @param  int    $productID
@@ -1510,6 +1541,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印敏捷项目的测试统计区块。
      * Print srcum test block.
      *
      * @param  object    $block
@@ -1545,6 +1577,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印测试统计区块。
      * Print qa statistic block.
      *
      * @param  object    $block
@@ -1559,11 +1592,12 @@ class blockZen extends block
         $status = isset($block->params->type)  ? $block->params->type : '';
         $count  = isset($block->params->count) ? (int)$block->params->count : 0;
 
+        /* 测试统计是按产品分组统计的。 */
         $projectID     = $this->lang->navGroup->qa == 'project' ? $this->session->project : 0;
         $products      = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID, 'all');
         $productIdList = array_keys($products);
 
-        $this->loadModel('metric');
+        /* 计算昨日和今日可能包含的日期情况。 */
         $years  = array();
         $months = array();
         for($i = 0; $i <= 1; $i ++)
@@ -1571,19 +1605,22 @@ class blockZen extends block
             $years[] = date('Y', strtotime("-{$i} day"));
             $months[] = date('m', strtotime("-{$i} day"));
         }
-        $createdBugGroup  = $this->metric->getResultByCode('count_of_daily_created_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
-        $resolvedBugGroup = $this->metric->getResultByCode('count_of_daily_resolved_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
-        $closedBugGroup   = $this->metric->getResultByCode('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
-        $bugFixRate       = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',           array('product' => join(',', $productIdList)));
-        $effectiveBug     = $this->metric->getResultByCode('count_of_effective_bug_in_product',      array('product' => join(',', $productIdList)));
-        $restoredBug      = $this->metric->getResultByCode('count_of_restored_bug_in_product',       array('product' => join(',', $productIdList)));
-        $activatedBug     = $this->metric->getResultByCode('count_of_activated_bug_in_product',      array('product' => join(',', $productIdList)));
+
+        $this->loadModel('metric');
+        $createdBugGroup  = $this->metric->getResultByCode('count_of_daily_created_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 获取昨日和今日新增的Bug数。
+        $resolvedBugGroup = $this->metric->getResultByCode('count_of_daily_resolved_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 获取昨日和今日解决的Bug数。
+        $closedBugGroup   = $this->metric->getResultByCode('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 获取昨日和今日关闭的Bug数。
+        $bugFixRate       = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',           array('product' => join(',', $productIdList))); // 获取Bug关闭率。
+        $effectiveBug     = $this->metric->getResultByCode('count_of_effective_bug_in_product',      array('product' => join(',', $productIdList))); // 获取Bug总数。
+        $restoredBug      = $this->metric->getResultByCode('count_of_restored_bug_in_product',       array('product' => join(',', $productIdList))); // 获取Bug关闭数。
+        $activatedBug     = $this->metric->getResultByCode('count_of_activated_bug_in_product',      array('product' => join(',', $productIdList))); // 获取Bug激活数。
 
         if(!empty($bugFixRate))   $bugFixRate   = array_column($bugFixRate,   null, 'product');
         if(!empty($effectiveBug)) $effectiveBug = array_column($effectiveBug, null, 'product');
         if(!empty($restoredBug))  $restoredBug  = array_column($restoredBug,  null, 'product');
         if(!empty($activatedBug)) $activatedBug = array_column($activatedBug, null, 'product');
 
+        /* 将获取出的度量项数据塞入产品列表数据中。 */
         foreach($products as $productID => $product)
         {
             $product->addToday          = 0;
@@ -1661,6 +1698,8 @@ class blockZen extends block
         $data->milestoneCount = 0;
 
         $this->loadModel('metric');
+
+        /* 从度量项获取产品总数量。 */
         $productCount = $this->metric->getResultByCode('count_of_product');
         if(!empty($productCount))
         {
@@ -1668,6 +1707,7 @@ class blockZen extends block
             $data->productCount = zget($productCount, 'value', 0);
         }
 
+        /* 从度量项获取发布次数。 */
         $releaseCount = $this->metric->getResultByCode('count_of_annual_created_release', array('year' => date('Y')));
         if(!empty($releaseCount))
         {
@@ -1675,6 +1715,7 @@ class blockZen extends block
             $data->releaseCount = zget($releaseCount, 'value', 0);
         }
 
+        /* 从度量项获取发布里程碑数。 */
         $milestoneCount = $this->metric->getResultByCode('count_of_marker_release');
         if(!empty($milestoneCount))
         {
@@ -1711,7 +1752,6 @@ class blockZen extends block
         $data->finishedStoryPoint['year']   = 0;
         $data->finishedStoryPoint['week']   = 0;
 
-        /* 从度量项获取各统计数据。 */
         $this->loadModel('metric');
         $productLineCount = $this->metric->getResultByCode('count_of_line'); // 产品线总量。
         if(!empty($productLineCount))
@@ -1749,8 +1789,8 @@ class blockZen extends block
         }
 
         $createdReleaseGroup = $this->metric->getResultByCode('count_of_annual_created_release'); // 已完成发布数。
-        $finishedStoryGroup  = $this->metric->getResultByCode('count_of_annual_finished_story'); // 已完成需求数。
-        $storyScaleGroup     = $this->metric->getResultByCode('scale_of_annual_finished_story'); // 已完成需求规模。
+        $finishedStoryGroup  = $this->metric->getResultByCode('count_of_annual_finished_story');  // 已完成需求数。
+        $storyScaleGroup     = $this->metric->getResultByCode('scale_of_annual_finished_story');  // 已完成需求规模。
 
         if($createdReleaseGroup) $createdReleaseGroup = array_column($createdReleaseGroup, null, 'year');
         if($finishedStoryGroup)  $finishedStoryGroup  = array_column($finishedStoryGroup,  null, 'year');
@@ -1877,6 +1917,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印测试概况区块。
      * Print qa overview block.
      *
      * @param  object    $block
@@ -1911,6 +1952,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印执行列表区块。
      * Print execution block.
      *
      * @param  object    $block
@@ -1945,6 +1987,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印指派给的我区块。
      * Print assign to me block.
      *
      * @param  object    $block
@@ -2133,6 +2176,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印最近项目区块。
      * Print recent project block.
      *
      * @access protected
@@ -2147,6 +2191,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印项目团队区块。
      * Print project team block.
      *
      * @param  object    $block
@@ -2167,6 +2212,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印文档统计区块。
      * Print document statistic block.
      *
      * @access protected
@@ -2178,6 +2224,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印文档动态区块。
      * Print document dynamic block.
      *
      * @access protected
@@ -2194,6 +2241,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印我关注的文档区块。
      * Print my collection of documents block.
      *
      * @access protected
@@ -2219,6 +2267,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印最近更新的文档区块。
      * Print recent update block.
      *
      * @access protected
@@ -2244,6 +2293,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印文档浏览排行区块。
      * Print view list block.
      *
      * @access protected
@@ -2259,6 +2309,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印文档关注排行区块。
      * Print collect list block.
      *
      * @access protected
@@ -2274,6 +2325,7 @@ class blockZen extends block
     }
 
     /**
+     * 打拼产品文档统计区块。
      * Print product's document block.
      *
      * @param  object    $block
@@ -2325,6 +2377,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印项目文档统计区块。
      * Print project's document block.
      *
      * @param  object    $block
@@ -2405,6 +2458,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印帮助区块。
      * Print guide block
      *
      * @param  object    $block
@@ -2437,21 +2491,25 @@ class blockZen extends block
      */
     protected function printMonthlyProgressBlock()
     {
+        /* 获取最近6个月的年月数组组合。 */
         $years  = array();
         $months = array();
         $groups = array();
         for($i = 5; $i >= 0; $i --)
         {
-            $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
-            $months[date('m', strtotime("first day of -{$i} month"))] = date('m', strtotime("first day of -{$i} month"));
-            $groups[date('Y-m', strtotime("first day of -{$i} month"))] = date('Y-m', strtotime("first day of -{$i} month"));
+            $years[]  = date('Y',   strtotime("first day of -{$i} month"));
+            $months[] = date('m',   strtotime("first day of -{$i} month"));
+            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
         }
-        $monthFinishedScale = $this->loadModel('metric')->getResultByCode('scale_of_monthly_finished_story', array('year' => join(',', $years), 'month' => join(',', $months)));
-        $monthCreatedStory  = $this->metric->getResultByCode('count_of_monthly_created_story',  array('year' => join(',', $years), 'month' => join(',', $months)));
-        $monthFinishedStory = $this->metric->getResultByCode('count_of_monthly_finished_story', array('year' => join(',', $years), 'month' => join(',', $months)));
-        $monthCreatedBug    = $this->metric->getResultByCode('count_of_monthly_created_bug',    array('year' => join(',', $years), 'month' => join(',', $months)));
-        $monthFinishedBug   = $this->metric->getResultByCode('count_of_monthly_fixed_bug',      array('year' => join(',', $years), 'month' => join(',', $months)));
 
+        $this->loadModel('metric');
+        $monthFinishedScale = $this->metric->getResultByCode('scale_of_monthly_finished_story', array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度完成需求规模数。
+        $monthCreatedStory  = $this->metric->getResultByCode('count_of_monthly_created_story',  array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度新增需求数。
+        $monthFinishedStory = $this->metric->getResultByCode('count_of_monthly_finished_story', array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度完成需求数。
+        $monthCreatedBug    = $this->metric->getResultByCode('count_of_monthly_created_bug',    array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度新增Bug数。
+        $monthFinishedBug   = $this->metric->getResultByCode('count_of_monthly_fixed_bug',      array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度解决Bug数。
+
+        /* 重新组装度量项数据为年月和数据的数组。 */
         foreach($groups as $group)
         {
             $doneStoryEstimate[$group] = 0;
@@ -2500,6 +2558,7 @@ class blockZen extends block
                 }
             }
         }
+
         $this->view->doneStoryEstimate = $doneStoryEstimate;
         $this->view->doneStoryCount    = $doneStoryCount;
         $this->view->createStoryCount  = $createStoryCount;
@@ -2516,18 +2575,20 @@ class blockZen extends block
      */
     protected function printAnnualWorkloadBlock()
     {
+        /* 获取产品列表， 按照产品分组展示数据。 */
         $products      = $this->loadModel('product')->getPairs();
         $productIdList = array_keys($products);
 
         $this->loadModel('metric');
-        $finishEstimateGroup = $this->metric->getResultByCode('scale_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
-        $doneStoryGroup      = $this->metric->getResultByCode('count_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
-        $resolvedBugGroup    = $this->metric->getResultByCode('count_of_annual_restored_bug_in_product',   array('product' => join(',', $productIdList), 'year' => date('Y')));
+        $finishEstimateGroup = $this->metric->getResultByCode('scale_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y'))); // 从度量项获取今年各产品完成的需求规模数。
+        $doneStoryGroup      = $this->metric->getResultByCode('count_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y'))); // 从度量项获取今年各产品完成的需求数。
+        $resolvedBugGroup    = $this->metric->getResultByCode('count_of_annual_restored_bug_in_product',   array('product' => join(',', $productIdList), 'year' => date('Y'))); // 从度量项获取今年各产品修复的Bug数。
 
         if(!empty($finishEstimateGroup)) $finishEstimateGroup = array_column($finishEstimateGroup, null, 'product');
         if(!empty($doneStoryGroup))      $doneStoryGroup      = array_column($doneStoryGroup,      null, 'product');
         if(!empty($resolvedBugGroup))    $resolvedBugGroup    = array_column($resolvedBugGroup,    null, 'product');
 
+        /* 组装数据成产品ID和度量数据的数组。 */
         $doneStoryEstimate = array();
         $doneStoryCount    = array();
         $resolvedBugCount  = array();
@@ -2537,6 +2598,8 @@ class blockZen extends block
             $doneStoryCount[$productID]    = isset($doneStoryGroup[$productID]['value'])      ? $doneStoryGroup[$productID]['value']      : 0;
             $resolvedBugCount[$productID]  = isset($resolvedBugGroup[$productID]['value'])    ? $resolvedBugGroup[$productID]['value']    : 0;
         }
+
+        /* 从大到小排序。 */
         arsort($doneStoryEstimate);
         arsort($doneStoryCount);
         arsort($resolvedBugCount);
@@ -2545,12 +2608,15 @@ class blockZen extends block
         $this->view->doneStoryEstimate = $doneStoryEstimate;
         $this->view->doneStoryCount    = $doneStoryCount;
         $this->view->resolvedBugCount  = $resolvedBugCount;
+
+        /* 获取各个分组中最大的值， 用来计算各个值所占的比例。 */
         $this->view->maxStoryEstimate  = max($doneStoryEstimate);
         $this->view->maxStoryCount     = max($doneStoryCount);
         $this->view->maxBugCount       = max($resolvedBugCount);
     }
 
     /**
+     * 打印产品的Bug数据区块。
      * Print bug statistic block.
      *
      * @param  object    $block
@@ -2559,50 +2625,83 @@ class blockZen extends block
      */
     protected function printBugStatisticBlock(object $block)
     {
-        $this->app->loadClass('pager', true);
-        $count = isset($block->params->count) ? (int)$block->params->count : 0;
-        $type  = isset($block->params->type) ? $block->params->type : '';
-        $pager = pager::init(0, $count , 1);
+        /* 获取需要统计的产品列表。 */
+        /* Obtain a list of products that require statistics. */
+        $status         = isset($block->params->type)  ? $block->params->type  : '';
+        $count          = isset($block->params->count) ? $block->params->count : '';
+        $products       = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
+        $productIdList  = array_keys($products);
 
-        $today = strtotime(helper::today());
-        $begin = strtotime(date('Y-m', strtotime('+2 month', $today)));
-        $end   = strtotime(date('Y-m', $today));
-        $begin = strtotime('2023-09');
-        $end   = strtotime('2024-02');
+        $this->loadModel('metric');
+        $bugFixedRate      = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',      array('product' => join(',', $productIdList))); // 从度量项获取各个产品的Bug修复率。
+        $effectiveBugGroup = $this->metric->getResultByCode('count_of_effective_bug_in_product', array('product' => join(',', $productIdList))); // 从度量项获取各个产品的有效Bug数。
+        $fixedBugGroup     = $this->metric->getResultByCode('count_of_fixed_bug_in_product',     array('product' => join(',', $productIdList))); // 从度量项获取各个产品的Bug修复数。
+        $activatedBugGroup = $this->metric->getResultByCode('count_of_activated_bug_in_product', array('product' => join(',', $productIdList))); // 从度量项获取各个产品的Bug激活数。
 
-        $months         = array();
-        $products       = $this->loadModel('product')->getList(0, $block->params->type);
-        $totalBugs      = array();
+        if(!empty($bugFixedRate))      $bugFixedRate      = array_column($bugFixedRate,      null, 'product');
+        if(!empty($effectiveBugGroup)) $effectiveBugGroup = array_column($effectiveBugGroup, null, 'product');
+        if(!empty($fixedBugGroup))     $fixedBugGroup     = array_column($fixedBugGroup,     null, 'product');
+        if(!empty($fixedBugGroup))     $activatedBugGroup = array_column($activatedBugGroup, null, 'product');
+
+        /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
+        $years  = array();
+        $months = array();
+        $groups = array();
+        for($i = 5; $i >= 0; $i --)
+        {
+            $years[]  = date('Y',   strtotime("first day of -{$i} month"));
+            $months[] = date('m',   strtotime("first day of -{$i} month"));
+            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+        }
+
+        $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
+        $monthFixedBugGroup   = $this->metric->getResultByCode('count_of_monthly_fixed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的解决Bug数。
+        $monthClosedBugGroup  = $this->metric->getResultByCode('count_of_monthly_closed_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
+
+        /* 组装页面所需的度量项数组。 */
         $closedBugs     = array();
         $unresovledBugs = array();
         $resolvedRate   = array();
         $activateBugs   = array();
         $resolveBugs    = array();
         $closeBugs      = array();
-        $products       = $this->loadModel('product')->getList(0, $type);
-        foreach($products as $productID => $product)
+        foreach($productIdList as $productID)
         {
-            $closedBugs[$productID]     = rand(10, 10000);
-            $unresovledBugs[$productID] = rand(10, 1000);
-            $totalBugs[$productID]      = rand(100, 10000);
-            $resolvedRate[$productID]   = rand(1, 100);
-            for($date = $begin; $date <= $end; $date = strtotime('+1 month', $date))
+            $closedBugs[$productID]     = isset($fixedBugGroup[$productID]['value'])     ? $fixedBugGroup[$productID]['value']      : 0;
+            $unresovledBugs[$productID] = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
+            $totalBugs[$productID]      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
+            $resolvedRate[$productID]   = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
+            foreach($groups as $group)
             {
-                $month = date('Y-m', $date);
-                $activateBugs[$productID][$month] = rand(100, 400);
-                $resolveBugs[$productID][$month]  = rand(100, 400);
-                $closeBugs[$productID][$month]    = rand(100, 400);
+                $activateBugs[$productID][$group] = 0;
+                $resolveBugs[$productID][$group]  = 0;
+                $closeBugs[$productID][$group]    = 0;
 
-                $month = (int)ltrim(date('m', $date), '0');
+                if(!empty($monthCreatedBugGroup))
+                {
+                    foreach($monthCreatedBugGroup as $data)
+                    {
+                        if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $activateBugs[$productID][$group] = $data['value'];
+                    }
+                }
 
-                $monthName = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? "{$month}{$this->lang->block->month}" : zget($this->lang->datepicker->monthNames, $month - 1, '');
-                if($month == 1) $monthName .= "\n" . date('Y', $date) . (in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $this->lang->year : '');
+                if(!empty($monthFixedBugGroup))
+                {
+                    foreach($monthFixedBugGroup as $data)
+                    {
+                        if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $resolveBugs[$productID][$group] = $data['value'];
+                    }
+                }
 
-                if(count($closedBugs) == 1) $months[] = $monthName;
+                if(!empty($monthClosedBugGroup))
+                {
+                    foreach($monthClosedBugGroup as $data)
+                    {
+                        if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $closeBugs[$productID][$group] = $data['value'];
+                    }
+                }
             }
         }
-
-        $this->app->loadLang('bug');
 
         $this->view->months         = $months;
         $this->view->products       = $products;
@@ -2624,6 +2723,7 @@ class blockZen extends block
      */
     protected function printTeamAchievementBlock()
     {
+        /* 获取昨日和今日可能的年月组合。 */
         $years  = array();
         $months = array();
         for($i = 0; $i <= 1; $i ++)
@@ -2666,7 +2766,7 @@ class blockZen extends block
             }
         }
 
-        /* 获取今日关闭BUG数和昨日关闭BUG数。 */
+        /* 获取今日关闭Bug数和昨日关闭Bug数。 */
         $closedBugs    = 0;
         $yesterdayBugs = 0;
         if($closedBugGroup)
@@ -2760,19 +2860,18 @@ class blockZen extends block
         if(!empty($closedStories))     $closedStories     = array_column($closedStories,     null, 'product');
         if(!empty($unclosedStories))   $unclosedStories   = array_column($unclosedStories,   null, 'product');
 
+        /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
         $groups = array();
         for($i = 5; $i >= 5; $i --)
         {
-            $years[date('Y', strtotime("first day of -{$i} month"))] = date('Y', strtotime("first day of -{$i} month"));
-            $months[date('m', strtotime("first day of -{$i} month"))] = date('m', strtotime("first day of -{$i} month"));
-            $groups[date('Y-m', strtotime("first day of -{$i} month"))] = date('Y-m', strtotime("first day of -{$i} month"));
+            $years[]  = date('Y',   strtotime("first day of -{$i} month"));
+            $months[] = date('m',   strtotime("first day of -{$i} month"));
+            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
         }
         $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
         $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
-        if(empty($monthFinish)) $monthFinish = array();
-        if(empty($monthCreated)) $monthCreated = array();
 
         /* 根据产品列表获取预计开始日期距离现在最近且预计开始日期大于当前日期的未开始状态计划。 */
         /* Obtain an unstarted status plan based on the product list, with an expected start date closest to the current date and an expected start date greater than the current date. */
@@ -2814,6 +2913,8 @@ class blockZen extends block
         $product->newExecution      = $newExecution;
         $product->newRelease        = $newRelease;
 
+        /* 将按照产品分组的统计数据放入产品列表中。 */
+        /* Place statistical data grouped by product into the product list. */
         foreach($groups as $group)
         {
             $product->monthFinish[$group]  = 0;

@@ -611,6 +611,11 @@ $lang->block->qastatistic->closedToday       = '今日关闭';
 $lang->block->qastatistic->latestTesttask    = '近期测试单';
 $lang->block->qastatistic->bugStatusStat     = 'Bug状态分布';
 
+$lang->block->bugstatistic = new stdclass();
+$lang->block->bugstatistic->effective = '有效Bug';
+$lang->block->bugstatistic->fixed     = '已修复';
+$lang->block->bugstatistic->activated = '激活的';
+
 $lang->block->executionstatistic = new stdclass();
 $lang->block->executionstatistic->allProject        = '全部项目';
 $lang->block->executionstatistic->progress          = '执行进度';
