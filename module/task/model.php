@@ -2671,33 +2671,35 @@ class taskModel extends model
     }
 
     /**
-     * Get task list by conditions.
+     * 通过给定条件获取任务列表信息。
+     * Get task list by condition.
      *
-     * @param  object           $conds
-     * @param  string           $orderBy
-     * @param  object           $pager
+     * @param  object      $condition
+     * @param  string      $orderBy
+     * @param  object|null $pager
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getListByConds($conds, $orderBy = 'id_desc', $pager = null)
+    public function getListByCondition(object $condition, string $orderBy = 'id_desc', object|null $pager = null): array
     {
-        foreach(array('priList' => array(), 'assignedToList' => array(), 'statusList' => array(), 'idList' => array(), 'taskName' => '') as $condKey => $defaultValue)
+        $defaultValueList = array('priList' => array(), 'assignedToList' => array(), 'statusList' => array(), 'idList' => array(), 'taskName' => '');
+        foreach($defaultValueList as $key => $defaultValue)
         {
-            if(!isset($conds->$condKey))
+            if(!isset($condition->$key))
             {
-                $conds->$condKey = $defaultValue;
+                $condition->$key = $defaultValue;
                 continue;
             }
-            if(strripos($condKey, 'list') === strlen($condKey) - 4 && !is_array($conds->$condKey)) $conds->$condKey = array_filter(explode(',', $conds->$condKey));
+            if(strripos($key, 'list') === strlen($key) - 4 && !is_array($condition->$key)) $condition->$key = array_filter(explode(',', $condition->$key));
         }
 
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->beginIF(!empty($conds->priList))->andWhere('pri')->in($conds->priList)->fi()
-            ->beginIF(!empty($conds->assignedToList))->andWhere('assignedTo')->in($conds->assignedToList)->fi()
-            ->beginIF(!empty($conds->statusList))->andWhere('status')->in($conds->statusList)->fi()
-            ->beginIF(!empty($conds->idList))->andWhere('id')->in($conds->idList)->fi()
-            ->beginIF(!empty($conds->taskName))->andWhere('name')->like("%{$conds->taskName}%")
+            ->beginIF(!empty($condition->priList))->andWhere('pri')->in($condition->priList)->fi()
+            ->beginIF(!empty($condition->assignedToList))->andWhere('assignedTo')->in($condition->assignedToList)->fi()
+            ->beginIF(!empty($condition->statusList))->andWhere('status')->in($condition->statusList)->fi()
+            ->beginIF(!empty($condition->idList))->andWhere('id')->in($condition->idList)->fi()
+            ->beginIF(!empty($condition->taskName))->andWhere('name')->like("%{$condition->taskName}%")->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->page($pager)

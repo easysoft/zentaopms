@@ -2168,4 +2168,21 @@ class taskTest
         $this->objectModel->updateOrderByGantt($postData);
         return $this->objectModel->dao->select('GROUP_CONCAT(`order`) as taskOrder')->from(TABLE_TASK)->where('id')->in($taskIdList)->fetch('taskOrder');
     }
+
+    /**
+     * 通过给定条件获取任务列表信息。
+     * Get task list by condition.
+     *
+     * @param  array  $conditionList
+     * @param  string $orderBy
+     * @access public
+     * @return object[]
+     */
+    public function getListByConditionTest(array $conditionList, string $orderBy): array
+    {
+        $condition = new stdclass();
+        foreach($conditionList as $key => $value) $condition->$key = $value;
+
+        return $this->objectModel->getListByCondition($condition, $orderBy);
+    }
 }
