@@ -636,6 +636,24 @@ class taskTao extends taskModel
     }
 
     /**
+     * 获取多人任务的完成者。
+     * Get the users who finished the multiple task.
+     *
+     * @param  int    $taskID
+     * @param  array  $team
+     * @access public
+     * @return array
+     */
+    public function getFinishedUsers(int $taskID = 0, array $team = array()): array
+    {
+        return $this->dao->select('id,account')->from(TABLE_TASKTEAM)
+            ->where('task')->eq($taskID)
+            ->andWhere('status')->eq('done')
+            ->beginIF($team)->andWhere('account')->in($team)->fi()
+            ->fetchPairs('id', 'account');
+    }
+
+    /**
      * 根据报表条件查询任务.
      * Get task list by report.
      *

@@ -970,7 +970,7 @@ class taskModel extends model
             }
 
             /* Set the task finisher. */
-            $finishedUsers = $this->getFinishedUsers($oldTask->id, array_keys($oldTask->members));
+            $finishedUsers = $this->taskTao->getFinishedUsers($oldTask->id, array_keys($oldTask->members));
             if(count($finishedUsers) == count($oldTask->team))
             {
                 $task->status       = 'done';
@@ -2668,23 +2668,6 @@ class taskModel extends model
             if(isset($users[$member->account])) $members[$member->account] = $users[$member->account];
         }
         return $members;
-    }
-
-    /**
-     * Get the users who finished the multiple task.
-     *
-     * @param  int          $taskID
-     * @param  string|array $team
-     * @access public
-     * @return array
-     */
-    public function getFinishedUsers($taskID = 0, $team = array())
-    {
-        return $this->dao->select('id,account')->from(TABLE_TASKTEAM)
-            ->where('task')->eq($taskID)
-            ->andWhere('status')->eq('done')
-            ->beginIF($team)->andWhere('account')->in($team)->fi()
-            ->fetchPairs('id', 'account');
     }
 
     /**
