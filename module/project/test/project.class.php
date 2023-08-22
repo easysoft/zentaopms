@@ -377,4 +377,18 @@ class Project
         );
         return implode('|', $result);
     }
+
+    /**
+     * Test build search form.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildSearchFormTest($queryID)
+    {
+        $this->project->buildSearchForm($queryID, 'searchUrl');
+
+        return $_SESSION['projectsearchParams']['queryID'];
+    }
 }
