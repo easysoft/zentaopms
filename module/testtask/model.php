@@ -1613,6 +1613,7 @@ class testtaskModel extends model
         $caseLink    = helper::createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask&taskID=$run->task");
         $account     = $this->app->user->account;
         $id          = $col->id;
+        $caseChanged = $run->version < $run->caseVersion;
         $fromCaseID  = $run->fromCaseID;
 
         if($col->show)
@@ -1672,12 +1673,19 @@ class testtaskModel extends model
                 foreach(explode(',', trim($run->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
                 break;
             case 'status':
-                $case = new stdClass();
-                $case->status = $run->caseStatus;
+                if($run->caseStatus != 'wait' and $caseChanged)
+                {
+                    echo "<span title='{$this->lang->testcase->changed}' class='warning'>{$this->lang->testcase->changed}</span>";
+                }
+                else
+                {
+                    $case = new stdClass();
+                    $case->status = $run->caseStatus;
 
-                $status = $this->processStatus('testcase', $case);
-                if($run->status == $status) $status = $this->processStatus('testtask', $run);
-                echo $status;
+                    $status = $this->processStatus('testcase', $case);
+                    if($run->status == $status) $status = $this->processStatus('testtask', $run);
+                    echo $status;
+                }
                 break;
             case 'precondition':
                 echo $run->precondition;
@@ -1735,6 +1743,12 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
+                if($run->caseStatus != 'wait' and $caseChanged)
+                {
+                    common::printIcon('testcase', 'confirmChange', "id=$run->case&taskID=$run->task&from=list", $run, 'list', 'search', 'hiddenwin');
+                    break;
+                }
+
                 common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=executionID=$task->execution,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
 
                 common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
