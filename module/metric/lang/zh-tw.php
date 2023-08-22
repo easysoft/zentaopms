@@ -15,6 +15,10 @@ $lang->metric->confirmDelete = "確認要刪除嗎？";
 
 $lang->metric->browseAction = '度量項列表';
 
+$lang->metric->stageList = array();
+$lang->metric->stageList['wait']     = "未發佈";
+$lang->metric->stageList['released'] = "已發佈";
+
 $lang->metric->purposeList = array();
 $lang->metric->purposeList['scale'] = "規模估算";
 $lang->metric->purposeList['qc']    = "質量控制";

@@ -15,6 +15,10 @@ $lang->metric->confirmDelete = "Are you sure you want to delete?";
 
 $lang->metric->browseAction = 'Metric List';
 
+$lang->metric->stageList = array();
+$lang->metric->stageList['wait']     = "Unpublished";
+$lang->metric->stageList['released'] = "Published";
+
 $lang->metric->purposeList = array();
 $lang->metric->purposeList['scale'] = "Scale Estimation";
 $lang->metric->purposeList['qc']    = "Quality Control";

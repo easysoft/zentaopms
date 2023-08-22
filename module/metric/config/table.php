@@ -16,12 +16,12 @@ $config->metric->dtable->definition->fieldList['name']['minWidth'] = '300';
 $config->metric->dtable->definition->fieldList['name']['required'] = true;
 $config->metric->dtable->definition->fieldList['name']['group']    = 1;
 
-$config->metric->dtable->definition->fieldList['stage']['title']    = $lang->metric->stage;
-$config->metric->dtable->definition->fieldList['stage']['name']     = 'statusCol';
-$config->metric->dtable->definition->fieldList['stage']['type']     = 'status';
-$config->metric->dtable->definition->fieldList['stage']['minWidth'] = '80';
-$config->metric->dtable->definition->fieldList['stage']['required'] = true;
-$config->metric->dtable->definition->fieldList['stage']['group']    = 2;
+$config->metric->dtable->definition->fieldList['stage']['title']     = $lang->metric->stage;
+$config->metric->dtable->definition->fieldList['stage']['type']      = 'status';
+$config->metric->dtable->definition->fieldList['stage']['statusMap'] = $lang->metric->stageList;
+$config->metric->dtable->definition->fieldList['stage']['minWidth']  = '80';
+$config->metric->dtable->definition->fieldList['stage']['required']  = true;
+$config->metric->dtable->definition->fieldList['stage']['group']     = 2;
 
 $config->metric->dtable->definition->fieldList['scope']['title']    = $lang->metric->scope;
 $config->metric->dtable->definition->fieldList['scope']['type']     = 'category';
