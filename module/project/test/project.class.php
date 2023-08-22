@@ -223,6 +223,27 @@ class Project
     }
 
     /**
+     * Test manage members.
+     * 
+     * @param  int    $projectID 
+     * @param  array  $members 
+     * @access public
+     * @return array 
+     */
+    public function manageMembers(int $projectID, array $members): array
+    {
+        $this->project->manageMembers($projectID, $members);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->project->getTeamMembers($projectID);
+        }
+    }
+
+    /**
      * Get budget with unit.
      *
      * @param  int        $budget
