@@ -398,7 +398,7 @@
                     }
                 }
             },
-            error: (xhr, type, error) =>
+            error: (error, type) =>
             {
                 updatePerfInfo(options, 'requestEnd', {error: error});
                 if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {xhr, type, error});;
