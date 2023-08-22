@@ -2540,7 +2540,7 @@ class taskModel extends model
         $mailto     = is_null($task->mailto) ? array() : explode(',', trim($task->mailto, ','));
         if($task->mode == 'multi')
         {
-            $teamList   = $this->getTeamMembers($task->id);
+            $teamList   = $this->getMultiTaskMembers($task->id);
             $teamList   = implode(',', $teamList);
             $assignedTo = $teamList;
         }
@@ -2707,16 +2707,18 @@ class taskModel extends model
     }
 
     /**
-     * Get teamTask members.
+     * 获取并行任务的团队成员。
+     * Get parallel task's members.
      *
      * @param  int    $taskID
      * @access public
      * @return array
      */
-    public function getTeamMembers($taskID)
+    public function getMultiTaskMembers(int $taskID): array
     {
         $taskType = $this->dao->select('mode')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('mode');
         if($taskType != 'multi') return array();
+
         $teamMembers = $this->dao->select('account')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->fetchPairs();
         return empty($teamMembers) ? $teamMembers : array_keys($teamMembers);
     }

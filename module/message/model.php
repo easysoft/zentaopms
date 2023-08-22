@@ -203,7 +203,7 @@ class messageModel extends model
         }
         if(empty($toList) and $objectType == 'task' and $object->mode == 'multi')
         {
-            $teamMembers = $this->loadModel('task')->getTeamMembers($object->id);
+            $teamMembers = $this->loadModel('task')->getMultiTaskMembers($object->id);
             $toList      = array_filter($teamMembers, function($account){
                 return $account != $this->app->user->account;
             });
