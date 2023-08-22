@@ -7,8 +7,18 @@ su('admin');
 /**
 
 title=测试 projectModel->getPairsByProgram();
+timeout=0
 cid=1
-pid=1
+
+- 查找管理员可查看的所有项目数量 @4
+
+- 查找独立项目数量 @40
+
+- 查找管理员可查看的所属项目集ID为1的项目数量 @4
+
+- 查找管理员可查看的所属项目集ID为1且状态为wait的项目数量 @1
+
+- 查找管理员可查看的所属项目集ID为1且状态不为closed的项目数量 @4
 
 */
 
