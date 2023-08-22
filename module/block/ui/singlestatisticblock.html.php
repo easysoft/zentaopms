@@ -185,12 +185,12 @@ panel
                             span
                             (
                                 setClass('border-r pr-2 text-sm text-gray'),
-                                html(sprintf($lang->block->productstatistic->monthDone, !empty($monthFinish[$lang->datepicker->dpText->TEXT_THIS_MONTH]) ? $monthFinish[$lang->datepicker->dpText->TEXT_THIS_MONTH] : 0))
+                                html(sprintf($lang->block->productstatistic->monthDone, !empty($product->monthFinish[$lang->datepicker->dpText->TEXT_THIS_MONTH]) ? $product->monthFinish[$lang->datepicker->dpText->TEXT_THIS_MONTH] : 0))
                             ),
                             span
                             (
                                 setClass('pl-2 text-sm text-gray'),
-                                html(sprintf($lang->block->productstatistic->monthOpened, !empty($monthCreated[$lang->datepicker->dpText->TEXT_THIS_MONTH]) ? $monthCreated[$lang->datepicker->dpText->TEXT_THIS_MONTH] : 0))
+                                html(sprintf($lang->block->productstatistic->monthOpened, !empty($product->monthCreated[$lang->datepicker->dpText->TEXT_THIS_MONTH]) ? $product->monthCreated[$lang->datepicker->dpText->TEXT_THIS_MONTH] : 0))
                             )
                         ),
                         div
@@ -201,7 +201,7 @@ panel
                                 set::color(array('#2B80FF', '#17CE97')),
                                 set::grid(array('left' => '10px', 'top' => '30px', 'right' => '0', 'bottom' => '30px',  'containLabel' => true)),
                                 set::legend(array('show' => true, 'right' => '0')),
-                                set::xAxis(array('type' => 'category', 'data' => array_keys($monthFinish), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
+                                set::xAxis(array('type' => 'category', 'data' => array_keys($product->monthFinish), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
                                 set::yAxis(array('type' => 'value', 'name' => '个', 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
                                 set::series
                                 (

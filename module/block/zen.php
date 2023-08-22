@@ -2864,7 +2864,7 @@ class blockZen extends block
         $years  = array();
         $months = array();
         $groups = array();
-        for($i = 5; $i >= 5; $i --)
+        for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
@@ -2872,8 +2872,6 @@ class blockZen extends block
         }
         $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
         $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
-        if(!$monthFinish)  $monthFinish  = array();
-        if(!$monthCreated) $monthCreated = array();
 
         /* 根据产品列表获取预计开始日期距离现在最近且预计开始日期大于当前日期的未开始状态计划。 */
         /* Obtain an unstarted status plan based on the product list, with an expected start date closest to the current date and an expected start date greater than the current date. */
@@ -2937,9 +2935,7 @@ class blockZen extends block
             }
         }
 
-        $this->view->product      = $product;
-        $this->view->monthFinish  = $monthFinish;
-        $this->view->monthCreated = $monthCreated;
+        $this->view->product = $product;
     }
 
     /**
