@@ -93,3 +93,7 @@ ALTER TABLE `zt_reviewissue` ADD `opinionCopy` mediumtext NULL;
 UPDATE `zt_reviewissue` SET `opinionCopy` = `opinion`;
 ALTER TABLE `zt_reviewissue` DROP `opinion`;
 ALTER TABLE `zt_reviewissue` CHANGE COLUMN `opinionCopy` `opinion` text;
+
+INSERT INTO `zt_actionrecent`(`objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,`date`,`comment`,`extra`,`read`,`vision`,`efforted`)
+SELECT `objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,`date`,`comment`,`extra`,`read`,`vision`,`efforted` FROM `zt_action`
+WHERE `date` >= DATE_SUB(NOW(), INTERVAL '1' MONTH);
