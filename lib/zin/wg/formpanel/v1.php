@@ -76,16 +76,25 @@ class formPanel extends panel
             $module = $app->rawModule;
             $method = $app->rawMethod;
 
-            $app->loadModuleConfig($module);
             $app->loadLang($module);
+            $app->loadModuleConfig($module);
 
-            $key        = $method . 'Fields';
-            $listFields = explode(',', $config->$module->list->{'custom' . ucfirst($key)});
-            $showFields = explode(',', $config->$module->custom->$key);
+            $key           = $method . 'Fields';
+            $listFields    = array();
+            $listFieldsKey = 'custom' . ucfirst($key);
+            if(!empty($config->$module->$listFieldsKey))       $listFields = explode(',', $config->$module->$listFieldsKey);
+            if(!empty($config->$module->list->$listFieldsKey)) $listFields = explode(',', $config->$module->list->$listFieldsKey);
+
+            if(empty($listFields))
+            {
+                $this->setProp('customFields', array());
+                return false;
+            }
 
             $fields = array();
             foreach($listFields as $field) $fields[$field] = $lang->$module->$field;
 
+            $showFields   = explode(',', $config->$module->custom->$key);
             $customFields = array('list' => $fields, 'show' => $showFields, 'key' => $key);
 
             $this->setProp('customFields', $customFields);
