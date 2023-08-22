@@ -283,7 +283,7 @@ class admin extends control
             $this->setting->setItem('system.common.global.scoreStatus', $this->post->module['myScore']);
             $this->setting->setItem('system.custom.URAndSR', $this->post->module['productUR']);
             $this->loadModel('custom')->processMeasrecordCron();
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'window.top.reload()'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => '$.apps.updateAppMenu'));
         }
         $this->view->title            = $this->lang->admin->setModuleIndex;
         $this->view->closedFeatures   = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=closedFeatures');
