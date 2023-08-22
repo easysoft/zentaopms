@@ -49,3 +49,8 @@ $config->programplan->form->create['end']        = array('label' => $lang->progr
 $config->programplan->form->create['realBegan']  = array('label' => $lang->programplan->realBegan, 'type' => 'array', 'control' => 'date',     'required' => false, 'default' => '');
 $config->programplan->form->create['realEnd']    = array('label' => $lang->programplan->realEnd,   'type' => 'array', 'control' => 'date',     'required' => false, 'default' => '');
 $config->programplan->form->create['desc']       = array('label' => $lang->programplan->desc,      'type' => 'array', 'control' => 'textarea', 'required' => false, 'default' => '');
+
+$config->programplan->form->updateDateByGantt['id']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->programplan->form->updateDateByGantt['startDate'] = array('required' => false, 'type' => 'string', 'default' => null);
+$config->programplan->form->updateDateByGantt['endDate']   = array('required' => false, 'type' => 'string', 'default' => '');
+$config->programplan->form->updateDateByGantt['type']      = array('required' => false, 'type' => 'string', 'default' => '');

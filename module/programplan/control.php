@@ -206,7 +206,8 @@ class programplan extends control
 
         $objectID   = $this->post->id;
         $objectType = $this->post->type;
-        $this->loadModel('task')->updateEsDateByGantt($objectID, $objectType);
+        $postData   = form::data($this->config->programplan->form->updateDateByGantt)->get();
+        $this->loadModel('task')->updateEsDateByGantt($postData);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success'));

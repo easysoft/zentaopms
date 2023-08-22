@@ -2576,86 +2576,72 @@ class taskModel extends model
     }
 
     /**
+     * 更新预计开始和结束日期。
      * Update estimate date by gantt.
      *
-     * @param  int     $objectID
-     * @param  string  $objectType
+     * @param  object $postData
      * @access public
      * @return bool
      */
-    public function updateEsDateByGantt($objectID, $objectType)
+    public function updateEsDateByGantt(object $postData)
     {
         $this->app->loadLang('project');
-        $post = fixer::input('post')->get();
-        $post->endDate = date('Y-m-d', strtotime('-1 day', strtotime($post->endDate)));
-        $changeTable = $objectType == 'task' ? TABLE_TASK : TABLE_PROJECT;
-        $actionType  = $objectType == 'task' ? 'task' : 'execution';
-        $oldObject   = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
-        if($objectType == 'task')
+
+        $postData->endDate = date('Y-m-d', strtotime('-1 day', strtotime($postData->endDate)));
+        $changeTable = $postData->type == 'task' ? TABLE_TASK : TABLE_PROJECT;
+        $actionType  = $postData->type == 'task' ? 'task' : 'execution';
+        $oldObject   = $this->dao->select('*')->from($changeTable)->where('id')->eq($postData->id)->fetch();
+
+        if($postData->type == 'task')
         {
-            $this->taskTao->updateTaskEsDateByGantt($objectID, $post);
+            $this->taskTao->updateTaskEsDateByGantt($postData);
         }
-        elseif($objectType == 'plan')
+        elseif($postData->type == 'plan')
         {
-            $this->updateExecutionEsDateByGantt($objectID, $post);
+            $this->updateExecutionEsDateByGantt($postData);
         }
 
         if(dao::isError()) return false;
 
-        $newObject = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
+        $newObject = $this->dao->select('*')->from($changeTable)->where('id')->eq($postData->id)->fetch();
         $changes   = common::createChanges($oldObject, $newObject);
-        $actionID  = $this->loadModel('action')->create($actionType, $objectID, 'edited');
+        $actionID  = $this->loadModel('action')->create($actionType, $postData->id, 'edited');
         if(!empty($changes)) $this->loadModel('action')->logHistory($actionID, $changes);
 
         return true;
     }
 
     /**
+     * 通过甘特图更新阶段的预计日期。
      * Update Execution estimate date by gantt.
      *
-     * @param  int     $objectID
-     * @param  string  $objectType
-     * @param  object  $postData
+     * @param  object $postData
      * @access public
      * @return bool
      */
-    public function updateExecutionEsDateByGantt($objectID, $postData)
+    public function updateExecutionEsDateByGantt(object $postData): bool
     {
-        $objectData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
-        $project    = $objectData->project;
-        $parent     = '';
-        if($objectData->project != $objectData->parent) $parent = $objectData->parent;
+        /* Get parent information. */
+        $stage      = $this->dao->select('project,parent')->from(TABLE_EXECUTION)->where('id')->eq($postData->id)->fetch();
+        $parentID   = $stage->project != $stage->parent ? $stage->parent : 0;
+        $parentData = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($parentID ? $parentID : $stage->project)->fetch();
 
-        if(empty($parent))
-        {
-            $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($project)->fetch();
-        }
-        else
-        {
-            $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($parent)->fetch();
-        }
+        $begin = helper::isZeroDate($parentData->begin) ? '' : $parentData->begin;
+        $end   = helper::isZeroDate($parentData->end)   ? '' : $parentData->end;
 
-        $start      = helper::isZeroDate($parentData->begin) ? '' : $parentData->begin;
-        $end        = helper::isZeroDate($parentData->end)   ? '' : $parentData->end;
-
-        if(helper::diffDate($start, $postData->startDate) > 0)
-        {
-            $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
-            dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
-        }
-
-        if(helper::diffDate($end, $postData->endDate) < 0)
-        {
-            $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
-            return dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
-        }
+        $this->app->loadLang('programplan');
+        $typeLang = $parentID ? $this->lang->programplan->parent : $this->lang->project->common;
+        if(helper::diffDate($begin, $postData->startDate) > 0) dao::$errors[] = sprintf($this->lang->task->overEsStartDate, $typeLang, $typeLang);
+        if(helper::diffDate($end, $postData->endDate) < 0) dao::$errors[] = sprintf($this->lang->task->overEsEndDate, $typeLang, $typeLang);
+        return !dao::isError();
 
         $this->dao->update(TABLE_PROJECT)
             ->set('begin')->eq($postData->startDate)
             ->set('end')->eq($postData->endDate)
             ->set('lastEditedBy')->eq($this->app->user->account)
-            ->where('id')->eq($objectID)
+            ->where('id')->eq($postData->id)
             ->exec();
+        return !dao::isError();
     }
 
     /**
