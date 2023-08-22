@@ -1,7 +1,7 @@
 $(function()
 {
     $('#resultsContainer').off('click', '.result-item').on('click', '.result-item', toggleShowResults);
-    $('#resultsContainer').off('click', '.check-all').on('click', '.check-all', toggleCheckAll);
+    $('#resultsContainer').off('click', '.check-all .checkbox-primary').on('click', '.check-all .checkbox-primary', toggleCheckAll);
     $('#resultsContainer').off('click', '.check-item').on('click', '.check-item', toggleCheckChildItem);
     $('#resultsContainer').off('click', '.to-bug-button').on('click', '.to-bug-button', createBug);
 });
@@ -94,9 +94,9 @@ function suitEndDate()
  */
 function createBug(event)
 {
-    var $form  = $(event.target).closest('form');
+    var $form      = $(event.target).closest('form');
     var stepIdList = '';
-    $(event.target).closest('form').find('.step .step-id input[type="checkbox"]:checked').each(function()
+    $form.find('.step .step-id input[type="checkbox"]:checked').each(function()
     {
         if($(this).prop('checked')) stepIdList += $(this).val() + '_';
     });
