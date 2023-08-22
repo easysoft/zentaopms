@@ -2034,4 +2034,29 @@ class taskTest
 
         return $this->objectModel->getExportTasks($orderBy);
     }
+
+    /**
+     * 测试删除工时后工时剩余。
+     * Get the left after deleting workhour.
+     *
+     * @param  int $effortID
+     * @return object
+     */
+    public function getLeftAfterDeleteWorkhourTest(int $effortID): object
+    {
+        $effort = $this->objectModel->getEffortByID($effortID);
+        $task   = $this->objectModel->getById($effort->objectID);
+
+        $result = new stdclass();
+        $result->taskEstimate   = $task->estimate;
+        $result->taskConsumed   = $task->consumed;
+        $result->taskLeft       = $task->left;
+
+        $result->effortLeft     = $effort->left;
+        $result->effortConsumed = $effort->consumed;
+
+        $result->left = $this->objectModel->getLeftAfterDeleteWorkhour($effort, $task);
+
+        return $result;
+    }
 }
