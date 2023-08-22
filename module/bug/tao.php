@@ -319,10 +319,10 @@ class bugTao extends bugModel
      * @param  string     $bugQuery
      * @param  int        $productID
      * @param  string|int $branchID
-     * @access private
+     * @access protected
      * @return string
      */
-    private function appendProductConditionForProject(string $bugQuery, int $productID, string|int $branchID): string
+    protected function appendProductConditionForProject(string $bugQuery, int $productID, string|int $branchID): string
     {
         if(strpos($bugQuery, 'product') === false && strpos($bugQuery, '`product` IN') === false)
         {
