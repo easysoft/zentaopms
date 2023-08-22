@@ -618,7 +618,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getBrotherProjects($project)
+    public function getBrotherProjects(object $project): array
     {
         if($project->parent == 0) return array($project->id => $project->id);
 
@@ -644,7 +644,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function getByIdList($projectIdList = array(), $mode = '')
+    public function getByIdList(array $projectIdList = array(), string $mode = ''): array
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
@@ -662,7 +662,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getPairsByIdList($projectIdList = array(), $model = '', $param = '')
+    public function getPairsByIdList(array $projectIdList = array(), string $model = '', string $param = ''): array
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
