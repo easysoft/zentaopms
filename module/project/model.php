@@ -524,15 +524,24 @@ class projectModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->groupBy('t1.type')
             ->fetchPairs('type', 'storyCount');
+
         $storyCount       = isset($storyTypeCount['story']) ? $storyTypeCount['story'] : 0;
         $requirementCount = isset($storyTypeCount['requirement']) ? $storyTypeCount['requirement'] : 0;
 
-        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetch('taskCount');
-        $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('project')->in($projectID)->andWhere('deleted')->eq(0)->fetch('bugCount');
+        $bugCount = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)
+             ->where('project')->in($projectID)
+             ->andWhere('deleted')->eq(0)
+             ->fetch('bugCount');
 
-        $statusPairs   = $this->dao->select('status,count(id) as count')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere('deleted')->eq(0)->groupBy('status')->fetchPairs('status', 'count');
-        $finishedCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere('finishedBy')->ne('')->andWhere('deleted')->eq(0)->fetch('taskCount');
-        $delayedCount  = $this->dao->select('count(id) as count')->from(TABLE_TASK)
+        $taskCount = $this->dao->select('count(*) as count,
+            sum(case when status = "wait" then 1 else 0 end) as waitCount,
+            sum(case when status = "doing" then 1 else 0 end) as doingCount,
+            sum(case when finishedBy != "" then 1 else 0 end) as finishedCount')->from(TABLE_TASK)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere('deleted')->eq('0')
+            ->fetch();
+
+        $delayedCount = $this->dao->select('count(id) as count')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
             ->andWhere('deadline')->notZeroDate()
             ->andWhere('deadline')->lt(helper::today())
@@ -543,11 +552,11 @@ class projectModel extends model
         $statData = new stdclass();
         $statData->storyCount       = $storyCount;
         $statData->requirementCount = $requirementCount;
-        $statData->taskCount        = $taskCount;
         $statData->bugCount         = $bugCount;
-        $statData->waitCount        = zget($statusPairs, 'wait', 0);
-        $statData->doingCount       = zget($statusPairs, 'doing', 0);
-        $statData->finishedCount    = $finishedCount;
+        $statData->taskCount        = $taskCount->count;
+        $statData->waitCount        = $taskCount->waitCount;
+        $statData->doingCount       = $taskCount->doingCount;
+        $statData->finishedCount    = $taskCount->finishedCount;
         $statData->delayedCount     = $delayedCount;
 
         return $statData;
