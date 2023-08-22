@@ -823,14 +823,15 @@ class projectModel extends model
     }
 
     /*
+     * 构造项目搜索表单配置项。
      * Build search form.
      *
      * @param int     $queryID
      * @param string  $actionURL
      *
-     * @return 0
+     * @return void
      * */
-    public function buildSearchForm($queryID, $actionURL)
+    public function buildSearchForm(int $queryID, string $actionURL)
     {
         $this->config->project->search['queryID']   = $queryID;
         $this->config->project->search['actionURL'] = $actionURL;
@@ -850,29 +851,7 @@ class projectModel extends model
     }
 
     /**
-     * Build the query.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return object
-     */
-    public function buildMenuQuery($projectID = 0)
-    {
-        $path    = '';
-        $project = $this->projectTao->fetchProjectInfo($projectID);
-        if($project) $path = $project->path;
-
-        return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('deleted')->eq('0')
-            ->andWhere('type')->eq('program')->fi()
-            ->andWhere('status')->ne('closed')
-            ->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
-            ->orderBy('grade desc, `order`')
-            ->get();
-    }
-
-    /**
+     * 构造项目版本的搜索表单配置。
      * Build project build search form.
      *
      * @param  array  $products
@@ -1004,73 +983,33 @@ class projectModel extends model
     }
 
     /**
-     * Get the tree menu of project.
-     *
-     * @param  int       $projectID
-     * @param  string    $userFunc
-     * @param  int       $param
-     * @access public
-     * @return string
-     */
-    public function getTreeMenu($projectID = 0, $userFunc = '', $param = 0)
-    {
-        $projectMenu = array();
-        $stmt        = $this->dbh->query($this->buildMenuQuery($projectID));
-
-        while($project = $stmt->fetch())
-        {
-            $linkHtml = call_user_func($userFunc, $project, $param);
-
-            if(isset($projectMenu[$project->id]) and !empty($projectMenu[$project->id]))
-            {
-                if(!isset($projectMenu[$project->parent])) $projectMenu[$project->parent] = '';
-                $projectMenu[$project->parent] .= "<li>$linkHtml";
-                $projectMenu[$project->parent] .= "<ul>".$projectMenu[$project->id]."</ul>\n";
-            }
-            else
-            {
-                if(isset($projectMenu[$project->parent]) and !empty($projectMenu[$project->parent]))
-                {
-                    $projectMenu[$project->parent] .= "<li>$linkHtml\n";
-                }
-                else
-                {
-                    $projectMenu[$project->parent] = "<li>$linkHtml\n";
-                }
-            }
-            $projectMenu[$project->parent] .= "</li>\n";
-        }
-
-        krsort($projectMenu);
-        $projectMenu = array_pop($projectMenu);
-
-        return $projectMenu;
-    }
-
-    /**
      * 根据项目ID获取项目集列表。
      * Get the program tree of project.
      *
-     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getProgramTree(int $projectID = 0): array
+    public function getProgramTree(): array
     {
+        /* Get program list. */
+        $programsList = $this->dao->select('id,name,parent')->from(TABLE_PROGRAM)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->eq('program')
+            ->andWhere('status')->ne('closed')
+            ->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->orderBy('grade desc, `order`')
+            ->fetchAll();
+
+        /* Init tree data. */
         $programs = array();
-        $stmt     = $this->dbh->query($this->buildMenuQuery($projectID));
-
-        while($project = $stmt->fetch())
+        foreach($programsList as $index => $program)
         {
-            $program = new stdClass();
-            $program->id     = $project->id;
-            $program->name   = $project->name;
-            $program->parent = $project->parent;
-            $program->url    = helper::createLink('project', 'browse', "programID={$program->id}");
-
-            $programs[] = $program;
+            $programs[$index] = new stdClass();
+            $programs[$index]->id     = $program->id;
+            $programs[$index]->name   = $program->name;
+            $programs[$index]->parent = $program->parent;
+            $programs[$index]->url    = helper::createLink('project', 'browse', "programID={$program->id}");
         }
-
         return $programs;
     }
 
