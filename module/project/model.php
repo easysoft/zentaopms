@@ -632,7 +632,7 @@ class projectModel extends model
         return $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
-            ->andWhere('path')->like("{$parentProgram->path}%")
+            ->andWhere("CONCAT(',', path, ',')")->like("%,{$parentProgram->id},%")
             ->fetchPairs('id');
     }
 
