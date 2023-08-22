@@ -1724,3 +1724,11 @@ function navigator(): navigator
 {
     return createWg('navigator', func_get_args());
 }
+
+/**
+ * Gantt widget.
+ */
+function gantt(): gantt
+{
+    return createWg('gantt', func_get_args());
+}
