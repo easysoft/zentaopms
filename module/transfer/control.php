@@ -107,13 +107,11 @@ class transfer extends control
         if($_FILES)
         {
             $file = $this->loadModel('file')->getUpload('file');
-
-            if(!empty($file['error'])) return print(js::alert($this->lang->file->uploadError[$file['error']]));
+            if(!empty($file['error'])) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->uploadError[$file['error']]));
 
             $file      = $file[0];
             $shortName = $this->file->getSaveName($file['pathname']);
-
-            if(empty($shortName)) return print(js::alert($this->lang->excel->emptyFileName));
+            if(empty($shortName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->excel->emptyFileName));
 
             $extension = $file['extension'];
             $fileName  = $this->file->savePath . $shortName;
@@ -127,12 +125,12 @@ class transfer extends control
             if(!$phpReader->canRead($fileName))
             {
                 $phpReader = new PHPExcel_Reader_Excel5();
-                if(!$phpReader->canRead($fileName)) return print(js::alert($this->lang->excel->canNotRead));
+                if(!$phpReader->canRead($fileName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->excel->canNotRead));
             }
             $this->session->set('fileImportFileName', $fileName);
             $this->session->set('fileImportExtension', $extension);
 
-            return print(js::locate($locate, 'parent.parent'));
+            return $this->send(array('load' => $locate, 'closeModel' => 'true'));
         }
 
         $this->view->title = $this->lang->transfer->importCase;
