@@ -1076,35 +1076,42 @@ class testcaseModel extends model
     /**
      * Batch review cases.
      *
-     * @param  array   $caseIDList
+     * @param  array  $caseIdList
+     * @param  string $result
      * @access public
      * @return array
      */
-    public function batchReview($caseIdList, $result)
+    public function batchReview(array $caseIdList, string $result): bool
     {
-        $now     = helper::now();
-        $actions = array();
+        $caseIdList = array_filter($caseIdList);
+        if(!$caseIdList) return false;
+
+        $oldCases = $this->getByList($caseIdList, "status = 'wait'");
+
+        $now  = helper::now();
+        $case = new stdClass();
+        $case->reviewedBy     = $this->app->user->account;
+        $case->reviewedDate   = substr($now, 0, 10);
+        $case->lastEditedBy   = $this->app->user->account;
+        $case->lastEditedDate = $now;
+        if($result == 'pass') $case->status = 'normal';
+
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('status')->eq('wait')->andWhere('id')->in($caseIdList)->exec();
+        if(dao::isError()) return false;
+
         $this->loadModel('action');
 
-        $oldCases = $this->getByList($caseIdList);
-        foreach($caseIdList as $caseID)
+        foreach($oldCases as $oldCase)
         {
-            if(empty($oldCases[$caseID])) continue;
-
-            $oldCase = $oldCases[$caseID];
-            if($oldCase->status != 'wait') continue;
-
-            $case = new stdClass();
-            $case->reviewedBy     = $this->app->user->account;
-            $case->reviewedDate   = substr($now, 0, 10);
-            $case->lastEditedBy   = $this->app->user->account;
-            $case->lastEditedDate = $now;
-            if($result == 'pass') $case->status = 'normal';
-            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
-            $actions[$caseID] = $this->action->create('case', $caseID, 'Reviewed', '', ucfirst($result));
+            $changes = common::createChanges($oldCase, $case);
+            if($changes)
+            {
+                $actionID = $this->action->create('case', $oldCase->id, 'Reviewed', '', ucfirst($result));
+                $this->action->logHistory($actionID, $changes);
+            }
         }
 
-        return $actions;
+        return !dao::isError();
     }
 
     /**

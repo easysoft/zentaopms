@@ -1297,12 +1297,12 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function batchReview($result)
+    public function batchReview(string $result)
     {
         if($this->post->caseIdList)
         {
-            $caseIdList = array_unique($this->post->caseIdList);
-            $actions    = $this->testcase->batchReview($caseIdList, $result);
+            $this->testcase->batchReview($this->post->caseIdList, $result);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
