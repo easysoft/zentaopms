@@ -51,19 +51,36 @@ if($project->hasProduct)
     foreach($products as $productID => $product)
     {
         $productDom = null;
+        $branches   = array();
         foreach($product->branches as $branchID)
         {
-            $branchName = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';
-            $productDom = h::td
-            (
+            $branchName  = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';
+            $branches[]  = div(
+                setClass('flex clip w-full items-center'),
                 icon('product mr-2'),
                 a
                 (
+                    setClass('flex'),
+                    set::title($product->name . $branchName),
                     hasPriv('product', 'browse') ? set::href(createLink('product', 'browse', "productID={$productID}&branch={$branchID}")) : null,
-                    span($product->name . $branchName)
+                    span
+                    (
+                        setClass('flex-1'),
+                        setStyle('width', '0'),
+                        $product->name . $branchName
+                    )
                 )
             );
         }
+
+        $productDom = h::td
+            (
+                div
+                (
+                    setClass('flex flex-wrap'),
+                    $branches
+                )
+            );
 
         $plans   = array();
         $planDom = null;
@@ -82,6 +99,7 @@ if($project->hasProduct)
                         icon('productplan mr-2 '),
                         a
                         (
+                            set::title($planGroup[$productID][$planID]),
                             hasPriv('productplan', 'view') ? set::href(createLink('productplan', 'view', "planID={$planID}")) : null,
                             span($planGroup[$productID][$planID])
                         )
