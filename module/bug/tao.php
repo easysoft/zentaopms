@@ -285,7 +285,7 @@ class bugTao extends bugModel
      * @access protected
      * @return string
      */
-    private function processSearchQuery(string $object, int $queryID, array|int $productIdList, string|int $branch): string
+    protected function processSearchQuery(string $object, int $queryID, array|int $productIdList, string|int $branch): string
     {
         $queryName = $object != 'bug' ? $object . 'BugQuery' : 'bugQuery';
         $formName  = $object != 'bug' ? $object . 'BugForm' : 'bugForm';
