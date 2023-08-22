@@ -20,7 +20,7 @@ function onChangeAppType(event)
 {
     const appType = $(event.target).val();
 
-    if(appType == 'jenkins' || appType == 'sonarqube')
+    if(appType == 'jenkins' || appType == 'sonarqube' || appType == 'nexus')
     {
         $('div.jenkins').removeClass('hidden');
         if(appType == 'jenkins')
@@ -67,6 +67,9 @@ function onChangeAppType(event)
             $('#url').attr('placeholder', sonarqubeUrlTips);
             $('#account').attr('placeholder', sonarqubeAccountTips);
             break;
+        case 'nexus':
+            $('#createAppForm').attr('action', $.createLink('instance', 'createExternalApp', 'type=nexus'));
+            break;
     }
 }
 
@@ -106,7 +109,6 @@ function onChangeStoreAppType(event)
 
         $('#app_version').val(app.app_version);
         $('#version').val(app.version);
-        $('#customName').val(app.alias);
         if((app.dependencies.mysql && mysqlList) || (app.dependencies.postgresql && pgList))
         {
             $('div.dbType').removeClass('hidden');

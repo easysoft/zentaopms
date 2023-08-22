@@ -38,19 +38,6 @@ if($config->inQuickon)
         $appID ? set::actions(array('submit', array('text' => $lang->instance->stop, 'data-type' => 'submit', 'data-dismiss' => 'modal'))) : null,
         formRow
         (
-            setStyle('display', $appID ? 'block' : 'none'),
-            formGroup
-            (
-                set::width('2/3'),
-                set::label($lang->instance->name),
-                set::name('customName'),
-                set::control('input'),
-                set::value($appID ? $apps[$appID] : ''),
-                set::required(true),
-            )
-        ),
-        formRow
-        (
             setStyle('display', $appID ? 'none' : 'block'),
             formGroup
             (
@@ -77,6 +64,19 @@ if($config->inQuickon)
                 set::items(array(array('text' => $lang->store->common, 'value' => 'store'), array('text' => $lang->space->handConfig, 'value' => 'external'))),
                 set::required(true),
                 on::change('onChangeType'),
+            )
+        ),
+        formRow
+        (
+            setStyle('display', 'block'),
+            formGroup
+            (
+                set::width('2/3'),
+                set::label($lang->instance->name),
+                set::name('customName'),
+                set::control('input'),
+                set::value($appID ? $apps[$appID] : ''),
+                set::required(true),
             )
         ),
         $showVersion ? formGroup

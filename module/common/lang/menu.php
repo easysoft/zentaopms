@@ -486,7 +486,8 @@ $lang->devops->homeMenu = new stdclass();
 //$lang->devops->homeMenu->dashboard   = array('link' => "{$lang->dashboard}|system|dashboard");
 $lang->devops->homeMenu->repos       = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import');
 $lang->devops->homeMenu->compile     = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->homeMenu->WIPs        = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs', 'alias' => 'createapplication,binduser,edit');
+$lang->devops->homeMenu->artifact    = array('link' => "{$lang->devops->artifact}|artifact|browse");
+$lang->devops->homeMenu->apps        = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs', 'alias' => 'createapplication,binduser,edit');
 //$lang->devops->homeMenu->environment = array('link' => "{$lang->devops->environment}|gitlab|browse", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit,import');
 //$lang->devops->homeMenu->app         = array('link' => "{$lang->app->common}|app|serverlink|%s");
 
@@ -500,11 +501,11 @@ $lang->devops->menuOrder[10] = 'repos';
 $lang->devops->menuOrder[15] = 'code';
 $lang->devops->menuOrder[20] = 'mr';
 $lang->devops->menuOrder[25] = 'compile';
-$lang->devops->menuOrder[30] = 'WIPs';
+$lang->devops->menuOrder[30] = 'apps';
 $lang->devops->menuOrder[35] = 'environment';
 $lang->devops->menuOrder[40] = 'app';
 
-$lang->devops->dividerMenu = ',WIPs,';
+$lang->devops->dividerMenu = ',apps,';
 
 $lang->devops->homeMenu->environment['subMenu'] = new stdclass();
 $lang->devops->homeMenu->environment['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
