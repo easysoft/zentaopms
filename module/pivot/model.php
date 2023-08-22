@@ -1541,7 +1541,7 @@ class pivotModel extends model
                 {
                     if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
                     {
-                        $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS FLOAT)" : "TO_DECIMAL(tt.`$field`)";
+                        $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS DECIMAL(32, 2))" : "TO_DECIMAL(tt.`$field`)";
                         $columnSQL  = "$stat($convertSql) as `$uuName`";
                     }
                     else
