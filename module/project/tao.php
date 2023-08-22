@@ -206,6 +206,78 @@ class projectTao extends projectModel
     }
 
     /**
+     * 插入项目团队成员。
+     * Insert project members.
+     *
+     * @param  array     $members
+     * @param  int       $projectID
+     * @access protected
+     * @return array
+     */
+    protected function insertMember(array $members, int $projectID): array
+    {
+        $accounts = array();
+        foreach($members as $key => $member)
+        {
+            if(empty($member->accounts)) continue;
+            $account    = $member->accounts;
+            $accounts[] = $account;
+
+            $data          = new stdclass();
+            $data->role    = $member->roles;
+            $data->days    = $member->days;
+            $data->hours   = $member->hours;
+            $data->limited = isset($member->limited) ? $member->limited : 'no';
+
+            $data->root    = $projectID;
+            $data->account = $account;
+            $data->join    = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
+            $data->type    = 'project';
+
+            $this->dao->insert(TABLE_TEAM)->data($data)->exec();
+        }
+
+        return $accounts;
+    }
+
+    /**
+     * 更新项目团队成员的视图权限
+     * Update member view when project member changed.
+     *
+     * @param  int       $projectID
+     * @param  array     $accounts
+     * @param  array     $oldJoin
+     * @access protected
+     * @return void
+     */
+    protected function updateMemberView(int $projectID, array $accounts, array $oldJoin): void
+    {
+        /* Only changed account update userview. */
+        $oldAccounts     = array_keys($oldJoin);
+        $removedAccounts = array_diff($oldAccounts, $accounts);
+        $changedAccounts = array_merge($removedAccounts, array_diff($accounts, $oldAccounts));
+        $changedAccounts = array_unique($changedAccounts);
+
+        $childSprints = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('project')->eq($projectID)
+            ->andWhere('type')->in('stage,sprint')
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
+
+        $linkedProducts = $this->dao->select("t2.id")->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.project')->eq($projectID)
+            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->fetchPairs();
+
+        $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
+        if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
+        if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+
+    }
+
+    /**
      * 获取项目的详情，包含project表的所有内容。
      * Get project details, including all contents of the project.
      *

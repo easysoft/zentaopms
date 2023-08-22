@@ -1693,78 +1693,40 @@ class projectModel extends model
     }
 
     /**
+     * 维护项目团队成员。
      * Manage team members.
      *
      * @param  int    $projectID
+     * @param  array  $members
      * @access public
      * @return void
      */
-    public function manageMembers($projectID)
+    public function manageMembers(int $projectID, array $members)
     {
         $project = $this->projectTao->fetchProjectInfo($projectID);
-        $data    = (array)fixer::input('post')->get();
+        $oldJoin = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->fetchPairs();
 
-        extract($data);
-        $projectID   = (int)$projectID;
-        $projectType = 'project';
-        $accounts    = array_unique($accounts);
-        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
-
-        foreach($accounts as $key => $account)
+        /* Check fields. */
+        foreach($members as $key => $member)
         {
-            if(empty($account)) continue;
+            if(empty($member->accounts)) continue;
 
-            if(!empty($project->days) and (int)$days[$key] > $project->days)
+            if(!empty($project->days) and (int)$member->days > $project->days)
             {
                 dao::$errors['days'] = sprintf($this->lang->project->daysGreaterProject, $project->days);
                 return false;
             }
-            if((float)$hours[$key] > 24)
+            if((float)$member->hours > 24)
             {
                 dao::$errors['hours'] = $this->lang->project->errorHours;
                 return false;
             }
         }
 
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->exec();
 
-        $projectMember = array();
-        foreach($accounts as $key => $account)
-        {
-            if(empty($account)) continue;
-
-            $member          = new stdclass();
-            $member->role    = $roles[$key];
-            $member->days    = $days[$key];
-            $member->hours   = $hours[$key];
-            $member->limited = isset($limited[$key]) ? $limited[$key] : 'no';
-
-            $member->root    = $projectID;
-            $member->account = $account;
-            $member->join    = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
-            $member->type    = $projectType;
-
-            $projectMember[$account] = $member;
-            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-        }
-
-        /* Only changed account update userview. */
-        $oldAccounts     = array_keys($oldJoin);
-        $removedAccounts = array_diff($oldAccounts, $accounts);
-        $changedAccounts = array_merge($removedAccounts, array_diff($accounts, $oldAccounts));
-        $changedAccounts = array_unique($changedAccounts);
-
-        $childSprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
-        $linkedProducts = $this->dao->select("t2.id")->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('t2.deleted')->eq(0)
-            ->andWhere('t1.project')->eq($projectID)
-            ->andWhere('t2.vision')->eq($this->config->vision)
-            ->fetchPairs();
-
-        $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
-        if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
-        if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+        $accounts = $this->projectTao->insertMember($members, $projectID);
+        $this->projectTao->updateMemberView($projectID, $accounts, $oldJoin);
 
         /* Remove execution members. */
         if($this->post->removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccounts))

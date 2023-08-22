@@ -1056,12 +1056,12 @@ class project extends control
      * Manage project members.
      *
      * @param  int    $projectID
-     * @param  int    $dept
+     * @param  mixed  $dept
      * @param  int    $copyProjectID
      * @access public
      * @return void
      */
-    public function manageMembers(int $projectID, string $dept = '', int $copyProjectID = 0)
+    public function manageMembers(int $projectID, mixed $dept = '', int $copyProjectID = 0)
     {
         /* Load model. */
         $this->loadModel('user');
@@ -1072,7 +1072,9 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $this->project->manageMembers($projectID);
+            $members = form::batchData($this->config->project->form->manageMembers)->get();
+            $this->project->manageMembers($projectID, $members);
+
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(empty($project->multiple))
@@ -1083,8 +1085,7 @@ class project extends control
 
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
-            $link = $this->session->teamList ? $this->session->teamList : $this->createLink('project', 'team', "projectID=$projectID");
-            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => $link));
+            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => $this->createLink('project', 'team', "projectID=$projectID")));
         }
 
         $users        = $this->user->getPairs('noclosed|nodeleted|devfirst');
