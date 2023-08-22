@@ -757,18 +757,19 @@ class projectModel extends model
     }
 
     /**
-     * Get project list by query
+     * 根据状态和项目模型获取项目列表。
+     * Get project list by query.
      *
      * @param  string $status
      * @param  string $order
-     * @param  int    $count
+     * @param  int    $limit
      * @param  string $excludedModel
      * @access public
      * @return void
      */
-    public function getProjectList(string $status, string $order, int $count, string $excludedModel)
+    public function getProjectList(string $status, string $order, int $limit, string $excludedModel): array
     {
-        return $this->projectTao->fetchProjectListByQuery($status, 0, $order, $count, $excludedModel);
+        return $this->projectTao->fetchProjectListByQuery($status, 0, $order, $limit, $excludedModel);
     }
 
     /**
@@ -864,12 +865,11 @@ class projectModel extends model
      */
     public function buildProjectBuildSearchForm(array $products, int $queryID, int $projectID, int $productID, string $type = 'project')
     {
-        $this->loadModel('build');
-
         /* Set search param. */
         $project = $this->projectTao->fetchProjectInfo($projectID);
         if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
 
+        $this->loadModel('build');
         $product = $productID ? $this->loadModel('product')->getByID($productID) : '';
         if($product and $product->type != 'normal')
         {
