@@ -93,15 +93,12 @@ function togglePending()
  */
 function loadList(type, id, todoDefaultType, objectID)
 {
+    let nameBoxClass = '.name-box';
+    let nameBoxID    = '#nameBox';
     if(id)
     {
-        let nameBoxClass = '.name-box' + id;
-        let nameBoxID    = '#nameBox' + id;
-    }
-    else
-    {
-        let nameBoxClass = '.name-box';
-        let nameBoxID    = '#nameBox';
+        nameBoxClass = '.name-box' + id;
+        nameBoxID    = '#nameBox' + id;
     }
 
     id = id ? id : '';
