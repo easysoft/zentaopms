@@ -897,6 +897,9 @@ class transferModel extends model
             return $modelDatas;
         }
 
+        /* Fetch the scene's cases. */
+        if($model == 'testcase') $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $queryCondition);
+
         if($onlyCondition and $queryCondition)
         {
             $table = zget($this->config->objectTables, $model);
