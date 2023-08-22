@@ -12,3 +12,13 @@ fields:
     range: project,sprint,stage,kanban{2}
   - field: vision
     range: rnd{4},lite
+  - field: begin
+    range: "20201101 000000:1D"
+    type: timestamp
+    format: "YY/MM/DD hh::mm:ss"
+    postfix: "\t"
+  - field: end
+    range: "20220101 000000:1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"

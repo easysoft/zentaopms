@@ -2059,4 +2059,77 @@ class taskTest
 
         return $result;
     }
+
+    /**
+     * 通过拖动甘特图修改任务的预计开始日期和截止日期。
+     * Update task estimate date and deadline through gantt.
+     *
+     * @param  int        $taskID
+     * @param  string     $begin
+     * @param  string     $end
+     * @access public
+     * @return array|bool
+     */
+    public function updateTaskEsDateByGanttTest(int $taskID, string $begin, string $end): array|bool
+    {
+        $postData = new stdclass();
+        $postData->id        = $taskID;
+        $postData->startDate = $begin;
+        $postData->endDate   = $end;
+        $postData->type      = 'task';
+
+        $this->objectModel->updateTaskEsDateByGantt($postData);
+
+        if(dao::isError()) return dao::getError();
+        return true;
+    }
+
+    /**
+     * 通过甘特图更新阶段的预计日期。
+     * Update Execution estimate date by gantt.
+     *
+     * @param  int        $executionID
+     * @param  string     $begin
+     * @param  string     $end
+     * @access public
+     * @return array|bool
+     */
+    public function updateExecutionEsDateByGanttTest(int $executionID, string $begin, string $end): array|bool
+    {
+        $postData = new stdclass();
+        $postData->id        = $executionID;
+        $postData->startDate = $begin;
+        $postData->endDate   = $end;
+        $postData->type      = 'task';
+
+        $this->objectModel->updateExecutionEsDateByGantt($postData);
+
+        if(dao::isError()) return dao::getError();
+        return true;
+    }
+
+    /**
+     * 更新预计开始和结束日期。
+     * Update estimate date by gantt.
+     *
+     * @param  int        $objectID
+     * @param  string     $begin
+     * @param  string     $end
+     * @param  string     $type
+     * @access public
+     * @return array|bool
+     */
+    public function updateEsDateByGanttTest(int $objectID, string $begin, string $end, string $type): array|bool
+    {
+        $postData = new stdclass();
+        $postData->id        = $objectID;
+        $postData->startDate = $begin;
+        $postData->endDate   = $end;
+        $postData->type      = $type;
+
+        $this->objectModel->updateEsDateByGantt($postData);
+
+        if(dao::isError()) return dao::getError();
+        return true;
+    }
 }
