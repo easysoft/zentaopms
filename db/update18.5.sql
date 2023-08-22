@@ -71,7 +71,7 @@ UPDATE `zt_notify` SET `subjectCopy` = `subject`;
 ALTER TABLE `zt_notify` DROP `subject`;
 ALTER TABLE `zt_notify` CHANGE COLUMN `subjectCopy` `subject` text;
 
-DROP INDEX IF EXISTS `objectType_toList_status` ON `zt_notify`;
+DROP INDEX `objectType_toList_status` ON `zt_notify`;
 CREATE INDEX `objectType` ON `zt_notify` (`objectType`);
 CREATE INDEX `status` ON `zt_notify` (`status`);
 
