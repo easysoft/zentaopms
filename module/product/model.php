@@ -1027,7 +1027,7 @@ class productModel extends model
         if(empty($productID)) return array();
 
         /* Determine executions order. */
-        $projects         = $this->loadModel('project')->getByIdList($projectID);
+        $projects         = $this->loadModel('project')->getByIdList(array($projectID));
         $hasWaterfall     = in_array('waterfall',     array_column($projects, 'model'));
         $hasWaterfallplus = in_array('waterfallplus', array_column($projects, 'model'));
         $waterfallOrderBy = ($hasWaterfall || $hasWaterfallplus) ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
