@@ -1289,6 +1289,7 @@ class bugModel extends model
             $bugResult = isset($stepResults[0]) ? zget($stepResults[0], 'real') : '';
             $bugExpect = '';
             $caseSteps = $run->case->steps;
+            $caseSteps = array_combine(array_column($caseSteps, 'id'), $caseSteps);
             $steps     = explode('_', trim($stepIdList, '_'));
             foreach($steps as $stepId)
             {
