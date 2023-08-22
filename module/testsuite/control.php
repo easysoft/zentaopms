@@ -192,8 +192,8 @@ class testsuite extends control
         /* 根据id获取测试套件信息。 */
         /* Get test suite, and set menu. */
         $suite = $this->testsuite->getById($suiteID, true);
-        if(!$suite) return print(js::error($this->lang->notFound) . js::locate('back'));
-        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
+        if(!$suite) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => inlink('browse'))));
+        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => inlink('browse'))));
 
         /* 设置1.5级菜单。 */
         /* Set product session. */
@@ -293,37 +293,21 @@ class testsuite extends control
      */
     public function delete(int $suiteID, string $confirm = 'no')
     {
-        if($confirm == 'no')
+        $suite = $this->testsuite->getById($suiteID);
+        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+
+        $this->testsuite->delete($suiteID);
+
+        $message = $this->executeHooks($suiteID);
+        if($message) $response['message'] = $message;
+
+        if(dao::isError())
         {
-            return print(js::confirm($this->lang->testsuite->confirmDelete, inlink('delete', "suiteID={$suiteID}&confirm=yes")));
+            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
         else
         {
-            $suite = $this->testsuite->getById($suiteID);
-            if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
-
-            $this->testsuite->delete($suiteID);
-
-            $message = $this->executeHooks($suiteID);
-            if($message) $response['message'] = $message;
-
-            /* 如果是ajax操作，直接返回操作结果。 */
-            /* if ajax request, send result. */
-            if($this->server->ajax)
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
-            }
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'message' => '', 'load' => true));
         }
     }
 

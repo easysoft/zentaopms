@@ -17,12 +17,14 @@ $config->testsuite->actionList['edit']['url']         = array('module' => 'tests
 $config->testsuite->actionList['edit']['order']       = 5;
 $config->testsuite->actionList['edit']['show']        = 'clickable';
 
-$config->testsuite->actionList['delete']['icon']  = 'trash';
-$config->testsuite->actionList['delete']['hint']  = $lang->testsuite->delete;
-$config->testsuite->actionList['delete']['text']  = $lang->testsuite->delete;
-$config->testsuite->actionList['delete']['url']   = array('module' => 'testsuite', 'method' => 'delete', 'params' => 'suiteID={id}');
-$config->testsuite->actionList['delete']['order'] = 10;
-$config->testsuite->actionList['delete']['show']  = 'clickable';
+$config->testsuite->actionList['delete']['icon']         = 'trash';
+$config->testsuite->actionList['delete']['hint']         = $lang->testsuite->delete;
+$config->testsuite->actionList['delete']['text']         = $lang->testsuite->delete;
+$config->testsuite->actionList['delete']['url']          = array('module' => 'testsuite', 'method' => 'delete', 'params' => 'suiteID={id}');
+$config->testsuite->actionList['delete']['order']        = 10;
+$config->testsuite->actionList['delete']['show']         = 'clickable';
+$config->testsuite->actionList['delete']['data-confirm'] = $lang->testsuite->confirmDelete;
+$config->testsuite->actionList['delete']['className']    = 'ajax-submit';
 
 $config->testsuite->dtable->fieldList['id']['name']  = 'id';
 $config->testsuite->dtable->fieldList['id']['title'] = $lang->idAB;

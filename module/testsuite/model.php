@@ -139,11 +139,13 @@ class testsuiteModel extends model
      * @param  int   $suiteID
      * @param  bool  $setImgSize
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getById(int $suiteID, bool $setImgSize = false): object
+    public function getById(int $suiteID, bool $setImgSize = false): object|bool
     {
         $suite = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
+        if(!$suite) return false;
+
         $suite = $this->loadModel('file')->replaceImgURL($suite, 'desc');
         if($setImgSize) $suite->desc = $this->file->setImgSize($suite->desc);
         return $suite;
