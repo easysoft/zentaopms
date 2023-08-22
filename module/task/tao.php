@@ -982,32 +982,32 @@ class taskTao extends taskModel
      * 通过拖动甘特图修改任务的预计开始日期和截止日期。
      * Update task estimate date and deadline through gantt.
      *
-     * @param  int       $taskID
      * @param  object    $postData
      * @access protected
      * @return bool
      */
-    protected function updateTaskEsDateByGantt(int $taskID, object $postData): bool
+    protected function updateTaskEsDateByGantt(object $postData): bool
     {
-        $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $task        = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($postData->id)->fetch();
         $isChildTask = $task->parent > 0;
 
         if($isChildTask) $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
-        $stage  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->andWhere('project')->eq($task->project)->fetch();
+        $stage = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->andWhere('project')->eq($task->project)->fetch();
 
-        $start = $isChildTask ? $parentTask->estStarted   : $stage->begin;
-        $end   = $isChildTask ? $parentTask->deadline     : $stage->end;
-        $arg   = $isChildTask ? $this->lang->task->parent : $this->lang->project->stage;
+        $start    = $isChildTask ? $parentTask->estStarted   : $stage->begin;
+        $end      = $isChildTask ? $parentTask->deadline     : $stage->end;
+        $typeLang = $isChildTask ? $this->lang->task->parent : $this->lang->project->stage;
 
-        if(helper::diffDate($start, $postData->startDate) > 0) dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
-        if(helper::diffDate($end, $postData->endDate) < 0)     dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
+        if(helper::diffDate($start, $postData->startDate) > 0) dao::$errors[] = sprintf($this->lang->task->overEsStartDate, $typeLang, $typeLang);
+        if(helper::diffDate($end, $postData->endDate) < 0)     dao::$errors[] = sprintf($this->lang->task->overEsEndDate, $typeLang, $typeLang);
+        return !dao::isError();
 
         /* Update estimate started and deadline of a task. */
         $this->dao->update(TABLE_TASK)
             ->set('estStarted')->eq($postData->startDate)
             ->set('deadline')->eq($postData->endDate)
             ->set('lastEditedBy')->eq($this->app->user->account)
-            ->where('id')->eq($taskID)
+            ->where('id')->eq($postData->id)
             ->exec();
 
         return !dao::isError();
