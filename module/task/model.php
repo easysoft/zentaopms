@@ -1584,7 +1584,8 @@ class taskModel extends model
     }
 
     /**
-     * Get task list of stories.
+     * 通过需求列表获取对应的任务列表，任务只取部分属性。
+     * Get the list of task information by the list of stories.
      *
      * @param  int[]    $storyIdList
      * @param  int      $executionID
@@ -1597,7 +1598,7 @@ class taskModel extends model
         return $this->dao->select('id, story, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
             ->from(TABLE_TASK)
             ->where('story')->in($storyIdList)
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
