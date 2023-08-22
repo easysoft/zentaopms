@@ -1118,7 +1118,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageGroupMember($groupID, $deptID = 0)
+    public function manageGroupMember(int $groupID, int $deptID = 0)
     {
         $this->loadModel('group');
         if(!empty($_POST))
