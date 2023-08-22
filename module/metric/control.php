@@ -23,6 +23,49 @@ class metric extends control
     }
 
     /**
+     * Browse metric list.
+     *
+     * @param  int    $param
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browse($param = 0, $type = 'bydefault', $orderBy = 'id desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('search');
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Append id for second sort. */
+        $sort = common::appendOrder($orderBy);
+
+        /* Build the search form. */
+        $queryID   = $type == 'bydefault' ? 0 : (int)$param;
+        $actionURL = $this->createLink('metric', 'browse', "param=myQueryID&type=bysearch");
+        $this->metric->buildSearchForm($queryID, $actionURL);
+
+        $metrics = $this->metric->getList($type, $queryID, $sort, $pager);
+
+        /* Process the sql, get the conditon partion, save it to session. */
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'metric', true);
+
+        $this->view->title       = $this->lang->metric->common;
+        $this->view->metrics     = $metrics;
+        $this->view->pager       = $pager;
+        $this->view->orderBy     = $orderBy;
+        $this->view->param       = $param;
+        $this->view->type        = $type;
+
+        $this->display();
+    }
+
+    /**
      * 计算度量项。
      * Excute metric.
      *

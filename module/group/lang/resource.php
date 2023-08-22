@@ -47,6 +47,7 @@ $lang->moduleOrder[110] = 'doc';
 $lang->moduleOrder[111] = 'screen';
 $lang->moduleOrder[112] = 'pivot';
 $lang->moduleOrder[113] = 'chart';
+$lang->moduleOrder[118] = 'metric';
 $lang->moduleOrder[119] = 'report';
 
 $lang->moduleOrder[120] = 'company';
@@ -1870,6 +1871,12 @@ $lang->resource->chart = new stdclass();
 $lang->resource->chart->preview = 'preview';
 
 $lang->chart->methodOrder[2] = 'preview';
+
+/* Metric. */
+$lang->resource->metric = new stdclass();
+$lang->resource->metric->browse = 'browseAction';
+
+$lang->metric->methodOrder[2] = 'browse';
 
 /* Report . */
 $lang->resource->report = new stdclass();

@@ -12,6 +12,43 @@
 class metricModel extends model
 {
     /**
+     * 获取度量项数据列表。
+     * Get metric data list.
+     *
+     * @param  string $type
+     * @param  int    $queryID
+     * @param  string $sort
+     * @param  object $pager
+     * @access public
+     * @return array|false
+     */
+    public function getList($type = '', $queryID = 0, $sort = '', $pager = null)
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('metricQuery', $query->sql);
+                $this->session->set('metricForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('metricQuery', ' 1 = 1');
+            }
+        }
+
+        $metrics = $this->dao->select('*')->from(TABLE_METRIC)
+            ->where('deleted')->eq('0')
+            ->beginIF($this->session->metricQuery)->andWhere($this->session->metricQuery)->fi()
+            ->orderBy($sort)
+            ->page($pager)
+            ->fetchAll();
+
+        return $metrics;
+    }
+
+    /**
      * 根据代号获取度量项信息。
      * Get metric info by code.
      *
@@ -262,5 +299,23 @@ class metricModel extends model
         $fieldList = array();
         foreach($calcList as $calcInstance) $fieldList  = array_merge($fieldList, $calcInstance->fieldList);
         return implode(',', array_unique($fieldList));
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($queryID, $actionURL)
+    {
+        $this->config->metric->browse->search['actionURL'] = $actionURL;
+        $this->config->metric->browse->search['queryID']   = $queryID;
+        $this->config->metric->browse->search['params']['dept']['values']    = $this->loadModel('dept')->getOptionMenu();
+        $this->config->metric->browse->search['params']['visions']['values'] = $this->loadModel('user')->getVisionList();
+
+        $this->loadModel('search')->setSearchParams($this->config->metric->browse->search);
     }
 }
