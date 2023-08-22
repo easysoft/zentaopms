@@ -45,9 +45,9 @@ div
                     set::href('#menuMoreList'),
                     icon('more-circle'),
                     span(set::class('text'), $lang->more),
-                    toggle('dropdown')
+                    toggle::dropdown(array('placement' => 'right-end', 'offset' => 12))
                 ),
-                ul(set::class('menu dropdown-menu menu-popup'), setID('menuMoreList'))
+                ul(set::class('dropdown-menu nav'), setID('menuMoreList'))
             )
         ),
     ),

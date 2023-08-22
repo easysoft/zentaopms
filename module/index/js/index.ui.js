@@ -570,7 +570,7 @@ function refreshMenu()
                 if(isDivider) return;
             }
             moreMenuHeight += isDivider ? dividerHeight : itemHeight;
-            $list.append($item.clone().removeClass('hidden'));
+            $list.append($item.clone().toggleClass('menu-item', !isDivider).removeClass('hidden'));
         }
         else
         {
