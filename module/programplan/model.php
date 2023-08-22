@@ -1216,7 +1216,7 @@ class programplanModel extends model
         $parentIdList = array_reverse($parentIdList);
         foreach($parentIdList as $id)
         {
-            $parent = $this->execution->getByID($id);
+            $parent = $this->execution->getByID((int)$id);
             if(empty($this->lang->execution->typeList[$parent->type]) || (!$isParent && $id == $stageID)) continue;
 
             /** 获取子阶段关联开始任务数以及状态下子阶段数量。  */
