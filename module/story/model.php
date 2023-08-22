@@ -813,7 +813,7 @@ class storyModel extends model
 
         /* If in ipd mode, set requirement status = 'launched'. */
         if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
-        if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
+        if(isset($story->status) and $story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins')
