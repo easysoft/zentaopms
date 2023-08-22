@@ -87,4 +87,21 @@ class metric extends control
 
         $this->metric->insertMetricLib($records);
     }
+
+    /**
+     * 查询度量项详情页。
+     * View a metric.
+     *
+     * @param  int    $metricID
+     * @access public
+     * @return void
+     */
+    public function view(int $metricID)
+    {
+        $this->view->metric         = $this->metric->getByID($metricID);
+        $this->view->legendBasic    = $this->metricZen->getBasicInfo($this->view);
+        $this->view->createEditInfo = $this->metricZen->getCreateEditInfo($this->view);
+
+        $this->display();
+    }
 }

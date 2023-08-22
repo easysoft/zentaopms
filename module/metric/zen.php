@@ -91,4 +91,48 @@ class metricZen extends metric
             }
         }
     }
+
+    /**
+     * 获取度量项的基本信息。
+     * Get the basic information of the metric.
+     *
+     * @param  object    $view
+     * @access protected
+     * @return array
+     */
+    protected function getBasicInfo(object $view)
+    {
+        extract((array)$view);
+
+        $legendBasic = array();
+        $legendBasic['scope']   = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->scopeList, $metric->scope));
+        $legendBasic['object']  = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->objectList, $metric->object));
+        $legendBasic['purpose'] = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->purposeList, $metric->purpose));
+        $legendBasic['code']    = array('name' => $this->lang->metric->code, 'text' => $metric->code);
+        $legendBasic['unit']    = array('name' => $this->lang->metric->unit, 'text' => $metric->unit);
+        $legendBasic['stage']   = array('name' => $this->lang->metric->stage, 'text' => zget($this->lang->metric->stageList, $metric->stage));
+
+        return $legendBasic;
+    }
+
+    /**
+     * 获取度量项的创建和编辑信息。
+     * Get the create and edit information of the metric.
+     *
+     * @param  object    $view
+     * @access protected
+     * @return array
+     */
+    protected function getCreateEditInfo(object $view)
+    {
+        extract((array)$view);
+
+        $createEditInfo = array();
+        $createEditInfo['createdBy']     = array('name' => $this->lang->metric->createdBy, 'text' => zget($users, $metric->createdBy) . ($metric->createdBy ? $this->lang->at . $metric->createdBy : ''));
+        $createEditInfo['implementedBy'] = array('name' => $this->lang->metric->implementedBy, 'text' => zget($users, $metric->implementedBy) . ($metric->implementedBy ? $this->lang->at . $metric->implementedBy : ''));
+        $createEditInfo['removedBy']     = array('name' => $this->lang->metric->removedBy, 'text' => zget($users, $metric->removedBy) . ($metric->removedBy ? $this->lang->at . $metric->removedBy : ''));
+
+        return $createEditInfo;
+
+    }
 }

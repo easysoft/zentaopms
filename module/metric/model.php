@@ -57,10 +57,25 @@ class metricModel extends model
      * @access public
      * @return object|false
      */
-    public function getByCode($code, $fieldList = '*')
+    public function getByCode(string $code, string|array $fieldList = '*')
     {
         if(is_array($fieldList)) $fieldList = implode(',', $fieldList);
         return $this->dao->select($fieldList)->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
+    }
+
+    /**
+     * 根据ID获取度量项信息。
+     * Get metric info by id.
+     *
+     * @param  int          $metricID
+     * @param  string|array $fieldList
+     * @access public
+     * @return object|false
+     */
+    public function getByID(int $metricID, string|array $fieldList = '*')
+    {
+        if(is_array($fieldList)) $fieldList = implode(',', $fieldList);
+        return $this->dao->select($fieldList)->from(TABLE_METRIC)->where('id')->eq($metricID)->fetch();
     }
 
     /**
