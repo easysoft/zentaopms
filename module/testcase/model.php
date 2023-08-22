@@ -320,7 +320,7 @@ class testcaseModel extends model
             ->beginIF($caseType)->andWhere('t2.type')->eq($caseType)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
-            ->page($pager, 't1.case')
+            ->page($pager, 't1.`case`')
             ->fetchAll('id');
     }
 
