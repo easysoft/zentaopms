@@ -29,7 +29,7 @@ if(count($teams2Import) > 1)
                 set::class('flex items-center team-title'),
                 $lang->execution->copyTeam
             ),
-            select
+            picker
             (
                 set::name('project'),
                 set::value($copyProjectID),
@@ -52,7 +52,7 @@ featureBar
             set::class('flex items-center dept-title'),
             $lang->execution->selectDept
         ),
-        select
+        picker
         (
             set::id('dept'),
             set::name('dept'),
@@ -88,7 +88,7 @@ foreach($teamMembers as $member)
                     set::type('hidden'),
                 ),
             ) : h::td(
-                select
+                picker
                 (
                     set::id("account{$i}"),
                     set::name("accounts[$i]"),
@@ -155,14 +155,14 @@ foreach($teamMembers as $member)
 
 jsVar('+itemIndex', $i);
 
-$i = '%i%';
+$i = '_i';
 h::table
 (
     set::class('hidden'),
     set::id('addItem'),
     h::tr(
         h::td(
-            select
+            picker
             (
                 set::id("account{$i}"),
                 set::name("accounts[$i]"),
