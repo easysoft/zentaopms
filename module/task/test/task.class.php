@@ -2036,6 +2036,21 @@ class taskTest
     }
 
     /**
+     * 测试删除工时后获取工时信息。
+     * Get task after deleting workhour.
+     *
+     * @param  int $effortID
+     * @return object
+     */
+    public function getTaskAfterDeleteWorkhourTest(int $effortID): object
+    {
+        $effort = $this->objectModel->getEffortByID($effortID);
+        $task   = $this->objectModel->getById($effort->objectID);
+
+        return $this->objectModel->getTaskAfterDeleteWorkhour($effort, $task);
+    }
+
+    /**
      * 测试删除工时后工时剩余。
      * Get the left after deleting workhour.
      *
