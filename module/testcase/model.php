@@ -2230,7 +2230,6 @@ class testcaseModel extends model
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
-        $this->config->testcase->search['module']    = $this->app->rawModule;
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
