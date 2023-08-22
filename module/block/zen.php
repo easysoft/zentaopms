@@ -110,14 +110,11 @@ class blockZen extends block
      */
     protected function getAvailableCodes(string $module): array|bool
     {
+        $blocks = array();
         /* 获取当前模块下的所有区块列表。 */
         if($module && isset($this->lang->block->modules[$module]))
         {
             $blocks = $this->lang->block->modules[$module]->availableBlocks;
-        }
-        else
-        {
-            $blocks = array();
         }
 
         /* 过滤掉永久关闭的区块。 */
@@ -175,7 +172,7 @@ class blockZen extends block
     {
         $blockTitle = zget($codes, $code, ''); // 标快的标题默认是区块列表下拉选中的内容。
 
-        /* scrumtest以外的区块标题前面要根据选中的type类型填充内容。 如：已关闭的产品列表。 */
+        /* scrumtest以外的区块标题前面要根据选中的类型填充标题内容。 如：产品列表 => 已关闭的产品列表。 */
         if($module != 'scrumtest' || $code == 'all')
         {
             $options = isset($params['type']['options']) ? $params['type']['options'] : array();
@@ -248,6 +245,7 @@ class blockZen extends block
                 $height[$block->width] += $block->height;
             }
         }
+
         return $blocks;
     }
 
@@ -263,8 +261,8 @@ class blockZen extends block
     protected function createMoreLink(object $block, int $projectID): object
     {
         $module = empty($block->module) ? 'common' : $block->module;
-
         $params = helper::safe64Encode("module={$block->module}&projectID={$projectID}");
+
         $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&params=$params");
         $block->moreLink  = '';
         if(isset($this->config->block->modules[$module]->moreLinkList->{$block->code}))
@@ -306,29 +304,12 @@ class blockZen extends block
         {
             $block->moreLink = $this->createLink('company', 'dynamic');
         }
+
         return $block;
     }
 
     /**
-     * 去掉待定和已暂停的任务。
-     * Remove undetermined and suspended tasks.
-     *
-     * @param  array     $todos
-     * @access protected
-     * @return array
-     */
-    protected function unsetTodos(array $todos): array
-    {
-        $suspendedTasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
-        foreach($todos as $key => $todo)
-        {
-            /* '2030-01-01' means undetermined */
-            if($todo->date == FUTURE_TIME || ($todo->type == 'task' && isset($suspendedTasks[$todo->objectID]))) unset($todos[$key]);
-        }
-        return $todos;
-    }
-
-    /**
+     * 打印动态区块。
      * latest dynamic.
      *
      * @access protected
@@ -345,6 +326,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印禅道官网最新动态。
      * Latest dynamic by zentao official.
      *
      * @access protected
@@ -354,11 +336,13 @@ class blockZen extends block
     {
         $this->app->loadModuleConfig('admin');
 
+        /* 调取接口获取数据。 */
         $dynamics = array();
         $result = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($this->config->admin->dynamicAPIURL)));
         if(!empty($result->data))
         {
             $data = $result->data;
+            /* 如果存在活动时间大于当前时间的禅道中国行的动态，则优先展示此类动态。 */
             if(!empty($data->zentaosalon) && time() < strtotime($data->zentaosalon->time))
             {
                 $data->zentaosalon->title     = $this->lang->block->zentaodynamic->zentaosalon;
@@ -366,6 +350,8 @@ class blockZen extends block
                 $data->zentaosalon->linklabel = $this->lang->block->zentaodynamic->registration;
                 $dynamics[] = $data->zentaosalon;
             }
+
+            /* 如果存在活动时间大于当前时间的禅道公开课的动态，则次优先展示此类动态。 */
             if(!empty($data->publicclass) && time() < strtotime($data->zentaosalon->time))
             {
                 $data->publicclass->title     = $this->lang->block->zentaodynamic->publicclass;
@@ -373,6 +359,8 @@ class blockZen extends block
                 $data->publicclass->linklabel = $this->lang->block->zentaodynamic->reservation;
                 $dynamics[] = $data->publicclass;
             }
+
+            /* 啥都没有就展示禅道的发布动态。 */
             if(!empty($data->release))
             {
                 foreach($data->release as $release)
@@ -411,7 +399,7 @@ class blockZen extends block
         $usageDays = 1; // 最小陪伴天数是一天。
         if($firstUseDate) $usageDays = ceil((time() - strtotime($firstUseDate)) / 3600 / 24);
 
-        $yesterday  = strtotime("-1 day");
+        $yesterday = strtotime("-1 day");
         /* 获取昨日完成的任务数。 */
         $finishTask      = 0;
         $finishTaskGroup = $this->loadModel('metric')->getResultByCode('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
@@ -490,41 +478,7 @@ class blockZen extends block
     }
 
     /**
-     * Print contribute block.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function printContributeBlock(): void
-    {
-        $this->view->data = $this->loadModel('user')->getPersonalData();
-    }
-
-    /**
-     * Print todo block.
-     *
-     * @params object     $block
-     * @access protected
-     * @return void
-     */
-    protected function printTodoListBlock(object $block): void
-    {
-        $limit = ($this->viewType == 'json' || !isset($block->params->count)) ? 0 : (int)$block->params->count;
-        $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, null, 'date, begin');
-        $uri   = $this->createLink('my', 'index');
-
-        $this->session->set('todoList',     $uri, 'my');
-        $this->session->set('bugList',      $uri, 'qa');
-        $this->session->set('taskList',     $uri, 'execution');
-        $this->session->set('storyList',    $uri, 'product');
-        $this->session->set('testtaskList', $uri, 'qa');
-
-        $todos = $this->unsetTodos($todos);
-
-        $this->view->todos = $todos;
-    }
-
-    /**
+     * 打印任务列表区块。
      * Print task block.
      *
      * @params object     $block
@@ -544,6 +498,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印Bug列表区块。
      * Print bug block.
      *
      * @params object     $block
@@ -555,12 +510,15 @@ class blockZen extends block
         $this->session->set('bugList', $this->createLink('my', 'index'), 'qa');
         if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
+        /* 如果是我的地盘则展示所有项目， 否则展示当前项目数据。 */
         $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
         $projectID = $block->dashboard == 'my' ? 0 : $projectID;
+
         $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $block->params->type, $block->params->orderBy, $this->viewType == 'json' ? 0 : (int)$block->params->count, null, $projectID);
     }
 
     /**
+     * 打印用例列表区块。
      * Print case block.
      *
      * @params object     $block
@@ -573,6 +531,7 @@ class blockZen extends block
         $this->app->loadLang('testcase');
         $this->app->loadLang('testtask');
 
+        /* 如果是我的地盘则展示所有项目， 否则展示当前项目数据。 */
         $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
         $projectID = $block->dashboard == 'my' ? 0 : $projectID;
 
@@ -1550,9 +1509,10 @@ class blockZen extends block
     }
 
     /**
+     * 打印单个项目下的迭代总览区块。
      * Print sprint block.
      *
-     * @param  object $block
+     * @param  object    $block
      * @access protected
      * @return void
      */
@@ -1872,11 +1832,12 @@ class blockZen extends block
     }
 
     /**
+     * 打印迭代总览区块。
      * Print execution overview block.
      *
      * @param  object    $block
-     * @param  string    $code          executionoverview|sprint
      * @param  array     $params
+     * @param  string    $code          executionoverview|sprint
      * @param  int       $project
      * @param  bool      $showClosed    true|false
      * @access protected
@@ -1884,61 +1845,90 @@ class blockZen extends block
      */
     protected function printExecutionOverviewBlock(object $block, array $params = array(), string $code = 'executionoverview', int $project = 0, bool $showClosed = false): void
     {
-        $query = $this->dao->select('id, status, Year(closedDate) AS year')->from(TABLE_PROJECT)
-            ->where('deleted')->eq('0')
-            ->andWhere('type')->in('sprint, stage, kanban')
-            ->andWhere('multiple')->eq('1')
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($project)->andWhere('project')->eq($project)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi();
+        $this->loadModel('metric');
 
-        $statusPairs = $query->fetchPairs('id', 'status');
-        $yearPairs   = $query->fetchPairs('id', 'year');
-        $yearPairs   = array_map(function($year){return $year == null ? 0 : $year;}, $yearPairs);
-        $statusStats = array_count_values($statusPairs);
-        $yearStats   = array_count_values($yearPairs);
+        /* 通过度量项获取迭代总量。 */
+        $executionCount = 0;
+        $executionCountGroup = $project ? $this->metric->getResultByCode('count_of_execution_in_project', array('project' => $project)) : $this->metric->getResultByCode('count_of_execution');
+        if(!empty($executionCountGroup))
+        {
+            $executionCountGroup = reset($executionCountGroup);
+            $executionCount      = zget($executionCountGroup, 'value', 0);
+        }
 
-        $cards = array();
-        $cards[0] = new stdclass();
-        $cards[0]->value = array_sum($statusStats);
-        $cards[0]->class = 'text-primary';
-        $cards[0]->label = $this->lang->block->{$code}->totalExecution;
+        /* 通过度量项获取今年完成的迭代数量。 */
+        $closedExecution      = 0;
+        $closedExecutionGroup = $project ? $this->metric->getResultByCode('count_annual_closed_execution_in_project', array('project' => $project, 'year' => date('Y'))) : $this->metric->getResultByCode('count_of_annual_closed_execution', array('year' => date('Y')));
+        if(!empty($closedExecutionGroup))
+        {
+            $closedExecutionGroup = reset($closedExecutionGroup);
+            $closedExecution      = zget($closedExecutionGroup, 'value', 0);
+        }
 
+        /* 通过度量项获取未开始的迭代数量。 */
+        $waitExecution = 0;
+        $waitExecutionGroup = $project ? $this->metric->getResultByCode('count_wait_execution_in_project', array('project' => $project)) : $this->metric->getResultByCode('count_of_wait_execution');
+        if(!empty($waitExecutionGroup))
+        {
+            $waitExecutionGroup = reset($waitExecutionGroup);
+            $waitExecution      = zget($waitExecutionGroup, 'value', 0);
+        }
+
+        /* 通过度量项获取进行中的迭代数量。 */
+        $doingExecution = 0;
+        $doingExecutionGroup = $project ? $this->metric->getResultByCode('count_of_doing_execution_in_project', array('project' => $project)) : $this->metric->getResultByCode('count_of_doing_execution');
+        if(!empty($doingExecutionGroup))
+        {
+            $doingExecutionGroup = reset($doingExecutionGroup);
+            $doingExecution      = zget($doingExecutionGroup, 'value', 0);
+        }
+
+        /* 通过度量项获取已挂起的迭代数量。 */
+        $suspendedExecution = 0;
+        $suspendedExecutionGroup = $project ? $this->metric->getResultByCode('count_of_suspended_execution_in_project', array('project' => $project)) : $this->metric->getResultByCode('count_of_suspended_execution');
+        if(!empty($suspendedExecutionGroup))
+        {
+            $suspendedExecutionGroup = reset($suspendedExecutionGroup);
+            $suspendedExecution      = zget($suspendedExecutionGroup, 'value', 0);
+        }
+
+        /* 如果是地盘下的区块跳转到执行列表，如果是单项目下的区块跳转到项目的迭代列表。 */
         $url = common::hasPriv('execution', 'all') ? helper::createLink('execution', 'all', 'status=all') : null;
         if($project) $url = common::hasPriv('project', 'execution') ? helper::createLink('project', 'execution', "status=all&projectID=$project") : null;
-        $cards[0]->url = $url;
+
+        /* 组装区块左侧的数据。 */
+        $cards = array();
+        $cards[0] = new stdclass();
+        $cards[0]->value = $executionCount;
+        $cards[0]->class = 'text-primary';
+        $cards[0]->label = $this->lang->block->{$code}->totalExecution;
+        $cards[0]->url   = $url;
 
         $cards[1] = new stdclass();
-        $cards[1]->value = zget($yearStats, date('Y'), 0);
+        $cards[1]->value = $closedExecution;
         $cards[1]->label = $this->lang->block->{$code}->thisYear;
 
         $cardGroup = new stdclass();
         $cardGroup->type  = 'cards';
         $cardGroup->cards = $cards;
 
-        $this->app->loadLang('execution');
-
-        $max = 0;
-        foreach($this->lang->execution->statusList as $status => $label)
-        {
-            if(!$showClosed && $status == 'closed') continue;
-
-            $$status = zget($statusStats, $status, 0);
-            if($max < $$status) $max = $$status;
-        }
-
+        /* 组装区块右侧的柱状图数据。 */
+        $max  = max($waitExecution, $doingExecution, $suspendedExecution);
         $bars = array();
-        foreach($this->lang->execution->statusList as $status => $label)
-        {
-            if(!$showClosed && $status == 'closed') continue;
+        $bars[0] = new stdclass();
+        $bars[0]->label = $this->lang->block->typeList->projectAll['wait'];
+        $bars[0]->value = $waitExecution;
+        $bars[0]->rate  = $max ? round($waitExecution / $max, 4) * 100 . '%' : '0%';
 
-            $bar = new stdclass();
-            $bar->label = $label;
-            $bar->value = $$status;
-            $bar->rate  = $max ? round($$status / $max, 4) * 100 . '%' : '0%';
+        $bars[1] = new stdclass();
+        $bars[1]->label = $this->lang->block->typeList->projectAll['doing'];
+        $bars[1]->value = $doingExecution;
+        $bars[1]->rate  = $max ? round($doingExecution / $max, 4) * 100 . '%' : '0%';
 
-            $bars[] = $bar;
-        }
+        $bars[2] = new stdclass();
+        $bars[2]->label = $this->lang->block->typeList->projectAll['suspended'];
+        $bars[2]->value = $suspendedExecution;
+        $bars[2]->rate  = $max ? round($suspendedExecution / $max, 4) * 100 . '%' : '0%';
 
         $barGroup = new stdclass();
         $barGroup->type  = 'barChart';
