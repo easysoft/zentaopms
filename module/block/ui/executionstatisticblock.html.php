@@ -90,16 +90,6 @@ $getExecutionInfo = function(array $executions, string $blockNavID, bool $longBl
     $tabItems = array();
     foreach($executions as $execution)
     {
-        $execution->totalEstimate     = rand(0, 1000);
-        $execution->totalConsumed     = rand(0, 1000);
-        $execution->totalLeft         = rand(0, $execution->totalEstimate);
-        $execution->progress          = $execution->totalEstimate ? round($execution->totalLeft / $execution->totalEstimate * 100) : 0;
-        $execution->doneStory         = rand(0, 1000);
-        $execution->totalStory        = rand(0, 1000);
-        $execution->totalTask         = rand(0, 1000);
-        $execution->undoneTask        = rand(0, 1000);
-        $execution->yesterdayDoneTask = rand(0, 1000);
-
         $burn = cell
         (
             set('class', 'flex-1'),
