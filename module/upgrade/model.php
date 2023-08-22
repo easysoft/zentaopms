@@ -697,6 +697,8 @@ class upgradeModel extends model
                 $this->loadModel('product')->refreshStats(true);
                 $this->loadModel('program')->refreshStats(true);
                 $this->updatePivotFieldsType();
+                $this->initActionRecent();
+                $this->addCreateAction4Story();
                 break;
         }
 
@@ -9706,5 +9708,29 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_PIVOT)->data($data)->where('id')->eq($pivot->id)->exec();
         }
+    }
+
+    /**
+     * Init recent action for new table.
+     *
+     * @access public
+     * @return void
+     */
+    public function initActionRecent()
+    {
+        $time = date("Y-m-d H:i:s", strtotime("-1 month"));
+        $sql  = "INSERT INTO `zt_actionrecent`(`objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,`date`,`comment`,`extra`,`read`,`vision`,`efforted`) SELECT `objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,`date`,`comment`,`extra`,`read`,`vision`,`efforted` FROM `zt_action` WHERE `date` >= '$time';";
+
+        $this->dbh->exec($sql);
+    }
+
+    /**
+     * Init recent action for new table.
+     *
+     * @access public
+     * @return void
+     */
+    public function addCreateAction4Story()
+    {
     }
 }
