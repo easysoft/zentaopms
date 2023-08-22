@@ -74,52 +74,59 @@ class testcase extends control
     /**
      * Browse cases.
      *
-     * @param  int        $productID
-     * @param  int|string $branch
-     * @param  string     $browseType
-     * @param  int        $param
-     * @param  string     $caseType
-     * @param  string     $orderBy
-     * @param  int        $recTotal
-     * @param  int        $recPerPage
-     * @param  int        $pageID
-     * @param  int        $projectID
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $caseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
     public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
+        /* 加载 datatable 模块，zanode 和 testtask 语言项。*/
+        /* Load datatable model, zanode and testtask language. */
         $this->loadModel('datatable');
         $this->app->loadLang('zanode');
+        $this->app->loadLang('testtask');
 
-        /* Set browse type. */
+        /* 将 browseType 转化为小写。*/
+        /* Set browse type as lower. */
         $browseType = strtolower($browseType);
 
+        /* 设置 cookie。*/
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+
         helper::setcookie('preProductID', $productID);
         helper::setcookie('preBranch', $branch);
 
-        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
+        if($this->cookie->preProductID != $productID || $this->cookie->preBranch != $branch)
         {
             $_COOKIE['caseModule'] = 0;
             helper::setcookie('caseModule', 0);
         }
         if($browseType == 'bymodule') helper::setcookie('caseModule', (int)$param);
         if($browseType == 'bysuite')  helper::setcookie('caseSuite', (int)$param);
-        if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
         $suiteID  = ($browseType == 'bysuite') ? (int)$param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
+        /* 在不同的应用中，设置不同的导航。 */
         /* Set menu, save session. */
         if($this->app->tab == 'project')
         {
             $linkedProducts = $this->product->getProducts($projectID, 'all', '', false);
             $this->products = array('0' => $this->lang->product->all) + $linkedProducts;
-            $hasProduct     = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
+
+            $hasProduct = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
             if(!$hasProduct) unset($this->config->testcase->search['fields']['product']);
 
             $branch = intval($branch) > 0 ? $branch : 'all';
@@ -133,8 +140,10 @@ class testcase extends control
             $this->qa->setMenu($this->products, $productID, $branch, $browseType);
         }
 
-        $uri = $this->app->getURI(true);
-        $this->session->set('caseList', $uri, $this->app->tab);
+        /* 设置 session。*/
+        /* Set session. */
+        if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
@@ -142,26 +151,25 @@ class testcase extends control
         $this->session->set('testcaseOrderBy', '`sort` asc', $this->app->tab);
         $this->session->set('testcaseOrderBy', '`sort` asc');
 
-        /* Load lang. */
-        $this->app->loadLang('testtask');
-
+        /* 加载分页器。*/
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $sort  = common::appendOrder($orderBy);
-        /* Get test cases. */
 
+        $cases          = array();
+        $caseIdList     = array();
         $queryCondition = '';
-
-        $cases      = array();
-        $caseIdList = array();
+        /* 仅场景的时候获取用例列表。*/
+        /* Get test cases when the browseType is not onlyscene. */
         if($browseType != 'onlyscene')
         {
+            $sort           = common::appendOrder($orderBy);
             $cases          = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, null);
             $queryCondition = $this->dao->get();
             $caseIdList     = array_column($cases, 'id');
         }
 
+        /* */
         /* Get top level cases and scenes.*/
         $productParam = $productID;
         if(intval($productID) <= 0)
@@ -170,6 +178,8 @@ class testcase extends control
             if(count($productParam) > 1) unset($productParam[0]);
         }
 
+        /* 获取不在场景下的用例。*/
+        /* Get cases that are not in the scene. */
         $topObjects = array();
         if(!$this->cookie->onlyAutoCase)
         {
@@ -181,19 +191,21 @@ class testcase extends control
             }
         }
 
+        /* 获取用例和场景列表。*/
         /* Get children cases and scenes.*/
+        /* Process case for check story changed. */
         $scenes = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, null, 'child', array_keys($topObjects), $browseType, $queryCondition);
+        $scenes = $this->loadModel('story')->checkNeedConfirm($scenes);
+        $scenes = $this->testcase->appendData($scenes);
 
-        /* save session .*/
-        $this->loadModel('common')->saveQueryCondition($queryCondition, 'testcase', false);
-
+        /* 获取列表底部统计信息。*/
         /* Get summary. */
         $indCount = 0;
         $topCount = 0;
         foreach($scenes as $scene)
         {
-            if($scene->isCase == '2' and $scene->parent == 0) $topCount ++;
-            if($scene->isCase == '1' and $scene->parent == 0) $indCount ++;
+            if($scene->isCase == '1' && $scene->parent == 0) $indCount ++;
+            if($scene->isCase == '2' && $scene->parent == 0) $topCount ++;
         }
 
         if($browseType == 'onlyscene')
@@ -205,23 +217,22 @@ class testcase extends control
             $summary = sprintf($this->lang->testcase->summary, $topCount, $indCount);
         }
 
-        /* Process case for check story changed. */
-        $scenes = $this->loadModel('story')->checkNeedConfirm($scenes);
-        $scenes = $this->testcase->appendData($scenes);
+        /* 保存查询的 session。*/
+        /* save session. */
+        $this->loadModel('common')->saveQueryCondition($queryCondition, 'testcase', false);
 
+        /* 构建搜索表单。*/
         /* Build the search form. */
-        $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
-        $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
-        $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-        $actionURL = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['onMenuBar'] = 'yes';
-
+        $currentModule  = $this->app->tab == 'project' ? 'project'  : 'testcase';
+        $currentMethod  = $this->app->tab == 'project' ? 'testcase' : 'browse';
+        $projectParam   = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
+        $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $searchProducts = $this->product->getPairs('', 0, '', 'all');
         $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
 
-        $showModule = !empty($this->config->testcase->browse->showModule) ? $this->config->testcase->browse->showModule : '';
-
-        /* Get module tree.*/
+        /* 获取模块树。*/
+        /* Get module tree. */
         if($projectID and empty($productID))
         {
             $moduleTree = $this->tree->getCaseTreeMenu($projectID, $productID, 0, array('treeModel', 'createCaseLink'));
@@ -231,7 +242,9 @@ class testcase extends control
             $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $branch);
         }
 
-        $product = $this->product->getById($productID);
+        /* 根据产品类型判断是否展示分支，获取分支选项信息和带标签的分支选项信息。*/
+        /* Judge whether to show branch according to the type of product, get branch option and branch tag option. */
+        $product = $this->product->getByID($productID);
 
         $showBranch      = false;
         $branchOption    = array();
@@ -250,8 +263,11 @@ class testcase extends control
             }
         }
 
-        /* Assign. */
-        $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
+        $showModule = !empty($this->config->testcase->browse->showModule) ? $this->config->testcase->browse->showModule : '';
+        $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
+
+        /* 指定变量。*/
+        /* Assign variables. */
         $this->view->title           = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->projectID       = $projectID;
         $this->view->productID       = $productID;
@@ -276,7 +292,6 @@ class testcase extends control
         $this->view->branchTagOption = $branchTagOption;
         $this->view->suiteList       = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->suiteID         = $suiteID;
-        $this->view->setModule       = true;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
         $this->view->showBranch      = $showBranch;
         $this->view->libraries       = $this->loadModel('caselib')->getLibraries();
