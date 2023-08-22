@@ -246,7 +246,7 @@ function changeDate(event)
  */
 function verifySpaceDay(event)
 {
-    if(!event.target.value) $(event.target).closest('.input-control').addClass('has-error');
+    if(typeof event.target.value != 'undefined' && !event.target.value) $(event.target).closest('.input-control').addClass('has-error');
 }
 
 /**
