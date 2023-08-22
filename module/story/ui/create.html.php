@@ -44,7 +44,6 @@ formPanel
         on::change('#branch', 'loadBranch'),
         formGroup
         (
-            setClass($hiddenProduct ? 'hidden' : ''),
             set::label($lang->story->product),
             set::width('1/2'),
             inputGroup
@@ -184,7 +183,6 @@ formPanel
         ),
         formGroup
         (
-            setClass($showFeedbackBox ? '' : ' hidden'),
             set::width('1/2'),
             setClass('feedbackBox'),
             set::label($lang->story->feedbackBy),
@@ -194,7 +192,6 @@ formPanel
         ),
         formGroup
         (
-            setClass($showFeedbackBox ? '' : ' hidden'),
             set::width('1/2'),
             setClass('feedbackBox'),
             set::label($lang->story->notifyEmail),
