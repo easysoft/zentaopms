@@ -490,137 +490,6 @@ pipeline {
               }
             }
 
-            stage("Docker Image") {
-              when {
-                environment name:'PUBLISH_IMAGE', value:'true'
-              }
-
-              agent {
-                kubernetes {
-                  inheritFrom "dind xuanim"
-                }
-              }
-
-              environment {
-                REGISTRY_HOST="hub.zentao.net"
-                CI_BUILD_PUBLIC_IMAGE="""${sh(
-                          returnStdout: true,
-                          script: 'test "$GIT_TAG_BUILD_TYPE" = release && echo true || echo false'
-                ).trim()}"""
-                CI_PUBLIC_IMAGE_NAMESPACE="""${sh(
-                          returnStdout: true,
-                          script: "echo $GIT_URL | grep demo/zentao >/dev/null && echo test || echo app"
-                ).trim()}"""
-              }
-
-              stages() {
-                stage("prepare") {
-                  steps {
-                    sh 'env'
-                    checkout scmGit(branches: [[name: "master"]],
-                      extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                      userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/app/zentao.git']]
-                    )
-                    container('docker') {
-                      sh "sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories"
-                      sh "apk --no-cache add make bash jq git"
-                      sh "make markdown-init"
-                    }
-                  }
-                }
-                stage("docker pms") {
-                  environment {
-                    ZENTAO_URL = """${sh(
-                                returnStdout: true,
-                                script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/pmsPack/`echo ${GIT_TAG_BUILD_GROUP} | tr . /`/ZenTaoPMS"
-                      ).trim()}"""
-                  }
-                  steps {
-                    sh 'echo ${ZENTAO_URL}'
-                    container('docker') {
-                      withDockerRegistry(credentialsId: 'hub-qucheng-push', url: 'https://' + env.REGISTRY_HOST) {
-                        sh "docker buildx create --name mybuilder --driver docker-container --bootstrap"
-                        sh "docker buildx use mybuilder"
-                        sh 'make build'
-                      }
-                    }
-                  }
-                }
-
-                stage("docker biz") {
-                  environment {
-                    ZENTAO_URL = """${sh(
-                                returnStdout: true,
-                                script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/bizPack/`echo ${GIT_TAG_BUILD_GROUP} | tr . /`/ZenTaoPMS"
-                      ).trim()}"""
-                  }
-                  steps {
-                    container('docker') {
-                      withDockerRegistry(credentialsId: 'hub-qucheng-push', url: 'https://' + env.REGISTRY_HOST) {
-                        sh "docker buildx create --name mybuilder --driver docker-container --bootstrap"
-                        sh "docker buildx use mybuilder"
-                        sh 'make build-biz'
-                        sh 'make build-biz-k8s'
-                      }
-                    }
-                      
-                  }
-                }
-
-                stage("docker max") {
-                  environment {
-                    ZENTAO_URL = """${sh(
-                                returnStdout: true,
-                                script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/maxPack/`echo ${GIT_TAG_BUILD_GROUP} | tr . /`/ZenTaoPMS"
-                      ).trim()}"""
-                  }
-                  steps {
-                    container('docker') {
-                      withDockerRegistry(credentialsId: 'hub-qucheng-push', url: 'https://' + env.REGISTRY_HOST) {
-                        sh "docker buildx create --name mybuilder --driver docker-container --bootstrap"
-                        sh "docker buildx use mybuilder"
-                        sh 'make build-max'
-                        sh 'make build-max-k8s'
-                      }
-                    }
-                  }
-                }
-
-                stage("docker ipd") {
-                  environment {
-                    ZENTAO_URL = """${sh(
-                                returnStdout: true,
-                                script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/ipdPack/`echo ${GIT_TAG_BUILD_GROUP} | tr . /`/ZenTaoPMS"
-                      ).trim()}"""
-                  }
-                  steps {
-                    container('docker') {
-                      withDockerRegistry(credentialsId: 'hub-qucheng-push', url: 'https://' + env.REGISTRY_HOST) {
-                        sh "docker buildx create --name mybuilder --driver docker-container --bootstrap"
-                        sh "docker buildx use mybuilder"
-                        sh 'make build-ipd'
-                        sh 'make build-ipd-k8s'
-                      }
-                    }
-                  }
-                }
-
-                stage("Notice Image") {
-                  steps {
-                    container('docker') {
-                      sh 'make markdown-render > ./report.md'
-                    }
-                    container('xuanimbot') {
-                      sh 'git config --global --add safe.directory $(pwd)'
-                      sh '/usr/local/bin/xuanimbot --title "`echo -n 56aF6YGT6ZWc5YOP5p6E5bu65oiQ5Yqf | base64 --decode`" --url "${RUN_DISPLAY_URL}" --content-file ./report.md --debug --custom'
-                    }
-                  }
-                }
-
-              }
-            } // End Docker Image
-
-
             stage("Zbox") {
               when {
                 environment name:'PUBLISH_ZBOX', value:'true'
@@ -885,6 +754,137 @@ pipeline {
               }
  
             } // End Zbox
+
+            stage("Docker Image") {
+              when {
+                environment name:'PUBLISH_IMAGE', value:'true'
+              }
+
+              agent {
+                kubernetes {
+                  inheritFrom "dind xuanim"
+                }
+              }
+
+              environment {
+                REGISTRY_HOST="hub.zentao.net"
+                CI_BUILD_PUBLIC_IMAGE="""${sh(
+                          returnStdout: true,
+                          script: 'test "$GIT_TAG_BUILD_TYPE" = release && echo true || echo false'
+                ).trim()}"""
+                CI_PUBLIC_IMAGE_NAMESPACE="""${sh(
+                          returnStdout: true,
+                          script: "echo $GIT_URL | grep demo/zentao >/dev/null && echo test || echo app"
+                ).trim()}"""
+              }
+
+              stages() {
+                stage("prepare") {
+                  steps {
+                    sh 'env'
+                    checkout scmGit(branches: [[name: "master"]],
+                      extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                      userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/app/zentao.git']]
+                    )
+                    container('docker') {
+                      sh "sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories"
+                      sh "apk --no-cache add make bash jq git"
+                      sh "make markdown-init"
+                    }
+                  }
+                }
+                stage("docker pms") {
+                  environment {
+                    ZENTAO_URL = """${sh(
+                                returnStdout: true,
+                                script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/pmsPack/`echo ${GIT_TAG_BUILD_GROUP} | tr . /`/ZenTaoPMS"
+                      ).trim()}"""
+                  }
+                  steps {
+                    sh 'echo ${ZENTAO_URL}'
+                    container('docker') {
+                      withDockerRegistry(credentialsId: 'hub-qucheng-push', url: 'https://' + env.REGISTRY_HOST) {
+                        sh "docker buildx create --name mybuilder --driver docker-container --bootstrap"
+                        sh "docker buildx use mybuilder"
+                        sh 'make build'
+                      }
+                    }
+                  }
+                }
+
+                stage("docker biz") {
+                  environment {
+                    ZENTAO_URL = """${sh(
+                                returnStdout: true,
+                                script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/bizPack/`echo ${GIT_TAG_BUILD_GROUP} | tr . /`/ZenTaoPMS"
+                      ).trim()}"""
+                  }
+                  steps {
+                    container('docker') {
+                      withDockerRegistry(credentialsId: 'hub-qucheng-push', url: 'https://' + env.REGISTRY_HOST) {
+                        sh "docker buildx create --name mybuilder --driver docker-container --bootstrap"
+                        sh "docker buildx use mybuilder"
+                        sh 'make build-biz'
+                        sh 'make build-biz-k8s'
+                      }
+                    }
+                      
+                  }
+                }
+
+                stage("docker max") {
+                  environment {
+                    ZENTAO_URL = """${sh(
+                                returnStdout: true,
+                                script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/maxPack/`echo ${GIT_TAG_BUILD_GROUP} | tr . /`/ZenTaoPMS"
+                      ).trim()}"""
+                  }
+                  steps {
+                    container('docker') {
+                      withDockerRegistry(credentialsId: 'hub-qucheng-push', url: 'https://' + env.REGISTRY_HOST) {
+                        sh "docker buildx create --name mybuilder --driver docker-container --bootstrap"
+                        sh "docker buildx use mybuilder"
+                        sh 'make build-max'
+                        sh 'make build-max-k8s'
+                      }
+                    }
+                  }
+                }
+
+                stage("docker ipd") {
+                  environment {
+                    ZENTAO_URL = """${sh(
+                                returnStdout: true,
+                                script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/ipdPack/`echo ${GIT_TAG_BUILD_GROUP} | tr . /`/ZenTaoPMS"
+                      ).trim()}"""
+                  }
+                  steps {
+                    container('docker') {
+                      withDockerRegistry(credentialsId: 'hub-qucheng-push', url: 'https://' + env.REGISTRY_HOST) {
+                        sh "docker buildx create --name mybuilder --driver docker-container --bootstrap"
+                        sh "docker buildx use mybuilder"
+                        sh 'make build-ipd'
+                        sh 'make build-ipd-k8s'
+                      }
+                    }
+                  }
+                }
+
+                stage("Notice Image") {
+                  steps {
+                    container('docker') {
+                      sh 'make markdown-render > ./report.md'
+                    }
+                    container('xuanimbot') {
+                      sh 'git config --global --add safe.directory $(pwd)'
+                      sh '/usr/local/bin/xuanimbot --title "`echo -n 56aF6YGT6ZWc5YOP5p6E5bu65oiQ5Yqf | base64 --decode`" --url "${RUN_DISPLAY_URL}" --content-file ./report.md --debug --custom'
+                    }
+                  }
+                }
+
+              }
+            } // End Docker Image
+
           }
 
           post {
