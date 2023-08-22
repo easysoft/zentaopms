@@ -2416,22 +2416,22 @@ class taskModel extends model
     }
 
     /**
+     * 判断任务操作是否可以点击。
      * Judge an action is clickable or not.
      *
-     * @param  object    $task
-     * @param  string    $action
+     * @param  object $task
+     * @param  string $action
      * @access public
      * @return bool
      */
-    public static function isClickable($task, $action)
+    public static function isClickable(object $task, string $action): bool
     {
         $action = strtolower($action);
-
         /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
         if($task->parent < 0 && !in_array($action, array('edit', 'batchcreate'))) return false;
 
         /* 子任务和多人任务不能创建子任务。Multi task and child task cannot create children. */
-        if($action == 'batchcreate' && (!empty($task->team) || $task->parent > 0))     return false;
+        if($action == 'batchcreate' && (!empty($task->team) || $task->parent > 0)) return false;
 
         if(!empty($task->team))
         {
@@ -2439,21 +2439,21 @@ class taskModel extends model
             $myself = new self();
             if($task->mode == 'linear')
             {
-                if($action == 'assignto' and strpos('done,cencel,closed', $task->status) === false) return false;
-                if($action == 'start' and strpos('wait,doing', $task->status) !== false)
+                if($action == 'assignto' && !in_array($task->status, array('done', 'cencel', 'closed'))) return false;
+                if($action == 'start' && in_array($task->status, array('wait', 'doing')))
                 {
                     if($task->assignedTo != $app->user->account) return false;
 
                     $currentTeam = $myself->getTeamByAccount($task->team, $app->user->account);
-                    if($currentTeam and $currentTeam->status == 'wait') return true;
+                    if($currentTeam && $currentTeam->status == 'wait') return true;
                 }
-                if($action == 'finish' and $task->assignedTo != $app->user->account) return false;
+                if($action == 'finish' && $task->assignedTo != $app->user->account) return false;
             }
             elseif($task->mode == 'multi')
             {
                 $currentTeam = $myself->getTeamByAccount($task->team, $app->user->account);
-                if($action == 'start' and strpos('wait,doing', $task->status) !== false and $currentTeam and $currentTeam->status == 'wait') return true;
-                if($action == 'finish' and (empty($currentTeam) or $currentTeam->status == 'done')) return false;
+                if($action == 'start' && in_array($task->status, array('wait', 'doing')) && $currentTeam && $currentTeam->status == 'wait') return true;
+                if($action == 'finish' && (empty($currentTeam) || $currentTeam->status == 'done')) return false;
             }
         }
 
@@ -2461,12 +2461,11 @@ class taskModel extends model
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';
         if($action == 'pause')    return $task->status == 'doing';
-        if($action == 'assignto') return $task->status != 'closed' and $task->status != 'cancel';
-        if($action == 'close')    return $task->status == 'done'   or  $task->status == 'cancel';
-        if($action == 'activate') return $task->status == 'done'   or  $task->status == 'closed'  or $task->status  == 'cancel';
-        if($action == 'finish')   return $task->status != 'done'   and $task->status != 'closed'  and $task->status != 'cancel';
-        if($action == 'cancel')   return $task->status != 'done'   and $task->status != 'closed'  and $task->status != 'cancel';
-
+        if($action == 'assignto') return !in_array($task->status, array('closed', 'cancel'));
+        if($action == 'close')    return $task->status == 'done' || $task->status == 'cancel';
+        if($action == 'activate') return $task->status == 'done' || $task->status == 'closed' || $task->status == 'cancel';
+        if($action == 'finish')   return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
+        if($action == 'cancel')   return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
         if($action == 'confirmstorychange') return !in_array($task->status, array('cancel', 'closed')) && !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion;
 
         return true;
