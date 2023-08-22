@@ -21,3 +21,6 @@ $config->testsuite->form->edit['lastEditedDate'] = array('required' => false, 't
 $config->testsuite->form->linkCase = array();
 $config->testsuite->form->linkCase['cases']    = array('required' => true, 'type' => 'array', 'default' => []);
 $config->testsuite->form->linkCase['versions'] = array('required' => true, 'type' => 'array', 'default' => []);
+
+$config->testsuite->form->batchUnlinkCases = array();
+$config->testsuite->form->batchUnlinkCases['caseIDList'] = array('required' => true, 'type' => 'array', 'default' => []);

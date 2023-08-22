@@ -56,25 +56,20 @@ $canBatchUnlink = common::hasPriv('testsuite', 'batchUnlinkCases');
 $canBatchRun    = common::hasPriv('testtask', 'batchRun');
 $hasCheckbox    = ($canBeChanged && $canBatchEdit && $canBatchUnlink && $canBatchRun);
 
+$batchItems = array
+(
+    array('text' => $lang->testsuite->unlinkCase, 'class' => 'batch-btn ajax-btn not-open-url ' . $canBatchUnlink ? '' : 'hidden', 'data-url' => helper::createLink('testsuite', 'batchUnlinkCases', "suiteID={$suite->id}")),
+    array('text' => $lang->testtask->runCase,     'class' => 'batch-btn ajax-btn not-open-url ' . $canBatchRun    ? '' : 'hidden', 'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&&orderBy={$orderBy}")),
+);
+
 $footToolbar = array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
     (
         array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => createLink('testcase', 'batchEdit', "productID={$productID}")),
-        array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+        array('caret' => 'up', 'class' => 'btn btn-caret size-sm primary not-open-url', 'data-placement' => 'top-start', 'items' => $batchItems),
     )),
-));
-
-menu
-(
-    set::id('navActions'),
-    set::class('menu dropdown-menu'),
-    set::items(array
-    (
-        $canBatchUnlink ? array('text' => $lang->testsuite->unlinkCase, 'className' => 'batch-btn', 'data-url' => helper::createLink('testsuite', 'batchUnlinkCases', "suiteID={$suite->id}")) : '',
-        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn', 'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&&orderBy={$orderBy}")) : '',
-    ))
-);
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'primary'));
 
 $config->testsuite->testcase->dtable->fieldList['module']['map'] = $modules;
 

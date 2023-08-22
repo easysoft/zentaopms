@@ -404,24 +404,20 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function unlinkCase(int $suiteID, int $rowID, string $confirm = 'no')
+    public function unlinkCase(int $suiteID, int $caseID, string $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->testsuite->confirmUnlinkCase, $this->createLink('testsuite', 'unlinkCase', "rowID=$rowID&confirm=yes")));
+            return print(js::confirm($this->lang->testsuite->confirmUnlinkCase, $this->createLink('testsuite', 'unlinkCase', "caseID={$caseID}&confirm=yes")));
         }
         else
         {
-            $response['result']  = 'success';
-            $response['message'] = '';
-
-            $this->dao->delete()->from(TABLE_SUITECASE)->where('`case`')->eq((int)$rowID)->andWhere('suite')->eq($suiteID)->exec();
+            $this->testsuite->deleteCaseBysuiteID(array($caseID), $suiteID);
             if(dao::isError())
             {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
-            return $this->send($response);
+            return $this->send(array('result' => 'success', 'message' => '', 'load' => true));
         }
     }
 
@@ -435,14 +431,11 @@ class testsuite extends control
      */
     public function batchUnlinkCases(int $suiteID)
     {
-        if(isset($_POST['caseIDList']))
-        {
-            $this->dao->delete()->from(TABLE_SUITECASE)
-                ->where('suite')->eq((int)$suiteID)
-                ->andWhere('`case`')->in($this->post->caseIDList)
-                ->exec();
+        $formData = form::data($this->config->testsuite->form->batchUnlinkCases)->get();
+        $this->testsuite->deleteCaseBysuiteID($formData->caseIDList, $suiteID);
+        if(dao::isError()){
+            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
-
-        return print(js::locate($this->createLink('testsuite', 'view', "suiteID=$suiteID")));
+        return $this->send(array('result' => 'success', 'message' => '', 'load' => true));
     }
 }

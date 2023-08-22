@@ -431,4 +431,18 @@ class testsuiteModel extends model
     {
         return true;
     }
+
+    /**
+     * 移除套件下的用例。
+     * Delete suitecase.
+     *
+     * @param  array $caseID
+     * @param  int   $suiteID
+     * @access public
+     * @return void
+     */
+    public function deleteCaseBySuiteID(array $caseID, int $suiteID)
+    {
+        $this->dao->delete()->from(TABLE_SUITECASE)->where('`case`')->in($caseID)->andWhere('suite')->eq((int)$suiteID)->exec();
+    }
 }

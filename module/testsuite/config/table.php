@@ -66,10 +66,11 @@ $app->loadModuleConfig('testcase');
 
 $config->testsuite->testcase = new stdclass();
 
-$config->testsuite->testcase->actionList['unlinkCase']['icon'] = 'unlink';
-$config->testsuite->testcase->actionList['unlinkCase']['text'] = $lang->testtask->unlinkCase;
-$config->testsuite->testcase->actionList['unlinkCase']['hint'] = $lang->testtask->unlinkCase;
-$config->testsuite->testcase->actionList['unlinkCase']['url']  = array('module' => 'testsuite', 'method' => 'unlinkCase', 'params' => 'suiteID={suite}&caseID={id}&confirm=yes');
+$config->testsuite->testcase->actionList['unlinkCase']['icon']      = 'unlink';
+$config->testsuite->testcase->actionList['unlinkCase']['text']      = $lang->testtask->unlinkCase;
+$config->testsuite->testcase->actionList['unlinkCase']['hint']      = $lang->testtask->unlinkCase;
+$config->testsuite->testcase->actionList['unlinkCase']['url']       = array('module' => 'testsuite', 'method' => 'unlinkCase', 'params' => 'suiteID={suite}&caseID={id}&confirm=yes');
+$config->testsuite->testcase->actionList['unlinkCase']['className'] = 'ajax-submit';
 
 $config->testsuite->testcase->actionList['runCase']['icon']        = 'play';
 $config->testsuite->testcase->actionList['runCase']['text']        = $lang->testtask->runCase;
