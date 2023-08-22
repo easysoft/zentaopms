@@ -2064,4 +2064,19 @@ class InstanceModel extends model
 
         return true;
     }
+
+    /**
+     * Check app name unique.
+     *
+     * @param  string    $name
+     * @access protected
+     * @return bool
+     */
+    public function checkAppNameUnique(string $name): bool
+    {
+        $existInstance = $this->dao->select('*')->from(TABLE_INSTANCE)->where('name')->eq($name)->andWhere('deleted')->eq(0)->fetch();
+        $existExternal = $this->dao->select('*')->from(TABLE_PIPELINE)->where('name')->eq($name)->andWhere('deleted')->eq('0')->fetch();
+
+        return ($existInstance || $existExternal) ? false : true;
+    }
 }

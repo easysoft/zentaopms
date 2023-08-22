@@ -357,6 +357,37 @@ class instance extends control
     }
 
     /**
+     * 创建手工配置外部应用。
+     * Create a external app.
+     *
+     * @param  string $type
+     * @access public
+     * @return viod
+     */
+    public function createExternalApp(string $type)
+    {
+        $this->app->loadModuleConfig('sonarqube');
+        $this->app->loadLang('pipeline');
+
+        $externalApp = form::data($this->config->sonarqube->form->create)
+            ->add('type', $type)
+            ->add('private',md5(rand(10,113450)))
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', helper::now())
+            ->trim('url,account,password')
+            ->skipSpecial('url,token,account,password')
+            ->remove('token,appType')
+            ->get();
+        if(!$this->instance->checkAppNameUnique($externalApp->name)) return $this->send(array('result' => false, 'message' => array('name' => sprintf($this->lang->error->repeat, $this->lang->pipeline->name, $externalApp->name))));
+
+        $appID = $this->loadModel('pipeline')->create($externalApp);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->loadModel('action')->create($type, $appID, 'created');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
+    }
+
+    /**
      * (Not used at present.) Install app by custom settings.
      *
      * @param int $id
@@ -413,6 +444,13 @@ class instance extends control
             if($customData->version && isset($versionList[$customData->version])) $customData->app_version = $versionList[$customData->version]->app_version;
 
             if(isset($this->config->instance->keepDomainList[$customData->customDomain]) || $this->instance->domainExists($customData->customDomain)) return $this->send(array('result' => 'fail', 'message' => $customData->customDomain . $this->lang->instance->errors->domainExists));
+
+            if(!$customData->customName)
+            {
+                dao::$errors['customName'] = sprintf($this->lang->error->notempty, $this->lang->instance->name);
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
+            if(!$this->instance->checkAppNameUnique($customData->customName)) return $this->send(array('result' => false, 'message' => array('customName' => sprintf($this->lang->error->repeat, $this->lang->instance->name, $customData->customName))));
 
             if(!validater::checkLength($customData->customDomain, 20, 2))      return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->domainLength));
             if(!validater::checkREG($customData->customDomain, '/^[a-z\d]+$/')) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->wrongDomainCharacter));
