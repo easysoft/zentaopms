@@ -274,7 +274,6 @@ class projectTao extends projectModel
         $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
         if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
-
     }
 
     /**
