@@ -1345,4 +1345,23 @@ class bugTest
         $summary = $this->objectModel->summary($bugs);
         return $summary;
     }
+
+    /**
+     * 测试从 SESSION 中获取报表操作。
+     * Test get report condition from session.
+     *
+     * @param  string $bugIdList
+     * @access public
+     * @return string
+     */
+    public function reportConditionTest(string|bool $bugQueryCondition, bool $bugOnlyCondition): string
+    {
+        global $tester;
+        if($bugQueryCondition) $tester->session->set('bugQueryCondition', $bugQueryCondition);
+        if($bugOnlyCondition) $tester->session->set('bugOnlyCondition', $bugOnlyCondition);
+        $reportCondition = $this->objectModel->reportCondition();
+        unset($_SESSION['bugQueryCondition']);
+        unset($_SESSION['bugOnlyCondition']);
+        return $reportCondition;
+    }
 }
