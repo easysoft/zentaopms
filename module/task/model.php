@@ -2058,7 +2058,8 @@ class taskModel extends model
 
 
     /**
-     * When task is finish, check whether need update status of bug.
+     * 通过缺陷(Bug)导入的任务在完成时检查是否需要更新对应缺陷的状态。
+     * When task is finished, check whether need update status of bug.
      *
      * @param  object  $task
      * @access public
@@ -2066,10 +2067,10 @@ class taskModel extends model
      */
     public function needUpdateBugStatus(object $task): bool
     {
-        /* If task is not from bug, return false. */
+        /* If the task is not imported from a bug, return false. */
         if($task->fromBug == 0) return false;
 
-        /* If bug has been resolved, return false. */
+        /* If the bug has been resolved, return false. */
         $bug = $this->loadModel('bug')->getByID($task->fromBug);
         if($bug->status == 'resolved') return false;
 
