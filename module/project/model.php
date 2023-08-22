@@ -983,7 +983,7 @@ class projectModel extends model
     }
 
     /**
-     * 根据项目ID获取项目集列表。
+     * 获取项目集列表。
      * Get the program tree of project.
      *
      * @access public
