@@ -1,15 +1,23 @@
 <?php
-$lang->metric->common    = "度量项";
-$lang->metric->name      = "度量项名称";
-$lang->metric->stage     = "阶段";
-$lang->metric->scope     = "范围";
-$lang->metric->object    = "对象";
-$lang->metric->purpose   = "目的";
-$lang->metric->unit      = "单位";
-$lang->metric->code      = "代号";
-$lang->metric->desc      = "描述";
-$lang->metric->when      = "收集方式";
-$lang->metric->createdBy = "创建者";
+$lang->metric->common      = "度量项";
+$lang->metric->name        = "度量项名称";
+$lang->metric->stage       = "阶段";
+$lang->metric->scope       = "范围";
+$lang->metric->object      = "对象";
+$lang->metric->purpose     = "目的";
+$lang->metric->unit        = "单位";
+$lang->metric->code        = "代号";
+$lang->metric->desc        = "描述";
+$lang->metric->definition  = "定义";
+$lang->metric->formula     = "计算方式";
+$lang->metric->when        = "收集方式";
+$lang->metric->createdBy   = "创建者";
+$lang->metric->implementBy = "由谁实现";
+$lang->metric->removeBy    = "由谁下架";
+$lang->metric->lastEdited  = "最后修改";
+
+$lang->metric->legendBasicInfo  = '基本信息';
+$lang->metric->legendCreateInfo = '创建编辑信息';
 
 $lang->metric->confirmDelete = "确认要删除吗？";
 
