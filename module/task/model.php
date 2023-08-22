@@ -441,7 +441,7 @@ class taskModel extends model
 
     /**
      * 更新父任务的状态.
-     * Update parent status by taskID.
+     * Update parent status by taskID of the child task.
      *
      * @param  int    $taskID
      * @param  int    $parentID
@@ -1114,7 +1114,8 @@ class taskModel extends model
     }
 
     /**
-     * Pause task
+     * 暂停一个任务。
+     * Pause a task.
      *
      * @param  object $task
      * @param  array  $output
@@ -1129,7 +1130,7 @@ class taskModel extends model
         /* Update kanban status. */
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($task->id)->exec();
 
-        /* If task has parent task, update status of the parent task. */
+        /* If task has parent task, update status of the parent task by the child task. */
         if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 
         /* If output is not empty, update kanban cell. */
