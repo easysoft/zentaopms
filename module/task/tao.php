@@ -251,6 +251,126 @@ class taskTao extends taskModel
     }
 
     /**
+     * Get left workhour of task after deleting a workhour of task.
+     *
+     * @param  object $effort
+     * @param  object $task
+     * @return float
+     */
+    protected function getLeftAfterDeleteWorkhour(object $effort, object $task): float
+    {
+        $left = $task->left;
+        if(!$effort->isLast)
+        {
+            $lastTwoEfforts = $this->dao->select('*')->from(TABLE_EFFORT)
+                ->where('objectID')->eq($effort->objectID)
+                ->andWhere('objectType')->eq('task')
+                ->orderBy('date desc,id desc')->limit(2)->fetchAll();
+            $lastTwoEfforts  = isset($lastTwoEfforts[1]) ? $lastTwoEfforts[1] : '';
+            if($lastTwoEfforts) $left = $lastTwoEfforts->left;
+            if(empty($lastTwoEfforts) and $left == 0) $left = $task->estimate;
+        }
+
+        /* 如果该任务是多人团队任务则做一些额外的处理。*/
+        if(empty($task->team)) return $left;
+
+        /* 获取要删除的工时的团队，如果要删除的工时的用户不是团队成员则不做任何处理。*/
+        $currentTeam = $this->getTeamByAccount($task->team, $effort->account, array('effortID' => $effort->id, 'order' => $effort->order));
+        if(!$currentTeam) return $left;
+
+        $left = $currentTeam->left;
+        if($task->mode == 'multi') /* 如果任务是多人并行任务。注：多人串行任务的mode是linear。*/
+        {
+            /* 获取要删除的工时对应的用户的工时信息列表。*/
+            $accountEfforts = $this->getTaskEfforts($currentTeam->task, $effort->account, $effort->id);
+            $lastEffort     = array_pop($accountEfforts);
+            if($lastEffort->id == $effort->id)
+            {
+                $lastTwoEfforts = array_pop($accountEfforts);
+                if($lastTwoEfforts) $left = $lastTwoEfforts->left;
+            }
+        }
+
+        /* 更新要删除的工时对应的用户的任务信息。*/
+        $newTeamInfo = new stdclass();
+        $newTeamInfo->consumed = $currentTeam->consumed - $effort->consumed;
+        if($currentTeam->status != 'done') $newTeamInfo->left = $left;
+        if($currentTeam->status == 'done' and $left > 0 and $task->mode == 'multi')
+        {
+            $newTeamInfo->status = 'doing';
+            $newTeamInfo->left = $left;
+        }
+
+        if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
+        if($task->mode == 'multi' and $currentTeam->status == 'done' and ($newTeamInfo->consumed == 0 and $left == 0))
+        {
+            $newTeamInfo->status = 'doing';
+            $newTeamInfo->left   = $currentTeam->estimate;
+        }
+        $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
+        return $left;
+    }
+
+    /**
+     * Get a new task after deleting a workhour of task.
+     *
+     * @param  object $effort
+     * @param  object $task
+     * @return object
+     */
+    protected function getTaskAfterDeleteWorkhour(object $effort, object $task)
+    {
+        /* Compute the left and consumed workhour of the task. */
+        $consumed = $task->consumed - $effort->consumed;
+        $left     = $this->getLeftAfterDeleteWorkhour($effort, $task);
+
+        /* Define and prepare one new task object to update the task. */
+        $data = new stdclass();
+        $data->consumed = $consumed;
+        $data->left     = $left;
+        $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
+        if($effort->isLast and $consumed == 0 and $task->status != 'wait')
+        {
+            $data->status       = 'wait';
+            $data->left         = $task->estimate;
+            $data->finishedBy   = '';
+            $data->canceledBy   = '';
+            $data->closedBy     = '';
+            $data->closedReason = '';
+            $data->finishedDate = null;
+            $data->canceledDate = null;
+            $data->closedDate   = null;
+            if($task->assignedTo == 'closed') $data->assignedTo = $this->app->user->account;
+        }
+        elseif($effort->isLast and $left != 0 and strpos('done,pause,cancel,closed', $task->status) !== false)
+        {
+            $data->status         = 'doing';
+            $data->finishedBy     = '';
+            $data->canceledBy     = '';
+            $data->closedBy       = '';
+            $data->closedReason   = '';
+            $data->finishedDate   = null;
+            $data->canceledDate   = null;
+            $data->closedDate     = null;
+        }
+        elseif($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
+        {
+            $now = helper::now();
+            $data->status         = 'done';
+            $data->assignedTo     = $task->openedBy;
+            $data->assignedDate   = $now;
+            $data->finishedBy     = $this->app->user->account;
+            $data->finishedDate   = $now;
+        }
+        else
+        {
+            $data->status = $task->status;
+        }
+
+        return $data;
+    }
+
+    /**
      * 编辑日志时，检查输入是否合法。
      * When editing a effort, check that the input is legal.
      *
