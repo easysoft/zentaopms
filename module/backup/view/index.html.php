@@ -136,4 +136,5 @@
 <?php js::set('restore', $lang->backup->restore);?>
 <?php js::set('backupTimeout', $lang->backup->error->timeout);?>
 <?php js::set('alertTips', $lang->backup->insufficientDisk);?>
+<?php js::set('backupError', empty($backupError) ? '' : $backupError);?>
 <?php include '../../common/view/footer.html.php';?>

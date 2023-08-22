@@ -22,15 +22,19 @@ class backup extends control
         parent::__construct($moduleName, $methodName);
 
         $this->backupPath = $this->backup->getBackupPath();
-        if(!is_dir($this->backupPath))
+
+        if($this->app->methodName != 'setting')
         {
-            if(!mkdir($this->backupPath, 0777, true)) $this->view->error = sprintf($this->lang->backup->error->noWritable, dirname($this->backupPath));
+            if(!is_dir($this->backupPath))
+            {
+                if(!mkdir($this->backupPath, 0777, true)) $this->view->error = sprintf($this->lang->backup->error->noWritable, dirname($this->backupPath));
+            }
+            else
+            {
+                if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
+            }
+            if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
         }
-        else
-        {
-            if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
-        }
-        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
     }
 
     /**
@@ -72,6 +76,8 @@ class backup extends control
         $this->view->title      = $this->lang->backup->common;
         $this->view->position[] = $this->lang->backup->common;
         $this->view->backups    = $backups;
+        if(!is_writable($this->backupPath))        $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->backupPath);
+        if(!is_writable($this->app->getTmpRoot())) $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->app->getTmpRoot());
         $this->display();
     }
 

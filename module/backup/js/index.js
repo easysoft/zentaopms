@@ -2,6 +2,11 @@ $(function()
 {
     $('.backup').click(function()
     {
+        if(backupError)
+        {
+            alert(backupError);
+            return;
+        }
         var that = this;
         $(that).toggleClass('loading');
         $(that).text(getSpaceLoading);
