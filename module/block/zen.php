@@ -3133,6 +3133,25 @@ class blockZen extends block
     {
         $productID = $this->session->product;
 
+        /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
+        $years  = array();
+        $months = array();
+        $groups = array();
+        for($i = 5; $i >= 0; $i --)
+        {
+            $years[]  = date('Y',   strtotime("first day of -{$i} month"));
+            $months[] = date('m',   strtotime("first day of -{$i} month"));
+            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+        }
+
+        $this->loadModel('metric');
+        $monthStroyScaleGroup     = $this->metric->getResultByCode('scale_of_monthly_finished_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
+        $monthCreatedStroyGroup   = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',   array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的解决Bug数。
+        $monthFinishedStoryGroup  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
+        $monthCreatedBugGroup     = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product',     array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
+        $monthFixedBugGroup       = $this->metric->getResultByCode('count_of_monthly_fixed_bug_in_product',       array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
+        $monthCreatedReleaseGroup = $this->metric->getResultByCode('count_of_monthly_created_release_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
+
         $months            = array();
         $doneStoryEstimate = array();
         $doneStoryCount    = array();
@@ -3140,28 +3159,58 @@ class blockZen extends block
         $fixedBugCount     = array();
         $createBugCount    = array();
         $releaseCount      = array();
-
-        $today = strtotime(helper::today());
-        $begin = strtotime(date('Y-m', strtotime('+2 month', $today)));
-        $end   = strtotime(date('Y-m', $today));
-        $begin = strtotime('2023-09');
-        $end   = strtotime('2024-02');
-        for($date = $begin; $date <= $end; $date = strtotime('+1 month', $date))
+        foreach($groups as $group)
         {
-            $month = date('Y-m', $date);
-            $doneStoryEstimate[$month] = rand(100, 400);
-            $doneStoryCount[$month]    = rand(100, 400);
-            $createStoryCount[$month]  = rand(100, 400);
-            $fixedBugCount[$month]     = rand(100, 400);
-            $createBugCount[$month]    = rand(100, 400);
-            $releaseCount[$month]      = rand(100, 400);
+            $doneStoryEstimate[$group] = 0;
+            $doneStoryCount[$group]    = 0;
+            $createStoryCount[$group]  = 0;
+            $fixedBugCount[$group]     = 0;
+            $createBugCount[$group]    = 0;
+            $releaseCount[$group]      = 0;
 
-            $month = (int)ltrim(date('m', $date), '0');
+            if(!empty($monthStroyScaleGroup))
+            {
+                foreach($monthStroyScaleGroup as $data)
+                {
+                    if($group == "{$data['year']}-{$data['month']}") $doneStoryEstimate[$group] = $data['value'];
+                }
+            }
 
-            $monthName = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? "{$month}{$this->lang->block->month}" : zget($this->lang->datepicker->monthNames, $month - 1, '');
-            if($month == 1) $monthName .= "\n" . date('Y', $date) . (in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $this->lang->year : '');
-
-            $months[] = $monthName;
+            if(!empty($monthCreatedStroyGroup))
+            {
+                foreach($monthCreatedStroyGroup as $data)
+                {
+                    if($group == "{$data['year']}-{$data['month']}") $createStoryCount[$group] = $data['value'];
+                }
+            }
+            if(!empty($monthFinishedStoryGroup))
+            {
+                foreach($monthFinishedStoryGroup as $data)
+                {
+                    if($group == "{$data['year']}-{$data['month']}") $doneStoryCount[$group] = $data['value'];
+                }
+            }
+            if(!empty($monthCreatedBugGroup))
+            {
+                foreach($monthCreatedBugGroup as $data)
+                {
+                    if($group == "{$data['year']}-{$data['month']}") $createBugCount[$group] = $data['value'];
+                }
+            }
+            if(!empty($monthFixedBugGroup))
+            {
+                foreach($monthFixedBugGroup as $data)
+                {
+                    if($group == "{$data['year']}-{$data['month']}") $fixedBugCount[$group] = $data['value'];
+                }
+            }
+            if(!empty($monthCreatedReleaseGroup))
+            {
+                foreach($monthCreatedReleaseGroup as $data)
+                {
+                    if($group == "{$data['year']}-{$data['month']}") $releaseCount[$group] = $data['value'];
+                }
+            }
         }
 
         $this->view->months            = $months;

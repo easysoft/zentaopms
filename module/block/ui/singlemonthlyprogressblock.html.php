@@ -25,7 +25,7 @@ blockPanel
                 set::title(array('text' => $lang->block->monthlyprogress->doneStoryEstimateTrendChart, 'textStyle' => array('fontSize' => '12'))),
                 set::color(array('#2B80FF', '#17CE97')),
                 set::grid(array('left' => '10px', 'top' => '60px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
-                set::xAxis(array('type' => 'category', 'data' => $months, 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => 0), 'axisLabel' => array('fontSize' => $longBlock ? '8' : '10'))),
+                set::xAxis(array('type' => 'category', 'data' => array_keys($doneStoryEstimate), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => 0), 'axisLabel' => array('fontSize' => $longBlock ? '8' : '10'))),
                 set::yAxis(array('type' => 'value', 'name' => "({$lang->block->projectstatistic->SP})", 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'), 'axisLabel' => array('showMaxLabel' => true, 'interval' => 'auto'))),
                 set::series
                 (
@@ -47,7 +47,7 @@ blockPanel
                 set::color(array('#2B80FF', '#17CE97')),
                 set::grid(array('left' => '10px', 'top' => '60px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
                 set::legend(array('show' => true, 'right' => '0', 'top' => '25px', 'textStyle' => array('fontSize' => '11'))),
-                set::xAxis(array('type' => 'category', 'data' => $months, 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => 0), 'axisLabel' => array('fontSize' => $longBlock ? '8' : '10'))),
+                set::xAxis(array('type' => 'category', 'data' => array_keys($createStoryCount), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => 0), 'axisLabel' => array('fontSize' => $longBlock ? '8' : '10'))),
                 set::yAxis(array('type' => 'value', 'name' => "({$lang->block->projectstatistic->unit})", 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'), 'axisLabel' => array('showMaxLabel' => true, 'interval' => 'auto'))),
                 set::series
                 (
@@ -79,7 +79,7 @@ blockPanel
                 set::color(array('#2B80FF', '#17CE97')),
                 set::grid(array('left' => '10px', 'top' => '60px', 'right' => '0', 'bottom' => '0', 'containLabel' => true)),
                 set::legend(array('show' => true, 'right' => '0', 'top' => '25px', 'textStyle' => array('fontSize' => '11'))),
-                set::xAxis(array('type' => 'category', 'data' => $months, 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => 0), 'axisLabel' => array('fontSize' => $longBlock ? '8' : '10'))),
+                set::xAxis(array('type' => 'category', 'data' => array_keys($createBugCount), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => 0), 'axisLabel' => array('fontSize' => $longBlock ? '8' : '10'))),
                 set::yAxis(array('type' => 'value', 'name' => "({$lang->block->projectstatistic->unit})", 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'), 'axisLabel' => array('showMaxLabel' => true, 'interval' => 'auto'))),
                 set::series
                 (
