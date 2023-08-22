@@ -1553,7 +1553,8 @@ class taskModel extends model
     }
 
     /**
-     * Get task list of a story.
+     * 通过需求获取对应的任务列表，任务只取部分属性。
+     * Get the task list by a story.
      *
      * @param  int   $storyID
      * @param  int   $executionID
@@ -1566,7 +1567,7 @@ class taskModel extends model
         $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
             ->from(TABLE_TASK)
             ->where('story')->eq($storyID)
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
@@ -1574,13 +1575,14 @@ class taskModel extends model
         $parentIdList = array();
         foreach($tasks as $task)
         {
+            /* 如果任务不是父任务，或者父任务已经在任务列表中，或者父任务已经在当前列表中，则跳过处理。*/
             if($task->parent <= 0 or isset($tasks[$task->parent]) or isset($parentIdList[$task->parent])) continue;
             $parentIdList[$task->parent] = $task->parent;
         }
 
         $parentTasks = $this->getByIdList($parentIdList);
-        $tasks       = $this->taskTao->buildTaskTree($tasks, $parentTasks);
-        return $this->taskTao->batchComputeProgress($tasks);
+        $tasks       = $this->taskTao->buildTaskTree($tasks, $parentTasks); /* 将子任务放到父任务里，或者将父任务的名字放到子任务里。*/
+        return $this->taskTao->batchComputeProgress($tasks); /* 通过任务的消耗和剩余工时计算任务及其子任务的进度，结果以百分比的数字部分显示。*/
     }
 
     /**

@@ -46,15 +46,19 @@ class taskTao extends taskModel
     {
         foreach($tasks as $task)
         {
+            /* 如果不是父任务则跳过。*/
             if($task->parent <= 0) continue;
+
             if(isset($tasks[$task->parent]))
             {
+                /* 如果任务列表里有这个任务的父任务，则将子任务放到父任务里，并删除子任务。*/
                 if(!isset($tasks[$task->parent]->children)) $tasks[$task->parent]->children = array();
                 $tasks[$task->parent]->children[$task->id] = $task;
                 unset($tasks[$task->id]);
             }
             else
             {
+                /* 如果任务列表里没有这个任务的父任务，则从父任务列表获取到父任务名称并附加到子任务上。*/
                 $parent = $parentTasks[$task->parent];
                 $task->parentName = $parent->name;
             }
@@ -391,7 +395,7 @@ class taskTao extends taskModel
     }
 
     /**
-     * 获取任务的进度。
+     * 获取任务的进度，通过任务的消耗和剩余工时计算，结果以百分比的数字部分显示。
      * Compute progress of a task.
      *
      * @param  object    $task
