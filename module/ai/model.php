@@ -531,7 +531,6 @@ class aiModel extends model
             {
                 $changes = commonModel::createChanges($originalPrompt, $prompt);
             }
-
         }
 
         $prompt->editedDate = helper::now();
