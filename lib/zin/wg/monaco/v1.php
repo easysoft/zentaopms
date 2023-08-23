@@ -10,6 +10,7 @@ class monaco extends wg
         'options?:array',
         'diffContent?:array',
         'onMouseDown?:string',
+        'onMouseMouse?:string',
     );
 
     protected static array $defaultProps = array(
@@ -17,6 +18,7 @@ class monaco extends wg
         'options' => array(),
         'diffContent' => array(),
         'onMouseDown' => '',
+        'onMouseMouse' => '',
     );
     public static function getPageJS(): string|false
     {
@@ -33,6 +35,7 @@ class monaco extends wg
         $options     = $this->prop('options');
         $diffContent = $this->prop('diffContent');
         $onMouseDown = $this->prop('onMouseDown');
+        $onMouseMove = $this->prop('onMouseMove');
 
         if(!$options) $options = new stdclass();
         return div
@@ -40,8 +43,9 @@ class monaco extends wg
             jsVar('id', $id),
             jsVar('action', $action),
             jsVar('options', $options),
-            jsVar('diffContent', $diffContent),
+            jsVar('diffContent', !$diffContent ? new stdclass() : $diffContent),
             jsVar('onMouseDown', $onMouseDown),
+            jsVar('onMouseMove', $onMouseMove),
             jsVar('vsPath', $vsPath),
             jsVar('clientLang', $clientLang),
             h::import($app->getWebRoot() . 'js/monaco-editor/min/vs/loader.js'),
