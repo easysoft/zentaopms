@@ -2012,7 +2012,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getMembers2Import($projectID, $currentMembers)
+    public function getMembers2Import(int $projectID, array $currentMembers): array
     {
         if($projectID == 0) return array();
 
