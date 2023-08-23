@@ -1065,10 +1065,11 @@
         return chunks;
     };
 
-    const uploadChunk = (url, chunk) => {
+    const uploadChunk = (url, chunk, headers) => {
         return fetch(url, {
             method: 'POST',
             body: chunk,
+            headers,
         }).then(response => response.json());
     }
 
@@ -1077,7 +1078,11 @@
         const promises = [];
 
         for (let i = 0; i < chunks.length; i++) {
-            promises.push(uploadChunk(url, chunks[i]));
+            const headers = {
+                'X-Chunk-Index': chunkIndex,
+                'X-Total-Chunks': totalChunks,
+            };
+            promises.push(uploadChunk(url, chunks[i], headers));
         }
 
         return Promise.all(promises);
