@@ -320,7 +320,7 @@ class testcaseModel extends model
             ->beginIF($caseType)->andWhere('t2.type')->eq($caseType)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
-            ->page($pager, 't1.case')
+            ->page($pager, 't1.`case`')
             ->fetchAll('id');
     }
 
@@ -1313,15 +1313,33 @@ class testcaseModel extends model
      * Batch change branch.
      *
      * @param  array  $caseIDList
+     * @param  array  $sceneIDList
      * @param  int    $branchID
      * @access public
      * @return bool
      */
-    public function batchChangeBranch($caseIDList, $branchID)
+    public function batchChangeBranch($caseIDList, $sceneIDList, $branchID)
     {
-        $caseIDList = array_filter($caseIDList);
-        if(!$caseIDList) return false;
+        $caseIDList  = array_filter($caseIDList);
+        $sceneIDList = array_filter($sceneIDList);
+        if(!$caseIDList && !$sceneIDList) return false;
 
+        $this->batchChangeCaseBranch($caseIDList, $branchID);
+        $this->batchChangeSceneBranch($sceneIDList, $branchID);
+
+        return !dao::isError();
+    }
+
+    /**
+     * Batch change branch of cases.
+     *
+     * @param  array  $caseIDList
+     * @param  int    $branchID
+     * @access public
+     * @return bool
+     */
+    public function batchChangeCaseBranch($caseIDList, $branchID)
+    {
         $oldCases = $this->getByList($caseIDList, "branch != '{$branchID}'");
 
         $case = new stdclass();
@@ -1340,6 +1358,41 @@ class testcaseModel extends model
             if($changes)
             {
                 $actionID = $this->action->create('case', $oldCase->id, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Batch change branch of scenes.
+     *
+     * @param  array  $sceneIDList
+     * @param  int    $branchID
+     * @access public
+     * @return bool
+     */
+    public function batchChangeSceneBranch($sceneIDList, $branchID)
+    {
+        $oldScenes = $this->dao->select('id, branch')->from(TABLE_SCENE)->where('branch')->ne($branchID)->andWhere('id')->in($sceneIDList)->fetchAll();
+
+        $scene = new stdclass();
+        $scene->branch         = $branchID;
+        $scene->lastEditedBy   = $this->app->user->account;
+        $scene->lastEditedDate = helper::now();
+
+        $this->dao->update(TABLE_SCENE)->data($scene)->where('branch')->ne($branchID)->andWhere('id')->in($sceneIDList)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action');
+
+        foreach($oldScenes as $oldScene)
+        {
+            $changes = common::createChanges($oldScene, $scene);
+            if($changes)
+            {
+                $actionID = $this->action->create('scene', $oldScene->id, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
         }
@@ -2177,7 +2230,6 @@ class testcaseModel extends model
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
-        $this->config->testcase->search['module']    = $this->app->rawModule;
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
@@ -2185,7 +2237,6 @@ class testcaseModel extends model
     /**
      * Print rows of cases.
      *
-     * @param  int    $index
      * @param  array  $cases
      * @param  array  $setting
      * @param  array  $users
@@ -2196,18 +2247,13 @@ class testcaseModel extends model
      * @access public
      * @return int
      */
-    public function printRow($index, $cases, $setting, $users, $branchOption, $modulePairs, $browseType, $mode)
+    public function printRow($cases, $setting, $users, $branchOption, $modulePairs, $browseType, $mode)
     {
         foreach($cases as $case)
         {
-            $case->index = $index;
-            $case->id    = str_replace(array('case_', 'scene_'), '', $case->id);   // Remove the prefix of case id.
-
-            $trClass      = '';
-            $idPrefix     = $case->isCase == 1 ? 'case_' : '';
-            $objectPrefix = $case->isCase == 1 ? 'case_' : 'scene_';
-            $trAttrs      = "data-id='{$idPrefix}{$case->id}' data-object-id='{$objectPrefix}{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
-            if($case->isCase == 2)
+            $trClass = '';
+            $trAttrs = "data-id='{$case->id}' data-auto='" . zget($case, 'auto', '') . "' data-order='{$case->sort}' data-parent='{$case->parent}' data-product='{$case->product}'";
+            if($case->isScene)
             {
                 $trAttrs .= " data-nested='true'";
                 $trClass .= $case->parent == '0' ? ' is-top-level table-nest-child-hide' : ' table-nest-hide';
@@ -2215,30 +2261,29 @@ class testcaseModel extends model
 
             if($case->parent)
             {
-                if($case->isCase != 2) $trClass .= ' is-nest-child';
+                if(!$case->isScene) $trClass .= ' is-nest-child';
                 $trClass .= ' table-nest-hide';
                 $trAttrs .= " data-nest-parent='{$case->parent}' data-nest-path='{$case->path}'";
             }
-            elseif($case->isCase != 2)
+            elseif(!$case->isScene)
             {
                 $trClass .= ' no-nest';
             }
             $trAttrs .= " class='row-case $trClass'";
 
-            echo "<tr data-itype='{$case->isCase}' {$trAttrs}>";
-            foreach($setting as $key => $value) $this->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $mode, $case->isCase);
-            echo '</tr>';
+            $case->id = str_replace(array('case_', 'scene_'), '', $case->id);   // Remove the prefix of case id.
 
-            $index++;
+            $isScene = $case->isScene ? 1 : 0;
+            echo "<tr data-is-scene='{$isScene}' {$trAttrs}>";
+            foreach($setting as $key => $value) $this->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $mode);
+            echo '</tr>';
 
             if(!empty($case->children) || !empty($case->cases))
             {
-                if(!empty($case->children)) $index = $this->printRow($index, $case->children, $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
-                if(!empty($case->cases))    $index = $this->printRow($index, $case->cases,    $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
+                if(!empty($case->children)) $this->printRow($case->children, $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
+                if(!empty($case->cases))    $this->printRow($case->cases,    $setting, $users, $branchOption, $modulePairs, $browseType, $mode);
             }
         }
-
-        return $index;
     }
 
     /**
@@ -2256,7 +2301,7 @@ class testcaseModel extends model
      */
     public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
     {
-        $isCase = $case->isCase;
+        $isScene = $case->isScene;
 
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('case', $case);
@@ -2308,7 +2353,7 @@ class testcaseModel extends model
 
             if($id == 'title')
             {
-                if($isCase == 2)
+                if($isScene)
                 {
                     echo "<td class='c-name table-nest-title text-left sort-handler has-prefix has-suffix' {$title}><span class='table-nest-icon icon '></span>";
                 }
@@ -2326,26 +2371,26 @@ class testcaseModel extends model
             switch($id)
             {
             case 'id':
-                $showID = ($browseType == 'all' && !$this->cookie->onlyScene) ? $case->index : $case->id;
+                $showID = ($browseType == 'all' && !$this->cookie->onlyScene && $case->isScene) ? '': sprintf('%03d', $case->id);
                 if($canBatchAction)
                 {
                     $disabled = $canBeChanged ? '' : 'disabled';
-                    if($isCase == 1)
+                    if(!$isScene)
                     {
-                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $showID), '', "data-app='{$this->app->tab}'");
+                        echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), $showID, '', "data-app='{$this->app->tab}'");
                     }
                     else
                     {
-                        echo html::checkbox('sceneIDList', array($case->id => ''), '', $disabled) .  sprintf('%03d', $showID);
+                        echo html::checkbox('sceneIDList', array($case->id => ''), '', $disabled) . $showID;
                     }
                 }
                 else
                 {
-                    printf('%03d', $showID);
+                    echo $showID;
                 }
                 break;
             case 'pri':
-                if($isCase != 2)
+                if(!$isScene)
                 {
                     echo "<span class='label-pri label-pri-" . $case->pri . "' title='" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
                     echo zget($this->lang->testcase->priList, $case->pri, $case->pri);
@@ -2353,7 +2398,7 @@ class testcaseModel extends model
                 }
                 break;
             case 'title':
-                if($isCase == 1){
+                if(!$isScene){
                     if($this->app->tab == 'project')
                     {
                         $showBranch = isset($this->config->project->testcase->showBranch) ? $this->config->project->testcase->showBranch : 1;
@@ -2363,7 +2408,7 @@ class testcaseModel extends model
                         $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
                     }
 
-                    $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-draft-edit'></i>" : '';
+                    $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-ztf'></i>" : '';
                     if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                     if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                     echo $canView ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")
@@ -2391,7 +2436,7 @@ class testcaseModel extends model
                 echo "<span title='$stages'>$stages</span>";
                 break;
             case 'status':
-                if($isCase == 2) break;
+                if($isScene) break;
                 if($case->needconfirm)
                 {
                     print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>");
@@ -2417,7 +2462,7 @@ class testcaseModel extends model
                 echo $case->keywords;
                 break;
             case 'version':
-                if($isCase == 1) echo $case->version;
+                if(!$isScene) echo $case->version;
                 break;
             case 'openedBy':
                 echo zget($users, $case->openedBy);
@@ -2444,23 +2489,24 @@ class testcaseModel extends model
                 if(!helper::isZeroDate($case->lastRunDate)) echo substr($case->lastRunDate, 5, 11);
                 break;
             case 'lastRunResult':
-                if ($isCase == 1) {
+                if(!$isScene)
+                {
                     $class = 'result-' . $case->lastRunResult;
                     $lastRunResultText = $case->lastRunResult ? zget($this->lang->testcase->resultList, $case->lastRunResult, $case->lastRunResult) : $this->lang->testcase->unexecuted;
                     echo "<span class='$class'>" . $lastRunResultText . "</span>";
                 }
                 break;
             case 'bugs':
-                if ($isCase == 1) echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
+                if(!$isScene) echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
                 break;
             case 'results':
-                if ($isCase == 1) echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;
+                if(!$isScene) echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;
                 break;
             case 'stepNumber':
-                if ($isCase == 1) echo $case->stepNumber;
+                if(!$isScene) echo $case->stepNumber;
                 break;
             case 'actions':
-                if ($isCase == 1)
+                if(!$isScene)
                 {
                     $case->browseType = $browseType;
                     echo $this->buildOperateMenu($case, 'browse');
@@ -3274,33 +3320,46 @@ class testcaseModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $moduleID
+     * @param  string $caseType
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getSceneGroups($productID, $branch = 0, $moduleID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getSceneGroups($productID, $branch = 0, $moduleID = 0, $caseType = '', $orderBy = 'id_desc', $pager = null)
     {
+        $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $scenes = $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
-            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
-            ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->orderBy('grade_desc, sort_asc')
             ->fetchAll('id');
+
+        $pager->recTotal = 0;
+
         if(!$scenes) return array();
 
         $cases = array();
         if($scenes && !$this->cookie->onlyScene)
         {
-            $caseList = $this->dao->select('*')->from(TABLE_CASE)
-                ->where('deleted')->eq('0')
-                ->andWhere('scene')->ne(0)
-                ->andWhere('product')->eq($productID)
-                ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
-                ->beginIF($moduleID)->andWhere('module')->eq($moduleID)->fi()
+            $stmt = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1');
+
+            if($this->app->tab == 'project') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
+
+            $caseList = $stmt->where('t1.deleted')->eq('0')
+                ->andWhere('t1.scene')->ne(0)
+                ->andWhere('t1.product')->eq($productID)
+                ->beginIF($this->app->tab == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
+                ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+                ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+                ->beginIF($this->cookie->showAutoCase)->andWhere('t1.auto')->ne('unit')->fi()
+                ->beginIF(!$this->cookie->showAutoCase)->andWhere('t1.auto')->notIN('unit,auto')->fi()
+                ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
                 ->orderBy($orderBy)
                 ->fetchAll('id');
+
             $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
             $caseList = $this->loadModel('story')->checkNeedConfirm($caseList);
             $caseList = $this->appendData($caseList);
@@ -3323,17 +3382,17 @@ class testcaseModel extends model
             $scene->results    = 0;
             $scene->caseFails  = 0;
             $scene->stepNumber = 0;
-            $scene->isCase     = 2;
+            $scene->isScene    = true;
 
             if(isset($cases[$id]))
             {
                 foreach($cases[$id] as $case)
                 {
-                    $case->id     = 'case_' . $case->id;
-                    $case->parent = $id;
-                    $case->grade  = $scene->grade + 1;
-                    $case->path   = $scene->path . $case->id . ',';
-                    $case->isCase = 1;
+                    $case->id      = 'case_' . $case->id;
+                    $case->parent  = $id;
+                    $case->grade   = $scene->grade + 1;
+                    $case->path    = $scene->path . $case->id . ',';
+                    $case->isScene = false;
 
                     $scene->cases[$case->id] = $case;
                 }
@@ -3589,7 +3648,7 @@ class testcaseModel extends model
             }
 
             $this->dao->update(TABLE_SCENE)->data($scene)->where('id')->eq($sceneID)->exec();
-            $this->dao->update(TABLE_SCENE)->set("path = REPLACE(path, {$oldScene->path}, {$scene->path})")
+            $this->dao->update(TABLE_SCENE)->set("path = REPLACE(path, '{$oldScene->path}', '{$scene->path}')")
                 ->where('id')->ne($sceneID)
                 ->andWhere('path')->like("{$oldScene->path}%")
                 ->exec();
@@ -3841,7 +3900,7 @@ class testcaseModel extends model
             $this->dao->insert(TABLE_SCENE)->data($scene)->autoCheck()->exec();
             $sceneID = $this->dao->lastInsertID();
 
-            $this->dao->update(TABLE_SCENE)->set('`order`')->eq($sceneID)->where('id')->eq((int)$sceneID)->exec();
+            $this->dao->update(TABLE_SCENE)->set('sort')->eq($sceneID)->where('id')->eq((int)$sceneID)->exec();
         }
         else
         {

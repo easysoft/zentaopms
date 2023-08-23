@@ -112,7 +112,7 @@ $(function()
               <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0);?></td>
             </tr>
             <?php endif;?>
-            <?php if($showBranch):?>
+            <?php if(isset($showBranch) and $showBranch):?>
             <tr>
               <td><?php echo $lang->datatable->showBranch;?></td>
               <td><?php echo html::radio('showBranch', $lang->datatable->showBranchList, isset($config->$currentModule->$currentMethod->showBranch) ? $config->$currentModule->$currentMethod->showBranch : 1);?></td>

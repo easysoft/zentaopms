@@ -1,104 +1,110 @@
 CREATE TABLE `zt_demandpool` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `desc` mediumtext NOT NULL,
-  `status` char(30) NOT NULL,
-  `createdBy` char(30) NOT NULL,
-  `createdDate` date NOT NULL,
-  `owner` text NOT NULL,
-  `reviewer` text NOT NULL,
-  `acl` char(30) NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `desc` mediumtext NULL,
+  `status` char(30) NOT NULL DEFAULT '',
+  `createdBy` char(30) NOT NULL DEFAULT '',
+  `createdDate` date NULL,
+  `owner` text NULL,
+  `reviewer` text NULL,
+  `acl` char(30) NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `zt_demand` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
-  `pool` int(8) NOT NULL,
-  `module` int(8) NOT NULL,
-  `product` mediumint(8) NOT NULL,
-  `parent` mediumint(8) NOT NULL,
-  `pri` char(30) NOT NULL,
-  `category` char(30) NOT NULL,
-  `source` char(30) NOT NULL,
-  `sourceNote` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `feedbackedBy` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `assignedTo` char(30) NOT NULL,
-  `assignedDate` datetime NOT NULL,
-  `reviewedBy` text NOT NULL,
-  `reviewedDate` datetime NOT NULL,
-  `status` char(30) NOT NULL,
-  `duration` char(30) NOT NULL,
-  `BSA` char(30) NOT NULL,
-  `story` mediumint(8) NOT NULL,
-  `roadmap` mediumint(8) NOT NULL,
-  `createdBy` char(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `mailto` text NOT NULL,
-  `duplicateDemand` mediumint(8) NOT NULL,
-  `childDemands` varchar(255) NOT NULL,
-  `version` varchar(255) NOT NULL,
+  `pool` int(8) NOT NULL DEFAULT '0',
+  `module` int(8) NOT NULL DEFAULT '0',
+  `product` mediumint(8) NOT NULL DEFAULT '0',
+  `parent` mediumint(8) NOT NULL DEFAULT '0',
+  `pri` char(30) NOT NULL DEFAULT '',
+  `category` char(30) NOT NULL DEFAULT '',
+  `source` char(30) NOT NULL DEFAULT '',
+  `sourceNote` varchar(255) NOT NULL DEFAULT '',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `feedbackedBy` varchar(255) NOT NULL DEFAULT '',
+  `email` varchar(255) NOT NULL DEFAULT '',
+  `assignedTo` char(30) NOT NULL DEFAULT '',
+  `assignedDate` datetime NULL,
+  `reviewedBy` text NULL,
+  `reviewedDate` datetime NULL,
+  `status` char(30) NOT NULL DEFAULT '',
+  `duration` char(30) NOT NULL DEFAULT '',
+  `BSA` char(30) NOT NULL DEFAULT '',
+  `story` mediumint(8) NOT NULL DEFAULT '0',
+  `roadmap` mediumint(8) NOT NULL DEFAULT '0',
+  `createdBy` char(30) NOT NULL DEFAULT '',
+  `createdDate` datetime NULL,
+  `mailto` text NULL,
+  `duplicateDemand` mediumint(8) NULL,
+  `childDemands` varchar(255) NOT NULL DEFAULT '',
+  `version` varchar(255) NOT NULL DEFAULT '',
   `vision` varchar(255) NOT NULL DEFAULT 'or',
-  `color` varchar(255) NOT NULL,
-  `changedBy` char(30) NOT NULL,
-  `changedDate` datetime NOT NULL,
-  `closedBy` char(30) NOT NULL,
-  `closedDate` datetime NOT NULL,
-  `closedReason` varchar(30) NOT NULL,
-  `submitedBy` varchar(30) NOT NULL,
+  `color` varchar(255) NOT NULL DEFAULT '',
+  `changedBy` char(30) NOT NULL DEFAULT '',
+  `changedDate` datetime NULL,
+  `closedBy` char(30) NOT NULL DEFAULT '',
+  `closedDate` datetime NULL,
+  `closedReason` varchar(30) NOT NULL DEFAULT '',
+  `submitedBy` varchar(30) NOT NULL DEFAULT '',
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
-  `lastEditedDate` datetime NOT NULL,
-  `activatedDate` datetime NOT NULL,
+  `lastEditedDate` datetime NULL,
+  `activatedDate` datetime NULL,
   `distributedBy` varchar(30) NOT NULL DEFAULT '',
-  `distributedDate` datetime NOT NULL,
+  `distributedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `zt_demandspec` (
-  `demand` mediumint(9) NOT NULL,
-  `version` smallint(6) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `spec` mediumtext NOT NULL,
-  `verify` mediumtext NOT NULL,
-  `files` text NOT NULL,
-  UNIQUE KEY `demand` (`demand`,`version`)
+  `demand` mediumint(9) NOT NULL DEFAULT '0',
+  `version` smallint(6) NOT NULL DEFAULT '0',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `spec` mediumtext NULL,
+  `verify` mediumtext NULL,
+  `files` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `demand` ON `zt_demandspec`(`demand`,`version`);
 
 CREATE TABLE `zt_demandreview` (
-  `demand` mediumint(9) NOT NULL,
-  `version` smallint(6) NOT NULL,
-  `reviewer` varchar(30) NOT NULL,
-  `result` varchar(30) NOT NULL,
-  `reviewDate` datetime NOT NULL,
-  UNIQUE KEY `demand` (`demand`,`version`,`reviewer`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `demand` mediumint(9) NOT NULL DEFAULT '0',
+  `version` smallint(6) NOT NULL DEFAULT '0',
+  `reviewer` varchar(30) NOT NULL DEFAULT '',
+  `result` varchar(30) NOT NULL DEFAULT '',
+  `reviewDate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`);
 
 CREATE TABLE `zt_charter` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `level` int(8) NOT NULL,
-  `category` char(30) NOT NULL,
-  `market` varchar(30) NOT NULL,
-  `appliedBy` char(30) NOT NULL,
-  `appliedDate` datetime NOT NULL,
-  `budget` char(30) NOT NULL,
-  `budgetUnit` char(30) NOT NULL,
-  `product` mediumint(8) NOT NULL,
-  `roadmap` mediumint(8) NOT NULL,
-  `spec` mediumtext NOT NULL,
-  `status` char(30) NOT NULL,
-  `createdBy` char(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `charterFiles` text NOT NULL,
-  `reviewedBy` char(30) NOT NULL,
-  `reviewedResult` char(30) NOT NULL,
-  `reviewedDate` datetime NOT NULL,
-  `meetingDate` date NOT NULL,
-  `meetingLocation` varchar(255) NOT NULL,
-  `meetingMinutes` mediumtext NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `level` int(8) NOT NULL DEFAULT '0',
+  `category` char(30) NOT NULL DEFAULT '',
+  `market` varchar(30) NOT NULL DEFAULT '',
+  `check` enum('0','1') NOT NULL DEFAULT '0',
+  `appliedBy` char(30) NOT NULL DEFAULT '',
+  `appliedDate` datetime NULL,
+  `budget` char(30) NOT NULL DEFAULT '',
+  `budgetUnit` char(30) NOT NULL DEFAULT '',
+  `product` mediumint(8) NOT NULL DEFAULT '0',
+  `roadmap` mediumint(8) NOT NULL DEFAULT '0',
+  `spec` mediumtext NULL,
+  `status` char(30) NOT NULL DEFAULT '',
+  `createdBy` char(30) NOT NULL DEFAULT '',
+  `createdDate` datetime NULL,
+  `charterFiles` text NULL,
+  `closedBy` char(30) NOT NULL DEFAULT '',
+  `closedDate` datetime NULL,
+  `closedReason` varchar(255) NOT NULL DEFAULT '',
+  `activatedBy` char(30) NOT NULL DEFAULT '',
+  `activatedDate` datetime NULL,
+  `reviewedBy` varchar(255) NOT NULL DEFAULT '',
+  `reviewedResult` char(30) NOT NULL DEFAULT '',
+  `reviewedDate` datetime NULL,
+  `meetingDate` date NULL,
+  `meetingLocation` varchar(255) NOT NULL DEFAULT '',
+  `meetingMinutes` mediumtext NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -112,38 +118,36 @@ ALTER TABLE `zt_story` ADD `demand` mediumint(8)  NOT NULL AFTER `notifyEmail`;
 ALTER TABLE `zt_product` ADD `PMT` text COLLATE 'utf8_general_ci' NOT NULL AFTER `reviewer`;
 ALTER TABLE `zt_story` ADD `submitedBy` varchar(30) NOT NULL AFTER `changedDate`;
 ALTER TABLE `zt_story` ADD `roadmap` VARCHAR(255)  NOT NULL  DEFAULT ''  AFTER `plan`;
-ALTER TABLE `zt_charter` ADD `check` enum('0','1') NOT NULL DEFAULT '0';
-ALTER TABLE `zt_charter` modify column reviewedBy varchar(255);
 
 CREATE TABLE `zt_roadmap` (
-  `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `product` mediumint(8) NOT NULL,
-  `branch` mediumint(8) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `status` char(30) NOT NULL,
-  `begin` date NOT NULL,
-  `end` date NOT NULL,
-  `desc` longtext NOT NULL,
-  `createdBy` char(30) NOT NULL,
-  `createdDate` date NOT NULL,
-  `closedBy` char(30) NOT NULL,
-  `closedDate` datetime NOT NULL,
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
+  `product` mediumint(8) NOT NULL DEFAULT '0',
+  `branch` mediumint(8) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `status` char(30) NOT NULL DEFAULT '',
+  `begin` date NULL,
+  `end` date NULL,
+  `desc` longtext NULL,
+  `createdBy` char(30) NOT NULL DEFAULT '',
+  `createdDate` date NULL,
+  `closedBy` char(30) NOT NULL DEFAULT '',
+  `closedDate` datetime NULL,
   `closedReason` enum('done','canceled') DEFAULT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0'
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `zt_roadmapstory` (
-  `roadmap` mediumint(8) unsigned NOT NULL,
-  `story` mediumint(8) unsigned NOT NULL,
-  `order` MEDIUMINT  UNSIGNED  NOT NULL,
-  UNIQUE KEY `roadmap_story` (`roadmap`,`story`)
+  `roadmap` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `story` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `order` MEDIUMINT  UNSIGNED  NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `roadmap_story` ON `zt_roadmapstory`(`roadmap`,`story`);
 
-ALTER TABLE `zt_story` MODIFY `status` enum('','changing','active','draft','closed','reviewing','launched','developing') NOT NULL DEFAULT '' AFTER `estimate`;
+ALTER TABLE `zt_story` MODIFY `status` enum('','changing','active','draft','closed','reviewing','launched','developing') NOT NULL DEFAULT '';
 
-ALTER TABLE `zt_project`
-ADD `charter` mediumint(8) NOT NULL DEFAULT 0 AFTER `project`,
-ADD `category` char(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `type`;
+ALTER TABLE `zt_project` ADD `charter` mediumint(8) NOT NULL DEFAULT 0 AFTER `project`;
+ALTER TABLE `zt_project` ADD `category` char(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `type`;
 
 REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `projectType`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
 ('概念',        '10',   'concept',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
@@ -159,30 +163,24 @@ ALTER TABLE `zt_review` MODIFY `docVersion` varchar(255);
 
 ALTER TABLE `zt_object` ADD `end` date NULL AFTER `designEst`;
 
-ALTER TABLE `zt_charter` ADD `closedBy`      char(30) NULL;
-ALTER TABLE `zt_charter` ADD `closedDate`    datetime NULL;
-ALTER TABLE `zt_charter` ADD `closedReason`  varchar(255) NULL;
-ALTER TABLE `zt_charter` ADD `activatedBy`   char(30) NULL;
-ALTER TABLE `zt_charter` ADD `activatedDate` datetime NULL;
-
 UPDATE `zt_priv` SET `vision` = ',rnd,or,' WHERE `module` = 'requirement' AND `method` = 'import';
 UPDATE `zt_priv` SET `vision` = ',rnd,or,' WHERE `module` = 'requirement' AND `method` = 'exportTemplate';
 
-REPLACE INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('demand', 'export', '643', ',ipd,', ',or,', '1', '210');
+REPLACE INTO `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES (2109, 'demand', 'export', '643', ',ipd,', ',or,', '1', '210');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2109, 'priv', 'de',    'demand-export', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2109, 'priv', 'en',    'demand-export', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2109, 'priv', 'fr',    'demand-export', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2109, 'priv', 'zh-cn', 'demand-export', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2109, 'priv', 'zh-tw', 'demand-export', '', '');
 
-REPLACE INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('demand', 'exportTemplate', '643', ',ipd,', ',or,', '1', '220');
+REPLACE INTO `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES (2110, 'demand', 'exportTemplate', '643', ',ipd,', ',or,', '1', '220');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2110, 'priv', 'de',    'demand-exportTemplate', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2110, 'priv', 'en',    'demand-exportTemplate', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2110, 'priv', 'fr',    'demand-exportTemplate', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2110, 'priv', 'zh-cn', 'demand-exportTemplate', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2110, 'priv', 'zh-tw', 'demand-exportTemplate', '', '');
 
-REPLACE INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('demand', 'import', '643', ',ipd,', ',or,', '1', '230');
+REPLACE INTO `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES (2111, 'demand', 'import', '643', ',ipd,', ',or,', '1', '230');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2111, 'priv', 'de',    'demand-import', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2111, 'priv', 'en',    'demand-import', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2111, 'priv', 'fr',    'demand-import', '', '');
@@ -202,7 +200,7 @@ REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2111, 'recomm
 REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2111, 'recommend', 2076);
 REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2111, 'recommend', 2077);
 
-REPLACE INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('requirement', 'batchChangeRoadmap', '32', ',ipd,', ',or,', '1', '125');
+REPLACE INTO `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES (2112, 'requirement', 'batchChangeRoadmap', '32', ',ipd,', ',or,', '1', '125');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2112, 'priv', 'de',    'requirement-batchChangeRoadmap', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2112, 'priv', 'en',    'requirement-batchChangeRoadmap', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2112, 'priv', 'fr',    'requirement-batchChangeRoadmap', '', '');
@@ -216,14 +214,14 @@ REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2112, 'recomm
 
 UPDATE `zt_privlang` SET `value` = '创建维护立项' WHERE `objectID` = 638 and `objectType` = 'manager';
 
-REPLACE INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('charter', 'close', '638', ',ipd,', ',or,', '1', '80');
+REPLACE INTO `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES (2113, 'charter', 'close', '638', ',ipd,', ',or,', '1', '80');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2113, 'priv', 'de',    'charter-close', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2113, 'priv', 'en',    'charter-close', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2113, 'priv', 'fr',    'charter-close', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2113, 'priv', 'zh-cn', 'charter-close', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2113, 'priv', 'zh-tw', 'charter-close', '', '');
 
-REPLACE INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('charter', 'activate', '638', ',ipd,', ',or,', '1', '90');
+REPLACE INTO `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES (2114, 'charter', 'activate', '638', ',ipd,', ',or,', '1', '90');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2114, 'priv', 'de',    'charter-activate', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2114, 'priv', 'en',    'charter-activate', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2114, 'priv', 'fr',    'charter-activate', '', '');
@@ -242,7 +240,7 @@ REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2114, 'recomm
 REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2114, 'recommend', 2063);
 REPLACE INTO `zt_privrelation` (priv, `type`, relationPriv) VALUES(2114, 'recommend', 2113);
 
-REPLACE INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('requirement', 'relation', '32', ',max,ipd,', ',rnd,', '1', '130');
+REPLACE INTO `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES (2115, 'requirement', 'relation', '32', ',max,ipd,', ',rnd,', '1', '130');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2115, 'priv', 'de',    'requirement-relation', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2115, 'priv', 'en',    'requirement-relation', '', '');
 REPLACE INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES (2115, 'priv', 'fr',    'requirement-relation', '', '');

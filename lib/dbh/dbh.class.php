@@ -256,9 +256,13 @@ class dbh
     public function formatDmSQL($sql)
     {
         $sql = trim($sql);
-        /* '\\\\n' try to compatible screen json like \u0232\\nBug. */
-        $sql = str_replace(array('\\\\n', '\r', '\n'), ' ', $sql);
         $sql = $this->formatFunction($sql);
+
+        if(defined('IN_UPGRADE'))
+        {
+            $sql = $this->processDmChangeColumn($sql);
+            $sql = $this->processDmTableIndex($sql);
+        }
 
         $actionPos = strpos($sql, ' ');
         $action    = strtoupper(substr($sql, 0, $actionPos));
@@ -313,7 +317,7 @@ class dbh
                 }
                 elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0 || stripos($sql, 'CREATE INDEX') === 0)
                 {
-                    preg_match('/ON\ +[0-9a-zA-Z\_\.]+\`([0-9a-zA-Z\_]+)\`/', $sql, $matches);
+                    preg_match('/ON\ +`([0-9a-zA-Z_]+)`/', $sql, $matches);
 
                     $tableName = str_replace($this->config->prefix, '', $matches);
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName[1]) . '_', $sql);
@@ -370,6 +374,32 @@ class dbh
             default:
                 return $sql;
         }
+    }
+
+    /**
+     * Format dm table index.
+     *
+     * @param string $sql
+     * @access public
+     * @return string
+     */
+    public function processDmTableIndex($sql)
+    {
+        if(strpos($sql, 'DROP INDEX') === FALSE) return $sql;
+        return preg_replace('/DROP INDEX `(\w+)` ON `zt_(\w+)`/', 'DROP INDEX IF EXISTS `$2_$1`', $sql);
+    }
+
+    /**
+     * Format dm change column.
+     *
+     * @param string $sql
+     * @access public
+     * @return string
+     */
+    public function processDmChangeColumn($sql)
+    {
+        if(strpos($sql, 'CHANGE COLUMN') === FALSE) return $sql;
+        return preg_replace('/ALTER TABLE `([^`]+)` CHANGE COLUMN `([^`]+)` `([^`]+)` (\w+)/', 'ALTER TABLE `$1` RENAME COLUMN `$2` TO `$3`;', $sql);
     }
 
     /**
@@ -469,7 +499,16 @@ class dbh
                     foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
                 }
 
-                if(strpos($sql, "ALTER TABLE") !== false) $sql = $this->convertAlterTableSql($sql);
+                if(strpos($sql, "ALTER TABLE") === 0)
+                {
+                    $sql = $this->convertAlterTableSql($sql);
+                    if(stripos($sql, "ADD") !== false)
+                    {
+                        // 使用正则表达式匹配并去除 "AFTER" 关键字及其后面的内容
+                        $pattern = "/\s+AFTER\s+.+$/i";
+                        $sql     = preg_replace($pattern, "", $sql);
+                    }
+                }
         }
 
         return $sql;
@@ -486,10 +525,11 @@ class dbh
     {
         // 解析REPLACE INTO语句，提取出表名、字段和值
         $matches = [];
-        preg_match('/^REPLACE\s+INTO\s+`?([\w_]+)`?\s*\((.*)\)\s+VALUES\s*\((.*?)\)\s*$/i', $sql, $matches);
+        preg_match('/^REPLACE\s+INTO\s+`?([\w_]+)`?\s*\((.*)\)\s+VALUES\s*\(([^()]+)\)\s*$/i', $sql, $matches);
+        if(empty($matches)) return $sql;
         $table_name = $matches[1];
-        $columns = array_map('trim', explode(',', $matches[2]));
-        $values = array_map('trim', explode(', ', $matches[3]));
+        $columns    = array_map('trim', explode(',', $matches[2]));
+        $values     = array_map('trim', explode(', ', $matches[3]));
         if($table_name == '' or $columns == '' or $values == '') return $sql;
 
         // 构造SELECT语句，查询数据是否存在

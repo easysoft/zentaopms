@@ -5,7 +5,8 @@ new Vue({
             attr: '',
             struct: {
                 ...struct,
-                attribute: struct.attribute
+                attribute:  struct.attribute,
+                structType: struct.type
             }
         }
     },

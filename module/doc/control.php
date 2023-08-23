@@ -1471,7 +1471,7 @@ class doc extends control
         if($this->config->vision == 'lite')         unset($spaceList['api'], $spaceList['product'], $typeList['api']);
 
         $products = $this->loadModel('product')->getPairs();
-        $projects = $this->project->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+        $projects = $this->project->getPairsByProgram('', 'all', false, 'order_asc');
 
         $this->view->spaceList  = $spaceList;
         $this->view->typeList   = $typeList;

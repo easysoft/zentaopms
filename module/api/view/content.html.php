@@ -79,8 +79,7 @@
               <td><?php echo $lang->api->boolList[$param['required']];?></td>
               <td><?php echo $param['desc'];?></td>
             <tr>
-            <?php endforeach;
-            ;?>
+            <?php endforeach;?>
             </tbody>
           </table>
           <?php endif;?>

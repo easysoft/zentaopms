@@ -125,6 +125,8 @@ class install extends control
         if(getenv('MYSQL_USER'))     $dbUser     = getenv('MYSQL_USER');
         if(getenv('MYSQL_PASSWORD')) $dbPassword = getenv('MYSQL_PASSWORD');
 
+        if($this->config->edition == 'ipd') unset($this->lang->install->dbDriverList['dm']);
+
         $this->view->title = $this->lang->install->setConfig;
 
         $this->view->dbHost     = $dbHost ? $dbHost : '127.0.0.1';

@@ -137,14 +137,11 @@ class project extends control
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
 
-        $parents = array_column($projects, 'parent');
-        $parents = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($parents)->fetchAll('id');
-
         $programs = $this->program->getPairs(true);
 
         foreach($projects as $project)
         {
-            $project->parent = isset($parents[$project->id]) ? $this->program->getTopByPath($parents[$project->id]) : 0;
+            $project->parent = $this->program->getTopByID($project->parent);
             $project->parent = isset($programs[$project->parent]) ? $project->parent : $project->id;
             $orderedProjects[$project->parent][] = $project;
             unset($projects[$project->id]);

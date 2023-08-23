@@ -60,7 +60,7 @@ class programplanModel extends model
             ->where('1 = 1')
             ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
-            ->beginIF($browseType == 'all')->andWhere('t1.project')->eq($executionID)->fi()
+            ->beginIF($browseType == 'all' || $browseType == 'leaf')->andWhere('t1.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t1.deleted')->eq('0')

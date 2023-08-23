@@ -720,6 +720,7 @@ class productModel extends model
         $product = fixer::input('post')
             ->callFunc('name', 'trim')
             ->setDefault('status', 'normal')
+            ->setDefault('PMT', '')
             ->setDefault('line', 0)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
@@ -1327,6 +1328,7 @@ class productModel extends model
      */
     public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc', $pager = null)
     {
+        $branch = $branch ? $branch : 0;
         $projectList = $this->dao->select('DISTINCT t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.id=t3.root')
@@ -1347,7 +1349,7 @@ class productModel extends model
             ->orWhere("CONCAT(',', t2.whitelist, ',')")->like("%,{$this->app->user->account},%")
             ->markRight(1)
             ->fi()
-            ->beginIF(!empty($branch) and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
@@ -1439,7 +1441,10 @@ class productModel extends model
             ->fetchAll('id');
 
         /* Only show leaf executions. */
-        $allExecutions = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)->where('type')->notin(array('program', 'project'))->fetchAll('id');
+        $allExecutions = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)
+            ->where('type')->notin(array('program', 'project'))
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
         $parents = array();
         foreach($allExecutions as $exec) $parents[$exec->parent] = true;
 
@@ -2377,9 +2382,9 @@ class productModel extends model
             {
                 $link = helper::createLink('testcase', 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=all') . "&browseType=$extra");
             }
-            elseif($module == 'testreport' and ($method == 'create' or $method == 'edit'))
+            elseif($module == 'testreport' and strpos('create,edit,browse', $method) !== false)
             {
-                $vars   = $method == 'edit' ? "objectID=%s" : "objectID=&objectType=testtask&extra=%s";
+                $vars   = ($method == 'edit' or $method == 'browse') ? "objectID=%s" : "objectID=&objectType=testtask&extra=%s";
                 $method = $method == 'edit' ? 'browse' : $method;
                 $link   = helper::createLink($module, $method, $vars);
             }

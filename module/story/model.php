@@ -234,10 +234,11 @@ class storyModel extends model
             ->cleanInt('product,module,pri,plan')
             ->callFunc('title', 'trim')
             ->add('version', 1)
-            ->setDefault('plan,verify,notifyEmail', '')
+            ->setDefault('plan,notifyEmail', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setDefault('estimate', 0)
+            ->setIF(strlen($this->post->verify) == 0, 'verify', '')
             ->setIF($this->post->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
@@ -266,7 +267,7 @@ class storyModel extends model
         {
             if(!$this->post->branches) $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
             if(!$this->post->modules or $product->type == 'normal')  $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
-            $this->post->plans    = isset($story->plan) ? array($story->plan) : array(0 => 0);
+            if(!$this->post->plans or $product->type == 'normal') $this->post->plans = isset($story->plan) ? array($story->plan) : array(0 => 0);
         }
 
         /* check module */
@@ -304,7 +305,7 @@ class storyModel extends model
             $story->module = $this->post->modules[$key];
             $story->plan   = $this->post->plans[$key];
 
-            if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $this->post->plan > 0 ? 'planned' : 'wait';
+            if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $story->plan > 0 ? 'planned' : 'wait';
             if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
             if(strpos($requiredFields, ',estimate,') !== false)
             {
@@ -3374,6 +3375,7 @@ class storyModel extends model
         if($excludeStories) $storyQuery = $storyQuery . ' AND `id` NOT ' . helper::dbIN($excludeStories);
         if($excludeStatus)  $storyQuery = $storyQuery . ' AND `status` NOT ' . helper::dbIN($excludeStatus);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
+        if(in_array($this->app->moduleName, array('build', 'projectrelease', 'release'))) $storyQuery .= "AND `parent` >= 0 ";
         $allBranch = "`branch` = 'all'";
         if(!empty($executionID))
         {

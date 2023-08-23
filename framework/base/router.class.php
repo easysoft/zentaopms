@@ -3354,7 +3354,8 @@ class ztSessionHandler
      */
     public function getSessionFile($id)
     {
-        if(!empty($this->sessionFile)) return $this->sessionFile;
+        if(!empty($this->sessionFile))  return $this->sessionFile;
+        if(!preg_match('/^\w+$/', $id)) return false;
 
         $sessionID = $id;
         if($this->tagID) $sessionID = md5($id . $this->tagID);
@@ -3406,6 +3407,7 @@ class ztSessionHandler
     public function read($id)
     {
         $sessFile = $this->getSessionFile($id);
+        if(!$sessFile) return false;
         if(!file_exists($sessFile))
         {
             ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
@@ -3426,6 +3428,8 @@ class ztSessionHandler
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
+        if(!$sessFile) return false;
+
         touch($sessFile);
         touch($this->rawFile);
         if(md5_file($sessFile) == md5($sessData)) return true;

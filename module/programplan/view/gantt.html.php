@@ -85,6 +85,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 #mainContent > .pull-left > .btn-group > a > .text{overflow: hidden;display: block;}
 #mainContent > .pull-right > .button-group  .text{margin-left: 0px;}
 .pull-right .icon-plus.icon-sm:before{vertical-align: 4%;}
+#ganttView .gantt_resizer{min-width: unset !important;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -631,9 +632,8 @@ $(function()
 
     function getDeadlineBtn(task)
     {
-        console.log(task);
         var date = task.deadline;
-        if(task.type == 'point' && canEditDeadline && (!task.rawStatus || task.rawStatus == 'fail' || task.rawStatus == 'draft')) return "<table><tr><td><span class='deadline'>" + gridDateToStr(new Date(date.valueOf() - 1)) + '</span> <a class="btn btn-primary editDeadline" title="<?php echo $lang->programplan->edit;?>"><i class="icon-common-edit icon-edit"></i> <?php echo $lang->programplan->edit;?></a></td></tr></table>';
+        if(task.type == 'point' && canEditDeadline && (!task.rawStatus || task.rawStatus == 'fail' || task.rawStatus == 'draft')) return "<table><tr><td><span class='deadline'>" + gridDateToStr(new Date(date.valueOf())) + '</span> <a class="btn btn-primary editDeadline" title="<?php echo $lang->programplan->edit;?>"><i class="icon-common-edit icon-edit"></i> <?php echo $lang->programplan->edit;?></a></td></tr></table>';
         return date;
     }
 

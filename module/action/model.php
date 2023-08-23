@@ -71,7 +71,18 @@ class actionModel extends model
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dao->lastInsertID();
 
-        $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
+        $hasRecentTable = true;
+        if(defined('IN_UPGRADE') and IN_UPGRADE)
+        {
+            $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
+            if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.6', '<'))               $hasRecentTable = false;
+            if(strpos($fromVersion, 'pro') !== false) $hasRecentTable = false;
+            if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.6',   '<')) $hasRecentTable = false;
+            if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.6',   '<')) $hasRecentTable = false;
+            if(strpos($fromVersion, 'ipd') !== false and version_compare($fromVersion, 'ipd1.0.1', '<')) $hasRecentTable = false;
+        }
+        if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
+
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
         /* Call the message notification function. */
@@ -79,6 +90,9 @@ class actionModel extends model
 
         /* Add index for global search. */
         $this->saveIndex($objectType, $objectID, $actionType);
+
+        $changeFunc = 'after' . ucfirst($objectType);
+        if(method_exists($this, $changeFunc)) call_user_func_array(array($this, $changeFunc), array($action, $actionID));
 
         return $actionID;
     }
@@ -897,6 +911,13 @@ class actionModel extends model
             }
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
         }
+
+        if(isset($this->session->calllbackActionList[$actionID]))
+        {
+            $callbackMethod = $this->session->calllbackActionList[$actionID];
+            unset($this->session->calllbackActionList[$actionID]);
+            if(method_exists($this, $callbackMethod)) call_user_func_array(array($this, $callbackMethod), array($actionID));
+        }
     }
 
     /**
@@ -1088,9 +1109,10 @@ class actionModel extends model
         if(!$this->app->user->admin)
         {
             $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-            if($productID == 'all')   $grantedProducts   = !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
-            if($projectID == 'all')   $grantedProjects   = !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
-            if($executionID == 'all') $grantedExecutions = !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
+            if($productID == 'all')   $grantedProducts   = empty($aclViews) || !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
+            if($projectID == 'all')   $grantedProjects   = empty($aclViews) || !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
+            if($executionID == 'all') $grantedExecutions = empty($aclViews) || !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
+            if(empty($grantedProducts)) $grantedProducts = '0';
 
             if($productID == 'all' and $projectID == 'all')
             {

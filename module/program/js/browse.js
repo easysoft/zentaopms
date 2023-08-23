@@ -4,10 +4,7 @@ $(function()
     {
         var editProject = $(this).is(':checked') ? 1 : 0;
         $.cookie('editProject', editProject, {expires:config.cookieLife, path:config.webRoot});
-        showEditCheckbox(editProject);
     });
-    if($.cookie('editProject') == 1) $('input#editProject1').prop('checked', 'true');
-    if($('input#editProject1').prop('checked')) showEditCheckbox(true);
 
     $(document).on('click', ":checkbox[name^='projectIdList']", function()
     {

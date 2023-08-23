@@ -87,7 +87,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'sort_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $this->loadModel('datatable');
         $this->app->loadLang('zanode');
@@ -154,7 +154,7 @@ class testcase extends control
         {
             $pager->pageID = $pageID;   // 场景和用例混排，$pageID 可能大于场景分页后的总页数。在 pager 构造函数中会被设为 1，这里要重新赋值。
 
-            $scenes = $this->testcase->getSceneGroups($productID, $branch, $moduleID, $sort, $pager);   // 获取包含子场景和用例的顶级场景树。
+            $scenes = $this->testcase->getSceneGroups($productID, $branch, $moduleID, $caseType, $sort, $pager);   // 获取包含子场景和用例的顶级场景树。
 
             if(!$this->cookie->onlyScene)
             {
@@ -211,10 +211,11 @@ class testcase extends control
         $cases = $this->testcase->appendData($cases);
         foreach($cases as $case)
         {
-            $case->parent = 0;
-            $case->grade  = 1;
-            $case->path   = ',' . $case->id . ',';
-            $case->isCase = 1;
+            $case->id      = 'case_' . $case->id;   // Add a prefix to avoid duplication with the scene ID.
+            $case->parent  = 0;
+            $case->grade   = 1;
+            $case->path    = ',' . $case->id . ',';
+            $case->isScene = false;
         }
 
         /* Build the search form. */
@@ -1403,6 +1404,8 @@ class testcase extends control
      */
     public function batchDelete($productID = 0)
     {
+        $this->post->caseIDList  = $this->post->caseIDList ? $this->post->caseIDList : array();
+        $this->post->sceneIDList = $this->post->sceneIDList ? $this->post->sceneIDList : array();
         if($this->post->caseIDList || $this->post->sceneIDList)
         {
             $this->testcase->batchDelete($this->post->caseIDList, $this->post->sceneIDList);
@@ -1420,9 +1423,9 @@ class testcase extends control
      */
     public function batchChangeBranch($branchID)
     {
-        if($this->post->caseIDList)
+        if($this->post->caseIDList || $this->post->sceneIDList)
         {
-            $this->testcase->batchChangeBranch($this->post->caseIDList, $branchID);
+            $this->testcase->batchChangeBranch($this->post->caseIDList, $this->post->sceneIDList, $branchID);
             if(dao::isError()) return print(js::error(dao::getError()));
         }
 
@@ -2556,7 +2559,7 @@ class testcase extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;
-            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=byModule&param={$this->post->module}");
+            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param={$this->post->module}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
@@ -2605,49 +2608,18 @@ class testcase extends control
      * @param  int    $moduleID
      * @param  string $element
      * @param  int    $sceneID
+     * @param  int    $number
+     * @param  int    $ditto
      * @access public
      * @return void
      */
-    public function ajaxGetScenes($productID, $branch = 0, $moduleID = 0, $element = 'scene', $sceneID = 0)
+    public function ajaxGetScenes($productID, $branch = 0, $moduleID = 0, $element = 'scene', $sceneID = 0, $number = 0, $ditto = 0)
     {
         $scenes = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $sceneID);
 
-        die(html::select($element, $scenes, '', "class='form-control'"));
-    }
+        if($ditto) $scenes['ditto'] = $this->lang->testcase->ditto;
 
-    /**
-     * Ajax get scenes.
-     *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $moduleID
-     * @param  int    $stype
-     * @param  int    $storyID
-     * @param  bool   $onlyOption
-     * @param  string $status
-     * @param  string $limit
-     * @param  string $type
-     * @param  int    $hasParent
-     * @param  string $number
-     * @param  int    $currentScene
-     * @access public
-     * @return void
-     */
-    public function ajaxGetScenesForBC($productID, $branch = 0, $moduleID = 0, $stype = 1, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $number = '', $currentScene = 0)
-    {
-        $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $currentScene);
-        $optionMenu['ditto'] = $this->lang->testcase->ditto;
-
-        if($stype == 1)
-        {
-            $output = html::select("parent", $optionMenu, "", "class='form-control'");
-        }
-        else
-        {
-            $output = html::select("scene" . $number, $optionMenu, array('' => ''), "class='form-control'");
-        }
-
-        die($output);
+        die(html::select($number ? "{$element}[{$number}]" : $element, $scenes, '', "class='form-control'"));
     }
 
     /**
@@ -2669,24 +2641,22 @@ class testcase extends control
     }
 
     /**
-     * Change scene.
+     * Change scene of a case or change parent of a scene.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function changeScene()
     {
         $sourceID = $this->post->sourceID;
-        $targetID = $this->post->targetID;
-        if(strpos('scene_', $targetID) === false) return true;
+        $sceneID  = $this->post->targetID;
+        if($sourceID == $sceneID) return false;
 
-        $sceneID = str_replace('scene_', '', $targetID);
-
-        if(strpos('case_', $sourceID) !== false)
+        if(strpos($sourceID, 'case_') !== false)
         {
             $caseID  = str_replace('case_', '', $sourceID);
             $oldCase = $this->dao->select('scene')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
-            if($oldCase->scene == $sceneID) return true;
+            if($oldCase->scene == $sceneID) return false;
 
             $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('id')->eq($caseID)->exec();
             if(dao::isError()) return false;
@@ -2697,29 +2667,23 @@ class testcase extends control
             $changes  = common::createChanges($oldCase, $newCase);
             $actionID = $this->loadModel('action')->create('case', $caseID, 'edited');
             $this->action->logHistory($actionID, $changes);
+
+            return !dao::isError();
         }
 
-        if(strpos('scene_', $sourceID) !== false)
-        {
-            $oldSceneID = str_replace('scene_', '', $sourceID);
-            if($oldSceneID == $sceneID) return true;
+        $oldScene      = $this->testcase->getSceneByID($sourceID);
+        $newScene      = $this->testcase->getSceneByID($sceneID);
+        $oldParentPath = substr($oldScene->path, 0, strpos($oldScene->path, ",{$oldScene->id},") + strlen(",{$oldScene->id},"));
 
-            $oldScene      = $this->testcase->getSceneByID($oldSceneID);
-            $newScene      = $this->testcase->getSceneByID($sceneID);
-            $oldParentPath = substr($oldScene->path, 0, strpos($oldScene->path, $oldScene->parent) + strlen($oldScene->parent) + 1);
-
-            $this->dao->update(TABLE_SCENE)->set('parent')->eq($sceneID)->where('id')->eq($oldSceneID)->exec();
-            if(dao::isError()) return false;
-
-            $this->dao->update(TABLE_SCENE)
-                ->set('product')->eq($newScene->product)
-                ->set('branch')->eq($newScene->branch)
-                ->set('module')->eq($newScene->module)
-                ->set('grade')->eq("grade + {$newScene->grade} - {$oldScene->grade}")
-                ->set('path')->eq("REPLACE(path, '{$oldParentPath}', '{$newScene->path}')")
-                ->where('path')->like("$oldScene->path}%")
-                ->exec();
-        }
+        $this->dao->update(TABLE_SCENE)->set('parent')->eq($sceneID)->where('id')->eq($oldScene->id)->exec();
+        $this->dao->update(TABLE_SCENE)
+            ->set('product')->eq($newScene->product)
+            ->set('branch')->eq($newScene->branch)
+            ->set('module')->eq($newScene->module)
+            ->set("grade=grade + {$newScene->grade} + 1 - {$oldScene->grade}")
+            ->set("path=REPLACE(path, '{$oldParentPath}', '{$newScene->path}{$oldScene->id},')")
+            ->where('path')->like("{$oldScene->path}%")
+            ->exec();
 
         return !dao::isError();
     }
@@ -2777,7 +2741,7 @@ class testcase extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $sceneID));
 
             $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;
-            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=byModule&param={$this->post->module}");
+            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param={$this->post->module}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
@@ -2823,32 +2787,46 @@ class testcase extends control
      */
     public function updateOrder()
     {
-        $idList  = explode(',', trim($this->post->idList, ','));
-        $orderBy = $this->post->orderBy;
-        if(strpos($orderBy, 'sort') === false) return false;
+        $type     = $this->post->type;
+        $sourceID = $this->post->sourceID;
+        $targetID = $this->post->targetID;
+        $dataList = $this->post->dataList;
+        if(!$type || !$sourceID || !$targetID || !$dataList) return false;
+        if($sourceID == $targetID) return false;
 
-        $caseIDList  = array_filter(array_map(function($id){return strpos($id, 'case_')  !== false ? str_replace('case_',  '', $id) : '';}, $idList));
-        $sceneIDList = array_filter(array_map(function($id){return strpos($id, 'scene_') !== false ? str_replace('scene_', '', $id) : '';}, $idList));
+        $idList      = array_map(function($data){return $data['id'];},    $dataList);
+        $orderList   = array_map(function($data){return $data['order'];}, $dataList);
+        $sourceIndex = array_search($sourceID, $idList);
+        $targetIndex = array_search($targetID, $idList);
 
-        if(count($caseIDList) > 1)
+        if($sourceIndex === false || $targetIndex === false) return false;
+
+        if($sourceIndex > $targetIndex)
         {
-            $caseSorts = $this->dao->select('id, sort')->from(TABLE_CASE)->where('id')->in($caseIDList)->orderBy($orderBy)->fetchPairs();
-            foreach($caseSorts as $id => $sort)
+            $idList    = array_slice($idList,    $targetIndex, $sourceIndex - $targetIndex + 1);
+            $orderList = array_slice($orderList, $targetIndex, $sourceIndex - $targetIndex + 1);
+            array_unshift($idList, array_pop($idList));
+        }
+        else
+        {
+            $idList    = array_slice($idList,    $sourceIndex, $targetIndex - $sourceIndex + 1);
+            $orderList = array_slice($orderList, $sourceIndex, $targetIndex - $sourceIndex + 1);
+            if(count($idList) == 2)
             {
-                $caseID = array_shift($caseIDList);
-
-                if($id != $caseID) $this->dao->update(TABLE_CASE)->set('sort')->eq($sort)->where('id')->eq($caseID)->exec();
+                $idList = array_reverse($idList);
+            }
+            else
+            {
+                array_splice($idList, -1, 0, array_shift($idList));
             }
         }
 
-        if(count($sceneIDList) > 1)
+        $table = $type == 'case' ? TABLE_CASE : TABLE_SCENE;
+
+        foreach($idList as $key => $id)
         {
-            $sceneSorts = $this->dao->select('id, sort')->from(TABLE_SCENE)->where('id')->in($sceneIDList)->orderBy($orderBy)->fetchPairs();
-            foreach($sceneSorts as $id => $sort)
-            {
-                $sceneID = array_shift($sceneIDList);
-                if($id != $sceneID) $this->dao->update(TABLE_SCENE)->set('sort')->eq($sort)->where('id')->eq($sceneID)->exec();
-            }
+            if(!isset($orderList[$key])) continue;
+            $this->dao->update($table)->set('sort')->eq($orderList[$key])->where('id')->eq($id)->exec();
         }
     }
 

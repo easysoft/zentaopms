@@ -433,23 +433,24 @@ class backupModel extends model
     }
 
     /**
-     * Check disk space is enough.
+     * Get disk space.
      *
      * @param  int    $backupPath
      * @access public
      * @return int
      */
-    public function checkDiskSpace($backupPath)
+    public function getkDiskSpace($backupPath)
     {
         $nofile        = strpos($this->config->backup->setting, 'nofile') !== false;
         $diskFreeSpace = disk_free_space($backupPath);
+        $backFileSize  = 0;
+
         $zfile = $this->app->loadClass('zfile');
-        $backFileSize = 0;
 
         if(!$nofile)
         {
-            $appRoot = $this->app->getAppRoot();
-            $appRootSize = $zfile->getDirSize($appRoot);
+            $appRoot      = $this->app->getAppRoot();
+            $appRootSize  = $this->getZentaoSize($appRoot);
             $backFileSize = $appRootSize - $zfile->getDirSize($appRoot . 'tmp') - $zfile->getDirSize($appRoot . 'www/course');
         }
 
@@ -459,6 +460,31 @@ class backupModel extends model
             ->groupBy('TABLE_SCHEMA')
             ->fetch('size');
 
-        return ($diskFreeSpace - ($backFileSize + $backSqlSize) > 0) ? 0 : $backFileSize + $backSqlSize;
+        return $diskFreeSpace . ',' . ($backFileSize + $backSqlSize);
+    }
+
+    /**
+     * Get zentao size.
+     *
+     * @param  string $appRoot
+     * @access public
+     * @return int
+     */
+    public function getZentaoSize($appRoot)
+    {
+        $totalSize = 0;
+        $tmpDir    = realPath($appRoot . 'tmp/');
+        $dataDir   = realPath($appRoot . 'www/data/');
+        $iterator  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($appRoot, RecursiveDirectoryIterator::SKIP_DOTS));
+
+        foreach($iterator as $file)
+        {
+            $filePath = $file->getRealPath();
+            if(strpos($filePath, $tmpDir) !== 0 and strpos($filePath, $dataDir) !== 0)
+            {
+                $totalSize += $file->getSize();
+            }
+        }
+        return $totalSize;
     }
 }

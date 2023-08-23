@@ -3861,7 +3861,7 @@ class execution extends control
 
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
 
-        $childExecutions = $this->dao->select('id,parent,project,grade,status,name,type,PM')->from(TABLE_EXECUTION)
+        $executions = $this->dao->select('id,parent,project,grade,status,name,type,PM,path')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('multiple')->eq('1')
             ->andWhere('type')->in('sprint,stage,kanban')
@@ -3877,10 +3877,14 @@ class execution extends control
             ->fetchAll('id');
 
         $executionGroups = array();
-        foreach($childExecutions as $executionID => $execution)
+        $childExecutions = array();
+        foreach($executions as $executionID => $execution)
         {
             if(!isset($executionGroups[$execution->project])) $executionGroups[$execution->project] = array();
             $executionGroups[$execution->project][$executionID] = $execution;
+
+            if(!isset($childExecutions[$execution->parent])) $childExecutions[$execution->parent] = array();
+            $childExecutions[$execution->parent][$executionID] = $execution;
         }
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)

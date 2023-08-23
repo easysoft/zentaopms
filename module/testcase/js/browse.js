@@ -70,13 +70,13 @@ var DtSort = {};
 DtSort.defaultConfig = {
     idAttrName: 'data-id',
     parentAttrName: 'data-parent',
-    dataNestedAttrName: 'data-nested',
+    productAttrName: 'data-product',
+    orderAttrName: 'data-order',
     nestPathAttrName: 'data-nest-path',
-    dataTypeAttrName: 'data-itype',
-    objectIdAttrName: 'data-object-id',
+    isSceneAttrName: 'data-is-scene',
     moveBuffer: 2,
-    canAccept: function(source, target,sameLevel, sourceMgr, targetMgr){return target.dataNested == "true";},
-    canMove: function(source, sourceMgr){return source.dataNested != "true";},
+    canMove: function(source, sourceMgr){return true;},
+    canAccept: function(source, target,sameLevel, sourceMgr, targetMgr){return true;},
     finish: function(source, target, sameLevel , sourceMgr, targetMgr){},
     movingClass: 'tr-moving',
     acceptableClass: 'tr-acceptable',
@@ -155,10 +155,10 @@ DtSort.Table.prototype.measure = function()
         var rowIndex = i;
         var id = $row.attr(this.options.idAttrName);
         var parent = $row.attr(this.options.parentAttrName);
-        var dataNested = $row.attr(this.options.dataNestedAttrName);
+        var product = $row.attr(this.options.productAttrName);
+        var order = $row.attr(this.options.orderAttrName);
         var nestPath = $row.attr(this.options.nestPathAttrName);
-        var dataType = $row.attr(this.options.dataTypeAttrName);
-        var objectID = $row.attr(this.options.objectIdAttrName);
+        var isScene = $row.attr(this.options.isSceneAttrName);
 
         var pos = DtSort.tools.elementPos($rows[i]);
         var size = DtSort.tools.elementSize($rows[i]);
@@ -168,17 +168,17 @@ DtSort.Table.prototype.measure = function()
             size = {w:this.rowList[0].boundary.w, h:this.rowList[0].boundary.h};
         }
 
-        if(dataNested == "true" && nestPath == undefined)
+        if(isScene == 1 && nestPath == undefined)
             nestPath = "," + id + ",";
 
         this.rowList.push({
             id: id,
             index: i,
             parent: parent,
-            dataNested: dataNested,
+            product: product,
+            order: order,
             nestPath: nestPath,
-            dateType: dataType,
-            objectID: objectID,
+            isScene: isScene,
             boundary: {x:pos.x, y:pos.y, w:size.w, h:size.h},
             $dom: $row
         });
@@ -217,15 +217,15 @@ DtSort.Table.prototype.pick = function(pos)
         }
         if(boundary.y <= pos.y && pos.y < maxH)
         {
-                hitIndex = i;
-                break;
+            hitIndex = i;
+            break;
         }
     }
 
     if(hitIndex < 0) return undefined;
 
     var hitRow = this.rowList[hitIndex];
-    if(this.rowList[hitIndex].dataNested == "true")
+    if(this.rowList[hitIndex].isScene == 1)
     {
         var hitRows = [hitRow]
         for(var i=hitIndex+1; i<this.rowList.length;i++)
@@ -644,9 +644,9 @@ $(function()
         var selectedCaseNum = 0;
         for(var i=0; i<trList.length; i++)
         {
-            var $tr      = $(trList[i]);
-            var dataType = $tr.attr("data-itype");
-            if(dataType != "1") continue;
+            var $tr     = $(trList[i]);
+            var isScene = $tr.attr("data-is-scene");
+            if(isScene == "1") continue;
             var $cbx = $tr.find(".checkbox-primary").find("input");
             if($cbx.is(':checked') == true) selectedCaseNum ++;
         }

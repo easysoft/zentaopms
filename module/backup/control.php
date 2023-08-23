@@ -22,15 +22,19 @@ class backup extends control
         parent::__construct($moduleName, $methodName);
 
         $this->backupPath = $this->backup->getBackupPath();
-        if(!is_dir($this->backupPath))
+
+        if($this->app->methodName != 'setting')
         {
-            if(!mkdir($this->backupPath, 0777, true)) $this->view->error = sprintf($this->lang->backup->error->noWritable, dirname($this->backupPath));
+            if(!is_dir($this->backupPath))
+            {
+                if(!mkdir($this->backupPath, 0777, true)) $this->view->error = sprintf($this->lang->backup->error->noWritable, dirname($this->backupPath));
+            }
+            else
+            {
+                if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
+            }
+            if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
         }
-        else
-        {
-            if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
-        }
-        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
     }
 
     /**
@@ -69,15 +73,32 @@ class backup extends control
         }
         krsort($backups);
 
-        $diskSapce = $this->backup->checkDiskSpace($this->backupPath);
-        $alertTips = sprintf($this->lang->backup->insufficientDisk, round($diskSapce / (1024 * 1024 * 1024), 2));
-
-        $this->view->diskSapce  = $diskSapce;
-        $this->view->alertTips  = $alertTips;
         $this->view->title      = $this->lang->backup->common;
         $this->view->position[] = $this->lang->backup->common;
         $this->view->backups    = $backups;
+        if(!is_writable($this->backupPath))        $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->backupPath);
+        if(!is_writable($this->app->getTmpRoot())) $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->app->getTmpRoot());
         $this->display();
+    }
+
+    /**
+     * Ajax get disk space.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetkDiskSpace()
+    {
+        set_time_limit(0);
+        session_write_close();
+        $diskSapce = $this->backup->getkDiskSpace($this->backupPath);
+        $diskSapce = explode(',', $diskSapce);
+
+        $space = new stdclass();
+        $space->freeSpace = intval($diskSapce[0]);
+        $space->needSpace = intval($diskSapce[1]);
+
+        echo json_encode($space);
     }
 
     /**

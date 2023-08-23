@@ -212,6 +212,14 @@ class upgrade extends control
             }
             if(version_compare($openVersion, '18_0_beta1', '>=')) $selectMode = false;
 
+            if($this->config->edition == 'ipd' and strpos($fromVersion, 'ipd') === false)
+            {
+                $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
+                $this->loadModel('setting')->setItem('system.custom.URAndSR', '1');
+                $this->loadModel('setting')->setItem('system.common.closedFeatures', '');
+                $this->loadModel('setting')->setItem('system.common.disabledFeatures', '');
+            }
+
             if($selectMode)
             {
                 if($this->config->edition == 'ipd') $this->locate(inlink('to18Guide', "fromVersion=$fromVersion&mode=ALM"));
@@ -219,14 +227,6 @@ class upgrade extends control
             }
 
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
-        }
-
-        if($this->config->edition == 'ipd' and strpos($fromVersion, 'ipd') === false)
-        {
-            $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
-            $this->loadModel('setting')->setItem('system.custom.URAndSR', '1');
-            $this->loadModel('setting')->setItem('system.common.closedFeatures', '');
-            $this->loadModel('setting')->setItem('system.common.disabledFeatures', '');
         }
 
         $this->view->result = 'sqlFail';

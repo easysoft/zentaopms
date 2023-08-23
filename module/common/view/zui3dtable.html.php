@@ -7,4 +7,15 @@ css::import($jsRoot . 'dtable/min.css');
 .dtable-header {border-bottom: 1px solid #f4f5f7;}
 .dtable-header .dtable-cell {font-weight: bold;}
 </style>
-<script>zui.DTable.defineFn();</script>
+<script>
+function convertCols(cols)
+{
+    cols.forEach(function(col)
+    {
+        if(col.fixed == 'no') col.fixed = false;
+    });
+
+    return cols;
+}
+zui.DTable.defineFn();
+</script>

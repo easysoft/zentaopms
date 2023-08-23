@@ -6,16 +6,19 @@
  * @param object $execution
  * @return string
  */
-$getExecutionGroup = function($execution): string
+$getExecutionGroup = function($execution)
 {
-    return ($execution->status == 'done' or $execution->status == 'closed') ? 'closed' : 'normal';
+    global $app;
+    if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $app->user->account or isset($execution->teams[$app->user->account]))) return 'my';
+    if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $app->user->account and !isset($execution->teams[$app->user->account])) return 'other';
+    if($execution->status == 'done' or $execution->status == 'closed') return 'closed';
 };
 
 /**
  * 定义每个分组下的选项数据列表。
  * Define the grouped data list.
  */
-$data = array('normal' => array(), 'closed' => array());
+$data = array('my' => array(), 'other' => array(), 'closed' => array());
 
 /* 处理分组数据。Process grouped data. */
 foreach($projectExecutions as $projectID => $executions)
@@ -47,7 +50,8 @@ else
      * Define every group name, include expanded group.
      */
     $tabs = array();
-    $tabs[] = array('name' => 'normal');
+    $tabs[] = array('name' => 'my',     'text' => $lang->execution->involved);
+    $tabs[] = array('name' => 'other',  'text' => $lang->execution->other);
     $tabs[] = array('name' => 'closed', 'text' => $lang->execution->closedExecution);
 
     /**

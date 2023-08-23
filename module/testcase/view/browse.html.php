@@ -134,7 +134,7 @@ js::set('langNormal',       $lang->testcase->normal);
           </tr>
         </thead>
         <tbody id='caseTableList'>
-          <?php $this->testcase->printRow(1, $cases, $setting, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
+          <?php $this->testcase->printRow($cases, $setting, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
         </tbody>
       </table>
       <?php if(!$useDatatable) echo '</div>';?>
@@ -416,146 +416,119 @@ $(function(){$('#caseForm').table();})
 </script>
 
 <script>
-function toChange(sourceID, targetID)
+function toChange(source, target)
 {
-  if(!checkProduct(sourceID, targetID)) return;
-  $.post(createLink('testcase', 'changeScene'), {'sourceID' : sourceID,'targetID' : targetID}, function(data){
-    toOrder(sourceID, targetID);
-  });
+    if(!checkProduct(source, target)) return;
+    $.post(createLink('testcase', 'changeScene'), {'sourceID' : source.id, 'targetID' : target.id}, function(data){
+        window.location.reload();
+    });
 }
 
-function toOrder(sourceID,targetID)
+function toOrder(source,target)
 {
-  if(!checkProduct(sourceID, targetID)) return;
+    if(!checkProduct(source, target)) return;
 
-  var origOrders = [];
-  var newOrders  = [];
-  var productID  = 0;
+    let dataList = [];
+    $('#caseTableList > tr').each(function(i, elem){
+        const rowData = $(elem).data();
+        if(rowData.product == target.product) {
+            const rowParent = rowData.parent.id || rowData.parent;
+            if(rowData.isScene != target.isScene || (rowData.id != source.id && rowParent != target.parent)) return true;
 
-  $('#caseTableList > tr').each(function(i, elem){
-    if($(elem).data('object-id') == sourceID) productID = $(elem).data('product');
-  });
+            const id = rowData.isScene ? rowData.id : rowData.id.replace('case_', '');
+            const data = {id, order: rowData.order};
+            dataList.push(data);
+        }
+    });
 
-  $('#caseTableList > tr').each(function(i, elem){
-    if($(elem).data('product') != productID) return;
-    origOrders.push($(elem).data('object-id'));
-  });
-
-  for(var i=0; i<origOrders.length;i++)
-  {
-    if(origOrders[i] == targetID)
-    {
-      newOrders.push(sourceID);
-      newOrders.push(targetID);
-    }
-    else if(origOrders[i] == sourceID)
-    {
-      continue;
-    }
-    else
-    {
-      newOrders.push(origOrders[i]);
-    }
-  }
-
-  const idList  = newOrders.join();
-  const orderBy = 'sort_desc';
-  $.post(createLink('testcase', 'updateOrder'), {idList, orderBy}, function(data){
-    window.location.reload();
-  });
+    const type     = source.isScene == 1 ? 'scene' : 'case';
+    const sourceID = source.isScene == 1 ? source.id : source.id.replace('case_', '');
+    const targetID = target.isScene == 1 ? target.id : target.id.replace('case_', '');
+    const postData = {type, sourceID, targetID, dataList};
+    $.post(createLink('testcase', 'updateOrder'), postData, function(){
+        window.location.reload();
+    });
 }
 
 function runToChange()
 {
-  var sourceID = $("#sceneDragModal").attr("sourceID");
-  var targetID = $("#sceneDragModal").attr("targetID");
+    var source = $("#sceneDragModal").data("source");
+    var target = $("#sceneDragModal").data("target");
 
-  $("#sceneDragModal").modal("hide");
+    $("#sceneDragModal").modal("hide");
 
-  toChange(sourceID, targetID);
+    toChange(source, target);
 }
 
 function runToOrder()
 {
-  var sourceID = $("#sceneDragModal").attr("sourceID");
-  var targetID = $("#sceneDragModal").attr("targetID");
+    var source = $("#sceneDragModal").data("source");
+    var target = $("#sceneDragModal").data("target");
 
-  $("#sceneDragModal").modal("hide");
+    $("#sceneDragModal").modal("hide");
 
-  toOrder(sourceID, targetID);
+    toOrder(source, target);
 }
 
-function checkProduct(sourceID, targetID)
+function checkProduct(source, target)
 {
-  /* Check source and target ID if belong to the same product. */
-  var sourceElem = null;
-  var targetElem = null;
-  $('#caseTableList > tr').each(function(i, elem){
-    if($(elem).data('object-id') == sourceID) sourceElem = elem;
-    if($(elem).data('object-id') == targetID) targetElem = elem;
-  });
+    if(source.id == target.id) return false;
 
-  if(sourceID == targetID) return false;
-  if($(sourceElem).data('product') !== $(targetElem).data('product'))
-  {
-    bootbox.alert(differentProduct);
-    return false;
-  }
+    if(source.product !== target.product)
+    {
+        bootbox.alert(differentProduct);
+        return false;
+    }
 
-  return true;
+    return true;
 }
 
 $(function()
 {
-  //下面是 source 和 target 的数据结构 $dom 是行tr 对应的Jquery 对象
-  // id: id,
-  // index: i,
-  // parent: parent,
-  // dataNested: dataNested,
-  // nestPath: nestPath,
-  // dataType: dataType,
-  // objectID: objectID
-  // boundary: {x:pos.x, y:pos.y, w:size.w, h:size.h},
-  // $dom: $row,
-  var xtable = $('#caseForm').data('zui.table');
-  var trList = $("#caseTableList").find("tr");
-  for(var i=0; i<trList.length; i++){
-    $row = $(trList[i]);
+    //下面是 source 和 target 的数据结构 $dom 是行tr 对应的Jquery 对象
+    // id: id,
+    // index: i,
+    // parent: parent,
+    // dataNested: dataNested,
+    // nestPath: nestPath,
+    // isScene: isScene,
+    // boundary: {x:pos.x, y:pos.y, w:size.w, h:size.h},
+    // $dom: $row,
+    var xtable = $('#caseForm').data('zui.table');
+    var trList = $("#caseTableList").find("tr");
+    for(var i=0; i<trList.length; i++){
+        const data = $(trList[i]).data();
+        if(data.isScene == 0) continue;
 
-    if($row.attr("data-itype") == "1") continue;
-
-    var dataId = $row.attr("data-id");
-    xtable.toggleNestedRows(dataId, true,true);
-  }
-
-  DtSort.sort({
-    container: "#caseTableList",
-    canMove: function(source, sourceMgr){ return true; },
-    canAccept: function(source, target,sameLevel, sourceMgr, targetMgr){
-      if(sameLevel == true) return true;    //同级别
-      if(target.dataNested == "true") return true; //拖到场景下面
-      return false;
-    },
-    finish: function(source, target, sameLevel , sourceMgr, targetMgr){
-      if(sameLevel == true) {
-        if(target.dataNested == "true"){
-          //同级别拖拽到场景下面，需要弹框询问是排序还是切换场景
-          $("#sceneDragModal").attr("sourceID", source.objectID);
-          $("#sceneDragModal").attr("targetID", target.objectID);
-          $("#sceneDragModal").modal("show");
-        } else {
-          //同级别拖拽到测试用例上，只能是调整顺序
-          toOrder(source.objectID, target.objectID);
-        }
-      } else {
-        //不同级别，只有拖拽到场景下才有用，这里执行切换场景操作
-        if(target.dataNested == "true"){
-          toChange(source.objectID, target.objectID);
-        }
-      }
+        xtable.toggleNestedRows(data.id, true, true);
     }
-  });
 
+    DtSort.sort({
+        container: "#caseTableList",
+        canAccept: function(source, target, sameLevel, sourceMgr, targetMgr){
+            if(sameLevel) return source.isScene == 0 || target.isScene == 1; // 同级别不能场景拖动到用例，其他都允许。
+            return target.isScene == 1; // 跨级别只能拖动到场景，其他都不允许。
+        },
+        finish: function(source, target, sameLevel , sourceMgr, targetMgr){
+            if(sameLevel) { // 同级别拖动
+                if(source.isScene == 1 && target.isScene == 1) {
+                    /* 场景拖动到场景，弹窗询问是更改所属场景还是调整顺序。*/
+                    $("#sceneDragModal").data("source", source);
+                    $("#sceneDragModal").data("target", target);
+                    $("#sceneDragModal").modal("show");
+                } else if(source.isScene == 0 && target.isScene == 0) {
+                    /* 用例拖动到用例，调整顺序。*/
+                    toOrder(source, target);
+                } else if(source.isScene == 0 && target.isScene == 1) {
+                    /* 用例拖动到场景，更改所属场景。*/
+                    toChange(source, target);
+                }
+            } else { // 跨级别拖动
+                const sourceParent = source.parent.id || source.parent;
+                if(target.isScene == 1 && source.parent != target.id) toChange(source, target); // 拖动到非父场景的场景，更改所属场景。
+            }
+        }
+    });
 });
 </script>
 
