@@ -3,21 +3,23 @@ title: zt_task
 author: auto_computeworkinghours
 version: "1.0"
 fields:
-- field: parent
-  range: 0,`-1`{3},2{3},3{3}
-- field: status
-  range: wait{2},doing{5},cancel{3}
-- field: estStarted
-  range: "20210101 000000-20220101 230000:360000"
-  type: timestamp
-  format: "YY/MM/DD hh:mm:ss"
-- field: realStarted
-  range: "20210102 000000-20220101 230000:360000"
-  type: timestamp
-  format: "YY/MM/DD hh:mm:ss"
-- field: deadline
-  range: "20210103 000000-20220101 230000:360000"
-  type: timestamp
-  format: "YY/MM/DD hh:mm:ss"
+  - field: parent
+    range: 0,`-1`{3},2{3},3{3}
+  - field: status
+    range: wait{2},doing{5},cancel{3}
+  - field: realStarted
+    range: "20210102 000000-20220101 230000:360000"
+    type: timestamp
+    format: "YY/MM/DD hh:mm:ss"
+  - field: estStarted
+    range: "20201101 000000:1D"
+    type: timestamp
+    format: "YY/MM/DD hh::mm:ss"
+    postfix: "\t"
+  - field: deadline
+    range: "20210101 000000:1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
 ...
 
