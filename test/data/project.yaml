@@ -87,6 +87,7 @@ fields:
     format: "YY/MM/DD"
     postfix: "\t"
   - field: multiple
-    range: 0-1
+    note: "有无迭代"
+    range: 1
   - field: deleted
     range: 0
