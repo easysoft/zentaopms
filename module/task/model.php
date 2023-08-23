@@ -191,15 +191,6 @@ class taskModel extends model
      */
     public function afterBatchCreate(array $taskIdList, int $parentID = 0): bool
     {
-        $this->loadModel('action');
-        $this->loadModel('score');
-        foreach($taskIdList as $taskID)
-        {
-            $this->executeHooks($taskID);
-            $this->action->create('task', $taskID, 'Opened', '');
-            $this->score->create('task', 'create', $taskID);
-        }
-
         /* Process other data after split task. */
         if($parentID && empty($taskIdList))
         {
