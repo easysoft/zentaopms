@@ -1,0 +1,54 @@
+title: execution.
+desc: execution data.
+author: Wang Yidong
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 敏捷项目,瀑布项目{2},看板项目
+    - field: name2
+      range: 1-10000
+  - field: project
+    range: 0
+  - field: code 
+    prefix: "code"
+    range: 1-1000
+  - field: model
+    range: scrum,waterfall{2},kanban
+  - field: attribute
+    range: "[]{4},[]{5},request,design,dev,qa,release,review,request,design,dev,qa,release,review,request,design,dev,qa,release,review,[]{5}"
+  - field: type
+    range: project
+  - field: budget
+    range: 800000-1:100
+  - field: status
+    range: doing{4},wait{2},doing{2},suspended{2},closed{2}
+  - field: auth
+    range: "extend"
+  - field: desc
+    range: 1-10000
+    prefix: "迭代描述"
+  - field: begin
+    range: "(-2M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: end
+    range: "(+1w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: grade
+    range: 1
+  - field: parent
+    range: 0
+  - field: path
+    prefix: ","
+    range: 1-100
+    postfix: ","
+  - field: hasProduct 
+    range: 0,1
