@@ -63,8 +63,8 @@
         <?php foreach ($cols as $key => $col):?>
         <?php
         $required  = zget($col, 'required', 'no') == 'yes';
-        $fixed     = zget($col, 'fixed', 'no');
-        $width     = zget($col, 'width', 'auto');
+        $fixed     = zget($col, 'fixed', '');
+        $width     = zget($col, 'width', '');
         $autoWidth = $width == 'auto';
         ?>
         <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $width;?>'>
