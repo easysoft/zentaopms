@@ -612,10 +612,10 @@ class taskTao extends taskModel
             ->batchCheckIF($task->status == 'wait' || $task->status == 'doing', 'finishedBy,finishedDate,canceledBy,canceledDate,closedBy,closedDate,closedReason', 'empty')
             ->checkIF($task->status == 'done', 'consumed', 'notempty')
             ->checkIF($task->status == 'done' && $task->closedReason, 'closedReason', 'equal', 'done')
-            ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
-            ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
+            ->batchCheckIF($task->status == 'done', 'canceledBy,canceledDate', 'empty')
+            ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy,finishedDate', 'empty')
             ->checkFlow()
-            ->where('id')->eq((int)$task->id)
+            ->where('id')->eq($task->id)
             ->exec();
 
         return !dao::isError();
