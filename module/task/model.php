@@ -1034,7 +1034,7 @@ class taskModel extends model
 
         /* Add field to workhour. */
         $workhour = $this->taskTao->buildWorkhour($taskID, $workhour);
-        if(empty($workhour || dao::isError())) return array();
+        if(empty($workhour)) return array();
 
         $allChanges  = array();
         $oldStatus   = $task->status;
