@@ -40,6 +40,60 @@ class metricZen extends metric
     }
 
     /**
+     * 构建模块树数据。
+     * Prepare module tree data.
+     *
+     * @param  int    $metrics
+     * @access protected
+     * @return void
+     */
+    protected function prepareTree($scope, $modules)
+    {
+        $moduleTree = array();
+        foreach($modules as $module)
+        {
+            $object  = $module->object;
+            $purpose = $module->purpose;
+
+            $moduleTree[$object] = (object)array
+            (
+                'id' => $object,
+                'parent' => '0',
+                'name' => $this->lang->metric->objectList[$object],
+                'url' => $this->inlink('browse', "scope=$scope&param=$object&type=byTree")
+            );
+
+            $moduleTree["{$object}_{$purpose}"] = (object)array
+            (
+                'id' => "{$object}_{$purpose}",
+                'parent' => $object,
+                'name' => $this->lang->metric->purposeList[$purpose],
+                'url' => $this->inlink('browse', "scope=$scope&param={$object}_{$purpose}&type=byTree")
+            );
+        }
+
+        return $moduleTree;
+    }
+
+    /**
+     * 构建范围下拉数据。
+     * Prepare scope picker data.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function prepareScopeList()
+    {
+        $scopeList = array();
+        foreach($this->lang->metric->scopeList as $scope => $scopeText)
+        {
+            $scopeList[] = array('key' => $scope, 'text' => $scopeText);
+        }
+
+        return $scopeList;
+    }
+
+    /**
      * 根据度量项计算的结果，构建可插入表的度量数据。
      * Build measurements that can be inserted into tables based on the results of the measurements computed.
      *

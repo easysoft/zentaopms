@@ -47,4 +47,47 @@ class metricTao extends metricModel
     {
         return $this->app->getModuleRoot() . 'metric' . DS . 'calc.class.php';
     }
+
+    /**
+     * 请求度量项数据列表。
+     * Fetch metric list.
+     *
+     * @param  string    $scope
+     * @param  string    $object
+     * @param  string    $purpose
+     * @param  string    $query
+     * @param  stirng    $sort
+     * @param  object    $pager
+     * @access protected
+     * @return void
+     */
+    protected function fetchMetrics($scope, $object, $purpose, $query, $sort, $pager)
+    {
+        $metrics = $this->dao->select('*')->from(TABLE_METRIC)
+            ->where('deleted')->eq('0')
+            ->andWhere('scope')->eq($scope)
+            ->beginIF($query)->andWhere($query)->fi()
+            ->beginIF(!empty($object))->andWhere('object')->eq($object)->fi()
+            ->beginIF(!empty($purpose))->andWhere('purpose')->eq($purpose)->fi()
+            ->orderBy($sort)
+            ->page($pager)
+            ->fetchAll();
+
+        return $metrics;
+    }
+
+    /**
+     * 请求模块数据。
+     * Fetch module data.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function fetchModules()
+    {
+        return $this->dao->select('object, purpose')->from(TABLE_METRIC)
+            ->where('deleted')->eq('0')
+            ->groupBy('object, purpose')
+            ->fetchAll();
+    }
 }

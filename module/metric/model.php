@@ -22,7 +22,7 @@ class metricModel extends model
      * @access public
      * @return array|false
      */
-    public function getList($type = '', $queryID = 0, $sort = '', $pager = null)
+    public function getList($scope, $param, $type = '', $queryID = 0, $sort = '', $pager = null)
     {
         if($queryID)
         {
@@ -38,14 +38,30 @@ class metricModel extends model
             }
         }
 
-        $metrics = $this->dao->select('*')->from(TABLE_METRIC)
-            ->where('deleted')->eq('0')
-            ->beginIF($this->session->metricQuery)->andWhere($this->session->metricQuery)->fi()
-            ->orderBy($sort)
-            ->page($pager)
-            ->fetchAll();
+        $object = null;
+        $purpose = null;
+        if($type == 'byTree')
+        {
+            $object_purpose = explode('_', $param);
+            $object = $object_purpose[0];
+            if(count($object_purpose) == 2) $purpose = $object_purpose[1];
+        }
+
+        $metrics = $this->metricTao->fetchMetrics($scope, $object, $purpose, $this->session->metricQuery, $sort, $pager);
 
         return $metrics;
+    }
+
+    /**
+     * 获取模块树数据。
+     * Get module tree data.
+     *
+     * @access public
+     * @return void
+     */
+    public function getModuleTreeList()
+    {
+        return $this->metricTao->fetchModules();
     }
 
     /**

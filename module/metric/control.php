@@ -34,7 +34,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function browse($param = 0, $type = 'bydefault', $orderBy = 'id desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($scope = 'global', $param = 0, $type = 'bydefault', $orderBy = 'id desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('search');
 
@@ -47,20 +47,29 @@ class metric extends control
 
         /* Build the search form. */
         $queryID   = $type == 'bydefault' ? 0 : (int)$param;
-        $actionURL = $this->createLink('metric', 'browse', "param=myQueryID&type=bysearch");
+        $actionURL = $this->createLink('metric', 'browse', "scope=$scope&param=myQueryID&type=bysearch");
         $this->metric->buildSearchForm($queryID, $actionURL);
 
-        $metrics = $this->metric->getList($type, $queryID, $sort, $pager);
+        $metrics = $this->metric->getList($scope, $param, $type, $queryID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'metric', true);
+
+        $modules    = $this->metric->getModuleTreeList();
+        $metricTree = $this->metricZen->prepareTree($scope, $modules);
+        $scopeList  = $this->metricZen->prepareScopeList();
 
         $this->view->title       = $this->lang->metric->common;
         $this->view->metrics     = $metrics;
         $this->view->pager       = $pager;
         $this->view->orderBy     = $orderBy;
         $this->view->param       = $param;
+        $this->view->metricTree  = $metricTree;
+        $this->view->closeLink   = $this->inlink('browse', 'scope=' . $scope);
         $this->view->type        = $type;
+        $this->view->scopeList   = $scopeList;
+        $this->view->scope       = $scope;
+        $this->view->scopeText   = $this->lang->metric->scopeList[$scope];
 
         $this->display();
     }

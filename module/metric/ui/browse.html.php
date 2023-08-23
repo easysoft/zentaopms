@@ -10,20 +10,38 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('statusList', $lang->metric->statusList);
-jsVar('confirmList', $lang->metric->confirmList);
+$fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
+{
+    $link = $this->createLink('metric', 'browse', "scope={key}");
+
+    return dropmenu
+    (
+        set::className('scope-menu btn'),
+        set::defaultValue($scope),
+        set::text($scopeText),
+        set::caret(false),
+        set::popWidth(200),
+        set::popClass('popup text-md'),
+        set::data(array('search' => false, 'checkIcon' => false, 'link' => $link, 'data' => $scopeList)),
+    );
+};
 
 featureBar
 (
-    set::current($browseType),
-    set::linkParams("browseType={key}"),
+    to::before($fnGenerateScopeMenu($scope, $scopeText, $scopeList)),
     li(searchToggle(set::open($type == 'bysearch'), set::module('metric'))),
 );
 
-$footToolbar = common::hasPriv('user', 'batchEdit') ? array(
-    'items' => array(array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'data-url' => createLink('user', 'batchEdit'))),
-    'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')
-) : null;
+sidebar
+(
+    moduleMenu(set(array
+    (
+        'modules'   => $metricTree,
+        'activeKey' => $type == 'byTree' ? $param : 0,
+        'closeLink' => $closeLink,
+        'showDisplay' => false,
+    )))
+);
 
 $tableData = initTableData($metrics, $this->config->metric->dtable->definition->fieldList, $this->loadModel('metric'));
 dtable
@@ -31,7 +49,6 @@ dtable
     setID('metricList'),
     set::cols($this->config->metric->dtable->definition->fieldList),
     set::data($tableData),
-    set::footToolbar($footToolbar),
     set::footPager(usePager()),
 );
 
