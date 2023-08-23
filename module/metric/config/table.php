@@ -11,7 +11,8 @@ $config->metric->dtable->definition->fieldList['id']['required'] = true;
 $config->metric->dtable->definition->fieldList['id']['group']    = 1;
 
 $config->metric->dtable->definition->fieldList['name']['title']    = $lang->metric->name;
-$config->metric->dtable->definition->fieldList['name']['type']     = 'text';
+$config->metric->dtable->definition->fieldList['name']['type']     = 'title';
+$config->metric->dtable->definition->fieldList['name']['link']     = array('module' => 'metric', 'method' => 'view', 'params' => 'metricID={id}');
 $config->metric->dtable->definition->fieldList['name']['minWidth'] = '300';
 $config->metric->dtable->definition->fieldList['name']['required'] = true;
 $config->metric->dtable->definition->fieldList['name']['group']    = 1;
