@@ -1991,11 +1991,11 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getTeamMemberGroup($projectIdList)
+    public function getTeamMemberGroup(mixed $projectIdList): array
     {
         if(empty($projectIdList)) return array();
 
-        return $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname, t1.root as project")->from(TABLE_TEAM)->alias('t1')
+        return $this->dao->select("t1.account, t2.realname, t1.root as project")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->in($projectIdList)
             ->andWhere('t1.type')->eq('project')
