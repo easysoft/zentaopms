@@ -1165,32 +1165,21 @@ class testcase extends control
     }
 
     /**
-     * Batch delete cases.
+     * Batch delete cases and scenes.
      *
-     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function batchDelete($productID = 0)
+    public function batchDelete()
     {
-        if(!$this->post->caseIdList) return print(js::locate($this->session->caseList));
-        $caseIdList = array_unique($this->post->caseIdList);
-
-        foreach($caseIdList as $caseID)
+        $caseIdList  = zget($_POST, 'caseIdList',  array());
+        $sceneIdList = zget($_POST, 'sceneIdList', array());
+        if($caseIdList || $sceneIdList)
         {
-            $vs = $this->dao->findById((int)$caseID)->from(VIEW_SCENECASE)->fetch();
-            if(empty($vs)) continue;
-
-            if($vs->isCase == 2)
-            {
-                $this->testcase->delete(TABLE_SCENE, $caseID);
-            }
-            else
-            {
-                $this->testcase->delete(TABLE_CASE, $caseID);
-            }
+            $this->testcase->batchDelete($caseIdList, $sceneIdList);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->caseList));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
     }
 
     /**

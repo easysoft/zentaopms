@@ -1299,6 +1299,37 @@ class testcaseModel extends model
     }
 
     /**
+     * Batch delete cases and scenes.
+     *
+     * @param  array  $caseIdList
+     * @param  array  $sceneIdList
+     * @access public
+     * @return bool
+     */
+    public function batchDelete(array $caseIdList, array $sceneIdList): bool
+    {
+        $caseIdList  = array_filter($caseIdList);
+        $sceneIdList = array_filter($sceneIdList);
+        if(!$caseIdList && !$sceneIdList) return false;
+
+        $this->loadModel('action');
+
+        if($caseIdList)
+        {
+            $this->dao->update(TABLE_CASE)->set('deleted')->eq('1')->where('id')->in($caseIdList)->exec();
+            foreach($caseIdList as $caseID) $this->action->create('case', $caseID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+        }
+
+        if($sceneIdList)
+        {
+            $this->dao->update(TABLE_SCENE)->set('deleted')->eq('1')->where('id')->in($sceneIdList)->exec();
+            foreach($sceneIdList as $sceneID) $this->action->create('scene', $sceneID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * Batch change branch.
      *
      * @param  array  $caseIDList
