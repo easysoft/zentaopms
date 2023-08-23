@@ -2563,6 +2563,8 @@ class taskModel extends model
      */
     public function getMemberPairs(object $task): array
     {
+        if(!is_array($task->team)) return array();
+
         $users   = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $members = array();
         foreach($task->team as $member)
