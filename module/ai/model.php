@@ -205,6 +205,23 @@ class aiModel extends model
         $response = json_decode($response);
         if(json_last_error())
         {
+            /* Polyfill for PHP 5 < 5.5.0. */
+            if(!function_exists('json_last_error_msg'))
+            {
+                function json_last_error_msg()
+                {
+                    switch(json_last_error())
+                    {
+                        case JSON_ERROR_DEPTH:          return 'Maximum stack depth exceeded';
+                        case JSON_ERROR_STATE_MISMATCH: return 'Underflow or the modes mismatch';
+                        case JSON_ERROR_CTRL_CHAR:      return 'Unexpected control character found';
+                        case JSON_ERROR_SYNTAX:         return 'Syntax error, malformed JSON';
+                        case JSON_ERROR_UTF8:           return 'Malformed UTF-8 characters, possibly incorrectly encoded';
+                        default:                        return 'Unknown error';
+                    }
+                }
+            }
+
             $this->errors[] = 'JSON decode error: ' . json_last_error_msg();
             return false;
         }
