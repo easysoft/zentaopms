@@ -1014,10 +1014,11 @@ class taskModel extends model
     }
 
     /**
+     * 记录工时。
      * Record workhour and left of task.
      *
      * @param  int    $taskID
-     * @param  array  $workhour
+     * @param  array  $workhour the form data from POST
      * @access public
      * @return array
      */
@@ -1037,7 +1038,7 @@ class taskModel extends model
 
         $allChanges  = array();
         $oldStatus   = $task->status;
-        $lastDate    = $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
+        $lastDate    = $this->dao->select('date')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->andWhere('deleted')->eq('0')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
         $currentTeam = !empty($task->team) ? $this->getTeamByAccount($task->team) : array();
 
         foreach($workhour as $record)
