@@ -459,6 +459,26 @@ class testcaseTest
     }
 
     /**
+     * Test the batch delete method.
+     *
+     * @param  array  $caseIdList
+     * @param  array  $sceneIdList
+     * @access public
+     * @return boo|array|string
+     */
+    public function batchDeleteTest($caseIdList, $sceneIdList)
+    {
+        $result = $this->objectModel->batchDelete($caseIdList, $sceneIdList);
+        if(!$result) return $result;
+        if(dao::isError()) return dao::getError();
+
+        $cases  = $this->objectModel->dao->select('id, deleted')->from(TABLE_CASE)->where('id')->in($caseIdList)->fetchPairs();
+        $scenes = $this->objectModel->dao->select('id, deleted')->from(TABLE_SCENE)->where('id')->in($sceneIdList)->fetchPairs();
+
+        return array('cases' => $cases, 'scenes' => $scenes);
+    }
+
+    /**
      * Test batch change branch.
      *
      * @param  array  $caseIDList
