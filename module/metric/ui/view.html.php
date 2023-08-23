@@ -46,7 +46,7 @@ detailHeader
         entityLabel
         (
             set::entityID($metric->id),
-            set::level(),
+            set::level(1),
             set::text($metric->name)
         )
     ),
@@ -55,7 +55,7 @@ detailHeader
         backBtn
         (
             set::icon('back'),
-            set::class('ghost text-white'),
+            set::type('secondary'),
             $lang->goback
         )
     )
