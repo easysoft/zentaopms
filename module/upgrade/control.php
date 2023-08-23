@@ -218,6 +218,7 @@ class upgrade extends control
                 $this->loadModel('setting')->setItem('system.custom.URAndSR', '1');
                 $this->loadModel('setting')->setItem('system.common.closedFeatures', '');
                 $this->loadModel('setting')->setItem('system.common.disabledFeatures', '');
+                $this->upgrade->addORPriv();
             }
 
             if($selectMode)
