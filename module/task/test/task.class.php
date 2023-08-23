@@ -360,7 +360,14 @@ class taskTest
         $task->id           = $taskID;
         $task->status       = $status;
         $task->lastEditedBy = $this->objectModel->app->user->account;
-        $object = $this->objectModel->updateTeam($task, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft);
+
+        $postData = new stdclass();
+        $postData->team         = $team;
+        $postData->teamSource   = $teamSource;
+        $postData->teamEstimate = $teamEstimate;
+        $postData->teamConsumed = $teamConsumed;
+        $postData->teamLeft     = $teamLeft;
+        $object = $this->objectModel->updateTeam($task, $postData);
 
         if($getTeam) return $this->objectModel->getMultiTaskMembers($taskID);
         if(dao::isError())

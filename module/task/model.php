@@ -881,24 +881,20 @@ class taskModel extends model
      * Update team.
      *
      * @param  object $task
-     * @param  array  $team
-     * @param  array  $teamSource
-     * @param  array  $teamEstimate
-     * @param  array  $teamConsumed
-     * @param  array  $teamLeft
+     * @param  object $postData
      * @access public
      * @return array|false
      */
-    public function updateTeam(object $task, array $team, array $teamSource, array $teamEstimate, array $teamConsumed, array $teamLeft): array|false
+    public function updateTeam(object $task, object $postData): array|false
     {
         $taskID  = $task->id;
         $oldTask = $this->getById($taskID);
 
         /* Check team data. */
-        $team = array_filter($team);
+        $team = array_filter($postData->team);
         foreach($team as $i => $account)
         {
-            if($teamConsumed[$i] == 0 and $teamLeft[$i] == 0)
+            if($postData->teamConsumed[$i] == 0 and $postData->teamLeft[$i] == 0)
             {
                 dao::$errors[] = $this->lang->task->noticeTaskStart;
                 return false;
@@ -911,7 +907,7 @@ class taskModel extends model
         }
 
         /* Manage the team and calculate task work information. */
-        $teams = $this->manageTaskTeam($oldTask->mode, $task, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft);
+        $teams = $this->manageTaskTeam($oldTask->mode, $task, $postData);
         !empty($teams) ? $task = $this->computeMultipleHours($oldTask, $task) : $task->mode = '';
 
         /* Update parent task status. */
