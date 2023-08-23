@@ -34,7 +34,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function browse($scope = 'global', $param = 0, $type = 'bydefault', $orderBy = 'id desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($scope = 'global', $param = 0, $type = 'bydefault', $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('search');
 
