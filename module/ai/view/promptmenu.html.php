@@ -50,6 +50,10 @@
     <script>
       $(function()
       {
+        const urlParams = new URLSearchParams(window.location.search);
+        const onlyBody = urlParams.get('onlybody');
+        if(Boolean(onlyBody)) return;
+
         $(`<?php echo $menuOptions->targetContainer;?>`).<?php echo isset($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append';?>(`<?php echo $html;?>`);
         $('[data-toggle="popover"]').popover({template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
 
