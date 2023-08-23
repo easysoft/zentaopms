@@ -898,6 +898,9 @@ class upgrade extends control
         {
             $this->loadModel('setting')->updateVersion($this->config->version);
 
+            $zfile = $this->app->loadClass('zfile');
+            $zfile->removeDir($this->app->getTmpRoot() . 'model/');
+
             $installFile = $this->app->getAppRoot() . 'www/install.php';
             $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
             if(file_exists($installFile)) @unlink($installFile);
