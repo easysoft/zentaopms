@@ -6,9 +6,9 @@
 .release-line > li:nth-child(odd) > a {border-top: 4px solid var(--color-primary-200);}
 .release-line > li:last-child > a {border-color: transparent !important;}
 .release-line > li > a {height: 80px; box-sizing: border-box;}
-.release-line > li > a::before {display: block; content: ' '; width: 12px; height: 12px; background: #fff; border: 2px solid var(--color-success-500); border-radius: 50%; position: absolute;}
-.release-line > li:nth-child(even) > a::before {bottom: -8px;}
-.release-line > li:nth-child(odd) > a::before {top: -8px;}
+.release-line > li > a:before {display: block; content: ' '; width: 12px; height: 12px; background: #fff; border: 2px solid var(--color-success-500); border-radius: 50%; position: absolute;}
+.release-line > li:nth-child(even) > a:before {bottom: -8px;}
+.release-line > li:nth-child(odd) > a:before {top: -8px;}
 .release-line > li:nth-child(odd) > a:after {top: 4px; left: 5px;}
 .release-line > li:nth-child(even) > a:after {bottom: 4px; left: 5px;}
 .release-line > li > a:after {position: absolute; display: block; width: 2px; height: 30px; content: ' '; background: var(--color-primary-200);}
@@ -18,3 +18,6 @@
 .release-line .icon-flag {font-size: 24px;}
 .release-line > li:nth-child(even) .icon-flag {bottom: -3px; left: 4px;}
 .release-line > li:nth-child(odd) .icon-flag {left: 4px; top: -25px;}
+.release-line > li:hover .title {color: var(--color-primary-500);}
+.release-line > li:hover > a:before {border-color: var(--color-success-700);}
+.release-line > li:hover > a:after {background: var(--color-primary-400);}
