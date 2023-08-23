@@ -30,9 +30,6 @@ CREATE TABLE IF NOT EXISTS `zt_promptrole` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
------------------------------------------------------------------------------
--- Privs of AI module.
------------------------------------------------------------------------------
 REPLACE INTO
     `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`)
 VALUES
@@ -58,13 +55,13 @@ VALUES
 REPLACE INTO
     `zt_privmanager` (`id`, `parent`, `code`, `type`, `edition`, `vision`, `order`)
 VALUES
-    (651, 457, 'ai', 'module', ',open,biz,max,', ',rnd,', 20),
-    (652, 651, '', 'package', ',open,biz,max,', ',rnd,', 40),
-    (653, 651, '', 'package', ',open,biz,max,', ',rnd,', 60),
-    (654, 651, '', 'package', ',open,biz,max,', ',rnd,', 80),
-    (655, 651, '', 'package', ',biz,max,', ',rnd,', 100),
-    (656, 651, '', 'package', ',open,biz,max,', ',rnd,', 120),
-    (657, 651, '', 'package', ',biz,max,', ',rnd,', 140);
+    (651, 457, 'ai', 'module', ',open,biz,max,', ',rnd,', 2020),
+    (652, 651, '', 'package', ',open,biz,max,', ',rnd,', 2040),
+    (653, 651, '', 'package', ',open,biz,max,', ',rnd,', 2060),
+    (654, 651, '', 'package', ',open,biz,max,', ',rnd,', 2080),
+    (655, 651, '', 'package', ',biz,max,', ',rnd,', 2100),
+    (656, 651, '', 'package', ',open,biz,max,', ',rnd,', 2120),
+    (657, 651, '', 'package', ',biz,max,', ',rnd,', 2140);
 
 REPLACE INTO
     `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`)
@@ -224,9 +221,6 @@ VALUES
     ('ai-promptAudit', 'depend', 'ai-promptAssignRole'), ('ai-promptAudit', 'depend', 'ai-promptSelectDataSource'), ('ai-promptAudit', 'depend', 'ai-promptSetPurpose'), ('ai-promptAudit', 'depend', 'ai-promptSetTargetForm'), ('ai-promptAudit', 'depend', 'ai-promptFinalize'), ('ai-promptAudit', 'depend', 'ai-promptExecute'),
     ('ai-roleTemplates', 'depend', 'ai-promptAssignRole'), ('ai-promptAssignRole', 'depend', 'ai-roleTemplates');
 
------------------------------------------------------------------------------
--- built-in AI prompt role templates.
------------------------------------------------------------------------------
 INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES ('请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。');
 INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES ('你是一名经验丰富的开发工程师。', '精通多种编程语言和框架、熟悉前后端技术和架构、擅长性能优化和安全防护、熟悉云计算和容器化技术、能够协调多人协作和项目管理。');
 INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES ('作为一名资深的测试工程师。', '测试工程师应该是专业且严谨的。熟悉测试流程和方法，精通自动化测试和性能测试，能够设计和编写测试用例和测试脚本，擅长问题诊断和分析，熟悉敏捷开发和持续集成，能够协调多部门合作和项目管理。');
@@ -235,9 +229,6 @@ INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES ('你是一名�
 INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES ('请你扮演一名经验丰富的项目经理。', '具备项目计划制定、进度管理、成本控制、团队管理、沟通协调、风险管理、质量控制、敏捷开发、互联网技术和数据分析等多方面的技能和能力。');
 INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES ('你是一个自回归的语言模型，已经通过instruction-tuning和RLHF进行了Fine-tuning。', '你仔细地提供准确、事实、深思熟虑、细致入微的答案，并在推理方面表现出色。如果你认为可能没有正确的答案，你会直接说出来。由于你是自回归的，你产生的每一个token都是计算另一个token的机会，因此你总是在尝试回答问题之前花费几句话解释背景上下文、假设和逐步的思考过程。您的用户是AI和伦理学的专家，所以他们已经知道您是一个语言模型以及您的能力和局限性，所以不需要再提醒他们。他们一般都熟悉伦理问题，所以您也不需要再提醒他们。在回答时不要啰嗦，但在可能有助于解释的地方提供详细信息和示例。');
 
------------------------------------------------------------------------------
--- built-in prompts.
------------------------------------------------------------------------------
 INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`) VALUES ('需求润色', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.change', '帮忙优化其中各字段的表述，使表述清晰准确。必要时可以修改需求使其更加合理。', '需求描述格式建议使用：作为一名<某种类型的用户>，我希望<达成某些目的>，这样可以<开发的价值>。验收标准建议列举多条。', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-08-10 13:24:14');
 INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`) VALUES ('一键拆用例', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.testcasecreate', '为这个需求生成一个或多个对应的测试用例。', '', '作为一名资深的测试工程师。', '熟悉测试流程和方法，精通自动化测试和性能测试，能够设计和编写测试用例和测试脚本，擅长问题诊断和分析，熟悉敏捷开发和持续集成，能够协调多部门合作和项目管理。开发工程师应该是专业且严谨的。', 'system', '2023-08-10 13:24:14');
 INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`) VALUES ('任务润色', 0, 'task', ',task.name,task.desc,task.pri,task.status,task.estimate,task.consumed,task.left,task.progress,task.estStarted,task.realStarted,', 'task.edit', '优化其中各字段的表述，使表述清晰准确，明确任务目标。', '必要时指出任务的风险点。', '你是一名经验丰富的开发工程师。', '精通多种编程语言和框架、熟悉前后端技术和架构、擅长性能优化和安全防护、熟悉云计算和容器化技术、能够协调多人协作和项目管理。', 'system', '2023-08-10 13:24:14');
