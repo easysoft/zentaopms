@@ -1689,6 +1689,7 @@ EOF;
 
         /* Add data-app attribute. */
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
+        if($onlyBody && strpos($misc, 'data-toggle') === false) $misc .= ' data-toggle="modal"';
 
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
