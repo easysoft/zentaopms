@@ -1030,11 +1030,11 @@ class taskModel extends model
 
         /* Check if field is valid. */
         $result = $this->taskTao->checkWorkhour($task, $workhour);
-        if(!$result) return array();
+        if(!$result || dao::isError()) return array();
 
         /* Add field to workhour. */
         $workhour = $this->taskTao->buildWorkhour($taskID, $workhour);
-        if(empty($workhour)) return array();
+        if(empty($workhour || dao::isError())) return array();
 
         $allChanges  = array();
         $oldStatus   = $task->status;
