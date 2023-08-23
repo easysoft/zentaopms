@@ -286,56 +286,52 @@ class projectModel extends model
     }
 
     /**
+     * 获取瀑布项目的进度。
      * Get waterfall project progress.
      *
-     * @param  array  $projectIDList
+     * @param  array  $projectIdList
      * @access public
-     * @return int
+     * @return array
      */
-    public function getWaterfallProgress($projectIDList)
+    public function getWaterfallProgress(array $projectIdList): array
     {
-        $projectList = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+        /* Get stage list. */
+        $stageGroup = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.type')->in('stage')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t1.project')->in($projectIDList)
+            ->andWhere('t1.project')->in($projectIdList)
             ->andWhere('t2.model')->eq('waterfall')
             ->fetchGroup('project', 'id');
 
+        /* Get hours information. */
         $totalHour = $this->dao->select("t1.project, t1.execution, ROUND(SUM(if(t1.status !='closed' && t1.status !='cancel', t1.`left`, 0)), 2) AS totalLeft, ROUND(SUM(t1.`consumed`), 1) AS totalConsumed")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t2.project')->in(array_keys($projectList))
+            ->where('t2.project')->in(array_keys($stageGroup))
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
             ->groupBy('t1.project,t1.execution')
             ->fetchGroup('project', 'execution');
 
+        /* Compute waterfall project progress. */
         $progressList = array();
-        foreach($projectList as $projectID => $stageList)
+        foreach($stageGroup as $projectID => $stageList)
         {
-            $progress = 0;
             $projectConsumed = 0;
             $projectLeft     = 0;
             foreach($stageList as $stageID => $stage)
             {
                 if($stage->project != $projectID) continue;
 
-                $stageTotalConsumed = isset($totalHour[$projectID][$stageID]) ? (float)$totalHour[$projectID][$stageID]->totalConsumed : 0;
-                $stageTotalLeft     = isset($totalHour[$projectID][$stageID]) ? round((float)$totalHour[$projectID][$stageID]->totalLeft, 1) : 0;
-
-                $projectConsumed += $stageTotalConsumed;
-                $projectLeft     += $stageTotalLeft;
-
+                $projectConsumed += isset($totalHour[$projectID][$stageID]) ? (float)$totalHour[$projectID][$stageID]->totalConsumed : 0;
+                $projectLeft     += isset($totalHour[$projectID][$stageID]) ? round((float)$totalHour[$projectID][$stageID]->totalLeft, 1) : 0;
             }
 
-            $progress += ($projectConsumed + $projectLeft) == 0 ? 0 : floor($projectConsumed / ($projectConsumed + $projectLeft) * 1000) / 1000 * 100;
-
-            $progressList[$projectID] = $progress;
+            $progressList[$projectID] = ($projectConsumed + $projectLeft) == 0 ? 0 : floor($projectConsumed / ($projectConsumed + $projectLeft) * 1000) / 1000 * 100;
         }
 
-        if(!is_numeric($projectIDList)) return $progressList;
-        return empty($progressList) ? 0 : $progressList[$projectIDList];
+        return $progressList;
     }
 
     /**

@@ -36,7 +36,8 @@ $totalEstimate = $workhour->totalConsumed + $workhour->totalLeft;
 $progress      = 0;
 if($project->model == 'waterfall')
 {
-    $progress = $this->project->getWaterfallProgress($project->id);
+    $progressList = $this->project->getWaterfallProgress(array($project->id));
+    $progress     = empty($progressList[$project->id]) ? 0 : $progressList[$project->id];
 }
 elseif($totalEstimate > 0)
 {
