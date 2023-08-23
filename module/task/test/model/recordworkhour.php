@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=- 无消耗时返回提示信息 @『ID
+title=测试记录任务的工时
 timeout=0
 cid=1
 
@@ -62,9 +62,13 @@ cid=1
  - 第2条的old属性 @closed
  - 第2条的new属性 @doing
 
-- 无消耗时返回提示信息 @『ID #1 工时』应当大于『0』。
+- 无消耗时返回提示信息 @请填写"消耗"。
 
 */
+
+$execution = zdTable('project');
+$execution->gen(7);
+
 $task = zdTable('task');
 $task->id->range('1-7');
 $task->execution->range('1-7');
@@ -125,16 +129,16 @@ $normalTaskEffort[1]->date     = "2022-01-01";
 
 $noconsumedTaskEffort = array();
 $noconsumedTaskEffort[1] = new stdclass();
-$noconsumedTaskEffort[1]->consumed = 0;
+$noconsumedTaskEffort[1]->consumed = 0; // 相当于未填写消耗
 $noconsumedTaskEffort[1]->left     = 2;
 $noconsumedTaskEffort[1]->work     = "无消耗的日志";
 $noconsumedTaskEffort[1]->date     = "2022-01-01";
 
 $task = new taskTest();
 $startTaskResult = $task->recordWorkhourTest(1, $startTaskEffort);
-r($startTaskResult[0]) && p('field,old,new') && e('consumed,3,8');      // 任务未开始时记录工时，查看已消耗工时
-r($startTaskResult[1]) && p('field,old,new') && e('left,1,5');          // 任务未开始时记录工时，查看剩余工时
-r($startTaskResult[2]) && p('field,old,new') && e('status,wait,doing'); // 任务未开始时记录工时，查看状态是否变化
+r($startTaskResult[0]) && p('field,old,new') && e('consumed,3,8');           // 任务未开始时记录工时，查看已消耗工时，应该在之前消耗的基础上增加测试设置的消耗值
+r($startTaskResult[1]) && p('field,old,new') && e('status,wait,doing');      // 任务未开始时记录工时，查看状态是否变化，应该从未开始变为开始
+r($startTaskResult[2]) && p('field,old,new') && e('assignedTo,user1,admin'); // 任务未开始时记录工时，查看指派给是否变化，应该从之前用户变为当前用户
 
 su('admin');
 $multiTaskResult = $task->recordWorkhourTest(2, $multiTaskEffort);
@@ -146,8 +150,8 @@ r($multiTaskResult[0]) && p('field,old,new') && e('estimate,1,25');  // 在多�
 r($multiTaskResult[1]) && p('field,old,new') && e('consumed,4,2');   // 在多人任务团队中的用户记录工时，查看返回的消耗工时
 r($multiTaskResult[2]) && p('field,old,new') && e('left,2,25');      // 在多人任务团队中的用户记录工时，查看返回的剩余工时
 
-r($task->recordWorkhourTest(3, $finishTaskEffort))        && p('0:field,old,new') && e('consumed,5,10');                 // 通过记录日志直接完成任务的情况 
+r($task->recordWorkhourTest(3, $finishTaskEffort))        && p('0:field,old,new') && e('consumed,5,10');                 // 通过记录日志直接完成任务的情况
 r($task->recordWorkhourTest(4, $normalTaskEffort))        && p('2:field,old,new') && e('status,done,doing');             // 正常记录工时
 r($task->recordWorkhourTest(6, $normalTaskEffort))        && p('2:field,old,new') && e('status,cancel,doing');           // 正常记录工时
 r($task->recordWorkhourTest(7, $normalTaskEffort))        && p('2:field,old,new') && e('status,closed,doing');           // 正常记录工时
-r($task->recordWorkhourTest(5, $noconsumedTaskEffort)[0]) && p()                  && e('『ID #1 工时』应当大于『0』。'); // 无消耗时返回提示信息
+r($task->recordWorkhourTest(5, $noconsumedTaskEffort))    && p('consumed[1]')     && e('请填写"消耗"');                    // 无消耗时返回提示信息，因为没有填写消耗所以应该提示填写消耗
