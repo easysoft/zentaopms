@@ -658,6 +658,7 @@ class taskModel extends model
     }
 
     /**
+     * 更新一个任务。
      * Update a task.
      *
      * @param  object             $task
