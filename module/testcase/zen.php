@@ -22,15 +22,15 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function setBrowseCookie(int $productID, string $branch, string $browseType, int $param): void
+    protected function setBrowseCookie(string $productID, string $branch, string $browseType, string $param): void
     {
-        helper::setcookie('preProductID', (string)$productID);
+        helper::setcookie('preProductID', $productID);
         helper::setcookie('preBranch', $branch);
 
         if($this->cookie->preProductID != $productID || $this->cookie->preBranch != $branch)
         {
             $_COOKIE['caseModule'] = 0;
-            helper::setcookie('caseModule', 0);
+            helper::setcookie('caseModule', '0');
         }
 
         if($browseType == 'bymodule') helper::setcookie('caseModule', $param);
@@ -97,8 +97,32 @@ class testcaseZen extends testcase
     }
 
     /**
-     * 获取用力列表。
-     * Get browse cases.
+     * 构建搜索表单。
+     * Build the search form.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $queryID
+     * @param  int       $projectID
+     * @access protected
+     * @return void
+     */
+    protected function buildBrowseSearchForm(int $productID, string $branch, int $queryID, int $projectID): void
+    {
+        $this->config->testcase->search['onMenuBar'] = 'yes';
+
+        $currentModule  = $this->app->tab == 'project' ? 'project'  : 'testcase';
+        $currentMethod  = $this->app->tab == 'project' ? 'testcase' : 'browse';
+        $projectParam   = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
+        $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
+        $searchProducts = $this->product->getPairs('', 0, '', 'all');
+
+        $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
+    }
+
+    /**
+     * 指定用例和场景。
+     * Assign browse cases and scenes.
      *
      * @param  int       $productID
      * @param  string    $branch
@@ -109,15 +133,15 @@ class testcaseZen extends testcase
      * @param  string    $orderBy
      * @param  object    $pager
      * @access protected
-     * @return array
+     * @return void
      */
-    protected function getCases(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, object $pager): array
+    protected function assignCasesAndScenesForBrowse(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, object $pager): void
     {
         $cases          = array();
         $caseIdList     = array();
         $queryCondition = '';
 
-        /* 仅场景的时候获取用例列表。*/
+        /* 不是仅场景的时候获取用例列表。*/
         /* Get test cases when the browseType is not onlyscene. */
         if($browseType != 'onlyscene')
         {
@@ -158,31 +182,10 @@ class testcaseZen extends testcase
         /* save session. */
         $this->loadModel('common')->saveQueryCondition($queryCondition, 'testcase', false);
 
-        return array($cases, $scenes);
-    }
-
-    /**
-     * 构建搜索表单。
-     * Build the search form.
-     *
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  int       $queryID
-     * @param  int       $projectID
-     * @access protected
-     * @return void
-     */
-    protected function buildBrowseSearchForm(int $productID, string $branch, int $queryID, int $projectID): void
-    {
-        $this->config->testcase->search['onMenuBar'] = 'yes';
-
-        $currentModule  = $this->app->tab == 'project' ? 'project'  : 'testcase';
-        $currentMethod  = $this->app->tab == 'project' ? 'testcase' : 'browse';
-        $projectParam   = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-        $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
-        $searchProducts = $this->product->getPairs('', 0, '', 'all');
-
-        $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
+        $this->view->cases   = $cases;
+        $this->view->scenes  = $scenes;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
     }
 
     /**
@@ -196,7 +199,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function assignModuleTree(int $productID, string $branch, int $projectID): void
+    protected function assignModuleTreeForBrowse(int $productID, string $branch, int $projectID): void
     {
         if($projectID && empty($productID))
         {
@@ -218,7 +221,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function assignProductAndBranch(int $productID, int $projectID): void
+    protected function assignProductAndBranchForBrowse(int $productID, string $branch, int $projectID): void
     {
         /* 根据产品类型判断是否展示分支，获取分支选项信息和带标签的分支选项信息。*/
         /* Judge whether to show branch according to the type of product, get branch option and branch tag option. */
@@ -241,9 +244,51 @@ class testcaseZen extends testcase
             }
         }
 
+        $this->view->productID       = $productID;
+        $this->view->productName     = $this->products[$productID];
         $this->view->product         = $product;
+        $this->view->branch          = (!empty($product) and $product->type != 'normal') ? $branch : 0;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
+    }
+
+    /**
+     * 指定变量。
+     * Assign variables.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $browseType
+     * @param  int       $projectID
+     * @param  int       $param
+     * @param  int       $moduleID
+     * @param  int       $suiteID
+     * @param  string    $caseType
+     * @access protected
+     * @return void
+     */
+    protected function assignForBrowse(int $productID, string $branch, string $browseType, int $projectID, int $param, int $moduleID, int $suiteID, string $caseType): void
+    {
+        $showModule = !empty($this->config->testcase->browse->showModule) ? $this->config->testcase->browse->showModule : '';
+        $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
+
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->projectID   = $projectID;
+        $this->view->projectType = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
+        $this->view->browseType  = $browseType;
+        $this->view->param       = $param;
+        $this->view->moduleID    = $moduleID;
+        $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->suiteID     = $suiteID;
+        $this->view->caseType    = $caseType;
+        $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->modules     = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch == 'all' ? '0' : $branch);
+        $this->view->iscenes     = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0,  0);
+        $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
+        $this->view->libraries   = $this->loadModel('caselib')->getLibraries();
+        $this->view->stories     = array('') + $this->loadModel('story')->getPairs($productID);
+        $this->view->automation  = $this->loadModel('zanode')->getAutomationByProduct($productID);
     }
 
     /**

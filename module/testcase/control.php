@@ -98,50 +98,18 @@ class testcase extends control
         $suiteID    = ($browseType == 'bysuite')  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
         $queryID    = ($browseType == 'bysearch') ? $param : 0;
 
-        $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, $param);
-
+        $this->testcaseZen->setBrowseCookie((string)$productID, $branch, $browseType, (string)$param);
         $this->testcaseZen->setBrowseSession($productID, $moduleID, $browseType, $orderBy);
-
         $this->testcaseZen->setBrowseMenu($productID, $branch, $browseType, $projectID);
+        $this->testcaseZen->buildBrowseSearchForm($productID, $branch, $queryID, $projectID);
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        list($cases, $scenes) = $this->testcaseZen->getCases($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $pager);
 
-        $this->testcaseZen->buildBrowseSearchForm($productID, $branch, $queryID, $projectID);
-
-        $this->testcaseZen->assignModuleTree($productID, $branch, $projectID);
-        $this->testcaseZen->assignProductAndBranch($productID, $projectID);
-
-        $showModule = !empty($this->config->testcase->browse->showModule) ? $this->config->testcase->browse->showModule : '';
-        $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
-
-        /* 指定变量。*/
-        /* Assign variables. */
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $this->view->projectID   = $projectID;
-        $this->view->productID   = $productID;
-        $this->view->productName = $this->products[$productID];
-        $this->view->modules     = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch == 'all' ? '0' : $branch);
-        $this->view->iscenes     = $this->testcase->getSceneMenu($productID, $moduleID, $viewType = 'case', $startSceneID = 0,  0);
-        $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
-        $this->view->moduleID    = $moduleID;
-        $this->view->projectType = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
-        $this->view->pager       = $pager;
-        $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->orderBy     = $orderBy;
-        $this->view->browseType  = $browseType;
-        $this->view->param       = $param;
-        $this->view->caseType    = $caseType;
-        $this->view->cases       = $cases;
-        $this->view->branch      = (!empty($product) and $product->type != 'normal') ? $branch : 0;
-        $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
-        $this->view->suiteID     = $suiteID;
-        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
-        $this->view->libraries   = $this->loadModel('caselib')->getLibraries();
-        $this->view->automation  = $this->loadModel('zanode')->getAutomationByProduct($productID);
-        $this->view->scenes      = $scenes;
-        $this->view->stories     = array('') + $this->loadModel('story')->getPairs($productID);
+        $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $pager);
+        $this->testcaseZen->assignModuleTreeForBrowse($productID, $branch, $projectID);
+        $this->testcaseZen->assignProductAndBranchForBrowse($productID, $branch, $projectID);
+        $this->testcaseZen->assignForBrowse($productID, $branch, $browseType, $projectID, $param, $moduleID, $suiteID, $caseType);
 
         $this->display();
     }
