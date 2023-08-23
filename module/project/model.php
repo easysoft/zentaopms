@@ -233,15 +233,16 @@ class projectModel extends model
     }
 
     /**
-     * Get project overview for block.
+     * 获取项目列表区块的数据。
+     * Get project list for block.
      *
-     * @param  string     $status
-     * @param  int        $projectID
-     * @param  string     $orderBy
-     * @param  int        $limit
-     * @param  string     $excludedModel
+     * @param  string   $status
+     * @param  int      $projectID
+     * @param  string   $orderBy
+     * @param  int      $limit
+     * @param  string   $excludedModel
      * @access public
-     * @return array
+     * @return object[]
      */
     public function getOverviewList(string $status = '', int $projectID = 0, string $orderBy = 'id_desc', int $limit = 15, string $excludedModel = ''): array
     {
@@ -254,7 +255,7 @@ class projectModel extends model
         $teamCount     = $this->projectTao->fetchMemberCountByIdList($projectIdList);
 
         /* Get all consumed and all estimate under the project. */
-        $hours  = $this->projectTao->fetchTaskEstimateByIdList($projectIdList, 'consumed,estimate');
+        $hours = $this->projectTao->fetchTaskEstimateByIdList($projectIdList, 'consumed,estimate');
 
         /* Get bug, task and story summary under the project. */
         $bugSummary   = $this->projectTao->getTotalBugByProject($projectIdList);
