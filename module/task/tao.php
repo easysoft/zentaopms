@@ -85,9 +85,9 @@ class taskTao extends taskModel
                 continue;
             }
 
-            if(helper::isZeroDate($record->date)) helper::end(js::alert($this->lang->task->error->dateEmpty));
-            if(!$record->consumed)                helper::end(js::alert($this->lang->task->error->consumedThisTime));
-            if($record->left === '')              helper::end(js::alert($this->lang->task->error->left));
+            if(helper::isZeroDate($record->date)) dao::$errors["date[$id]"]     = $this->lang->task->error->dateEmpty;
+            if(!$record->consumed)                dao::$errors["consumed[$id]"] = $this->lang->task->error->consumedThisTime;
+            if($record->left === '')              dao::$errors["left[$id]"]     = $this->lang->task->error->left;
 
             $record->task    = $taskID;
             $record->account = $this->app->user->account;
