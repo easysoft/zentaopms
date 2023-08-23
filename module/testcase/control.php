@@ -89,20 +89,16 @@ class testcase extends control
      */
     public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
-        /* 将 browseType 转化为小写。*/
-        /* Set browse type as lower. */
-        $browseType = strtolower($browseType);
-
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
-        $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
-        $branch    = ($this->cookie->preBranch !== '' && $branch === '') ? $this->cookie->preBranch : $branch;
+        $productID  = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
+        $branch     = ($this->cookie->preBranch !== '' && $branch === '') ? $this->cookie->preBranch : $branch;
+        $browseType = strtolower($browseType);
+        $moduleID   = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
+        $suiteID    = ($browseType == 'bysuite')  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
+        $queryID    = ($browseType == 'bysearch') ? $param : 0;
 
         $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, $param);
-
-        $moduleID = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
-        $suiteID  = ($browseType == 'bysuite')  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
-        $queryID  = ($browseType == 'bysearch') ? $param : 0;
 
         $this->testcaseZen->setBrowseSession($productID, $moduleID, $browseType, $orderBy);
 

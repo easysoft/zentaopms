@@ -12,6 +12,7 @@ declare(strict_types=1);
 class testcaseZen extends testcase
 {
     /**
+     * 设置列表页面的 cookie。
      * Set browse cookie.
      *
      * @param  int       $productID
@@ -21,7 +22,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function setBrowseCookie(int $productID, string $branch, string $browseType, int $param)
+    protected function setBrowseCookie(int $productID, string $branch, string $browseType, int $param): void
     {
         helper::setcookie('preProductID', (string)$productID);
         helper::setcookie('preBranch', $branch);
@@ -37,16 +38,17 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 设置列表页面的 session。
      * Set Browse session.
      *
-     * @param  int $productID
-     * @param  int $moduleID
-     * @param  string $browseType
-     * @param  string $orderBy
+     * @param  int       $productID
+     * @param  int       $moduleID
+     * @param  string    $browseType
+     * @param  string    $orderBy
      * @access protected
      * @return void
      */
-    protected function setBrowseSession(int $productID, int $moduleID, string $browseType, string $orderBy)
+    protected function setBrowseSession(int $productID, int $moduleID, string $browseType, string $orderBy): void
     {
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
@@ -70,7 +72,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function setBrowseMenu(int $productID, string $branch, string $browseType, int $projectID)
+    protected function setBrowseMenu(int $productID, string $branch, string $browseType, int $projectID): void
     {
         /* 在不同的应用中，设置不同的导航。 */
         /* Set menu, save session. */
@@ -94,13 +96,6 @@ class testcaseZen extends testcase
         }
     }
 
-    /**
-     * 获取用力列表。
-     * Get browse cases.
-     *
-     * @access protected
-     * @return void
-     */
     /**
      * 获取用力列表。
      * Get browse cases.
