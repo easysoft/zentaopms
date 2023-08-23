@@ -156,42 +156,11 @@ pipeline {
               steps {
                 container('package') {
                   sh 'cd $SRC_ZENTAOEXT_PATH && make'
-                  sh 'cp ${ZENTAO_BUILD_PATH}/zentao*.zip ./'
                   sh 'cp ${ZENTAO_BUILD_PATH}/docker/Dockerfile.release.ext ./Dockerfile.release.ext'
                 }
                 container('docker') {
                   sh 'docker build --pull -t ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG} -f Dockerfile.release.ext ${ZENTAO_RELEASE_PATH}'
                   sh 'docker push ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
-                }
-                script {
-                  def pkgVersionMap = [
-                    "pms": ["pmsPack", env.PMS_VERSION, "zentaopms" + env.PMS_VERSION + ".zip"],
-                    "biz": ["bizPack", env.BIZ_VERSION, "zentaobiz.zip"],
-                    "max": ["maxPack", env.MAX_VERSION, "zentaomax.zip"],
-                    "ipd": ["ipdPack", env.IPD_VERSION, "zentaoipd.zip"]
-                  ]
-
-                  for (entry in pkgVersionMap.entrySet()) {
-                    def SubGroup = entry.value[0]
-                    def Zversion = entry.value[1]
-                    def FileName = entry.value[2]
-
-                    nexusArtifactUploader(
-                      nexusVersion: 'nexus3',
-                      protocol: env.ARTIFACT_PROTOCOL,
-                      nexusUrl: env.ARTIFACT_HOST,
-                      groupId: 'zentao.' + SubGroup + '.' + env.GIT_TAG_BUILD_GROUP + '.source',
-                      version: Zversion,
-                      repository: env.ARTIFACT_REPOSITORY,
-                      credentialsId: env.ARTIFACT_CRED_ID,
-                      artifacts: [
-                        [artifactId: "zentao",
-                          classifier: "source",
-                          file: FileName,
-                          type: 'zip']
-                      ]
-                    )
-                  }
                 }
               }
             }
@@ -490,10 +459,6 @@ pipeline {
                 environment name:'PUBLISH_ZIP', value:'true'
               }
               steps {
-                checkout scmGit(branches: [[name: "master"]],
-                  extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                  userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zentao-package.git']]
-                )
                 container('xuanimbot') {
                   sh 'env | grep GIT'
                   sh 'git config --global --add safe.directory $(pwd)'
