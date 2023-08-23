@@ -44,28 +44,6 @@ pipeline {
       agent {
         kubernetes {
           inheritFrom "zentao-package build-docker xuanim"
-          yaml '''
-            spec:
-              affinity:
-                nodeAffinity:
-                  requiredDuringSchedulingIgnoredDuringExecution:
-                    nodeSelectorTerms:
-                    - matchExpressions:
-                      - key: kubernetes.io/hostname
-                        operator: In
-                        values:
-                        - "k3s-worker01"
-              containers:
-              - name: docker
-                volumeMounts:
-                - mountPath: /var/run/docker.sock
-                  name: docker-socket
-              volumes:
-              - name: docker-socket
-                hostPath:
-                  path: /var/run/docker.sock
-                  type: Socket
-          '''
         }
       }
 
@@ -515,13 +493,35 @@ pipeline {
                     stage("Zbox win") {
                       agent {
                         kubernetes {
-                          containerTemplate {
-                            name "docker"
-                            image "docker:23.0.6-dind-alpine3.17"
-                            command "sleep"
-                            args "99d"
-                          }
-                          inheritFrom "dind"
+                          yaml '''
+                            metadata:
+                              labels:
+                                ci-cpu-level: high
+                            spec:
+                              affinity:
+                                podAntiAffinity:
+                                  requiredDuringSchedulingIgnoredDuringExecution:
+                                    - labelSelector:
+                                        matchExpressions:
+                                          - key: ci-cpu-level
+                                            operator: In
+                                            values:
+                                              - high
+                                      topologyKey: "kubernetes.io/hostname"
+                              containers:
+                              - name: docker
+                                image: docker:23.0.6-dind-alpine3.17
+                                command: ["sleep"]
+                                args: ["99d"]
+                                volumeMounts:
+                                - mountPath: /var/run/docker.sock
+                                  name: docker-socket
+                              volumes:
+                              - name: docker-socket
+                                hostPath:
+                                  path: /var/run/docker.sock
+                                  type: Socket
+                          '''
                         }
                       }
 
@@ -629,13 +629,35 @@ pipeline {
                     stage("Zbox linux") {
                       agent {
                         kubernetes {
-                          containerTemplate {
-                            name "docker"
-                            image "docker:23.0.6-dind-alpine3.17"
-                            command "sleep"
-                            args "99d"
-                          }
-                          inheritFrom "dind"
+                          yaml '''
+                            metadata:
+                              labels:
+                                ci-cpu-level: high
+                            spec:
+                              affinity:
+                                podAntiAffinity:
+                                  requiredDuringSchedulingIgnoredDuringExecution:
+                                    - labelSelector:
+                                        matchExpressions:
+                                          - key: ci-cpu-level
+                                            operator: In
+                                            values:
+                                              - high
+                                      topologyKey: "kubernetes.io/hostname"
+                              containers:
+                              - name: docker
+                                image: docker:23.0.6-dind-alpine3.17
+                                command: ["sleep"]
+                                args: ["99d"]
+                                volumeMounts:
+                                - mountPath: /var/run/docker.sock
+                                  name: docker-socket
+                              volumes:
+                              - name: docker-socket
+                                hostPath:
+                                  path: /var/run/docker.sock
+                                  type: Socket
+                          '''
                         }
                       }
 
@@ -891,7 +913,6 @@ pipeline {
             } // End Docker Image
 
           }
-
           post {
             failure {
               container('xuanimbot') {
@@ -900,6 +921,7 @@ pipeline {
               }
             }
           }
+
         } // end publish
       }
     } // end package
@@ -907,5 +929,6 @@ pipeline {
   }
 
 }
+
 
 
