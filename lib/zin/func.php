@@ -1732,3 +1732,11 @@ function gantt(): gantt
 {
     return createWg('gantt', func_get_args());
 }
+
+/**
+ * road map widget.
+ */
+function roadMap(): roadMap
+{
+    return createWg('roadmap', func_get_args());
+}
