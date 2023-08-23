@@ -1080,7 +1080,10 @@ class storyTao extends storyModel
         if(empty($story)) return false;
 
         $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
-        foreach($linkedBranches as $branchID) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branchID)->set('stage')->eq('closed')->exec();
+        foreach($linkedBranches as $branchID)
+        {
+            if(!empty($branchID)) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branchID)->set('stage')->eq('closed')->exec();
+        }
         if($story->stage != 'closed') $this->updateLinkedLane($storyID, $linkedProjects);
         return true;
     }
@@ -1103,7 +1106,6 @@ class storyTao extends storyModel
 
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if(empty($story)) return false;
-
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         if($product and $product->type != 'normal' and empty($story->branch))
         {
