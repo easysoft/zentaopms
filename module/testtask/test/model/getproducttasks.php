@@ -3,32 +3,123 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+zdTable('product')->gen(100);
+zdTable('project')->gen(100);
+zdTable('project')->config('execution')->gen(300, false);
+zdTable('build')->gen(500);
+zdTable('testtask')->gen(500);
+
 /**
 
 title=测试 testtaskModel->getProductTasks();
+timeout=0
 cid=1
-pid=1
 
-查看产品1下的测试单的数量 >> 2
-查看系统中所有测试单的数量 >> 11
-查看系统中所有截止日期大于2023-01-01的测试单的数量 >> 0
-查看ID为11的测试单的详细信息 >> 新增测试报告,system,2022-03-05,2022-09-05
-查看ID为3的测试单的详细信息 >> 测试单3,,2022-04-08,2022-04-15
+- 查询产品ID为1的所有状态的测试单的数量 @5
+
+- 查询产品ID为51的所有状态的测试单的数量 @0
+
+- 查询产品ID为1的等待状态的测试单的数量 @5
+
+- 查询产品ID为1的完成状态的测试单的数量 @0
+
+- 查询产品ID为1的阻塞状态的测试单的数量 @0
+
+- 查询有权限产品的所有状态的测试单的数量 @150
+
+- 查询有权限产品的等待状态的测试单的数量 @45
+
+- 查询有权限产品的完成状态的测试单的数量 @30
+
+- 查询有权限产品的阻塞状态的测试单的数量 @30
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @5
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @5
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @5
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @5
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @5
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @5
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @5
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @5
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的所有状态且某时间段的测试单的数量 @0
+
+- 查询产品ID为1的测试单对应的产品名称第1条的productName属性 @正常产品1
+
+- 查询产品ID为2的测试单对应的产品名称第2条的productName属性 @项目12
+
+- 查询产品ID为1的测试单对应的产品名称第1条的executionName属性 @迭代1
+
+- 查询产品ID为1的测试单对应的产品名称第2条的executionName属性 @项目12/迭代2
 
 */
 
 global $tester;
 $tester->loadModel('testtask');
 
-$localScope = array('local', 'totalstatus');
-$allScope   = array('all', 'totalstatus');
+r(count($tester->testtask->getProductTasks(1,  'all', 'id_desc', null, 'local,totalstatus'))) && p() && e('5');  // 查询产品ID为1的所有状态的测试单的数量
+r(count($tester->testtask->getProductTasks(51, 'all', 'id_desc', null, 'local,totalstatus'))) && p() && e('0');  // 查询产品ID为51的所有状态的测试单的数量
+r(count($tester->testtask->getProductTasks(1,  'all', 'id_desc', null, 'local,wait')))        && p() && e('5');  // 查询产品ID为1的等待状态的测试单的数量
+r(count($tester->testtask->getProductTasks(1,  'all', 'id_desc', null, 'local,done')))        && p() && e('0');  // 查询产品ID为1的完成状态的测试单的数量
+r(count($tester->testtask->getProductTasks(1,  'all', 'id_desc', null, 'local,blocked')))     && p() && e('0');  // 查询产品ID为1的阻塞状态的测试单的数量
+r(count($tester->testtask->getProductTasks(1,  'all', 'id_desc', null, 'all,totalstatus')))   && p() && e('150'); // 查询有权限产品的所有状态的测试单的数量
+r(count($tester->testtask->getProductTasks(1,  'all', 'id_desc', null, 'all,wait')))          && p() && e('45'); // 查询有权限产品的等待状态的测试单的数量
+r(count($tester->testtask->getProductTasks(1,  'all', 'id_desc', null, 'all,done')))          && p() && e('30'); // 查询有权限产品的完成状态的测试单的数量
+r(count($tester->testtask->getProductTasks(1,  'all', 'id_desc', null, 'all,blocked')))       && p() && e('30'); // 查询有权限产品的阻塞状态的测试单的数量
 
-$tasks1 = $tester->testtask->getProductTasks(1, 'all', 'id_desc', null, $localScope);
-$tasks2 = $tester->testtask->getProductTasks(2, 'all', 'id_asc', null, $allScope);
-$tasks3 = $tester->testtask->getProductTasks(2, 'all', 'id_asc', null, $allScope, '2023-01-01');
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d'))))                      && p() && e('5');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d', strtotime('-1 day'))))) && p() && e('5');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d', strtotime('+1 day'))))) && p() && e('0');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
 
-r(count($tasks1)) && p()                         && e('2');                                         // 查看产品1下的测试单的数量
-r(count($tasks2)) && p()                         && e('11');                                        // 查看系统中所有测试单的数量
-r(count($tasks3)) && p()                         && e('0');                                         // 查看系统中所有截止日期大于2023-01-01的测试单的数量
-r($tasks1)        && p('11:name,type,begin,end') && e('新增测试报告,system,2022-03-05,2022-09-05'); // 查看ID为11的测试单的详细信息
-r($tasks2)        && p('3:name,type,begin,end')  && e('测试单3,,2022-04-08,2022-04-15');            // 查看ID为3的测试单的详细信息
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', '', date('Y-m-d')))) && p() && e('0');                       // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', '', date('Y-m-d', strtotime('+6 day'))))) && p() && e('0');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', '', date('Y-m-d', strtotime('+7 day'))))) && p() && e('5');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', '', date('Y-m-d', strtotime('+8 day'))))) && p() && e('5');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d'), date('Y-m-d')))) && p() && e('0');                       // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d'), date('Y-m-d', strtotime('+6 day'))))) && p() && e('0');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d'), date('Y-m-d', strtotime('+7 day'))))) && p() && e('5');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d'), date('Y-m-d', strtotime('+8 day'))))) && p() && e('5');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d', strtotime('-1 day')), date('Y-m-d')))) && p() && e('0');                       // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d', strtotime('-1 day')), date('Y-m-d', strtotime('+6 day'))))) && p() && e('0');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d', strtotime('-1 day')), date('Y-m-d', strtotime('+7 day'))))) && p() && e('5');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d', strtotime('-1 day')), date('Y-m-d', strtotime('+8 day'))))) && p() && e('5');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d', strtotime('+1 day')), date('Y-m-d')))) && p() && e('0');                       // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d', strtotime('+1 day')), date('Y-m-d', strtotime('+6 day'))))) && p() && e('0');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d', strtotime('+1 day')), date('Y-m-d', strtotime('+7 day'))))) && p() && e('0');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+r(count($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus', date('Y-m-d', strtotime('+1 day')), date('Y-m-d', strtotime('+8 day'))))) && p() && e('0');  // 查询产品ID为1的所有状态且某时间段的测试单的数量
+
+r($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus')) && p('1:productName') && e('正常产品1');      // 查询产品ID为1、测试单ID为1的测试单对应的执行名称
+r($tester->testtask->getProductTasks(2, 'all', 'id_desc', null, 'local,totalstatus')) && p('2:productName') && e('项目12');         // 查询产品ID为2、测试单ID为2的测试单对应的执行名称
+r($tester->testtask->getProductTasks(1, 'all', 'id_desc', null, 'local,totalstatus')) && p('1:executionName') && e('迭代1');        // 查询产品ID为1、测试单ID为1的测试单对应的执行名称
+r($tester->testtask->getProductTasks(2, 'all', 'id_desc', null, 'local,totalstatus')) && p('2:executionName') && e('项目12/迭代2'); // 查询产品ID为1、测试单ID为2的测试单对应的执行名称
+

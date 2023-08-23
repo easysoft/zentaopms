@@ -36,7 +36,6 @@ class testtask extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-
         $this->loadModel('product');
 
         /* Get product data. */
@@ -91,17 +90,11 @@ class testtask extends control
         $this->session->set('reportList',   $uri, 'qa');
         $this->session->set('buildList',    $uri, 'execution');
 
-        $scopeAndStatus = explode(',', $type);
-        $this->session->set('testTaskVersionScope', $scopeAndStatus[0]);
-        $this->session->set('testTaskVersionStatus', $scopeAndStatus[1]);
-
-        $beginTime = $beginTime ? date('Y-m-d', strtotime($beginTime)) : '';
-        $endTime   = $endTime   ? date('Y-m-d', strtotime($endTime))   : '';
-
         /* Set menu. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $products  = $this->testtaskZen->getProducts();
+        $productID = $this->loadModel('product')->saveState($productID, $products);
         $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
-        $this->loadModel('qa')->setMenu($this->products, $productID, $branch, $type);
+        $this->loadModel('qa')->setMenu($products, $productID, $branch, $type);
         $this->session->set('branch', $branch, 'qa');
 
         /* Load pager. */
@@ -112,17 +105,19 @@ class testtask extends control
         $sort = common::appendOrder($orderBy);
 
         /* Get tasks. */
-        $product = $this->product->getById($productID);
+        $beginTime = $beginTime ? date('Y-m-d', strtotime($beginTime)) : '';
+        $endTime   = $endTime   ? date('Y-m-d', strtotime($endTime))   : '';
+        $product   = $this->product->getById($productID);
         if($product->type == 'normal') $branch = 'all';
-        $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
+        $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $type, $beginTime, $endTime);
 
+        /* 获取不同状态测试单的数量，用于列表底部统计信息展示。 */
         $waitCount    = 0;
         $testingCount = 0;
         $blockedCount = 0;
         $doneCount    = 0;
         foreach($tasks as $key => $task)
         {
-            $productTasks[$task->product][] = $task;
             if($task->status == 'wait')    $waitCount ++;
             if($task->status == 'doing')   $testingCount ++;
             if($task->status == 'blocked') $blockedCount ++;
@@ -130,18 +125,17 @@ class testtask extends control
             if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
         }
 
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->title        = $products[$productID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->productID    = $productID;
-        $this->view->productName  = $this->products[$productID];
-        $this->view->orderBy      = $orderBy;
+        $this->view->product      = $product;
+        $this->view->branch       = $branch;
         $this->view->tasks        = $tasks;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager        = $pager;
-        $this->view->branch       = $branch;
         $this->view->beginTime    = $beginTime;
         $this->view->endTime      = $endTime;
-        $this->view->product      = $product;
         $this->view->type         = $type;
+        $this->view->orderBy      = $orderBy;
         $this->view->waitCount    = $waitCount;
         $this->view->testingCount = $testingCount;
         $this->view->blockedCount = $blockedCount;
@@ -1617,7 +1611,7 @@ class testtask extends control
     public function ajaxGetDropMenu($productID, $branch, $taskID, $module, $method, $objectType = '', $objectID = 0)
     {
         $scope     = empty($objectType) ? 'local' : 'all';
-        $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, array($scope, 'totalStatus'));
+        $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, "$scope,totalStatus");
 
         $namePairs = array();
         foreach($testtasks as $testtaskID => $testtask) $namePairs[$testtaskID] = $testtask->name;

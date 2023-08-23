@@ -24,6 +24,9 @@ fields:
       range: code
     - field: code2
       range: 1-300
+  - field: shadow
+    note: "影子产品"
+    range: 0-1
   - field: line
     note: "产品线"
     range: 0-10

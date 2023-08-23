@@ -86,5 +86,7 @@ fields:
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"
+  - field: multiple
+    range: 0-1
   - field: deleted
     range: 0

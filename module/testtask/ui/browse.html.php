@@ -9,9 +9,10 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-$scope    = $this->session->testTaskVersionScope;
-$status   = $this->session->testTaskVersionStatus ? $this->session->testTaskVersionStatus : '';
-$viewName = $scope == 'local'? $productName : $lang->testtask->all;
+$scopeAndStatus = explode(',', $type);
+$scope          = !empty($scopeAndStatus[0]) ? $scopeAndStatus[0] : '';
+$status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
+$viewName       = $scope == 'local'? \zget($products, $productID) : $lang->testtask->all;
 jsVar('condition', "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
 
 $productDropdown = productMenu
@@ -20,7 +21,7 @@ $productDropdown = productMenu
     set::items(array
     (
         array('text' => $lang->testtask->all, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=0&type=all,$status")),
-        array('text' => $productName, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status"))
+        array('text' => \zget($products, $productID), 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status"))
     )),
     set::link(createLink('qa', 'index')),
 );

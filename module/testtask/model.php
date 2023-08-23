@@ -60,20 +60,22 @@ class testtaskModel extends model
     /**
      * Get test tasks of a product.
      *
-     * @param  int         $productID
-     * @param  int|string  $branch
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  array       $scopeAndStatus
-     * @param  int         $beginTime
-     * @param  int         $endTime
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $type
+     * @param  string $beginTime
+     * @param  string $endTime
      * @access public
      * @return array
      */
-    public function getProductTasks($productID, $branch = 'all', $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array(), $beginTime = 0, $endTime = 0)
+    public function getProductTasks(int $productID, string $branch = 'all', string $orderBy = 'id_desc', object $pager = null, string $type = '', string $beginTime = '', string $endTime = ''): array
     {
-        $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
-        $branch   = $scopeAndStatus[0] == 'all' ? 'all' : $branch;
+        $scopeAndStatus = explode(',', $type);
+        $scope          = !empty($scopeAndStatus[0]) ? $scopeAndStatus[0] : '';
+        $status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
+        $branch         = $scope == 'all' ? 'all' : $branch;
 
         $tasks = $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, t3.name as executionName, t4.name AS buildName, t4.branch AS branch, t5.name AS projectName")
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -81,40 +83,40 @@ class testtaskModel extends model
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t3.project = t5.id')
-
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
-            ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
-            ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
-            ->beginIF(!in_array(strtolower($scopeAndStatus[1]), array('totalstatus', 'review'), true))->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
+            ->beginIF($scope == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
+            ->beginIF($scope == 'all')->andWhere('t1.product')->in($this->app->user->view->products)->fi()
+            ->beginIF(strtolower($status) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
+            ->beginIF(strtolower($status) == 'review') // 工作流开启审批的时候才会使用，才会新增字段。
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->beginIF(!in_array(strtolower($status), array('totalstatus', 'review'), true))->andWhere('t1.status')->eq($status)->fi()
             ->beginIF($branch !== 'all')->andWhere("CONCAT(',', t4.branch, ',')")->like("%,$branch,%")->fi()
             ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
             ->beginIF($branch == BRANCH_MAIN)
             ->orWhere('(t1.build')->eq('trunk')
-            ->andWhere('t1.product')->eq((int)$productID)
+            ->andWhere('t1.product')->eq($productID)
             ->markRight(1)
-            ->fi()
-            ->beginIF($scopeAndStatus[1] == 'review')
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
         foreach($tasks as $taskID => $task)
         {
             if($task->multiple)
             {
                 if($task->projectName and $task->executionName)
                 {
-                    $tasks[$taskID]->executionName = $task->projectName . '/' . $task->executionName;
+                    $task->executionName = $task->projectName . '/' . $task->executionName;
                 }
                 elseif(!$task->executionName)
                 {
-                    $tasks[$taskID]->executionName = $task->projectName;
+                    $task->executionName = $task->projectName;
                 }
             }
         }
