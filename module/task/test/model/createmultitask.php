@@ -32,8 +32,8 @@ $teamSourceList    = array('admin', 'user1', 'user2');
 $teamEstimateList  = array(2, 3, 4);
 $teamConsumedList  = array(4, 3, 2);
 $teamLeftList      = array(0, 1, 3);
-$emptyTeamData     = array('team' => array(), 'teamEstimateList' => array(), 'teamConsumedList' => array(), 'teamLeftList' => array(), 'teamSourceList' => array());
-$teamData          = array('team' => $teamList, 'teamEstimateList' => $teamEstimateList, 'teamConsumedList' => $teamConsumedList, 'teamLeftList' => $teamLeftList, 'teamSourceList' => $teamSourceList);
+$emptyTeamData     = array('team' => array(), 'teamEstimate' => array(), 'teamConsumed' => array(), 'teamLeft' => array(), 'teamSource' => array());
+$teamData          = array('team' => $teamList, 'teamEstimate' => $teamEstimateList, 'teamConsumed' => $teamConsumedList, 'teamLeft' => $teamLeftList, 'teamSource' => $teamSourceList);
 
 $taskTester = new taskTest();
 r($taskTester->createMultiTaskObject())                                                 && p('name:0')         && e('『任务名称』不能为空。');     // 测试空数据
