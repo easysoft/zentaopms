@@ -190,4 +190,64 @@ class metricZen extends metric
         return $createEditInfo;
 
     }
+
+    /**
+     * 获取度量数据表的表头。
+     * Get header of result table.
+     *
+     * @param  array     $result
+     * @access protected
+     * @return array
+     */
+    protected function getResultHeader($result)
+    {
+        $header = array();
+
+        $row = current($result);
+        foreach($row as $field => $value)
+        {
+            if(array_key_exists($field, $this->lang->metric->scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->scopeList[$field] . $this->lang->metric->name);
+            if(array_key_exists($field, $this->lang->metric->dateList))  $header[] = array('name' => 'data', 'title' => $this->lang->metric->date);
+            if($field == 'value')                                        $header[] = array('name' => 'value', 'title' => $this->lang->metric->value);
+        }
+
+        return $header;
+    }
+
+    /**
+     * 获取度量数据表的数据。
+     * Get data of result table.
+     *
+     * @param  object    $metric
+     * @param  array     $result
+     * @access protected
+     * @return array
+     */
+    protected function getResultData($metric, $result)
+    {
+        $objectPairs = array();
+        $scope = $metric->scope;
+        switch($scope)
+        {
+            case 'dept':
+                $objectPairs = $this->loadModel('dept')->getPairs();
+                break;
+            case 'user':
+                $objectPairs = $this->loadModel('user')->getPairs();
+                break;
+            default:
+                $objectPairs = $this->loadModel($scope)->getPairs();
+                break;
+        }
+
+        $tableData = array();
+        foreach($result as $row)
+        {
+            $row = (object)$row;
+            $row->scope = $objectPairs[$row->$scope];
+            $tableData[] = $row;
+        }
+
+        return $tableData;
+    }
 }

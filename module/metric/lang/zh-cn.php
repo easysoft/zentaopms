@@ -15,6 +15,10 @@ $lang->metric->createdBy     = "创建者";
 $lang->metric->implementedBy = "由谁实现";
 $lang->metric->removedBy     = "由谁下架";
 $lang->metric->lastEdited    = "最后修改";
+$lang->metric->value         = "数值";
+$lang->metric->name          = "名称";
+$lang->metric->date          = "日期";
+$lang->metric->metricData    = "度量数据";
 
 $lang->metric->legendBasicInfo  = '基本信息';
 $lang->metric->legendCreateInfo = '创建编辑信息';
@@ -26,6 +30,12 @@ $lang->metric->browseAction = '度量项列表';
 $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "未发布";
 $lang->metric->stageList['released'] = "已发布";
+
+$lang->metric->dateList = array();
+$lang->metric->dateList['year']  = '年';
+$lang->metric->dateList['month'] = '月';
+$lang->metric->dateList['week']  = '周';
+$lang->metric->dateList['day']   = '日';
 
 $lang->metric->purposeList = array();
 $lang->metric->purposeList['scale'] = "规模估算";

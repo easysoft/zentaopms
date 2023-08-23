@@ -76,6 +76,15 @@ detailBody
             set::title($lang->metric->formula),
             set::content($metric->definition),
             set::useHtml(true)
+        ),
+        section
+        (
+            set::title($lang->metric->metricData),
+            dtable
+            (
+                set::cols($resultHeader),
+                set::data(array_values($resultData))
+            )
         )
     ),
     history(),

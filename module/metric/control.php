@@ -107,7 +107,13 @@ class metric extends control
      */
     public function view(int $metricID)
     {
-        $this->view->metric         = $this->metric->getByID($metricID);
+        $metric = $this->metric->getByID($metricID);
+        $result = $this->metric->getResultByCode($metric->code);
+
+        $this->view->metric         = $metric;
+        $this->view->result         = $result;
+        $this->view->resultHeader   = $this->metricZen->getResultHeader($result);
+        $this->view->resultData     = $this->metricZen->getResultData($metric, $result);
         $this->view->legendBasic    = $this->metricZen->getBasicInfo($this->view);
         $this->view->createEditInfo = $this->metricZen->getCreateEditInfo($this->view);
 
