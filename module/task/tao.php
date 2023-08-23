@@ -223,8 +223,6 @@ class taskTao extends taskModel
      */
     protected function checkWorkhour(object $task, array $workhour): bool
     {
-        $taskID = $task->id;
-        $today  = helper::today();
         foreach($workhour as $id => $record)
         {
             $consumed = $record->consumed;
@@ -233,22 +231,23 @@ class taskTao extends taskModel
             /* Check consumed hours. */
             if(!is_numeric($consumed) and !empty($consumed))
             {
-                dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
+                dao::$errors["consumed[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
             }
             elseif(is_numeric($consumed) and $consumed <= 0)
             {
-                dao::$errors[] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->record, '0');
+                dao::$errors["consumed[$id]"] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->record, '0');
             }
 
             /* Check left hours. */
-            if(!is_numeric($left)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
+            if(!is_numeric($left)) dao::$errors["left[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
+            if(is_numeric($left) and $left < 0) dao::$errors["left[$id]"] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->left, '0');
 
-            if($record->date > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
+            if($record->date > helper::today()) dao::$errors["date[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         }
 
         if(dao::isError()) return false;
 
-        $inTeam = $this->dao->select('id')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->fetch('id');
+        $inTeam = $this->dao->select('id')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->andWhere('account')->eq($this->app->user->account)->fetch('id');
         if($task->team && !$inTeam) return false;
 
         return true;
