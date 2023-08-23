@@ -1,0 +1,21 @@
+title: team.
+desc: team data.
+author: Sun Guangming 
+version: "1.0"
+fields:
+  - field: id 
+    range: 1-1000
+  - field: root 
+    range: 11{5},60{5},61{10},100{10},101-700
+  - field: type
+    range: project{30},execution{600}
+  - field: account
+    fields:
+    - field: account1
+      range: user{20},test{20},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+    - field: account2
+      range: "1-20,1-20,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
+  - field: role 
+    range: "研发{20},测试{20},开发{20},项目经理{100},产品经理{100},其他{1000}"
+  - field: hours 
+    range: '7.5'

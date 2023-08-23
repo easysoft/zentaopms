@@ -1966,15 +1966,14 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs($projectID)
+    public function getTeamMemberPairs(int $projectID): array
     {
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
         if(empty($project)) return array();
 
-        $type = 'project';
-        if($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') $type = 'execution';
+        $type = $project->type == 'project' ? 'project' : 'execution';
 
-        $members = $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
+        $members = $this->dao->select("t1.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
             ->andWhere('t1.type')->eq($type)
