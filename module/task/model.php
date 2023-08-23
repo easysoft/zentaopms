@@ -2881,7 +2881,7 @@ class taskModel extends model
 
         /* Create a action. */
         $extra    = implode(',', $childrenIdList);
-        $actionID = $this->action->create('task', $parentID, 'createChildren', '', trim($extra, ','));
+        $actionID = $this->loadModel('action')->create('task', $parentID, 'createChildren', '', trim($extra, ','));
 
         /* Create a log history. */
         $newParentTask = $this->getByID($parentID);
@@ -2990,7 +2990,7 @@ class taskModel extends model
      * @access public
      * @return void
      */
-    public function createTestChildTasks(int $taskID, array $testTasks): void
+    public function createTestChildTasks(int $taskID, array $testTasks)
     {
         $this->loadModel('action');
 
