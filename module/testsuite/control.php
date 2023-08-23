@@ -241,6 +241,9 @@ class testsuite extends control
     public function edit(int $suiteID)
     {
         $suite = $this->testsuite->getById($suiteID);
+
+        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('locate' => inlink('browse'))));
+
         if(!empty($_POST))
         {
             $response = array();
@@ -269,8 +272,6 @@ class testsuite extends control
             $response['locate']  = inlink('view', "suiteID=$suiteID");
             return $this->send($response);
         }
-
-        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
         /* 设置1.5级菜单。 */
         /* Set product session. */
@@ -390,19 +391,12 @@ class testsuite extends control
      */
     public function unlinkCase(int $suiteID, int $caseID, string $confirm = 'no')
     {
-        if($confirm == 'no')
+        $this->testsuite->deleteCaseBysuiteID(array($caseID), $suiteID);
+        if(dao::isError())
         {
-            return print(js::confirm($this->lang->testsuite->confirmUnlinkCase, $this->createLink('testsuite', 'unlinkCase', "caseID={$caseID}&confirm=yes")));
+            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
-        else
-        {
-            $this->testsuite->deleteCaseBysuiteID(array($caseID), $suiteID);
-            if(dao::isError())
-            {
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
-            return $this->send(array('result' => 'success', 'message' => '', 'load' => true));
-        }
+        return $this->send(array('result' => 'success', 'message' => '', 'load' => true));
     }
 
     /**
