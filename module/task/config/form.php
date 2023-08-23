@@ -187,7 +187,7 @@ $config->task->form->recordWorkhour = array();
 $config->task->form->recordWorkhour['date']     = array('type' => 'date',   'required' => true, 'default' => array());
 $config->task->form->recordWorkhour['work']     = array('type' => 'string', 'required' => true, 'default' => array(), 'base' => true);
 $config->task->form->recordWorkhour['consumed'] = array('type' => 'float',  'required' => true, 'default' => array());
-$config->task->form->recordWorkhour['left']     = array('type' => 'float',  'required' => true, 'default' => array());
+$config->task->form->recordWorkhour['left']     = array('type' => 'float',  'required' => false, 'default' => array()); /* Set required to false as the required field can NOT be 0. */
 
 $config->task->form->editEffort = array();
 $config->task->form->editEffort['date']     = array('type' => 'date',   'required' => true,  'default' => '');
