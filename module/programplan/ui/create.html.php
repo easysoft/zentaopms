@@ -39,25 +39,6 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
     );
 };
 
-/* Generate customized fields. */
-$fnGenerateCustomizedFields = function() use ($defaultFields, $customFields, $showFields, $custom)
-{
-    $items = array();
-
-    foreach($customFields as $name => $text)
-    {
-        $items[] = array
-        (
-            'name' => $name,
-            'text' => $text,
-            'show' => str_contains($showFields, $name),
-            'default' => str_contains($defaultFields, $name)
-        );
-    }
-
-    return array('items' => $items, 'urlParams' => "module=programplan&section={$custom}&key=createFields");
-};
-
 /* Generate checkboxes for sub-stage management. */
 $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $executionType)
 {
@@ -262,7 +243,7 @@ formBatchPanel
     set::id('dataform'),
     set::onRenderRow(jsRaw('window.onRenderRow')),
     to::headingActions(array($fnGenerateSubPlanManageFields())),
-    set::customFields($fnGenerateCustomizedFields()),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
     set::items($fnGenerateFields()),
     set::data($fnGenerateDefaultData())
 );

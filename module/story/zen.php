@@ -1229,10 +1229,7 @@ class storyZen extends story
         }
 
         /* User requirement without plan field. */
-        if($storyType == 'requirement')
-        {
-            unset($customFields['plan']);
-        }
+        if($storyType == 'requirement') unset($customFields['plan']);
 
         return $customFields;
     }
@@ -1255,10 +1252,7 @@ class storyZen extends story
             $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
             $showFields = trim($showFields, ',');
         }
-        if($storyType == 'requirement')
-        {
-            $showFields = str_replace('plan', '', $showFields);
-        }
+        if($storyType == 'requirement') $showFields = str_replace('plan', '', $showFields);
 
         return $showFields;
     }

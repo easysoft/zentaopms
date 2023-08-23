@@ -19,15 +19,6 @@ jsVar('moduleList', $config->todo->moduleList);
 jsVar('objectsMethod', $config->todo->getUserObjectsMethod);
 jsVar('nameBoxLabel', array('custom' => $lang->todo->name, 'objectID' => $lang->todo->objectID));
 
-$fnGenerateCustomizedFields = function() use ($showFields, $customFields)
-{
-    $showFields    = ",{$showFields},";
-    $fields        = array();
-    $defaultFields = explode(',', 'pri,desc,beginAndEnd,type');
-    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
-    return $fields;
-};
-
 div
 (
     setID('nameInputBox'),
@@ -42,7 +33,7 @@ div
 formBatchPanel
 (
     set::id('batchCreateTodoForm'),
-    set::customFields(array('items' => $fnGenerateCustomizedFields(), 'urlParams' => 'module=todo&section=custom&key=batchCreateFields')),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
 
     on::change('[data-name="type"]', 'changeType'),
     on::change('.time-input', 'initTime'),
@@ -53,7 +44,7 @@ formBatchPanel
     (
         div
         (
-            setClass("panel-title text-lg"), 
+            setClass("panel-title text-lg"),
             $lang->todo->batchCreate . $lang->todo->common,
             inputGroup
             (

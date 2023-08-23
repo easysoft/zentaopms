@@ -31,16 +31,6 @@ $fnGenerateFields = function() use ($lang, $fields)
     }, array_keys($fields), array_values($fields)));
 };
 
-/* Generate customized fields. */
-$fnGenerateCustomizedFields = function() use ($showFields, $customFields)
-{
-    $showFields    = ",$showFields,";
-    $fields        = array();
-    $defaultFields = explode(',', 'branch,platform,plan,spec,pri,estimate');
-    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
-    return $fields;
-};
-
 formBatchPanel
 (
     on::click('#saveButton', 'customSubmit'),
@@ -49,7 +39,7 @@ formBatchPanel
     set::title($storyID ? $storyTitle . $lang->colon . $this->lang->story->subdivide : $this->lang->story->batchCreate),
     set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")),
     set::pasteField('title'),
-    set::customFields(array('items' => $fnGenerateCustomizedFields())),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
     set::items($fnGenerateFields()),
     set::onRenderRow(jsRaw('renderRowData')),
     set::actions(array

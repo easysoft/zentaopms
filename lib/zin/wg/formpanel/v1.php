@@ -127,7 +127,7 @@ class formPanel extends panel
                 $headingActions[] = formSettingBtn
                 (
                     set::customFields(array('list' => $listFields, 'show' => $showFields)),
-                    set::urlParams($urlParams)
+                    set::urlParams(zget($customFields, 'urlParams', $urlParams)),
                 );
 
                 $this->setProp('headingActions', $headingActions);
@@ -146,7 +146,7 @@ class formPanel extends panel
     protected function buildForm(): wg
     {
         $customFields = $this->prop('customFields', array());
-        $listFields   = zget($customFields, 'list',  array());
+        $listFields   = zget($customFields, 'list', array());
         $showFields   = zget($customFields, 'show', array());
         $hiddenFields = $listFields && $showFields ? array_values(array_diff(array_keys($listFields), $showFields)) : array();
 

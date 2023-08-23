@@ -16,20 +16,10 @@ $items = array_merge($items, $config->user->form->batchEdit);
 $items['dept']['items']    = $depts;
 $items['visions']['items'] = $visionList;
 
-$fnGenerateCustomizedFields = function() use ($showFields, $customFields)
-{
-    global $config;
-    $showFields    = ",{$showFields},";
-    $fields        = array();
-    $defaultFields = explode(',', $config->user->custom->batchEditFields);
-    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
-    return $fields;
-};
-
 formBatchPanel
 (
     h::import($config->webRoot . 'js/md5.js', 'js'),
-    set::customFields(array('items' => $fnGenerateCustomizedFields(), 'urlParams' => 'module=user&section=custom&key=batchEditFields')),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::title($lang->user->batchEdit),
     set::mode('edit'),
     set::items($items),

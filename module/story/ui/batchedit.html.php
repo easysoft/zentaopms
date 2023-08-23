@@ -55,22 +55,13 @@ foreach($stories as $storyID => $story)
     }
 }
 
-$fnGenerateCustomizedFields = function() use ($showFields, $customFields)
-{
-    $showFields    = ",{$showFields},";
-    $fields        = array();
-    $defaultFields = explode(',', 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason');
-    foreach($customFields as $name => $text) $fields[] = array('name' => $name, 'text' => $text, 'show' => str_contains($showFields, ",$name,"), 'default' => in_array($name, $defaultFields));
-    return $fields;
-};
-
 formBatchPanel
 (
     set::title($lang->story->batchEdit),
     set::mode('edit'),
     set::items($items),
     set::data(array_values($data)),
-    set::customFields(array('items' => $fnGenerateCustomizedFields(), 'urlParams' => 'module=story&section=custom&key=batchEditFields')),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::onRenderRow(jsRaw('renderRowData')),
 );
 
