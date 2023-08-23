@@ -124,8 +124,8 @@ class taskTest
      */
     public function batchUpdateObject(array $taskIdList, array $params = array(), $requiredField = ''): array
     {
-        $requiredFields = $this->objectModel->config->task->edit->requiredFields;
-        if($requiredField) $this->objectModel->config->task->edit->requiredFields = $this->objectModel->config->task->edit->requiredFields . ',' . $requiredField . ',';
+        $requiredFields = $this->objectModel->config->task->batchedit->requiredFields;
+        if($requiredField) $this->objectModel->config->task->batchedit->requiredFields = $this->objectModel->config->task->batchedit->requiredFields . ',' . $requiredField . ',';
 
         $oldTasks = $this->objectModel->getByIdList($taskIdList);
         $taskData = array();
@@ -143,7 +143,7 @@ class taskTest
         }
 
         $allChanges = $this->objectModel->batchUpdate($taskData);
-        $this->objectModel->config->task->edit->requiredFields = $requiredFields;
+        $this->objectModel->config->task->batchedit->requiredFields = $requiredFields;
 
         if(dao::isError()) return current(dao::getError());
         return $allChanges;
