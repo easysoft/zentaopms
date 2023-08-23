@@ -77,18 +77,8 @@ class taskTao extends taskModel
      */
     protected function buildWorkhour(int $taskID, array $workhour): array
     {
-        foreach($workhour as $id => $record)
+        foreach($workhour as $record)
         {
-            if(!$record->work && !$record->consumed)
-            {
-                unset($workhour[$id]);
-                continue;
-            }
-
-            if(helper::isZeroDate($record->date)) dao::$errors["date[$id]"]     = $this->lang->task->error->dateEmpty;
-            if(!$record->consumed)                dao::$errors["consumed[$id]"] = $this->lang->task->error->consumedThisTime;
-            if($record->left === '')              dao::$errors["left[$id]"]     = $this->lang->task->error->left;
-
             $record->task    = $taskID;
             $record->account = $this->app->user->account;
         }
@@ -225,11 +215,26 @@ class taskTao extends taskModel
     {
         foreach($workhour as $id => $record)
         {
+            if(!$record->work && !$record->consumed)
+            {
+                unset($workhour[$id]);
+                continue;
+            }
+
+            $date     = $record->date;
             $consumed = $record->consumed;
             $left     = $record->left;
 
+            /* Check the date of workhour. */
+            if(helper::isZeroDate($date)) dao::$errors["date[$id]"] = $this->lang->task->error->dateEmpty;
+            if($date > helper::today())   dao::$errors["date[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
+
             /* Check consumed hours. */
-            if(!is_numeric($consumed) and !empty($consumed))
+            if(!$consumed)
+            {
+                dao::$errors["consumed[$id]"] = $this->lang->task->error->consumedThisTime;
+            }
+            elseif(!is_numeric($consumed) and !empty($consumed))
             {
                 dao::$errors["consumed[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
             }
@@ -239,10 +244,9 @@ class taskTao extends taskModel
             }
 
             /* Check left hours. */
+            if($left === '') dao::$errors["left[$id]"] = $this->lang->task->error->left;
             if(!is_numeric($left)) dao::$errors["left[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
             if(is_numeric($left) and $left < 0) dao::$errors["left[$id]"] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->left, '0');
-
-            if($record->date > helper::today()) dao::$errors["date[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         }
 
         if(dao::isError()) return false;
