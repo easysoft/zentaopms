@@ -63,7 +63,7 @@
         <?php foreach ($cols as $key => $col):?>
         <?php
         $required  = zget($col, 'required', 'no') == 'yes';
-        $fixed     = zget($col, 'fixed', '');
+        $fixed     = zget($col, 'fixed', 'no');
         $width     = zget($col, 'width', '');
         $autoWidth = $width == 'auto';
         ?>
