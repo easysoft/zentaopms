@@ -546,9 +546,14 @@ pipeline {
                         stage("Build") {
                           steps {
                             container('docker') {
-
-                              sh 'bash build-zbox.sh en win $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
-                              sh 'bash build-zbox.sh zh-cn win $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
+                              sh 'bash build-zbox.sh en win $PMS_VERSION $BIZ_VERSION $MAX_VERSION'
+                              sh 'bash build-zbox.sh en win $BIZ_VERSION $MAX_VERSION'
+                              sh 'bash build-zbox.sh en win $MAX_VERSION'
+                              sh 'bash build-zbox.sh en win $IPD_VERSION'
+                              sh 'bash build-zbox.sh zh-cn win $PMS_VERSION $BIZ_VERSION $MAX_VERSION'
+                              sh 'bash build-zbox.sh zh-cn win $BIZ_VERSION $MAX_VERSION'
+                              sh 'bash build-zbox.sh zh-cn win $MAX_VERSION'
+                              sh 'bash build-zbox.sh zh-cn win $IPD_VERSION'
                               sh 'tree ./release'
                               sh 'find release/ -name "*.exe" | xargs chmod +r'
                             }
