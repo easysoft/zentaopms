@@ -3988,10 +3988,11 @@ class taskModel extends model
      *
      * @param  object $task
      * @param  array  $users
+     * @param  bool   $output
      * @access public
      * @return void
      */
-    public function printAssignedHtml($task, $users)
+    public function printAssignedHtml($task, $users, $output = true)
     {
         $btnTextClass   = '';
         $btnClass       = '';
@@ -4025,9 +4026,12 @@ class taskModel extends model
         $btnClass    .= $task->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass    .= ' iframe btn btn-icon-left btn-sm';
         $assignToLink = $task->assignedTo == 'closed' ? '#' : helper::createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "'>{$assignedToText}</span>", '', "class='$btnClass' data-toggle='modal'");
 
-        echo !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
+        $html = !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
+
+        if(!$output) return $html;
+        echo $html;
     }
 
     /**
@@ -4304,17 +4308,17 @@ class taskModel extends model
         $canEdit           = common::hasPriv('task', 'edit');
         $canBatchCreate    = ($this->config->vision == 'rnd' and common::hasPriv('task', 'batchCreate'));
 
-        if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true);
-        if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true);
-        $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'browse', '', '', 'iframe', true);
-        $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
+        if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
+        if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
+        $menu .= $this->buildMenu('task', 'finish', $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
+        $menu .= $this->buildMenu('task', 'close',  $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
 
         if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
         {
             $menu .= "<div class='dividing-line'></div>";
         }
 
-        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true, 'data-toggle="modal"');
         $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse');
         if($this->config->vision == 'rnd')
         {
@@ -4552,5 +4556,176 @@ class taskModel extends model
         if(!empty($estStarted) and !helper::isZeroDate($estStarted) and $estStarted > $execution->end)   dao::$errors['estStarted'][] = $pre . sprintf($this->lang->task->error->beginGtExecution, $this->lang->execution->common, $execution->end);
         if(!empty($deadline) and !helper::isZeroDate($deadline) and $deadline > $execution->end)       dao::$errors['deadline'][]   = $pre . sprintf($this->lang->task->error->endGtExecution, $this->lang->execution->common, $execution->end);
         if(!empty($deadline) and !helper::isZeroDate($deadline) and $deadline < $execution->begin)     dao::$errors['deadline'][]   = $pre . sprintf($this->lang->task->error->endLtExecution, $this->lang->execution->common, $execution->begin);
+    }
+
+    /**
+     * Generate col for dtable.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function generateCol($orderBy = '')
+    {
+        $setting   = $this->loadModel('datatable')->getSetting('execution');
+        $fieldList = $this->config->task->datatable->fieldList;
+
+        foreach($fieldList as $field => $items)
+        {
+            if(isset($items['title'])) continue;
+
+            $title    = $field == 'id' ? 'ID' : zget($this->lang->task, $field, zget($this->lang, $field, $field));
+            $fieldList[$field]['title'] = $title;
+        }
+
+        if(empty($setting))
+        {
+            $setting = $this->config->task->datatable->defaultField;
+            $order   = 1;
+            foreach($setting as $key => $value)
+            {
+                $set = new stdclass();;
+                $set->id    = $value;
+                $set->order = $order ++;
+                $set->show  = true;
+                $setting[$key] = $set;
+            }
+        }
+
+        foreach($setting as $key => $set)
+        {
+            if(empty($set->show))
+            {
+                unset($setting[$key]);
+                continue;
+            }
+
+            $sortType = '';
+            if(!strpos($orderBy, ',') && strpos($orderBy, $set->id) !== false)
+            {
+                $sort = str_replace("{$set->id}_", '', $orderBy);
+                $sortType = $sort == 'asc' ? 'up' : 'down';
+            }
+
+            $set->name  = $set->id;
+            $set->title = $fieldList[$set->id]['title'];
+
+            if(isset($fieldList[$set->id]['checkbox']))     $set->checkbox     = $fieldList[$set->id]['checkbox'];
+            if(isset($fieldList[$set->id]['nestedToggle'])) $set->nestedToggle = $fieldList[$set->id]['nestedToggle'];
+            if(isset($fieldList[$set->id]['fixed']))        $set->fixed        = $fieldList[$set->id]['fixed'];
+            if(isset($fieldList[$set->id]['type']))         $set->type         = $fieldList[$set->id]['type'];
+            if(isset($fieldList[$set->id]['sortType']))     $set->sortType     = $fieldList[$set->id]['sortType'];
+            if(isset($fieldList[$set->id]['flex']))         $set->flex         = $fieldList[$set->id]['flex'];
+            if(isset($fieldList[$set->id]['minWidth']))     $set->minWidth     = $fieldList[$set->id]['minWidth'];
+            if(isset($fieldList[$set->id]['maxWidth']))     $set->maxWidth     = $fieldList[$set->id]['maxWidth'];
+            if(isset($fieldList[$set->id]['pri']))          $set->pri          = $fieldList[$set->id]['pri'];
+            if(isset($fieldList[$set->id]['map']))          $set->map          = $fieldList[$set->id]['map'];
+
+            if($sortType) $set->sortType = $sortType;
+
+            if(isset($set->fixed) && $set->fixed == 'no') unset($set->fixed);
+            if(isset($set->width)) $set->width = str_replace('px', '', $set->width);
+            unset($set->id);
+        }
+
+        usort($setting, array('datatableModel', 'sortCols'));
+        return $setting;
+    }
+
+    /**
+     * Generate row for dtable.
+     *
+     * @param  array  $tasks
+     * @param  array  $users
+     * @access public
+     * @return array
+     */
+    public function generateRow($tasks, $users)
+    {
+        $userFields = array('assignedTo', 'openedBy', 'closedBy', 'lastEditedBy', 'finishedBy');
+        $dateFields = array('assignedDate', 'openedDate', 'deadline', 'finishedDate', 'closedDate', 'lastEditedDate', 'canceledDate', 'activatedDate', 'estStarted', 'realStarted', 'replacetypeDate');
+        $canView    = common::hasPriv('task', 'view');
+        $rows       = array();
+        foreach($tasks as $task)
+        {
+            $task->assignedTo = $this->printAssignedHtml($task, $users, false);
+            $task->actions    = '<div class="c-actions">' . $this->buildOperateBrowseMenu($task) . '</div>';
+
+            $taskName  = '';
+            $taskLink  = helper::createLink('task', 'view', "taskID=$task->id", '', $this->config->vision == 'lite' ? true : false);
+            $linkClass = $this->config->vision == 'lite' ? 'class="iframe"' : '';
+
+            if($task->parent > 0 and isset($task->parentName)) $task->name = "{$task->parentName} / {$task->name}";
+            if($task->module and isset($modulePairs[$task->module])) $taskName .= "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
+            if($task->parent > 0) $taskName .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
+            if(!empty($task->team)) $taskName .= '<span class="label label-badge label-light" title="' . $this->lang->task->multiple . '">' . $this->lang->task->multipleAB . '</span> ';
+
+            $taskName .= $canView ? html::a($taskLink, $task->name, null, "$linkClass style='color: $task->color' title='$task->name'") : "<span style='color: $task->color'>$task->name</span>";
+            if(!empty($task->children)) $taskName .= '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';
+            if($task->fromBug) $taskName .= html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '', "class='bug'");
+            $task->name = $taskName;
+
+            $priClass  = $task->pri ? "label-pri label-pri-{$task->pri}" : '';
+            $task->pri = "<span class='{$priClass}'>" . zget($this->lang->task->priList, $task->pri) . '</span>';
+
+            $task->statusCode = $task->status;
+            $storyChanged     = (!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')));
+            $task->status     = $storyChanged ? "<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>" : "<span class='status-task status-{$task->status}' title='{$this->processStatus('task', $task)}'> " . $this->processStatus('task', $task) . "</span>";
+
+            $task->estimateNum = round($task->estimate, 1);
+            $task->consumedNum = round($task->consumed, 1);
+            $task->leftNum     = round($task->left, 1);
+
+            $task->estimate = round($task->estimate, 1) . $this->lang->execution->workHourUnit;
+            $task->consumed = round($task->consumed, 1) . $this->lang->execution->workHourUnit;
+            $task->left     = round($task->left, 1) . $this->lang->execution->workHourUnit;
+
+            if(!empty($task->storyID))
+            {
+                if(common::hasPriv('story', 'view'))
+                {
+                    $task->story = html::a(helper::createLink('story', 'view', "storyid=$task->storyID", 'html', true), "<i class='icon icon-{$this->lang->icons['story']}'></i>", '', "class='iframe' data-width='1050' title='{$task->storyTitle}' data-toggle='modal' data-size='lg'");
+                }
+                else
+                {
+                   $task->story = "<i class='icon icon-{$this->lang->icons['story']}' title='{$task->storyTitle}'></i>";
+                }
+            }
+
+            $mailto = explode(',', $task->mailto);
+            foreach($mailto as $key => $account)
+            {
+                $account = trim($account);
+                if(empty($account))
+                {
+                    unset($mailto[$key]);
+                    continue;
+                }
+
+                $mailto[$key] = zget($users, $account);
+            }
+            $task->mailto = implode(' &nbsp;', $mailto);
+
+            foreach($userFields as $field) $task->$field = zget($users, $task->$field);
+            foreach($dateFields as $field) $task->$field = empty($task->$field) || helper::isZeroDate($task->$field) ? '' : $task->$field;
+
+            $children = isset($task->children) ? $task->children : array();
+            unset($task->children);
+
+            $task->isParent = false;
+            if($task->parent == -1)
+            {
+                $task->isParent = true;
+                $task->parent   = 0;
+            }
+
+            $rows[] = $task;
+
+            if(!empty($children))
+            {
+                $rows = array_merge($rows, $this->generateRow($children, $users));
+            }
+        }
+        return $rows;
     }
 }
