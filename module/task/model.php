@@ -4680,6 +4680,8 @@ class taskModel extends model
             $task->consumed = round($task->consumed, 1) . $this->lang->execution->workHourUnit;
             $task->left     = round($task->left, 1) . $this->lang->execution->workHourUnit;
 
+            $task->design = '';
+            $task->story  = '';
             if(!empty($task->storyID))
             {
                 if(common::hasPriv('story', 'view'))
