@@ -951,7 +951,7 @@
         $.apps.changeAppsTheme(theme);
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
@@ -1050,4 +1050,36 @@
             if(!isInAppTab && !zui.store.get('Zinbar:hidden')) loadCurrentPage();
         }
     });
+
+    const getChunks = (file, chunkSize) => {
+        const chunks = [];
+        let start = 0;
+        let end = Math.min(chunkSize, file.size);
+
+        while (start < end) {
+            chunks.push(file.slice(start, end));
+            start = end;
+            end = Math.min(start + chunkSize, file.size);
+        }
+
+        return chunks;
+    };
+
+    const uploadChunk = (url, chunk) => {
+        return fetch(url, {
+            method: 'POST',
+            body: chunk,
+        }).then(response => response.json());
+    }
+
+    function uploadFileByChunk(url, file, chunkSize = 1024 * 1024) {
+        const chunks = getChunks(file, chunkSize);
+        const promises = [];
+
+        for (let i = 0; i < chunks.length; i++) {
+            promises.push(uploadChunk(url, chunks[i]));
+        }
+
+        return Promise.all(promises);
+    };
 }());
