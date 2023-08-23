@@ -76,8 +76,9 @@ $config->task->datatable->fieldList['name']['iconRender']   = true;
 $config->task->datatable->fieldList['pri']['title']    = 'priAB';
 $config->task->datatable->fieldList['pri']['fixed']    = 'left';
 $config->task->datatable->fieldList['pri']['type']     = 'html';
-$config->task->datatable->fieldList['pri']['width']    = '35';
+$config->task->datatable->fieldList['pri']['width']    = '45';
 $config->task->datatable->fieldList['pri']['required'] = 'no';
+$config->task->datatable->fieldList['pri']['sortType'] = true;
 $config->task->datatable->fieldList['pri']['name']     = $lang->task->pri;
 
 $config->task->datatable->fieldList['assignedTo']['title']      = 'assignedTo';
@@ -193,10 +194,12 @@ $config->task->datatable->fieldList['lastEditedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
 $config->task->datatable->fieldList['lastEditedDate']['width']    = '120';
+$config->task->datatable->fieldList['lastEditedDate']['type']     = 'date';
 $config->task->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
 $config->task->datatable->fieldList['activatedDate']['width']    = '90';
+$config->task->datatable->fieldList['activatedDate']['type']     = 'date';
 $config->task->datatable->fieldList['activatedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['story']['title']      = "storyAB";
