@@ -50,7 +50,7 @@ VALUES
     (2131, 'ai', 'prompts', 654, ',open,biz,max,', ',rnd,', '1', 75),
     (2132, 'ai', 'promptview', 654, ',open,biz,max,', ',rnd,', '1', 80),
     (2133, 'ai', 'promptexecute', 652, ',open,biz,max,', ',rnd,', '1', 85),
-    (2134, 'ai', 'roletemplates', 655, ',biz,max,', ',rnd,', '1', 86);
+    (2134, 'ai', 'roletemplates', 655, ',biz,max,', ',rnd,', '1', 90);
 
 REPLACE INTO
     `zt_privmanager` (`id`, `parent`, `code`, `type`, `edition`, `vision`, `order`)
