@@ -213,6 +213,7 @@ if($config->edition === 'open')
     unset($lang->admin->menuList->platform['tabMenu']['resource']['service']);
     unset($lang->admin->menuList->platform['tabMenu']['resource']['stage']);
     unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20']);
+    unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['30']);
     unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['55']);
 }
 

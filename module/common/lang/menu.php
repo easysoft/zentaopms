@@ -487,8 +487,11 @@ $lang->devops->homeMenu = new stdclass();
 $lang->devops->homeMenu->repos       = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import');
 $lang->devops->homeMenu->compile     = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->artifact    = array('link' => "{$lang->devops->artifact}|artifact|browse");
-$lang->devops->homeMenu->deploy      = array('link' => "{$lang->devops->deploy}|deploy|browse", 'subModule' => 'create,edit,browse,view');
-$lang->devops->homeMenu->apps        = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs', 'alias' => 'createapplication,binduser,edit');
+
+if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'subModule' => 'create,edit,browse,view');
+
+$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs', 'alias' => 'createapplication,binduser,edit');
+
 //$lang->devops->homeMenu->environment = array('link' => "{$lang->devops->environment}|gitlab|browse", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit,import');
 //$lang->devops->homeMenu->app         = array('link' => "{$lang->app->common}|app|serverlink|%s");
 
@@ -508,12 +511,12 @@ $lang->devops->menuOrder[30] = 'apps';
 
 $lang->devops->dividerMenu = ',apps,';
 
-$lang->devops->homeMenu->environment['subMenu'] = new stdclass();
-$lang->devops->homeMenu->environment['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
-$lang->devops->homeMenu->environment['subMenu']->gogs      = array('link' => 'Gogs|gogs|browse', 'subModule' => 'gogs');
-$lang->devops->homeMenu->environment['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
-$lang->devops->homeMenu->environment['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
-$lang->devops->homeMenu->environment['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
+// $lang->devops->homeMenu->environment['subMenu'] = new stdclass();
+// $lang->devops->homeMenu->environment['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
+// $lang->devops->homeMenu->environment['subMenu']->gogs      = array('link' => 'Gogs|gogs|browse', 'subModule' => 'gogs');
+// $lang->devops->homeMenu->environment['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
+// $lang->devops->homeMenu->environment['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
+// $lang->devops->homeMenu->environment['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
 
 /* Kanban menu. */
 $lang->kanban->menu = new stdclass();
