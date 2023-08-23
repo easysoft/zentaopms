@@ -205,6 +205,15 @@ class yaml
     public $config;
 
     /**
+     * $dao对象，用于访问或者更新数据库。
+     * The $dao object, used to access or update database.
+     *
+     * @var dao
+     * @access public
+     */
+    public $dao;
+
+    /**
      * The generated data table name.
      *
      * @var string
@@ -228,8 +237,9 @@ class yaml
      */
     public function __construct($tableName)
     {
-        global $config;
+        global $config, $tester;
         $this->config    = $config;
+        $this->dao       = $tester->dao;
         $this->tableName = $tableName;
         $this->fields    = new fields();
 
@@ -403,6 +413,8 @@ class yaml
         }
 
         $this->insertDB($sqlPath, $this->tableName, $isClear);
+
+        return $this;
     }
 
     /**
@@ -517,6 +529,67 @@ class yaml
         $command     = "mysql -u%s -p%s -h%s -P%s %s < %s";
         $execRestore = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableSql);
         system($execRestore);
+    }
+
+    /**
+     * Generate grade field and path field according to id field and parent field
+     *
+     * @access public
+     * @return object
+     */
+    public function fixPath()
+    {
+        $fieldPairs  = array();
+        $table       = $this->config->db->prefix . $this->tableName;
+        $tableFields = $this->dao->query("DESC {$table}")->fetchAll();
+        foreach($tableFields as $field) $fieldPairs[] = $field->Field;
+
+        foreach(array('id', 'parent', 'grade', 'path') as $field)
+        {
+            if(in_array($field, $fieldPairs)) continue;
+
+            echo "error: Cann't fix path because the table {$table} doesn't has {$field} column." . PHP_EOL;
+            return $this;
+        }
+
+        $dataList      = array();
+        $groupDataList = $this->dao->select('id, parent')->from($table)->fetchGroup('parent', 'id');
+
+        /* Cycle the groupDataList until it has no item any more. */
+        while(count($groupDataList) > 0)
+        {
+            $oldCounts = count($groupDataList);    // Record the counts before processing.
+            foreach($groupDataList as $parentDataID => $childDataList)
+            {
+                /* If the parentData doesn't exsit in the dataList, skip it. If exists, compute it's child dataList. */
+                if(!isset($dataList[$parentDataID]) && $parentDataID != 0) continue;
+                if($parentDataID == 0)
+                {
+                    $parentData = new stdclass();
+                    $parentData->grade = 0;
+                    $parentData->path  = ',';
+                }
+                else
+                {
+                    $parentData = $dataList[$parentDataID];
+                }
+
+                /* Compute it's child dataList. */
+                foreach($childDataList as $childDataID => $childData)
+                {
+                    $childData->grade  = $parentData->grade + 1;
+                    $childData->path   = $parentData->path . $childData->id . ',';
+                    $dataList[$childDataID] = $childData;   // Save child data to dataList, thus the child of child can compute it's grade and path.
+                }
+                unset($groupDataList[$parentDataID]);       // Remove it from the groupDataList.
+            }
+            if(count($groupDataList) == $oldCounts) break;  // If after processing, no data processed, break the cycle.
+        }
+
+        /* Save dataList to database. */
+        foreach($dataList as $data) $this->dao->update($table)->data($data)->where('id')->eq($data->id)->limit(1)->exec();
+
+        return $this;
     }
 }
 
