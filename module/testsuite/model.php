@@ -74,6 +74,7 @@ class testsuiteModel extends model
     }
 
     /**
+     * 获取一个产品下的测试套件。
      * Get test suites of a product.
      *
      * @param  int    $productID
@@ -83,7 +84,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getSuites($productID, $orderBy = 'id_desc', $pager = null, $param = '')
+    public function getSuites(int $productID, string $orderBy = 'id_desc', object $pager = null, string $param = ''): array
     {
         return $this->dao->select("*")->from(TABLE_TESTSUITE)
             ->where('product')->eq((int)$productID)
@@ -97,13 +98,14 @@ class testsuiteModel extends model
     }
 
     /**
+     * 获取一个产品下的测试套件对。
      * Get test suites pairs of a product.
      *
      * @param  int    $productID
      * @access public
      * @return array
      */
-    public function getSuitePairs($productID)
+    public function getSuitePairs(int $productID): array
     {
         return $this->dao->select("id, name")->from(TABLE_TESTSUITE)
             ->where('product')->eq((int)$productID)
@@ -115,6 +117,7 @@ class testsuiteModel extends model
     }
 
     /**
+     * 获取单元套件。
      * Get unit suite.
      *
      * @param  int    $productID
@@ -122,7 +125,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getUnitSuites($productID, $orderBy = 'id_desc')
+    public function getUnitSuites(int $productID, string $orderBy = 'id_desc'): array
     {
         return $this->dao->select("*")->from(TABLE_TESTSUITE)
             ->where('product')->eq((int)$productID)
@@ -152,6 +155,7 @@ class testsuiteModel extends model
     }
 
     /**
+     * 更新一个测试套件。
      * Update a test suite.
      *
      * @param  object $suite
@@ -204,6 +208,7 @@ class testsuiteModel extends model
     }
 
     /**
+     * 获取套件下关联的测试用例。
      * Get linked cases for suite.
      *
      * @param  int    $suiteID
@@ -213,7 +218,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getLinkedCases($suiteID, $orderBy = 'id_desc', $pager = null, $append = true)
+    public function getLinkedCases(int $suiteID, string $orderBy = 'id_desc', object $pager = null, bool $append = true): array
     {
         $suite = $this->getById($suiteID);
         $cases = $this->dao->select('t1.*,t2.version as caseVersion,t2.suite')->from(TABLE_CASE)->alias('t1')
@@ -233,13 +238,14 @@ class testsuiteModel extends model
     }
 
     /**
+     * 获取套件下关联的测试用例对。
      * Get linked cases pairs of suite.
      *
      * @param  int    $suiteID
      * @access public
      * @return array
      */
-    public function getLinkedCasePairs($suiteID)
+    public function getLinkedCasePairs(int $suiteID): array
     {
         $suite = $this->getById($suiteID);
         return $this->dao->select('t1.id, t1.title')->from(TABLE_CASE)->alias('t1')
@@ -254,6 +260,7 @@ class testsuiteModel extends model
     }
 
     /**
+     * 获取套件下未关联的测试用例。
      * Get unlinked cases for suite.
      *
      * @param  object $suite
@@ -262,7 +269,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getUnlinkedCases($suite, $param = 0, $pager = null)
+    public function getUnlinkedCases(object $suite, int $param = 0, object $pager = null): array
     {
         if($this->session->testsuiteQuery == false) $this->session->set('testsuiteQuery', ' 1 = 1');
         $queryID = (int)$param;
@@ -293,6 +300,7 @@ class testsuiteModel extends model
     }
 
     /**
+     * 删除套件和扩展。
      * Delete suite and library.
      *
      * @param  int    $suiteID
@@ -300,7 +308,7 @@ class testsuiteModel extends model
      * @access public
      * @return bool
      */
-    public function delete($suiteID, $table = '')
+    public function delete(int $suiteID, string $table = ''): bool
     {
         parent::delete(TABLE_TESTSUITE, $suiteID);
         $this->dao->delete()->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->exec();
@@ -308,6 +316,7 @@ class testsuiteModel extends model
     }
 
     /**
+     * 获取可以导入的测试用例。
      * Get can import cases.
      *
      * @param  int    $productID
@@ -315,10 +324,11 @@ class testsuiteModel extends model
      * @param  int    $branch
      * @param  string $orderBy
      * @param  object $pager
+     * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function getCanImportCases($productID, $libID, $branch, $orderBy = 'id_desc', $pager = null, $browseType = '', $queryID = 0)
+    public function getCanImportCases(int $productID, int $libID, int $branch, string $orderBy = 'id_desc', object $pager = null, string $browseType = '', int $queryID = 0): array
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -363,6 +373,7 @@ class testsuiteModel extends model
     }
 
     /**
+     * 获取已经导入的用例实体。
      * Get imported case modules.
      *
      * @param  int    $productID
@@ -371,7 +382,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getCanImportModules($productID, $libID, $branch)
+    public function getCanImportModules(int$productID, int $libID, int $branch): array
     {
         $importedModules = $this->dao->select('fromCaseID,module')->from(TABLE_CASE)
             ->where('product')->eq($productID)
@@ -399,6 +410,7 @@ class testsuiteModel extends model
     }
 
     /**
+     * 创建测试套件菜单。
      * Build testsuite menu.
      *
      * @param  object $suite
@@ -406,7 +418,7 @@ class testsuiteModel extends model
      * @access public
      * @return string
      */
-    public function buildOperateMenu($suite, $type = 'view')
+    public function buildOperateMenu(object $suite, string $type = 'view'): string
     {
         $menu   = '';
         $params = "suiteID=$suite->id";
