@@ -30,18 +30,18 @@ $teamLeftList     = array(array(0, 0, 0, 0), array(0, 1, 3, 5, 7));
 $teamSourceList   = array(array('admin', 'user1', 'user2', 'user3'), array('user4', 'user5', 'user6', 'user7', 'user9'));
 
 $teamData1 = new stdclass();
-$teamData1->team             = $account[0];
-$teamData1->teamLeftList     = $teamLeftList[0];
-$teamData1->teamSourceList   = $teamSourceList[0];
-$teamData1->teamEstimateList = $teamEstimateList[0];
-$teamData1->teamConsumedList = $teamConsumedList[0];
+$teamData1->team         = $account[0];
+$teamData1->teamLeft     = $teamLeftList[0];
+$teamData1->teamSource   = $teamSourceList[0];
+$teamData1->teamEstimate = $teamEstimateList[0];
+$teamData1->teamConsumed = $teamConsumedList[0];
 
 $teamData2 = new stdclass();
-$teamData2->team             = $account[1];
-$teamData2->teamLeftList     = $teamLeftList[1];
-$teamData2->teamSourceList   = $teamSourceList[1];
-$teamData2->teamEstimateList = $teamEstimateList[1];
-$teamData2->teamConsumedList = $teamConsumedList[1];
+$teamData2->team         = $account[1];
+$teamData2->teamLeft     = $teamLeftList[1];
+$teamData2->teamSource   = $teamSourceList[1];
+$teamData2->teamEstimate = $teamEstimateList[1];
+$teamData2->teamConsumed = $teamConsumedList[1];
 
 $task = new taskTest();
 
