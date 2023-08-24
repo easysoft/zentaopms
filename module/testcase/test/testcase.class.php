@@ -340,7 +340,7 @@ class testcaseTest
     /**
      * Test get scenes by id list and query string.
      *
-     * @param  array  $sceneIdLsit
+     * @param  array  $sceneIdList
      * @param  string $query
      * @access public
      * @return array
