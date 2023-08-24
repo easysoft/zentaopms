@@ -1,23 +1,29 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('project')->gen('50');
 su('admin');
 
 /**
 
 title=测试 projectModel->getPairsByModel();
+timeout=0
 cid=1
-pid=1
-
-获取项目集1下的所有项目数量 >> 9
-获取项目集1下的项目名称 >> 项目集1 / 项目11
-获取项目集1下的所有瀑布项目数量 >> 3
 
 */
 
 global $tester;
 $tester->loadModel('project');
 
-r(count($tester->project->getPairsByModel('all', 1)))       && p()     && e('9');                // 获取项目集1下的所有项目数量
-r($tester->project->getPairsByModel('all', 1))              && p('21') && e('项目集1 / 项目11'); // 获取项目集1下的项目名称
-r(count($tester->project->getPairsByModel('waterfall', 1))) && p()     && e('3');                // 获取项目集1下的所有瀑布项目数量
+r($tester->project->getPairsByModel('all'))           && p('21') && e('项目集6 / 项目26'); // 获取所有项目
+r($tester->project->getPairsByModel('scrum'))         && p('1')  && e('项目集1 / 项目21'); // 获取敏捷项目
+r($tester->project->getPairsByModel('waterfallplus')) && p('10') && e('项目集7 / 项目37'); // 获取融合瀑布类型项目
+
+r($tester->project->getPairsByModel('all', 'noclosed'))          && p('10') && e('项目集3 / 项目43'); // 获取未关闭的项目
+r($tester->project->getPairsByModel('all', 'multiple'))          && p('10') && e('项目集3 / 项目33'); // 获取启用迭代的项目
+r($tester->project->getPairsByModel('all', 'noclosed,multiple')) && p('10') && e('项目集3 / 项目43'); // 获取未关闭的启用迭代的项目
+
+r($tester->project->getPairsByModel('all', 'noclosed', 50))                && p('1') && e('项目集1 / 项目21'); // 获取所有项目
+r($tester->project->getPairsByModel('waterfall', 'noclosed', 11))          && p('1') && e('项目集2 / 项目22'); // 获取所有瀑布项目
+r($tester->project->getPairsByModel('agileplus', 'noclosed,multiple', 11)) && p('5') && e('项目集4 / 项目34'); // 获取所有瀑布项目
