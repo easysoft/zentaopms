@@ -23,11 +23,11 @@ class blockZen extends block
         foreach($blocks as $block)
         {
             /* 根据module和code生成区块的宽度和高度。 */
-            $defaultSize = $this->config->block->defaultSize; // 默认为区块的统一默认尺寸。
-            if(!empty($this->config->block->size[$block['module']][$block['code']]))                  $defaultSize     = $this->config->block->size[$block['module']][$block['code']];
-            if(!empty($this->config->block->size[$block['module']][$block['code']][$block['width']])) $block['height'] = $this->config->block->size[$block['module']][$block['code']][$block['width']];
-            if(empty($block['width']))  $block['width']  = reset(array_keys($defaultSize));
-            if(empty($block['height'])) $block['height'] = reset($defaultSize);
+            $sizeConfig  = $this->config->block->size[$block['module']][$block['code']];
+            $defaultSize = empty($sizeConfig) ? $this->config->block->defaultSize : $sizeConfig; // 默认为区块的统一默认尺寸。
+            if(!empty($sizeConfig[$block['width']])) $block['height'] = $sizeConfig[$block['width']];
+            if(empty($block['width']))               $block['width']  = reset(array_keys($defaultSize));
+            if(empty($block['height']))              $block['height'] = reset($defaultSize);
 
             $block['account']   = $account;   // 所属用户。
             $block['dashboard'] = $dashboard; // 所属仪表盘。
@@ -218,32 +218,20 @@ class blockZen extends block
             /* 生成更多链接。 */
             $this->createMoreLink($block, $projectID);
 
-            $defaultSize = $this->config->block->defaultSize; // 默认为区块的统一默认尺寸。
-            if(!empty($this->config->block->size[$block->module][$block->code])) $defaultSize = $this->config->block->size[$block->module][$block->code];
+            $sizeConfig  = $this->config->block->size[$block->module][$block->code];
+            $defaultSize = empty($sizeConfig) ? $this->config->block->defaultSize : $sizeConfig; // 默认为区块的统一默认尺寸。
 
             if(empty($block->width))  $block->width  = reset(array_keys($defaultSize));
-            if(empty($block->height)) $block->height = !empty($this->config->block->size[$block->module][$block->code][$block->width]) ? $this->config->block->size[$block->module][$block->code][$block->width] : reset($defaultSize);
+            if(empty($block->height)) $block->height = !empty($sizeConfig[$block->width]) ? $sizeConfig[$block->width] : reset($defaultSize);
 
             /* 设置区块距离左侧的宽度和距离顶部的高度。 */
-            $block->left = $block->width == 1 ? 2 : 0;
-        }
+            if(!isset($block->left))  $block->left = $block->width == 1 ? 2 : 0;
+            if(!isset($block->top))   $block->top = -1; // -1 将会自动计算高度。
 
-        /* 根据每个区块的高度和宽度重新生成各个区块的left和top属性。 */
-        $blocks = array_values($blocks);
-        $height = array(1 => 0, 2 => 0);
-        foreach($blocks as $block)
-        {
-            if($block->width == 3)
-            {
-                $block->top = max($height[1], $height[2]);
-                $height[1] += $block->height;
-                $height[2] += $block->height;
-            }
-            else
-            {
-                $block->top = $height[$block->width];
-                $height[$block->width] += $block->height;
-            }
+            $block->width  = (int)$block->width;
+            $block->height = (int)$block->height;
+            $block->left   = (int)$block->left;
+            $block->top    = (int)$block->top;
         }
 
         return $blocks;
