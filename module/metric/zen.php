@@ -225,6 +225,8 @@ class metricZen extends metric
      */
     protected function getResultData($metric, $result)
     {
+        if(empty($result)) return array_map(function($item){return null;}, (array)current($result));
+
         $objectPairs = array();
         $scope = $metric->scope;
         switch($scope)

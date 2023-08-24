@@ -82,6 +82,7 @@ detailBody
             set::title($lang->metric->metricData),
             dtable
             (
+                set::height(400),
                 set::cols($resultHeader),
                 set::data(array_values($resultData))
             )
