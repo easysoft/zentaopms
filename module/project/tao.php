@@ -553,6 +553,53 @@ class projectTao extends projectModel
     }
 
     /**
+     * 构造批量更新项目的数据。
+     * Build bathc update project data.
+     *
+     * @param  array     $data
+     * @param  array     $oldProjects
+     * @access protected
+     * @return array
+     */
+    protected function buildBatchUpdateProjects(array $data, array $oldProjects): array
+    {
+        if(empty($data)) return array();
+
+        $extendFields = $this->getFlowExtendFields();
+
+        $projects = array();
+        foreach($data as $projectID => $project)
+        {
+            $projectID = (int)$projectID;
+
+            $projects[$projectID] = new stdClass();
+            $projects[$projectID]->id             = $projectID;
+            $projects[$projectID]->name           = $project->name;
+            $projects[$projectID]->model          = $oldProjects[$projectID]->model;
+            $projects[$projectID]->PM             = $project->PM;
+            $projects[$projectID]->begin          = $project->begin;
+            $projects[$projectID]->end            = $project->end == $this->lang->project->longTime ? LONG_TIME : $project->end;
+            $projects[$projectID]->acl            = $project->acl;
+            $projects[$projectID]->lastEditedBy   = $this->app->user->account;
+            $projects[$projectID]->lastEditedDate = helper::now();
+
+            if(isset($project->parent)) $projects[$projectID]->parent = $project->parent;
+            if(isset($project->code))   $projects[$projectID]->code   = $project->code;
+            if($project->end == $this->lang->project->longTime) $projects[$projectID]->days = 0;
+
+            foreach($extendFields as $extendField)
+            {
+                $projects[$projectID]->{$extendField->field} = $project->{$extendField->field};
+                if(is_array($projects[$projectID]->{$extendField->field})) $projects[$projectID]->{$extendField->field} = implode(',', $projects[$projectID]->{$extendField->field});
+
+                $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
+            }
+        }
+
+        return $projects;
+    }
+
+    /**
      * 删除项目团队成员。
      * Delete project team member.
      *

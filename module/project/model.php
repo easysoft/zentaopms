@@ -1353,9 +1353,10 @@ class projectModel extends model
     }
 
     /**
+     * 批量更新项目。
      * Batch update projects.
      *
-     * @param  array  $data
+     * @param  array       $data
      * @access public
      * @return array|false
      */
@@ -1364,36 +1365,7 @@ class projectModel extends model
         $projects     = array();
         $allChanges   = array();
         $oldProjects  = $this->getByIdList(array_keys($data));
-        $extendFields = $this->getFlowExtendFields();
-        foreach($data as $projectID => $project)
-        {
-            $projectID = (int)$projectID;
-
-            $projects[$projectID] = new stdClass();
-            $projects[$projectID]->id             = $projectID;
-            $projects[$projectID]->name           = $project->name;
-            $projects[$projectID]->model          = $oldProjects[$projectID]->model;
-            $projects[$projectID]->PM             = $project->PM;
-            $projects[$projectID]->begin          = $project->begin;
-            $projects[$projectID]->end            = $project->end == $this->lang->project->longTime ? LONG_TIME : $project->end;
-            $projects[$projectID]->acl            = $project->acl;
-            $projects[$projectID]->lastEditedBy   = $this->app->user->account;
-            $projects[$projectID]->lastEditedDate = helper::now();
-
-            if(isset($project->parent)) $projects[$projectID]->parent = $project->parent;
-            if(isset($project->code))   $projects[$projectID]->code   = $project->code;
-            if($project->end == $this->lang->project->longTime) $projects[$projectID]->days = 0;
-
-            foreach($extendFields as $extendField)
-            {
-                $projects[$projectID]->{$extendField->field} = $project->{$extendField->field};
-                if(is_array($projects[$projectID]->{$extendField->field})) $projects[$projectID]->{$extendField->field} = implode(',', $projects[$projectID]->{$extendField->field});
-
-                $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
-            }
-        }
-
-        if(dao::isError()) return false;
+        $projects = $this->projectTao->buildBatchUpdateProjects($data, $oldProjects);
 
         $this->loadModel('execution');
         $this->lang->error->unique = $this->lang->error->repeat;
