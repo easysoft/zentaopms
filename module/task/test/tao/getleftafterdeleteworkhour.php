@@ -30,5 +30,5 @@ cid=1
 
 $task = new taskTest();
 r($task->getLeftAfterDeleteWorkhourTest(1)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,1,1,1,1,1'); // 删除ID为1的工时
-r($task->getLeftAfterDeleteWorkhourTest(2)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,2,0,1,1,1'); // 删除ID为2的工时
-r($task->getLeftAfterDeleteWorkhourTest(3)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,2,0,1,0,0'); // 删除ID为3的工时
+r($task->getLeftAfterDeleteWorkhourTest(2)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,2,0,1,1,0'); // 删除ID为2的工时
+r($task->getLeftAfterDeleteWorkhourTest(3)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,2,0,1,0,1'); // 删除ID为3的工时
