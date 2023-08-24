@@ -2204,6 +2204,7 @@ class projectModel extends model
     }
 
     /**
+     * 根据项目ID获取项目关联的对象。
      * Get the objects under the project.
      *
      * @param  string $table
@@ -2212,7 +2213,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function getDataByProject($table, $projectID, $type = '')
+    public function getDataByProject(string $table, int $projectID, string $type = ''): object
     {
         return $this->dao->select('id')->from($table)
             ->where('project')->eq($projectID)
