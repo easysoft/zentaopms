@@ -254,6 +254,7 @@ class taskModel extends model
     }
 
     /**
+     * 从GitLab议题创建任务。
      * Create task from gitlab issue.
      *
      * @param  object    $task
@@ -261,20 +262,25 @@ class taskModel extends model
      * @access public
      * @return int
      */
-    public function createTaskFromGitlabIssue($task, $executionID)
+    public function createTaskFromGitlabIssue(object $task, int $executionID): int|false
     {
         $task->version      = 1;
         $task->openedBy     = $this->app->user->account;
         $task->lastEditedBy = $this->app->user->account;
-        $task->assignedDate = isset($task->assignedTo) ? helper::now() : 0;
+        $task->assignedDate = isset($task->assignedTo) ? helper::now() : null;
         $task->story        = 0;
         $task->module       = 0;
         $task->estimate     = 0;
+        $task->deadline     = $task->deadline ?? null;
         $task->estStarted   = null;
         $task->left         = 0;
         $task->pri          = 3;
         $task->type         = 'devel';
+        $task->execution    = $task->execution ?? $executionID;
         $task->project      = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('project');
+
+        /* Set project of the task to 0 if the project of execution is not exist. */
+        if(empty($task->project)) $task->project = 0;
 
         $this->dao->insert(TABLE_TASK)->data($task, 'id,product')
              ->autoCheck()
