@@ -694,7 +694,7 @@ class taskModel extends model
         unset($oldTask->parent, $task->parent);
 
         /* Logging history when multi-task team members have changed. */
-        if(isset($oldTask->team) and isset($teamData->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
+        if(!empty($oldTask->team) and !empty($teamData->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
 
         $this->loadModel('file')->processFile4Object('task', $oldTask, $task);
         $changes = common::createChanges($oldTask, $task);
