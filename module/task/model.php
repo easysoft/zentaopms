@@ -2114,12 +2114,12 @@ class taskModel extends model
         $tasks = $this->taskTao->getListByReportCondition('execution', $this->reportCondition());
         if(!$tasks) return array();
 
-        $datas = $this->processData4Report($tasks, array(), 'execution');
+        $dataList = $this->processData4Report($tasks, array(), 'execution');
 
         /* Get execution names for these tasks. */
         $executions = $this->loadModel('execution')->fetchPairs(0, 'all', true, true);
-        foreach($datas as $executionID => $data) $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
-        return $datas;
+        foreach($dataList as $executionID => $data) $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
+        return $dataList;
     }
 
     /**
@@ -2136,15 +2136,15 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas = $this->processData4Report($tasks, array(), 'module');
+        $dataList = $this->processData4Report($tasks, array(), 'module');
 
         /* Get modules name. */
-        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas), true, true);
-        foreach($datas as $moduleID => $data)
+        $modules = $this->loadModel('tree')->getModulesName(array_keys($dataList), true, true);
+        foreach($dataList as $moduleID => $data)
         {
             $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
         }
-        return $datas;
+        return $dataList;
     }
 
     /**
@@ -2161,15 +2161,15 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas = $this->processData4Report($tasks, array(), 'assignedTo');
+        $dataList = $this->processData4Report($tasks, array(), 'assignedTo');
 
         /* Get user's realname. */
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data)
+        foreach($dataList as $account => $data)
         {
             if(isset($this->users[$account])) $data->name = $this->users[$account];
         }
-        return $datas;
+        return $dataList;
     }
 
     /**
@@ -2186,13 +2186,13 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas = $this->processData4Report($tasks, array(), 'type');
+        $dataList = $this->processData4Report($tasks, array(), 'type');
 
-        foreach($datas as $type => $data)
+        foreach($dataList as $type => $data)
         {
             if(isset($this->lang->task->typeList[$type])) $data->name = $this->lang->task->typeList[$type];
         }
-        return $datas;
+        return $dataList;
     }
 
     /**
@@ -2209,10 +2209,10 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas = $this->processData4Report($tasks, array(), 'pri');
+        $dataList = $this->processData4Report($tasks, array(), 'pri');
 
-        foreach($datas as $pri) $pri->name = $this->lang->task->priList[$pri->name];
-        return $datas;
+        foreach($dataList as $pri) $pri->name = $this->lang->task->priList[$pri->name];
+        return $dataList;
     }
 
     /**
@@ -2229,10 +2229,10 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas = $this->processData4Report($tasks, array(), 'status');
-        foreach($datas as $status => $data) $data->name = $this->lang->task->statusList[$status];
+        $dataList = $this->processData4Report($tasks, array(), 'status');
+        foreach($dataList as $status => $data) $data->name = $this->lang->task->statusList[$status];
 
-        return $datas;
+        return $dataList;
     }
 
     /**
@@ -2322,15 +2322,15 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas = $this->processData4Report($tasks, array(), 'finishedBy');
+        $dataList = $this->processData4Report($tasks, array(), 'finishedBy');
 
         /* Get user's realname. */
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data)
+        foreach($dataList as $account => $data)
         {
             if(isset($this->users[$account])) $data->name = $this->users[$account];
         }
-        return $datas;
+        return $dataList;
     }
 
     /**
@@ -2348,12 +2348,12 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas = $this->processData4Report($tasks, array(), 'closedReason');
-        foreach($datas as $closedReason => $data)
+        $dataList = $this->processData4Report($tasks, array(), 'closedReason');
+        foreach($dataList as $closedReason => $data)
         {
             if(isset($this->lang->task->reasonList[$closedReason])) $data->name = $this->lang->task->reasonList[$closedReason];
         }
-        return $datas;
+        return $dataList;
     }
 
     /**
@@ -2393,8 +2393,8 @@ class taskModel extends model
             foreach($children as $childTask) unset($tasks[$childTask->parent]);
         }
 
-        $fields = array();
-        $datas  = array();
+        $fields   = array();
+        $dataList = array();
         foreach($tasks as $task)
         {
             $key = (string)$task->$field;
@@ -2410,10 +2410,10 @@ class taskModel extends model
             $data->name  = $field;
             $data->value = $count;
 
-            $datas[$field] = $data;
+            $dataList[$field] = $data;
         }
 
-        return $datas;
+        return $dataList;
     }
 
     /**
